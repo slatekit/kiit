@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>module Shell</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/lang.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Slate Kit</h1>
+      <h2 class="project-tagline">A scala utility library and tool kit</h2>
+      <a href="https://github.com/kishorereddy/scala-slate" class="btn">View on GitHub</a>
+      <a href="https://github.com/kishorereddy/scala-slate/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kishorereddy/scala-slate/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+		<h1 id="shell">Shell</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A simple command line shell interface you can hook into to run custom commands or apis</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-4-10 11:2:31</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.core.shell</td>
+    </tr>
+    <tr>
+      <td><strong>core source</strong></td>
+      <td>slate.core.shell.ShellService</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Shell.scala">Example_Shell</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.core.shell.</span><span class="o">{</span><span class="nc">ShellCommand</span><span class="o">,</span> <span class="nc">ShellService</span><span class="o">}</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
+<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="k">class</span> <span class="nc">AppShell</span> <span class="k">extends</span> <span class="nc">ShellService</span>
+  <span class="o">{</span>
+
+    <span class="cm">/**
+      * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onShellStart</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="c1">// You don't need to override this as the base method displays help info
+</span>      <span class="k">super</span><span class="o">.</span><span class="n">showHelp</span><span class="o">()</span>
+      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onShellStart - starting myapp command line interface"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+      * Use case 3b : ( OPTIONAL ) do some stuff before ending the shell this is called
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onShellEnd</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onShellEnd - ending myapp command line interface"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+      * Use case 3c : ( OPTIONAL ) do some stuff before executing the command
+      * @param cmd
+      * @return
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onCommandBeforeExecute</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ShellCommand</span><span class="o">)</span><span class="k">:</span><span class="kt">ShellCommand</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onCommandBeforeExecute - before command is executed"</span><span class="o">)</span>
+      <span class="n">cmd</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+      * Use case 3c: ( REQUIRED ) you must override this method to handle your command
+      * @param cmd
+      * @return
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onCommandExecuteInternal</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ShellCommand</span><span class="o">)</span><span class="k">:</span><span class="kt">ShellCommand</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
+      <span class="n">cmd</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+      * Use case 3d: ( OPTIONAL ) do some stuff after the command execution
+      * @param cmd
+      * @return
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onCommandAfterExecute</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ShellCommand</span><span class="o">)</span><span class="k">:</span><span class="kt">ShellCommand</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onCommandAfterExecute - after command is executed"</span><span class="o">)</span>
+      <span class="n">cmd</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+
+</code></pre>
+</div>
+
+<h2 id="examples">Examples</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Use case 1: Create your own shell by extending the ShellService
+</span>    <span class="k">val</span> <span class="n">shell</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppShell</span><span class="o">()</span>
+
+    <span class="c1">// Use case 2: (Optional) configure a startup command
+</span>    <span class="c1">// by setting it explicity through a method or setting
+</span>    <span class="c1">// the "_startupCommand" in your shells constructor
+</span>    <span class="n">shell</span><span class="o">.</span><span class="n">setStartupCommand</span><span class="o">(</span><span class="s">"hello -name:'world'"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 3a: HOOK into start shell event
+</span>    <span class="c1">// see: "onShellStart" override in AppShell below
+</span>    <span class="c1">// This allows you to run some code when the shell is starting up but before running commands.
+</span>
+    <span class="c1">// Use case 3b: HOOK into end shell event
+</span>    <span class="c1">// see : "onShellEnd" override in AppShell below
+</span>    <span class="c1">// This allows you to run some code when the shell is ending but before it fully stops
+</span>
+    <span class="c1">// Use case 4: exit
+</span>    <span class="c1">// you can type "exit" or "quit" to quit the shell
+</span>
+    <span class="c1">// Use case 5: help
+</span>    <span class="c1">// you can type "?", "help" to show help info
+</span>
+    <span class="c1">// Use case 6: supply command line args ( e.g. from main )
+</span>    <span class="n">shell</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"-env:dev"</span><span class="o">,</span> <span class="s">"-log:verbose"</span><span class="o">))</span>
+    
+
+</code></pre>
+</div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kishorereddy/scala-slate">Slate Kit</a> is maintained by <a href="https://github.com/kishorereddy">kishorereddy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>  
+  </body>
+</html>

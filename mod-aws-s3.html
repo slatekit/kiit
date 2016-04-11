@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>module AWS-S3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/lang.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Slate Kit</h1>
+      <h2 class="project-tagline">A scala utility library and tool kit</h2>
+      <a href="https://github.com/kishorereddy/scala-slate" class="btn">View on GitHub</a>
+      <a href="https://github.com/kishorereddy/scala-slate/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kishorereddy/scala-slate/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+		<h1 id="aws-s3">AWS-S3</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Abstraction layer on cloud file storage to Amazon S3</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-4-10 11:2:31</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.cloud.aws</td>
+    </tr>
+    <tr>
+      <td><strong>core source</strong></td>
+      <td>slate.cloud.aws.AwsCloudFiles</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Aws_S3.scala">Example_Aws_S3</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.cloud.aws.AwsCloudFiles</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
+<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Not storing any key/secret in source code for security purposes
+</span>    <span class="c1">// Using the recommended approach of aws to store a config file
+</span>    <span class="c1">// in the users directory
+</span>    <span class="k">val</span> <span class="n">files</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"blendlife-dev1"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="examples">Examples</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Use case 1: Connect using parameters
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">connect</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+    <span class="c1">// Use case 2: create using just name and content
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 3: update using just name and content
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 4: create using folder and file name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 5: update using folder and file name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 6: get file as a text using just name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 7: get file using folder and file name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 8: download file to local folder
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"c:/dev/temp/"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 9: download using folder and file name to local folder
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"c:/dev/temp"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 10: delete file by just the name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 11: delete using folder and name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kishorereddy/scala-slate">Slate Kit</a> is maintained by <a href="https://github.com/kishorereddy">kishorereddy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>  
+  </body>
+</html>

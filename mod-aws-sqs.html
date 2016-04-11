@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>module AWS-SQS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/lang.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Slate Kit</h1>
+      <h2 class="project-tagline">A scala utility library and tool kit</h2>
+      <a href="https://github.com/kishorereddy/scala-slate" class="btn">View on GitHub</a>
+      <a href="https://github.com/kishorereddy/scala-slate/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kishorereddy/scala-slate/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+		<h1 id="aws-sqs">AWS-SQS</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Abstraction layer on message queues using Amazon S3</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-4-10 11:2:31</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.cloud.aws</td>
+    </tr>
+    <tr>
+      <td><strong>core source</strong></td>
+      <td>slate.cloud.aws.AwsCloudQueue</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Aws_Sqs.scala">Example_Aws_Sqs</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.cloud.aws.AwsCloudQueue</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
+<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Not storing any key/secret in source code for security purposes
+</span>    <span class="c1">// Using the recommended approach of aws to store a config file
+</span>    <span class="c1">// in the users directory
+</span>    <span class="k">val</span> <span class="n">queue</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudQueue</span><span class="o">(</span><span class="s">"dev1-usa-001-shr"</span><span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="examples">Examples</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Use case 1: connect using parameters
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">connect</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+
+    <span class="c1">// Use case 2: send 1 message
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 1"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 3: send multiple messages
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 2"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 4: send message with tags
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"user=kishore"</span><span class="o">,</span> <span class="n">tagName</span><span class="o">=</span><span class="s">"type"</span><span class="o">,</span> <span class="n">tagValue</span><span class="o">=</span><span class="s">"reg"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 5: receive 1 message
+</span>    <span class="k">val</span> <span class="n">item1</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">next</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">getMessageBody</span><span class="o">(</span><span class="n">item1</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">getMessageTag</span><span class="o">(</span><span class="n">item1</span><span class="o">,</span> <span class="s">"type"</span><span class="o">))</span>
+
+    <span class="c1">// Use case 6: recieve 2 messages
+</span>    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">nextBatch</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+
+    <span class="c1">// Use case 7: delete a message
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">complete</span><span class="o">(</span><span class="n">item1</span><span class="o">)</span>
+
+    <span class="c1">// Use case 8: delete many
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">completeAll</span><span class="o">(</span><span class="n">items</span><span class="o">)</span>
+
+    <span class="c1">// Use case 9: abandon a message
+</span>    <span class="n">queue</span><span class="o">.</span><span class="n">abandon</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">next</span><span class="o">())</span>
+
+    <span class="c1">// Use case 10: get count ( approximation )
+</span>    <span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">count</span><span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kishorereddy/scala-slate">Slate Kit</a> is maintained by <a href="https://github.com/kishorereddy">kishorereddy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>  
+  </body>
+</html>

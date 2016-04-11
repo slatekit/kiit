@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>module Args</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/lang.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Slate Kit</h1>
+      <h2 class="project-tagline">A scala utility library and tool kit</h2>
+      <a href="https://github.com/kishorereddy/scala-slate" class="btn">View on GitHub</a>
+      <a href="https://github.com/kishorereddy/scala-slate/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kishorereddy/scala-slate/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+		<h1 id="args">Args</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A lexical arguments/options parser for command line parsing and more</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-4-10 11:2:31</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.common.args</td>
+    </tr>
+    <tr>
+      <td><strong>core source</strong></td>
+      <td>slate.common.args.Args</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Args.scala">Example_Args</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.common.args.Args</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
+<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// no setup required
+</span>
+</code></pre>
+</div>
+
+<h2 id="examples">Examples</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Use case 1: Defaults e..g prefix = "-", sep = ":"
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"-env:dev -text:'hello word' -batch:10"</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 2: Custom prefix and sep e.g. "!" and separator "="
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"!env=dev !text='hello word' !batch=10 "</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"!"</span><span class="o">,</span> <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 3a: Check for method call in the beginning
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method -env=dev -text='hello word' -batch=10"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span>
+                 <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 3b: Check for method call in the beginning
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"method -env=dev -text='hello word' -batch=10"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span>
+                 <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 4: No args
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span> <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 5a: Help request ( "?", "help")
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"?"</span>         <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 5b: Help request with method call ( "method.action" ? )
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method help"</span>   <span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 6: Version request ( "ver", "version" )
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"version"</span>  <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 7: Exit request
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"exit"</span>     <span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 8: apply args to an object
+</span>    <span class="nc">Args</span><span class="o">.</span><span class="n">apply</span><span class="o">(</span> <span class="s">"-env:dev -text:'hello word' -batch:10"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">SampleOptions</span><span class="o">(),</span> <span class="s">"-"</span><span class="o">,</span> <span class="s">":"</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kishorereddy/scala-slate">Slate Kit</a> is maintained by <a href="https://github.com/kishorereddy">kishorereddy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>  
+  </body>
+</html>
