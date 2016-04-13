@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>module App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/cayman/stylesheets/lang.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Slate Kit</h1>
+      <h2 class="project-tagline">A scala utility library and tool kit</h2>
+      <a href="https://github.com/kishorereddy/scala-slate" class="btn">View on GitHub</a>
+      <a href="https://github.com/kishorereddy/scala-slate/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kishorereddy/scala-slate/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+		<h1 id="app">App</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A base application with support for logging, config, status and more</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-4-13 3:2:1</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.core.app</td>
+    </tr>
+    <tr>
+      <td><strong>core source</strong></td>
+      <td>slate.core.app.AppProcess</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_App.scala">Example_App</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.core.app.</span><span class="o">{</span><span class="nc">AppProcess</span><span class="o">,</span> <span class="nc">AppRunner</span><span class="o">}</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">OperationResult</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+<span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
+  <span class="o">{</span>
+
+    <span class="cm">/**
+     * initialize app and metadata
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="c1">// Initialize info about this app
+</span>      <span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="k">=</span> <span class="s">"sampleapp"</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">desc</span> <span class="k">=</span> <span class="s">"sample app to show the appprocess base class, template methods, and functionality"</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">region</span> <span class="k">=</span> <span class="s">"usa.ny"</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">env</span> <span class="k">=</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">version</span> <span class="k">=</span> <span class="s">"1.0.0.3"</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">log</span> <span class="k">=</span> <span class="s">"{@app}-{@env}-{@date}.log"</span>
+
+      <span class="c1">// Set some options
+</span>
+      <span class="c1">// 1. Prints a summary of the all the metadata and
+</span>      <span class="c1">// stats( time, duration, errors, etc ) during shutdown
+</span>      <span class="n">options</span><span class="o">.</span><span class="n">printSummaryBeforeExec</span> <span class="k">=</span> <span class="kc">false</span>
+      <span class="n">options</span><span class="o">.</span><span class="n">printSummaryOnShutdown</span> <span class="k">=</span> <span class="kc">true</span>
+
+      <span class="c1">// 2.Renames config files e.g. meta.config = "{@env}.config" = "dev.config"
+</span>      <span class="n">options</span><span class="o">.</span><span class="n">renameConfig</span> <span class="k">=</span> <span class="kc">true</span>
+
+      <span class="c1">// 3. Renames the log file e.g. meta.log = "{@app}-{@env}.log" = "sample-app-qa.log"
+</span>      <span class="n">options</span><span class="o">.</span><span class="n">renameLog</span> <span class="k">=</span> <span class="kc">true</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * accepts the arguments from command line or other source
+     * @param args
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onAccept</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span>
+        <span class="k">return</span>
+
+      <span class="n">meta</span><span class="o">.</span><span class="n">env</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">region</span> <span class="k">=</span> <span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
+
+      <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"app configured with env(dev,qa,uat,prod) and region(usa.ny) etc... "</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * executes the app
+     * @return
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">OperationResult</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
+
+      <span class="c1">// simulate work
+</span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+
+      <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"app completed"</span><span class="o">)</span>
+
+      <span class="nc">OperationResult</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * called when app is done
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onShutdown</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"app shutting down"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">ListBuffer</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">)</span>
+      <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+
+</code></pre>
+</div>
+
+<h2 id="examples">Examples</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"qa"</span><span class="o">,</span> <span class="s">"usa.ny"</span><span class="o">)))</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="output">Output</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">executing</span> <span class="n">now</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">completed</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">shutting</span> <span class="n">down</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">SUMMARY</span> <span class="o">:</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">name</span>          <span class="o">=</span> <span class="n">sampleapp</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">desc</span>          <span class="o">=</span> <span class="n">sample</span> <span class="n">app</span> <span class="n">to</span> <span class="n">show</span> <span class="n">the</span> <span class="n">appprocess</span> <span class="n">base</span> <span class="kd">class</span><span class="err">,</span> <span class="nc">template</span> <span class="n">methods</span><span class="o">,</span> <span class="n">and</span> <span class="n">functionality</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">version</span>       <span class="o">=</span> <span class="mf">1.0</span><span class="o">.</span><span class="mf">0.3</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">tags</span>          <span class="o">=</span> <span class="n">feature_01</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">args</span>          <span class="o">=</span> <span class="n">Some</span><span class="o">([</span><span class="n">Ljava</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">;</span><span class="err">@</span><span class="mi">9304022</span><span class="o">)</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">env</span>           <span class="o">=</span> <span class="n">qa</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">config</span>        <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="na">config</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">log</span>           <span class="o">=</span> <span class="n">sampleapp</span><span class="o">-</span><span class="n">qa</span><span class="o">-</span><span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">14</span><span class="o">.</span><span class="na">log</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">region</span>        <span class="o">=</span> <span class="n">usa</span><span class="o">.</span><span class="na">ny</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">started</span>       <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">14</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">ended</span>         <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">15</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">duration</span>      <span class="o">=</span> <span class="n">slate</span><span class="o">.</span><span class="na">common</span><span class="o">.</span><span class="na">TimeSpan</span><span class="err">@</span><span class="mi">3</span><span class="n">ec27ce4</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">status</span>        <span class="o">=</span> <span class="n">ended</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">errors</span>        <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">error</span>         <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">KREDDY</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">ip</span>       <span class="o">=</span> <span class="n">Windows</span> <span class="mi">7</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">origin</span>   <span class="o">=</span> <span class="n">local</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">6.1</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">scala</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">2.11</span><span class="o">.</span><span class="mi">7</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">java</span>     <span class="o">=</span> <span class="n">local</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">home</span>     <span class="o">=</span> <span class="nl">C:</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">Java</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0</span><span class="n">_79</span><span class="o">/</span><span class="n">jre</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">1</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data1</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">2</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data2</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+</code></pre>
+</div>
+
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kishorereddy/scala-slate">Slate Kit</a> is maintained by <a href="https://github.com/kishorereddy">kishorereddy</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>  
+  </body>
+</html>
