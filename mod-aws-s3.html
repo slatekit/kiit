@@ -30,7 +30,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-4-13 2:42:10</td>
+      <td>2016-4-16 0:24:10</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -41,12 +41,12 @@
       <td>slate.cloud.aws</td>
     </tr>
     <tr>
-      <td><strong>core source</strong></td>
+      <td><strong>source</strong></td>
       <td>slate.cloud.aws.AwsCloudFiles</td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Aws_S3.scala">Example_Aws_S3</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Aws_S3.scala">Example_Aws_S3</a></td>
     </tr>
   </tbody>
 </table>
@@ -58,7 +58,7 @@
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
-<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 
 
 </code></pre>
@@ -76,7 +76,7 @@
 </code></pre>
 </div>
 
-<h2 id="examples">Examples</h2>
+<h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Use case 1: Connect using parameters
@@ -115,41 +115,6 @@
 
 </code></pre>
 </div>
-
-<h2 id="output">Output</h2>
-
-<p><code class="highlighter-rouge">bat
-    Info : app executing now
-    Info : app completed
-    Info : app shutting down
-    Info : ===============================================================
-    Info : name          = sampleapp
-    Info : desc          = sample app to show the appprocess base class, template methods, and functionality
-    Info : version       = 1.0.0.3
-    Info : tags          = feature_01
-    Info : args          = Some([Ljava.lang.String;@52c62074)
-    Info : env           = qa
-    Info : config        = qa.config
-    Info : log           = sampleapp-qa-2016-4-13-2-24-7.log
-    Info : region        = usa.ny
-    Info : started       = 2016-4-13 2:24:7
-    Info : ended         = 2016-4-13 2:24:8
-    Info : duration      = slate.common.TimeSpan@4d7cca20
-    Info : status        = ended
-    Info : errors        = 0
-    Info : error         = n/a
-    Info : host.name     = KISHORE
-    Info : host.ip       = Windows 7
-    Info : host.origin   = local
-    Info : host.version  = 6.1
-    Info : lang.name     = scala
-    Info : lang.version  = 2.11.7
-    Info : lang.java     = local
-    Info : lang.home     = C:\Tools\Java\jdk1.7.0_79\jre
-    Info : sampleapp: extra 1  = extra summary data1
-    Info : sampleapp: extra 2  = extra summary data2
-    Info : ===============================================================
-   </code></p>
 
 
       <footer class="site-footer">

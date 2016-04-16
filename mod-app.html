@@ -30,7 +30,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-4-13 3:2:1</td>
+      <td>2016-4-16 0:24:10</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -41,12 +41,12 @@
       <td>slate.core.app</td>
     </tr>
     <tr>
-      <td><strong>core source</strong></td>
+      <td><strong>source</strong></td>
       <td>slate.core.app.AppProcess</td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_App.scala">Example_App</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_App.scala">Example_App</a></td>
     </tr>
   </tbody>
 </table>
@@ -58,7 +58,7 @@
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">OperationResult</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.ListBuffer</span>
 
 
@@ -152,7 +152,7 @@
 </code></pre>
 </div>
 
-<h2 id="examples">Examples</h2>
+<h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"qa"</span><span class="o">,</span> <span class="s">"usa.ny"</span><span class="o">)))</span>
