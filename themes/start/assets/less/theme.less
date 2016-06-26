@@ -1,0 +1,142 @@
+a {
+  .transition(color 0.5s);
+  outline: none !important;
+}
+
+img {
+  max-width: 100%;
+}
+
+.nav > li > a {
+  .transition(background 0.5s);
+}
+
+//
+// Form
+// --------------------------------------------------
+.form-control {
+  box-shadow: none !important;
+  .transition(border 0.5s);
+
+  &:focus {
+    border-color: @gray-dark;
+  }
+}
+
+.input-circle {
+  border-radius: 30px;
+}
+
+.carousel-control {
+  .fa {
+    top: 50%;
+    margin-top: -10px;
+    position: absolute;
+  }
+}
+
+//
+// Buttons
+// --------------------------------------------------
+.btn {
+  border-width: 0 0 2px !important;
+  outline: none !important;
+}
+
+.button-variant(@color; @background; @border) {
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    color: @color;
+    background-color: lighten(@background, 5%);
+        border-color: lighten(@border, 5%);
+  }
+
+  &:active,
+  &.active {
+    background-color: lighten(@border, 5%);
+  }
+}
+
+.btn-lg {
+  border-radius: 30px;
+}
+
+//
+// Jumbotron
+// --------------------------------------------------
+.jumbotron {
+  margin-bottom: 0;
+  background: url(../../images/bg-1.jpg) @brand-primary;
+}
+
+//
+// Page Header
+// --------------------------------------------------
+.page-header {
+  margin: 0;
+  padding: 30px 0;
+  background: url(../../images/bg-1.jpg) @brand-primary;
+  color: #fff;
+  border: none;
+  
+  h1 {
+    margin: 0;
+  }
+}
+
+//
+// Image Hover Effect
+// --------------------------------------------------
+.hover-effect {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+
+  .overlay {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    color: #fff;
+    text-align: center;
+    line-height: 100%;
+    .transition(all 0.5s);
+  }
+
+  .fa {
+    top: 60%;
+    margin-top: -15px;
+    position: absolute;
+    left: 50%;
+    margin-left: -15px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: transparent;
+    .transition(all 0.5s);
+  }
+
+  &:hover {
+    .overlay {
+      background: @brand-danger;
+    }
+
+    .fa {
+      top: 50%;
+      color: #fff;
+    }
+  }
+}
+
+//
+// Paralax Background
+// --------------------------------------------------
+.parallax-background {
+  background-position: 50% 0;
+  background-attachment: fixed;
+}
