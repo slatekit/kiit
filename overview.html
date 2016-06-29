@@ -75,88 +75,245 @@
           <div class="container">
             <div class="">
 				<div class="row"> 
-					<h2>Overview</h2>					
-					<ul>
-						<li>100% written in Scala</li>
-						<li>Highly modular utilities and features</li>
-						<li>Layered approach via multiple projects</li>
-						<li>Several utilities available</li>
-					</ul>
+					<h1>Overview</h1>	
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>Language</strong></td>
+						<td>100% written in Scala</td>
+					  </tr>
+					  <tr>
+						<td><strong>Approach</strong></td>
+						<td>Highly modular utilities and features</td>
+					  </tr>
+					  <tr>
+						<td><strong>Layered</strong></td>
+						<td>Layered approach via multiple projects</td>
+					  </tr>
+					  <tr>
+						<td><strong>Back-end architecture</strong></td>
+						<td>Ultimately built to be a mobile/web back-end architecture.
+						</td>
+					  </tr>
+					</table>
 					<br/>
-					<h4>Philosophy</h4>
-					<ul>
-						<li>Simplicity above all</li>
-						<li>Modularity in all areas</li>
-						<li>Minimal dependencies</li>
-						<li>Healthy balance between functional vs imperative</li>
-					</ul>
+					<h1>Philosophy</h1>
+					
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>Simplicity</strong></td>
+						<td>Simplicity is above all else in the design philosophy of Slate</td>
+					  </tr>
+					  <tr>
+						<td><strong>Modularity</strong></td>
+						<td>Slate Kit is a collection of small, manageable building blocks</td>
+					  </tr>
+					  <tr>
+						<td><strong>Layered</strong></td>
+						<td>Each project is for a specific purpose.</td>
+					  </tr>
+					  <tr>
+						<td><strong>Utilities</strong></td>
+						<td>Much of the code, components, server are designed to be glorified utilities and components. All components are well integrated together.
+						</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
+					<h1>Projects</h1>
+					<br/>
 					<h2>1. Slate.Common</h2>
-					<p>Slate Common is the project contain all the core utility code for Slate. 
-					</p>					
-					<ul>
-						<li>0 dependencies</li>
-						<li>Used by all other projects</li>
-						<li>Contains the core common components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.common</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.common.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>n/a</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>library - reusable code</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>free : open-source</td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>used by all other projects</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
 					<h2>2. Slate.Core</h2>
-					<p>Slate Core contains the components integral to the architecture.   
-					</p>					
-					<ul>
-						<li>Depends on Slate.Common</li>
-						<li>Includes abstractions / base implementations for Queues, Files, Tasks</li>
-						<li>Includes a command line interface component to easily build CLI tools</li>
-						<li>Many other useful components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.core</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.core.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>slate.common.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>library - reusable code</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>free : open-source</td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>contains most of the architectural components.<br/>
+						Includes abstractions / base implementations for Queues, Files, Tasks<br/>
+						Includes a command line interface component to easily build CLI tools
+						</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
 					<h2>3. Slate.Cloud</h2>
-					<p>Slate Common is the project contain all the core utility code for Slate. 
-					</p>					
-					<ul>
-						<li>0 dependencies</li>
-						<li>Used by all other projects</li>
-						<li>Contains the core common components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.cloud</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.cloud.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>slate.common.jar, slate.core.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>library - reusable code</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>free : open-source</td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>Contains simplified abstractions over queues, file storage and more. Implementations for AWS based queues, file storage via SQS and S3 available.
+						</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
 					<h2>4. Slate.Ext</h2>
-					<p>Slate Common is the project contain all the core utility code for Slate. 
-					</p>					
-					<ul>
-						<li>0 dependencies</li>
-						<li>Used by all other projects</li>
-						<li>Contains the core common components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.ext</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.ext.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>slate.common.jar, slate.core.jar, slate.cloud.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>library - reusable code</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>paid :$ - please refer to pricing</td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>Contains all the features needed for most mobile / web applications. These include users, devices, registration, invites, push notifications, logging, status updates, managing long-running, continuously running tasks and much more.
+						</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
 					<h2>5. Slate.Server</h2>
-					<p>Slate Common is the project contain all the core utility code for Slate. 
-					</p>					
-					<ul>
-						<li>0 dependencies</li>
-						<li>Used by all other projects</li>
-						<li>Contains the core common components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.server</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.server.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>slate.common.jar, slate.core.jar, slate.cloud.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>optional</strong></td>
+						<td>slate.ext.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>library - reusable code</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>free : open-source </td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>A web api server written in Scala Akka-Http. Contains the ability easily embed/include protocol independent apis inside the server. Built in support for features related to dev-ops, health, status, version and monitoring.
+						</td>
+					  </tr>
+					</table>
 				</div>
 				<br/>
 				<div class="row">
 					<h2>6. Slate.CLI</h2>
-					<p>Slate Common is the project contain all the core utility code for Slate. 
-					</p>					
-					<ul>
-						<li>0 dependencies</li>
-						<li>Used by all other projects</li>
-						<li>Contains the core common components</li>
-					</ul>
+					<table class="table table-bordered table-striped">
+					  <tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.cli</td>
+					  </tr>
+					  <tr>
+						<td><strong>jar</strong></td>
+						<td>slate.cli.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>dependencies</strong></td>
+						<td>slate.common.jar, slate.core.jar, slate.cloud.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>optional</strong></td>
+						<td>slate.ext.jar</td>
+					  </tr>
+					  <tr>
+						<td><strong>type</strong></td>
+						<td>executable - command line</td>
+					  </tr>
+					  <tr>
+						<td><strong>cost</strong></td>
+						<td>paid :$ - please refer to pricing</td>
+					  </tr>
+					  <tr>
+						<td><strong>notes</strong></td>
+						<td>The command line interface for Slate. Support several features such as generating new projects, code generation. This is currently only available internally and will be made public soon.
+						</td>
+					  </tr>
+					</table>
 				</div>
             </div>
           </div>
