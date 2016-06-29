@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-6-26 2:14:42</td>
+      <td>2016-6-28 11:25:52</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -109,24 +109,65 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConfig</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">Db</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">}</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Result</span><span class="o">}</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="c1">// CASE 1: Default database connection using credentials from users folder with content:
+</span>    <span class="c1">//
+</span>    <span class="c1">// e.g. on windows: C:\Users\kv\.slate\db_default.txt
+</span>    <span class="c1">//
+</span>    <span class="c1">// driver:com.mysql.jdbc.Driver
+</span>    <span class="c1">// url:jdbc:mysql://localhost/World
+</span>    <span class="c1">// user:root
+</span>    <span class="c1">// password:123abc
+</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 2: Default database connection explicitly ( not recommended - store config files in your user folder )
+</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getDefault</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 3: Register connection and link to a key "user_db" using credentials from user folder
+</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getByKey</span><span class="o">(</span><span class="s">"user_db"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 4: Register connection and link to a key "user_db" explicitly
+</span>    <span class="c1">// ( not recommended - store config files in your user folder )
+</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db"</span><span class="o">,</span> <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/user_db"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getByKey</span><span class="o">(</span><span class="s">"user_db"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 5: Register connection as a shard and link to a group
+</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">shard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard1"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">shard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard2"</span><span class="o">,</span> <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getShard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard1"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getShard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard2"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 6: Now create the database class and start using some basic methods
+</span>    <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Db</span><span class="o">(</span><span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">))</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">open</span><span class="o">()</span>
+
+    <span class="c1">// CASE 7: Get scala int value ( assumes default mysql installation is present with db_default.txt existing
+</span>    <span class="c1">// in the users folder &lt;user&gt;/.slate/db_default.txt
+</span>    <span class="k">val</span> <span class="n">total</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">getScalarInt</span><span class="o">(</span><span class="s">"select count(*) from City"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"total users: ${total}"</span><span class="o">)</span>
+    
 
 </code></pre>
 </div>

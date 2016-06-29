@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+    <title>Slate Kit - ORM / Entities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -31,24 +31,24 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <i class="fa fa-bars"></i>
               </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li><a href="utils.html">Utilities</a></li>
+                <li class="active"><a href="orm.html" class="current">Overview</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,78 +62,106 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Overview</h1>
+                <h3>A simple Scala toolkit and backend for your mobile and web apps<br />
+                </h3>
               </aside>
 
             </div>
 			</div>
 		</footer>
 		
-		<section id="codeExample" class="section" >
-			<div class="container">
-				<h1 id="reflect">Reflect</h1>
-
-<table>
-  <tbody>
-    <tr>
-      <td><strong>desc</strong></td>
-      <td>Reflection helper for Scala</td>
-    </tr>
-    <tr>
-      <td><strong>date</strong></td>
-      <td>2016-6-28 11:25:52</td>
-    </tr>
-    <tr>
-      <td><strong>version</strong></td>
-      <td>0.9.1</td>
-    </tr>
-    <tr>
-      <td><strong>namespace</strong></td>
-      <td>slate.common</td>
-    </tr>
-    <tr>
-      <td><strong>source</strong></td>
-      <td>slate.common.Reflect</td>
-    </tr>
-    <tr>
-      <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Reflect.scala">Example_Reflect</a></td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
-
-<span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
-
-</code></pre>
-</div>
-
-<h2 id="setup">Setup</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
-
-</code></pre>
-</div>
-
-<h2 id="usage">Usage</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
-
-</code></pre>
-</div>
-
-
-			</div>
-		</section>
+		<section id="features" class="section">
+          <div class="container">
+            <div class="">
+				<div class="row"> 
+					<h2>Overview</h2>					
+					<ul>
+						<li>100% written in Scala</li>
+						<li>Highly modular utilities and features</li>
+						<li>Layered approach via multiple projects</li>
+						<li>Several utilities available</li>
+					</ul>
+					<br/>
+					<h4>Philosophy</h4>
+					<ul>
+						<li>Simplicity above all</li>
+						<li>Modularity in all areas</li>
+						<li>Minimal dependencies</li>
+						<li>Healthy balance between functional vs imperative</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>1. Slate.Common</h2>
+					<p>Slate Common is the project contain all the core utility code for Slate. 
+					</p>					
+					<ul>
+						<li>0 dependencies</li>
+						<li>Used by all other projects</li>
+						<li>Contains the core common components</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>2. Slate.Core</h2>
+					<p>Slate Core contains the components integral to the architecture.   
+					</p>					
+					<ul>
+						<li>Depends on Slate.Common</li>
+						<li>Includes abstractions / base implementations for Queues, Files, Tasks</li>
+						<li>Includes a command line interface component to easily build CLI tools</li>
+						<li>Many other useful components</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>3. Slate.Cloud</h2>
+					<p>Slate Common is the project contain all the core utility code for Slate. 
+					</p>					
+					<ul>
+						<li>0 dependencies</li>
+						<li>Used by all other projects</li>
+						<li>Contains the core common components</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>4. Slate.Ext</h2>
+					<p>Slate Common is the project contain all the core utility code for Slate. 
+					</p>					
+					<ul>
+						<li>0 dependencies</li>
+						<li>Used by all other projects</li>
+						<li>Contains the core common components</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>5. Slate.Server</h2>
+					<p>Slate Common is the project contain all the core utility code for Slate. 
+					</p>					
+					<ul>
+						<li>0 dependencies</li>
+						<li>Used by all other projects</li>
+						<li>Contains the core common components</li>
+					</ul>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>6. Slate.CLI</h2>
+					<p>Slate Common is the project contain all the core utility code for Slate. 
+					</p>					
+					<ul>
+						<li>0 dependencies</li>
+						<li>Used by all other projects</li>
+						<li>Contains the core common components</li>
+					</ul>
+				</div>
+            </div>
+          </div>
+        </section>
+        
       </main>
 
       <footer id="footer" class="site-footer">

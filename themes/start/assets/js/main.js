@@ -11,6 +11,7 @@
     });
   });
 
+  
   // One Page Navigation Setup
   $('.one-page-nav #navigation').singlePageNav({
     offset: $('.one-page-nav').outerHeight(),
@@ -23,7 +24,7 @@
     onComplete: function() {
     }
   });
-
+  
   // Sticky Navbar Affix
   $('.one-page-nav').affix({
     offset: {

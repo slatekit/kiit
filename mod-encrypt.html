@@ -76,13 +76,13 @@
 		
 		<section id="codeExample" class="section" >
 			<div class="container">
-				<h1 id="reflect">Reflect</h1>
+				<h1 id="encrypt">Encrypt</h1>
 
 <table>
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Reflection helper for Scala</td>
+      <td>Encryption using AES</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
@@ -94,39 +94,58 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common</td>
+      <td>slate.common.encrypt</td>
     </tr>
     <tr>
       <td><strong>source</strong></td>
-      <td>slate.common.Reflect</td>
+      <td>slate.common.encrypt.Encryptor</td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Reflect.scala">Example_Reflect</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Encryptor.scala">Example_Encryptor</a></td>
     </tr>
   </tbody>
 </table>
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.encrypt.</span><span class="o">{</span><span class="nc">Encryptor</span><span class="o">}</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Ensure</span><span class="o">,</span> <span class="nc">Strings</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
+
+<span class="c1">// Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.
+</span><span class="k">object</span> <span class="nc">TestEncryptor</span> <span class="k">extends</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">){</span>
+<span class="o">}</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="c1">// CASE 1: Encrypt using AES ( text is base64 encoded without newlines )
+</span>    <span class="k">val</span> <span class="n">input</span> <span class="k">=</span> <span class="s">"basMoAKSKDFJrd789"</span>
+    <span class="k">val</span> <span class="n">encrypted</span> <span class="k">=</span> <span class="nc">TestEncryptor</span><span class="o">.</span><span class="n">encrypt</span><span class="o">(</span><span class="n">input</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">encrypted</span><span class="o">)</span>
+
+    <span class="c1">// CASE 2: Decrypt using AES
+</span>    <span class="k">val</span> <span class="n">decrypted</span> <span class="k">=</span> <span class="nc">TestEncryptor</span><span class="o">.</span><span class="n">decrypt</span><span class="o">(</span><span class="n">encrypted</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">decrypted</span><span class="o">)</span>
+
+    <span class="c1">// CASE 3: Ensure decrypted matches original
+</span>    <span class="nc">Ensure</span><span class="o">.</span><span class="n">isTrue</span><span class="o">(</span><span class="nc">Strings</span><span class="o">.</span><span class="n">isMatch</span><span class="o">(</span><span class="n">input</span><span class="o">,</span> <span class="n">decrypted</span><span class="o">),</span> <span class="s">"Encryption / decrypting does not work"</span><span class="o">)</span>
+    
 
 </code></pre>
 </div>

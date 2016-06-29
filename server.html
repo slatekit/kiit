@@ -45,9 +45,9 @@
                 <li ><a href="#header">Home</a></li>
                 <li><a href="infra.html">Infrastructure</a></li>
                 <li><a href="utils.html">Utilities</a></li>
-                <li class="active"><a href="orm.html" class="current">ORM</a></li>
+                <li><a href="orm.html">ORM</a></li>
                 <li><a href="features.html">Features</a></li>
-                <li><a href="server.html">Server</a></li>
+                <li class="active"><a href="server.html" class="current">Server</a></li>
                 <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
@@ -62,9 +62,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">ORM</h1>
-                <h3>A light-weight single table object-relational mapper for cloud databases<br />
-                </h3>
+                <h1 class="widget-title">Server</h1>
+                <h3>A fully featured Web API server build in Scala using Akka-Http<br />
+					Many mobile back-end features built-in. Easily extensible.
+				</h3>
               </aside>
 
             </div>
@@ -74,7 +75,19 @@
 		<section id="features" class="section">
           <div class="container">
             <div class="">
-				<div> 
+				<div class="row">
+					<ul id="navigation" class="nav navbar-nav navbar-center">
+						<li><a href="#server-cli" class="btn">Config</a></li>
+						<li><a href="#server-cli" class="btn">Setup</a></li>
+						<li><a href="#server-cli" class="btn">Routing</a></li>
+						<li><a href="#server-cli" class="btn">Features</a></li>
+						<li><a href="#server-cli" class="btn">Extending</a></li>
+						<li><a href="#server-cli" class="btn">CLI</a></li>
+						<li><a href="#server-install">Install</a></li>
+						<li><a href="#server-aws">AWS</a></li>
+					</ul>
+				</div>
+				<div class="row"> 
 					<h2>Overview</h2>
 					<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
 						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
@@ -82,92 +95,75 @@
 					</p>
 				</div>
 				<br/>
-				<div class="">
-					<div > 
-						<h2>Features</h2>					
-						<ul>
-							<li>Setup: Registering 1 or more database to the ORM</li>
-							<li>Setup: Connecting a model with a specific data-source</li>
-							<li>Setup: Auto-mapping to mysql tables</li>
-							<li>Setup: Setting up your field mappings programmaticaly</li>
-							<li>Setup: Setting up your field mappings via annotations</li>
-							<li>Usage: You can use just an individual part of the ORM or the whole thing</li>
-							<li>Usage: The ORM is separated into a Model definition, Mapper, Repository and Service per model</li>
-							<li>Usage: Typically all you need is a model and your own Service for a model. E.g. User, UserService  </li>
-							<li>Usage: All entities have an "id" field and timestamps/audit fields ( created, updated, createdBy, updatedBy )</li>
-							<li>Usage: CRUD operations, FindBy field and DeleteBy field methods are supported.</li>
-							<li>Usage: A "query" specification pattern is used for more complex queries.</li>			
-							<li>Usage: Outside of these built-in features, you are free to use stored procs, sql</li>
-							<li>Usage: Reference other model services to perform joins</li>
-						</ul>						
-					</div>
-				</div>
-				<br/>
 				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>1. Databases</h2>
-						<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-						</p>
-						<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-					<div class="col-sm-6"> 
-						<h2>4. Mapper</h2>
-						<p>The mapper component is used map fields in the Model definition to/from sql. The Mapper  is designed to be general enough to support conversion to/from other formats such as JSON. You can write your own mapper. There is a built in Mapper for MySql.
-						</p>
-						<a href="mod-orm-mapper.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-				</div>
-				<br/>
-				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>2. Models</h2>
-						<p>In order to use the ORM to map entities to tables, you have setup a model definition. A model definition is the name of the model along with the fields to be persisted. This can be done 2 different ways either programmatically or via annotations.</p>
-						<a href="mod-orm-model.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-					<div class="col-sm-6"> 
-						<h2>5. Repo</h2>
-						<p>The Repository layer/component support all of the CRUD operations on your entities and uses a Mapper to Map the entities to/from database records. You don't need to implement your own Repo unless for more complex queries or calling stored procs.
-						</p>
-						<a href="mod-orm-repo.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-				</div>
-				<br/>
-				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>3. Entities</h2>
-						<p>The entities you want to be auto-mapped to a table need to implement the IEntity trait. This ensure for consistent field names such as "id" ( long ) and timestamp/audit field like created, createdby etc. It also allows for the ORM to use generics.
-						</p>
-						<a href="mod-orm-entity.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-					<div class="col-sm-6"> 
-						<h2>6. Service</h2>
-						<p>The Service layer/component serves as the location to put any business logic/operations before/after any CRUD operations. There are already several CRUD methods available here that simply delegate to the Repo, but can override the behaviour.
-						</p>
-						<a href="mod-orm-service.html" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-				</div>
-				<br/>
-				<br/>
-				<div>
-					<h2>Relations</h2>
-					<p>
-					While joins/relationships are not supported currently, you can easily get a reference to other entity Services to query related data. Part of the reason for not initially supporting joins/relationships was to get a simple ORM working well for single-table models for mostly Cloud/Mobile Backend data. The ORM will be enhanced in future versions.
+					<h2>Tech</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
 					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
 				</div>
 				<br/>
-				<div> 
+				<div class="row">
+					<h2>Approach</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>Config</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div class="row">
 					<h2>Setup</h2>
-					<p>You can setup the ORM / Entities system to use multiple databases and also connect repositories to different types of databases. 
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
 					</p>
-					<a href="mod-orm-setup.html" class="more"><span class="btn btn-primary">See docs</span></a>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
 				</div>
 				<br/>
-				<div> 
-					<h2>Full examples</h2>
+				<div class="row">
+					<h2>Routing</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div class="row">
+					<h2>Features</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<div class="row">
+					<h2>Extending</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div id="server-cli" class="row">
+					<h2>CLI</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div id="server-install" class="row">
+					<h2>Install</h2>
+					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
+					</p>
+					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				</div>
+				<br/>
+				<div id="server-aws" class = "row"> 
+					<h2>AWS</h2>
 					<p>These parts of the ORM were designed to be used independently where applicable while also integrated together to support typical ORM features. 
 					</p>
 					<a href="mod-entities-full.html" class="more"><span class="btn btn-primary">See docs</span></a>
 				</div>
+				<br/>
             </div>
           </div>
         </section>

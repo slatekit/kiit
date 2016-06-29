@@ -31,7 +31,7 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -42,13 +42,13 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
               <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li ><a href="#header">Home</a></li>
+                <li class="active"><a href="infra.html" class="current">Infrastructure</a></li>
+                <li><a href="utils.html">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -71,46 +71,66 @@
 				</div>
 			</div>
 		</footer>
-        <section id="features" class="section section-center section-hilite section-features">
+        <section id="features" class="section section-center  section-features">
           <div class="container">
+			<div class="row">
+				<h4>Click on any item below to see more details and docs.</h4>
+				<br/><br/><br/>
+			</div>
             <div class="row">
-
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a></div>
+                <div class="icon-wrap">
+					<a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
+				</div>
                 <a href="mod-app.html"><h4>App</h4></a>
-                <p>A foundation for any command line, batch, or other app with support for logging, config, environments and more</p>
+                <p>A foundation for any command line, batch, or other app with support for logging, configuration, environment selection, diagnostics, status and much more.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/terminal.png" width="80" alt=""></div>
+                <div class="icon-wrap">
+					<a href="mod-shell.html"><img src="themes/start/images/white/terminal.png" width="90" alt=""></a>
+				</div>
                 <a href="mod-shell.html"><h4>CLI</h4></a>
-                <p>Command line access to any of your services, apis, and/or administrative features.</p>
+                <p>Command line access to your services, apis, and/or admin features. Extend the Shell app, register apis, and have the shell marshal commands via reflection.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/layers.png" width="80" alt=""></div>
-                <a href="mod-data.html"><h4>Database</h4></a>
-                <p>A convenient set to tools for accessing, querying data and more via JDBC. Also has support for mapping objects.</p>
+                <div class="icon-wrap">
+					<a href="orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
+				</div>
+                <a href="orm.html"><h4>Data / ORM</h4></a>
+                <p>A convenient set of tools for accessing, querying data, and executing commands on your database via JDBC. Also has support for mapping objects.</p>
               </div>
-
+			</div>
+			<div class="row">
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/queue.png" width="80" alt=""></div>
+                <div class="icon-wrap">
+					<a href="mod-aws-sqs.html"><img src="themes/start/images/white/queue.png" width="80" alt=""></a>
+				</div>
                 <a href="mod-aws-sqs.html"><h4>Queues</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. Built in support for <strong>AWS SQS</strong></p>
+                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/folders.png" width="80" alt=""></div>
-                <a href="mod-aws-s3.html"><h4>Files</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. <strong>AWS S3</strong> integration to store files</p>
+                <div class="icon-wrap">
+					<a href="mod-aws-s3.html"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>
+				</div>
+                <a href="mod-aws-s3.html"><a href="mod-aws-s3.html"><h4>Files</h4></a>
+                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/gears.png" width="80" alt=""></div>
+                <div class="icon-wrap">
+					<a href="mod-tasks.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>
+				</div>
                 <a href="mod-tasks.html"><h4>Tasks</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing.</p>
+                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
               </div>
             </div>
+			<div class="row">
+				<span class="danger"><strong>All items can be used independently</strong></span>
+				<br/><br/><br/>
+			</div>
           </div>
         </section>
         

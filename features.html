@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+    <title>Slate Kit - Features</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -30,25 +30,25 @@
             </div>
           </div>
         </nav>
-
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+		
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <i class="fa fa-bars"></i>
               </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Start</a></h1>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li><a href="utils.html">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li class="active"><a href="features.html"  class="current">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -59,80 +59,94 @@
 
 		<footer class="site-footer">
 			<div class="container">
-			<div class="row">
+				<div class="row">
 
-              <aside class="widget">
-                <h1 class="widget-title">Utilities</h1>
-                <h3>
-                  A common set of useful tools for your development needs.<br />
-                </h3>
-              </aside>
-
-            </div>
+				  <aside class="widget">
+					<h1 class="widget-title">Features</h1>
+					<h3>                  
+					  Leverage useful pre-built features<br />
+					  Get your app up and running quickly.
+					</h3>
+				  </aside>
+				</div>
 			</div>
 		</footer>
-		
-		<section id="features" class="section section-center section-features">
+        <section id="features" class="section section-center  section-features">
+			
           <div class="container">
-            <div class="row">
+			<div class="row">
+				<h4>Click on any item below to see more details and docs.</h4>
+				<h5><strong>All features below can be included in our Web API Scala Akka-Http Server</strong></h5>
+				<br/><br/><br/>
+			</div>
+            <div class="row ">
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/gears.png" width="80" alt=""></div>
-                <a href="mod-args.html"><h4>Args</h4></a>
-                <p>A lexical command line argument parser</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-users.html"><img src="themes/start/images/white/users.png" width="70" alt=""></div></a>
+                <a href="mod-ext-users.html"><h4>Users</h4></a>
+                <p>User creation and management. You can setup email, phone, device configuration options. Multiple fields are available and you can also customize as necessary.</p>
+              </div> 
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+				<a href="mod-ext-devices.html"><img src="themes/start/images/white/phone.png" width="60" alt=""></div></a>
+                <a href="mod-ext-devices.html"><h4>Devices</h4></a>
+                <p>Mobile device registration and management. This feature allows linking of Users to their devices and is used to support push notifications and messages.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/eye2.png" width="80" alt=""></div>
-                <a href="mod-auth.html"><h4>Auth</h4></a>
-                <p>A simple auth component</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-reg.html"><img src="themes/start/images/white/registration.png" width="80" alt=""></div></a>
+                <a href="mod-ext-reg.html"><h4>Registration</h4></a>
+                <p>A registration system for Users and devices. You can setup various verification modes such as email, phone, or mobile device verification.</strong></p>
+              </div>
+			</div>
+			<br/>
+			<div class="row ">
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+				<a href="mod-ext-settings.html"><img src="themes/start/images/white/settings3.png" width="60" alt=""></div></a>
+                <a href="mod-ext-settings.html"><h4>Settings</h4></a>
+                <p>Save settings for server side components and / or store user settings. Designed for flexibility. Grouping of settings by service and/or user is possible.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/layers.png" width="80" alt=""></div>
-                <a href="mod-data.html"><h4>Database</h4></a>
-                <p>Database utilities</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-tasks.html"><img src="themes/start/images/white/task_management.png" width="80" alt=""></div></a>
+                <a href="mod-ext-tasks.html"><h4>Tasks</h4></a>
+                <p>Tasks for background processing can be configured on the server. This feature allows you to start, stop, pause, resume and get a status on the tasks. </strong></p>
               </div>
 			  
-
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/lock.png" width="80" alt=""></div>
-                <a href="mod-encrypt.html"><h4>Encrypt</h4></a>
-                <p>AES encryption/decryption support</p>
-              </div>              
-
+                <div class="icon-wrap">
+				<a href="mod-ext-invites.html"><img src="themes/start/images/white/gift.png" width="70" alt=""></div></a>
+                <a href="mod-ext-invites.html"><h4>Invites</h4></a>
+                <p>Allows users of your app to request invitations. You can then  then approve to convert them to actual users. Useful for scaling and user growth.</p>
+              </div>
+			</div>
+			<br/>
+			<div class="row ">
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/gears.png" width="80" alt=""></div>
-                <a href="mod-info.html"><h4>Info</h4></a>
-                <p>Useful information about app, host, runtime</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-logs.html"><img src="themes/start/images/white/error.png" width="60" alt=""></div></a>
+                <a href="mod-ext-logs.html"><h4>Logs</h4></a>
+                <p>Error logs can be stored in a table on the server but you can customize this to implement / use external logging provider such as new relic, loggly, logstash. </p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/document.png" width="80" alt=""></div>
-                <a href="mod-lex.html"><h4>Lex</h4></a>
-                <p>A light-weight lexer to parse tokens</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-status.html"><img src="themes/start/images/white/diagnostic.png" width="60" alt=""></div></a>
+                <a href="mod-ext-status.html"><h4>Status</h4></a>
+                <p>Provides a consistent approach to tracking the status of any of your servers, tasks and resources. You  update the status entries for named resources.</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/module.png" width="80" alt=""></div>
-                <a href="mod-results.html"><h4>Results</h4></a>
-                <p>Wrapper around return value and a return value builder</p>
+                <div class="icon-wrap">
+				<a href="mod-ext-audits.html"><img src="themes/start/images/white/warning.png" width="60" alt=""></div></a>
+                <a href="mod-ext-audits.html"><h4>Audits</h4></a>
+                <p>Use the auditing service to listen for / store any important actions taking place in your system. This gives you a history of important events taking place.
               </div>
-			  
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/email2.png" width="80" alt=""></div>
-                <a href="mod-sms.html"><h4>Sms</h4></a>
-                <p>Simple text message via Twilio HTTP calls</p>
-              </div>
-              
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap"><img src="themes/start/images/white/gears.png" width="80" alt=""></div>
-                <a href="mod-utils.html"><h4>Utils</h4></a>
-                <p>Miscellaneous utilities</p>
-              </div>
-
-            </div>
+			</div>
           </div>
         </section>
         
