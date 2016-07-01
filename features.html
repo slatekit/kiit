@@ -42,13 +42,13 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li ><a href="#header">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
                 <li><a href="infra.html">Infrastructure</a></li>
-                <li><a href="utils.html">Utilities</a></li>
-                <li><a href="orm.html">ORM</a></li>
                 <li class="active"><a href="features.html"  class="current">Features</a></li>
+                <li><a href="orm.html">ORM</a></li>
                 <li><a href="server.html">Server</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="utils.html">Utilities</a></li>
               </ul>
             </div>
           </div>
@@ -74,10 +74,13 @@
         <section id="features" class="section section-center  section-features">
 			
           <div class="container">
-			<div class="row">
+			<div class="alert alert-info" role="alert">
 				<h4>Click on any item below to see more details and docs.</h4>
 				<h5><strong>All features below can be included in our Web API Scala Akka-Http Server</strong></h5>
-				<br/><br/><br/>
+			</div>
+			<div class="row">				
+				<br/>
+				<br/>
 			</div>
             <div class="row ">
               <div class="col-md-4 col-sm-6">
@@ -85,7 +88,7 @@
 				<a href="mod-ext-users.html"><img src="themes/start/images/white/users.png" width="70" alt=""></div></a>
                 <a href="mod-ext-users.html"><h4>Users</h4></a>
                 <p>User creation and management. You can setup email, phone, device configuration options. Multiple fields are available and you can also customize as necessary.</p>
-              </div> 
+              </div>
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
@@ -147,9 +150,59 @@
                 <p>Use the auditing service to listen for / store any important actions taking place in your system. This gives you a history of important events taking place.
               </div>
 			</div>
+			<br/>		
+			<div class="alert alert-info" role="alert">
+				<strong>All items can be used independently</strong>
+			</div>
           </div>
         </section>
-        
+        <section id="features" class="section">
+          <div class="container">
+			<div class="row">
+				<h2>Slate.Ext</h2>
+				<p>All these utilities are available in the following project</p>	
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-3"><strong>namespace</strong></td>
+						<td>slate.ext</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slate.ext.jar</td>
+					</tr>
+					<tr>
+						<td><strong>cost</strong></td>
+						<td>paid : refer to pricing</td>
+					</tr>
+					<tr>
+						<td><strong>dependencies</strong></td>
+						<td>									
+							<ul>
+								<li>slate.common.jar</li>
+								<li>slate.core.jar</li>
+								<li>slate.cloud.jar</li>
+								<li>aws-sdk</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>about</strong></td>
+						<td>	
+							<ul>
+								<li>Contains all the mobile backend features</li>
+								<li>All features are implemented as modules</li>
+								<li>All the fetures modules here can be used/included in the Server (see below)</li>
+								<li>All the fetures modules here can be alternatived accessed and used in the CLI( command line interface shell )</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+				<p>You can view more information on projects available in SlateKit in the overview page</p>
+				<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
+				<br/><br/>
+			</div>
+		  </div>
+		</section>
       </main>
 
       <footer id="footer" class="site-footer">
