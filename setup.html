@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slate Kit - Infrastructure</title>
+    <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,16 +41,16 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="overview.html">Overview</a></li>
-                <li class="active"><a href="infra.html" class="current">Infrastructure</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
                 <li><a href="features.html">Features</a></li>
                 <li><a href="orm.html">ORM</a></li>
                 <li><a href="server.html">Server</a></li>
-                <li><a href="utils.html">Utilities</a></li>
+                <li><a href="utils.html" >Utilities</a></li>
                 <li><a href="releases.html" >Releases</a></li>
-                <li><a href="setup.html">Setup</a></li>
+                <li class="active"><a href="setup.html" class="current">Setup</a></li>
               </ul>
             </div>
           </div>
@@ -61,124 +61,119 @@
 
 		<footer class="site-footer">
 			<div class="container">
-				<div class="row">
+			<div class="row">
 
-				  <aside class="widget">
-					<h1 class="widget-title">Infrastructure</h1>
-					<h3>                  
-					  Save time and costs using pre-built architecture.<br />
-					  Focus on your business features.
-					</h3>
-				  </aside>
-				</div>
+              <aside class="widget">
+                <h1 class="widget-title">Setup</h1>
+                <h3>
+                  Setup SlateKit for rapid development.<br />
+                </h3>
+              </aside>
+
+            </div>
 			</div>
 		</footer>
-        <section id="features" class="section section-center  section-features">
+		
+		<section id="features" class="section section-features">
+			
           <div class="container">
-			<div class="alert alert-info" role="alert">
-				<h4>Click on any item below to see more details and docs.</h4>
-				<h5><strong>The architectural components such as queues, file storage, data access are built for AWS, Linux, MySQL</strong></h5>
+			
+            <div class="alert alert-info" role="alert">
+				<h4>SlateKit will soon be available on package management tools like sbt, maven, gradle</h4>
 			</div>
-			<div class="row">				
-				<br/>
-				<br/>
-			</div>
-            <div class="row">
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-api.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-api.html"><h4>APIs</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
-              </div>
-			  
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-app.html"><h4>App</h4></a>
-                <p>A foundation for any command line, batch, or other app with support for logging, configuration, environment selection, diagnostics, status and much more.</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-shell.html"><img src="themes/start/images/white/terminal.png" width="90" alt=""></a>
-				</div>
-                <a href="mod-shell.html"><h4>CLI</h4></a>
-                <p>Command line access to your services, apis, and/or admin features. Extend the Shell app, register apis, and have the shell marshal commands via reflection.</p>
-              </div>
-			</div>
-			<div class="row">
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
-				</div>
-                <a href="orm.html"><h4>Data / ORM</h4></a>
-                <p>A convenient set of tools for accessing, querying data, and executing commands on your database via JDBC. Also has support for mapping objects.</p>
-              </div>
-			  
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-aws-s3.html"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-aws-s3.html"><a href="mod-aws-s3.html"><h4>Files</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-notifications.html"><img src="themes/start/images/white/speaker.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-notifications.html"><h4>Notifications</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
-              </div>
-            </div>
 			<br/>
-			<div class="row">
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-aws-sqs.html"><img src="themes/start/images/white/queue.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-aws-sqs.html"><h4>Queues</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
-              </div>
-			  
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-server.html"><img src="themes/start/images/white/connected.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-server.html"><h4>Server</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-tasks.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-tasks.html"><h4>Tasks</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
-              </div>
-            </div>
-			<br/>			
-			<div class="alert alert-info" role="alert">
-				<strong>All items can be used independently</strong>
+			<div class="row">			
+				<h1>Requirements</h1>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-3"><strong>Java</strong></td>
+						<td class="col-sm-3">1.8</td>
+						<td >For all code</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>Scala</strong></td>
+						<td class="col-sm-3 error">2.17</td>
+						<td class="col-sm-3">For all code</td>
+					</tr>
+				</table>
 			</div>
+			<br/><br/>
+			<div class="row">			
+				<h1>Optional</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-3"><strong>Sbt</strong></td>
+						<td class="col-sm-3">latest</td>
+						<td class="col-sm-3">Build tool</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>MySql Connector</strong></td>
+						<td class="col-sm-3">5.7</td>
+						<td class="col-sm-3">For JDBC connections</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>Akka-Http</strong></td>
+						<td class="col-sm-3">latest</td>
+						<td class="col-sm-3">For Slate Server</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>AWS Sdk ( For Java )</strong></td>
+						<td class="col-sm-3">latest</td>
+						<td class="col-sm-3">Cloud Storage of Files(S3), Queues(SQS)</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>IntelliJ</strong></td>
+						<td class="col-sm-3">latest</td>
+						<td class="col-sm-3">IDE</td>
+					</tr>
+				</table>
+            </div>
+			<br/><br/>
+			<div class="row">			
+				<h1>Installation</h1>
+				<h3>Java</h3>
+				<ul>
+					<li>install java 1.8.0 to example: C:\Tools\Java\jdk1.8.0</li>
+					<li>setup java home env variable: JAVA_HOME=C:\Tools\Java\jdk1.8.0</li>				
+				</ul>
+				
+				<h3>Scala</h3>
+				<ul>
+					<li>install scala from download url below to c:\tools\scala\lang</li>
+					<li>ensure C:\tools\scala\lang\bin; is in your system PATH variable.</li>
+					<li>ensure environment variable SCALA_HOME=C:\Tools\Scala\Lang</li>
+				</ul>
+				<h3>SBT</h3>
+				<ul>
+					<li>install sbt ( scala build tool ) from download url below to c:\tools\scala\sbt</li>
+					<li>ensure C:\tools\scala\sbt\bin; is in your system PATH variable.</li>
+					<li>ensure environment variable SBT_HOME=C:\tools\Scala\SBT\</li>
+				</ul>
+				<h3>Slate</h3>
+				<ul>
+					<li>download binaries or source code</li>
+				</ul>
+            </div>
+			<br/><br/>
+			<div class="row">			
+				<h1>Configuration</h1>
+				<p>There is currently no specific configuration needed at a global level for Slate Kit.</p>
+            </div>
+			<div class="row">			
+				<h1>Compiling</h1>
+				<h3>Slate</h3>
+				<ul>
+					<li>download binaries or source code</li>
+					<li>if you are using binaries, drop jar files into your sbt lib folder</li>
+					<li>if you are using sources, add project dependencies to the slate kit projects.</li>
+				</ul>
+				
+            </div>
           </div>
         </section>
-        <section id="features" class="section">
-			<div class="container">
-				<div class="row">
-					<h2>Projects</h2>
-					<p>All these items are available in the Slate.Core, Slate.Cloud, Slate.Server projects</p>
-					<p>You can view more information on projects available in SlateKit in the overview page</p>
-					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
-					<br/><br/>
-				</div>
-			</div>
-		</section>
+        
+		<br/>
+		<br/>
       </main>
 
       <footer id="footer" class="site-footer">

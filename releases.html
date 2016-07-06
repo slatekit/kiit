@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slate Kit - Infrastructure</title>
+    <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -41,15 +41,15 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="overview.html">Overview</a></li>
-                <li class="active"><a href="infra.html" class="current">Infrastructure</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
                 <li><a href="features.html">Features</a></li>
                 <li><a href="orm.html">ORM</a></li>
                 <li><a href="server.html">Server</a></li>
                 <li><a href="utils.html">Utilities</a></li>
-                <li><a href="releases.html" >Releases</a></li>
+                <li class="active"><a href="releases.html"  class="current">Releases</a></li>
                 <li><a href="setup.html">Setup</a></li>
               </ul>
             </div>
@@ -61,124 +61,173 @@
 
 		<footer class="site-footer">
 			<div class="container">
-				<div class="row">
+			<div class="row">
 
-				  <aside class="widget">
-					<h1 class="widget-title">Infrastructure</h1>
-					<h3>                  
-					  Save time and costs using pre-built architecture.<br />
-					  Focus on your business features.
-					</h3>
-				  </aside>
-				</div>
+              <aside class="widget">
+                <h1 class="widget-title">Releases</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
+              </aside>
+
+            </div>
 			</div>
 		</footer>
-        <section id="features" class="section section-center  section-features">
+		
+		<section id="features" class="section section-features">
+			
           <div class="container">
-			<div class="alert alert-info" role="alert">
-				<h4>Click on any item below to see more details and docs.</h4>
-				<h5><strong>The architectural components such as queues, file storage, data access are built for AWS, Linux, MySQL</strong></h5>
+			<div class="row"> 
+					<p>We are very happy to announce that SlateKit is now officially publicly available as a Beta Release. We have been using SlateKit internally on projects for over <strong>1.5 years</strong> with much success. The investment in Scala, Akka and Akka-Http has paid off tremendously for us and our clients, by providing a modern, concise, cross-platform language with great tools and frameworks to build  high-performance, scalable mobile and web applications. We are offering much of the SlateKit as open-source while some parts are paid/premium.
+					</p>
+					
+				</div>
+            <div class="alert alert-info" role="alert">
+				<h4>SlateKit is now publicly available as an early beta-release. </h4>
+				<h5>As the first beta release, SlateKit may have bugs/issues.</h5>
+				<h5>Please feel free to contact us at www.github.com\codehelix or at www.github.com\kishorereddy</h5>
 			</div>
-			<div class="row">				
-				<br/>
-				<br/>
-			</div>
-            <div class="row">
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-api.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-api.html"><h4>APIs</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
-              </div>
-			  
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-app.html"><h4>App</h4></a>
-                <p>A foundation for any command line, batch, or other app with support for logging, configuration, environment selection, diagnostics, status and much more.</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-shell.html"><img src="themes/start/images/white/terminal.png" width="90" alt=""></a>
-				</div>
-                <a href="mod-shell.html"><h4>CLI</h4></a>
-                <p>Command line access to your services, apis, and/or admin features. Extend the Shell app, register apis, and have the shell marshal commands via reflection.</p>
-              </div>
-			</div>
-			<div class="row">
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
-				</div>
-                <a href="orm.html"><h4>Data / ORM</h4></a>
-                <p>A convenient set of tools for accessing, querying data, and executing commands on your database via JDBC. Also has support for mapping objects.</p>
-              </div>
-			  
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-aws-s3.html"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-aws-s3.html"><a href="mod-aws-s3.html"><h4>Files</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-notifications.html"><img src="themes/start/images/white/speaker.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-notifications.html"><h4>Notifications</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
-              </div>
-            </div>
 			<br/>
-			<div class="row">
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-aws-sqs.html"><img src="themes/start/images/white/queue.png" width="80" alt=""></a>
+			<div class="row">				
+				<h1>Release 0.9.1</h1>	
+							
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td>1st beta version available for public</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>Date</strong></td>
+						<td>July 15 2016</td>
+					</tr>
+					<tr>
+						<td><strong>Build</strong></td>
+						<td>0.9.0.160</td>
+					</tr>
+					<tr>
+						<td><strong>Company</strong></td>
+						<td>Code Helix Solutions Inc ( www.codehelix.co )</td>
+					</tr>
+					<tr>
+						<td><strong>Contact</strong></td>
+						<td>kishore@codehelix.co</td>
+					</tr>
+					<tr>
+						<td><strong>Required</strong></td>
+						<td>						
+							<ul>
+								<li>Java 1.8</li>
+								<li>Scala 2.1.7</li>
+								<li>Json Simple</li>
+								<li>Config.jar</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Optional</strong></td>
+						<td>						
+							<ul>
+								<li>MySql: For Jdbc connector</li>
+								<li>Aws SDK: For SQS, S3</li>
+								<li>Akka-Http: For server</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Features</strong></td>
+						<td>
+							<ul>
+								<li>Slate Utilities</li>
+								<li>Slate Architecture</li>
+								<li>Slate Tools</li>
+								<li>Slate CLI</li>
+								<li>Slate Server</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Changes</strong></td>
+						<td>
+							<ul>
+								<li>API clean up</li>
+								<li>Web Site</li>
+								<li>Examples</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<div class="left">
+					<a href="releases/rel_0_9_1.zip"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>
 				</div>
-                <a href="mod-aws-sqs.html"><h4>Queues</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
-              </div>
-			  
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-server.html"><img src="themes/start/images/white/connected.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-server.html"><h4>Server</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
-              </div>
-
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-tasks.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-tasks.html"><h4>Tasks</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
-              </div>
+				<a href="releases/rel_0_9_1.zip">Release 0.9.1 available for download.</a>
+				<br/><br/><br/>
             </div>
-			<br/>			
-			<div class="alert alert-info" role="alert">
-				<strong>All items can be used independently</strong>
-			</div>
+			<div class="row">				
+				<h1>Release 0.9.0</h1>	
+							
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td>Alpha Private</td>
+					</tr>
+					<tr>
+						<td class="col-sm-3"><strong>Date</strong></td>
+						<td>April 15 2016</td>
+					</tr>
+					<tr>
+						<td><strong>Build</strong></td>
+						<td>0.9.0.160</td>
+					</tr>
+					<tr>
+						<td><strong>Company</strong></td>
+						<td>Code Helix Solutions Inc ( www.codehelix.co )</td>
+					</tr>
+					<tr>
+						<td><strong>Contact</strong></td>
+						<td>kishore@codehelix.co</td>
+					</tr>
+					<tr>
+						<td><strong>Required</strong></td>
+						<td>						
+							<ul>
+								<li>Java 1.8</li>
+								<li>Scala 2.1.7</li>
+								<li>Json Simple</li>
+								<li>Config.jar</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Optional</strong></td>
+						<td>						
+							<ul>
+								<li>MySql: For Jdbc connector</li>
+								<li>Aws SDK: For SQS, S3</li>
+								<li>Akka-Http: For server</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Features</strong></td>
+						<td>
+							<ul>
+								<li>Slate Utilities</li>
+								<li>Slate Architecture</li>
+								<li>Slate Tools</li>
+								<li>Slate CLI</li>
+								<li>Slate Server</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+				<br/>
+            </div>
           </div>
         </section>
-        <section id="features" class="section">
-			<div class="container">
-				<div class="row">
-					<h2>Projects</h2>
-					<p>All these items are available in the Slate.Core, Slate.Cloud, Slate.Server projects</p>
-					<p>You can view more information on projects available in SlateKit in the overview page</p>
-					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
-					<br/><br/>
-				</div>
-			</div>
-		</section>
+        
+		<br/>
+		<br/>
       </main>
 
       <footer id="footer" class="site-footer">
