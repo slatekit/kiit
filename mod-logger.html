@@ -31,7 +31,7 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -41,14 +41,14 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,12 +62,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
               </aside>
 
             </div>
@@ -86,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-6-28 11:25:52</td>
+      <td>2016-7-5 6:4:25</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -109,24 +107,85 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.logging.LogLevel.LogLevel</span>
+<span class="k">import</span> <span class="nn">slate.common.logging._</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
+
+
+  <span class="c1">// NOTE: The logger is very simple and designed to be extended for customization
+</span>  <span class="c1">// especially to use a more robust logging system such as :
+</span>  <span class="c1">// 1. log4net
+</span>  <span class="c1">// 2. loggly
+</span>  <span class="c1">// 3. new relic
+</span>  <span class="c1">//
+</span>  <span class="c1">// Setup the static logger with implementation for logging to console.
+</span>  <span class="nc">Logger</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="nc">LogLevel</span><span class="o">.</span><span class="nc">Info</span><span class="o">,</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">())</span>
+
+  <span class="c1">// Setup a custom logger
+</span>  <span class="k">class</span> <span class="nc">MyCustomLogger</span> <span class="k">extends</span> <span class="nc">LoggerBase</span> <span class="o">{</span>
+
+    <span class="k">override</span> <span class="k">def</span> <span class="n">log</span><span class="o">(</span><span class="n">level</span><span class="k">:</span> <span class="kt">LogLevel</span><span class="o">,</span> <span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Exception</span><span class="o">],</span> <span class="n">tag</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
+      <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"custom logger : "</span> <span class="o">+</span> <span class="n">level</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span> <span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="c1">// Sample exception
+</span>    <span class="k">val</span> <span class="n">ex</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Example exception"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 1: Different ways to log with the static logger
+</span>    <span class="c1">// 1. message only
+</span>    <span class="c1">// 2. message + exception
+</span>    <span class="c1">// 3. message + exception + tag
+</span>    <span class="nc">Logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">"debug with message only"</span><span class="o">)</span>
+    <span class="nc">Logger</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"info with message and exception"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ex</span><span class="o">))</span>
+    <span class="nc">Logger</span><span class="o">.</span><span class="n">warn</span><span class="o">(</span><span class="s">"debug with message, exception, and tag"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ex</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"APP1"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE: 2 Standard info, warn, error levels available
+</span>    <span class="c1">// Same overloads ( msg, ex, tag ) are available.
+</span>    <span class="nc">Logger</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"info"</span><span class="o">)</span>
+    <span class="nc">Logger</span><span class="o">.</span><span class="n">warn</span><span class="o">(</span><span class="s">"warn"</span><span class="o">)</span>
+    <span class="nc">Logger</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 3: Log explicitly using log method.
+</span>    <span class="nc">Logger</span><span class="o">.</span><span class="n">log</span><span class="o">(</span><span class="nc">LogLevel</span><span class="o">.</span><span class="nc">Error</span><span class="o">,</span> <span class="s">"error"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ex</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"APP1"</span><span class="o">))</span>
+
+    <span class="c1">// CASE 4: You can extend a class with the LogSupportIn trait
+</span>    <span class="c1">// to add logging methods to any class. The trait expects to have
+</span>    <span class="c1">// a _log member variable available.
+</span>    <span class="nc">_log</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">())</span>
+    <span class="n">debug</span><span class="o">(</span><span class="s">"debug from trait"</span><span class="o">)</span>
+    <span class="n">info</span> <span class="o">(</span><span class="s">"info from trait"</span><span class="o">)</span>
+    <span class="n">warn</span> <span class="o">(</span><span class="s">"warn from trait"</span><span class="o">)</span>
+    <span class="n">error</span><span class="o">(</span><span class="s">"error from trait"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 5: Custom logger ( see setup above )
+</span>    <span class="c1">// YOu just have to implement the log method.
+</span>    <span class="k">val</span> <span class="n">log</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyCustomLogger</span><span class="o">()</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">"debug from trait"</span><span class="o">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="o">(</span><span class="s">"info from trait"</span><span class="o">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">warn</span> <span class="o">(</span><span class="s">"warn from trait"</span><span class="o">)</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error from trait"</span><span class="o">)</span>
+    
 
 </code></pre>
 </div>

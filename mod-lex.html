@@ -31,7 +31,7 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -41,14 +41,14 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,12 +62,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
               </aside>
 
             </div>
@@ -86,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-6-28 11:25:52</td>
+      <td>2016-7-5 6:4:25</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -109,24 +107,48 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.lex.</span><span class="o">{</span><span class="nc">Token</span><span class="o">,</span> <span class="nc">Tokens</span><span class="o">,</span> <span class="nc">TokenType</span><span class="o">,</span> <span class="nc">Lexer</span><span class="o">}</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">}</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
+<span class="n">n</span><span class="o">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="k">val</span> <span class="n">lexer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Lexer</span><span class="o">()</span>
+
+    <span class="c1">// CASE 1: Get all the tokens at once
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">lexer</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span><span class="s">"-env:dev -text:'hello word' -batch:10 "</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"tokens: "</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">total</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"first: "</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">tokens</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
+
+    <span class="c1">// CASE 2: Token definition
+</span>    <span class="c1">// Tokens are created/parsed with fields:
+</span>    <span class="c1">// - raw text parsed
+</span>    <span class="c1">// - value ( converted from raw text )
+</span>    <span class="c1">// - token type
+</span>    <span class="c1">// - line #
+</span>    <span class="c1">// - char #
+</span>    <span class="c1">// - index
+</span>    <span class="k">val</span> <span class="n">token</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Token</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"env"</span><span class="o">,</span> <span class="nc">TokenType</span><span class="o">.</span><span class="nc">Ident</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">token</span><span class="o">)</span>
+
+    <span class="c1">// CASE 3: Tokens list
+</span>    <span class="c1">// Coming soon. Tokens can be iterated over with assertions
+</span>    
 
 </code></pre>
 </div>

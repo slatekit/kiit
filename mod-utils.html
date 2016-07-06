@@ -31,7 +31,7 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -41,14 +41,14 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,12 +62,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
               </aside>
 
             </div>
@@ -86,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-6-28 11:25:52</td>
+      <td>2016-7-5 6:4:25</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -98,7 +96,7 @@
     </tr>
     <tr>
       <td><strong>source</strong></td>
-      <td>slate.common.Todos</td>
+      <td>slate.common.ConsoleWriter</td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
@@ -109,24 +107,60 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">EnvItem</span><span class="o">,</span> <span class="nc">Env</span><span class="o">,</span> <span class="nc">ConsoleWriter</span><span class="o">,</span> <span class="nc">Todo</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">}</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
+<span class="n">n</span><span class="o">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="c1">// Miscellaneous utilities.
+</span>
+    <span class="c1">// CASE 1: ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
+</span>    <span class="k">val</span> <span class="n">writer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ConsoleWriter</span><span class="o">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">title</span><span class="o">(</span><span class="s">"title is in CAPS"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">subTitle</span><span class="o">(</span><span class="s">"subtitle is in color cyan"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">url</span><span class="o">(</span><span class="s">"url is in blue"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"highlight is in color"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">important</span><span class="o">(</span><span class="s">"important is red"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error shown in red"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">success</span><span class="o">(</span><span class="s">"success is in green"</span><span class="o">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">line</span><span class="o">()</span>
+
+    <span class="c1">// CASE 2: Environment selection
+</span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"dev1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">,</span> <span class="s">"dev1.dev"</span><span class="o">)</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">isDev</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">isQa</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">isUat</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">isProd</span>
+    <span class="nc">Env</span><span class="o">.</span><span class="n">current</span>
+
+    <span class="c1">// CASE 3: Strongly typed, structured representation of Todos.
+</span>    <span class="nc">Todo</span><span class="o">.</span><span class="n">implement</span><span class="o">(</span><span class="s">"Component 1"</span><span class="o">,</span> <span class="s">"This code needs further error handling"</span> <span class="o">)</span>
+    <span class="nc">Todo</span><span class="o">.</span><span class="n">refactor</span><span class="o">(</span><span class="s">"Component 2"</span><span class="o">,</span> <span class="s">"method is too long"</span> <span class="o">)</span>
+    <span class="nc">Todo</span><span class="o">.</span><span class="n">bug</span><span class="o">(</span><span class="s">"Component 3"</span><span class="o">,</span> <span class="s">"invalid data, bug fix needed"</span><span class="o">,</span> <span class="s">"JIRA:12434"</span> <span class="o">)</span>
+    <span class="nc">Todo</span><span class="o">.</span><span class="n">implement</span><span class="o">(</span><span class="s">"Component 4"</span><span class="o">,</span> <span class="s">"Store to database"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(()</span> <span class="k">=&gt;</span>
+    <span class="o">{</span>
+      <span class="c1">// This is an example of showing how to pass a closure/anonymous
+</span>      <span class="c1">// function to the methods.
+</span>      <span class="n">println</span><span class="o">(</span><span class="s">"inside closure of todo example"</span><span class="o">)</span>
+    <span class="o">}))</span>
+    
 
 </code></pre>
 </div>

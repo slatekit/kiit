@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slate Kit - ORM / Entities</title>
+    <title>Slate Kit - Server</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -42,13 +42,13 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li ><a href="#header">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
                 <li><a href="infra.html">Infrastructure</a></li>
-                <li><a href="utils.html">Utilities</a></li>
-                <li><a href="orm.html">ORM</a></li>
                 <li><a href="features.html">Features</a></li>
+                <li><a href="orm.html">ORM</a></li>
                 <li class="active"><a href="server.html" class="current">Server</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="utils.html">Utilities</a></li>
               </ul>
             </div>
           </div>
@@ -75,19 +75,7 @@
 		<section id="features" class="section">
           <div class="container">
             <div class="">
-				<div class="row">
-					<ul id="navigation" class="nav navbar-nav navbar-center">
-						<li><a href="#server-cli" class="btn">Config</a></li>
-						<li><a href="#server-cli" class="btn">Setup</a></li>
-						<li><a href="#server-cli" class="btn">Routing</a></li>
-						<li><a href="#server-cli" class="btn">Features</a></li>
-						<li><a href="#server-cli" class="btn">Extending</a></li>
-						<li><a href="#server-cli" class="btn">CLI</a></li>
-						<li><a href="#server-install">Install</a></li>
-						<li><a href="#server-aws">AWS</a></li>
-					</ul>
-				</div>
-				<div class="row"> 
+				<div class="row"> 				
 					<h2>Overview</h2>
 					<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
 						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
@@ -96,78 +84,113 @@
 				</div>
 				<br/>
 				<div class="row">
-					<h2>Tech</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+					<div class="col-sm-6"> 
+						<h2>Tech</h2>
+						<p>Built in 100% Scala and using Akka-Http. Our tech stack is AWS. Integration available for queues via SQS, file storage via S3 and servers via EC2 and MySql. The ORM / entities persistance layer is home-grown and built using Scala Reflection and Annotations.
+						</p>
+						<a href="#server-tech" class="more"><span class="btn btn-primary">See more</span></a>
+					</div>
+					<div class="col-sm-6"> 
+						<h2>Approach</h2>
+						<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Scala APIs to run in the server and/or in the CLI. Our server code marshalls/routes WEB API REST calls to your APIs. You simply annotate your APIs to make them available.
+						</p>
+						<a href="#server-approach" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
 				</div>
 				<br/>
 				<div class="row">
-					<h2>Approach</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>Config</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>Setup</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>Routing</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>Features</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+					<div class="col-sm-6"> 
+						<h2>Setup</h2>
+						<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+						</p>
+						<a href="#server-config" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
+					<div class="col-sm-6">
+						<h2>Routing</h2>
+						<p>The server routes WEB REST calls or commands on the CLI(command line interface) to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+						</p>
+						<a href="#server-routing" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
 				</div>
 				<div class="row">
-					<h2>Extending</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+					<div class="col-sm-6"> 
+						<h2>Security</h2>
+						<p>Control how and when the server is booted up and also what APIs the server will "embed" or host. You register modules into the server which represent your plain old Scala APIs. You can also setup authentication and authorization of your API calls.
+						</p>
+						<a href="#server-setup" class="more"><span class="btn btn-primary">See docs</span></a> 
+					</div>				
+					<div class="col-sm-6"> 
+						<h2>Features</h2>
+						<p>The Slate Server has built in support to easily handle version, status, health checks, diagnostics, logging, error handling and more. You can optionally register short or long-running tasks that can be run/managed remotely. APIs are embedded into the server.
+						</p>
+						<a href="#server-features" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
 				</div>
-				<br/>
-				<div id="server-cli" class="row">
-					<h2>CLI</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				<div class="row">				
+					<div class="col-sm-6"> 
+						<h2>Extending</h2>
+						<p>You can add as many API's as you want to the Slate Server by simply creating classes and methods with annotations and registering your API's with the Server. These APIs can be called on the command line via the CLI making them protocol independent.
+						</p>
+						<a href="#server-extending" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>		
+					<div class="col-sm-6"> 
+						<h2>CLI</h2>
+						<p>Since APIs are Scala classes with annotations, it is easy to make protocol independent APIs. We provide a CLI(Command Line Interface) for making calls to your APIs via the command line by simply typing out the function/method name and inputs/parameters.
+						</p>
+						<a href="#server-cli" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
 				</div>
-				<br/>
-				<div id="server-install" class="row">
-					<h2>Install</h2>
-					<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting different databases.
-					</p>
-					<a href="mod-data.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				<div class="row">				
+					<div class="col-sm-6"> 
+						<h2>Install</h2>
+						<p>Slate Server relies on the Slate.Common, Slate.Core libraries and also the Slate.Cloud and Slate.Ext libraries if you plan to queues, files, and any of the mobile backend features. Since Akka-Http is used, you will also need those libraries.
+						</p>
+						<a href="#server-install" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
+					<div class="col-sm-6"> 
+						<h2>AWS</h2>
+						<p>To run the Slate Server on Amazon EC2, we have detailed documentation available which show how to compile the code with the Akka-Http dependencies and also how to correctly package a zip file for distributing and installing the server on EC2.
+						</p>
+						<a href="#server-aws" class="more"><span class="btn btn-primary">See docs</span></a>
+					</div>
 				</div>
-				<br/>
-				<div id="server-aws" class = "row"> 
-					<h2>AWS</h2>
-					<p>These parts of the ORM were designed to be used independently where applicable while also integrated together to support typical ORM features. 
-					</p>
-					<a href="mod-entities-full.html" class="more"><span class="btn btn-primary">See docs</span></a>
-				</div>
-				<br/>
             </div>
           </div>
         </section>
-        
+        <section id="features" class="section">
+          <div class="container">
+			<div id="server-tech" class="row">
+				config
+			</div>
+			<div id="server-approach" class="row">
+				config
+			</div>
+			<div id="server-config" class="row">
+				config
+			</div>
+			<div id="server-routing" class="row">
+				config
+			</div>
+			<div id="server-security" class="row">
+				config
+			</div>
+			<div id="server-features" class="row">
+				config
+			</div>
+			<div id="server-extending" class="row">
+				config
+			</div>
+			<div id="server-cli" class="row">
+				config
+			</div>
+			<div id="server-install" class="row">
+				config
+			</div>
+			<div id="server-aws" class="row">
+				config
+			</div>
+		  </div>
+		</section>
       </main>
 
       <footer id="footer" class="site-footer">

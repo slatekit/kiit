@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start - Responsive One Page Template</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-google-plus"></i></a>
+                <a href="#"><i class="fa fa-pinterest"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="config">Config</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A thin wrapper for Config with support for environments, databases, encryption</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2016-7-5 6:4:25</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.1</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.core.common</td>
+    </tr>
+    <tr>
+      <td><strong>source</strong></td>
+      <td>slate.core.common.Conf</td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Config.scala">Example_Config</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
+<span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
+<span class="k">import</span> <span class="nn">slate.core.common.Conf</span>
+
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// CASE 1: Load up config from application.conf
+</span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"env.name: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"env.name"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"db.enabled: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"db.enabled"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">()</span>
+
+    <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf.
+</span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${env.name}, ${env.env}, ${env.key}"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">()</span>
+
+    <span class="c1">// CASE 3: Get the db connection info from conf
+</span>    <span class="c1">// Use this mode if you plan on only having 1 db connection info in the config.
+</span>    <span class="c1">// NOTE: Refer to src\main\resources\configSample1.conf
+</span>    <span class="k">val</span> <span class="n">conf1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf1</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample1.conf"</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">dbCon</span> <span class="k">=</span> <span class="n">conf1</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
+    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con : "</span><span class="o">,</span> <span class="n">dbCon</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 4: Get the db connection info from conf with environment prefix
+</span>    <span class="c1">// Use this mode if you have db settings in the conf file for each environment.
+</span>    <span class="k">val</span> <span class="n">conf2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf2</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample2.conf"</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">dbConEnv</span> <span class="k">=</span> <span class="n">conf2</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">enableEnvPrefix</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
+    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con with env prefix: "</span><span class="o">,</span> <span class="n">dbConEnv</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 5: Get the db connection string from a settings file called "db-lcl.txt"
+</span>    <span class="c1">// in a folder called ".slate" in the user directory. This is for added security to avoid
+</span>    <span class="c1">// any database connection strings in the application.conf file.
+</span>    <span class="k">val</span> <span class="n">conf3</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf3</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample3.conf"</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">dbConUserDir</span> <span class="k">=</span> <span class="n">conf3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">userFolder</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">))</span>
+    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con from user folder: "</span><span class="o">,</span> <span class="n">dbConUserDir</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 6: Get the db connection string from a settings file called "db-lcl.txt"
+</span>    <span class="c1">// in a folder called ".slate" in the user directory. This is for added security to avoid
+</span>    <span class="c1">// any database connection strings in the application.conf file.
+</span>    <span class="c1">// This is same as #5 but with the environment prefix!
+</span>    <span class="k">val</span> <span class="n">conf4</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf4</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample4.conf"</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">dbConUserDirWithEnv</span> <span class="k">=</span> <span class="n">conf4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">enableEnvPrefix</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">true</span><span class="o">),</span> <span class="n">userFolder</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">))</span>
+    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con with env prefix and user folder: "</span><span class="o">,</span> <span class="n">dbConUserDirWithEnv</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 7: Enable encrypted strings in the config file
+</span>    <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">conf5</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
+    <span class="n">conf5</span><span class="o">.</span><span class="n">init</span><span class="o">(</span> <span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample5.conf"</span><span class="o">),</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">encryptor</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"db user decrypted : "</span> <span class="o">+</span> <span class="n">conf5</span><span class="o">.</span><span class="n">getStringEnc</span><span class="o">(</span><span class="s">"db.user"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"db pswd decrypted : "</span> <span class="o">+</span> <span class="n">conf5</span><span class="o">.</span><span class="n">getStringEnc</span><span class="o">(</span><span class="s">"db.pswd"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">()</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="output">Output</h2>
+
+<pre><code class="language-bat">  env.name: lc1
+  db.enabled: true
+
+  lc1, dev, dev : lc1
+
+  db con :
+  com.mysql.jdbc.Driver
+  jdbc:mysql://localhost/test1
+  root
+  123456789
+
+  db con with env prefix:
+  com.mysql.jdbc.Driver
+  jdbc:mysql://localhost/db1
+  root
+  123456789
+
+  db con from user folder:
+  com.mysql.jdbc.Driver
+  jdbc:mysql://localhost/test1
+  root
+  123456789
+
+  db con with env prefix and user folder:
+  com.mysql.jdbc.Driver
+  jdbc:mysql://localhost/test1
+  root
+  123456789
+
+  db user decrypted : root
+  db pswd decrypted : 123456789
+</code></pre>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div class="street-address">416 Water St.</div>
+                    <span class="locality">New York</span>,
+                    <abbr class="region" title="New York">NY</abbr>,
+                    <span class="postal-code">10002</span>,
+                    <span class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+  </body>
+</html>

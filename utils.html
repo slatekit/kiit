@@ -42,13 +42,13 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li ><a href="#header">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
                 <li><a href="infra.html">Infrastructure</a></li>
-                <li class="active"><a href="utils.html" class="current">Utilities</a></li>
-                <li><a href="orm.html">ORM</a></li>
                 <li><a href="features.html">Features</a></li>
+                <li><a href="orm.html">ORM</a></li>
                 <li><a href="server.html">Server</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li class="active"><a href="utils.html" class="current">Utilities</a></li>
               </ul>
             </div>
           </div>
@@ -74,9 +74,13 @@
 		
 		<section id="features" class="section section-center section-features">
           <div class="container">
-			<div class="row">
+			<div class="alert alert-info" role="alert">
 				<h4>Click on any item below to see more details and docs.</h4>
-				<br/><br/><br/>
+				<h5><strong>All items can be used independently</strong></h5>
+			</div>
+			<div class="row">				
+				<br/>
+				<br/>
 			</div>
             <div class="row">
               <div class="col-md-4 col-sm-6">
@@ -91,6 +95,13 @@
 				<a href="mod-auth.html"><img src="themes/start/images/white/eye2.png" width="80" alt=""></div></a>
                 <a href="mod-auth.html"><h4>Auth</h4></a>
                 <p>A simple auth component</p>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+				<a href="mod-config.html"><img src="themes/start/images/white/settings.png" width="65" alt=""></div></a>
+                <a href="mod-config.html"><h4>Config</h4></a>
+                <p>Configuration file utilities</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
@@ -110,7 +121,7 @@
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-				<a href="mod-info.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></div></a>
+				<a href="mod-info.html"><img src="themes/start/images/white/info.png" width="65" alt=""></div></a>
                 <a href="mod-info.html"><h4>Info</h4></a>
                 <p>Useful information about app, host, runtime</p>
               </div>
@@ -120,6 +131,20 @@
 				<a href="mod-lex.html"><img src="themes/start/images/white/document.png" width="80" alt=""></div></a>
                 <a href="mod-lex.html"><h4>Lex</h4></a>
                 <p>A light-weight lexer to parse tokens</p>
+              </div>             
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+				<a href="mod-logger.html"><img src="themes/start/images/white/error.png" width="60" alt=""></div></a>
+                <a href="mod-logger.html"><h4>Logs</h4></a>
+                <p>Simple, extensible, customizable logger</p>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+				<a href="mod-reflect.html"><img src="themes/start/images/white/search.png" width="80" alt=""></div></a>
+                <a href="mod-reflect.html"><h4>Reflection</h4></a>
+                <p>Scala reflection utilities</p> 
               </div>
 
               <div class="col-md-4 col-sm-6">
@@ -127,14 +152,14 @@
 				<a href="mod-results.html"><img src="themes/start/images/white/module.png" width="80" alt=""></div></a>
                 <a href="mod-results.html"><h4>Results</h4></a>
                 <p>Wrapper around return value and a return value builder</p> 
-              </div>
+              </div> 
 			  
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-				<a href="mod-sms.html"><img src="themes/start/images/white/email2.png" width="80" alt=""></div></a>
-                <a href="mod-sms.html"><h4>Sms</h4></a>
-                <p>Simple text message via Twilio HTTP calls</p>
+				<a href="mod-timer.html"><img src="themes/start/images/white/timer.png" width="80" alt=""></div></a>
+                <a href="mod-timer.html"><h4>Timer</h4></a>
+                <p>Timer class to benchmark code</p>
               </div>
               
 
@@ -145,14 +170,53 @@
                 <p>Miscellaneous utilities</p>
               </div>
             </div>
-			
-			<div class="row">
-				<span class="danger"><strong>All items can be used independently</strong></span>
-				<br/><br/><br/>
-			</div>
           </div>
         </section>
-        
+        <section id="features" class="section">
+          <div class="container">
+			<div class="row">
+				<h2>Slate.Common</h2>
+				<p>All these utilities are available in the following project</p>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-3"><strong>name</strong></td>
+						<td>Slate.Common</td>
+					</tr>
+					<tr>
+						<td><strong>namespace</strong></td>
+						<td>slate.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slate.common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>cost</strong></td>
+						<td>free : open-source</td>
+					</tr>
+					<tr>
+						<td><strong>dependencies</strong></td>
+						<td>none</td>
+					</tr>
+					<tr>
+						<td><strong>about</strong></td>
+						<td>														
+							<ul>
+								<li>Contains utility code used through SlateKit.</li>
+								<li>Also contains the ORM/Entities component.</li>
+								<li>Many other useful components</li>
+							</ul>
+						 </td>
+					</tr>
+				</table>
+				<p>You can view more information on projects available in SlateKit in the overview page</p>
+				<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
+				<br/><br/>
+			</div>
+		  </div>
+		</section>
+		<br/>
+		<br/>
       </main>
 
       <footer id="footer" class="site-footer">

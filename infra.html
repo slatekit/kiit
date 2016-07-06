@@ -42,13 +42,13 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
               <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li ><a href="#header">Home</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="overview.html">Overview</a></li>
                 <li class="active"><a href="infra.html" class="current">Infrastructure</a></li>
-                <li><a href="utils.html">Utilities</a></li>
-                <li><a href="orm.html">ORM</a></li>
                 <li><a href="features.html">Features</a></li>
+                <li><a href="orm.html">ORM</a></li>
                 <li><a href="server.html">Server</a></li>
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="utils.html">Utilities</a></li>
               </ul>
             </div>
           </div>
@@ -73,11 +73,23 @@
 		</footer>
         <section id="features" class="section section-center  section-features">
           <div class="container">
-			<div class="row">
+			<div class="alert alert-info" role="alert">
 				<h4>Click on any item below to see more details and docs.</h4>
-				<br/><br/><br/>
+				<h5><strong>The architectural components such as queues, file storage, data access are built for AWS, Linux, MySQL</strong></h5>
+			</div>
+			<div class="row">				
+				<br/>
+				<br/>
 			</div>
             <div class="row">
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+					<a href="mod-api.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
+				</div>
+                <a href="mod-api.html"><h4>APIs</h4></a>
+                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
+              </div>
+			  
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
 					<a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
@@ -93,6 +105,8 @@
                 <a href="mod-shell.html"><h4>CLI</h4></a>
                 <p>Command line access to your services, apis, and/or admin features. Extend the Shell app, register apis, and have the shell marshal commands via reflection.</p>
               </div>
+			</div>
+			<div class="row">
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
@@ -101,15 +115,7 @@
                 <a href="orm.html"><h4>Data / ORM</h4></a>
                 <p>A convenient set of tools for accessing, querying data, and executing commands on your database via JDBC. Also has support for mapping objects.</p>
               </div>
-			</div>
-			<div class="row">
-              <div class="col-md-4 col-sm-6">
-                <div class="icon-wrap">
-					<a href="mod-aws-sqs.html"><img src="themes/start/images/white/queue.png" width="80" alt=""></a>
-				</div>
-                <a href="mod-aws-sqs.html"><h4>Queues</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
-              </div>
+			  
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
@@ -121,19 +127,56 @@
 
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
+					<a href="mod-notifications.html"><img src="themes/start/images/white/speaker.png" width="80" alt=""></a>
+				</div>
+                <a href="mod-notifications.html"><h4>Notifications</h4></a>
+                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
+              </div>
+            </div>
+			<br/>
+			<div class="row">
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+					<a href="mod-aws-sqs.html"><img src="themes/start/images/white/queue.png" width="80" alt=""></a>
+				</div>
+                <a href="mod-aws-sqs.html"><h4>Queues</h4></a>
+                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
+              </div>
+			  
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
+					<a href="mod-server.html"><img src="themes/start/images/white/connected.png" width="80" alt=""></a>
+				</div>
+                <a href="mod-server.html"><h4>Server</h4></a>
+                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
+              </div>
+
+              <div class="col-md-4 col-sm-6">
+                <div class="icon-wrap">
 					<a href="mod-tasks.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>
 				</div>
                 <a href="mod-tasks.html"><h4>Tasks</h4></a>
                 <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
               </div>
             </div>
-			<div class="row">
-				<span class="danger"><strong>All items can be used independently</strong></span>
-				<br/><br/><br/>
+			<br/>			
+			<div class="alert alert-info" role="alert">
+				<strong>All items can be used independently</strong>
 			</div>
           </div>
         </section>
-        
+        <section id="features" class="section">
+			<div class="container">
+				<div class="row">
+					<h2>Projects</h2>
+					<p>All these items are available in the Slate.Core, Slate.Cloud, Slate.Server projects</p>
+					<p>You can view more information on projects available in SlateKit in the overview page</p>
+					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
+					<br/><br/>
+				</div>
+			</div>
+		</section>
       </main>
 
       <footer id="footer" class="site-footer">

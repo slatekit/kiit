@@ -31,7 +31,7 @@
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
@@ -41,14 +41,14 @@
               <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
-              <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li class="active"><a href="#header" class="current">Home</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#testimonials">Testimonials</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#clients">Clients</a></li>
-                <li><a href="#contact">Contact</a></li>
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li ><a href="#header">Home</a></li>
+                <li><a href="infra.html">Infrastructure</a></li>
+                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
+                <li><a href="orm.html">ORM</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="server.html">Server</a></li>
+                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,12 +62,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
               </aside>
 
             </div>
@@ -86,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-6-28 11:25:52</td>
+      <td>2016-7-5 6:4:25</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -126,8 +124,8 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Setup 1: Register an api that can be called dynamically
-</span>    <span class="k">val</span> <span class="n">apiRunner</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiRunner</span><span class="o">()</span>
-    <span class="n">apiRunner</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">())</span>
+</span>    <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainer</span><span class="o">()</span>
+    <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">())</span>
     
 
 </code></pre>
@@ -152,29 +150,29 @@
 </span>    <span class="c1">//
 </span>    <span class="c1">// This approach essentially makes your api protocal agnostic!!
 </span>
-    <span class="c1">// Use case 1: check if api action exists ( false )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span> <span class="s">"users.fakeMethod"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 1: check if api action exists ( false )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span> <span class="s">"app.users.fakeMethod"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 2: check if api action exists ( true )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span> <span class="s">"users.total"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 2: check if api action exists ( true )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span> <span class="s">"app.users.total"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 3a: validate the parameters ( fails - total takes 0 parameters )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"users.total -test:5"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 3a: validate the parameters ( fails - total takes 0 parameters )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"app.users.total -test:5"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 3b: validate the parameters ( fails - invite takes 3 parameters )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"users.activate"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 3b: validate the parameters ( fails - invite takes 3 parameters )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"app.users.activate"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 3c: validate the parameters ( fails - invite requires 'phone' and 'date' param )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"users.activate -code:1234 -isPremiumUser:true"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 3c: validate the parameters ( fails - invite requires 'phone' and 'date' param )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"app.users.activate -code:1234 -isPremiumUser:true"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 3d: validate the parameters ( succeeds )
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"users.activate -phone:1234567890 -code:1234 -isPremiumUser:true -date:20160315"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 3d: validate the parameters ( succeeds )
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">check</span><span class="o">(</span> <span class="s">"app.users.activate -phone:1234567890 -code:1234 -isPremiumUser:true -date:20160315"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 4: call an api action without parameters
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">call</span><span class="o">(</span> <span class="s">"users.total"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 4: call an api action without parameters
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">call</span><span class="o">(</span> <span class="s">"app.users.total"</span> <span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Use case 6: call an api action with multiple parameters
-</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apiRunner</span><span class="o">.</span><span class="n">call</span><span class="o">(</span> <span class="s">"users.activate -phone:1234567890 -code:1234 -isPremiumUser:true -date:20160315"</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 6: call an api action with multiple parameters
+</span>    <span class="n">printResult</span><span class="o">(</span> <span class="n">apis</span><span class="o">.</span><span class="n">call</span><span class="o">(</span> <span class="s">"app.users.activate -phone:1234567890 -code:1234 -isPremiumUser:true -date:20160315"</span> <span class="o">)</span> <span class="o">)</span>
     
 
 </code></pre>
