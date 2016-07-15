@@ -84,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-7-5 6:4:25</td>
+      <td>2016-7-6 5:24:42</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -138,10 +138,12 @@
     <span class="n">println</span><span class="o">(</span> <span class="s">"db.enabled: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"db.enabled"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
+
     <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf.
 </span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">()</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${env.name}, ${env.env}, ${env.key}"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
+
 
     <span class="c1">// CASE 3: Get the db connection info from conf
 </span>    <span class="c1">// Use this mode if you plan on only having 1 db connection info in the config.
@@ -151,12 +153,14 @@
     <span class="k">val</span> <span class="n">dbCon</span> <span class="k">=</span> <span class="n">conf1</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con : "</span><span class="o">,</span> <span class="n">dbCon</span> <span class="o">)</span>
 
+
     <span class="c1">// CASE 4: Get the db connection info from conf with environment prefix
 </span>    <span class="c1">// Use this mode if you have db settings in the conf file for each environment.
 </span>    <span class="k">val</span> <span class="n">conf2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
     <span class="n">conf2</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample2.conf"</span><span class="o">))</span>
     <span class="k">val</span> <span class="n">dbConEnv</span> <span class="k">=</span> <span class="n">conf2</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">enableEnvPrefix</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">true</span><span class="o">))</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con with env prefix: "</span><span class="o">,</span> <span class="n">dbConEnv</span> <span class="o">)</span>
+
 
     <span class="c1">// CASE 5: Get the db connection string from a settings file called "db-lcl.txt"
 </span>    <span class="c1">// in a folder called ".slate" in the user directory. This is for added security to avoid
@@ -166,6 +170,7 @@
     <span class="k">val</span> <span class="n">dbConUserDir</span> <span class="k">=</span> <span class="n">conf3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">userFolder</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">))</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con from user folder: "</span><span class="o">,</span> <span class="n">dbConUserDir</span> <span class="o">)</span>
 
+
     <span class="c1">// CASE 6: Get the db connection string from a settings file called "db-lcl.txt"
 </span>    <span class="c1">// in a folder called ".slate" in the user directory. This is for added security to avoid
 </span>    <span class="c1">// any database connection strings in the application.conf file.
@@ -174,6 +179,7 @@
     <span class="n">conf4</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">file</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"configSample4.conf"</span><span class="o">))</span>
     <span class="k">val</span> <span class="n">dbConUserDirWithEnv</span> <span class="k">=</span> <span class="n">conf4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">enableEnvPrefix</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="kc">true</span><span class="o">),</span> <span class="n">userFolder</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">))</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con with env prefix and user folder: "</span><span class="o">,</span> <span class="n">dbConUserDirWithEnv</span> <span class="o">)</span>
+
 
     <span class="c1">// CASE 7: Enable encrypted strings in the config file
 </span>    <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>

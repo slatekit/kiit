@@ -7,6 +7,7 @@
     <title>Slate Kit - Overview</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -20,12 +21,12 @@
         <nav id="topbar" class="site-topbar visible-lg visible-md">
           <div class="container">
             <div class="row">
-              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
               <div class="social-links col-sm-6">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-google-plus"></i></a>
-                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a id="topbar_social_facebook"  href="#"><i class="fa fa-facebook"></i></a>
+                <a id="topbar_social_twitter"   href="#"><i class="fa fa-twitter"></i></a>
+                <a id="topbar_social_gplus"     href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_pinterest" href="#"><i class="fa fa-pinterest"></i></a>
               </div>
             </div>
           </div>
@@ -42,15 +43,6 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li><a href="index.html">Home</a></li>
-                <li class="active"><a href="overview.html" class="current">Overview</a></li>
-                <li><a href="infra.html">Infrastructure</a></li>
-                <li><a href="features.html">Features</a></li>
-                <li><a href="orm.html">ORM</a></li>
-                <li><a href="server.html">Server</a></li>
-                <li><a href="utils.html">Utilities</a></li>
-                <li><a href="releases.html" >Releases</a></li>
-                <li><a href="setup.html">Setup</a></li>
               </ul>
             </div>
           </div>
@@ -65,7 +57,7 @@
 
               <aside class="widget">
                 <h1 class="widget-title">Overview</h1>
-                <h3>A simple Scala toolkit and backend for your mobile and web apps<br />
+                <h3>A simple toolkit, utility library and mobile backend in Scala.<br/>
                 </h3>
               </aside>
 
@@ -73,15 +65,13 @@
 			</div>
 		</footer>
 		
-		<section id="features" class="section">
+		<section id="features" class="section ">
           <div class="container">
             <div class="">
 				
 				<div class="row"> 
 					<h1>About</h1>	
-					<p>Slate Kit is a utility library, tool kit, and server backend for mobile and web apps. It is written in Scala and uses Akka-Http for the Server. While there are a few server backend projects available either for purchase or open-source, Slate Kit is one of the few written entirely in <strong>Scala</strong>, <strong>Akka-Http</strong> and integrated with <strong>AWS</strong>. Some of the other core differences with Slate Kit is the focus on simplicity, utility code and modularity above all else. One of the other core design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell.
-					</p>
-					<p>Slate Kit is currently used to build the backend architecture for 2 mobile apps currently in production for 2 client projects of <a href="http://www.codehelix.co">Code Helix Solutions Inc</a>. 
+					<p>Slate Kit is a utility library, tool kit, and server backend for mobile and web apps. It is written in Scala and uses Akka-Http for the Server. While there are a few server backend projects available either for purchase or open-source, Slate Kit is one of the few written entirely in <strong>Scala</strong>, <strong>Akka-Http</strong> and integrated with <strong>AWS</strong>. Some of the other core differences with Slate Kit is the focus on simplicity, utility code and modularity above all else. One of the other core design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell. Slate Kit is currently used to build the backend architecture for 2 mobile apps currently in production for 2 client projects of <a class="url-ch" href="http://www.codehelix.co">Code Helix Solutions Inc</a>. 
 					</p>
 					
 				</div>
@@ -91,32 +81,31 @@
 					<table class="table table-bordered table-striped">
 						<tr>
 							<td class="col-sm-3"><strong>Tech</strong></td>
-							<td>100% Scala for all utilities, features, server code</td>
+							<td>100% Scala for all utilities, features, server code. Built for MySql, AWS ( S3, SQS )</td>
 						</tr>
 						<tr>
 							<td class="col-sm-3"><strong>Simplicity</strong></td>
 							<td>Simplicity above all else</td>
 						</tr>
 						<tr>
-							<td><strong>Modularity</strong></td>
-							<td>All utility code and features are modular</td>
+							<td><strong>Responsibility</strong></td>
+							<td>All utilities, features, and architecture components designed for a single purpose.</td>
 						</tr>
 						<tr>
 							<td><strong>Dependencies</strong></td>
-							<td>Kept to a minimum</td>
+							<td>Dependencies on external, 3rd-party libraries are kept to a minimum</td>
 						</tr>
 						<tr>
-							<td><strong>Configuration</strong></td>
-							<td>Convention over configuration</td>
+							<td><strong>Conventions</strong></td>
+							<td>Following the idea of convention over configuration</td>
 						</tr>
 						<tr>
 							<td><strong>Balance</strong></td>
 							<td>
 								<ul>
-									<li>Mostly immutable + mutable</li>
-									<li>Mostly idiomatic Scala</li>
-									<li>Strongly typed + areas of dynamic programming</li>
-									<li>Functional + Imperative</li>
+									<li>Mostly immutable + minimum amount of mutability</li>
+									<li>Mostly idiomatic Scala + some areas of innovative / new concepts</li>
+									<li>Majority strongly typed + some areas of dynamic/reflection calls</li>
 								</ul>
 							</td>
 						</tr>
@@ -125,288 +114,473 @@
 				<br/>
 				<div class="row">
 					<h1>Projects</h1>
-					<br/>
-					<h2>1. Slate.Common</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>name</strong></td>
-							<td>Slate.Common</td>
-						</tr>
-						<tr>
-							<td><strong>namespace</strong></td>
-							<td>slate.common</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.common.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>free : open-source</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>none</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>														
-								<ul>
-									<li>Contains utility code used through SlateKit.</li>
-									<li>Also contains the ORM/Entities component.</li>
-									<li>Many other useful components</li>
-								</ul>
-							 </td>
-						</tr>
-					</table>
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-common" class="thumbnail">
+							<img src="themes/start/images/white/multitool.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 >Slate.Common</h3>
+									<p>Collection of utilities</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.common</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.common.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>								
+											<ul>
+												<li>none</li>
+												<li>-</li>
+												<li>-</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>														
+											<ul>
+												<li>Contains utility code used through SlateKit.</li>
+												<li>Also contains the ORM/Entities component.</li>
+												<li>Many other useful components that can be used in web or server</li>
+											</ul>
+										 </td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="utils.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-entities" class="thumbnail">
+							<img src="themes/start/images/white/layers.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Entities</h3>
+									<p>Light-weight single table ORM</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.entities</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.entities.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>mysql connector</li>
+												<li>scala reflect</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>							
+											<ul>
+												<li>Requires the AWS sdk jar for Java</li>
+												<li>Contains the implementations of core architectural components ( queue, files ) using AWS S3 / SQS</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="orm.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>					
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-core" class="thumbnail">
+							<img src="themes/start/images/white/build.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Core</h3>
+									<p>Core architecture components</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.core</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.core.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>config.jar</li>
+												<li>-</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>							
+											<ul>
+												<li>Includes abstractions / base implementations for Queues, Files, Tasks</li>
+												<li>A command line interface component to easily build CLI tools</li>
+												<li>Many other components</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
 				</div>
-				<br/>
-				<div class="row">
-					<h2>2. Slate.Core</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>name</strong></td>
-							<td>Slate.Core</td>
-						</tr>
-						<tr>
-							<td><strong>namespace</strong></td>
-							<td>slate.core</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.core.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>free : open-source</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>									
-								<ul>
-									<li>slate.common.jar</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>							
-								<ul>
-									<li>Includes abstractions / base implementations for Queues, Files, Tasks</li>
-									<li>Includes a command line interface component to easily build CLI tools</li>
-									<li>Many other useful components</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
+				<br/><br/>
+				<div class="row">				
+					<div id="project-slate-cloud" class="col-sm-6 col-md-4">
+						<div class="thumbnail">
+							<img src="themes/start/images/white/cloud_sync.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Cloud</h3>
+									<p>Cloud integration with AWS</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.cloud</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.cloud.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>aws-sdk</li>
+												<li>-</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>							
+											<ul>
+												<li>Requires the AWS sdk jar for Java</li>
+												<li>Contains the implementations of components ( queue, files ) using AWS S3 / SQS</li>
+												<li>The S3 / Files api is abstracted out</li>
+												<li>The SQS / Queue api is abstracted out</li>
+												<li>The S3/SQS api can be embedded into the CLI</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-ext" class="thumbnail">
+							<img src="themes/start/images/white/module.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Ext</h3>
+									<p>Embeddable Mobile / Web Features</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td class="col-sm-3"><strong>namespace</strong></td>
+										<td>slate.ext</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.ext.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>paid : refer to pricing</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>slate.cloud</li>
+												<li>aws-sdk</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>	
+											<ul>
+												<li>Contains all the mobile backend features</li>
+												<li>All features are implemented as modules</li>
+												<li>All the fetures modules here can be used/included in the Server (see below)</li>
+												<li>All the fetures modules here can be alternatived accessed and used in the CLI( command line interface shell )</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="features.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>				
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-tools" class="thumbnail">
+							<img src="themes/start/images/white/gears.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Tools</h3>
+									<p>Miscellaneous tools and code generator</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td class="col-sm-3"><strong>namespace</strong></td>
+										<td>slate.tools</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.tools.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td> 									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>slate.cloud</li>
+												<li>aws-sdk</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>	
+											<ul>												
+												<li>Includes a code generator</li>
+												<li>Includes an api to generate documentation for Slate Kit </li>
+												<li>Includes an api for devops, this api can be included into your CLI or Server project for getting information about your application, version, host, and language runtime.</li>
+												<li>More tools coming soon</li>												
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>							
+							<p class=" text-center">
+								<a href="" class="btn btn-primary" role="button">see source code</a> 
+							</p>
+						</div>
+					</div>
 				</div>
-				<br/>
+				<br/><br/>
 				<div class="row">
-					<h2>3. Slate.Cloud</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>name</strong></td>
-							<td>Slate.Cloud</td>
-						</tr>
-						<tr>
-							<td><strong>namespace</strong></td>
-							<td>slate.cloud</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.cloud.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>free : open-source</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>									
-								<ul>
-									<li>slate.common.jar</li>
-									<li>slate.core.jar</li>
-									<li>aws-sdk</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>							
-								<ul>
-									<li>Requires the AWS sdk jar for Java</li>
-									<li>Contains the implementations of core architectural components ( queue, files ) using AWS S3 / SQS</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>4. Slate.Ext</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>namespace</strong></td>
-							<td>slate.ext</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.ext.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>paid : refer to pricing</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>									
-								<ul>
-									<li>slate.common.jar</li>
-									<li>slate.core.jar</li>
-									<li>slate.cloud.jar</li>
-									<li>aws-sdk</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>	
-								<ul>
-									<li>Contains all the mobile backend features</li>
-									<li>All features are implemented as modules</li>
-									<li>All the fetures modules here can be used/included in the Server (see below)</li>
-									<li>All the fetures modules here can be alternatived accessed and used in the CLI( command line interface shell )</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>5. Slate.Tools</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>namespace</strong></td>
-							<td>slate.tools</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.tools.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>free : open-source</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td> 									
-								<ul>
-									<li>slate.common.jar</li>
-									<li>slate.core.jar</li>
-									<li>slate.cloud.jar</li>
-									<li>aws-sdk</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>	
-								<ul>
-									<li>Contains all the mobile backend features</li>
-									<li>All features are implemented as modules</li>
-									<li>All the fetures modules here can be used/included in the Server (see below)</li>
-									<li>All the fetures modules here can be alternatived accessed and used in the CLI( command line interface shell )</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>6. Slate.Server</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>name</strong></td>
-							<td>Slate.Server</td>
-						</tr>
-						<tr>
-							<td><strong>namespace</strong></td>
-							<td>slate.server
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.server.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>paid : refer to pricing</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>									
-								<ul>
-									<li>slate.common.jar</li>
-									<li>slate.core.jar</li>
-									<li>slate.cloud.jar</li>
-									<li>aws-sdk</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>
-								<ul>
-									<li>Uses Akka-Http</li>
-									<li>Protocol agnostic web api</li>
-									<li>An API is added to the server as a module</li>
-									<li>Build in features for version checking, diagnostics, error handling, checking status and much more</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div class="row">
-					<h2>7. Slate.Shell</h2>
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>name</strong></td>
-							<td>Slate.Shell</td>
-						</tr>
-						<tr>
-							<td><strong>namespace</strong></td>
-							<td>slate.shell</td>
-						</tr>
-						<tr>
-							<td><strong>jar</strong></td>
-							<td>slate.shell.jar</td>
-						</tr>
-						<tr>
-							<td><strong>cost</strong></td>
-							<td>free : open-source</td>
-						</tr>
-						<tr>
-							<td><strong>dependencies</strong></td>
-							<td>									
-								<ul>
-									<li>slate.common.jar</li>
-									<li>slate.core.jar</li>
-									<li>slate.cloud.jar</li>
-									<li>aws-sdk</li>
-								</ul>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>about</strong></td>
-							<td>									
-								<ul>
-									<li>Not yet publically available</li>
-									<li>Provides the ability to create projects</li>
-									<li>Runs all your protocol independent APIS( more info coming soon ) in the Command line</li>
-								</ul>
-							</td>
-						</tr>
-					</table>
+					<div id="project-slate-shell" class="col-sm-6 col-md-4">
+						<div class="thumbnail">
+							<img src="themes/start/images/white/terminal.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Shell</h3>
+									<p>CLI for Slate Features</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.shell</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.shell.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common.jar</li>
+												<li>slate.core.jar</li>
+												<li>slate.cloud.jar</li>
+												<li>aws-sdk</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>									
+											<ul>
+												<li>Provides the ability to create projects</li>
+												<li>Runs all your protocol independent APIS in the Command line</li>
+												<li>Includes all the apis from the Tools project</li>
+												<li>Includes a code generator</li>
+												<li>Includes an api to generate the documentation for Slate Kit </li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>						
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">more</a> 
+							</p>
+						</div>
+					</div>					
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-server" class="thumbnail">
+							<img src="themes/start/images/white/connected.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Server</h3>
+									<p>Backend Server and API container</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.server
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.server.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free: open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>slate.ext/cloud (optional)</li>
+												<li>akka-http.*</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>
+											<ul>
+												<li>Uses Akka-Http</li>
+												<li>Protocol agnostic web api</li>
+												<li>An API is added to the server as a module</li>
+												<li>Build in features for version checking, diagnostics, error handling, checking status and much more</li>
+												<li>All of the Slate.Ext features can be embedded in the server</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>						
+							<p class=" text-center">
+								<a href="server.html" class="btn btn-primary" role="button">more</a> 
+							</p>
+						</div>
+					</div>					
+					<div class="col-sm-6 col-md-4">
+						<div id="project-slate-examples" class="thumbnail">
+							<img src="themes/start/images/white/manual.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Examples</h3>
+									<p>Examples and Sample apps</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>namespace</strong></td>
+										<td>slate.examples
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.examples.jar</td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free: open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>slate.ext/cloud (optional)</li>
+												<li>akka-http.*</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>
+											<ul>
+												<li>Uses Akka-Http</li>
+												<li>Protocol agnostic web api</li>
+												<li>An API is added to the server as a module</li>
+												<li>Build in features for version checking, diagnostics, error handling, checking status and much more</li>
+												<li>All of the Slate.Ext features can be embedded in the server</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>						
+							<p class=" text-center">
+								<a href="" class="btn btn-primary" role="button">see source code</a> 
+							</p>
+						</div>
+					</div>
 				</div>
             </div>
           </div>
@@ -422,27 +596,26 @@
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">About Us</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Contact</h5>
                 <div class="textwidget">
                   <div class="adr">
-                    <div class="street-address">416 Water St.</div>
-                    <span class="locality">New York</span>,
-                    <abbr class="region" title="New York">NY</abbr>,
-                    <span class="postal-code">10002</span>,
-                    <span class="country-name">U.S.A</span>
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
                   </div>
-                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
-                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                  <div>Website: <a class="url" href="http://www.codehelix.co">http://www.codehelix.co</a></div>
                 </div>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Need Help?</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
@@ -454,10 +627,10 @@
                   </span>
                 </div>
                 <ul class="social-links">
-                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                  <li><a id="footer_social_facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a id="footer_social_twitter"  href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a id="footer_social_gplus"    href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_pinterest"href="#"><i class="fa fa-pinterest"></i></a></li>
                 </ul>
               </aside>
 
@@ -476,5 +649,9 @@
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "overview";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>
 </html>

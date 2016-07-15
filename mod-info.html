@@ -84,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-7-5 6:4:25</td>
+      <td>2016-7-6 5:24:42</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -133,15 +133,18 @@
     <span class="n">host</span><span class="o">.</span><span class="n">log</span><span class="o">(</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${name} : ${value}"</span> <span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
+
     <span class="c1">// CASE 2: Get the Lang runtime info ( java version, scala version etc )
 </span>    <span class="k">val</span> <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">()</span>
     <span class="n">lang</span><span class="o">.</span><span class="n">log</span><span class="o">(</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${name} : ${value}"</span> <span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
+
     <span class="c1">// CASE 3: Set startup info ( env, config, log, args)
 </span>    <span class="k">val</span> <span class="n">startup</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StartInfo</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"-level=error"</span><span class="o">)),</span> <span class="s">"{@app}-{@env}-{@date}.log"</span><span class="o">,</span> <span class="s">"{@app}.config"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">)</span>
     <span class="n">startup</span><span class="o">.</span><span class="n">log</span><span class="o">(</span> <span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">value</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${name} : ${value}"</span> <span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
+
 
     <span class="c1">// CASE 4: Set up info about your application.
 </span>    <span class="k">val</span> <span class="n">app</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>

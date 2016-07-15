@@ -7,6 +7,7 @@
     <title>Slate Kit - Server</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -20,12 +21,12 @@
         <nav id="topbar" class="site-topbar visible-lg visible-md">
           <div class="container">
             <div class="row">
-              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
               <div class="social-links col-sm-6">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-google-plus"></i></a>
-                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a id="topbar_social_facebook"  href="#"><i class="fa fa-facebook"></i></a>
+                <a id="topbar_social_twitter"   href="#"><i class="fa fa-twitter"></i></a>
+                <a id="topbar_social_gplus"     href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_pinterest" href="#"><i class="fa fa-pinterest"></i></a>
               </div>
             </div>
           </div>
@@ -42,15 +43,6 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="overview.html">Overview</a></li>
-                <li><a href="infra.html">Infrastructure</a></li>
-                <li><a href="features.html">Features</a></li>
-                <li><a href="orm.html">ORM</a></li>
-                <li class="active"><a href="server.html" class="current">Server</a></li>
-                <li><a href="utils.html">Utilities</a></li>
-                <li><a href="releases.html" >Releases</a></li>
-                <li><a href="setup.html">Setup</a></li>
               </ul>
             </div>
           </div>
@@ -193,6 +185,31 @@
 			</div>
 		  </div>
 		</section>
+		<section id="project_references" class="section">
+			<div class="container">
+				<div class="row">
+					<h2>Projects</h2>
+					<p>All these items are available in the following projects:</p>
+					<ul>
+						<li><a class="url-ch" href="overview.html#project-slate-server">slate.server</a></li>
+					</ul>
+					<p>You can view more information on projects available in SlateKit in the overview page</p>
+					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
+					<br/><br/>
+				</div>
+				<div class="row"> 
+					<h2>Notes</h2>	
+					<ul>
+						<li>The server provides a lot of built-in functionality</li>
+						<li>The server is simply an api container.</li>
+						<li>The server contains a custom request marshaller that marshalls requests to the apis</li>
+						<li>The apis are designed to be simple Scala classes with annotations designating api methods.</li>
+						<li>The apis can be easily registered with the server</li>
+						<li>The apis are designed to be protocol ( http ) agnostic</li>
+					</ul>					
+				</div>
+			</div>
+		</section>
       </main>
 
       <footer id="footer" class="site-footer">
@@ -203,27 +220,26 @@
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">About Us</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Contact</h5>
                 <div class="textwidget">
                   <div class="adr">
-                    <div class="street-address">416 Water St.</div>
-                    <span class="locality">New York</span>,
-                    <abbr class="region" title="New York">NY</abbr>,
-                    <span class="postal-code">10002</span>,
-                    <span class="country-name">U.S.A</span>
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
                   </div>
-                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
-                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                  <div>Website: <a class="url" href="http://www.codehelix.co">http://www.codehelix.co</a></div>
                 </div>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Need Help?</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
@@ -235,10 +251,10 @@
                   </span>
                 </div>
                 <ul class="social-links">
-                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                  <li><a id="footer_social_facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a id="footer_social_twitter"  href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a id="footer_social_gplus"    href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_pinterest"href="#"><i class="fa fa-pinterest"></i></a></li>
                 </ul>
               </aside>
 
@@ -257,5 +273,9 @@
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "server";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>
 </html>

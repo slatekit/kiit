@@ -84,7 +84,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-7-5 6:4:25</td>
+      <td>2016-7-6 5:24:42</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -140,33 +140,40 @@
 </span>    <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">createInstance</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"user: "</span> <span class="o">+</span> <span class="n">user</span><span class="o">)</span>
 
+
     <span class="c1">// CASE 2: Get a field value
 </span>    <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="k">=</span> <span class="s">"johndoe@home.com"</span>
     <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getFieldValue</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="s">"email"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"email : "</span> <span class="o">+</span> <span class="n">name</span><span class="o">)</span>
 
+
     <span class="c1">// CASE 3: Set a field value
 </span>    <span class="nc">Reflector</span><span class="o">.</span><span class="n">setFieldValue</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="s">"email"</span><span class="o">,</span> <span class="s">"johndoe@work.com"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"email : "</span> <span class="o">+</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="o">)</span>
 
+
     <span class="c1">// CASE 4: Call a method with parameters
 </span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">callMethod</span><span class="o">(</span><span class="n">api</span><span class="o">,</span> <span class="s">"create"</span><span class="o">,</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">Any</span><span class="o">](</span><span class="s">"superman@metro.com"</span><span class="o">,</span> <span class="s">"super"</span><span class="o">,</span> <span class="s">"man"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">35</span><span class="o">))</span>
     <span class="n">println</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">User</span><span class="o">].</span><span class="n">toString</span><span class="o">())</span>
+
 
     <span class="c1">// CASE 5: Get a class level annotation
 </span>    <span class="c1">// NOTE: The annotation must be created with all parameters ( not named parameters )
 </span>    <span class="k">val</span> <span class="n">annoCls</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getClassAnnotation</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">],</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Api</span><span class="o">]).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Api</span><span class="o">]</span>
     <span class="n">println</span><span class="o">(</span><span class="n">annoCls</span><span class="o">)</span>
 
+
     <span class="c1">// CASE 6: Get a method level annotation
 </span>    <span class="c1">// NOTE: The annotation must be created with all parameters
 </span>    <span class="k">val</span> <span class="n">annoMem</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getMemberAnnotation</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">],</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">ApiAction</span><span class="o">],</span> <span class="s">"activate"</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">ApiAction</span><span class="o">]</span>
     <span class="n">println</span><span class="o">(</span><span class="n">annoMem</span><span class="o">)</span>
 
+
     <span class="c1">// CASE 7: Get a field level annotation
 </span>    <span class="c1">// NOTE: The annotation must be created with all parameters
 </span>    <span class="k">val</span> <span class="n">annoFld</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getFieldAnnotation</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Field</span><span class="o">],</span> <span class="s">"email"</span><span class="o">).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Field</span><span class="o">]</span>
     <span class="n">println</span><span class="o">(</span><span class="n">annoFld</span><span class="o">)</span>
+
 
     <span class="c1">// CASE 8: print parameters
 </span>    <span class="k">val</span> <span class="n">method</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getMethod</span><span class="o">(</span><span class="n">api</span><span class="o">,</span> <span class="s">"activate"</span><span class="o">)</span>
@@ -175,21 +182,26 @@
     <span class="c1">// CASE 9: get all fields with annotations
 </span>    <span class="k">val</span> <span class="n">fields</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getFieldsWithAnnotations</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Field</span><span class="o">])</span>
 
+
     <span class="c1">// CASE 10: Get method
 </span>    <span class="k">val</span> <span class="n">sym</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getMethod</span><span class="o">(</span><span class="n">api</span><span class="o">,</span> <span class="s">"info"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="n">sym</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
+
 
     <span class="c1">// CASE 11: Get method parameters
 </span>    <span class="k">val</span> <span class="n">symArgs</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getMethodParameters</span><span class="o">(</span><span class="n">sym</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="n">symArgs</span><span class="o">(</span><span class="mi">0</span><span class="o">))</span>
 
+
     <span class="c1">// CASE 12: Is argument a basic type
 </span>    <span class="k">val</span> <span class="n">argType</span> <span class="k">=</span> <span class="n">symArgs</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="n">argType</span><span class="o">.</span><span class="n">isBasicType</span><span class="o">())</span>
 
+
     <span class="c1">// CASE 13: Create instance from parameter
 </span>    <span class="k">val</span> <span class="n">argInstance</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">createInstance</span><span class="o">(</span><span class="n">symArgs</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="n">asType</span><span class="o">())</span>
     <span class="n">println</span><span class="o">(</span><span class="n">argInstance</span><span class="o">)</span>
+
 
     <span class="c1">// CASE 14: Get fields of argument type
 </span>    <span class="k">val</span> <span class="n">argInstanceFields</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">getFieldsDeclared</span><span class="o">(</span><span class="n">argInstance</span><span class="o">.</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">AnyRef</span><span class="o">])</span>

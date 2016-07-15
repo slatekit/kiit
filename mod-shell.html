@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-7-5 6:4:25</td>
+      <td>2016-7-6 5:24:42</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -113,8 +113,12 @@
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
-<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
+<span class="k">import</span> <span class="nn">scala.collection.mutable.Map</span>
+<span class="k">import</span> <span class="nn">slate.common.InputArgs</span>
+<span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiContainer</span><span class="o">,</span> <span class="nc">ApiCmd</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.examples.common.UserApi</span>
 
 
 </code></pre>
@@ -125,6 +129,7 @@
 
   <span class="k">class</span> <span class="nc">AppShell</span> <span class="k">extends</span> <span class="nc">ShellService</span>
   <span class="o">{</span>
+    <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainer</span><span class="o">()</span>
 
     <span class="cm">/**
       * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
@@ -133,6 +138,11 @@
     <span class="o">{</span>
       <span class="c1">// You don't need to override this as the base method displays help info
 </span>      <span class="k">super</span><span class="o">.</span><span class="n">showHelp</span><span class="o">()</span>
+
+      <span class="c1">// You can register apis that you can call dynamically via command line.
+</span>      <span class="c1">// Refer to the API's module.
+</span>      <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">())</span>
+
       <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onShellStart - starting myapp command line interface"</span><span class="o">)</span>
     <span class="o">}</span>
 
@@ -148,6 +158,7 @@
 
     <span class="cm">/**
       * Use case 3c : ( OPTIONAL ) do some stuff before executing the command
+      *
       * @param cmd
       * @return
       */</span>
@@ -160,18 +171,47 @@
 
     <span class="cm">/**
       * Use case 3c: ( REQUIRED ) you must override this method to handle your command
+      *
       * @param cmd
       * @return
       */</span>
     <span class="k">override</span> <span class="k">def</span> <span class="n">onCommandExecuteInternal</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ShellCommand</span><span class="o">)</span><span class="k">:</span><span class="kt">ShellCommand</span> <span class="o">=</span>
     <span class="o">{</span>
-      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
+
+      <span class="c1">// 1. Here is where you can put in your code to handle the command.
+</span>      <span class="nc">_writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
+
+      <span class="c1">// 2. You have access to all the command fields and arguments.
+</span>      <span class="n">println</span><span class="o">(</span><span class="s">"line   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"call   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"area   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">area</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"name   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"action : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">action</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"arg #  : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">size</span><span class="o">())</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"arg 1   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+
+      <span class="c1">// 3. You can integrate with the API's feature ( for calling methods dynamically )
+</span>      <span class="c1">// Refer to the APIs module.
+</span>
+      <span class="c1">// 3a. Create global inputs to the API ( e.g. api-keys )
+</span>      <span class="k">val</span> <span class="n">opts</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Any</span><span class="o">](</span><span class="s">"api-key"</span> <span class="o">-&gt;</span> <span class="s">"123456789"</span><span class="o">)))</span>
+
+      <span class="c1">// 3b. Convert the shell command to an api command
+</span>      <span class="k">val</span> <span class="n">apiCmd</span> <span class="k">=</span> <span class="nc">ApiCmd</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">)</span>
+
+      <span class="c1">// 3c. Call the api command
+</span>      <span class="k">val</span> <span class="n">apiResult</span> <span class="k">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">callCommand</span><span class="o">(</span><span class="n">apiCmd</span><span class="o">)</span>
+
+      <span class="c1">// 3d. Set the result of the shell command to the result of api call
+</span>      <span class="n">cmd</span><span class="o">.</span><span class="n">result</span> <span class="k">=</span> <span class="n">apiResult</span>
+
       <span class="n">cmd</span>
     <span class="o">}</span>
 
 
     <span class="cm">/**
       * Use case 3d: ( OPTIONAL ) do some stuff after the command execution
+      *
       * @param cmd
       * @return
       */</span>
@@ -189,35 +229,82 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Create your own shell by extending the ShellService
+    <span class="c1">// CASE 1: Create your own shell by extending the ShellService
 </span>    <span class="k">val</span> <span class="n">shell</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppShell</span><span class="o">()</span>
 
-    <span class="c1">// Use case 2: (Optional) configure a startup command
+
+    <span class="c1">// CASE 2: (Optional) configure a startup command
 </span>    <span class="c1">// by setting it explicity through a method or setting
 </span>    <span class="c1">// the "_startupCommand" in your shells constructor
-</span>    <span class="n">shell</span><span class="o">.</span><span class="n">setStartupCommand</span><span class="o">(</span><span class="s">"hello -name:'world'"</span><span class="o">)</span>
+</span>    <span class="c1">// shell.setStartupCommand("app.users.last -active=true")
+</span>
 
-    <span class="c1">// Use case 3a: HOOK into start shell event
+    <span class="c1">// CASE 3a: HOOK into start shell event
 </span>    <span class="c1">// see: "onShellStart" override in AppShell below
 </span>    <span class="c1">// This allows you to run some code when the shell is starting up but before running commands.
+</span>    <span class="c1">// simulating a "user entered command"
 </span>
-    <span class="c1">// Use case 3b: HOOK into end shell event
+
+    <span class="c1">// CASE 3b: HOOK into end shell event
 </span>    <span class="c1">// see : "onShellEnd" override in AppShell below
 </span>    <span class="c1">// This allows you to run some code when the shell is ending but before it fully stops
 </span>
-    <span class="c1">// Use case 4: exit
+
+    <span class="c1">// CASE 4: Example command line ( simulating user entered text )
+</span>    <span class="c1">// NOTE: the action "app.users.invite" is translated to "area.name.action"
+</span>    <span class="n">shell</span><span class="o">.</span><span class="n">onCommandExecute</span><span class="o">(</span><span class="s">"app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'"</span><span class="o">)</span>
+
+
+    <span class="c1">// CASE 5: exit
 </span>    <span class="c1">// you can type "exit" or "quit" to quit the shell
 </span>
-    <span class="c1">// Use case 5: help
+
+    <span class="c1">// CASE 6: help
 </span>    <span class="c1">// you can type "?", "help" to show help info
 </span>
-    <span class="c1">// Use case 6: supply command line args ( e.g. from main )
+
+    <span class="c1">// CASE 7: API integration
+</span>    <span class="c1">// If you want to integrate with the API module ( which allows for calling apis dynamically )
+</span>    <span class="c1">// you can convert the ShellCommand to an API command on the handler for commandExecuteInternal.
+</span>    <span class="c1">// Refer to the commandExecuteInternal and api setup code above.
+</span>
+
+    <span class="c1">// CASE 8: supply command line args ( e.g. from main )
 </span>    <span class="n">shell</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"-env:dev"</span><span class="o">,</span> <span class="s">"-log:verbose"</span><span class="o">))</span>
     
 
 </code></pre>
 </div>
 
+<h2 id="output">Output</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">PLEASE</span> <span class="n">TYPE</span> <span class="n">YOUR</span> <span class="n">COMMANDS</span>
+
+		 <span class="n">Syntax</span>
+		 <span class="n">api</span><span class="o">.</span><span class="na">command</span>  <span class="n">key</span><span class="o">=</span><span class="n">value</span><span class="o">*</span>
+
+		 <span class="n">Examples</span>
+		 <span class="n">users</span><span class="o">.</span><span class="na">activate</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="n">johndoe</span><span class="nd">@gmail</span><span class="o">.</span><span class="na">com</span> <span class="o">-</span><span class="n">role</span><span class="o">=</span><span class="n">user</span>
+
+		 <span class="n">Available</span>
+
+  <span class="n">type</span> <span class="s">"exit"</span> <span class="n">or</span> <span class="s">"quit"</span> <span class="n">to</span> <span class="n">quit</span> <span class="n">program</span>
+  <span class="n">type</span> <span class="s">"info"</span> <span class="k">for</span> <span class="n">detailed</span> <span class="n">information</span>
+
+ 	<span class="nl">hook:</span> <span class="n">onCommandBeforeExecute</span> <span class="o">-</span> <span class="n">before</span> <span class="n">command</span> <span class="n">is</span> <span class="n">executed</span>
+ 	<span class="nl">hook:</span> <span class="n">onCommandExecuteInternal</span> <span class="n">handling</span> <span class="o">:</span> <span class="n">app</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">isActive</span>
+
+  <span class="n">line</span>   <span class="o">:</span> <span class="n">app</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">isActive</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"johndoe@company.com"</span>
+  <span class="n">call</span>   <span class="o">:</span> <span class="n">app</span><span class="o">.</span><span class="na">users</span><span class="o">.</span><span class="na">isActive</span>
+  <span class="n">area</span>   <span class="o">:</span> <span class="n">app</span>
+  <span class="n">name</span>   <span class="o">:</span> <span class="n">users</span>
+  <span class="n">action</span> <span class="o">:</span> <span class="n">isActive</span>
+  <span class="n">args</span>   <span class="o">:</span> <span class="mi">1</span>
+  <span class="n">arg</span> <span class="mi">1</span>  <span class="o">:</span> <span class="n">johndoe</span><span class="nd">@company</span><span class="o">.</span><span class="na">com</span>
+
+ 	<span class="nl">hook:</span> <span class="n">onCommandAfterExecute</span> <span class="o">-</span> <span class="n">after</span> <span class="n">command</span> <span class="n">is</span> <span class="n">executed</span>
+</code></pre>
+</div>
 
 			</div>
 		</section>
