@@ -400,42 +400,79 @@
 <h1 id="api-discovery">Api Discovery</h1>
 
 <div class="alert alert-success" role="alert">
-	<h3 id="web-areaapiaction-help">web: {area}/{api}/{action}-help</h3>
-	<h3 id="cli-areaapiaction">cli: {area}.{api}.{action}?</h3>
+	<h3 id="cli-areaapiaction">{area}.{api}.{action}?</h3>
 </div>
 
 <br/>
 <h3>Examples</h3>
 <p>With the unified routing format in place, we can easily support a simple and fast way to discover all the areas, apis, and actions in the system. The unified discovery approach</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// Web 1. WEB: to show all the areas in the system 
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">-</span><span class="n">help</span>
- 
- <span class="c1">// Web 2. WEB: to show all the apis in an area 
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">help</span>
- 
- <span class="c1">// Web 3. WEB: to show all the actions in an api 
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">-</span><span class="n">help</span>
-  
- <span class="c1">// Web 4. WEB: to show all inputs to an api 
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">-</span><span class="n">help</span>
- 
- 
- <span class="c1">// CLI 1. WEB: to show all the areas in the system 
-</span> <span class="o">?</span>
- 
- <span class="c1">// CLI 2. WEB: to show all the apis in an area 
-</span> <span class="n">app</span> <span class="o">?</span>
- 
- <span class="c1">// CLI 3. WEB: to show all the actions in an api 
-</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span> <span class="o">?</span>
-  
- <span class="c1">// CLI 4. WEB: to show all inputs to an api 
-</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">?</span>
- 
- 
-</code></pre>
-</div>
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-2"><strong>Container</strong></td>
+		<td class="col-sm-2"><strong>Type</strong></td>
+		<td class="col-sm-2"><strong>Format</strong></td>
+		<td class="col-sm-3"><strong>Example</strong></td>
+		<td><strong>Result</strong></td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>areas</td>
+		<td>?</td>
+		<td>?</td>
+		<td>shows all the areas in the system</td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>apis</td>
+		<td>area ?</td>
+		<td>app ?</td>
+		<td>shows all the apis for the area supplied</td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>actions</td>
+		<td>area.action ?</td>
+		<td>app.users ?</td>
+		<td>shows all the actions for the area/api supplied</td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>action</td>
+		<td>area.api.action ?</td>
+		<td>app.users.activate ?</td>
+		<td>shows signature / details of the action on the area/api/action supplied</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>areas</td>
+		<td>help</td>
+		<td>http://.../api/api-help</td>
+		<td>shows all the areas in the system</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>apis</td>
+		<td>area-help</td>
+		<td>http://.../api/app-help</td>
+		<td>shows all the apis for the area supplied</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>actions</td>
+		<td>area/action-help</td>
+		<td>http://.../api/app/users-help</td>
+		<td>shows all the actions for the area/api supplied</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>action</td>
+		<td>area/api/action-help</td>
+		<td>http://.../api/app/users/activate-help</td>
+		<td>shows signature / details of the action on the area/api/action supplied</td>
+	</tr>
+</table>
+
 <br/>
 
 <h3>Notes</h3>
