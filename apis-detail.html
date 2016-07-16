@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slate Kit - APIs</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-google-plus"></i></a>
+                <a href="#"><i class="fa fa-pinterest"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        
+		
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+				<div class="row">
+
+				  <aside class="widget">
+					<h1 class="widget-title">APIs</h1>
+					<h3>                  
+					  Protocol independent APIs<br />
+					  Run your APIs on the Web ( Http ) or on the CLI ( command line )
+					</h3>
+				  </aside>
+				</div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="apis">Apis</h1>
+					<p>The apis in Slate Kit are built to be <strong>protocol independent</strong>. 
+					This means that you can build your APIs 1 time and they can be made to be available on the command line shell or as a Web API, or both. This is done using various techniques outlined below. Before going into the details, first review the terminology.</p>
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div> 
+							<h1>Basics</h1>
+							<p>The core concepts of Slate Kit <strong>Protocol Independent APIs</strong> are listed below.</p>
+							<br/>
+						</div>
+						<div> 
+							<h2>1. Results</h2>
+							<p>Built in 100% Scala and using Akka-Http. Our tech stack is AWS. Integration available for queues via SQS, file storage via S3 and servers via EC2 and MySql. The ORM / entities persistance layer is home-grown and built using Scala Reflection and Annotations.
+							</p>
+							<a href="#api-result" class="more"><span class="btn btn-primary">See more</span></a>
+						</div>
+						<div > 
+							<h2>2. Routing</h2>
+							<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Scala APIs to run in the server and/or in the CLI. Our server code marshalls/routes WEB API REST calls to your APIs. You simply annotate your APIs to make them available.
+							</p>
+							<a href="#api-routing" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+						<div > 
+							<h2>3. Discovery</h2>
+							<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+							</p>
+							<a href="#api-discovery" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+						<div >
+							<h2>4. Setup</h2>
+							<p>The server routes WEB REST calls or commands on the CLI(command line interface) to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+							</p>
+							<a href="#api-setup" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+					</div>
+					
+					<div class="col-sm-6">
+						<div> 
+							<h1>Features</h1>
+							<p>Many standard features for most apis including, registration, security, etc are supported.</p>
+							<br/>
+						</div> 					
+						<div > 
+							<h2>5. Security</h2>
+							<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+							</p>
+							<a href="#server-config" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+						<div >
+							<h2>6. Services</h2>
+							<p>The server routes WEB REST calls or commands on the CLI(command line interface) to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+							</p>
+							<a href="#server-routing" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+						<div > 
+							<h2>7. CLI</h2>
+							<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+							</p>
+							<a href="#server-config" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+						<div >
+							<h2>8. Server</h2>
+							<p>The server routes WEB REST calls or commands on the CLI(command line interface) to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+							</p>
+							<a href="#server-routing" class="more"><span class="btn btn-primary">See docs</span></a>
+						</div>
+					</div>
+				</div
+				
+
+<br/><br/><br/><br/>
+<h1 id="api-containers">Api Containers</h1>
+<p>All your APIs run inside of what we call an Api Container. There are 3 types of api containers:</p>
+
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-2"><strong>Type</strong></td>
+		<td class="col-sm-2"><strong>Protocol</strong></td>
+		<td class="col-sm-2"><strong>Routes</strong></td>
+		<td><strong>Notes</strong></td>
+	</tr>
+	<tr>
+		<td><strong>Web</strong></td>
+		<td>Http</td>
+		<td>more info below</td>
+		<td>A container to host your APIs as Web APIs via Http protocol using Akka-Http</td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>Command</td>
+		<td>more info below</td>
+		<td>A container to host your APIs on the command line and supports some level of automation</td>
+	</tr>
+	<tr>
+		<td><strong>Queue</strong></td>
+		<td>Queue</td>
+		<td>coming soon</td>
+		<td>A container to host your APIs where all calls are made via a message queue ( coming later )</td>
+	</tr>
+</table>
+
+<br/><br/>
+<h1 id="api-result">Api Result</h1>
+
+<p>Represents a response / return value from an API action. This is implemented as a simple case class that wraps a return value with a success/fail flag, a message, status code, error and data. </p>
+
+<br/>
+<h3>Class</h3>
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-3"><strong>Field</strong></td>
+		<td class="col-sm-3"><strong>Type</strong></td>
+		<td><strong>Message</strong></td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>success</strong></td>
+		<td>Boolean</td>
+		<td>Success / Fail flag</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>msg</strong></td>
+		<td>String</td>
+		<td>Information message if success, error message if failure</td>
+	</tr>
+	<tr>
+		<td><strong>code</strong></td>
+		<td>Int</td>
+		<td>Status code - matches Http status codes for easy conversion to http response.</td>
+	</tr>
+	<tr>
+		<td><strong>data</strong></td>
+		<td>Any</td>
+		<td>The return value of the API action</td>
+	</tr>
+	<tr>
+		<td><strong>ref</strong></td>
+		<td>String</td>
+		<td>String tag for external references</td>
+	</tr>
+</table>
+
+
+<a href="mod-results.html" class="more"><span class="btn btn-primary">See docs</span></a>
+<br/><br/>
+
+<h3>Example</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">import</span> <span class="nn">slate.common.Result</span>
+  <span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultCode</span><span class="o">,</span> <span class="nc">ResultSupport</span><span class="o">}</span>
+
+    <span class="c1">// CASE 1: The Result class is a glorified wrapper around a return value/response.
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">Result</span><span class="o">(</span>
+      <span class="n">success</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+      <span class="n">msg</span> <span class="k">=</span> <span class="s">"user created"</span><span class="o">,</span>
+      <span class="n">code</span> <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
+      <span class="n">data</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
+      <span class="n">ref</span> <span class="k">=</span> <span class="s">"tag001"</span>
+    <span class="o">)</span>
+
+    <span class="c1">// CASE 2: Success ( 200 )
+</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="s">"user created"</span><span class="o">,</span> <span class="n">data</span> <span class="k">=</span> <span class="mi">123456</span><span class="o">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">"promoCode:ny001"</span><span class="o">)</span>
+    <span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
+	
+</code></pre>
+</div>
+
+<br/>
+<h3>Builder</h3>
+<p>There is a Result builder trait called ResultSupporIn that you can extend from that allows you to easily construct results that represent very common semantics</p>
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-3"><strong>Method</strong></td>
+		<td class="col-sm-3"><strong>Code</strong></td>
+		<td><strong>Meaning</strong></td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>success (...)</strong></td>
+		<td>200</td>
+		<td>Successful call ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>failure (...)</strong></td>
+		<td>400</td>
+		<td>Represents a bad request ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>unAuthorized (...)</strong></td>
+		<td>401</td>
+		<td>No permission to access api/action ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>notFound (...)</strong></td>
+		<td>404</td>
+		<td>Api action not found ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>badRequest (...)</strong></td>
+		<td>400</td>
+		<td>Bad api call ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>conflict (...)</strong></td>
+		<td>409</td>
+		<td>Conflict with api call / concurrency issue ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>unexpectedError (...)</strong></td>
+		<td>500</td>
+		<td>Unexpected error occurred ( similar to http )</td>
+	</tr>
+	<tr>
+		<td class="col-sm-3"><strong>notImplemented (...)</strong></td>
+		<td>501</td>
+		<td>Api call not implemented ( similar to http )</td>
+	</tr>
+</table>
+
+<br/>
+<h3>Notes</h3>
+<div class="alert alert-info" role="alert">
+	<ol>
+	  <li>The status codes match Http Status Codes.</li>
+	  <li>The result can be used to easily convert to an Http response.</li>
+	  <li>There is also a builder trait ( see below ) that can build results mimicking common http responses.</li>
+	  <li>Provides an effective way to keep complex logic in a service layer</li>
+	  <li>The system will return a success for API actions that don't return anything ( Unit )</li>
+	</ol>
+</div>
+<br/><br/>
+<h1 id="api-routing">Api Routing</h1>
+
+<p>In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.</p>
+
+<br/>
+<div class="alert alert-success" role="alert">
+	<h3>{area}.{api}.{action} key=value*</h3>
+</div>
+<br/>
+
+<h3>Parts</h3>
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-3"><strong>Part</strong></td>
+		<td class="col-sm-3"><strong>Example</strong></td>
+		<td><strong>Purpose</strong></td>
+	</tr>
+	<tr>
+		<td><strong>area</strong></td>
+		<td>app, admin, sys</td>
+		<td>This is a root level category containing a collection of apis</td>
+	</tr>
+	<tr>
+		<td><strong>api</strong></td>
+		<td>users, invites, jobs</td>
+		<td>This is the name of a single api which may support 1 or more actions </td>
+	</tr>
+	<tr>
+		<td><strong>action</strong></td>
+		<td>create, update, activate</td>
+		<td>A action is the lowest level in the route and typically maps to a method/function</td>
+	</tr>
+</table>
+
+<br/>
+<h3>Formats</h3>
+<table class="table table-bordered table-striped">
+	<tr>
+		<td class="col-sm-2"><strong>Container</strong></td>
+		<td class="col-sm-2"><strong>Type</strong></td>
+		<td class="col-sm-3"><strong>Format</strong></td>
+		<td><strong>Example</strong></td>
+	</tr>
+	<tr>
+		<td><strong>CLI</strong></td>
+		<td>n/a</td>
+		<td>{area}.{api}.{action} key=value*</td>
+		<td>app.users.activate -code=2 -phone=123456789 -active=true -email="kishore@abc.com"</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>GET</td>
+		<td>{area}/{api}/{action}?key=value*</td>
+		<td>http://mycompany.com/api/app/users/activate?code=1&phone=123456789&active=true&email=kishore@abc.com</td>
+	</tr>
+	<tr>
+		<td><strong>WEB</strong></td>
+		<td>POST ( json data )</td>
+		<td>{area}/{api}/{action} { key=value* }</td>
+		<td>http://mycompany.com/api/app/users/activate <br/>
+ { code=2, phone=123456789, active=true, email="kishore@abc.com" } </td>
+	</tr>
+</table>
+
+<br/>
+
+<h3>Example</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// 1. WEB: with inputs in query string
+</span> <span class="c1">// unified routing format: area/apiname/action?&amp;phone=123456789&amp;active=true&amp;email=kishore@abc.com
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
+ 
+ 
+ <span class="c1">// 2. WEB: with inputs as json post data 
+</span> <span class="c1">// unified routing format: area/apiname/action { id=2, phone=123456789, active=true, email="kishore@abc.com" } 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> 
+ <span class="o">{</span> <span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">,</span> <span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">,</span> <span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">,</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> <span class="o">}</span> 
+ 
+ 
+ <span class="c1">// 3. CLI: command line syntax
+</span> <span class="c1">// unified routing format: area.api.action -key=value*
+</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
+ 
+</code></pre>
+</div>
+
+<br/>
+<h3>Notes</h3>
+<div class="alert alert-info" role="alert">
+	<ol>
+	  <li>It is <strong>NOT</strong> REST based by design!</li>
+	  <li>It is designed for simplicity</li>
+	  <li>Favours convention over configuration</li>
+	  <li>Provides consistency between web and command line</li>
+	</ol>
+</div>
+
+<br/><br/>
+<h1 id="api-discovery">Api Discovery</h1>
+
+<div class="alert alert-success" role="alert">
+	<h3 id="web-areaapiaction-help">web: {area}/{api}/{action}-help</h3>
+	<h3 id="cli-areaapiaction">cli: {area}.{api}.{action}?</h3>
+</div>
+
+<br/>
+<h3>Examples</h3>
+<p>With the unified routing format in place, we can easily support a simple and fast way to discover all the areas, apis, and actions in the system. The unified discovery approach</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// Web 1. WEB: to show all the areas in the system 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">-</span><span class="n">help</span>
+ 
+ <span class="c1">// Web 2. WEB: to show all the apis in an area 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">-</span><span class="n">help</span>
+ 
+ <span class="c1">// Web 3. WEB: to show all the actions in an api 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">-</span><span class="n">help</span>
+  
+ <span class="c1">// Web 4. WEB: to show all inputs to an api 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">-</span><span class="n">help</span>
+ 
+ 
+ <span class="c1">// CLI 1. WEB: to show all the areas in the system 
+</span> <span class="o">?</span>
+ 
+ <span class="c1">// CLI 2. WEB: to show all the apis in an area 
+</span> <span class="n">app</span> <span class="o">?</span>
+ 
+ <span class="c1">// CLI 3. WEB: to show all the actions in an api 
+</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span> <span class="o">?</span>
+  
+ <span class="c1">// CLI 4. WEB: to show all inputs to an api 
+</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">?</span>
+ 
+ 
+</code></pre>
+</div>
+<br/>
+
+<h3>Notes</h3>
+<div class="alert alert-info" role="alert">
+<ol>
+  <li>You can authorize access to the docs</li>
+  <li>The ? is not used in the web as it would conflict with query string</li>
+</ol>
+</div>
+<br/><br/>
+<h1 id="api-setup">Api Setup</h1>
+
+<p>The apis are set up to be simple Scala classes with annotations.</p>
+
+<ol>
+  <li>Put an @Api annotation to indicate its a unified api</li>
+  <li>You specify the <strong>area</strong> and <strong>api</strong> in the @Api annotation</li>
+  <li>Put an @ApiAction annotation to indicate that a specific method is publicly available as an action</li>
+  <li>You can put a role permission at the api itself</li>
+  <li>You can put a role permission at the api action / method annotation</li>
+  <li>An action annotation can reference its parent role permission via “@parent”</li>
+  <li>You can hook in any authentication system you prefer. see details below</li>
+  <li>The access role field can indicate whether to make the api available ‘cli’, ‘web’ or ‘*’ for all</li>
+</ol>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slate.core.apis._</span>
+
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+<span class="o">{</span>
+   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
+  <span class="o">{</span>
+    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+  <span class="o">}</span>
+  
+  <span class="c1">// .. more
+</span><span class="o">}</span>
+
+</code></pre>
+</div>
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div class="street-address">416 Water St.</div>
+                    <span class="locality">New York</span>,
+                    <abbr class="region" title="New York">NY</abbr>,
+                    <span class="postal-code">10002</span>,
+                    <span class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "apis";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+  </body>
+</html>
