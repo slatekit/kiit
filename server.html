@@ -77,7 +77,7 @@
 					</p>
 				</div>
 				<br/>
-				<h1>Overview</h1>
+				<h1 id="overview">Overview</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Step</strong></td>
@@ -87,37 +87,37 @@
 					<tr> 
 						<td><strong>1. Tech</strong></td>
 						<td>How to represent the response/return values from APIs</td>
-						<td><a href="#api-result" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-result" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr >
 						<td><strong>2. Approach</strong></td>
 						<td><p>How to set up your scala classes as APIs and actions.</td>
-						<td><a href="#api-declaration" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-declaration" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr > 
 						<td><strong>3. Setup</strong></td>
 						<td>How the Web / CLI routes map to actions using a <strong>Unified Routing Format</strong></td>
-						<td><a href="#api-routing" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-routing" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr > 
 						<td><strong>4. Routing</strong></td>
 						<td>How to easily discover APIs on the Web or the CLI.</td>
-						<td><a href="#api-discovery" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-discovery" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>5. Security</strong></td>
 						<td>How to configure security and write your own authentication/authorization scheme.</td>
-						<td><a href="#api-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
+						<td><a href="#server-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
 					</tr>
 					<tr> 
 						<td><strong>6. Features</strong></td>
 						<td>The pre-buit features baked into the server</td>
-						<td><a href="#api-setup" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-setup" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>7. Extending</strong></td>
 						<td>How to extend the server with your own features/apis.</td>
-						<td><a href="#api-cli" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#server-cli" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>8. Install</strong></td>
@@ -131,77 +131,258 @@
 					</tr>
 					
 				</table>
-				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>Tech</h2>
+					<div> 
+						<br/><br/>
+						<h1>Tech</h1>
 						<p>Built in 100% Scala and using Akka-Http. Our tech stack is AWS. Integration available for queues via SQS, file storage via S3 and servers via EC2 and MySql. The ORM / entities persistance layer is home-grown and built using Scala Reflection and Annotations.
 						</p>
-						<a href="#server-tech" class="more"><span class="btn btn-primary">See more</span></a>
+						<table class="table table-bordered table-striped">
+							<tr>
+								<td class="col-sm-2"><strong>Tech</strong></td>
+								<td class="col-sm-2"><strong>Version</strong></td>
+								<td><strong>About</strong></td>
+							</tr>
+							<tr> 
+								<td>java</td>
+								<td>1.8</td>
+								<td>JRE</td>
+							</tr>
+							<tr> 
+								<td>scala</td>
+								<td>2.11.7</td>
+								<td>Scala sdk</td>
+							</tr>
+							<tr> 
+								<td>akka-http</td>
+								<td>2.11-1.0</td>
+								<td>Http async server/framework</td>
+							</tr>
+							<tr> 
+								<td>slate.common</td>
+								<td>-</td>
+								<td>slate utilities</td>
+							</tr>
+							<tr> 
+								<td>slate.core</td>
+								<td>-</td>
+								<td>slate API container</td>
+							</tr>
+						</table>
+						<br/>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>
-					<div class="col-sm-6"> 
-						<h2>Approach</h2>
+					<div> 
+						<h1>Approach</h1>
 						<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Scala APIs to run in the server and/or in the CLI. Our server code marshalls/routes WEB API REST calls to your APIs. You simply annotate your APIs to make them available.
 						</p>
-						<a href="#server-approach" class="more"><span class="btn btn-primary">See docs</span></a>
+						<br/>
+						<h3>APIS</h3>
+						<p>The server is implemented as a collection of APIs. For more information see the APIs page</p>
+						<a href="apis-detail.html" class="apis"><span class="btn btn-primary">See APIs</span></a>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>
-				</div>
-				<br/>
-				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>Setup</h2>
+					<div> 
+						<h1>Setup</h1>
 						<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
 						</p>
-						<a href="#server-config" class="more"><span class="btn btn-primary">See docs</span></a>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>
-					<div class="col-sm-6">
-						<h2>Routing</h2>
+					<div>
+						<h1>Routing</h1>
 						<p>The server routes WEB REST calls or commands on the CLI(command line interface) to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
 						</p>
-						<a href="#server-routing" class="more"><span class="btn btn-primary">See docs</span></a>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6"> 
-						<h2>Security</h2>
+					<div> 
+						<h1>Security</h1>
 						<p>Control how and when the server is booted up and also what APIs the server will "embed" or host. You register modules into the server which represent your plain old Scala APIs. You can also setup authentication and authorization of your API calls.
 						</p>
-						<a href="#server-setup" class="more"><span class="btn btn-primary">See docs</span></a> 
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>				
-					<div class="col-sm-6"> 
-						<h2>Features</h2>
+					<div> 
+						<h1>Features</h1>
 						<p>The Slate Server has built in support to easily handle version, status, health checks, diagnostics, logging, error handling and more. You can optionally register short or long-running tasks that can be run/managed remotely. APIs are embedded into the server.
 						</p>
-						<a href="#server-features" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-				</div>
-				<div class="row">				
-					<div class="col-sm-6"> 
-						<h2>Extending</h2>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
+					</div>		
+					<div> 
+						<h1>Extending</h1>
 						<p>You can add as many API's as you want to the Slate Server by simply creating classes and methods with annotations and registering your API's with the Server. These APIs can be called on the command line via the CLI making them protocol independent.
 						</p>
-						<a href="#server-extending" class="more"><span class="btn btn-primary">See docs</span></a>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>		
-					<div class="col-sm-6"> 
-						<h2>CLI</h2>
+					<div> 
+						<h1>CLI</h1>
 						<p>Since APIs are Scala classes with annotations, it is easy to make protocol independent APIs. We provide a CLI(Command Line Interface) for making calls to your APIs via the command line by simply typing out the function/method name and inputs/parameters.
 						</p>
-						<a href="#server-cli" class="more"><span class="btn btn-primary">See docs</span></a>
-					</div>
-				</div>
-				<div class="row">				
-					<div class="col-sm-6"> 
-						<h2>Install</h2>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
+					</div>	
+					<div>
+						<h1>Building</h1>
 						<p>Slate Server relies on the Slate.Common, Slate.Core libraries and also the Slate.Cloud and Slate.Ext libraries if you plan to queues, files, and any of the mobile backend features. Since Akka-Http is used, you will also need those libraries.
 						</p>
-						<a href="#server-install" class="more"><span class="btn btn-primary">See docs</span></a>
+						<br/>
+						<table class="table table-bordered table-striped">
+							<tr>
+								<td class="col-sm-1"><strong>Step</strong></td>
+								<td class="col-sm-2"><strong>Action</strong></td>
+								<td class="col-sm-2"><strong>Note</strong></td>
+								<td><strong>Example</strong></td>
+							</tr>
+							<tr> 
+								<td>1</td>
+								<td>Build project</td>
+								<td>using <strong>sbt</strong></td>
+								<td><br/>
+									<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">cd</span> <span class="o">%</span><span class="nc">APP_HOME</span><span class="o">%</span>
+<span class="n">sbt</span> <span class="k">package</span>
+
+</code></pre>
+</div>
+								</td>
+							</tr>
+							<tr> 
+								<td>2</td>
+								<td>Copy to temp dir</td>
+								<td>to package all files</td>
+								<td>
+									Copy over all the built classes over to a temp directory.<br/><br/>
+									<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="nc">REM</span> <span class="nc">Copy</span> <span class="n">classes</span> <span class="n">over</span> <span class="n">from</span> <span class="n">target</span> <span class="n">to</span> <span class="nc">APP_HOME</span><span class="o">\</span><span class="n">dist</span><span class="o">\</span><span class="n">temp</span>
+<span class="n">xcopy</span> <span class="o">/</span><span class="n">e</span> <span class="o">/</span><span class="n">v</span> <span class="o">/</span><span class="n">y</span> <span class="o">%</span><span class="nc">APP_TARG</span><span class="o">%</span> <span class="o">%</span><span class="nc">APP_TEMP</span><span class="o">%\</span>
+
+</code></pre>
+</div>
+								</td>
+							</tr>
+							<tr> 
+								<td>3</td>
+								<td>Create manifest</td>
+								<td>to create a runnable jar</td>
+								<td>Manifest includes your app to run, entry point, and dependent jars.<br/><br/>
+								<pre><code class="language-bat">Manifest-Version: 1.0
+Main-Class: myapp.web.WebApp
+Class-Path: akka-actor_2.11-2.3.11.jar
+  akka-http-core-experimental_2.11-1.0-RC4.jar
+  akka-http-experimental_2.11-1.0-RC4.jar
+  akka-http-spray-json-experimental_2.11-1.0-RC4.jar
+  akka-parsing-experimental_2.11-1.0-RC4.jar
+  akka-stream-experimental_2.11-1.0-RC4.jar
+  aws-java-sdk-1.10.55.jar
+  myapp_2.11-1.0.jar
+  commons-codec-1.9.jar
+  commons-logging-1.2.jar
+  config-1.2.1.jar
+  httpclient-4.5.1.jar
+  httpcore-4.4.3.jar
+  jackson-annotations-2.5.0.jar
+  jackson-core-2.5.3.jar
+  jackson-databind-2.5.3.jar
+  jline-2.10.4.jar
+  joda-time-2.8.1.jar
+  json_simple-1.1.jar
+  mysql-connector-java-5.1.38-bin.jar
+  reactive-streams-1.0.0.jar
+  scala-library.jar
+  scala-reflect.jar
+  slate-cloud_2.11-1.0.jar
+  slate-common_2.11-1.0.jar
+  slate-core_2.11-1.0.jar
+  slate-ext_2.11-1.0.jar
+  spray-json_2.11-1.3.1.jar
+
+</code></pre>
+								</td>
+							</tr>
+							<tr> 
+								<td>4</td>
+								<td>Create a jar</td>
+								<td>to create a single runnable jar file for your app</td>
+								<td>
+								<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="nc">REM</span> <span class="n">move</span> <span class="n">to</span> <span class="n">temp</span> <span class="n">and</span> <span class="n">jar</span> <span class="n">all</span> <span class="n">the</span> <span class="n">files</span> <span class="n">using</span> <span class="n">custom</span> <span class="n">manifest</span>
+<span class="n">cd</span> <span class="o">%</span><span class="nc">APP_TEMP</span><span class="o">%</span>
+<span class="n">jar</span> <span class="o">-</span><span class="n">cvfm</span> <span class="o">%</span><span class="nc">APP_JAR</span><span class="o">%</span> <span class="o">%</span><span class="nc">APP_BUILD</span><span class="o">%\</span><span class="n">manifest</span><span class="o">.</span><span class="n">txt</span> <span class="o">*</span>
+
+</code></pre>
+</div>
+								</td>
+							</tr>
+							<tr> 
+								<td>5</td>
+								<td>Copy dependencies</td>
+								<td>scala, akka-http, slate, etc.</td>
+								<td>Copy all the dependent jars into this temp directory.
+								</td>
+							</tr>
+						</table>
+						<br/>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>						
 					</div>
-					<div class="col-sm-6"> 
-						<h2>AWS</h2>
-						<p>To run the Slate Server on Amazon EC2, we have detailed documentation available which show how to compile the code with the Akka-Http dependencies and also how to correctly package a zip file for distributing and installing the server on EC2.
+					<div> 
+						<h1>Install</h1>
+						<p>Slate Server relies on the Slate.Common, Slate.Core libraries and also the Slate.Cloud and Slate.Ext libraries if you plan to queues, files, and any of the mobile backend features. Since Akka-Http is used, you will also need those libraries.
 						</p>
-						<a href="#server-aws" class="more"><span class="btn btn-primary">See docs</span></a>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>
 					</div>
-				</div>
+					<div> 
+						<h1>AWS</h1>
+						<p>To run the Slate Server on Amazon EC2, follow the steps for packaging first. Then after creating a jar file, perform the following steps. </p>
+						<br/>
+						<table class="table table-bordered table-striped">
+							<tr>
+								<td class="col-sm-1"><strong>Step</strong></td>
+								<td class="col-sm-2"><strong>Action</strong></td>
+								<td class="col-sm-2"><strong>Example</strong></td>
+								<td><strong>Notes</strong></td>
+							</tr>
+							<tr> 
+								<td>1</td>
+								<td>Create procfile</td>
+								<td>file: <strong>Procfile</strong></td>
+								<td>Create a file called <strong>Procfile</strong> that tells AWS how to run your application. <br/>
+									The content of the file is the command to run your application. e.g. <br/><br/>
+									<strong>web: java -jar myapp.jar</strong>
+								</td>
+							</tr>
+							<tr> 
+								<td>2</td>
+								<td>Create zip file</td>
+								<td>file: <strong>myapp_v1_0_1.zip</strong></td>
+								<td>Zip up all the items in the temp folder but <strong>NOT</strong> the folder itself.</td>
+							</tr>
+							<tr> 
+								<td>3</td>
+								<td>Deploy zip file</td>
+								<td>file: myapp_v1_0_1.zip</td>
+								<td>Now the zip file represents your fully packaging application. You can use this zip file to deploy to AWS.</td>
+							</tr>
+						</table>
+						<br/>
+						<h3>More</h3>
+						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+						<br/><br/><br/>								
+					</div>
             </div>
           </div>
         </section>

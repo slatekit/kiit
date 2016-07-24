@@ -82,7 +82,7 @@
 			
 				
 				<br/><br/>
-				<h1>Overview</h1>
+				<h1 id="overview">Overview</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Step</strong></td>
@@ -102,12 +102,12 @@
 					<tr > 
 						<td><strong>3. Request</strong></td>
 						<td>How an API request is abstracted and data marshalled to an API method</td>
-						<td><a href="#api-marshalling" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#api-request" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>4. Response</strong></td>
 						<td>How to construct and return a response from an API action</td>
-						<td><a href="#api-result" class="more"><span class="btn btn-primary">See more</span></a></td>
+						<td><a href="#api-response" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr > 
 						<td><strong>5. Routing</strong></td>
@@ -120,14 +120,14 @@
 						<td><a href="#api-discovery" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>7. Security</strong></td>
-						<td>How to configure security and write your own authentication/authorization scheme.</td>
-						<td><a href="#api-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
-					</tr>
-					<tr> 
-						<td><strong>8. Setup</strong></td>
+						<td><strong>7. Setup</strong></td>
 						<td>How to register your APIs with the API container and run them.</td>
 						<td><a href="#api-setup" class="more"><span class="btn btn-primary">See more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>8. Security</strong></td>
+						<td>How to configure security and write your own authentication/authorization scheme.</td>
+						<td><a href="#api-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
 					</tr>
 					<tr> 
 						<td><strong>9. CLI</strong></td>
@@ -197,12 +197,13 @@
 </code>
 </pre>
 				</div>				
-				<br/><br/>
+				<br/><br/><br/>
 							
 				
 				<h1 id="api-containers">1. Containers</h1>
 				<p>All your APIs run inside of what we call an Api Container. There are 3 types of api containers:</p>
-
+				<br/>
+				<h3>Types</h3>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Container</strong></td>
@@ -214,59 +215,94 @@
 						<td><strong>Web</strong></td>
 						<td>Http</td>
 						<td>more info below</td>
-						<td>A container to host your APIs as Web APIs via Http protocol using Akka-Http</td>
+						<td>A container that hosts your APIs as Web APIs via Http protocol using Akka-Http.</td>
 					</tr>
 					<tr>
 						<td><strong>CLI</strong></td>
 						<td>Command</td>
 						<td>more info below</td>
-						<td>A container to host your APIs on the command line and supports some level of automation</td>
+						<td>A container that hosts your APIs on a command line shell. </td>
 					</tr>
 					<tr>
 						<td><strong>Queue</strong></td>
 						<td>Queue</td>
 						<td>coming soon</td>
-						<td>A container to host your APIs where all calls are made via a message queue ( coming later )</td>
+						<td>A container that hosts your APIs where each request comes from a message queue ( coming later )</td>
 					</tr>
 				</table>
-
-				<br/><br/>
+				<br/>
+				<h3>Process</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-1"><strong>Step</strong></td>
+						<td class="col-sm-3"><strong>Action</strong></td>
+						<td><strong>Notes</strong></td>
+					</tr>
+					<tr>
+						<td><strong>1</strong></td>
+						<td>Protocol request</td>
+						<td>Parse protocol request ( e.g. Http or CLI )<br/>
+							<ol>
+								<li>http://mycompany.com/api/app/users/activate { code=2, ...more params } </li>
+								<li>app.users.activate -code=2 ... more params </li>
+							</ol>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>2</strong></td>
+						<td>Conversion</td>
+						<td>Convert to common request format ( see Request / "ApiCmd" below )</td>
+					</tr>
+					<tr>
+						<td><strong>3</strong></td>
+						<td>Discovery</td>
+						<td>Discovers the API via the "area", "api", "name" routing structure ( see below ). 
+						</td>
+					</tr>
+					<tr>
+						<td><strong>4</strong></td>
+						<td>Validation</td>
+						<td>Validate request against security, permissions and parameters</td>
+					</tr>
+					<tr>
+						<td><strong>5</strong></td>
+						<td>Execution</td>
+						<td>Executes the API api method associated with the request.</td>
+					</tr>
+					<tr>
+						<td><strong>6</strong></td>
+						<td>Conversion</td>
+						<td>Converts result to common response ( see Response / "Result" below )</td>
+					</tr>
+					<tr>
+						<td><strong>7</strong></td>
+						<td>Protocol response</td>
+						<td>Convert to protocol response<br/><br/>
+							Api container converts the common response back to the protocol specific response.
+						</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>
+					  <li>Each protocol specific request and response is <strong>abstracted</strong> out to a <strong>unified request and response</strong> structure for Web, CLI, Queue</li>
+					  <li>Your API code is kept as simple, <strong>plain old scala objects</strong> with annotations to indicate APIs and actions</li>
+					</ol>
+				</div>
+				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 				
 				<h1 id="api-declaration">2. Declarations</h1>
 				<p>The apis are set up to be simple Scala classes with annotations.</p>
-				
-				<br/>
-				<h3>Setup</h3>
-
-				<table class="table table-bordered table-striped">	
-					<tr>
-						<td class="col-sm-2"><strong>Type</strong></td>
-						<td ><strong>Notes</strong></td>
-					</tr>	
-					<tr>
-						<td>setup</td>
-						<td><strong>@Api</strong> annotation to indicate its a unified api</td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td>You specify the area and api name in the <strong>@Api</strong> annotation</td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td><strong>@ApiAction</strong> annotation indicates to the container that a specific method is available as an action</td>
-					</tr>
-					<tr>
-						<td>container</td>
-						<td>The <strong>access</strong> make the api available in specific containers ‘cli’, ‘web’ or ‘*’ for all</td>
-					</tr>
-				</table>
-
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">container</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
 <span class="o">{</span>
    <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
@@ -280,51 +316,233 @@
 
 </code></pre>
 </div>
-				<br/><br/>
-				
-				<h1 id="api-result">3. Results</h1>
-
-				<p>Represents a response / return value from an API action. This is implemented as a simple case class that wraps a return value with a success/fail flag, a message, status code, error and data. </p>
-
 				<br/>
-				<h3>Class</h3>
-				<table class="table table-bordered table-striped">
+				<h3>Annotations</h3>
+				<table class="table table-bordered table-striped">	
 					<tr>
-						<td class="col-sm-3"><strong>Field</strong></td>
-						<td class="col-sm-3"><strong>Type</strong></td>
-						<td><strong>Message</strong></td>
+						<td class="col-sm-2"><strong>Annotation</strong></td>
+						<td class="col-sm-2"><strong>Level</strong></td>
+						<td ><strong>Notes</strong></td>
+					</tr>	
+					<tr>
+						<td><strong>@Api</strong></td>
+						<td>class</td>
+						<td>indicates to the container that this class is an API.</td>
 					</tr>
 					<tr>
-						<td class="col-sm-3"><strong>success</strong></td>
-						<td>Boolean</td>
-						<td>Success / Fail flag</td>
-					</tr>
-					<tr>
-						<td class="col-sm-3"><strong>msg</strong></td>
-						<td>String</td>
-						<td>Information message if success, error message if failure</td>
-					</tr>
-					<tr>
-						<td><strong>code</strong></td>
-						<td>Int</td>
-						<td>Status code - matches Http status codes for easy conversion to http response.</td>
-					</tr>
-					<tr>
-						<td><strong>data</strong></td>
-						<td>Any</td>
-						<td>The return value of the API action</td>
-					</tr>
-					<tr>
-						<td><strong>ref</strong></td>
-						<td>String</td>
-						<td>String tag for external references</td>
+						<td><strong>@ApiAction</strong></td>
+						<td>method</td>
+						<td>indicates to the container that the specific method should be an API action</td>
 					</tr>
 				</table>
+				<br/>
+				<h3>Fields</h3>
+				<table class="table table-bordered table-striped">	
+					<tr>
+						<td class="col-sm-2"><strong>Annotation</strong></td>
+						<td class="col-sm-2"><strong>Field</strong></td>
+						<td class="col-sm-2"><strong>Value(s)</strong></td>
+						<td ><strong>Notes</strong></td>
+					</tr>
+					<tr>
+						<td><strong>@Api</strong></td>
+						<td>area</td>
+						<td>text</td>
+						<td>the root level category that the API is a part of.</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>name</td>
+						<td>text</td>
+						<td>the name of the API</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>desc</td>
+						<td>text</td>
+						<td>short description about the API</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>auth</td>
+						<td>api-key | app-roles | both</td>
+						<td>
+							the type of authorization for this API. ( see security section for more info )
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>roles</td>
+						<td>text</td>
+						<td>the roles that can access the API. ( see security section for more info )</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>container</td>
+						<td>cli | web | *</td>
+						<td>						
+							indicates in what container the API can run. cli=Command line, web=http, * = both
+						</td>
+					</tr>
+					<tr>
+						<td><strong>@ApiAction</strong></td>
+						<td>name</td>
+						<td>text</td>
+						<td>the name of the action</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>desc</td>
+						<td>text</td>
+						<td>short description about the action</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>roles</td>
+						<td>text</td>
+						<td>the roles that can access the API. ( see security section for more info )</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>verb</td>
+						<td>"get" | "set" | "*" </td>
+						<td>Method of execution for action. e.g "get" = http get, "set" = http post, "*" or empty is either.</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>
+					  <li>All you need to mark your class as an API is the @Api annotation</li>
+					  <li>An area and name fields set to "app" and "users" creates a route of <strong>"app.users"</strong></li>
+					  <li>All you need to mark a method as an API action is the @ApiAction</li>
+					  <li>An area, name and action name fields set to "app", "users", "activate" creates a route of <strong>"app.users.activate"</strong></li>
+					  <li>You can create your own custom authorization provider</li>
+					  <li>The description field becomes very useful when using the API on the CLI</li>
+					  <li>For Web APIs, the parameters are either query string or JSON post data.</li>
+					</ol>
+				</div>
+				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
+				
+				
+				<h1 id="api-request">3. Request</h1>
+				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. This unified format is implemented as what we call an <strong>ApiCmd</strong>
+				( see below ). The ApiCmd is then executed by the ApiContainer. All the parameters and data are available in the args field.
+				Web Http headers are available in the opts field. </p>
+				<br/>
+				<h3>Example</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+ * Represents a web endpoint / http request translated to small command
+ * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
+ * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
+ * @param area      : area represented by route e.g. app in "app.reg.activateUser"
+ * @param name      : name of api represented by route e.g. reg in "app.reg.activateUser"
+ * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
+ * @param verb      : get / post ( similar to http verb )
+ * @param opts      : options representing settings/configurations ( contains http headers )
+ * @param args      : arguments to the command
+ */</span>
+<span class="k">case</span> <span class="k">class</span> <span class="nc">ApiCmd</span> <span class="o">(</span>
+                     <span class="n">path</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">,</span>
+                     <span class="n">parts</span>      <span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>      <span class="o">,</span>
+                     <span class="n">area</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                     <span class="n">name</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                     <span class="n">action</span>     <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                     <span class="n">verb</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                     <span class="n">args</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
+                     <span class="n">opts</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span>
+                   <span class="o">)</span>
+<span class="o">{</span>
+<span class="o">}</span>
 
-
-				<a href="mod-results.html" class="more"><span class="btn btn-primary">See docs</span></a>
+</code></pre>
+</div>
+				<br/>				
+				<h3>Request class ( ApiCmd )</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Field</strong></td>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-2"><strong>Example</strong></td>
+						<td><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td><strong>path</strong></td>
+						<td>String</td>
+						<td>"app.users.activate"</td>
+						<td>route path</td>
+					</tr>
+					<tr>
+						<td><strong>parts</strong></td>
+						<td>List[String]</td>
+						<td>["app", "users", "activate"]</td>
+						<td>parts of the route</td>
+					</tr>
+					<tr>
+						<td><strong>area</strong></td>
+						<td>String</td>
+						<td>"app"</td>
+						<td>root level area ( 1st part of route )</td>
+					</tr>
+					<tr>
+						<td><strong>name</strong></td>
+						<td>String</td>
+						<td>"users"</td>
+						<td>api name ( 2nd part of route )</td>
+					</tr>
+					<tr>
+						<td><strong>action</strong></td>
+						<td>String</td>
+						<td>"activate"</td>
+						<td>api action ( 3rd part of route )</td>
+					</tr>
+					<tr>
+						<td><strong>verb</strong></td>
+						<td>String</td>
+						<td>GET | POST</td>
+						<td>http method if http protocol</td>
+					</tr>
+					<tr>
+						<td><strong>opts</strong></td>
+						<td>Option[Inputs]</td>
+						<td>( "header1" => "abc" )</td>
+						<td>headers that can be passed in</td>
+					</tr>
+					<tr>
+						<td><strong>args</strong></td>
+						<td>Option[Inputs]</td>
+						<td>( "code" => 2 )</td>
+						<td>parameters</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>
+					  <li>Refer to <strong>routing</strong> section below for more info on how routes map to API methods</li>
+					  <li>Examples here use sample request <strong>app.users.activate { parameters }</strong> via Http or ClI </li>
+					  <li>Headers and parameters are abstracted out via  opts and args fields respectively.</li>
+					  <li>Headers and parameters are <strong>NOT</strong> copied, they are wrapped by an abstraction layer.</li>
+					  <li>Copying of data is avoided to maintain high-performance.</li>
+					  <li>For Web APIs, the paramters are either query string or JSON post data.</li>
+					  <li>A marshaller converts each protocol request to the unified request</li>					  
+					  <li>A marshaller converts each unified response to the protocol response</li>				  
+					  <li>The marshaller can handle API action methods with parameters of basic types and simple non-nested objects</li>
+					</ol>
+				</div>
+				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/>
-
+				
+				
+				<h1 id="api-response">4. Response</h1>
+				<p>Results/respones from an API action are represented as a <strong>Result</strong> class.
+				This is a simple case class that wraps a return value with a success/fail flag, message, status code, error and data. </p>
+				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.common.Result</span>
@@ -345,9 +563,48 @@
 	
 </code></pre>
 </div>
-
 				<br/>
-				<h3>Builder</h3>
+				<h3>Result class</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Field</strong></td>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-2"><strong>Example</strong></td>
+						<td><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td><strong>success</strong></td>
+						<td>Boolean</td>
+						<td>true | false</td>
+						<td>Success / Fail flag</td>
+					</tr>
+					<tr>
+						<td><strong>msg</strong></td>
+						<td>String</td>
+						<td>"account created"</td>
+						<td>Information message if success, error message if failure</td>
+					</tr>
+					<tr>
+						<td><strong>code</strong></td>
+						<td>Int</td>
+						<td>200, 401, 409, 500</td>
+						<td>Status code - matches Http status codes for easy conversion to http response.</td>
+					</tr>
+					<tr>
+						<td><strong>data</strong></td>
+						<td>Any</td>
+						<td>new Token()</td>
+						<td>The return value of the API action</td>
+					</tr>
+					<tr>
+						<td><strong>ref</strong></td>
+						<td>String</td>
+						<td>"code:abc"</td>
+						<td>String tag for external references</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Result builder</h3>
 				<p>There is a Result builder trait called ResultSupporIn that you can extend from that allows you to easily construct and represent very common semantic results</p>
 				<table class="table table-bordered table-striped">
 					<tr>
@@ -405,55 +662,84 @@
 						<td>Api call not implemented</td>
 					</tr>
 				</table>
-
 				<br/>
 				<h3>Notes</h3>
 				<div class="alert alert-info" role="alert">
 					<ol>
 					  <li>The status codes match Http Status Codes.</li>
-					  <li>The result can be used to easily convert to an Http response.</li>
-					  <li>There is also a builder trait ( see below ) that can build results mimicking common http responses.</li>
-					  <li>Provides an effective way to keep complex logic in a service layer</li>
+					  <li>The result is used by the marshaller to easily convert to an Http response when running in a Web API container.</li>
+					  <li>The builder trait can build results mimicking common http responses.</li>
+					  <li>The result class provides an effective way to keep complex logic in a service layer</li>
 					  <li>The system will return a success for API actions that don't return anything ( Unit )</li>
 					</ol>
 				</div>
-				<br/><br/>
+				<br/>
+				<h3>More</h3>
+				<a href="mod-results.html" class="more"><span class="btn btn-primary">See docs</span></a>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 				
-				<h1 id="api-routing">4. Routing</h1>
-
+				
+				<h1 id="api-routing">5. Routing</h1>
 				<p>In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.</p>
-
 				<br/>
 				<div class="alert alert-success" role="alert">
 					<h3>{area}.{api}.{action} key=value*</h3>
 					<br/>
 				</div>
 				<br/>
+				<h3>Example</h3>
+				<div class="highlighter-rouge">
+					<pre class="highlight">
+<code> 
+<span class="c1"> // 1. app.users.activate via Http GET ( query string )
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
+ 
+ 
+  <span class="c1">// 2. app.users.activate via Http POST ( json data )</span>
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> 
+ <span class="o">{</span> 
+   <span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">,</span> <span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">,</span> <span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">,</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> 
+ <span class="o">}</span> 
 
+ <span class="c1">// 3. CLI: command line syntax
+</span> <span class="c1">// unified routing format: area.api.action -key=value*
+</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
+ 
+</code></pre>
+</div>
+
+				<br/>
 				<h3>Parts</h3>
 				<table class="table table-bordered table-striped">
 					<tr>
-						<td class="col-sm-3"><strong>Part</strong></td>
+						<td class="col-sm-2"><strong>Part Name</strong></td>
+						<td class="col-sm-2"><strong>Part # </strong></td>
 						<td class="col-sm-3"><strong>Example</strong></td>
 						<td><strong>Purpose</strong></td>
 					</tr>
 					<tr>
 						<td><strong>area</strong></td>
-						<td>app, admin, sys</td>
-						<td>This is a root level category containing a collection of apis</td>
+						<td>1</td>
+						<td>app</td>
+						<td>This is a root level category containing a collection of apis. <br/>
+						<strong>e.g. app, admin, sys</strong></td>
 					</tr>
 					<tr>
 						<td><strong>api</strong></td>
-						<td>users, invites, jobs</td>
-						<td>This is the name of a single api which may support 1 or more actions </td>
+						<td>2</td>
+						<td>users</td>
+						<td>This is the name of a single api which may support 1 or more actions. <br/>
+						<strong>e.g. users, invites, jobs</strong></td>
 					</tr>
 					<tr>
 						<td><strong>action</strong></td>
-						<td>create, update, activate</td>
-						<td>A action is the lowest level in the route and typically maps to a method/function</td>
+						<td>3</td>
+						<td>create</td>
+						<td>A action is the lowest level in the route and typically maps to a method/function. <br/>
+						<strong>e.g. create, update, activate</strong></td>
 					</tr>
 				</table>
-
 				<br/>
 				<h3>Formats</h3>
 				<table class="table table-bordered table-striped">
@@ -483,28 +769,6 @@
 				 { code=2, phone=123456789, active=true, email="kishore@abc.com" } </td>
 					</tr>
 				</table>
-
-				<br/>
-
-				<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// 1. WEB: with inputs in query string
-</span> <span class="c1">// unified routing format: area/apiname/action?&amp;phone=123456789&amp;active=true&amp;email=kishore@abc.com
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
- 
- 
- <span class="c1">// 2. WEB: with inputs as json post data 
-</span> <span class="c1">// unified routing format: area/apiname/action { id=2, phone=123456789, active=true, email="kishore@abc.com" } 
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> 
- <span class="o">{</span> <span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">,</span> <span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">,</span> <span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">,</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> <span class="o">}</span> 
- 
- 
- <span class="c1">// 3. CLI: command line syntax
-</span> <span class="c1">// unified routing format: area.api.action -key=value*
-</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
- 
-</code></pre>
-</div>
-
 				<br/>
 				<h3>Notes</h3>
 				<div class="alert alert-info" role="alert">
@@ -515,55 +779,12 @@
 					  <li>Provides consistency between web and command line</li>
 					</ol>
 				</div>
-				
-				
-				
-
-				<br/><br/>
-				<h1 id="api-marshalling">5. Marshalling</h1>
-				<p>Every WEB and CLI api call is converted to an ApiCmd ( see below ). The ApiCmd is then executed by the ApiContainer. All the parameters and data are available in the args field and headers ( http or cli ) are available in the header field. </p>
 				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 				
-				<h3>Notes</h3>
-				<div class="alert alert-info" role="alert">
-					<ol>
-					  <li>Headers and parameters are abstracted out via  opts and args fields respectively.</li>
-					  <li>Headers and parameters are <strong>NOT</strong> copied, they are wrapped by an abstraction layer.</li>
-					  <li>Copying of data is avoided to maintain high-performance.</li>
-					  <li>For Web APIs, the paramters are either query string or JSON post data.</li>
-					</ol>
-				</div>
-				<br/>
 				
-				<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Represents a web endpoint / http request translated to small command
- * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
- * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param area      : action represented by route e.g. app in "app.reg.activateUser"
- * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
- * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
- * @param verb      : get / post ( similar to http verb )
- * @param opts      : options representing settings/configurations ( similar to http-headers )
- * @param args      : arguments to the command
- */</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">ApiCmd</span> <span class="o">(</span>
-                     <span class="n">path</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">,</span>
-                     <span class="n">parts</span>      <span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>      <span class="o">,</span>
-                     <span class="n">area</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">name</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">action</span>     <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">verb</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">args</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
-                     <span class="n">opts</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span>
-                   <span class="o">)</span>
-<span class="o">{</span>
-<span class="o">}</span>
-
-</code></pre>
-</div>
-
-				<br/><br/>
 				<h1 id="api-discovery">6. Discovery</h1>
 				<p>Api discovery is simple with the unified routing formats. All the areas, apis inside areas, and actions inside apis can be easily discovered with the following syntax</p>
 				<br/>
@@ -571,7 +792,6 @@
 					<h3 id="cli-areaapiaction">{area}.{api}.{action}?</h3>
 					<br/>
 				</div>
-
 				<br/>
 				<h3>Examples</h3>
 				<p>With the unified routing format in place, we can easily support a simple and fast way to discover all the areas, apis, and actions in the system. The unified discovery approach</p>
@@ -616,7 +836,7 @@
 						<td><strong>WEB</strong></td>
 						<td>areas</td>
 						<td>help</td>
-						<td>http://.../api/api-help</td>
+						<td>http://.../api-help</td>
 						<td>shows all the areas in system</td>
 					</tr>
 					<tr>
@@ -641,64 +861,106 @@
 						<td>shows signature of the api action</td>
 					</tr>
 				</table>
-
 				<br/>
-
 				<h3>Notes</h3>
 				<div class="alert alert-info" role="alert">
-				<ol>
-				  <li>You can authorize access to the docs</li>
-				  <li>The ? is not used in the web as it would conflict with query string</li>
-				</ol>
+					<ol>
+					  <li>You can authorize access to the docs</li>
+					  <li>The ? is not used in the web as it would conflict with query string</li>
+					</ol>
 				</div>
-				<br/><br/>
+				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
+			
 				
-								
-				<h1 id="api-security">7. Security</h1>
+				<h1 id="api-setup">7. Setup</h1>
 				<p>The apis are set up to be simple Scala classes with annotations.</p>
+				<br/>
+				<h3>Container</h3>
+				<p>The first step is the create an instance of an Api container</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// REGISTRATION: Create instance of the API container to "host" all APIs
+</span>  <span class="c1">// NOTES:
+</span>  <span class="c1">// 1. The ApiContainerCLI extends from ApiContainer
+</span>  <span class="c1">// 2. The ApiContainerCLI only overrides some methods to display help/docs.
+</span>  <span class="c1">// 3. If you want to run the APIs via Web/Http, refer to the Server documentation.
+</span>  <span class="c1">// 4. The Web Server Api container simply uses the ApiContainerWeb which extends from
+</span>  <span class="c1">//    ApiContainer and also only overrides some methods for help/docs
+</span>  <span class="c1">// 5. Ultimately, to run the container inside of a CLI or Web, the Slate Shell component is used
+</span>  <span class="c1">//    and the Slate Server is used. They provide a wrapper to marshall the data from CLI/Web to
+</span>  <span class="c1">//    the container. ( Refer to CLI and Server for more info )
+</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">()</span>
+
+</code></pre>
+</div>
+				<br/>
+				<h3>Context</h3>
+				<p>The second step is to provide the container with the context. The context contains common dependent services any application typically needs. e.g. environment info, logging, config, encryption/decryption, etc. The context is provided to all the APIs.</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Provide the container with a context which contains some dependent services and info about the app 
+</span>  <span class="c1">// NOTE: This context is made available to all the APIs your register with the container.
+</span>  <span class="c1">// So every API can perform logging, get config settings, encrypt/decrypt etc.
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+    <span class="n">env</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"local:dev"</span><span class="o">),</span>
+    <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+    <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
+    <span class="n">con</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">),</span>
+    <span class="n">enc</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
+    <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">)</span>
+  <span class="o">)</span>
+
+</code></pre>
+</div>
+				<br/>
+				<h3>Registration</h3>
+				<p>Next, you register the APIs. There are multiple ways to register the API, with parameters to override the Annotations </p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// REG 1. Register the api ( uses roles/auth values from annotations on class )
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">())</span>
+
+  <span class="c1">// REG 2. Register the api ( allow API actions from subclass also )
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span> <span class="o">)</span>
+
+  <span class="c1">// REG 3. Register the api and explicitly set the roles allowed to access the api
+</span>  <span class="c1">//        This overrides the "roles" value in the @Api annotation
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">))</span>
+
+  <span class="c1">// REG 4a. Register the api and set access to api only from CLI/command line container
+</span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"cli"</span><span class="o">))</span>
+
+  <span class="c1">// REG 4b. Register the api and set access to api only from web/http container
+</span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"web"</span><span class="o">))</span>
+
+  <span class="c1">// REG 4c. Register the api and set access to api from both CLI/Web
+</span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">))</span>
+
+  <span class="c1">// REG 5. Register the api and supply your auth mode that will check for roles/permissions.
+</span>  <span class="c1">//        This overrides the "auth" value in the @Api annotation
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppVersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
+
+</code></pre>
+</div>			
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
 				
+				<br/><br/><br/>
+				<h1 id="api-security">8. Security</h1>
+				<p>There are multiple ways to setup the security for the APIs. You can also build your own authorization provider. Sample below.</p>
 				<br/>
-				<h3>Setup</h3>
-
-				<table class="table table-bordered table-striped">	
-					<tr>
-						<td class="col-sm-2"><strong>Type</strong></td>
-						<td ><strong>Notes</strong></td>
-					</tr>
-					<tr>
-						<td>security</td>
-						<td>You can put a <strong>roles</strong> permission at the api secure all actions at an api level</td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td>The api <strong>roles</strong> permission can reference its parent area role permission via <strong>@parent</strong></td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td>You can put a <strong>roles</strong> permission at the api action / method specifically</td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td>An action annotation can reference its parent role permission via <strong>@parent</strong></td>
-					</tr>
-					<tr>
-						<td>-</td>
-						<td>You can hook in any authentication system you prefer. see details below</td>
-					</tr>
-				</table>
-
-				<br/>
-				<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>
+				<h3>Annotations</h3>
+				<p>You can setup the roles that are authorized for the API via the <strong>roles</strong> field on the @Api and @ApiAction annotations. The <strong>auth</strong> field specifies how the authorization mode ( see below )</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
 <span class="o">{</span>
-   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
   <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
   <span class="o">{</span>
-	<span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
   <span class="o">}</span>
   
   <span class="c1">// .. more
@@ -706,14 +968,143 @@
 
 </code></pre>
 </div>
-					
-				<br/><br/>
-				
-				<h1 id="api-setup">8. Setup</h1>
-				<p>The apis are set up to be simple Scala classes with annotations.</p>
-				
 				<br/>
-					
+				<h3>Modes</h3>				
+				<table class="table table-bordered table-striped">	
+					<tr>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-2"><strong>Example</strong></td>
+						<td ><strong>Notes</strong></td>
+					</tr>
+					<tr>
+						<td><strong>key-roles</strong></td>
+						<td>auth="key-roles"</td>
+						<td>Uses API key to ensure access to the api/action.<br/><br/>
+							<ol>
+								<li>You should use this for non-application features, such as getting the version number of the server or application</li>
+								<li>The api-key can be a GUID or some randomly generated string</li>
+								<li>You can register multiple api keys ( see examples below )</li>
+							</ol>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>app-roles</strong></td>
+						<td>auth="app-roles"</td>
+						<td>indicates using application specific roles							
+						</td>
+					</tr>
+					<tr>
+						<td><strong>both</strong></td>
+						<td>auth="both"</td>
+						<td>indicates using both the api-keys and app-roles </td>
+					</tr>
+				</table>
+				<br/><h3>Roles</h3>				
+				<table class="table table-bordered table-striped">	
+					<tr>
+						<td class="col-sm-2"><strong>Value</strong></td>
+						<td class="col-sm-2"><strong>Example</strong></td>
+						<td ><strong>Purpose</strong></td>
+					</tr>
+					<tr>
+						<td><strong>?</strong></td>
+						<td>roles="?"</td>
+						<td>indicates anyone can access the api or action</td>
+					</tr>
+					<tr>
+						<td><strong>*</strong></td>
+						<td>roles="*"</td>
+						<td>to indicate any authenticated user can access the api or action</td>
+					</tr>
+					<tr>
+						<td><strong>@parent</strong></td>
+						<td>roles="@parent"</td>
+						<td>to refer to the role at the parent level ( for actions, this is the @Api role ) </td>
+					</tr>
+					<tr>
+						<td><strong>{text}</strong></td>
+						<td>roles="admin"</td>
+						<td>represents an application specific role</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Api Keys</h3>
+				<p>You can use API keys to authorize APIs. Keys are very useful, especially for some features that may not require a login. But you must ensure the privacy and security of your keys.
+				Some use cases for api keys are devs, ops teams accessing non-application features such as simply getting the version of the application. For all other cases, you should implement a more secure Auth provider
+				that can check for users/roles against the application via a login that yields some type of token.</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// REG 6: Setup your authorization provider
+</span>  <span class="c1">// NOTE:
+</span>  <span class="c1">// 1. For the AppUsersApi, the application roles are checked.
+</span>  <span class="c1">// 2. For the AppAboutApi, the api keys are checked.
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
+    <span class="nc">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">](</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"devs"</span> <span class="o">,</span> <span class="s">"94744D43418C421586E544DE0BB4CC37"</span><span class="o">,</span> <span class="s">"dev"</span>          <span class="o">),</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"ops"</span>  <span class="o">,</span> <span class="s">"677961A57F82440AB6F4E1F1EAC721ED"</span><span class="o">,</span> <span class="s">"dev,ops"</span>      <span class="o">),</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="s">"A100E22B5544423693FABD81791FAC80"</span><span class="o">,</span> <span class="s">"dev,ops,admin"</span><span class="o">)</span>
+      <span class="o">))</span> <span class="o">)</span>
+	  
+</code></pre>
+</div>
+				<br/>
+				<h3>Auth Provider</h3>
+				<p>You can implement your own auth provider to fully customize the authorization of your APIs. You can extend from the base ApiAuth class.
+				For either CLI / Web requests ( since both type of requests are abstracted via the ApiCmd ), you still have access to http headers which you
+				can use to check for some form of credentials such as an OAuth <strong>token</strong></p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
+    <span class="k">with</span> <span class="nc">ResultSupportIn</span>
+  <span class="o">{</span>
+
+    <span class="cm">/**
+     * Handle authorization via api-keys for non-application level features,
+     * such getting basic metadata, or diagnostics for your deployed application.
+     * e.g. get the version number of your application.
+     * @param cmd
+     * @param roles
+     * @param rolesParent
+     * @return
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="k">super</span><span class="o">.</span><span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">roles</span><span class="o">,</span> <span class="n">rolesParent</span><span class="o">)</span>
+    <span class="o">}</span>
+
+      <span class="cm">/**
+     * Handle authorization via app roles.
+     * @param cmd        : The abstract ApiRequest ( could be a CLI or Web Request )
+     * @param roles      : The roles value from the ApiAction annotation
+     * @param roleParent : The roles value from the Api annotation
+     * @return
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
+
+      <span class="c1">// NOTES: The ApiCmd will either represent a Web Request or a CLI request.
+</span>      <span class="c1">// Slate abstracts the protocol requests using a "Unified Request data structure"
+</span>
+      <span class="c1">// get the header named "Authorization"
+</span>      <span class="c1">// EXAMPLE: Implement your code here to get the correct header
+</span>      <span class="k">val</span> <span class="n">header</span> <span class="k">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">opts</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"Authorization"</span><span class="o">)</span>
+
+      <span class="c1">// Decrypt the token
+</span>      <span class="c1">// EXAMPLE: Implement your code here to get/decrypt the token
+</span>      <span class="k">val</span> <span class="n">token</span> <span class="k">=</span> <span class="s">"user_01_sample_token"</span>
+
+      <span class="c1">// Get the roles for the user with the token.
+</span>      <span class="c1">// EXAMPLE: Implement your code here to get the roles for the user of the token
+</span>      <span class="k">val</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"user,dev,qa,ops,admin"</span>
+
+      <span class="c1">// EXAMPLE: Return sample success for now
+</span>      <span class="n">success</span><span class="o">(</span><span class="s">"sample authorization provider"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+</code></pre>
+</div>
+				<br/>
+				<h3>Keys + Roles</h3>
+				<p>You can use both the api-keys and roles approach. See the ApiAuth implementation for more details.</p>
+				<br/>
+				<h3>More</h3>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
+				
 				<br/><br/>
 				
 				<h1 id="api-cli">9. CLI</h1>

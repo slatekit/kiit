@@ -76,7 +76,7 @@
 			<div class="container">
 				<h1 id="timer">Timer</h1>
 
-<table>
+<table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
@@ -84,23 +84,35 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-7-6 5:24:42</td>
+      <td>2016-07-23T22:24:17.177</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
       <td>0.9.1</td>
     </tr>
     <tr>
+      <td><strong>jar</strong></td>
+      <td>slate.common.jar</td>
+    </tr>
+    <tr>
       <td><strong>namespace</strong></td>
       <td>slate.common</td>
     </tr>
     <tr>
-      <td><strong>source</strong></td>
-      <td>slate.common.Timer</td>
+      <td><strong>source core</strong></td>
+      <td>slate.common.Timer.scala</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common">/src/lib/scala/Slate.Common/src/main/scala/slate/common/common</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Timer.scala">Example_Timer</a></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Timer.scala">/src/apps/scala/slate-examples/src/main/scala/slate.examples/Example_Timer.scala</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td> </td>
     </tr>
   </tbody>
 </table>
@@ -108,7 +120,7 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">,</span> <span class="nc">ResultTimed</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Timer</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">RandomGen</span><span class="o">,</span> <span class="nc">Timer</span><span class="o">}</span>
 
 
 <span class="c1">// optional 
@@ -129,22 +141,93 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// CASE 1: Benchmark an operation 1 time
-</span>    <span class="n">showResult</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">once</span><span class="o">(</span><span class="s">"run once"</span><span class="o">,</span> <span class="o">{</span> <span class="s">"operation 1"</span> <span class="o">}</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="c1">// NOTE: Using call-by-name
+</span>    <span class="n">showResult</span><span class="o">(</span>
+      <span class="nc">Timer</span><span class="o">.</span><span class="n">once</span><span class="o">(</span><span class="s">"run once"</span><span class="o">,</span> <span class="o">{</span>
+        <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">RandomGen</span><span class="o">.</span><span class="n">digits3</span><span class="o">()</span> <span class="o">)</span>
+      <span class="o">})</span>
+    <span class="o">)</span>
 
 
     <span class="c1">// CASE 2: Benchmark an operation 10 times and get all individual results
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">many</span><span class="o">(</span><span class="s">"run 10 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"operation : $count"</span> <span class="o">)</span> <span class="o">},</span> <span class="mi">10</span><span class="o">))</span>
+</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">many</span><span class="o">(</span><span class="s">"run 2 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"operation : $count"</span> <span class="o">)</span> <span class="o">},</span> <span class="mi">2</span><span class="o">))</span>
 
 
     <span class="c1">// CASE 3: Benchmark an operation 10 times and get an average
-</span>    <span class="n">showResult</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">avg</span><span class="o">(</span><span class="s">"avg of 10 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"operation : $count"</span> <span class="o">)</span> <span class="o">},</span> <span class="mi">10</span><span class="o">))</span>
-
-
-    <span class="c1">// CASE 3: Benchmark an operation 10 times get the total ( no averages )
-</span>    <span class="n">showResult</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">total</span><span class="o">(</span><span class="s">"avg of 10 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"operation : $count"</span> <span class="o">)</span> <span class="o">},</span> <span class="mi">10</span><span class="o">))</span>
+</span>    <span class="n">showResult</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">avg</span><span class="o">(</span><span class="s">"avg of 10 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span>
+    <span class="o">{</span>
+      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">RandomGen</span><span class="o">.</span><span class="n">digits3</span><span class="o">())</span>
+    <span class="o">},</span> <span class="mi">10</span><span class="o">))</span>
 
     
 
+</code></pre>
+</div>
+
+<h2 id="output">Output</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">desc</span>           <span class="o">:</span> <span class="n">run</span> <span class="n">once</span>
+  <span class="n">success</span>        <span class="o">:</span> <span class="kc">true</span>
+  <span class="n">message</span>        <span class="o">:</span>
+  <span class="n">code</span>           <span class="o">:</span> <span class="mi">1</span>
+  <span class="n">data</span>           <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">ref</span>            <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">start</span>          <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">54.539</span>
+  <span class="n">end</span>            <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.537</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">secs</span>  <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">nanos</span> <span class="o">:</span> <span class="mi">998000000</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">used</span>    <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">free</span>    <span class="o">:</span> <span class="mi">192835456</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">total</span>   <span class="o">:</span> <span class="mi">257425408</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">max</span>     <span class="o">:</span> <span class="mi">3797417984</span>
+
+
+  <span class="n">desc</span>           <span class="o">:</span> <span class="n">run</span> <span class="mi">2</span> <span class="n">times</span>
+  <span class="n">success</span>        <span class="o">:</span> <span class="kc">true</span>
+  <span class="n">message</span>        <span class="o">:</span>
+  <span class="n">code</span>           <span class="o">:</span> <span class="mi">1</span>
+  <span class="n">data</span>           <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">ref</span>            <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">start</span>          <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.542</span>
+  <span class="n">end</span>            <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.542</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">secs</span>  <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">nanos</span> <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">used</span>    <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">free</span>    <span class="o">:</span> <span class="mi">192835456</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">total</span>   <span class="o">:</span> <span class="mi">257425408</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">max</span>     <span class="o">:</span> <span class="mi">3797417984</span>
+
+
+  <span class="n">desc</span>           <span class="o">:</span> <span class="n">run</span> <span class="mi">2</span> <span class="n">times</span>
+  <span class="n">success</span>        <span class="o">:</span> <span class="kc">true</span>
+  <span class="n">message</span>        <span class="o">:</span>
+  <span class="n">code</span>           <span class="o">:</span> <span class="mi">1</span>
+  <span class="n">data</span>           <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">ref</span>            <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">start</span>          <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.542</span>
+  <span class="n">end</span>            <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.542</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">secs</span>  <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">nanos</span> <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">used</span>    <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">free</span>    <span class="o">:</span> <span class="mi">192835456</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">total</span>   <span class="o">:</span> <span class="mi">257425408</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">max</span>     <span class="o">:</span> <span class="mi">3797417984</span>
+
+
+  <span class="n">desc</span>           <span class="o">:</span> <span class="n">avg</span> <span class="n">of</span> <span class="mi">10</span> <span class="n">times</span>
+  <span class="n">success</span>        <span class="o">:</span> <span class="kc">true</span>
+  <span class="n">message</span>        <span class="o">:</span>
+  <span class="n">code</span>           <span class="o">:</span> <span class="mi">200</span>
+  <span class="n">data</span>           <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">ref</span>            <span class="o">:</span> <span class="kc">null</span>
+  <span class="n">start</span>          <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">17</span><span class="o">:</span><span class="mf">55.544</span>
+  <span class="n">end</span>            <span class="o">:</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">07</span><span class="o">-</span><span class="mi">15</span><span class="nl">T17:</span><span class="mi">18</span><span class="o">:</span><span class="mf">03.017</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">secs</span>  <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">duration</span><span class="o">.</span><span class="na">nanos</span> <span class="o">:</span> <span class="mi">47300000</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">used</span>    <span class="o">:</span> <span class="mi">0</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">free</span>    <span class="o">:</span> <span class="mi">192835456</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">total</span>   <span class="o">:</span> <span class="mi">257425408</span>
+  <span class="n">memory</span><span class="o">.</span><span class="na">max</span>     <span class="o">:</span> <span class="mi">3797417984</span>
 </code></pre>
 </div>
 

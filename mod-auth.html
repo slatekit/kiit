@@ -76,31 +76,43 @@
 			<div class="container">
 				<h1 id="auth">Auth</h1>
 
-<table>
+<table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A simple auth component for desktop/local and web/concurrent apps</td>
+      <td>A simple authentication component to check current user role and permissions</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-4-14 11:22:53</td>
+      <td>2016-07-23T22:24:17.373</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
       <td>0.9.1</td>
     </tr>
     <tr>
+      <td><strong>jar</strong></td>
+      <td>slate.core.jar</td>
+    </tr>
+    <tr>
       <td><strong>namespace</strong></td>
       <td>slate.core.auth</td>
     </tr>
     <tr>
-      <td><strong>core source</strong></td>
-      <td>slate.core.auth.Auth</td>
+      <td><strong>source core</strong></td>
+      <td>slate.core.auth.Auth.scala</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth">/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala">Example_Auth</a></td>
+      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala">/src/apps/scala/slate-examples/src/main/scala/slate.examples/Example_Auth.scala</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slate.common.jar</td>
     </tr>
   </tbody>
 </table>
@@ -111,8 +123,8 @@
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slate.common.OperationResult</span>
-<span class="k">import</span> <span class="nn">slate.core.commands.Command</span>
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 
 
 </code></pre>
@@ -137,7 +149,7 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Use the authWeb ( per user / concurrent service ) to check auth info
+    <span class="c1">// CASE 1: Use the authWeb ( per user / concurrent service ) to check auth info
 </span>    <span class="n">println</span> <span class="o">(</span><span class="s">"Checking auth info in web/concurrent mode"</span> <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"user info         : "</span> <span class="o">+</span> <span class="n">authWeb</span><span class="o">.</span><span class="n">user</span>                   <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"user id           : "</span> <span class="o">+</span> <span class="n">authWeb</span><span class="o">.</span><span class="n">userId</span>                 <span class="o">)</span>
@@ -148,7 +160,8 @@
     <span class="n">println</span> <span class="o">(</span> <span class="s">"is an admin       : "</span> <span class="o">+</span> <span class="n">authWeb</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"admin"</span> <span class="o">)</span>    <span class="o">)</span>
     <span class="n">println</span> <span class="o">()</span>
 
-    <span class="c1">// Use case 2: Use singleton Auth class for desktop apps to conveniently access auth information
+
+    <span class="c1">// CASE 2: Use singleton Auth class for desktop apps to conveniently access auth information
 </span>    <span class="n">println</span> <span class="o">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"user info         : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">user</span>                   <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"user id           : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">userId</span>                 <span class="o">)</span>

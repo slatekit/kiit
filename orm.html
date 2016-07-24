@@ -76,7 +76,7 @@
 					</p>
 				</div>
 				<br/>
-				<h1>Overview</h1>
+				<h1 id="orm-overview">Overview</h1>
 				<p>These are all the various steps/concepts in the ORM setup and usage. All the various parts of the ORM were designed to be used independently ( where applicable ) while also being able to be integrated together to support typical ORM features. </p>
 				<table class="table table-bordered table-striped">
 					<tr>
@@ -137,10 +137,12 @@
 				</table>
 				
 				<div>
+					<br/><br/>
 					<div> 
 						<h2 id="orm-database">1. Databases</h2>
 						<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting multiple databases. Currently, only <strong>MySql</strong> is supported.
 						</p>
+						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>    
   <span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConfig</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">DbConstants</span><span class="o">}</span>
@@ -160,26 +162,31 @@
   <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db2"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db.txt"</span><span class="o">)</span> <span class="o">)</span>
 
 </code></pre>
-</div>			
-						
+</div>									
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
-							<ol>
-							  <li>Support for <strong>MySql</strong></li>
-							  <li>Support for <strong>multiple databases</strong></li>
+							<ol>								
+							  <li>Slate Kit currently supports <strong>MySql</strong></li>
+							  <li>Support for <strong>multiple databases</strong> is available</li>
+							  <li>See the <strong>config</strong> component in the utilities page for getting database info out of config files</li>
+							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
 							  <li>Load connection info from a config file in user directory e.g. {user}./slate <strong>( for added security )</strong></li>
 							</ol>
 						</div>	
+						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-data.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
-					<br/><br/>
+					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-entity">2. Entities</h2>
 						<p>Each class that you want persisted and mapped to a database table/record must extend the IEntity trait.
 						IEntity provides some consistent fields and behaviour to facilitate the ORM.
-						</p>
+						</p>	
+						<br/>
 						<h3>Example</h3>
 						<div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
@@ -215,7 +222,8 @@
   <span class="o">}</span>
 
 </code></pre>
-</div>
+</div>	
+						<br/>
 						<h3>Fields</h3>
 						<table class="table table-bordered table-striped">
 							<tr>
@@ -282,7 +290,8 @@
 								<td>IEntityUnique</td>
 								<td>a unique guid generated 1 time used for cross-environment uniquess and import/export.</td>
 							</tr>
-						</table>
+						</table>	
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
 							<ol>
@@ -292,18 +301,22 @@
 							  <li>The timestamps ( <strong>createdAt</strong>, <strong>updatedAt</strong> ) are managed by the ORM.</li>
 							  <li>Extending from IEntityUnique allows ORM to auto-create guid for the uniqueId field.</li>
 							</ol>
-						</div>						
+						</div>	
+						<br/>						
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 						<br/>
 					</div>
-					<br/><br/>				
+					<br/><br/><br/>				
 					<div>
 						<h2 id="orm-setup">3. Setup</h2>
 						<p>Once you setup entities and services(optional), you simply register your components to have the ORM wire everything together.</p>
+						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// Entities is a registration system for your entities, databases, services, repositories.
 <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">()</span>
 
 <span class="c1">// Set up 1: Simple ( using default service, repo, connection ) 
@@ -329,21 +342,26 @@
 
 </code></pre>
 </div>
-						
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
 							<ol>
 							  <li>The simplest case is you only create an entity and use the pre-built service and repo classes.</li>
 							  <li>You are free to create your own <strong>service</strong> or <strong>repository</strong> classes.</li>
+							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>							  
 							</ol>
 						</div>	
+						<br/>				
+						<h3>More</h3>
 						<a href="mod-orm-setup.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
-					<br/><br/>
+					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-service">4. Service</h2>
 						<p>A Service layer ( a default implementation is provided ) must be set up for each entity and provides many boiler-plate features such as CRUD, search, timestamps and auditing.
 						</p>
+						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
@@ -401,6 +419,7 @@
   
 </code></pre>
 </div>					
+						<br/>
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
 							<tr>
@@ -429,26 +448,34 @@
 								<td><strong>coming soon</strong></td>
 							</tr>
 						</table>
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
 							<ol>
+							  <li>You do <strong>NOT</strong> need to write your own Service class.</li>							  
+							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
+							  <li>If you want to incorporate custom logic or avoid using generics, then you can extend from the EntityService[T] class</li>
 							  <li>The base service is <strong>EntityService[T >: Null <: IEntity]</strong></li>
 							  <li>You can simply use the base service for your Entity via <strong>new EntityService[User]()</strong></li>
 							  <li>You can subclass the EntityService to avoid generics <strong>class UserService extends EntityService[User]</strong></li>
 							  <li>The service layer uses a <strong>EntityRepo</strong>(Repository) class/instance ( see below ) to perform the actual CRUD operations</li>
 							  <li>The service layer is <strong>independent</strong> of the underlying database/repository implementation.</li>
 							  <li>Use the <strong>Entities</strong> component for registering all your entities.</li>
+							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
 							</ol>
 						</div>
+						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
-					<br/><br/>
+					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-repository">5. Repo</h2>
 						<p>The Repository layer ( a default mysql implementation is provided ) must be set up to support all of the CRUD operations on your entity.						
 						</p>
+						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.repos._</span>
@@ -496,7 +523,7 @@
   
 </code></pre>
 </div>
-						
+						<br/>						
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
 							<tr>
@@ -515,25 +542,63 @@
 								<td>yes</td>
 							</tr>
 						</table>
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
 							<ol>
-							  <li>The base repo is <strong>EntityRepo[T >: Null <: IEntity]</strong></li>
+							  <li>You do <strong>NOT</strong> need to write your own Repository for single table entities.</li>							  
+							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
+							  <li>If you want to incorporate stored procs, then you will need to extend from EntityRepo and add your custom features</li>
+							  <li>The base repo is <strong>EntityRepo[T >: Null <: IEntity]</strong> in the slate.entities.jar</li>
 							  <li>You can simply use the base repo for your Entity via <strong>new EntityRepoMySql[User](typeOf[User])</strong></li>
 							  <li>You can subclass the EntityRepo if you need to provide your own implementation of method(s)</li>
 							  <li>The repository uses a <strong>EntityMapper</strong>(Mapper) class/instance ( see below ) to map between objects to SQL</li>
 							  <li>A repository implementation exists for <strong>MySql</strong></li>
+							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
 							</ol>
 						</div>
+						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-repo.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
-					<br/><br/>
+					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-mapper">6. Mapper</h2>
 						<p>The mapper component ( a default mysql entity mapper is provided ) is used map fields in the entity to/from SQL. It is designed to be general enough to support conversion to/from other formats such as JSON. You can write your own mapper. There is a built in Mapper for MySql.
 						</p>
+						<br/>
+						<h3>Example</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">import</span> <span class="nn">slate.entities.core._</span>
+  
+  <span class="c1">// STEP 1: Create instance of entity class
+</span>  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">()</span>
+
+  <span class="c1">// STEP 2: Create a new mapper that loads fields/annotations mappings from the entity class
+</span>  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+  <span class="k">val</span> <span class="n">modelSchema</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+
+  <span class="c1">// STEP 3: Create instance for testing
+</span>  <span class="n">user</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"john"</span>
+  <span class="n">user</span><span class="o">.</span><span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe"</span>
+  <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="k">=</span> <span class="s">"john.doe@gmail.com"</span>
+
+  <span class="c1">// STEP 4: Get the sql for create
+</span>  <span class="k">val</span> <span class="n">sqlCreate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span><span class="n">sqlCreate</span><span class="o">)</span>
+
+  <span class="c1">// STEP 5: Get the sql for update
+</span>  <span class="k">val</span> <span class="n">sqlForUpdate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span><span class="n">sqlForUpdate</span><span class="o">)</span>
+
+  <span class="c1">// STEP 6: Generate the table schema for mysql from the model schema
+</span>  <span class="n">println</span><span class="o">(</span> <span class="s">"table sql : "</span> <span class="o">+</span> <span class="k">new</span> <span class="nc">DbBuilder</span><span class="o">().</span><span class="n">addTable</span><span class="o">(</span><span class="n">modelSchema</span><span class="o">))</span>
+</code></pre>
+</div>						
+						<br/>
+						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
 							<tr>
 								<td class="col-sm-1"><strong>Area</strong></td>
@@ -556,36 +621,81 @@
 								<td>yes</td>
 							</tr>
 						</table>
+						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
 							<ol>
-							  <li>The base mapper is <strong>EntityMapper</strong></li>
+							  <li>You do <strong>NOT</strong> need to write your own mapper.</li>							  
+							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
+							  <li>The base mapper is <strong>EntityMapper</strong> which is available in the slate.entities.jar</li>
 							  <li>You can simply use the base mapper for your Entity via <strong>new EntityMapper(typeOf[User])</strong></li>
 							  <li>You can subclass the EntityMapper if you need to provide your own implementation of method(s)</li>
 							  <li>The mapper requires your entity to have annotations on it which tells it what fields to map</li>
 							  <li>The mapper creates an internal Model Definition( see models below ) to store the schema of your entity for mapping purposes. </li>
 							</ol>
 						</div>
+						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-mapper.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
-					<br/><br/>
+					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-model">7. Models</h2>
-						<p>In order to use the ORM to map entities to tables, a model definition is created. A model definition is the name of the model along with the fields to be persisted. This can be done 2 different ways. Either manually ( programmatically ) or automatically ( via annotations on your entity classes ). <br/>
-						<strong>Note:</strong> The examples use the annotation approach, but the docs are listed here to show how the internals work. Also, the model definition can always be queried and the code generator in Slate Kit uses the model definition to generate sql-scripts, services, apis, and javascript api proxies ( coming soon ).
+						<p>The ORM that map entities to tables automatically creates an underlying model definition for each mapped Entity. 
+						A model definition is the name of the model along with the fields to be persisted. This can be done 2 different ways. Either manually ( programmatically ) or automatically ( via annotations on your entity classes ). <br/>
 						</p>
+						<br/>
+						<h3>Example</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Model</span><span class="o">}</span>
+  
+  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Model</span><span class="o">(</span><span class="s">"Resource"</span><span class="o">,</span> <span class="s">"slate.ext.resources.Resource"</span><span class="o">)</span>
+
+  <span class="c1">// CASE 2. add a field for uniqueness / identity
+</span>  <span class="n">model</span><span class="o">.</span><span class="n">addId</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"id"</span><span class="o">,</span> <span class="n">autoIncrement</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">dataType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Long</span><span class="o">])</span>
+
+  <span class="c1">// CASE 3: add fields for text, bool, int, date etc.
+</span>  <span class="n">model</span><span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"key"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"name"</span>       <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"category"</span>   <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"country"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"region"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"aggRegion"</span>  <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"aggCategory"</span><span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"links"</span>      <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"owner"</span>      <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"status"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addInt</span>   <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"recordState"</span><span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+       <span class="o">.</span><span class="n">addObject</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"hostInfo"</span>   <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">dataType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Host</span><span class="o">])</span>
+       <span class="o">.</span><span class="n">addDate</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"created"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span>                <span class="o">)</span>
+       <span class="o">.</span><span class="n">addDate</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"updated"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span>                <span class="o">)</span>
+
+	   </code></pre>
+</div>						
+						<br/>
+						<h3>Notes</h3>
+						<div class="alert alert-info" role="alert">
+							<ol>
+							  <li>You do <strong>NOT</strong> need to write your own model definition.</li>							  
+							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
+							  <li>The model definition is also internally for the code generator ( document not yet available )</li>							  
+							</ol>
+						</div>
+						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-model.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>	
 					<br/><br/>				
 					<div>
 						<h2 id="orm-relations">8. Relations</h2>
 						<p>
 						While joins/relationships are not supported currently, you can easily get a reference to other entity Services to query related data. Part of the reason for not initially supporting joins/relationships was to get a simple ORM working well for single-table models for mostly Cloud/Mobile Backend data. The ORM will be enhanced in future versions.
-						</p>
+						</p>						
+						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 				</div>
             </div>
@@ -594,9 +704,10 @@
         <section id="project_references" class="section">
 			<div class="container">
 				<div class="row">
-					<h2>Projects</h2>
-					<p>All these items are available in the following projects:</p>
+					<h2>Dependencies</h2>
+					<p>All these items are available and require the following projects:</p>
 					<ul>
+						<li><a class="url-ch" href="overview.html#project-slate-common">slate.common</a></li>
 						<li><a class="url-ch" href="overview.html#project-slate-entities">slate.entities</a></li>
 					</ul>
 					<p>You can view more information on projects available in SlateKit in the overview page</p>
