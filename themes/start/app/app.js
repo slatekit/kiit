@@ -88,15 +88,16 @@ var codeHelixMeta = {
 	{ name: "Home"          ,  page: "index.html"       },
 	{ name: "Overview"      ,  page: "overview.html"    },
 	{ name: "Setup"         ,  page: "setup.html"       },
-	{ name: "Infrastructure",  page: "infra.html"       },
-	{ name: "Features"      ,  page: "features.html"    },
+	{ name: "Core"          ,  page: "infra.html"       },
+	{ name: "App"           ,  page: "app.html" },
 	{ name: "APIs"          ,  page: "apis-detail.html" },
 	{ name: "Server"        ,  page: "server.html"      },
 	//{ name: "CLI"           ,  page: "cli.html"         },
 	{ name: "ORM"           ,  page: "orm.html"         },
 	{ name: "Utils"         ,  page: "utils.html"       },
+	{ name: "Features"      ,  page: "features.html"    },
 	{ name: "Releases"      ,  page: "releases.html"    },
-	{ name: "scala 101"      ,  page: "scala101.html"    }
+	{ name: "Scala 101"     ,  page: "scala101.html"    }
   ]
 };  
 
