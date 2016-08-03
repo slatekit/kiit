@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slate Kit - Utilities</title>
+    <title>Slate Kit - Setup</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
@@ -66,16 +66,20 @@
 			</div>
 		</footer>
 		
-		<section id="features" class="section section-features">
-			
+		<section id="features" class="section">
           <div class="container">
 			
             <div class="alert alert-info text-center" role="alert">
 				<h3>Slate Kit will soon be available on package management tools</h3>
 			</div>
 			<br/>
-			<div class="row">			
+			
+			<div>			
 				<h1>Required</h1>
+				<p>All the software below is required to run Scala and Slate Kit. Scala is dependent on 
+				<strong>Java</strong>. Using <strong>Sbt</strong> ( the Scala build tool ) will making building 
+				and packaging your apps easier.
+				</p>
 				<table class="table table-bordered table-striped">
 					<tr class="">
 						<td class="col-sm-2"><strong>Tech</strong></td>
@@ -102,11 +106,14 @@
 						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
 					</tr>
 				</table>
-				
 			</div>
 			<br/><br/>
-			<div class="row">			
+			<div>			
 				<h1>Suggested</h1>
+				<p>The software below is recommended but not required. Any IDE ( IntelliJ, Eclipse ) is fine. 
+				Slate Kit supports MySql with limited support for Sql-Server. Having the MySql Java Connector will 
+				help with the sample apps and is also needed for the ORM ( entities ).
+				</p>
 				<table class="table table-bordered table-striped">
 					<tr class="">
 						<td class="col-sm-2"><strong>Tech</strong></td>
@@ -126,11 +133,13 @@
 						<td class="col-sm-3">For JDBC connections</td>
 						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
 					</tr>
-				</table>				
+				</table>			
             </div>
 			<br/><br/>
-			<div class="row">			
+			<div>			
 				<h1>Optional</h1>
+				<p>Slate Kit support building Web APIs using <strong>Akka-Http</strong>, Cloud Services ( Files, Queues ) using <strong>AWS</strong> and databases using <strong>MySql</strong>. The following are needed if you plan on using any of these.
+				</p>
 				<table class="table table-bordered table-striped">
 					<tr class="">
 						<td class="col-sm-2"><strong>Tech</strong></td>
@@ -159,8 +168,10 @@
 				</table>				
             </div>
 			<br/><br/>
-			<div class="row">			
+			<div>			
 				<h1>Installation</h1>
+				<p>Installation of Java, Scala, SBT and Slate Kit is fairly easy. We recommend the following insallation steps and centralized location for simplicity.
+				</p>
 				<table class="table table-bordered table-striped">
 					<tr class="">
 						<td class="col-sm-2"><strong>Tech</strong></td>
@@ -218,11 +229,79 @@
 				</table>
             </div>
 			<br/><br/>
-			<div class="row">			
-				<h1>Configuration</h1>
-				<p>There is currently no specific configuration needed at a global level for Slate Kit.</p>
-            </div>
-			<div class="row">			
+			<div>
+				<h1>Sample Apps</h1>
+				<p>There are 3 sample apps available showing the components and features of Slate Kit. There is an 
+				emphasis on showing <strong>application setup</strong>, <strong>utilities</strong>, <strong>core architecture</strong> components and <strong>APIs</strong> using an approach that we call <strong>Protocol Independent APIs</strong>. 
+				<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Name</strong></td>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Source</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Core</strong></td>
+						<td class="col-sm-2">Library</td>
+						<td class="col-sm-3">
+							The core library for all the sample apps. <br/><br/>
+							Contains some sample services that can be used in either the CLI or the Server Web API ( using Protocol Independent APIs )<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Console</strong></td>
+						<td class="col-sm-2">Console</td>
+						<td class="col-sm-3">
+							Console app with several pre-built features <br/><br/>
+							<ul>
+								<li>environment selection</li>
+								<li>configiguration (with inherited configs)</li>
+								<li>logging</li>
+								<li>encryption</li>
+								<li>and much more</li>
+							</ul>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp CLI</strong></td>
+						<td class="col-sm-2">CLI</td>
+						<td class="col-sm-3">Command line interface ( Shell )<br/><br/>
+							Provides a CLI interface for services in Sample Core Library.
+							Shows how to easily setup and run Slate Kit <strong>Protocol Independent APIs</strong>. to run in a CLI<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Server</strong></td>
+						<td class="col-sm-2">Server</td>
+						<td class="col-sm-3">
+							Server Web API for services in Sample Core Library <br/><br/>
+							Shows how to easily setup Slate Kit <strong>Protocol Independent APIs</strong> to run in a web container.<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>								
+					  <li>The Sample Apps are packaged to contain the necessary dependencies on Akka-Http</li>
+					  <li>The Sample Apps are packaged to contain the necessary dependencies on MySql</li>
+					  <li>The Sample Core Library contains services that can be run in CLI or Server</li>
+					  <li>All the sample apps use the Application component ( see App page for more info )</li>
+					</ol>
+				</div>
+				
+			</div>
+			<br/><br/>
+			<div>			
 				<h1>Compiling</h1>
 				<h3>Slate</h3>
 				<ul>
