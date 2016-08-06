@@ -68,18 +68,84 @@
 		
 		<section id="features" class="section">
           <div class="container">
+				
+			<div>
 				<div class="alert alert-info text-center" role="alert">
-					<h3 id="cli-areaapiaction">An Powerful Base-App</h3>
-					<h4> Easily add several features to support <strong>Console</strong>,
-					<strong>CLI</strong>, and <strong>Server</strong> application types</h4>
+					
+							<h3 id="cli-areaapiaction">A Powerful Base-App</h3>
+							<h4> Easily add several features to support <strong>Console</strong>,
+							<strong>CLI</strong>, and <strong>Server</strong> application types</h4>
+					
+				</div>
+				<br/>
+				<div class="text-center">
+					<img src="themes/start/images/white/desktop.png" width="80" alt="">
 				</div>
 				<br/>
 				
-			<div>
-				<h1 id="apis">App</h1>
-				<p>The App component ( available in the <a class="url-ch" href="overview.html#project-slate-core">slate.core</a> project ) is an Application template that supports many common features needed for any type of application. Features include:
-				</p>
-				<h3>Features</h3>
+				
+				<h1 id="app-about">About</h1>
+				<p>The App component ( available in the <a class="url-ch" href="overview.html#project-slate-core">slate.core</a> 
+				project ) is an Application template that supports many common features needed for any type of application. 
+				Some of these features include <strong>command line args</strong>, <strong>environment selection</strong>, 
+				<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong> and much more.
+				</p>				
+				<br/>
+				
+				<h1 id="app-goals">Goals</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Goal</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>1. Foundation</strong></td>
+						<td class="col-sm-6">Provide a starting point for building any type of application ( Console, Batch, CLI, Server )</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>2. Features</strong> </td>
+						<td class="col-sm-6">Pre-built support for common features like command line args, environment 
+						selection, config, logging, life-cycle and more.</td>						
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>3. Standardized</strong></td>
+						<td class="col-sm-6">Provides consistent setup and functionality for all application types 
+						</td>						
+					</tr>
+				</table>				
+				<br/>
+				
+				<h1 id="app-concepts">Concepts</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Concept</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>1. Life-cycle</strong></td>
+						<td class="col-sm-6">The app component is a base class, with support for life-cycle events ( check, init, accept, execute, shutdown )</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>2. Environments</strong></td>
+						<td class="col-sm-6">Environment selection ( local, dev, qa, stg, prod, etc ) is available with integration with respective config files.</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>3. Overrides</strong></td>
+						<td class="col-sm-6">Support for overriding <strong>some</strong> settings on the command line with what is set up in the configuration file(s)</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>4. Context</strong></td>
+						<td class="col-sm-6">Components such as selected environment ( local, dev, etc ), config, logger, encryptor are 
+						available in an AppContext.</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>5. Help</strong></td>
+						<td class="col-sm-6">Support for application information, version, and command line args, is easily available.</td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="app-features">Features</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Feature</strong></td>
@@ -88,13 +154,13 @@
 					</tr>
 					<tr> 
 						<td><strong>1. Args</strong></td>
-						<td>Command line arguments support ( which can override any config settings )
+						<td>Command line arguments support ( which can override some config settings )
 						</td>
 						<td>-env=dev -log.level=info -region=ny</td>
 					</tr>
 					<tr> 
 						<td><strong>2. Envs</strong></td>
-						<td>Support and selection of multiple environments ( with defaults )</td>
+						<td>Support and selection of multiple environments ( defaults available )</td>
 						<td>local, dev, qa, stg, pro</td>
 					</tr>
 					<tr> 
@@ -127,9 +193,109 @@
 						<td>An application context to contain and provide access to many services</td>
 						<td>encryptor, logger, settings, environment, etc</td>
 					</tr>
+					<tr> 
+						<td><strong>9. Help</strong></td>
+						<td>App info, version, and command line args can be displayed</td>
+						<td>on command line type {app} ? | help | about </td>
+					</tr>
+					<tr> 
+						<td><strong>10. Output</strong></td>
+						<td>Full display of app info and diagnostics can be shown at beginning or end of app</td>
+						<td>info, version, start time/end time, etc</td>
+					</tr>
 				</table>
 				<br/>
-				<h3>Usage</h3>
+				
+				<h1 id="app-example">Example</h1>
+				<p>Example of the application template with life-cycle methods, context, and app metadata. You can 
+				run the app using the AppRunner helper class.
+				See <a class="url-ch" href="#app-details">details section</a> for more info.</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">import</span> <span class="nn">slate.core.app.AppProcess</span>
+
+  <span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
+  <span class="o">{</span>
+
+    <span class="cm">/**
+     * initialize app and metadata
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="c1">// The base init can take care of some things such as:
+</span>      <span class="c1">// 1. loading the common "resources/env.conf" config file as "confBase"
+</span>      <span class="c1">// 2. loading the selected environment "env" from either 
+</span>      <span class="c1">//    the command line first ( -env="dev1:dev" ) or "env.conf"
+</span>      <span class="c1">// 3. setting up "conf" inherited config from "env.dev.conf" + "env.conf"
+</span>      
+      <span class="c1">// Initialize the context with common app info
+</span>      <span class="c1">// The context contains all the various services that are common
+</span>      <span class="c1">// to most apps, you can then make this available to other parts of your application.
+</span>      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+        <span class="n">env</span>  <span class="k">=</span> <span class="n">env</span><span class="o">,</span>
+        <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
+        <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
+        <span class="n">inf</span>  <span class="k">=</span> <span class="n">buildAbout</span><span class="o">(),</span>
+        <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">()</span>
+      <span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * executes the app
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
+
+      <span class="c1">// simulate work
+</span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+
+      <span class="n">success</span><span class="o">()</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * called when app is done
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onShutdown</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">info</span><span class="o">(</span><span class="s">"app shutting down"</span><span class="o">)</span>
+    <span class="o">}</span>
+
+
+    <span class="cm">/**
+     * fill extra items into the diagnostics summary shown at end of shutdown
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+    <span class="o">{</span>
+      <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">,</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span>
+      <span class="o">))</span>
+    <span class="o">}</span>
+
+
+    <span class="k">override</span> <span class="k">def</span> <span class="n">buildAbout</span><span class="o">()</span><span class="k">:</span><span class="kt">About</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
+        <span class="n">name</span> <span class="k">=</span> <span class="s">"Slate Sample App"</span><span class="o">,</span>
+        <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample to show the base application"</span><span class="o">,</span>
+        <span class="n">version</span> <span class="k">=</span> <span class="s">"0.9.1"</span><span class="o">,</span>
+        <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@company.co"</span>
+      <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+
+  <span class="c1">// Use the AppRunner helper class to run the App.
+</span>  <span class="c1">// NOTE: AppRunner calls all the template methods in 
+</span>  <span class="c1">// the appropriate order 
+</span>  <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"qa"</span><span class="o">,</span> <span class="s">"usa.ny"</span><span class="o">)))</span>
+
+</code></pre>
+</div>
+				<br/>
+				
+				<h1 id="app-usage">Usage</h1>
 				<p>The App template is used as the base class for all Slate application types.
 				This makes creation, setup, and execution of any app type consistent and very simple.
 				</p>
@@ -156,189 +322,115 @@
 					</tr>
 				</table>
 				<br/>
-			</div>
-			<div>		
-				<h1 id="setup-overview">Overview</h1>
+				
+				<h1 id="app-overview">Details</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
-						<td class="col-sm-2"><strong>Step</strong></td>
-						<td class="col-sm-2"><strong>Category</strong></td>
+						<td class="col-sm-1"><strong>Step</strong></td>
 						<td class="col-sm-3"><strong>About</strong></td>
-						<td class="col-sm-2"><strong>Docs</strong></td>
+						<td class="col-sm-1"><strong>Docs</strong></td>
 					</tr>
 					<tr> 
 						<td><strong>1. Setup</strong></td>
-						<td>Example</td>
 						<td>How to create and setup your app to use the base app</td>
 						<td><a href="#app-setup" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>2. Environments</strong></td>
-						<td>Config</td>
-						<td>The various settings available in config files for different components</td>
+						<td>The various environments available for selection.</td>
 						<td><a href="#app-env" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>3. Config files</strong></td>
-						<td>Configuration</td>
-						<td>The Context object available in all apps</td>
+						<td>The configuration files associated with each environment</td>
 						<td><a href="#app-config" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>4. Settings</strong></td>
-						<td>Configuration</td>
-						<td>The Context object available in all apps</td>
+						<td>Settings stored in the configuration files</td>
 						<td><a href="#app-settings" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>5. Arguments </strong></td>
-						<td>Configuration</td>
 						<td>The startup process of any type of app( Console, CLI, Server )</td>
 						<td><a href="#app-arguments" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>6. About </strong></td>
-						<td>Information</td>
 						<td>Set up information about your app for help/doc purposes on the command line</td>
-						<td><a href="#app-about" class="more"><span class="btn btn-primary">more</span></a></td>
+						<td><a href="#app-info" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>7. Help </strong></td>
-						<td>Information</td>
 						<td>Set up information about your app for help/doc purposes on the command line</td>
 						<td><a href="#app-help" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>8. Context</strong></td>
-						<td>Execution</td>
 						<td>The Context object available in all apps</td>
 						<td><a href="#app-context" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>9. Startup</strong></td>
-						<td>Execution</td>
 						<td>The Context object available in all apps</td>
 						<td><a href="#app-startup" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>10. Life-cycle</strong></td>
-						<td>Execution</td>
 						<td>The application life-cycle</td>
 						<td><a href="#app-life-cycle" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>11. Execution</strong></td>
-						<td>Execution</td>
 						<td>The Context object available in all apps</td>
 						<td><a href="#app-exec" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>12. Output</strong></td>
+						<td>Display important information before and after application execution.</td>
+						<td><a href="#app-output" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 				</table>
 			</div>			
 			<br/><br/>
 			<div>
 				<h1 id="app-setup">Setup</h1>
-				<p>You can create a new Application by subclassing AppProcess
+				<p>You can create a new Application by subclassing AppProcess. You can run the app using the AppRunner helper class
 				</p>
 				<h3>Example</h3>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">import</span> <span class="nn">slate.core.app.AppProcess</span>
+  <span class="k">import</span> <span class="nn">slate.core.app.AppProcess</span>
 
-<span class="k">class</span> <span class="nc">SampleAppBatch</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
-<span class="o">{</span>
-  <span class="cm">/**
-   * Initialize your app here
-   *
-   * @return
-  */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+  <span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
   <span class="o">{</span>
-    <span class="c1">// The base init can take care of some things such as:
-</span>    <span class="c1">// 1. loading the "resources/env.conf" config file as "confBase"
-</span>    <span class="c1">// 2. loading the selected environment "env" from either 
-</span>    <span class="c1">//    the command line first ( -env="dev1:dev" ) or "env.conf"
-</span>    <span class="c1">// 3. setting up "conf" inherited config from "env.dev.conf" + "env.conf"
-</span>    
-    <span class="c1">// Initialize the context with common app info
-</span>    <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
-      <span class="n">env</span>  <span class="k">=</span> <span class="n">env</span><span class="o">,</span>
-      <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
-      <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
-      <span class="n">con</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">)</span> <span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="kc">null</span><span class="o">),</span>
-      <span class="n">enc</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
-      <span class="n">inf</span>  <span class="k">=</span> <span class="n">buildAbout</span><span class="o">(),</span>
-      <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span>
-      <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
-      <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">()</span>
-    <span class="o">)</span>
-    <span class="c1">// your code here.
-</span>  <span class="o">}</span>
+    <span class="cm">/**
+     * executes the app
+     */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
 
+      <span class="c1">// simulate work
+</span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
 
-  <span class="cm">/**
-   * You implement this method to executes the app
-   *
-   * @return
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="c1">// simulate work
-</span>    <span class="n">info</span><span class="o">(</span><span class="s">"simulating work for 2 seconds. please wait..."</span><span class="o">)</span>
-    <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">)</span>
-
-    <span class="n">success</span><span class="o">()</span>
+      <span class="n">success</span><span class="o">()</span>
+    <span class="o">}</span>
   <span class="o">}</span>
 
 
-  <span class="cm">/**
-   * HOOK for when app is shutting down
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onShutdown</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="n">info</span><span class="o">(</span><span class="s">"app shutting down"</span><span class="o">)</span>
-  <span class="o">}</span>
-
-
-  <span class="cm">/**
-   * HOOK for adding items to the summary of data shown at the end of app execution
-   * @param args
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">ListBuffer</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">)</span>
-    <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span><span class="o">)</span>
-  <span class="o">}</span>
-
-
-  <span class="cm">/**
-   * build information about this application for diagnostics
-   * @return
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">buildAbout</span><span class="o">()</span><span class="k">:</span><span class="kt">About</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="c1">// Get info about app from base config "env.conf" which is common to all environments.
-</span>    <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
-      <span class="n">name</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="s">"Sample App"</span><span class="o">),</span>
-      <span class="n">desc</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.desc"</span>     <span class="o">,</span> <span class="s">"Sample to show the base application"</span><span class="o">),</span>
-      <span class="n">region</span>   <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.region"</span>   <span class="o">,</span> <span class="s">"ny"</span><span class="o">),</span>
-      <span class="n">version</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.version"</span>  <span class="o">,</span> <span class="s">"0.9.1"</span><span class="o">),</span>
-      <span class="n">url</span>      <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.url"</span>      <span class="o">,</span> <span class="s">"http://sampleapp.slatekit.com"</span><span class="o">),</span>
-      <span class="n">group</span>    <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.group"</span>    <span class="o">,</span> <span class="s">"codehelix.co"</span><span class="o">),</span>
-      <span class="n">contact</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.contact"</span>  <span class="o">,</span> <span class="s">"kishore@codehelix.co"</span><span class="o">),</span>
-      <span class="n">tags</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.tags"</span>     <span class="o">,</span> <span class="s">"slate,shell,cli"</span><span class="o">),</span>
-      <span class="n">examples</span> <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.examples"</span> <span class="o">,</span> <span class="s">""</span><span class="o">)</span>
-    <span class="o">)</span>
-  <span class="o">}</span>   
-   
-  <span class="c1">// ...
-</span><span class="o">}</span>
+  <span class="c1">// Use the AppRunner helper class to run the App.
+</span>  <span class="c1">// NOTE: AppRunner calls all the template methods in 
+</span>  <span class="c1">// the appropriate order 
+</span>  <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"-env='qa1.qa'"</span><span class="o">,</span> <span class="s">"-log.level=info"</span><span class="o">)))</span>
 
 </code></pre>
 </div>
-			<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+			<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 			<br/><br/><br/>
 			</div>
 			<div>
 				<h1 id="app-env">Environments</h1>
-				<p>You can setup different environments ( local, dev, qa, etc ) for your application. The following environments are available by default. Since environments need to have config files (see below) and some environments may share common config settings, there is the concept of a base or common environment which the other environments are based from.<p>
+				<p>You can setup different environments ( local, dev, qa1, qa2, etc ) for your application. The following environments are available by default. Since environments need to have config files (see below) and some environments may share common config settings, there is the concept of a base or common environment which the other environments are based from.<p>
 				<table class="table table-bordered table-striped">
 					<tr class="">
 						<td class="col-sm-2"><strong>Env</strong></td>
@@ -361,8 +453,13 @@
 						<td class="col-sm-3">Common</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>QA</strong></td>
-						<td class="col-sm-2">Quality Assurance / Test</td>
+						<td class="col-sm-2"><strong>QA 1</strong></td>
+						<td class="col-sm-2">Quality Assurance / Test 1</td>
+						<td class="col-sm-3">Common</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>QA 2</strong></td>
+						<td class="col-sm-2">Quality Assurance / Test 2</td>
 						<td class="col-sm-3">Common</td>
 					</tr>
 					<tr>
@@ -376,30 +473,96 @@
 						<td class="col-sm-2">Common</td>
 					</tr>
 				</table>
-				<h3>Example</h3>
-				<p>In code, an environment is represented as an EnvItem</p>
-				<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">EnvItem</span><span class="o">}</span>
+				<h3>Define</h3>
+				<p>In code, an environment is represented as an EnvItem. The default environments listed above are already setup
+				in the base App component.</p>
 
-<span class="c1">// Environment definition
-</span><span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"dev1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">,</span> <span class="s">"dev1.dev"</span><span class="o">)</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="n">env</span><span class="o">)</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">isDev</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">isQa</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">isUat</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">isProd</span>
-<span class="nc">Env</span><span class="o">.</span><span class="n">current</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">EnvItem</span><span class="o">}</span>
+
+  <span class="k">class</span> <span class="nc">AppProcess</span>
+  <span class="o">{</span>
+    
+    <span class="c1">// ... code </span>  
+	
+    <span class="cm">/**
+    * The list of available environments to choose from.
+    * An environment definition is defined by its name and mode
+    * The key is built up from name and mode as {name}.{mode}
+    * e.g. "qa1.QA"
+    *
+    * Each of these environments has an associated env.{name}.conf
+    * config file in the /resources/ directory.
+    * e.g.
+    * /resources/env.conf     ( common      config )
+    * /resources/env.loc.conf ( local       config )
+    * /resources/env.dev.conf ( development config )
+    * /resources/env.qa1.conf ( qa1         config )
+    * /resources/env.qa2.conf ( qa2         config )
+    * /resources/env.stg.conf ( staging     config )
+    * /resources/env.pro.conf ( production  config )
+    * @return
+    */</span>
+    <span class="k">def</span> <span class="n">envs</span><span class="o">()</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">EnvItem</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="nc">List</span><span class="o">[</span><span class="kt">EnvItem</span><span class="o">](</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"loc"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">),</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"dev"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">),</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">),</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa2"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">),</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"stg"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">UAT</span><span class="o">),</span>
+        <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"pro"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">PROD</span><span class="o">)</span>
+      <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
 	
 </code></pre>
-</div>			<div class="alert alert-info text-left" role="alert">
+</div>				
+				<br/>
+				<h3>Config</h3>
+				<p>You can set the selected environment in the <strong>/resources/env.conf</strong> config file as follows</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c"># environment selection</span>
+  <span class="c"># this can be overriden on the commandline via -env=qa</span>
+  <span class="n">env</span> <span class="o">=</span> <span class="s">"loc"</span>
+ 
+</code></pre>
+</div>
+				<br/>
+				<h3>Args</h3>
+				<p>You can set the environment as as command line arg with the following syntax. The command line will override the config setting.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// You can run your app and supply the environment on the command line
+</span> <span class="c1">// environemnt: -env=name 
+</span> <span class="c1">// log level  : -log-level=name 
+</span> 
+ <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"loc:dev"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">debug</span> 
+ <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"dev:dev"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">info</span> 
+ <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"qa1:qa"</span>   <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">warn</span> 
+ <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"stg:qa"</span>   <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">error</span> 
+ <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"pro:pro"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">error</span> 
+ 
+</code></pre>
+</div>
+				<br/>
+				<h3>Access</h3>
+				<p>You can access the selected environment in the code via the <strong>env</strong> data member.</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
+  <span class="o">{</span>
+    <span class="c1">// You have access the the selected environment via the "env" member
+</span>    <span class="n">info</span><span class="o">(</span><span class="s">"selected environment is : "</span> <span class="o">+</span> <span class="n">env</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
+  
+    <span class="n">success</span><span class="o">()</span>
+  <span class="o">}</span>
+ 
+</code></pre>
+</div>
+				<br/>
+				<div class="alert alert-info text-left" role="alert">
 					<ol>
 					  <li>You can create custom environments</li>
-					  <li>The most common environemnts <strong>( local, dev, qa, stg, prod )</strong> are available by default</li>			
-					  <li>Other typical environments are <strong>( local, dev1, dev2, qa1, qa2, stg1, stg2, prod )</strong> 
-					  to support <strong>current version</strong> + <strong>production version</strong> in each environment</li>			
+					  <li>The most common environemnts <strong>( local, dev, qa, stg, prod )</strong> are available by default</li>
 					</ol>
 				</div>
-				<br/>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
 			<div>			
@@ -461,8 +624,7 @@
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="c"># environment selection</span>
 <span class="c"># this can be overriden on the commandline via -env=qa</span>
-<span class="n">env</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"loc"</span>
-<span class="n">env</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s">"dev"</span>
+<span class="n">env</span> <span class="o">=</span> <span class="s">"loc"</span>
 
 <span class="c"># This config file is :</span>
 <span class="c"># 1. common to all other config files</span>
@@ -471,9 +633,6 @@
 <span class="c"># these can be overriden in each of the environment specific config files</span>
 <span class="c"># e.g.</span>
 <span class="c"># dev = env.dev.conf ( development )</span>
-<span class="c"># qa  = env.qa1.conf ( qa testing  )</span>
-<span class="c"># loc = env.loc.conf ( local dev   )</span>
-<span class="c"># pro = env.pro.conf ( production  )</span>
 <span class="n">app</span><span class="o">.</span><span class="nb">id</span>      <span class="o">=</span> <span class="s">"slate.examples"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">company</span> <span class="o">=</span> <span class="s">"codehelix"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">name</span>    <span class="o">=</span> <span class="s">"Sample App"</span>
@@ -482,22 +641,9 @@
 <span class="n">app</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s">"0.9.1"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">url</span>     <span class="o">=</span> <span class="s">"http://sampleapp.slatekit.com"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">group</span>   <span class="o">=</span> <span class="s">"codehelix.co"</span>
-<span class="n">app</span><span class="o">.</span><span class="n">contact</span> <span class="o">=</span> <span class="s">"kishore@codehelix.co"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">contact</span> <span class="o">=</span> <span class="s">"kishore@abc.co"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">tags</span>    <span class="o">=</span> <span class="s">"slate,shell,cli"</span>
 <span class="n">app</span><span class="o">.</span><span class="n">examples</span> <span class="o">=</span> <span class="s">"sampleapp -env=dev -log.level=debug -region='ny' -enc=false"</span>
-
-<span class="c"># log and level</span>
-<span class="n">log</span><span class="o">.</span><span class="n">name</span>    <span class="o">=</span> <span class="s">"@{app.name}-@{env.name}-@{date}.log"</span>
-<span class="n">log</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">true</span>
-<span class="n">log</span><span class="o">.</span><span class="n">level</span>   <span class="o">=</span> <span class="s">"info"</span>
-
-<span class="c"># DB Settings - defaulted to dev database</span>
-<span class="n">db</span><span class="o">.</span><span class="n">enabled</span>     <span class="o">=</span> <span class="n">false</span>
-<span class="n">db</span><span class="o">.</span><span class="n">source</span>      <span class="o">=</span> <span class="s">"conf"</span>
-<span class="n">db</span><span class="o">.</span><span class="n">driver</span>      <span class="o">=</span> <span class="s">"com.mysql.jdbc.Driver"</span>
-<span class="n">db</span><span class="o">.</span><span class="n">url</span>         <span class="o">=</span> <span class="s">"jdbc:mysql://localhost/db1"</span>
-<span class="n">db</span><span class="o">.</span><span class="n">user</span>        <span class="o">=</span> <span class="s">"root"</span>
-<span class="n">db</span><span class="o">.</span><span class="n">pswd</span>        <span class="o">=</span> <span class="s">"123456789"</span>
 
 </code></pre>
 </div>			
@@ -517,7 +663,10 @@
 </div>
 				<br/>
 				<h3>Example 3: Reference Config file in user directory.</h3>
-				<p>For added security, you can extract some settings into a separate config file that is kept in the user directory. You can create separate config files for different settings such as database, AWS, etc. See the settings section for more info</p>
+				<p>For added security, you can extract some settings into a separate config file that is kept in the <strong>user</strong> directory. 
+				The user directory on windows would be <strong>C:/users/${user}</strong>
+				You can create separate config files for different settings such as database, AWS, etc. 
+				See the settings section for more info</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="c"># Example: Override the db settings for prod to indicate</span>
 <span class="c"># loading the info from a file called "db-pro.txt" from the users folder.</span>
@@ -556,16 +705,18 @@
 					  <li>Example file is: <strong>kreddy/.codehelix/sampleapp1/database.conf</strong></li>			
 					</ol>
 				</div>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<a href="mod-config.html" class="more"><span class="btn btn-primary">See config component for more info</span></a>
 				<br/><br/><br/>
             </div>	
 			<div>			
 				<h1 id="app-settings">Settings</h1>
-				<p>There are configuration settings available for different components. For example, database settings, logging settings, etc. These settings can be setup in either:
+				<p>Settings are stored either in the common config environment specific configs. 
+				You can create settings for things like database settings, logging settings, etc. 
+				These settings can be setup in either:
 				<ol>
-					<li>inside common config <strong>env.conf</strong> - shared by all environments.</li>
-					<li>inside environment config <strong>env.dev.conf</strong> - specific to environment and overrides common config</li>
+					<li>common config <strong>/resources/env.conf</strong> - shared by all environments.</li>
+					<li>environment config <strong>/resources/env.dev.conf</strong> - specific to environment and overrides common config</li>
 					<li>external config file in user dir <strong>kreddy/mycompany/app1/log.conf</strong></li>
 				</ol>
 				<br/>
@@ -613,20 +764,50 @@
 						<td class="col-sm-2">env conf or userdir:aws.conf</td>
 						<td class="col-sm-3">AWS configuration including the key, password</td>
 					</tr>
-				</table>				
+				</table>
+				<h3>Accessing</h3>
+				<p>To access any of the settings you can use the <strong>conf</strong> data member which is a thin wrapper around the typesafe config.
+					However, it supports inherited configs by loading both the common config <strong>/resources/env.conf</strong> and the 
+					environment specific config <strong>/resources/env.qa.conf</strong></p>
+				</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// The conf is an inherited config that loads the environment
+</span>  <span class="c1">// specific config ( env.qa.conf ) plus with the common config ( env.conf )
+</span>  <span class="c1">// It is a decorated config container that first checks for a setting in
+</span>  <span class="c1">// the environment specific for an overriden value before checking the common config.
+</span>  <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span> <span class="o">)</span>
+  <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"log.enabled"</span><span class="o">)</span> <span class="o">)</span>
+
+  <span class="c1">// The dbCon convenience method load up a database connection with
+</span>  <span class="c1">// driver:String, url:String, user:String, password:String
+</span>  <span class="c1">// the keys are expected to be:
+</span>  <span class="c1">// db.driver      = "com.mysql.jdbc.Driver"
+</span>  <span class="c1">// db.url         = "jdbc:mysql://localhost/db1"
+</span>  <span class="c1">// db.user        = "root"
+</span>  <span class="c1">// db.pswd        = "123456789"
+</span>  <span class="k">val</span> <span class="n">dbCon</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">dbCon</span> <span class="o">)</span>
+
+  <span class="c1">// NOTE: For more details on how to load configs and db connections from the config
+</span>  <span class="c1">// refer to the Example_Configs.scala example
+</span> 
+</code></pre>
+</div>
 				<div class="alert alert-info text-left" role="alert">
 					<ol>
 					  <li>It is recommended to <strong>encrypt</strong> settings ( see the config component in utils for more info )</li>
 					  <li>It is also recommended to store <strong>Database</strong>, <strong>AWS</strong> and other sensitive settings in separate files in the <strong>user directory</strong></li>
+					   <li>Check the <strong>Example_Config.scala</strong> for more examples of using config files, encryption, and getting database settings</li>
 					</ol>
 				</div>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
             </div>	
 			
 			<div>
 				<h1 id="app-arguments">Arguments</h1>
-				<p>You can setup command line args for your application by building a argument schema.</p>
+				<p>You can setup command line args for your application by building an argument schema. 
+				This uses the <strong>Args</strong> component from Slate Kit Utilities</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">class</span> <span class="nc">SampleAppBatch</span> <span class="k">extends</span> <span class="nc">AppProcess</span> 
 <span class="o">{</span>
@@ -653,12 +834,46 @@
 					  <li>Example is <strong>myapp -env=dev -log.level=info -region="ny"</strong></li>
 					</ol>
 				</div>
-			<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+			<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 			<br/><br/><br/>
 			</div>
 			<div>
-				<h1 id="app-about">About</h1>
-				<p>You can add information about an app which can be displayed in command line help. ( see below )</p>
+				<h1 id="app-info">About</h1>
+				<p>You can add information about an app which can be displayed in command line help. ( see below ).
+				This uses the <strong>About</strong> component from Slate Kit Utilities ( info namespace )		
+				<br/>There are 2 ways of doing this: </p>
+				<h3>Option 1</h3>
+				<p>Option 1 is the easiest way and more configurable by simple setting the following values in the <strong>env.conf</strong>
+				common config. Slate Kit will automaticall check for the app information here</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c"># environment selection</span>
+<span class="c"># this can be overriden on the commandline via -env=qa</span>
+<span class="n">env</span> <span class="o">=</span> <span class="s">"loc"</span>
+
+<span class="c"># This config file is :</span>
+<span class="c"># 1. common to all other config files</span>
+<span class="c"># 2. inherited by all other config files.</span>
+<span class="c"># 3. settings can be overriden in the derived files.</span>
+<span class="c"># these can be overriden in each of the environment specific config files</span>
+<span class="c"># e.g.</span>
+<span class="c"># dev = env.dev.conf ( development )</span>
+<span class="n">app</span><span class="o">.</span><span class="nb">id</span>      <span class="o">=</span> <span class="s">"slate.examples"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">company</span> <span class="o">=</span> <span class="s">"codehelix"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">name</span>    <span class="o">=</span> <span class="s">"Sample App"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">desc</span>    <span class="o">=</span> <span class="s">"Sample console application to show the base application features"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">region</span>  <span class="o">=</span> <span class="s">"ny"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s">"0.9.1"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">url</span>     <span class="o">=</span> <span class="s">"http://sampleapp.slatekit.com"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">group</span>   <span class="o">=</span> <span class="s">"codehelix.co"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">contact</span> <span class="o">=</span> <span class="s">"kishore@abc.co"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">tags</span>    <span class="o">=</span> <span class="s">"slate,shell,cli"</span>
+<span class="n">app</span><span class="o">.</span><span class="n">examples</span> <span class="o">=</span> <span class="s">"sampleapp -env=dev -log.level=debug -region='ny' -enc=false"</span>
+
+</code></pre>
+</div>			
+				<br/>
+				<h3>Option 2</h3>
+				<p>Option 2 is to override the buildAbout method and setup the information what ever way you want</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="cm">/**
    * build information about this application for diagnostics
@@ -682,14 +897,7 @@
   
 </code></pre>
 </div>
-				<div class="alert alert-info text-left" role="alert">
-					<ol>
-					  <li>The <strong>env.conf</strong> file can contain all the about info above so you do not have to hard-code them in the code.</li>
-					  <li>The AppProcess base class can read the about info so you do <strong>NOT</strong> need to implement the about method, except for customization.</li>
-					</ol>
-				</div>
-	
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
 			<div>
@@ -720,9 +928,16 @@
              ? optional  [String]  e.g. us
 			 
 </code></pre>
-
-	
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<h3>Usage</h3>
+				<p>You can have the help displayed by running your app with the following parameters on the command line</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>	
+  <span class="n">sampleapp</span> <span class="o">?</span>
+  <span class="n">sampleapp</span> <span class="n">help</span>
+  <span class="n">sampleapp</span> <span class="n">about</span> 
+  
+</code></pre>
+</div>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
 			<div>
@@ -730,14 +945,13 @@
 				<p>Every application ( Console, CLI, Server ) is setup with a AppContext that contains many common services.
 				</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
   <span class="o">{</span>
-    <span class="c1">// The base class can take care of some things such as:
+    <span class="c1">// The base class init() can take care of some things such as:
 </span>    <span class="c1">// 1. loading the "env.conf" config file as "confBase"
 </span>    <span class="c1">// 2. loading the "env" from either the command line first ( -env="dev1:dev" ) or "env.conf"
 </span>    <span class="c1">// 3. setting up "conf" inherited confi from "env.dev.conf" + "env.conf"
-</span>    <span class="k">super</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
-
+</span>
     <span class="c1">// 2. Initialize the context with common app info
 </span>    <span class="c1">// The database can be set up in the "env.conf" shared inherited config or
 </span>    <span class="c1">// overridden in the environment specific e.g. "env.qa.conf"
@@ -757,10 +971,75 @@
 </code></pre>
 </div>
 			
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
-			</div>
+			</div>			
 			<div>			
+				<h1 id="app-life-cycle">Life-cycle</h1>
+				<p>The application has 4-5 life-cycle events you can hook into.</p>
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><strong>Step</strong></td>
+						<td class="col-sm-2"><strong>Method</strong></td>
+						<td class="col-sm-3"><strong>Desc</strong></td>
+					</tr>
+					<tr>
+						<td><strong>1. Check</strong></td>
+						<td>check()</td>
+						<td>Checks the command line arguments</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td>onCheck()</td>
+						<td>Hook for derived class to implement extra checks</td>
+					</tr>
+					<tr>
+						<td><strong>2. Initialize</strong></td>
+						<td>init()</td>
+						<td>Initialize your application</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td>onInit()</td>
+						<td>Hook for derived class to implement extra initialization</td>
+					</tr>
+					<tr>
+						<td><strong>3. Accept</strong></td>
+						<td>accept()</td>
+						<td>Post initialization</td>
+					</tr>
+						<td><strong></strong></td>
+						<td>onAccept()</td>
+						<td>Hook for derived class to implement extra acceptance of data/inputs</td>
+					</tr>
+					<tr>
+						<td><strong>4. Execute</strong></td>
+						<td>execute()</td>
+						<td>Execute the code for your application.</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td>onExecute()</td>
+						<td>Hook for derived class to implement actual work</td>
+					</tr>
+					<tr>
+						<td><strong>5. Shutdown</strong></td>
+						<td>shutDown()</td>
+						<td>Shutdowns your application</td>
+					</tr>
+					<tr>
+						<td><strong></strong></td>
+						<td>onShutDown()</td>
+						<td>Hook for derived class to implement shutdown</td>
+					</tr>
+				</table>
+				<br/>			
+				
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
+			</div>	
+<div>			
 				<h1 id="app-startup">Startup</h1>
 				<p>All the different types of applications ( Console, CLI, Server - Web API ) all start up in the same way. This is accomplished by extending from the Slate Kit AppProcess class. Because most apps
 				will need to have a way to initialize the environment, configuration, logging and more, we have templated this process to make it easier while also allowing for easy customization. The following are the series of actions that occur during startup.
@@ -810,51 +1089,38 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>7. Load other data</strong></td>
-						<td class="col-sm-2">env.name</td>
-						<td class="col-sm-2">env</td>
-						<td class="col-sm-2">env</td>
+						<td class="col-sm-2">-</td>
+						<td class="col-sm-2">-</td>
+						<td class="col-sm-2">-</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>8. Proceed to execute</strong></td>
+						<td class="col-sm-2">onExecute()</td>
+						<td class="col-sm-2">Your app</td>
+						<td class="col-sm-2">-</td>
 					</tr>
 				</table>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
-			</div>
-			<div>			
-				<h1 id="app-life-cycle">Life-cycle</h1>
-				<p>The application has 4-5 life-cycle events you can hook into.</p>
-				</p>
-				<table class="table table-bordered table-striped">
-					<tr class="">
-						<td class="col-sm-1"><strong>Step</strong></td>
-						<td class="col-sm-2"><strong>Method</strong></td>
-						<td class="col-sm-2"><strong>Desc</strong></td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>1. Check</strong></td>
-						<td class="col-sm-2">check()</td>
-						<td class="col-sm-2">Checks the command line arguments</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>2. Initialize</strong></td>
-						<td class="col-sm-2">init()</td>
-						<td class="col-sm-2">Initialize your application</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>3. Accept</strong></td>
-						<td class="col-sm-2">accept()</td>
-						<td class="col-sm-2">Post initialization</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>4. Execute</strong></td>
-						<td class="col-sm-2">execute()</td>
-						<td class="col-sm-2">Execute the code for your application.</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>5. Shutdown</strong></td>
-						<td class="col-sm-2">shutDown()</td>
-						<td class="col-sm-2">Shutdowns your application</td>
-					</tr>
-				</table>
-				<br/>
+			</div>			
+			<div>	
+				<h1 id="app-exec">Execution</h1>
+				<p>You can run your application using the AppRunner convenience class. This class runs the application life-cycle methods in the appropriate order.</p>
+				</p>				
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">package</span> <span class="nn">sampleapp.batch</span>
+
+<span class="k">import</span> <span class="nn">slate.core.app.AppRunner</span>
+
+<span class="k">object</span> <span class="nc">SampleAppRunner</span>
+<span class="o">{</span>
+  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleAppBatch</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+</div>
 				<h3>App Runner</h3>
 				<p>The AppRunner class is a convenience class for executing your application. It calls the life-cycle events in the appropriate order</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
@@ -906,30 +1172,77 @@
 
 </code></pre>
 </div>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
-			</div>			
-			<div>	
-				<br/>
-				<h1 id="app-exec">Execution</h1>
-				<p>You can run your application using the AppRunner convenience class. This class runs the application life-cycle methods in the appropriate order.</p>
-				</p>				
+            </div>	
+<div>	
+				<h1 id="app-output">Output</h1>
+				<p>You can setup the app to display information about the app, settings, and diagnostics before and after execution of the app.</p>
+				</p>	
+				<h3>Setup</h3>
+				<p>You simply setup options to indicate logging diagnostics before and/or after</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">package</span> <span class="nn">sampleapp.batch</span>
 
-<span class="k">import</span> <span class="nn">slate.core.app.AppRunner</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+  <span class="o">{</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">printSummaryBeforeExec</span> <span class="k">=</span> <span class="kc">false</span>
+    <span class="n">options</span><span class="o">.</span><span class="n">printSummaryOnShutdown</span> <span class="k">=</span> <span class="kc">true</span>
+	
+    <span class="c1">// ...  
+</span>  <span class="o">}</span>
 
-<span class="k">object</span> <span class="nc">SampleAppRunner</span>
-<span class="o">{</span>
-  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleAppBatch</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">))</span>
+</code></pre>
+</div>			<h3>Customize</h3>
+				<p>To add any extra diagnostics to the app, you can override the collectSummaryExtra method</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
+  <span class="o">{</span>
+    <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">,</span>
+      <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span>
+    <span class="o">))</span>
   <span class="o">}</span>
-<span class="o">}</span>
 
 </code></pre>
 </div>
-				<br/>
-				<a href="#setup-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<h3>Log</h3>
+				<p>This is the output of the application</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">executing</span> <span class="n">now</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">completed</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">shutting</span> <span class="n">down</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">SUMMARY</span> <span class="o">:</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">name</span>          <span class="o">=</span> <span class="n">sampleapp</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">desc</span>          <span class="o">=</span> <span class="n">sample</span> <span class="n">app</span> <span class="n">to</span> <span class="n">show</span> <span class="n">the</span> <span class="n">appprocess</span> <span class="n">base</span> <span class="kd">class</span><span class="err">,</span> <span class="nc">template</span> <span class="n">methods</span><span class="o">,</span> <span class="n">and</span> <span class="n">functionality</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">version</span>       <span class="o">=</span> <span class="mf">1.0</span><span class="o">.</span><span class="mf">0.3</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">tags</span>          <span class="o">=</span> <span class="n">feature_01</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">args</span>          <span class="o">=</span> <span class="n">Some</span><span class="o">([</span><span class="n">Ljava</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">;</span><span class="err">@</span><span class="mi">9304022</span><span class="o">)</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">env</span>           <span class="o">=</span> <span class="n">qa</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">config</span>        <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="na">config</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">log</span>           <span class="o">=</span> <span class="n">sampleapp</span><span class="o">-</span><span class="n">qa</span><span class="o">-</span><span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">14</span><span class="o">.</span><span class="na">log</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">region</span>        <span class="o">=</span> <span class="n">usa</span><span class="o">.</span><span class="na">ny</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">started</span>       <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">14</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">ended</span>         <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">15</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">duration</span>      <span class="o">=</span> <span class="n">slate</span><span class="o">.</span><span class="na">common</span><span class="o">.</span><span class="na">TimeSpan</span><span class="err">@</span><span class="mi">3</span><span class="n">ec27ce4</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">status</span>        <span class="o">=</span> <span class="n">ended</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">errors</span>        <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">error</span>         <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">KREDDY</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">ip</span>       <span class="o">=</span> <span class="n">Windows</span> <span class="mi">7</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">origin</span>   <span class="o">=</span> <span class="n">local</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">6.1</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">scala</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">2.11</span><span class="o">.</span><span class="mi">7</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">java</span>     <span class="o">=</span> <span class="n">local</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">home</span>     <span class="o">=</span> <span class="nl">C:</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">Java</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0</span><span class="n">_79</span><span class="o">/</span><span class="n">jre</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">1</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data1</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">2</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data2</span>
+  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+</code></pre>
+</div>
+				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
             </div>			
           </div>

@@ -218,9 +218,14 @@
       <td class=" text-center"><a href="#scala-implicits" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>method calls</strong></td>
-      <td>short hand syntax for method calls</td>
-      <td class=" text-center"><a href="#scala-method-calls" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td><strong>static methods</strong></td>
+      <td>scala approach to "static" methods</td>
+      <td class=" text-center"><a href="#scala-static-methods" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>apply</strong></td>
+      <td>how to create instances without using "new"</td>
+      <td class=" text-center"><a href="#scala-apply" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
   </tbody>
 </table>
@@ -513,14 +518,46 @@
     <span class="n">s</span><span class="s">"existing user: ${name}"</span>
   <span class="o">}</span>
   
+
+  <span class="c1">// 4. function with functions as parameters,
+</span>  <span class="c1">// Last expression is assumed to be the return value
+</span>  <span class="k">def</span> <span class="n">test4</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
+             <span class="n">hello1</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
+             <span class="n">hello2</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
+             <span class="n">hello3</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">String</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c1">// 1. first function takes 0 parameters, and returns nothing
+</span>    <span class="n">hello1</span><span class="o">()</span>
+
+    <span class="c1">// 2. second function takes 1 paramter, and returns nothing
+</span>    <span class="n">hello2</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
+
+    <span class="c1">// 3. third function takes 2 parameter and returns a value
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">hello3</span><span class="o">(</span><span class="s">"hey"</span><span class="o">,</span> <span class="s">"hello"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+  <span class="o">}</span>
   
   
   <span class="c1">// call the functions  
 </span>  <span class="k">def</span> <span class="n">testFunctions</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">test1</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
-    <span class="n">test2</span> <span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
-    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">test3</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">123456789123L</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">test1</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with parameters with default values
+</span>    <span class="n">test2</span> <span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+
+    <span class="c1">// 3. function with parameters with default values + return value
+</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="n">test3</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">123456789123L</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result1</span> <span class="o">)</span>
+
+    <span class="c1">// 4. function with functions as paramters
+</span>    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="n">test4</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span>
+        <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="nc">Unit</span> <span class="o">},</span>
+        <span class="o">(</span><span class="n">greeting1</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">greeting1</span> <span class="o">+</span> <span class="s">" john"</span><span class="o">),</span>
+        <span class="o">(</span><span class="n">greeting2</span><span class="o">,</span> <span class="n">greeting3</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">greeting2</span> <span class="o">+</span> <span class="s">" and "</span> <span class="o">+</span> <span class="n">greeting3</span> <span class="o">+</span> <span class="s">" john"</span>
+    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result2</span> <span class="o">)</span>
   <span class="o">}</span>
 
 </code></pre>
@@ -671,6 +708,53 @@
 <h2 id="scala-option">Option</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// Value
+</span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
+    <span class="k">val</span> <span class="n">age1</span>      <span class="k">=</span> <span class="mi">35</span>
+    <span class="k">val</span> <span class="n">account1</span>  <span class="k">=</span> <span class="mi">12345678901L</span>
+    <span class="k">val</span> <span class="n">isActive1</span> <span class="k">=</span> <span class="kc">false</span>
+    <span class="k">val</span> <span class="n">salary1</span>   <span class="k">=</span> <span class="mf">20.5</span>
+    <span class="k">val</span> <span class="n">date1</span>     <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+
+    <span class="c1">// Values as implicit Option[T] with an actual ( Some ) value
+</span>    <span class="k">val</span> <span class="n">name2</span>     <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">age2</span>      <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">35</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">account2</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">12345678901L</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">isActive2</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="kc">false</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">salary2</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mf">20.5</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">date2</span>     <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">)</span>
+
+    <span class="c1">// Values with explicit type as Option[T] with an actual ( Some ) value
+</span>    <span class="k">val</span> <span class="n">name3</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">age3</span>      <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>           <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">35</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">account3</span>  <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span>          <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">12345678901L</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">isActive3</span> <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>       <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="kc">false</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">salary3</span>   <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mf">20.5</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">date3</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">LocalDateTime</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">)</span>
+
+    <span class="c1">// Values with explicit type as Option[T] with no ( None ) value
+</span>    <span class="k">val</span> <span class="n">name4</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">age4</span>      <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>           <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">account4</span>  <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span>          <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">isActive4</span> <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>       <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">salary4</span>   <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">date4</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">LocalDateTime</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+	
+    <span class="c1">// Usage
+</span>    <span class="k">val</span> <span class="n">batman</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">catwoman</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Selina Kyle"</span><span class="o">)</span>
+
+    <span class="c1">// Is the value there ?
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">isDefined</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">isEmpty</span> <span class="o">)</span>
+
+    <span class="c1">// Discouraged ( as it could be null )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">get</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">catwoman</span><span class="o">.</span><span class="n">get</span> <span class="o">)</span>
+
+    <span class="c1">// Encouraged ( get if present or default - to avoid null exception )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">"Bruce Wayne"</span><span class="o">).</span><span class="n">toUpperCase</span><span class="o">)</span>
+
 </code></pre>
 </div>
 
@@ -872,7 +956,11 @@
       <span class="k">case</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span>                         <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"text "</span> <span class="o">+</span> <span class="n">s</span><span class="o">)</span>
       <span class="k">case</span> <span class="n">u</span><span class="k">:</span><span class="kt">User3</span>                          <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"user"</span> <span class="o">)</span>
 
-      <span class="c1">// 4. default case
+      <span class="c1">// 4. Option
+</span>      <span class="k">case</span> <span class="nc">None</span>                             <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span> <span class="s">"No value supplied"</span> <span class="o">)</span>
+      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>                          <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span> <span class="s">"Some value"</span> <span class="o">+</span> <span class="n">x</span> <span class="o">)</span>
+        
+      <span class="c1">// 5. default case
 </span>      <span class="k">case</span> <span class="k">_</span>                                <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"unknown"</span><span class="o">)</span>
     <span class="o">}</span>
   <span class="o">}</span>
@@ -883,7 +971,9 @@
   <span class="n">testMatch</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
   <span class="n">testMatch</span><span class="o">(</span><span class="mf">3.5</span><span class="o">)</span>
   <span class="n">testMatch</span><span class="o">(</span><span class="s">"some text"</span><span class="o">)</span>
-  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"john"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"john"</span>  <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"jane"</span>  <span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"batman"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span>      <span class="o">))</span>
   <span class="n">testMatch</span><span class="o">((</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">))</span>
   
 </code></pre>
@@ -955,12 +1045,41 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 <h2 id="scala-implicits">Implicits</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">package</span> <span class="nn">slate.common</span> 
+
+<span class="k">object</span> <span class="nc">StringHelpers</span> <span class="o">{</span>
+
+  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">StringExt</span><span class="o">(</span><span class="n">text</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * converts the text to valid url path which means:
+     * 1. trim leading / trailing spaces
+     * 2. remove spaces and replace with '-'
+     * @return
+     */</span>
+    <span class="k">def</span> <span class="n">toUrlPath</span><span class="o">()</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">text</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">""</span>
+      <span class="n">text</span><span class="o">.</span><span class="n">trim</span><span class="o">().</span><span class="n">replaceAllLiterally</span><span class="o">(</span><span class="s">" "</span><span class="o">,</span> <span class="s">"-"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+ <span class="c1">// ...
+</span> 
+ <span class="k">import</span> <span class="nn">slate.common.StringHelpers.StringExts</span>
+ 
+ <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">" slate kit "</span>
+ <span class="k">val</span> <span class="n">urlPath</span> <span class="k">=</span> <span class="n">name</span><span class="o">.</span><span class="n">toUrlPath</span><span class="o">()</span>
+ <span class="n">println</span><span class="o">(</span> <span class="n">urlPath</span><span class="o">)</span>
+
 </code></pre>
 </div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
-<h2 id="scala-method-calls">Method calls</h2>
+<h2 id="scala-static-methods">static methods</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
 </code></pre>
@@ -968,13 +1087,14 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
-<h2 id="scala-actors">Actors</h2>
+<h2 id="scala-apply">apply</h2>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
 </code></pre>
 </div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
 
 			</div>
 		</section>

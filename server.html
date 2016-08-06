@@ -69,15 +69,155 @@
 		<section id="features" class="section">
           <div class="container">
             <div class="">
-				<div > 				
-					<h2>Overview</h2>
-					<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
-						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
-						The ORM is designed in form of an "Entities" based approach ( as you will see in the docs ). The following features are supported:
-					</p>
+				
+				<div class="alert alert-info text-center" role="alert">
+					
+							<h3 id="cli-areaapiaction">An Powerful Base-App</h3>
+							<h4> Easily add several features to support <strong>Console</strong>,
+							<strong>CLI</strong>, and <strong>Server</strong> application types</h4>
+					
 				</div>
 				<br/>
-				<h1 id="overview">Overview</h1>
+				<div class="text-center">
+					<img src="themes/start/images/white/connected.png" width="80" alt="">
+				</div>
+				<br/>
+				<h1>About</h1>
+				<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
+					Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
+					The ORM is designed in form of an "Entities" based approach ( as you will see in the docs ). The following features are supported:
+				</p>
+				<br/>
+				<h1 id="apis">Goals</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Features</strong></td>
+						<td class="col-sm-6"><strong>Consistency</strong></td>
+						<td class="col-sm-3"><strong>Best Practices</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Features </td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Consistency</td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Something</td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+				</table>				
+				<br/>
+				
+				<h1 id="apis">Concepts</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Features</strong></td>
+						<td class="col-sm-6"><strong>Consistency</strong></td>
+						<td class="col-sm-3"><strong>Best Practices</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Features </td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Consistency</td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Something</td>
+						<td class="col-sm-6">some text goes here</td>
+						<td class="col-sm-3">something </td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="apis">Usage</h1>
+				<p>The App template is used as the base class for all Slate application types.
+				This makes creation, setup, and execution of any app type consistent and very simple.
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>App Type</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+						<td class="col-sm-3"><strong>Example</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Console</strong></td>
+						<td>A simple console application template with diagnostics and logging</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+					<tr> 
+						<td><strong>2. CLI </strong></td>
+						<td>The CLI( Command Line Interface ) to your APIs</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+					<tr> 
+						<td><strong>3. Server</strong></td>
+						<td>The web server hosting your APIs</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1>Features</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Feature</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+						<td class="col-sm-3"><strong>Example</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Args</strong></td>
+						<td>Command line arguments support ( which can override any config settings )
+						</td>
+						<td>-env=dev -log.level=info -region=ny</td>
+					</tr>
+					<tr> 
+						<td><strong>2. Envs</strong></td>
+						<td>Support and selection of multiple environments ( with defaults )</td>
+						<td>local, dev, qa, stg, pro</td>
+					</tr>
+					<tr> 
+						<td><strong>3. Logs</strong></td>
+						<td>Logging and error handling ( any log provider can be easily added )</td>
+						<td>console / file logger, custom logger</td>
+					</tr>
+					<tr> 
+						<td><strong>4. Config</strong></td>
+						<td>Configuration files for each environment ( with support for config inheritance )</td>
+						<td>env.conf, env.local.conf, env.qa.conf</td>
+					</tr>
+					<tr> 
+						<td><strong>5. Settings</strong></td>
+						<td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
+						<td>${user}/mycompany/myapp/database.conf</td>
+					</tr>
+					<tr> 
+						<td><strong>6. Encryption</strong></td>
+						<td>Encryption and decryption support</td>
+						<td>Using AES</td>
+					</tr>
+					<tr> 
+						<td><strong>7. Life-cycle</strong></td>
+						<td>Application life-cycle events</td>
+						<td>check(), init(), accept(), execute(), shutdown()</td>
+					</tr>
+					<tr> 
+						<td><strong>8. Context</strong></td>
+						<td>An application context to contain and provide access to many services</td>
+						<td>encryptor, logger, settings, environment, etc</td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="overview">Details</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Step</strong></td>

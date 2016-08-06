@@ -72,17 +72,145 @@
 				
 				<div class="alert alert-info text-center" role="alert">
 					<h3 id="cli-areaapiaction">Protocol Independent APIs</h3>
-					<h4> Create and run APIs on the <strong>Web</strong> ( Http ) or on the <strong>CLI</strong> ( command line )</h4>
+					<h4> Create APIs, and run them on the <strong>Web</strong> ( Http ), <strong>CLI</strong> ( command line ) or in a <strong>Console</strong> App</h4>
+				</div>
+				<br/>
+				<div class="text-center">
+					<img src="themes/start/images/white/webapi.png" width="80" alt="">
+					<img src="themes/start/images/white/terminal.png" width="80" alt="">
+					<img src="themes/start/images/white/desktop.png" width="80" alt="">
 				</div>
 				<br/>
 				
-				<h1 id="apis">APIs</h1>
+				<h1 id="apis">About</h1>
 				<p>The APIs in Slate Kit are built to be <strong>protocol independent</strong>. 
 				This means that you can build your APIs 1 time and they can be made to be available on the command line shell or as a Web API, or both. This is accomplished using various techniques outlined below and marshalling the data from the specific protocol/container to your APIs.</p>
-			
+				<br/>
 				
-				<br/><br/>
-				<h1 id="overview">Overview</h1>
+				<h1 id="apis-goals">Goals</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Goal</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Protocol Independent</strong></td>
+						<td class="col-sm-6">Build protocol independent APIs (e.g. Http) so your write an API once and run it as a Web API or on the CLI (command line)</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>API Design</strong></td>
+						<td class="col-sm-6">Various design patterns built-in to standardize and apply best practices to API development.</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Api Discovery</strong></td>
+						<td class="col-sm-6">Incorporate ways to easily discover and call APIs</td>
+					</tr>
+				</table>				
+				<br/>
+				
+				<h1 id="apis-concepts">Concepts</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Concept</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>1. Containers</strong></td>
+						<td class="col-sm-6">All APIs built with Slate Kit are run inside of a <strong>Web Container</strong> or a <strong>CLI Container</strong>.</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>2. Unified Routing</strong></td>
+						<td class="col-sm-6">A simple, effective approach to API routes so they are consistent in both Web and CLI  ( e.g. <strong>{area}.{api}.{action}</strong> )</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>3. Unified Requests</strong></td>
+						<td class="col-sm-6">A structure for representing API <strong>requests</strong> for both Web and CLI to support protocol independent APIs</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>4. Unified Responses</strong></td>
+						<td class="col-sm-6">A structure for representing API <strong>responses</strong> for both Web and CLI to support protocol independent APIs</td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="apis-usage">Usage</h1>
+				<p>The API design and implementation approach facilitates running your APIs in any application types</p>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>App Type</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+						<td class="col-sm-3"><strong>Example</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Console</strong></td>
+						<td>A simple console application template with diagnostics and logging</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+					<tr> 
+						<td><strong>2. CLI </strong></td>
+						<td>The CLI( Command Line Interface ) to your APIs</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+					<tr> 
+						<td><strong>3. Server</strong></td>
+						<td>The web server hosting your APIs</td>
+						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="apis-features">Features</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Feature</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+						<td class="col-sm-3"><strong>Example</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Args</strong></td>
+						<td>Command line arguments support ( which can override any config settings )
+						</td>
+						<td>-env=dev -log.level=info -region=ny</td>
+					</tr>
+					<tr> 
+						<td><strong>2. Envs</strong></td>
+						<td>Support and selection of multiple environments ( with defaults )</td>
+						<td>local, dev, qa, stg, pro</td>
+					</tr>
+					<tr> 
+						<td><strong>3. Logs</strong></td>
+						<td>Logging and error handling ( any log provider can be easily added )</td>
+						<td>console / file logger, custom logger</td>
+					</tr>
+					<tr> 
+						<td><strong>4. Config</strong></td>
+						<td>Configuration files for each environment ( with support for config inheritance )</td>
+						<td>env.conf, env.local.conf, env.qa.conf</td>
+					</tr>
+					<tr> 
+						<td><strong>5. Settings</strong></td>
+						<td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
+						<td>${user}/mycompany/myapp/database.conf</td>
+					</tr>
+					<tr> 
+						<td><strong>6. Encryption</strong></td>
+						<td>Encryption and decryption support</td>
+						<td>Using AES</td>
+					</tr>
+					<tr> 
+						<td><strong>7. Life-cycle</strong></td>
+						<td>Application life-cycle events</td>
+						<td>check(), init(), accept(), execute(), shutdown()</td>
+					</tr>
+					<tr> 
+						<td><strong>8. Context</strong></td>
+						<td>An application context to contain and provide access to many services</td>
+						<td>encryptor, logger, settings, environment, etc</td>
+					</tr>
+				</table>
+				<br/>
+				
+				<h1 id="overview">Details</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Step</strong></td>
