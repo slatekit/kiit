@@ -73,8 +73,8 @@
 				<div class="alert alert-info text-center" role="alert">
 					
 							<h3 id="cli-areaapiaction">A Powerful Base-App</h3>
-							<h4> Easily add several features to support <strong>Console</strong>,
-							<strong>CLI</strong>, and <strong>Server</strong> application types</h4>
+							<h4> Several built-in features to support <strong>Console</strong>,
+							<strong>Batch</strong>, <strong>CLI</strong>, and <strong>Server</strong> application types</h4>
 					
 				</div>
 				<br/>
@@ -104,12 +104,12 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>2. Features</strong> </td>
-						<td class="col-sm-6">Pre-built support for common features like command line args, environment 
+						<td class="col-sm-6">Provide pre-built support for common features like args, environment 
 						selection, config, logging, life-cycle and more.</td>						
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>3. Standardized</strong></td>
-						<td class="col-sm-6">Provides consistent setup and functionality for all application types 
+						<td class="col-sm-6">Provide consistent setup and functionality for all application types 
 						</td>						
 					</tr>
 				</table>				
@@ -135,12 +135,11 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>4. Context</strong></td>
-						<td class="col-sm-6">Components such as selected environment ( local, dev, etc ), config, logger, encryptor are 
-						available in an AppContext.</td>
+						<td class="col-sm-6">Container for services and items such as selected environment ( local, dev, etc ), config, logger, encryptor.</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>5. Help</strong></td>
-						<td class="col-sm-6">Support for application information, version, and command line args, is easily available.</td>
+						<td class="col-sm-6">Support for app information, version, and command line args, is made available through config files and/or code</td>
 					</tr>
 				</table>
 				<br/>
@@ -469,7 +468,7 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Prod</strong></td>
-						<td class="col-sm-3">env.conf</td>
+						<td class="col-sm-3">Production / Live</td>
 						<td class="col-sm-2">Common</td>
 					</tr>
 				</table>
@@ -518,10 +517,21 @@
 </div>				
 				<br/>
 				<h3>Config</h3>
-				<p>You can set the selected environment in the <strong>/resources/env.conf</strong> config file as follows</p>
+				<p>You can set the selected environment in the common <strong>/resources/env.conf</strong> config file as follows. 
+				<br/>This references the name of the environment which matches the corresponding conf file. e.g. <strong>qa1</strong> = <strong>env.qa1.conf</strong></p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c"># environment selection</span>
   <span class="c"># this can be overriden on the commandline via -env=qa</span>
-  <span class="n">env</span> <span class="o">=</span> <span class="s">"loc"</span>
+  <span class="n">env</span> <span class="o">=</span> <span class="s">"qa1"</span>
+ 
+</code></pre>
+</div>
+
+				<p>You can set various environment properties in the environment specific config file <strong>/resources/env.qa1.conf</strong> as follows</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c"># set the environment name, mode, and description</span>
+  <span class="n">env.name</span> <span class="o">=</span> <span class="s">"qa1"</span>
+  <span class="n">env.mode</span> <span class="o">=</span> <span class="s">"qa"</span>
+  <span class="n">env.desc</span> <span class="o">=</span> <span class="s">"Quality Assurance Test Environment 1"</span>
  
 </code></pre>
 </div>
@@ -797,7 +807,7 @@
 					<ol>
 					  <li>It is recommended to <strong>encrypt</strong> settings ( see the config component in utils for more info )</li>
 					  <li>It is also recommended to store <strong>Database</strong>, <strong>AWS</strong> and other sensitive settings in separate files in the <strong>user directory</strong></li>
-					   <li>Check the <strong>Example_Config.scala</strong> for more examples of using config files, encryption, and getting database settings</li>
+					   <li>Check the <strong><a class="url-ch" href="mod-config.html">Config component</a></strong> for more examples of using config files, encryption, and getting database settings</li>
 					</ol>
 				</div>
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>

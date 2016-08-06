@@ -173,7 +173,17 @@
       <td class=" text-center"><a href="#scala-multiline-strings" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>immuatable</strong></td>
+      <td><strong>static methods</strong></td>
+      <td>scala approach to "static" methods via "object" classes</td>
+      <td class=" text-center"><a href="#scala-static-methods" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>apply</strong></td>
+      <td>how to create instances without using "new"</td>
+      <td class=" text-center"><a href="#scala-apply" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>immutable</strong></td>
       <td>create immutable values of different types</td>
       <td class=" text-center"><a href="#scala-immutable" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
@@ -214,25 +224,15 @@
     </tr>
     <tr>
       <td><strong>implicits</strong></td>
-      <td>-</td>
+      <td>conversion methods you can apply to types</td>
       <td class=" text-center"><a href="#scala-implicits" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>static methods</strong></td>
-      <td>scala approach to "static" methods</td>
-      <td class=" text-center"><a href="#scala-static-methods" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>apply</strong></td>
-      <td>how to create instances without using "new"</td>
-      <td class=" text-center"><a href="#scala-apply" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
   </tbody>
 </table>
 <br/><br/>
 
 <h2 id="scala-import">Import</h2>
-<p>you can import items from a package in various ways, 1 item, multiple, and all</p>
+<p>You can import items from a package in various ways, 1 item, multiple items, and all items from a package</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// 1. Import 1 item from a package 
@@ -252,7 +252,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-package">Package</h2>
-<p>declaring you code in a pacakge</p>
+<p>Declaring your code in a pacakge</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="k">package</span> <span class="nn">slate.common.logging</span>
@@ -269,7 +269,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-main">Main</h2>
-<p>simple main method as entry point into application</p>
+<p>Simple main method as entry point into application. use println to print to the system console</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="k">package</span> <span class="nn">slate.examples.sampleApp</span>
@@ -287,7 +287,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-vals">Vals</h2>
-<p>constants / immutable values are declared using <strong>val</strong></p>
+<p>Constants / immutable values are declared using <strong>val</strong></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
    <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
@@ -303,7 +303,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-vars">Vars</h2>
-<p>variables are declared using <strong>var</strong></p>
+<p>Variables are declared using <strong>var</strong></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
    <span class="k">var</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
@@ -319,7 +319,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-types">Types</h2>
-<p>You can declare types implicitly using the values or explicity by specifying the type name</p>
+<p>You can declare types implicitly using the values or explicitly by specifying the type name</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>	
     <span class="c1">// Implicit
@@ -347,7 +347,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-strings">Strings</h2>
-<p>Strings can be interpolated</p>
+<p>Strings can be interpolated ( referencing of other values/expressions inside a string )</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
     <span class="k">val</span> <span class="n">age</span> <span class="k">=</span> <span class="mi">35</span>
@@ -378,7 +378,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-conditions">Conditions</h2>
-<p>if conditions</p>
+<p>If conditions, using single line ( no braces ) and multi-line ( with braces ). there is no ternary "? :" operation.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// 1. if only
@@ -419,7 +419,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-loops">Loops</h2>
-<p>for loops and while loops</p>
+<p>For loops and while loops</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// 1. for loop inclusive ( 5 included )
@@ -462,7 +462,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-trycatch">Try/Catch</h2>
-<p>try catch blocks use a pattern matching syntax for catching exceptions.</p>
+<p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="k">try</span>
@@ -492,7 +492,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-functions">Functions</h2>
-<p>simple definition of functions</p>
+<p>Scala has many features related to functions/methods. this is a partial list.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// 1. function does not return anything ( via "Unit" type )
@@ -652,10 +652,8 @@
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
-<h1 id="scala-features">Scala features</h1>
-
 <h2 id="scala-multiline-strings">Multiline strings</h2>
-<p>multiline strings begin with “””</p>
+<p>Multiline strings begin with “””</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 1. Space / indentation is preserved
 </span>    <span class="k">val</span> <span class="n">example1</span> <span class="k">=</span> <span class="s">""" app.users.activate
@@ -683,8 +681,69 @@
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
+<h2 id="scala-static-methods">Static methods</h2>
+<p>Scala does not have static methods. but you can declare the class as an <strong>object</strong> accessing it statically</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">object</span> <span class="nc">Ensure</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="n">isTrue</span><span class="o">(</span><span class="n">isTrue</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+  <span class="o">{</span>
+    <span class="k">if</span><span class="o">(!</span><span class="n">isTrue</span><span class="o">)</span>
+    <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="n">isFalse</span><span class="o">(</span><span class="n">isFalse</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+  <span class="o">{</span>
+    <span class="k">if</span><span class="o">(!</span><span class="n">isFalse</span><span class="o">)</span>
+    <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+  <span class="c1">// Example of a guard like approach to validation.
+</span>  <span class="nc">Ensure</span><span class="o">.</span><span class="n">isTrue</span><span class="o">(</span><span class="n">person</span><span class="o">.</span><span class="n">isActive</span><span class="o">,</span> <span class="s">"Account has not been validated"</span> <span class="o">)</span>
+
+  <span class="c1">// NOTE: Make sure to use Option[T] as an alternative to exceptions 
+</span>  <span class="c1">// where applicable
+</span></code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-apply">Apply</h2>
+<p>By using object classes ( see above ), you can create factory methods for a class removing the need for "new"</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Represents an environment ( e.g. "qa1", "qa" environment )
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">key</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="o">{</span>
+  
+  <span class="o">}</span>
+  
+  
+  <span class="k">object</span> <span class="nc">EnvItem</span>
+  <span class="o">{</span>
+    <span class="k">def</span> <span class="n">apply</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">EnvItem</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="nc">EnvItem</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">env</span><span class="o">,</span> <span class="n">s</span><span class="s">"$name.$env"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  
+  <span class="c1">// Build up with class constructor ( key = "name"."mode" )
+</span>  <span class="k">val</span> <span class="n">qa1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">,</span> <span class="s">"dev1.env"</span><span class="o">)</span>
+  
+  <span class="c1">// Build up with .apply ( do NOT need "new" )
+</span>  <span class="k">val</span> <span class="n">qa2</span> <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
 <h2 id="scala-immutable">Immutable</h2>
-<p>you can easily make items immutable via the “val” keyword. collections also exist in mutable and immutable versions.</p>
+<p>You can easily make items immutable via the “val” keyword. collections have mutable and immutable versions.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
    <span class="k">import</span> <span class="nn">scala.collections.immutable.List</span> 
@@ -706,7 +765,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-option">Option</h2>
-
+<p>Option classes are used for nullable values to represent if there is a value ( Some ) or not ( None )</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// Value
 </span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
@@ -761,37 +820,39 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-callbyname">Call by name</h2>
-
+<p>The call by name feature allows passing in a code block to a function in a concise approach.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// CALL BY NAME: takes a code block using syntax : =&gt;
-</span>  <span class="k">def</span> <span class="n">refactor1</span><span class="o">(</span><span class="n">area</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">block</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"review this code in area : "</span> <span class="o">+</span> <span class="n">area</span> <span class="o">)</span>
+</span>  <span class="k">def</span> <span class="n">refactor1</span><span class="o">(</span><span class="n">block</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"review this code in area"</span> <span class="o">)</span>
     <span class="n">block</span>
   <span class="o">}</span>
 
 
   <span class="c1">// Same function using normal function
-</span>  <span class="k">def</span> <span class="n">refactor2</span> <span class="o">(</span><span class="n">area</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">block</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span> <span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span>  <span class="k">def</span> <span class="n">refactor2</span> <span class="o">(</span><span class="n">block</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
     <span class="n">println</span><span class="o">(</span> <span class="s">"review this code in area : "</span> <span class="o">+</span> <span class="n">area</span> <span class="o">)</span>
     <span class="n">block</span>
   <span class="o">}</span>
-  
-  
-  <span class="c1">// this block of code is wrapped up as a function and called.
-</span>  <span class="c1">// With call by name, you DO NOT have to use syntax () =&gt; for passing a function
-</span>  <span class="n">refactor1</span> <span class="o">(</span>  <span class="s">"registration"</span><span class="o">,</span> <span class="o">{</span>
-
-    <span class="n">println</span><span class="o">(</span><span class="s">"code review example via call by name, pass a block of code via { ... } "</span><span class="o">)</span>
-
-  <span class="o">})</span>
 
 
-  <span class="c1">// Without call by name, notice you MUST use syntax () =&gt; for passing a function
-</span>  <span class="n">refactor2</span> <span class="o">(</span> <span class="s">"registration"</span><span class="o">,</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="n">showCallByName</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// this block of code is wrapped up as a function and called.
+</span>    <span class="c1">// With call by name, you DO NOT have to use syntax () =&gt; for passing a function
+</span>    <span class="n">refactor1</span> <span class="o">{</span>
+	
+      <span class="n">println</span><span class="o">(</span><span class="s">"refactor this code!"</span><span class="o">)</span>
+    
+    <span class="o">}</span>
 
-    <span class="n">println</span><span class="o">(</span><span class="s">"code review example via explicit function passing syntax () =&gt; "</span><span class="o">)</span>
 
-  <span class="o">})</span>
+    <span class="c1">// Without call by name, notice you MUST use syntax () =&gt; for passing a function
+</span>    <span class="n">refactor2</span> <span class="o">(</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    
+      <span class="n">println</span><span class="o">(</span><span class="s">"refactor this code!"</span><span class="o">)</span>
+    
+    <span class="o">})</span>
+  <span class="o">}</span>
 	
 
 </code></pre>
@@ -800,7 +861,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-classes">Classes</h2>
-
+<p>Some basics of classes and constructors. This is a partial list of features</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// 1. You can declare class members in the constructor!
 </span>  <span class="c1">// 2. You can declare set the access modifiers ( none = public, protected, private )
@@ -841,7 +902,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-traits">Traits</h2>
-
+<p>Traits are like interfaces/contracts with implementations. You can then extend a class with multiple traits.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code> 
   <span class="c1">// Traits are like interfaces with implementations
 </span>  <span class="c1">// You can compose your clases to extend the trait.
@@ -904,7 +965,8 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-case-classes">Case classes</h2>
-
+<p>Case classes provide a convenient way to make all members of the class readonly/vals. Boiler-plate code such as copy methods are automatically created,
+and they are used for pattern-matching.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   
   <span class="c1">// CASE Classes
@@ -934,7 +996,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-pattern-matching">Pattern matching</h2>
-
+<p>Scala contains pattern matching for easily matching values against either basic types, values, or case classes.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">def</span> <span class="n">testMatch</span><span class="o">(</span><span class="n">message</span><span class="k">:</span><span class="kt">Any</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
 
@@ -982,7 +1044,7 @@
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-operators">Operators</h2>
-<p>operator overloading is implemented using simple method syntax. this examples creates a custom DateTime class that is a simple wrapper on the java 8 LocalDateTime.
+<p>Operator overloading is implemented using simple method syntax. this examples creates a custom DateTime class that is a simple wrapper on the java 8 LocalDateTime.
 It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to compare instances of this class.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
@@ -1043,7 +1105,7 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-implicits">Implicits</h2>
-
+<p>Implicit methods allow for apply custom methods on types for conversions.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">package</span> <span class="nn">slate.common</span> 
 
@@ -1074,22 +1136,6 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
  <span class="k">val</span> <span class="n">urlPath</span> <span class="k">=</span> <span class="n">name</span><span class="o">.</span><span class="n">toUrlPath</span><span class="o">()</span>
  <span class="n">println</span><span class="o">(</span> <span class="n">urlPath</span><span class="o">)</span>
 
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-static-methods">static methods</h2>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-apply">apply</h2>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>
 </code></pre>
 </div>
 

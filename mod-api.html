@@ -20,35 +20,28 @@
         <nav id="topbar" class="site-topbar visible-lg visible-md">
           <div class="container">
             <div class="row">
-              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
               <div class="social-links col-sm-6">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-google-plus"></i></a>
-                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a id="topbar_social_facebook"  href="#"><i class="fa fa-facebook"></i></a>
+                <a id="topbar_social_twitter"   href="#"><i class="fa fa-twitter"></i></a>
+                <a id="topbar_social_gplus"     href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_pinterest" href="#"><i class="fa fa-pinterest"></i></a>
               </div>
             </div>
           </div>
         </nav>
 
-        <nav id="navbar" class="site-navbar navbar navbar-static-top" role="navigation">
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
                 <i class="fa fa-bars"></i>
               </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse-1">
                <ul id="navigation" class="nav navbar-nav navbar-right">
-                <li ><a href="#header">Home</a></li>
-                <li><a href="infra.html">Infrastructure</a></li>
-                <li class="active"><a href="utils.html"  class="current">Utilities</a></li>
-                <li><a href="orm.html">ORM</a></li>
-                <li><a href="features.html">Features</a></li>
-                <li><a href="server.html">Server</a></li>
-                <li><a href="contact.html">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -62,10 +55,12 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Utilities</h1>
-                <h3>
-                  The ultimate utility belt for your dev needs.<br />
-                </h3>
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
               </aside>
 
             </div>
@@ -353,18 +348,18 @@
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">About Us</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Contact</h5>
                 <div class="textwidget">
                   <div class="adr">
-                    <div class="street-address">416 Water St.</div>
-                    <span class="locality">New York</span>,
-                    <abbr class="region" title="New York">NY</abbr>,
-                    <span class="postal-code">10002</span>,
-                    <span class="country-name">U.S.A</span>
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
                   </div>
                   <div>Phone: <span class="tel">+1.123.456.7890</span></div>
                   <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
@@ -373,7 +368,7 @@
 
               <aside class="widget col-md-3 col-sm-6">
                 <h5 class="widget-title">Need Help?</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
               </aside>
 
               <aside class="widget col-md-3 col-sm-6">
@@ -385,10 +380,10 @@
                   </span>
                 </div>
                 <ul class="social-links">
-                  <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                  <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                  <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                  <li><a id="footer_social_facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                  <li><a id="footer_social_twitter"  href="#"><i class="fa fa-twitter"></i></a></li>
+                  <li><a id="footer_social_gplus"    href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_pinterest"href="#"><i class="fa fa-pinterest"></i></a></li>
                 </ul>
               </aside>
 
@@ -406,6 +401,10 @@
     <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
+	<script type="text/javascript">
+		var _codehelixAppPage = "core";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>
 </html>

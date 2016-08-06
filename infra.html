@@ -56,10 +56,9 @@
 				<div class="row">
 
 				  <aside class="widget">
-					<h1 class="widget-title">Infrastructure</h1>
+					<h1 class="widget-title">Architecture</h1>
 					<h3>                  
-					  Save time and costs using pre-built architecture.<br />
-					  Focus on your business features.
+					  Pre-built architecture saves you time and costs, so you can focus on your business.
 					</h3>
 				  </aside>
 				</div>
@@ -68,8 +67,9 @@
         <section id="features" class="section section-center  section-features">
           <div class="container">
 			<div class="alert alert-info" role="alert">
-				<h4>Click on any item below to see more details and docs.</h4>
-				<h5><strong>The architectural components such as queues, file storage, data access are built for AWS, Linux, MySQL</strong></h5>
+				<h3>Core architecture components</h3>
+				<h5>The <strong><a class="url-ch" href="overview.html#project-slate-core">slate.core</a></strong> project contains <strong>abstractions</strong> and <strong>implementations</strong> for all components below. 
+				 <br/>Queues, file storage, data access are built for AWS, Linux, MySQL</h5>
 			</div>
 			<div class="row">				
 				<br/>
@@ -81,7 +81,9 @@
 					<a href="mod-api.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
 				</div>
                 <a href="mod-api.html"><h4>APIs</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent queue. We offer built in support for <strong>AWS SQS</strong> as well as a simple in-memory queue.</p>
+                <p>An <strong>protocol independent</strong> approach to building APIs in Slate so they run as Web APIs or on the CLI. 
+				See <a class="url-ch" href="apis-detail.html">concepts</a>, <a class="url-ch" href="mod-api.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
+				</p>
               </div>
 			  
               <div class="col-md-4 col-sm-6">
@@ -89,7 +91,9 @@
 					<a href="mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
 				</div>
                 <a href="mod-app.html"><h4>App</h4></a>
-                <p>A foundation for any command line, batch, or other app with support for logging, configuration, environment selection, diagnostics, status and much more.</p>
+                <p>A <strong>base App</strong> for Console, CLI, Batch, or Server apps with support for environments, logging, configs and more.
+				See <a class="url-ch" href="app.html">concepts</a>, <a class="url-ch" href="mod-app.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
+				</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
@@ -106,8 +110,10 @@
                 <div class="icon-wrap">
 					<a href="orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
 				</div>
-                <a href="orm.html"><h4>Data / ORM</h4></a>
-                <p>A convenient set of tools for accessing, querying data, and executing commands on your database via JDBC. Also has support for mapping objects.</p>
+                <a href="orm.html"><h4>Data</h4></a>
+                <p>Libraries for accessing, querying data, executing commands on your database via JDBC and mapping objects.
+				See <a class="url-ch" href="orm.html">ORM</a>, <a class="url-ch" href="mod-data.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
+				</p>
               </div>
 			  
 
@@ -124,7 +130,8 @@
 					<a href="mod-notifications.html"><img src="themes/start/images/white/speaker.png" width="80" alt=""></a>
 				</div>
                 <a href="mod-notifications.html"><h4>Notifications</h4></a>
-                <p>Background tasks/worker/jobs pattern to handle 1 time, long-running or continuous background processing. Built in support for queue processing available.</p>
+                <p>A push notification abstraction primarily for mobile based push notifications. This component is a work-in-progress and not currently available.
+				</p>
               </div>
             </div>
 			<br/>
@@ -143,7 +150,9 @@
 					<a href="mod-server.html"><img src="themes/start/images/white/connected.png" width="80" alt=""></a>
 				</div>
                 <a href="mod-server.html"><h4>Server</h4></a>
-                <p>A simplified interface and abstraction for any type of persistent file storage. We offer built in support for <strong>AWS S3</strong> to store files</p>
+                <p>A base Web Server to host your <a class="url-ch" href="mod-server.html">protocol independent APIs</a> with built in support for many features. 
+				See <a class="url-ch" href="server.html">concepts</a>, <a class="url-ch" href="mod-server.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
+				</p>
               </div>
 
               <div class="col-md-4 col-sm-6">
