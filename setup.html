@@ -304,12 +304,136 @@
 			<br/><br/>
 			<div>			
 				<h1>Compiling</h1>
-				<h3>Slate</h3>
-				<ul>
-					<li>download binaries or source code</li>
-					<li>if you are using binaries, drop jar files into your sbt lib folder</li>
-					<li>if you are using sources, add project dependencies to the slate kit projects.</li>
-				</ul>				
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>	
+						<li>download all binaries above and/or source code</li>
+						<li>if you are using binaries, drop jar files into your sbt lib folder ( see below )</li>
+						<li>if you are using sources, add project dependencies to the slate kit projects ( via IntelliJ )</li>
+					</ol>	
+				</div>
+				<h2 id="libs">Libs</h2>
+				<p>Ensure all the dependent jars are in the lib folder of your application/library.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">cloud_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>   
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">common_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>  
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">core_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>    
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">entities_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">ext_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>     
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">tools_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span> 
+ 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="n">library</span><span class="o">.</span><span class="n">jar</span>  
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="n">reflect</span><span class="o">.</span><span class="n">jar</span> 
+ 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">config</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mf">1.</span><span class="n">jar</span>                    
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">json_simple</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="n">jar</span>                 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">mysql</span><span class="o">-</span><span class="n">connector</span><span class="o">-</span><span class="n">java</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">38</span><span class="o">-</span><span class="n">bin</span><span class="o">.</span><span class="n">jar</span> 
+ 
+</code></pre>
+</div>
+
+				<h2 id="compile">Compile</h2>
+				<p>Open a command window and move to the root directory of your app</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="n">compile</span>
+
+</code></pre>
+</div>
+
+				<h2 id="run">Run</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="n">run</span>
+
+</code></pre>
+</div>
+
+				<h2 id="package">Package</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="k">package</span>
+
+</code></pre>
+</div>
+
+<pre><code class="language-props">
+c:\apps\MySampleApp\target\scala-2.11\mysampleapp.jar
+
+</code></pre>
+			</div>
+			<br/><br/><br/>
+			<div>			
+				<h1>Running</h1>
+				<p>There are multiple options to run your Scala app</p>
+				<h2 id="using-scala">Using Scala</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// Include all your jars here!
+</span><span class="n">scala</span> <span class="o">-</span><span class="n">classpath</span> <span class="s">"slate-common_2.11-1.0.jar;...;mysampleapp.jar"</span> <span class="n">mycompany</span><span class="o">.</span><span class="n">apps</span><span class="o">.</span><span class="nc">MySampleApp</span>
+
+</code></pre>
+</div>
+
+				<h2 id="using-java">Using Java</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// Include all your jars here!
+</span><span class="n">java</span> <span class="o">-</span><span class="n">cp</span> <span class="n">slate</span><span class="o">-</span><span class="n">common_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span><span class="o">;...;</span><span class="n">mysamplepp</span><span class="o">.</span><span class="n">jar</span><span class="o">;</span> <span class="n">mycompany</span><span class="o">.</span><span class="n">apps</span><span class="o">.</span><span class="nc">MySampleApp</span>
+
+</code></pre>
+</div>
+
+				<h2 id="using-java-manifest">Using Java Manifest</h2>
+				<p>To package an app for deployment, it may be easier to pacakge your app using a manifest file</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// NOTES: This example is using windows commands 
+// 1. Package up your app using sbt package above 
+// C:\apps\MySampleApp&gt;sbt package
+</span>
+<span class="c1">// 2. Copy classes over from app\target to some temp directory
+</span><span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">xcopy</span> <span class="o">/</span><span class="n">e</span> <span class="o">/</span><span class="n">v</span> <span class="o">/</span><span class="n">y</span> <span class="n">target</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="mf">2.11</span><span class="o">\</span><span class="n">classes</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">\</span>
+
+<span class="c1">// 3. move to temp to package everything using jar and manifest
+</span><span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">cd</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">\</span>
+
+<span class="c1">// 4. jar all the files with custom manifest
+</span><span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">&gt;</span><span class="n">jar</span> <span class="o">-</span><span class="n">cvfm</span> <span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">build</span><span class="o">\</span><span class="n">manifest</span><span class="o">.</span><span class="n">txt</span> <span class="o">*</span>
+
+<span class="c1">// 5. Copy the built jar into a final destination directory 
+</span><span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">&gt;</span><span class="n">copy</span> <span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">dist</span><span class="o">\</span><span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> 
+
+<span class="c1">// NOTE!! Ensure all the other dependent libraries from the manifest are also
+// in this destination directory.
+</span>
+</code></pre>
+</div>
+
+				<p>The manifest file will look something like this.</p>
+
+<pre><code class="language-props">Manifest-Version: 1.0
+Main-Class: mycompany.apps.MySampleApp
+Class-Path: config-1.2.1.jar
+  json_simple-1.1.jar
+  mysql-connector-java-5.1.38-bin.jar
+  scala-library.jar
+  scala-reflect.jar
+  slate-common_2.11-1.0.jar
+  slate-entities_2.11-1.0.jar
+  slate-core_2.11-1.0.jar
+  slate-integration_2.11-1.0.jar
+  slate-cloud_2.11-1.0.jar
+</code></pre>
+
+				<p>Now you can simply run your app using the jar.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">dist</span><span class="o">&gt;</span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">mysamplepp</span><span class="o">.</span><span class="n">jar</span>
+
+</code></pre>
+</div>			
             </div>
           </div>
         </section>

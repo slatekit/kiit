@@ -842,7 +842,7 @@
 				<div class="alert alert-info text-left" role="alert">
 					<ol>
 					  <li>The syntax for command line args is <strong>{app} -name=value</strong></li>
-					  <li>Example is <strong>myapp -env=dev -log.level=info -region="ny"</strong></li>
+					  <li>Example is <strong>java -jar sampleapp.jar -env='loc.dev' -log.level=info -region='ny'</strong></li>
 					</ol>
 				</div>
 			<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -942,9 +942,9 @@
 				<h3>Usage</h3>
 				<p>You can have the help displayed by running your app with the following parameters on the command line</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>	
-  <span class="n">sampleapp</span> <span class="o">?</span>
-  <span class="n">sampleapp</span> <span class="n">help</span>
-  <span class="n">sampleapp</span> <span class="n">about</span> 
+  <span class="n">java -jar sampleapp.jar </span> <span class="o">?</span>
+  <span class="n">java -jar sampleapp.jar </span> <span class="n">help</span>
+  <span class="n">java -jar sampleapp.jar </span> <span class="n">about</span> 
   
 </code></pre>
 </div>
@@ -1116,7 +1116,9 @@
 			</div>			
 			<div>	
 				<h1 id="app-exec">Execution</h1>
-				<p>You can run your application using the AppRunner convenience class. This class runs the application life-cycle methods in the appropriate order.</p>
+				<p>You can run your application using the AppRunner convenience class. This class runs the application life-cycle methods in the appropriate order.
+					After you have compiled and packaged your application, you can run it using java or scala ( see examples below ).
+				</p>
 				</p>				
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">package</span> <span class="nn">sampleapp.batch</span>
@@ -1183,6 +1185,23 @@
 
 </code></pre>
 </div>
+				<h3>Run using Java</h3>
+				<p>To run the application on the command line with java ( assumes all the other dependent jars are in the same folder )</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>	
+  <span class="n">java -jar sampleapp.jar </span> <span class="o">-env='qa1:qa'</span>
+  <span class="n">java -jar sampleapp.jar </span> <span class="n">-env='loc:dev' -log.level=debug</span>
+  <span class="n">java -jar sampleapp.jar </span> <span class="n">-env='dev:dev' -log.level=info</span> 
+</code></pre>
+</div>
+				<h3>Run using Scala</h3>
+				<p>To run the application on the command line scala ( assumes all the other dependent jars are in the same folder )</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>	  
+  <span class="n">scala -classpath "sampleapp.jar" sampleapp.batch.SampleAppRunner</span> <span class="o">-env='qa1:qa'</span>
+  <span class="n">scala -classpath "sampleapp.jar" sampleapp.batch.SampleAppRunner</span> <span class="n">-env='loc:dev' -log.level=debug</span>
+  <span class="n">scala -classpath "sampleapp.jar" sampleapp.batch.SampleAppRunner</span> <span class="n">-env='dev:dev' -log.level=info</span> 
+</code></pre>
+</div>
+
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
             </div>	
@@ -1217,6 +1236,7 @@
 
 </code></pre>
 </div>
+				
 				<h3>Log</h3>
 				<p>This is the output of the application</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">executing</span> <span class="n">now</span>
