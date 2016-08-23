@@ -58,7 +58,7 @@
 
               <aside class="widget">
                 <h1 class="widget-title">ORM</h1>
-                <h3>A light-weight single table object-relational mapper for cloud databases<br />
+                <h3>A light-weight single table ORM for domain-driven models<br />
                 </h3>
               </aside>
 
@@ -71,9 +71,8 @@
             <div class="">
 				<div class="alert alert-info text-center" role="alert">
 					
-							<h3 id="cli-areaapiaction">An Powerful Base-App</h3>
-							<h4> Easily add several features to support <strong>Console</strong>,
-							<strong>CLI</strong>, and <strong>Server</strong> application types</h4>
+							<h3 id="cli-areaapiaction">A simple ORM for domain models</h3>
+							<h4>Easily map, manage, and find your data/domain models using the ORM.</h4>
 					
 				</div>
 				<br/>
@@ -93,24 +92,20 @@
 				<h1 id="apis">Goals</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
-						<td class="col-sm-2"><strong>Features</strong></td>
-						<td class="col-sm-6"><strong>Consistency</strong></td>
-						<td class="col-sm-3"><strong>Best Practices</strong></td>
+						<td class="col-sm-2"><strong>Goal</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">Features </td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
+						<td class="col-sm-2">Light-Weight</td>
+						<td class="col-sm-6">Simple, light-weight ORM for single model/table persistence. No support for relationships.</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">Consistency</td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
+						<td class="col-sm-2">Domain Driven</td>
+						<td class="col-sm-6">Approach to building models and managing persistence using a Domain Driven Approach</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">Something</td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
+						<td class="col-sm-2">SQL Transparent</td>
+						<td class="col-sm-6">Support for direclty using SQL / Stored procs where needed. We don't hide or abstract SQL.</td>
 					</tr>
 				</table>				
 				<br/>
@@ -118,52 +113,31 @@
 				<h1 id="apis">Concepts</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
-						<td class="col-sm-2"><strong>Features</strong></td>
-						<td class="col-sm-6"><strong>Consistency</strong></td>
-						<td class="col-sm-3"><strong>Best Practices</strong></td>
-					</tr>
-					<tr>
-						<td class="col-sm-2">Features </td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
-					</tr>
-					<tr>
-						<td class="col-sm-2">Consistency</td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
-					</tr>
-					<tr>
-						<td class="col-sm-2">Something</td>
-						<td class="col-sm-6">some text goes here</td>
-						<td class="col-sm-3">something </td>
-					</tr>
-				</table>
-				<br/>
-				
-				<h1 id="apis">Usage</h1>
-				<p>The App template is used as the base class for all Slate application types.
-				This makes creation, setup, and execution of any app type consistent and very simple.
-				</p>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<td class="col-sm-2"><strong>App Type</strong></td>
+						<td class="col-sm-2"><strong>Concept</strong></td>
 						<td class="col-sm-6"><strong>Description</strong></td>
-						<td class="col-sm-3"><strong>Example</strong></td>
 					</tr>
-					<tr> 
-						<td><strong>1. Console</strong></td>
-						<td>A simple console application template with diagnostics and logging</td>
-						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					<tr>
+						<td class="col-sm-2">Entity</td>
+						<td class="col-sm-6">An entity trait that defines entities with fields annotated for persistence</td>
 					</tr>
-					<tr> 
-						<td><strong>2. CLI </strong></td>
-						<td>The CLI( Command Line Interface ) to your APIs</td>
-						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					<tr>
+						<td class="col-sm-2">Standardized Entity</td>
+						<td class="col-sm-6">Standardization of entities using common fields like Id, TimeStamps, Audit Fields, Uniqueness and others</td>
+					<tr>
+						<td class="col-sm-2">Generic Service</td>
+						<td class="col-sm-6">A general purpose service <strong>( EntityService[T] )</strong> for Entities to support CRUD operations business logic; delegates calls to the Repository</td>
 					</tr>
-					<tr> 
-						<td><strong>3. Server</strong></td>
-						<td>The web server hosting your APIs</td>
-						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
+					<tr>
+						<td class="col-sm-2">Generic Repository</td>
+						<td class="col-sm-6">A general purpose repository <strong>( EntityRepo[T] )</strong> for Entities to support CRUD operations, Find methods, and other features.</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Generic Query</td>
+						<td class="col-sm-6">A query pattern for specifying sql queries to accommodate for database differences. Direct SQL use is still supported</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2">Generic Mapper</td>
+						<td class="col-sm-6">A general purpose mapper <strong>( EntityMapper )</strong>  to map an entity to SQL create/updates and from records back to entities.</td>
 					</tr>
 				</table>
 				<br/>
@@ -173,48 +147,39 @@
 					<tr>
 						<td class="col-sm-2"><strong>Feature</strong></td>
 						<td class="col-sm-6"><strong>Description</strong></td>
-						<td class="col-sm-3"><strong>Example</strong></td>
 					</tr>
 					<tr> 
-						<td><strong>1. Args</strong></td>
-						<td>Command line arguments support ( which can override any config settings )
+						<td><strong>1. Databases</strong></td>
+						<td>Setup your entities to use multiple and/or different databases.
 						</td>
-						<td>-env=dev -log.level=info -region=ny</td>
 					</tr>
 					<tr> 
-						<td><strong>2. Envs</strong></td>
-						<td>Support and selection of multiple environments ( with defaults )</td>
-						<td>local, dev, qa, stg, pro</td>
+						<td><strong>2. In-Memory</strong></td>
+						<td>An in-memory implementation of a Generic Repository for rapid prototyping</td>
 					</tr>
 					<tr> 
-						<td><strong>3. Logs</strong></td>
-						<td>Logging and error handling ( any log provider can be easily added )</td>
-						<td>console / file logger, custom logger</td>
+						<td><strong>3. Registration</strong></td>
+						<td>Multiple ways to register your entities, services, repositories</td>
 					</tr>
 					<tr> 
-						<td><strong>4. Config</strong></td>
-						<td>Configuration files for each environment ( with support for config inheritance )</td>
-						<td>env.conf, env.local.conf, env.qa.conf</td>
+						<td><strong>4. Defaults</strong></td>
+						<td>Default services, repositories available to get CRUD and Find functionality without subclassing</td>
 					</tr>
 					<tr> 
-						<td><strong>5. Settings</strong></td>
-						<td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
-						<td>${user}/mycompany/myapp/database.conf</td>
+						<td><strong>5. CRUD</strong></td>
+						<td>Built in support in EntityService and EntityRepo for <strong>C</strong>reate, <strong>R</strong>etrieve, <strong>U</strong>pdate, <strong>D</strong>elete and <strong>F</strong>ind methods</td>
 					</tr>
 					<tr> 
-						<td><strong>6. Encryption</strong></td>
-						<td>Encryption and decryption support</td>
-						<td>Using AES</td>
+						<td><strong>6. Find By</strong></td>
+						<td>Built in support in EntityService and EntityRepo for multiple find and search methods</td>
 					</tr>
 					<tr> 
 						<td><strong>7. Life-cycle</strong></td>
-						<td>Application life-cycle events</td>
-						<td>check(), init(), accept(), execute(), shutdown()</td>
+						<td>Support for entity life-cycle events and hooks such as onSave, onDelete, onMapped</td>
 					</tr>
 					<tr> 
-						<td><strong>8. Context</strong></td>
-						<td>An application context to contain and provide access to many services</td>
-						<td>encryptor, logger, settings, environment, etc</td>
+						<td><strong>8. Annotations</strong></td>
+						<td>Easily mark class fields for persistence using annotations using <strong>@field</strong> annotations.</td>
 					</tr>
 				</table>
 				<br/>
@@ -295,16 +260,17 @@
   <span class="c1">// 2. Register using conf file from use folder {user}/.slate/db.txt
 </span>  <span class="c1">// NOTE: This is a more secure
 </span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db.txt"</span><span class="o">)</span> <span class="o">)</span>
-    
+  <span class="k">val</span> <span class="n">dbCon1</span> <span class="k">=</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getDefault</span> 
+  
   <span class="c1">// 3. Create a new db connection string
-</span>  <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
+</span>  <span class="k">val</span> <span class="n">dbCon2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
   
   <span class="c1">// 4. Register named connections 
 </span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db1"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">))</span>
   <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db2"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db.txt"</span><span class="o">)</span> <span class="o">)</span>
 
 </code></pre>
-</div>									
+</div>							
 						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">

@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-07-23T22:24:17.464</td>
+      <td>2016-08-22T21:23:13.210</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -152,15 +153,15 @@
     <span class="o">)</span>
 
 
-    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Any</span><span class="o">])</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">success</span><span class="o">()</span>
+    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Any</span><span class="o">])</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="n">ok</span><span class="o">()</span>
     <span class="o">}</span>
 
 
-    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">onExec</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
+    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">onExec</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>
     <span class="o">{</span>
       <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">)</span>
-      <span class="n">success</span><span class="o">()</span>
+      <span class="n">success</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
     <span class="o">}</span>
 
 

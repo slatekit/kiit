@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-07-23T22:24:17.355</td>
+      <td>2016-08-22T21:23:13.097</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -142,43 +143,29 @@
     <span class="cm">/**
      * initialize app and metadata
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">init</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
     <span class="o">{</span>
-      <span class="c1">// 1. Load the conf from application.conf
-</span>      <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">().</span><span class="n">init</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+      <span class="n">options</span><span class="o">.</span><span class="n">printSummaryBeforeExec</span> <span class="k">=</span> <span class="kc">false</span>
+      <span class="n">options</span><span class="o">.</span><span class="n">printSummaryOnShutdown</span> <span class="k">=</span> <span class="kc">true</span>
 
-      <span class="c1">// 2. Initialize the context with common app info
-</span>      <span class="c1">// NOTE:
-</span>      <span class="c1">// - Environment selection ( dev, qa, prod ) is set in application.conf
-</span>      <span class="c1">// - Database selection.
-</span>      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+      <span class="c1">// The base init can take care of some things such as:
+</span>      <span class="c1">// 1. loading the common "resources/env.conf" config file as "confBase"
+</span>      <span class="c1">// 2. loading the selected environment "env" from either
+</span>      <span class="c1">//    the command line first ( -env="dev1:dev" ) or "env.conf"
+</span>      <span class="c1">// 3. setting up "conf" inherited config from "env.dev.conf" + "env.conf"
+</span>
+      <span class="c1">// Initialize the context with common app info
+</span>      <span class="c1">// The context contains all the various services that are common
+</span>      <span class="c1">// to most apps, you can then make this available to other parts of your application.
+</span>
+      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
         <span class="n">env</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">(),</span>
         <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
-        <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
-        <span class="n">con</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">)</span> <span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="kc">null</span><span class="o">),</span>
-        <span class="n">enc</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
+        <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
         <span class="n">inf</span>  <span class="k">=</span> <span class="n">buildAbout</span><span class="o">(),</span>
-        <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span>
-        <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
-        <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">()</span>
+        <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">()</span>
       <span class="o">)</span>
-    <span class="o">}</span>
 
-
-    <span class="cm">/**
-     * accepts the arguments from command line or other source
-      *
-      * @param args
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onAccept</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-    <span class="o">{</span>
-      <span class="k">if</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="n">isEmpty</span><span class="o">)</span>
-        <span class="k">return</span>
-
-      <span class="c1">//meta.env = args.get(0)
-</span>      <span class="c1">//meta.region = args.get(1)
-</span>
-      <span class="n">info</span><span class="o">(</span><span class="s">"app configured with env(dev,qa,uat,prod) and region(usa.ny) etc... "</span><span class="o">)</span>
     <span class="o">}</span>
 
 
@@ -187,8 +174,31 @@
       *
       * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>
     <span class="o">{</span>
+      <span class="c1">// Get app name from the base config ( env.conf )
+</span>      <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span>
+
+      <span class="c1">// The conf is an inherited config that loads the environment
+</span>      <span class="c1">// specific config ( env.qa.conf ) plus with the common config ( env.conf )
+</span>      <span class="c1">// It is a decorated config container that first checks for a setting in
+</span>      <span class="c1">// the environment specific for an overriden value before checking the common config.
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span> <span class="o">)</span>
+      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"log.enabled"</span><span class="o">)</span>  <span class="o">)</span>
+
+      <span class="c1">// The dbCon convenience method load up a database connection with
+</span>      <span class="c1">// driver:String, url:String, user:String, password:String
+</span>      <span class="c1">// the keys are expected to be:
+</span>      <span class="c1">// db.driver      = "com.mysql.jdbc.Driver"
+</span>      <span class="c1">// db.url         = "jdbc:mysql://localhost/db1"
+</span>      <span class="c1">// db.user        = "root"
+</span>      <span class="c1">// db.pswd        = "123456789"
+</span>      <span class="k">val</span> <span class="n">dbCon</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">dbCon</span> <span class="o">)</span>
+
+      <span class="c1">// NOTE: For more details on how to load configs and db connections from the config
+</span>      <span class="c1">// refer to the Example_Configs.scala example
+</span>
       <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
 
       <span class="c1">// simulate work
@@ -196,7 +206,7 @@
 
       <span class="n">info</span><span class="o">(</span><span class="s">"app completed"</span><span class="o">)</span>
 
-      <span class="n">success</span><span class="o">()</span>
+      <span class="n">ok</span><span class="o">()</span>
     <span class="o">}</span>
 
 
@@ -209,10 +219,12 @@
     <span class="o">}</span>
 
 
-    <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">ListBuffer</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
     <span class="o">{</span>
-      <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">)</span>
-      <span class="n">args</span> <span class="o">+=</span> <span class="o">(</span><span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span><span class="o">)</span>
+      <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 1  = extra summary data1"</span><span class="o">,</span>
+        <span class="n">meta</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s">": extra 2  = extra summary data2"</span>
+      <span class="o">))</span>
     <span class="o">}</span>
 
 
@@ -220,12 +232,8 @@
       <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
         <span class="n">name</span> <span class="k">=</span> <span class="s">"Slate Sample App"</span><span class="o">,</span>
         <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample to show the base application"</span><span class="o">,</span>
-        <span class="n">region</span> <span class="k">=</span> <span class="s">"ny"</span><span class="o">,</span>
         <span class="n">version</span> <span class="k">=</span> <span class="s">"0.9.1"</span><span class="o">,</span>
-        <span class="n">url</span> <span class="k">=</span> <span class="s">"http://www.slatekit.com"</span><span class="o">,</span>
-        <span class="n">group</span> <span class="k">=</span> <span class="s">"codehelix.co"</span><span class="o">,</span>
-        <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@codehelix.co"</span><span class="o">,</span>
-        <span class="n">tags</span> <span class="k">=</span> <span class="s">"slate,shell,cli"</span>
+        <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@codehelix.co"</span>
       <span class="o">)</span>
     <span class="o">}</span>
   <span class="o">}</span>
@@ -237,7 +245,7 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"qa"</span><span class="o">,</span> <span class="s">"usa.ny"</span><span class="o">)))</span>
+    <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"-env='qa1.qa'"</span><span class="o">,</span> <span class="s">"-log.level=info"</span><span class="o">)))</span>
     
 
 </code></pre>

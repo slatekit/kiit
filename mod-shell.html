@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -79,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-07-23T22:24:17.390</td>
+      <td>2016-08-22T21:23:13.126</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -122,7 +123,7 @@
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.Map</span>
 <span class="k">import</span> <span class="nn">slate.common.InputArgs</span>
-<span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiContainer</span><span class="o">,</span> <span class="nc">ApiCmd</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiConstants</span><span class="o">,</span> <span class="nc">ApiContainer</span><span class="o">,</span> <span class="nc">ApiCmd</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.examples.common.UserApi</span>
 
 
@@ -202,7 +203,7 @@
 </span>      <span class="k">val</span> <span class="n">opts</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Any</span><span class="o">](</span><span class="s">"api-key"</span> <span class="o">-&gt;</span> <span class="s">"123456789"</span><span class="o">)))</span>
 
       <span class="c1">// 3b. Convert the shell command to an api command
-</span>      <span class="k">val</span> <span class="n">apiCmd</span> <span class="k">=</span> <span class="nc">ApiCmd</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">)</span>
+</span>      <span class="k">val</span> <span class="n">apiCmd</span> <span class="k">=</span> <span class="nc">ApiCmd</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">,</span> <span class="nc">ApiConstants</span><span class="o">.</span><span class="nc">ProtocolCLI</span><span class="o">)</span>
 
       <span class="c1">// 3c. Call the api command
 </span>      <span class="k">val</span> <span class="n">apiResult</span> <span class="k">=</span> <span class="n">apis</span><span class="o">.</span><span class="n">callCommand</span><span class="o">(</span><span class="n">apiCmd</span><span class="o">)</span>
@@ -275,7 +276,7 @@
 </span>
 
     <span class="c1">// CASE 8: supply command line args ( e.g. from main )
-</span>    <span class="n">shell</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="nc">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"-env:dev"</span><span class="o">,</span> <span class="s">"-log:verbose"</span><span class="o">))</span>
+</span>    <span class="n">shell</span><span class="o">.</span><span class="n">run</span><span class="o">()</span>
     
 
 </code></pre>

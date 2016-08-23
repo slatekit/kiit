@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -55,12 +56,10 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Slate Kit</h1>
-                <p>
-                  Pre-built server architecture and backend for you applications.				  
-				  <br />
-				  Tools and utilities also included!
-                </p>
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
               </aside>
 
             </div>
@@ -79,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-07-23T22:24:17.337</td>
+      <td>2016-08-22T21:23:13.086</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -115,12 +114,19 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span>
+<span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
+<span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
+<span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
+<span class="k">import</span> <span class="nn">slate.common.info.</span><span class="o">{</span><span class="nc">About</span><span class="o">,</span> <span class="nc">Lang</span><span class="o">,</span> <span class="nc">Host</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.logging.LoggerConsole</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
+<span class="k">import</span> <span class="nn">slate.core.common.</span><span class="o">{</span><span class="nc">Conf</span><span class="o">,</span> <span class="nc">AppContext</span><span class="o">}</span>
+
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">ApiKey</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">EnvItem</span><span class="o">,</span> <span class="nc">ApiKey</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slate.examples.common.</span><span class="o">{</span><span class="nc">UserApi</span><span class="o">,</span> <span class="nc">User</span><span class="o">}</span>
 
@@ -143,13 +149,13 @@
 </span>  <span class="c1">// 4. This example API will be used to show application level authorization using a custom
 </span>  <span class="c1">//    authorization provider that you can easily build.
 </span>  <span class="c1">// =======================================================================================
-</span>  <span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"registers users"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+</span>  <span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"registers users"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
   <span class="k">class</span> <span class="nc">AppUsersApi</span> <span class="k">extends</span> <span class="nc">ApiBase</span> <span class="o">{</span>
     <span class="k">var</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span>
 
     <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account"</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
-    <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="nc">Result</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">"ok"</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">)</span>
+    <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="n">ok</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
     <span class="o">}</span>
 
 
@@ -167,7 +173,7 @@
 </span>  <span class="c1">// NOTE: This example will show how to use Api keys for authorization.
 </span>  <span class="c1">// The "auth" mode is set to "key-roles"
 </span>  <span class="c1">// =======================================================================================
-</span>  <span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"about"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"registers users"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"key-roles"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+</span>  <span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"about"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"registers users"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"key-roles"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
   <span class="k">class</span> <span class="nc">AppVersionApi</span> <span class="k">extends</span> <span class="nc">ApiBase</span> <span class="o">{</span>
     <span class="k">var</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span>
 
@@ -196,8 +202,8 @@
      * @param rolesParent
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="k">super</span><span class="o">.</span><span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">roles</span><span class="o">,</span> <span class="n">rolesParent</span><span class="o">)</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="k">super</span><span class="o">.</span><span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">roles</span><span class="o">,</span> <span class="n">rolesParent</span><span class="o">)</span>
     <span class="o">}</span>
 
       <span class="cm">/**
@@ -207,7 +213,7 @@
      * @param roleParent : The roles value from the Api annotation
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
 
       <span class="c1">// NOTES: The ApiCmd will either represent a Web Request or a CLI request.
 </span>      <span class="c1">// Slate abstracts the protocol requests using a "Unified Request data structure"
@@ -225,7 +231,7 @@
 </span>      <span class="k">val</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"user,dev,qa,ops,admin"</span>
 
       <span class="c1">// EXAMPLE: Return sample success for now
-</span>      <span class="n">success</span><span class="o">(</span><span class="s">"sample authorization provider"</span><span class="o">)</span>
+</span>      <span class="n">ok</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"sample authorization provider"</span><span class="o">))</span>
     <span class="o">}</span>
   <span class="o">}</span>
 
@@ -238,7 +244,32 @@
 </span>  <span class="c1">// 3. If you want to run the APIs via Web/Http, refer to the Server documentation.
 </span>  <span class="c1">// 4. The Web Server Api container simply uses the ApiContainerWeb which extends from
 </span>  <span class="c1">//    ApiContainer and also only overrides some methods for help/docs
+</span>  <span class="c1">// 5. Ultimately, to run the container inside of a CLI or Web, the Slate Shell component is used
+</span>  <span class="c1">//    and the Slate Server is used. They provide a wrapper to marshall the data from CLI/Web to
+</span>  <span class="c1">//    the container. ( Refer to CLI and Server for more info )
 </span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">()</span>
+
+  <span class="c1">// Provide the container with a context about application and some dependent services.
+</span>  <span class="c1">// NOTE: This context is made available to all the APIs your register with the container.
+</span>  <span class="c1">// So every API can perform logging, get config settings, encrypt/decrypt etc.
+</span>  <span class="c1">// The value here are somewhat hard-coded for demonstration purposes.
+</span>  <span class="c1">// You should setup the context that is more production quality ( see the Slate.Shell setup )
+</span>  <span class="c1">// The context contains:
+</span>  <span class="c1">//
+</span>  <span class="c1">// - The current environment ( e.g. local, dev, qa, stg, pro )
+</span>  <span class="c1">// - Config ( config wrapper to access data in application.conf in this case )
+</span>  <span class="c1">// - Logger
+</span>  <span class="c1">// - Db connection
+</span>  <span class="c1">// - Encryption service
+</span>  <span class="c1">// - App information
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+    <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">),</span>
+    <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+    <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
+    <span class="n">con</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">),</span>
+    <span class="n">enc</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
+    <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">)</span>
+  <span class="o">)</span>
 
   <span class="c1">// REG 1. Register the api ( uses roles/auth values from annotations on class )
 </span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">())</span>
@@ -252,19 +283,19 @@
 
   <span class="c1">// REG 4a. Register the api and set access to api only from CLI/command line container
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"cli"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">protocol</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"cli"</span><span class="o">))</span>
 
   <span class="c1">// REG 4b. Register the api and set access to api only from web/http container
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"web"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">protocol</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"web"</span><span class="o">))</span>
 
   <span class="c1">// REG 4c. Register the api and set access to api from both CLI/Web
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">protocol</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">))</span>
 
   <span class="c1">// REG 5. Register the api and supply your auth mode that will check for roles/permissions.
 </span>  <span class="c1">//        This overrides the "auth" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppVersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppVersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">protocol</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
 
   <span class="c1">// REG 6: Setup your authorization provider
 </span>  <span class="c1">// NOTE:
@@ -401,9 +432,9 @@
     <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
 	<script type="text/javascript">
-		var _codehelixAppPage = "core";
+		var _codehelixAppPage = "utils";
 	</script>
     <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>

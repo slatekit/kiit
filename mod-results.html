@@ -4,7 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Start - Responsive One Page Template</title>
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -77,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-07-23T22:24:17.168</td>
+      <td>2016-08-22T21:23:13.012</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -113,8 +114,8 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span>
-<span class="k">import</span> <span class="nn">slate.common.Result</span>
-<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultCode</span><span class="o">,</span> <span class="nc">ResultSupport</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">SuccessResult</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">,</span> <span class="nc">ResultCode</span><span class="o">}</span>
 
 
 
@@ -143,12 +144,11 @@
 </span>    <span class="c1">// 4. code               - matches http status codes
 </span>    <span class="c1">// 5. ref                - tag for external id references
 </span>    <span class="c1">// 6. exception          - error info
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">Result</span><span class="o">(</span>
-      <span class="n">success</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
-      <span class="n">msg</span> <span class="k">=</span> <span class="s">"user created"</span><span class="o">,</span>
-      <span class="n">code</span> <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
-      <span class="n">data</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
-      <span class="n">ref</span> <span class="k">=</span> <span class="s">"tag001"</span>
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SuccessResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+      <span class="n">value</span>  <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
+      <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
+      <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
+      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span><span class="o">)</span>
     <span class="o">)</span>
 
     <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
@@ -156,37 +156,37 @@
 </span>    <span class="c1">// instead of a controller/api layer
 </span>
     <span class="c1">// CASE 2: Success ( 200 )
-</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="s">"user created"</span><span class="o">,</span> <span class="n">data</span> <span class="k">=</span> <span class="mi">123456</span><span class="o">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">"promoCode:ny001"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span> <span class="n">tag</span><span class="k">=</span><span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 3: Failure ( 400 ) with ref tag
-</span>    <span class="k">val</span> <span class="n">res2</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">,</span> <span class="n">ref</span> <span class="k">=</span> <span class="s">"23SKASDF23"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res2</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"23SKASDF23"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res2</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 4: Unauthorized ( 401 )
-</span>    <span class="k">val</span> <span class="n">res3</span> <span class="k">=</span> <span class="n">unAuthorized</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res3</span> <span class="k">=</span> <span class="n">unAuthorized</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res3</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 5: Unexpected ( 500 )
-</span>    <span class="k">val</span> <span class="n">res4</span> <span class="k">=</span> <span class="n">unexpectedError</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res4</span> <span class="k">=</span> <span class="n">unexpectedError</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res4</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 6: Conflict ( 409 )
-</span>    <span class="k">val</span> <span class="n">res5</span> <span class="k">=</span> <span class="n">conflict</span><span class="o">(</span><span class="s">"item already exists"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res5</span> <span class="k">=</span> <span class="n">conflict</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"item already exists"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res5</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 7: Failure
-</span>    <span class="k">val</span> <span class="n">res6</span> <span class="k">=</span> <span class="n">notFound</span><span class="o">(</span><span class="s">"action not found"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res6</span> <span class="k">=</span> <span class="n">notFound</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"action not found"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res6</span><span class="o">)</span>
 
 
     <span class="c1">// CASE 8: Failure
-</span>    <span class="k">val</span> <span class="n">res7</span> <span class="k">=</span> <span class="n">notAvailable</span><span class="o">(</span><span class="s">"operation currently unavailable"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">res7</span> <span class="k">=</span> <span class="n">notAvailable</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"operation currently unavailable"</span><span class="o">))</span>
     <span class="n">printResult</span><span class="o">(</span><span class="n">res7</span><span class="o">)</span>
     
 
