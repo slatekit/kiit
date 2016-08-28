@@ -12,13 +12,48 @@ var codehelixUtils = {
 	  for(var ndx = 0; ndx < items.length; ndx++){
 		  var item = items[ndx];
 		  if(item.name.toLowerCase() == page.toLowerCase()){
-			  html += '<li class="active"><a href="' + item.page + '" class="current">' + item.name + '</a></li>';
+			  html += '<li class="active">'; 
+			  
+			  if( item.children != null && item.children.length > 0 ) {
+			    html += this.buildMenuIndicator(item);
+				html += this.buildMenu( item.children, 'dropdown-menu' );
+			  }
+			  else {
+				html += '<a href="' + item.page + '" class="current">' + item.name + '</a>';
+			  }
+			  html += '</li>';
 		  }
 		  else {
-			  html += '<li><a href="' + item.page + '">' + item.name + '</a></li>';
+			  html += '<li>'; 
+			  if( item.children != null && item.children.length > 0 ) {
+				html += this.buildMenuIndicator(item);
+				html += this.buildMenu( item.children, 'dropdown-menu' );
+			  }
+			  else {
+				html += '<a href="' + item.page + '">' + item.name + '</a>';
+			  }
+			  html += '</li>';
 		  }
 	  }
 	  $("#navigation").html(html)
+	},
+	
+	
+	buildMenuIndicator: function(item) {
+		return '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">'
+				+ item.name 
+				+ ' &nbsp;<span class="caret"></span></a>';
+	},
+	
+	
+	buildMenu: function(items, cls) {
+	  var html = '<ul class="' + cls + '">';
+	  for(var ndx = 0; ndx < items.length; ndx++){
+		  var item = items[ndx];
+		  html += '<li><a href="' + item.page + '">' + item.name + '</a></li>';
+	  }
+	  html += "</ul>";
+	  return html;
 	},
 	
 	
@@ -85,19 +120,22 @@ var codeHelixMeta = {
   
   menu: 
   [
-	{ name: "Home"          ,  page: "index.html"       },
-	{ name: "Overview"      ,  page: "overview.html"    },
-	{ name: "Setup"         ,  page: "setup.html"       },
-	{ name: "Core"          ,  page: "infra.html"       },
-	{ name: "App"           ,  page: "app.html" },
-	{ name: "APIs"          ,  page: "apis-detail.html" },
-	{ name: "Server"        ,  page: "server.html"      },
-	//{ name: "CLI"           ,  page: "cli.html"         },
-	{ name: "ORM"           ,  page: "orm.html"         },
-	{ name: "Utils"         ,  page: "utils.html"       },
-	{ name: "Features"      ,  page: "features.html"    },
-	{ name: "Releases"      ,  page: "releases.html"    },
-	{ name: "Scala 101"     ,  page: "scala101.html"    }
+	{ name: "Home"          ,  page: "index.html"       , children: null },
+	{ name: "Overview"      ,  page: "overview.html"    , children: null },
+	{ name: "Setup"         ,  page: "setup.html"       , children: null },
+	{ name: "Core"          ,  page: "infra.html"       , children: null },
+	{ name: "App"           ,  page: "app.html"         , children: null },
+	{ name: "APIs"          ,  page: "apis-detail.html" , children: null },
+	{ name: "Server"        ,  page: "server.html"      , children: null },
+	{ name: "ORM"           ,  page: "orm.html"         , children: null },
+	{ name: "Utils"         ,  page: "utils.html"       , children: null },
+	{ name: "Features"      ,  page: "features.html"    , children: null },
+	{ name: "Releases"      ,  page: "releases.html"    , children: null },
+	{ name: "More"          ,  page: "-"                , children: [
+		{ name: "Scala 101"        ,  page: "scala101.html"    },
+		{ name: "About Us"         ,  page: "setup.html"       }
+	  ]
+	}
   ]
 };  
 
