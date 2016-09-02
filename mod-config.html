@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-08-22T21:23:12.925</td>
+      <td>2016-09-01T22:05:45.485</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -113,7 +113,9 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
+</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">EnvItem</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
 <span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
 <span class="k">import</span> <span class="nn">slate.core.common.Conf</span>
 
@@ -139,36 +141,35 @@
 
     <span class="c1">// CASE 1: Load up config from application.conf in resources
 </span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
-    <span class="n">conf</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
     <span class="n">println</span><span class="o">(</span> <span class="s">"env.name: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"env.name"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">(</span> <span class="s">"db.enabled: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"db.enabled"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
 
     <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf.
-</span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">()</span>
+</span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">().</span><span class="n">getOrElse</span><span class="o">(</span><span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">))</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${env.name}, ${env.env}, ${env.key}"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
 
     <span class="c1">// CASE 3: Inherit config from another config in resources folder
 </span>    <span class="c1">// e.g. env.dev.conf ( dev environment ) can inherit from env.conf ( common )
-</span>    <span class="k">val</span> <span class="n">confs1</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"env.dev.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">confs1</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.dev.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
     <span class="k">val</span> <span class="n">dbConInherited</span> <span class="k">=</span> <span class="n">confs1</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - inherited : "</span><span class="o">,</span> <span class="n">dbConInherited</span> <span class="o">)</span>
 
 
     <span class="c1">// CASE 4: Override inherited config settings
 </span>    <span class="c1">// e.g. env.loc.conf ( local environment ) overrides settings inherited from env.conf
-</span>    <span class="k">val</span> <span class="n">confs2</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"env.loc.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">confs2</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.loc.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
     <span class="k">val</span> <span class="n">dbConOverride</span> <span class="k">=</span> <span class="n">confs2</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - override : "</span><span class="o">,</span> <span class="n">dbConOverride</span> <span class="o">)</span>
 
 
     <span class="c1">// CASE 5: Multiple db settings, get 1 using a prefix
 </span>    <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefix.
-</span>    <span class="k">val</span> <span class="n">confs3</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"qa2"</span><span class="o">)</span> <span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">confs3</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"qa2"</span><span class="o">)</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - multiple : "</span><span class="o">,</span> <span class="n">dbConMulti</span> <span class="o">)</span>
 
 
@@ -177,14 +178,14 @@
 </span>    <span class="c1">// in a folder called ".slate" in the user directory.
 </span>    <span class="c1">// This is for added security to avoid
 </span>    <span class="c1">// any database connection strings in the application.conf file.
-</span>    <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">userFolder</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">".slate"</span><span class="o">))</span>
+</span>    <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"slate"</span><span class="o">)</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - file ref: "</span><span class="o">,</span> <span class="n">dbConFile</span> <span class="o">)</span>
 
 
     <span class="c1">// CASE 7: Encrypted strings in the config file
 </span>    <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">confs5</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">load</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">,</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">encryptor</span><span class="o">)</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">confs5</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">,</span> <span class="n">enc</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">encryptor</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"db user decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getStringEnc</span><span class="o">(</span><span class="s">"db.user"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"db pswd decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getStringEnc</span><span class="o">(</span><span class="s">"db.pswd"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
