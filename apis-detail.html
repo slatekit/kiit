@@ -101,7 +101,7 @@
 						<td class="col-sm-6">Various design patterns built-in to standardize and apply best practices to API development.</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Api Discovery</strong></td>
+						<td class="col-sm-2"><strong>API Discovery</strong></td>
 						<td class="col-sm-6">Incorporate ways to easily discover and call APIs</td>
 					</tr>
 				</table>				
@@ -136,6 +136,47 @@
 				</table>
 				<br/>
 				
+				<h1 id="apis-features">Features</h1>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Feature</strong></td>
+						<td class="col-sm-6"><strong>Description</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Scala</strong></td>
+						<td>Create APIs using scala classes, just annotate classes/methods as APIs and API methods</td>
+					</tr>
+					<tr> 
+						<td><strong>2. CLI</strong></td>
+						<td>You can run your APIs on the command line </td>
+					</tr>
+					<tr> 
+						<td><strong>3. Http</strong></td>
+						<td>You can run your APIs as Web APIs via Akka-Http</td>
+					</tr>
+					<tr> 
+						<td><strong>4. Auth</strong></td>
+						<td>Authentication support is available and you can build your own auth provider easily</td>
+					</tr>
+					<tr> 
+						<td><strong>5. Portable</strong></td>
+						<td>APIs are scala classes for low vendor-lockin. Easily swap out SlateKit if needed</td>
+					</tr>
+					<tr> 
+						<td><strong>6. Context</strong></td>
+						<td>APIs contain a context to contain / provide access to many services</td>
+					</tr>
+					<tr> 
+						<td><strong>7. Entities</strong></td>
+						<td>Built-in support for easily creating APIs for database entities</td>
+					</tr>
+					<tr> 
+						<td><strong>8. Help</strong></td>
+						<td>Built-in support for discovering and getting help on API methods</td>
+					</tr>
+				</table>
+				<br/>
+				
 				<h1 id="apis-usage">Usage</h1>
 				<p>The API design and implementation approach facilitates running your APIs in any application types</p>
 				<table class="table table-bordered table-striped">
@@ -158,57 +199,6 @@
 						<td><strong>3. Server</strong></td>
 						<td>The web server hosting your APIs</td>
 						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
-					</tr>
-				</table>
-				<br/>
-				
-				<h1 id="apis-features">Features</h1>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<td class="col-sm-2"><strong>Feature</strong></td>
-						<td class="col-sm-6"><strong>Description</strong></td>
-						<td class="col-sm-3"><strong>Example</strong></td>
-					</tr>
-					<tr> 
-						<td><strong>1. Args</strong></td>
-						<td>Command line arguments support ( which can override any config settings )
-						</td>
-						<td>-env=dev -log.level=info -region=ny</td>
-					</tr>
-					<tr> 
-						<td><strong>2. Envs</strong></td>
-						<td>Support and selection of multiple environments ( with defaults )</td>
-						<td>local, dev, qa, stg, pro</td>
-					</tr>
-					<tr> 
-						<td><strong>3. Logs</strong></td>
-						<td>Logging and error handling ( any log provider can be easily added )</td>
-						<td>console / file logger, custom logger</td>
-					</tr>
-					<tr> 
-						<td><strong>4. Config</strong></td>
-						<td>Configuration files for each environment ( with support for config inheritance )</td>
-						<td>env.conf, env.local.conf, env.qa.conf</td>
-					</tr>
-					<tr> 
-						<td><strong>5. Settings</strong></td>
-						<td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
-						<td>${user}/mycompany/myapp/database.conf</td>
-					</tr>
-					<tr> 
-						<td><strong>6. Encryption</strong></td>
-						<td>Encryption and decryption support</td>
-						<td>Using AES</td>
-					</tr>
-					<tr> 
-						<td><strong>7. Life-cycle</strong></td>
-						<td>Application life-cycle events</td>
-						<td>check(), init(), accept(), execute(), shutdown()</td>
-					</tr>
-					<tr> 
-						<td><strong>8. Context</strong></td>
-						<td>An application context to contain and provide access to many services</td>
-						<td>encryptor, logger, settings, environment, etc</td>
 					</tr>
 				</table>
 				<br/>
@@ -281,13 +271,13 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
 <span class="o">{</span>
    <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
   <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
   <span class="o">{</span>
-	<span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
   <span class="o">}</span>
   
   <span class="c1">// .. more
@@ -433,13 +423,13 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">container</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
 <span class="o">{</span>
    <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
   <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
   <span class="o">{</span>
-	<span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
   <span class="o">}</span>
   
   <span class="c1">// .. more
@@ -495,21 +485,29 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td>auth</td>
-						<td>api-key | app-roles | both</td>
-						<td>
-							the type of authorization for this API. ( see security section for more info )
-						</td>
-					</tr>
-					<tr>
-						<td></td>
 						<td>roles</td>
 						<td>text</td>
 						<td>the roles that can access the API. ( see security section for more info )</td>
 					</tr>
 					<tr>
 						<td></td>
-						<td>container</td>
+						<td>auth</td>
+						<td>app-key | app-roles | key-roles</td>
+						<td>
+							the type of authorization for this API. ( see security section for more info )
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>verb</td>
+						<td>get | post</td>
+						<td>
+							the type of way to get data ( matches http verbs - see security section for more info )
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>protocol</td>
 						<td>cli | web | *</td>
 						<td>						
 							indicates in what container the API can run. cli=Command line, web=http, * = both
@@ -536,7 +534,7 @@
 					<tr>
 						<td></td>
 						<td>verb</td>
-						<td>"get" | "set" | "*" </td>
+						<td>"get" | "post" | "*" </td>
 						<td>Method of execution for action. e.g "get" = http get, "set" = http post, "*" or empty is either.</td>
 					</tr>
 				</table>
@@ -679,18 +677,37 @@
   <span class="k">import</span> <span class="nn">slate.common.Result</span>
   <span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultCode</span><span class="o">,</span> <span class="nc">ResultSupport</span><span class="o">}</span>
 
-	<span class="c1">// CASE 1: The Result class is a glorified wrapper around a return value/response.
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">Result</span><span class="o">(</span>
-	  <span class="n">success</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
-	  <span class="n">msg</span> <span class="k">=</span> <span class="s">"user created"</span><span class="o">,</span>
-	  <span class="n">code</span> <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
-	  <span class="n">data</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
-	  <span class="n">ref</span> <span class="k">=</span> <span class="s">"tag001"</span>
-	<span class="o">)</span>
+    <span class="c1">// CASE 1: The Result class is a glorified wrapper around a status code
+</span>    <span class="c1">// and contains the following.
+</span>    <span class="c1">// 1. success / failure  - flag
+</span>    <span class="c1">// 2. message / error    - informative message
+</span>    <span class="c1">// 3. data               - data being returned
+</span>    <span class="c1">// 4. code               - matches http status codes
+</span>    <span class="c1">// 5. tag                - tag for external id references
+</span>    <span class="c1">// 
+</span>    <span class="c1">// In functional programming terms, it is implemented as a Monad and 
+</span>    <span class="c1">// works as a replacement for the Try/Success/Error Monad.
+</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="nc">SuccessResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+      <span class="n">value</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
+      <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
+      <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
+      <span class="n">ext</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
+      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span> <span class="o">)</span>
+    <span class="o">)</span>
+	
+    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="nc">FailureResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+      <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">BADREQUEST</span><span class="o">,</span>
+      <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid login"</span><span class="o">),</span>
+      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span> <span class="o">)</span>
+    <span class="o">)</span>
 
-	<span class="c1">// CASE 2: Success ( 200 )
-</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="s">"user created"</span><span class="o">,</span> <span class="n">data</span> <span class="k">=</span> <span class="mi">123456</span><span class="o">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">"promoCode:ny001"</span><span class="o">)</span>
-	<span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
+    <span class="c1">// CASE 2: Success ( 200 )
+</span>    <span class="c1">// You can easily build up the results using the helper methods in the ResultSupportIn trait
+</span>    <span class="c1">// There are methods that exist that match the most common http statuses
+</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="n">data</span> <span class="k">=</span> <span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
+    <span class="k">val</span> <span class="n">res2</span> <span class="k">=</span> <span class="n">badRequest</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid login"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
+	
+    <span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
 	
 </code></pre>
 </div>
@@ -1085,10 +1102,10 @@
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">access</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
 <span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
 <span class="o">{</span>
-   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
   <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
   <span class="o">{</span>
     <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>

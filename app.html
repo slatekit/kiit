@@ -258,11 +258,13 @@
 </span>      <span class="c1">// The context contains all the various services that are common
 </span>      <span class="c1">// to most apps, you can then make this available to other parts of your application.
 </span>      <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+        <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span>
         <span class="n">env</span>  <span class="k">=</span> <span class="n">env</span><span class="o">,</span>
         <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
-        <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
-        <span class="n">inf</span>  <span class="k">=</span> <span class="n">buildAbout</span><span class="o">(),</span>
-        <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">()</span>
+        <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
+        <span class="n">inf</span>  <span class="k">=</span> <span class="n">aboutApp</span><span class="o">(),</span>
+        <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
+        <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">()</span>
       <span class="o">)</span>
     <span class="o">}</span>
 
@@ -304,20 +306,33 @@
 
     <span class="k">override</span> <span class="k">def</span> <span class="n">buildAbout</span><span class="o">()</span><span class="k">:</span><span class="kt">About</span> <span class="o">=</span> <span class="o">{</span>
       <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
-        <span class="n">name</span> <span class="k">=</span> <span class="s">"Slate Sample App"</span><span class="o">,</span>
+        <span class="n">id</span>   <span class="k">=</span> <span class="s">"SlateKit.SampleApp"</span><span class="o">,</span>
+        <span class="n">name</span> <span class="k">=</span> <span class="s">"SlateKit Sample App"</span><span class="o">,</span>
         <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample to show the base application"</span><span class="o">,</span>
         <span class="n">version</span> <span class="k">=</span> <span class="s">"0.9.1"</span><span class="o">,</span>
-        <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@company.co"</span>
+        <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@codehelix.co"</span>
       <span class="o">)</span>
     <span class="o">}</span>
   <span class="o">}</span>
 
 
-  <span class="c1">// Use the AppRunner helper class to run the App.
-</span>  <span class="c1">// NOTE: AppRunner calls all the template methods in 
-</span>  <span class="c1">// the appropriate order 
-</span>  <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"qa"</span><span class="o">,</span> <span class="s">"usa.ny"</span><span class="o">)))</span>
+  <span class="cm">/**
+    * Entry point into the sample console application.
+    *
+    * java -jar sample_app.jar -env=dev -log.level=info
+    * java -jar sample_app.jar --version
+    * java -jar sample_app.jar --about
+    * java -jar sample_app.jar ?
+    *
+    * @param args
+    */</span>
+  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
 
+    <span class="c1">// Use the AppRunner helper class to run the App.
+</span>    <span class="c1">// NOTE: AppRunner calls all the template methods in 
+</span>    <span class="c1">// the appropriate order 
+</span>     <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleAppBatch</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">))</span>
+  <span class="o">}</span>
 </code></pre>
 </div>
 				<br/>
@@ -445,10 +460,23 @@
   <span class="o">}</span>
 
 
-  <span class="c1">// Use the AppRunner helper class to run the App.
-</span>  <span class="c1">// NOTE: AppRunner calls all the template methods in 
-</span>  <span class="c1">// the appropriate order 
-</span>  <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleApp</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="s">"-env='qa1.qa'"</span><span class="o">,</span> <span class="s">"-log.level=info"</span><span class="o">)))</span>
+  <span class="cm">/**
+    * Entry point into the sample console application.
+    *
+    * java -jar sample_app.jar -env=dev -log.level=info
+    * java -jar sample_app.jar --version
+    * java -jar sample_app.jar --about
+    * java -jar sample_app.jar ?
+    *
+    * @param args
+    */</span>
+  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c1">// Use the AppRunner helper class to run the App.
+</span>    <span class="c1">// NOTE: AppRunner calls all the template methods in 
+</span>    <span class="c1">// the appropriate order 
+</span>     <span class="nc">AppRunner</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleAppBatch</span><span class="o">(),</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">))</span>
+  <span class="o">}</span>
 
 </code></pre>
 </div>
@@ -920,15 +948,16 @@
   <span class="k">override</span> <span class="k">def</span> <span class="n">buildAbout</span><span class="o">()</span><span class="k">:</span><span class="kt">About</span> <span class="o">=</span> <span class="o">{</span>
     <span class="c1">// Get info about app from base config "env.conf" which is common to all environments.
 </span>    <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
-      <span class="n">name</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="s">"Sample App"</span><span class="o">),</span>
-      <span class="n">desc</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.desc"</span>     <span class="o">,</span> <span class="s">"Sample to show the base application"</span><span class="o">),</span>
-      <span class="n">region</span>   <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.region"</span>   <span class="o">,</span> <span class="s">"ny"</span><span class="o">),</span>
-      <span class="n">version</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.version"</span>  <span class="o">,</span> <span class="s">"0.9.1"</span><span class="o">),</span>
-      <span class="n">url</span>      <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.url"</span>      <span class="o">,</span> <span class="s">"http://sampleapp.slatekit.com"</span><span class="o">),</span>
-      <span class="n">group</span>    <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.group"</span>    <span class="o">,</span> <span class="s">"codehelix.co"</span><span class="o">),</span>
-      <span class="n">contact</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.contact"</span>  <span class="o">,</span> <span class="s">"kishore@codehelix.co"</span><span class="o">),</span>
-      <span class="n">tags</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.tags"</span>     <span class="o">,</span> <span class="s">"slate,shell,cli"</span><span class="o">),</span>
-      <span class="n">examples</span> <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.examples"</span> <span class="o">,</span> <span class="s">""</span><span class="o">)</span>
+      <span class="n">id</span>       <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.id"</span>       <span class="o">,</span> <span class="s">"sampleapp.console"</span><span class="o">),</span>
+      <span class="n">name</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="s">"Sample App"</span><span class="o">),</span>
+      <span class="n">desc</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.desc"</span>     <span class="o">,</span> <span class="s">"Sample to show the base application"</span><span class="o">),</span>
+      <span class="n">region</span>   <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.region"</span>   <span class="o">,</span> <span class="s">"ny"</span><span class="o">),</span>
+      <span class="n">version</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.version"</span>  <span class="o">,</span> <span class="s">"0.9.1"</span><span class="o">),</span>
+      <span class="n">url</span>      <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.url"</span>      <span class="o">,</span> <span class="s">"http://sampleapp.slatekit.com"</span><span class="o">),</span>
+      <span class="n">group</span>    <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.group"</span>    <span class="o">,</span> <span class="s">"codehelix.co"</span><span class="o">),</span>
+      <span class="n">contact</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.contact"</span>  <span class="o">,</span> <span class="s">"kishore@codehelix.co"</span><span class="o">),</span>
+      <span class="n">tags</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.tags"</span>     <span class="o">,</span> <span class="s">"slate,shell,cli"</span><span class="o">),</span>
+      <span class="n">examples</span> <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.examples"</span> <span class="o">,</span> <span class="s">""</span><span class="o">)</span>
     <span class="o">)</span>
   <span class="o">}</span>   
 

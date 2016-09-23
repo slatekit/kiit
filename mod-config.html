@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-01T22:05:45.485</td>
+      <td>2016-09-22T14:53:39.043</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -169,7 +169,7 @@
     <span class="c1">// CASE 5: Multiple db settings, get 1 using a prefix
 </span>    <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefix.
 </span>    <span class="k">val</span> <span class="n">confs3</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"qa2"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">)</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - multiple : "</span><span class="o">,</span> <span class="n">dbConMulti</span> <span class="o">)</span>
 
 
@@ -179,7 +179,7 @@
 </span>    <span class="c1">// This is for added security to avoid
 </span>    <span class="c1">// any database connection strings in the application.conf file.
 </span>    <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"slate"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"db"</span><span class="o">)</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - file ref: "</span><span class="o">,</span> <span class="n">dbConFile</span> <span class="o">)</span>
 
 
