@@ -58,8 +58,7 @@
 
               <aside class="widget">
                 <h1 class="widget-title">Overview</h1>
-                <h3>A simple toolkit, utility library and server backend in Scala.<br/>
-                </h3>
+				<h3>A Scala toolkit, utility library and server backend.<br/></h3>
               </aside>
 
             </div>
@@ -71,13 +70,62 @@
 				
 				<div> 
 					<h1>About</h1>	
-					<p>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. It is written in Scala and uses Akka-Http for the Server. While there are a few server backend projects available either for purchase or open-source, Slate Kit is one of the few written entirely in <strong>Scala</strong>, <strong>Akka-Http</strong> and integrated with <strong>AWS</strong>. Some of the other core differences with Slate Kit is the focus on simplicity, utility code and modularity above all else. One of the other core design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell. Slate Kit is currently used to build the backend architecture for 2 mobile apps currently in production for 2 client projects of <a class="url-ch" href="http://www.codehelix.co">Code Helix Solutions Inc</a>. 
+					<p>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. It is written entirely in <strong>Scala</strong>, uses <strong>Akka-Http</strong> for the Server, and works with <strong>AWS</strong> and <strong>MySql</strong>. Slate Kit is modular and contains many reusable components ( see list below ). One of the main design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell. Slate Kit is currently used to build the backend architecture for a few mobile beta apps.</a>. 
 					</p>
 					
 				</div>
 				<br/>
 				
-				
+				<div>
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td class="col-sm-1"><strong>Component</strong></td>
+							<td class="col-sm-2"><strong>About</strong></td>
+							<td class="col-md-4"><strong>Description</strong></td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="app.html">1. App</a></strong></td>
+							<td>Base Application</td>
+							<td>A powerful base app with support for command line args, environment selection, configs per environment, logging, life-cycle events, encryption, diagnostics and more</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="apis-detail.html">2. APIs</a></strong></td>
+							<td>Protocol Independent APIs</td>
+							<td>Easily build protocol independent APIs using simple scala classes/methods with annotations, that can be hosted / run on both Slate Command Line Shell and/or as Web APIs in the Slate Server </td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="mod-shell.html">3. CLI</a></strong></td>
+							<td>Command Line Interface</td>
+							<td>A command line interface shell that you can extend to host your "Protocol Independent APIs" and/or hook into to handle and execute any user commands in a shell.</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="server.html">4. Server</a></strong></td>
+							<td>Web API Server</td>
+							<td>A Web API server built using Akka Http that can host your "Protocol Independent APIs". You can extend this server and register your own APIs.</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="orm.html">5. ORM</a></strong></td>
+							<td>Domain-Driven ORM</td>
+							<td>A simple, light-weight, Domain-Driven, single table ORM to map your Scala entities to and from database tables. MySql is currently supported with support for MS Sql Server coming soon.</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="infra.html">6. Architecture</a></strong></td>
+							<td>Architecture Components</td>
+							<td>Architectural abstractions and implementations for APIs, CLI, Files, Queues, Tasks and more. Files and Queues are easy to use abstractions over AWS S3 and SQS.</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="utils.html">7. Utilities</a></strong></td>
+							<td>Utility Components</td>
+							<td>Many useful utility components and code that can be used for any application. All these are located in the Slate.Common project and independent and modular.</td>
+						</tr>
+						<tr>
+							<td><strong><a class="url-ch" href="features.html">8. Mobile</strong></td>
+							<td>Mobile / Web Features</td>
+							<td>Mobile and web features for most applications, such as Users, Devices, Registration, Invites, Settings and more.</td>
+						</tr>
+					</table>
+				</div>
+				<br/>
 				<div> 					
 					<h1>Philosophy</h1>	
 					
@@ -115,10 +163,10 @@
 							<td><strong>Balance</strong></td>
 							<td>
 								<ul>
-									<li>Immutable Data  + minimal areas of mutability</li>
-									<li>Idiomatic Scala + areas of divergence for simplicity</li>
-									<li>Strongly Typed  + areas of dynamic objects/reflection calls</li>
-									<li>Imperative      + functional</li>
+									<li>Mostly immutable Data</li>
+									<li>Mostly idiomatic scala</li>
+									<li>Strongly Typed code</li>
+									<li>Functional + Imperative</li>
 								</ul>
 							</td>
 						</tr>
@@ -217,9 +265,8 @@
 										<td><strong>about</strong></td>
 										<td>							
 											<ul>
-												<li>Domain Driven approach via Entity, EntityService, EntityRepository</li>
-												<li>Implemented using Generic Service / Repository pattern</li>
-												<li>Includes support for MySql</li>	
+												<li>Requires the AWS sdk jar for Java</li>
+												<li>Contains the implementations of core architectural components ( queue, files ) using AWS S3 / SQS</li>
 											</ul>
 										</td>
 									</tr>
@@ -258,8 +305,8 @@
 										<td>									
 											<ul>
 												<li>slate.common</li>
-												<li>slate.entities</li>
 												<li>config.jar</li>
+												<li>-</li>
 											</ul>
 										</td>
 									</tr>
@@ -357,7 +404,7 @@
 									</tr>
 									<tr>
 										<td><strong>cost</strong></td>
-										<td>paid : refer to pricing</td>
+										<td>paid : coming in October</td>
 									</tr>
 									<tr>
 										<td><strong>dependencies</strong></td>
