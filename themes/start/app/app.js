@@ -112,7 +112,7 @@ var codeHelixMeta = {
   product: 
   {
 	name : "Slate Kit",
-	slogan: "A simple toolkit, utility library and server backend in Scala",
+	slogan: "A scala toolkit, utility library and server backend",
 	about: 'Slate Kit is a product of <a href="www.codehelix.co">Code Helix Solutions Inc.</a>. We specialise in contract services focused on Scala, Java, PHP for Web and Mobile Applications',
 	needhelp: 'For more information on Slate Kit, including source code visit our github repository and feel free to email/contact us at <a href="mailto:kishore@codehelix.co">kishore@codehelix.co</a>',
 	questions: 'Questions ? Contact us via github or at <a href="http://www.codehelix.co">Code Helix Solutions Inc.</a>'
@@ -133,6 +133,7 @@ var codeHelixMeta = {
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },
 	{ name: "More"          ,  page: "-"                , children: [
 		{ name: "Scala 101"        ,  page: "scala101.html"    },
+		{ name: "Sample Apps"      ,  page: "samples.html"     },
 		{ name: "About Us"         ,  page: "about.html"       }
 	  ]
 	}
