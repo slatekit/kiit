@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
-    <title>Slate Kit - Utilities</title>
+    <title>Slate Kit - Architecture</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -56,10 +56,12 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Utilities</h1>
-                <h3>
-                  The ultimate utility belt for your dev needs.<br />
-                </h3>
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
               </aside>
 
             </div>
@@ -74,11 +76,11 @@
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A protocol agnostic api approach to make apis available on command line or web</td>
+      <td>An API Container to host protocol agnostic apis to run on the command line or web</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-22T14:53:39.226</td>
+      <td>2016-09-30T14:18:39.427</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -163,6 +165,31 @@
     <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"get total number of users"</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
     <span class="k">def</span> <span class="n">total</span><span class="o">()</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="o">{</span>
       <span class="mi">2</span>
+    <span class="o">}</span>
+
+
+    <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"get total number of users"</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+    <span class="k">def</span> <span class="n">rawCommand</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+
+      <span class="n">println</span><span class="o">(</span><span class="s">"handling the raw command that abstracts both a CLI command and a Web API request"</span><span class="o">)</span>
+      <span class="c1">// NOTE: Use this if you do NOT want container to auto map arguments to your method parameters
+</span>      
+      <span class="c1">// Full name of route
+</span>      <span class="n">println</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
+
+      <span class="c1">// The parts of the route area.name.action
+</span>      <span class="c1">// e.g.
+</span>      <span class="c1">// 1. CLI : app.users.activate
+</span>      <span class="c1">// 2. Web : http://company.com/api/api/users/activate
+</span>      <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"${cmd.area} ${cmd.name} ${cmd.action}"</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">parts</span><span class="o">)</span>
+
+      <span class="c1">// Represent the arguments
+</span>      <span class="n">println</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">)</span>
+
+      <span class="c1">// Represents additional "headers" for both command line and web API.
+</span>      <span class="n">println</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">opts</span><span class="o">)</span>
+      <span class="kc">true</span>
     <span class="o">}</span>
   <span class="o">}</span>
 
@@ -437,9 +464,9 @@
     <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
 	<script type="text/javascript">
-		var _codehelixAppPage = "utils";
+		var _codehelixAppPage = "core";
 	</script>
     <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>

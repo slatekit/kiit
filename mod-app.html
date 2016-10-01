@@ -76,11 +76,11 @@
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A base application with support for logging, config, status and more</td>
+      <td>A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-22T14:53:39.241</td>
+      <td>2016-09-30T14:18:39.429</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -165,11 +165,11 @@
         <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
         <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
         <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(),</span>
+        <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)),</span>
         <span class="n">inf</span>  <span class="k">=</span> <span class="n">aboutApp</span><span class="o">(),</span>
         <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
         <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">()</span>
       <span class="o">)</span>
-
     <span class="o">}</span>
 
 
@@ -180,30 +180,42 @@
      */</span>
     <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>
     <span class="o">{</span>
-      <span class="c1">// Get app name from the base config ( env.conf )
-</span>      <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span>
-
-      <span class="c1">// The conf is an inherited config that loads the environment
-</span>      <span class="c1">// specific config ( env.qa.conf ) plus with the common config ( env.conf )
-</span>      <span class="c1">// It is a decorated config container that first checks for a setting in
-</span>      <span class="c1">// the environment specific for an overriden value before checking the common config.
-</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span> <span class="o">)</span>
-      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"log.enabled"</span><span class="o">)</span>  <span class="o">)</span>
-
-      <span class="c1">// The dbCon convenience method load up a database connection with
-</span>      <span class="c1">// driver:String, url:String, user:String, password:String
-</span>      <span class="c1">// the keys are expected to be:
-</span>      <span class="c1">// db.driver      = "com.mysql.jdbc.Driver"
-</span>      <span class="c1">// db.url         = "jdbc:mysql://localhost/db1"
-</span>      <span class="c1">// db.user        = "root"
-</span>      <span class="c1">// db.pswd        = "123456789"
-</span>      <span class="k">val</span> <span class="n">dbCon</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
-      <span class="n">println</span><span class="o">(</span> <span class="n">dbCon</span> <span class="o">)</span>
-
-      <span class="c1">// NOTE: For more details on how to load configs and db connections from the config
-</span>      <span class="c1">// refer to the Example_Configs.scala example
+      <span class="c1">// NOTE(s):
+</span>      <span class="c1">// The app contains the context which stores multiple services setup above in init method.
+</span>      <span class="c1">// The args and conf are available as members in the base class itself.
 </span>
-      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
+      <span class="c1">// 1. Get the selected environment
+</span>      <span class="n">println</span><span class="o">(</span> <span class="n">ctx</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">toString</span> <span class="o">)</span>
+
+      <span class="c1">// 2. Get the command line args and show the raw inputs supplied
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">args</span><span class="o">.</span><span class="n">raw</span> <span class="o">)</span>
+
+      <span class="c1">// 3. Get the setting from base config ( common config that all other configs inherit from )
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span> <span class="o">)</span>
+
+      <span class="c1">// 4. Get value from inherited config ( env.qa.conf ) that inherits
+</span>      <span class="c1">// from the common config ( env.conf )
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"app.name"</span><span class="o">)</span> <span class="o">)</span>
+      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"log.enabled"</span><span class="o">)</span> <span class="o">)</span>
+      <span class="n">println</span> <span class="o">(</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span> <span class="o">)</span>
+
+      <span class="c1">// 5. Get and use logger
+</span>      <span class="n">ctx</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"default logger "</span><span class="o">)</span>
+
+      <span class="c1">// 6. Get app info ( showing just 1 property )
+</span>      <span class="n">println</span><span class="o">(</span> <span class="n">ctx</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">about</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
+
+      <span class="c1">// 7. Get the host computer info
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">ctx</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">host</span> <span class="o">)</span>
+
+      <span class="c1">// 8. Get the scala language runtime
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">ctx</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">lang</span> <span class="o">)</span>
+
+      <span class="c1">// 9. Get the encryptor to encrypt/decrypt
+</span>      <span class="n">println</span> <span class="o">(</span> <span class="n">ctx</span><span class="o">.</span><span class="n">enc</span><span class="o">.</span><span class="n">fold</span><span class="o">(</span><span class="s">"no encryption"</span><span class="o">)(</span> <span class="n">enc</span> <span class="k">=&gt;</span> <span class="n">enc</span><span class="o">.</span><span class="n">encrypt</span><span class="o">(</span><span class="s">"hello world"</span><span class="o">)))</span>
+
+      <span class="c1">// 10. Execute your work here.
+</span>      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
 
       <span class="c1">// simulate work
 </span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>

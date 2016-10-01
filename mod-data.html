@@ -74,11 +74,11 @@
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Database access library using JDBC for MySql and SqlServer</td>
+      <td>Database access utilty to query and manage data using JDBC for MySql. Other database support coming later.</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-22T14:53:39.049</td>
+      <td>2016-09-30T14:18:39.397</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -115,12 +115,16 @@
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConfig</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">Db</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
+<span class="k">import</span> <span class="nn">slate.core.common.Conf</span>
+<span class="k">import</span> <span class="nn">slate.entities.core.EntityMapper</span>
+<span class="k">import</span> <span class="nn">slate.examples.common.User</span>
 
 
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">scala.reflect.runtime.universe.</span><span class="o">{</span><span class="n">typeOf</span><span class="o">}</span>
 
 
 </code></pre>
@@ -138,7 +142,7 @@
 
     <span class="c1">// CASE 1: Default database connection using credentials from users folder with content:
 </span>    <span class="c1">//
-</span>    <span class="c1">// e.g. on windows: C:\Users\kv\.slate\db_default.txt
+</span>    <span class="c1">// e.g. on windows: C:\Users\kv\slatekit\conf\db.txt
 </span>    <span class="c1">//
 </span>    <span class="c1">// driver:com.mysql.jdbc.Driver
 </span>    <span class="c1">// url:jdbc:mysql://localhost/World
@@ -166,13 +170,33 @@
     <span class="n">showResult</span><span class="o">(</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getShard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard2"</span><span class="o">)</span> <span class="o">)</span>
 
     <span class="c1">// CASE 6: Now create the database class and start using some basic methods
-</span>    <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Db</span><span class="o">(</span><span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">))</span>
-    <span class="n">db</span><span class="o">.</span><span class="n">open</span><span class="o">()</span>
+</span>    <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Db</span><span class="o">(</span><span class="k">new</span> <span class="nc">Conf</span><span class="o">().</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"db"</span><span class="o">).</span><span class="n">get</span><span class="o">)</span>
 
-    <span class="c1">// CASE 7: Get scala int value ( assumes default mysql installation is present with db_default.txt existing
-</span>    <span class="c1">// in the users folder &lt;user&gt;/.slate/db_default.txt
-</span>    <span class="k">val</span> <span class="n">total</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">getScalarInt</span><span class="o">(</span><span class="s">"select count(*) from City"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">s</span><span class="s">"total users: ${total}"</span><span class="o">)</span>
+    <span class="c1">// CASE 7: Open the database
+</span>    <span class="n">db</span><span class="o">.</span><span class="n">open</span><span class="o">()</span>
+
+    <span class="c1">// CASE 8: Get scalar int value
+</span>    <span class="k">val</span> <span class="n">total1</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">getScalarInt</span><span class="o">(</span><span class="s">"select count(*) from City"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 9: Execute a sql insert
+</span>    <span class="k">val</span> <span class="n">id1</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">executeInsertGetId</span><span class="o">(</span><span class="s">"insert into `city`(`name`) values( 'ny' )"</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 10: Execute a sql insert using
+</span>    <span class="k">val</span> <span class="n">id2</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">executeInsertGetId</span><span class="o">(</span><span class="s">"insert into `city`(`name`) values( 'ny' )"</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 10: Execute a sql update
+</span>    <span class="k">val</span> <span class="n">total2</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">executeUpdate</span><span class="o">(</span><span class="s">"update `city` set `name` = 'ny' where id = 2"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 11: Map a record to an model using the mapper component
+</span>    <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
+    <span class="n">mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(),</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+    <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">mapOne</span><span class="o">(</span><span class="s">"select * from `city` where id = 1"</span><span class="o">,</span> <span class="n">mapper</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">model</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 12: Map multiple records
+</span>    <span class="k">val</span> <span class="n">models</span> <span class="k">=</span> <span class="n">db</span><span class="o">.</span><span class="n">mapMany</span><span class="o">(</span><span class="s">"select * from `city` where id &lt; 5"</span><span class="o">,</span> <span class="n">mapper</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">models</span> <span class="o">)</span>
+
     
 
 </code></pre>

@@ -74,11 +74,11 @@
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A thin wrapper for Config with support for environments, databases, encryption</td>
+      <td>Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-22T14:53:39.043</td>
+      <td>2016-09-30T14:18:39.395</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -142,11 +142,12 @@
     <span class="c1">// CASE 1: Load up config from application.conf in resources
 </span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">()</span>
     <span class="n">println</span><span class="o">(</span> <span class="s">"env.name: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"env.name"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"env.region: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"env.region"</span><span class="o">,</span> <span class="s">"usa"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">(</span> <span class="s">"db.enabled: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"db.enabled"</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
 
-    <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf.
+    <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf or default
 </span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">().</span><span class="n">getOrElse</span><span class="o">(</span><span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span><span class="o">))</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${env.name}, ${env.env}, ${env.key}"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
@@ -174,16 +175,33 @@
 
 
     <span class="c1">// CASE 6: File from user directory:
-</span>    <span class="c1">// Get the db settings from a settings file called "db-pr1.txt"
-</span>    <span class="c1">// in a folder called ".slate" in the user directory.
-</span>    <span class="c1">// This is for added security to avoid
-</span>    <span class="c1">// any database connection strings in the application.conf file.
+</span>    <span class="c1">// You can refer to a file path using a uri syntax:
+</span>    <span class="c1">//
+</span>    <span class="c1">// SYNTAX:
+</span>    <span class="c1">// - "jars://"  refer to resources directory in the jar.
+</span>    <span class="c1">// - "user://"  refer to user.home directory.
+</span>    <span class="c1">// - "file://"  refer to an explicit path to the file
+</span>    <span class="c1">// - "file://"  refer to a relative path to the file from working directory
+</span>
+    <span class="c1">// EXAMPLES:
+</span>    <span class="c1">// - jar://env.qa.conf
+</span>    <span class="c1">// - user://slatekit/conf/env.qa.conf
+</span>    <span class="c1">// - file://c:/slatekit/system/slate.shell/conf/env.qa.conf
+</span>    <span class="c1">// - file://./conf/env.qa.conf
+</span>    <span class="c1">//
+</span>    <span class="c1">// CONFIG
+</span>    <span class="c1">//
+</span>    <span class="c1">// db {
+</span>    <span class="c1">//   location: "user://slatekit/conf/db.conf"
+</span>    <span class="c1">// }
 </span>    <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
     <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"db"</span><span class="o">)</span>
     <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - file ref: "</span><span class="o">,</span> <span class="n">dbConFile</span> <span class="o">)</span>
 
 
-    <span class="c1">// CASE 7: Encrypted strings in the config file
+    <span class="c1">// CASE 7: Decryp encrypted strings in the config file
+</span>    <span class="c1">// e.g.
+</span>    <span class="c1">// db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
 </span>    <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>
     <span class="k">val</span> <span class="n">confs5</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">,</span> <span class="n">enc</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">encryptor</span><span class="o">)</span> <span class="o">)</span>
     <span class="n">println</span> <span class="o">(</span> <span class="s">"db user decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getStringEnc</span><span class="o">(</span><span class="s">"db.user"</span><span class="o">)</span> <span class="o">)</span>
