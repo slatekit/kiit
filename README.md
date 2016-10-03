@@ -1,2 +1,2 @@
 # slatekit
-A Scala utility library and tool kit
+A Scala tool-kit, utility library and server backend
