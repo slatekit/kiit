@@ -129,8 +129,9 @@ var codeHelixMeta = {
 	{ name: "Server"        ,  page: "server.html"      , children: null },
 	{ name: "ORM"           ,  page: "orm.html"         , children: null },
 	{ name: "Utils"         ,  page: "utils.html"       , children: null },
-	{ name: "Features"      ,  page: "features.html"    , children: null },
+	{ name: "Extensions"      ,  page: "features.html"    , children: null },
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },
+	{ name: "Docs"          ,  page: "docs/slate-scala-docs.zip" },
 	{ name: "More"          ,  page: "-"                , children: [
 		{ name: "Scala 101"        ,  page: "scala101.html"    },
 		{ name: "Sample Apps"      ,  page: "samples.html"     },
