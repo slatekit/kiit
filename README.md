@@ -1,20 +1,14 @@
-# slatekit
-A Scala tool-kit, utility library and server backend
-
-**author **: Kishore Reddy
-**website**: www.slatekit.com 
-**date   **: Oct 3, 2016
-**release**: 1.0.1
-**build  **: 1.0.1.2
-**url    **: www.slatekit.com
-
-
-
 # SLATE KIT
-This is Slate Kit 1.0 
 Slate Kit is a tool kit, utility library and server backend for mobile and web apps. 
 It is written in Scala and uses Akka-Http for the Server. 
 
+
+- **author**: Kishore Reddy
+- **website**: www.slatekit.com 
+- **date**: Oct 3, 2016
+- **release**: 1.0.1
+- **build**: 1.0.1.2
+- **url**: www.slatekit.com
 
 
 # LINKS
