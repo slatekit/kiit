@@ -131,7 +131,7 @@ var codeHelixMeta = {
 	{ name: "Utils"         ,  page: "utils.html"       , children: null },
 	{ name: "Extensions"      ,  page: "features.html"    , children: null },
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },
-	{ name: "Docs"          ,  page: "docs/slate-scala-docs.zip" },
+	{ name: "Docs"          ,  page: "docs/slate-scala-docs.zip?raw=true" },
 	{ name: "More"          ,  page: "-"                , children: [
 		{ name: "Scala 101"        ,  page: "scala101.html"    },
 		{ name: "Sample Apps"      ,  page: "samples.html"     },
