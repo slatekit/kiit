@@ -69,3 +69,15 @@ The following are needed if you plan on using any of these.
 2. AWS Sdk ( For Java )	latest	Cloud Storage of Files(S3), Queues(SQS)	download
 3. MySql 5.7	Database	download
 
+
+# PROJECT DEPENDENCIES
+- slate.common : none
+- slate.entities : slate.common, mysql-connector-java-5.1.38-bin.jar
+- slate.core : slate.common, slate.entities 
+- slate.integration : slate.common, slate.entities, slate.core
+- slate.tools : slate.common, slate.entities, slate.core
+- slate.cloud : slate.common, slate.entities, slate.core, aws libs ( see lib folder )
+- slate.shell : slate.common, slate.entities, slate.core, slate.integration
+- slate.server: slate.common, slate.entities, slate.core, slate.integration,  akka http libs ( see lib folder ) 
+- slate.ext : not currently available
+
