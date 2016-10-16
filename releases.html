@@ -71,14 +71,14 @@
 			
           <div class="container">
 			<div> 
-					<p>We are very happy to announce that Slate Kit is now officially publicly available. 
-					Slate Kit has been used internally on projects for over <strong>1.5 years</strong> with much success. 
+					<p>Slate Kit is now officially publicly available! 
+					Slate Kit has been used in internal projects during the concept and creation phase for <strong>2 years</strong> with much success. 
 					The investment in Scala, Akka and Akka-Http has paid off tremendously. 
 					Scala is a modern, concise, cross-platform language with amazing language features. 
 					Akka complements Scala with frameworks to build high-performance, scalable applications.
-					We are open-sourcing majority ( almost 90% ) of Slate Kit with the exception of the 
+					We are open-sourcing a majority ( almost 90% ) of Slate Kit. The  
 					<a class="url-ch" href="overview.html#project-slate-ext">Slate.Ext</a> project containing the 
-					mobile / web application <a class="url-ch" href="features.html">features</a> as closed-source and available 
+					mobile / web application <a class="url-ch" href="features.html">features</a> are closed-source and will be made available 
 					as a premium offering ( coming soon ). The license is an MIT License. Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">github</a> project for more info. </p>
 					</p>
 				</div>
@@ -89,42 +89,41 @@
 					<a class="url-ch" href="www.github.com\codehelix"> www.github.com\codehelix</a> or at <a class="url-ch" href="www.github.com\kishorereddy">www.github.com\kishorereddy</a></div>
 			</div>
 			<br/>
-			<h1>Versions</h2>
-			<div class="row">
-				<div class="col-sm-6 col-md-4">
+			<h1>Live</h2>								
+			<table class="table table-bordered table-striped">
+				
+				<tr>
+					<td><strong><a class="url-ch" href="#release_1_0_1">1.0.1</a></strong></td>
+					<td>Sep 25, 2016</td>
+					<td><strong>MVP - Minimum Viable Product + Patch</strong></td>
+				</tr>
+			</table>
+			<br/><br/>
+			
+			<h1>All</h2>
+			<div id="release_1_1_0" class="row">
+				<div class="col-md-12">
 					<div class="thumbnail">
-						<img src="themes/start/images/white/flag.png" alt="..." width="80">
-						<div class="caption">			
-							<div class="text-center"><h1>1.0.0</h1><br/></div>
-							<table class="table table-bordered table-striped">
+						<div class="caption">						
+							<div>
+								<div class="row">
+									<div class="col-sm-2">
+										<img src="themes/start/images/white/prototype.png" alt="..." width="80">
+									</div>
+									<div class="text-left"><h1>1.1.0 ( in-progress )</h1></div>
+								</div>
+							</div><table class="table table-bordered table-striped">
 								<tr>
-									<td class="col-sm-3"><strong>About</strong></td>
-									<td>First Release</td>
+									<td class="col-sm-2"><strong>About</strong></td>
+									<td>Functional Release - Focus on making some of the remaining components <strong>immutable</strong>, <strong>idiomatic scala</strong>.</td>
 								</tr>
 								<tr>
-									<td class="col-sm-3"><strong>Date</strong></td>
-									<td>Sep 25, 2016</td>
+									<td><strong>Date</strong></td>
+									<td>TBD - Oct 16, 2016 ( Tentative )</td>
 								</tr>
 								<tr>
 									<td><strong>Build</strong></td>
-									<td>1.0.0</td>
-								</tr>
-								<tr>
-									<td><strong>Company</strong></td>
-									<td>
-									<ul>
-										<li><a class="url-ch" href="www.codehelix.co"> www.codehelix.co</a></li>
-										<li><a class="url-ch" href="www.github.com\codehelix"> www.github.com\codehelix</a></li>
-									</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Contact</strong></td>
-									<td>
-										<ul>
-											<li><a class="url-ch" href="mailto:kishore@codehelix.co">kishore@codehelix.co</a></li>
-										</ul>
-									</td>
+									<td>-</td>
 								</tr>
 								<tr>
 									<td><strong>Required</strong></td>
@@ -133,28 +132,6 @@
 											<li>Java 1.8</li>
 											<li>Scala 2.1.7</li>
 											<li>Config.jar</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Optional</strong></td>
-									<td>						
-										<ul>
-											<li>MySql: For Jdbc connector</li>
-											<li>Aws SDK: For SQS, S3</li>
-											<li>Akka-Http: For server</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Features</strong></td>
-									<td>
-										<ul>
-											<li>Slate Utilities</li>
-											<li>Slate Architecture</li>
-											<li>Slate Tools</li>
-											<li>Slate CLI</li>
-											<li>Slate Server</li>
 										</ul>
 									</td>
 								</tr>
@@ -162,50 +139,62 @@
 									<td><strong>Changes</strong></td>
 									<td>
 										<ul>
-											<li>Bug fixes</li>
-											<li>ORM improvements</li>
-											<li>Server improvements</li>
+											<li>Args utility component now immutable</li>
+											<li>Env utility component now immutable</li>
+											<li>App metadata now immutable</li>
+											<li>App component refactored and immutable</li>
+											<li>API registration now immutable</li>
+											<li>Removed unused code</li>
+											<li>Sample apps updated</li>
+											<li><strong>Minor breaking changes</strong></li>
 										</ul>
+									</td>
+								</tr>								
+								<tr>
+									<td><strong>Downloads</strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/6wjv1jn5vs8k2dp/slatekit_v_1_0_1_binaries.zip?dl=0">binaries</a></h4>
+										Slate Kit Jars and Sample App Jars, Akka Http, MySql 5.7, and other 3rd party libs
+									</td>
+								</tr>
+								<tr>
+									<td><strong></strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/jbo040qojeprkvf/slatekit_v_1_0_1_samples.zip?dl=0">binaries + samples</a></h4>
+										Binaries + Sample apps for the Slate Kit Base App, Shell, Server and Protocol Independent APIs.
 									</td>
 								</tr>
 							</table>
+							<br/>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-4">
+            </div>
+			
+			<div id="release_1_0_1" class="row">
+				<div class="col-md-12">
 					<div class="thumbnail">
-						<img src="themes/start/images/white/microscope.png" alt="..." width="80">
 						<div class="caption">			
-							<div class="text-center"><h1>1.0.1</h1><br/></div>
+							<div>
+								<div class="row">
+									<div class="col-sm-2">
+										<img src="themes/start/images/white/microscope.png" alt="..." width="80">
+									</div>
+									<div class="text-left"><h1>1.0.1</h1></div>
+								</div>
+							</div>
 							<table class="table table-bordered table-striped">
 								<tr>
-									<td class="col-sm-3"><strong>About</strong></td>
-									<td>Bug Fixes + Small Improvements</td>
+									<td class="col-sm-2"><strong>About</strong></td>
+									<td>Patch: Bug Fixes + Small Improvements</td>
 								</tr>
 								<tr>
-									<td class="col-sm-3"><strong>Date</strong></td>
+									<td><strong>Date</strong></td>
 									<td>Oct 1, 2016</td>
 								</tr>
 								<tr>
 									<td><strong>Build</strong></td>
-									<td>-</td>
-								</tr>
-								<tr>
-									<td><strong>Company</strong></td>
-									<td>
-									<ul>
-										<li><a class="url-ch" href="www.codehelix.co"> www.codehelix.co</a></li>
-										<li><a class="url-ch" href="www.github.com\codehelix"> www.github.com\codehelix</a></li>
-									</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Contact</strong></td>
-									<td>
-										<ul>
-											<li><a class="url-ch" href="mailto:kishore@codehelix.co">kishore@codehelix.co</a></li>
-										</ul>
-									</td>
+									<td>1.0.1</td>
 								</tr>
 								<tr>
 									<td><strong>Required</strong></td>
@@ -213,29 +202,6 @@
 										<ul>
 											<li>Java 1.8</li>
 											<li>Scala 2.1.7</li>
-											<li>Config.jar</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Optional</strong></td>
-									<td>						
-										<ul>
-											<li>MySql: For Jdbc connector</li>
-											<li>Aws SDK: For SQS, S3</li>
-											<li>Akka-Http: For server</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Features</strong></td>
-									<td>
-										<ul>
-											<li>Slate Utilities</li>
-											<li>Slate Architecture</li>
-											<li>Slate Tools</li>
-											<li>Slate CLI</li>
-											<li>Slate Server</li>
 										</ul>
 									</td>
 								</tr>
@@ -246,7 +212,22 @@
 											<li>API clean up</li>
 											<li>Web Site</li>
 											<li>Examples</li>
+											<li>Sample Apps</li>
 										</ul>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Downloads</strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/6wjv1jn5vs8k2dp/slatekit_v_1_0_1_binaries.zip?dl=0">binaries</a></h4>
+										Slate Kit Jars and Sample App Jars, Akka Http, MySql 5.7, and other 3rd party libs
+									</td>
+								</tr>
+								<tr>
+									<td><strong></strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/jbo040qojeprkvf/slatekit_v_1_0_1_samples.zip?dl=0">binaries + samples</a></h4>
+										Binaries + Sample apps for the Slate Kit Base App, Shell, Server and Protocol Independent APIs.
 									</td>
 								</tr>
 							</table>
@@ -254,58 +235,39 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-6 col-md-4">
+			</div>
+			<div id="release_1_0_0" class="row">
+				<div class="col-md-12">
 					<div class="thumbnail">
-						<img src="themes/start/images/white/prototype.png" alt="..." width="80">
-						<div class="caption">						
-							<div class="text-center"><h1>1.1.0</h1><br/></div>
+						<div class="caption">			
+							<div>
+								<div class="row">
+									<div class="col-sm-2">
+										<img src="themes/start/images/white/flag.png" alt="..." width="80">
+									</div>
+									<div class="text-left"><h1>1.0.0</h1></div>
+								</div>
+							</div>
 							<table class="table table-bordered table-striped">
+								
 								<tr>
-									<td class="col-sm-3"><strong>About</strong></td>
-									<td>Minor release</td>
+									<td class="col-sm-2"><strong>About</strong></td>
+									<td>First Release as an MVP ( Minimum Viable Product )</td>
 								</tr>
 								<tr>
-									<td class="col-sm-3"><strong>Date</strong></td>
-									<td>Nov 1, 2016</td>
+									<td><strong>Date</strong></td>
+									<td>Sep 25, 2016</td>
 								</tr>
 								<tr>
 									<td><strong>Build</strong></td>
-									<td>-</td>
-								</tr>
-								<tr>
-									<td><strong>Company</strong></td>
-									<td>
-									<ul>
-										<li><a class="url-ch" href="www.codehelix.co"> www.codehelix.co</a></li>
-										<li><a class="url-ch" href="www.github.com\codehelix"> www.github.com\codehelix</a></li>
-									</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Contact</strong></td>
-									<td>
-										<ul>
-											<li><a class="url-ch" href="mailto:kishore@codehelix.co">kishore@codehelix.co</a></li>
-										</ul>
-									</td>
-								</tr>
+									<td>1.0.0</td>
+								</tr>								
 								<tr>
 									<td><strong>Required</strong></td>
 									<td>						
 										<ul>
 											<li>Java 1.8</li>
-											<li>Scala 2.1.7</li>
-											<li>Config.jar</li>
-										</ul>
-									</td>
-								</tr>
-								<tr>
-									<td><strong>Optional</strong></td>
-									<td>						
-										<ul>
-											<li>MySql: For Jdbc connector</li>
-											<li>Aws SDK: For SQS, S3</li>
-											<li>Akka-Http: For server</li>
+											<li>Scala 2.1.7 || Scala 2.1.8</li>
 										</ul>
 									</td>
 								</tr>
@@ -321,18 +283,27 @@
 										</ul>
 									</td>
 								</tr>
+								<tr>
+									<td><strong>Notes</strong></td>
+									<td>
+										<ul>
+											<li>Bug fixes from earlier versions</li>
+											<li>Sample applications</li>
+											<li>Server, ORM, App, PII ( Protocol Independent APIs )</li>
+										</ul>
+									</td>
+								</tr>
 							</table>
-							<br/>
 						</div>
 					</div>
 				</div>
-            </div>
+			</div>
           
 			<div id="release-downloads">
-				<h1>Downloads</h2>
+				<h1>Downloads ( Latest Release )</h2>
 				<table class="table table-bordered table-striped">
 					<tr>
-						<td class="col-sm-1"><h4>0.9.1</h4></td>
+						<td class="col-sm-1"><h4>1.0.1</h4></td>
 						<td class="col-sm-3">
 							<h4><a class="url-ch" href="releases/slatekit_v_0_9_1_binaries.zip">Binaries</a></h4>							
 							Slate Kit Jars and Sample App Jars, Akka Http, MySql 5.7, and other 3rd party libs
