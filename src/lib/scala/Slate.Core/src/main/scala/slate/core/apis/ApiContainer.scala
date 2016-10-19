@@ -14,6 +14,7 @@ package slate.core.apis
 import slate.common._
 import slate.common.args.Args
 import slate.common.results.{ResultSupportIn}
+import slate.common.Funcs.execute
 import slate.core.apis.support.{ApiCallReflect, ApiCallHelper, ApiCallCheck}
 import slate.core.auth.{Auth, AuthBase}
 import slate.core.common.AppContext
@@ -22,34 +23,43 @@ import scala.reflect.runtime.universe.{typeOf, Type}
 
 /**
   * This is the core container hosting, managing and executing the protocol independent apis.
-  * @param protocol
   */
-class ApiContainer(val protocol:String = "") extends ResultSupportIn {
+class ApiContainer(val ctx:AppContext,
+                   auth:Option[ApiAuth] = None,
+                   protocol:String = "*",
+                   apis:Option[List[ApiReg]] = None) extends ResultSupportIn {
 
   protected val _lookup = new ListMap[String, ApiLookup]()
   val settings = new ApiSettings()
-  var auth:Option[ApiAuth] = None
-  var ctx:AppContext = null
 
 
-  def this(ctx:AppContext, auth:Option[ApiAuth], protocol:String) = {
-    this(Strings.valueOrDefault(protocol, "*"))
-    this.auth = auth
-    this.ctx = ctx
-  }
+  registerAll()
 
   /**
    * initializes
    */
   def init(): Unit =
   {
+
+  }
+
+
+  /**
+   * registers all the apis.
+   */
+  def registerAll():Unit = {
+    execute[List[ApiReg]](apis, all => {
+      for(reg <- all) {
+        register(reg.api, reg.declaredOnly, reg.roles, reg.auth, reg.protocol)
+      }
+    })
   }
 
 
   /**
    * registers an api for dynamic calls
- *
-   * @param api
+   *
+   *
    */
   def register[A >: Null](api:ApiBase,
                           declaredOnly:Boolean = true,

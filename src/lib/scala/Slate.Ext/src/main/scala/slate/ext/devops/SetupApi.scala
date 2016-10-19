@@ -12,8 +12,9 @@
 package slate.ext.devops
 
 import slate.cloud.aws.{AwsCloudFiles, AwsCloudQueue}
+import slate.common.envs.Envs
 import slate.common.queues.QueueSource
-import slate.common.{Env, Ioc}
+import slate.common.Ioc
 import slate.core.apis.{ApiAction, Api}
 import slate.core.common.svcs.ApiWithSupport
 import slate.ext.tasks.TaskService
@@ -27,7 +28,7 @@ class SetupApi
   @ApiAction(name = "", desc= "create instance of aws sqs queue with supplied name", roles= "@parent", verb = "@parent", protocol = "@parent")
   def sqs(name:String):Unit = {
 
-    val queue = new AwsCloudQueue(context.cfg.getStringEnc( Env.name + ".aws.sqs.name"))
+    val queue = new AwsCloudQueue(context.cfg.getStringEnc( this.context.env.name + ".aws.sqs.name"))
     queue.connectWith(context.cfg.getStringEnc("aws.key"), context.cfg.getStringEnc("aws.pswd"))
     Ioc.register("que", queue)
   }
@@ -36,7 +37,7 @@ class SetupApi
   @ApiAction(name = "", desc= "create instance of aws s3 with supplied name", roles= "@parent", verb = "@parent", protocol = "@parent")
   def s3(name:String):Unit =
   {
-    val files = new AwsCloudFiles(context.cfg.getStringEnc( Env.name + ".aws.s3.name"), false)
+    val files = new AwsCloudFiles(context.cfg.getStringEnc( this.context.env.name + ".aws.s3.name"), false)
     files.connectWith(context.cfg.getStringEnc("aws.key"), context.cfg.getStringEnc("aws.pswd"))
     Ioc.register("files", files)
   }

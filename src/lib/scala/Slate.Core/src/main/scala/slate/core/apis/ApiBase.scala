@@ -12,7 +12,7 @@
 package slate.core.apis
 
 import slate.common._
-import slate.common.results.{ResultBase, ResultTimed}
+import slate.common.results.ResultTimed
 import slate.core.apis.support.{ApiCallReflect}
 import slate.core.common.AppContext
 
@@ -99,14 +99,13 @@ class ApiBase {
   }
 
 
-
   /**
    * benchmarks a function call by tracking the start, end and duration of the call.
     *
     * @param callback : the call to benchmark
    * @return : OperationResultBenchmarked
    */
-  def bench(callback:()=>Any ):ResultBase =
+  def bench(callback:()=>Any ):ResultTimed[Any] =
   {
     var result:Any = null
 

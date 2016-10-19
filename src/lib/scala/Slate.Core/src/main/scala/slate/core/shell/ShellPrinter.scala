@@ -15,7 +15,6 @@ package slate.core.shell
 import slate.common.serialization.{SerializerProps, SerializerJson}
 import slate.entities.core.{EntitySerializer, Entities, IEntity}
 import slate.common._
-import slate.common.results.{ResultConverter, ResultTimed}
 
 import scala.collection.immutable.LinearSeq
 

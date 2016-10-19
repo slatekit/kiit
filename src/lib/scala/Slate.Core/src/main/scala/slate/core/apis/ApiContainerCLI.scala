@@ -20,13 +20,10 @@ import scala.collection.mutable.Map
   * A thin wrapper on the ApiContainer that only extends the base implementation by handling
   * requests for help/docs on the Apis/Actions.
   */
-class ApiContainerCLI extends ApiContainer(ApiConstants.ProtocolCLI) {
+class ApiContainerCLI(ctx:AppContext, auth:Option[ApiAuth] = None, apis : Option[List[ApiReg]] = None)
+  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis) {
 
-  def this(ctx:AppContext, auth:Option[ApiAuth]) = {
-    this()
-    this.auth = auth
-    this.ctx = ctx
-  }
+
 
   override def getOptions(ctx:Option[Any]): Option[Inputs] = {
     Some(new InputArgs(Map[String,Any]()))

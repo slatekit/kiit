@@ -25,16 +25,17 @@ import scala.collection.mutable.Map
   * @param appDir : deprecated
   * @param settings : Settings for the shell functionality
   */
-class ShellAPI(private val creds:Credentials,
-               val ctx        : AppContext  ,
-               val auth       : ApiAuth     ,
-               val appDir     : String      ,
-               settings   : ShellSettings = new ShellSettings()
+class ShellAPI(private val creds:Credentials                   ,
+               val ctx    : AppContext                         ,
+               val auth   : ApiAuth                            ,
+               val appDir : String                             ,
+               settings   : ShellSettings = new ShellSettings(),
+               apiItems   : Option[List[ApiReg]] = None
                )
   extends ShellService(ctx.app, ctx.dirs.get, settings) {
 
   // api container holding all the apis.
-  val apis = new ApiContainerCLI(ctx, Some(auth))
+  val apis = new ApiContainerCLI(ctx, Some(auth), apiItems)
 
   // configure the root directory in user directory for this app.
   configure(appDir, s".${appDir}", true)
