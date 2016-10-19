@@ -60,40 +60,38 @@ case class Arg (
    * -region  :  the region linked to app
    *             ? optional  [String]  e.g. us
    *
-   * @param writer
    * @param tab
    * @param prefix
    * @param separator
    * @param maxWidth
    */
-  def toStringCLI(writer:Option[ConsoleWriter] = None,
-                  tab:Option[String] = Some("\t"),
-                  prefix:Option[String] = Some("-"),
-                  separator:Option[String] = Some("="),
-                  maxWidth:Option[Int] = None ): Unit =
+  def semantic(
+                tab:Option[String] = Some("\t"),
+                prefix:Option[String] = Some("-"),
+                separator:Option[String] = Some("="),
+                maxWidth:Option[Int] = None ): List[(String,String,Boolean)] =
   {
-    val wr = writer.getOrElse(new ConsoleWriter())
-    val namePadded = name.pad(maxWidth.getOrElse(name.length))
+    val nameLen = maxWidth.getOrElse(name.length)
 
-    // -env     :  the environment to run in
-    wr.highlight("-" + namePadded, endLine = false)
-    wr.text(" : ", endLine = false)
-    wr.text(desc, endLine = true )
-    wr.text(" ".repeat(maxWidth.getOrElse(name.length) + 6), false)
+    var logs = List[(String,String,Boolean)](
+      ( "highlight", prefix.getOrElse("-") + name.pad(nameLen), false),
+      ( "text"     , separator.getOrElse("=")                 , false),
+      ( "text"     , desc                   , true ),
+      ( "text"     , " ".repeat(nameLen + 6), false))
 
-    // ! required  [String]  e.g. dev
-    val requiredIndicator = if(isRequired) "!" else "?"
     if(isRequired)
     {
-      wr.important(requiredIndicator, endLine = false)
-      wr.text(s"required ", endLine = false)
+      logs = logs :+ ("important", "!"           , false)
+      logs = logs :+ ("text"     , s"required "  , false)
     }
     else
     {
-      wr.success(requiredIndicator, endLine = false)
-      wr.text(s"optional ", endLine = false)
+      logs = logs :+ ("success", "?"             , false)
+      logs = logs :+ ("text"   , s"optional "    , false)
     }
-    wr.subTitle(s"[${dataType}] ", endLine = false)
-    wr.text(s"e.g. ${example}", endLine = false)
+
+    logs = logs :+ ("subTitle", s"[$dataType] "  , false)
+    logs = logs :+ ("text"    , s"e.g. $example" , true)
+    logs
   }
 }

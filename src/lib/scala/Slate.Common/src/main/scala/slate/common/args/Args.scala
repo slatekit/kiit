@@ -12,8 +12,9 @@
 package slate.common.args
 
 
-import slate.common.results.ResultCode
+
 import slate.common.{Inputs, Result}
+import slate.common.Funcs._
 
 
 /**
@@ -23,30 +24,38 @@ import slate.common.{Inputs, Result}
  *
  *  @example usage: app.users.invite -email="john@gmail.com" -role="guest"
   *
+  * @param raw         : the raw text that was parsed into arguments.
   * @param action      : "app.users.invite"
   * @param actionVerbs : ["app", "users", "invite" ]
   * @param prefix      : the letter used to prefix each key / name of named parameters e.g. "-"
   * @param separator   : the letter used to separate the key / name with value e.g. ":"
-  * @param raw         : the raw text that was parsed into arguments.
   * @param _namedArgs  : the map of named arguments ( key / value ) pairs
   * @param _indexArgs  : the list of positional arguments ( index based )
   */
-class Args(val action:String,
-           val actionVerbs:List[String],
-           val prefix:String,
-           val separator:String,
-           val raw:List[String],
-           private val _namedArgs:Map[String,String],
-           private val _indexArgs:List[String] ) extends Inputs
+class Args(val raw         :List[String],
+           val action      :String,
+           val actionVerbs :List[String],
+           val prefix      :String = "-",
+           val separator   :String = "=",
+           private val _namedArgs:Option[Map[String,String]] = None,
+           private val _indexArgs:Option[List[String]]       = None ) extends Inputs
 {
 
   private val _metaIndex = 0
 
 
-  def named:Map[String,String] = _namedArgs
+  /**
+   * gets read-only map of key-value based arguments
+   * @return
+   */
+  def named:Map[String,String] = _namedArgs.getOrElse(Map[String,String]())
 
 
-  def positional:List[String] = _indexArgs
+  /**
+   * gets read-only list of index/positional based arguments.
+   * @return
+   */
+  def positional:List[String] = _indexArgs.getOrElse(List[String]())
 
 
   /**
@@ -54,13 +63,9 @@ class Args(val action:String,
     *
     * @return
     */
-  def size():Int =
-  {
-    var count = 0
-    if (_namedArgs != null ) count = _namedArgs.size
-    if ( _indexArgs!= null ) count = count + _indexArgs.size
-
-    count
+  def size():Int = {
+    _namedArgs.fold(0)( named => named.size ) +
+    _indexArgs.fold(0)( positional => positional.size )
   }
 
 
@@ -69,10 +74,7 @@ class Args(val action:String,
     *
     * @return
    */
-  def isEmpty: Boolean =
-  {
-    ( named == null || named.size == 0) && (positional == null || positional.size == 0)
-  }
+  def isEmpty: Boolean = named.isEmpty && positional.isEmpty
 
 
   /**
@@ -81,10 +83,7 @@ class Args(val action:String,
     *
     * @return
    */
-  def isVersion: Boolean =
-  {
-    ArgsHelper.isVersion(positional, _metaIndex)
-  }
+  def isVersion: Boolean = ArgsHelper.isVersion(positional, _metaIndex)
 
 
   /**
@@ -93,10 +92,7 @@ class Args(val action:String,
     *
     * @return
    */
-  def isPause: Boolean =
-  {
-    ArgsHelper.isPause(positional, _metaIndex)
-  }
+  def isPause: Boolean = ArgsHelper.isPause(positional, _metaIndex)
 
 
   /**
@@ -105,10 +101,7 @@ class Args(val action:String,
     *
     * @return
    */
-  def isExit: Boolean =
-  {
-    ArgsHelper.isExit(positional, _metaIndex)
-  }
+  def isExit: Boolean = ArgsHelper.isExit(positional, _metaIndex)
 
 
   /**
@@ -116,19 +109,14 @@ class Args(val action:String,
     *
     * @return
    */
-  def isHelp: Boolean =
-  {
-    ArgsHelper.isHelp(positional, _metaIndex)
-  }
+  def isHelp: Boolean = ArgsHelper.isHelp(positional, _metaIndex)
 
 
-  /// <summary>
-  /// Returns true if there is only 1 argument with value: --About -About /About
-  /// </summary>
-  def isInfo: Boolean =
-  {
-    ArgsHelper.isMetaArg(positional, _metaIndex, "about", "info")
-  }
+  /**
+   * returns true if there is only 1 argument with value -about or -info
+   * @return
+   */
+  def isInfo: Boolean = ArgsHelper.isMetaArg(positional, _metaIndex, "about", "info")
 
 
   def getVerb(pos:Int): String =
@@ -142,41 +130,34 @@ class Args(val action:String,
 
   def getValueAt(pos:Int): String =
   {
-    if ( _indexArgs == null || _indexArgs.size == 0 )
-      return ""
-    if (pos >= _indexArgs.size)
-      return ""
-
-    _indexArgs(pos)
+    _indexArgs.fold("")( args =>
+    {
+      defaultOrExecute( pos >= args.size, "", { args(pos) } )
+    })
   }
 
 
-  /// <summary>
   override def getValue(key: String): AnyVal =
   {
-    if ( !containsKey(key) )
-      throw new IllegalArgumentException("key not found in arguments : " + key)
-
-    _namedArgs(key).asInstanceOf[AnyVal]
+    _namedArgs.fold[AnyVal](false)( args =>
+    {
+      defaultOrExecute( !containsKey(key), false, { args(key).asInstanceOf[AnyVal] } )
+    })
   }
 
 
-  /// <summary>
   override def getObject(key: String): AnyRef =
   {
-    if ( !containsKey(key) ) return null
-
-    _namedArgs(key).asInstanceOf[AnyRef]
+    _namedArgs.fold[AnyRef]("")( args =>
+    {
+      defaultOrExecute( !containsKey(key), "", { args(key).asInstanceOf[AnyRef] })
+    })
   }
 
 
-  /// <summary>
   override def containsKey(key: String): Boolean =
   {
-    if(_namedArgs == null){
-      return false
-    }
-    _namedArgs.contains(key)
+    _namedArgs.fold(false)( args => args.contains(key))
   }
 }
 

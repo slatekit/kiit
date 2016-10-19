@@ -12,48 +12,94 @@
 package slate.common.args
 
 import slate.common.results.ResultSupportIn
-import slate.common.{Validation, Looper, Result, ConsoleWriter}
+import slate.common.Funcs.defaultOrExecute
+import slate.common.{Validation, Result, ConsoleWriter}
 
 import scala.reflect.runtime.universe.{Type, typeOf}
 
-class ArgsSchema extends ResultSupportIn with Validation {
+/**
+  * stores and builds a list of 1 or more arguments which collectively represent the schema.
+  * @note  this schema is immutable and returns a new schema when adding additional arguments
+  * @param items : the list of arguments.
+  */
+class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with Validation {
 
-  private var _items = List[Arg]()
+  def any = { items.size > 0 }
 
-
-  def any = { _items.size > 0 }
-
-
-  def addText(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
+  /**
+    * Adds a argument of type text to the schema
+    * @param name        : Name of argument
+    * @param desc        : Description
+    * @param required    : Whether this is required or not
+    * @param defaultVal  : Default value for argument
+    * @param example     : Example of value shown for help text
+    * @param exampleMany : Examples of values shown for help text
+    * @param group       : Used to group arguments into categories
+    * @return
+    */
+  def text(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
               example:String = "", exampleMany:String = "", group:String = ""  ) : ArgsSchema = {
     add(name, desc, typeOf[String], required, defaultVal, example, exampleMany, group)
   }
 
 
-  def addFlag(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
+  /**
+    * Adds a argument of type boolean to the schema
+    * @param name        : Name of argument
+    * @param desc        : Description
+    * @param required    : Whether this is required or not
+    * @param defaultVal  : Default value for argument
+    * @param example     : Example of value shown for help text
+    * @param exampleMany : Examples of values shown for help text
+    * @param group       : Used to group arguments into categories
+    * @return
+    */
+  def flag(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
               example:String = "", exampleMany:String = "", group:String = ""  ) : ArgsSchema = {
-    add(name, desc, typeOf[String], required, defaultVal, example, exampleMany, group)
+    add(name, desc, typeOf[Boolean], required, defaultVal, example, exampleMany, group)
   }
 
 
-  def addNumber(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
+  /**
+    * Adds a argument of type number to the schema
+    * @param name        : Name of argument
+    * @param desc        : Description
+    * @param required    : Whether this is required or not
+    * @param defaultVal  : Default value for argument
+    * @param example     : Example of value shown for help text
+    * @param exampleMany : Examples of values shown for help text
+    * @param group       : Used to group arguments into categories
+    * @return
+    */
+  def number(name:String, desc:String = "", required:Boolean = false, defaultVal:String = "",
                 example:String = "", exampleMany:String = "", group:String = ""  ) : ArgsSchema = {
-    add(name, desc, typeOf[String], required, defaultVal, example, exampleMany, group)
+    add(name, desc, typeOf[Number], required, defaultVal, example, exampleMany, group)
   }
 
 
+  /**
+    * Adds a argument to the schema
+    * @param name        : Name of argument
+    * @param desc        : Description
+    * @param dataType    : Data type of the argument
+    * @param required    : Whether this is required or not
+    * @param defaultVal  : Default value for argument
+    * @param example     : Example of value shown for help text
+    * @param exampleMany : Examples of values shown for help text
+    * @param group       : Used to group arguments into categories
+    * @return
+    */
   def add(name:String, desc:String = "", dataType:Type, required:Boolean = false, defaultVal:String = "",
           example:String = "", exampleMany:String = "", group:String = ""  ) : ArgsSchema = {
     val typeName = dataType.typeSymbol.name.toString
-    _items = _items :+ new Arg("", name, desc, typeName, required, false, false, false, group, "", defaultVal, example, exampleMany )
-    this
+    val updates = items :+ new Arg("", name, desc, typeName, required, false, false, false, group, "", defaultVal, example, exampleMany )
+    new ArgsSchema(updates)
   }
 
 
   def validate(args:Args):Result[Boolean] = {
 
-    validate( yes(), _items)( (res, arg) =>
-
+    validate( yes(), items)( (res, arg) =>
       if (arg.isRequired && !args.containsKey(arg.name)) {
         no ( msg = Some(s"arg: ${arg.name} was not supplied") )
       }
@@ -64,16 +110,25 @@ class ArgsSchema extends ResultSupportIn with Validation {
   }
 
 
-  def maxLengthOfName : Int = {
+  /**
+   * whether or not the argument supplied is missing
+   * @param args
+   * @param arg
+   * @return
+   */
+  def missing(args:Args, arg:Arg): Boolean = {
+    arg.isRequired && !args.containsKey(arg.name)
+  }
 
-    // Get the max length
-    var maxLength = 0
-    for(arg <- _items){
-      if(arg.name.length > maxLength){
-        maxLength = arg.name.length
-      }
-    }
-    maxLength
+
+  /**
+   * gets the maximum length of an argument name from all arguments
+   * @return
+   */
+  def maxLengthOfName : Int = {
+    defaultOrExecute( items.isEmpty, 0, {
+      items.maxBy( arg => arg.name.length ).name.length
+    })
   }
 
 
@@ -84,10 +139,10 @@ class ArgsSchema extends ResultSupportIn with Validation {
     // For color and semantic writing
     val writer = new ConsoleWriter()
     val maxLen = maxLengthOfName
-    for(arg <- _items) {
-      arg.toStringCLI(Some(writer), Some("\t"), prefix, separator, Some(maxLen))
-      writer.line()
-    }
 
+    for(arg <- items) {
+      val semanticHelp = arg.semantic(Some("\t"), prefix, separator, Some(maxLen))
+      writer.writeItems(semanticHelp)
+    }
   }
 }

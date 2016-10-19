@@ -23,50 +23,35 @@ object ArgsHelper {
    * returns true if there is only 1 argument with value: help ?
    * @return
    */
-  def isHelp(words:List[String], pos:Int): Boolean =
-  {
-    isMetaArg(words, pos, "help", "?")
-  }
+  def isHelp = isMetaArg(_:List[String], _:Int, "help", "?")
 
 
   /**
    * returns true if there is only 1 argument with value: version | ver
    * @return
    */
-  def isVersion(words:List[String], pos:Int): Boolean =
-  {
-    isMetaArg(words, pos, "version", "ver")
-  }
+  def isVersion = isMetaArg(_:List[String], _:Int, "version", "ver")
 
 
   /**
     * returns true if there is only 1 argument with value: version | ver
     * @return
     */
-  def isAbout(words:List[String], pos:Int): Boolean =
-  {
-    isMetaArg(words, pos, "about", "info")
-  }
+  def isAbout = isMetaArg(_:List[String], _:Int, "about", "info")
 
 
   /**
    * returns true if there is only 1 argument with value: pause
    * @return
    */
-  def isPause(words:List[String], pos:Int): Boolean =
-  {
-    isMetaArg(words, pos, "pause", "ver")
-  }
+  def isPause = isMetaArg(_:List[String], _:Int, "pause", "ver")
 
 
   /**
    * returns true if there is only 1 argument with value: --exit -quit /? -? ?
    * @return
    */
-  def isExit(words:List[String], pos:Int): Boolean =
-  {
-    isMetaArg(words, pos, "exit", "quit")
-  }
+  def isExit = isMetaArg(_:List[String], _:Int, "exit", "quit")
 
 
   /**
@@ -112,7 +97,7 @@ object ArgsHelper {
       }
       ndx = ndx + 1
     }
-    return isMatch
+    isMatch
   }
 
 

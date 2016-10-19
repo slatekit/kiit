@@ -41,7 +41,7 @@ class ArgsService extends ResultSupportIn {
 
     // Check 1: Empty line ?
     if (Strings.isNullOrEmpty(line))
-      return success( new Args("", null, prefix, sep, null, null, null))
+      return success( new Args(List[String](), "", List[String](), prefix, sep, None, None))
 
     // Parse the line into words/args
     val lexer = new Lexer()
@@ -104,8 +104,8 @@ class ArgsService extends ResultSupportIn {
       {
         indexResult = tokens.slice(argsResult._2, tokens.size)
       }
-      val args = new Args(action, verbs.toList, prefix, sep, tokens,
-        argsResult._1.toMap[String,String], indexResult)
+      val args = new Args(tokens, action, verbs.toList, prefix, sep,
+        Some(argsResult._1.toMap[String,String]), Some(indexResult))
       args
     })
   }
