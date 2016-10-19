@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-30T14:18:39.436</td>
+      <td>2016-10-19T06:54:47.988</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -140,8 +140,7 @@
 </span>  <span class="c1">// 3. support for setting/getting app info
 </span>  <span class="k">class</span> <span class="nc">SampleTask1</span> <span class="k">extends</span> <span class="nc">Task</span>
   <span class="o">{</span>
-    <span class="nc">_appMeta</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">()</span>
-    <span class="nc">_appMeta</span><span class="o">.</span><span class="n">about</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
+    <span class="nc">_appMeta</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(</span><span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
       <span class="n">id</span> <span class="k">=</span> <span class="s">"slatekit.task"</span><span class="o">,</span>
       <span class="n">name</span> <span class="k">=</span> <span class="s">"Sample Slate Task"</span><span class="o">,</span>
       <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample to show creating a simple task"</span><span class="o">,</span>
@@ -152,7 +151,7 @@
       <span class="n">group</span> <span class="k">=</span> <span class="s">"codehelix.co"</span><span class="o">,</span>
       <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@codehelix.co"</span><span class="o">,</span>
       <span class="n">tags</span> <span class="k">=</span> <span class="s">"slate,shell,cli"</span>
-    <span class="o">)</span>
+    <span class="o">))</span>
 
 
     <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Any</span><span class="o">])</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>

@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-30T14:18:39.427</td>
+      <td>2016-10-19T06:54:47.974</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -119,6 +119,7 @@
 <span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
 <span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
 <span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
+<span class="k">import</span> <span class="nn">slate.common.envs.EnvItem</span>
 <span class="k">import</span> <span class="nn">slate.common.info.</span><span class="o">{</span><span class="nc">About</span><span class="o">,</span> <span class="nc">Lang</span><span class="o">,</span> <span class="nc">Host</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.logging.LoggerConsole</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
@@ -129,7 +130,7 @@
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">EnvItem</span><span class="o">,</span> <span class="nc">ApiKey</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">ApiKey</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slate.examples.common.</span><span class="o">{</span><span class="nc">UserApi</span><span class="o">,</span> <span class="nc">User</span><span class="o">}</span>
 
@@ -173,7 +174,7 @@
 
       <span class="n">println</span><span class="o">(</span><span class="s">"handling the raw command that abstracts both a CLI command and a Web API request"</span><span class="o">)</span>
       <span class="c1">// NOTE: Use this if you do NOT want container to auto map arguments to your method parameters
-</span>      
+</span>
       <span class="c1">// Full name of route
 </span>      <span class="n">println</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">)</span>
 
@@ -265,19 +266,7 @@
 
 
   <span class="c1">// =======================================================================================
-</span>  <span class="c1">// REGISTRATION: Create instance of the API container to "host" all APIs
-</span>  <span class="c1">// NOTES:
-</span>  <span class="c1">// 1. The ApiContainerCLI extends from ApiContainer
-</span>  <span class="c1">// 2. The ApiContainerCLI only overrides some methods to display help/docs.
-</span>  <span class="c1">// 3. If you want to run the APIs via Web/Http, refer to the Server documentation.
-</span>  <span class="c1">// 4. The Web Server Api container simply uses the ApiContainerWeb which extends from
-</span>  <span class="c1">//    ApiContainer and also only overrides some methods for help/docs
-</span>  <span class="c1">// 5. Ultimately, to run the container inside of a CLI or Web, the Slate Shell component is used
-</span>  <span class="c1">//    and the Slate Server is used. They provide a wrapper to marshall the data from CLI/Web to
-</span>  <span class="c1">//    the container. ( Refer to CLI and Server for more info )
-</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">()</span>
-
-  <span class="c1">// Provide the container with a context about application and some dependent services.
+</span>  <span class="c1">// Provide the container with a context about application and some dependent services.
 </span>  <span class="c1">// NOTE: This context is made available to all the APIs your register with the container.
 </span>  <span class="c1">// So every API can perform logging, get config settings, encrypt/decrypt etc.
 </span>  <span class="c1">// The value here are somewhat hard-coded for demonstration purposes.
@@ -290,8 +279,7 @@
 </span>  <span class="c1">// - Db connection
 </span>  <span class="c1">// - Encryption service
 </span>  <span class="c1">// - App information
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
-    <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span>
+</span>  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
     <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">),</span>
     <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
     <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
@@ -302,6 +290,28 @@
     <span class="n">con</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">)),</span>
     <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">))</span>
   <span class="o">)</span>
+  <span class="c1">// REG 6: Setup your authorization provider
+</span>  <span class="c1">// NOTE:
+</span>  <span class="c1">// 1. For the AppUsersApi, the application roles are checked.
+</span>  <span class="c1">// 2. For the AppAboutApi, the api keys are checked.
+</span>  <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
+    <span class="nc">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">](</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"devs"</span> <span class="o">,</span> <span class="s">"94744D43418C421586E544DE0BB4CC37"</span><span class="o">,</span> <span class="s">"dev"</span>          <span class="o">),</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"ops"</span>  <span class="o">,</span> <span class="s">"677961A57F82440AB6F4E1F1EAC721ED"</span><span class="o">,</span> <span class="s">"dev,ops"</span>      <span class="o">),</span>
+        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="s">"A100E22B5544423693FABD81791FAC80"</span><span class="o">,</span> <span class="s">"dev,ops,admin"</span><span class="o">)</span>
+      <span class="o">))</span> <span class="o">)</span>
+
+  <span class="c1">// REGISTRATION: Create instance of the API container to "host" all APIs
+</span>  <span class="c1">// NOTES:
+</span>  <span class="c1">// 1. The ApiContainerCLI extends from ApiContainer
+</span>  <span class="c1">// 2. The ApiContainerCLI only overrides some methods to display help/docs.
+</span>  <span class="c1">// 3. If you want to run the APIs via Web/Http, refer to the Server documentation.
+</span>  <span class="c1">// 4. The Web Server Api container simply uses the ApiContainerWeb which extends from
+</span>  <span class="c1">//    ApiContainer and also only overrides some methods for help/docs
+</span>  <span class="c1">// 5. Ultimately, to run the container inside of a CLI or Web, the Slate Shell component is used
+</span>  <span class="c1">//    and the Slate Server is used. They provide a wrapper to marshall the data from CLI/Web to
+</span>  <span class="c1">//    the container. ( Refer to CLI and Server for more info )
+</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span><span class="o">)</span>
 
   <span class="c1">// REG 1. Register the api ( uses roles/auth values from annotations on class )
 </span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">())</span>
@@ -329,16 +339,6 @@
 </span>  <span class="c1">//        This overrides the "auth" value in the @Api annotation
 </span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppVersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">protocol</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
 
-  <span class="c1">// REG 6: Setup your authorization provider
-</span>  <span class="c1">// NOTE:
-</span>  <span class="c1">// 1. For the AppUsersApi, the application roles are checked.
-</span>  <span class="c1">// 2. For the AppAboutApi, the api keys are checked.
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
-    <span class="nc">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">](</span>
-        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"devs"</span> <span class="o">,</span> <span class="s">"94744D43418C421586E544DE0BB4CC37"</span><span class="o">,</span> <span class="s">"dev"</span>          <span class="o">),</span>
-        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"ops"</span>  <span class="o">,</span> <span class="s">"677961A57F82440AB6F4E1F1EAC721ED"</span><span class="o">,</span> <span class="s">"dev,ops"</span>      <span class="o">),</span>
-        <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="s">"A100E22B5544423693FABD81791FAC80"</span><span class="o">,</span> <span class="s">"dev,ops,admin"</span><span class="o">)</span>
-      <span class="o">))</span> <span class="o">)</span>
   
 
 </code></pre>

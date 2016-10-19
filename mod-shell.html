@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-30T14:18:39.433</td>
+      <td>2016-10-19T06:54:47.984</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -118,6 +118,7 @@
 </span>
 <span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
 <span class="k">import</span> <span class="nn">slate.common.info.Folders</span>
+<span class="k">import</span> <span class="nn">slate.core.common.AppContext</span>
 <span class="k">import</span> <span class="nn">slate.core.shell.</span><span class="o">{</span><span class="nc">ShellSettings</span><span class="o">,</span> <span class="nc">ShellCommand</span><span class="o">,</span> <span class="nc">ShellService</span><span class="o">}</span>
 
 
@@ -138,7 +139,7 @@
 
   <span class="k">class</span> <span class="nc">AppShell</span><span class="o">(</span><span class="n">meta</span><span class="k">:</span><span class="kt">AppMeta</span><span class="o">,</span> <span class="n">folders</span><span class="k">:</span><span class="kt">Folders</span><span class="o">,</span> <span class="n">settings</span><span class="k">:</span><span class="kt">ShellSettings</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ShellService</span><span class="o">(</span><span class="n">meta</span><span class="o">,</span> <span class="n">folders</span><span class="o">,</span> <span class="n">settings</span><span class="o">)</span>
   <span class="o">{</span>
-    <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainer</span><span class="o">()</span>
+    <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainer</span><span class="o">(</span><span class="nc">AppContext</span><span class="o">.</span><span class="n">sample</span><span class="o">(</span><span class="s">"sample"</span><span class="o">,</span> <span class="s">"sample"</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">))</span>
 
     <span class="cm">/**
       * Use case 3a : ( OPTIONAL ) do some stuff before running any commands

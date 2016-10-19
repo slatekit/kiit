@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-09-30T14:18:39.392</td>
+      <td>2016-10-19T06:54:47.922</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -113,7 +113,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.args.Args</span>
+</span><span class="k">import</span> <span class="nn">slate.common.args.</span><span class="o">{</span><span class="nc">ArgsSchema</span><span class="o">,</span> <span class="nc">Args</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 
 
@@ -135,7 +135,6 @@
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-
 
     <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"-log.level=info -env=dev -text='hello world'"</span><span class="o">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
 
@@ -183,6 +182,10 @@
 
     <span class="c1">// CASE 8: apply args to an object
 </span>    <span class="nc">Args</span><span class="o">.</span><span class="n">apply</span><span class="o">(</span> <span class="s">"-env:dev -text:'hello word' -batch:10"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">SampleOptions</span><span class="o">(),</span> <span class="s">"-"</span><span class="o">,</span> <span class="s">":"</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+
+    <span class="c1">// CASE 9: Build up the schema
+</span>    <span class="k">val</span> <span class="n">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ArgsSchema</span><span class="o">().</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">).</span><span class="n">flag</span><span class="o">(</span><span class="s">"log"</span><span class="o">).</span><span class="n">number</span><span class="o">(</span><span class="s">"level"</span><span class="o">)</span>
+    <span class="n">print</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
 
     
 
