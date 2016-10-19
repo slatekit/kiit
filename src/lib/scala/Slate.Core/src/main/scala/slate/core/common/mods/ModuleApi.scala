@@ -12,7 +12,7 @@ package slate.core.common.mods
 
 import slate.common._
 import slate.common.query.Query
-import slate.common.results.{ResultSupportIn}
+import slate.common.Funcs._
 import slate.core.apis.{ApiBase, Api, ApiAction}
 import slate.core.common.AppContext
 import slate.core.common.svcs.ApiWithSupport
@@ -20,7 +20,7 @@ import slate.core.common.svcs.ApiWithSupport
 import scala.collection.mutable.ListBuffer
 
 @Api(area = "sys", name = "mods", desc = "management of system modules", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
-class ModuleApi extends ApiWithSupport with Funcs {
+class ModuleApi extends ApiWithSupport {
 
   private val _items = new ListMap[String,Module]()
   var ctx:ModuleContext = new ModuleContext()
@@ -74,7 +74,7 @@ class ModuleApi extends ApiWithSupport with Funcs {
   @ApiAction(name = "", desc = "installs a specific module", roles = "@parent" )
   def installByName(name:String): Result[Any] = {
 
-    performOrDefault( _items.contains(name), failure(Some("Unknown module : " + name)), {
+    defaultOrExecute( _items.contains(name), failure(Some("Unknown module : " + name)), {
       val mod = _items(name)
       installMod(mod)
     })

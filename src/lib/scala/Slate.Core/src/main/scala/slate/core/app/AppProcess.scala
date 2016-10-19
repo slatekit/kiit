@@ -1,22 +1,23 @@
 package slate.core.app
 
-import slate.common.app.{AppRunConst, AppMetaSupport, AppMeta}
-import slate.common.args.{ArgsHelper, ArgsSchema, Args}
+import slate.common.app.{AppMetaSupport, AppMeta}
+import slate.common.args.{Arg, ArgsHelper, ArgsSchema, Args}
 import slate.common.conf.ConfigBase
 import slate.common.encrypt.EncryptSupportIn
+import slate.common.envs.{EnvItem, Env}
 import slate.common.i18n.I18nSupportIn
 import slate.common.info._
 import slate.common._
 import slate.common.logging.LogLevel.LogLevel
-import slate.common.logging.{Logger, LoggerConsole, LogLevel, LogSupportIn}
-import slate.common.results.ResultSupportIn
+import slate.common.logging.{Logger, LoggerConsole, LogSupportIn}
+import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.common.subs.Subs
 import slate.core.common.{Conf, AppContext}
+import slate.core.app.AppFuncs._
 import slate.entities.core.Entities
 
-import scala.collection.immutable.HashMap
-import scala.collection.mutable.{ListBuffer, ArrayBuffer}
-import scala.util.Try
+import scala.collection.mutable.{ListBuffer}
+
 
 /**
  * Application base class providing most of the scaffolding to support command line argument
@@ -29,30 +30,35 @@ class AppProcess extends AppMetaSupport
   with I18nSupportIn
   with ResultSupportIn
 {
-  var ctx:AppContext = null
-  var meta = new AppMeta()
-  var options = new AppOptions()
+  // Args related fields:
+  // 1. the schema of the all supported command line args for this app
+  // 2. the raw args from command line
+  // 3.
+  lazy val argsSchema = new ArgsSchema(List[Arg]())
+
+  // the raw command line args
+  protected var argsRaw:Option[Array[String]] = None
+
+  // the parsed command line args
+  protected var args:Args = null
+
+  // Options on output/logging
+  lazy val options = new AppOptions()
 
   // Wrapper for println with color coding and semantics ( title, subtitle, url, error )
   val writer = new ConsoleWriter()
 
+  protected var ctx:AppContext = null
+  protected var meta = new AppMeta()
+
   // env.conf is the base config with settings common to all other configs ( dev, qa, stg, pro )
-  var confBase:ConfigBase = new Conf(Some("env.conf"))
+  protected var confBase:ConfigBase = new Conf(Some("env.conf"))
 
   // the environment specific conf e.g. "env.dev.conf"
-  var conf:ConfigBase = null
+  protected var conf:ConfigBase = null
 
   // The selected environment at startup ( can come from command line or conf )
-  var env:EnvItem = null
-
-  // arguments supplied on the command line: parsed
-  var args:Args = null
-
-  // the schema of the all supported command line args for this app
-  val argsSchema = new ArgsSchema()
-
-  // the raw command line arguments: un-parsed
-  var argsRaw:Option[Array[String]] = None
+  protected var env:EnvItem = null
 
 
   /**
@@ -64,45 +70,15 @@ class AppProcess extends AppMetaSupport
   override def appMeta(): AppMeta = meta
 
   /**
-   * checks the command line arguments.
-   *
-   * @param raw
+   * accepts the command line arguments and provides life-cycle hook to further
+   * validate them
+   * @param raw        : the raw command line args
+   * @param parsedArgs : the parsed command line args
    */
-  def check(raw:Option[Array[String]]): Result[Any] = {
-
+  def args(raw:Option[Array[String]], parsedArgs:Args): Result[Boolean] = {
     argsRaw = raw
-
-    // 1. Parse args
-    val result = Args.parseArgs(raw.getOrElse(Array[String]()), "-", "=", false)
-
-    // 2. Bad args?
-    if (!result.success) {
-      writer.line()
-      writer.error("Input parameters invalid")
-      writer.line()
-      println(argsSchema.buildHelp())
-      return badRequest(Some("invalid arguments supplied"))
-    }
-
-    // 3. Help request
-    val helpCheck = argsRaw.fold[Result[String]](failure())( args => isAppInfoRequest(args.toList))
-    if(helpCheck.success) {
-      return help()
-    }
-
-    // 4. Determine env, log, config from inputs if supplied
-    args = result.get
-
-    // 5. Invalid inputs
-    val checkResult = argsSchema.validate(args)
-    if(!checkResult.success){
-      writer.line()
-      writer.error(checkResult.msg.getOrElse(""))
-      writer.line()
-      argsSchema.buildHelp()
-      return checkResult
-    }
-    success(args)
+    args = parsedArgs
+    ok()
   }
 
 
@@ -122,7 +98,7 @@ class AppProcess extends AppMetaSupport
     // 1. The location of the directory can be overriden on the command line
     // 2. The conf base is loaded again since if the "-help" arg was supplied
     // if will get the info from the confBase ( env.conf )
-    confBase = new Conf(Some(getConfPath("env.conf", None)))
+    confBase = new Conf(Some(getConfPath(args, "env.conf", None)))
 
     // 2. The environment can be selected in the following order:
     // - command line ( via "-env=dev"   )
@@ -131,7 +107,7 @@ class AppProcess extends AppMetaSupport
     val envInput = getEnv()
 
     // 2. Validate the environment
-    val envCheck = validateEnv(envInput)
+    val envCheck = Env.defaults().validate(envInput)
     if(!envCheck.success){
       writer.error(envCheck.msg.getOrElse(""))
       throw new IllegalArgumentException(envCheck.msg.getOrElse(""))
@@ -144,7 +120,7 @@ class AppProcess extends AppMetaSupport
     // 4. We now have the environment to use ( e.g. "dev" )
     // Now load the final environment specific override
     // for directory reference provide: "file://./conf/"
-    val overrideConfPath = Some( getConfPath(s"env.${env.name}.conf", Some(confBase)))
+    val overrideConfPath = Some( getConfPath(args, s"env.${env.name}.conf", Some(confBase)))
     conf = Conf.loadWithFallbackConfig(overrideConfPath, confBase)
 
     // 5. Let derived app build initialize itself. it may also build the context using the
@@ -155,14 +131,11 @@ class AppProcess extends AppMetaSupport
     // In this case create the minimal version of ctx.
     if(ctx == null){
       ctx = new AppContext (
-        app  = new AppMeta(),
         env  = env,
         cfg  = conf,
         log  = new LoggerConsole(),
         ent  = new Entities(),
         inf  = aboutApp(),
-        lang = Lang.asScala(),
-        host = Host.local(),
         dirs = Some(folders())
       )
     }
@@ -199,14 +172,11 @@ class AppProcess extends AppMetaSupport
     _enc = ctx.enc
 
     // Get the host and language
-    meta = ctx.app
-    meta.about = ctx.inf
-    meta.host = Host.local()
-    meta.lang = Lang.asScala()
+    meta = ctx.app.copy(ctx.inf, Host.local(), Lang.asScala())
     onAccept()
 
     // set the startup info to track times.
-    meta.start = new StartInfo(argsRaw, ctx.log.name, s"env.${env.name}.conf", env.name)
+    meta = meta.copy(start = new StartInfo(argsRaw, ctx.log.name, s"env.${env.name}.conf", env.name))
   }
 
 
@@ -345,42 +315,33 @@ class AppProcess extends AppMetaSupport
   }
 
 
-  protected def isAppInfoRequest(raw:List[String]):Result[String] = {
+  def showHelp(code:Int):Unit = {
 
-    // Case 1: Exit ?
-    if (ArgsHelper.isExit(raw, 0))
-    {
-      writer.error("exiting")
-      return exit()
+    code match {
+      case ResultCode.EXIT => {
+        writer.error("exiting")
+      }
+      case ResultCode.VERSION => {
+        writer.line()
+        writer.highlight("version :", false)
+        writer.url(aboutApp().version, true)
+        writer.line()
+      }
+      case ResultCode.HELP => {
+        writer.line()
+        writer.text("==============================================")
+        writer.title("ABOUT")
+        aboutApp().log( (key, value) => {
+          writer.highlight(key + " : ", false)
+          writer.text(value, true)
+        })
+        writer.text("==============================================")
+        writer.line()
+        writer.title("ARGS")
+        argsSchema.buildHelp()
+        writer.line()
+      }
     }
-    // Case 2a: version ?
-    if (ArgsHelper.isVersion(raw, 0))
-    {
-      writer.line()
-      writer.highlight("version :", false)
-      writer.url(aboutApp().version, true)
-      writer.line()
-      return help()
-    }
-    // Case 2b: about ?
-    // Case 3a: Help ?
-    if (ArgsHelper.isAbout(raw, 0) || ArgsHelper.isHelp(raw, 0))
-    {
-      writer.line()
-      writer.text("==============================================")
-      writer.title("ABOUT")
-      aboutApp().log( (key, value) => {
-        writer.highlight(key + " : ", false)
-        writer.text(value, true)
-      })
-      writer.text("==============================================")
-      writer.line()
-      writer.title("ARGS")
-      argsSchema.buildHelp()
-      writer.line()
-      return help()
-    }
-    failure[String]()
   }
 
 
@@ -403,16 +364,7 @@ class AppProcess extends AppMetaSupport
    *
    * @return
    */
-  protected def envs(): List[EnvItem] = {
-    List[EnvItem](
-      EnvItem("loc", Env.DEV),
-      EnvItem("dev", Env.DEV),
-      EnvItem("qa1", Env.QA),
-      EnvItem("qa2", Env.QA),
-      EnvItem("stg", Env.UAT),
-      EnvItem("pro", Env.PROD)
-    )
-  }
+  protected def envs(): List[EnvItem] = AppFuncs.envs()
 
 
   /**
@@ -420,22 +372,7 @@ class AppProcess extends AppMetaSupport
     *
     * @return
     */
-  protected def aboutApp():About = {
-    // Get info about app from base config "env.conf" which is common to all environments.
-    new About(
-      id       = confBase.getStringOrElse("app.id"       , "sampleapp.console"),
-      name     = confBase.getStringOrElse("app.name"     , "Sample App - Console"),
-      desc     = confBase.getStringOrElse("app.desc"     , "Sample to show the base application"),
-      company  = confBase.getStringOrElse("app.company"  , "slatekit"),
-      region   = confBase.getStringOrElse("app.region"   , "ny"),
-      version  = confBase.getStringOrElse("app.version"  , "0.9.1"),
-      url      = confBase.getStringOrElse("app.url"      , "http://sampleapp.slatekit.com"),
-      group    = confBase.getStringOrElse("app.group"    , "products-dept"),
-      contact  = confBase.getStringOrElse("app.contact"  , "kishore@abc.co"),
-      tags     = confBase.getStringOrElse("app.tags"     , "slate,shell,cli"),
-      examples = confBase.getStringOrElse("app.examples" , "")
-    )
-  }
+  protected def aboutApp():About = AppFuncs.about(confBase)
 
 
   /**
@@ -454,20 +391,7 @@ class AppProcess extends AppMetaSupport
     *
     * @return
     */
-  protected def folders():Folders = {
-
-    val about = aboutApp()
-    new Folders(
-      location = AppRunConst.LOCATION_USERDIR,
-      root    = Some(Strings.toId(about.company)),
-      group   = Some(Strings.toId(about.group)),
-      app     = about.id,
-      cache   = "cache",
-      inputs  = "inputs",
-      logs    = "logs",
-      outputs = "outputs"
-    )
-  }
+  protected def folders():Folders = AppFuncs.folders(confBase)
 
 
   /**
@@ -478,22 +402,7 @@ class AppProcess extends AppMetaSupport
     *
     * @return
     */
-  protected def vars(): Subs = {
-    val about = aboutApp()
-    val subs = new Subs()
-    subs("user.home"    ) = (s) => System.getProperty("user.home")
-    subs("company.id"   ) = (s) => Strings.toId(about.company)
-    subs("company.name" ) = (s) => about.company
-    subs("company.dir"  ) = (s) => "@{user.home}/@{company.id}"
-    subs("root.dir"     ) = (s) => "@{company.dir}"
-    subs("group.id"     ) = (s) => Strings.toId(about.group)
-    subs("group.name"   ) = (s) => about.group
-    subs("group.dir"    ) = (s) => "@{root.dir}/@{group.id}"
-    subs("app.id"       ) = (s) => about.id
-    subs("app.name"     ) = (s) => about.name
-    subs("app.dir"      ) = (s) => "@{root.dir}/@{group.id}/@{app.id}"
-    subs
-  }
+  protected def vars(): Subs = AppFuncs.vars(confBase)
 
 
   protected def getOverrideSetting(key:String, defaultValue:Option[String],
@@ -564,34 +473,6 @@ class AppProcess extends AppMetaSupport
     text = text.replace("@{env}", ctx.env.name)
     text = text.replace("@{date}", DateTime.now().toStringNumeric())
     text
-  }
-
-
-  /**
-   * validates the environment against the supported
-   *
-   * @param env
-   * @return
-   */
-  protected def validateEnv(env:EnvItem): Result[EnvItem] = {
-    val matched = envs().filter( item => Strings.isMatch(item.name, env.name ))
-    if(matched != null && matched.size > 0)
-      return success(matched.head)
-
-    failure(Some(s"Unknown environment name : ${env.name} supplied"))
-  }
-
-
-  protected def getConfPath(file:String, conf:Option[ConfigBase]):String = {
-    val pathFromArgs = Option(args.getStringOrElse("conf.dir", null))
-    val location = pathFromArgs.getOrElse( conf.fold("")( c => c.getStringOrElse("conf.dir", "")))
-    val prefix = location match {
-      case "jars" => ""
-      case "conf" => "file://./conf/"
-      case ""     => ""
-      case _      => location
-    }
-    prefix + file
   }
 
 

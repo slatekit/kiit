@@ -11,12 +11,20 @@
 
 package slate.common
 
-trait Funcs {
+object Funcs {
 
-  def performOrDefault[T](condition:Boolean, defaultValue:T, f: => T): T = {
-    if(!condition){
+  def defaultOrExecute[T](condition:Boolean, defaultValue:T, f: => T): T = {
+    if(condition){
       return defaultValue
     }
     f
+  }
+
+
+  def execute[T](data:Option[T], f:(T) => Unit): Unit = {
+    data.fold(Unit)( item => {
+      f(item)
+      Unit
+    })
   }
 }

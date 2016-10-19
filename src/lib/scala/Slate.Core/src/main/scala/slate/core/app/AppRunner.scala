@@ -11,33 +11,39 @@
 
 package slate.core.app
 
-import slate.common.{Result}
+import slate.common.app.AppMeta
+import slate.common.args.{ArgsSchema, Args}
+import slate.common.info.{Host, Lang}
+import slate.common.logging.LoggerConsole
+import slate.common.{FailureResult, ConsoleWriter, Result}
+import slate.core.common.{Conf, AppContext}
+import slate.common.results._
+import slate.entities.core.Entities
+import slate.core.app.AppFuncs._
+import slate.common.Strings.newline
 
-object AppRunner
+object AppRunner extends ResultSupportIn
 {
   /**
    * runs the app with the arguments supplied.
-   * @param app
+    *
+    * @param app
    * @param args
    * @return
    */
   def run(app: AppProcess, args:Option[Array[String]]): Result[Any] =
   {
     // 1. Check the command line args
-    val result = app.check(args)
+    val result = check(args, app.argsSchema)
     if(!result.success ){
+      handleHelp(app, result)
       return result
     }
 
-    // 2. Request for help
-    // e.g.
-    // - ?
-    // -about
-    if(result.isExit || result.isHelpRequest){
-      return result
-    }
+    // 2. Configure args
+    app.args(args, result.get)
 
-    // 3. Allow app to initialize
+    // 3. Begin app workflow
     app.init()
 
     // 4. Accept the initialize
@@ -47,10 +53,80 @@ object AppRunner
     // 5. Execute the app
     val res = app.exec()
 
-    // 6. Shutdown the app
+    // 6 Shutdown the app
     app.shutdown()
 
     // 7. Return the result from execution
     res
+  }
+
+
+  /**
+   * Checks the command line arguments for help, exit, or invalid arguments based on schema.
+   * @param rawArgs  : the raw command line arguments directly from shell/console.
+   * @param schema   : the argument schema that defines what arguments are supported.
+   * @return
+   */
+  def check(rawArgs:Option[Array[String]], schema:ArgsSchema):Result[Args] = {
+
+    // 1. Parse args
+    val result = Args.parseArgs(rawArgs.getOrElse(Array[String]()), "-", "=", false)
+
+    // 2. Bad args?
+    if (!result.success) {
+      return badRequest[Args](Some("invalid arguments supplied"))
+    }
+
+    // 3. Help request
+    val helpCheck = rawArgs.fold[Result[String]](failure())( args => AppFuncs.checkCmd(args.toList))
+    if(helpCheck.isExit || helpCheck.isHelpRequest) {
+      return new FailureResult[Args](helpCheck.code, helpCheck.msg)
+    }
+
+    // 4. Invalid inputs
+    val args = result.get
+    val checkResult = schema.validate(args)
+    if(!checkResult.success){
+      return badRequest[Args](Some("invalid arguments supplied"))
+    }
+    success(args)
+  }
+
+
+  /**
+   * Handles displaying the approapriate help text ( about, version, args etc )
+   * based on the type of error result.
+   * @param app
+   * @param result
+   */
+  def handleHelp(app:AppProcess, result:Result[Args]):Unit = {
+
+    val writer = new ConsoleWriter()
+
+    result.code match {
+      case ResultCode.BAD_REQUEST => {
+        writer.error(newline() + "Input parameters invalid" + newline())
+        app.argsSchema.buildHelp()
+      }
+      case _ => {
+        app.showHelp(result.code)
+      }
+    }
+  }
+
+
+  def build(args:Option[Array[String]]):AppContext = {
+    val conf = new Conf()
+    val ctx = new AppContext (
+      env  = null,
+      cfg  = conf,
+      log  = new LoggerConsole(),
+      ent  = new Entities(),
+      inf  = about(conf),
+      lang = Lang.asScala(),
+      host = Host.local(),
+      dirs = Some(folders(conf))
+    )
+    ctx
   }
 }

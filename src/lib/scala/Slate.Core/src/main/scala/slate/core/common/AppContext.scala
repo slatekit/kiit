@@ -14,18 +14,17 @@ import slate.common.app.{AppRunConst, AppMeta}
 import slate.common.conf.ConfigBase
 import slate.common.databases.DbConString
 import slate.common.encrypt.Encryptor
+import slate.common.envs.{Env, Envs, EnvItem}
 import slate.common.subs.Subs
 import slate.entities.core.Entities
 import slate.common.i18n.I18nStrings
 import slate.common.info.{Folders, Lang, Host, About}
 import slate.common.logging.{LoggerConsole, LoggerBase}
-import slate.common.{Env, EnvItem}
 import slate.core.auth.AuthBase
 import slate.core.common.tenants.Tenant
 
 /**
  *
- * @param app  : all meta-data about the app ( about, language, host, startup, etc )
  * @param con  : db connection string
  * @param enc  : encryption/decryption service
  * @param env  : environment selection ( dev, qa, staging, prod )
@@ -40,23 +39,23 @@ import slate.core.common.tenants.Tenant
  * @param auth : authentication service for security/permissions
  */
 case class AppContext(
-                        app :AppMeta                          ,
-                        env :EnvItem                          ,
-                        cfg :ConfigBase                       ,
-                        log :LoggerBase                       ,
-                        ent :Entities                         ,
-                        inf :About                            ,
-                        host:Host                             ,
-                        lang:Lang                             ,
-                        auth:Option[AuthBase]           = None,
-                        con :Option[DbConString]        = None,
-                        enc :Option[Encryptor]          = None,
-                        dirs:Option[Folders]            = None,
-                        subs:Option[Subs]               = None,
-                        res :Option[I18nStrings]        = None,
+                        env :EnvItem                                    ,
+                        cfg :ConfigBase                                 ,
+                        log :LoggerBase                                 ,
+                        ent :Entities                                   ,
+                        inf :About                                      ,
+                        host:Host                       = Host.local()  ,
+                        lang:Lang                       = Lang.asScala(),
+                        auth:Option[AuthBase]           = None          ,
+                        con :Option[DbConString]        = None          ,
+                        enc :Option[Encryptor]          = None          ,
+                        dirs:Option[Folders]            = None          ,
+                        subs:Option[Subs]               = None          ,
+                        res :Option[I18nStrings]        = None          ,
                         tnt :Option[Tenant]             = None
                      )
 {
+  def app:AppMeta = { new AppMeta(inf, host, lang) }
 }
 
 
@@ -64,7 +63,6 @@ object AppContext {
 
   def sample(id:String, name:String, about:String, company:String):AppContext = {
     val ctx = new AppContext (
-      app  = new AppMeta(),
       env  = EnvItem("test", Env.DEV),
       cfg  = new Conf(),
       log  = new LoggerConsole(),
