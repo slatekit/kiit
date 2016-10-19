@@ -37,14 +37,11 @@ class AppBase extends AppProcess
     // The database can be set up in the "env.conf" shared inherited config or
     // overridden in the environment specific e.g. "env.qa.conf"
     ctx = new AppContext (
-      app  = new AppMeta(),
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
       ent  = new Entities(),
       inf  = aboutApp(),
-      host = Host.local(),
-      lang = Lang.asScala(),
       con  = conf.dbCon(),
       enc  = Some(AppEncryptor)
     )

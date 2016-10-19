@@ -15,6 +15,7 @@ package sampleapp.server
 import sampleapp.core.common.{AppApiKeys, AppAuth, AppEncryptor}
 import sampleapp.core.models.{Movie, User}
 import sampleapp.core.services.{MovieApi, MovieService, UserService, UserApi}
+import slate.common.args.ArgsSchema
 
 // Slate Result Monad + database/logger/application metadata
 import slate.common.{Result}
@@ -82,12 +83,12 @@ class SampleAppServer extends AppProcess
   // 2. If supplied on command line, they override the values in .conf file
   // 3. If any of these are required and not supplied, then an error is display and program exists
   // 4. Help text can be easily built from this schema.
-  argsSchema.addText("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
-            .addText("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*" )
-            .addText("port"       , "the port to run on"       , false, "5000" , "5000" , "5000|80")
-            .addText("domain"     , "domain association"       , false, "::0"  , "::0"  , "::0|mycompany.com")
-            .addText("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
-
+  override lazy val argsSchema = new ArgsSchema()
+            .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+            .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*" )
+            .text("port"       , "the port to run on"       , false, "5000" , "5000" , "5000|80")
+            .text("domain"     , "domain association"       , false, "::0"  , "::0"  , "::0|mycompany.com")
+            .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
 
   /**
     * initialize app context, database and ORM / entities.
@@ -108,14 +109,11 @@ class SampleAppServer extends AppProcess
     // The database can be set up in the "env.conf" shared inherited config or
     // overridden in the environment specific e.g. "env.qa.conf"
     ctx = new AppContext (
-      app  = new AppMeta(),
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
       ent  = new Entities(),
       inf  = aboutApp(),
-      host = Host.local(),
-      lang = Lang.asScala(),
       con  = conf.dbCon(),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())

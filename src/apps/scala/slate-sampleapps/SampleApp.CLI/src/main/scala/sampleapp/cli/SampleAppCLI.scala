@@ -13,10 +13,11 @@ package sampleapp.cli
 
 import slate.common._
 import slate.common.app.AppMeta
+import slate.common.args.ArgsSchema
 import slate.common.databases.DbLookup
 import slate.common.info.{About, Lang, Host}
 import slate.common.logging.LoggerConsole
-import slate.core.apis.{ApiBase, ApiAuth, ApiContainerCLI}
+import slate.core.apis.{ApiReg, ApiBase, ApiAuth, ApiContainerCLI}
 import slate.core.app.{AppRunner, AppProcess}
 import slate.core.common.AppContext
 import slate.core.shell.{ShellSettings, ShellAPI}
@@ -73,9 +74,6 @@ object SampleAppCLI
   */
 class SampleAppCLI extends AppProcess
 {
-  // console.writer.
-  val console = new ConsoleWriter()
-
 
   // setup the command line arguments.
   // NOTE:
@@ -83,9 +81,10 @@ class SampleAppCLI extends AppProcess
   // 2. If supplied on command line, they override the values in .conf file
   // 3. If any of these are required and not supplied, then an error is display and program exists
   // 4. Help text can be easily built from this schema.
-  argsSchema.addText("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
-            .addText("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
-            .addText("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+  override lazy val argsSchema = new ArgsSchema()
+            .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+            .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
+            .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
 
 
   /**
@@ -105,14 +104,11 @@ class SampleAppCLI extends AppProcess
     // - Environment selection ( dev, qa, prod ) is set in env.conf
     // - Database selection.
     ctx = new AppContext (
-      app  = new AppMeta(),
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
       ent  = new Entities(),
       inf  = aboutApp(),
-      host = Host.local(),
-      lang = Lang.asScala(),
       con  = conf.dbCon(),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())
@@ -156,11 +152,11 @@ class SampleAppCLI extends AppProcess
     */
   override def onExecute():Result[Any] =
   {
-    console.text("************************************")
-    console.title("Welcome to SampleApp.CLI")
-    console.text("************************************")
-    console.line()
-    console.text("starting in environment: " + this.ctx.env.key +
+    writer.text("************************************")
+    writer.title("Welcome to SampleApp.CLI")
+    writer.text("************************************")
+    writer.line()
+    writer.text("starting in environment: " + this.ctx.env.key +
               " " + this.ctx.cfg.getStringOrElse("env.desc", ""))
 
     // 1. Create a sample user for authentication.
@@ -171,14 +167,19 @@ class SampleAppCLI extends AppProcess
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = new ShellAPI(creds, ctx, auth, "sampleapp", new ShellSettings( enableLogging = true, enableOutput = true))
+    val shell = new ShellAPI(creds, ctx, auth, "sampleapp",
+      new ShellSettings( enableLogging = true, enableOutput = true),
+      Some(
+        List[ApiReg](
+          new ApiReg(new AppApi()    , true  ),
+          new ApiReg(new VersionApi(), true  ),
+          new ApiReg(new UserApi()   , false ),
+          new ApiReg(new MovieApi()  , false ),
+          new ApiReg(new EntitiesApi(new ModelSettings(true, true)), true )
+        )
+      )
+    )
 
-    // 3 Register the apis using default mode ( uses permissions in annotations on class )
-    shell.apis.register[AppApi]     (new AppApi()    , true )
-    shell.apis.register[VersionApi] (new VersionApi(), true )
-    shell.apis.register[EntitiesApi](new EntitiesApi(new ModelSettings(enableLogging = true, enableOutput = true)), true )
-    shell.apis.register[UserApi]    (new UserApi()   , false )
-    shell.apis.register[MovieApi]   (new MovieApi()   , false )
     shell.apis.init()
 
     // 4. Run the server ( this starts the life-cycle init, execute, shutdown )

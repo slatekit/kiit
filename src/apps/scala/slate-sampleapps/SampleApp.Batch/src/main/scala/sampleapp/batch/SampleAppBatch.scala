@@ -17,6 +17,7 @@ import sampleapp.core.services.{MovieService, UserService}
 
 import slate.common.Result
 import slate.common.app.AppMeta
+import slate.common.args.ArgsSchema
 import slate.common.databases.DbLookup
 import slate.common.encrypt.Encryptor
 import slate.common.info.{About, Lang, Host}
@@ -75,10 +76,11 @@ class SampleAppBatch extends AppProcess
   // 2. If supplied on command line, they override the values in .conf file
   // 3. If any of these are required and not supplied, then an error is display and program exists
   // 4. Help text can be easily built from this schema.
-  argsSchema.addText("env"        , "the environment to run in"      , false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
-            .addText("region"     , "the region linked to app"       , false, "us"   , "us"   , "us|europe|india|*")
-            .addText("config.loc" , "location of config files"       , false, "jar"  , "jar"  , "jar|conf")
-            .addText("log.level"  , "the log level for logging"      , false, "info" , "info" , "debug|info|warn|error")
+  override lazy val argsSchema = new ArgsSchema()
+            .text("env"        , "the environment to run in"      , false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+            .text("region"     , "the region linked to app"       , false, "us"   , "us"   , "us|europe|india|*")
+            .text("config.loc" , "location of config files"       , false, "jar"  , "jar"  , "jar|conf")
+            .text("log.level"  , "the log level for logging"      , false, "info" , "info" , "debug|info|warn|error")
 
 
   /**
@@ -97,14 +99,11 @@ class SampleAppBatch extends AppProcess
     // The database can be set up in the "env.conf" shared inherited config or
     // overridden in the environment specific e.g. "env.qa.conf"
     ctx = new AppContext (
-      app  = new AppMeta(),
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
       ent  = new Entities(),
       inf  = aboutApp(),
-      host = Host.local(),
-      lang = Lang.asScala(),
       con  = conf.dbCon(),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())
