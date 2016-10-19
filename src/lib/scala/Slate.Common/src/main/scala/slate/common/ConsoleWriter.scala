@@ -18,6 +18,49 @@ package slate.common
 class ConsoleWriter
 {
   /**
+    * Write many items based on the semantic modes
+    * @param items
+    */
+  def writeItems(items:List[(String,String,Boolean)]): Unit = {
+    items.foreach( item => { writeItem( item._1, item._2, item._3) })
+  }
+
+
+  /**
+    * Write a single item based on the semantic mode
+    * @param mode
+    * @param msg
+    * @param endLine
+    */
+  def writeItem(mode:String, msg:String, endLine:Boolean): Unit = {
+    mode match {
+      case "title"     =>  title    ( msg, endLine )
+      case "subtitle"  =>  subTitle ( msg, endLine )
+      case "url"       =>  url      ( msg, endLine )
+      case "important" =>  important( msg, endLine )
+      case "highlight" =>  highlight( msg, endLine )
+      case "success"   =>  success  ( msg, endLine )
+      case "error"     =>  error    ( msg, endLine )
+      case "text"      =>  text     ( msg, endLine )
+      case _           =>
+    }
+  }
+
+
+  /**
+    * prints text in the color supplied.
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def write(color:String, text:String, endLine:Boolean): Unit =
+  {
+    print(color + " " + text )
+    if(endLine)
+      println()
+  }
+
+
+  /**
     * prints a empty line
     */
   def line()
@@ -127,18 +170,5 @@ class ConsoleWriter
   def text(text:String, endLine:Boolean = true):Unit =
   {
     write(Console.WHITE, text, endLine)
-  }
-
-
-  /**
-    * prints text in the color supplied.
-    * @param text    : the text to print
-    * @param endLine : whether or not to include a newline at the end
-    */
-  def write(color:String, text:String, endLine:Boolean): Unit =
-  {
-    print(color + " " + text )
-    if(endLine)
-      println()
   }
 }
