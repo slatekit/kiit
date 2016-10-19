@@ -49,7 +49,7 @@ object Requests {
     val inputJson = if(isPost) Some(json.asJsObject) else None
     val inputArgs = new HttpInputs(ctx, inputJson)
 
-    val args = new Args(action, actionVerbs.toList, "-", "=", rawTokens, null, indexArgs)
+    val args = new Args(rawTokens,action, actionVerbs.toList, "-", "=", None, Some(indexArgs))
     val cmd = ApiCmd(action, args, Some(inputArgs), Some(inputOpts), verb)
     cmd
   }

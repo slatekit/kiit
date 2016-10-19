@@ -1,4 +1,5 @@
 import slate.common._
+import slate.common.envs.EnvItem
 import slate.common.results.ResultSupportIn
 
 /**

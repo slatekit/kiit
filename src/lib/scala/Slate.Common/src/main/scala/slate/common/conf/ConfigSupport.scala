@@ -12,7 +12,8 @@
 package slate.common.conf
 
 import slate.common.databases.DbConString
-import slate.common.{Strings, ApiCredentials, Credentials, EnvItem}
+import slate.common.envs.EnvItem
+import slate.common.{Strings, ApiCredentials, Credentials}
 
 trait ConfigSupport {
 

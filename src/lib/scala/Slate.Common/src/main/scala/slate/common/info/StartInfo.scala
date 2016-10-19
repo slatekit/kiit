@@ -11,14 +11,13 @@
 
 package slate.common.info
 
-import slate.common.{Env}
 
 
 case class StartInfo (
                    args   : Option[Array[String]] = None        ,
                    log    : String = "{@app}-{@env}-{@date}.log",
                    config : String = "{@app}.config"            ,
-                   env    : String = Env.DEV
+                   env    : String = "dev"
                )
 {
 

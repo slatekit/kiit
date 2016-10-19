@@ -38,12 +38,13 @@ import scala.io.StdIn
 class Server( val port       : Int    = 5000 ,
               val interface  : String = "::0",
               val ctx        : AppContext    ,
-              val auth       : ApiAuth
+              val auth       : ApiAuth       ,
+              apiItems       :Option[List[ApiReg]] = None
             )
             extends ResultSupportIn
 {
   // api container holding all the apis.
-  val apis = new ApiContainer(ctx, Some(auth), "web")
+  val apis = new ApiContainer(ctx, Some(auth), "web", apiItems)
 
 
   /**

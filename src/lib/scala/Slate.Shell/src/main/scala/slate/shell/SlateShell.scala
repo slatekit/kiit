@@ -11,6 +11,7 @@
 package slate.shell
 
 import slate.common.app.{AppRunConst, AppMeta}
+import slate.common.args.ArgsSchema
 import slate.common.databases.DbLookup
 import slate.common.encrypt.Encryptor
 import slate.common.logging.LoggerConsole
@@ -30,8 +31,10 @@ import slate.core.shell._
   */
 object SlateShell extends AppProcess {
 
-  // console.writer.
-  val console = new ConsoleWriter()
+
+  def main(args: Array[String]): Unit = {
+    AppRunner.run(this, Some(args))
+  }
 
 
   // STEP 1. setup the command line arguments.
@@ -40,13 +43,9 @@ object SlateShell extends AppProcess {
   // 2. If supplied on command line, they override the values in .conf file
   // 3. If any of these are required and not supplied, then an error is display and program exists
   // 4. Help text can be easily built from this schema.
-  argsSchema.addText("env"   , "the environment to run in", false, ""     , "dev"  , "dev1|qa1|stg1|pro" )
-            .addText("log"   , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
-
-
-  def main(args: Array[String]): Unit = {
-    AppRunner.run(this, Some(args))
-  }
+  override lazy val argsSchema = new ArgsSchema()
+            .text("env"   , "the environment to run in", false, ""     , "dev"  , "dev1|qa1|stg1|pro" )
+            .text("log"   , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
 
 
   /**
@@ -59,14 +58,11 @@ object SlateShell extends AppProcess {
     // - Environment selection ( dev, qa, prod ) is set in env.conf
     // - Database selection.
     ctx = new AppContext (
-      app  = new AppMeta(),
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
       ent  = new Entities(),
       inf  = aboutApp(),
-      host = Host.local(),
-      lang = Lang.asScala(),
       con  = conf.dbCon(),
       enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
       dirs = Some(folders)
@@ -84,10 +80,10 @@ object SlateShell extends AppProcess {
     */
   override def onExecute():Result[Any] =
   {
-    console.text("************************************")
-    console.title("Welcome to Slate.Shell")
-    console.text("************************************")
-    console.line()
+    writer.text("************************************")
+    writer.title("Welcome to Slate.Shell")
+    writer.text("************************************")
+    writer.line()
 
     // 1. Get the user login info from .slate
     val creds = new Credentials("1", "john doe", "jdoe@gmail.com", key = buildApiKeys()(5).key)
