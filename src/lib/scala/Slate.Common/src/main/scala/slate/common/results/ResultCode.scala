@@ -32,5 +32,6 @@ object ResultCode {
 
   val HELP = 1000
   val EXIT = 1001
+  val VERSION = 1002
 
 }

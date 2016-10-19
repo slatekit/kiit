@@ -25,7 +25,20 @@ trait ResultSupportIn {
   protected def help(msg:Option[String] = Some("success"),
            tag:Option[String] = None): Result[String] =
   {
-    new SuccessResult[String]("help", code = ResultCode.HELP, msg = msg)
+    new FailureResult[String](code = ResultCode.HELP, msg = msg)
+  }
+
+
+  /**
+   * Help result : return success with string value "help" and status code of HELP
+   * @param msg : Optional message
+   * @param tag : Optional tag
+   * @return
+   */
+  protected def helpOn[T](msg:Option[String] = Some("success"),
+                     tag:Option[String] = None): Result[T] =
+  {
+    new FailureResult[T](code = ResultCode.HELP, msg = msg)
   }
 
 

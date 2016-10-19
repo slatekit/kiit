@@ -23,7 +23,6 @@ case class ResultTimed[+T](
                         memory  : MemUsage,
                         result  : Result[T]
                        )
-  extends ResultBase
 {
   /**
    *
@@ -53,7 +52,7 @@ case class ResultTimed[+T](
   }
 
 
-  override def print():Unit = {
+  def print():Unit = {
     println("desc           : " + desc               )
     println("start          : " + start              )
     println("end            : " + end                )
@@ -67,18 +66,7 @@ case class ResultTimed[+T](
   }
 
 
-  override def toJson():String = {
-    val json = new ObjectBuilderJson(true, "  ")
-    json.begin()
-    json.putString("success"  , if( success ) "true" else "false"     )
-    json.putString("msg"      , msg.getOrElse("null")   )
-    json.putString("code"     , code.toString  )
-    json.putString("data"     , data.map[String]( d => d.toString ).getOrElse("null"))
-    json.putString("err"      , err.map[String]( e => e.getMessage ).getOrElse("null"))
-    json.putString("ext"      , ext.getOrElse("null").toString )
-    json.putString("tag"      , tag.getOrElse("null") )
-    json.end()
-    val text = json.toString()
-    text
+  def toJson():String = {
+    "not implemented"
   }
 }
