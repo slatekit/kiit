@@ -8,12 +8,14 @@ import scala.collection.mutable.ListBuffer
 /**
  * Created by kv on 11/4/2015.
  */
-class AppMeta {
-  var about      = About.none
-  var host       = Host.none
-  var lang       = Lang.none
-  var status     = Status.none
-  var start      = StartInfo.none
+case class AppMeta(
+                     about  : About     =  About.none    ,
+                     host   : Host      =  Host.none     ,
+                     lang   : Lang      =  Lang.none     ,
+                     status : Status    =  Status.none   ,
+                     start  : StartInfo =  StartInfo.none
+                  )
+{
 
   /**
     * builds a list of properties fully describing this app by adding
