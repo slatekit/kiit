@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-19T06:54:47.974</td>
+      <td>2016-10-24T23:56:44.899</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/apis">/src/lib/scala/Slate.Core/src/main/scala/slate/core/apis</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/apis">/src/lib/scala/Slate.Core/src/main/scala/slate/core/apis</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Api.scala">/src/apps/scala/slate-examples/src/main/scala/slate.examples/Example_Api.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Api.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Api.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -170,7 +170,7 @@
 
 
     <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"get total number of users"</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
-    <span class="k">def</span> <span class="n">rawCommand</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">rawCommand</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">Request</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
 
       <span class="n">println</span><span class="o">(</span><span class="s">"handling the raw command that abstracts both a CLI command and a Web API request"</span><span class="o">)</span>
       <span class="c1">// NOTE: Use this if you do NOT want container to auto map arguments to your method parameters
@@ -231,7 +231,7 @@
      * @param rolesParent
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">Request</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
       <span class="k">super</span><span class="o">.</span><span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">roles</span><span class="o">,</span> <span class="n">rolesParent</span><span class="o">)</span>
     <span class="o">}</span>
 
@@ -242,7 +242,7 @@
      * @param roleParent : The roles value from the Api annotation
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">Request</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
 
       <span class="c1">// NOTES: The ApiCmd will either represent a Web Request or a CLI request.
 </span>      <span class="c1">// Slate abstracts the protocol requests using a "Unified Request data structure"

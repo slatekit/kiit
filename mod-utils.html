@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-19T06:54:47.953</td>
+      <td>2016-10-24T23:56:44.857</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -90,19 +90,19 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common</td>
+      <td>slate.common.console</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.ConsoleWriter.scala</td>
+      <td>slate.common.console.ConsoleWriter.scala</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common">/src/lib/scala/Slate.Common/src/main/scala/slate/common/common</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/console">/src/lib/scala/Slate.Common/src/main/scala/slate/common/console</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Utils.scala">/src/apps/scala/slate-examples/src/main/scala/slate.examples/Example_Utils.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Utils.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Utils.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -113,8 +113,8 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.envs._</span>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Todo</span><span class="o">,</span> <span class="nc">ListMap</span><span class="o">,</span> <span class="nc">Ensure</span><span class="o">,</span> <span class="nc">ConsoleWriter</span><span class="o">}</span>
+</span><span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
+<span class="k">import</span> <span class="nn">slate.common._</span>
 <span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">}</span>
 
 
@@ -137,61 +137,33 @@
 
     <span class="c1">// Miscellaneous utilities.
 </span>
-    <span class="c1">// CASE 1: ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-</span>    <span class="k">val</span> <span class="n">writer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ConsoleWriter</span><span class="o">()</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">title</span><span class="o">(</span><span class="s">"title is in CAPS"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">subTitle</span><span class="o">(</span><span class="s">"subtitle is in color cyan"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">url</span><span class="o">(</span><span class="s">"url is in blue"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">highlight</span><span class="o">(</span><span class="s">"highlight is in color"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">important</span><span class="o">(</span><span class="s">"important is red"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error shown in red"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">success</span><span class="o">(</span><span class="s">"success is in green"</span><span class="o">)</span>
-    <span class="n">writer</span><span class="o">.</span><span class="n">line</span><span class="o">()</span>
+    <span class="c1">// CASE 1: Api Credentials
+</span>    <span class="c1">// The ApiCredentials class provides a convenient container for most fields required to
+</span>    <span class="c1">// represent the access credentials some API such as AWS ( Amazon Web Services ) or Azure.
+</span>    <span class="k">val</span> <span class="n">awsS3</span>    <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiCredentials</span><span class="o">(</span><span class="s">"aws-s3"</span><span class="o">,</span> <span class="s">"ABCDEFG"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"user-profile"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">twilio</span>   <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiCredentials</span><span class="o">(</span><span class="s">"1-234-567-8901"</span><span class="o">,</span> <span class="s">"ABCEDEFG"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"sms"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">sendgrid</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiCredentials</span><span class="o">(</span><span class="s">"support@mystartup.com"</span><span class="o">,</span> <span class="s">"mystartup"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"emails"</span><span class="o">)</span>
 
-    <span class="c1">// CASE 2: Environment selection
-</span>    <span class="c1">// Build up with constructor ( key = "name"."mode" )
-</span>    <span class="k">val</span> <span class="n">qa1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">,</span> <span class="s">"dev1.env"</span><span class="o">)</span>
-
-    <span class="c1">// Build up with .apply
-</span>    <span class="k">val</span> <span class="n">qa2</span> <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">envs</span> <span class="k">=</span> <span class="nc">Env</span><span class="o">.</span><span class="n">defaults</span><span class="o">().</span><span class="n">select</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">)</span>
-    <span class="n">envs</span><span class="o">.</span><span class="n">isDev</span>
-    <span class="n">envs</span><span class="o">.</span><span class="n">isQa</span>
-    <span class="n">envs</span><span class="o">.</span><span class="n">isUat</span>
-    <span class="n">envs</span><span class="o">.</span><span class="n">isProd</span>
-    <span class="n">envs</span><span class="o">.</span><span class="n">current</span>
-
-    <span class="c1">// CASE 3: Guards
+    <span class="c1">// CASE 2: Guards ( Exceptions are discouraged in favor
+</span>    <span class="c1">// of functional error handling, however, there are times where
+</span>    <span class="c1">// a guard like approach to inputs is preferable
 </span>    <span class="nc">Ensure</span><span class="o">.</span><span class="n">isFalse</span><span class="o">(</span> <span class="s">"slate-kit"</span><span class="o">.</span><span class="n">length</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">,</span> <span class="s">"Name must be less than 10 chars"</span><span class="o">)</span>
     <span class="nc">Ensure</span><span class="o">.</span><span class="n">isTrue</span> <span class="o">(</span> <span class="s">"slate-kit"</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">,</span> <span class="s">"Name must be supplied"</span> <span class="o">)</span>
     <span class="nc">Ensure</span><span class="o">.</span><span class="n">isNotNull</span><span class="o">(</span><span class="s">"slate-kit"</span><span class="o">,</span> <span class="s">"Name must be supplied"</span> <span class="o">)</span>
 
-    <span class="c1">// CASE 4: ListMap
-</span>    <span class="k">val</span> <span class="n">listMap</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ListMap</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Int</span><span class="o">]()</span>
-    <span class="n">listMap</span><span class="o">(</span><span class="s">"a"</span><span class="o">)</span> <span class="k">=</span> <span class="mi">1</span>
-    <span class="n">listMap</span><span class="o">(</span><span class="s">"b"</span><span class="o">)</span> <span class="k">=</span> <span class="mi">2</span>
-    <span class="n">listMap</span><span class="o">(</span><span class="s">"c"</span><span class="o">)</span> <span class="k">=</span> <span class="mi">3</span>
+    <span class="c1">// CASE 3: Db connection
+</span>    <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/blend_v1"</span><span class="o">,</span> <span class="s">"db1"</span><span class="o">,</span> <span class="s">"1245689"</span><span class="o">)</span>
 
-    <span class="c1">// get by key
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">listMap</span><span class="o">(</span><span class="s">"a"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 4: Random string, digit and alpha(string+digits) generation
+</span>    <span class="k">import</span> <span class="nn">slate.common.RandomGen._</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">string3</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">digits3</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">digits6</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">alpha3</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">alpha6</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">stringGuid</span><span class="o">()</span> <span class="o">)</span>
 
-    <span class="c1">// get size
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">listMap</span><span class="o">.</span><span class="n">size</span><span class="o">()</span> <span class="o">)</span>
-
-    <span class="c1">// get by index
-</span>    <span class="n">listMap</span><span class="o">.</span><span class="n">getAt</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
-
-
-    <span class="c1">// CASE 4: Strongly typed, structured representation of Todos.
-</span>    <span class="nc">Todo</span><span class="o">.</span><span class="n">implement</span><span class="o">(</span><span class="s">"Component 1"</span><span class="o">,</span> <span class="s">"This code needs further error handling"</span> <span class="o">)</span>
-    <span class="nc">Todo</span><span class="o">.</span><span class="n">refactor</span><span class="o">(</span><span class="s">"Component 2"</span><span class="o">,</span> <span class="s">"method is too long"</span> <span class="o">)</span>
-    <span class="nc">Todo</span><span class="o">.</span><span class="n">bug</span><span class="o">(</span><span class="s">"Component 3"</span><span class="o">,</span> <span class="s">"invalid data, bug fix needed"</span><span class="o">,</span> <span class="s">"JIRA:12434"</span> <span class="o">)</span>
-    <span class="nc">Todo</span><span class="o">.</span><span class="n">implement</span><span class="o">(</span><span class="s">"Component 4"</span><span class="o">,</span> <span class="s">"Store to database"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(()</span> <span class="k">=&gt;</span>
-    <span class="o">{</span>
-      <span class="c1">// This is an example of showing how to pass a closure/anonymous
-</span>      <span class="c1">// function to the methods.
-</span>      <span class="n">println</span><span class="o">(</span><span class="s">"inside closure of todo example"</span><span class="o">)</span>
-    <span class="o">}))</span>
     
 
 </code></pre>

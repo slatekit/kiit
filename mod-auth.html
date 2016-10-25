@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-19T06:54:47.980</td>
+      <td>2016-10-24T23:56:44.907</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -98,11 +98,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth">/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth">/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/kishorereddy/blend-server/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala">/src/apps/scala/slate-examples/src/main/scala/slate.examples/Example_Auth.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -130,12 +130,12 @@
 
     <span class="c1">// Setup 1: For web / con-current apps ( use separate instance of authWeb per user )
 </span>    <span class="k">val</span> <span class="n">user1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span> <span class="s">"1"</span><span class="o">,</span> <span class="s">"user 001"</span><span class="o">,</span> <span class="s">"user"</span><span class="o">,</span> <span class="s">"001"</span><span class="o">,</span> <span class="s">"user001@gmail.com"</span><span class="o">,</span> <span class="s">"123-456-7001"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">authWeb</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AuthWeb</span><span class="o">().</span><span class="n">init</span><span class="o">(</span><span class="n">isAuthenticated</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">user</span> <span class="k">=</span> <span class="n">user1</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"moderator"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">authWeb</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AuthWeb</span><span class="o">(</span><span class="n">isAuthenticatedUser</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">user</span> <span class="k">=</span> <span class="n">user1</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"moderator"</span><span class="o">)</span>
 
     <span class="c1">// Setup 2: For local / desktop ( non-concurrent apps - use 1 instance of AuthDesktop )
 </span>    <span class="c1">// and initialize the singleton Auth with the desktop implementation for convenient access
 </span>    <span class="k">val</span> <span class="n">user2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="s">"john"</span><span class="o">,</span> <span class="s">"doe"</span><span class="o">,</span> <span class="s">"jdoe@gmail.com"</span><span class="o">,</span> <span class="s">"123-456-7890"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
-    <span class="nc">Auth</span><span class="o">.</span><span class="n">init</span><span class="o">(</span><span class="n">isAuthenticated</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">user</span> <span class="k">=</span> <span class="n">user2</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"admin"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">authDesktop</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AuthDesktop</span><span class="o">(</span><span class="n">isAuthenticatedUser</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">user</span> <span class="k">=</span> <span class="n">user2</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"admin"</span><span class="o">)</span>
     
 
 </code></pre>
@@ -158,13 +158,13 @@
 
     <span class="c1">// CASE 2: Use singleton Auth class for desktop apps to conveniently access auth information
 </span>    <span class="n">println</span> <span class="o">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"user info         : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">user</span>                   <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"user id           : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">userId</span>                 <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is authenticated  : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">isAuthenticated</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is email verified : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">isEmailVerified</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is phone verified : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">isPhoneVerified</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is a moderator    : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"moderator"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is an admin       : "</span> <span class="o">+</span> <span class="nc">Auth</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"admin"</span> <span class="o">)</span>    <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"user info         : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">user</span>                   <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"user id           : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">userId</span>                 <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"is authenticated  : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">isAuthenticated</span>        <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"is email verified : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">isEmailVerified</span>        <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"is phone verified : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">isPhoneVerified</span>        <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"is a moderator    : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"moderator"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span> <span class="o">(</span> <span class="s">"is an admin       : "</span> <span class="o">+</span> <span class="n">authDesktop</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"admin"</span> <span class="o">)</span>    <span class="o">)</span>
     
 
 </code></pre>
