@@ -140,7 +140,7 @@ class Server( val port       : Int    = 5000 ,
    * @param cmd
    * @return
    */
-  protected def callCommand(cmd:ApiCmd): Result[Any] = {
+  protected def callCommand(cmd:Request): Result[Any] = {
     apis.callCommand(cmd)
   }
 }

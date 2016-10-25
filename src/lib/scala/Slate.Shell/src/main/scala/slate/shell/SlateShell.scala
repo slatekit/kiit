@@ -17,7 +17,7 @@ import slate.common.encrypt.Encryptor
 import slate.common.logging.LoggerConsole
 import slate.common._
 import slate.common.info.{Folders, Lang, Host, About}
-import slate.core.apis.{ApiAuth}
+import slate.core.apis.{ApiReg, ApiAuth}
 import slate.core.app.{AppProcess, AppRunner}
 import slate.core.common.{Conf, AppContext}
 import slate.entities.core.Entities
@@ -91,13 +91,16 @@ object SlateShell extends AppProcess {
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = new ShellAPI(creds, ctx, auth, "sampleapp", new ShellSettings( enableLogging = true, enableOutput = true))
+    val shell = new ShellAPI(creds, ctx, auth, "sampleapp", new ShellSettings( enableLogging = true, enableOutput = true),
+      apiItems = Some(List[ApiReg](
+        new ApiReg(new AppApi()    , true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new VersionApi(), true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new DocApi()    , true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new CodeGenApi(), true, Some("qa"), protocol = Some("*"))
+      )
+    ))
 
-    // 4. Register the apis using default mode ( uses permissions in annotations on class )
-    shell.apis.register[AppApi]    (new AppApi()    , true, Some("qa"), protocol = Some("*"))
-    shell.apis.register[VersionApi](new VersionApi(), true, Some("qa"), protocol = Some("*") )
-    shell.apis.register[DocApi]    (new DocApi()    , true, Some("qa"), protocol = Some("*"))
-    shell.apis.register[CodeGenApi]  (new CodeGenApi()  , true, Some("qa"), protocol = Some("*") )
+    // 4. Initialize the apis
     shell.apis.init()
 
     // 5. Provide the apis to the shell and run!

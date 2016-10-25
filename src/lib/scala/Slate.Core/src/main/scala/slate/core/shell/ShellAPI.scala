@@ -86,7 +86,7 @@ class ShellAPI(private val creds:Credentials                   ,
 
     // Supply the api-key into each command.
     val opts = Some(new InputArgs(Map[String,Any]("api-key" -> creds.key)))
-    val apiCmd = ApiCmd(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI)
+    val apiCmd = Request(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI)
     cmd.result = apis.callCommand(apiCmd)
     cmd
   }

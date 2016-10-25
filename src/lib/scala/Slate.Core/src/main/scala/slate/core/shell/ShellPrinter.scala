@@ -12,6 +12,7 @@
 package slate.core.shell
 
 
+import slate.common.console.ConsoleWriter
 import slate.common.serialization.{SerializerProps, SerializerJson}
 import slate.entities.core.{EntitySerializer, Entities, IEntity}
 import slate.common._

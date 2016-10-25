@@ -23,9 +23,27 @@ object RandomGen {
   val rnd = new Random()
 
 
-  def digits6():Int =
+  def alpha3():String = alphaN(3)
+
+
+  def alpha6():String = alphaN(6)
+
+
+  def digits3():Int = digitsN(3)
+
+
+  def digits6():Int = digitsN(6)
+
+
+  def string3():String = stringN(3)
+
+
+  def string6():String = stringN(6)
+
+
+  def digitsN(n:Int):Int =
   {
-    val LEN = 6
+    val LEN = n
     val sb = new StringBuilder(LEN)
     for (i <- 0 until LEN)
       sb.append(NUMS.charAt(rnd.nextInt(NUMS.length())))
@@ -35,21 +53,9 @@ object RandomGen {
   }
 
 
-  def digits3():Int =
+  def stringN(n:Int):String =
   {
-    val LEN = 3
-    val sb = new StringBuilder(LEN)
-    for (i <- 0 until LEN)
-      sb.append(NUMS.charAt(rnd.nextInt(NUMS.length())))
-
-    val number = Integer.parseInt(sb.toString())
-    number
-  }
-
-
-  def string6():String =
-  {
-    val LEN = 6
+    val LEN = n
     val sb = new StringBuilder(LEN)
     for (i <- 0 until LEN)
       sb.append(LETTERS.charAt(rnd.nextInt(LETTERS.length())))
@@ -59,9 +65,9 @@ object RandomGen {
   }
 
 
-  def alpha6():String =
+  def alphaN(n:Int):String =
   {
-    val LEN = 6
+    val LEN = n
     val sb = new StringBuilder(LEN)
     for (i <- 0 until LEN)
       sb.append(ALPHA.charAt(rnd.nextInt(ALPHA.length())))

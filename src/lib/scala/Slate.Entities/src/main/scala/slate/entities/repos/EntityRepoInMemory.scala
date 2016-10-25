@@ -30,11 +30,11 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
     *
     * @param entity
    */
-  override def create(entity: T) =
+  override def create(entity: T):Long =
   {
     // Check 1: already persisted ?
     if(entity.isPersisted())
-      false
+      return entity.id
 
     // get next id
     entity.id = getNextId()

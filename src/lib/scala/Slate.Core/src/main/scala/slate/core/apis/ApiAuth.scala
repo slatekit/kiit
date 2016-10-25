@@ -12,7 +12,8 @@
 package slate.core.apis
 
 import slate.common.results.ResultSupportIn
-import slate.common.{ListMap, Result, Strings, ApiKey}
+import slate.common.{Result, Strings, ApiKey}
+import slate.core.auth.AuthFuncs._
 
 /**
  * Class used to authenticate an api with support for 3 modes:
@@ -23,11 +24,11 @@ import slate.common.{ListMap, Result, Strings, ApiKey}
  * Need to initialize with api-keys
  */
 class ApiAuth(private val keys:List[ApiKey],
-              private val callback:Option[(ApiCmd, String, String ) => Result[Boolean]],
+              private val callback:Option[(Request, String, String ) => Result[Boolean]],
               private val headerApiKeyName:String = "api-key")
   extends ResultSupportIn {
 
-  private val _keyLookup = init(keys)
+  private val _keyLookup = convertKeys(keys)
 
 
   /**
@@ -38,7 +39,7 @@ class ApiAuth(private val keys:List[ApiKey],
    * @param roleParents
    * @return
    */
-  def isAuthorized(cmd:ApiCmd, mode:String, roles:String, roleParents:String):Result[Boolean] =
+  def isAuthorized(cmd:Request, mode:String, roles:String, roleParents:String):Result[Boolean] =
   {
     // CASE 1: no roles ? authorization not applicable
     if (Strings.isNullOrEmpty(roles))
@@ -69,42 +70,12 @@ class ApiAuth(private val keys:List[ApiKey],
   }
 
 
-  def isKeyRoleValid(cmd:ApiCmd, actionRoles:String, parentRoles:String):Result[Boolean] = {
-
-    // No headers!
-    if(!cmd.opts.isDefined) {
-      return unAuthorized(Some("api key not provided"))
-    }
-
-    // Key not in header!
-    if(!cmd.opts.get.contains(headerApiKeyName)) {
-      return unAuthorized(Some("api key not provided"))
-    }
-
-    val key = cmd.opts.get(headerApiKeyName).toString()
-
-    // Empty key!
-    if(Strings.isNullOrEmpty(key)) {
-      return unAuthorized(Some("api key not provided"))
-    }
-
-    // Unknown key!
-    if(!_keyLookup.contains(key)){
-      return unAuthorized(Some("api key not valid"))
-    }
-
-    // Now ensure that key contains roles matching one provided.
-    val apiKey = _keyLookup(key)
-
-    // "Roles" could refer to "@parent" so get the final role(s)
-    val expectedRole = ApiHelper.getReferencedValue(actionRoles, parentRoles)
-
-    // Now match the roles.
-    matchRoles(expectedRole, apiKey.rolesLookup)
+  def isKeyRoleValid(cmd:Request, actionRoles:String, parentRoles:String):Result[Boolean] = {
+    isKeyValid(cmd.opts, _keyLookup, headerApiKeyName, actionRoles, parentRoles)
   }
 
 
-  def isAppRoleValid(cmd:ApiCmd, actionRoles:String, parentRoles:String):Result[Boolean] = {
+  def isAppRoleValid(cmd:Request, actionRoles:String, parentRoles:String):Result[Boolean] = {
 
     // Check 1: Callback supplied ( so as to avoid subclassing this class )
     if(callback.isDefined) {
@@ -112,7 +83,7 @@ class ApiAuth(private val keys:List[ApiKey],
     }
 
     // Get the expected role from either action or possible reference to parent
-    val expectedRoles = ApiHelper.getReferencedValue(actionRoles, parentRoles)
+    val expectedRoles = getReferencedValue(actionRoles, parentRoles)
 
     // Get the user roles
     val actualRole = getUserRoles(cmd)
@@ -123,50 +94,7 @@ class ApiAuth(private val keys:List[ApiKey],
   }
 
 
-  protected def getUserRoles(cmd:ApiCmd):String = {
+  protected def getUserRoles(cmd:Request):String = {
     ""
-  }
-
-
-  /**
-   * matches the expected roles with the actual roles
-   * @param expectedRole : "dev,ops,admin"
-   * @param actualRoles  : Map of actual roles the user has.
-   * @return
-   */
-  protected def matchRoles(expectedRole:String, actualRoles:Map[String,String]): Result[Boolean] = {
-
-    // 1. No roles ?
-    if(actualRoles == null || actualRoles.size == 0) {
-      return unAuthorized()
-    }
-
-    // 2. Any role "*"
-    if(Strings.isMatch(expectedRole, ApiConstants.RoleAny)){
-      return ok()
-    }
-
-    // 3. Get all roles "dev,moderator,admin"
-    val expectedRoles = Strings.split(expectedRole, ',')
-
-    // 4. Now compare
-    for(role <- expectedRoles ){
-      if(actualRoles.contains(role)) {
-        return ok()
-      }
-    }
-    unAuthorized()
-  }
-
-
-  private def init(keys:List[ApiKey]):ListMap[String,ApiKey] = {
-    val lookup = new ListMap[String,ApiKey]()
-    if(keys == null)
-      return lookup
-    for(key <- keys) {
-      val rolesLookup = Strings.splitToMap(key.roles, ',', true)
-      lookup.add(key.key, new ApiKey(key.name, key.key, key.roles, rolesLookup))
-    }
-    lookup
   }
 }

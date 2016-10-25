@@ -11,13 +11,13 @@
 
 package slate.core.apis.doc
 
-import slate.common.ConsoleWriter
+import slate.common.console.ConsoleWriter
 import slate.core.apis.{Api, ApiArg}
 
 abstract class ApiDocBase extends ApiVisit {
   private val _writer = new ConsoleWriter()
   private val _settings = new ApiDocSettings()
-
+  import _writer._
 
   def settings:ApiDocSettings =
   {
@@ -27,35 +27,35 @@ abstract class ApiDocBase extends ApiVisit {
 
   def lineBreak():Unit =
   {
-    _writer.text("---------------------------------------------------------------", endLine = true)
+    text("---------------------------------------------------------------", endLine = true)
   }
 
 
   override def onVisitSeparator(): Unit =
   {
-    _writer.line()
+    line()
   }
 
 
   override def onVisitAreasBegin():Unit =
   {
     lineBreak()
-    _writer.title("supported areas: ", endLine = true)
-    _writer.line()
+    title("supported areas: ", endLine = true)
+    line()
   }
 
 
   override def onVisitAreasEnd():Unit =
   {
-    _writer.text("type '{area} ?' to list all apis in the area. ")
-    _writer.url("e.g. sys ?" , endLine = true)
+    text("type '{area} ?' to list all apis in the area. ")
+    url("e.g. sys ?" , endLine = true)
     lineBreak()
   }
 
 
   override def onVisitAreaBegin(area:String):Unit =
   {
-    _writer.highlight(area, endLine = true)
+    highlight(area, endLine = true)
   }
 
 
@@ -67,37 +67,37 @@ abstract class ApiDocBase extends ApiVisit {
   override def onVisitApisBegin(area:String):Unit =
   {
     lineBreak()
-    _writer.title("supported apis: ", endLine = true)
-    _writer.line()
+    title("supported apis: ", endLine = true)
+    line()
   }
 
 
   override def onVisitApisEnd(area:String):Unit =
   {
-    _writer.line()
-    _writer.text("type {area}.{api} ? to list all actions on an api. ")
-    _writer.url("e.g. sys.models ?" , endLine = true)
+    line()
+    text("type {area}.{api} ? to list all actions on an api. ")
+    url("e.g. sys.models ?" , endLine = true)
     lineBreak()
   }
 
 
   override def onVisitApiEnd(api: Api): Unit =
   {
-    _writer.line()
+    line()
   }
 
 
   override def onVisitApiArgEnd(arg: ApiArg): Unit =
   {
-    _writer.line()
+    line()
   }
 
 
   override def onVisitApiActionSyntax(): Unit =
   {
-    _writer.line()
-    _writer.text("type {area}.{api}.{action} ? to list inputs for an action. ")
-    _writer.url("e.g. sys.models.install ?" , endLine = true)
+    line()
+    text("type {area}.{api}.{action} ? to list inputs for an action. ")
+    url("e.g. sys.models.install ?" , endLine = true)
     lineBreak()
   }
 

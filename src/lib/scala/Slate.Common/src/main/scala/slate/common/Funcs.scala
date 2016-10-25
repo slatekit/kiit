@@ -27,4 +27,14 @@ object Funcs {
       Unit
     })
   }
+
+
+  def executeIf[T](condition:Boolean, data:Option[T], f:(T) => Unit): Unit = {
+    if(condition) {
+      data.fold(Unit)(item => {
+        f(item)
+        Unit
+      })
+    }
+  }
 }

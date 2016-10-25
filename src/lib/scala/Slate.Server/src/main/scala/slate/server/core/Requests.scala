@@ -14,7 +14,7 @@ package slate.server.core
 import akka.http.scaladsl.server.RequestContext
 import slate.common.{Strings, InputArgs}
 import slate.common.args.Args
-import slate.core.apis.ApiCmd
+import slate.core.apis.Request
 import slate.server.utils.{HttpHeaders, HttpInputs}
 import spray.json.JsValue
 
@@ -29,7 +29,7 @@ object Requests {
    * @param verb : http verb "get", "post" only supported.
    * @return
    */
-  def convertToCommand(ctx:RequestContext, json:JsValue, verb:String): ApiCmd = {
+  def convertToCommand(ctx:RequestContext, json:JsValue, verb:String): Request = {
 
     // 1. get the route /api/app/users/register
     val rawPath = ctx.request.getUri().path()
@@ -50,7 +50,7 @@ object Requests {
     val inputArgs = new HttpInputs(ctx, inputJson)
 
     val args = new Args(rawTokens,action, actionVerbs.toList, "-", "=", None, Some(indexArgs))
-    val cmd = ApiCmd(action, args, Some(inputArgs), Some(inputOpts), verb)
+    val cmd = Request(action, args, Some(inputArgs), Some(inputOpts), verb)
     cmd
   }
 

@@ -16,6 +16,8 @@ import sampleapp.core.common.{AppApiKeys, AppAuth, AppEncryptor}
 import sampleapp.core.models.{Movie, User}
 import sampleapp.core.services.{MovieApi, MovieService, UserService, UserApi}
 import slate.common.args.ArgsSchema
+import slate.core.apis.ApiReg
+import slate.entities.models.ModelSettings
 
 // Slate Result Monad + database/logger/application metadata
 import slate.common.{Result}
@@ -32,7 +34,7 @@ import slate.core.common.AppContext
 import slate.entities.core.Entities
 import slate.entities.repos.{EntityRepoMySql}
 
-import slate.integration.{VersionApi, AppApi}
+import slate.integration.{EntitiesApi, VersionApi, AppApi}
 import slate.server.core.Server
 import scala.reflect.runtime.universe.{typeOf}
 
@@ -167,13 +169,17 @@ class SampleAppServer extends AppProcess
     // 2. Initialize server with port, domain, context (see above) and auth provider
     val server = new Server( args.getIntOrElse("port", 5000),
                              args.getStringOrElse("domain", "::0"),
-                             ctx, auth
+                             ctx, auth,
+                             apiItems = Some(
+                                List[ApiReg](
+                                    new ApiReg(new AppApi()    , true  ),
+                                    new ApiReg(new VersionApi(), true  ),
+                                    new ApiReg(new UserApi()   , false ),
+                                    new ApiReg(new MovieApi()  , false )
+                                  )
+                              )
                             )
-    // 3. Register the APIs within the api container
-    server.apis.register[AppApi]    (new AppApi()    , true  )
-    server.apis.register[VersionApi](new VersionApi(), true  )
-    server.apis.register[UserApi]    (new UserApi()   , false )
-    server.apis.register[MovieApi]   (new MovieApi()   , false )
+    // 3. Init the APIs within the api container
     server.apis.init()
 
     // 4. Run the server ( this starts the life-cycle init, execute, shutdown )
@@ -197,10 +203,10 @@ class SampleAppServer extends AppProcess
   /**
    * HOOK for adding items to the summary of data shown at the end of app execution
    */
-  override def collectSummaryExtra(): Option[List[String]] =
+  override def collectSummaryExtra(): Option[List[(String,String)]] =
   {
-    Some(List[String](
-      "region" + " = " + args.getStringOrElse("region", "n/a")
+    Some(List[(String,String)](
+      ("region", args.getStringOrElse("region", "n/a"))
     ))
   }
 }

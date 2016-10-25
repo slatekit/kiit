@@ -1,24 +1,24 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2016 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2016 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
+package slate.common.console
 
-package slate.common
+import slate.common.Strings
 
-/**
-  * Semantic console writer to print text in different colors and in Uppercase/lowercase for
-  * things like title, subtitle, url etc.
-  */
-class ConsoleWriter
-{
+trait ConsoleWrites {
+
+  val settings:ConsoleSettings
+
   /**
     * Write many items based on the semantic modes
+    *
     * @param items
     */
   def writeItems(items:List[(String,String,Boolean)]): Unit = {
@@ -28,6 +28,7 @@ class ConsoleWriter
 
   /**
     * Write a single item based on the semantic mode
+    *
     * @param mode
     * @param msg
     * @param endLine
@@ -49,6 +50,7 @@ class ConsoleWriter
 
   /**
     * prints text in the color supplied.
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -70,7 +72,19 @@ class ConsoleWriter
 
 
   /**
+   * prints a empty line
+   */
+  def lines(count:Int): Unit =
+  {
+    for(a <- 0 until count){
+      println()
+    }
+  }
+
+
+  /**
     * prints a tab count times
+    *
     * @param count
     */
   def tab(count:Int = 1)
@@ -84,6 +98,7 @@ class ConsoleWriter
 
   /**
     * prints text in title format ( UPPERCASE and BLUE )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -98,6 +113,7 @@ class ConsoleWriter
 
   /**
     * prints text in subtitle format ( CYAN )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -109,6 +125,7 @@ class ConsoleWriter
 
   /**
     * prints text in url format ( BLUE )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -120,6 +137,7 @@ class ConsoleWriter
 
   /**
     * prints text in important format ( RED )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -131,6 +149,7 @@ class ConsoleWriter
 
   /**
     * prints text in highlight format ( YELLOW )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -141,7 +160,33 @@ class ConsoleWriter
 
 
   /**
+    * prints text in normal format ( WHITE )
+    *
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def label(text:String, endLine:Boolean = true):Unit =
+  {
+    val color = if(settings.darkMode) Console.BLACK else Console.WHITE
+    write(color, text, endLine)
+  }
+
+
+  /**
+    * prints text in normal format ( WHITE )
+    *
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def text(text:String, endLine:Boolean = true):Unit =
+  {
+    write(Console.WHITE, text, endLine)
+  }
+
+
+  /**
     * prints text in error format ( RED )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
@@ -152,23 +197,27 @@ class ConsoleWriter
 
 
   /**
+    * prints text using a label : value format
+    *
+    * @param key     :
+    * @param value   : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def keyValue(key:String, value:String, endLine:Boolean = true):Unit =
+  {
+    label(key + " = ", false)
+    text(value, endLine)
+  }
+
+
+  /**
     * prints text in title format ( UPPERCASE and BLUE )
+    *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
   def success(text:String, endLine:Boolean = true):Unit =
   {
     write(Console.GREEN, text, endLine)
-  }
-
-
-  /**
-    * prints text in normal format ( WHITE )
-    * @param text    : the text to print
-    * @param endLine : whether or not to include a newline at the end
-    */
-  def text(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.WHITE, text, endLine)
   }
 }

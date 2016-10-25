@@ -11,7 +11,8 @@
 
 package slate.core.apis.doc
 
-import slate.common.{ReflectedArg, ConsoleWriter}
+import slate.common.console.ConsoleWriter
+import slate.common.ReflectedArg
 import slate.core.apis.{ApiArg, ApiAction, Api}
 
 class ApiDocWeb extends ApiDocBase {

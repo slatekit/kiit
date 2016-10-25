@@ -42,10 +42,10 @@ class Mapper(protected var _model:Model) {
   {
     val modelName = item.getClass().getSimpleName
     val modelNameFull = item.getClass.getName
-    val model = new Model(modelName, modelNameFull, Some(dataType))
+    var model = new Model(modelName, modelNameFull, Some(dataType))
 
     // Add id
-    model.addId( name = "id" , autoIncrement = true, dataType = typeOf[Long])
+    model = model.addId( name = "id" , autoIncrement = true, dataType = typeOf[Long])
 
     // Now add all the fields.
     val matchedFieldsR = Reflector.getFieldsWithAnnotations(item, dataType, typeOf[Field])
@@ -59,7 +59,7 @@ class Mapper(protected var _model:Model) {
       val required = anno.required
       val length   = anno.length
       val dataType = matchedField._5
-      model.addField( name= name, dataType= dataType, isRequired= required, maxLength = length )
+      model = model.addField( name= name, dataType= dataType, isRequired= required, maxLength = length )
     }
     this._model = model
     model
@@ -68,7 +68,7 @@ class Mapper(protected var _model:Model) {
 
   def mapFrom(record:MappedSourceReader): Option[Any] =
   {
-    if(!_model.anyFields())
+    if(!_model.any)
       return None
 
     val entity:Any = createEntity()

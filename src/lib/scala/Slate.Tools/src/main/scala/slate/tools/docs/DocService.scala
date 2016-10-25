@@ -12,6 +12,7 @@
 package slate.tools.docs
 
 import slate.common._
+import slate.common.console.ConsoleWriter
 import slate.common.results.ResultSupportIn
 
 import scala.collection.immutable.List
@@ -26,9 +27,11 @@ class DocService(val _rootdir:String, val _outputDir:String, val _templatePath:S
   private val _docs = List[Doc](
      new Doc("Args"         ,  "slate.common.args.Args"             , "0.9.1", "Example_Args"             , true  , false, "utils", "", "slate.common.jar"  , ""                    , "A lexical command line argument parser for command line parsing and support specifying routes / method calls")
     ,new Doc("Config"       ,  "slate.common.conf.Config"           , "0.9.1", "Example_Config"           , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys")
+    ,new Doc("Console"      ,  "slate.core.console.Console"         , "0.9.1", "Example_Console"          , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors")
     ,new Doc("Csv"          ,  "slate.core.csv.Csv"                 , "0.9.1", "Example_Csv"              , false , false, "utils", "", "slate.common.jar"  , ""                    , "Csv parser with additional services like auto-mapping and serialization")
     ,new Doc("Data"         ,  "slate.core.databases.Db"            , "0.9.1", "Example_Database"         , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Database access utilty to query and manage data using JDBC for MySql. Other database support coming later.")
     ,new Doc("Encrypt"      ,  "slate.common.encrypt.Encryptor"     , "0.9.1", "Example_Encryptor"        , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Encryption using AES")
+    ,new Doc("Env"          ,  "slate.common.envs.Env"              , "0.9.1", "Example_Env"              , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Environment selector and validator for environments such as (local, dev, qa, stg, prod) )")
     ,new Doc("Info"         ,  "slate.common.info._"                , "0.9.1", "Example_Info"             , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Get/Set useful diagnostics about the system, language runtime, application and more")
     ,new Doc("Lex"          ,  "slate.common.lex.Lexer"             , "0.9.1", "Example_Lexer"            , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Lexer for parsing text into tokens")
     ,new Doc("Logger"       ,  "slate.common.logging.Logger"        , "0.9.1", "Example_Logger"           , true  , false, "utils", "", "slate.common.jar"  , ""                    , "A simple logger with extensibility for using other 3rd party loggers")
@@ -39,7 +42,8 @@ class DocService(val _rootdir:String, val _outputDir:String, val _templatePath:S
     ,new Doc("Queue"        ,  "slate.common.queues.QueueSource"    , "0.9.1", "Example_Queue"            , false , false, "infra", "", "slate.common.jar"  , ""                    , "Queue implementation and interfaces used for Queue abstractions over Amazon SQS" )
     ,new Doc("Results"      ,  "slate.common.Result"                , "0.9.1", "Example_Results"          , true  , false, "utils", "", "slate.common.jar"  , ""                    , "A monad that wraps a value with status codes, message, and other fields. Support failure, success branchs and supports http status codes." )
     ,new Doc("Timer"        ,  "slate.common.Timer"                 , "0.9.1", "Example_Timer"            , true  , false, "utils", "", "slate.common.jar"  , ""                    , "A timer to benchmark time/duration of code blocks")
-    ,new Doc("Utils"        ,  "slate.common.ConsoleWriter"         , "0.9.1", "Example_Utils"            , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Various utilities available in the Slate library")
+    ,new Doc("Todo"         ,  "slate.common.Todo"                  , "0.9.1", "Example_Todo"             , true  , false, "utils", "", "slate.common.jar"  , ""                    , "A programmatic approach to marking and tagging code that is strongly typed and consistent")
+    ,new Doc("Utils"        ,  "slate.common.console.ConsoleWriter"         , "0.9.1", "Example_Utils"            , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Various utilities available in the Slate library")
     ,new Doc("Reflect"      ,  "slate.common.Reflector"             , "0.9.1", "Example_Reflect"          , true  , false, "utils", "", "slate.common.jar"  , ""                    , "Reflection helper for Scala to create instances, get methods, fields, annotations and more" )
     ,new Doc("Orm-Model"    ,  "slate.common.Model"                 , "0.9.1", "Example_Model"            , true  , false, "orm"  , "", "slate.common.jar"  , "com"                 , "A model schema builder")
     ,new Doc("Orm-Entity"   ,  "slate.common.entities.Entity"       , "0.9.1", "Example_Entities"         , true  , false, "orm"  , "", "slate.entities.jar", "com"                 , "A base class for persistent domain entities")

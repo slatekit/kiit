@@ -43,8 +43,10 @@ class ApiVisitor {
       val actions = api.actions()
       if(actions.size() > 0)
       {
-        val apiAnno = actions.getAt(0).api
-        visitApi(apiAnno, visitor, actions,  listActions = false, listArgs = false)
+        actions.getAt(0).fold(Unit)( apiAnno => {
+          visitApi(apiAnno.api, visitor, actions,  listActions = false, listArgs = false)
+          Unit
+        })
       }
     }
     visitor.onVisitApisEnd(area)
@@ -56,8 +58,10 @@ class ApiVisitor {
     val actions = apiBase.actions()
     if(actions.size() > 0)
     {
-      val apiAnno = actions.getAt(0).api
-      visitApi(apiAnno, visitor, actions, listActions = true, listArgs = false )
+      actions.getAt(0).fold(Unit)( apiAnno => {
+        visitApi(apiAnno.api, visitor, actions, listActions = true, listArgs = false)
+        Unit
+      })
     }
     visitor.onVisitApiActionSyntax()
   }
@@ -89,15 +93,19 @@ class ApiVisitor {
     val actions = apiBase.actions()
     if(actions.size() > 0)
     {
-      val api = actions.getAt(0).api
-      visitor.onVisitApiBegin(api)
-      visitor.onVisitSeparator()
-      val call = actions(actionName)
-      visitApiAction(call, visitor, detailMode = true)
+      actions.getAt(0).fold(Unit)( apiAnno => {
 
-      if ( true ) {
-        visitor.onVisitApiActionExample(api, call.name, call.action, call.paramList)
-      }
+        val api = apiAnno.api
+        visitor.onVisitApiBegin(api)
+        visitor.onVisitSeparator()
+        val call = actions(actionName)
+        visitApiAction(call, visitor, detailMode = true)
+
+        if ( true ) {
+          visitor.onVisitApiActionExample(api, call.name, call.action, call.paramList)
+        }
+        Unit
+      })
     }
   }
 

@@ -15,6 +15,7 @@ package slate.core.shell
 import slate.common._
 import slate.common.app.{AppMetaSupport, AppMeta}
 import slate.common.args.{ArgsHelper, Args}
+import slate.common.console.ConsoleWriter
 import slate.common.info.Folders
 import slate.common.results.{ResultCode, ResultSupportIn}
 
@@ -26,6 +27,7 @@ import scala.collection.mutable.ListBuffer
   * functionality to handle user input commands, printing of data, checks for help requests,
   * and exiting the shell. Derive from the class and override the onCommandExecuteInternal
   * to handle the user input command converted to ShellCommand.
+ *
   * @param _appMeta : Metadata about the app used for displaying help about app
   * @param folders  : Used to write output to app directories
   * @param settings : Settings for the shell functionality

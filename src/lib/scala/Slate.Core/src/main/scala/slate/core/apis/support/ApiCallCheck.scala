@@ -11,8 +11,7 @@
 
 package slate.core.apis.support
 
-import slate.common.args.Args
-import slate.core.apis.{ApiCmd, ApiBase}
+import slate.core.apis.{Request, ApiBase}
 
 
 /**
@@ -35,7 +34,7 @@ case class ApiCallCheck(
                          apiAction    : String  ,
                          custom       : Boolean ,
                          api          : ApiBase ,
-                         cmd          : ApiCmd
+                         cmd          : Request
                        )
 {
 

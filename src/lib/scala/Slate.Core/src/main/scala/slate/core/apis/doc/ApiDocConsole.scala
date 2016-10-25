@@ -11,12 +11,13 @@
 
 package slate.core.apis.doc
 
-import slate.common.{ReflectedArg, Strings, ConsoleWriter}
+import slate.common.console.ConsoleWriter
+import slate.common.{ReflectedArg, Strings}
 import slate.core.apis.{Api, ApiAction, ApiArg}
 
 class ApiDocConsole extends ApiDocBase {
   protected val _writer = new ConsoleWriter()
-
+  import _writer._
 
   override def result: AnyRef =
   {
@@ -32,65 +33,65 @@ class ApiDocConsole extends ApiDocBase {
 
   override def onVisitApiBegin(api: Api): Unit =
   {
-    _writer.highlight(getFormattedText(api.name, settings.maxLengthApi + 3), endLine = false)
-    _writer.text(":", endLine = false)
-    _writer.text(api.desc, endLine = false)
+    highlight(getFormattedText(api.name, settings.maxLengthApi + 3), endLine = false)
+    text(":", endLine = false)
+    text(api.desc, endLine = false)
   }
 
 
   override def onVisitApiActionBegin(action: ApiAction, name:String): Unit =
   {
-    _writer.tab(1)
-    _writer.subTitle(getFormattedText(name, settings.maxLengthAction + 3), endLine = false)
-    _writer.text(":", endLine =  false)
-    _writer.text(action.desc, endLine = false)
+    tab(1)
+    subTitle(getFormattedText(name, settings.maxLengthAction + 3), endLine = false)
+    text(":", endLine =  false)
+    text(action.desc, endLine = false)
   }
 
 
   override def onVisitApiActionEnd(action: ApiAction, name:String): Unit =
   {
-    _writer.line()
+    line()
   }
 
 
   override def onVisitApiActionExample(api: Api, actionName: String, action: ApiAction,
                                        args:List[ReflectedArg]): Unit =
   {
-    _writer.line()
-    _writer.tab(1)
+    line()
+    tab(1)
     val fullName = api.area + "." + api.name + "." + actionName
-    var text = ""
+    var txt = ""
     for(argInfo <- args)
     {
-      text = text + "-" + argInfo.name + "=" + argInfo.sample() + " "
+      txt = txt + "-" + argInfo.name + "=" + argInfo.sample() + " "
     }
-    _writer.url(fullName + " ", endLine = false)
-    _writer.text(text, true)
-    _writer.line()
+    url(fullName + " ", endLine = false)
+    text(txt, true)
+    line()
   }
 
 
   override def onVisitApiArgBegin(arg: ApiArg): Unit =
   {
-    _writer.line()
-    _writer.tab(2)
-    _writer.highlight(getFormattedText(arg.name, settings.maxLengthArg + 3), endLine = false)
-    _writer.text(":", endLine = false)
-    _writer.text( Strings.valueOrDefault(arg.desc, "\"\""), endLine = true )
+    line()
+    tab(2)
+    highlight(getFormattedText(arg.name, settings.maxLengthArg + 3), endLine = false)
+    text(":", endLine = false)
+    text( Strings.valueOrDefault(arg.desc, "\"\""), endLine = true )
 
-    _writer.tab(2)
-    _writer.text(getFormattedText("", settings.maxLengthArg + 5), endLine = false)
+    tab(2)
+    text(getFormattedText("", settings.maxLengthArg + 5), endLine = false)
 
-    val text = if(arg.required) "!" else "?"
+    val txt = if(arg.required) "!" else "?"
     if(arg.required)
     {
-      _writer.important(text, endLine = false)
-      _writer.text("required", endLine = false)
+      important(txt, endLine = false)
+      text("required", endLine = false)
     }
     else
     {
-      _writer.text(text, endLine = false)
-      _writer.text("optional", endLine = false)
+      text(txt, endLine = false)
+      text("optional", endLine = false)
     }
   }
 }

@@ -13,7 +13,7 @@ package sampleapp.core.common
 
 import slate.common.{Strings, Result, Files, ApiKey}
 import slate.common.results.ResultSupportIn
-import slate.core.apis.{ApiCmd, ApiAuth}
+import slate.core.apis.{Request, ApiAuth}
 import slate.core.common.Conf
 
 /**
@@ -47,7 +47,7 @@ with ResultSupportIn
     * 3. the base class properly delegates handling the auth modes.
     * @return
     */
-  override def isAuthorized(cmd:ApiCmd, mode:String, actionRoles:String, parentRoles:String)
+  override def isAuthorized(cmd:Request, mode:String, actionRoles:String, parentRoles:String)
   :Result[Boolean] = {
       super.isAuthorized(cmd, mode, actionRoles, parentRoles)
   }
@@ -60,7 +60,7 @@ with ResultSupportIn
     * @param parentRoles : The role setup on the API itself
     * @return
     */
-  override def isKeyRoleValid(cmd:ApiCmd, actionRoles:String, parentRoles:String):Result[Boolean] = {
+  override def isKeyRoleValid(cmd:Request, actionRoles:String, parentRoles:String):Result[Boolean] = {
 
     super.isKeyRoleValid(cmd, actionRoles, parentRoles)
   }
@@ -73,7 +73,7 @@ with ResultSupportIn
     * @param parentRoles : The role setup on the API itself
     * @return
     */
-  override def isAppRoleValid(cmd:ApiCmd, actionRoles:String, parentRoles:String): Result[Boolean] = {
+  override def isAppRoleValid(cmd:Request, actionRoles:String, parentRoles:String): Result[Boolean] = {
 
     super.isAppRoleValid(cmd, actionRoles, parentRoles)
   }
@@ -92,7 +92,7 @@ with ResultSupportIn
     *
     * @return
     */
-  override protected def getUserRoles(cmd:ApiCmd):String = {
+  override protected def getUserRoles(cmd:Request):String = {
 
     // CASE 1: sample demo
     if(mode == "test-mode"){

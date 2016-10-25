@@ -12,7 +12,7 @@
 package slate.core.apis.support
 
 import slate.common.results.{ResultSupportIn}
-import slate.core.apis.ApiCmd
+import slate.core.apis.Request
 
 import scala.reflect.runtime.universe.typeOf
 import slate.common._
@@ -57,7 +57,7 @@ object ApiCallHelper extends ResultSupportIn {
   }
 
 
-  def fillArgs(callReflect:ApiCallReflect, cmd:ApiCmd, args:Inputs): Array[Any] =
+  def fillArgs(callReflect:ApiCallReflect, cmd:Request, args:Inputs): Array[Any] =
   {
     // Check 1: No args ?
     if(!callReflect.hasArgs)

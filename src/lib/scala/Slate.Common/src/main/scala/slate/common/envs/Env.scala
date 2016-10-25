@@ -34,7 +34,7 @@ object Env {
       EnvItem("stg", Env.UAT , desc = "STG environment (demo)" ),
       EnvItem("pro", Env.PROD, desc = "LIVE environment" )
     )
-    new Envs(all(1), all)
+    new Envs(all, Some(all(0)))
   }
 
 

@@ -19,28 +19,28 @@ import slate.common.{Strings, Result, envs}
   * Store the currently selected environment ( local, dev, qa, stg, prod ) and provides some
   * utility functions to parse an environment
   */
-case class Envs(current:EnvItem, all:List[EnvItem]) extends EnvSupport with ResultSupportIn {
+case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSupport with ResultSupportIn {
 
 
   /**
    * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
    * @return
    */
-  def name: String = current.name
+  def name: String = current.fold("")( c => c.name )
 
 
   /**
-   * Mode of the currently selected environment ( dev, qa, uat, pro )
+   * Environment of the currently selected ( dev, qa, uat, pro )
    * @return
    */
-  def mode: String = current.env
+  def env: String = current.fold("")( c => c.env )
 
 
   /**
    * The fully qualified name of the currently selected environment ( combines the name + key )
    * @return
    */
-  def key: String = current.key
+  def key: String = current.fold("")( c => c.key )
 
 
   /**
@@ -49,7 +49,7 @@ case class Envs(current:EnvItem, all:List[EnvItem]) extends EnvSupport with Resu
    * @return
    */
   override def isEnv(env: String): Boolean = {
-    current.env == env
+    current.fold(false)( c => c.env == env)
   }
 
 
@@ -61,7 +61,7 @@ case class Envs(current:EnvItem, all:List[EnvItem]) extends EnvSupport with Resu
    */
   def select(name:String): Envs = {
     val matched = all.filter( item => Strings.isMatch(item.name, name ))
-    new Envs(matched.head, all)
+    new Envs(all, Option(matched.head))
   }
 
 
@@ -72,10 +72,32 @@ case class Envs(current:EnvItem, all:List[EnvItem]) extends EnvSupport with Resu
    * @return
    */
   def validate(env:envs.EnvItem): Result[envs.EnvItem] = {
-    val matched = all.filter( item => Strings.isMatch(item.name, env.name ))
+    this.apply(env.name)
+  }
+
+
+  /**
+   * validates the environment against the supported
+   *
+   * @param name
+   * @return
+   */
+  def isValid(name:String): Boolean = {
+    this.apply(name).map[Boolean]( e => true).getOrElse(false)
+  }
+
+
+  /**
+   * validates the environment against the supported
+   *
+   * @param name
+   * @return
+   */
+  def apply(name:String): Result[EnvItem] = {
+    val matched = all.filter( item => Strings.isMatch(item.name, name ))
     if(matched != null && matched.size > 0)
       return success(matched.head)
 
-    failure(Some(s"Unknown environment name : ${env.name} supplied"))
+    failure(Some(s"Unknown environment name : ${name} supplied"))
   }
 }

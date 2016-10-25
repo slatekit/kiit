@@ -35,12 +35,12 @@ object ApiHelper extends ResultSupportIn {
 
   def buildCmd(path:String,
                inputs:Option[List[(String,String)]],
-               headers:Option[List[(String,String)]]): ApiCmd = {
+               headers:Option[List[(String,String)]]): Request = {
 
     val tokens = Strings.split(path, '.').toList
     val args = Some(buildArgs(inputs))
     val opts = Some(buildArgs(headers))
-    val apiCmd = new ApiCmd(path, tokens, tokens(0), tokens(1), tokens(2), "get", args, opts)
+    val apiCmd = new Request(path, tokens, tokens(0), tokens(1), tokens(2), "get", args, opts)
     apiCmd
   }
 
@@ -49,7 +49,7 @@ object ApiHelper extends ResultSupportIn {
    *  Checks the action and api to ensure the current request (cmd) is authorizated to
     *  make the call
    */
-  def isAuthorizedForCall(cmd:ApiCmd, call:ApiCallReflect, auth:Option[ApiAuth]):Result[Boolean] =
+  def isAuthorizedForCall(cmd:Request, call:ApiCallReflect, auth:Option[ApiAuth]):Result[Boolean] =
   {
     val noAuth = !auth.isDefined
 

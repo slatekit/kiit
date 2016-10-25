@@ -11,14 +11,16 @@
 
 package slate.common.args
 
+import slate.common.console.ConsoleWriter
 import slate.common.results.ResultSupportIn
 import slate.common.Funcs.defaultOrExecute
-import slate.common.{Validation, Result, ConsoleWriter}
+import slate.common.{Validation, Result}
 
 import scala.reflect.runtime.universe.{Type, typeOf}
 
 /**
   * stores and builds a list of 1 or more arguments which collectively represent the schema.
+ *
   * @note  this schema is immutable and returns a new schema when adding additional arguments
   * @param items : the list of arguments.
   */
@@ -28,6 +30,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
     * Adds a argument of type text to the schema
+ *
     * @param name        : Name of argument
     * @param desc        : Description
     * @param required    : Whether this is required or not
@@ -45,6 +48,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
     * Adds a argument of type boolean to the schema
+ *
     * @param name        : Name of argument
     * @param desc        : Description
     * @param required    : Whether this is required or not
@@ -62,6 +66,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
     * Adds a argument of type number to the schema
+ *
     * @param name        : Name of argument
     * @param desc        : Description
     * @param required    : Whether this is required or not
@@ -79,6 +84,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
     * Adds a argument to the schema
+ *
     * @param name        : Name of argument
     * @param desc        : Description
     * @param dataType    : Data type of the argument
@@ -112,6 +118,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
    * whether or not the argument supplied is missing
+ *
    * @param args
    * @param arg
    * @return
@@ -123,6 +130,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   /**
    * gets the maximum length of an argument name from all arguments
+ *
    * @return
    */
   def maxLengthOfName : Int = {

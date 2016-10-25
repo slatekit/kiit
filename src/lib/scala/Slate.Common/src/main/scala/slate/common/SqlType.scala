@@ -19,73 +19,46 @@ object SqlType {
 
   def getNameForSqlLite(sqlType:Int):String =
   {
-    if( sqlType == TypeNumberShort)
-      return "INTEGER"
-
-    if( sqlType == TypeNumber)
-      return "INTEGER"
-
-    if( sqlType == TypeNumberLong)
-      return "INTEGER"
-
-    if( sqlType == TypeString)
-      return "TEXT"
-
-    if( sqlType == TypeBool)
-      return "INTEGER"
-
-    if( sqlType == TypeReal)
-      return "REAL"
-
-    if( sqlType == TypeDate)
-      return "INTEGER"
-
-    if( sqlType == TypeTime)
-      return "INTEGER"
-
-    return "INTEGER"
+    sqlType match {
+      case TypeNumberShort => "INTEGER"
+      case TypeNumber      => "INTEGER"
+      case TypeNumberLong  => "INTEGER"
+      case TypeString      => "TEXT"
+      case TypeBool        => "INTEGER"
+      case TypeReal        => "REAL"
+      case TypeDate        => "INTEGER"
+      case TypeTime        => "INTEGER"
+      case _               => "INTEGER"
+    }
   }
 
 
   def getName(sqlType:Int):String =
   {
-    if( sqlType == TypeNumberShort)
-      return "TINYINT"
-
-    if( sqlType == TypeNumber)
-      return "INTEGER"
-
-    if( sqlType == TypeNumberLong)
-      return "BIGINT"
-
-    if( sqlType == TypeString)
-      return "NVARCHAR"
-
-    if( sqlType == TypeBool)
-      return "BIT"
-
-    if( sqlType == TypeReal)
-      return "REAL"
-
-    if( sqlType == TypeDate)
-      return "DATETIME"
-
-    if( sqlType == TypeTime)
-      return "INTEGER"
-
-    return "INTEGER"
+    sqlType match {
+      case TypeNumberShort => "TINYINT"
+      case TypeNumber      => "INTEGER"
+      case TypeNumberLong  => "BIGINT"
+      case TypeString      => "NVARCHAR"
+      case TypeBool        => "BIT"
+      case TypeReal        => "REAL"
+      case TypeDate        => "DATETIME"
+      case TypeTime        => "INTEGER"
+      case _               => "INTEGER"
+    }
   }
 
 
   def getTypeFromScala(dataType:Type):Int =
   {
-    if (dataType == typeOf[Boolean]) return SqlType.TypeBool
+    
+    if (dataType == typeOf[Boolean])  return SqlType.TypeBool
     if (dataType == typeOf[DateTime]) return SqlType.TypeDate
-    if (dataType == typeOf[Int]) return SqlType.TypeNumber
-    if (dataType == typeOf[Short]) return SqlType.TypeNumberShort
-    if (dataType == typeOf[Long]) return SqlType.TypeNumberLong
-    if (dataType == typeOf[Double]) return SqlType.TypeReal
-    if (dataType == typeOf[String]) return SqlType.TypeString
+    if (dataType == typeOf[Int])      return SqlType.TypeNumber
+    if (dataType == typeOf[Short])    return SqlType.TypeNumberShort
+    if (dataType == typeOf[Long])     return SqlType.TypeNumberLong
+    if (dataType == typeOf[Double])   return SqlType.TypeReal
+    if (dataType == typeOf[String])   return SqlType.TypeString
     if (dataType == typeOf[TimeSpan]) return SqlType.TypeTime
     //if (dataType.IsEnum) return SqlType.TypeNumber
     SqlType.TypeString

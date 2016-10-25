@@ -11,7 +11,6 @@
 
 package slate.common.args
 
-import slate.common.{ConsoleWriter}
 import slate.common.StringHelpers.StringExt
 
 

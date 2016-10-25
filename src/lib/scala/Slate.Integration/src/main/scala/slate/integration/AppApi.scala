@@ -13,7 +13,7 @@ package slate.integration
 import slate.common.databases.Db
 import slate.common.info._
 import slate.common.serialization.{SerializerUtils, SerializerProps}
-import slate.core.apis.{ApiCmd, Api, ApiAction}
+import slate.core.apis.{Request, Api, ApiAction}
 import slate.core.common.svcs.ApiWithSupport
 
 @Api(area = "app", name = "info", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
@@ -27,7 +27,7 @@ class AppApi extends ApiWithSupport
 
 
   @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def cmd(cmd:ApiCmd):About = {
+  def cmd(cmd:Request):About = {
     println(cmd.fullName)
     context.app.about
   }

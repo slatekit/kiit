@@ -202,10 +202,10 @@ class SampleAppCLI extends AppProcess
     * HOOK for adding more items to the summary of data shown at the end
     *
     */
-  override def collectSummaryExtra(): Option[List[String]] =
+  override def collectSummaryExtra(): Option[List[(String,String)]] =
   {
-    Some(List[String](
-      meta.about.name + ": extra 1  = extra summary data1"
+    Some(List[(String,String)](
+      (meta.about.name, ": extra 1  = extra summary data1")
     ))
   }
 }

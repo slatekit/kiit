@@ -24,8 +24,8 @@ object ApiValidator extends ResultSupportIn {
     * @param cmd       : the command input
     * @return
     */
-  def validateCall(cmd:ApiCmd,
-                   fetcher:(ApiCmd)=> Result[(ApiCallReflect,ApiBase)],
+  def validateCall(cmd:Request,
+                   fetcher:(Request)=> Result[(ApiCallReflect,ApiBase)],
                    allowSingleDefaultParam:Boolean = false): Result[Any] =
   {
     val fullName  = cmd.fullName

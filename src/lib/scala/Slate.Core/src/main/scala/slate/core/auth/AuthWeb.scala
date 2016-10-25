@@ -12,6 +12,7 @@
 package slate.core.auth
 
 
-class AuthWeb extends AuthBase {
+class AuthWeb(isAuthenticatedUser:Boolean, user:User, roles:String)
+  extends AuthBase(isAuthenticatedUser, user, roles) {
 
 }

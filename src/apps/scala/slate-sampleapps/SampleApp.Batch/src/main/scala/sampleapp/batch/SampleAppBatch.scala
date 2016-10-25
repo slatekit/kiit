@@ -18,6 +18,7 @@ import sampleapp.core.services.{MovieService, UserService}
 import slate.common.Result
 import slate.common.app.AppMeta
 import slate.common.args.ArgsSchema
+import slate.common.console.{ConsoleSettings, ConsoleWriter}
 import slate.common.databases.DbLookup
 import slate.common.encrypt.Encryptor
 import slate.common.info.{About, Lang, Host}
@@ -185,10 +186,10 @@ class SampleAppBatch extends AppProcess
   /**
    * HOOK for adding items to the summary of data shown at the end of app execution
    */
-  override def collectSummaryExtra(): Option[List[String]] =
+  override def collectSummaryExtra(): Option[List[(String,String)]] =
   {
-    Some(List[String](
-      "region" + " = " + args.getStringOrElse("region", "n/a")
+    Some(List[(String,String)](
+      ("region",  args.getStringOrElse("region", "n/a"))
     ))
   }
 }

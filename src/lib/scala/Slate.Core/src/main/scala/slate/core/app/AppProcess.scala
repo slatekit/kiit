@@ -3,6 +3,7 @@ package slate.core.app
 import slate.common.app.{AppMetaSupport, AppMeta}
 import slate.common.args.{Arg, ArgsHelper, ArgsSchema, Args}
 import slate.common.conf.ConfigBase
+import slate.common.console.ConsoleWriter
 import slate.common.encrypt.EncryptSupportIn
 import slate.common.envs.{EnvItem, Env}
 import slate.common.i18n.I18nSupportIn
@@ -72,7 +73,8 @@ class AppProcess extends AppMetaSupport
   /**
    * accepts the command line arguments and provides life-cycle hook to further
    * validate them
-   * @param raw        : the raw command line args
+    *
+    * @param raw        : the raw command line args
    * @param parsedArgs : the parsed command line args
    */
   def args(raw:Option[Array[String]], parsedArgs:Args): Result[Boolean] = {
@@ -281,7 +283,7 @@ class AppProcess extends AppMetaSupport
   def logStart():Unit =
   {
     info( "===============================================================")
-    this.appLogStart( (name, value) => info( name + value) )
+    this.appLogStart( (name, value) => info( name + " = " + value) )
     info( "STARTING : "                                    )
     info( "===============================================================")
   }
@@ -292,7 +294,7 @@ class AppProcess extends AppMetaSupport
    */
   def logSummary():Unit =
   {
-    val args = ListBuffer[String]()
+    val args = ListBuffer[(String,String)]()
     info( "===============================================================")
     info( "SUMMARY : ")
     info( "===============================================================")
@@ -301,15 +303,16 @@ class AppProcess extends AppMetaSupport
     val extra = collectSummaryExtra()
     if(extra.isDefined ) {
       args ++= extra.get
-      for (arg <- args) {
-        info(arg)
-      }
+    }
+    for (arg <- args) {
+      info(arg._1 + " = " + arg._2)
+      //writer.keyValue(arg._1, arg._2)
     }
     info( "===============================================================")
   }
 
 
-  def collectSummaryExtra(): Option[List[String]] =
+  def collectSummaryExtra(): Option[List[(String,String)]] =
   {
     None
   }
@@ -483,10 +486,10 @@ class AppProcess extends AppMetaSupport
   }
 
 
-  private def collectSummary(args:ListBuffer[String]): Unit =
+  private def collectSummary(args:ListBuffer[(String,String)]): Unit =
   {
     this.appLogEnd( (name, value) => {
-      args += name + value
+      args.append((name, value))
     })
   }
 }

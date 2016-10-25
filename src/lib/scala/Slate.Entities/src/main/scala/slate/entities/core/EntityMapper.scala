@@ -26,7 +26,7 @@ class EntityMapper(model:Model) extends Mapper(model) {
 
   def mapToSql(item:AnyRef, update:Boolean, fullSql:Boolean = false): String =
   {
-    if(!_model.anyFields())
+    if(!_model.any)
       return Strings.empty
 
     var dat = ""

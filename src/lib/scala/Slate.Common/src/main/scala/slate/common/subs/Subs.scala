@@ -80,13 +80,13 @@ class Subs(setDefaults:Boolean = true) {
   private def defaults():Unit = {
 
     // Default functions.
-    _groups("today"     )  = ( sub ) => { DateTime.today().toStringYYYYMMDD()             }
-    _groups("yesterday" )  = ( sub ) => { DateTime.today().addDays(-1).toStringYYYYMMDD() }
-    _groups("tomorrow"  )  = ( sub ) => { DateTime.today().addDays(1).toStringYYYYMMDD()  }
-    _groups("t"         )  = ( sub ) => { DateTime.today().toStringYYYYMMDD()             }
-    _groups("t-1"       )  = ( sub ) => { DateTime.today().addDays(-1).toStringYYYYMMDD() }
-    _groups("t+1"       )  = ( sub ) => { DateTime.today().addDays(1).toStringYYYYMMDD()  }
-    _groups("today+1"   )  = ( sub ) => { DateTime.today().addDays(1).toStringYYYYMMDD()  }
-    _groups("today-1"   )  = ( sub ) => { DateTime.today().addDays(-1).toStringYYYYMMDD() }
+    _groups + ("today"     , ( sub ) => DateTime.today().toStringYYYYMMDD()             )
+    _groups + ("yesterday" , ( sub ) => DateTime.today().addDays(-1).toStringYYYYMMDD() )
+    _groups + ("tomorrow"  , ( sub ) => DateTime.today().addDays(1).toStringYYYYMMDD()  )
+    _groups + ("t"         , ( sub ) => DateTime.today().toStringYYYYMMDD()             )
+    _groups + ("t-1"       , ( sub ) => DateTime.today().addDays(-1).toStringYYYYMMDD() )
+    _groups + ("t+1"       , ( sub ) => DateTime.today().addDays(1).toStringYYYYMMDD()  )
+    _groups + ("today+1"   , ( sub ) => DateTime.today().addDays(1).toStringYYYYMMDD()  )
+    _groups + ("today-1"   , ( sub ) => DateTime.today().addDays(-1).toStringYYYYMMDD() )
   }
 }

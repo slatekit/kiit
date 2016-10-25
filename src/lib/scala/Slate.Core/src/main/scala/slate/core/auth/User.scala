@@ -11,6 +11,8 @@
 
 package slate.core.auth
 
+import javax.swing.text.html.HTML.Tag
+
 import slate.common.Strings
 
 
@@ -29,6 +31,7 @@ import slate.common.Strings
  * @param state            : The state where user is in
  * @param zip              : The zip where user is in
  * @param country          : The country where user is in ( 2 digit county code )
+ * @param region           : The region of the user ( can use as a shard )
  * @param tag              : A tag used for external links
  * @param schema           : The scheam or version of this model
  */
@@ -46,6 +49,7 @@ case class User (
                     state           :String    = ""    ,
                     zip             :String    = ""    ,
                     country         :String    = ""    ,
+                    region          :String    = ""    ,
                     tag             :String    = ""    ,
                     schema          :String    = ""    ,
                     token           :String    = ""

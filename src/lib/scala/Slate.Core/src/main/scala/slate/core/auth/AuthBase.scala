@@ -13,21 +13,29 @@ package slate.core.auth
 
 
 import slate.common.Strings
-import scala.collection.mutable.Map
 
 
-class AuthBase {
+class AuthBase(val isAuthenticated:Boolean, userInfo:User, roles:String) {
 
-  private var _user = Some(Auth.guest)
-  private val _roles = Map[String, Boolean]()
-  private var _isAuthenticated = false
+  private val _user = Option(userInfo)
+  private val _roles = AuthFuncs.convertRoles(roles)
 
 
+  /**
+   * matches the user to the one supplied.
+   * @param user
+   * @return
+   */
   def isUser(user:Option[User]):Boolean = {
-   user.fold( false )( _.isMatch(_user.getOrElse(Auth.guest) ) )
+   user.fold( false )( _.isMatch(_user.getOrElse(AuthFuncs.guest) ) )
   }
 
 
+  /**
+   * whether or not the user in the role supplied.
+   * @param role
+   * @return
+   */
   def isInRole(role:String ):Boolean = {
     if(_roles.isEmpty)
       return false
@@ -38,43 +46,38 @@ class AuthBase {
   }
 
 
-  def isAuthenticated:Boolean = {
-    _isAuthenticated
-  }
-
-
+  /**
+   * whether or not the users phone is verified
+   * @return
+   */
   def isPhoneVerified:Boolean = {
     _user.fold( false)( _.isPhoneVerified )
   }
 
 
+  /**
+   * whether or not the users email is verified
+   * @return
+   */
   def isEmailVerified:Boolean = {
-    _user.fold( false)( _.isEmailVerified )
+    _user.fold( false )( _.isEmailVerified )
   }
 
 
+  /**
+   * The user id
+   * @return
+   */
   def userId:String = {
     _user.fold( Strings.empty )( _.id )
   }
 
 
+  /**
+   * The user info
+   * @return
+   */
   def user :Option[User] = {
     _user
-  }
-
-
-  def init(isAuthenticated:Boolean, user:User, roles:String): AuthBase =
-  {
-    _isAuthenticated = isAuthenticated
-    _user = Some(user)
-    _roles.clear()
-
-    if(!Strings.isNullOrEmpty(roles))
-    {
-      val tokens = roles.split(',')
-      val filtered = tokens.filter( p => !Strings.isNullOrEmpty(p))
-      filtered.foreach( role => _roles( role ) = true )
-    }
-    this
   }
 }

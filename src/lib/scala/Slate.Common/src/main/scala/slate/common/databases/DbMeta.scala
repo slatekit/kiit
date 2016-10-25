@@ -35,16 +35,16 @@ class DbMeta(private val con:DbConString) {
           val cat = rec.name match {
             case "uniqueId"    => "meta"
             case "tag"         => "meta"
-            case "created_at"  => "meta"
-            case "created_by"  => "meta"
-            case "updated_at"  => "meta"
-            case "updated_by"  => "meta"
+            case "createdAt"   => "meta"
+            case "createdBy"   => "meta"
+            case "updatedAt"   => "meta"
+            case "updatedBy"   => "meta"
             case _             => "data"
           }
           model.addField(rec.name, rec.getFieldType(), "", isRequired = !rec.isNull, maxLength = rec.maxLength(), destName = Some(rec.name), cat = cat)
         }
       }
-      if(model.idField() == null){
+      if(model.idField.isEmpty){
         model.addId("id", autoIncrement = true, dataType = typeOf[Int])
       }
       return model

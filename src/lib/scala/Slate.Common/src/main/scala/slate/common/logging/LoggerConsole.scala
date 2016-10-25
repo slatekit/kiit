@@ -12,8 +12,7 @@
 
 package slate.common.logging
 
-
-import slate.common.ConsoleWriter
+import slate.common.console.ConsoleWriter
 import slate.common.logging.LogLevel.LogLevel
 
 
@@ -25,6 +24,7 @@ class LoggerConsole(level:LogLevel = LogLevel.Debug)
 
   /**
    * Logs to the console
+ *
    * @param level :
    * @param msg   :
    * @param ex    :

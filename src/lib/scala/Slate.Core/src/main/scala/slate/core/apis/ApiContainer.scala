@@ -16,7 +16,6 @@ import slate.common.args.Args
 import slate.common.results.{ResultSupportIn}
 import slate.common.Funcs.execute
 import slate.core.apis.support.{ApiCallReflect, ApiCallHelper, ApiCallCheck}
-import slate.core.auth.{Auth, AuthBase}
 import slate.core.common.AppContext
 
 import scala.reflect.runtime.universe.{typeOf, Type}
@@ -174,7 +173,7 @@ class ApiContainer(val ctx:AppContext,
     * @param cmd
     * @return
     */
-  def checkCommand(cmd:ApiCmd): Result[Boolean] =
+  def checkCommand(cmd:Request): Result[Boolean] =
   {
     val result = ApiValidator.validateCall(cmd, getApiCallReflect)
     okOrFailure(result.success, msg = result.msg, tag = Some(cmd.fullName))
@@ -185,7 +184,7 @@ class ApiContainer(val ctx:AppContext,
   }
 
 
-  def callCommand(cmd:ApiCmd): Result[Any] =
+  def callCommand(cmd:Request): Result[Any] =
   {
     // Now invoke the action/method
     var result:Result[Any] = NoResult
@@ -252,12 +251,6 @@ class ApiContainer(val ctx:AppContext,
   def handleHelpForAction(area:String, api:String, name:String):Unit =
   {
 
-  }
-
-
-  def getAuth():AuthBase =
-  {
-    Auth._auth
   }
 
 
@@ -346,7 +339,7 @@ class ApiContainer(val ctx:AppContext,
   }
 
 
-  def getApiCallReflect(cmd:ApiCmd): Result[(ApiCallReflect,ApiBase)]  =
+  def getApiCallReflect(cmd:Request): Result[(ApiCallReflect,ApiBase)]  =
   {
     getApiCallReflect(cmd.area, cmd.name, cmd.action)
   }
@@ -379,7 +372,7 @@ class ApiContainer(val ctx:AppContext,
   }
 
 
-  protected def parseHandle(text:String, callback: (ApiCmd) => Result[Any],
+  protected def parseHandle(text:String, callback: (Request) => Result[Any],
                             errorOnBadArgs:Boolean = false ): Result[Any] =
   {
     // Parse the string into words.
@@ -392,13 +385,13 @@ class ApiContainer(val ctx:AppContext,
     }
 
     val args = result.get
-    val cmd = ApiCmd(text, args, None, "get")
+    val cmd = Request(text, args, None, "get")
     val finalResult = callback(cmd)
     finalResult
   }
 
 
-  private def callCommandInternal(cmd:ApiCmd): Result[Any] = {
+  private def callCommandInternal(cmd:Request): Result[Any] = {
 
     // 1. Check for method.
     val existsCheck = getApiCallReflect(cmd)
@@ -458,7 +451,7 @@ class ApiContainer(val ctx:AppContext,
   }
 
 
-  def isCliAllowed(cmd:ApiCmd, supportedProtocol:String): Boolean = {
+  def isCliAllowed(cmd:Request, supportedProtocol:String): Boolean = {
     supportedProtocol == "*" || supportedProtocol == "cli"
   }
 }

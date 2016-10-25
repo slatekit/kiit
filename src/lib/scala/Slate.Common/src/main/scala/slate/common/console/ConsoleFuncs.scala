@@ -8,34 +8,9 @@
   * usage: Please refer to license on github for more info.
   * </slate_header>
   */
-package slate.common
+package slate.common.console
 
-trait EnvSupport {
+object ConsoleFuncs {
 
-
-  def isProd:Boolean =
-  {
-    isEnv(Env.PROD)
-  }
-
-
-  def isUat:Boolean =
-  {
-    isEnv(Env.UAT)
-  }
-
-
-  def isQa:Boolean =
-  {
-    isEnv(Env.QA)
-  }
-
-
-  def isDev:Boolean =
-  {
-    isEnv(Env.DEV)
-  }
-
-
-  def isEnv(envMode: String):Boolean = ???
+  def defaults():ConsoleSettings = new ConsoleSettings(darkMode = true, newLineAutomatic = false)
 }
