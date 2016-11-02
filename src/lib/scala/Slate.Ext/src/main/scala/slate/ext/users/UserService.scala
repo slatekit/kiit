@@ -22,17 +22,19 @@ class UserService extends EntityServiceWithSupport[User]()
 
 
   def getPhoneConfirmCode(id:Long): Long = {
-    // {call testScalarBit(1,?)}
-    val code = new Db(context.con.get).getScalarLong("{call getPhoneConfirmCode(?)}", Some(List[Any](id)))
-    code
+    context.dbs.fold[Long](0)( dbs => {
+      val code = new Db(dbs.default.get).getScalarLong("{call getPhoneConfirmCode(?)}", Some(List[Any](id)))
+      code
+    })
   }
 
 
 
   def getUserByEmail(email:String): Option[User] = {
-    // {call testScalarBit(1,?)}
-    val model = new Db(context.con.get).mapOne[User]("{call getUserByEmail(?)}",_repo.mapper(), Some(List[Any](email)))
-    model
+    context.dbs.fold[Option[User]](None)( dbs => {
+      val model = new Db(dbs.default.get).mapOne[User]("{call getUserByEmail(?)}",_repo.mapper(), Some(List[Any](email)))
+      model
+    })
   }
 
 

@@ -4,13 +4,13 @@ package slate.common.query
   * Created by kreddy on 12/24/2015.
   */
 trait IQuery {
-  def getUpdates():List[FieldValue]
+  def toUpdates():List[FieldValue]
 
 
-  def getUpdatesText():String
+  def toUpdatesText():String
 
 
-  def getFilter(): String
+  def toFilter(): String
 
 
   /// <summary>

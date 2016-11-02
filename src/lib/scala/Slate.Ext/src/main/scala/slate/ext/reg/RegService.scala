@@ -13,6 +13,7 @@ package slate.ext.reg
 import slate.common._
 import slate.common.encrypt.Encryptor
 import slate.common.results.{ResultCode, ResultSupportIn}
+
 import slate.core.email.EmailService
 import slate.core.mobile.MessageService
 import slate.core.sms.SmsService
@@ -211,8 +212,8 @@ class RegService(
 
     // Email
     user.isEmailVerified = false
-    user.emailConfirmCode = RandomGen.digits6()
-    user.userId = RandomGen.stringGuid(false)
+    user.emailConfirmCode = Random.digits6()
+    user.userId = Random.stringGuid(false)
 
     // Ensure location fields.
     RegHelper.ensureDefaults(user)
@@ -430,8 +431,8 @@ class RegService(
   {
     val user = new User()
     user.version                 = "v1"
-    user.userId                  = RandomGen.stringGuid(false)
-    user.token                   = RandomGen.stringGuid(false)
+    user.userId                  = Random.stringGuid(false)
+    user.token                   = Random.stringGuid(false)
     user.userName                = email
     user.email                   = email
     user.password                = "temp"
@@ -458,9 +459,9 @@ class RegService(
     user.imageThumbnailId        = ""
     user.familyId                = ""
     user.blockedUsers            = ""
-    user.emailConfirmCode        = RandomGen.digits6()
-    user.phoneConfirmCode        = RandomGen.digits6()
-    user.deviceConfirmCode       = RandomGen.digits6()
+    user.emailConfirmCode        = Random.digits6()
+    user.phoneConfirmCode        = Random.digits6()
+    user.deviceConfirmCode       = Random.digits6()
     user.isEmailVerified         = false
     user.devices                 = ""
     user.recordState             = 0

@@ -14,7 +14,6 @@ package slate.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
 import slate.common.Strings
-import slate.common.TypeChecks
 import slate.core.cloud._
 
 import com.amazonaws.regions.Region
@@ -26,7 +25,7 @@ import scala.collection.mutable.ListBuffer
 
 
 class AwsCloudQueue(queue:String) extends CloudQueueBase
-  with AwsSupport with TypeChecks
+  with AwsSupport
 {
 
   private val _queue = queue
@@ -122,31 +121,32 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     */
   override def send(msg: Any, tagName:String = "", tagValue:String = "") : Unit =
   {
-    if(isType[String](msg))
-    {
-      // Send the message, any message that fails will get caught
-      // and the onError method is called for that message
-      execute(SOURCE, "send", data = Some(""), call = () =>
-      {
-        val message = msg.asInstanceOf[String]
-        var req = new SendMessageRequest(_queueUrl, message)
-        if(!Strings.isNullOrEmpty(tagName))
+    msg match {
+      case t:String => {
+        // Send the message, any message that fails will get caught
+        // and the onError method is called for that message
+        execute(SOURCE, "send", data = Some(""), call = () =>
         {
-          val finalTagValue = if(Strings.isNullOrEmpty(tagValue)) "" else tagValue
-          req = req.addMessageAttributesEntry(tagName, new MessageAttributeValue()
-            .withDataType("String").withStringValue(finalTagValue))
-        }
-        _sqs.sendMessage(req)
-      })
-      return
-    }
+          val message = msg.asInstanceOf[String]
+          var req = new SendMessageRequest(_queueUrl, message)
+          if(!Strings.isNullOrEmpty(tagName))
+          {
+            val finalTagValue = if(Strings.isNullOrEmpty(tagValue)) "" else tagValue
+            req = req.addMessageAttributesEntry(tagName, new MessageAttributeValue()
+              .withDataType("String").withStringValue(finalTagValue))
+          }
+          _sqs.sendMessage(req)
+        })
+      }
+      case t:Map[String,Any] => {
+        val map = msg.asInstanceOf[Map[String, Any]]
+        val message = getOrDefault(map, "message", "").asInstanceOf[String]
+        val atts = getOrDefault(map, "attributes", Map[String, Any]()).asInstanceOf[Map[String, Any]]
+        send(message, atts)
+      }
+      case _ => {
 
-    // map contain many.
-    if(isType[Map[String,Any]](msg)) {
-      val map = msg.asInstanceOf[Map[String, Any]]
-      val message = getOrDefault(map, "message", "").asInstanceOf[String]
-      val atts = getOrDefault(map, "attributes", Map[String, Any]()).asInstanceOf[Map[String, Any]]
-      send(message, atts)
+      }
     }
   }
 
@@ -249,14 +249,19 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
   private def discard(item:Any, action:String):Unit =
   {
-    if(isTypeNot[Message](item)) return
+    item match {
+      case t:Message => {
+        execute(SOURCE, action, data = Some(item), call = () =>
+        {
+          val message = item.asInstanceOf[Message]
+          val msgHandle = message.getReceiptHandle
 
-    execute(SOURCE, action, data = Some(item), call = () =>
-    {
-      val message = item.asInstanceOf[Message]
-      val msgHandle = message.getReceiptHandle
-
-      _sqs.deleteMessage(new DeleteMessageRequest(_queueUrl, msgHandle))
-    })
+          _sqs.deleteMessage(new DeleteMessageRequest(_queueUrl, msgHandle))
+        })
+      }
+      case _ => {
+        // TODO: Provide some callback/notification mechanism
+      }
+    }
   }
 }

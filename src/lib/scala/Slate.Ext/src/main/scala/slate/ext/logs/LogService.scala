@@ -16,7 +16,7 @@ import slate.common.i18n.I18nSupportIn
 import slate.common.logging.{LogSupport}
 import slate.common.results.ResultSupportIn
 import slate.common.{Strings, DateTime}
-import slate.common.logging.LogLevel._
+import slate.common.logging.LogLevel
 import slate.core.common.AppContext
 import slate.core.common.svcs.AppContextSupport
 

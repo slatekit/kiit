@@ -199,3 +199,14 @@ class ListMap[A,B] {
   }
 
 }
+
+/*
+
+
+case class DtValMap[T](iv: Map[DateTime, T]) extends Map[DateTime, T] {
+  def -(key: DateTime) = new DtValMap(iv.-(key))
+  def get(key: DateTime) = iv.get(key)
+  def +[T1 >: T](kv: (DateTime, T1)): DtValMap[T1] = new DtValMap(iv + kv)
+  def iterator: Iterator[(DateTime, T)] = iv.iterator
+}
+* */

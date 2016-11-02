@@ -12,7 +12,7 @@
 package slate.common.logging
 
 
-import slate.common.logging.LogLevel.LogLevel
+import slate.common.DateTime
 
 
 abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = "") {
@@ -20,7 +20,8 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
   /**
    * Logs an debug message
-   * @param msg : The message
+    *
+    * @param msg : The message
    * @param ex : The exception to log
    */
   def debug(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
@@ -31,7 +32,8 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
   /**
    * Logs an info message
-   * @param msg : The message
+    *
+    * @param msg : The message
    * @param ex : The exception to log
    */
   def info(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
@@ -42,7 +44,8 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
   /**
    * Logs an warning
-   * @param msg : The message
+    *
+    * @param msg : The message
    * @param ex : The exception to log
    */
   def warn(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
@@ -53,7 +56,8 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
   /**
    * Logs an error
-   * @param msg : The message
+    *
+    * @param msg : The message
    * @param ex : The exception to log
    */
   def error(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
@@ -64,6 +68,7 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
   /**
    * Logs an entry
+ *
    * @param level
    * @param msg
    * @param ex
@@ -73,16 +78,40 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
     if(level < this.level) 
       return 
     
-    performLog(level, msg, ex, tag)
+    performLog(buildLog(level, msg, ex, tag))
+  }
+
+
+  /**
+    * Logs an entry
+    */
+  def log(entry:LogEntry): Unit =
+  {
+    if(level < this.level)
+      return
+
+    performLog(entry)
   }
 
 
   /**
    * Logs an entry
-   * @param level
-   * @param msg
-   * @param ex
+ *
+   * @param entry
    */
-  protected def performLog(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None):
+  protected def performLog(entry:LogEntry):
   Unit
+
+
+  /**
+    * Logs an entry
+    *
+    * @param level
+    * @param msg
+    * @param ex
+    */
+  protected def buildLog(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None):
+  LogEntry = {
+    new LogEntry(name, "", level, DateTime.now, Some(msg), ex)
+  }
 }

@@ -15,7 +15,7 @@ import slate.common.app.AppMeta
 import slate.common.databases.{DbConString, DbBuilder}
 import slate.common.info.Folders
 import slate.common.results.ResultSupportIn
-import slate.common.{Files, Result}
+import slate.common.{NoResult, Files, Result}
 import slate.entities.core.{EntityInfo, Entities}
 
 import scala.collection.mutable.ListBuffer
@@ -140,7 +140,8 @@ class EntitySetupService(val _entities:Entities,
   def connection(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
   {
     val con = _entities.getDbConnection(dbKey, dbShard)
-    success(con)
+      .fold[Result[DbConString]](NoResult)( con => success(con))
+    con
   }
 
 

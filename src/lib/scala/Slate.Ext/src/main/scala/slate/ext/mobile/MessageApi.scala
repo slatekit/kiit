@@ -11,7 +11,7 @@
 package slate.ext.mobile
 
 import slate.common.encrypt.Encryptor
-import slate.common.{Ioc, DateTime}
+import slate.common.{IocRunTime, DateTime}
 import slate.core.apis.{ApiBase, Api, ApiAction}
 import slate.core.mobile.{Message}
 import scala.reflect.runtime.universe.typeOf
@@ -47,15 +47,13 @@ class MessageApi(val _encryptor:Encryptor) extends ApiBase{
 
   override def init():Unit =
   {
-    val service = Ioc.get("msg")
-    service.get.asInstanceOf[MessageUserService]
   }
 
 
   def service: MessageUserService =
   {
-    val service = Ioc.get("msg")
-    service.get.asInstanceOf[MessageUserService]
+    // Using this requires the service to be registered
+    getSvc[MessageUserService]("msg").get
   }
 
 }

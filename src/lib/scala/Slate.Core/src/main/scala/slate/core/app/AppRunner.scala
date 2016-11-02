@@ -128,20 +128,4 @@ object AppRunner extends ResultSupportIn
       }
     }
   }
-
-
-  def build(args:Option[Array[String]]):AppContext = {
-    val conf = new Conf()
-    val ctx = new AppContext (
-      env  = null,
-      cfg  = conf,
-      log  = new LoggerConsole(),
-      ent  = new Entities(),
-      inf  = about(conf),
-      lang = Lang.asScala(),
-      host = Host.local(),
-      dirs = Some(folders(conf))
-    )
-    ctx
-  }
 }

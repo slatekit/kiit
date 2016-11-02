@@ -12,6 +12,8 @@
 package slate.common
 
 
+import slate.common.utils.Temp
+
 import scala.collection.mutable.{ListBuffer}
 import scala.collection.immutable.{List}
 import scala.reflect.runtime.{universe => ru}

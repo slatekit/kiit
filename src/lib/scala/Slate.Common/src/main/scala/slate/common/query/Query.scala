@@ -1,6 +1,7 @@
 package slate.common.query
 
-import slate.common.{SqlType, Strings}
+import slate.common.Strings
+import slate.common.databases.SqlType
 
 import scala.collection.mutable.ListBuffer
 
@@ -21,13 +22,13 @@ class Query extends IQuery {
   protected val _data = new QueryData(new ListBuffer[ICondition](), new ListBuffer[FieldValue]())
 
 
-  def getUpdates():List[FieldValue] =
+  def toUpdates():List[FieldValue] =
   {
     _data.updates.toList
   }
 
 
-  def getUpdatesText(): String =
+  def toUpdatesText(): String =
   {
     // No updates ?
     if(_data.updates.size == 0)
@@ -46,11 +47,11 @@ class Query extends IQuery {
       if(field.fieldValue == SqlType.EmptyString)
         fieldValue = "''"
       else
-        fieldValue = QueryEncoder.convertVal(field.fieldValue, true)
+        fieldValue = QueryEncoder.convertVal(field.fieldValue)
       text += field.field + "=" + fieldValue
     }
     if(anyConditions) {
-      text += " WHERE " + getFilter()
+      text += " WHERE " + toFilter()
     }
     if(anyLimit)
     {
@@ -60,7 +61,7 @@ class Query extends IQuery {
   }
 
 
-  def getFilter(): String =
+  def toFilter(): String =
   {
     var text = ""
     for ( ndx <- 0 until _data.conditions.size )
@@ -76,6 +77,7 @@ class Query extends IQuery {
 
   /**
     * builds up a set field clause
+    *
     * @param field
     * @param fieldValue
     * @return
@@ -89,6 +91,7 @@ class Query extends IQuery {
 
   /**
     * builds up a where clause with the supplied arguments
+    *
     * @param field:  The field name
     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
     * @param fieldValue: The field value
@@ -104,7 +107,8 @@ class Query extends IQuery {
 
   /**
    * builds up a where clause with the supplied arguments
-   * @param field:  The field name
+    *
+    * @param field:  The field name
    * @param compare: The comparison operator ( =, >, >=, <, <=, != )
    * @param fieldValue: The field value
    * @return this instance
@@ -117,6 +121,7 @@ class Query extends IQuery {
 
   /**
     * adds an and clause with the supplied arguments
+    *
     * @param field:  The field name
     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
     * @param fieldValue: The field value
@@ -138,6 +143,7 @@ class Query extends IQuery {
 
   /**
     * adds an or clause with the supplied arguments
+    *
     * @param field:  The field name
     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
     * @param fieldValue: The field value

@@ -13,7 +13,6 @@
 package slate.common.logging
 
 import slate.common.console.ConsoleWriter
-import slate.common.logging.LogLevel.LogLevel
 
 
 class LoggerConsole(level:LogLevel = LogLevel.Debug)
@@ -25,21 +24,18 @@ class LoggerConsole(level:LogLevel = LogLevel.Debug)
   /**
    * Logs to the console
  *
-   * @param level :
-   * @param msg   :
-   * @param ex    :
-   * @param tag   :
+   * @param entry :
    */
-  override protected def performLog(level: LogLevel, msg: String,
-                   ex: Option[Exception] = None, tag: Option[String] = None) =
+  override protected def performLog(entry:LogEntry) =
   {
+    val prefix = entry.
     level match {
-      case LogLevel.Debug => _writer.subTitle(level.toString + " : " + msg)
-      case LogLevel.Info  => _writer.text(level.toString + "  : " + msg)
-      case LogLevel.Warn  => _writer.url(level.toString + "  : " + msg)
-      case LogLevel.Error => _writer.error(level.toString + " : " + msg)
-      case LogLevel.Fatal => _writer.highlight(level.toString + " : " + msg)
-      case _              => _writer.text(level.toString + " : " + msg)
+      case LogLevel.Debug => _writer.subTitle  (entry.level.name + " : "  + entry.msg.getOrElse(""))
+      case LogLevel.Info  => _writer.text      (entry.level.name + "  : " + entry.msg.getOrElse(""))
+      case LogLevel.Warn  => _writer.url       (entry.level.name + "  : " + entry.msg.getOrElse(""))
+      case LogLevel.Error => _writer.error     (entry.level.name + " : "  + entry.msg.getOrElse(""))
+      case LogLevel.Fatal => _writer.highlight (entry.level.name + " : "  + entry.msg.getOrElse(""))
+      case _              => _writer.text      (entry.level.name + " : "  + entry.msg.getOrElse(""))
     }
   }
 }

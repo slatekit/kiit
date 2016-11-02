@@ -13,6 +13,7 @@ package slate.core.mobile
 
 import org.json.simple.JSONObject
 import slate.common._
+import slate.common.serialization.ObjectBuilderJson
 
 
 class Message

@@ -11,7 +11,7 @@
 
 package slate.ext.reg
 
-import slate.common.RandomGen
+import slate.common.Random
 import slate.ext.devices.DeviceService
 import slate.ext.users.User
 
@@ -77,7 +77,7 @@ class RegHooks(val _devices:DeviceService, val _reg:RegService) {
     val device = deviceCheck.get
     device.regId = user.primaryPhoneRegId
     device.isDeviceVerified = false
-    device.deviceConfirmCode = RandomGen.digits6()
+    device.deviceConfirmCode = Random.digits6()
 
     // Link the items
     user.deviceConfirmCode = device.deviceConfirmCode

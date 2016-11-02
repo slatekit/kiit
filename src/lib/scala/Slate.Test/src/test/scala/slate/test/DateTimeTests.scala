@@ -81,17 +81,15 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
   }
 
 
-  test("to string sql") {
+  test("to string sql: yyyy-MM-ddTHHmmss") {
 
-    // yyyy-MM-ddTHHmmss
     val dt = new DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringSql() == "2016-08-10T123045")
   }
 
 
-  test("to string my-sql") {
+  test("to string my-sql:  yyyy-MM-dd HH:mm:ss") {
 
-    // yyyy-MM-dd HH:mm:ss
     val dt = new DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringMySql() == "2016-08-10 12:30:45")
   }

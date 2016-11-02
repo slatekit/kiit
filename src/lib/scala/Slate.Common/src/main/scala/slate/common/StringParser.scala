@@ -35,10 +35,10 @@ class StringParser(private val _content:String ) {
     if(_lastMatch)
     {
 
-    val end = _pos - token.length
-    val content = extract(start, end)
-    _extracts(name) = content
-  }
+      val end = _pos - token.length
+      val content = extract(start, end)
+      _extracts(name) = content
+    }
     this
   }
 

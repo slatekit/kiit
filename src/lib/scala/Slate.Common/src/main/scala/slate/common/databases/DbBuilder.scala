@@ -13,7 +13,7 @@ package slate.common.databases
 
 
 import slate.common.Strings
-import slate.common.{SqlType, Model}
+import slate.common.Model
 import slate.common.query.{QueryEncoder, Query}
 
 
@@ -80,24 +80,6 @@ class DbBuilder() {
 
     val sql = " " + Strings.newline() + colName + " " + colType + " " + nullText
     sql
-  }
-
-
-  def dropCol(table:String, col:String, sqlType:Int): DbBuilder =
-  {
-    this
-  }
-
-
-  def addIndex(table:String, col:String): DbBuilder =
-  {
-    this
-  }
-
-
-  def dropIndex(table:String, col:String): DbBuilder =
-  {
-    this
   }
 
 

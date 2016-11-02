@@ -12,9 +12,8 @@
 package slate.ext.devops
 
 import slate.cloud.aws.{AwsCloudFiles, AwsCloudQueue}
-import slate.common.envs.Envs
+import slate.common.IocRunTime
 import slate.common.queues.QueueSource
-import slate.common.Ioc
 import slate.core.apis.{ApiAction, Api}
 import slate.core.common.svcs.ApiWithSupport
 import slate.ext.tasks.TaskService
@@ -30,7 +29,7 @@ class SetupApi
 
     val queue = new AwsCloudQueue(context.cfg.getStringEnc( this.context.env.name + ".aws.sqs.name"))
     queue.connectWith(context.cfg.getStringEnc("aws.key"), context.cfg.getStringEnc("aws.pswd"))
-    Ioc.register("que", queue)
+    context.svcs.get.register("que", queue)
   }
 
 
@@ -39,15 +38,15 @@ class SetupApi
   {
     val files = new AwsCloudFiles(context.cfg.getStringEnc( this.context.env.name + ".aws.s3.name"), false)
     files.connectWith(context.cfg.getStringEnc("aws.key"), context.cfg.getStringEnc("aws.pswd"))
-    Ioc.register("files", files)
+    context.svcs.get.register("files", files)
   }
 
 
   @ApiAction(name = "", desc= "create instance of the push notifications", roles= "@parent", verb = "@parent", protocol = "@parent")
   def taskQueue(task:String, queue:String):Unit =
   {
-    val svc = Ioc.get(task).get.asInstanceOf[TaskService]
-    val que = Ioc.get(queue).get.asInstanceOf[QueueSource]
+    val svc = getSvc[TaskService](task).get
+    val que = getSvc[QueueSource](queue).get
     svc.setQueue(que)
   }
 }

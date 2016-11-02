@@ -12,7 +12,7 @@
 package slate.common.args
 
 
-import slate.common.{Looper}
+import slate.common.Funcs.loop
 import scala.collection.mutable.{ListBuffer, Map}
 
 
@@ -118,7 +118,7 @@ object ArgsHelper {
     var verbCount = 0
     var lastIndexIncluded = 0
 
-    Looper.loop(args, 0, (ndx:Int) =>
+    loop(args, 0, (ndx:Int) =>
     {
       val text = args(ndx)
       var returnVal = true
@@ -182,7 +182,7 @@ object ArgsHelper {
     var lastVal = ""
     val resultArgs = Map[String,String]()
 
-    Looper.loop(args, startIndex, (ndx:Int) =>
+    loop(args, startIndex, (ndx:Int) =>
     {
       val curr = args(ndx)
       val next = if(args.size <= (ndx+1)) "" else args(ndx+1)

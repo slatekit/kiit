@@ -11,10 +11,7 @@
 
 package slate.common.conf
 
-import slate.common.databases.{DbConString, DbConfig}
 import slate.common.encrypt.Encryptor
-import slate.common.info.Folders
-import slate.common.subs.Subs
 import slate.common._
 
 /**

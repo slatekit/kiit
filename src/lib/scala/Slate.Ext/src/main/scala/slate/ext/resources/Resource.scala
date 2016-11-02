@@ -12,7 +12,8 @@
 package slate.ext.resources
 
 import slate.common.info.Host
-import slate.common.{Field, Sample, DateTime}
+import slate.common.utils.Sample
+import slate.common.{Field, DateTime}
 import slate.entities.core.{IEntityUnique, IEntity}
 import slate.core.common.tenants.ITenant
 

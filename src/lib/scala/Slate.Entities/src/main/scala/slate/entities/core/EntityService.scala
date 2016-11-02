@@ -15,6 +15,7 @@ import slate.common._
 import slate.common.encrypt.Encryptor
 import slate.common.query.IQuery
 
+
 /**
   * Base entity service with generics to support all CRUD operations.
   * Delegates calls to the entity repository, and also manages the timestamps
@@ -193,7 +194,7 @@ class EntityService[T >: Null <: IEntity]
     if (item.isInstanceOf[IEntityUnique]){
       val unique = item.asInstanceOf[IEntityUnique]
       if (Strings.isNullOrEmpty(unique.uniqueId) ){
-        unique.uniqueId = RandomGen.stringGuid(false)
+        unique.uniqueId = Random.stringGuid(false)
       }
     }
   }

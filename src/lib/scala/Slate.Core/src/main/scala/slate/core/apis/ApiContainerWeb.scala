@@ -17,7 +17,10 @@ import slate.core.common.AppContext
   * Thin wrapper on the ApiContainer for web based handling ( TODO ).
   * This will ( in the coming release handle help requests for API info )
   */
-class ApiContainerWeb(ctx:AppContext, auth:Option[ApiAuth] = None, apis : Option[List[ApiReg]] = None)
-  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis) {
+class ApiContainerWeb(ctx    : AppContext                    ,
+                      auth   : Option[ApiAuth]         = None,
+                      apis   : Option[List[ApiReg]]    = None,
+                      errors : Option[ApiErrorHandler] = None)
+  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis, errors) {
 
 }

@@ -23,10 +23,11 @@ import scala.reflect.runtime.universe.{typeOf, Type}
 /**
   * This is the core container hosting, managing and executing the protocol independent apis.
   */
-class ApiContainer(val ctx:AppContext,
-                   auth:Option[ApiAuth] = None,
-                   protocol:String = "*",
-                   apis:Option[List[ApiReg]] = None) extends ResultSupportIn {
+class ApiContainer(val ctx:AppContext                           ,
+                       auth     : Option[ApiAuth]         = None,
+                       protocol : String                  = "*",
+                       apis     : Option[List[ApiReg]]    = None,
+                       errors   : Option[ApiErrorHandler] = None) extends ResultSupportIn {
 
   protected val _lookup = new ListMap[String, ApiLookup]()
   val settings = new ApiSettings()
@@ -187,17 +188,18 @@ class ApiContainer(val ctx:AppContext,
   def callCommand(cmd:Request): Result[Any] =
   {
     // Now invoke the action/method
-    var result:Result[Any] = NoResult
-    try
+    val result:Result[Any] = try
     {
-      result = callCommandInternal(cmd)
+      callCommandInternal(cmd)
     }
     catch
     {
       case ex:Exception =>
       {
-        println(ex.getMessage)
-        result = unexpectedError(Some("error executing : " + cmd.fullName + ", check inputs"))
+        errors.fold[Result[Any]]( onError(ctx, cmd, ex) )( e =>
+        {
+          e.onException(ctx, cmd, ex)
+        })
       }
     }
     result
@@ -268,6 +270,12 @@ class ApiContainer(val ctx:AppContext,
 
     val callReflect = check.get._1
     success( (callReflect.api, callReflect.action) )
+  }
+
+
+  def onError(context:AppContext, request:Request, ex:Exception):Result[Any] = {
+    println(ex.getMessage)
+    unexpectedError(Some("error executing : " + request.fullName + ", check inputs"))
   }
 
 
@@ -392,61 +400,82 @@ class ApiContainer(val ctx:AppContext,
 
 
   private def callCommandInternal(cmd:Request): Result[Any] = {
+    var api:ApiBase = null
+    var finalResult:Result[Any] = NoResult
 
-    // 1. Check for method.
-    val existsCheck = getApiCallReflect(cmd)
-    if (!existsCheck.success ){
-      return existsCheck
-    }
+    try {
+      // 1. Check for method.
+      val existsCheck = getApiCallReflect(cmd)
+      if (!existsCheck.success) {
+        return existsCheck
+      }
 
-    // 2. Ensure verb is correct get/post
-    val callInfo = existsCheck.get
-    val callReflect = callInfo._1
-    val actualVerb = callReflect.action.actualVerb(callReflect.api)
-    val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
-    val supportedProtocol = actualProtocol
-    val isCliOk = isCliAllowed(cmd, supportedProtocol)
-    if( !isCliOk && !Strings.isNullOrEmpty( actualVerb ) && actualVerb != "*" &&
+      // 2. Ensure verb is correct get/post
+      val callInfo = existsCheck.get
+      val callReflect = callInfo._1
+      val actualVerb = callReflect.action.actualVerb(callReflect.api)
+      val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
+      val supportedProtocol = actualProtocol
+      val isCliOk = isCliAllowed(cmd, supportedProtocol)
+      if (!isCliOk && !Strings.isNullOrEmpty(actualVerb) && actualVerb != "*" &&
         !Strings.isMatch(actualVerb, cmd.verb)) {
-      return badRequest(Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
+        return badRequest(Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
+      }
+
+      // 3. Ensure protocol is correct get/post
+      if (!isCliOk && !Strings.isNullOrEmpty(supportedProtocol) && supportedProtocol != "*" &&
+        !Strings.isMatch(supportedProtocol, protocol)) {
+        return notFound(Some(s"${cmd.fullName} not found"))
+      }
+
+      // 4. Validate api access
+      val apiKeyCheck = ApiHelper.isAuthorizedForCall(cmd, callReflect, auth)
+      if (!apiKeyCheck.success) {
+        return apiKeyCheck
+      }
+
+      // 5. Bad request
+      val checkResult = ApiValidator.validateCall(cmd, getApiCallReflect, true)
+      if (!checkResult.success) {
+        // Don't return the result from internal ( as it contains too much info )
+        return badRequest(checkResult.msg, tag = Some(cmd.action))
+      }
+
+      // 6. Get api action
+      // Get the call check which has all the relevant info about the call
+      val callCheck = checkResult.get.asInstanceOf[ApiCallCheck]
+
+      // 7. Get the call reflect from the api using the action
+      api = callCheck.api
+
+      // 8. Finally make call.
+      val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get)
+      val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
+
+      // 9. Already a Result object - don't wrap inside another result object
+      if (returnVal.isInstanceOf[Result[Any]]) {
+        return returnVal.asInstanceOf[Result[Any]]
+      }
+      finalResult = success( data = returnVal )
+    }
+    catch{
+      case ex:Exception => {
+
+        // OPTION 1: API Level error handling enabled
+        if(api != null && api.isErrorEnabled) {
+          finalResult = api.onException(this.ctx, cmd, ex)
+        }
+        // OPTION 2: GLOBAL Level custom handler
+        else if( errors.isDefined ) {
+          finalResult = errors.get.onException(ctx, cmd, ex)
+        }
+        // OPTION 3: GLOBAL Level default handler
+        else {
+          finalResult = onError(ctx, cmd, ex)
+        }
+      }
     }
 
-    // 3. Ensure protocol is correct get/post
-    if( !isCliOk && !Strings.isNullOrEmpty( supportedProtocol ) && supportedProtocol != "*" &&
-      !Strings.isMatch(supportedProtocol, protocol)) {
-      return notFound(Some(s"${cmd.fullName} not found"))
-    }
-
-    // 4. Validate api access
-    val apiKeyCheck = ApiHelper.isAuthorizedForCall(cmd, callReflect, auth)
-    if ( !apiKeyCheck.success) {
-      return apiKeyCheck
-    }
-
-    // 5. Bad request
-    val checkResult = ApiValidator.validateCall( cmd, getApiCallReflect, true)
-    if ( !checkResult.success )
-    {
-      // Don't return the result from internal ( as it contains too much info )
-      return badRequest(checkResult.msg, tag = Some(cmd.action ))
-    }
-
-    // 6. Get api action
-    // Get the call check which has all the relevant info about the call
-    val callCheck = checkResult.get.asInstanceOf[ApiCallCheck]
-
-    // 7. Get the call reflect from the api using the action
-    val api = callCheck.api
-
-    // 8. Finally make call.
-    val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get)
-    val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
-
-    // 9. Already a Result object - don't wrap inside another result object
-    if (returnVal.isInstanceOf[Result[Any]]){
-      return returnVal.asInstanceOf[Result[Any]]
-    }
-    val finalResult = success( data = returnVal )
     finalResult
   }
 

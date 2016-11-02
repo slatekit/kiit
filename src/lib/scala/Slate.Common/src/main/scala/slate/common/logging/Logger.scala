@@ -12,9 +12,6 @@
 package slate.common.logging
 
 
-import slate.common.logging.LogLevel.LogLevel
-
-
 object Logger extends LoggerBase {
 
   private var _logger:Option[LoggerBase] = None
@@ -25,41 +22,27 @@ object Logger extends LoggerBase {
    * @param level: The level of the logger
    * @param logger: The logger
    */
-  def init(level: LogLevel, logger: LoggerBase) =
-  {
-    _logger = Some(logger)
+  def init(level: LogLevel, logger: LoggerBase) = {
+    _logger = Option(logger)
   }
 
 
   /**
    * Logs a message
-   * @param level: The log level
-   * @param msg: The message
-   * @param ex: The exception
+   * @param entry: The log entry
    */
-  override protected def performLog(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None) =
+  override protected def performLog(entry:LogEntry) =
   {
     try
     {
-      if(_logger.isDefined)
-      {
-        _logger.map( (l) => { l.log(level, msg, ex); true } )
-      }
+      _logger.fold[Unit](None)( l => l.log(entry) )
     }
     catch
     {
-      case e: NullPointerException =>
-      {
-        println("Error logging : null pointer exception")
-      }
       case e:Exception =>
       {
         println("Error logging : unexpected")
       }
-    }
-    finally
-    {
-      //println("done logging")
     }
   }
 

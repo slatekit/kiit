@@ -12,7 +12,7 @@
 package slate.common
 
 import slate.common.results.{ ResultChecks}
-import slate.common.serialization.{SerializerProps, SerializerJson}
+import slate.common.serialization.{ObjectBuilderJson, SerializerProps, SerializerJson}
 
 import scala.collection.immutable.LinearSeq
 

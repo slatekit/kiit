@@ -18,38 +18,25 @@ object QueryEncoder {
 
   def convertVal(value:Any): String =
   {
-    if(value == null ) return ""
-
-    var result = ""
-    if (value.isInstanceOf[Boolean]) {
-      val b = value.asInstanceOf[Boolean]
-      result = if(b) "1" else "0"
+    value match {
+      case null               => ""
+      case None               => "null"
+      case s:Option[Any]      => convertVal(s.orNull)
+      case s:String           => toString(s)
+      case s:Int              => s.toString
+      case s:Long             => s.toString
+      case s:Double           => s.toString
+      case s:Boolean          => if(s) "1" else "0"
+      case s:DateTime         => "'" + s.toStringMySql + "'"
+      case _                  => value.toString
     }
-    else if (value.isInstanceOf[DateTime])
-    {
-      result = value.asInstanceOf[DateTime].toStringMySql()
-    }
-    else if (value.isInstanceOf[String])
-    {
-      val s = QueryEncoder.ensureValue(value.asInstanceOf[String])
-      result = if(Strings.isNullOrEmpty(s)) "''" else "'" + s + "'"
-    }
-    else if (value.isInstanceOf[(String, Boolean)])
-    {
-      val ts = value.asInstanceOf[(String,Boolean)]._1
-      val s = QueryEncoder.ensureValue(ts)
-      result = if(Strings.isNullOrEmpty(ts)) "''" else "'" + s + "'"
-    }
-    else
-    {
-      result = value.toString
-    }
-    result
   }
+
 
   /**
    * ensures the text value supplied be escaping single quotes for sql.
-   * @param text
+    *
+    * @param text
    * @return
    */
   def ensureValue(text:String):String =
@@ -91,25 +78,26 @@ object QueryEncoder {
   /**
    * ensures the comparison operator to be any of ( = > >= < <= != is), other wise
    * defaults to "="
-   * @param compare
+    *
+    * @param compare
    * @return
    */
   def ensureCompare(compare:String) :String =
   {
-    if ("=".equalsIgnoreCase(compare))
-      return "="
-    if (">".equalsIgnoreCase(compare))
-      return ">"
-    if (">=".equalsIgnoreCase(compare))
-      return ">="
-    if ("<".equalsIgnoreCase(compare))
-      return "<"
-    if ("<=".equalsIgnoreCase(compare))
-      return "<="
-    if ("!=".equalsIgnoreCase(compare))
-      return "!="
-    if ("is".equalsIgnoreCase(compare))
-      return "is"
+    if ("=".equalsIgnoreCase(compare)) return "="
+    if (">".equalsIgnoreCase(compare)) return ">"
+    if (">=".equalsIgnoreCase(compare))return ">="
+    if ("<".equalsIgnoreCase(compare)) return "<"
+    if ("<=".equalsIgnoreCase(compare))return "<="
+    if ("!=".equalsIgnoreCase(compare))return "!="
+    if ("is".equalsIgnoreCase(compare))return "is"
     "="
+  }
+
+
+  def toString(value:String): String ={
+    val s = QueryEncoder.ensureValue(value.asInstanceOf[String])
+    val res = if(Strings.isNullOrEmpty(s)) "''" else "'" + s + "'"
+    res
   }
 }

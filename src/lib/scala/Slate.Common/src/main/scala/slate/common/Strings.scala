@@ -15,6 +15,8 @@ object Strings {
 
   val empty = ""
 
+  var typeString = ""
+
 
   def newline():String =
   {

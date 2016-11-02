@@ -16,6 +16,7 @@ import java.io.File
 import slate.common._
 import slate.common.databases.{DbBuilder, DbMeta, DbLookup}
 import slate.common.results.ResultSupportIn
+import slate.common.serialization.{ObjectBuilderJson, ObjectBuilder}
 import slate.core.apis.{ApiAction, Api}
 import slate.core.common.svcs.ApiWithSupport
 import slate.entities.core.EntityMapper
@@ -39,7 +40,57 @@ class CodeGenApi extends ApiWithSupport with ResultSupportIn
     _rootFolder = folder
   }
 
+/*
+  @ApiAction(name = "", desc= "creates a model from the table", roles= "@parent", verb = "@parent", protocol = "@parent")
+  def createFromTables(standardize:Boolean, lang:String): Result[Boolean] = {
+    var sql = ""
+    val nl2 = Strings.newline() + Strings.newline()
 
+    sql = sql + createFromTable( "country"             , "Country"             , standardize, lang).get + nl2
+    sql = sql + createFromTable( "state"               , "State"               , standardize, lang).get + nl2
+    sql = sql + createFromTable( "city"                , "City"                , standardize, lang).get + nl2
+    sql = sql + createFromTable( "languages"           , "Language"            , standardize, lang).get + nl2
+    sql = sql + createFromTable( "category"            , "Category"            , standardize, lang).get + nl2
+    sql = sql + createFromTable( "filetypes"           , "FileType"            , standardize, lang).get + nl2
+    sql = sql + createFromTable( "users"               , "Users"               , standardize, lang).get + nl2
+    sql = sql + createFromTable( "email"               , "Email"               , standardize, lang).get + nl2
+    sql = sql + createFromTable( "skillcategory"       , "SkillCategory"       , standardize, lang).get + nl2
+    sql = sql + createFromTable( "skills"              , "Skills"              , standardize, lang).get + nl2
+    sql = sql + createFromTable( "skillposition"       , "SkillPosition"       , standardize, lang).get + nl2
+    sql = sql + createFromTable( "experience"          , "Experience"          , standardize, lang).get + nl2
+    sql = sql + createFromTable( "jobcategory"         , "JobCategory"         , standardize, lang).get + nl2
+    sql = sql + createFromTable( "jobdept"             , "JobDept"             , standardize, lang).get + nl2
+    sql = sql + createFromTable( "education"           , "Education"           , standardize, lang).get + nl2
+    sql = sql + createFromTable( "communicationlevel"  , "CommunicationLevel"  , standardize, lang).get + nl2
+    sql = sql + createFromTable( "contact"             , "Contact"             , standardize, lang).get + nl2
+    sql = sql + createFromTable( "daysavailable"       , "Daysavailable"       , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empattitude"         , "EmpAttitude"         , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empappearance"       , "EmpAppearance"       , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empreliability"      , "EmpReliability"      , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "emptransportation"   , "EmpTransportation"   , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empreferred"         , "EmpReferred"         , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empeducation"        , "EmpEducation"        , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empcheck"            , "EmpCheck"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empfiles"            , "EmpFiles"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "emphours"            , "EmpHours"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "emphoursdetail"      , "EmpHoursDetail"      , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empjobs"             , "EmpJobs"             , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "employee"            , "Employee"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "employeedetail"      , "EmployeeDetail"      , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "employeemaster"      , "EmployeeMaster"      , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "employeeo"           , "EmployeeO"           , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "empskills"           , "EmpSkills"           , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "interview"           , "Interview"           , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "screening"           , "Screening"           , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "comments"            , "Comments"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "communicationlevel"  , "CommunicationLevel"  , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "customer"            , "Customer"            , standardize, lang).get + nl2
+    //sql = sql + createFromTable( "jobs"                , "Job"                 , standardize, lang).get + nl2
+    val path = _sqlFolder + File.separator + "_install_meta2" + ".sql"
+    Files.writeAllText(path, sql)
+    ok()
+  }
+*/
 
   @ApiAction(name = "", desc= "creates a model from the table", roles= "@parent", verb = "@parent", protocol = "@parent")
   def createFromTable(tableName:String, modelName:String, standardize:Boolean, lang:String): Result[String] = {

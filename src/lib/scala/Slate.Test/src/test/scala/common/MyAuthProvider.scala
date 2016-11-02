@@ -12,7 +12,7 @@ package slate.test.common
 
 import slate.common.{Strings, Result, ApiKey}
 import slate.common.results.ResultSupportIn
-import slate.core.apis.{ApiCmd, ApiAuth}
+import slate.core.apis.{Request, ApiAuth}
 
 // =======================================================================================
 // AUTH PROVIDER: Implement your own custom authentication/permission provider.
@@ -23,7 +23,7 @@ class MyAuthProvider(val user:String, val roles:String, keys:List[ApiKey]) exten
   with ResultSupportIn
 {
 
-  override protected def getUserRoles(cmd:ApiCmd):String = {
+  override protected def getUserRoles(cmd:Request):String = {
     roles
   }
 }

@@ -10,9 +10,10 @@
   */
 package slate.core.common
 
+import slate.common.IocRunTime
 import slate.common.app.{AppRunConst, AppMeta}
 import slate.common.conf.ConfigBase
-import slate.common.databases.DbConString
+import slate.common.databases.{DbLookup, DbConString}
 import slate.common.encrypt.Encryptor
 import slate.common.envs.{Env, Envs, EnvItem}
 import slate.common.subs.Subs
@@ -25,7 +26,7 @@ import slate.core.common.tenants.Tenant
 
 /**
  *
- * @param con  : db connection string
+ * @param dbs  : db connection strings lookup
  * @param enc  : encryption/decryption service
  * @param env  : environment selection ( dev, qa, staging, prod )
  * @param ent  : entity/orm registration server to get entity services/repositories
@@ -47,12 +48,13 @@ case class AppContext(
                         host:Host                       = Host.local()  ,
                         lang:Lang                       = Lang.asScala(),
                         auth:Option[AuthBase]           = None          ,
-                        con :Option[DbConString]        = None          ,
+                        dbs :Option[DbLookup]           = None          ,
                         enc :Option[Encryptor]          = None          ,
                         dirs:Option[Folders]            = None          ,
                         subs:Option[Subs]               = None          ,
                         res :Option[I18nStrings]        = None          ,
-                        tnt :Option[Tenant]             = None
+                        tnt :Option[Tenant]             = None          ,
+                        svcs:Option[IocRunTime]                = None
                      )
 {
   def app:AppMeta = { new AppMeta(inf, host, lang) }

@@ -99,6 +99,25 @@ class SubsTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
         (SubConstants.TypeSub  , "company.id" )
       ))
     }
+
+
+    it("can sub many in template") {
+      check ( subs().parse(
+        "hi @{user.name}, Welcome to @{company.id}, @{company.id} does abc. " +
+        "visit @{company.url} for more info. regards @{company.support}"
+      ), List[(Int,String)](
+        (SubConstants.TypeText  , "hi "  ),
+        (SubConstants.TypeSub  , "user.name"  ),
+        (SubConstants.TypeText  , ", Welcome to "  ),
+        (SubConstants.TypeSub  , "company.id"  ),
+        (SubConstants.TypeText  , ", "  ),
+        (SubConstants.TypeSub  , "company.id"  ),
+        (SubConstants.TypeText  , " does abc. visit "  ),
+        (SubConstants.TypeSub  , "company.url"  ),
+        (SubConstants.TypeText  , " for more info. regards "  ),
+        (SubConstants.TypeSub  , "company.support" )
+      ))
+    }
   }
 
 
@@ -128,6 +147,7 @@ class SubsTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
     val subs = new Subs()
     subs("user.home"    ) = (s) => "c:/users/johndoe"
     subs("company.id"   ) = (s) => "slatekit"
+    subs("company.url"  ) = (s) => "http://www.slatekit.com"
     subs("company.dir"  ) = (s) => "@{user.home}/@{company.id}"
     subs("company.confs") = (s) => "@{user.home}/@{company.id}/confs"
     subs("app.id"       ) = (s) => "slatekit.tests"

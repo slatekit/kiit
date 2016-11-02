@@ -12,9 +12,10 @@
 package slate.common
 
 /**
-  * Guard or Assert like class methods. Although Scala's Option[T] and SlateKits Result[T] are
-  * heavily used in Slate Kit, there are times when this Guard is useful to use the more
-  * traditional and imperative exception handling to throw exceptions early on
+  * Although Scala's Option[T] and SlateKits Result[T] are heavily used and functional
+  * error handling approaches are recommended, there are times and use cases this
+  * Guard ( Assert like class ) can be used for traditional and imperative exception handling.
+  * This is especially useful to throw exceptions early such as during startup / initialization
   */
 object Ensure {
 
@@ -93,7 +94,7 @@ object Ensure {
     * @param size      : The size to check against
     * @param message   : Message for the exception
     */
-  def index(pos:Int, size:Int, message:String): Unit =
+  def isValidIndex(pos:Int, size:Int, message:String): Unit =
   {
     if(pos < 0 || pos >= size)
     {

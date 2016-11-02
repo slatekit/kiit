@@ -12,42 +12,36 @@
 package slate.ext.dbchanges
 
 import slate.common.databases.Db
-import slate.common.{Ioc, Ensure, Models, Model}
+import slate.common.{IocRunTime, Ensure, Model}
+import slate.entities.core.Entities
 
 
-class DbService(val models:Models) {
-
+class DbService(val db:Db, val entities:Entities)
+{
   def installModel(name:String):Unit =
   {
-    Ensure.isTrue(models.contains(name), "invalid name supplied to create table")
-    createTable(name)
+    //createTable(name)
   }
 
 
   def uninstallModel(name:String):Unit =
   {
-    Ensure.isTrue(models.contains(name), "invalid name supplied to create table")
-    val model = models.get(name)
-    dropTable(model.name)
+    //Ensure.isTrue(models.contains(name), "invalid name supplied to create table")
+    //val model = models.get(name)
+    //dropTable(model.name)
   }
 
 
   def createTable(name:String): Unit =
   {
-    Ensure.isTrue(models.contains(name), "invalid name supplied to create table")
-    val model = models.get(name)
-    database.createTable(model)
+    //Ensure.isTrue(models.contains(name), "invalid name supplied to create table")
+    //val model = models.get(name)
+    //db.createTable(model)
   }
 
 
   def dropTable(name:String): Unit =
   {
-    database.dropTable(name)
-  }
-
-
-  private def database:Db =
-  {
-    Ioc.get("db").asInstanceOf[Db]
+    //db.dropTable(name)
   }
 }

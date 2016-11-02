@@ -14,14 +14,16 @@ package slate.common.results
 import java.time.Duration
 
 import slate.common._
+import slate.common.info.MemUsage
 
 case class ResultTimed[+T](
-                        desc    :String,
-                        start   : DateTime,
-                        end     : DateTime,
-                        duration: Duration,
-                        memory  : MemUsage,
-                        result  : Result[T]
+                        desc        : String,
+                        start       : DateTime,
+                        end         : DateTime,
+                        duration    : Duration,
+                        memory      : MemUsage,
+                        result      : Result[T],
+                        avg         : Duration
                        )
 {
   /**
@@ -32,9 +34,9 @@ case class ResultTimed[+T](
    * @param mem
    * @param data
    */
-  def this(start:DateTime, end:DateTime, duration:Duration, mem:MemUsage, data:Result[T])
+  def this(start:DateTime, end:DateTime, duration:Duration, mem:MemUsage, data:Result[T], avg:Duration)
   {
-    this("", start, end, duration, mem, data)
+    this("", start, end, duration, mem, data, avg)
   }
 
 
@@ -43,12 +45,12 @@ case class ResultTimed[+T](
       return this
     }
     if(result.isInstanceOf[ResultTimed[Any]]) {
-      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]])
+      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
     }
     if(result.isInstanceOf[Result[Any]]) {
-      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]])
+      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
     }
-    new ResultTimed[T](start, end, duration, memory, NoResult)
+    new ResultTimed[T](start, end, duration, memory, NoResult, avg)
   }
 
 

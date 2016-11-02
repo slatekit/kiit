@@ -25,8 +25,8 @@ class Condition(val field:Any, val comparison:String, val fieldValue:Any) extend
     val fieldName = QueryEncoder.ensureField(this.field.toString)
     val col = if (surround) left + fieldName + right else fieldName
     val comp = QueryEncoder.ensureCompare(comparison)
-    val fieldVal:String = this.fieldValue.toString
-    val result = QueryEncoder.convertVal(fieldVal, true)
+    val fieldVal = this.fieldValue
+    val result = QueryEncoder.convertVal(fieldVal)
 
     col + " " + comp + " " + result
   }

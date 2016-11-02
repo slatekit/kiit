@@ -61,15 +61,12 @@ object SlateShell extends AppProcess {
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(),
+      ent  = new Entities(Option(dbs())),
       inf  = aboutApp(),
-      con  = conf.dbCon(),
-      enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
-      dirs = Some(folders)
+      dbs  = Option(dbs()),
+      enc  = Option(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
+      dirs = Option(folders())
     )
-
-    // 3. Initialize the database if enabled
-    DbLookup.setDefault(ctx.con)
   }
 
 

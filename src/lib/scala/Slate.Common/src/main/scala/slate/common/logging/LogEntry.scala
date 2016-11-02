@@ -11,12 +11,17 @@
 
 package slate.common.logging
 
+import java.time.ZoneOffset
 
-import slate.common.logging.LogLevel.LogLevel
+import slate.common.DateTime
 
-
-class LogEntry {
-  var level : LogLevel = LogLevel.Info
-  var msg : Option[String] = None
-  var ex: Option[Exception] = None
+case class LogEntry(
+                      name   : String           = "",
+                      tag    : String           = "",
+                      level : LogLevel          = LogLevel.Info,
+                      time  : DateTime          = DateTime.now,
+                      msg   : Option[String]    = None,
+                      ex    : Option[Exception] = None
+                   )
+{
 }

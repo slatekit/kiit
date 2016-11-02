@@ -4,13 +4,13 @@ import slate.common.app.{AppMetaSupport, AppMeta}
 import slate.common.args.{Arg, ArgsHelper, ArgsSchema, Args}
 import slate.common.conf.ConfigBase
 import slate.common.console.ConsoleWriter
+import slate.common.databases.DbLookup
 import slate.common.encrypt.EncryptSupportIn
 import slate.common.envs.{EnvItem, Env}
 import slate.common.i18n.I18nSupportIn
 import slate.common.info._
 import slate.common._
-import slate.common.logging.LogLevel.LogLevel
-import slate.common.logging.{Logger, LoggerConsole, LogSupportIn}
+import slate.common.logging.{Logger, LoggerConsole, LogSupportIn, LogLevel}
 import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.common.subs.Subs
 import slate.core.common.{Conf, AppContext}
@@ -136,7 +136,8 @@ class AppProcess extends AppMetaSupport
         env  = env,
         cfg  = conf,
         log  = new LoggerConsole(),
-        ent  = new Entities(),
+        ent  = new Entities(Option(dbs())),
+        dbs  = Option(dbs()),
         inf  = aboutApp(),
         dirs = Some(folders())
       )
@@ -368,6 +369,14 @@ class AppProcess extends AppMetaSupport
    * @return
    */
   protected def envs(): List[EnvItem] = AppFuncs.envs()
+
+
+  /**
+    * Builds the database lookup structure.
+    *
+    * @return
+    */
+  protected def dbs(): DbLookup = AppFuncs.dbs(conf)
 
 
   /**

@@ -12,6 +12,8 @@ package slate.core.app
 
 import slate.common.app.AppRunConst
 import slate.common.args.{Args, ArgsHelper}
+import slate.common.databases.{DbConString, DbLookup}
+import slate.common.databases.DbLookup._
 import slate.common.envs.{Env, Envs, EnvItem}
 import slate.common.results.ResultSupportIn
 import slate.common.subs.Subs
@@ -50,6 +52,20 @@ object AppFuncs extends ResultSupportIn {
       EnvItem("pro", Env.PROD)
     )
   }
+
+
+  /**
+    * Builds the DbLookup containing the database connections :
+    * 1. default connection
+    * 2. named connections
+    * 3. grouped connections
+    *
+    * @return
+    */
+  def dbs(conf:ConfigBase): DbLookup = {
+    defaultDb(conf.dbCon("db").getOrElse(DbConString.empty))
+  }
+
 
 
   /**

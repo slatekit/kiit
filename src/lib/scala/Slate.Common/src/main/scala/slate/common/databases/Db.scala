@@ -15,7 +15,7 @@ package slate.common.databases
 import java.sql._
 import scala.reflect.runtime.universe._
 import scala.collection.mutable.ListBuffer
-import slate.common.{DateTime, Strings, Model}
+import slate.common.{DateTime, Model}
 import slate.common.mapper.{MapperSourceRecord, Mapper}
 
 

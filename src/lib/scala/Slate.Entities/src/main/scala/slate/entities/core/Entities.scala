@@ -12,7 +12,7 @@
 package slate.entities.core
 
 import slate.common.databases.{Db, DbConString, DbConstants, DbLookup}
-import slate.common.{ListMap, Reflector, Strings}
+import slate.common.{Ensure, ListMap, Reflector, Strings}
 import slate.entities.repos.{EntityRepoSql, EntityRepoMySql, EntityRepoInMemory}
 
 import scala.collection.mutable.{ListBuffer, Map}
@@ -51,7 +51,8 @@ import scala.reflect.runtime.universe.Type
   *     repo: new InvitationRepository(), mapper: null, dbType: "mysql");
   *
   */
-class Entities {
+class Entities(private val _dbs:Option[DbLookup] = None) {
+
   private val _info = new ListMap[String, EntityInfo]()
   private val _mappers = Map[String, EntityMapper]()
 
@@ -193,22 +194,28 @@ class Entities {
 
   def getDatabase(dbKey:String = "", dbShard:String = ""): Db =
   {
-    new Db( getDbConnection() ).open()
+    val con = getDbConnection()
+    Ensure.isTrue(con.isDefined, s"Database connection for ${dbKey} & ${dbShard} has not been set")
+    new Db( con.get ).open()
   }
 
 
-  def getDbConnection(dbKey:String = "", dbShard:String = ""): DbConString =
+  def getDbConnection(dbKey:String = "", dbShard:String = ""): Option[DbConString] =
   {
-    // Case 1: default connection
-    if(Strings.isNullOrEmpty(dbKey))
-      return DbLookup.getDefault
+    _dbs.fold[Option[DbConString]](None)( dbs => {
 
-    // Case 2: named connection
-    if(Strings.isNullOrEmpty(dbShard))
-      return DbLookup.getByKey(dbKey)
+      // Case 1: default connection
+      if(Strings.isNullOrEmpty(dbKey))
+        dbs.default
 
-    // Case 3: shard
-    DbLookup.getShard(dbKey, dbShard)
+      // Case 2: named connection
+      if(Strings.isNullOrEmpty(dbShard))
+        dbs.named(dbKey)
+
+      // Case 3: shard
+      else
+        dbs.group(dbKey, dbShard)
+    })
   }
 
 

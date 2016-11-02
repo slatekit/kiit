@@ -81,7 +81,7 @@ abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
 
   override def find(query:IQuery):List[T] =
   {
-    val filter = query.getFilter()
+    val filter = query.toFilter()
     val sql = s"select * from ${tableName} where " + filter
     val results = sqlMapMany(sql)
     results.getOrElse( List[T]() )

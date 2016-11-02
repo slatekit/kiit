@@ -144,19 +144,10 @@ class RegApi() extends ApiBaseEntity[User] with ResultSupportIn {
     val users = context.ent.getService(typeOf[User]).asInstanceOf[UserService]
     val devices = context.ent.getService(typeOf[Device]).asInstanceOf[DeviceService]
 
-    val sms = Ioc.get("sms")
-    val smsSvc:Option[SmsService] =
-      if(sms.isDefined) Some(sms.get.asInstanceOf[SmsService]) else None
-
-    val email = Ioc.get("email")
-    val emailSvc:Option[EmailService] =
-      if(email.isDefined) Some(email.get.asInstanceOf[EmailService]) else None
-
-    val msg = Ioc.get("msg")
-    val msgSvc:Option[MessageService] =
-      if(msg.isDefined) Some(msg.get.asInstanceOf[MessageService]) else None
-
-    val reg = new RegService(this.context.enc.get, users, devices, smsSvc, emailSvc, msgSvc)
+    val sms = getSvc[SmsService]("sms")
+    val email = getSvc[EmailService]("email")
+    val msg = getSvc[MessageService]("msg")
+    val reg = new RegService(this.context.enc.get, users, devices, sms, email, msg)
     val hooks = new RegHooks(devices, reg)
     reg.setHooks(hooks)
     reg

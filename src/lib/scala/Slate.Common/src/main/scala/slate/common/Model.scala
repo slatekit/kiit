@@ -262,23 +262,14 @@ class Model(val name:String,
                   defaultValue:Option[Any] = None,
                   tag:String = "",
                   cat:String = "data"
-               ) : Model =
-  {
-    var finalName = name
-    if(destName.nonEmpty)
-    {
-      if(destName.get.trim != "" )
-      {
-        finalName = destName.get
-      }
-    }
+               ) : Model = {
+    val field = ModelField.build(name, dataType, desc, isRequired, minLength, maxLength,
+      destName, defaultValue, tag, cat)
+    add(field)
+  }
 
 
-    val field = new ModelField(name = name, desc = desc, dataType = dataType,
-      storedName = finalName, pos = 0,
-      isRequired = isRequired, minLength = minLength, maxLength = maxLength,
-      defaultValue, "", tag = tag, cat = cat)
-
+  def add(field:ModelField): Model = {
     val newPropList = _propList.fold( List[ModelField](field))( props => {
       props :+ field
     })

@@ -15,6 +15,21 @@ import slate.common.results.ResultSupportIn
 import slate.common.{DateTime, Result}
 import slate.core.apis._
 
+@Api(area = "app", name = "users2", desc = "api to access and manage users 3",
+  roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+class UserApi2 extends ApiBaseEntity[User] with ResultSupportIn {
+
+  override val isErrorEnabled = true
+
+
+  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "@parent")
+  def testException(code:Int, tag:String): Result[String] =
+  {
+    throw new Exception("Test unhandled exception")
+  }
+}
+
+
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
 class UserApi extends ApiBaseEntity[User] with ResultSupportIn
@@ -53,6 +68,13 @@ class UserApi extends ApiBaseEntity[User] with ResultSupportIn
   def protocolParent(code:Int, tag:String): Result[String] =
   {
     success("protocolParent", Some(s"${code} ${tag}"))
+  }
+
+
+  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "@parent")
+  def testException(code:Int, tag:String): Result[String] =
+  {
+    throw new Exception("Test unhandled exception")
   }
 
 

@@ -11,7 +11,7 @@
 
 package slate.common.queues
 
-import slate.common.{RandomGen, Strings}
+import slate.common.{Random, Strings}
 
 import scala.collection.mutable.ListBuffer
 
@@ -63,7 +63,7 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
   {
     synchronized
     {
-      val id = RandomGen.stringGuid()
+      val id = Random.stringGuid()
       _list += new QueueSourceData(msg, Some(Map( tagName -> tagValue) ), Some(id) )
     }
   }

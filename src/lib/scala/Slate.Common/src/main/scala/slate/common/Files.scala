@@ -68,7 +68,7 @@ object Files {
     val config = new Config(Map[String,String]())
     for(line <- lines )
     {
-      var lineClean = line.trim
+      val lineClean = line.trim
       if(!lineClean.startsWith("#")) {
         val ndxColon = line.indexOf(":")
         if (ndxColon > 0) {

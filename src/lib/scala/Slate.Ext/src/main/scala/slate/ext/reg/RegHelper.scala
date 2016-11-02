@@ -13,6 +13,7 @@ package slate.ext.reg
 
 import slate.common._
 import slate.common.results.{ResultSupportIn}
+
 import slate.ext.devices.Device
 import slate.ext.users.User
 
@@ -107,7 +108,7 @@ object RegHelper extends ResultSupportIn {
   def setupVerification(user:User)
   {
     user.isPrimaryPhoneVerified = false
-    user.phoneConfirmCode = RandomGen.digits6()
+    user.phoneConfirmCode = Random.digits6()
   }
 
 
@@ -115,7 +116,7 @@ object RegHelper extends ResultSupportIn {
   {
     device.phoneConfirmCode = user.phoneConfirmCode
     device.isPhoneVerified = false
-    device.deviceConfirmCode = RandomGen.digits6()
+    device.deviceConfirmCode = Random.digits6()
     device.isDeviceVerified = false
 
     user.isPhoneDeviceVerified = false

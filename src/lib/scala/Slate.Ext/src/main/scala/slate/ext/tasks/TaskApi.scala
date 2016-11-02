@@ -11,7 +11,7 @@
 package slate.ext.tasks
 
 import slate.common.app.AppRunState
-import slate.common.{Ioc, Result}
+import slate.common.{IocRunTime, Result}
 import slate.core.apis.{ApiAction, Api}
 import slate.core.common.svcs.ApiWithSupport
 
@@ -71,10 +71,7 @@ class TaskApi
 
 
   def service(name:String): Option[TaskService] = {
-    val result = Ioc.get(name)
-    if(!result.isDefined)
-      return None
-    Some(result.get.asInstanceOf[TaskService])
+    getSvc[TaskService](name)
   }
 
 

@@ -11,7 +11,8 @@
 
 package slate.entities.models
 
-import slate.common.{Model, ModelField, ObjectBuilder, Strings}
+import slate.common.serialization.ObjectBuilder
+import slate.common.{Model, ModelField, Strings}
 
 class ModelSerializer extends ObjectBuilder(true, "  ") {
 

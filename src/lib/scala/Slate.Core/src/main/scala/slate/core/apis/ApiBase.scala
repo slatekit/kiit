@@ -12,7 +12,7 @@
 package slate.core.apis
 
 import slate.common._
-import slate.common.results.ResultTimed
+import slate.common.results.{ResultCode, ResultTimed}
 import slate.core.apis.support.{ApiCallReflect}
 import slate.core.common.AppContext
 
@@ -20,6 +20,8 @@ import slate.core.common.AppContext
   * Base class for any Api, provides lookup functionality to check for exposed api actions.
   */
 class ApiBase {
+
+  val isErrorEnabled = false
 
   protected  val _lookup = new ListMap[String, ApiCallReflect]()
 
@@ -97,6 +99,20 @@ class ApiBase {
   {
     _lookup(action) = value
   }
+
+
+  def onException(context:AppContext, request: Request, ex:Exception): Result[Any] = {
+    new FailureResult[Boolean](ResultCode.UNEXPECTED_ERROR, msg = Some("unexpected error in api"), err = Some(ex))
+  }
+
+
+  /**
+    * gets a service from the context
+    * @param key
+    * @tparam T
+    * @return
+    */
+  def getSvc[T](key:String): Option[T] = context.svcs.fold[Option[T]](None)( s => s.get(key) )
 
 
   /**

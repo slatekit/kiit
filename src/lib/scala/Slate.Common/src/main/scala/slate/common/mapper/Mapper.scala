@@ -12,6 +12,9 @@
 package slate.common.mapper
 
 
+import slate.common.utils.Temp
+
+import scala.collection.mutable.ListBuffer
 import scala.reflect.runtime.universe._
 import slate.common.Field
 import slate.common._
@@ -42,14 +45,13 @@ class Mapper(protected var _model:Model) {
   {
     val modelName = item.getClass().getSimpleName
     val modelNameFull = item.getClass.getName
-    var model = new Model(modelName, modelNameFull, Some(dataType))
-
-    // Add id
-    model = model.addId( name = "id" , autoIncrement = true, dataType = typeOf[Long])
 
     // Now add all the fields.
     val matchedFieldsR = Reflector.getFieldsWithAnnotations(item, dataType, typeOf[Field])
     val matchedFields = matchedFieldsR.reverse
+    val fieldId = ModelField.id( name = "id" , autoIncrement = true, dataType = typeOf[Long])
+    val fields = new ListBuffer[ModelField]()
+    fields.append(fieldId)
 
     // Loop through each field
     for(matchedField <- matchedFields )
@@ -59,10 +61,11 @@ class Mapper(protected var _model:Model) {
       val required = anno.required
       val length   = anno.length
       val dataType = matchedField._5
-      model = model.addField( name= name, dataType= dataType, isRequired= required, maxLength = length )
+      fields.append( ModelField.build( name= name, dataType= dataType, isRequired= required, maxLength = length ) )
     }
-    this._model = model
-    model
+
+    this._model = new Model(modelName, modelNameFull, Some(dataType), _propList = Some(fields.toList))
+    this._model
   }
 
 
@@ -71,6 +74,10 @@ class Mapper(protected var _model:Model) {
     if(!_model.any)
       return None
 
+    // NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // Not using pattern matching here on the types.
+    // This is because using "if ( datatype == typeOf[x] )"
+    // is slightly faster
     val entity:Any = createEntity()
     for( ndx <- 0 until _model.fields.size)
     {

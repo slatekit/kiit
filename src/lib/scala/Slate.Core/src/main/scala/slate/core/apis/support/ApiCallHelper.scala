@@ -12,6 +12,7 @@
 package slate.core.apis.support
 
 import slate.common.results.{ResultSupportIn}
+import slate.common.utils.Temp
 import slate.core.apis.Request
 
 import scala.reflect.runtime.universe.typeOf

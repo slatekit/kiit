@@ -13,6 +13,7 @@ package slate.common
 
 object Funcs {
 
+
   def defaultOrExecute[T](condition:Boolean, defaultValue:T, f: => T): T = {
     if(condition){
       return defaultValue
@@ -35,6 +36,27 @@ object Funcs {
         f(item)
         Unit
       })
+    }
+  }
+
+
+  /**
+   * loops through the list with support for breaking the loop early
+   * @param args    : The list to iterate through
+   * @param callback: The callback to call
+   * @param start   : The index to the start with
+   */
+  def loop(args:Seq[Any], start:Int, callback:(Int) => Boolean):Unit =
+  {
+    var loop = true
+    var ndx = start
+    if (args == null || args.size == 0 || ndx >= args.size)
+      return
+
+    while (loop && ndx < args.length)
+    {
+      loop = callback(ndx)
+      ndx = ndx + 1
     }
   }
 }
