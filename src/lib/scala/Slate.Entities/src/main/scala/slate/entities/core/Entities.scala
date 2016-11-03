@@ -209,7 +209,7 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
         dbs.default
 
       // Case 2: named connection
-      if(Strings.isNullOrEmpty(dbShard))
+      else if(Strings.isNullOrEmpty(dbShard))
         dbs.named(dbKey)
 
       // Case 3: shard
