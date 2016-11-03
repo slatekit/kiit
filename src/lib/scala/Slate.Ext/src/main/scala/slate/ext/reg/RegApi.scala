@@ -83,7 +83,7 @@ class RegApi() extends ApiBaseEntity[User] with ResultSupportIn {
   @ApiAction(name = "", desc="resets the password", roles= "@parent")
   def resetPass(id:String): Result[Boolean] =
   {
-    notImplemented(Some("regapi.resetPassword"))
+    notImplemented(msg = Some("regapi.resetPassword"))
   }
 
 

@@ -88,20 +88,20 @@ object AppRunner extends ResultSupportIn
 
     // 2. Bad args?
     if (!result.success) {
-      return badRequest[Args](Some("invalid arguments supplied"))
+      return badRequest[Args]( msg = Some("invalid arguments supplied"))
     }
 
     // 3. Help request
     val helpCheck = rawArgs.fold[Result[String]](failure())( args => AppFuncs.checkCmd(args.toList))
     if(helpCheck.isExit || helpCheck.isHelpRequest) {
-      return new FailureResult[Args](helpCheck.code, helpCheck.msg)
+      return new FailureResult[Args](None, helpCheck.code, helpCheck.msg)
     }
 
     // 4. Invalid inputs
     val args = result.get
     val checkResult = schema.validate(args)
     if(!checkResult.success){
-      return badRequest[Args](Some("invalid arguments supplied"))
+      return badRequest[Args](msg = Some("invalid arguments supplied"))
     }
     success(args)
   }

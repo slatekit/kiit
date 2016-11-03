@@ -67,19 +67,19 @@ class MessageUserService(private val _users:UserService,
 
     // Unknown user ?
     if (!userCheck.isDefined)
-      return unAuthorized[Boolean](Some("Unknown sender"))
+      return unAuthorized[Boolean](msg = Some("Unknown sender"))
 
     // Validate message
     val result = validate(msg, userCheck.get)
     if (!result.success)
-      return failure(result.msg)
+      return failure(Some(false), result.msg)
 
     // Get destination user ( either email, phone, id, reference to self )
     val destCheck = _users.getUserById(destId, Some(destId), userCheck)
 
     // unknown destination ?
     if (!destCheck.isDefined)
-      return failure[Boolean](Some("Unknown user : " + destId))
+      return failure[Boolean](msg = Some("Unknown user : " + destId))
 
     // Fill message details
     val user = userCheck.get
@@ -119,8 +119,8 @@ class MessageUserService(private val _users:UserService,
 
 
   def validate(msg:Message, user:User):Result[Boolean] = {
-    if (Strings.isNullOrEmpty(msg.subject))  return failure[Boolean](Some("message subject not supplied"))
-    if (Strings.isNullOrEmpty(msg.data))     return failure[Boolean](Some("message data not supplied"))
+    if (Strings.isNullOrEmpty(msg.subject))  return failure[Boolean](Some(false), Some("message subject not supplied"))
+    if (Strings.isNullOrEmpty(msg.data))     return failure[Boolean](Some(false), Some("message data not supplied"))
     ok()
   }
 }

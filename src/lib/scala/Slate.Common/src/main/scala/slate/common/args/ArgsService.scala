@@ -48,14 +48,14 @@ class ArgsService extends ResultSupportIn {
     val result = lexer.parse(line)
     if(!result.success)
     {
-      return failure(Some(result.message))
+      return failure(msg = Some(result.message))
     }
     var args = result.tokens.map(t => t.text)
     args = args.take(args.size - 1)
 
     // Check: Nothing ?
     if (args == null || args.length == 0)
-      return failure(Some(err))
+      return failure(msg = Some(err))
 
     // Filter: Get only non-empty args
 
@@ -63,13 +63,13 @@ class ArgsService extends ResultSupportIn {
 
     // Check: No arguments after filtering ?
     if (filtered != null && filtered.size == 0)
-      return failure(Some(err))
+      return failure(msg = Some(err))
 
     val finalArgs = filtered.toList
     val parseResult = parseInternal(finalArgs, prefix, sep, hasAction)
     if (!parseResult.success)
     {
-      return failure(Some(err))
+      return failure(msg = Some(err))
     }
     success(parseResult.get)
   }

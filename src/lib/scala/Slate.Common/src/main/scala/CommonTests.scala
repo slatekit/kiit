@@ -23,7 +23,7 @@ object CommonTests extends ResultSupportIn  {
 
   def testReturnValue(code:Int): Result[Boolean] = {
     if(code <= 0 )
-      return new FailureResult[Boolean](-1)
+      return new FailureResult[Boolean](code = -1)
     new SuccessResult[Boolean](true,1)
   }
 

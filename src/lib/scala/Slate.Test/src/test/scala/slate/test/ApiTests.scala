@@ -135,7 +135,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
           "app.users.rolesAny",
           Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
           None,
-          unAuthorized[String](Some("Unable to authorize, authorization provider not set"))
+          unAuthorized[String](msg = Some("Unable to authorize, authorization provider not set"))
         )
       }
 
@@ -198,7 +198,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
           "app.users.rolesAny",
           Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
           None,
-          unAuthorized[String](Some("Unable to authorize, authorization provider not set"))
+          unAuthorized[String](msg = Some("Unable to authorize, authorization provider not set"))
         )
       }
 
@@ -283,7 +283,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
         "app.users.protocolWeb",
         Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
         None,
-        notFound[String](Some("app.users.protocolWeb not found"))
+        notFound[String](msg = Some("app.users.protocolWeb not found"))
       )
     }
   }

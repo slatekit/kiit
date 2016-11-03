@@ -196,10 +196,10 @@ class RegService(
     else if (isExisting)
     {
       action = "already reg"
-      opResult = failure[Boolean](Some("Already registered"))
+      opResult = failure[Boolean](msg = Some("Already registered"))
     }
     else {
-      opResult = failure[Boolean](Some("Unknown registration action"))
+      opResult = failure[Boolean](msg = Some("Unknown registration action"))
     }
     opResult
   }
@@ -393,7 +393,7 @@ class RegService(
   def sendConfirmEmail(user:User): Result[Boolean] =
   {
     if(!_emailSvc.isDefined) {
-      return failure[Boolean](Some("Sms service not configured"))
+      return failure[Boolean](msg = Some("Sms service not configured"))
     }
     val result = _emailSvc.get.send(user.email, "Welcome to Blend", "Welcome to Blend.Life."
         + " Confirmation code = " + user.emailConfirmCode, false)
@@ -477,12 +477,12 @@ class RegService(
 
     // confirm code supplied ?
     if (Strings.isNullOrEmpty(deviceId))
-      return failure(Some("Device id code not supplied"))
+      return failure(msg = Some("Device id code not supplied"))
 
     // validate user
     val userCheck = getUser(userId, true)
     if (!userCheck.isDefined)
-      return failure(Some("Unknown user"))
+      return failure(msg = Some("Unknown user"))
 
     // Update user model
     val user = userCheck.get

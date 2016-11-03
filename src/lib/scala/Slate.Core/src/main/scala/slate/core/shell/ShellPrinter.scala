@@ -83,6 +83,7 @@ object ShellPrinter {
       case null             => writeText( "null" )
       case None             => writeText( "none" )
       case s:Option[Any]    => printAny(s.getOrElse(None))
+      case s:Result[Any]    => printAny(s.getOrElse(None))
       case s:String         => writeText( Strings.stringRepresentation(s) )
       case s:Int            => writeText( s.toString )
       case s:Long           => writeText( s.toString )

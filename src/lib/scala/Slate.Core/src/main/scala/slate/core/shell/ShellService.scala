@@ -216,7 +216,7 @@ class ShellService(
     if (!results.success)
     {
       showArgumentsError(results.msg)
-      return failure[ShellCommand]( results.msg )
+      return failure[ShellCommand]( msg = results.msg )
     }
     // Build up the command from inputs
     val args = results.get
@@ -227,7 +227,8 @@ class ShellService(
 
     // Exit or help ? Do not proceed.
     if(assistanceCheck.success){
-      return failureWithCode[ShellCommand](assistanceCheck.code, assistanceCheck.msg, tag = assistanceCheck.tag)
+      return failureWithCode[ShellCommand](assistanceCheck.code, Some(cmd),  assistanceCheck.msg,
+      tag = assistanceCheck.tag)
     }
 
     // Good to go for making calls.
@@ -479,7 +480,7 @@ class ShellService(
     if (!results.success)
     {
       showArgumentsError(results.msg)
-      return badRequest[ShellCommand](results.msg, tag = Some(line))
+      return badRequest[ShellCommand](msg = results.msg, tag = Some(line))
     }
     // Build up the command from inputs
     val args = results.get
@@ -490,7 +491,8 @@ class ShellService(
 
     // Exit or help ? Do not proceed.
     if(checkResult.success){
-      return failureWithCode[ShellCommand](checkResult.code, checkResult.msg, tag = checkResult.tag)
+      return failureWithCode[ShellCommand](checkResult.code, Some(cmd), checkResult.msg,
+      tag = checkResult.tag)
     }
 
     // Good to go for making calls.

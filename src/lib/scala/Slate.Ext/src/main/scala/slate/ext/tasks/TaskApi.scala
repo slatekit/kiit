@@ -78,7 +78,7 @@ class TaskApi
   private def perform(name:String, callback:(TaskService) => Result[AppRunState] ): Result[AppRunState] = {
     val svcCheck = service(name)
     if(!svcCheck.isDefined)
-      return failure[AppRunState](Some("Task not setup"))
+      return failure[AppRunState](msg = Some("Task not setup"))
     callback(svcCheck.get)
   }
 }

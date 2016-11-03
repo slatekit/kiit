@@ -97,7 +97,7 @@ trait ResultSupportIn {
   protected def no(msg:Option[String] = None,
                    tag:Option[String] = None): Result[Boolean] =
   {
-    new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, tag = tag)
+    new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, tag = tag)
   }
 
 
@@ -131,7 +131,7 @@ trait ResultSupportIn {
     if(success)
       new SuccessResult[Boolean](true, ResultCode.SUCCESS, msg, tag)
     else
-      new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, err = None, tag = tag)
+      new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, err = None, tag = tag)
   }
 
 
@@ -149,7 +149,7 @@ trait ResultSupportIn {
     if(success)
       new SuccessResult[T](data, ResultCode.SUCCESS, msg, tag)
     else
-      new FailureResult[T](ResultCode.FAILURE, msg = msg, err = None, tag = tag)
+      new FailureResult[T](Option(data), ResultCode.FAILURE, msg = msg, err = None, tag = tag)
   }
 
 
@@ -169,7 +169,7 @@ trait ResultSupportIn {
     if(success)
       new SuccessResult[T](result.get, ResultCode.SUCCESS, msg = Some(message))
     else
-      new FailureResult[T](ResultCode.FAILURE, msg = Some(message), err = None)
+      new FailureResult[T](result, ResultCode.FAILURE, msg = Some(message), err = None)
   }
 
 
@@ -222,11 +222,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def failure[T]( msg:Option[String]    = Some("failure"),
+  protected def failure[T]( data:Option[T]        = None,
+                            msg:Option[String]    = Some("failure"),
                             err:Option[Exception] = None,
                             tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.FAILURE, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.FAILURE, msg = msg, err = err, tag = tag)
   }
 
 
@@ -237,11 +238,12 @@ trait ResultSupportIn {
     * @return
     */
   protected def failureWithCode[T]( code:Int,
+                                    data:Option[T]        = None,
                                     msg:Option[String]    = Some("failure"),
                                     err:Option[Exception] = None,
                                     tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](code, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, code, msg = msg, err = err, tag = tag)
   }
 
 
@@ -251,11 +253,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def unAuthorized[T]( msg:Option[String]    = Some("unauthorized"),
+  protected def unAuthorized[T]( data:Option[T]        = None,
+                                 msg:Option[String]    = Some("unauthorized"),
                                  err:Option[Exception] = None,
                                  tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag)
   }
 
 
@@ -265,11 +268,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notFound[T]( msg:Option[String]    = Some("not found"),
+  protected def notFound[T]( data:Option[T]        = None,
+                             msg:Option[String]    = Some("not found"),
                              err:Option[Exception] = None,
                              tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag)
   }
 
 
@@ -279,11 +283,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def badRequest[T]( msg:Option[String]    = Some("not found"),
+  protected def badRequest[T]( data:Option[T]        = None,
+                               msg:Option[String]    = Some("not found"),
                                err:Option[Exception] = None,
                                tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag)
   }
 
 
@@ -293,11 +298,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def conflict[T]( msg:Option[String]    = Some("conflict"),
+  protected def conflict[T]( data:Option[T]        = None,
+                             msg:Option[String]    = Some("conflict"),
                              err:Option[Exception] = None,
                              tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.CONFLICT, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.CONFLICT, msg = msg, err = err, tag = tag)
   }
 
 
@@ -307,11 +313,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def deprecated[T]( msg:Option[String]    = Some("deprecated"),
+  protected def deprecated[T]( data:Option[T]        = None,
+                               msg:Option[String]    = Some("deprecated"),
                                err:Option[Exception] = None,
                                tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.DEPRECATED, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.DEPRECATED, msg = msg, err = err, tag = tag)
   }
 
 
@@ -321,11 +328,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def unexpectedError[T]( msg:Option[String]    = Some("unexpected error"),
+  protected def unexpectedError[T]( data:Option[T]        = None,
+                                    msg:Option[String]    = Some("unexpected error"),
                                     err:Option[Exception] = None,
                                     tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag)
   }
 
 
@@ -335,11 +343,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notAvailable[T]( msg:Option[String]    = Some("not available"),
+  protected def notAvailable[T]( data:Option[T]        = None,
+                                 msg:Option[String]    = Some("not available"),
                                  err:Option[Exception] = None,
                                  tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag)
   }
 
 
@@ -349,101 +358,11 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notImplemented[T]( msg:Option[String]    = Some("not implemented"),
+  protected def notImplemented[T]( data:Option[T]        = None,
+                                   msg:Option[String]    = Some("not implemented"),
                                    err:Option[Exception] = None,
                                    tag:Option[String]    = None): Result[T] =
   {
-    new FailureResult[T](ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag)
+    new FailureResult[T](data, ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag)
   }
 }
-
-/*
-trait ResultSupportIn {
-
-  // HTTP COMPLIANT
-  protected def successOrFail(success:Boolean, data:Option[Any] = None, msg:Option[String] = Some("success")): Result =
-  {
-    val flag = if(success) ResultCode.SUCCESS else ResultCode.FAILURE
-    new Result(success, code = flag, data = data, msg = msg )
-  }
-
-
-  protected def success(msg:Option[String] = Some("success"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(true, code = ResultCode.SUCCESS,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def confirm(msg:Option[String] = Some("success"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(true, code = ResultCode.CONFIRM, data = data,  msg = msg, tag = tag)
-  }
-
-
-  protected def failure(msg:Option[String] = Some("failure"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.FAILURE, data = data,  msg = msg, tag = tag)
-  }
-
-
-  protected def unAuthorized(msg:Option[String] = Some("unauthorized"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.UNAUTHORIZED,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def notFound(msg:Option[String] = Some("not found"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.NOT_FOUND,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def badRequest(msg:Option[String] = Some("not found"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.BAD_REQUEST,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def conflict(msg:Option[String] = Some("conflict"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.CONFLICT,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def deprecated(msg:Option[String] = Some("deprecated"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.DEPRECATED,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def unexpectedError(msg:Option[String] = Some("unexpected error"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.UNEXPECTED_ERROR,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def notAvailable(msg:Option[String] = Some("not available"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.NOT_AVAILABLE,data = data, msg = msg, tag = tag)
-  }
-
-
-  protected def notImplemented(msg:Option[String] = Some("not implemented"), data:Option[Any] = None, tag:Option[String] = None): Result =
-  {
-    new Result(false, code = ResultCode.NOT_IMPLEMENTED,data = data, msg = msg, tag = tag)
-  }
-
-
-  // command line
-  protected def helpRequest(msg:Option[String] = Some("help"), data:Option[Any] = None): Result =
-  {
-    new Result(true, code = ResultCode.HELP, data = data, msg = msg)
-  }
-
-
-  protected def exit(msg:Option[String] = Some("exit"), data:Option[Any] = None): Result =
-  {
-    new Result(false, code = ResultCode.EXIT, data = data, msg = msg)
-  }
-}
-*/

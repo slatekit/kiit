@@ -102,7 +102,7 @@ class ApiBase {
 
 
   def onException(context:AppContext, request: Request, ex:Exception): Result[Any] = {
-    new FailureResult[Boolean](ResultCode.UNEXPECTED_ERROR, msg = Some("unexpected error in api"), err = Some(ex))
+    new FailureResult[Boolean](Some(false), ResultCode.UNEXPECTED_ERROR, msg = Some("unexpected error in api"), err = Some(ex))
   }
 
 

@@ -98,6 +98,6 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
     if(matched != null && matched.size > 0)
       return success(matched.head)
 
-    failure(Some(s"Unknown environment name : ${name} supplied"))
+    failure(msg = Some(s"Unknown environment name : ${name} supplied"))
   }
 }

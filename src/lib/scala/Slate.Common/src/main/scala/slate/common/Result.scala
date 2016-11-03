@@ -139,6 +139,7 @@ sealed abstract class Result[+T](
       case null             => "null"
       case None             => "null"
       case s:Option[Any]    => serialize(s.getOrElse(None))
+      case s:Result[Any]    => serialize(s.getOrElse(None))
       case s:String         => Strings.stringRepresentation(s)
       case s:Int            => s.toString
       case s:Long           => s.toString
@@ -198,6 +199,7 @@ final case class SuccessResult[+T](
 
 /**
   * The failure branch of the Result
+  * @param value   : The value
   * @param code    : Numeric status code
   * @param msg     : Optional string message for more information
   * @param err     : Optional exception
@@ -206,15 +208,17 @@ final case class SuccessResult[+T](
   * @tparam T
   */
 final case class FailureResult[+T](
+                                    value               : Option[T]         = None,
                                     override val code   : Int               = 0   ,
                                     override val msg    : Option[String]    = None,
                                     override val err    : Option[Throwable] = None,
                                     override val ext    : Option[Any]       = None,
-                                    override val tag    : Option[String]    = None
+                                    override val tag    : Option[String]    = None,
+                                    override val format : Option[String]    = None
                             )       extends Result[T](false, code, msg, err, ext, tag) {
   def isEmpty = true
 
-  def get = throw err.getOrElse(new NoSuchElementException("ErrorResult.get"))
+  def get = value.get
 }
 
 

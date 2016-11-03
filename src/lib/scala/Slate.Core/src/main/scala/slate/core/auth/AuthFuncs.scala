@@ -48,24 +48,24 @@ object AuthFuncs extends ResultSupportIn {
 
     // No headers!
     if(!inputs.isDefined) {
-      return unAuthorized(Some("api key not provided"))
+      return unAuthorized(msg = Some("api key not provided"))
     }
 
     // Key not in header!
     if(!inputs.get.contains(inputName)) {
-      return unAuthorized(Some("api key not provided"))
+      return unAuthorized(msg = Some("api key not provided"))
     }
 
     val key = inputs.get(inputName).toString()
 
     // Empty key!
     if(Strings.isNullOrEmpty(key)) {
-      return unAuthorized(Some("api key not provided"))
+      return unAuthorized(msg = Some("api key not provided"))
     }
 
     // Unknown key!
     if(!keys.contains(key)){
-      return unAuthorized(Some("api key not valid"))
+      return unAuthorized(msg = Some("api key not valid"))
     }
 
     // Now ensure that key contains roles matching one provided.

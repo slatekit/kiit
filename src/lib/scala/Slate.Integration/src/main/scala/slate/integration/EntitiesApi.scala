@@ -58,21 +58,28 @@ class EntitiesApi(val _settings:ModelSettings) extends ApiBase
 
 
   @ApiAction(name = "", desc = "gets the default db connection", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectionDefault(): Result[DbConString] =
+  def connectionByDefault(): Result[DbConString] =
   {
-    service.connection("", "")
+    service.connectionByDefault()
+  }
+
+
+  @ApiAction(name = "", desc = "gets the default db connection", roles= "@parent", verb = "@parent", protocol = "@parent")
+  def connectionByName(name:String): Result[DbConString] =
+  {
+    service.connectionByName(name)
   }
 
 
   @ApiAction(name = "", desc = "get the database connection for the db shard", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connection(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
+  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
   {
-    service.connection(dbKey, dbShard)
+    service.connectionByGroup(dbKey, dbShard)
   }
 
 
   private def service: EntitySetupService =
   {
-    new EntitySetupService(context.ent, _settings, context.dirs)
+    new EntitySetupService(context.ent, context.dbs, _settings, context.dirs)
   }
 }

@@ -265,7 +265,7 @@ class ApiContainer(val ctx:AppContext                           ,
   {
     val check = getApiCallReflect(apiArea, apiName, apiAction)
     if ( !check.success ) {
-      return failure(check.msg)
+      return failure(msg = check.msg)
     }
 
     val callReflect = check.get._1
@@ -275,7 +275,7 @@ class ApiContainer(val ctx:AppContext                           ,
 
   def onError(context:AppContext, request:Request, ex:Exception):Result[Any] = {
     println(ex.getMessage)
-    unexpectedError(Some("error executing : " + request.fullName + ", check inputs"))
+    unexpectedError(msg = Some("error executing : " + request.fullName + ", check inputs"))
   }
 
 
@@ -361,17 +361,17 @@ class ApiContainer(val ctx:AppContext                           ,
 
     // 1. Check area exists
     if( !_lookup.contains(apiArea))
-      return notFound(Some(s"not found: area $apiArea"))
+      return notFound(msg = Some(s"not found: area $apiArea"))
 
     // 2. Check api exists
     val apiLookup = _lookup(apiArea)
     if( !apiLookup.contains(apiName))
-      return notFound(Some(s"not found: api $apiName not found in area: $apiArea"))
+      return notFound(msg = Some(s"not found: api $apiName not found in area: $apiArea"))
 
     // 3. Check method exists
     val api = apiLookup(apiName)
     if (!api.contains(apiAction))
-      return notFound(Some(s"not found: action $apiAction not found in area: $apiArea, api: $apiName"))
+      return notFound(msg = Some(s"not found: action $apiAction not found in area: $apiArea, api: $apiName"))
 
     // 4a: Params - check no args needed
     val callReflect = api(apiAction)
@@ -419,13 +419,13 @@ class ApiContainer(val ctx:AppContext                           ,
       val isCliOk = isCliAllowed(cmd, supportedProtocol)
       if (!isCliOk && !Strings.isNullOrEmpty(actualVerb) && actualVerb != "*" &&
         !Strings.isMatch(actualVerb, cmd.verb)) {
-        return badRequest(Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
+        return badRequest(msg = Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
       }
 
       // 3. Ensure protocol is correct get/post
       if (!isCliOk && !Strings.isNullOrEmpty(supportedProtocol) && supportedProtocol != "*" &&
         !Strings.isMatch(supportedProtocol, protocol)) {
-        return notFound(Some(s"${cmd.fullName} not found"))
+        return notFound(msg = Some(s"${cmd.fullName} not found"))
       }
 
       // 4. Validate api access

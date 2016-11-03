@@ -64,7 +64,7 @@ object ApiHelper extends ResultSupportIn {
     }
     // CASE 3: No auth and action requires roles!
     if(noAuth){
-      return unAuthorized(Some("Unable to authorize, authorization provider not set"))
+      return unAuthorized(msg = Some("Unable to authorize, authorization provider not set"))
     }
     // auth-mode, action roles, api roles
     auth.get.isAuthorized(cmd, call.api.auth, call.action.roles, call.api.roles)

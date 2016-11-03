@@ -26,7 +26,7 @@ class TaskService(var task:Option[TaskQueue] = None) extends ResultSupportIn{
   {
     // Checks
     if(!task.isDefined) {
-      return failure(Some("task has not been defined"))
+      return failure(msg = Some("task has not been defined"))
     }
 
     synchronized {
@@ -85,7 +85,7 @@ class TaskService(var task:Option[TaskQueue] = None) extends ResultSupportIn{
 
     synchronized {
       if (!_started) {
-        return failure[AppRunState](Some("Task has not been started"))
+        return failure[AppRunState](msg = Some("Task has not been started"))
       }
       callback(task.get)
     }

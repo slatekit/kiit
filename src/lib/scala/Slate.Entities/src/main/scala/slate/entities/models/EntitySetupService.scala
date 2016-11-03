@@ -12,7 +12,7 @@
 package slate.entities.models
 
 import slate.common.app.AppMeta
-import slate.common.databases.{DbConString, DbBuilder}
+import slate.common.databases.{DbLookup, DbConString, DbBuilder}
 import slate.common.info.Folders
 import slate.common.results.ResultSupportIn
 import slate.common.{NoResult, Files, Result}
@@ -24,6 +24,7 @@ import scala.collection.mutable.ListBuffer
   * Created by kreddy on 3/23/2016.
   */
 class EntitySetupService(val _entities:Entities,
+                         val _dbs:Option[DbLookup],
                          val _settings:ModelSettings,
                          val _folders:Option[Folders]) extends ResultSupportIn {
 
@@ -83,7 +84,7 @@ class EntitySetupService(val _entities:Entities,
     val result = generateSql(name, version)
     if(!result.success)
     {
-      return failure(Some(s"Unable to install, can not generate sql for model ${name}"))
+      return failure(msg = Some(s"Unable to install, can not generate sql for model ${name}"))
     }
     val sql = result.get
     val db = _entities.getDatabase(dbKey, dbShard)
@@ -130,6 +131,24 @@ class EntitySetupService(val _entities:Entities,
   }
 
 
+  def connectionByDefault(): Result[DbConString] =
+  {
+    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs => {
+      dbs.default.fold[Result[DbConString]](NoResult)( con => success( con ))
+    })
+    con
+  }
+
+
+  def connectionByName(name:String): Result[DbConString] =
+  {
+    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs => {
+      dbs.named(name).fold[Result[DbConString]](NoResult)( con => success( con ))
+    })
+    con
+  }
+
+
   /**
    * gets the database connection for the supplied key and shard.
     *
@@ -137,10 +156,12 @@ class EntitySetupService(val _entities:Entities,
    * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
    * @return
    */
-  def connection(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
+  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
   {
-    val con = _entities.getDbConnection(dbKey, dbShard)
-      .fold[Result[DbConString]](NoResult)( con => success(con))
+    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs =>
+    {
+      dbs.group(dbKey, dbShard).fold[Result[DbConString]](NoResult)( con => success(con))
+    })
     con
   }
 
