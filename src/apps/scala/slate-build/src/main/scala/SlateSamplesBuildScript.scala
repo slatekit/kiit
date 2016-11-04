@@ -11,14 +11,14 @@ class SlateSamplesBuildScript extends BuildScript
 	// Constants ( names, folders, etc )
 	APP_NAME = "slatekit";
     APP_ROOT = normalize(sys.env("SCALA_SLATE_HOME"))
-    APP_RELEASE = "1.0"
-    APP_BUILD = "12"
+    APP_RELEASE = "1.1"
+    APP_BUILD = "3"
     APP_VERSION = s"${APP_RELEASE}.${APP_BUILD}"
-	APP_BUILD_DIR = normalize( s"${APP_ROOT}/build/lib" )
+	APP_BUILD_DIR = normalize( s"${APP_ROOT}/build/lib/${APP_RELEASE}" )
 	APP_RELEASE_DIR = normalize( s"${APP_ROOT}/dist/${APP_NAME}/releases/${APP_RELEASE}" )
     SCALA_VERSION = "2.11"
 	SCALA_TARGET_FOLDER = "scala-2.11"
-	SCALA_JAR_SUFFIX = "_2.11-1.0"
+	SCALA_JAR_SUFFIX = "_2.11-1.1"
 	SCALA_LIB_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/scala-library.jar")
 	SCALA_RFL_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/scala-reflect.jar")
 	SCALA_CFG_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/config-1.3.0.jar")
@@ -86,15 +86,15 @@ class SlateSamplesBuildScript extends BuildScript
 	
 	
 	LIBS_SLATE = List[(String,String)](
-	  ( "slate-cloud_2.11-1.0.jar"       , s"${APP_ROOT}/build/lib/slate-cloud_2.11-1.0.jar"        ),                  
-      ( "slate-common_2.11-1.0.jar"      , s"${APP_ROOT}/build/lib/slate-common_2.11-1.0.jar"       ),
-      ( "slate-core_2.11-1.0.jar"        , s"${APP_ROOT}/build/lib/slate-core_2.11-1.0.jar"         ),
-      ( "slate-entities_2.11-1.0.jar"    , s"${APP_ROOT}/build/lib/slate-entities_2.11-1.0.jar"     ),
-      ( "slate-ext_2.11-1.0.jar"         , s"${APP_ROOT}/build/lib/slate-ext_2.11-1.0.jar"          ),
-      ( "slate-integration_2.11-1.0.jar" , s"${APP_ROOT}/build/lib/slate-integration_2.11-1.0.jar"  ),
-      ( "slate-server_2.11-1.0.jar"      , s"${APP_ROOT}/build/lib/slate-server_2.11-1.0.jar"       ),
-      ( "slate-shell_2.11-1.0.jar"       , s"${APP_ROOT}/build/lib/slate-shell_2.11-1.0.jar"        ),
-	  ( "slate-tools_2.11-1.0.jar"       , s"${APP_ROOT}/build/lib/slate-tools_2.11-1.0.jar"        )
+	  ( "slate-cloud_2.11-1.1.jar"       , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-cloud_2.11-1.1.jar"        ),                  
+      ( "slate-common_2.11-1.1.jar"      , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-common_2.11-1.1.jar"       ),
+      ( "slate-core_2.11-1.1.jar"        , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-core_2.11-1.1.jar"         ),
+      ( "slate-entities_2.11-1.1.jar"    , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-entities_2.11-1.1.jar"     ),
+      ( "slate-ext_2.11-1.1.jar"         , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-ext_2.11-1.1.jar"          ),
+      ( "slate-integration_2.11-1.1.jar" , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-integration_2.11-1.1.jar"  ),
+      ( "slate-server_2.11-1.1.jar"      , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-server_2.11-1.1.jar"       ),
+      ( "slate-shell_2.11-1.1.jar"       , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-shell_2.11-1.1.jar"        ),
+	  ( "slate-tools_2.11-1.1.jar"       , s"${APP_ROOT}/build/lib/${APP_RELEASE}/slate-tools_2.11-1.1.jar"        )
 	  
 	)
   }

@@ -10,14 +10,14 @@ class SlateBuildScript extends BuildScript
 	// Constants ( names, folders, etc )
 	APP_NAME = "slatekit";
     APP_ROOT = normalize(sys.env("SCALA_SLATE_HOME"))
-    APP_RELEASE = "1.0"
-    APP_BUILD = "12"
+    APP_RELEASE = "1.1"
+    APP_BUILD = "3"
     APP_VERSION = s"${APP_RELEASE}.${APP_BUILD}"
-	APP_BUILD_DIR = normalize( s"${APP_ROOT}/build/lib" )
+	APP_BUILD_DIR = normalize( s"${APP_ROOT}/build/lib/${APP_RELEASE}" )
 	APP_RELEASE_DIR = normalize( s"${APP_ROOT}/dist/${APP_NAME}/releases/${APP_RELEASE}" )
     SCALA_VERSION = "2.11"
 	SCALA_TARGET_FOLDER = "scala-2.11"
-	SCALA_JAR_SUFFIX = "_2.11-1.0"
+	SCALA_JAR_SUFFIX = "_2.11-1.1"
 	SCALA_LIB_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/scala-library.jar")
 	SCALA_RFL_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/scala-reflect.jar")
 	SCALA_CFG_PATH = normalize(s"${APP_ROOT}/lib/ext/scala/config-1.3.0.jar")
