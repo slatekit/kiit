@@ -10,26 +10,33 @@
   */
 package slate.examples
 
-import java.time._
 
+//<doc:import_required>
 import slate.common.{Ensure, DateTime}
 import slate.common.results.ResultSupportIn
+//</doc:import_required>
+
+//<doc:import_examples>
+import java.time._
 import slate.core.cmds.Cmd
+//</doc:import_examples>
+
 
 class Example_DateTime extends Cmd("types") with ResultSupportIn {
 
   override protected def executeInternal(args: Any): AnyRef = {
 
 
-    // 1. local date time by default
+    //<doc:examples>
+    // Case 1. local date time by default
     val dt = DateTime.now()
     println("slate Current DateTime: " + dt)
 
-    // 2. local date
+    // Case 2. utc
     val dateOnly = dt.atUtc()
     println("dateOnly : " + dateOnly)
 
-    // 3. fields
+    // Case 3. Date parts
     println( "year  : " + dt.year    )
     println( "month : " + dt.month   )
     println( "day   : " + dt.day     )
@@ -37,7 +44,7 @@ class Example_DateTime extends Cmd("types") with ResultSupportIn {
     println( "mins  : " + dt.minutes )
     println( "secs  : " + dt.day     )
 
-    // 4. add times
+    // Case 4. add time
     val dt1 = new DateTime(2016, 7, 22, 8, 30, 30)
     println( dt1.addSeconds(1).toString )
     println( dt1.addMinutes(1).toString    )
@@ -46,7 +53,7 @@ class Example_DateTime extends Cmd("types") with ResultSupportIn {
     println( dt1.addMonths(1).toString  )
     println( dt1.addYears(1).toString   )
 
-    // 5. Compare local
+    // Case 5. Compare local
     ensureTrue(dt1, "> ", dt1.addHours(-1), dt1 >  dt1.addHours(-1) )
     ensureTrue(dt1, ">=", dt1.addHours(-1), dt1 >= dt1.addHours(-1) )
     ensureTrue(dt1, ">=", dt1.addHours( 0), dt1 >= dt1.addHours( 0) )
@@ -56,7 +63,7 @@ class Example_DateTime extends Cmd("types") with ResultSupportIn {
     ensureTrue(dt1, "==", dt1.addHours( 0), dt1 == dt1.addHours( 0) )
     ensureTrue(dt1, "!=", dt1.addHours( 2), dt1 != dt1.addHours( 2) )
 
-    // 6. Compare local with utc
+    // Case 6. Compare local with utc
     ensureTrue(dt1, "> ", dt1.addHours(-1), dt1 >  dt1.addHours(-1).atUtc() )
     ensureTrue(dt1, ">=", dt1.addHours(-1), dt1 >= dt1.addHours(-1).atUtc() )
     ensureTrue(dt1, ">=", dt1.addHours( 0), dt1 >= dt1.addHours( 0).atUtc() )
@@ -66,12 +73,20 @@ class Example_DateTime extends Cmd("types") with ResultSupportIn {
     ensureTrue(dt1, "==", dt1.addHours( 0), dt1 == dt1.addHours( 0).atUtc() )
     ensureTrue(dt1, "!=", dt1.addHours( 2), dt1 != dt1.addHours( 2).atUtc() )
 
-    // 7. Shortcut to getting duration from another datetime
+    // Case 7. Get the duration
     println( dt1.addSeconds(2).durationFrom( dt1 ) )
     println( dt1.addMinutes(2).durationFrom( dt1 ) )
     println( dt1.addHours(2).durationFrom( dt1 ) )
     println( dt1.addDays(2).durationFrom( dt1 ) )
     println( dt1.addMonths(2).periodFrom( dt1 ) )
+
+    //</doc:examples>
+    ok()
+  }
+
+
+  def test():Unit = {
+
 
     //12 december 2014
     val date3 = LocalDate.of(2014, Month.DECEMBER, 12)
@@ -84,8 +99,6 @@ class Example_DateTime extends Cmd("types") with ResultSupportIn {
     //parse a string
     val date5 = LocalTime.parse("20:15:30")
     println("date5: " + date5)
-
-    ok()
   }
 
 

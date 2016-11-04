@@ -15,6 +15,7 @@ package slate.examples
 
 import slate.common.{SuccessResult, Result}
 import slate.common.results.{ResultSupportIn, ResultCode}
+import slate.examples.common.User
 
 //</doc:import_required>
 
@@ -28,14 +29,20 @@ class Example_Results extends Cmd("types") with ResultSupportIn {
   override protected def executeInternal(args: Any) : AnyRef = {
 
     //<doc:examples>
-    // CASE 1: The Result class is a glorified wrapper around a status code
-    // and contains the following
+    // CASE 1: The Result class is a container for the following
     // 1. success / failure  - flag
     // 2. message / error    - informative message
     // 3. data               - data being returned
     // 4. code               - matches http status codes
     // 5. ref                - tag for external id references
     // 6. exception          - error info
+
+    // NOTES: The result is in an alternative to Scala's Option[T]
+    // and also the Try/Success/Failure. It provides a status code
+    // as an integer that can be set to Http Status codes.
+    // Also, the ResultSupportIn trait supports convenience functions
+    // that can be used to easily build up Success or Failure Results
+    // that match Http Status Codes ( see samples below ).
     val result = new SuccessResult[String](
       value  = "userId:1234567890",
       code  = ResultCode.SUCCESS,
@@ -47,38 +54,43 @@ class Example_Results extends Cmd("types") with ResultSupportIn {
     // This allows easy construction of results/status from a server layer
     // instead of a controller/api layer
 
-    // CASE 2: Success ( 200 )
+    // CASE 1: Success ( 200 )
     val res1 = success(123456, msg = Some("user created"), tag=Some("promoCode:ny001"))
     printResult(res1)
 
 
-    // CASE 3: Failure ( 400 ) with ref tag
-    val res2 = failure(Some("invalid email"), tag = Some("23SKASDF23"))
-    printResult(res2)
+    // CASE 2: Failure ( 400 ) with message and ref tag
+    val res2a = failure(msg = Some("invalid email"), tag = Some("23SKASDF23"))
+    printResult(res2a)
+
+
+    // CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
+    val res2b = failure(data = Some(new User()),  msg = Some("invalid email"), tag = Some("23SKASDF23"))
+    printResult(res2b)
 
 
     // CASE 4: Unauthorized ( 401 )
-    val res3 = unAuthorized(Some("invalid email"))
+    val res3 = unAuthorized(msg = Some("invalid email"))
     printResult(res3)
 
 
     // CASE 5: Unexpected ( 500 )
-    val res4 = unexpectedError(Some("invalid email"))
+    val res4 = unexpectedError(msg = Some("invalid email"))
     printResult(res4)
 
 
     // CASE 6: Conflict ( 409 )
-    val res5 = conflict(Some("item already exists"))
+    val res5 = conflict(msg = Some("item already exists"))
     printResult(res5)
 
 
     // CASE 7: Failure
-    val res6 = notFound(Some("action not found"))
+    val res6 = notFound(msg = Some("action not found"))
     printResult(res6)
 
 
     // CASE 8: Failure
-    val res7 = notAvailable(Some("operation currently unavailable"))
+    val res7 = notAvailable(msg = Some("operation currently unavailable"))
     printResult(res7)
     //</doc:examples>
 
