@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-26T22:12:24.950</td>
+      <td>2016-11-03T20:35:59.599</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -118,6 +118,7 @@
 </span>
 <span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
 <span class="k">import</span> <span class="nn">slate.common.databases.DbConString</span>
+<span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
 <span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
 <span class="k">import</span> <span class="nn">slate.common.envs.EnvItem</span>
 <span class="k">import</span> <span class="nn">slate.common.info.</span><span class="o">{</span><span class="nc">About</span><span class="o">,</span> <span class="nc">Lang</span><span class="o">,</span> <span class="nc">Host</span><span class="o">}</span>
@@ -279,15 +280,16 @@
 </span>  <span class="c1">// - Db connection
 </span>  <span class="c1">// - Encryption service
 </span>  <span class="c1">// - App information
-</span>  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+</span>  <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
+  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
     <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">),</span>
     <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
     <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
     <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"slatekit.examples"</span><span class="o">,</span> <span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"slatekit"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="n">region</span><span class="k">=</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">),</span>
     <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">(),</span>
     <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
-    <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(),</span>
-    <span class="n">con</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">)),</span>
+    <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbs</span><span class="o">)),</span>
+    <span class="n">dbs</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">dbs</span><span class="o">),</span>
     <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">))</span>
   <span class="o">)</span>
   <span class="c1">// REG 6: Setup your authorization provider

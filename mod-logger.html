@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-26T22:12:24.659</td>
+      <td>2016-11-03T20:35:59.216</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -113,8 +113,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.logging.LogLevel.LogLevel</span>
-<span class="k">import</span> <span class="nn">slate.common.logging._</span>
+</span><span class="k">import</span> <span class="nn">slate.common.logging._</span>
 
 
 <span class="c1">// optional 
@@ -141,10 +140,10 @@
   <span class="c1">// Setup a custom logger
 </span>  <span class="k">class</span> <span class="nc">MyCustomLogger</span> <span class="k">extends</span> <span class="nc">LoggerBase</span> <span class="o">{</span>
 
-    <span class="k">override</span> <span class="k">def</span> <span class="n">performLog</span><span class="o">(</span><span class="n">level</span><span class="k">:</span> <span class="kt">LogLevel</span><span class="o">,</span> <span class="n">msg</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Exception</span><span class="o">],</span> <span class="n">tag</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">performLog</span><span class="o">(</span><span class="n">entry</span><span class="k">:</span><span class="kt">LogEntry</span><span class="o">)</span>
       <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
     <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"custom logger : "</span> <span class="o">+</span> <span class="n">level</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span> <span class="n">msg</span><span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span><span class="s">"custom logger : "</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="n">level</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="n">msg</span><span class="o">)</span>
     <span class="o">}</span>
   <span class="o">}</span>
   

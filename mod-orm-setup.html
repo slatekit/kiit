@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-26T22:12:24.922</td>
+      <td>2016-11-03T20:35:59.586</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -121,7 +121,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConfig</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">DbConstants</span><span class="o">}</span>
+</span><span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConString</span><span class="o">,</span> <span class="nc">DbUtils</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">DbConstants</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
 <span class="k">import</span> <span class="nn">slate.examples.common._</span>
@@ -144,14 +144,14 @@
 </span>    <span class="c1">// See Example_Database.scala for more info
 </span>
     <span class="c1">// 1. Register the default connection
-</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">defaultDb</span><span class="o">(</span><span class="nc">DbUtils</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">))</span>
 
     <span class="c1">// 2. Register a named connection
-</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span>
-
+</span>    <span class="c1">//val dbs = DbLookup.namedDbs(("user_db", DbUtils.loadFromUserFolder(".slate", "db_default.txt"))
+</span>
     <span class="c1">// 3: Register connection as a shard and link to a group
-</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">shard</span><span class="o">(</span><span class="s">"group1"</span><span class="o">,</span> <span class="s">"shard1"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">)</span>
-    
+</span>    <span class="c1">//val dbs = DbLookup.groupedDbs(("group1", List[(String,DbConString)](("shard1", DbUtils.loadFromUserFolder(".slate", "db_default.txt")))))
+</span>    
 
 </code></pre>
 </div>
