@@ -174,6 +174,10 @@
 						<td><strong>8. Help</strong></td>
 						<td>Built-in support for discovering and getting help on API methods</td>
 					</tr>
+					<tr> 
+						<td><strong>9. Errors</strong></td>
+						<td>Handle exceptions/errors using defaults or customize globally or per API</td>
+					</tr>
 				</table>
 				<br/>
 				
@@ -251,12 +255,17 @@
 						<td><a href="#api-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
 					</tr>
 					<tr> 
-						<td><strong>9. CLI</strong></td>
+						<td><strong>9. Errors</strong></td>
+						<td>How error handling works and how to customize it either globally or per API.</td>
+						<td><a href="#api-errors" class="more"><span class="btn btn-primary">See more</span></a></td>						
+					</tr>
+					<tr> 
+						<td><strong>10. CLI</strong></td>
 						<td>How to run your APIs on the CLI ( command line )</td>
 						<td><a href="#api-cli" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>10. WEB</strong></td>
+						<td><strong>11. WEB</strong></td>
 						<td>How to run your APIs in the WEB Akka-Http container</td>
 						<td><a href="#server-routing" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
@@ -271,53 +280,66 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
-<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
 <span class="o">{</span>
-   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
-  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
+  <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="o">{</span>
-    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="c1">// NOTES: 
+</span>    <span class="c1">// 1. All APIs return a "Result[T]" object which simply wraps a value 
+</span>    <span class="c1">//    with an numeric status code, optional string message, and more.
+</span>    <span class="c1">// 2. See the "Results" utility component for more info
+</span>    <span class="c1">// 3. The companion "ResultSupportIn" trait provides convenient builder
+</span>    <span class="c1">//    methods to construct meaning Results that match http status codes,
+</span>    <span class="c1">//    such as success, badRequest, unauthorized, conflict, and others.
+</span>    <span class="c1">// 4. You can either handle your logic here or makes the APIs logic-less 
+</span>    <span class="c1">//    by delegating to your service layer 
+</span>	
+    <span class="c1">// Your logic here ....
+</span>    <span class="n">success</span><span class="o">(</span><span class="s">"ok"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
   <span class="o">}</span>
-  
+
   <span class="c1">// .. more
 </span><span class="o">}</span>
-
 </code></pre>
 </div>
-
 					<br/>
 					
 				<h3>Web</h3>
-				<div class="highlighter-rouge">
-					<pre class="highlight">
-<code> 
-<span class="c1"> // 1. app.users.activate via Http GET ( query string )
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
+				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// NOTES: 
+</span> <span class="c1">// - Slate uses a unified routing format ( area/api/action ) 
+</span> <span class="c1">//   for both Http and CLI requests.
+</span> <span class="c1">// - See the "Unified Routing" section for more info.
+</span> 
+ <span class="c1">// 1. app.users.activate via Http GET ( query string )
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
  
  
-  <span class="c1">// 2. app.users.activate via Http POST ( json data )</span>
+ <span class="c1">// 2. app.users.activate via Http POST ( json data 
 </span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> 
  <span class="o">{</span> 
    <span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">,</span> <span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">,</span> <span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">,</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> 
  <span class="o">}</span> 
-</code>
-					</pre>
-				</div>
+ 
+ 
+ 
+</code></pre>
+</div>
 				
 				
 				
 				<br/>
 				
 				<h3>CLI</h3>
-				<div class="highlighter-rouge">
-					<pre class="highlight">
-<code> 
-<span class="c1"> // 3. app.users.activate via CLI 
-</span> <span class="n">C:\apps\app1> app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
-</code>
-</pre>
-				</div>				
+				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// The same command run on the CLI.
+</span> 
+ <span class="c1">// 3. app.users.activate via CLI 
+</span> <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">app1</span><span class="o">&gt;</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
+ 
+</code></pre>
+</div>
+	
 				<br/><br/><br/>
 							
 				
@@ -372,7 +394,7 @@
 					<tr>
 						<td><strong>2</strong></td>
 						<td>Conversion</td>
-						<td>Convert to common request format ( see Request / "ApiCmd" below )</td>
+						<td>Convert to common request format ( see Request below )</td>
 					</tr>
 					<tr>
 						<td><strong>3</strong></td>
@@ -423,20 +445,31 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
-<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
 <span class="o">{</span>
-   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
-  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
+  <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="o">{</span>
-    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="c1">// NOTES: 
+</span>    <span class="c1">// 1. All APIs return a "Result[T]" object which simply wraps a value 
+</span>    <span class="c1">//    with an numeric status code, optional string message, and more.
+</span>    <span class="c1">// 2. See the "Results" utility component for more info
+</span>    <span class="c1">// 3. The companion "ResultSupportIn" trait provides convenient builder
+</span>    <span class="c1">//    methods to construct meaning Results that match http status codes,
+</span>    <span class="c1">//    such as success, badRequest, unauthorized, conflict, and others.
+</span>    <span class="c1">// 4. You can either handle your logic here or makes the APIs logic-less 
+</span>    <span class="c1">//    by delegating to your service layer 
+</span>	
+    <span class="c1">// Your logic here ....
+</span>    <span class="n">success</span><span class="o">(</span><span class="s">"ok"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
   <span class="o">}</span>
-  
+
   <span class="c1">// .. more
 </span><span class="o">}</span>
-
 </code></pre>
 </div>
+
 				<br/>
 				<h3>Annotations</h3>
 				<table class="table table-bordered table-striped">	
@@ -558,39 +591,41 @@
 				
 				
 				<h1 id="api-request">3. Request</h1>
-				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. This unified format is implemented as what we call an <strong>ApiCmd</strong>
-				( see below ). The ApiCmd is then executed by the ApiContainer. All the parameters and data are available in the args field.
+				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. This unified format is implemented as what we call an <strong>Request</strong>
+				( see below ). The Request is then executed by the ApiContainer. All the parameters and data are available in the args field.
 				Web Http headers are available in the opts field. </p>
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Represents a web endpoint / http request translated to small command
+ * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
  * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param area      : area represented by route e.g. app in "app.reg.activateUser"
- * @param name      : name of api represented by route e.g. reg in "app.reg.activateUser"
+ * @param area      : action represented by route e.g. app in "app.reg.activateUser"
+ * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
  * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
  * @param verb      : get / post ( similar to http verb )
- * @param opts      : options representing settings/configurations ( contains http headers )
+ * @param opts      : options representing settings/configurations ( similar to http-headers )
  * @param args      : arguments to the command
+ * @param tag       : Optional tag for tracking purposes
  */</span>
-<span class="k">case</span> <span class="k">class</span> <span class="nc">ApiCmd</span> <span class="o">(</span>
-                     <span class="n">path</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">,</span>
-                     <span class="n">parts</span>      <span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>      <span class="o">,</span>
-                     <span class="n">area</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">name</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">action</span>     <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">verb</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                     <span class="n">args</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
-                     <span class="n">opts</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span>
-                   <span class="o">)</span>
+<span class="k">class</span> <span class="nc">Request</span> <span class="o">(</span>
+                <span class="n">path</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">,</span>
+                <span class="n">parts</span>      <span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>      <span class="o">,</span>
+                <span class="n">area</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                <span class="n">name</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                <span class="n">action</span>     <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                <span class="n">verb</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+                <span class="n">args</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
+                <span class="n">opts</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
+                <span class="n">tag</span>        <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span>
+              <span class="o">)</span> <span class="k">extends</span> <span class="nc">RequestBase</span> <span class="o">(</span> <span class="n">path</span><span class="o">,</span> <span class="n">parts</span><span class="o">,</span> <span class="n">area</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">action</span><span class="o">,</span> <span class="n">verb</span><span class="o">,</span> <span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">,</span> <span class="n">tag</span><span class="o">)</span>
 <span class="o">{</span>
 <span class="o">}</span>
 
 </code></pre>
 </div>
 				<br/>				
-				<h3>Request class ( ApiCmd )</h3>
+				<h3>Request class ( Request )</h3>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Field</strong></td>
@@ -674,41 +709,62 @@
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.common.Result</span>
-  <span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultCode</span><span class="o">,</span> <span class="nc">ResultSupport</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">SuccessResult</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">,</span> <span class="nc">ResultCode</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.examples.common.User</span>
 
-    <span class="c1">// CASE 1: The Result class is a glorified wrapper around a status code
-</span>    <span class="c1">// and contains the following.
+    <span class="c1">// CASE 1: The Result class is a container for the following
 </span>    <span class="c1">// 1. success / failure  - flag
 </span>    <span class="c1">// 2. message / error    - informative message
 </span>    <span class="c1">// 3. data               - data being returned
 </span>    <span class="c1">// 4. code               - matches http status codes
-</span>    <span class="c1">// 5. tag                - tag for external id references
-</span>    <span class="c1">// 
-</span>    <span class="c1">// In functional programming terms, it is implemented as a Monad and 
-</span>    <span class="c1">// works as a replacement for the Try/Success/Error Monad.
-</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="nc">SuccessResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
-      <span class="n">value</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
+</span>    <span class="c1">// 5. ref                - tag for external id references
+</span>    <span class="c1">// 6. exception          - error info
+</span>    <span class="c1">// 7. tag                - for referencing/tracking purposes
+</span>    
+    <span class="c1">// NOTES: The result is in an alternative to Scala's Option[T]
+</span>    <span class="c1">// and also the Try/Success/Failure. It provides a status code
+</span>    <span class="c1">// as an integer that can be set to Http Status codes.
+</span>    <span class="c1">// Also, the ResultSupportIn trait supports convenience functions
+</span>    <span class="c1">// that can be used to easily build up Success or Failure Results
+</span>    <span class="c1">// that match Http Status Codes ( see samples below ).
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SuccessResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
+      <span class="n">value</span>  <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
       <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
       <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
-      <span class="n">ext</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
-      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span> <span class="o">)</span>
+      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span><span class="o">)</span>
     <span class="o">)</span>
-	
-    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="nc">FailureResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
-      <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">BADREQUEST</span><span class="o">,</span>
-      <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid login"</span><span class="o">),</span>
-      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span> <span class="o">)</span>
-    <span class="o">)</span>
+    
+    <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
+</span>    <span class="c1">// This allows easy construction of results/status from a SERVICE layer
+</span>    <span class="c1">// instead of a controller/api layer, allowing more logic to be stored 
+</span>    <span class="c1">// in the service layer and to keep the controllers/APIs thin.
+</span>    
+    <span class="c1">// CASE 1: Success ( 200 )
+</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span> <span class="n">tag</span><span class="k">=</span><span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 2: Failure ( 400 ) with message and ref tag
+</span>    <span class="k">val</span> <span class="n">res2a</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"23SKASDF23"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
+</span>    <span class="k">val</span> <span class="n">res2b</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="n">data</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">()),</span>  <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">),</span> 
+                <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"23SKASDF23"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 4: Unauthorized ( 401 )
+</span>    <span class="k">val</span> <span class="n">res3</span> <span class="k">=</span> <span class="n">unAuthorized</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 5: Unexpected ( 500 )
+</span>    <span class="k">val</span> <span class="n">res4</span> <span class="k">=</span> <span class="n">unexpectedError</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 6: Conflict ( 409 )
+</span>    <span class="k">val</span> <span class="n">res5</span> <span class="k">=</span> <span class="n">conflict</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"item already exists"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 7: Not found
+</span>    <span class="k">val</span> <span class="n">res6</span> <span class="k">=</span> <span class="n">notFound</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"action not found"</span><span class="o">))</span>
+    
+    <span class="c1">// CASE 8: Not available
+</span>    <span class="k">val</span> <span class="n">res7</span> <span class="k">=</span> <span class="n">notAvailable</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"operation currently unavailable"</span><span class="o">))</span>
 
-    <span class="c1">// CASE 2: Success ( 200 )
-</span>    <span class="c1">// You can easily build up the results using the helper methods in the ResultSupportIn trait
-</span>    <span class="c1">// There are methods that exist that match the most common http statuses
-</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="n">data</span> <span class="k">=</span> <span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
-    <span class="k">val</span> <span class="n">res2</span> <span class="k">=</span> <span class="n">badRequest</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid login"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
-	
-    <span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
-	
 </code></pre>
 </div>
 				<br/>
@@ -837,22 +893,24 @@
 				</div>
 				<br/>
 				<h3>Example</h3>
-				<div class="highlighter-rouge">
-					<pre class="highlight">
-<code> 
-<span class="c1"> // 1. app.users.activate via Http GET ( query string )
-</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
+				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// NOTES: 
+</span> <span class="c1">// - Slate uses a unified routing format ( area/api/action ) 
+</span> <span class="c1">//   for both Http and CLI requests.
+</span> <span class="c1">// - See the "Unified Routing" section for more info.
+</span> 
+ <span class="c1">// 1. app.users.activate via Http GET ( query string )
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
  
  
-  <span class="c1">// 2. app.users.activate via Http POST ( json data )</span>
+ <span class="c1">// 2. app.users.activate via Http POST ( json data 
 </span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> 
  <span class="o">{</span> 
    <span class="n">code</span><span class="k">=</span><span class="mi">2</span><span class="o">,</span> <span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">,</span> <span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">,</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> 
  <span class="o">}</span> 
-
- <span class="c1">// 3. CLI: command line syntax
-</span> <span class="c1">// unified routing format: area.api.action -key=value*
-</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
+ 
+ 
+ <span class="c1">// 3. app.users.activate via CLI 
+</span> <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">app1</span><span class="o">&gt;</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">code</span><span class="k">=</span><span class="mi">2</span> <span class="o">-</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span> <span class="o">-</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
  
 </code></pre>
 </div>
@@ -917,6 +975,60 @@
 				 { code=2, phone=123456789, active=true, email="kishore@abc.com" } </td>
 					</tr>
 				</table>
+				<br/>
+				<h2>Mapped Routes</h2>
+				<p>The routes map to your plain Scala methods. This is done by decorating your methods with the api annotation.
+					You can handle the request in 2 ways, by either having the API Container auto-map the parameters or by handling 
+					the raw abstracted out Request.
+				</p>
+				<br/>
+				<h3>Option 1 ( Auto-Convert parameters )</h3>
+				<p>
+				   You can have the API Container auto-convert the parameters from the request to your method parameters.
+				   To use this option, simply create parameters as usual and the API container will check for the same parameters
+				   ( matched by name ) in the Request URL and/or the Request Body ( Json ). The container will will pass all the
+				   parameters along to your method.
+				</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slate.core.apis._</span>
+
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
+<span class="o">{</span>
+  <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="o">{</span>
+    <span class="c1">// Your logic here ....
+</span>    <span class="n">success</span><span class="o">(</span><span class="s">"ok"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="c1">// .. more
+</span><span class="o">}</span>
+</code></pre>
+</div>
+				<br/>
+				<h3>Option 2 ( Handle Raw Request )</h3>
+				<p>You can also have the API Container provide your mapped method the raw request ( Request ) which contains the parts
+				of the route, the full route, headers and values ( from URL / Post Body ). You can then extract the data 
+				on your own to handle the request.				
+				</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slate.core.apis._</span>
+
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
+<span class="o">{</span>
+  <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">request</span><span class="k">:</span><span class="kt">Request</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
+  <span class="o">{</span>
+    <span class="c1">// Your logic here ....
+</span>    <span class="n">success</span><span class="o">(</span><span class="s">"ok"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
+  <span class="o">}</span>
+
+  <span class="c1">// .. more
+</span><span class="o">}</span>
+</code></pre>
+</div>
 				<br/>
 				<h3>Notes</h3>
 				<div class="alert alert-info" role="alert">
@@ -1027,7 +1139,7 @@
 				<p>The apis are set up to be simple Scala classes with annotations.</p>
 				<br/>
 				<h3>Container</h3>
-				<p>The first step is the create an instance of an Api container</p>
+				<p>The first step is the create the dependencies of the container which at the minimum are the context and an optional auth implementation. You then supply these to create an instance of an Api container</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// REGISTRATION: Create instance of the API container to "host" all APIs
 </span>  <span class="c1">// NOTES:
 </span>  <span class="c1">// 1. The ApiContainerCLI extends from ApiContainer
@@ -1038,58 +1150,72 @@
 </span>  <span class="c1">// 5. Ultimately, to run the container inside of a CLI or Web, the Slate Shell component is used
 </span>  <span class="c1">//    and the Slate Server is used. They provide a wrapper to marshall the data from CLI/Web to
 </span>  <span class="c1">//    the container. ( Refer to CLI and Server for more info )
-</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">()</span>
+</span>  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="o">...</span> 
+  <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="o">....</span>
+  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span><span class="o">)</span>
 
 </code></pre>
 </div>
-				<br/>
+<br/>
 				<h3>Context</h3>
 				<p>The second step is to provide the container with the context. The context contains common dependent services any application typically needs. e.g. environment info, logging, config, encryption/decryption, etc. The context is provided to all the APIs.</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Provide the container with a context which contains some dependent services and info about the app 
 </span>  <span class="c1">// NOTE: This context is made available to all the APIs your register with the container.
 </span>  <span class="c1">// So every API can perform logging, get config settings, encrypt/decrypt etc.
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
-    <span class="n">env</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"local:dev"</span><span class="o">),</span>
-    <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
-    <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
-    <span class="n">con</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">),</span>
-    <span class="n">enc</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
-    <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">)</span>
+</span>  <span class="c1">// Initialize the context with common app info
+</span>  <span class="c1">// The database can be set up in the "env.conf" shared inherited config or
+</span>  <span class="c1">// overridden in the environment specific e.g. "env.qa.conf"
+</span>  <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
+  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+	  <span class="n">env</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"local:dev"</span><span class="o">),</span>
+	  <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+	  <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
+	  <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">)),</span>
+	  <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">),</span>
+	  <span class="n">dbs</span>  <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">),</span>
+	  <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)),</span>
+	  <span class="n">dirs</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">folders</span><span class="o">())</span>
   <span class="o">)</span>
-
+  <span class="c1">// auth setup code...  
+</span>  <span class="c1">// See notes below on the auth object   
+</span>  
+  <span class="c1">// Create the API container
+</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span><span class="o">)</span>	
 </code></pre>
 </div>
+
 				<br/>
 				<h3>Registration</h3>
 				<p>Next, you register the APIs. There are multiple ways to register the API, with parameters to override the Annotations </p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// REG 1. Register the api ( uses roles/auth values from annotations on class )
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">())</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">())</span>
 
   <span class="c1">// REG 2. Register the api ( allow API actions from subclass also )
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span> <span class="o">)</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span> <span class="o">)</span>
 
   <span class="c1">// REG 3. Register the api and explicitly set the roles allowed to access the api
 </span>  <span class="c1">//        This overrides the "roles" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">))</span>
 
   <span class="c1">// REG 4a. Register the api and set access to api only from CLI/command line container
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"cli"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"cli"</span><span class="o">))</span>
 
   <span class="c1">// REG 4b. Register the api and set access to api only from web/http container
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"web"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"web"</span><span class="o">))</span>
 
   <span class="c1">// REG 4c. Register the api and set access to api from both CLI/Web
 </span>  <span class="c1">//        This overrides the "access" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppUsersApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppUsersApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">))</span>
 
   <span class="c1">// REG 5. Register the api and supply your auth mode that will check for roles/permissions.
 </span>  <span class="c1">//        This overrides the "auth" value in the @Api annotation
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppVersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
+</span>  <span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppVersionApi</span><span class="o">(),</span> <span class="n">declaredOnly</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"admin"</span><span class="o">),</span> <span class="n">access</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"*"</span><span class="o">),</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"key-roles"</span><span class="o">))</span>
 
 </code></pre>
-</div>			
+</div>
+		
 				<h3>More</h3>
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
 				
@@ -1102,18 +1228,18 @@
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 
-<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"sample api"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
-<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
 <span class="o">{</span>
-   <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"activates a users account 3"</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
-  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span> <span class="o">=</span>
+  <span class="nd">@ApiAction</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"@parent"</span><span class="o">)</span>
+  <span class="k">def</span> <span class="n">activate</span><span class="o">(</span><span class="n">phone</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">code</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">isPremiumUser</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">date</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span>
   <span class="o">{</span>
-    <span class="n">success</span><span class="o">(</span> <span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span> <span class="o">)</span>
+    <span class="c1">// Your logic here ....
+</span>    <span class="n">success</span><span class="o">(</span><span class="s">"ok"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">s</span><span class="s">"activated $phone, $code, $isPremiumUser, $date"</span><span class="o">))</span>
   <span class="o">}</span>
-  
+
   <span class="c1">// .. more
 </span><span class="o">}</span>
-
 </code></pre>
 </div>
 				<br/>
@@ -1184,19 +1310,34 @@
 </span>  <span class="c1">// NOTE:
 </span>  <span class="c1">// 1. For the AppUsersApi, the application roles are checked.
 </span>  <span class="c1">// 2. For the AppAboutApi, the api keys are checked.
-</span>  <span class="n">apis</span><span class="o">.</span><span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
+</span>  <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
     <span class="nc">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">](</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"devs"</span> <span class="o">,</span> <span class="s">"94744D43418C421586E544DE0BB4CC37"</span><span class="o">,</span> <span class="s">"dev"</span>          <span class="o">),</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"ops"</span>  <span class="o">,</span> <span class="s">"677961A57F82440AB6F4E1F1EAC721ED"</span><span class="o">,</span> <span class="s">"dev,ops"</span>      <span class="o">),</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="s">"A100E22B5544423693FABD81791FAC80"</span><span class="o">,</span> <span class="s">"dev,ops,admin"</span><span class="o">)</span>
       <span class="o">))</span> <span class="o">)</span>
 	  
+  <span class="c1">// database and context 
+</span>  <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
+  <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+	  <span class="n">env</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"local:dev"</span><span class="o">),</span>
+	  <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+	  <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
+	  <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">)),</span>
+	  <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"myapp"</span><span class="o">,</span> <span class="s">"sample app"</span><span class="o">,</span> <span class="s">"product group 1"</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="n">version</span> <span class="k">=</span> <span class="s">"1.1.0"</span><span class="o">),</span>
+	  <span class="n">dbs</span>  <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">),</span>
+	  <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)),</span>
+	  <span class="n">dirs</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">folders</span><span class="o">())</span>
+  <span class="o">)</span>
+  
+  <span class="c1">// Create the API container
+</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span><span class="o">)</span>	
 </code></pre>
 </div>
 				<br/>
 				<h3>Auth Provider</h3>
 				<p>You can implement your own auth provider to fully customize the authorization of your APIs. You can extend from the base ApiAuth class.
-				For either CLI / Web requests ( since both type of requests are abstracted via the ApiCmd ), you still have access to http headers which you
+				For either CLI / Web requests ( since both type of requests are abstracted via the Request ), you still have access to http headers which you
 				can use to check for some form of credentials such as an OAuth <strong>token</strong></p>
 <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
     <span class="k">with</span> <span class="nc">ResultSupportIn</span>
@@ -1211,7 +1352,7 @@
      * @param rolesParent
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">Request</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">rolesParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
       <span class="k">super</span><span class="o">.</span><span class="n">isApiKeyValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">roles</span><span class="o">,</span> <span class="n">rolesParent</span><span class="o">)</span>
     <span class="o">}</span>
 
@@ -1222,9 +1363,9 @@
      * @param roleParent : The roles value from the Api annotation
      * @return
      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">Request</span><span class="o">,</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">roleParent</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span> <span class="o">{</span>
 
-      <span class="c1">// NOTES: The ApiCmd will either represent a Web Request or a CLI request.
+      <span class="c1">// NOTES: The Request will either represent a Web Request or a CLI request.
 </span>      <span class="c1">// Slate abstracts the protocol requests using a "Unified Request data structure"
 </span>
       <span class="c1">// get the header named "Authorization"
@@ -1255,12 +1396,65 @@
 				
 				<br/><br/>
 				
-				<h1 id="api-cli">9. CLI</h1>
+				<h1 id="api-errors">9. Errors</h1>
+				<p>See the <a class="url-ch" href="mod-shell.html">CLI</a> example and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Command Line Shell.</p>
+				
+				<h3>Option 1: Global Default</h3>
+				<p>The API container by default will handle all errors and will log the exceptions to the logger setup in the context.</p>
+				<br/>
+				<h3>Option 2: Global Custom</h3>
+				<p>If you want to handle the errors globally for all APIs yourself, you can implement your own <strong>ApiErrorHandler</strong> with a function callback and supply it to the API Container</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slate.core.apis._</span>
+  <span class="c1">// 1. create the error handler 
+</span>  <span class="k">val</span> <span class="n">errorHandler</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiErrorHandler</span><span class="o">(</span><span class="nc">Some</span><span class="o">((</span><span class="n">ctx</span><span class="o">,</span> <span class="n">req</span><span class="o">,</span> <span class="n">ex</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+  
+    <span class="c1">// Do something with the error here...
+</span>	
+	<span class="c1">// Return a Result[Any]
+</span>    <span class="k">this</span><span class="o">.</span><span class="n">unexpectedError</span><span class="o">(</span><span class="n">msg</span><span class="k">=</span><span class="nc">Some</span><span class="o">(</span><span class="s">"global custom handler"</span><span class="o">))</span>
+  <span class="o">}))</span>
+  
+  <span class="c1">// 2. create the API container 
+</span>  <span class="k">val</span> <span class="n">apis</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiContainerCLI</span><span class="o">(</span><span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span><span class="o">,</span> <span class="n">errors</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">errorHandler</span><span class="o">))</span>
+</code></pre>
+</div>
+				<br/>
+				<h3>Option 3: API Level</h3>
+				<p>If you want to handle the errors yourself, you can enable API level error handling via the <strong>isErrorEnabled</strong>
+				flag and then override the <strong>onException</strong> method</p>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slate.core.apis._</span>
+
+<span class="nd">@Api</span><span class="o">(</span><span class="n">area</span> <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">""</span><span class="o">,</span> <span class="n">roles</span><span class="k">=</span> <span class="s">"admin"</span><span class="o">,</span> <span class="n">auth</span> <span class="k">=</span> <span class="s">"app-roles"</span><span class="o">,</span> <span class="n">verb</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">,</span> <span class="n">protocol</span> <span class="k">=</span> <span class="s">"*"</span><span class="o">)</span>
+<span class="k">class</span> <span class="nc">UserApi</span> <span class="k">extends</span> <span class="nc">ApiBaseEntity</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span> <span class="k">with</span> <span class="nc">ResultSupportIn</span>
+<span class="o">{</span>
+  <span class="c1">// Enable API level error handling
+</span>  <span class="k">override</span> <span class="k">val</span> <span class="n">isErrorEnabled</span> <span class="k">=</span> <span class="kc">true</span>
+
+  <span class="cm">/**
+   * Handle error at when this is called
+   * @param context
+   * @param request
+   * @param ex
+   * @return
+   */</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="n">onException</span><span class="o">(</span><span class="n">context</span><span class="k">:</span><span class="kt">AppContext</span><span class="o">,</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="n">unexpectedError</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="kc">false</span><span class="o">),</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"unexpected error in api"</span><span class="o">),</span> <span class="n">err</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">ex</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+</div>
+				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
+				<br/><br/>
+				
+				<h1 id="api-cli">10. CLI</h1>
 				<p>See the <a class="url-ch" href="mod-shell.html">CLI</a> example and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Command Line Shell.</p>
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
 				<br/><br/>
 				
-				<h1 id="api-server">10. Web</h1>
+				<h1 id="api-server">11. Web</h1>
 				<p>See the <a class="url-ch" href="server.html">CLI</a> page and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Slate Server.</p>
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>					
