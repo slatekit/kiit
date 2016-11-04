@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-24T23:56:44.848</td>
+      <td>2016-10-26T22:12:24.724</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -114,7 +114,8 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">,</span> <span class="nc">ResultTimed</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">RandomGen</span><span class="o">,</span> <span class="nc">Timer</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Random</span><span class="o">,</span> <span class="nc">Timer</span><span class="o">}</span>
+
 
 
 <span class="c1">// optional 
@@ -138,7 +139,7 @@
 </span>    <span class="c1">// NOTE: Using call-by-name
 </span>    <span class="n">showResult</span><span class="o">(</span>
       <span class="nc">Timer</span><span class="o">.</span><span class="n">once</span><span class="o">(</span><span class="s">"run once"</span><span class="o">,</span> <span class="o">{</span>
-        <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">RandomGen</span><span class="o">.</span><span class="n">digits3</span><span class="o">()</span> <span class="o">)</span>
+        <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">Random</span><span class="o">.</span><span class="n">digits3</span><span class="o">()</span> <span class="o">)</span>
       <span class="o">})</span>
     <span class="o">)</span>
 
@@ -150,7 +151,7 @@
     <span class="c1">// CASE 3: Benchmark an operation 10 times and get an average
 </span>    <span class="n">showResult</span><span class="o">(</span> <span class="nc">Timer</span><span class="o">.</span><span class="n">avg</span><span class="o">(</span><span class="s">"avg of 10 times"</span><span class="o">,</span> <span class="o">(</span><span class="n">count</span><span class="o">)</span> <span class="k">=&gt;</span>
     <span class="o">{</span>
-      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">RandomGen</span><span class="o">.</span><span class="n">digits3</span><span class="o">())</span>
+      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="nc">Random</span><span class="o">.</span><span class="n">digits3</span><span class="o">())</span>
     <span class="o">},</span> <span class="mi">10</span><span class="o">))</span>
 
     

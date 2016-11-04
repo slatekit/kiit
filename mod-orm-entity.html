@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-10-24T23:56:44.880</td>
+      <td>2016-10-26T22:12:24.795</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -123,7 +123,7 @@
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Field</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">RandomGen</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Random</span><span class="o">,</span> <span class="nc">Field</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
 
 
 <span class="c1">// optional 
@@ -183,7 +183,7 @@
     <span class="c1">// The unique id is a guid and unique regardless of environment ( dev, qa, staging, prod )
 </span>    <span class="c1">// It serves as a easy way to check for existing items across different environments and
 </span>    <span class="c1">// also makes it easy to import/export items from 1 environment to another ( e.g. pro to dev )
-</span>    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">RandomGen</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+</span>    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
   <span class="o">}</span>
 
 
