@@ -82,8 +82,10 @@
 				<br/>
 				
 				<h1 id="apis">About</h1>
-				<p>The APIs in Slate Kit are built to be <strong>protocol independent</strong>. 
-				This means that you can build your APIs 1 time and they can be made to be available on the command line shell or as a Web API, or both. This is accomplished using various techniques outlined below and marshalling the data from the specific protocol/container to your APIs.</p>
+				<p>The APIs in Slate Kit are built using plain Scala classes/methods with <strong>annotations</strong> 
+				and are <strong>protocol independent</strong>. This means that you can build your APIs 1 time 
+				and they can be made to be available on the command line shell or as a Web API, or both. 
+				This is accomplished using various techniques outlined below.</p>
 				<br/>
 				
 				<h1 id="apis-goals">Goals</h1>
@@ -93,8 +95,8 @@
 						<td class="col-sm-6"><strong>Description</strong></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Protocol Independent</strong></td>
-						<td class="col-sm-6">Build protocol independent APIs (e.g. Http) so your write an API once and run it as a Web API or on the CLI (command line)</td>
+						<td class="col-sm-2"><strong>API Portability</strong></td>
+						<td class="col-sm-6">Build APIs using plain Scala classes/methods which are also protocol independent so they can run as an Http Web API or on the CLI (command line)</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>API Design</strong></td>
@@ -115,23 +117,27 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>1. API Containers</strong></td>
-						<td class="col-sm-6">All APIs built with Slate Kit are run inside of a <strong>API Container</strong>.</td>
+						<td class="col-sm-6">All APIs built with Slate Kit are run inside of a <strong>API Container</strong> built for either the Web or CLI.</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>2. Unified Routing</strong></td>
-						<td class="col-sm-6">A simple, effective approach to API <strong>routes</strong> so they are consistent in both Web and CLI  ( e.g. <strong>{area}.{api}.{action}</strong> )</td>
+						<td class="col-sm-2"><strong>2. Protocol Independent</strong></td>
+						<td class="col-sm-6">APIs are annotated plain Scala classes and methods that can be accessed as Web API or CLI commands</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>3. Unified Requests</strong></td>
-						<td class="col-sm-6">A structure for representing API <strong>requests</strong> for both Web and CLI to support protocol independent APIs</td>
+						<td class="col-sm-2"><strong>3. Unified Routes</strong></td>
+						<td class="col-sm-6">A simple, 3-part hierarchical API <strong>routing</strong> approach to abstract both Web and CLI routes  ( e.g. <strong>{area}.{api}.{action}</strong> )</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>4. Unified Responses</strong></td>
-						<td class="col-sm-6">A structure for representing API <strong>responses</strong> for both Web and CLI to support protocol independent APIs</td>
+						<td class="col-sm-2"><strong>4. Unified Requests</strong></td>
+						<td class="col-sm-6">A data structure for API <strong>requests</strong> to abstract both Web and CLI requests</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>5. Unified Discovery</strong></td>
-						<td class="col-sm-6">An approach to API discovery and help docs for both Web and CLI levaraging the Unified Routing approach</td>
+						<td class="col-sm-2"><strong>5. Unified Responses</strong></td>
+						<td class="col-sm-6">A data structure for API <strong>responses</strong> to abstract both Web and CLI responses</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>6. Unified Discovery</strong></td>
+						<td class="col-sm-6">An approach to API discovery and help docs for both Web and CLI levaraging Unified Routing</td>
 					</tr>
 				</table>
 				<br/>
@@ -143,16 +149,16 @@
 						<td class="col-sm-6"><strong>Description</strong></td>
 					</tr>
 					<tr> 
-						<td><strong>1. Scala</strong></td>
+						<td><strong>1. Setup</strong></td>
 						<td>Create APIs using scala classes, just annotate classes/methods as APIs and API methods</td>
 					</tr>
 					<tr> 
 						<td><strong>2. CLI</strong></td>
-						<td>You can run your APIs on the command line </td>
+						<td>Run your APIs on the command line via the API container for CLI</td>
 					</tr>
 					<tr> 
 						<td><strong>3. Http</strong></td>
-						<td>You can run your APIs as Web APIs via Akka-Http</td>
+						<td>Run your APIs as Web APIs via Akka-Http using the Slate API Server</td>
 					</tr>
 					<tr> 
 						<td><strong>4. Auth</strong></td>
@@ -164,7 +170,7 @@
 					</tr>
 					<tr> 
 						<td><strong>6. Context</strong></td>
-						<td>APIs contain a context to contain / provide access to many services</td>
+						<td>APIs contain a context to provide access to many services</td>
 					</tr>
 					<tr> 
 						<td><strong>7. Entities</strong></td>
@@ -191,7 +197,7 @@
 					</tr>
 					<tr> 
 						<td><strong>1. Console</strong></td>
-						<td>A simple console application template with diagnostics and logging</td>
+						<td>Console application for 1 time/batch/scheduled apps</td>
 						<td><a class="url-ch" href="releases.html">Download the sample apps</a></td>
 					</tr>
 					<tr> 
@@ -216,7 +222,7 @@
 					</tr>
 					<tr> 
 						<td><strong>1. Containers</strong></td>
-						<td>How APIs can be run in Slate.</td>
+						<td>How APIs are hosted in Slate for both Web / CLI.</td>
 						<td><a href="#api-containers" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr >
@@ -347,6 +353,8 @@
 				<p>All your APIs run inside of what we call an Api Container. There are 3 types of api containers:</p>
 				<br/>
 				<h3>Types</h3>
+				<p>Please refer to the sample apps on how to create APIs, host them on the CLI, 
+				and run them in the Web Server.</p>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Container</strong></td>
@@ -358,13 +366,13 @@
 						<td><strong>Web</strong></td>
 						<td>Http</td>
 						<td>more info below</td>
-						<td>A container that hosts your APIs as Web APIs via Http protocol using Akka-Http.</td>
+						<td>A container that hosts your APIs as <strong>Web APIs</strong> via Http protocol using <strong>Akka-Http</strong>.</td>
 					</tr>
 					<tr>
 						<td><strong>CLI</strong></td>
 						<td>Command</td>
 						<td>more info below</td>
-						<td>A container that hosts your APIs on a command line shell. </td>
+						<td>A container that hosts your APIs on a command line shell ( <strong>CLI</strong> ). </td>
 					</tr>
 					<tr>
 						<td><strong>Queue</strong></td>
@@ -375,6 +383,8 @@
 				</table>
 				<br/>
 				<h3>Process</h3>
+				<p>The API container handles requests and sends them to corresponding API actions.
+				   The process is:</p>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-1"><strong>Step</strong></td>
@@ -399,7 +409,7 @@
 					<tr>
 						<td><strong>3</strong></td>
 						<td>Discovery</td>
-						<td>Discovers the API via the "area", "api", "name" routing structure ( see below ). 
+						<td>Discovers API via the "area", "api", "name" routing format (see below) 
 						</td>
 					</tr>
 					<tr>
@@ -414,14 +424,8 @@
 					</tr>
 					<tr>
 						<td><strong>6</strong></td>
-						<td>Conversion</td>
-						<td>Converts result to common response ( see Response / "Result" below )</td>
-					</tr>
-					<tr>
-						<td><strong>7</strong></td>
 						<td>Protocol response</td>
-						<td>Convert to protocol response<br/><br/>
-							Api container converts the common response back to the protocol specific response.
+						<td>Converts API result to the protocol specific response.
 						</td>
 					</tr>
 				</table>
@@ -439,7 +443,7 @@
 				<br/><br/><br/>
 				
 				<h1 id="api-declaration">2. Declarations</h1>
-				<p>The apis are set up to be simple Scala classes with annotations.</p>
+				<p>The APIs are set up to be simple Scala classes with annotations on the API (class) and Actions (methods).</p>
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
@@ -591,9 +595,12 @@
 				
 				
 				<h1 id="api-request">3. Request</h1>
-				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. This unified format is implemented as what we call an <strong>Request</strong>
-				( see below ). The Request is then executed by the ApiContainer. All the parameters and data are available in the args field.
-				Web Http headers are available in the opts field. </p>
+				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. 
+				This unified format is implemented as what we call a <strong>Request</strong>
+				( see below ). The Request is then executed by the ApiContainer. 
+				All the parameters and data are available in the args field.
+				Web Http headers are available in the opts field. 
+				The request is then handled by its corresponding API action associated with the request route.</p>
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
@@ -625,7 +632,7 @@
 </code></pre>
 </div>
 				<br/>				
-				<h3>Request class ( Request )</h3>
+				<h3>Request class </h3>
 				<table class="table table-bordered table-striped">
 					<tr>
 						<td class="col-sm-2"><strong>Field</strong></td>
@@ -704,8 +711,26 @@
 				
 				
 				<h1 id="api-response">4. Response</h1>
-				<p>Results/respones from an API action are represented as a <strong>Result</strong> class.
-				This is a simple case class that wraps a return value with a success/fail flag, message, status code, error and data. </p>
+				<p>Results/respones from an API action are represented as a <strong>Result[T]</strong> class.				
+				</p>
+				<br/>
+				
+				<div class="alert alert-info" role="alert">
+					<ol>
+						<li>An immutable class wrapping a value, success/fail flag, message, status code, error and more.</li>
+						<li>Result[T] is a Monad and serves as alernative to Scala's Option[T] or Try/Success/Failure.</li>
+						<li>Result[T] has 2 branches (SuccessResult, FailureResult). </li>
+						<li>There is a convient Result[T] trait for building common results</li>
+						<li>Check the <a href="mod-results.html" class="url-ch">Result[T]</a> utility component for more info.</li>
+					</ol>
+					<br/>
+					The Result[T] also has a double purpose in that by wrapping a return value, with a numeric 
+					status code ( which are http client ) and optional string message, it allows complex logic / conditional responses ( badrequest, unauthorized, etc )
+					to be returned from the Service layer. 
+					<br/><br/>
+					This greatly reduces the logic in the typical controller/API layer and 
+					keeps all business logic in the Service layer.
+				</div>
 				<br/>
 				<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
@@ -871,7 +896,7 @@
 				<div class="alert alert-info" role="alert">
 					<ol>
 					  <li>The status codes match Http Status Codes.</li>
-					  <li>The result is used by the marshaller to easily convert to an Http response when running in a Web API container.</li>
+					  <li>The result is used by the container to easily convert to an Http response when running in a Web API container.</li>
 					  <li>The builder trait can build results mimicking common http responses.</li>
 					  <li>The result class provides an effective way to keep complex logic in a service layer</li>
 					  <li>The system will return a success for API actions that don't return anything ( Unit )</li>
@@ -885,12 +910,108 @@
 				
 				
 				<h1 id="api-routing">5. Routing</h1>
-				<p>In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.</p>
+				<p>In Slate Kit, API routes are simplified using a 3-part hierarchical approach that is consistent
+				for both Web(http) or command line (CLI ). 
+				<br/>We call this the <strong>unified routing format</strong>.</p>
 				<br/>
 				<div class="alert alert-success" role="alert">
-					<h3>{area}.{api}.{action} key=value*</h3>
+					<h3>{area} . {api} . {action}  key=value*</h3>
 					<br/>
 				</div>
+				<br/>
+				<h3>Parts</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Part Name</strong></td>
+						<td class="col-sm-2"><strong>Part # </strong></td>
+						<td class="col-sm-3"><strong>Example</strong></td>
+						<td><strong>Purpose</strong></td>
+					</tr>
+					<tr>
+						<td><strong>area</strong></td>
+						<td>1</td>
+						<td>app</td>
+						<td>This is a root level category containing a collection of apis. <br/>
+						<strong>e.g. app, admin, sys</strong></td>
+					</tr>
+					<tr>
+						<td><strong>api</strong></td>
+						<td>2</td>
+						<td>users</td>
+						<td>This is the name of a single api ( belonging to 1 area ), and may support 1 or more actions. <br/>
+						<strong>e.g. users, invites, jobs</strong></td>
+					</tr>
+					<tr>
+						<td><strong>action</strong></td>
+						<td>3</td>
+						<td>create</td>
+						<td>An action belongs to an API and is the lowest level in the route and maps to a method/function. <br/>
+						<strong>e.g. create, update, activate</strong></td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Hierarchy</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Area</strong></td>
+						<td class="col-sm-2"><strong>Api </strong></td>
+						<td class="col-sm-3"><strong>Actions</strong></td>
+						<td><strong>Purpose</strong></td>
+					</tr>
+					<tr>
+						<td><strong>app</strong></td>
+						<td></td>
+						<td></td>
+						<td>Example of area to contain multiple APIs</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><strong>users</strong></td>
+						<td></td>
+						<td>Example of a Users API to manage user accounts</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td><strong>create</strong></td>
+						<td>Example action to create/register a new user</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td><strong>invite</strong></td>
+						<td>Example action to invite a person to your application</td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Formats</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-3"><strong>Format</strong></td>
+						<td><strong>Example</strong></td>
+					</tr>
+					<tr>
+						<td><strong>CLI</strong></td>
+						<td>n/a</td>
+						<td>{area}.{api}.{action} -key=value*</td>
+						<td>app.users.activate -code=2 -phone=123456789 -active=true -email="kishore@abc.com"</td>
+					</tr>
+					<tr>
+						<td><strong>WEB</strong></td>
+						<td>GET</td>
+						<td>{area}/{api}/{action}?key=value*</td>
+						<td>http://mycompany.com/api/app/users/activate?code=1&phone=123456789&active=true&email=kishore@abc.com</td>
+					</tr>
+					<tr>
+						<td><strong>WEB</strong></td>
+						<td>POST ( json data )</td>
+						<td>{area}/{api}/{action} { key=value* }</td>
+						<td>http://mycompany.com/api/app/users/activate <br/>
+				 { code=2, phone=123456789, active=true, email="kishore@abc.com" } </td>
+					</tr>
+				</table>
 				<br/>
 				<h3>Example</h3>
 				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// NOTES: 
@@ -915,67 +1036,7 @@
 </code></pre>
 </div>
 
-				<br/>
-				<h3>Parts</h3>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<td class="col-sm-2"><strong>Part Name</strong></td>
-						<td class="col-sm-2"><strong>Part # </strong></td>
-						<td class="col-sm-3"><strong>Example</strong></td>
-						<td><strong>Purpose</strong></td>
-					</tr>
-					<tr>
-						<td><strong>area</strong></td>
-						<td>1</td>
-						<td>app</td>
-						<td>This is a root level category containing a collection of apis. <br/>
-						<strong>e.g. app, admin, sys</strong></td>
-					</tr>
-					<tr>
-						<td><strong>api</strong></td>
-						<td>2</td>
-						<td>users</td>
-						<td>This is the name of a single api which may support 1 or more actions. <br/>
-						<strong>e.g. users, invites, jobs</strong></td>
-					</tr>
-					<tr>
-						<td><strong>action</strong></td>
-						<td>3</td>
-						<td>create</td>
-						<td>A action is the lowest level in the route and typically maps to a method/function. <br/>
-						<strong>e.g. create, update, activate</strong></td>
-					</tr>
-				</table>
-				<br/>
-				<h3>Formats</h3>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<td class="col-sm-2"><strong>Container</strong></td>
-						<td class="col-sm-2"><strong>Type</strong></td>
-						<td class="col-sm-3"><strong>Format</strong></td>
-						<td><strong>Example</strong></td>
-					</tr>
-					<tr>
-						<td><strong>CLI</strong></td>
-						<td>n/a</td>
-						<td>{area}.{api}.{action} key=value*</td>
-						<td>app.users.activate -code=2 -phone=123456789 -active=true -email="kishore@abc.com"</td>
-					</tr>
-					<tr>
-						<td><strong>WEB</strong></td>
-						<td>GET</td>
-						<td>{area}/{api}/{action}?key=value*</td>
-						<td>http://mycompany.com/api/app/users/activate?code=1&phone=123456789&active=true&email=kishore@abc.com</td>
-					</tr>
-					<tr>
-						<td><strong>WEB</strong></td>
-						<td>POST ( json data )</td>
-						<td>{area}/{api}/{action} { key=value* }</td>
-						<td>http://mycompany.com/api/app/users/activate <br/>
-				 { code=2, phone=123456789, active=true, email="kishore@abc.com" } </td>
-					</tr>
-				</table>
-				<br/>
+				<br/>				
 				<h2>Mapped Routes</h2>
 				<p>The routes map to your plain Scala methods. This is done by decorating your methods with the api annotation.
 					You can handle the request in 2 ways, by either having the API Container auto-map the parameters or by handling 
@@ -1165,7 +1226,7 @@
 </span>  <span class="c1">// Initialize the context with common app info
 </span>  <span class="c1">// The database can be set up in the "env.conf" shared inherited config or
 </span>  <span class="c1">// overridden in the environment specific e.g. "env.qa.conf"
-</span>  <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/World_shard2"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
+</span>  <span class="k">val</span> <span class="n">dbs</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/db1"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
   <span class="k">val</span> <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
 	  <span class="n">env</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"local"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"local:dev"</span><span class="o">),</span>
 	  <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
@@ -1389,7 +1450,7 @@
 </div>
 				<br/>
 				<h3>Keys + Roles</h3>
-				<p>You can use both the api-keys and roles approach. See the ApiAuth implementation for more details.</p>
+				<p>You can use both the api-keys and roles approach. See the Sample app ApiAuth implementation for more details.</p>
 				<br/>
 				<h3>More</h3>
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
@@ -1397,10 +1458,11 @@
 				<br/><br/>
 				
 				<h1 id="api-errors">9. Errors</h1>
-				<p>See the <a class="url-ch" href="mod-shell.html">CLI</a> example and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Command Line Shell.</p>
+				<p>You can choose to have errors handling in 3 different ways. </p>
 				
 				<h3>Option 1: Global Default</h3>
-				<p>The API container by default will handle all errors and will log the exceptions to the logger setup in the context.</p>
+				<p>The API container by default will handle all errors and will log the exceptions to the logger setup in the context. This 
+				requires no additional configuration.</p>
 				<br/>
 				<h3>Option 2: Global Custom</h3>
 				<p>If you want to handle the errors globally for all APIs yourself, you can implement your own <strong>ApiErrorHandler</strong> with a function callback and supply it to the API Container</p>
@@ -1421,8 +1483,8 @@
 </div>
 				<br/>
 				<h3>Option 3: API Level</h3>
-				<p>If you want to handle the errors yourself, you can enable API level error handling via the <strong>isErrorEnabled</strong>
-				flag and then override the <strong>onException</strong> method</p>
+				<p>If you want to handle the errors for a specific API yourself, you can enable API level error handling via the <strong>isErrorEnabled</strong>
+				flag and then override the <strong>onException</strong> method  for the API.</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
 <span class="k">import</span> <span class="nn">slate.core.apis._</span>
 

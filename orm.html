@@ -247,30 +247,63 @@
 					<br/><br/>
 					<div> 
 						<h2 id="orm-database">1. Databases</h2>
-						<p>You can register your entities to use 1 database or many by simply registering your databases by name and/or shard. Then you connect a specific model/entities to a named database. This approach  allows for flexibility in supporting multiple databases. Currently, only <strong>MySql</strong> is supported.
+						<p>You can register database connections using a <strong>database lookup</strong> called
+						a <strong>DbLookup</strong> which can hold a <strong>default database</strong>, and/or many 
+						<strong>named databases</strong>.
+						Then you connect a specific model/entities to a named database. 
+						This approach  allows for flexibility in supporting multiple databases
+						in the mapper. However, in terms of types of database, currently, only <strong>MySql</strong> is supported.
 						</p>
 						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>    
-  <span class="k">import</span> <span class="nn">slate.common.databases.</span><span class="o">{</span><span class="nc">DbConfig</span><span class="o">,</span> <span class="nc">DbLookup</span><span class="o">,</span> <span class="nc">DbConstants</span><span class="o">}</span>
-
-  <span class="c1">// 1. Register the default connection
-</span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
-
-  <span class="c1">// 2. Register using conf file from use folder {user}/.slate/db.txt
-</span>  <span class="c1">// NOTE: This is a more secure
-</span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db.txt"</span><span class="o">)</span> <span class="o">)</span>
-  <span class="k">val</span> <span class="n">dbCon1</span> <span class="k">=</span> <span class="nc">DbLookup</span><span class="o">.</span><span class="n">getDefault</span> 
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
   
-  <span class="c1">// 3. Create a new db connection string
-</span>  <span class="k">val</span> <span class="n">dbCon2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
-  
-  <span class="c1">// 4. Register named connections 
-</span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db1"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">))</span>
-  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">set</span><span class="o">(</span><span class="s">"user_db2"</span><span class="o">,</span> <span class="nc">DbConfig</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db.txt"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// CASE 1: Load database lookup using a single db connection
+</span>    <span class="k">val</span> <span class="n">dbLookup1</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
+        <span class="s">"db1"</span><span class="o">,</span>
+        <span class="s">"abcdefghi"</span>
+      <span class="o">)</span>
+    <span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbLookup1</span><span class="o">.</span><span class="n">default</span> <span class="o">)</span>
 
+    <span class="c1">// CASE 2. Load database lookup using a single db connection
+</span>    <span class="c1">// from a config file from .slatekit folder 
+</span>    <span class="k">val</span> <span class="n">dbLookup2</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span> <span class="nc">DbUtils</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slatekit"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">))</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbLookup2</span><span class="o">.</span><span class="n">default</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 3: Load database lookup using named db connection "users"
+</span>    <span class="k">val</span> <span class="n">dbLookup3</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span> <span class="o">(</span><span class="s">"users"</span><span class="o">,</span> <span class="nc">DbUtils</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">))</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 4: Load database lookup using multiple 
+</span>	<span class="c1">// named db connections ( "users", "files" )
+</span>    <span class="k">val</span> <span class="n">dbs4</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span>
+      <span class="o">(</span>
+        <span class="s">"users"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+          <span class="s">"jdbc:mysql://localhost/users"</span><span class="o">,</span>
+          <span class="s">"root"</span><span class="o">,</span>
+          <span class="s">"abcdefghi"</span>
+        <span class="o">)</span>
+      <span class="o">),</span>
+      <span class="o">(</span>
+        <span class="s">"files"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+          <span class="s">"jdbc:mysql://localhost/files"</span><span class="o">,</span>
+          <span class="s">"root"</span><span class="o">,</span>
+          <span class="s">"abcdefghi"</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+    <span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"fiels"</span><span class="o">)</span> <span class="o">)</span>
 </code></pre>
-</div>							
+</div>				
 						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
@@ -424,8 +457,22 @@
 						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="c1">// Entities is a registration system for your entities, databases, services, repositories.
-<span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">()</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
+  
+<span class="c1">// Create database connection lookup
+// single connection in this example
+</span><span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
+      <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
+        <span class="s">"db1"</span><span class="o">,</span>
+        <span class="s">"abcdefghi"</span>
+      <span class="o">)</span>
+    <span class="o">)</span>
+
+<span class="c1">// Entities stores all the entity registrations 
+</span><span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span>
 
 <span class="c1">// Set up 1: Simple ( using default service, repo, connection ) 
 </span><span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">)</span>
@@ -448,6 +495,9 @@
 <span class="c1">// Use case 3: Get the entity mapper
 </span><span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getMapper</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
 
+<span class="c1">// Use case 4: Get the repo for a specific shard
+</span><span class="k">val</span> <span class="n">repoShard</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getRepo</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+	
 </code></pre>
 </div>
 						<br/>
@@ -473,11 +523,22 @@
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
-
-  <span class="c1">// PREREQUISITE: Setup the default database connection.
-</span>  <span class="c1">// See database setup for more info
-</span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
   
+
+  
+  <span class="c1">// Create database connection lookup
+</span>  <span class="c1">// single connection in this example
+</span>  <span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+          <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
+          <span class="s">"db1"</span><span class="o">,</span>
+          <span class="s">"abcdefghi"</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+	  
   <span class="c1">// =====================================================
 </span>  <span class="c1">// SETUP 1: Use the existing EntityService[T] class
 </span>  <span class="k">val</span> <span class="n">svc1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityService</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">getUserRepo</span><span class="o">())</span>
@@ -497,7 +558,7 @@
 </span>  <span class="c1">// a) database
 </span>  <span class="c1">// b) entity
 </span>  <span class="c1">// c) service 
-</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">()</span> 
+</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span> 
   <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span> <span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> 
                            <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
                            <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
@@ -526,7 +587,8 @@
   <span class="n">svc</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
   
 </code></pre>
-</div>					
+</div>
+
 						<br/>
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
@@ -587,11 +649,21 @@
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.repos._</span>
-
-  <span class="c1">// PREREQUISITE: Setup the default database connection.
-</span>  <span class="c1">// See database setup for more info
-</span>  <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
+  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
   
+
+  <span class="c1">// Create database connection lookup
+</span>  <span class="c1">// single connection in this example
+</span>  <span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
+        <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
+          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+          <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
+          <span class="s">"db1"</span><span class="o">,</span>
+          <span class="s">"abcdefghi"</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+	  
   <span class="c1">// =====================================================
 </span>  <span class="c1">// SETUP 1: Use existing implementation of Repo for MySql 
 </span>  <span class="k">val</span> <span class="n">repoMySql</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
@@ -608,7 +680,7 @@
 </span>  <span class="c1">// a) database
 </span>  <span class="c1">// b) entity
 </span>  <span class="c1">// c) service 
-</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">()</span> 
+</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span> 
   <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span> <span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> 
                            <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
                            <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
@@ -631,6 +703,7 @@
   
 </code></pre>
 </div>
+
 						<br/>						
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
