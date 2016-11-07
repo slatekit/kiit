@@ -52,6 +52,8 @@ class Server( val port       : Int    = 5000 ,
    *
    */
   def init():Unit = {
+    // Init the APIs within the api container
+    apis.init()
   }
 
 

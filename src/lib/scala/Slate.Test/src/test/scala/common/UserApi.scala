@@ -11,9 +11,10 @@
 
 package slate.test.common
 
-import slate.common.results.ResultSupportIn
-import slate.common.{DateTime, Result}
+import slate.common.results.{ResultCode, ResultSupportIn}
+import slate.common.{FailureResult, DateTime, Result}
 import slate.core.apis._
+import slate.core.common.AppContext
 
 @Api(area = "app", name = "users2", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
@@ -30,11 +31,38 @@ class UserApi2 extends ApiBaseEntity[User] with ResultSupportIn {
 }
 
 
+@Api(area = "app", name = "users2", desc = "api to access and manage users 3",
+  roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+class UserApi3 extends ApiBaseEntity[User] with ResultSupportIn {
+
+  override val isErrorEnabled = true
+
+  /**
+   * Handle error at the API level
+   * @param context
+   * @param request
+   * @param ex
+   * @return
+   */
+  override def onException(context:AppContext, request: Request, ex:Exception): Result[Any] = {
+    unexpectedError(Some(false), msg = Some("unexpected error in api"), err = Some(ex))
+  }
+}
+
+
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
 class UserApi extends ApiBaseEntity[User] with ResultSupportIn
 {
   var user = new User
+
+  @ApiAction(name = "activate", desc = "activates a users account 3", roles= "@parent",
+    verb = "@parent", protocol = "@parent")
+  def activate(phone:String, code:Int, isPremiumUser:Boolean, date:DateTime): Result[String] =
+  {
+    success("ok", Some(s"activated $phone, $code, $isPremiumUser, $date"))
+  }
+
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "", verb = "get", protocol = "@parent")
   def info(format:String = "json"): Result[String] =
@@ -103,14 +131,6 @@ class UserApi extends ApiBaseEntity[User] with ResultSupportIn
   def rolesParent(code:Int, tag:String): Result[String] =
   {
     success("rolesParent", Some(s"${code} ${tag}"))
-  }
-
-
-  @ApiAction(name = "activate", desc = "activates a users account 3", roles= "@parent",
-    verb = "@parent", protocol = "@parent")
-  def activate(phone:String, code:Int, isPremiumUser:Boolean, date:DateTime): Result[String] =
-  {
-    success("ok", Some(s"activated $phone, $code, $isPremiumUser, $date"))
   }
 
 

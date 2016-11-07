@@ -13,6 +13,7 @@ package slate.core.apis
 
 import slate.common.results.ResultSupportIn
 import slate.common.{Result, Strings, ApiKey}
+import slate.core.apis.ApiConstants._
 import slate.core.auth.AuthFuncs._
 
 /**
@@ -23,8 +24,8 @@ import slate.core.auth.AuthFuncs._
  *
  * Need to initialize with api-keys
  */
-class ApiAuth(private val keys:List[ApiKey],
-              private val callback:Option[(Request, String, String ) => Result[Boolean]],
+class ApiAuth(private val keys:Option[List[ApiKey]],
+              private val callback:Option[(String, Request, String, String ) => Result[Boolean]],
               private val headerApiKeyName:String = "api-key")
   extends ResultSupportIn {
 
@@ -50,15 +51,15 @@ class ApiAuth(private val keys:List[ApiKey],
       return ok()
 
     // CASE 3: App Roles + Key Roles mode
-    if (Strings.isMatch(ApiConstants.AuthModeKeyRole, mode)) {
+    if (Strings.isMatch(AuthModeKeyRole, mode)) {
       return isKeyRoleValid(cmd, roles, roleParents)
     }
     // CASE 4: App-Role mode
-    if (Strings.isMatch(ApiConstants.AuthModeAppRole, mode)) {
+    if (Strings.isMatch(AuthModeAppRole, mode)) {
       return isAppRoleValid(cmd, roles, roleParents)
     }
     // CASE 5: api-key + role
-    if (Strings.isMatch(ApiConstants.AuthModeAppKey, mode)) {
+    if (Strings.isMatch(AuthModeAppKey, mode)) {
       val keyResult = isKeyRoleValid(cmd, roles, roleParents)
       if(!keyResult.success){
         return keyResult
@@ -71,7 +72,10 @@ class ApiAuth(private val keys:List[ApiKey],
 
 
   def isKeyRoleValid(cmd:Request, actionRoles:String, parentRoles:String):Result[Boolean] = {
-    isKeyValid(cmd.opts, _keyLookup, headerApiKeyName, actionRoles, parentRoles)
+    callback.fold[Result[Boolean]](
+      isKeyValid(cmd.opts, _keyLookup, headerApiKeyName, actionRoles, parentRoles))( call => {
+        call(AuthModeAppKey, cmd, actionRoles, parentRoles)
+      })
   }
 
 
@@ -79,7 +83,8 @@ class ApiAuth(private val keys:List[ApiKey],
 
     // Check 1: Callback supplied ( so as to avoid subclassing this class )
     if(callback.isDefined) {
-      return callback.map(c => c(cmd, actionRoles, parentRoles)).getOrElse(unAuthorized())
+      return callback.map(c => c(AuthModeAppRole, cmd, actionRoles, parentRoles))
+        .getOrElse(unAuthorized())
     }
 
     // Get the expected role from either action or possible reference to parent

@@ -16,7 +16,7 @@ import slate.common.args.{ArgsSchema, Args}
 import slate.common.console.ConsoleWriter
 import slate.common.info.{Host, Lang}
 import slate.common.logging.LoggerConsole
-import slate.common.{FailureResult, Result}
+import slate.common.{NoResult, FailureResult, Result}
 import slate.core.common.{Conf, AppContext}
 import slate.common.results._
 import slate.entities.core.Entities
@@ -34,7 +34,7 @@ object AppRunner extends ResultSupportIn
    */
   def run(app: AppProcess, args:Option[Array[String]]): Result[Any] =
   {
-    var res:Result[Any] = null
+    var res:Result[Any] = NoResult
 
     try {
       // 1. Check the command line args
@@ -63,9 +63,13 @@ object AppRunner extends ResultSupportIn
     catch {
       case ex:Exception => {
         println("Unexpected error : " + ex.getMessage)
+        res = failure( msg = Some("Unexpected error running application: " + ex.getMessage ),
+                       err = Some(ex)
+        )
       }
     }
-    finally{
+    finally {
+      // Reset any color changes
       println(Console.RESET)
     }
 

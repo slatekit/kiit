@@ -138,15 +138,16 @@ object AuthFuncs extends ResultSupportIn {
    * @param keys
    * @return
    */
-  def convertKeys(keys:List[ApiKey]):ListMap[String,ApiKey] = {
-    val lookup = new ListMap[String,ApiKey]()
-    if(keys == null)
-      return lookup
-    for(key <- keys) {
-      val rolesLookup = Strings.splitToMap(key.roles, ',', true)
-      lookup.add(key.key, new ApiKey(key.name, key.key, key.roles, rolesLookup))
-    }
-    lookup
+  def convertKeys(keys:Option[List[ApiKey]]):ListMap[String,ApiKey] = {
+    keys.fold(new ListMap[String,ApiKey]())( all => {
+
+      val lookup = new ListMap[String,ApiKey]()
+      for(key <- all) {
+        val rolesLookup = Strings.splitToMap(key.roles, ',', true)
+        lookup.add(key.key, new ApiKey(key.name, key.key, key.roles, rolesLookup))
+      }
+      lookup
+    })
   }
 
 

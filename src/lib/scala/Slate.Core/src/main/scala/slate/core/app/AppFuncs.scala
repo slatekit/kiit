@@ -44,12 +44,12 @@ object AppFuncs extends ResultSupportIn {
     */
   def envs(): List[EnvItem] = {
     List[EnvItem](
-      EnvItem("loc", Env.DEV),
-      EnvItem("dev", Env.DEV),
-      EnvItem("qa1", Env.QA),
-      EnvItem("qa2", Env.QA),
-      EnvItem("stg", Env.UAT),
-      EnvItem("pro", Env.PROD)
+      EnvItem("loc", Env.DEV , desc = "Dev environment (local)" ),
+      EnvItem("dev", Env.DEV , desc = "Dev environment (shared)" ),
+      EnvItem("qa1", Env.QA  , desc = "QA environment  (current release)" ),
+      EnvItem("qa2", Env.QA  , desc = "QA environment  (last release)" ),
+      EnvItem("stg", Env.UAT , desc = "STG environment (demo)" ),
+      EnvItem("pro", Env.PROD, desc = "LIVE environment" )
     )
   }
 
