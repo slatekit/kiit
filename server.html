@@ -83,9 +83,12 @@
 				</div>
 				<br/>
 				<h1>About</h1>
-				<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
-					Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
-					The ORM is designed in form of an "Entities" based approach ( as you will see in the docs ). The following features are supported:
+				<p>The Slate Kit Server is a Web API Server that can host Slate Kit 
+					<strong><a href="apis-detail.html" class="url-ch">Protocol Independent APIs</a></strong> which can run as both Web APIs and on the CLI ( Command Line ).
+					The server uses <strong>Akka-Http</strong> as the underlying http server 
+					and also leverages the Slate Kit <strong><a href="app.html" class="url-ch">Base App</a></strong> 
+					to easily provide built-in support for command line arguments, environment selection, configs, 
+					encryption, logging and more. 
 				</p>
 				<br/>
 				<h1 id="apis">Goals</h1>
@@ -95,16 +98,16 @@
 						<td class="col-sm-6"><strong>Description</strong></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">Foundation </td>
-						<td class="col-sm-6">Provide a starting point for quickly building an API server</td>
+						<td class="col-sm-2"><strong>Server Foundation</strong></td>
+						<td class="col-sm-6">Provide a strong foundation for quickly building an API server</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">Pre-built Features</td>
-						<td class="col-sm-6">Many fetures are pre-built, such as checking versions, diagnostics, logs and more</td>
+						<td class="col-sm-2"><strong>Server Features</strong></td>
+						<td class="col-sm-6">Pre-built features such as getting version info, diagnostics, error-logging and more</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2">API Separation</td>
-						<td class="col-sm-6">APIs are built as pure Scala classes using the Protocol Independent API approaches</td>
+						<td class="col-sm-2"><strong>Server Separation</strong></td>
+						<td class="col-sm-6">Decouple server from APIs, which are pure Scala classes & Protocol Independent</td>
 					</tr>
 				</table>				
 				<br/>
@@ -117,19 +120,19 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>1. API Containers</strong></td>
-						<td class="col-sm-6">All APIs built with Slate Kit are run inside of a <strong>API Container</strong>.</td>
+						<td class="col-sm-6">All APIs built with Slate Kit are run inside of a <strong>API Container</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>2. Unified Routing</strong></td>
-						<td class="col-sm-6">A simple, effective approach to API <strong>routing</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
+						<td class="col-sm-6">A simple, 3-part hierarchical approach to API <strong>routes</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>3. Unified Requests</strong></td>
-						<td class="col-sm-6">A structure for representing API <strong>requests</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
+						<td class="col-sm-6">A data structure for representing API <strong>requests</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>4. Unified Responses</strong></td>
-						<td class="col-sm-6">A structure for representing API <strong>responses</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
+						<td class="col-sm-6">A data structure for representing API <strong>responses</strong>. Refer to <a class="url-ch" href="apis-detail.html">APIs</a></td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>5. Unified Discovery</strong></td>
@@ -137,58 +140,7 @@
 					</tr>
 				</table>
 				<br/>
-				
-				<h1>Features</h1>
-				<table class="table table-bordered table-striped">
-					<tr>
-						<td class="col-sm-2"><strong>Feature</strong></td>
-						<td class="col-sm-6"><strong>Description</strong></td>
-						<td class="col-sm-3"><strong>Example</strong></td>
-					</tr>
-					<tr> 
-						<td><strong>1. Args</strong></td>
-						<td>Command line arguments support ( which can override any config settings )
-						</td>
-						<td>-env=dev -log.level=info -region=ny</td>
-					</tr>
-					<tr> 
-						<td><strong>2. Envs</strong></td>
-						<td>Support and selection of multiple environments ( with defaults )</td>
-						<td>local, dev, qa, stg, pro</td>
-					</tr>
-					<tr> 
-						<td><strong>3. Logs</strong></td>
-						<td>Logging and error handling ( any log provider can be easily added )</td>
-						<td>console / file logger, custom logger</td>
-					</tr>
-					<tr> 
-						<td><strong>4. Config</strong></td>
-						<td>Configuration files for each environment ( with support for config inheritance )</td>
-						<td>env.conf, env.local.conf, env.qa.conf</td>
-					</tr>
-					<tr> 
-						<td><strong>5. Settings</strong></td>
-						<td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
-						<td>${user}/mycompany/myapp/database.conf</td>
-					</tr>
-					<tr> 
-						<td><strong>6. Encryption</strong></td>
-						<td>Encryption and decryption support</td>
-						<td>Using AES</td>
-					</tr>
-					<tr> 
-						<td><strong>7. Life-cycle</strong></td>
-						<td>Application life-cycle events</td>
-						<td>check(), init(), accept(), execute(), shutdown()</td>
-					</tr>
-					<tr> 
-						<td><strong>8. Context</strong></td>
-						<td>An application context to contain and provide access to many services</td>
-						<td>encryptor, logger, settings, environment, etc</td>
-					</tr>
-				</table>
-				<br/>
-				
+												
 				<h1 id="overview">Details</h1>
 				<table class="table table-bordered table-striped">
 					<tr>
@@ -261,7 +213,7 @@
 							</tr>
 							<tr> 
 								<td>akka-http</td>
-								<td>2.11-2.4.4</td>
+								<td>2.11-2.4.10</td>
 								<td>Http async server/framework</td>
 							</tr>
 							<tr> 
@@ -275,12 +227,42 @@
 								<td>Using the <a class="url-ch" href="app.html">Base App</a> and <a class="url-ch" href="apis-detail.html">API Container</a></td>
 							</tr>
 						</table>
+						<h3>Imports</h3>
+						<p>Below are the typical imports you need to run the server. The akka-http
+						libraries are abstracted away from you.</p>
+						<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// Support components
+// 1. Current environment ( dev, qa )
+// 2. Logger
+// 3. Result[T] success/failure
+</span><span class="k">import</span> <span class="nn">slate.common.envs.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">EnvItem</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.SuccessResult</span>
+<span class="k">import</span> <span class="nn">slate.common.info.About</span>
+<span class="k">import</span> <span class="nn">slate.common.logging.LoggerConsole</span>
+
+<span class="c1">// Core API components
+</span><span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiReg</span><span class="o">,</span> <span class="nc">ApiAuth</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.common.</span><span class="o">{</span><span class="nc">Conf</span><span class="o">,</span> <span class="nc">AppContext</span><span class="o">}</span>
+
+<span class="c1">// Entities for database access
+</span><span class="k">import</span> <span class="nn">slate.entities.core.Entities</span>
+
+<span class="c1">// Server components
+</span><span class="k">import</span> <span class="nn">slate.server.core.Server</span>
+
+<span class="c1">// Sample APIs ( get version, app info )
+</span><span class="k">import</span> <span class="nn">slate.integration.</span><span class="o">{</span><span class="nc">VersionApi</span><span class="o">,</span> <span class="nc">AppApi</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.examples.common.UserApi</span>
+
+</code></pre>
+</div>
+
 						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 						<br/><br/><br/>
 					</div>
 					<div> 
 						<h1 id="server-approach">Approach</h1>
-						<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Scala APIs to run in the server and/or in the CLI. Our server code marshalls/routes WEB API REST calls to your APIs. You simply annotate your APIs to make them available.
+						<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Scala APIs to run in the server and/or in the CLI. 
+						Our server code marshalls/routes WEB API calls to your APIs. You simply annotate your APIs to make them available.
 						</p>
 						<h3>APIS</h3>
 						<p>The server is implemented as a collection of APIs. For more information see the APIs page</p>
@@ -292,184 +274,69 @@
 						<h1 id="server-setup">Setup</h1>
 						<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
 						</p>
-						<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">package</span> <span class="nn">sampleapp.server</span>
-
-<span class="c1">// Sample services
-</span><span class="k">import</span> <span class="nn">sampleapp.core.common.</span><span class="o">{</span><span class="nc">AppApiKeys</span><span class="o">,</span> <span class="nc">AppAuth</span><span class="o">,</span> <span class="nc">AppEncryptor</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">sampleapp.core.models.</span><span class="o">{</span><span class="nc">Movie</span><span class="o">,</span> <span class="nc">User</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">sampleapp.core.services.</span><span class="o">{</span><span class="nc">MovieApi</span><span class="o">,</span> <span class="nc">MovieService</span><span class="o">,</span> <span class="nc">UserService</span><span class="o">,</span> <span class="nc">UserApi</span><span class="o">}</span>
-
-<span class="c1">// Slate Result Monad + database/logger/application metadata
-</span><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Result</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
-<span class="k">import</span> <span class="nn">slate.common.databases.DbLookup</span>
-<span class="k">import</span> <span class="nn">slate.common.info.</span><span class="o">{</span><span class="nc">Lang</span><span class="o">,</span> <span class="nc">Host</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.logging.LoggerConsole</span>
-
-<span class="c1">// Slate Base Application ( to support command line args, environments, config etc )
-</span><span class="k">import</span> <span class="nn">slate.core.app.</span><span class="o">{</span><span class="nc">AppRunner</span><span class="o">,</span> <span class="nc">AppProcess</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.core.common.AppContext</span>
-
-<span class="c1">// Slate entities ( mini-ORM ) - Optional
-</span><span class="k">import</span> <span class="nn">slate.entities.core.Entities</span>
-<span class="k">import</span> <span class="nn">slate.entities.repos.</span><span class="o">{</span><span class="nc">EntityRepoMySql</span><span class="o">}</span>
-
-<span class="k">import</span> <span class="nn">slate.integration.</span><span class="o">{</span><span class="nc">VersionApi</span><span class="o">,</span> <span class="nc">AppApi</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.server.core.Server</span>
-<span class="k">import</span> <span class="nn">scala.reflect.runtime.universe.</span><span class="o">{</span><span class="n">typeOf</span><span class="o">}</span>
-
-<span class="cm">/**
-  * Sample Server application.
-  *
-  * IMPORTANT
-  * 1. You can further extend the slate AppProcess ( refer to AppBase in SampleApp.Core )
-  * 2. The onInit method is ONLY provided here to show how the context can be set up
-  * 3. The AppBase class ( in SampleApp.Core ) can be used to have a common base class with
-  *    the onInit method already implemented for your specific needs.
-  *
-  * NOTE(s):
-  * 1. you can extend from AppBase ( SampleApp.Core ) to avoid initializing context in onInit here
-  * 2. command line arguments are optional but set up here for demo purposes
-  */</span>
-<span class="k">class</span> <span class="nc">SampleAppServer</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
-<span class="o">{</span>
-  <span class="c1">// setup the command line arguments.
-</span>  <span class="c1">// NOTE(s):
-</span>  <span class="c1">// 1. These values can can be setup in the env.conf file
-</span>  <span class="c1">// 2. If supplied on command line, they override the values in .conf file
-</span>  <span class="c1">// 3. If any of these are required and not supplied, then an error is display and program exists
-</span>  <span class="c1">// 4. Help text can be easily built from this schema.
-</span>  <span class="n">argsSchema</span><span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"env"</span>        <span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"dev"</span>  <span class="o">,</span> <span class="s">"dev"</span>  <span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span> <span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"region"</span>     <span class="o">,</span> <span class="s">"the region linked to app"</span> <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"us"</span>   <span class="o">,</span> <span class="s">"us"</span>   <span class="o">,</span> <span class="s">"us|europe|india|*"</span> <span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"port"</span>       <span class="o">,</span> <span class="s">"the port to run on"</span>       <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"5000"</span> <span class="o">,</span> <span class="s">"5000"</span> <span class="o">,</span> <span class="s">"5000|80"</span><span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"domain"</span>     <span class="o">,</span> <span class="s">"domain association"</span>       <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"::0"</span>  <span class="o">,</span> <span class="s">"::0"</span>  <span class="o">,</span> <span class="s">"::0|mycompany.com"</span><span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"log.level"</span>  <span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span> <span class="o">,</span> <span class="s">"info"</span> <span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">)</span>
-
-
-  <span class="cm">/**
-    * initialize app context, database and ORM / entities.
-    *
-    * NOTE: If you extend this class from AppBase ( see SampleApp.Core project ),
-    * which contains this init code. That way you don't have to duplicate if for the app types
-    * below. This approach works in the initialization of app context is same for all the app types.
-    * 1. console
-    * 2. cli
-    * 3. server
-    */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="c1">// Shows startup summary before execution.
-</span>    <span class="n">options</span><span class="o">.</span><span class="n">printSummaryBeforeExec</span> <span class="k">=</span> <span class="kc">true</span>
-
-    <span class="c1">// Initialize the context with common app info
-</span>    <span class="c1">// The database can be set up in the "env.conf" shared inherited config or
-</span>    <span class="c1">// overridden in the environment specific e.g. "env.qa.conf"
-</span>    <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
-      <span class="n">app</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span>
-      <span class="n">env</span>  <span class="k">=</span> <span class="n">env</span><span class="o">,</span>
-      <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
-      <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
-      <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(),</span>
-      <span class="n">inf</span>  <span class="k">=</span> <span class="n">aboutApp</span><span class="o">(),</span>
-      <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
-      <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">(),</span>
-      <span class="n">con</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(),</span>
-      <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">AppEncryptor</span><span class="o">),</span>
-      <span class="n">dirs</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">folders</span><span class="o">())</span>
+						<div class="highlighter-rouge"><pre class="highlight"><code>    
+  <span class="k">def</span> <span class="n">runServer</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  
+    <span class="c1">// 1. Build the auth provider 
+</span>    <span class="c1">// ( Sample auth below always return true authenticating requests)
+</span>    <span class="c1">// mode        = "key-roles" | "app-roles"
+</span>    <span class="c1">// request     = the request ( see Unified Requests in APIs section )
+</span>    <span class="c1">// actionRoles = the roles on the api action
+</span>    <span class="c1">// parentRoles = the roles on the parent api
+</span>    <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span>
+      <span class="n">callback</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">((</span><span class="n">mode</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">actionRoles</span><span class="o">,</span> <span class="n">parentRoles</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    	<span class="k">new</span> <span class="nc">SuccessResult</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="mi">200</span><span class="o">)</span>
+      <span class="o">})</span>
     <span class="o">)</span>
-
-    <span class="c1">// 3. Initialize the database if enabled
-</span>    <span class="c1">// NOTE(s):
-</span>    <span class="c1">// 1. There is a sample mysql database connection in common environment config "env.conf".
-</span>    <span class="c1">// 2. It is currently disabled for loading via the db.enabled = false flag.
-</span>    <span class="c1">// 3. To enable loading of the connection and making it available in ctx.con
-</span>    <span class="c1">//    set db.enabled = true
-</span>    <span class="nc">DbLookup</span><span class="o">.</span><span class="n">setDefault</span><span class="o">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">con</span><span class="o">)</span>
-
-    <span class="c1">// 4. Setup the User entity services
-</span>    <span class="c1">// NOTE(s):
-</span>    <span class="c1">// 1. See the ORM documentation for more info.
-</span>    <span class="c1">// 2. The entity services uses a Generic Service/Repository pattern for ORM functionality.
-</span>    <span class="c1">// 3. The services support CRUD operations out of the box for single-table mapped entities.
-</span>    <span class="c1">// 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
-</span>    <span class="n">ctx</span><span class="o">.</span><span class="n">ent</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span>
-      <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]))</span>
-    <span class="n">ctx</span><span class="o">.</span><span class="n">ent</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">Movie</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Movie</span><span class="o">],</span>
-      <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">MovieService</span><span class="o">],</span> <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">Movie</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">Movie</span><span class="o">]))</span>
-  <span class="o">}</span>
-
-
-  <span class="cm">/**
-   * You implement this method to executes the app
-   *
-   * @return
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>
-  <span class="o">{</span>
-    <span class="n">info</span><span class="o">(</span><span class="s">"server starting"</span><span class="o">)</span>
-
-    <span class="c1">// 1. Build the auth provider
-</span>    <span class="k">val</span> <span class="n">sampleKeys</span> <span class="k">=</span> <span class="nc">AppApiKeys</span><span class="o">.</span><span class="n">fetch</span><span class="o">()</span>
-    <span class="k">val</span> <span class="n">selectedKey</span> <span class="k">=</span> <span class="n">sampleKeys</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppAuth</span><span class="o">(</span><span class="s">"test-mode"</span><span class="o">,</span> <span class="s">"slatekit"</span><span class="o">,</span> <span class="s">"johndoe"</span><span class="o">,</span> <span class="n">selectedKey</span><span class="o">,</span> <span class="n">sampleKeys</span><span class="o">)</span>
-
-    <span class="c1">// 2. Initialize server with port, domain, context (see above) and auth provider
-</span>    <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="o">(</span> <span class="n">args</span><span class="o">.</span><span class="n">getIntOrElse</span><span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="mi">5000</span><span class="o">),</span>
-                             <span class="n">args</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"domain"</span><span class="o">,</span> <span class="s">"::0"</span><span class="o">),</span>
-                             <span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span>
+	
+    <span class="c1">// 2. Initialize server with port, domain, context (see below) and auth provider
+</span>    <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="o">(</span>  <span class="n">port</span>       <span class="k">=</span> <span class="mi">5000</span> <span class="o">,</span>
+                              <span class="n">interface</span>  <span class="k">=</span> <span class="s">"::0"</span><span class="o">,</span>
+                              <span class="n">ctx</span>        <span class="k">=</span> <span class="n">context</span><span class="o">()</span> <span class="o">,</span>
+                              <span class="n">auth</span>       <span class="k">=</span> <span class="n">auth</span><span class="o">,</span>
+                              <span class="n">apiItems</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span>
+                                <span class="nc">List</span><span class="o">[</span><span class="kt">ApiReg</span><span class="o">](</span>
+                                  <span class="k">new</span> <span class="nc">ApiReg</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppApi</span><span class="o">()</span>    <span class="o">,</span> <span class="kc">true</span>  <span class="o">),</span>
+                                  <span class="k">new</span> <span class="nc">ApiReg</span><span class="o">(</span><span class="k">new</span> <span class="nc">VersionApi</span><span class="o">(),</span> <span class="kc">true</span>  <span class="o">),</span>
+                                  <span class="k">new</span> <span class="nc">ApiReg</span><span class="o">(</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
+                                <span class="o">)</span>
+                              <span class="o">)</span>
                             <span class="o">)</span>
-    <span class="c1">// 3. Register the APIs within the api container
-</span>    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppApi</span><span class="o">]</span>    <span class="o">(</span><span class="k">new</span> <span class="nc">AppApi</span><span class="o">()</span>    <span class="o">,</span> <span class="kc">true</span>  <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">VersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">VersionApi</span><span class="o">(),</span> <span class="kc">true</span>  <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">]</span>    <span class="o">(</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">MovieApi</span><span class="o">]</span>   <span class="o">(</span><span class="k">new</span> <span class="nc">MovieApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
-
-    <span class="c1">// 4. Run the server ( this starts the life-cycle init, execute, shutdown )
+    
+    <span class="c1">// 3. Run the server ( this starts the life-cycle init, execute, shutdown )
 </span>    <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="o">()</span>
-
-    <span class="n">info</span><span class="o">(</span><span class="s">"server stopped"</span><span class="o">)</span>
-
-    <span class="n">success</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
   <span class="o">}</span>
 
-
-  <span class="cm">/**
-   * HOOK for when app is shutting down
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onShutdown</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="n">info</span><span class="o">(</span><span class="s">"app shutting down"</span><span class="o">)</span>
+  <span class="c1">// Slate Kit app, apis, server use an AppContext which 
+</span>  <span class="c1">// contains basic startup info and services like 
+</span>  <span class="c1">// current environment ( dev, qa, etc ), logger, config, encryptor
+</span>  <span class="c1">// and info about the app.
+</span>  <span class="k">def</span> <span class="n">context</span><span class="o">()</span><span class="k">:</span><span class="kt">AppContext</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+      <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="s">"ny.dev.01"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span> <span class="o">),</span>
+      <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+      <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
+      <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"slatekit.sample-server"</span><span class="o">,</span> <span class="s">"SlateKit Server"</span><span class="o">,</span> <span class="s">"example"</span><span class="o">,</span> <span class="s">"slatekit"</span><span class="o">),</span>
+      <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">)</span>
   <span class="o">}</span>
-
-
-  <span class="cm">/**
-   * HOOK for adding items to the summary of data shown at the end of app execution
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="o">{</span>
-    <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
-      <span class="s">"region"</span> <span class="o">+</span> <span class="s">" = "</span> <span class="o">+</span> <span class="n">args</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"region"</span><span class="o">,</span> <span class="s">"n/a"</span><span class="o">)</span>
-    <span class="o">))</span>
-  <span class="o">}</span>
-<span class="o">}</span>
 
 </code></pre>
 </div>
+
 
 						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 						<br/><br/><br/>
 					</div>
 					<div>
 						<h1 id="server-routing">Routing</h1>
-						<p>The server routes WEB API calls or commands to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+						<p>The server routes WEB API calls to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
 						In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.
 						Refer to <a class="url-ch" href="apis-detail.html">APIs</a> for more info.
 						</p>
 				<br/>
 				<div class="alert alert-success" role="alert">
-					<h3>http://mycomany.com/api/<strong>{area}/{api}/{action}</strong>key=value*</h3>
+					<h3>http://mycomany.com/api/<strong>{area}/{api}/{action}</strong></h3>
 					<br/>
 				</div>
 				<br/>
@@ -499,127 +366,9 @@
 					<div> 
 						<h1 id="server-security">Security</h1>
 						<p>You can setup authorization on your API using annotations on the classes and methods.
-						Refer to <a class="url-ch" href="apis-detail.html">API Security</a> for more info. For full customization 
-						you can build your own authentication provider and handle authorization any way you want. Please 
-						refer to the example below and the sample apps.
+						 For full customization you can build your own authentication provider and handle 
+						 authorization any way you want. Refer to <a class="url-ch" href="apis-detail.html">APIs</a> for more info.
 						</p>
-						<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">package</span> <span class="nn">sampleapp.core.common</span>
-
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Strings</span><span class="o">,</span> <span class="nc">Result</span><span class="o">,</span> <span class="nc">Files</span><span class="o">,</span> <span class="nc">ApiKey</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
-<span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiCmd</span><span class="o">,</span> <span class="nc">ApiAuth</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.core.common.Conf</span>
-
-<span class="cm">/**
-  * Sample custom auth provider for your application.
-  *
-  * @param mode        : "test-mode"     - for demo purposes to return hard-coded roles
-  * @param appDir      : "mycompany"     - app directory in user folder to store configs e.g. c:/users/jdoe/mycompany
-  * @param user        : "john.doe"      - hard-coded user name for demo purposes
-  * @param selectedKey : "dev,ops,admin" - hard-coded user roles for demo purposes
-  * @param keys        : the list of api keys when using api key based authorization.
-  */</span>
-<span class="k">class</span> <span class="nc">AppAuth</span> <span class="o">(</span><span class="k">val</span> <span class="n">mode</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">appDir</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
-               <span class="k">val</span> <span class="n">user</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">selectedKey</span><span class="k">:</span><span class="kt">ApiKey</span><span class="o">,</span> <span class="n">keys</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">])</span>
-  <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
-<span class="k">with</span> <span class="nc">ResultSupportIn</span>
-<span class="o">{</span>
-
-  <span class="cm">/**
-    * Override and implement this method if you want to completely handle authorization your self.
-    * @param cmd         : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
-    * @param mode        : The auth-mode of the api ( refer to auth-mode for protocolo independent APIs )
-    * @param actionRoles : The role setup on the API action
-    * @param parentRoles : The role setup on the API itself
-    *
-    * IMPORTANT:
-    * 1. all you need to do to implement your authorization is to implement the getUserRoles below
-    *
-    * NOTES:
-    * 1. see base class implementation for details.
-    * 2. the auth modes on the apis can be "app-roles" or "key-roles" ( api-keys )
-    * 3. the base class properly delegates handling the auth modes.
-    * @return
-    */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">isAuthorized</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">mode</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">actionRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">parentRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span>
-  <span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-      <span class="k">super</span><span class="o">.</span><span class="n">isAuthorized</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">mode</span><span class="o">,</span> <span class="n">actionRoles</span><span class="o">,</span> <span class="n">parentRoles</span><span class="o">)</span>
-  <span class="o">}</span>
-
-
-  <span class="cm">/**
-    * Called by system to handle authorization for an API action with auth mode = "key-roles"
-    * @param cmd         : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
-    * @param actionRoles : The role setup on the API action
-    * @param parentRoles : The role setup on the API itself
-    * @return
-    */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">actionRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">parentRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-
-    <span class="k">super</span><span class="o">.</span><span class="n">isKeyRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">actionRoles</span><span class="o">,</span> <span class="n">parentRoles</span><span class="o">)</span>
-  <span class="o">}</span>
-
-
-  <span class="cm">/**
-    * Called by system to handle authorization for an API action with auth mode = "app-roles"
-    * @param cmd         : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
-    * @param actionRoles : The role setup on the API action
-    * @param parentRoles : The role setup on the API itself
-    * @return
-    */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">,</span> <span class="n">actionRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">parentRoles</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-
-    <span class="k">super</span><span class="o">.</span><span class="n">isAppRoleValid</span><span class="o">(</span><span class="n">cmd</span><span class="o">,</span> <span class="n">actionRoles</span><span class="o">,</span> <span class="n">parentRoles</span><span class="o">)</span>
-  <span class="o">}</span>
-
-  <span class="cm">/**
-    * Called by system to get the users roles from API request (ApiCmd)
-    * @param cmd   : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
-    *
-    * IMPORTANT
-    * 1. for sample / demo purposes this returns the hard-coded user/roles if mode = 'test-mode'
-    *
-    * NOTES:
-    * 1. you need to implement this method to provide the system with the roles from request.
-    * 2. the api cmd could be a http request, in which case you can access the headers via cmd.opts.
-    * 3. you have freedom to implement any authorization scheme you want.
-    *
-    * @return
-    */</span>
-  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">getUserRoles</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span><span class="kt">ApiCmd</span><span class="o">)</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
-
-    <span class="c1">// CASE 1: sample demo
-</span>    <span class="k">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s">"test-mode"</span><span class="o">){</span>
-      <span class="k">return</span> <span class="n">selectedKey</span><span class="o">.</span><span class="n">roles</span>
-    <span class="o">}</span>
-
-    <span class="c1">// CASE 2: When running a console/cli app
-</span>    <span class="c1">// You get get the user/roles from some local encrypted file saved on the user directory
-</span>    <span class="k">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s">"user-dir"</span><span class="o">){</span>
-      <span class="k">val</span> <span class="n">path</span> <span class="k">=</span> <span class="nc">Files</span><span class="o">.</span><span class="n">loadUserAppFile</span><span class="o">(</span><span class="n">appDir</span><span class="o">,</span> <span class="s">"login.txt"</span><span class="o">).</span><span class="n">getAbsolutePath</span>
-      <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">path</span><span class="o">))</span>
-      <span class="k">val</span> <span class="n">roles</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"roles"</span><span class="o">)</span>
-      <span class="k">return</span> <span class="n">roles</span>
-    <span class="o">}</span>
-
-    <span class="c1">// CASE 3: Running a web server
-</span>    <span class="c1">// Get the roles from the opts abstraction member representing http headers
-</span>    <span class="k">if</span><span class="o">(</span><span class="n">mode</span> <span class="o">==</span> <span class="s">"header"</span><span class="o">){</span>
-      <span class="k">val</span> <span class="n">headers</span> <span class="k">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">opts</span>
-      <span class="k">val</span> <span class="n">roles</span> <span class="k">=</span> <span class="n">headers</span><span class="o">.</span><span class="n">map</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span> <span class="n">ops</span> <span class="k">=&gt;</span> <span class="n">ops</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"auth.roles"</span><span class="o">)).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">""</span><span class="o">)</span>
-
-      <span class="c1">// NOTE: Handle encryption etc. for production
-</span>      <span class="c1">// This is just here for sample purpose to show getting auth/user info from
-</span>      <span class="c1">// protocol independent APIs ( see slatekit.com for more info ).
-</span>      <span class="k">return</span> <span class="n">roles</span>
-    <span class="o">}</span>
-    <span class="s">""</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-</code></pre>
-</div>
 						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 						<br/><br/><br/>
 					</div>	
@@ -628,40 +377,60 @@
 						<p>You can add as many API's as you want to the Slate Server by simply creating classes and methods with annotations and registering your API's with the Server. These APIs can be also called on the command line via the CLI making them protocol independent.
 						Refer to <a class="url-ch" href="apis-detail.html">APIs</a> for more info. The sample apps and example below show 
 						how to register the app and version api to get application metadata and version information via APIs.
+						You can also do the following:
+						<ol>
+							<li>Derive from Server and override <strong>init, execute, shutdown</strong> life-cycle events</li>
+							<li>Instead of supplying the APIs during the server creation, register them after ( see below )</li>
+							<li>Easily customize authorization via the callback and use 3rd-party/open-source auth implementations</li>
+							<li>Refer to <a href="apis-detail.html" class="url-ch">APIs</a> for more info.</li>
+						</ol>						
 						</p>
-						<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
-   * You implement this method to executes the app
-   *
-   * @return
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span>
-  <span class="o">{</span>
-    <span class="n">info</span><span class="o">(</span><span class="s">"server starting"</span><span class="o">)</span>
+						<br/>
+						<div class="highlighter-rouge"><pre class="highlight"><code>   
+  <span class="k">def</span> <span class="n">runServer</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+  
+    <span class="c1">// 1. Build the auth provider 
+</span>    <span class="c1">// ( Sample auth below always return true authenticating requests)
+</span>    <span class="c1">// mode        = "key-roles" | "app-roles"
+</span>    <span class="c1">// request     = the request ( see Unified Requests in APIs section )
+</span>    <span class="c1">// actionRoles = the roles on the api action
+</span>    <span class="c1">// parentRoles = the roles on the parent api
+</span>    <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="nc">None</span><span class="o">,</span>
+      <span class="n">callback</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">((</span><span class="n">mode</span><span class="o">,</span> <span class="n">request</span><span class="o">,</span> <span class="n">actionRoles</span><span class="o">,</span> <span class="n">parentRoles</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    	<span class="k">new</span> <span class="nc">SuccessResult</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="mi">200</span><span class="o">)</span>
+      <span class="o">})</span>
+    <span class="o">)</span>
+	
+    <span class="c1">// 2. Initialize server with port, domain, context (see below) and auth provider
+</span>    <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="o">(</span>  <span class="n">port</span>       <span class="k">=</span> <span class="mi">5001</span> <span class="o">,</span>
+                               <span class="n">interface</span>  <span class="k">=</span> <span class="s">"::0"</span><span class="o">,</span>
+                               <span class="n">ctx</span>        <span class="k">=</span> <span class="n">context</span>   <span class="o">,</span>
+                               <span class="n">auth</span>       <span class="k">=</span> <span class="n">sampleAuth</span>
+                             <span class="o">)</span>
 
-    <span class="c1">// 1. Build the auth provider
-</span>    <span class="k">val</span> <span class="n">sampleKeys</span> <span class="k">=</span> <span class="nc">AppApiKeys</span><span class="o">.</span><span class="n">fetch</span><span class="o">()</span>
-    <span class="k">val</span> <span class="n">selectedKey</span> <span class="k">=</span> <span class="n">sampleKeys</span><span class="o">(</span><span class="mi">5</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppAuth</span><span class="o">(</span><span class="s">"test-mode"</span><span class="o">,</span> <span class="s">"slatekit"</span><span class="o">,</span> <span class="s">"johndoe"</span><span class="o">,</span> <span class="n">selectedKey</span><span class="o">,</span> <span class="n">sampleKeys</span><span class="o">)</span>
-
-    <span class="c1">// 2. Initialize server with port, domain, context (see above) and auth provider
-</span>    <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="o">(</span> <span class="n">args</span><span class="o">.</span><span class="n">getIntOrElse</span><span class="o">(</span><span class="s">"port"</span><span class="o">,</span> <span class="mi">5000</span><span class="o">),</span>
-                             <span class="n">args</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"domain"</span><span class="o">,</span> <span class="s">"::0"</span><span class="o">),</span>
-                             <span class="n">ctx</span><span class="o">,</span> <span class="n">auth</span>
-                            <span class="o">)</span>
-    <span class="c1">// 3. Register the APIs within the api container
+    <span class="c1">// 3. Register your APIs.
 </span>    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">AppApi</span><span class="o">]</span>    <span class="o">(</span><span class="k">new</span> <span class="nc">AppApi</span><span class="o">()</span>    <span class="o">,</span> <span class="kc">true</span>  <span class="o">)</span>
     <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">VersionApi</span><span class="o">](</span><span class="k">new</span> <span class="nc">VersionApi</span><span class="o">(),</span> <span class="kc">true</span>  <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">]</span>    <span class="o">(</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">MovieApi</span><span class="o">]</span>   <span class="o">(</span><span class="k">new</span> <span class="nc">MovieApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
-    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
-
+    <span class="n">server</span><span class="o">.</span><span class="n">apis</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">UserApi</span><span class="o">]</span>   <span class="o">(</span><span class="k">new</span> <span class="nc">UserApi</span><span class="o">()</span>   <span class="o">,</span> <span class="kc">false</span> <span class="o">)</span>
+	
     <span class="c1">// 4. Run the server ( this starts the life-cycle init, execute, shutdown )
 </span>    <span class="n">server</span><span class="o">.</span><span class="n">run</span><span class="o">()</span>
-
-    <span class="n">info</span><span class="o">(</span><span class="s">"server stopped"</span><span class="o">)</span>
-
-    <span class="n">success</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
   <span class="o">}</span>
+
+  <span class="c1">// Slate Kit app, apis, server use an AppContext which 
+</span>  <span class="c1">// contains basic startup info and services like 
+</span>  <span class="c1">// current environment ( dev, qa, etc ), logger, config, encryptor
+</span>  <span class="c1">// and info about the app.
+</span>  <span class="k">def</span> <span class="n">context</span><span class="o">()</span><span class="k">:</span><span class="kt">AppContext</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
+      <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="s">"ny.dev.01"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span> <span class="o">),</span>
+      <span class="n">cfg</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(),</span>
+      <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
+      <span class="n">inf</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">About</span><span class="o">(</span><span class="s">"slatekit.sample-server"</span><span class="o">,</span> <span class="s">"SlateKit Server"</span><span class="o">,</span> <span class="s">"example"</span><span class="o">,</span> <span class="s">"slatekit"</span><span class="o">),</span>
+      <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+    <span class="o">)</span>
+  <span class="o">}</span>
+
 </code></pre>
 </div>
 						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
