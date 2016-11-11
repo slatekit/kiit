@@ -12,6 +12,7 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSpec}
+import slate.common.mapper.Mapper
 import slate.entities.core.{EntityMapper, EntityService}
 import slate.entities.repos.EntityRepoInMemory
 import slate.test.common.User
@@ -102,8 +103,8 @@ class EntityTests  extends FunSpec with BeforeAndAfter with BeforeAndAfterAll {
 
   private def service(): EntityService[User] = {
     // 1. Setup the mapper
-    val mapper = new EntityMapper(null)
-    mapper.loadSchema(new User(), typeOf[User])
+    val model = Mapper.loadSchema(new User(), typeOf[User])
+    val mapper = new EntityMapper(model)
 
     // 2. Setup repo
     val repo = new EntityRepoInMemory[User](typeOf[User])

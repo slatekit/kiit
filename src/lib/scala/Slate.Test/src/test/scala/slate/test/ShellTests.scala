@@ -93,7 +93,7 @@ class ShellTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = new ShellAPI(creds, ctx, new ApiAuth(apiKeys, null), "sampleapp")
+    val shell = new ShellAPI(creds, ctx, new ApiAuth(Some(apiKeys), None), "sampleapp")
 
     // 4. Register the apis using default mode ( uses permissions in annotations on class )
     shell.apis.register[AppApi]    (new AppApi()    , true, Some("qa"), protocol = Some("*"))

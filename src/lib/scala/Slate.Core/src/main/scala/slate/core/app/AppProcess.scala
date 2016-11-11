@@ -6,7 +6,7 @@ import slate.common.conf.ConfigBase
 import slate.common.console.ConsoleWriter
 import slate.common.databases.DbLookup
 import slate.common.encrypt.EncryptSupportIn
-import slate.common.envs.{EnvItem, Env}
+import slate.common.envs.{Envs, EnvItem, Env}
 import slate.common.i18n.I18nSupportIn
 import slate.common.info._
 import slate.common._
@@ -109,7 +109,10 @@ class AppProcess extends AppMetaSupport
     val envInput = getEnv()
 
     // 2. Validate the environment
-    val envCheck = Env.defaults().validate(envInput)
+    val envsAll = envs()
+    val selected = envsAll(0)
+    val envLookup = new Envs(envsAll, Some(selected))
+    val envCheck = envLookup.validate(envInput)
     if(!envCheck.success){
       writer.error(envCheck.msg.getOrElse(""))
       throw new IllegalArgumentException(envCheck.msg.getOrElse(""))
@@ -217,6 +220,7 @@ class AppProcess extends AppMetaSupport
         error("error while executing app : " + e.getMessage)
         meta.status.error = e.getMessage
         meta.status.errors += 1
+        res = unexpectedError(msg = Some("Unexpected error : " + e.getMessage), err = Some(e))
       }
     }
 

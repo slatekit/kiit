@@ -105,12 +105,12 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   def validate(args:Args):Result[Boolean] = {
 
-    validate( yes(), items)( (res, arg) =>
+    validateResults[Arg,Boolean]( yes(), items)( (arg) =>
       if (arg.isRequired && !args.containsKey(arg.name)) {
         no ( msg = Some(s"arg: ${arg.name} was not supplied") )
       }
       else {
-        res
+        yes()
       }
     )
   }

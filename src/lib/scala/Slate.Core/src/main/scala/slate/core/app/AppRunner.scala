@@ -11,16 +11,11 @@
 
 package slate.core.app
 
-import slate.common.app.AppMeta
 import slate.common.args.{ArgsSchema, Args}
 import slate.common.console.ConsoleWriter
-import slate.common.info.{Host, Lang}
-import slate.common.logging.LoggerConsole
 import slate.common.{NoResult, FailureResult, Result}
-import slate.core.common.{Conf, AppContext}
+import slate.common.Funcs._
 import slate.common.results._
-import slate.entities.core.Entities
-import slate.core.app.AppFuncs._
 import slate.common.Strings.newline
 
 object AppRunner extends ResultSupportIn
@@ -38,14 +33,16 @@ object AppRunner extends ResultSupportIn
 
     try {
       // 1. Check the command line args
-      val result = check(args, app.argsSchema)
+      val checkedArgs = if( args == null ) None else args
+      val safeArgs = checkedArgs.getOrElse(Array[String]())
+      val result = check(checkedArgs, Option(app.argsSchema))
       if (!result.success) {
         handleHelp(app, result)
         return result
       }
 
       // 2. Configure args
-      app.args(args, result.get)
+      app.args(Option(safeArgs), result.get)
 
       // 3. Begin app workflow
       app.init()
@@ -85,7 +82,7 @@ object AppRunner extends ResultSupportIn
    * @param schema   : the argument schema that defines what arguments are supported.
    * @return
    */
-  def check(rawArgs:Option[Array[String]], schema:ArgsSchema):Result[Args] = {
+  def check(rawArgs:Option[Array[String]], schema:Option[ArgsSchema]):Result[Args] = {
 
     // 1. Parse args
     val result = Args.parseArgs(rawArgs.getOrElse(Array[String]()), "-", "=", false)
@@ -103,11 +100,20 @@ object AppRunner extends ResultSupportIn
 
     // 4. Invalid inputs
     val args = result.get
-    val checkResult = schema.validate(args)
-    if(!checkResult.success){
-      return badRequest[Args](msg = Some("invalid arguments supplied"))
-    }
-    success(args)
+
+    // 5. No schema ? default to success otherwise validate args against schema
+    val finalResult = schema.fold[Result[Args]](success(args))( s => {
+
+      // Validate args against schema
+      val checkResult = s.validate(args)
+
+      // Invalid args ? error out
+      defaultOrExecute(!checkResult.success,
+        badRequest[Args](msg = Some("invalid arguments supplied")),
+        success(args)
+      )
+    })
+    finalResult
   }
 
 
