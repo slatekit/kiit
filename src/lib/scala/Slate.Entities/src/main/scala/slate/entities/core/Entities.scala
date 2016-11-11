@@ -12,6 +12,7 @@
 package slate.entities.core
 
 import slate.common.databases.{Db, DbConString, DbConstants, DbLookup}
+import slate.common.mapper.Mapper
 import slate.common.{Ensure, ListMap, Reflector, Strings}
 import slate.entities.repos.{EntityRepoSql, EntityRepoMySql, EntityRepoInMemory}
 
@@ -102,11 +103,11 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
     val entityKey = entityType.typeSymbol.fullName
     if(mapper == null && !_mappers.contains(entityKey))
     {
-      mapperFinal = new EntityMapper(null)
-
       // load attributes
       val entity = Reflector.createInstance(entityType).asInstanceOf[T]
-      mapperFinal.loadSchema(entity, entityType)
+      val model = Mapper.loadSchema(entity, entityType)
+
+      mapperFinal = new EntityMapper(model)
       _mappers(entityKey) = mapperFinal
     }
     else if( mapper != null && isSqlRepo && !_mappers.contains(entityKey))

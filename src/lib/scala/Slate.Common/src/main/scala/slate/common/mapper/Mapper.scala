@@ -20,14 +20,11 @@ import slate.common.Field
 import slate.common._
 
 
-class Mapper(protected var _model:Model) {
+class Mapper(protected val _model:Model) {
 
   protected var _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
 
-  def model() : Model =
-  {
-    _model
-  }
+  def model() : Model = _model
 
 
   def init(): Unit =
@@ -38,34 +35,6 @@ class Mapper(protected var _model:Model) {
   def createEntity() : Any =
   {
     Reflector.createInstance(_model.dataType.get)
-  }
-
-
-  def loadSchema(item:AnyRef, dataType:Type):Model =
-  {
-    val modelName = item.getClass().getSimpleName
-    val modelNameFull = item.getClass.getName
-
-    // Now add all the fields.
-    val matchedFieldsR = Reflector.getFieldsWithAnnotations(item, dataType, typeOf[Field])
-    val matchedFields = matchedFieldsR.reverse
-    val fieldId = ModelField.id( name = "id" , autoIncrement = true, dataType = typeOf[Long])
-    val fields = new ListBuffer[ModelField]()
-    fields.append(fieldId)
-
-    // Loop through each field
-    for(matchedField <- matchedFields )
-    {
-      val anno     = matchedField._4.asInstanceOf[Field]
-      val name     = matchedField._1
-      val required = anno.required
-      val length   = anno.length
-      val dataType = matchedField._5
-      fields.append( ModelField.build( name= name, dataType= dataType, isRequired= required, maxLength = length ) )
-    }
-
-    this._model = new Model(modelName, modelNameFull, Some(dataType), _propList = Some(fields.toList))
-    this._model
   }
 
 
@@ -135,5 +104,38 @@ class Mapper(protected var _model:Model) {
       all += field.toString() + "\n"
     }
     all
+  }
+}
+
+
+object Mapper {
+
+
+
+  def loadSchema(item:AnyRef, dataType:Type):Model =
+  {
+    val modelName = item.getClass().getSimpleName
+    val modelNameFull = item.getClass.getName
+
+    // Now add all the fields.
+    val matchedFieldsR = Reflector.getFieldsWithAnnotations(item, dataType, typeOf[Field])
+    val matchedFields = matchedFieldsR.reverse
+    val fieldId = ModelField.id( name = "id" , autoIncrement = true, dataType = typeOf[Long])
+    val fields = new ListBuffer[ModelField]()
+    fields.append(fieldId)
+
+    // Loop through each field
+    for(matchedField <- matchedFields )
+    {
+      val anno     = matchedField._4.asInstanceOf[Field]
+      val name     = matchedField._1
+      val required = anno.required
+      val length   = anno.length
+      val dataType = matchedField._5
+      fields.append( ModelField.build( name= name, dataType= dataType, isRequired= required, maxLength = length ) )
+    }
+
+    val model = new Model(modelName, modelNameFull, Some(dataType), _propList = Some(fields.toList))
+    model
   }
 }

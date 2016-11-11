@@ -73,7 +73,7 @@ class EntityService[T >: Null <: IEntity]
   }
 
 
-  def delete(id: Long) :Unit =
+  def delete(id: Long) :Boolean =
   {
     _repo.delete(id)
   }
