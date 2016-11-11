@@ -63,16 +63,23 @@ trait LogSupport {
 
 
   /**
+    * Logs an fatal
+    *
+    * @param msg : The message
+    * @param ex : The exception to log
+    */
+  def fatal(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
+  {
+    log(LogLevel.Fatal, msg, ex, tag)
+  }
+
+
+  /**
    * Logs an entry
    * @param level
    * @param msg
    * @param ex
    */
-  def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None): Unit =
-  {
-    val log = logger
-    if(log.isDefined ) {
-      log.get.log( level, msg, ex, tag)
-    }
-  }
+  def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None)
+    : Unit = ???
 }

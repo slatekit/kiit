@@ -54,6 +54,7 @@ object Logger extends LoggerBase {
       case "info"  => logLevel = LogLevel.Info
       case "warn"  => logLevel = LogLevel.Warn
       case "error" => logLevel = LogLevel.Error
+      case "fatal" => logLevel = LogLevel.Fatal
       case _       => logLevel = LogLevel.Warn
     }
     logLevel

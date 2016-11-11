@@ -16,12 +16,12 @@ import java.time.ZoneOffset
 import slate.common.DateTime
 
 case class LogEntry(
-                      name   : String           = "",
-                      tag    : String           = "",
+                      name  : String            = "",
                       level : LogLevel          = LogLevel.Info,
+                      msg   : String            = "",
                       time  : DateTime          = DateTime.now,
-                      msg   : Option[String]    = None,
-                      ex    : Option[Exception] = None
+                      ex    : Option[Exception] = None,
+                      tag   : Option[String]    = None
                    )
 {
 }

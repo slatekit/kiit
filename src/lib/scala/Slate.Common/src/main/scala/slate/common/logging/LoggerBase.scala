@@ -13,56 +13,23 @@ package slate.common.logging
 
 
 import slate.common.DateTime
+import scala.reflect.runtime.universe.Type
 
-
-abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = "") {
-
-
-  /**
-   * Logs an debug message
-    *
-    * @param msg : The message
-   * @param ex : The exception to log
-   */
-  def debug(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
-  {
-    log(LogLevel.Debug, msg, ex, tag)
-  }
-
+abstract class LoggerBase(val level:LogLevel       = LogLevel.Warn,
+                          val name:String          = "",
+                          val logType:Option[Type] = None ) extends LogSupport
+{
 
   /**
-   * Logs an info message
-    *
-    * @param msg : The message
-   * @param ex : The exception to log
+   * gets a new instance of logger with the supplied type, name and level
+   * with the same level as this one by default
+   * @param t
+   * @param name
+   * @param lvl
+   * @return
    */
-  def info(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
-  {
-    log(LogLevel.Info, msg, ex, tag)
-  }
-
-
-  /**
-   * Logs an warning
-    *
-    * @param msg : The message
-   * @param ex : The exception to log
-   */
-  def warn(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
-  {
-    log(LogLevel.Warn, msg, ex, tag)
-  }
-
-
-  /**
-   * Logs an error
-    *
-    * @param msg : The message
-   * @param ex : The exception to log
-   */
-  def error(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
-  {
-    log(LogLevel.Error, msg, ex, tag)
+  def getLogger(lvl:Option[LogLevel],  name:String, t:Option[Type] ):LoggerBase = {
+    new LoggerConsole(lvl.getOrElse(this.level), name, t)
   }
 
 
@@ -73,7 +40,7 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
    * @param msg
    * @param ex
    */
-  def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None): Unit =
+  override def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None): Unit =
   {
     if(level < this.level) 
       return 
@@ -95,15 +62,6 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
 
 
   /**
-   * Logs an entry
- *
-   * @param entry
-   */
-  protected def performLog(entry:LogEntry):
-  Unit
-
-
-  /**
     * Logs an entry
     *
     * @param level
@@ -112,6 +70,15 @@ abstract class LoggerBase(val level:LogLevel = LogLevel.Warn, val name:String = 
     */
   protected def buildLog(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None):
   LogEntry = {
-    new LogEntry(name, "", level, DateTime.now, Some(msg), ex)
+    new LogEntry(name, level, msg, DateTime.now, ex, tag)
   }
+
+
+  /**
+    * Logs an entry
+    *
+    * @param entry
+    */
+  protected def performLog(entry:LogEntry):
+  Unit
 }

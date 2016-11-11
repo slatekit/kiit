@@ -67,7 +67,7 @@ trait LogSupportIn {
 
 
   /**
-   * Logs an error
+   * Logs an fatal
    *
    * @param msg : The message
    * @param ex : The exception to log
