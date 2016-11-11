@@ -417,14 +417,15 @@ class ApiContainer(val ctx:AppContext                           ,
       val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
       val supportedProtocol = actualProtocol
       val isCliOk = isCliAllowed(cmd, supportedProtocol)
-      if (!isCliOk && !Strings.isNullOrEmpty(actualVerb) && actualVerb != "*" &&
-        !Strings.isMatch(actualVerb, cmd.verb)) {
+      val isWeb = protocol == ApiConstants.ProtocolWeb
+
+      // 2. Ensure verb is correct
+      if (isWeb && !ApiHelper.isValidMatch(actualVerb, cmd.verb)) {
         return badRequest(msg = Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
       }
 
       // 3. Ensure protocol is correct get/post
-      if (!isCliOk && !Strings.isNullOrEmpty(supportedProtocol) && supportedProtocol != "*" &&
-        !Strings.isMatch(supportedProtocol, protocol)) {
+      if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, protocol)) {
         return notFound(msg = Some(s"${cmd.fullName} not found"))
       }
 

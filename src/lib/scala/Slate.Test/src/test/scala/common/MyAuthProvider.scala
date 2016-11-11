@@ -19,7 +19,7 @@ import slate.core.apis.{Request, ApiAuth}
 // NOTE: You can also use own pre-built authorization provider which has
 // support for users, roles, permissions
 // =======================================================================================
-class MyAuthProvider(val user:String, val roles:String, keys:List[ApiKey]) extends ApiAuth(keys, None)
+class MyAuthProvider(val user:String, val roles:String, keys:Option[List[ApiKey]]) extends ApiAuth(keys, None)
   with ResultSupportIn
 {
 

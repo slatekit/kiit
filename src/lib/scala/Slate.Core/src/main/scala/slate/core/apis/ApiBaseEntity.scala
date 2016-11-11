@@ -25,70 +25,77 @@ class ApiBaseEntity[T >: Null <: IEntity] extends ApiBase {
   protected var _service:EntityService[T] = null
 
 
-  @ApiAction(name = "", desc= "gets the total number of users", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets the total number of users", roles= "@parent", verb = "get", protocol = "@parent")
   def total():Long =
   {
     _service.count()
   }
 
 
-  @ApiAction(name = "", desc= "gets the first item", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets all items", roles= "@parent", verb = "get", protocol = "@parent")
+  def getAll():List[T] =
+  {
+    _service.getAll()
+  }
+
+
+  @ApiAction(name = "", desc= "gets the first item", roles= "@parent", verb = "get", protocol = "@parent")
   def first(): Option[T] =
   {
     _service.first()
   }
 
 
-  @ApiAction(name = "", desc= "gets the first item", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets the first item", roles= "@parent", verb = "get", protocol = "@parent")
   def getById(id:Long): Option[T] =
   {
     _service.get(id)
   }
 
 
-  @ApiAction(name = "", desc= "gets the last item", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets the last item", roles= "@parent", verb = "get", protocol = "@parent")
   def last(): Option[T] =
   {
     _service.last()
   }
 
 
-  @ApiAction(name = "", desc= "gets recent items in the system", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets recent items in the system", roles= "@parent", verb = "get", protocol = "@parent")
   def recent(count:Int = 5): List[T] =
   {
     _service.recent(count)
   }
 
 
-  @ApiAction(name = "", desc= "gets oldest items in the system", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets oldest items in the system", roles= "@parent", verb = "get", protocol = "@parent")
   def oldest(count:Int = 5): List[T] =
   {
     _service.oldest(count)
   }
 
 
-  @ApiAction(name = "", desc= "gets distinct items based on the field", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "gets distinct items based on the field", roles= "@parent", verb = "get", protocol = "@parent")
   def distinct(field:String): List[Any] =
   {
     List[Any]()
   }
 
 
-  @ApiAction(name = "", desc= "finds items by field name and value", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "finds items by field name and value", roles= "@parent", verb = "get", protocol = "@parent")
   def findBy(field:String, value:String): List[T] =
   {
      _service.find(new Query().where(field, "=", value))
   }
 
 
-  @ApiAction(name = "", desc= "finds items by field name and value", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "finds items by field name and value", roles= "@parent", verb = "post", protocol = "@parent")
   def updateField(id:Long, field:String, value:String): Unit =
   {
     _service.update(id, field, value)
   }
 
 
-  @ApiAction(name = "", desc= "deletes an item by its id", roles= "@parent", verb = "@parent", protocol = "@parent")
+  @ApiAction(name = "", desc= "deletes an item by its id", roles= "@parent", verb = "delete", protocol = "@parent")
   def delete(id:Long):Unit =
   {
     _service.delete(id)

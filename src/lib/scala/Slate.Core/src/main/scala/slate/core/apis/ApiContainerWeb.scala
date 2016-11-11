@@ -21,6 +21,6 @@ class ApiContainerWeb(ctx    : AppContext                    ,
                       auth   : Option[ApiAuth]         = None,
                       apis   : Option[List[ApiReg]]    = None,
                       errors : Option[ApiErrorHandler] = None)
-  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis, errors) {
+  extends ApiContainer(ctx, auth, ApiConstants.ProtocolWeb, apis, errors) {
 
 }

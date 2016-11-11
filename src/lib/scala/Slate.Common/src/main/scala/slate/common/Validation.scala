@@ -15,7 +15,7 @@ trait Validation {
 
   /**
    * Validates the sequence of items. This is basically a foldLeft with the sequence supplied.
- *
+   *
    * @param startValue : The starting value
    * @param items      : The items to validate
    * @param f          : The function to use to validate
@@ -31,5 +31,29 @@ trait Validation {
       these = these.tail
     }
     acc
+  }
+
+  /**
+    * Validates the sequence of items. This is basically a foldLeft with the sequence supplied.
+    *
+    * @param startValue : The starting value
+    * @param items      : The items to validate
+    * @param f          : The function to use to validate
+    * @tparam R         : The type of the result
+    * @tparam S         : The type of the item
+    * @return           : Type R result
+    */
+  protected def validateResults[S,R](startValue: Result[R], items:Seq[S])(f: (S) => Result[R])
+    : Result[R] =
+  {
+    var res = startValue
+    var these = items
+    var success = true
+    while (!these.isEmpty && success) {
+      res = f(these.head)
+      these = these.tail
+      success = res.success
+    }
+    res
   }
 }

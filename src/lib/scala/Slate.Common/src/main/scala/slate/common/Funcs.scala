@@ -59,4 +59,42 @@ object Funcs {
       ndx = ndx + 1
     }
   }
+
+
+  def getStringByOrder(key:String, f1:String=>Option[String], f2:String => Option[String]): String = {
+    val result1 = f1(key)
+
+    // f1 => none ? then try f2
+    val finalResult = result1.fold[String]( f2(key).getOrElse("") ) ( res1Value => {
+
+      // check f1 value for empty string value
+      val f1Orf2Value = if (Strings.isNullOrEmpty(res1Value)) f2(key).getOrElse("") else res1Value
+
+      f1Orf2Value
+    })
+    finalResult
+  }
+
+
+  def getStringByOrderOrElse(key:String,
+                             f1:String=>Option[String],
+                             f2:String => Option[String],
+                             defaultValue:String ): String = {
+    val result1 = f1(key)
+
+    // f1 => none ? then try f2
+    val finalResult = result1.fold[String]( f2(key).getOrElse(defaultValue) ) ( res1Value => {
+
+      // check f1 value for empty string value
+      val f1Orf2Value =
+        if (Strings.isNullOrEmpty(res1Value)) {
+        f2(key).getOrElse(defaultValue)
+      }
+      else {
+        res1Value
+      }
+      f1Orf2Value
+    })
+    finalResult
+  }
 }

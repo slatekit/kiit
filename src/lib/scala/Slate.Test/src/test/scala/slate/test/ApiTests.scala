@@ -346,7 +346,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
         new ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
         new ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
       )
-      val auth = Some(new MyAuthProvider(user._1, user._2, keys))
+      val auth = Some(new MyAuthProvider(user._1, user._2, Some(keys)))
       val apis = getApis(protocolCt, auth, apiRegs = Some(regs), errors = errors)
       apis
     }

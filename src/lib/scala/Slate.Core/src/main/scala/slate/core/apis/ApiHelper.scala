@@ -19,6 +19,14 @@ import slate.core.apis.support.ApiCallReflect
 
 object ApiHelper extends ResultSupportIn {
 
+  def isValidMatch(actual:String, expected:String):Boolean = {
+    if ( Strings.isNullOrEmpty(actual) || actual == "*" )
+      true
+    else
+      Strings.isMatch(actual, expected)
+  }
+
+
   def buildArgs(inputs:Option[List[(String,String)]]):InputArgs = {
 
     // fill args
