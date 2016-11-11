@@ -76,7 +76,7 @@ with ResultSupportIn
    * @param route
    * @return
    */
-  def api(route:Route, callback:(RequestContext, JsValue, String) => Result[Any] ):Route = {
+  def api(route:Route, callback:(RequestContext, JsValue) => Result[Any] ):Route = {
 
     import HttpJson._
 
@@ -91,7 +91,33 @@ with ResultSupportIn
             val jsMarshall = as[JsValue]
             val jsFuture = jsMarshall(ctx.request)
             val json = jsFuture.value.get.get
-            val res = callback(ctx, json, "post")
+            val res = callback(ctx, json)
+            res.toJson()
+          })
+        }
+      } ~
+      put
+      {
+        ctx =>
+        {
+          completeAsJson(ctx, () => {
+            val jsMarshall = as[JsValue]
+            val jsFuture = jsMarshall(ctx.request)
+            val json = jsFuture.value.get.get
+            val res = callback(ctx, json)
+            res.toJson()
+          })
+        }
+      } ~
+      delete
+      {
+        ctx =>
+        {
+          completeAsJson(ctx, () => {
+            val jsMarshall = as[JsValue]
+            val jsFuture = jsMarshall(ctx.request)
+            val json = jsFuture.value.get.get
+            val res = callback(ctx, json)
             res.toJson()
           })
         }
@@ -101,7 +127,7 @@ with ResultSupportIn
         ctx =>
         {
           completeAsJson(ctx, () => {
-            val res = callback(ctx, null, "get")
+            val res = callback(ctx, null)
             res.toJson()
           })
         }

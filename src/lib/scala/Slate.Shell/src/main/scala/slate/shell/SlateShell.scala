@@ -84,7 +84,7 @@ object SlateShell extends AppProcess {
 
     // 1. Get the user login info from .slate
     val creds = new Credentials("1", "john doe", "jdoe@gmail.com", key = buildApiKeys()(5).key)
-    val auth = new ApiAuth(buildApiKeys(), null)
+    val auth = new ApiAuth(Some(buildApiKeys()), None)
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.

@@ -37,6 +37,10 @@ object HttpUtils {
   {
     var text = ""
     val params = uri.query().toList
+    val maps = uri.query.toMap
+    for( key <- maps.keySet().toArray()){
+      println(key + " : " + maps.get(key))
+    }
     for(ndx <- 0 until params.size() ) {
         val pair = params.get(ndx)
         val p:akka.japi.Pair[String,String] = pair.asInstanceOf[akka.japi.Pair[String,String]]

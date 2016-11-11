@@ -117,10 +117,10 @@ class Server( val port       : Int    = 5000 ,
     * @param json
     * @return
     */
-  def handle(ctx:RequestContext, json:JsValue, verb:String): Result[Any] = {
+  def handle(ctx:RequestContext, json:JsValue): Result[Any] = {
 
     // 1. convert to webcmd for protocol independent use
-    val apiCmd = Requests.convertToCommand(ctx, json, verb)
+    val apiCmd = Requests.convertToCommand(ctx, json)
 
     // 2. call the command on the api in the container
     val result = callCommand(apiCmd)

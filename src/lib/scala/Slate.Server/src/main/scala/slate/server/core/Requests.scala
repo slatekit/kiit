@@ -11,6 +11,7 @@
 
 package slate.server.core
 
+import akka.http.scaladsl.model.HttpMethods
 import akka.http.scaladsl.server.RequestContext
 import slate.common.{Strings, InputArgs}
 import slate.common.args.Args
@@ -24,12 +25,12 @@ object Requests {
    * converts the Akka-Http request into the abstracted Slate Kit ApiCmd which
    * can represent both an Http request ( with uri, uri parts, headers and values which
    * can be both query string params, and post data )
+ *
    * @param ctx  : Request context
    * @param json : Json Post data if post
-   * @param verb : http verb "get", "post" only supported.
    * @return
    */
-  def convertToCommand(ctx:RequestContext, json:JsValue, verb:String): Request = {
+  def convertToCommand(ctx:RequestContext, json:JsValue): Request = {
 
     // 1. get the route /api/app/users/register
     val rawPath = ctx.request.getUri().path()
@@ -37,7 +38,7 @@ object Requests {
 
     // 2. get the api action parts {area}/{name}/{action}
     val action = path.replaceAllLiterally("/", ".")
-    val actionVerbs = action.split('.')
+    val actionParts = action.split('.')
 
     // 3. headers
     val inputOpts = new HttpHeaders(ctx)
@@ -45,11 +46,23 @@ object Requests {
     // 3. initialize args
     val rawTokens = List[String]()
     val indexArgs = List[String]()
-    val isPost = Strings.isMatch(verb, "post")
-    val inputJson = if(isPost) Some(json.asJsObject) else None
+    val isGet = ctx.request.method == HttpMethods.GET
+
+    // 4. Convert verb to verb name used in API component.
+    val verb = ctx.request.method match {
+      case HttpMethods.GET    => "get"
+      case HttpMethods.PUT    => "put"
+      case HttpMethods.POST   => "post"
+      case HttpMethods.DELETE => "delete"
+      case _                  => "get"
+    }
+
+    // 5. Build the inputs object to abstract getting data out of query string/post body
+    val inputJson = if(!isGet) Some(json.asJsObject) else None
     val inputArgs = new HttpInputs(ctx, inputJson)
 
-    val args = new Args(rawTokens,action, actionVerbs.toList, "-", "=", None, Some(indexArgs))
+    // 6. Now have an abstract request.
+    val args = new Args(rawTokens,action, actionParts.toList, "-", "=", None, Some(indexArgs))
     val cmd = Request(action, args, Some(inputArgs), Some(inputOpts), verb)
     cmd
   }
