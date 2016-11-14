@@ -24,29 +24,54 @@ class ListMapTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
 
   test("can add") {
-    val items = build()
-    var items2 = items + ("a", 1)
-    items2 = items + ("b", 2)
-
-    assert( items.size() == 0)
-    assert( items.get("a") == None)
-
-    assert( items2.size() == 2)
-    assert( items2.get("a").get == 1)
-    assert( items2.getAt(0).get == 1)
-    assert( items2.get("b").get == 2)
-    assert( items2.getAt(1).get == 2)
+    val items =  new ListMap[String,Int]()
+    items.add("a", 1)
+    items.add("b", 2)
+    items.add("c", 3)
+    assert( items.size() == 3)
+    assert( items.contains("a"))
+    assert( items.contains("b"))
+    assert( items.contains("c"))
+    assert( !items.contains("d"))
   }
 
 
-  test("can add via +") {
+  test("can get by name") {
+    val items =  new ListMap[String,Int]()
+    items.add("a", 1)
+    items.add("b", 2)
+    items.add("c", 3)
+    assert( items.get("a") == Some(1))
+    assert( items.get("b") == Some(2))
+    assert( items.get("c") == Some(3))
+  }
+
+
+  test("can get by index") {
+    val items =  new ListMap[String,Int]()
+    items.add("a", 1)
+    items.add("b", 2)
+    items.add("c", 3)
+    assert( items.getAt(0) == Some(1))
+    assert( items.getAt(1) == Some(2))
+    assert( items.getAt(2) == Some(3))
   }
 
 
   test("can remove") {
-  }
+    val items =  new ListMap[String,Int]()
+    items.add("a", 1)
+    items.add("b", 2)
+    items.add("c", 3)
+    assert( items.size() == 3)
 
-
-  test("can remove via -") {
+    items.remove("b")
+    assert( items.contains("a"))
+    assert( !items.contains("b"))
+    assert( items.contains("c"))
+    assert( items.get("a") == Some(1))
+    assert( items.get("c") == Some(3))
+    assert( items.getAt(0) == Some(1))
+    assert( items.getAt(1) == Some(3))
   }
 }
