@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------------------
 @author : Kishore Reddy
 @website: www.slatekit.com 
-@date   : Nov 3, 2016
+@date   : Nov 11, 2016
 @release: 1.1.0
 @build  : 1.1.0.2
 ----------------------------------------------------------------------------------------
@@ -128,7 +128,7 @@ Info  : SUMMARY :
 Info  : ===============================================================
 Info  : name             = Sample App - Console
 Info  : desc             = Sample console application to show the Slate Kit base app
-Info  : version          = 1.1.0
+Info  : version          = 0.9.1
 Info  : tags             = slate,shell,cli
 Info  : group            = Samples
 Info  : region           = ny
@@ -185,10 +185,18 @@ EXAMPLES
 :> sampleapp.users.create  -email="superman@metropolis.com" -first="clark" -last="kent" -isMale=true -age=32 -phone="987654321" -country="us" 
 :> sampleapp.users.create  -email="wonderwoman@metropolis.com" -first="diana" -last="price" -isMale=false -age=32 -phone="111111111" -country="br" 
 :> sampleapp.users.getById -id=1
-:> sampleapp.users.first   
-:> sampleapp.users.last
+:> sampleapp.users.getAll
+:> sampleapp.users.updatePhone -id=1 -phone=1112223334
+:> sampleapp.users.first          
+:> sampleapp.users.getById -id=2   
+:> sampleapp.users.last           
 :> sampleapp.users.recent -count=2
 :> sampleapp.users.oldest -count=2
+:> sampleapp.users.deleteById -id=2     
+:> sampleapp.users.total
+:> sampleapp.users.getAll          
+
+
 :> exit
 
 
@@ -212,20 +220,26 @@ NOTES:
 5. ensure for "post" requests you have at least an empty json object "{ }" for calling endpoints/methods that take 0 params
 6. use any of the urls below for testing
 
-verb,  header,       url                                              body ( json )
-post   see step 3.   http://localhost:5000/api/sys/version/java       { }      
-post   see step 3.   http://localhost:5000/api/sys/version/scala      { }          
-get    see step 3.   http://localhost:5000/api/app/info/lang          { }                 
-get    see step 3.   http://localhost:5000/api/app/info/host          { }          
-get    see step 3.   http://localhost:5000/api/app/info/app           { }        
-post   see step 3.   http://localhost:5000/api/sampleapp/users/total  { }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/create { "email" : "batman@gotham.com", "first" : "bruce", "last" : "wayne", "isMale" : true, "age" : 32, "phone" : "123456789", "country" : "us" }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/create { "email" : "superman@metropolis.com", "first" : "clark", "last" : "kent", "isMale" : true, "age" : 32, "phone" : "987654321", "country" : "us" }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/create { "email" : "wonderwoman@metropolis.com", "first" : "diana", "last" : "price", "isMale" : false, "age" : 32, "phone" : "111111111", "country" : "us" }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/first  { }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/last   { }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/recent { "count" : 2 }
-post   see step 3.   http://localhost:5000/api/sampleapp/users/oldest { "count" : 2 }
+verb,  header,       url                                                      body ( json )
+get    see step 3.   http://localhost:5000/api/sys/version/java               { }      
+get    see step 3.   http://localhost:5000/api/sys/version/scala              { }          
+post   see step 3.   http://localhost:5000/api/app/info/lang                  { }                 
+post   see step 3.   http://localhost:5000/api/app/info/host                  { }          
+post   see step 3.   http://localhost:5000/api/app/info/app                   { }        
+post   see step 3.   http://localhost:5000/api/sampleapp/users/total          { }
+post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "batman@gotham.com", "first" : "bruce", "last" : "wayne", "isMale" : true, "age" : 32, "phone" : "123456789", "country" : "us" }
+post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "superman@metropolis.com", "first" : "clark", "last" : "kent", "isMale" : true, "age" : 32, "phone" : "987654321", "country" : "us" }
+post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "wonderwoman@metropolis.com", "first" : "diana", "last" : "price", "isMale" : false, "age" : 32, "phone" : "111111111", "country" : "us" }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/getById?id=2   
+get    see step 3.   http://localhost:5000/api/sampleapp/users/getAll         { }
+put    see step 3.   http://localhost:5000/api/sampleapp/users/updatePhone    { "id" : 1, "phone": "1112223334" }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/first          { }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/last           { }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/recent?count=2
+get    see step 3.   http://localhost:5000/api/sampleapp/users/oldest?count=2
+delete see step 3.   http://localhost:5000/api/sampleapp/users/deleteById     { "id" : 2 }       
+get    see step 3.   http://localhost:5000/api/sampleapp/users/total          { }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/getAll         { }
 
 
 
