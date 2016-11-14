@@ -96,7 +96,7 @@ class ApiBaseEntity[T >: Null <: IEntity] extends ApiBase {
 
 
   @ApiAction(name = "", desc= "deletes an item by its id", roles= "@parent", verb = "delete", protocol = "@parent")
-  def delete(id:Long):Unit =
+  def delete(id:Long):Boolean =
   {
     _service.delete(id)
   }

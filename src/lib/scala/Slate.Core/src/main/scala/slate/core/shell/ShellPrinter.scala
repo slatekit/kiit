@@ -81,6 +81,7 @@ object ShellPrinter {
   {
     obj match {
       case null             => writeText( "null" )
+      case s:Unit           => println("no result")
       case None             => writeText( "none" )
       case s:Option[Any]    => printAny(s.getOrElse(None))
       case s:Result[Any]    => printAny(s.getOrElse(None))

@@ -137,6 +137,7 @@ sealed abstract class Result[+T](
   def serialize(obj:Any):String = {
     obj match {
       case null             => "null"
+      case Unit             => "null"
       case None             => "null"
       case s:Option[Any]    => serialize(s.getOrElse(None))
       case s:Result[Any]    => serialize(s.getOrElse(None))
