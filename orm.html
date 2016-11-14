@@ -648,7 +648,8 @@
 						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.entities.repos._</span>
+  <span class="k">import</span> <span class="nn">slate.entities.repos._</span>  
+  <span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
   <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
   <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
   
@@ -694,8 +695,8 @@
 </span>  <span class="k">val</span> <span class="n">dbConfig</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
   
   <span class="c1">// Create the mapper to map entity to/from SQL
-</span>  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
-  <span class="n">mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(),</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span> 
+</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span>  <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(),</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span> 
+  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
 
   <span class="c1">// Set db and mapper on the repo  
 </span>  <span class="n">repoMySql</span><span class="o">.</span><span class="n">setDb</span><span class="o">(</span><span class="n">dbConfig</span><span class="o">)</span>
@@ -752,14 +753,17 @@
 						<br/>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
+  
+  <span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
   
   <span class="c1">// STEP 1: Create instance of entity class
 </span>  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">()</span>
 
   <span class="c1">// STEP 2: Create a new mapper that loads fields/annotations mappings from the entity class
-</span>  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
-  <span class="k">val</span> <span class="n">modelSchema</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
+  
 
   <span class="c1">// STEP 3: Create instance for testing
 </span>  <span class="n">user</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"john"</span>

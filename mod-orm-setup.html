@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-11-03T20:35:59.586</td>
+      <td>2016-11-13T23:40:55.508</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -168,7 +168,7 @@
 </span>    <span class="c1">// - use a certain type of database ( mysql only for now )
 </span>    <span class="c1">// - use the default EntityRepository ( mysql ) or a custom repository
 </span>    <span class="c1">// - use a supplied EntityMapper or a custom mapper
-</span>    <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">()</span>
+</span>    <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbs</span><span class="o">))</span>
 
     <span class="c1">// Case 1: In-memory
 </span>    <span class="n">showResults</span><span class="o">(</span> <span class="s">"Case 1"</span><span class="o">,</span> <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]))</span>

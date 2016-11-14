@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-11-03T20:35:59.493</td>
+      <td>2016-11-13T23:40:55.464</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -121,7 +121,9 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
+</span>
+<span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 
 <span class="k">import</span> <span class="nn">scala.reflect.runtime.universe._</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
@@ -174,8 +176,8 @@
 </span>    <span class="k">val</span> <span class="n">person</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">createInstance</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">]).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">]</span>
 
     <span class="c1">// CASE 2: Load the mapper with schema from the annotations on the model
-</span>    <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="kc">null</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+</span>    <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+    <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
 
     <span class="c1">// CASE 3: Create instance for testing
 </span>    <span class="n">person</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"share"</span>

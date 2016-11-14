@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-11-03T20:35:59.599</td>
+      <td>2016-11-13T23:40:55.521</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -219,7 +219,7 @@
 </span>  <span class="c1">// NOTE: You can also use own pre-built authorization provider which has
 </span>  <span class="c1">// support for users, roles, permissions
 </span>  <span class="c1">// =======================================================================================
-</span>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
+</span>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">]])</span> <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
     <span class="k">with</span> <span class="nc">ResultSupportIn</span>
   <span class="o">{</span>
 
@@ -296,12 +296,12 @@
 </span>  <span class="c1">// NOTE:
 </span>  <span class="c1">// 1. For the AppUsersApi, the application roles are checked.
 </span>  <span class="c1">// 2. For the AppAboutApi, the api keys are checked.
-</span>  <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span>
+</span>  <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span>
     <span class="nc">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">](</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"devs"</span> <span class="o">,</span> <span class="s">"94744D43418C421586E544DE0BB4CC37"</span><span class="o">,</span> <span class="s">"dev"</span>          <span class="o">),</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"ops"</span>  <span class="o">,</span> <span class="s">"677961A57F82440AB6F4E1F1EAC721ED"</span><span class="o">,</span> <span class="s">"dev,ops"</span>      <span class="o">),</span>
         <span class="k">new</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"admin"</span><span class="o">,</span> <span class="s">"A100E22B5544423693FABD81791FAC80"</span><span class="o">,</span> <span class="s">"dev,ops,admin"</span><span class="o">)</span>
-      <span class="o">))</span> <span class="o">)</span>
+      <span class="o">))))</span>
 
   <span class="c1">// REGISTRATION: Create instance of the API container to "host" all APIs
 </span>  <span class="c1">// NOTES:
