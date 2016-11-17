@@ -1,17 +1,14 @@
 /**
-  <header>
-    <author>Kishore Reddy</author>
-    <url>https://github.com/kishorereddy/scala-slate</url>
-    <copyright>2015 Kishore Reddy</copyright>
-    <license>https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md</license>
-    <desc>a scala micro-framework</desc>
-    <usage>Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-    </usage>
-  </header>
+<slate_header>
+  url: www.slatekit.com
+  git: www.github.com/code-helix/slatekit
+  org: www.codehelix.co
+  author: Kishore Reddy
+  copyright: 2016 CodeHelix Solutions Inc.
+  license: refer to website and/or github
+  about: A Scala utility library, tool-kit and server backend.
+  mantra: Simplicity above all else
+</slate_header>
   */
 package slate.core.cmds
 

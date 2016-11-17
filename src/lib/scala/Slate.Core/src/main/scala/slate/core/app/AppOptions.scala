@@ -1,8 +1,17 @@
+/**
+<slate_header>
+  url: www.slatekit.com
+  git: www.github.com/code-helix/slatekit
+  org: www.codehelix.co
+  author: Kishore Reddy
+  copyright: 2016 CodeHelix Solutions Inc.
+  license: refer to website and/or github
+  about: A Scala utility library, tool-kit and server backend.
+  mantra: Simplicity above all else
+</slate_header>
+  */
 package slate.core.app
 
-/**
- * Created by kv on 11/5/2015.
- */
 class AppOptions {
   var printSummaryBeforeExec = false
   var printSummaryOnShutdown = true
