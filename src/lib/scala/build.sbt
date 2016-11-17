@@ -4,6 +4,7 @@ lazy val commonSettings = Seq(
   organization := "com.slatekit",
   version := "1.2.0",
   scalaVersion := "2.11.8",
+  useGpg := true,
   homepage := Some(url("http://www.slatekit.com/")),
   publishMavenStyle := true,
   publishArtifact in Test := false,
@@ -15,8 +16,9 @@ lazy val commonSettings = Seq(
     else
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
-  credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials" ),  
-  scaladexKeywords := Seq("api", "arguments", "cli", "crypto", "database", "server", "shell", "utils"),
+  //resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
+  scaladexKeywords := Seq("utils"),
+  credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials"),  
   pomExtra := (
     <url>https://github.com/code-helix/slatekit</url>
       <licenses>
@@ -50,126 +52,13 @@ lazy val common = (project in file("Slate.Common")).
 	   "com.googlecode.json-simple" % "json-simple"   % "1.1"
 	)
   )
-  
-lazy val entities = (project in file("Slate.Entities")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-entities",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect"        % scalaVersion.value,
-	   "com.typesafe"               % "config"               % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"          % "1.1",
-	   "mysql"                      % "mysql-connector-java" % "5.1.40"
-	)
-  ).
-  dependsOn(common)
-  
-  
-lazy val core = (project in file("Slate.Core")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-core",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect" % scalaVersion.value,
-	   "com.typesafe"               % "config"        % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"   % "1.1"
-	)
-  ).
-  dependsOn(common,entities)
-  
- 
-lazy val tools = (project in file("Slate.Tools")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-tools",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect" % scalaVersion.value,
-	   "com.typesafe"               % "config"        % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"   % "1.1"
-	)
-  ).
-  dependsOn(common,entities,core)
+      
 
- 
-lazy val integration = (project in file("Slate.Integration")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-integration",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect" % scalaVersion.value,
-	   "com.typesafe"               % "config"        % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"   % "1.1"
-	)
-  ).
-  dependsOn(common,entities,core)  
-
-
-lazy val cloud = (project in file("Slate.Cloud")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-cloud",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect"     % scalaVersion.value,
-	   "com.typesafe"               % "config"            % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"       % "1.1",
-	   "com.amazonaws"              % "aws-java-sdk-core" % "1.10.55",
-	   "com.amazonaws"              % "aws-java-sdk-s3"   % "1.10.55",
-	   "com.amazonaws"              % "aws-java-sdk-sqs"  % "1.10.55"
-	)
-  ).
-  dependsOn(common,entities,core,integration)  
-  
-/*
-lazy val ext = (project in file("Slate.Ext")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-ext",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect"        % scalaVersion.value,
-	   "com.typesafe"               % "config"               % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"          % "1.1",
-	   "com.amazonaws"              % "aws-java-sdk-core"    % "1.10.55",
-	   "com.amazonaws"              % "aws-java-sdk-s3"      % "1.10.55",
-	   "com.amazonaws"              % "aws-java-sdk-sqs"     % "1.10.55",
-	   "mysql"                      % "mysql-connector-java" % "5.1.40"
-	)
-  ).
-  dependsOn(common,entities,core,integration,cloud)
-*/
-
-lazy val shell = (project in file("Slate.Shell")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-shell",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect"        % scalaVersion.value,
-	   "com.typesafe"               % "config"               % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"          % "1.1",
-	   "mysql"                      % "mysql-connector-java" % "5.1.40"
-	)
-  ).
-  dependsOn(common,entities,core,tools,integration)      
-
-
-lazy val server = (project in file("Slate.Server")).
-  settings(commonSettings: _*).
-  settings(    
-    name := "slate-server",
-	libraryDependencies ++= Seq(
-	   "org.scala-lang"             % "scala-reflect"                % scalaVersion.value,
-	   "com.typesafe"               % "config"                       % "1.3.0",
-	   "com.googlecode.json-simple" % "json-simple"                  % "1.1"
-	   //"com.typesafe.akka"          % "akka-actor_2.11 "             % "2.4.4",
-	   //"com.typesafe.akka"          % "akka-http-experimental_2.11 " % "2.4.10"
-	)
-  ).
-  dependsOn(common,entities,core,tools,integration)      
-
-  
+//, entities, core, tools, integration, cloud, shell, server  
 lazy val root = (project in file(".")).
-  aggregate(common, entities, core, tools, integration, cloud, shell, server).
+  aggregate(common).
+  settings(commonSettings: _*).
   settings(
-  scalaVersion := "2.11.8",
   publish := (),
   publishLocal := (),
   publishArtifact := false
