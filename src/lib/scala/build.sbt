@@ -1,3 +1,5 @@
+// http://central.sonatype.org/pages/ossrh-guide.html
+// http://www.sonatype.org/nexus/2015/06/02/how-to-publish-software-artifacts-to-maven-central/
 lazy val commonSettings = Seq(
   organization := "com.slatekit",
   version := "1.2.0",
@@ -14,24 +16,7 @@ lazy val commonSettings = Seq(
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   },
   credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials" ),  
-  scaladexKeywords := Seq(
-    "api"          ,  
-	"arguments"    , 
-	"aws"          , 
-	"backend"      ,  
-	"cli"          , 
-	"crypto"       , 
-	"database"     ,  
-	"db"           , 
-	"entities"     , 
-	"http"         ,
-	"logging"      ,  
-	"microservices", 
-	"orm"          , 
-	"server"       ,  
-	"shell"        ,
-	"utils"
-  ),
+  scaladexKeywords := Seq("api", "arguments", "cli", "crypto", "database", "server", "shell", "utils"),
   pomExtra := (
     <url>https://github.com/code-helix/slatekit</url>
       <licenses>
