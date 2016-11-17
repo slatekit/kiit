@@ -2,6 +2,18 @@ lazy val commonSettings = Seq(
   organization := "com.slatekit",
   version := "1.2.0",
   scalaVersion := "2.11.8",
+  homepage := Some(url("http://www.slatekit.com/")),
+  publishMavenStyle := true,
+  publishArtifact in Test := false,
+  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
+  publishTo := {
+    val nexus = "https://oss.sonatype.org/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+  },
+  credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials" ),  
   scaladexKeywords := Seq(
     "api"          ,  
 	"arguments"    , 
@@ -20,9 +32,6 @@ lazy val commonSettings = Seq(
 	"shell"        ,
 	"utils"
   ),
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".slatekit-scaladex.credentials" ),
   pomExtra := (
     <url>https://github.com/code-helix/slatekit</url>
       <licenses>
@@ -173,4 +182,10 @@ lazy val server = (project in file("Slate.Server")).
 
   
 lazy val root = (project in file(".")).
-  aggregate(common, entities, core, tools, integration, cloud, shell, server)
+  aggregate(common, entities, core, tools, integration, cloud, shell, server).
+  settings(
+  scalaVersion := "2.11.8",
+  publish := (),
+  publishLocal := (),
+  publishArtifact := false
+)
