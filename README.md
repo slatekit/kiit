@@ -1,4 +1,6 @@
 # SLATE KIT
+
+[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Slate Kit is a tool kit, utility library and server backend for mobile and web apps. 
 It is written in Scala and uses Akka-Http for the Server. 
 
