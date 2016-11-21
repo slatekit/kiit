@@ -22,6 +22,7 @@ case class Doc(
                 example  : String,
                 available: Boolean,
                 multi    : Boolean,
+                readme   : Boolean,
                 group    : String,
                 folder   : String,
                 jar      : String,
