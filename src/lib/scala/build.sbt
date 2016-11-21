@@ -6,7 +6,8 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.11.8",
   homepage := Some(url("http://www.slatekit.com/")),
   scaladexKeywords := Seq("api", "arguments", "cli", "crypto", "database", "server", "shell", "utils"),
-  credentials in Scaladex := Seq(Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials"))
+  credentials in Scaladex := Seq(Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")),
+  scmInfo := Some(ScmInfo(new java.net.URL("https://github.com/code-helix/slatekit"), "scm:git@github.com:code-helix/slatekit.git", Some("scm:git@github.com:code-helix/slatekit.git")))
 )
 
 lazy val common = (project in file("Slate.Common")).
