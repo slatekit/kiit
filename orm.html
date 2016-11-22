@@ -245,6 +245,16 @@
 				
 				<div>
 					<br/><br/>
+					<div class="alert alert-info" role="alert">
+						<h4>This current version of the ORM is <strong>not</strong> immutable/functional</h4>	
+						<br/>
+						<ol>
+						  <li>The entity/model classes are currently mutable via usage of "var" fields</li>
+						  <li>The <strong>next release</strong> will provide optional support of <strong>entities as case classes</strong></li>
+						  <li>The <strong>next release</strong> will provide support for a <strong>Monad to abstract database operations</strong></li>							  
+						</ol>
+					</div>
+					<br/>
 					<div> 
 						<h2 id="orm-database">1. Databases</h2>
 						<p>You can register database connections using a <strong>database lookup</strong> called

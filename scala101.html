@@ -687,32 +687,25 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <p>Scala does not have static methods. but you can declare the class as an <strong>object</strong> accessing it statically</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">object</span> <span class="nc">Ensure</span> <span class="o">{</span>
-
-  <span class="k">def</span> <span class="n">isTrue</span><span class="o">(</span><span class="n">isTrue</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="k">if</span><span class="o">(!</span><span class="n">isTrue</span><span class="o">)</span>
+  <span class="k">object</span> <span class="nc">Checks</span> <span class="o">{</span>
+  
+    <span class="k">def</span> <span class="n">ifElse</span><span class="o">(</span><span class="n">condition</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">a</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>
     <span class="o">{</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">condition</span><span class="o">)</span> <span class="n">a</span> <span class="k">else</span> <span class="n">b</span>
     <span class="o">}</span>
   <span class="o">}</span>
+  
+  
+  <span class="k">val</span> <span class="n">userId</span> <span class="k">=</span> <span class="mi">2</span>
+  
+  <span class="c1">// Call using class name
+</span>  <span class="n">println</span><span class="o">(</span> <span class="nc">Checks</span><span class="o">.</span><span class="n">ifElse</span> <span class="o">(</span> <span class="n">userId</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">,</span> <span class="s">"user"</span><span class="o">,</span> <span class="s">"no-one"</span>  <span class="o">)</span> <span class="o">)</span>
+  
+  <span class="c1">// Call using imported method
+</span>  <span class="k">import</span> <span class="nn">Checks.ifElse</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">ifElse</span> <span class="o">(</span> <span class="n">userId</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">,</span> <span class="s">"admin"</span><span class="o">,</span> <span class="s">"normal"</span> <span class="o">)</span> <span class="o">)</span>
 
-
-  <span class="k">def</span> <span class="n">isFalse</span><span class="o">(</span><span class="n">isFalse</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="k">if</span><span class="o">(!</span><span class="n">isFalse</span><span class="o">)</span>
-    <span class="o">{</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
-  <span class="c1">// Example of a guard like approach to validation.
-</span>  <span class="nc">Ensure</span><span class="o">.</span><span class="n">isTrue</span><span class="o">(</span><span class="n">person</span><span class="o">.</span><span class="n">isActive</span><span class="o">,</span> <span class="s">"Account has not been validated"</span> <span class="o">)</span>
-
-  <span class="c1">// NOTE: Make sure to use Option[T] as an alternative to exceptions 
-</span>  <span class="c1">// where applicable
-</span></code></pre>
+</code></pre>
 </div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
