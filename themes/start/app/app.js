@@ -61,10 +61,10 @@ var codehelixUtils = {
 	  
 	  // Header 
 	  $("#topbar_title" ).html( codeHelixMeta.product.questions );  
-	  $("#topbar_social_facebook" ).attr('href', codeHelixMeta.social.facebook); 
-	  $("#topbar_social_twitter"  ).attr('href', codeHelixMeta.social.twitter);   
+	  $("#topbar_social_github" ).attr('href', codeHelixMeta.social.github); 
+	  $("#topbar_social_gitter").attr('href', codeHelixMeta.social.gitter); 
 	  $("#topbar_social_gplus"    ).attr('href', codeHelixMeta.social.gplus);   
-	  $("#topbar_social_pinterest").attr('href', codeHelixMeta.social.linkedin); 
+	  $("#topbar_social_twitter"  ).attr('href', codeHelixMeta.social.twitter);   
 	  
 	  // Footer 
 	  $("#footer_aboutus").html(codeHelixMeta.product.about);
@@ -74,10 +74,10 @@ var codehelixUtils = {
 	  $("#footer_addr_street").html(codeHelixMeta.company.address.street);
 	  $("#footer_addr_country").html(codeHelixMeta.company.address.country);
 	  $("#footer_addr_zip").html(codeHelixMeta.company.address.zip);
-	  $("#footer_social_facebook" ).attr('href', codeHelixMeta.social.facebook); 
-	  $("#footer_social_twitter"  ).attr('href', codeHelixMeta.social.twitter);   
-	  $("#footer_social_gplus"    ).attr('href', codeHelixMeta.social.gplus);   
-	  $("#footer_social_pinterest").attr('href', codeHelixMeta.social.linkedin); 
+	  $("#footer_social_github"   ).attr('href', codeHelixMeta.social.github); 
+	  $("#footer_social_gitter"   ).attr('href', codeHelixMeta.social.gitter); 
+	  $("#footer_social_gplus"    ).attr('href', codeHelixMeta.social.gplus   );   
+	  $("#footer_social_twitter"  ).attr('href', codeHelixMeta.social.twitter );   
 	}
 };
 
@@ -104,8 +104,10 @@ var codeHelixMeta = {
   {
 	facebook: "http://www.facebook.com",
 	linkedin: "http://www.linkedin.com",
-	twitter: "http://www.twitter.com",
-	gplus: "http://www.google.com/plus"
+	twitter: "https://twitter.com/kishore_reddy",
+	gplus: "https://plus.google.com/communities/101712726574147167469",
+	gitter: "https://gitter.im/code-helix/slatekit",
+	github: "https://github.com/code-helix/slatekit",
   },
   
   
