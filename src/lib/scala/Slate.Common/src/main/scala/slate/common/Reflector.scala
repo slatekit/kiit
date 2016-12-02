@@ -14,12 +14,14 @@ package slate.common
 
 import slate.common.utils.Temp
 
+import scala.collection.mutable
 import scala.collection.mutable.{ListBuffer}
 import scala.collection.immutable.{List}
 import scala.reflect.runtime.{universe => ru}
 import ru._
 
-
+// http://docs.scala-lang.org/overviews/reflection/overview.html
+// https://gist.github.com/ConnorDoyle/7002426
 object Reflector {
 
 
@@ -35,59 +37,87 @@ object Reflector {
 
 
   /**
-    * Creates an instance of the type dynamically.( assumes existance of a 0 param constructor )
-    * Only works for non-inner classes and for types with 0 parameter constructors.
-    * @param tpe
-    * @return
-    */
-  def createInstance(tpe:Type): Any = {
+   * Creates an instance of the type dynamically using the parameters supplied.
+   * @param tpe
+   * @return
+   */
+  def createInstance(tpe:Type, args:Option[Seq[_]] = None): Any = {
     val mirror = ru.runtimeMirror(getClass.getClassLoader)
     val clsSym = tpe.typeSymbol.asClass
     val clsMirror = mirror.reflectClass(clsSym)
-
-    val conSym = tpe.decls.filter( s =>
-    {
-      s.isMethod && s.isConstructor && s.asMethod.paramLists.flatten.isEmpty
-    }).toList.apply(0).asMethod
-
-    if(conSym == null)
-      return null
-
-    val conMirror = clsMirror.reflectConstructor(conSym)
-    val instance = conMirror()
-    return instance
-  }
-
-
-  /**
-    * Creates an instance of the type dynamically using a constructor with 0 parameters.
-    * @param tpe
-    * @return
-    */
-  def createInstanceWithNoParams(tpe:Type): Any = {
-    val mirror = ru.runtimeMirror(getClass.getClassLoader)
-    val clsSym = tpe.typeSymbol.asClass
-    val clsMirror = mirror.reflectClass(clsSym)
-    val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
-    val conMirror = clsMirror.reflectConstructor(conSym)
-    val instance = conMirror()
+    val defaultConstructor = getConstructorDefault(tpe)
+    val constructorMethod = clsMirror.reflectConstructor(defaultConstructor)
+    val instance = if(args.isEmpty) {
+      constructorMethod()
+    }
+    else {
+      val params = args.get
+      constructorMethod(params: _*)
+    }
+    //val instance = constructorMethod(args: _*)
     instance
   }
-  
 
-  /**
-    * Creates an instance of the type dynamically using the parameters supplied.
-    * @param tpe
-    * @return
-    */
-  def createInstanceWithParams(tpe:Type, args:List[Any]): Any = {
-    val mirror = ru.runtimeMirror(getClass.getClassLoader)
-    val clsSym = tpe.typeSymbol.asClass
-    val clsMirror = mirror.reflectClass(clsSym)
-    val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
-    val conMirror = clsMirror.reflectConstructor(conSym)
-    val instance = conMirror(args: _*)
-    return instance
+
+  /*
+    def createInstanceWithNoParams(tpe:Type, params:Option[List[Any]] = None): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = if(params.isEmpty) conMirror() else conMirror(params: _*)
+      instance
+    }
+
+
+    def createInstance(tpe:Type): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+
+      val conSym = tpe.decls.filter( s =>
+      {
+        s.isMethod && s.isConstructor && s.asMethod.paramLists.flatten.isEmpty
+      }).toList.apply(0).asMethod
+
+      if(conSym == null)
+        return null
+
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = conMirror()
+      instance
+    }
+
+
+    def createInstanceWithParams(tpe:Type, args:List[Any]): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = conMirror(args: _*)
+      instance
+    }
+  */
+
+  def isCaseClass(instance: Any): Boolean = {
+    val typeMirror = runtimeMirror(instance.getClass.getClassLoader)
+    val instanceMirror = typeMirror.reflect(instance)
+    val symbol = instanceMirror.symbol
+    symbol.isCaseClass
+  }
+
+
+  def getConstructorDefault(tpe:Type): scala.reflect.runtime.universe.MethodSymbol = {
+   val conSymbol = tpe.decl(ru.termNames.CONSTRUCTOR)
+    val defaultConstructor =
+      if (conSymbol.isMethod) conSymbol.asMethod
+      else {
+        val ctors = conSymbol.asTerm.alternatives
+        ctors.map { _.asMethod }.find { _.isPrimaryConstructor }.get
+      }
+    defaultConstructor
   }
 
 
@@ -181,7 +211,7 @@ object Reflector {
 
       annoValue
     })
-    val anoInstance = createInstanceWithParams(anoType, annotationInputs)
+    val anoInstance = createInstance(anoType, Some(annotationInputs))
     anoInstance
   }
 

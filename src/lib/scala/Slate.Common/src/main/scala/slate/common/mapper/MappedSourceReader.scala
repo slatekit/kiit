@@ -26,8 +26,8 @@ trait MappedSourceReader {
    def getShort(pos:Int) : Int
    def getShort(name:String) : Int
 
-  def getInt(pos:Int) : Int
-  def getInt(name:String) : Int
+   def getInt(pos:Int) : Int
+   def getInt(name:String) : Int
 
    def getLong(pos:Int) : Long
    def getLong(name:String) : Long

@@ -66,8 +66,9 @@ object Random {
   {
     val result = java.util.UUID.randomUUID().toString().toUpperCase()
     if(!includeDashes)
-      return result.replaceAllLiterally("-","")
-    result
+      result.replaceAllLiterally("-","")
+    else
+      result
   }
 
 

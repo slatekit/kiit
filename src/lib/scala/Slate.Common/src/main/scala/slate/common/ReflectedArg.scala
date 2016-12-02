@@ -22,61 +22,28 @@ case class ReflectedArg(name:String, typeName:String, pos:Int, sym:AnyRef,
 
   def isBasicType():Boolean = {
 
-    val paramType = typeName
-
-    // Convert to appropriate type
-    if(paramType == "String")
-    {
-      return true
+    typeName match {
+      case "String"  => true
+      case "Int"     => true
+      case "Boolean" => true
+      case "Long"    => true
+      case "Double"  => true
+      case _         => false
     }
-    else if(paramType == "Int")
-    {
-      return true
-    }
-    else if(paramType == "Boolean")
-    {
-      return true
-    }
-    else if(paramType == "Long")
-    {
-      return true
-    }
-    else if(paramType == "Double")
-    {
-      return true
-    }
-    false
   }
 
 
   def sample():String = {
 
-    val paramType = typeName
-
-    // Convert to appropriate type
-    if(paramType == "String")
+    typeName match
     {
-      return "\"text\""
+      case "String"   => "\"text\""
+      case "Int"      => "1"
+      case "Boolean"  => "true"
+      case "Long"     => "10"
+      case "Double"   => "3.14"
+      case "DateTime" => DateTime.now().toStringYYYYMMDDHHmmss()
+      case _ => "??"
     }
-    else if(paramType == "Int")
-    {
-      return "1"
-    }
-    else if(paramType == "Boolean")
-    {
-      return "true"
-    }
-    else if(paramType == "Long")
-    {
-      return "10"
-    }
-    else if(paramType == "Double")
-    {
-      return "3.14"
-    }
-    else if(paramType == "DateTime") {
-      return DateTime.now().toStringYYYYMMDDHHmmss()
-    }
-    "??"
   }
 }

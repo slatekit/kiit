@@ -1,7 +1,7 @@
 package slate.common.query
 
 import slate.common.Strings
-import slate.common.databases.SqlType
+import slate.common.databases.{DbConstants}
 
 import scala.collection.mutable.ListBuffer
 
@@ -44,7 +44,7 @@ class Query extends IQuery {
       }
       val field = _data.updates(ndx)
       var fieldValue = " "
-      if(field.fieldValue == SqlType.EmptyString)
+      if(field.fieldValue == DbConstants.EmptyString)
         fieldValue = "''"
       else
         fieldValue = QueryEncoder.convertVal(field.fieldValue)
