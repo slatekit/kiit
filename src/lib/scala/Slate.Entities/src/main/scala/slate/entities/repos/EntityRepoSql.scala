@@ -35,7 +35,7 @@ abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
   override def create(entity: T):Long =
   {
     val sql = mapFields(entity, false)
-    val id = _db.executeInsertGetId(s"insert into ${tableName} " + sql + ";")
+    val id = _db.insert(s"insert into ${tableName} " + sql + ";")
     entity.id = id
     id
   }
@@ -98,7 +98,7 @@ abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
 
   private def sqlExecute(sql: String) :Int =
   {
-    _db.executeUpdate(sql)
+    _db.update(sql)
   }
 
 

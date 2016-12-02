@@ -18,7 +18,7 @@ import slate.common.databases.{DbConString, DbLookup}
 import slate.common.databases.DbLookup._
 import slate.common.envs.{Env, Envs, EnvItem}
 import slate.common.results.ResultSupportIn
-import slate.common.subs.Subs
+import slate.common.templates.{TemplatePart, Subs}
 import slate.common.{Result, Strings}
 import slate.common.conf.ConfigBase
 import slate.common.info.{Folders, About}
@@ -135,19 +135,19 @@ object AppFuncs extends ResultSupportIn {
     */
   def vars(conf:ConfigBase): Subs = {
     val abt = about(conf)
-    val subs = new Subs()
-    subs("user.home"    ) = (s) => System.getProperty("user.home")
-    subs("company.id"   ) = (s) => Strings.toId(abt.company)
-    subs("company.name" ) = (s) => abt.company
-    subs("company.dir"  ) = (s) => "@{user.home}/@{company.id}"
-    subs("root.dir"     ) = (s) => "@{company.dir}"
-    subs("group.id"     ) = (s) => Strings.toId(abt.group)
-    subs("group.name"   ) = (s) => abt.group
-    subs("group.dir"    ) = (s) => "@{root.dir}/@{group.id}"
-    subs("app.id"       ) = (s) => abt.id
-    subs("app.name"     ) = (s) => abt.name
-    subs("app.dir"      ) = (s) => "@{root.dir}/@{group.id}/@{app.id}"
-    subs
+    new Subs(Some(List[(String,(TemplatePart)=> String)](
+      ("user.home"    , (s) => System.getProperty("user.home")    ),
+      ("company.id"   , (s) => Strings.toId(abt.company)          ),
+      ("company.name" , (s) => abt.company                        ),
+      ("company.dir"  , (s) => "@{user.home}/@{company.id}"       ),
+      ("root.dir"     , (s) => "@{company.dir}"                   ),
+      ("group.id"     , (s) => Strings.toId(abt.group)            ),
+      ("group.name"   , (s) => abt.group                          ),
+      ("group.dir"    , (s) => "@{root.dir}/@{group.id}"          ),
+      ("app.id"       , (s) => abt.id                             ),
+      ("app.name"     , (s) => abt.name                           ),
+      ("app.dir"      , (s) => "@{root.dir}/@{group.id}/@{app.id}")
+    )))
   }
 
 

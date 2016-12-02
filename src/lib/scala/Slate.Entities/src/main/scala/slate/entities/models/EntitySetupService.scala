@@ -90,7 +90,7 @@ class EntitySetupService(val _entities:Entities,
     }
     val sql = result.get
     val db = _entities.getDatabase(dbKey, dbShard)
-    db.executeUpdate(sql)
+    db.update(sql)
     ok()
   }
 

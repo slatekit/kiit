@@ -16,7 +16,7 @@ import slate.common.conf.ConfigBase
 import slate.common.databases.{DbLookup, DbConString}
 import slate.common.encrypt.Encryptor
 import slate.common.envs.{Env, Envs, EnvItem}
-import slate.common.subs.Subs
+import slate.common.templates.Subs
 import slate.entities.core.Entities
 import slate.common.i18n.I18nStrings
 import slate.common.info.{Folders, Lang, Host, About}

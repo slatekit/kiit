@@ -25,7 +25,7 @@ import slate.common.info._
 import slate.common._
 import slate.common.logging.{Logger, LoggerConsole, LogSupportIn, LogLevel}
 import slate.common.results.{ResultCode, ResultSupportIn}
-import slate.common.subs.Subs
+import slate.common.templates.Subs
 import slate.core.common.{Conf, AppContext}
 import slate.core.app.AppFuncs._
 import slate.entities.core.Entities
