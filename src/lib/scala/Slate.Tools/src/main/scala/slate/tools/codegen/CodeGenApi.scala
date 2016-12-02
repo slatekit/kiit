@@ -16,7 +16,7 @@ package slate.tools.codegen
 import java.io.File
 
 import slate.common._
-import slate.common.databases.{DbBuilder, DbMeta, DbLookup}
+import slate.common.databases.{DbBuilder, DbLookup}
 import slate.common.results.ResultSupportIn
 import slate.common.serialization.{ObjectBuilderJson, ObjectBuilder}
 import slate.core.apis.{ApiAction, Api}
