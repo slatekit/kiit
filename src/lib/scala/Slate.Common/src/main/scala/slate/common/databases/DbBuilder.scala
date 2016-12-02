@@ -14,7 +14,8 @@ package slate.common.databases
 
 import slate.common.Strings
 import slate.common.Model
-import slate.common.query.{QueryEncoder, Query}
+import slate.common.databases.DbConstants._
+import slate.common.query.{QueryEncoder}
 
 
 /**
@@ -40,7 +41,7 @@ class DbBuilder() {
       val mapping = model.fields(ndx)
       if (!Strings.isMatch(mapping.name, "id"))
       {
-        val sqlType = SqlType.getTypeFromScala(mapping.dataType)
+        val sqlType = getTypeFromScala(mapping.dataType)
         if(colsAdded > 0)
         {
           sql += ","
@@ -73,7 +74,7 @@ class DbBuilder() {
   def addColNew(name:String, dataType:Int, required:Boolean = false, maxLen:Int = 0): String =
   {
     val nullText = if(required ) "NOT NULL" else ""
-    val isText = dataType == SqlType.TypeString
+    val isText = dataType == TypeString
     var maxLenText = maxLen.toString
     val colType = getColType(dataType, maxLen)
     val colName = getColName(name)
@@ -97,15 +98,15 @@ class DbBuilder() {
 
   def getColType(colType:Int, maxLen:Int): String =
   {
-    if(colType == SqlType.TypeString && maxLen == -1)
+    if(colType == TypeString && maxLen == -1)
     {
       return "longtext"
     }
-    if(colType == SqlType.TypeString)
+    if(colType == TypeString)
     {
       return "VARCHAR(" + maxLen + ")"
     }
-    SqlType.getName(colType)
+    getName(colType)
   }
 
 

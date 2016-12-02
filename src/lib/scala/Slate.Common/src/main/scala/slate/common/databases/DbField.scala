@@ -14,7 +14,9 @@ package slate.common.databases
 import slate.common.{Reflector, DateTime, Strings}
 import scala.reflect.runtime.universe.{Type, typeOf}
 
-
+/**
+  * Internal USE ONLY
+  */
 class DbField
 {
   var name       = ""

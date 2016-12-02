@@ -17,6 +17,7 @@ import scala.reflect.runtime.universe._
 import scala.collection.mutable.ListBuffer
 import slate.common.{DateTime, Model}
 import slate.common.mapper.{MapperSourceRecord, Mapper}
+import DbUtils._
 
 
 /**
@@ -49,20 +50,6 @@ class Db(private val _dbCon:DbConString) {
 
 
   /**
-    * gets a new jdbc connection via Driver manager
-    * @return
-    */
-  def getConnection() : Connection =
-  {
-    if(_dbCon.driver == "com.mysql.jdbc.Driver")
-    {
-      return DriverManager.getConnection(_dbCon.url, _dbCon.user, _dbCon.password)
-    }
-    DriverManager.getConnection(_dbCon.url)
-  }
-
-
-  /**
    * creates a table in the database that matches the schema(fields) in the model supplied
    * @param model : The model associated with the table.
    */
@@ -70,8 +57,7 @@ class Db(private val _dbCon:DbConString) {
   {
     val builder = new DbBuilder()
     val sql = builder.addTable(model)
-    executeInternal((con, stmt) => stmt.execute(sql))
-    log(sql)
+    execute(_dbCon, (con, stmt) => stmt.execute(sql), error)
   }
 
 
@@ -83,8 +69,7 @@ class Db(private val _dbCon:DbConString) {
   {
     val builder = new DbBuilder()
     val sql = builder.dropTable(name)
-    executeInternal((con, stmt) => stmt.execute(sql))
-    log(sql)
+    execute(_dbCon, (con, stmt) => stmt.execute(sql), error)
   }
 
 
@@ -93,11 +78,11 @@ class Db(private val _dbCon:DbConString) {
     * @param sql : The sql text
     * @return
     */
-  def querySingle[T](sql:String, typ:Type, inputs:Option[List[Any]]): Option[T]  = {
+  def getScalar[T](sql:String, typ:Type, inputs:Option[List[Any]]): Option[T]  = {
 
     var res:Option[T] = None
 
-    executeInternalProc(sql, (rs, stmt) => {
+    execute(_dbCon, sql, (rs, stmt) => {
 
       // fill all the arguments into the prepared stmt
       fillArgs(stmt, inputs)
@@ -106,20 +91,20 @@ class Db(private val _dbCon:DbConString) {
       val rs = stmt.executeQuery()
       val any =  rs.next()
       if(any) {
-        res = getResultValue[T](rs, typ, 1)
+        res = DbUtils.getScalar[T](rs, typ)
       }
-    })
+    }, error)
     res
   }
 
 
   /**
-    * gets a scalar string value using the sql provided
-    * @param sql : The sql text
-    * @return
-    */
+   * gets a scalar string value using the sql provided
+   * @param sql : The sql text
+   * @return
+   */
   def getScalarString(sql:String, inputs:Option[List[Any]] = None): String  = {
-    querySingle[String](sql, typeOf[String], inputs).get
+    getScalar[String](sql, typeOf[String], inputs).get
   }
 
 
@@ -129,7 +114,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarInt(sql:String, inputs:Option[List[Any]] = None): Int  = {
-    querySingle[Int](sql, typeOf[Int], inputs).get
+    getScalar[Int](sql, typeOf[Int], inputs).get
   }
 
 
@@ -139,7 +124,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarLong(sql:String, inputs:Option[List[Any]] = None): Long  = {
-    querySingle[Long](sql, typeOf[Long], inputs).get
+    getScalar[Long](sql, typeOf[Long], inputs).get
   }
 
 
@@ -149,7 +134,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarDouble(sql:String, inputs:Option[List[Any]] = None): Double  = {
-    querySingle[Double](sql, typeOf[Double], inputs).get
+    getScalar[Double](sql, typeOf[Double], inputs).get
   }
 
 
@@ -159,7 +144,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarBool(sql:String, inputs:Option[List[Any]] = None): Boolean  = {
-    querySingle[Boolean](sql, typeOf[Boolean], inputs).get
+    getScalar[Boolean](sql, typeOf[Boolean], inputs).get
   }
 
 
@@ -169,7 +154,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarDate(sql:String, inputs:Option[List[Any]] = None): DateTime  = {
-    querySingle[DateTime](sql, typeOf[DateTime], inputs).get
+    getScalar[DateTime](sql, typeOf[DateTime], inputs).get
   }
 
 
@@ -228,16 +213,16 @@ class Db(private val _dbCon:DbConString) {
    * @param inputs  : The inputs for the sql or stored proc
    * @return        : The number of affected records
    */
-  def executeUpdate(sql:String, inputs:Option[List[Any]] = None):Int = {
+  def update(sql:String, inputs:Option[List[Any]] = None):Int = {
     var res = 0
-    executeInternalProc(sql, (con, stmt) => {
+    DbUtils.execute(_dbCon, sql, (con, stmt) => {
 
       // fill all the arguments into the prepared stmt
       fillArgs(stmt, inputs)
 
       // update and get number of affected records
       res = stmt.executeUpdate()
-    })
+    }, error)
     res
   }
 
@@ -248,9 +233,9 @@ class Db(private val _dbCon:DbConString) {
    * @param inputs  : The inputs for the sql or stored proc
    * @return    : The id ( primary key )
    */
-  def executeInsertGetId(sql:String, inputs:Option[List[Any]] = None):Long = {
+  def insert(sql:String, inputs:Option[List[Any]] = None):Long = {
     var res = 0L
-    executeConnection( (con) => {
+    DbUtils.execute(_dbCon, (con) => {
 
       val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
 
@@ -266,7 +251,7 @@ class Db(private val _dbCon:DbConString) {
         res = rs.getLong(1)
       }
       DbUtils.close(stmt)
-    })
+    }, error)
     res
   }
 
@@ -275,7 +260,7 @@ class Db(private val _dbCon:DbConString) {
                            callback: (ResultSet) => Unit,
                            moveNext:Boolean = true,
                            inputs:Option[List[Any]] = None) = {
-    executeInternalProc(sql, (con, stmt) =>
+    DbUtils.execute(_dbCon, sql, (con, stmt) =>
     {
 
       // fill all the arguments into the prepared stmt
@@ -289,139 +274,14 @@ class Db(private val _dbCon:DbConString) {
       {
         callback(rs)
       }
-    })
+    }, error)
   }
 
 
-  private def executeInternal(callback:(Connection, Statement) => Unit): Unit =
-  {
-    var conn:Connection = null
-    var stmt:Statement = null
-    try
-    {
-      conn = getConnection()
-      stmt = conn.createStatement()
-      callback(conn, stmt)
-    }
-    catch
-    {
-      case ex:Exception =>
-      {
-        handleException(ex)
-      }
-    }
-    finally
-    {
-      DbUtils.close(stmt, conn)
-    }
-  }
-
-
-  private def executeInternalProc(sql:String, callback:(Connection, PreparedStatement ) => Unit): Unit =
-  {
-    var conn:Connection = null
-    var stmt:CallableStatement = null
-    try
-    {
-      conn = getConnection()
-      stmt = conn.prepareCall(sql)
-      callback(conn, stmt)
-    }
-    catch
-      {
-        case ex:Exception =>
-        {
-          handleException(ex)
-        }
-      }
-    finally
-    {
-      DbUtils.close(stmt, conn)
-    }
-  }
-
-
-  private def executeConnection(callback:(Connection) => Unit): Unit =
-  {
-    var conn:Connection = null
-    try
-    {
-      conn = getConnection()
-      callback(conn)
-    }
-    catch
-      {
-        case ex:Exception =>
-        {
-          handleException(ex)
-        }
-      }
-    finally
-    {
-      DbUtils.close(conn)
-    }
-  }
-
-
-  private def handleException(ex:Exception): Unit =
+  private def error(ex:Exception): Unit =
   {
     val msg= ex.getMessage
     println(msg)
-  }
-
-
-  private def log(sql:String): Unit =
-  {
-    println(sql)
-  }
-
-
-  private def fillArgs(stmt:PreparedStatement, inputs:Option[List[Any]]):Unit = {
-    inputs.fold(Unit)( all => {
-      var pos = 1
-      for(arg <- all){
-        arg match {
-          case s:String         => stmt.setString (pos, arg.toString)
-          case s:Int            => stmt.setInt    (pos, arg.asInstanceOf[Int])
-          case s:Long           => stmt.setLong   (pos, arg.asInstanceOf[Long])
-          case s:Double         => stmt.setDouble (pos, arg.asInstanceOf[Double])
-          case s:Boolean        => stmt.setBoolean(pos, arg.asInstanceOf[Boolean])
-          case s:DateTime       => "\"" + s.toString() + "\""
-        }
-        pos += 1
-      }
-      Unit
-    })
-  }
-
-
-  private def getResultValue[T](rs:ResultSet, typ:Type, pos:Int): Option[T] = {
-    var res:Option[T] = None
-      if(typ == typeOf[String]      ) {
-        res = Option(rs.getString(pos)                   .asInstanceOf[T])
-      }
-      else if(typ == typeOf[Short]  ) {
-        res = Option(rs.getShort(pos)                    .asInstanceOf[T])
-      }
-      else if(typ == typeOf[Int]    ) {
-        res = Option(rs.getInt(pos)                      .asInstanceOf[T])
-      }
-      else if(typ == typeOf[Long]         ) {
-        res = Option(rs.getLong(pos)                     .asInstanceOf[T])
-      }
-      else if(typ == typeOf[Double]         ) {
-        res = Option(rs.getDouble(pos)                   .asInstanceOf[T])
-      }
-      else if(typ == typeOf[Boolean]       ) {
-        res = Option(rs.getBoolean(pos)                  .asInstanceOf[T])
-      }
-      else if(typ == typeOf[DateTime]       ) {
-        res = Option(new DateTime(rs.getTimestamp(pos))  .asInstanceOf[T])
-      }
-      else {
-        Some(0)
-      }
-    res
   }
   /*
   * DELIMITER $$
@@ -430,5 +290,118 @@ BEGIN
 	select * from `user` where email = email;
 END$$
 DELIMITER ;
-  * */
+  **/
 }
+
+
+/*
+import java.sql._
+import slate.common.DateTime
+import scala.collection.mutable.ListBuffer
+import scala.reflect.runtime.universe._
+import DbUtils._
+
+
+class DbCmd[+A](val sql:String, val inputs:Option[List[Any]], val tpe:Type) {
+
+  val con:DbConString = DbConString.empty
+
+
+  def run(): Option[A] = {
+    var res:Option[A] = None
+
+    // execute sql or proc
+    execute(con, sql, (conn, stmt) => {
+
+      // parameters for sql or proc
+      fillArgs(stmt, inputs)
+
+      // execute
+      val rs = stmt.executeQuery()
+      val any =  rs.next()
+      if( any ) {
+        res = map[A](rs)
+      }
+    }, error)
+    res
+  }
+
+
+  def map[A](resultSet: ResultSet): Option[A] = ???
+
+
+  def error(ex:Exception): Unit =
+  {
+    val msg= ex.getMessage
+    println(msg)
+  }
+}
+
+
+
+class DbCmdScalar[A:TypeTag](implicit typ:Type, sql:String, inputs:Option[List[Any]])
+  extends DbCmd[A](sql, inputs, typ) {
+
+  override def map[T](rs:ResultSet): Option[T] = {
+    val pos = 1
+
+    if(typ == typeOf[String] )       Option(rs.getString(pos).asInstanceOf[T])
+    else if(typ == typeOf[Short]   ) Option(rs.getShort(pos).asInstanceOf[T])
+    else if(typ == typeOf[Int]     ) Option(rs.getInt(pos).asInstanceOf[T])
+    else if(typ == typeOf[Long]    ) Option(rs.getLong(pos).asInstanceOf[T])
+    else if(typ == typeOf[Double]  ) Option(rs.getDouble(pos).asInstanceOf[T])
+    else if(typ == typeOf[Boolean] ) Option(rs.getBoolean(pos).asInstanceOf[T])
+    else if(typ == typeOf[DateTime]) Option(new DateTime(rs.getTimestamp(pos)).asInstanceOf[T])
+    else None
+  }
+}
+
+
+
+class DbCmdGetOne[A:TypeTag](implicit typ:Type, sql:String, inputs:Option[List[Any]], f:(ResultSet) => Option[A])
+  extends DbCmd[A](sql, inputs, typ) {
+
+  override def map[T](rs:ResultSet): Option[T] = {
+
+    val res = if(rs.next()) f(rs) else None
+    res.fold[Option[T]](None)( v => Some(v.asInstanceOf[T]))
+  }
+}
+
+
+
+class DbCmdGetMany[A:TypeTag](implicit typ:Type, sql:String, inputs:Option[List[Any]], f:(ResultSet) => Option[A])
+  extends DbCmd[A](sql, inputs, typ) {
+
+  override def map[A](rs:ResultSet): Option[scala.List[A]] = {
+    val items = new ListBuffer[A]()
+    while(rs.next())
+    {
+      val item = if(rs.next()) f(rs) else None
+      items.append( item.get.asInstanceOf[A] )
+    }
+    Option(items.toList)
+  }
+}
+
+
+
+class DbCmdUpdate(implicit typ:Type, sql:String, inputs:Option[List[Any]])
+  extends DbCmd[Int](sql, inputs, typ) {
+
+  override def run(): Option[Int] = {
+    var res:Option[Int] = None
+
+    // execute sql or proc
+    execute(con, sql, (conn, stmt) => {
+
+      // parameters for sql or proc
+      fillArgs(stmt, inputs)
+
+      // execute
+      res = Some(stmt.executeUpdate())
+    }, error)
+    res
+  }
+}
+*/
