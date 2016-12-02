@@ -15,13 +15,52 @@ object Strings {
 
   val empty = ""
 
-  var typeString = ""
+
+  val typeString = ""
 
 
-  def newline():String =
-  {
-    System.lineSeparator
+  def newline():String = System.lineSeparator
+
+
+  def serialize(obj:Any):String = {
+    obj match {
+      case null             => "null"
+      case Unit             => "null"
+      case None             => "null"
+      case s:Option[Any]    => serialize(s.getOrElse(None))
+      case s:Result[Any]    => serialize(s.getOrElse(None))
+      case s:String         => Strings.stringRepresentation(s)
+      case s:Int            => s.toString
+      case s:Long           => s.toString
+      case s:Double         => s.toString
+      case s:Boolean        => s.toString.toLowerCase
+      case s:DateTime       => "\"" + s.toString() + "\""
+      case s:Seq[Any]       => "[ " + serializeList(s, serialize) + "]"
+      case s: AnyRef        => { s.toString }
+      case _                => obj.toString
+    }
   }
+
+
+  /**
+   * prints a list ( recursive
+   *
+   * @param items
+   */
+  def serializeList(items:Seq[Any], serializer: (String) => String): String =
+  {
+    var text = ""
+    for(ndx <- 0 until items.size)
+    {
+      val item = items(ndx)
+      if(ndx > 0) {
+        text += ", "
+      }
+      text += serialize(item)
+    }
+    text
+  }
+
 
 
   def substring(text:String, pattern:String): Option[(String, String)] = {
@@ -29,7 +68,7 @@ object Strings {
       return None
     }
     val ndxPattern = text.indexOf(pattern)
-    if (ndxPattern < 0 ){
+    if (ndxPattern < 0 ) {
       return None
     }
     val part1 = text.substring(0, ndxPattern + pattern.length)

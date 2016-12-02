@@ -27,6 +27,7 @@ import scala.collection.immutable.LinearSeq
   * @param err     : Optional exception
   * @param ext     : Optional extra data / metadata
   * @param tag     : Optional tag used for tracking purposes
+  * @param ref     : Optional reference to some original value
   * @param format  : Optional format to indicate the format of data
   * @tparam T      : Type T
   */
@@ -37,6 +38,7 @@ sealed abstract class Result[+T](
                                     val err     : Option[Throwable] = None,
                                     val ext     : Option[Any]       = None,
                                     val tag     : Option[String]    = None,
+                                    val ref     : Option[Any]       = None,
                                     val format  : Option[String]    = None
                                  ) extends Product with ResultChecks
 {
@@ -147,7 +149,7 @@ sealed abstract class Result[+T](
       case s:Double         => s.toString
       case s:Boolean        => s.toString.toLowerCase
       case s:DateTime       => "\"" + s.toString() + "\""
-      case s:LinearSeq[Any] => "[ " + serializeList(s) + "]"
+      case s:Seq[Any]       => "[ " + serializeList(s) + "]"
       case s: AnyRef        => { val ser = new SerializerJson(); ser.serialize(s); }
       case _                => obj.toString
     }
@@ -159,7 +161,7 @@ sealed abstract class Result[+T](
    *
    * @param items
    */
-  def serializeList(items:scala.collection.immutable.LinearSeq[Any]): String =
+  def serializeList(items:Seq[Any]): String =
   {
     var json = ""
     for(ndx <- 0 until items.size)
@@ -190,8 +192,9 @@ final case class SuccessResult[+T](
                                     override val msg    : Option[String]    = None,
                                     override val ext    : Option[Any]       = None,
                                     override val tag    : Option[String]    = None,
+                                    override val ref    : Option[Any]       = None,
                                     override val format : Option[String]    = None
-                                  ) extends Result[T](true, code, msg, None, ext, tag, format) {
+                                  ) extends Result[T](true, code, msg, None, ext, tag, ref, format) {
    def isEmpty = false
 
    def get = value
@@ -215,8 +218,9 @@ final case class FailureResult[+T](
                                     override val err    : Option[Throwable] = None,
                                     override val ext    : Option[Any]       = None,
                                     override val tag    : Option[String]    = None,
+                                    override val ref    : Option[Any]       = None,
                                     override val format : Option[String]    = None
-                            )       extends Result[T](false, code, msg, err, ext, tag) {
+                            )       extends Result[T](false, code, msg, err, ext, tag, ref, format) {
   def isEmpty = true
 
   def get = value.get

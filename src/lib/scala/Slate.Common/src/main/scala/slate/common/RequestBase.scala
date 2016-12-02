@@ -41,11 +41,12 @@ class RequestBase(
   def fullName :String =
   {
     if(Strings.isNullOrEmpty(name))
-      return area
+      area
 
-    if(Strings.isNullOrEmpty(action))
-      return area + "." + name
+    else if(Strings.isNullOrEmpty(action))
+      area + "." + name
 
-    area + "." + name + "." + action
+    else
+      area + "." + name + "." + action
   }
 }
