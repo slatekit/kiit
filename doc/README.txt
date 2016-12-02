@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------------------------
 @author : Kishore Reddy
 @website: www.slatekit.com 
-@date   : Nov 11, 2016
-@release: 1.1.0
-@build  : 1.1.0.2
+@date   : Dec 1, 2016
+@release: 1.2.0
+@build  : 1.2.0.3
 ----------------------------------------------------------------------------------------
 
 
@@ -11,7 +11,7 @@
 ----------------------------------------------------------------------------------------
 SLATE KIT
 ----------------------------------------------------------------------------------------
-This is Slate Kit 1.1 
+This is Slate Kit 1.2 
 Slate Kit is a tool kit, utility library and server backend for mobile and web apps. 
 It is written in Scala and uses Akka-Http for the Server. 
 
@@ -128,7 +128,7 @@ Info  : SUMMARY :
 Info  : ===============================================================
 Info  : name             = Sample App - Console
 Info  : desc             = Sample console application to show the Slate Kit base app
-Info  : version          = 0.9.1
+Info  : version          = 1.2.0
 Info  : tags             = slate,shell,cli
 Info  : group            = Samples
 Info  : region           = ny
@@ -226,7 +226,7 @@ get    see step 3.   http://localhost:5000/api/sys/version/scala              { 
 post   see step 3.   http://localhost:5000/api/app/info/lang                  { }                 
 post   see step 3.   http://localhost:5000/api/app/info/host                  { }          
 post   see step 3.   http://localhost:5000/api/app/info/app                   { }        
-post   see step 3.   http://localhost:5000/api/sampleapp/users/total          { }
+get    see step 3.   http://localhost:5000/api/sampleapp/users/total          { }
 post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "batman@gotham.com", "first" : "bruce", "last" : "wayne", "isMale" : true, "age" : 32, "phone" : "123456789", "country" : "us" }
 post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "superman@metropolis.com", "first" : "clark", "last" : "kent", "isMale" : true, "age" : 32, "phone" : "987654321", "country" : "us" }
 post   see step 3.   http://localhost:5000/api/sampleapp/users/create         { "email" : "wonderwoman@metropolis.com", "first" : "diana", "last" : "price", "isMale" : false, "age" : 32, "phone" : "111111111", "country" : "us" }
