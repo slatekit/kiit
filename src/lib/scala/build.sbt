@@ -5,39 +5,9 @@ lazy val commonSettings = Seq(
   version := "1.2.0",
   scalaVersion := "2.11.8",
   homepage := Some(url("http://www.slatekit.com/")),
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("releases"  at nexus + "service/local/staging/deploy/maven2")
-  },
-  credentials in Scaladex += Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials" ),  
   scaladexKeywords := Seq("api", "arguments", "cli", "crypto", "database", "server", "shell", "utils"),
-  pomExtra := (
-    <url>https://github.com/code-helix/slatekit</url>
-      <licenses>
-        <license>
-          <name>Apache 2.0</name>
-          <url>https://github.com/code-helix/slatekit/blob/master/LICENSE</url>
-          <distribution>repo</distribution>
-        </license>
-      </licenses>
-      <scm>
-        <url>git@github.com:code-helix/slatekit.git</url>
-        <connection>scm:git@github.com:code-helix/slatekit.git</connection>
-      </scm>
-      <developers>
-        <developer>
-          <id>kishorereddy</id>
-          <name>Kishore Reddy</name>
-          <url>http://github.com/kishorereddy</url>
-        </developer>
-      </developers>
-  )
+  credentials in Scaladex := Seq(Credentials(Path.userHome / ".ivy2" / ".scaladex.credentials")),
+  scmInfo := Some(ScmInfo(new java.net.URL("https://github.com/code-helix/slatekit"), "scm:git@github.com:code-helix/slatekit.git", Some("scm:git@github.com:code-helix/slatekit.git")))
 )
 
 lazy val common = (project in file("Slate.Common")).
@@ -165,11 +135,11 @@ lazy val server = (project in file("Slate.Server")).
   ).
   dependsOn(common,entities,core,tools,integration)      
 
-  
+//, entities, core, tools, integration, cloud, shell, server  
 lazy val root = (project in file(".")).
   aggregate(common, entities, core, tools, integration, cloud, shell, server).
+  settings(commonSettings: _*).
   settings(
-  scalaVersion := "2.11.8",
   publish := (),
   publishLocal := (),
   publishArtifact := false
