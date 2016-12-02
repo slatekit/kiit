@@ -15,6 +15,8 @@ import slate.common.Strings
 trait ConsoleWrites {
 
   val settings:ConsoleSettings
+  val TAB = "\t"
+
 
   /**
     * Write many items based on the semantic modes
@@ -58,7 +60,7 @@ trait ConsoleWrites {
   {
     print(color + " " + text )
     if(endLine)
-      println()
+      line()
   }
 
 
@@ -77,7 +79,7 @@ trait ConsoleWrites {
   def lines(count:Int): Unit =
   {
     for(a <- 0 until count){
-      println()
+      line()
     }
   }
 
@@ -91,7 +93,7 @@ trait ConsoleWrites {
   {
     for (ndx <- 0 to count)
     {
-      print("\t")
+      print(TAB)
     }
   }
 
@@ -106,7 +108,7 @@ trait ConsoleWrites {
   {
     var finalText = text
     if(!Strings.isNullOrEmpty(finalText))
-      finalText = finalText.toUpperCase()
+      finalText = finalText.toUpperCase
     write(Console.BLUE, finalText, endLine)
   }
 
@@ -181,6 +183,18 @@ trait ConsoleWrites {
   def text(text:String, endLine:Boolean = true):Unit =
   {
     write(Console.WHITE, text, endLine)
+  }
+
+
+  def list(items:Seq[_], isOrdered:Boolean = false ):Unit = {
+
+    for(ndx <- 0 to items.size) {
+      val item = items(ndx)
+      val value = Strings.serialize(item)
+      val prefix = if(isOrdered) (ndx + 1).toString + ". " else "- "
+      text(TAB + prefix + value, endLine = true)
+    }
+    line()
   }
 
 
