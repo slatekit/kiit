@@ -1,4 +1,4 @@
-import common.ServiceFactory
+import slate.tests.common.ServiceFactory
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import slate.common.app.AppRunConst
 import slate.common.queues.QueueSourceDefault

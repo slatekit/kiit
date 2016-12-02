@@ -9,7 +9,7 @@
   * </slate_header>
   */
 
-import common.{RegTestHelper, ServiceFactory}
+import slate.tests.common._
 import org.scalatest._
 import slate.common.results.ResultCode
 import slate.common.{Result}

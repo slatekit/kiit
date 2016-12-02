@@ -8,7 +8,7 @@
   * usage: Please refer to license on github for more info.
   * </slate_header>
   */
-package common
+package slate.tests.common
 
 import slate.ext.reg.RegInfo
 

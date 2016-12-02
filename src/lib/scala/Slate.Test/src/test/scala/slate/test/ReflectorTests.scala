@@ -1,10 +1,10 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.{Field, Reflector}
+import slate.common.{DateTime, Field, Reflector}
 import slate.core.apis.{Api, ApiAction}
 import slate.entities.core.EntityUnique
-import slate.test.common.{User, UserApi}
+import slate.test.common.{User2, User, UserApi}
 import scala.reflect.runtime.universe.{typeOf}
 
 /**
@@ -21,9 +21,15 @@ import scala.reflect.runtime.universe.{typeOf}
 
 class ReflectorTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
-  test("can create class") {
+  test("can create class normal") {
     val inst = Reflector.createInstance(typeOf[User])
     assert( inst.isInstanceOf[User])
+  }
+
+
+  test("can create class case") {
+    val inst = Reflector.createInstance(typeOf[User2], Some(Seq("batman@gotham.com", "bruce", "wayne", true, 30, 0, "abc", DateTime.now, 0, DateTime.now, 0)))
+    assert( inst.isInstanceOf[User2])
   }
 
 

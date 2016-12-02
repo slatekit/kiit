@@ -59,11 +59,81 @@ class User extends IEntity with IEntityUnique {
   var age = 35
 
 
+  @Field("", true, 10)
+  var password = ""
+
+
   def init(first:String, last:String): User =
   {
     firstName = first
     lastName = last
     this
+  }
+
+
+  def fullname:String =
+  {
+    firstName + " " + lastName
+  }
+
+
+  override def toString():String =
+  {
+    email + ", " + firstName + ", " + lastName + ", " + isMale + ", " + age
+  }
+}
+
+
+case class User2 (
+
+  @Field("", true, 30)
+   email :String = "",
+
+
+  @Field("", true, 30)
+   firstName :String = "",
+
+
+  @Field("", true, 30)
+   lastName :String = "",
+
+
+  @Field("", true, 30)
+   isMale :Boolean = false,
+
+
+  @Field("", true, 0)
+   age :Int = 35,
+
+
+  id: Long = 0,
+
+
+  @Field("",true, 50)
+  uniqueId :String = "",
+
+
+  @Field("", true, -1)
+  createdAt: DateTime = DateTime.now(),
+
+
+  @Field("", true, -1)
+  createdBy: Int  = 0,
+
+
+  @Field("", true, -1)
+  updatedAt : DateTime =  DateTime.now(),
+
+
+  @Field("", true, -1)
+  updatedBy : Int  = 0
+
+)
+{
+
+  def this(first:String, last:String) =
+  {
+    this(firstName = first, lastName = last)
   }
 
 
