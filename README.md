@@ -16,6 +16,9 @@ It is written in Scala, uses MySql, AWS, and Akka-Http in the Server.
 2. www.codehelix.com 
 
 
+# GITTER
+[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 # COMPONENTS
 Slate Kit contains many useful components, utilities and infrastructure abstractions.
