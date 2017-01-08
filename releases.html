@@ -93,6 +93,11 @@
 			<table class="table table-bordered table-striped">
 				
 				<tr>
+					<td><strong><a class="url-ch" href="#release_1_3_0">1.3.0</a></strong></td>
+					<td>Jan 10, 2017 ( EST )</td>
+					<td><strong>AWS Integration, URI Helpers, Fixes/Improvements</strong></td>
+				</tr>
+				<tr>
 					<td><strong><a class="url-ch" href="#release_1_2_0">1.2.0</a></strong></td>
 					<td>Dec 1, 2016</td>
 					<td><strong>New Components, Improvements</strong></td>
@@ -116,6 +121,91 @@
 			<br/><br/>
 			
 			<h1>All</h2>
+			<div id="release_1_3_0" class="row">
+				<div class="col-md-12">
+					<div class="thumbnail">
+						<div class="caption">						
+							<div>
+								<div class="row">
+									<div class="col-sm-2">
+										<img src="themes/start/images/white/prototype.png" alt="..." width="80">
+									</div>
+									<div class="text-left"><h1>1.3.0 - In-Progress</h1></div>
+								</div>
+							</div><table class="table table-bordered table-striped">
+								<tr>
+									<td class="col-sm-2"><strong>About</strong></td>
+									<td><h4>AWS Integration, URI Handling, Cleanup</h4>
+									<br/>1. Improved AWS integration for S3, SQS
+									<br/>2. Bug fixes, code cleanup
+									<br/>3. Push towards more idiomatic Scala</td>
+								</tr>
+								<tr>
+									<td><strong>Date</strong></td>
+									<td>Jan 10, 2016</td>
+								</tr>
+								<tr>
+									<td><strong>Build</strong></td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<td><strong>Required</strong></td>
+									<td>						
+										<ul>
+											<li>Java 1.8</li>
+											<li>Scala 2.1.7</li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<td><strong>Changes</strong></td>
+									<td>
+										<h4>AWS Integration</h4>										
+										<ul>
+											<li>AWS Integration improvements</li>
+											<li>AWS S3 ( Files ) API improved</li>
+											<li>AWS SQS ( Queues ) API improved</li>
+											<li>AWS APIs for CLI now support easy file references to local files</li>
+											<li>Refer to <a href="mod-aws-s3.html" class="url-ch">AWS S3</a> and 
+												<a href="mod-aws-sqs.html" class="url-ch">AWS SQS</a> for more info</li>
+										</ul>										
+										<br/>
+										
+										<h4>URI Handling</h4>
+										<ul>
+											<li>The API CLI now supports easy referencing of files via uris (file://c:/test.txt, user://myapp.conf)</li>
+											<li>APIs can now have a "Doc" parameter which will the CLI will autofill with file path and content</li>											
+										</ul>										
+										<br/>
+										
+										<h4>Clean-up</h4>
+										<ul>
+											<li>Push towards more idiomatic Scala</li>
+											<li>Push towards more immutability</li>
+											<li>Minor small bugs fixed</li>
+										</ul>
+									</td>
+								</tr>								
+								<tr>
+									<td><strong>Downloads</strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/q4sjikzzssgw3jv/slatekit_v_1_2_0_binaries.zip?dl=0">binaries</a></h4>
+										Slate Kit Jars and Sample App Jars, Akka Http, MySql 5.7, and other 3rd party libs
+									</td>
+								</tr>
+								<tr>
+									<td><strong></strong></td>
+									<td>
+										<h4><a class="url-ch" href="https://www.dropbox.com/s/wc44obmvuytucf8/slatekit_v_1_2_0_samples.zip?dl=0">binaries + samples</a></h4>
+										Binaries + Sample apps for the Slate Kit Base App, Shell, Server and Protocol Independent APIs.
+									</td>
+								</tr>
+							</table>
+							<br/>
+						</div>
+					</div>
+				</div>
+            </div>
 			<div id="release_1_2_0" class="row">
 				<div class="col-md-12">
 					<div class="thumbnail">
@@ -148,7 +238,6 @@
 										<ul>
 											<li>Java 1.8</li>
 											<li>Scala 2.1.7</li>
-											<li>Config.jar</li>
 										</ul>
 									</td>
 								</tr>
@@ -230,7 +319,6 @@
 										<ul>
 											<li>Java 1.8</li>
 											<li>Scala 2.1.7</li>
-											<li>Config.jar</li>
 										</ul>
 									</td>
 								</tr>
