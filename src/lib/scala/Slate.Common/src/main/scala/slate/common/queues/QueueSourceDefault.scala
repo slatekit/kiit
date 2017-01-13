@@ -11,9 +11,11 @@
 
 package slate.common.queues
 
-import slate.common.{Random, Strings}
+import slate.common._
+import slate.common.results.ResultFuncs._
 
 import scala.collection.mutable.ListBuffer
+
 
 
 class QueueSourceDefault extends QueueSource with QueueSourceMsg {
@@ -59,29 +61,43 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
     }
   }
 
-  override def send(msg: Any, tagName:String = "", tagValue:String = "") : Unit =
+  override def send(msg: Any, tagName:String = "", tagValue:String = "") : Result[String] =
   {
     synchronized
     {
       val id = Random.stringGuid()
       _list += new QueueSourceData(msg, Some(Map( tagName -> tagValue) ), Some(id) )
+      success(id)
     }
   }
 
 
-  override def send(msg:String, attributes:Map[String,Any]) : Unit =
+  override def send(msg:String, attributes:Map[String,Any]) : Result[String] =
   {
     synchronized
     {
-      _list +=  new QueueSourceData(msg, Some(attributes) )
+      val id = Random.stringGuid()
+      _list +=  new QueueSourceData(msg, Some(attributes), Some(id) )
+      success(id)
     }
+  }
+
+
+  override def sendFromFile(fileNameLocal:String, tagName:String = "", tagValue:String = "") : Result[String] =
+  {
+    val path = Uris.interpret(fileNameLocal)
+    path.fold(failure(Some(""), msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
+      val content = Files.readAllText(pathLocal)
+      send(content, tagName, tagValue)
+    })
   }
 
 
   override def complete(item:Option[Any]): Unit =
   {
-    if(item.isEmpty)return
-    discard(item.get)
+    if(!item.isEmpty) {
+      discard(item.get)
+    }
   }
 
 
@@ -89,13 +105,13 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
   {
     synchronized
     {
-      if(items.isEmpty)return
-      val all = items.get
-      for(item <- all)
-      {
-        val data = item.asInstanceOf[QueueSourceData]
-        val pos = _list.indexOf(data)
-        _list.remove(pos)
+      if(!items.isEmpty) {
+        val all = items.get
+        for (item <- all) {
+          val data = item.asInstanceOf[QueueSourceData]
+          val pos = _list.indexOf(data)
+          _list.remove(pos)
+        }
       }
     }
   }
@@ -103,36 +119,49 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
 
   override def abandon(item:Option[Any]): Unit =
   {
-    if(item.isEmpty)return
-    discard(item.get)
+    if(item.isDefined) {
+      discard(item.get)
+    }
   }
 
 
   override def toString(item:Option[Any]):String =
   {
-    if(item.isEmpty) return Strings.empty
-    item.get.toString
+    item.getOrElse("").toString()
   }
 
 
   override def getMessageBody(msgItem:Option[Any]):String =
   {
-    if(msgItem.isEmpty) return ""
-    val item = msgItem.get
-    if(!item.isInstanceOf[QueueSourceData]) return ""
-    val data = item.asInstanceOf[QueueSourceData]
-    data.message.toString
+    getMessageItemProperty(msgItem, (data) => data.message.toString)
   }
 
 
   override def getMessageTag(msgItem:Option[Any], tagName:String):String =
   {
-    if(msgItem.isEmpty) return ""
-    val item = msgItem.get
-    if(!item.isInstanceOf[QueueSourceData]) return ""
-    val data = item.asInstanceOf[QueueSourceData]
-    if(data.tags.isEmpty) return ""
-    data.tags.get(tagName).toString
+    getMessageItemProperty(msgItem, (data) => {
+      if(data.tags.isEmpty)
+        ""
+      else
+        data.tags.get(tagName).toString
+    })
+  }
+
+
+  private def getMessageItemProperty(msgItem:Option[Any], callback:(QueueSourceData) => String)
+    :String =
+  {
+    if(msgItem.isEmpty){
+      ""
+    }
+    else {
+     val item = msgItem.get
+     if(item.isInstanceOf[QueueSourceData]){
+      callback(item.asInstanceOf[QueueSourceData])
+     }
+     else
+       ""
+    }
   }
 
 

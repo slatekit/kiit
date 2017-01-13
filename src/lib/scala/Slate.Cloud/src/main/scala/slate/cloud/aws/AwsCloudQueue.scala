@@ -15,7 +15,8 @@
 package slate.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
-import slate.common.Strings
+import slate.common._
+import slate.common.results.ResultFuncs._
 import slate.core.cloud._
 
 import com.amazonaws.regions.Region
@@ -36,7 +37,13 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   private val SOURCE  = "aws:sqs"
 
 
-  def connectWith(key:String, password:String):Unit =
+  def this(apiKey:ApiCredentials) = {
+    this( apiKey.account)
+    connectWith(apiKey.key, apiKey.pass, apiKey.tag)
+  }
+
+
+  override def connectWith(key:String, password:String, tag:String):Unit =
   {
     execute(SOURCE, "connect", rethrow = true, data = None, call = () =>
     {
@@ -121,13 +128,13 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     * contains the message data and attributes
     * @param msg: String message, or map containing the fields "message", and "atts"
     */
-  override def send(msg: Any, tagName:String = "", tagValue:String = "") : Unit =
+  override def send(msg: Any, tagName:String = "", tagValue:String = "") : Result[String] =
   {
-    msg match {
+    val msgResult = msg match {
       case t:String => {
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
-        execute(SOURCE, "send", data = Some(""), call = () =>
+        executeResult[String](SOURCE, "send", data = Some(""), call = () =>
         {
           val message = msg.asInstanceOf[String]
           var req = new SendMessageRequest(_queueUrl, message)
@@ -137,7 +144,8 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
             req = req.addMessageAttributesEntry(tagName, new MessageAttributeValue()
               .withDataType("String").withStringValue(finalTagValue))
           }
-          _sqs.sendMessage(req)
+          val result = _sqs.sendMessage(req)
+          result.getMessageId
         })
       }
       case t:Map[String,Any] => {
@@ -147,9 +155,10 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
         send(message, atts)
       }
       case _ => {
-
+        successOrError(false, Some(""), Some("unknown message type"))
       }
     }
+    msgResult
   }
 
 
@@ -157,14 +166,25 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     * @param message : The message to send
     * @param attributes : Additional attributes to put into the message
     */
-  override def send(message:String, attributes:Map[String,Any]) : Unit =
+  override def send(message:String, attributes:Map[String,Any]) : Result[String] =
   {
     // Send the message, any message that fails will get caught
     // and the onError method is called for that message
-    execute(SOURCE, "send", data = Some(message), call = () =>
+    executeResult[String](SOURCE, "send", data = Some(message), call = () =>
     {
       val req = new SendMessageRequest(_queueUrl, message)
-      _sqs.sendMessage(req)
+      val result = _sqs.sendMessage(req)
+      result.getMessageId
+    })
+  }
+
+
+  override def sendFromFile(fileNameLocal:String, tagName:String = "", tagValue:String = "") : Result[String] =
+  {
+    val path = Uris.interpret(fileNameLocal)
+    path.fold(failure(Some(""), msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
+      val content = Files.readAllText(pathLocal)
+      send(content, tagName, tagValue)
     })
   }
 

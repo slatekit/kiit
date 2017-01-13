@@ -19,14 +19,7 @@ import com.amazonaws.auth.{BasicAWSCredentials, AWSCredentials}
 
 trait AwsSupport {
 
-  def credentials(key:String, secret:String): AWSCredentials =
-  {
-    new BasicAWSCredentials(key, secret)
-  }
+  def credentials(key:String, secret:String): AWSCredentials = new BasicAWSCredentials(key, secret)
 
-
-  def credentialsFromLogon(): AWSCredentials =
-  {
-    new ProfileCredentialsProvider().getCredentials
-  }
+  def credentialsFromLogon(): AWSCredentials = new ProfileCredentialsProvider().getCredentials
 }

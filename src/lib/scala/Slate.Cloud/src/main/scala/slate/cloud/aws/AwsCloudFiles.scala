@@ -13,12 +13,13 @@
 
 package slate.cloud.aws
 
+import java.io.File
+
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
-import slate.common.Strings
-import slate.common.Files;
+import slate.common._
 
 import slate.core.cloud._
 
@@ -30,7 +31,19 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
   private var _s3:AmazonS3Client = null
 
 
-  def connectWith(key:String, password:String):Unit =
+  def this(apiKey:ApiCredentials) = {
+    this( apiKey.account, false)
+    connectWith(apiKey.key, apiKey.pass, apiKey.tag)
+  }
+
+
+  /**
+    * connects to the datasource using the key/password supplied.
+    *
+    * @param key
+    * @param password
+    */
+  override def connectWith(key:String, password:String, tag:String):Unit =
   {
     execute(SOURCE, "connect", rethrow = true, data = None, call = () =>
     {
@@ -40,6 +53,11 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
   }
 
 
+  /**
+    * connects to the datasource using login credentials from default credentials file for aws
+    *
+    * @param args
+    */
   override def connect(args:Any):Unit =
   {
     execute(SOURCE, "connect", rethrow = true, data = Some(args), call = () =>
@@ -50,28 +68,11 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
   }
 
 
-  override def create(folder:String, name:String, content:String):Unit =
-  {
-    put("create", folder, name, content)
-  }
-
-
-  override def update(folder:String, name:String, content:String): Unit =
-  {
-    put("update", folder, name, content)
-  }
-
-
-  override def delete(folder:String, name:String):Unit =
-  {
-    val fullName = getName(folder, name)
-    execute(SOURCE, "delete", data = Some(fullName), call = () =>
-    {
-      _s3.deleteObject(_defaultFolder, fullName)
-    })
-  }
-
-
+  /**
+    * creates a root folder/bucket with the supplied name.
+    *
+    * @param rootFolder
+    */
   override def createRootFolder(rootFolder:String):Unit =
   {
     if(Strings.isNullOrEmpty(rootFolder)) return
@@ -80,37 +81,129 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
   }
 
 
-  override def getAsText(folder:String, name:String):String =
+  /**
+    * creates a file with the supplied folder name, file name, and content
+    *
+    * @param folder
+    * @param name
+    * @param content
+    */
+  override def create(folder:String, name:String, content:String):Result[String] =
   {
-    var content = ""
+    put("create", folder, name, content)
+  }
+
+
+  /**
+    * updates a file with the supplied folder name, file name, and content
+    *
+    * @param folder
+    * @param name
+    * @param content
+    */
+  override def update(folder:String, name:String, content:String): Result[String] =
+  {
+    put("update", folder, name, content)
+  }
+
+
+  /**
+    * deletes a file with the supplied folder name, file name
+    *
+    * @param folder
+    * @param name
+    */
+  override def delete(folder:String, name:String):Result[String] =
+  {
     val fullName = getName(folder, name)
-    execute(SOURCE, "getAsText", data = Some(fullName), call = () =>
+    executeResult[String](SOURCE, "delete", data = Some(fullName), call = () =>
+    {
+      _s3.deleteObject(_defaultFolder, fullName)
+      fullName
+    })
+  }
+
+
+  /**
+    * gets the file specified by folder and name, as text content
+    *
+    * @param folder
+    * @param name
+    * @return
+    */
+  override def getAsText(folder:String, name:String):Result[String] =
+  {
+    val fullName = getName(folder, name)
+    executeResult[String](SOURCE, "getAsText", data = Some(fullName), call = () =>
     {
       val obj = _s3.getObject(new GetObjectRequest(_defaultFolder, fullName))
-      content = toString(obj.getObjectContent())
+      val content = toString(obj.getObjectContent())
+      //val content = "simulating download of " + fullName
+      content
     })
-    content
   }
 
 
-  override def download(folder:String, name:String, localFolder:String): Unit =
+  /**
+    * downloads the file specified by folder and name to the local folder specified.
+ *
+    * @param folder
+    * @param name
+    * @param localFolder
+    * @return
+    */
+  override def download(folder:String, name:String, localFolder:String): Result[String] =
   {
     val fullName = getName(folder, name)
-    execute(SOURCE, "download", data = Some(fullName), call = () => {
-      val content = getAsText(folder, name)
-      Files.writeAllText(localFolder + "/" + fullName, content)
+    executeResult[String](SOURCE, "download", data = Some(fullName), call = () => {
+      val content = getAsText(folder, name).getOrElse("")
+      val finalFolder = Uris.interpret(localFolder).getOrElse("")
+      val localFile = new File(finalFolder, fullName)
+      val localFileName = localFile.getAbsolutePath
+      Files.writeAllText(localFileName, content)
+      localFileName
     })
   }
 
 
-  def put(action:String, folder:String, name:String, content:String): Unit =
+  /**
+    * downloads the file specified by folder and name to the local folder specified.
+    *
+    * @param folder
+    * @param name
+    * @param filePath
+    * @return
+    */
+  override def downloadToFile(folder:String, name:String, filePath:String): Result[String] =
+  {
+    val fullName = getName(folder, name)
+    executeResult[String](SOURCE, "download", data = Some(fullName), call = () => {
+      val content = getAsText(folder, name).getOrElse("")
+      val localFile = Uris.interpret(filePath)
+      val localFileName = localFile.getOrElse("")
+      Files.writeAllText(localFileName, content)
+      localFileName
+    })
+  }
+
+
+  /**
+    * uploads the file to the datasource using the supplied folder, filename, and content
+    *
+    * @param folder
+    * @param name
+    * @param content
+    * @return
+    */
+  def put(action:String, folder:String, name:String, content:String): Result[String] =
   {
     // full name of the file is folder + name
     val fullName = getName(folder, name)
 
-    execute(SOURCE, action, data = Some(fullName), call = () =>
+    executeResult[String](SOURCE, action, data = Some(fullName), call = () =>
     {
       _s3.putObject(_defaultFolder, fullName, toInputStream(content), new ObjectMetadata())
+      fullName
     })
   }
 

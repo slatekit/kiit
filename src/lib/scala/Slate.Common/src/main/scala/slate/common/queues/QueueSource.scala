@@ -11,72 +11,46 @@
 
 package slate.common.queues
 
+import slate.common.{Result}
 
 
 abstract class QueueSource {
 
-  def connect(args:Any):Unit =
-  {
-
-  }
+  def connect(args:Any):Unit = { }
 
 
-  def close(): Unit =
-  {
-
-  }
+  def connectWith(key:String, pass:String, tag:String):Unit = { }
 
 
-  def count(): Int =
-  {
-    0
-  }
+  def close(): Unit = { }
 
 
-  def next():Option[Any] =
-  {
-    None
-  }
+  def count(): Int = { 0 }
 
 
-  def nextBatch(size:Int = 10):Option[List[Any]] =
-  {
-    None
-  }
+  def next():Option[Any] = { None }
 
 
-  def complete(item:Option[Any]): Unit =
-  {
-
-  }
+  def nextBatch(size:Int = 10):Option[List[Any]] = { None }
 
 
-  def completeAll(items:Option[List[Any]]):Unit =
-  {
-
-  }
+  def complete(item:Option[Any]): Unit ={ }
 
 
-  def abandon(item:Option[Any]): Unit =
-  {
-
-  }
+  def completeAll(items:Option[List[Any]]):Unit = { }
 
 
-  def toString(item:Option[Any]):String =
-  {
-    ""
-  }
+  def abandon(item:Option[Any]): Unit = { }
 
 
-  def send(msg: Any, tagName:String = "", tagValue:String = "") : Unit =
-  {
-
-  }
+  def toString(item:Option[Any]):String = { "" }
 
 
-  def send(message:String, attributes:Map[String,Any]) : Unit =
-  {
+  def send(msg: Any, tagName:String = "", tagValue:String = "") : Result[String] = ???
 
-  }
+
+  def send(message:String, attributes:Map[String,Any]) : Result[String] = ???
+
+
+  def sendFromFile(fileNameLocal:String, tagName:String = "", tagValue:String = "") : Result[String] = ???
 }
