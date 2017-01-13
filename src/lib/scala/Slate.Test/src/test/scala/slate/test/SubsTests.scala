@@ -11,7 +11,7 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSpec}
-import slate.common.{Random, Result}
+import slate.common.{Vars, Random, Result}
 import slate.common.templates.{TemplatePart, Template, Templates}
 import slate.common.templates.TemplateConstants._
 
@@ -255,6 +255,30 @@ class SubsTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
       val result = templates.resolveTemplate("welcome", Option(subs))
       assert(result.isDefined)
       assert(result.get == "Hi john.doe, Welcome to CodeHelix.")
+    }
+
+
+    it("can resolve saved template with custom dictionary variables with global overrides") {
+      val templates = Templates(
+        templates = Seq(
+          new Template("welcome", "Hi @{user.name}, Welcome to @{company.name}."),
+          new Template("confirm", "Your confirmation code for @{app.name} is @{code}.")
+        ),
+        subs = Some(List(
+          ("company.name" , (s:TemplatePart) => "CodeHelix"                       ),
+          ("app.name"     , (s:TemplatePart) => "slatekit.sampleapp2"              ),
+          ("user.name"    , (s:TemplatePart) => "john.doe"                        ),
+          ("code"         , (s:TemplatePart) => Random.alpha6()                   )
+        ))
+      )
+      val subs = Map[String,Any](
+        ("company.name" , "CodeHelix"                       ),
+        ("user.name"    , "john.doe"                        ),
+        ("code"         , "abc123"                          )
+      )
+      val result = templates.resolveTemplateWithVars("confirm", Option(subs))
+      assert(result.isDefined)
+      assert(result.get == "Your confirmation code for slatekit.sampleapp2 is abc123.")
     }
   }
 

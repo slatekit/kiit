@@ -13,7 +13,6 @@ package slate.test
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSpec}
 import slate.common.DateTime
 import slate.common.query.{QueryEncoder, Query}
-import slate.common.subs.{Sub, SubConstants, Subs}
 
 class QueryTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
@@ -57,17 +56,22 @@ class QueryTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
     it("can convert boolean datetime") {
       assert( QueryEncoder.convertVal(new DateTime(2016, 10, 16)) == "'2016-10-16 12:00:00'")
     }
+
+
+    it("can convert field") {
+      assert( QueryEncoder.ensureField("a(1)2*3&4b") == "a1234b")
+    }
   }
 
 
-  describe ( "Sql Query Builder") {
+  describe ( "Sql Query Builder Filter") {
 
     it("can build empty") {
       assert( new Query().toFilter() == "")
     }
 
 
-    it("can build where with 1 field of type string") {
+    it("can build filter 1") {
       assert( new Query().where("name", "=", "slate kit").toFilter() == "name = 'slate kit'")
     }
 

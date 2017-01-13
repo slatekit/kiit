@@ -1,7 +1,7 @@
 package slate.test
 
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.{DateTime, Field, Reflector}
+import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
+import slate.common.{Reflected, DateTime, Field, Reflector}
 import slate.core.apis.{Api, ApiAction}
 import slate.entities.core.EntityUnique
 import slate.test.common.{User2, User, UserApi}
@@ -19,82 +19,85 @@ import scala.reflect.runtime.universe.{typeOf}
   */
 
 
-class ReflectorTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
+class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll {
 
-  test("can create class normal") {
-    val inst = Reflector.createInstance(typeOf[User])
-    assert( inst.isInstanceOf[User])
-  }
+  describe("Reflector") {
 
 
-  test("can create class case") {
-    val inst = Reflector.createInstance(typeOf[User2], Some(Seq("batman@gotham.com", "bruce", "wayne", true, 30, 0, "abc", DateTime.now, 0, DateTime.now, 0)))
-    assert( inst.isInstanceOf[User2])
-  }
+    it("can create class normal") {
+      val inst = Reflector.createInstance(typeOf[User])
+      assert(inst.isInstanceOf[User])
+    }
 
 
-  test("can get a field value") {
-    val user = new User()
-    user.email = "johndoe@home.com"
-    val email = Reflector.getFieldValue(user, "email")
-    assert(email == user.email )
-  }
+    it("can create class case") {
+      val inst = Reflector.createInstance(typeOf[User2], Some(Seq("batman@gotham.com", "bruce", "wayne", true, 30, 0, "abc", DateTime.now, 0, DateTime.now, 0)))
+      assert(inst.isInstanceOf[User2])
+    }
 
 
-  test("can set a field value") {
-    val user = new User()
-    Reflector.setFieldValue(user, "email", "johndoe@work.com")
-    assert( user.email == "johndoe@work.com")
-  }
+    it("can get a field value") {
+      val user = new User()
+      user.email = "johndoe@home.com"
+      val email = Reflector.getFieldValue(user, "email")
+      assert(email == user.email)
+    }
 
 
-  test("can get method") {
-     val api = new UserApi()
-     val sym = Reflector.getMethod(api, "info")
-     assert( sym.name.toTermName.toString == "info")
-  }
+    it("can set a field value") {
+      val user = new User()
+      Reflector.setFieldValue(user, "email", "johndoe@work.com")
+      assert(user.email == "johndoe@work.com")
+    }
 
 
-  test("can call a method with parameters") {
-
-    val api = new UserApi()
-    val result = Reflector.callMethod(api, "create", Array[Any]("superman@metro.com", "super", "man", true, 35))
-    assert( api.user.email == "superman@metro.com")
-    assert( api.user.firstName == "super")
-    assert( api.user.lastName == "man")
-    assert( api.user.isMale)
-    assert( api.user.age == 35)
-  }
+    it("can get method") {
+      val api = new UserApi()
+      val sym = Reflector.getMethod(api, "info")
+      assert(sym.name.toTermName.toString == "info")
+    }
 
 
-  test("can get a class level annotation") {
-    // NOTE: The annotation must be created with all parameters ( not named parameters )
-    val anno = Reflector.getClassAnnotation(typeOf[UserApi], typeOf[Api]).asInstanceOf[Api]
-    assert(anno.area == "app")
-    assert(anno.name == "users")
-    assert(anno.roles == "admin")
-    assert(anno.protocol == "*")
-    assert(anno.auth == "app-roles")
-  }
+    it("can call a method with parameters") {
+
+      val api = new UserApi()
+      val result = Reflector.callMethod(api, "create", Array[Any]("superman@metro.com", "super", "man", true, 35))
+      assert(api.user.email == "superman@metro.com")
+      assert(api.user.firstName == "super")
+      assert(api.user.lastName == "man")
+      assert(api.user.isMale)
+      assert(api.user.age == 35)
+    }
 
 
-  test("can get a method level annotation") {
-    // NOTE: The annotation must be created with all parameters
-    val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "activate").asInstanceOf[ApiAction]
-    assert(anno.name == "activate")
-    assert(anno.roles == "@parent")
-  }
+    it("can get a class level annotation") {
+      // NOTE: The annotation must be created with all parameters ( not named parameters )
+      val anno = Reflector.getClassAnnotation(typeOf[UserApi], typeOf[Api]).asInstanceOf[Api]
+      assert(anno.area == "app")
+      assert(anno.name == "users")
+      assert(anno.roles == "admin")
+      assert(anno.protocol == "*")
+      assert(anno.auth == "app-roles")
+    }
 
 
-  test("can get a method level annotation with verb") {
-    // NOTE: The annotation must be created with all parameters
-    val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "info").asInstanceOf[ApiAction]
-    assert(anno.name == "")
-    assert(anno.roles == "")
-    assert(anno.verb == "get")
-  }
+    it("can get a method level annotation") {
+      // NOTE: The annotation must be created with all parameters
+      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "activate").asInstanceOf[ApiAction]
+      assert(anno.name == "activate")
+      assert(anno.roles == "@parent")
+    }
 
-/*
+
+    it("can get a method level annotation with verb") {
+      // NOTE: The annotation must be created with all parameters
+      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "info").asInstanceOf[ApiAction]
+      assert(anno.name == "")
+      assert(anno.roles == "")
+      assert(anno.verb == "get")
+    }
+
+    /*
   test("can get a method level annotation with verb defaulted") {
     // NOTE: The annotation must be created with all parameters
     val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "activate").asInstanceOf[ApiAction]
@@ -104,18 +107,51 @@ class ReflectorTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
   }
 */
 
-  test("can get a field level annotation") {
-    // NOTE: The annotation must be created with all parameters
-    val anno = Reflector.getFieldAnnotation(typeOf[User], typeOf[Field], "email").asInstanceOf[Field]
-    assert(anno.name == "")
-    assert(anno.length == 30 )
-    assert(anno.required )
+    it("can get a field level annotation") {
+      // NOTE: The annotation must be created with all parameters
+      val anno = Reflector.getFieldAnnotation(typeOf[User], typeOf[Field], "email").asInstanceOf[Field]
+      assert(anno.name == "")
+      assert(anno.length == 30)
+      assert(anno.required)
+    }
   }
+
+
+  describe("Reflected") {
+
+    it("can get full name"){
+      val re = new Reflected[User]()
+      assert( re.name == "User" )
+      assert( re.fullname == "slate.test.common.User" )
+    }
+
+
+    it("can get method"){
+      val re = new Reflected[User]()
+      assert( re.name == "User" )
+      assert( re.fullname == "slate.test.common.User" )
+    }
+
+
+    it("can get a field value") {
+      val re = new Reflected[User]()
+      val user = new User()
+      user.email = "johndoe@home.com"
+      val email = re.getValue(user, "email")
+      assert(email == user.email)
+    }
+
+
+    it("can set a field value") {
+      val re = new Reflected[User]()
+      val user = new User()
+      re.setValue(user, "email", "johndoe@work.com")
+      assert(user.email == "johndoe@work.com")
+    }
+  }
+
+
  /*
-
-
-
-
 
   test("can determine if basic type") {
     val argType = symArgs(0)
