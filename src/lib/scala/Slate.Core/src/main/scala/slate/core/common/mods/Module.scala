@@ -10,7 +10,7 @@
   */
 package slate.core.common.mods
 
-import slate.common.Result
+import slate.common.{Strings, Result}
 
 import scala.collection.mutable.ListBuffer
 
@@ -41,23 +41,28 @@ class Module
     * install this module
     */
   def install():Unit = {
-    if(info.isDbDependent && info.models.isDefined ){
-      for(modelName <- info.models.get ) {
-        ctx.modelService.install(modelName, info.version, "", "")
-      }
+    if(info.isDbDependent ){
+      info.models.fold(Unit)( models => {
+        models.foreach( modelName => {
+          ctx.modelService.install(modelName, info.version, "", "")
+        })
+        Unit
+      })
     }
   }
 
 
   def script():List[String] = {
-    val scripts = new ListBuffer[String]()
-    if(info.isDbDependent && info.models.isDefined ){
-      for(modelName <- info.models.get ) {
-        ctx.modelService.generateSql(modelName, info.version)
-        scripts.append(modelName)
-      }
+    if(info.isDbDependent ){
+      info.models.fold(List[String]())( models => {
+        models.map(modelName => {
+          ctx.modelService.generateSql(modelName, info.version)
+          modelName
+        })
+      })
     }
-    scripts.toList
+    else
+      List[String]()
   }
 
 

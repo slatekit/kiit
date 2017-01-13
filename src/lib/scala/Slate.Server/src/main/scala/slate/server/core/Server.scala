@@ -131,7 +131,7 @@ class Server( val port       : Int    = 5000 ,
     if(result.isDefined ) {
       val res = result.get
       if(res.isInstanceOf[Option[Any]]) {
-        return new SuccessResult(res.asInstanceOf[Option[Any]].get, result.code, result.msg, result.ext, result.tag, result.format)
+        return new SuccessResult(res.asInstanceOf[Option[Any]].get, result.code, result.msg, result.ext, result.tag)
       }
     }
     result

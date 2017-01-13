@@ -89,8 +89,7 @@ class ShellAPI(private val creds:Credentials                   ,
     // Supply the api-key into each command.
     val opts = Some(new InputArgs(Map[String,Any]("api-key" -> creds.key)))
     val apiCmd = Request(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI)
-    cmd.result = apis.callCommand(apiCmd)
-    cmd
+    cmd.copy(result = apis.callCommand(apiCmd))
   }
 
 
@@ -126,20 +125,22 @@ class ShellAPI(private val creds:Credentials                   ,
     */
   override protected def showHelpFor(cmd:ShellCommand, mode:Int): Unit =
   {
-    // 1: {area} ? = help on area
-    if( mode == ShellConstants.VerbPartArea)
-    {
-      apis.handleHelpForArea(cmd.args.getVerb(0))
-    }
-    // 2. {area}.{api} = help on api
-    else if ( mode == ShellConstants.VerbPartApi)
-    {
-      apis.handleHelpForApi(cmd.args.getVerb(0), cmd.args.getVerb(1))
-    }
-    // 3. {area}.{api}.{action} = help on api action
-    else
-    {
-      apis.handleHelpForAction(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
+    mode match {
+      // 1: {area} ? = help on area
+      case ShellConstants.VerbPartArea =>
+      {
+        apis.handleHelpForArea(cmd.args.getVerb(0))
+      }
+      // 2. {area}.{api} = help on api
+      case ShellConstants.VerbPartApi =>
+      {
+        apis.handleHelpForApi(cmd.args.getVerb(0), cmd.args.getVerb(1))
+      }
+      // 3. {area}.{api}.{action} = help on api action
+      case _ =>
+      {
+        apis.handleHelpForAction(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
+      }
     }
   }
 

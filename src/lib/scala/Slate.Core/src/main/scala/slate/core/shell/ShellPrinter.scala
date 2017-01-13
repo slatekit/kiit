@@ -38,14 +38,14 @@ object ShellPrinter {
 
     if (result.isEmpty) {
       printEmpty()
-      return
     }
-
-    val data = result.get
-    if(data != null) {
-      printAny(data)
+    else {
+      val data = result.get
+      if (data != null) {
+        printAny(data)
+      }
+      printSummary(result)
     }
-    printSummary(result)
   }
 
 
@@ -87,7 +87,7 @@ object ShellPrinter {
       case None             => writeText( "none" )
       case s:Option[Any]    => printAny(s.getOrElse(None))
       case s:Result[Any]    => printAny(s.getOrElse(None))
-      case s:String         => writeText( Strings.stringRepresentation(s) )
+      case s:String         => writeText( Strings.toStringRep(s) )
       case s:Int            => writeText( s.toString )
       case s:Long           => writeText( s.toString )
       case s:Double         => writeText( s.toString )
@@ -121,18 +121,16 @@ object ShellPrinter {
     * @param entity
    * @param entities
    */
-  def printEntity(entity:IEntity, entities:Option[Entities])
+  def printEntity(entity:IEntity, entities:Option[Entities]):Unit =
   {
-    if(entities.isEmpty)
-    {
-      return
+    if(entities.isDefined) {
+      // Entity ? Print it as text.
+      val mapper = entities.get.getMapper(Reflector.getTypeFromInstance(entity))
+      val serializer = new EntitySerializer()
+      val text = serializer.serializeToProps(entity, mapper)
+      writeText(text)
+      writeLine()
     }
-    // Entity ? Print it as text.
-    val mapper = entities.get.getMapper(Reflector.getTypeFromInstance(entity))
-    val serializer = new EntitySerializer()
-    val text = serializer.serializeToProps(entity, mapper)
-    writeText(text)
-    writeLine()
   }
 
 

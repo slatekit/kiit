@@ -36,12 +36,12 @@ import scala.collection.mutable.ListBuffer
 class ShellService(
                     protected val _appMeta:AppMeta,
                     val folders:Folders,
-                    val settings:ShellSettings
-                  ) extends AppMetaSupport with ResultSupportIn {
-
-  protected val _writer = new ConsoleWriter()
-  protected var _startupCommand = ""
-
+                    val settings:ShellSettings,
+                    protected val _startupCommand:String = "",
+                    protected val _writer:ConsoleWriter = new ConsoleWriter()
+                  )
+  extends AppMetaSupport with ResultSupportIn
+{
 
   /**
     * gets the application metadata containing information about this shell application,
@@ -50,17 +50,6 @@ class ShellService(
     * @return
     */
   override def appMeta(): AppMeta = _appMeta
-
-
-  /**
-    * sets an optional command that can be run automatically on startup
-    *
-    * @param line
-    */
-  def setStartupCommand(line:String) =
-  {
-    _startupCommand = line
-  }
 
 
   /**
@@ -221,7 +210,7 @@ class ShellService(
     }
     // Build up the command from inputs
     val args = results.get
-    val cmd = buildCommand(args, line)
+    var cmd = buildCommand(args, line)
 
     // Check for system level commands ( exit, help )
     val assistanceCheck = checkForAssistance(cmd, results)
@@ -234,15 +223,15 @@ class ShellService(
 
     // Good to go for making calls.
     // Before run
-    onCommandBeforeExecute(cmd)
+    cmd = onCommandBeforeExecute(cmd)
 
     // Execute
     if(cmd.is("sys", "shell", "batch")){
       val batch = new ShellBatch(cmd, this)
-      batch.run()
+      cmd = batch.run()
     }
     else {
-      onCommandExecuteInternal(cmd)
+      cmd = onCommandExecuteInternal(cmd)
     }
 
     // After
@@ -431,45 +420,46 @@ class ShellService(
     // Case 1: Exit ?
     if (ArgsHelper.isExit(words, 0))
     {
-      return yesWithCode(ResultCode.EXIT, msg = Some("exit"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.EXIT, msg = Some("exit"), tag = Some(cmd.args.action))
     }
     // Case 2a: version ?
-    if (ArgsHelper.isVersion(words, 0))
+    else if (ArgsHelper.isVersion(words, 0))
     {
       showAbout()
-      return yesWithCode(ResultCode.HELP, msg = Some("version"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("version"), tag = Some(cmd.args.action))
     }
     // Case 2b: about ?
-    if (ArgsHelper.isAbout(words, 0))
+    else if (ArgsHelper.isAbout(words, 0))
     {
       showAbout()
-      return yesWithCode(ResultCode.HELP, msg = Some("about"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("about"), tag = Some(cmd.args.action))
     }
     // Case 3a: Help ?
-    if (ArgsHelper.isHelp(words, 0))
+    else if (ArgsHelper.isHelp(words, 0))
     {
       showHelp()
-      return yesWithCode(ResultCode.HELP, msg = Some("help"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("help"), tag = Some(cmd.args.action))
     }
     // Case 3b: Help on area ?
-    if (ArgsHelper.isHelp(verbs, 1))
+    else if (ArgsHelper.isHelp(verbs, 1))
     {
       showHelpFor(cmd, ShellConstants.VerbPartArea)
-      return yesWithCode(ResultCode.HELP, msg = Some("area ?"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("area ?"), tag = Some(cmd.args.action))
     }
     // Case 3c: Help on api ?
-    if (ArgsHelper.isHelp(verbs, 2))
+    else if (ArgsHelper.isHelp(verbs, 2))
     {
       showHelpFor(cmd, ShellConstants.VerbPartApi)
-      return yesWithCode(ResultCode.HELP, msg = Some("area.api ?"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("area.api ?"), tag = Some(cmd.args.action))
     }
     // Case 3d: Help on action ?
-    if (ArgsHelper.isHelp(cmd.args.positional, 0) && !Strings.isNullOrEmpty(cmd.args.action))
+    else if (ArgsHelper.isHelp(cmd.args.positional, 0) && !Strings.isNullOrEmpty(cmd.args.action))
     {
       showHelpFor(cmd, ShellConstants.VerbPartAction)
-      return yesWithCode(ResultCode.HELP, msg = Some("area.api.action ?"), tag = Some(cmd.args.action))
+      yesWithCode(ResultCode.HELP, msg = Some("area.api.action ?"), tag = Some(cmd.args.action))
     }
-    no()
+    else
+      no()
   }
 
 

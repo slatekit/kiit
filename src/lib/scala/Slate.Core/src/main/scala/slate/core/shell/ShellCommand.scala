@@ -39,10 +39,13 @@ import slate.common.args.Args
   * @param line   : The raw line of text supplied by user.
   * @param args   : The arguments supplied.
   */
-class ShellCommand(val area:String, val name:String, val action:String, val line:String, val args:Args)
+case class ShellCommand( area:String,
+                    name:String,
+                    action:String,
+                    line:String,
+                    args:Args,
+                    result:Result[Any] = NoResult )
 {
-  var result:Result[Any] = NoResult
-
 
   /**
     * the area, name and action combined.
@@ -51,12 +54,11 @@ class ShellCommand(val area:String, val name:String, val action:String, val line
   def fullName :String =
   {
     if(Strings.isNullOrEmpty(name))
-      return area
-
-    if(Strings.isNullOrEmpty(action))
-      return area + "." + name
-
-    area + "." + name + "." + action
+      area
+    else if(Strings.isNullOrEmpty(action))
+      area + "." + name
+    else
+      area + "." + name + "." + action
   }
 
 
@@ -68,11 +70,10 @@ class ShellCommand(val area:String, val name:String, val action:String, val line
     * @return
     */
   def is(area:String, name:String, action:String):Boolean = {
-    if(Strings.isMatch(this.area, area)
+    (
+         Strings.isMatch(this.area, area)
       && Strings.isMatch(this.name, name)
-      && Strings.isMatch(this.action, action)){
-      return true
-    }
-    false
+      && Strings.isMatch(this.action, action)
+    )
   }
 }
