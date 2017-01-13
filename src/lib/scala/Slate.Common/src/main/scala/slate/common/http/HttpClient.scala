@@ -61,11 +61,10 @@ class HttpClient {
       con.setReadTimeout(req.readTimeOut)
 
       // Headers
-      if(req.headers.isDefined){
-        for(pair <- req.headers.get){
-          con.setRequestProperty(pair._1, pair._2)
-        }
-      }
+      req.headers.fold(Unit)( headers => {
+        headers.foreach( h => con.setRequestProperty(h._1, h._2))
+        Unit
+      })
       // Request method
       con.setRequestMethod(HttpMethod.GET.stringVal)
       HttpHelper.setCredentials(con, req)
@@ -120,12 +119,10 @@ class HttpClient {
       HttpHelper.setCredentials(con, req)
 
       // Headers
-      if(req.headers.isDefined){
-        for(pair <- req.headers.get){
-          con.setRequestProperty(pair._1, pair._2)
-        }
-      }
-
+      req.headers.fold(Unit)( headers => {
+        headers.foreach( h => con.setRequestProperty(h._1, h._2))
+        Unit
+      })
       con.setDoOutput(true)
 
       // Parameters
@@ -154,7 +151,6 @@ class HttpClient {
     var success = false
     var statusCode = 0
     var content = ""
-    var message = ""
 
 
     try
@@ -173,7 +169,7 @@ class HttpClient {
     catch {
       case ex: Exception =>
       {
-        message = s"Error getting content from ${req.url}"
+        content = s"Error getting content from ${req.url}"
         println(ex.getMessage)
         success = false
       }

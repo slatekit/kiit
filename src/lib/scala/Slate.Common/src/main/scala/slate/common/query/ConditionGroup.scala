@@ -11,8 +11,10 @@ class ConditionGroup(val left:Any, val operator:String, val right:Any ) extends 
 
   private def getString(item:Any):String =
   {
-    if(item.isInstanceOf[ICondition])
-      return item.asInstanceOf[ICondition].toStringQuery()
-    return item.toString
+    item match {
+      case null         => ""
+      case s:ICondition => s.toStringQuery()
+      case _            => item.toString
+    }
   }
 }

@@ -327,11 +327,10 @@ class Model(val name:String,
    */
   def eachField(callback:(ModelField, Int) => Unit ):Unit = {
     executeIf[List[ModelField]](callback != null, _propList, props => {
-      var pos = 0
-      for(field <- props){
-        callback(field, pos)
-        pos = pos + 1
-      }
+      props.indices.foreach( ndx => {
+        val field = props(ndx)
+        callback(field, ndx)
+      })
     })
   }
 }

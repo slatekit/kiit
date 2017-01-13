@@ -1,8 +1,8 @@
 package slate.common.query
 
 import slate.common.Strings
+import slate.common.Strings._
 import slate.common.databases.{DbConstants}
-
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -31,48 +31,37 @@ class Query extends IQuery {
   def toUpdatesText(): String =
   {
     // No updates ?
-    if(_data.updates.size == 0)
-      return Strings.empty
+    if(_data.updates.size > 0 ) {
+      // Build up the sql
+      val text = ListBuffer("SET ")
 
-    // Build up
-    var text = "SET "
-    for(ndx <- 0 until _data.updates.size )
-    {
-      if(ndx > 0)
-      {
-        text += ", "
-      }
-      val field = _data.updates(ndx)
-      var fieldValue = " "
-      if(field.fieldValue == DbConstants.EmptyString)
-        fieldValue = "''"
-      else
-        fieldValue = QueryEncoder.convertVal(field.fieldValue)
-      text += field.field + "=" + fieldValue
+      // Each update
+      val updates = mkString[FieldValue]( _data.updates, f => {
+        f.fieldValue match {
+          case DbConstants.EmptyString => f.field + "=" + "''"
+          case _                       => f.field + "=" + QueryEncoder.convertVal(f.fieldValue)
+        }
+      }, ", ")
+      text += updates
+
+      // Filters
+      if (anyConditions) text += " WHERE " + toFilter()
+      if (anyLimit) text += " LIMIT " + _limit
+
+      val sql = text.reduce((a, b) => a + b)
+      sql
     }
-    if(anyConditions) {
-      text += " WHERE " + toFilter()
-    }
-    if(anyLimit)
-    {
-      text += " LIMIT " + _limit
-    }
-    text
+    else
+      Strings.empty
   }
 
 
   def toFilter(): String =
   {
-    var text = ""
-    for ( ndx <- 0 until _data.conditions.size )
-    {
-      val obj = _data.conditions(ndx)
-      if (ndx > 0)
-        text += ", "
-      text += obj.toStringQuery
-    }
-    text
+    val filter = mkString[ICondition](_data.conditions, d => d.toStringQuery())
+    filter
   }
+
 
 
   /**
@@ -169,22 +158,13 @@ class Query extends IQuery {
   }
 
 
-  def orderBy ( field:String ): IQuery =
-  {
-    this
-  }
+  def orderBy ( field:String ): IQuery = this
 
 
-  def asc (  ): IQuery =
-  {
-    this
-  }
+  def asc (  ): IQuery = this
 
 
-  def desc (  ): IQuery =
-  {
-    this
-  }
+  def desc (  ): IQuery = this
 
 
   protected  def buildCondition(field:String, compare:String, fieldValue:Any): Condition =

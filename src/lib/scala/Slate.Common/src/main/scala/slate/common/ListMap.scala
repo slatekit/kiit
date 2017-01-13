@@ -14,6 +14,23 @@ package slate.common
 
 import scala.collection.mutable.{ListBuffer, Map}
 
+
+object ListMap {
+
+  def build[A,B](items:Option[List[(A,B)]]):ListMap[A,B] = {
+    val lm = new ListMap[A,B]()
+    items.fold(Unit)( all => {
+      all.foreach( item => {
+        lm.add(item._1, item._2)
+      })
+      Unit
+    })
+    lm
+  }
+}
+
+
+
 /**
  *
  * This class is meant for INTERNAL USE ONLY ( meaning only inside of slate-kit and not
@@ -120,43 +137,26 @@ class ListMap[A,B] {
    */
   def remove(key:A): ListMap[A,B] =
   {
-    if(!contains(key))
-      return this
-
-    val entry = _map(key)
-    _list.remove(entry.index, 1)
-    _map.remove(key)
+    if(contains(key)) {
+      val entry = _map(key)
+      _list.remove(entry.index, 1)
+      _map.remove(key)
+    }
     this
   }
 
 
-  def keys(): List[A] =
-  {
-    if(_list.size == 0)
-      return List[A]()
+  def keys(): List[A]   = _list.map( i => i.key).toList
 
-    val buffer = new ListBuffer[A]()
-    for(ndx <- 0 until _list.size)
-    {
-      val entry = _list(ndx)
-      buffer.append(entry.key)
-    }
-    buffer.toList
-  }
+
+  def values(): List[B] = _list.map( i => i.value).toList
 
 
   def all(): List[B] = values()
 
 
-  def values(): List[B] =
-  {
-    val buffer = new ListBuffer[B]()
-    for(ndx <- 0 until _list.size)
-    {
-      val entry = _list(ndx)
-      buffer.append(entry.value)
-    }
-    buffer.toList
+  def asMap(): scala.collection.immutable.Map[String,Any] = {
+    _list.map( a => a.key.toString -> a.value.asInstanceOf[Any] ).toMap
   }
 
 
@@ -179,22 +179,20 @@ class ListMap[A,B] {
    */
   def each(callback:(Int,A,B) => Unit ): Unit =
   {
-    for(ndx <- 0 until _list.size)
-    {
+    _list.indices.foreach( ndx => {
       val entry = _list(ndx)
       callback(ndx, entry.key, entry.value)
-    }
+    })
   }
 
 
   override def clone():ListMap[A,B] =
   {
     val copy = new ListMap[A,B]()
-    for(ndx <- _list.indices)
-    {
+    _list.indices.foreach( ndx => {
       val entry = _list(ndx)
       copy.add(entry.key, entry.value)
-    }
+    })
     copy
   }
 

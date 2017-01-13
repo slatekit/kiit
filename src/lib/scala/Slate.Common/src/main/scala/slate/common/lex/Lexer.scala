@@ -11,7 +11,7 @@
 
 package slate.common.lex
 
-import slate.common.Strings
+import slate.common.{Funcs, Strings}
 
 import scala.collection.mutable.ListBuffer
 
@@ -26,29 +26,13 @@ class Lexer {
 
   def parse(text:String): LexResult =
   {
-    var success = false
-    var message = ""
-    var total = 0
-    var tokens:ListBuffer[Token] = null
-    var error:Exception = null
-    try
-    {
+    val res = Funcs.executeResult( () => {
       _state.init(text)
-      tokens = getTokens(-1)
-      total = tokens.length
-      success = true
-    }
-    catch
-    {
-      case ex:Exception =>
-      {
-        success = false
-        message = ex.getMessage
-        error = ex
-      }
-    }
-    val result = new LexResult(success, message, tokens.toList, total, false, error)
-    result
+      getTokens(-1)
+    })
+
+    val t = res.getOrElse(new ListBuffer[Token]())
+    new LexResult(res.success, res.msg.getOrElse(""), t.toList, t.size,false, null)
   }
 
 
@@ -266,9 +250,9 @@ class Lexer {
   {
     val nextPos = _state.pos + 1
     if (nextPos < _state.END)
-      return _state.text.charAt(nextPos)
-
-    Character.MIN_VALUE
+      _state.text.charAt(nextPos)
+    else
+      Character.MIN_VALUE
   }
 
 

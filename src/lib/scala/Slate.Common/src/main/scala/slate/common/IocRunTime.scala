@@ -73,8 +73,9 @@ class IocRunTime() {
   def getAs[T:TypeTag]():Option[T] = {
     val key = typeOf[T].typeSymbol.asType.fullName
     if(_lookup.contains(key))
-      return Some(_lookup(key).asInstanceOf[T])
-    None
+      Some(_lookup(key).asInstanceOf[T])
+    else
+      None
   }
 
 
@@ -86,7 +87,8 @@ class IocRunTime() {
     */
   def get[T](key:String):Option[T] = {
     if(_lookup.contains(key))
-      return Some(_lookup(key).asInstanceOf[T])
-    None
+      Some(_lookup(key).asInstanceOf[T])
+    else
+      None
   }
 }

@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common
@@ -14,7 +14,6 @@ package slate.common
 
 import slate.common.utils.Temp
 
-import scala.collection.mutable
 import scala.collection.mutable.{ListBuffer}
 import scala.collection.immutable.{List}
 import scala.reflect.runtime.{universe => ru}
@@ -28,6 +27,7 @@ object Reflector {
   /**
     * Creates an instance of the type supplied ( assumes existance of a 0 param constructor )
     * Only works for non-inner classes and for types with 0 parameter constructors.
+    *
     * @tparam T
     * @return
     */
@@ -38,7 +38,8 @@ object Reflector {
 
   /**
    * Creates an instance of the type dynamically using the parameters supplied.
-   * @param tpe
+    *
+    * @param tpe
    * @return
    */
   def createInstance(tpe:Type, args:Option[Seq[_]] = None): Any = {
@@ -123,6 +124,7 @@ object Reflector {
 
   /**
     * gets the scala.reflect.Type of a class using the instance.
+    *
     * @param inst
     * @return
     */
@@ -139,6 +141,7 @@ object Reflector {
   /**
     * Gets a member annotaction of the type supplied. This works only for the
     * class level annotations.
+    *
     * @param clsType : The type of the class to check for the annotation
     * @param anoType : The type of the annotation to check/retrieve
     * @return
@@ -154,6 +157,7 @@ object Reflector {
     * Gets a member annotation of the type supplied.
     * NOTE: This does not yet populate the annotation values
     * TODO: figure out how to fill the annotation values
+    *
     * @param clsType   : The type of the class to check for the annotation
     * @param anoType   : The type of the annotation to check/retrieve
     * @param fieldName : The name of the field containing the annotations
@@ -170,7 +174,8 @@ object Reflector {
    * Gets a member annotation of the type supplied.
    * NOTE: This does not yet populate the annotation values
    * TODO: figure out how to fill the annotation values
-   * @param clsType   : The type of the class to check for the annotation
+    *
+    * @param clsType   : The type of the class to check for the annotation
    * @param anoType   : The type of the annotation to check/retrieve
    * @return
    */
@@ -185,7 +190,8 @@ object Reflector {
    * Gets a member annotation of the type supplied.
    * NOTE: This does not yet populate the annotation values
    * TODO: figure out how to fill the annotation values
-   * @param clsType
+    *
+    * @param clsType
    * @param anoType
    * @return
    */
@@ -248,27 +254,9 @@ object Reflector {
   }
 
 
-  def getFields(item:Any, tpe:Type): String =
-  {
-    var info = ""
-
-    for(mem <- tpe.members)
-    {
-      // Method + Public + declared in type
-      //println(mem.fullName, mem.isMethod, mem.isTerm)
-
-      if(mem.isPublic && !mem.isMethod && mem.isTerm && mem.owner == tpe.typeSymbol)
-      {
-        info = info + "\r\n" + mem.fullName
-        info = info + "\r\n" + mem.name + ": " + getFieldValue(item, mem.name.toString)
-      }
-    }
-    info
-  }
-
-
   /**
     * Gets a field value from the instance
+    *
     * @param item: The instance to get the field value from
     * @param fieldName: The name of the field to get
     * @return
@@ -287,6 +275,7 @@ object Reflector {
 
   /**
     * Gets a field value from the instance
+    *
     * @param item: The instance to get the field value from
     * @param fieldName: The name of the field to get
     * @return
@@ -306,6 +295,7 @@ object Reflector {
 
   /**
     * Sets a field value in the instance
+    *
     * @param item: The instance to set the field value to
     * @param fieldName: The name of the field to set
     * @param v
@@ -324,6 +314,7 @@ object Reflector {
 
   /**
     * calls a method on the instance supplied
+    *
     * @param inst
     * @param name
     * @param inputs
@@ -343,7 +334,8 @@ object Reflector {
 
   /**
    * Gets a method on the instance with the supplied name
-   * @param instance
+    *
+    * @param instance
    * @param name
    * @return
    */
@@ -359,7 +351,8 @@ object Reflector {
   /**
    * gets a handle to the scala method mirror which can be used for an optimized approach
    * to invoking the method later
-   * @param instance
+    *
+    * @param instance
    * @param name
    * @return
    */
@@ -375,7 +368,8 @@ object Reflector {
 
   /**
    * gets a list of all the method parameters
-   * @param mem
+    *
+    * @param mem
    * @return tuple(name:String, type:String, position:Index)
    */
   def getMethodParameters(mem: Symbol): List[ReflectedArg] =
@@ -387,13 +381,12 @@ object Reflector {
     for(arg <- args)
     {
       var pos = 0
-      for(sym <- arg)
-      {
+      for(sym <- arg){
         val term = sym.asTerm
         val isDefault = term.isParamWithDefault
         val typeSym = sym.typeSignature.typeSymbol
         list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, isDefault))
-        pos = pos + 1
+        pos += 1
       }
     }
     list.toList
@@ -470,13 +463,11 @@ object Reflector {
   def printParams(mem: Symbol): Unit =
   {
     val args = mem.typeSignature.paramLists
-    if(args == null || args.size == 0) return
-
-    for(arg <- args)
-    {
-      for(sym <- arg)
-      {
-        println(sym.name + " : " + sym.typeSignature.typeSymbol.name)
+    if (args != null && args.size > 0) {
+      for (arg <- args) {
+        arg.foreach( sym => {
+          println(sym.name + " : " + sym.typeSignature.typeSymbol.name)
+        })
       }
     }
   }
@@ -525,19 +516,14 @@ object Reflector {
   def printAnnotations(tpe:Type, anoTpe:Type, mem: Symbol): Unit =
   {
     val annos = mem.annotations
-  //  val annos = tpe.typeSymbol.annotations
-    if(annos == null || annos.size == 0) return
-
-    for(anno <-annos)
-    {
-      println(anno.tree.tpe.typeSymbol.name)
-      for(child <- anno.tree.children)
-      {
-        //println(child)
-        println(child.productPrefix)
-        for(pe <- child.productIterator)
-        {
-          println(pe)
+    if(annos != null && annos.size > 0) {
+      for (anno <- annos) {
+        println(anno.tree.tpe.typeSymbol.name)
+        for (child <- anno.tree.children) {
+          println(child.productPrefix)
+          for (pe <- child.productIterator) {
+            println(pe)
+          }
         }
       }
     }
@@ -596,6 +582,27 @@ object Reflector {
         }
       }
     }
+  }
+
+
+
+
+  def getFields(item:Any, tpe:Type): String =
+  {
+    var info = ""
+
+    for(mem <- tpe.members)
+    {
+      // Method + Public + declared in type
+      //println(mem.fullName, mem.isMethod, mem.isTerm)
+
+      if(mem.isPublic && !mem.isMethod && mem.isTerm && mem.owner == tpe.typeSymbol)
+      {
+        info = info + "\r\n" + mem.fullName
+        info = info + "\r\n" + mem.name + ": " + getFieldValue(item, mem.name.toString)
+      }
+    }
+    info
   }
   */
 }

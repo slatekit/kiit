@@ -11,7 +11,7 @@
 
 package slate.common.lex
 
-import slate.common.Strings
+import slate.common.Strings._
 
 
 /**
@@ -35,11 +35,7 @@ case class LexResult(
   def toStringDetail():String =
   {
     val text = s"$success, $message, total=$total, isSubset=$isSubset"
-    var tokenDetail = ""
-    for(token <- tokens)
-    {
-      tokenDetail += token.toStringDetail() + Strings.newline
-    }
-    text + Strings.newline + tokenDetail
+    val tokenDetail = tokens.foldLeft[String]("")( (s, t) => s + t.toStringDetail() + newline())
+    text + newline + tokenDetail
   }
 }

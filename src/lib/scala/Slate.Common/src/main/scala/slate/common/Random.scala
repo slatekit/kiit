@@ -74,12 +74,9 @@ object Random {
 
   def randomize(n:Int, allowedChars:String):String =
   {
-    val LEN = n
-    val sb = new StringBuilder(LEN)
-    for (i <- 0 until LEN)
-      sb.append(allowedChars.charAt(rnd.nextInt(allowedChars.length())))
-
-    val result = sb.toString()
-    result
+    val text = 0.until(n).foldLeft("")( (s, ndx) => {
+      s + allowedChars.charAt(rnd.nextInt(allowedChars.length()))
+    })
+    text
   }
 }

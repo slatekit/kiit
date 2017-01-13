@@ -25,12 +25,12 @@ class Tokens(val _tokens:List[Token]) {
   }
 
 
-  def peek(n:Int = 1): Token =
+  def peek(n:Int = 1): Option[Token] =
   {
     if (_pos + n >= _tokens.size)
-      return null
-
-    _tokens(_pos + n)
+      None
+    else
+      Some(_tokens(_pos + n))
   }
 
 

@@ -11,7 +11,7 @@
 
 package slate.common.info
 
-import slate.common.Strings
+import slate.common.Strings._
 
 /**
  * represent meta-data about an application
@@ -56,23 +56,23 @@ case class About (
 
 
   def toStringProps():String = {
-    var text = ""
-    val newLine = Strings.newline()
-    text += "name     : " +  name     + newLine
-    text += "desc     : " +  desc     + newLine
-    text += "group    : " +  group    + newLine
-    text += "region   : " +  region   + newLine
-    text += "url      : " +  url      + newLine
-    text += "contact  : " +  contact  + newLine
-    text += "version  : " +  version  + newLine
-    text += "tags     : " +  tags     + newLine
-    text += "examples : " +  examples + newLine
+    val newLine = newline()
+    val text = "" +
+               "name     : " +  name     + newLine +
+               "desc     : " +  desc     + newLine +
+               "group    : " +  group    + newLine +
+               "region   : " +  region   + newLine +
+               "url      : " +  url      + newLine +
+               "contact  : " +  contact  + newLine +
+               "version  : " +  version  + newLine +
+               "tags     : " +  tags     + newLine +
+               "examples : " +  examples + newLine
     text
   }
 
 
   def dir:String = {
-    Strings.valueOrDefault(company, name).replaceAllLiterally(" ", "-")
+    valueOrDefault(company, name).replaceAllLiterally(" ", "-")
   }
 }
 

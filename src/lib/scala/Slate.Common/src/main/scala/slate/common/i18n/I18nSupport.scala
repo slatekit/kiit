@@ -17,8 +17,9 @@ trait I18nSupport {
 
   def translate(name:String):String = {
     if(resources.isDefined){
-      return resources.get.translate(name, "")
+      resources.get.translate(name, "")
     }
-    name
+    else
+      name
   }
 }

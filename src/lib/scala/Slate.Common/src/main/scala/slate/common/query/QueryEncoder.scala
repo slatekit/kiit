@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common.query
@@ -41,37 +41,22 @@ object QueryEncoder {
    */
   def ensureValue(text:String):String =
   {
-    if (Strings.isNullOrEmpty(text))
-      return text
-
-    text.replace("'", "''")
+    text match {
+      case null  => text
+      case ""    => text
+      case _     => text.replace("'", "''")
+    }
   }
 
 
   def ensureField(text:String): String =
   {
-    // Validate.
-    if (Strings.isNullOrEmpty(text)) return Strings.empty
-
-    // Get all lowercase without spaces.
-    val trimmed = text.toLowerCase.trim()
-
-    val buffer = new StringBuilder()
-    var c:Char = ' '
-
-
-    // Now go through each character.
-    for (ndx <- 0 until trimmed.length())
-    {
-      c = trimmed(ndx)
-
-      // Invalid char ? Go to next one.
-      if (Character.isDigit(c) || Character.isLetter(c) || c == '_')
-      {
-        buffer.append(c)
-      }
+    text match {
+      case null  => ""
+      case ""    => ""
+      case _     => text.toLowerCase.trim().filter( c => c.isDigit || c.isLetter || c == '_')
+                     .foldLeft[String]("")( (a,b) => a.toString + b.toString)
     }
-    buffer.toString()
   }
 
 
@@ -84,14 +69,16 @@ object QueryEncoder {
    */
   def ensureCompare(compare:String) :String =
   {
-    if ("=".equalsIgnoreCase(compare)) return "="
-    if (">".equalsIgnoreCase(compare)) return ">"
-    if (">=".equalsIgnoreCase(compare))return ">="
-    if ("<".equalsIgnoreCase(compare)) return "<"
-    if ("<=".equalsIgnoreCase(compare))return "<="
-    if ("!=".equalsIgnoreCase(compare))return "!="
-    if ("is".equalsIgnoreCase(compare))return "is"
-    "="
+    compare match {
+      case "="  =>  "="
+      case ">"  =>  ">"
+      case ">=" => ">="
+      case "<"  =>  "<"
+      case "<=" => "<="
+      case "!=" => "!="
+      case "is" => "is"
+      case _    => "="
+    }
   }
 
 

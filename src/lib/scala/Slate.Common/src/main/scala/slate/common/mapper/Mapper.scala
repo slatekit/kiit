@@ -22,7 +22,7 @@ import slate.common._
 
 class Mapper(protected val _model:Model) {
 
-  protected var _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
+  protected val _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
 
   def model() : Model = _model
 
@@ -40,69 +40,56 @@ class Mapper(protected val _model:Model) {
 
   def mapFrom(record:MappedSourceReader): Option[Any] =
   {
-    if(!_model.any)
-      return None
+    if(_model.any) {
 
-    // NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // Not using pattern matching here on the types.
-    // This is because using "if ( datatype == typeOf[x] )"
-    // is slightly faster
-    val entity:Any = createEntity()
-    for( ndx <- 0 until _model.fields.size)
-    {
-      val mapping = _model.fields(ndx)
-      val colName = mapping.storedName
-      val fieldType = mapping.dataType
+      // NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // 1. Not using pattern matching here on the types.
+      //    This is because using "if ( datatype == typeOf[x] )"
+      //    is slightly faster
+      val entity: Any = createEntity()
+      _model.fields.foreach(mapping => {
+        val colName = mapping.storedName
+        val fieldType = mapping.dataType
 
-      if( mapping.dataType == _tpeString )
-      {
-        val sVal = record.get(colName)
-        Reflector.setFieldValue(entity, mapping.name, sVal)
-      }
-      else if(mapping.dataType == typeOf[Boolean])
-      {
-        val bVal = record.getBool(colName)
-        Reflector.setFieldValue(entity, mapping.name, bVal)
-      }
-      else if(mapping.dataType == typeOf[Int])
-      {
-        val iVal = record.getInt(colName)
-        Reflector.setFieldValue(entity, mapping.name, iVal)
-      }
-      else if(mapping.dataType == typeOf[Short])
-      {
-        val iVal = record.getShort(colName)
-        Reflector.setFieldValue(entity, mapping.name, iVal)
-      }
-      else if(mapping.dataType == typeOf[Long])
-      {
-        val lVal = record.getLong(colName)
-        Reflector.setFieldValue(entity, mapping.name, lVal)
-      }
-      else if(mapping.dataType == typeOf[Double])
-      {
-        val dVal = record.getDouble(colName)
-        Reflector.setFieldValue(entity, mapping.name, dVal)
-      }
-      else if(mapping.dataType == typeOf[DateTime])
-      {
-        val dVal = record.getDate(colName)
-        Reflector.setFieldValue(entity, mapping.name, dVal)
-      }
+        if (mapping.dataType == _tpeString) {
+          val sVal = record.get(colName)
+          Reflector.setFieldValue(entity, mapping.name, sVal)
+        }
+        else if (mapping.dataType == typeOf[Boolean]) {
+          val bVal = record.getBool(colName)
+          Reflector.setFieldValue(entity, mapping.name, bVal)
+        }
+        else if (mapping.dataType == typeOf[Int]) {
+          val iVal = record.getInt(colName)
+          Reflector.setFieldValue(entity, mapping.name, iVal)
+        }
+        else if (mapping.dataType == typeOf[Short]) {
+          val iVal = record.getShort(colName)
+          Reflector.setFieldValue(entity, mapping.name, iVal)
+        }
+        else if (mapping.dataType == typeOf[Long]) {
+          val lVal = record.getLong(colName)
+          Reflector.setFieldValue(entity, mapping.name, lVal)
+        }
+        else if (mapping.dataType == typeOf[Double]) {
+          val dVal = record.getDouble(colName)
+          Reflector.setFieldValue(entity, mapping.name, dVal)
+        }
+        else if (mapping.dataType == typeOf[DateTime]) {
+          val dVal = record.getDate(colName)
+          Reflector.setFieldValue(entity, mapping.name, dVal)
+        }
+      })
+      Some(entity)
     }
-    Some(entity)
+    else
+      None
   }
 
 
   override def toString(): String =
   {
-    Ensure.isNotNull(_model, "Model and/or schema not initialized")
-
-    var all = ""
-    for(field <- _model.fields)
-    {
-      all += field.toString() + "\n"
-    }
+    val all = _model.fields.foldLeft("")( (s, field) => s + field.toString() + Strings.newline())
     all
   }
 }
@@ -125,15 +112,14 @@ object Mapper {
     fields.append(fieldId)
 
     // Loop through each field
-    for(matchedField <- matchedFields )
-    {
+    matchedFields.foreach( matchedField => {
       val anno     = matchedField._4.asInstanceOf[Field]
       val name     = matchedField._1
       val required = anno.required
       val length   = anno.length
       val dataType = matchedField._5
       fields.append( ModelField.build( name= name, dataType= dataType, isRequired= required, maxLength = length ) )
-    }
+    })
 
     val model = new Model(modelName, modelNameFull, Some(dataType), _propList = Some(fields.toList))
     model

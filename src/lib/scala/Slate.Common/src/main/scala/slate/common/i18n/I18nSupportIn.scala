@@ -17,9 +17,6 @@ trait I18nSupportIn {
 
 
   protected def translate(name:String):String = {
-    if(_res.isDefined){
-      return _res.get.translate(name, "")
-    }
-    name
+    if(_res.isDefined) _res.get.translate(name, "") else name
   }
 }

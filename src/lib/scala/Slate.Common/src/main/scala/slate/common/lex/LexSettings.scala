@@ -12,9 +12,10 @@
 package slate.common.lex
 
 
-class LexSettings {
-
-  var enableBoolIdentifiers      = false
-  val enableBoolYesNoIdentifiers = false
-  val enableDashInIdentifiers    = false
+case class LexSettings(
+                         enableBoolIdentifiers      : Boolean = false,
+                         enableBoolYesNoIdentifiers : Boolean = false,
+                         enableDashInIdentifiers    : Boolean = false
+                      )
+{
 }

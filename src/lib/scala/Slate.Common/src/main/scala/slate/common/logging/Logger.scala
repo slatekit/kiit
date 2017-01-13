@@ -48,15 +48,13 @@ object Logger extends LoggerBase {
 
 
   def parseLogLevel(level:String):LogLevel = {
-    var logLevel = LogLevel.Debug
     level match {
-      case "debug" => logLevel = LogLevel.Debug
-      case "info"  => logLevel = LogLevel.Info
-      case "warn"  => logLevel = LogLevel.Warn
-      case "error" => logLevel = LogLevel.Error
-      case "fatal" => logLevel = LogLevel.Fatal
-      case _       => logLevel = LogLevel.Warn
+      case "debug" => LogLevel.Debug
+      case "info"  => LogLevel.Info
+      case "warn"  => LogLevel.Warn
+      case "error" => LogLevel.Error
+      case "fatal" => LogLevel.Fatal
+      case _       => LogLevel.Debug
     }
-    logLevel
   }
 }

@@ -42,10 +42,9 @@ abstract class LoggerBase(val level:LogLevel       = LogLevel.Warn,
    */
   override def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None): Unit =
   {
-    if(level < this.level) 
-      return 
-    
-    performLog(buildLog(level, msg, ex, tag))
+    checkLog(level, {
+      performLog(buildLog(level, msg, ex, tag))
+    })
   }
 
 
@@ -54,10 +53,9 @@ abstract class LoggerBase(val level:LogLevel       = LogLevel.Warn,
     */
   def log(entry:LogEntry): Unit =
   {
-    if(level < this.level)
-      return
-
-    performLog(entry)
+    checkLog(level, {
+      performLog(entry)
+    })
   }
 
 
@@ -71,6 +69,13 @@ abstract class LoggerBase(val level:LogLevel       = LogLevel.Warn,
   protected def buildLog(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None):
   LogEntry = {
     new LogEntry(name, level, msg, DateTime.now, ex, tag)
+  }
+
+
+  protected def checkLog(level:LogLevel, callback: =>Unit ):Unit = {
+    if(level >= this.level) {
+      callback
+    }
   }
 
 

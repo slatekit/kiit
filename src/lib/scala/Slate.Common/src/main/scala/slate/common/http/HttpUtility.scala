@@ -13,7 +13,7 @@ object HttpUtility {
   */
   @throws(classOf[java.io.IOException])
   @throws(classOf[java.net.SocketTimeoutException])
-  def get(url: String, connectTimeout:Int =5000, readTimeout:Int =5000, requestMethod: String = "GET") = {
+  def get(url: String, connectTimeout:Int =5000, readTimeout:Int =5000, requestMethod: String = "GET"):String = {
     import java.net.{HttpURLConnection, URL}
 
     // connection
