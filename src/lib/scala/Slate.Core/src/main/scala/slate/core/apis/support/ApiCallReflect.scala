@@ -40,10 +40,13 @@ class ApiCallReflect(
                     )
 {
   def isSingleDefaultedArg():Boolean = {
-    if(!hasArgs || paramList.size != 1)
-      return false
-    val arg = paramList(0)
-    arg.isParamDefaulted
+    if(!hasArgs || paramList.size != 1) {
+      false
+    }
+    else {
+      val arg = paramList(0)
+      arg.isParamDefaulted
+    }
   }
 
 

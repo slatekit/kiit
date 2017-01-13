@@ -95,15 +95,16 @@ class Conf( fileName:Option[String] = None,
   override def getValue(key: String): AnyVal = {
     val cfval = _config.getAnyRef(key)
     if (cfval.isInstanceOf[Integer]){
-      return cfval.asInstanceOf[Integer].intValue()
+      cfval.asInstanceOf[Integer].intValue()
     }
-    if (cfval.isInstanceOf[Double]){
-      return cfval.asInstanceOf[Double]
+    else if (cfval.isInstanceOf[Double]){
+      cfval.asInstanceOf[Double]
     }
-    if (cfval.isInstanceOf[Boolean]){
-      return cfval.asInstanceOf[Boolean]
+    else if (cfval.isInstanceOf[Boolean]){
+      cfval.asInstanceOf[Boolean]
     }
-    0
+    else
+      0
   }
 
 

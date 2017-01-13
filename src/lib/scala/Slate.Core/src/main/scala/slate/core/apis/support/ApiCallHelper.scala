@@ -52,24 +52,30 @@ object ApiCallHelper extends ResultSupportIn {
     if(totalErrors > 0)
     {
       error = error + " )"
-      return badRequest( Some(false), Some("bad request: action " + callReflect.name + error))
+      badRequest( Some(false), Some("bad request: action " + callReflect.name + error))
     }
-
-    // Ok!
-    ok()
+    else {
+      // Ok!
+      ok()
+    }
   }
 
 
-  def fillArgs(callReflect:ApiCallReflect, cmd:Request, args:Inputs): Array[Any] =
+  def fillArgs(callReflect:ApiCallReflect, cmd:Request, args:Inputs, allowLocalIO:Boolean = false): Array[Any] =
   {
     // Check 1: No args ?
     if(!callReflect.hasArgs)
-      return Array[Any]()
-
+      Array[Any]()
     // Check 2: 1 param with default and no args
-    if(callReflect.isSingleDefaultedArg() && args.size() == 0)
-      return Array[Any](null)
+    else if(callReflect.isSingleDefaultedArg() && args.size() == 0)
+      Array[Any](null)
+    else
+      fillArgsExact(callReflect, cmd, args, allowLocalIO)
+  }
 
+
+  def fillArgsExact(callReflect:ApiCallReflect, cmd:Request, args:Inputs, allowLocalIO:Boolean = false): Array[Any] =
+  {
     // Check each parameter to api call
     val inputs = new ListBuffer[Any]()
     for(ndx <- 0 until callReflect.paramList.size )
@@ -112,6 +118,15 @@ object ApiCallHelper extends ResultSupportIn {
       else if(paramType == "ApiCmd")
       {
         paramValue = cmd
+      }
+      else if(allowLocalIO && paramType == "Doc"){
+        val uri = args.getString(paramName)
+        val doc = Uris.readDoc(uri)
+        paramValue = doc.getOrElse(new Doc("", "", "", 0))
+      }
+      else if(paramType == "Vars"){
+        val text = args.getString(paramName)
+        paramValue = Vars(text)
       }
       else if (!parameter.isBasicType()){
         val subObj = args.getObject(paramName).asInstanceOf[Inputs]

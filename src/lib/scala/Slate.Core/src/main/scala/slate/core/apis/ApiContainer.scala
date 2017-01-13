@@ -29,7 +29,8 @@ class ApiContainer(val ctx:AppContext                           ,
                        auth     : Option[ApiAuth]         = None,
                        protocol : String                  = "*",
                        apis     : Option[List[ApiReg]]    = None,
-                       errors   : Option[ApiErrorHandler] = None) extends ResultSupportIn {
+                       errors   : Option[ApiErrorHandler] = None,
+                       allowIO: Boolean                 = true ) extends ResultSupportIn {
 
   protected val _lookup = new ListMap[String, ApiLookup]()
   val settings = new ApiSettings()
@@ -51,9 +52,9 @@ class ApiContainer(val ctx:AppContext                           ,
    */
   def registerAll():Unit = {
     execute[List[ApiReg]](apis, all => {
-      for(reg <- all) {
+      all.foreach( reg => {
         register(reg.api, reg.declaredOnly, reg.roles, reg.auth, reg.protocol)
-      }
+      })
     })
   }
 
@@ -92,7 +93,7 @@ class ApiContainer(val ctx:AppContext                           ,
 
     // 6. get all the methods with the apiAction annotation
     val matches = Reflector.getMethodsWithAnnotations(api, clsType, typeOf[ApiAction], declaredOnly)
-    for(item <- matches) {
+    matches.foreach(item => {
 
       // a) Get the name of the action or default to method name
       val methodName = item._1
@@ -112,7 +113,7 @@ class ApiContainer(val ctx:AppContext                           ,
       val anyParameters = parameters != null && parameters.size > 0
       val callReflect = new ApiCallReflect( actionName, apiAnno, apiActionAnno, methodMirror, anyParameters, parameters)
       api(actionName) = callReflect
-    }
+    })
 
     // 7. Finally link up services and this runner to the api
     api.context = ctx
@@ -452,7 +453,7 @@ class ApiContainer(val ctx:AppContext                           ,
       api = callCheck.api
 
       // 8. Finally make call.
-      val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get)
+      val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get, allowIO)
       val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
 
       // 9. Already a Result object - don't wrap inside another result object

@@ -22,7 +22,8 @@ import slate.core.common.AppContext
 class ApiContainerWeb(ctx    : AppContext                    ,
                       auth   : Option[ApiAuth]         = None,
                       apis   : Option[List[ApiReg]]    = None,
-                      errors : Option[ApiErrorHandler] = None)
-  extends ApiContainer(ctx, auth, ApiConstants.ProtocolWeb, apis, errors) {
+                      errors : Option[ApiErrorHandler] = None,
+                      allowIO: Boolean                 = false)
+  extends ApiContainer(ctx, auth, ApiConstants.ProtocolWeb, apis, errors, allowIO) {
 
 }

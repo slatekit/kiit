@@ -23,11 +23,10 @@ class ApiVisitor {
   def visitAreas( areas:List[String], visitor:ApiVisit ) : Unit =
   {
     visitor.onVisitAreasBegin()
-    for(area <- areas )
-    {
+    areas.foreach( area => {
       visitor.onVisitAreaBegin(area)
       visitor.onVisitAreaEnd(area)
-    }
+    })
     visitor.onVisitAreasEnd()
   }
 
@@ -35,23 +34,24 @@ class ApiVisitor {
   def visitApis(area:String, apis:ListMap[String,ApiBase], visitor:ApiVisit) : Unit =
   {
     val all = apis.all()
-    if(all.isEmpty) return
-    val keys = apis.keys()
-    visitor.settings.maxLengthApi = Strings.maxLength(keys)
+    if(all.nonEmpty) {
+      val keys = apis.keys()
+      visitor.settings.maxLengthApi = Strings.maxLength(keys)
 
-    visitor.onVisitApisBegin(area)
-    for(api <- all)
-    {
-      val actions = api.actions()
-      if(actions.size() > 0)
-      {
-        actions.getAt(0).fold(Unit)( apiAnno => {
-          visitApi(apiAnno.api, visitor, actions,  listActions = false, listArgs = false)
-          Unit
-        })
-      }
+      visitor.onVisitApisBegin(area)
+      val sorted = keys.sortBy(s => s)
+      sorted.foreach(key => {
+        val api = apis(key)
+        val actions = api.actions()
+        if (actions.size() > 0) {
+          actions.getAt(0).fold(Unit)(apiAnno => {
+            visitApi(apiAnno.api, visitor, actions, listActions = false, listArgs = false)
+            Unit
+          })
+        }
+      })
+      visitor.onVisitApisEnd(area)
     }
-    visitor.onVisitApisEnd(area)
   }
 
 
@@ -78,12 +78,13 @@ class ApiVisitor {
       if ( listActions ) {
 
         visitor.onVisitSeparator()
-        val actionNames = actions.keys()
+        val actionNames = actions.keys().sortBy(s => s)
         visitor.settings.maxLengthAction = Strings.maxLength(actionNames)
 
-        for (action <- actions.all()) {
+        actionNames.foreach( actionName => {
+          val action = actions(actionName)
           visitApiAction(action, visitor, listArgs)
-        }
+        })
       }
     }
     visitor.onVisitApiEnd(api)
@@ -128,13 +129,13 @@ class ApiVisitor {
 
   def visitArgs(info:ApiCallReflect, visitor:ApiVisit):Unit =
   {
-    if(!info.hasArgs) return
-    val names = info.paramList.map((item) => item.name)
-    val maxLength = Strings.maxLength(names)
-    visitor.settings.maxLengthArg = maxLength
-    for(argInfo <- info.paramList)
-    {
-      visitor.onVisitApiArgBegin(new ApiArg(name = argInfo.name, ""))
+    if(info.hasArgs) {
+      val names = info.paramList.map((item) => item.name)
+      val maxLength = Strings.maxLength(names)
+      visitor.settings.maxLengthArg = maxLength
+      info.paramList.foreach(argInfo => {
+        visitor.onVisitApiArgBegin(new ApiArg(name = argInfo.name, ""))
+      })
     }
   }
 }

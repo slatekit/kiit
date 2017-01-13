@@ -62,11 +62,9 @@ class ApiDocConsole extends ApiDocBase {
     line()
     tab(1)
     val fullName = api.area + "." + api.name + "." + actionName
-    var txt = ""
-    for(argInfo <- args)
-    {
-      txt = txt + "-" + argInfo.name + "=" + argInfo.sample() + " "
-    }
+    val txt = args.foldLeft("")( (s, arg) => {
+      s + "-" + arg.name + "=" + arg.sample() + " "
+    })
     url(fullName + " ", endLine = false)
     text(txt, true)
     line()

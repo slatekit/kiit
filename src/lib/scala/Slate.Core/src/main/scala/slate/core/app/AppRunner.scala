@@ -91,31 +91,34 @@ object AppRunner extends ResultSupportIn
 
     // 2. Bad args?
     if (!result.success) {
-      return badRequest[Args]( msg = Some("invalid arguments supplied"))
+      badRequest[Args]( msg = Some("invalid arguments supplied"))
     }
+    else {
+      // 3. Help request
+      val helpCheck = rawArgs.fold[Result[String]](failure())( args => AppFuncs.checkCmd(args.toList))
+      if (helpCheck.isExit || helpCheck.isHelpRequest) {
+        new FailureResult[Args](None, helpCheck.code, helpCheck.msg)
+      }
+      else {
 
-    // 3. Help request
-    val helpCheck = rawArgs.fold[Result[String]](failure())( args => AppFuncs.checkCmd(args.toList))
-    if(helpCheck.isExit || helpCheck.isHelpRequest) {
-      return new FailureResult[Args](None, helpCheck.code, helpCheck.msg)
+        // 4. Invalid inputs
+        val args = result.get
+
+        // 5. No schema ? default to success otherwise validate args against schema
+        val finalResult = schema.fold[Result[Args]](success(args))( s => {
+
+        // Validate args against schema
+        val checkResult = s.validate(args)
+
+        // Invalid args ? error out
+        defaultOrExecute(!checkResult.success,
+            badRequest[Args](msg = Some("invalid arguments supplied")),
+            success(args)
+          )
+        })
+        finalResult
+      }
     }
-
-    // 4. Invalid inputs
-    val args = result.get
-
-    // 5. No schema ? default to success otherwise validate args against schema
-    val finalResult = schema.fold[Result[Args]](success(args))( s => {
-
-      // Validate args against schema
-      val checkResult = s.validate(args)
-
-      // Invalid args ? error out
-      defaultOrExecute(!checkResult.success,
-        badRequest[Args](msg = Some("invalid arguments supplied")),
-        success(args)
-      )
-    })
-    finalResult
   }
 
 

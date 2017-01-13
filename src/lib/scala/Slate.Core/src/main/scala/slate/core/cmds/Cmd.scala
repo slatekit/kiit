@@ -51,7 +51,7 @@ class Cmd(val name: String) {
   var _result: CmdResult = null
 
 
-  def state : CmdState = _state.copy
+  def state : CmdState = _state.copy()
 
   def result : CmdResult = _result.copy()
 
@@ -68,24 +68,22 @@ class Cmd(val name: String) {
     var success = false
     var msg = ""
     var executionResult:AnyRef = null
-    var executeTimeMilli = 0d
 
     try
     {
-      _state.lastRuntime = start
+      _state = _state.copy(lastRuntime = start)
       executionResult = executeInternal(args)
       success = true
     }
     catch {
       case e: Exception => {
-        _state.errorCount += 1
+        _state = _state.copy(errorCount = _state.errorCount + 1)
         msg = e.getMessage
       }
     }
     finally
     {
-      _state.runCount += 1
-      _state.hasRun = true
+      _state = _state.copy(runCount = _state.runCount + 1, hasRun = true)
     }
 
     // calculate total time

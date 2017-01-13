@@ -40,11 +40,11 @@ class AuthBase(val isAuthenticated:Boolean, userInfo:User, roles:String) {
    */
   def isInRole(role:String ):Boolean = {
     if(_roles.isEmpty)
-      return false
-    if(!_roles.contains(role))
-      return false
-
-    true
+      false
+    else if(!_roles.contains(role))
+      false
+    else
+      true
   }
 
 

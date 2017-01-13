@@ -46,30 +46,32 @@ class ApiAuth(private val keys:Option[List[ApiKey]],
   {
     // CASE 1: no roles ? authorization not applicable
     if (Strings.isNullOrEmpty(roles))
-      return ok()
+      ok()
 
     // CASE 2: Guest
-    if (roles == "?")
-      return ok()
+    else if (roles == "?")
+      ok()
 
     // CASE 3: App Roles + Key Roles mode
-    if (Strings.isMatch(AuthModeKeyRole, mode)) {
-      return isKeyRoleValid(cmd, roles, roleParents)
+    else if (Strings.isMatch(AuthModeKeyRole, mode)) {
+      isKeyRoleValid(cmd, roles, roleParents)
     }
     // CASE 4: App-Role mode
-    if (Strings.isMatch(AuthModeAppRole, mode)) {
-      return isAppRoleValid(cmd, roles, roleParents)
+    else if (Strings.isMatch(AuthModeAppRole, mode)) {
+      isAppRoleValid(cmd, roles, roleParents)
     }
     // CASE 5: api-key + role
-    if (Strings.isMatch(AuthModeAppKey, mode)) {
+    else if (Strings.isMatch(AuthModeAppKey, mode)) {
       val keyResult = isKeyRoleValid(cmd, roles, roleParents)
       if(!keyResult.success){
-        return keyResult
+        keyResult
       }
-      val appResult = isAppRoleValid(cmd, roles, roleParents)
-      return appResult
+      else {
+        isAppRoleValid(cmd, roles, roleParents)
+      }
     }
-    unAuthorized()
+    else
+      unAuthorized()
   }
 
 
@@ -85,19 +87,20 @@ class ApiAuth(private val keys:Option[List[ApiKey]],
 
     // Check 1: Callback supplied ( so as to avoid subclassing this class )
     if(callback.isDefined) {
-      return callback.map(c => c(AuthModeAppRole, cmd, actionRoles, parentRoles))
+      callback.map(c => c(AuthModeAppRole, cmd, actionRoles, parentRoles))
         .getOrElse(unAuthorized())
     }
+    else {
+      // Get the expected role from either action or possible reference to parent
+      val expectedRoles = getReferencedValue(actionRoles, parentRoles)
 
-    // Get the expected role from either action or possible reference to parent
-    val expectedRoles = getReferencedValue(actionRoles, parentRoles)
+      // Get the user roles
+      val actualRole = getUserRoles(cmd)
+      val actualRoles = Strings.splitToMap(actualRole, ',')
 
-    // Get the user roles
-    val actualRole = getUserRoles(cmd)
-    val actualRoles = Strings.splitToMap(actualRole, ',')
-
-    // Now match.
-    matchRoles(expectedRoles, actualRoles)
+      // Now match.
+      matchRoles(expectedRoles, actualRoles)
+    }
   }
 
 

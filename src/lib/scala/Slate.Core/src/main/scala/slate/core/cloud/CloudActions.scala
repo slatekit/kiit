@@ -13,6 +13,10 @@
 
 package slate.core.cloud
 
+import slate.common.Result
+import slate.common.results.ResultFuncs
+import slate.common.results.ResultFuncs._
+
 trait CloudActions {
 
   def execute(source:String, action:String, tag:String = "", audit:Boolean = false,
@@ -34,6 +38,32 @@ trait CloudActions {
       }
     }
   }
+
+
+  def executeResult[T](source:String,
+                       action:String,
+                       tag:String = "",
+                       audit:Boolean = false,
+                       data:Option[Any],
+                       call:() => T ): Result[T] =
+    {
+      val result = try
+      {
+        val resultValue = Option(call())
+        (true, "", resultValue)
+      }
+      catch {
+        case ex:Exception =>
+        {
+          onError(source, action, tag, data, Some(ex))
+          (false, s"Error performing action $action on $source with tag $tag. $ex", None)
+        }
+      }
+      val success = result._1
+      val message = result._2
+      val resData = result._3
+      successOrError(success, resData, Option(message), Option(tag))
+    }
 
 
   def onAudit(source:String, action:String, tag:String, data:Option[Any]): Unit =

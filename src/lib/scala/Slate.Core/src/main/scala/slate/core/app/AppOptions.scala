@@ -12,9 +12,11 @@
   */
 package slate.core.app
 
-class AppOptions {
-  var printSummaryBeforeExec = false
-  var printSummaryOnShutdown = true
-  var getConfNameFromEnv = true
-  var getLogNameFromEnv = true
+case class AppOptions (
+                        printSummaryBeforeExec :Boolean = false,
+                        printSummaryOnShutdown :Boolean = true ,
+                        getConfNameFromEnv     :Boolean = true ,
+                        getLogNameFromEnv      :Boolean = true
+                      )
+{
 }

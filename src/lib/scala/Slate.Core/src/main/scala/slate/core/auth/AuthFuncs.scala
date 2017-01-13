@@ -48,36 +48,34 @@ object AuthFuncs extends ResultSupportIn {
                  actionRoles:String,
                  parentRoles:String):Result[Boolean] = {
 
-    // No headers!
-    if(!inputs.isDefined) {
-      return unAuthorized(msg = Some("api key not provided"))
+    // Check 1: Default to none
+    val keyCheck = inputs.fold[Option[String]](None)( inp => {
+
+      // Check 2: Key exists in request ?
+      if( inputs.get.contains(inputName) ) {
+        val key = inputs.get(inputName).toString()
+
+        // Check 3: Key is non-empty ?
+        if(Strings.isNullOrEmpty(key)) {
+          None
+        }
+        else {
+          // Check 4: CHeck if valid key
+          if(keys.contains(key))
+            Some(key)
+          else
+            None
+        }
+      }
+      else
+        None
+    })
+
+    keyCheck match {
+      case None            => unAuthorized(msg = Some("Api Key not provided or invalid"))
+      case s: Some[String] => validateKey(s.get, keys, actionRoles, parentRoles)
+      case _               => unAuthorized(msg = Some("Api key not provided or invalid"))
     }
-
-    // Key not in header!
-    if(!inputs.get.contains(inputName)) {
-      return unAuthorized(msg = Some("api key not provided"))
-    }
-
-    val key = inputs.get(inputName).toString()
-
-    // Empty key!
-    if(Strings.isNullOrEmpty(key)) {
-      return unAuthorized(msg = Some("api key not provided"))
-    }
-
-    // Unknown key!
-    if(!keys.contains(key)){
-      return unAuthorized(msg = Some("api key not valid"))
-    }
-
-    // Now ensure that key contains roles matching one provided.
-    val apiKey = keys(key)
-
-    // "Roles" could refer to "@parent" so get the final role(s)
-    val expectedRole = getReferencedValue(actionRoles, parentRoles)
-
-    // Now match the roles.
-    matchRoles(expectedRole, apiKey.rolesLookup)
   }
 
 
@@ -91,24 +89,23 @@ object AuthFuncs extends ResultSupportIn {
 
     // 1. No roles ?
     if(actualRoles == null || actualRoles.size == 0) {
-      return unAuthorized()
+      unAuthorized()
     }
-
     // 2. Any role "*"
-    if(Strings.isMatch(expectedRole, AuthConstants.RoleAny)){
-      return ok()
+    else if(Strings.isMatch(expectedRole, AuthConstants.RoleAny)){
+      ok()
     }
+    else {
+      // 3. Get all roles "dev,moderator,admin"
+      val expectedRoles = Strings.split(expectedRole, ',')
 
-    // 3. Get all roles "dev,moderator,admin"
-    val expectedRoles = Strings.split(expectedRole, ',')
-
-    // 4. Now compare
-    for(role <- expectedRoles ){
-      if(actualRoles.contains(role)) {
-        return ok()
-      }
+      // 4. Now compare
+      val matches = expectedRoles.toList.filter( role => actualRoles.contains(role))
+      if(matches.nonEmpty )
+        ok()
+      else
+        unAuthorized()
     }
-    unAuthorized()
   }
 
 
@@ -123,15 +120,17 @@ object AuthFuncs extends ResultSupportIn {
     // Role!
     if(!Strings.isNullOrEmpty(primaryValue) ){
       if(Strings.isMatch(primaryValue, AuthConstants.RoleParent)){
-        return parentValue
+        parentValue
       }
-      return primaryValue
+      else
+        primaryValue
     }
     // Parent!
-    if(!Strings.isNullOrEmpty(parentValue)){
-      return parentValue
+    else if(!Strings.isNullOrEmpty(parentValue)){
+      parentValue
     }
-    ""
+    else
+      ""
   }
 
 
@@ -172,5 +171,19 @@ object AuthFuncs extends ResultSupportIn {
     })
 
     scala.collection.immutable.Map[String,Boolean](rolesLookup.toSeq : _*)
+  }
+
+
+  private def validateKey(key:String, keys:ListMap[String, ApiKey],
+                          actionRoles:String, parentRoles:String):Result[Boolean] = {
+
+    // Now ensure that key contains roles matching one provided.
+    val apiKey = keys(key)
+
+    // "Roles" could refer to "@parent" so get the final role(s)
+    val expectedRole = getReferencedValue(actionRoles, parentRoles)
+
+    // Now match the roles.
+    matchRoles(expectedRole, apiKey.rolesLookup)
   }
 }

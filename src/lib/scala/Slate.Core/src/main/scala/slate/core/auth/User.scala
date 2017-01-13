@@ -61,8 +61,6 @@ case class User (
 
   def isMatch(user:User):Boolean =
   {
-    if (!Strings.isMatch(user.id, this.id))
-      return false
-    true
+    Strings.isMatch(user.id, this.id)
   }
 }

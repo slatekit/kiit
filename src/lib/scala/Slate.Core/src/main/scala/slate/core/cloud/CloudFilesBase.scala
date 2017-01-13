@@ -15,7 +15,7 @@ package slate.core.cloud
 
 import java.io.{InputStreamReader, BufferedReader, InputStream, ByteArrayInputStream}
 
-import slate.common.Files
+import slate.common.{IO, Result, Files}
 
 /**
   * Abstraction for cloud base file storage and retrieval.
@@ -23,6 +23,9 @@ import slate.common.Files
 abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFolder:Boolean) extends CloudActions {
 
   def connect(args:Any): Unit = { }
+
+
+  def connectWith(key:String, pass:String, tag:String):Unit = { }
 
 
   def create(name:String, content:String): Unit =
@@ -38,8 +41,9 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   }
 
 
-  def createFromPath(folder:String, name:String, filePath:String): Unit =
+  def createFromPath(folder:String, name:String, filePath:String): Result[String] =
   {
+    //val content = "simulating from file : " + filePath
     val content = loadFromFile(filePath)
     create(folder, name, content)
   }
@@ -51,7 +55,7 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   }
 
 
-  def getAsText(name:String): String =
+  def getAsText(name:String): Result[String] =
   {
     getAsText(_defaultFolder, name)
   }
@@ -69,14 +73,14 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   }
 
 
-  def updateFromPath(name:String, filePath:String): Unit =
+  def updateFromPath(name:String, filePath:String): Result[String] =
   {
-    val content = loadFromFile(filePath)
+    val content = "simulating from file : " + filePath; //loadFromFile(filePath)
     update(_defaultFolder, name, content)
   }
 
 
-  def updateFromPath(folder:String, name:String, filePath:String): Unit =
+  def updateFromPath(folder:String, name:String, filePath:String): Result[String] =
   {
     val content = loadFromFile(filePath)
     update(folder, name, content)
@@ -86,19 +90,22 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   def createRootFolder(rootFolder:String):Unit
 
 
-  def create(folder:String, name:String, content:String):Unit
+  def create(folder:String, name:String, content:String):Result[String]
 
 
-  def update(folder:String, name:String, content:String): Unit
+  def update(folder:String, name:String, content:String): Result[String]
 
 
-  def delete(folder:String, name:String):Unit
+  def delete(folder:String, name:String):Result[String]
 
 
-  def getAsText(folder:String, name:String):String
+  def getAsText(folder:String, name:String):Result[String]
 
 
-  def download(folder:String, name:String, localFolder:String): Unit
+  def download(folder:String, name:String, localFolder:String): Result[String]
+
+
+  def downloadToFile(folder:String, name:String, filePath:String):Result[String]
 
 
   protected def loadFromFile(filePath:String):String =
@@ -113,23 +120,5 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   }
 
 
-  protected def toString(input: InputStream): String =
-  {
-    val reader = new BufferedReader(new InputStreamReader(input))
-    val buffer = new StringBuilder()
-    var moreData = true
-    while (moreData) {
-      val line = reader.readLine()
-      if (line == null)
-      {
-        moreData = false
-      }
-      else
-      {
-        buffer.append(line)
-      }
-    }
-    val content = buffer.toString()
-    content
-  }
+  protected def toString(input: InputStream): String = IO.toString(input)
 }

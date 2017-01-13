@@ -16,13 +16,15 @@ package slate.core.apis
 /**
   * Created by kreddy on 3/25/2016.
   */
-class ApiSettings {
-  var appName = ""
-  var appUserDir = ""
-  var outputDir = ""
-  var outputDirRelative = ""
-  var inputDir = ""
-  var logDir = ""
-  var enableLogging = false
-  var enableOutput = false
+case class ApiSettings(
+                        appName           :String  = ""    ,
+                        appUserDir        :String  = ""    ,
+                        outputDir         :String  = ""    ,
+                        outputDirRelative :String  = ""    ,
+                        inputDir          :String  = ""    ,
+                        logDir            :String  = ""    ,
+                        enableLogging     :Boolean = false ,
+                        enableOutput      :Boolean = false
+                      )
+{
 }

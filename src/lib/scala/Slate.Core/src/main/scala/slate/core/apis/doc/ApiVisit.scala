@@ -13,8 +13,8 @@
 
 package slate.core.apis.doc
 
-import slate.common.ReflectedArg
-import slate.core.apis.{Api, ApiAction, ApiArg}
+import slate.common.{ListMap, Strings, ReflectedArg}
+import slate.core.apis.{ApiBase, Api, ApiAction, ApiArg}
 
 trait ApiVisit {
 

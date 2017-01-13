@@ -13,6 +13,9 @@
 
 package slate.core.apis
 
+import java.io.File
+import java.nio.file.Paths
+
 import slate.common._
 import slate.common.results.{ResultCode, ResultTimed}
 import slate.core.apis.support.{ApiCallReflect}
@@ -110,6 +113,7 @@ class ApiBase {
 
   /**
     * gets a service from the context
+    *
     * @param key
     * @tparam T
     * @return
@@ -132,5 +136,35 @@ class ApiBase {
     })
 
     resultTimed.withData(result)
+  }
+
+
+  protected def interpretUri(path:String): Option[String] = {
+    val pathParts = Strings.substring(path, "://")
+    pathParts.fold(Option(path))( parts => {
+      parts._1 match {
+        case "user://"    => Option(new File(System.getProperty("user.home"), parts._2).toString)
+        case "temp://"    => Option(new File(System.getProperty("java.io.tmpdir"), parts._2).toString)
+        case "file://"    => Option(new File(parts._2).toString)
+        case "inputs://"  => Option(new File(this.context.dirs.get.pathToInputs , parts._2).toString)
+        case "outputs://" => Option(new File(this.context.dirs.get.pathToOutputs, parts._2).toString)
+        case "logs://"    => Option(new File(this.context.dirs.get.pathToLogs   , parts._2).toString)
+        case "cache://"   => Option(new File(this.context.dirs.get.pathToCache  , parts._2).toString)
+        case _            => Option(path)
+      }
+    })
+  }
+
+
+  protected def writeToFile(msg:Option[Any], fileNameLocal:String, count:Int,
+                          contentFetcher:(Option[Any]) => String):Option[String] = {
+
+    msg.fold(Some("No items available"))( item => {
+      val finalFileName = if(count == 0) fileNameLocal else fileNameLocal + "_" + count
+      val path = interpretUri(finalFileName)
+      val content = contentFetcher(msg)
+      Files.writeAllText(path.get.toString, content)
+      Some("File content written to : " + path)
+    })
   }
 }

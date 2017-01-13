@@ -322,10 +322,10 @@ class AppProcess extends AppMetaSupport
     if(extra.isDefined ) {
       args ++= extra.get
     }
-    for (arg <- args) {
+    args.foreach(arg => {
       info(arg._1 + " = " + arg._2)
       //writer.keyValue(arg._1, arg._2)
-    }
+    })
     info( "===============================================================")
   }
 
@@ -443,17 +443,21 @@ class AppProcess extends AppMetaSupport
     // 2. Supplied on the command line!
     // This overrides the config
     if(!Strings.isNullOrEmpty(argSetting)) {
-      return argSetting
+      argSetting
     }
-    // 3. Check the config
-    val actualConfig = confSource.getOrElse(conf)
-    val confSetting = actualConfig.getStringOrElse(key, defaultValue.getOrElse(""))
+    else {
+      // 3. Check the config
+      val actualConfig = confSource.getOrElse(conf)
+      val confSetting = actualConfig.getStringOrElse(key, defaultValue.getOrElse(""))
 
-    // 4. Supplied in config!
-    if(!Strings.isNullOrEmpty(confSetting)) {
-      return confSetting
+      // 4. Supplied in config!
+      if (!Strings.isNullOrEmpty(confSetting)) {
+        confSetting
+      }
+      else {
+        defaultValue.getOrElse("")
+      }
     }
-    defaultValue.getOrElse("")
   }
 
 

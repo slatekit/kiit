@@ -12,9 +12,11 @@
   */
 package slate.core.apis.doc
 
-class ApiDocSettings {
-  var maxLengthApi = 0
-  var maxLengthAction = 0
-  var maxLengthArg = 0
-  var enableDetailMode = false
+class ApiDocSettings(
+                          var maxLengthApi     :Int     = 0    ,
+                          var maxLengthAction  :Int     = 0    ,
+                          var maxLengthArg     :Int     = 0    ,
+                          var enableDetailMode :Boolean = false
+                        )
+{
 }

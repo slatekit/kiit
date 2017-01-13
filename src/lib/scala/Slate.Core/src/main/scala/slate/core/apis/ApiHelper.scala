@@ -33,11 +33,10 @@ object ApiHelper extends ResultSupportIn {
 
     // fill args
     val rawArgs = Map[String,Any]()
-    if(inputs.isDefined) {
-      for (input <- inputs.get) {
-        rawArgs(input._1) = input._2
-      }
-    }
+    inputs.fold(Unit)( all => {
+      all.foreach( input => rawArgs(input._1) = input._2)
+      Unit
+    })
     val args = new InputArgs(rawArgs)
     args
   }
@@ -65,19 +64,21 @@ object ApiHelper extends ResultSupportIn {
 
     // CASE 1: No auth for action
     if(noAuth && (call.action.roles == ApiConstants.RoleGuest || Strings.isNullOrEmpty(call.action.roles) )){
-      return ok()
+      ok()
     }
     // CASE 2: No auth for parent
-    if(noAuth && call.action.roles == ApiConstants.RoleParent
+    else if(noAuth && call.action.roles == ApiConstants.RoleParent
         && call.api.roles == ApiConstants.RoleGuest){
-      return ok()
+      ok()
     }
     // CASE 3: No auth and action requires roles!
-    if(noAuth){
-      return unAuthorized(msg = Some("Unable to authorize, authorization provider not set"))
+    else if(noAuth){
+      unAuthorized(msg = Some("Unable to authorize, authorization provider not set"))
     }
-    // auth-mode, action roles, api roles
-    auth.get.isAuthorized(cmd, call.api.auth, call.action.roles, call.api.roles)
+    else {
+      // auth-mode, action roles, api roles
+      auth.get.isAuthorized(cmd, call.api.auth, call.action.roles, call.api.roles)
+    }
   }
 
 
@@ -86,15 +87,17 @@ object ApiHelper extends ResultSupportIn {
     // Role!
     if(!Strings.isNullOrEmpty(primaryValue) ){
       if(Strings.isMatch(primaryValue, ApiConstants.RoleParent)){
-        return parentValue
+        parentValue
       }
-      return primaryValue
+      else
+        primaryValue
     }
     // Parent!
-    if(!Strings.isNullOrEmpty(parentValue)){
-      return parentValue
+    else if(!Strings.isNullOrEmpty(parentValue)){
+      parentValue
     }
-    ""
+    else
+      ""
   }
 
 
@@ -112,11 +115,13 @@ object ApiHelper extends ResultSupportIn {
                         auth:Option[String] = None,
                         protocol:Option[String] = None ): Api = {
     if(!roles.isDefined && !auth.isDefined && !protocol.isDefined ){
-      return ano
+      ano
     }
-    val finalRoles    = roles.getOrElse( ano.roles )
-    val finalAuth     = auth.getOrElse( ano.auth )
-    val finalProtocol = protocol.getOrElse( ano.protocol )
-    ano.copy(ano.area, ano.name, ano.desc, finalRoles, finalAuth, ano.verb, finalProtocol )
+    else {
+      val finalRoles = roles.getOrElse(ano.roles)
+      val finalAuth = auth.getOrElse(ano.auth)
+      val finalProtocol = protocol.getOrElse(ano.protocol)
+      ano.copy(ano.area, ano.name, ano.desc, finalRoles, finalAuth, ano.verb, finalProtocol)
+    }
   }
 }

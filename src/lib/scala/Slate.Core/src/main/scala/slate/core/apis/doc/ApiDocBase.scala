@@ -107,14 +107,8 @@ abstract class ApiDocBase extends ApiVisit {
   protected def getFormattedText(text:String, max:Int):String =
   {
     if (text.length == max)
-      return text
-    var pad = ""
-    var count = 0
-    while(count < max - text.length)
-    {
-      pad += " "
-      count = count + 1
-    }
-    text + pad
+      text
+    else
+      text + 0.until(max - text.length).foldLeft("")( (s, v) => s + " ")
   }
 }

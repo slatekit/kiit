@@ -50,14 +50,16 @@ case class ApiAction(
     // Role!
     if(!Strings.isNullOrEmpty(primaryValue) ){
       if(Strings.isMatch(primaryValue, ApiConstants.RoleParent)){
-        return parentValue
+        parentValue
       }
-      return primaryValue
+      else
+        primaryValue
     }
     // Parent!
-    if(!Strings.isNullOrEmpty(parentValue)){
-      return parentValue
+    else if(!Strings.isNullOrEmpty(parentValue)){
+      parentValue
     }
-    ""
+    else
+      ""
   }
 }

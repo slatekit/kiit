@@ -25,8 +25,9 @@ import scala.collection.mutable.Map
 class ApiContainerCLI(ctx    : AppContext                    ,
                       auth   : Option[ApiAuth]         = None,
                       apis   : Option[List[ApiReg]]    = None,
-                      errors : Option[ApiErrorHandler] = None)
-  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis, errors) {
+                      errors : Option[ApiErrorHandler] = None,
+                      allowIO: Boolean                 = true )
+  extends ApiContainer(ctx, auth, ApiConstants.ProtocolCLI, apis, errors, allowIO) {
 
 
 
