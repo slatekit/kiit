@@ -124,12 +124,11 @@ class EntityMapper(model:Model) extends Mapper(model) {
       sql = cols + "VALUES (" + dat + ")"
     }
     if(!fullSql)
-      return sql
-
-    if(update)
-      return s"update ${_model.name} set " + sql + ";"
-
-    s"insert into ${_model.name} " + sql + ";"
+      sql
+    else if(update)
+      s"update ${_model.name} set " + sql + ";"
+    else
+      s"insert into ${_model.name} " + sql + ";"
   }
 
 

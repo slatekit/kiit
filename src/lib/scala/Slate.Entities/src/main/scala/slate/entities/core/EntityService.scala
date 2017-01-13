@@ -68,10 +68,12 @@ class EntityService[T >: Null <: IEntity]
   def update(id:Long, field:String, value:String): Unit =
   {
     val item = get(id)
-    if(item.isEmpty) return
-    val entity = item.get
-    Reflector.setFieldValue(entity, field, value)
-    update(entity)
+    if(item.nonEmpty) {
+      val entity = item.get
+      Reflector.setFieldValue(entity, field, value)
+
+      update(entity)
+    }
   }
 
 
@@ -170,8 +172,9 @@ class EntityService[T >: Null <: IEntity]
   {
     val results = find(query)
     if(results == null || results.size == 0)
-      return None
-    results(0).asInstanceOf[Option[T]]
+      None
+    else
+      results(0).asInstanceOf[Option[T]]
   }
 
 
@@ -179,24 +182,24 @@ class EntityService[T >: Null <: IEntity]
   }
 
 
-  def applyFieldData(mode:Int, entity:Option[T] )
+  def applyFieldData(mode:Int, entity:Option[T] ) : Unit =
   {
-    if (!entity.isDefined)
-      return
+    if (entity.isDefined) {
 
-    val item = entity.get
+      val item = entity.get
 
-    // 1. Time stamps
-    if (mode == 1 || !item.isPersisted()) {
-      item.createdAt = DateTime.now()
-    }
-    item.updatedAt = DateTime.now()
+      // 1. Time stamps
+      if (mode == 1 || !item.isPersisted()) {
+        item.createdAt = DateTime.now()
+      }
+      item.updatedAt = DateTime.now()
 
-    // 2. Unique id ( GUID )
-    if (item.isInstanceOf[IEntityUnique]){
-      val unique = item.asInstanceOf[IEntityUnique]
-      if (Strings.isNullOrEmpty(unique.uniqueId) ){
-        unique.uniqueId = Random.stringGuid(false)
+      // 2. Unique id ( GUID )
+      if (item.isInstanceOf[IEntityUnique]) {
+        val unique = item.asInstanceOf[IEntityUnique]
+        if (Strings.isNullOrEmpty(unique.uniqueId)) {
+          unique.uniqueId = Random.stringGuid(false)
+        }
       }
     }
   }

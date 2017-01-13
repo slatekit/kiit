@@ -35,15 +35,13 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
   override def create(entity: T):Long =
   {
     // Check 1: already persisted ?
-    if(entity.isPersisted())
-      return entity.id
+    if(!entity.isPersisted()) {
+      // get next id
+      entity.id = getNextId()
 
-    // get next id
-    entity.id = getNextId()
-
-    // store
-    _items.add(entity.id, entity)
-
+      // store
+      _items.add(entity.id, entity)
+    }
     entity.id
   }
 
@@ -56,11 +54,9 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
   override def update(entity: T) :Unit =
   {
     // Check 1: already persisted ?
-    if(!entity.isPersisted())
-      return
-
-    // store
-    _items(entity.id) = entity
+    if(entity.isPersisted()) {
+      _items(entity.id) = entity
+    }
   }
 
 
@@ -72,10 +68,11 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
   override def delete(id: Long): Boolean =
   {
     if(!_items.contains(id))
-      return false
-
-    _items.remove(id)
-    true
+      false
+    else {
+      _items.remove(id)
+      true
+    }
   }
 
 
@@ -86,10 +83,7 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
    */
   override def get(id: Long): Option[T] =
   {
-    if(_items.contains(id))
-      return Some(_items(id))
-
-    None
+    if(_items.contains(id)) Some(_items(id)) else None
   }
 
 
@@ -98,28 +92,22 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
     *
     * @return
     */
-  override def getAll() : List[T] =
-  {
-    _items.all()
-  }
+  override def getAll() : List[T] = _items.all()
 
 
-  override def count() : Long  =
-  {
-    _items.size
-  }
+  override def count() : Long  = _items.size
 
 
   override def top(count:Int, desc:Boolean ): List[T]  =
   {
-    if(_items.size() == 0)
-      return List[T]()
-
-    var sorted = _items.all.sortBy( item => item.id )
-    if(desc)
-      sorted = sorted.reverse
-
-    sorted.take(count)
+    if(_items.size() == 0) {
+      List[T]()
+    }
+    else {
+      val items = _items.all.sortBy(item => item.id)
+      val sorted = if (desc) items.reverse else items
+      sorted.take(count)
+    }
   }
 
 

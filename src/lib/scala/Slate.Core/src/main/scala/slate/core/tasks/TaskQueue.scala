@@ -131,27 +131,20 @@ class TaskQueue(name:String = "") extends Task(name) {
    */
   protected def processItems(items:Option[List[Any]]):Unit = {
 
-    // CASE 1: any ?
-    if (items.isDefined){
-
-      // handle each one
-      if(items.get.size > 0) {
-
-        for (item <- items.get) {
-
-          // avoid failure ( either complete/abandon item )
-          try {
-            processItem(item)
-            queue.complete(Some(item))
-          }
-          catch {
-            case ex: Exception => {
-              queue.abandon(Some(item))
-            }
+    items.fold(Unit)( all => {
+      all.foreach( item => {
+        try {
+          processItem(item)
+          queue.complete(Some(item))
+        }
+        catch {
+          case ex: Exception => {
+            queue.abandon(Some(item))
           }
         }
-      }
-    }
+      })
+      Unit
+    })
   }
 
 

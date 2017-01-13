@@ -161,8 +161,9 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
   {
     val info = getInfo(entityType, dbKey, dbShard)
     if(!info.entityRepoInstance.isDefined || info.entityRepoInstance.get == null)
-      return null
-    info.entityRepoInstance.get.asInstanceOf[IEntityRepo]
+      null
+    else
+      info.entityRepoInstance.get.asInstanceOf[IEntityRepo]
   }
 
 
@@ -170,8 +171,9 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
   {
     val info = getInfo(entityType, dbKey, dbShard)
     if(!info.entityServiceInstance.isDefined || info.entityServiceInstance.get == null)
-      return null
-    info.entityServiceInstance.get.asInstanceOf[IEntityService]
+      null
+    else
+      info.entityServiceInstance.get.asInstanceOf[IEntityService]
   }
 
 
@@ -179,8 +181,9 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
   {
     val info = getInfoByName(entityType, dbKey, dbShard)
     if(!info.entityServiceInstance.isDefined || info.entityServiceInstance.get == null)
-      return null
-    info.entityServiceInstance.get.asInstanceOf[IEntityService]
+      null
+    else
+      info.entityServiceInstance.get.asInstanceOf[IEntityService]
   }
 
 

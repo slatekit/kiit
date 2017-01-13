@@ -78,9 +78,7 @@ abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
     */
   def delete(entity:Option[T]): Boolean =
   {
-    if(entity.isEmpty)
-      return false
-    delete(entity.get.id)
+    if(entity.isEmpty) false else delete(entity.get.id)
   }
 
 
@@ -91,14 +89,13 @@ abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
     */
   def save(entity: Option[T]): Unit =
   {
-    if(entity.isEmpty)
-      return
-
-    val item = entity.get
-    if(item.isPersisted())
-      update(item)
-    else
-      create(item)
+    if(entity.nonEmpty) {
+      val item = entity.get
+      if (item.isPersisted())
+        update(item)
+      else
+        create(item)
+    }
   }
 
 
@@ -144,8 +141,9 @@ abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
   {
     val results = call()
     if (results == null || results.isEmpty)
-      return None
-    Some(results.head)
+      None
+    else
+      Some(results.head)
   }
 
 

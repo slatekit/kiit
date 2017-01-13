@@ -69,16 +69,17 @@ case class EntityInfo(
   private def getTypeName(tpe:Option[Type]) : String =
   {
     if(tpe.nonEmpty && tpe.get != null)
-      return tpe.get.typeSymbol.fullName
-
-    ""
+      tpe.get.typeSymbol.fullName
+    else
+      ""
   }
 
 
   private def getTypeNameFromInst(tpe:Option[AnyRef]) : String =
   {
     if(tpe.nonEmpty && tpe.get != null)
-      return tpe.get.getClass.getName
-    ""
+      tpe.get.getClass.getName
+    else
+      ""
   }
 }

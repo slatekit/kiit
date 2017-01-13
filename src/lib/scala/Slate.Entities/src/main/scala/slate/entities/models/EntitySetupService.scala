@@ -86,12 +86,14 @@ class EntitySetupService(val _entities:Entities,
     val result = generateSql(name, version)
     if(!result.success)
     {
-      return failure(msg = Some(s"Unable to install, can not generate sql for model ${name}"))
+      failure(msg = Some(s"Unable to install, can not generate sql for model ${name}"))
     }
-    val sql = result.get
-    val db = _entities.getDatabase(dbKey, dbShard)
-    db.update(sql)
-    ok()
+    else {
+      val sql = result.get
+      val db = _entities.getDatabase(dbKey, dbShard)
+      db.update(sql)
+      ok()
+    }
   }
 
 
