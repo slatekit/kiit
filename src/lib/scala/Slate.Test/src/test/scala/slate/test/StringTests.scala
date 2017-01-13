@@ -57,5 +57,12 @@ class StringTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
       assert( maxLength(List[String]("a", "bcd", "efgh")) == 4)
       assert( maxLength(List[String]("a", "bcd", "ef", "12345")) == 5)
     }
+
+
+    it("can pad") {
+      assert( pad("abc", 3) == "abc")
+      assert( pad("abc", 4) == "abc ")
+      assert( pad("abc", 5) == "abc  ")
+    }
   }
 }

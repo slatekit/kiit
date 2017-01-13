@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.entities.core
@@ -22,15 +22,20 @@ import scala.reflect.runtime.universe._
 
 /**
   * Maps an entity to sql and from sql records.
+  *
   * @param model
   */
 class EntityMapper(model:Model) extends Mapper(model) {
 
-  def mapToSql(item:AnyRef, update:Boolean, fullSql:Boolean = false): String =
-  {
-    if(!_model.any)
-      return Strings.empty
+  def mapToSql(item:AnyRef, update:Boolean, fullSql:Boolean = false): String = {
+    if (!_model.any)
+      Strings.empty
+    else
+      mapFields(item, update, fullSql)
+  }
 
+
+  private def mapFields(item:AnyRef, update:Boolean, fullSql:Boolean = false): String = {
     var dat = ""
     var sql = ""
     var cols = ""

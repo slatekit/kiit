@@ -72,7 +72,8 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can get a class level annotation") {
       // NOTE: The annotation must be created with all parameters ( not named parameters )
-      val anno = Reflector.getClassAnnotation(typeOf[UserApi], typeOf[Api]).asInstanceOf[Api]
+      val anno = Reflector.getClassAnnotation(typeOf[UserApi], typeOf[Api])
+        .asInstanceOf[Option[Any]].get.asInstanceOf[Api]
       assert(anno.area == "app")
       assert(anno.name == "users")
       assert(anno.roles == "admin")
@@ -83,7 +84,8 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can get a method level annotation") {
       // NOTE: The annotation must be created with all parameters
-      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "activate").asInstanceOf[ApiAction]
+      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "activate")
+        .asInstanceOf[Option[Any]].get.asInstanceOf[ApiAction]
       assert(anno.name == "activate")
       assert(anno.roles == "@parent")
     }
@@ -91,7 +93,8 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can get a method level annotation with verb") {
       // NOTE: The annotation must be created with all parameters
-      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "info").asInstanceOf[ApiAction]
+      val anno = Reflector.getMemberAnnotation(typeOf[UserApi], typeOf[ApiAction], "info")
+        .asInstanceOf[Option[Any]].get.asInstanceOf[ApiAction]
       assert(anno.name == "")
       assert(anno.roles == "")
       assert(anno.verb == "get")
@@ -109,7 +112,8 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can get a field level annotation") {
       // NOTE: The annotation must be created with all parameters
-      val anno = Reflector.getFieldAnnotation(typeOf[User], typeOf[Field], "email").asInstanceOf[Field]
+      val anno = Reflector.getFieldAnnotation(typeOf[User], typeOf[Field], "email")
+        .asInstanceOf[Option[Any]].get.asInstanceOf[Field]
       assert(anno.name == "")
       assert(anno.length == 30)
       assert(anno.required)

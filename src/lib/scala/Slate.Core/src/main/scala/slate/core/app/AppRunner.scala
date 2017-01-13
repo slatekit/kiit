@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.core.app
@@ -31,8 +31,6 @@ object AppRunner extends ResultSupportIn
    */
   def run(app: AppProcess, args:Option[Array[String]]): Result[Any] =
   {
-    var res:Result[Any] = NoResult
-
     try {
       // 1. Check the command line args
       val checkedArgs = if( args == null ) None else args
@@ -40,29 +38,32 @@ object AppRunner extends ResultSupportIn
       val result = check(checkedArgs, Option(app.argsSchema))
       if (!result.success) {
         handleHelp(app, result)
-        return result
+        result
       }
+      else {
+        // 2. Configure args
+        app.args(Option(safeArgs), result.get)
 
-      // 2. Configure args
-      app.args(Option(safeArgs), result.get)
+        // 3. Begin app workflow
+        app.init()
 
-      // 3. Begin app workflow
-      app.init()
+        // 4. Accept the initialize
+        // NOTE: This serves as a hook for post initialization
+        app.accept()
 
-      // 4. Accept the initialize
-      // NOTE: This serves as a hook for post initialization
-      app.accept()
+        // 5. Execute the app
+        val res = app.exec()
 
-      // 5. Execute the app
-      res = app.exec()
+        // 6 Shutdown the app
+        app.shutdown()
 
-      // 6 Shutdown the app
-      app.shutdown()
+        res
+      }
     }
     catch {
       case ex:Exception => {
         println("Unexpected error : " + ex.getMessage)
-        res = failure( msg = Some("Unexpected error running application: " + ex.getMessage ),
+        failure( msg = Some("Unexpected error running application: " + ex.getMessage ),
                        err = Some(ex)
         )
       }
@@ -71,9 +72,6 @@ object AppRunner extends ResultSupportIn
       // Reset any color changes
       println(Console.RESET)
     }
-
-    // 7. Return the result from execution
-    res
   }
 
 

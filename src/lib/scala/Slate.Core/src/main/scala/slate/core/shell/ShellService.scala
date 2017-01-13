@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 package slate.core.shell
 
@@ -53,24 +53,6 @@ class ShellService(
 
 
   /**
-    * configures the settings and logging options
-    *
-    * @param appName         : "slate"
-    * @param appUserFolder   : ".slate"
-    * @param log             : whether or not to log.
-    */
-  def configure(appName:String, appUserFolder:String, log:Boolean = false ):Unit = {
-
-    // create ".slate\{appname}.shell\output" directory
-    Files.mkUserDir(appUserFolder)
-    Files.createUserAppSubDirectory(appUserFolder, "apps")
-    Files.createUserAppSubDirectory(appUserFolder, s"apps\\${appName}.shell")
-    Files.createUserAppSubDirectory(appUserFolder, s"apps\\${appName}.shell\\output")
-    Files.createUserAppSubDirectory(appUserFolder, s"apps\\${appName}.shell\\input")
-  }
-
-
-  /**
     * runs the shell command line with arguments
     */
   def run():Unit =
@@ -100,103 +82,90 @@ class ShellService(
 
 
   /**
-    * initialization hook for derived class
+    * Hook for initialization for derived classes
     */
-  def onShellInit(): Unit =
-  {
-
-  }
+  def onShellInit(): Unit = { }
 
 
   /**
-    * startup hook for derived class
+    * Hook for startup for derived classes
     */
-  def onShellStart(): Unit =
-  {
-    showHelp()
-  }
+  def onShellStart(): Unit = showHelp()
 
 
   /**
-    * runs the shell continuously until "exit" or "quit" are entered.
+    * Runs the shell continuously until "exit" or "quit" are entered.
     */
   def onShellRun(): Unit =
   {
-    // Startup command ( e.g. quick login, set environment etc )
+    // Startup ( e.g. quick login, set environment etc )
     handleStartupCommand()
 
-    // Keep prompting user for command until "exit" is hit.
-    var running = true
-    while (running)
-    {
+    // Keep reading from console until ( exit, quit ) is hit.
+    Loops.forever( {
+
+      // Show prompt
       _writer.text(":>", false)
+
+      // Get line
       val line = readLine()
 
-      // CASE 1: nothing ?
+      // Case 1: Nothing Keep going
       if (Strings.isNullOrEmpty(line))
       {
-        _writer.text("no command/action provided")
-        _writer.line()
+        display(msg = Some("No command/action provided"))
+        true
       }
-      // CASE 2: "exit, quit" ?
+      // Case 2: "exit, quit" ?
+      else if ( ArgsHelper.isExit(List[String](line.trim()), 0) ) {
+        display(msg = Some("Exiting..."))
+        false
+      }
+      // Case 3: Keep going
       else
       {
-        try {
-          val result = onCommandExecute(line)
-          if (!result.success && result.isExit) {
-            running = false
-          }
-        }
-        catch
-        {
-          case ex:Exception =>
-          {
-            _writer.line()
-            _writer.error(ex.getMessage)
-            _writer.line()
-          }
-        }
+        tryLine(line)
+      }
+    })
+  }
+
+
+  /**
+    * Hook for shutdown for derived classes
+    */
+  def onShellEnd(): Unit = { }
+
+
+  def tryLine(line:String ): Boolean = {
+    try {
+      val result = onCommandExecute(line)
+      val isExit = result.isExit
+      result.success || !isExit
+    }
+    catch {
+      case ex:Exception => {
+        display(None, Some(ex))
+        true
       }
     }
   }
 
 
   /**
-    * shutdown hook for derived class
+    * Hook for command before it is executed
+    *
+    * @param cmd
+    * @return
     */
-  def onShellEnd(): Unit =
-  {
-
-  }
+  def onCommandBeforeExecute(cmd:ShellCommand):ShellCommand = { cmd }
 
 
-  def onCommandBeforeExecute(cmd:ShellCommand):ShellCommand =
-  {
-    cmd
-  }
-
-
-  def onCommandExecuteBatch(lines:List[String], mode:Int): List[Result[ShellCommand]] = {
-    val finalResults = ListBuffer[Result[ShellCommand]]()
-    for(line <- lines){
-
-      val checkResult = executeLine(line, false)
-
-      // Do not continue processing more !
-      if (!checkResult.success && mode == ShellConstants.BatchModeFailOnError)
-      {
-        finalResults.append(checkResult)
-        return finalResults.toList
-      }
-      else
-      {
-        finalResults.append(checkResult)
-      }
-    }
-    finalResults.toList
-  }
-
-
+  /**
+    * Executes the command represented by the line
+    *
+    * @param line
+    * @return
+    */
   def onCommandExecute(line:String): Result[ShellCommand] =
   {
     // 1st step, parse the command line into arguments
@@ -206,46 +175,51 @@ class ShellService(
     if (!results.success)
     {
       showArgumentsError(results.msg)
-      return failure[ShellCommand]( msg = results.msg )
-    }
-    // Build up the command from inputs
-    val args = results.get
-    var cmd = buildCommand(args, line)
-
-    // Check for system level commands ( exit, help )
-    val assistanceCheck = checkForAssistance(cmd, results)
-
-    // Exit or help ? Do not proceed.
-    if(assistanceCheck.success){
-      return failureWithCode[ShellCommand](assistanceCheck.code, Some(cmd),  assistanceCheck.msg,
-      tag = assistanceCheck.tag)
-    }
-
-    // Good to go for making calls.
-    // Before run
-    cmd = onCommandBeforeExecute(cmd)
-
-    // Execute
-    if(cmd.is("sys", "shell", "batch")){
-      val batch = new ShellBatch(cmd, this)
-      cmd = batch.run()
+      failure[ShellCommand]( msg = results.msg )
     }
     else {
-      cmd = onCommandExecuteInternal(cmd)
+      // Build up the command from inputs
+      val args = results.get
+      var cmd = buildCommand(args, line)
+
+      // Check for system level commands ( exit, help )
+      val assistanceCheck = checkForAssistance(cmd, results)
+
+      // Exit or help ? Do not proceed.
+      if (assistanceCheck.success) {
+        failureWithCode[ShellCommand](assistanceCheck.code, Some(cmd), assistanceCheck.msg,
+          tag = assistanceCheck.tag)
+      }
+      else {
+        // Good to go for making calls.
+        // Before run
+        cmd = onCommandBeforeExecute(cmd)
+
+        // Execute
+        if (cmd.is("sys", "shell", "batch")) {
+          val batch = new ShellBatch(cmd, this)
+          cmd = batch.run()
+        }
+        else {
+          cmd = onCommandExecuteInternal(cmd)
+        }
+
+        // After
+        onCommandAfterExecute(cmd)
+
+        // Output
+        handleCommandOutput(cmd)
+
+        if (cmd.result == null) {
+          success(cmd, results.msg)
+        }
+        else {
+          // Return true to indicate continuing to the next command
+          // Only return false if "exit" or "quit" is typed.
+          success(cmd)
+        }
+      }
     }
-
-    // After
-    onCommandAfterExecute(cmd)
-
-    // Output
-    handleCommandOutput(cmd)
-
-    if(cmd.result == null)
-      return success(cmd, results.msg)
-
-    // Return true to indicate continuing to the next command
-    // Only return false if "exit" or "quit" is typed.
-    success(cmd)
   }
 
 
@@ -282,6 +256,36 @@ class ShellService(
   }
 
 
+  /**
+    * Executes a batch of commands ( 1 per line )
+    *
+    * @param lines
+    * @param mode
+    * @return
+    */
+  def onCommandBatchExecute(lines:List[String], mode:Int): List[Result[ShellCommand]] = {
+    // Keep track of all the command results per line
+    val results = ListBuffer[Result[ShellCommand]]()
+
+    // For x lines
+    Loops.repeat(lines.size, (ndx) => {
+      val line = lines(ndx)
+
+      // Execute and store result
+      val result = executeLine(line, false)
+      results.append(result)
+
+      // Only stop if error or fail fast
+      val stop = !result.success && mode == ShellConstants.BatchModeFailOnError
+      result.success || !stop
+    })
+    results.toList
+  }
+
+
+  /**
+    * Shows general help info
+    */
   protected def showHelp()
   {
     _writer.title("Please type your commands")
@@ -310,6 +314,9 @@ class ShellService(
   }
 
 
+  /**
+    * Shows help command structure
+    */
   protected def showHelpCommandSyntax()
   {
     _writer.tab(1)
@@ -318,6 +325,9 @@ class ShellService(
   }
 
 
+  /**
+    * Shows help command example syntax
+    */
   protected def showHelpCommandExample()
   {
     _writer.tab(1)
@@ -326,6 +336,9 @@ class ShellService(
   }
 
 
+  /**
+    * Shows extra help - useful for derived classes to show more help info
+    */
   protected def showHelpExtended()
   {
   }
@@ -376,30 +389,16 @@ class ShellService(
   }
 
 
-  def writeLine(text:String):Unit =
-  {
-    println(text)
-  }
+  def writeLine(text:String):Unit = println(text)
 
 
-  protected def printResult(result:Result[Any]):Unit =
-  {
-    ShellPrinter.printResult(result)
-  }
+  protected def printResult(result:Result[Any]):Unit = ShellPrinter.printResult(result)
 
 
-  protected def readLine():String =
-  {
-    return scala.io.StdIn.readLine()
-  }
+  protected def readLine():String = scala.io.StdIn.readLine()
 
 
-  protected def serialize(result:Any):String =
-  {
-    if(result == null) return ""
-
-    result.toString()
-  }
+  protected def serialize(result:Any):String = Option(result).getOrElse("").toString
 
 
   protected def buildCommand(args:Args, line:String):ShellCommand =
@@ -407,8 +406,7 @@ class ShellService(
     val area = args.getVerb(0)
     val name = args.getVerb(1)
     val action = args.getVerb(2)
-    val cmd = new ShellCommand(area, name, action, line, args)
-    cmd
+    new ShellCommand(area, name, action, line, args)
   }
 
 
@@ -463,6 +461,14 @@ class ShellService(
   }
 
 
+  private def display(msg:Option[String], err:Option[Exception] = None):Unit = {
+    _writer.line()
+    msg.fold(Unit)( message => { _writer.text(message); Unit } )
+    err.fold(Unit)( error   => { _writer.text(error.getMessage); Unit } )
+    _writer.line()
+  }
+
+
   private def executeLine(line:String, checkForHelp:Boolean):Result[ShellCommand] = {
     // 1st step, parse the command line into arguments
     val results = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
@@ -471,31 +477,34 @@ class ShellService(
     if (!results.success)
     {
       showArgumentsError(results.msg)
-      return badRequest[ShellCommand](msg = results.msg, tag = Some(line))
+      badRequest[ShellCommand](msg = results.msg, tag = Some(line))
     }
-    // Build up the command from inputs
-    val args = results.get
-    val cmd = buildCommand(args, line)
+    else {
+      // Build up the command from inputs
+      val args = results.get
+      val cmd = buildCommand(args, line)
 
-    // Check for system level commands ( exit, help )
-    val checkResult = checkForAssistance(cmd, results)
+      // Check for system level commands ( exit, help )
+      val checkResult = checkForAssistance(cmd, results)
 
-    // Exit or help ? Do not proceed.
-    if(checkResult.success){
-      return failureWithCode[ShellCommand](checkResult.code, Some(cmd), checkResult.msg,
-      tag = checkResult.tag)
+      // Exit or help ? Do not proceed.
+      if (checkResult.success) {
+        failureWithCode[ShellCommand](checkResult.code, Some(cmd), checkResult.msg,
+          tag = checkResult.tag)
+      }
+      else {
+        // Good to go for making calls.
+        // Before run
+        onCommandBeforeExecute(cmd)
+
+        // Execute
+        onCommandExecuteInternal(cmd)
+
+        // After
+        onCommandAfterExecute(cmd)
+
+        success[ShellCommand](cmd)
+      }
     }
-
-    // Good to go for making calls.
-    // Before run
-    onCommandBeforeExecute(cmd)
-
-    // Execute
-    onCommandExecuteInternal(cmd)
-
-    // After
-    onCommandAfterExecute(cmd)
-
-    success[ShellCommand](cmd)
   }
 }

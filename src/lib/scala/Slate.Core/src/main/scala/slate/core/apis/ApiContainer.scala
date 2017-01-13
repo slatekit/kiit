@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.core.apis
@@ -268,11 +268,12 @@ class ApiContainer(val ctx:AppContext                           ,
   {
     val check = getApiCallReflect(apiArea, apiName, apiAction)
     if ( !check.success ) {
-      return failure(msg = check.msg)
+      failure(msg = check.msg)
     }
-
-    val callReflect = check.get._1
-    success( (callReflect.api, callReflect.action) )
+    else {
+      val callReflect = check.get._1
+      success((callReflect.api, callReflect.action))
+    }
   }
 
 
@@ -342,11 +343,14 @@ class ApiContainer(val ctx:AppContext                           ,
 
   def getOrCreateArea(area:String):ApiLookup =
   {
-    if(_lookup.contains(area))
-      return _lookup(area)
-    val apiLookup = new ApiLookup()
-    _lookup(area) = apiLookup
-    apiLookup
+    if(_lookup.contains(area)) {
+      _lookup(area)
+    }
+    else {
+      val apiLookup = new ApiLookup()
+      _lookup(area) = apiLookup
+      apiLookup
+    }
   }
 
 
@@ -363,23 +367,29 @@ class ApiContainer(val ctx:AppContext                           ,
     Ensure.isNotEmptyText( apiAction, "api action not supplied" )
 
     // 1. Check area exists
-    if( !_lookup.contains(apiArea))
-      return notFound(msg = Some(s"not found: area $apiArea"))
+    if( !_lookup.contains(apiArea)) {
+      notFound(msg = Some(s"not found: area $apiArea"))
+    }
+    else {
 
-    // 2. Check api exists
-    val apiLookup = _lookup(apiArea)
-    if( !apiLookup.contains(apiName))
-      return notFound(msg = Some(s"not found: api $apiName not found in area: $apiArea"))
-
-    // 3. Check method exists
-    val api = apiLookup(apiName)
-    if (!api.contains(apiAction))
-      return notFound(msg = Some(s"not found: action $apiAction not found in area: $apiArea, api: $apiName"))
-
-    // 4a: Params - check no args needed
-    val callReflect = api(apiAction)
-
-    success(data = (callReflect, api) )
+      // 2. Check api exists
+      val apiLookup = _lookup(apiArea)
+      if (!apiLookup.contains(apiName)) {
+        notFound(msg = Some(s"not found: api $apiName not found in area: $apiArea"))
+      }
+      else {
+        // 3. Check method exists
+        val api = apiLookup(apiName)
+        if (!api.contains(apiAction)) {
+          notFound(msg = Some(s"not found: action $apiAction not found in area: $apiArea, api: $apiName"))
+        }
+        else {
+          // 4a: Params - check no args needed
+          val callReflect = api(apiAction)
+          success(data = (callReflect, api))
+        }
+      }
+    }
   }
 
 
@@ -392,95 +402,103 @@ class ApiContainer(val ctx:AppContext                           ,
     if(!result.success)
     {
       onErrorInputsInvalid(text, result)
-      return result
+      result
     }
-
-    val args = result.get
-    val cmd = Request(text, args, None, "get")
-    val finalResult = callback(cmd)
-    finalResult
+    else {
+      val args = result.get
+      val cmd = Request(text, args, None, "get")
+      val finalResult = callback(cmd)
+      finalResult
+    }
   }
 
 
   private def callCommandInternal(cmd:Request): Result[Any] = {
     var api:ApiBase = null
-    var finalResult:Result[Any] = NoResult
 
     try {
       // 1. Check for method.
       val existsCheck = getApiCallReflect(cmd)
       if (!existsCheck.success) {
-        return existsCheck
+        existsCheck
       }
+      else {
+        // 2. Ensure verb is correct get/post
+        val callInfo = existsCheck.get
+        val callReflect = callInfo._1
+        val actualVerb = callReflect.action.actualVerb(callReflect.api)
+        val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
+        val supportedProtocol = actualProtocol
+        val isCliOk = isCliAllowed(cmd, supportedProtocol)
+        val isWeb = protocol == ApiConstants.ProtocolWeb
 
-      // 2. Ensure verb is correct get/post
-      val callInfo = existsCheck.get
-      val callReflect = callInfo._1
-      val actualVerb = callReflect.action.actualVerb(callReflect.api)
-      val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
-      val supportedProtocol = actualProtocol
-      val isCliOk = isCliAllowed(cmd, supportedProtocol)
-      val isWeb = protocol == ApiConstants.ProtocolWeb
+        // 2. Ensure verb is correct
+        if (isWeb && !ApiHelper.isValidMatch(actualVerb, cmd.verb)) {
+          badRequest(msg = Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
+        }
 
-      // 2. Ensure verb is correct
-      if (isWeb && !ApiHelper.isValidMatch(actualVerb, cmd.verb)) {
-        return badRequest(msg = Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
+        // 3. Ensure protocol is correct get/post
+        else if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, protocol)) {
+          notFound(msg = Some(s"${cmd.fullName} not found"))
+        }
+        else {
+          // 4. Validate api access
+          val apiKeyCheck = ApiHelper.isAuthorizedForCall(cmd, callReflect, auth)
+          if (!apiKeyCheck.success) {
+            apiKeyCheck
+          }
+          else {
+            // 5. Bad request
+            val checkResult = ApiValidator.validateCall(cmd, getApiCallReflect, true)
+            if (!checkResult.success) {
+              // Don't return the result from internal ( as it contains too much info )
+              badRequest(checkResult.msg, tag = Some(cmd.action))
+            }
+            else {
+              // 6. Get api action
+              // Get the call check which has all the relevant info about the call
+              val callCheck = checkResult.get.asInstanceOf[ApiCallCheck]
+
+              // 7. Get the call reflect from the api using the action
+              api = callCheck.api
+
+              // 8. Finally make call.
+              val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get, allowIO)
+              val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
+
+              // 9. Already a Result object - don't wrap inside another result object
+              if (returnVal.isInstanceOf[Result[Any]]) {
+                returnVal.asInstanceOf[Result[Any]]
+              }
+              else
+                success(data = returnVal)
+            }
+          }
+        }
       }
-
-      // 3. Ensure protocol is correct get/post
-      if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, protocol)) {
-        return notFound(msg = Some(s"${cmd.fullName} not found"))
-      }
-
-      // 4. Validate api access
-      val apiKeyCheck = ApiHelper.isAuthorizedForCall(cmd, callReflect, auth)
-      if (!apiKeyCheck.success) {
-        return apiKeyCheck
-      }
-
-      // 5. Bad request
-      val checkResult = ApiValidator.validateCall(cmd, getApiCallReflect, true)
-      if (!checkResult.success) {
-        // Don't return the result from internal ( as it contains too much info )
-        return badRequest(checkResult.msg, tag = Some(cmd.action))
-      }
-
-      // 6. Get api action
-      // Get the call check which has all the relevant info about the call
-      val callCheck = checkResult.get.asInstanceOf[ApiCallCheck]
-
-      // 7. Get the call reflect from the api using the action
-      api = callCheck.api
-
-      // 8. Finally make call.
-      val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get, allowIO)
-      val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
-
-      // 9. Already a Result object - don't wrap inside another result object
-      if (returnVal.isInstanceOf[Result[Any]]) {
-        return returnVal.asInstanceOf[Result[Any]]
-      }
-      finalResult = success( data = returnVal )
     }
     catch{
       case ex:Exception => {
-
-        // OPTION 1: API Level error handling enabled
-        if(api != null && api.isErrorEnabled) {
-          finalResult = api.onException(this.ctx, cmd, ex)
-        }
-        // OPTION 2: GLOBAL Level custom handler
-        else if( errors.isDefined ) {
-          finalResult = errors.get.onException(ctx, cmd, ex)
-        }
-        // OPTION 3: GLOBAL Level default handler
-        else {
-          finalResult = onError(ctx, cmd, ex)
-        }
+        handleError(api, cmd, ex)
       }
     }
+  }
 
-    finalResult
+
+  def handleError(api:ApiBase, cmd:Request, ex:Exception):Result[Any] = {
+
+    // OPTION 1: API Level error handling enabled
+    if(api != null && api.isErrorEnabled) {
+      api.onException(this.ctx, cmd, ex)
+    }
+    // OPTION 2: GLOBAL Level custom handler
+    else if( errors.isDefined ) {
+      errors.get.onException(ctx, cmd, ex)
+    }
+    // OPTION 3: GLOBAL Level default handler
+    else {
+      onError(ctx, cmd, ex)
+    }
   }
 
 

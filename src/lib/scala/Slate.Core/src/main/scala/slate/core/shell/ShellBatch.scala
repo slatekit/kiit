@@ -26,7 +26,7 @@ class ShellBatch(val cmd:ShellCommand, val svc:ShellService) extends ResultSuppo
       cmd
     }
     else {
-      val results = svc.onCommandExecuteBatch(lines, ShellConstants.BatchModeContinueOnError)
+      val results = svc.onCommandBatchExecute(lines, ShellConstants.BatchModeContinueOnError)
       val newLine = Strings.newline()
       val messages = results.foldLeft("")((s, res) => {
         if (res.success) {
