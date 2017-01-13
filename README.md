@@ -1,13 +1,13 @@
 # SLATE KIT
-Slate Kit is a tool kit, utility library and server backend for mobile and web apps. 
-It is written in Scala and uses Akka-Http for the Server. 
+Slate Kit is a tool kit, utility library and server backend for web and mobile apps. 
+It is written in Scala, uses MySql, AWS, and Akka-Http in the Server. 
 
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
-- **date**: Oct 3, 2016
-- **release**: 1.0.1
-- **build**: 1.0.1.2
+- **date**: Dec 1, 2016
+- **release**: 1.2.0
+- **build**: 1.2.0.3
 - **url**: www.slatekit.com
 
 
@@ -15,6 +15,9 @@ It is written in Scala and uses Akka-Http for the Server.
 1. www.slatekit.com
 2. www.codehelix.com 
 
+
+# GITTER
+[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 # COMPONENTS
@@ -25,7 +28,8 @@ concepts. These include the following. ( Please refer to website for more detail
 1. Slate Kit - Base App 
 2. Slate Kit - Protocol Independent APIs
 3. Slate Kit - Domain Driven Single-Table ORM 
-4. Slate Kit - Server 
+4. Slate Kit - API Server
+5. Slate Kit - CLI 
 
 
 
@@ -55,7 +59,7 @@ All the software below is required to run Scala and Slate Kit. Scala is dependen
 Using Sbt ( the Scala build tool ) will making building and packaging your apps easier.
 
 1. Java	            1.8	
-2. Scala	        2.17
+2. Scala	          2.11
 3. Sbt	            latest
 4. IntelliJ	        latest 
 5. MySql Connector	5.7	For JDBC connectios 
