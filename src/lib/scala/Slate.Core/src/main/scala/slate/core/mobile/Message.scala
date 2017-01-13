@@ -17,129 +17,77 @@ import org.json.simple.JSONObject
 import slate.common._
 import slate.common.serialization.ObjectBuilderJson
 
-
-class Message
+/**
+  *
+  * @param origin       : origin ( phone | user | server )
+  * @param originCo     : country of origin "us", "in"
+  * @param toId         : id of sender
+  * @param toPhone      : phone of sender
+  * @param toName       : name of sender
+  * @param toPlatform   : destination platform "and" | "ios"
+  * @param toDevice     : destination device id
+  * @param subject      : Title of the message
+  * @param details      : Details of message ( Short description, full data is in "data" field )
+  * @param data         : The actual data of the message
+  * @param targetDate   : Optional target date for the message
+  * @param msgCategory  : Category of message ( "general" | "reg" | "share" | "alert" )
+  * @param msgType      : Specifies the type of data in the message details
+  * @param msgAction    : Specifies an action to perform
+  * @param msgDate      : Date message was sent
+  * @param msgState     : State of the data when sent
+  * @param msgTag       : Tag for reference purposes
+  */
+case class Message(
+                    origin             : String   = "",
+                    originCo           : String   = "",
+                    fromId             : String   = "",
+                    fromPhone          : String   = "",
+                    fromName           : String   = "",
+                    toId               : String   = "",
+                    toPhone            : String   = "",
+                    toName             : String   = "",
+                    toPlatform         : String   = "",
+                    toDevice           : String   = "",
+                    subject            : String   = "",
+                    details            : String   = "",
+                    data               : String   = "",
+                    targetDate         : DateTime = DateTime.now(),
+                    msgCategory        : String   = "",
+                    msgType            : String   = "",
+                    msgAction          : String   = "",
+                    msgDate            : DateTime = DateTime.now(),
+                    msgState           : Int = 0,
+                    msgTag             : String = ""
+)
 {
-
-  /**
-   *
-   * @param origin       : origin ( phone | user | server )
-   * @param originCo     : country of origin "us", "in"
-   * @param toId         : id of sender
-   * @param toPhone      : phone of sender
-   * @param toName       : name of sender
-   * @param toPlatform   : destination platform "and" | "ios"
-   * @param toDevice     : destination device id
-   * @param subject      : Title of the message
-   * @param details      : Details of message ( Short description, full data is in "data" field )
-   * @param data         : The actual data of the message
-   * @param targetDate   : Optional target date for the message
-   * @param msgCategory  : Category of message ( "general" | "reg" | "share" | "alert" )
-   * @param msgType      : Specifies the type of data in the message details
-   * @param msgAction    : Specifies an action to perform
-   * @param msgDate      : Date message was sent
-   * @param msgState     : State of the data when sent
-   * @param msgTag       : Tag for reference purposes
-   */
-  def this(
-              origin             : String   = "",
-              originCo           : String   = "",
-              fromId             : String   = "",
-              fromPhone          : String   = "",
-              fromName           : String   = "",
-              toId               : String   = "",
-              toPhone            : String   = "",
-              toName             : String   = "",
-              toPlatform         : String   = "",
-              toDevice           : String   = "",
-              subject            : String   = "",
-              details            : String   = "",
-              data               : String   = "",
-              targetDate         : DateTime = DateTime.now(),
-              msgCategory        : String   = "",
-              msgType            : String   = "",
-              msgAction          : String   = "",
-              msgDate            : DateTime = DateTime.now(),
-              msgState           : Int = 0,
-              msgTag             : String = ""
-            )
-  {
-    this()
-    this.origin           = origin
-    this.originCo         = originCo
-    this.fromId           = fromId
-    this.fromPhone        = fromPhone
-    this.fromName         = fromName
-    this.toId             = toId
-    this.toPhone          = toPhone
-    this.toName           = toName
-    this.toPlatform       = toPlatform
-    this.toDevice         = toDevice
-    this.subject          = subject
-    this.details          = details
-    this.data             = data
-    this.targetDate       = targetDate
-    this.msgCategory      = msgCategory
-    this.msgType          = msgType
-    this.msgAction        = msgAction
-    this.msgDate          = msgDate
-    this.msgState         = msgState
-    this.msgTag           = msgTag
-  }
-
-  var  origin             : String   = ""
-  var  originCo           : String   = ""
-  var  fromId             : String   = ""
-  var  fromPhone          : String   = ""
-  var  fromName           : String   = ""
-  var  toId               : String   = ""
-  var  toPhone            : String   = ""
-  var  toName             : String   = ""
-  var  toPlatform         : String   = ""
-  var  toDevice           : String   = ""
-  var  subject            : String   = ""
-  var  details            : String   = ""
-  var  data               : String   = ""
-  var  targetDate         : DateTime = DateTime.now()
-  var  msgCategory        : String   = ""
-  var  msgType            : String   = ""
-  var  msgAction          : String   = ""
-  var  msgDate            : DateTime = DateTime.now()
-  var  msgState           : Int = 0
-  var  msgTag             : String = ""
-
-
   def source(origin:String, country:String): Message = {
-    this.origin = origin
-    this.originCo = country
-    this
+    this.copy(origin = origin, originCo = country)
   }
 
 
   def from(name:String, phone:String, id:String) : Message =  {
-    this.fromName = name
-    this.fromPhone = phone
-    this.fromId = id
-    this
+    this.copy(fromName = name, fromPhone = phone, fromId = id)
   }
 
 
   def to(id:String, phone:String, name:String, platform:String, deviceId:String) : Message =  {
-    this.toId = id
-    this.toPhone = phone
-    this.toName = name
-    this.toPlatform = platform
-    this.toDevice = deviceId
-    this
+    this.copy(
+      toId = id,
+      toPhone = phone,
+      toName = name,
+      toPlatform = platform,
+      toDevice = deviceId
+    )
   }
 
 
   def message(subject:String, details:String, data:String, targetDate:DateTime) : Message =  {
-    this.subject = subject
-    this.details = details
-    this.targetDate = targetDate
-    this.data = data
-    this
+    this.copy(
+      subject = subject,
+      details = details,
+      targetDate = targetDate,
+      data = data
+    )
   }
 
 
@@ -284,29 +232,31 @@ object Message {
 
 
   def fromJson(content:String):Message = {
-    val msg = new Message()
+
     val parser = new org.json.simple.parser.JSONParser()
     val json = parser.parse(content).asInstanceOf[JSONObject]
-    msg.origin      = json.get("origin"        ).asInstanceOf[String]
-    msg.originCo    = json.get("originCo"      ).asInstanceOf[String]
-    msg.fromId      = json.get("fromId"        ).asInstanceOf[String]
-    msg.fromPhone   = json.get("fromPhone"     ).asInstanceOf[String]
-    msg.fromName    = json.get("fromName"      ).asInstanceOf[String]
-    msg.toId        = json.get("toId"          ).asInstanceOf[String]
-    msg.toPhone     = json.get("toPhone"       ).asInstanceOf[String]
-    msg.toName      = json.get("toName"        ).asInstanceOf[String]
-    msg.toPlatform  = json.get("toPlatform"    ).asInstanceOf[String]
-    msg.toDevice    = json.get("toDevice"      ).asInstanceOf[String]
-    msg.subject     = json.get("subject"       ).asInstanceOf[String]
-    msg.details     = json.get("details"       ).asInstanceOf[String]
-    msg.data        = json.get("data"          ).asInstanceOf[String]
-    msg.targetDate  = DateTime.parseNumericVal(json.get("targetDate").asInstanceOf[String])
-    msg.msgCategory = json.get("msgCategory"   ).asInstanceOf[String]
-    msg.msgType     = json.get("msgType"       ).asInstanceOf[String]
-    msg.msgAction   = json.get("msgAction"     ).asInstanceOf[String]
-    msg.msgDate     = DateTime.parseNumericVal(json.get("msgDate"   ).asInstanceOf[String])
-    msg.msgState    = json.get("msgState"      ).asInstanceOf[String].toInt
-    msg.msgTag      = json.get("msgTag"        ).asInstanceOf[String]
+    val msg = new Message(
+      origin      = json.get("origin"        ).asInstanceOf[String],
+      originCo    = json.get("originCo"      ).asInstanceOf[String],
+      fromId      = json.get("fromId"        ).asInstanceOf[String],
+      fromPhone   = json.get("fromPhone"     ).asInstanceOf[String],
+      fromName    = json.get("fromName"      ).asInstanceOf[String],
+      toId        = json.get("toId"          ).asInstanceOf[String],
+      toPhone     = json.get("toPhone"       ).asInstanceOf[String],
+      toName      = json.get("toName"        ).asInstanceOf[String],
+      toPlatform  = json.get("toPlatform"    ).asInstanceOf[String],
+      toDevice    = json.get("toDevice"      ).asInstanceOf[String],
+      subject     = json.get("subject"       ).asInstanceOf[String],
+      details     = json.get("details"       ).asInstanceOf[String],
+      data        = json.get("data"          ).asInstanceOf[String],
+      targetDate  = DateTime.parseNumericVal(json.get("targetDate").asInstanceOf[String]),
+      msgCategory = json.get("msgCategory"   ).asInstanceOf[String],
+      msgType     = json.get("msgType"       ).asInstanceOf[String],
+      msgAction   = json.get("msgAction"     ).asInstanceOf[String],
+      msgDate     = DateTime.parseNumericVal(json.get("msgDate"   ).asInstanceOf[String]),
+      msgState    = json.get("msgState"      ).asInstanceOf[String].toInt,
+      msgTag      = json.get("msgTag"        ).asInstanceOf[String]
+    )
     msg
   }
 }

@@ -62,9 +62,6 @@ class MessageService(val _queue:Option[QueueSource] = None) extends MessageServi
 
 
   def queue(msg:Message):Unit = {
-    if(!_queue.isDefined) {
-      return
-    }
   }
 
 

@@ -14,23 +14,13 @@
 package slate.core.email
 
 
-import slate.common.{ApiCredentials, Vars, Ensure, Result}
+import slate.common.templates.Templates
+import slate.common._
+import slate.common.IO._
+import slate.common.Strings.{isNullOrEmpty}
 
 
-abstract class EmailService {
-
-  protected var _queueDefault = new EmailQueue()
-  protected val _templates = Map[String, String]()
-
-
-  /**
-   * registers a new template
-   * @param name    : name of template
-   * @param content : content of template
-   */
-  def addTemplate(name:String, content:String):Unit =
-  {
-  }
+abstract class EmailService(templates:Option[Templates] = None) {
 
 
   /**
@@ -38,7 +28,7 @@ abstract class EmailService {
    * @param msg
    * @return
    */
-  def send(msg:EmailMessage):Result[Boolean]
+  def send(msg:EmailMessage):IO[Result[Boolean]]
 
 
   /**
@@ -49,10 +39,17 @@ abstract class EmailService {
    * @param html    : Whether or not the email is html formatted
    * @return
    */
-  def send(to:String, subject:String, body:String, html:Boolean):Result[Boolean] =
+  def send(to:String, subject:String, body:String, html:Boolean): IO[Result[Boolean]] =
   {
-    Ensure.isNotEmptyText(subject, "subject not provided")
-    send( new EmailMessage(to, subject, body, html) )
+    // NOTE: This guards are more readable that other alternatives
+    val result = validate(to, subject)
+    if(result.success){
+      send( new EmailMessage(to, subject, body, html) )
+    }
+    else
+    {
+      failedIO(result.message)
+    }
   }
 
 
@@ -63,23 +60,27 @@ abstract class EmailService {
    * @param html    : Whether or not the email is html formatted
    * @param variables   : values to replace the variables in template
    */
-  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, variables:Vars):Unit =
+  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, variables:Vars):IO[Result[Boolean]] =
   {
-    Ensure.isTrue(_templates.contains(name), s"Template ${name} does not exist")
-    Ensure.isNotEmptyText(to, "destination code not provided")
-    Ensure.isNotEmptyText(subject, "subject not provided")
-
-    // Get the template content
-    var message = _templates(name)
-
-    // Build the message replacing the variables
-    for(variable <- variables.keys())
-    {
-      val value = variables(variable)
-      val valueText = if(value == null) "" else value.toString
-      message = message.replaceAll("${" + variable + "}", valueText)
+    val result = validate(to, subject)
+    if(result.success) {
+      // Send the message
+      //send(to, subject, message, html)
+      templates.fold(failedIO[Boolean]("templates are not setup"))(t => {
+        val result = t.resolveTemplateWithVars(name, Option(variables.asMap()))
+        val message = result.get
+        send(new EmailMessage(to, subject, message, html))
+      })
     }
-    // Send the message
-    send(to, subject, message, html)
+    else {
+      failedIO(result.message)
+    }
+  }
+
+
+  private def validate(to:String, subject:String): BoolMessage = {
+    if(isNullOrEmpty(to)           ) new BoolMessage(false, "to not provided"      )
+    else if(isNullOrEmpty(subject) ) new BoolMessage(false, "subject not provided" )
+    else BoolMessage.True
   }
 }

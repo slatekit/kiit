@@ -19,7 +19,7 @@ import slate.common.results.ResultSupportIn
 
 class MessageServiceGoogle(private val _key:String) extends MessageService with ResultSupportIn {
 
-  var _settings = new MessageSettings("", _key, "")
+  val _settings = new MessageSettings("", _key, "")
   val _baseUrl = "https://android.googleapis.com/gcm/send"
 
 

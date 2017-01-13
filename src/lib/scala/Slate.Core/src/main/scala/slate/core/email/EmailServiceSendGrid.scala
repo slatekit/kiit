@@ -13,11 +13,20 @@
 
 package slate.core.email
 
-import slate.common.{ApiCredentials, Result}
-import slate.common.http.{HttpCredentials, HttpClient}
+import slate.common.http.HttpHelper._
+import slate.common.http.common.HttpConstants
+import slate.common.http.common.HttpMethod.POST
+import slate.common.templates.Templates
+import slate.common.{IO, ApiCredentials, Result}
+import slate.common.http.{HttpRequest, HttpCredentials, HttpClient}
 import slate.common.results.ResultSupportIn
 
-class EmailServiceSendGrid(user:String, key:String, phone:String ) extends EmailService with ResultSupportIn {
+class EmailServiceSendGrid(user      : String,
+                           key       : String,
+                           phone     : String,
+                           templates : Option[Templates] = None,
+                           sender    : Option[(HttpRequest) => IO[Result[Boolean]]] = None )
+  extends EmailService(templates) with ResultSupportIn {
 
   val _settings = new EmailSettings(user, key, phone)
   private val _baseUrl = s"https://api.sendgrid.com/api/mail.send.json"
@@ -27,38 +36,43 @@ class EmailServiceSendGrid(user:String, key:String, phone:String ) extends Email
    * Initialize with api credentials
    * @param apiKey
    */
-  def this(apiKey: ApiCredentials) = {
-    this(apiKey.key, apiKey.pass, apiKey.account)
+  def this(apiKey: ApiCredentials, templates:Option[Templates]) = {
+    this(apiKey.key, apiKey.pass, apiKey.account, templates)
   }
 
 
-  override def send(msg: EmailMessage): Result[Boolean] = {
+  override def send(msg: EmailMessage): IO[Result[Boolean]] = {
 
-    okOrFailure(
-    {
-      val toFinal = msg.to
+    // Parameters
+    val bodyArg = if (msg.html) "html" else "text"
 
-      // Parameters
-      val bodyArg = if (msg.html) "html" else "text"
-      val params = Some(Seq[(String,String)](
+    // Create an immutable http request.
+    val req = new HttpRequest (
+      url = _baseUrl,
+      method = POST,
+      params = Some(Seq[(String,String)](
         ("api_user", _settings.user),
         ("api_key", _settings.key),
-        ("to", toFinal),
+        ("to", msg.to),
         ("from", _settings.account),
         ("subject", msg.subject),
         (bodyArg, msg.body)
-      ))
+      )),
+      headers = None,
+      credentials = Some(new HttpCredentials("Basic", _settings.user, _settings.key)),
+      entity = None,
+      connectTimeOut = HttpConstants.defaultConnectTimeOut,
+      readTimeOut = HttpConstants.defaultReadTimeOut
+    )
 
-      // Credentials
-      val creds = new HttpCredentials("Basic", _settings.user, _settings.key)
+    // This optionally uses the IO monad supplied or actually posts ( impure )
+    // This approach allows for testing this without actually sending a http request.
+    sender.fold( post(req) )( s => s(req) )
+  }
 
-      // Post
-      val http = new HttpClient()
-      val message = http.post(_baseUrl, params, credentials = Some(creds)).result.getOrElse("")
-        .asInstanceOf[String]
 
-      // return message to be used in Result[Boolean]
-      message
-    })
+  private def post(req:HttpRequest): IO[Result[Boolean]] = {
+    val client = new HttpClient()
+    postIO(client, req)
   }
 }
