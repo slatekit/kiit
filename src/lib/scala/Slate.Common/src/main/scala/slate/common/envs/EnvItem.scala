@@ -20,8 +20,5 @@ case class EnvItem( name:String, env:String, region:String = "", desc:String = "
   def key : String = name + ":" + env
 
 
-  override def isEnv(envMode: String):Boolean =
-  {
-    env == envMode
-  }
+  override def isEnv(envMode: String):Boolean = env == envMode
 }

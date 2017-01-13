@@ -14,12 +14,12 @@ package slate.common.info
 import slate.common.{TimeSpan, DateTime}
 
 class Status (
-                var started    : DateTime = DateTime.now()    ,
-                var ended      : DateTime = DateTime.now()    ,
-                var duration   : TimeSpan = TimeSpan(0,0,0)   ,
-                var status     : String   = "not-started"     ,
-                var errors     : Int      = 0                 ,
-                var error      : String   = "n/a"
+               var started    : DateTime = DateTime.now()    ,
+               var ended      : DateTime = DateTime.now()    ,
+               var duration   : TimeSpan = TimeSpan(0,0,0)   ,
+               var status     : String   = "not-started"     ,
+               var errors     : Int      = 0                 ,
+               var error      : String   = "n/a"
              )
 {
 

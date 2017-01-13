@@ -78,11 +78,12 @@ object Host
     val env = System.getenv()
 
     if (env.containsKey("COMPUTERNAME"))
-      return env.get("COMPUTERNAME");
+      env.get("COMPUTERNAME");
 
     else if (env.containsKey("HOSTNAME"))
-      return env.get("HOSTNAME");
+      env.get("HOSTNAME");
 
-    "Unknown Computer";
+    else
+      "Unknown Computer";
   }
 }

@@ -133,8 +133,8 @@ object DbUtils {
     */
   def fillArgs(stmt:PreparedStatement, inputs:Option[List[Any]]):Unit = {
     inputs.fold(Unit)( all => {
-      var pos = 1
-      for(arg <- all){
+      all.indices.foreach( pos => {
+        val arg = all(pos)
         arg match {
           case s:String         => stmt.setString (pos, arg.toString)
           case s:Int            => stmt.setInt    (pos, arg.asInstanceOf[Int])
@@ -143,8 +143,7 @@ object DbUtils {
           case s:Boolean        => stmt.setBoolean(pos, arg.asInstanceOf[Boolean])
           case s:DateTime       => "\"" + s.toString() + "\""
         }
-        pos += 1
-      }
+      })
       Unit
     })
   }

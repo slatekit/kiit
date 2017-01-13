@@ -45,6 +45,7 @@ import slate.common.app.AppRunConst
   */
 case class Folders(
                     location : Int    = 0,
+                    home     : String = System.getProperty("user.home"),
                     root     : Option[String] = None,
                     group    : Option[String] = None,
                     app      : String = "app",
@@ -86,25 +87,23 @@ case class Folders(
 
   def pathToApp(): String = {
     val sep = File.separator
-    var finalPath = System.getProperty("user.home")
-    finalPath = root.fold[String](finalPath)( folder => finalPath + sep + folder )
-    finalPath = group.fold[String](finalPath)( folder => finalPath +sep + folder )
-    finalPath = finalPath + sep + app
+    val homePath  = home
+    val rootPath  = root.fold[String](homePath)( folder => homePath + sep + folder )
+    val groupPath = group.fold[String](rootPath)( folder => rootPath +sep + folder )
+    val finalPath = groupPath + sep + app
     finalPath
   }
 
 
   def create(): String = {
-    val userHome = System.getProperty("user.home")
-
-    var path = Files.mkDir(userHome, root)
-    path     = Files.mkDir(path, group)
-    path     = Files.mkDir(path, app)
-    Files.mkDir(path, cache)
-    Files.mkDir(path, inputs)
-    Files.mkDir(path, logs)
-    Files.mkDir(path, outputs)
-    Files.mkDir(path, conf)
+    val rootPath  = Files.mkDir(home, root)
+    val groupPath = Files.mkDir(rootPath, group)
+    val appPath   = Files.mkDir(groupPath, app)
+    Files.mkDir(appPath, cache)
+    Files.mkDir(appPath, inputs)
+    Files.mkDir(appPath, logs)
+    Files.mkDir(appPath, outputs)
+    Files.mkDir(appPath, conf)
   }
 }
 

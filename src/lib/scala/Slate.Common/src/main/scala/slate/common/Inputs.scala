@@ -26,99 +26,60 @@ abstract class Inputs {
   }
 
 
-  def get(key: String) : Any =
-  {
-    getObjectAs[String](key)
-  }
+  def get(key: String)       : Any = getObjectAs[String](key)
 
 
-  def getString(key: String) : String =
-  {
-    getObjectAs[String](key)
-  }
+  def getString(key: String) : String = getObjectAs[String](key)
 
 
-  def getBool(key: String) : Boolean =
-  {
-    getValueAs[Boolean](key)
-  }
+  def getBool(key: String)   : Boolean = getValueAs[Boolean](key)
 
 
-  def getInt(key: String) : Int =
-  {
-    getValueAs[Int](key)
-  }
+  def getInt(key: String)    : Int = getValueAs[Int](key)
 
 
-  def getLong(key: String): Long =
-  {
-    getValueAs[Long](key)
-  }
+  def getLong(key: String)   : Long = getValueAs[Long](key)
 
 
-  def getDouble(key: String): Double =
-  {
-    getValueAs[Double](key)
-  }
+  def getDouble(key: String) : Double = getValueAs[Double](key)
 
 
-  def getDate(key: String): DateTime =
-  {
-    getValueAs[DateTime](key)
-  }
+  def getDate(key: String)   : DateTime = getValueAs[DateTime](key)
 
 
   def getStringOrElse(key: String, defaultVal:String) : String =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getObjectAs[String](key)
+    getObjectOrElse[String](key, defaultVal)
   }
 
 
   def getBoolOrElse(key: String, defaultVal: Boolean): Boolean =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getValueAs[Boolean](key)
+    getValueOrElse[Boolean](key, defaultVal)
   }
 
 
   def getIntOrElse(key: String, defaultVal: Int) : Int =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getValueAs[Int](key)
+    getValueOrElse[Int](key, defaultVal)
   }
 
 
   def getLongOrElse(key: String, defaultVal: Long) : Long =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getValueAs[Long](key)
+    getValueOrElse[Long](key, defaultVal)
   }
 
 
   def getDoubleOrElse(key: String, defaultVal: Double) : Double =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getValueAs[Double](key)
+    getValueOrElse[Double](key, defaultVal)
   }
 
 
   def getDateOrElse(key: String, defaultVal: DateTime) : DateTime =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getObjectAs[DateTime](key)
+    getObjectOrElse[DateTime](key, defaultVal)
   }
 
 
@@ -128,9 +89,27 @@ abstract class Inputs {
   }
 
 
+  def getValueOrElse[T](key: String, defaultVal:T): T =
+  {
+    if (!containsKey(key))
+      defaultVal
+    else
+      getValueAs[T](key)
+  }
+
+
   def getObjectAs[T >: Null](key: String): T =
   {
     getObject(key).asInstanceOf[T]
+  }
+
+
+  def getObjectOrElse[T >: Null](key: String, defaultVal:T): T =
+  {
+    if (!containsKey(key))
+      defaultVal
+    else
+      getObject(key).asInstanceOf[T]
   }
 
 

@@ -19,12 +19,8 @@ package slate.common.encrypt
 class Encryptor(private val _key:String, private val _iv:String) {
 
 
-  def encrypt(text:String ):String = {
-    EncryptorAES.encrypt(_key, _iv, text)
-  }
+  def encrypt(text:String ):String = EncryptorAES.encrypt(_key, _iv, text)
 
 
-  def decrypt(encrypted:String):String = {
-    EncryptorAES.decrypt(_key, _iv, encrypted)
-  }
+  def decrypt(encrypted:String):String = EncryptorAES.decrypt(_key, _iv, encrypted)
 }

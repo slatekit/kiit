@@ -12,8 +12,7 @@
 package slate.common.databases
 
 
-import slate.common.Strings
-import slate.common.Model
+import slate.common.{ModelField, Strings, Model}
 import slate.common.databases.DbConstants._
 import slate.common.query.{QueryEncoder}
 
@@ -35,21 +34,15 @@ class DbBuilder() {
     sql += getPrimaryKey("id") + ","
 
     // 3. Now build all the columns
-    var colsAdded = 0
-    for( ndx <- 0 until model.fields.size)
-    {
-      val mapping = model.fields(ndx)
-      if (!Strings.isMatch(mapping.name, "id"))
-      {
-        val sqlType = getTypeFromScala(mapping.dataType)
-        if(colsAdded > 0)
-        {
-          sql += ","
-        }
-        sql += addColNew(mapping.name, sqlType, mapping.isRequired, mapping.maxLength)
-        colsAdded += 1
-      }
-    }
+    // Get only fields ( excluding primary key )
+    val dataFields = model.fields.filter( field => !Strings.isMatch(field.name, "id"))
+
+    // Build sql for the data fields.
+    val dataFieldSql = Strings.mkString[ModelField]( dataFields, field => {
+      val sqlType = getTypeFromScala(field.dataType)
+      this.addColNew(field.name, sqlType, field.isRequired, field.maxLength)
+    }, ",")
+    sql += dataFieldSql
 
     // 4. finish the construction and get the sql.
     sql += " );"
@@ -87,26 +80,22 @@ class DbBuilder() {
   def getColName(name:String): String =
   {
     if (Strings.compare(name, "key", true) == 0)
-      return "`" + name + "`"
-
-    if (Strings.compare(name, "group", true) == 0)
-      return "`" + name + "`"
-
-    name + " "
+      "`" + name + "`"
+    else if (Strings.compare(name, "group", true) == 0)
+      "`" + name + "`"
+    else
+      name + " "
   }
 
 
   def getColType(colType:Int, maxLen:Int): String =
   {
     if(colType == TypeString && maxLen == -1)
-    {
-      return "longtext"
-    }
-    if(colType == TypeString)
-    {
-      return "VARCHAR(" + maxLen + ")"
-    }
-    getName(colType)
+      "longtext"
+    else if(colType == TypeString)
+      "VARCHAR(" + maxLen + ")"
+    else
+      getName(colType)
   }
 
 

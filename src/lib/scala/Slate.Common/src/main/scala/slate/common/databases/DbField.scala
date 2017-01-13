@@ -26,41 +26,42 @@ class DbField
   var defaultVal = ""
   var extra      = ""
 
-  def isNull     = {
-    !Strings.isMatch(nullable, "NO")
-  }
+  def isNull :Boolean = !Strings.isMatch(nullable, "NO")
 
 
-  def isKey = {
-    Strings.isMatch(key, "PRI")
-  }
+  def isKey  :Boolean = Strings.isMatch(key, "PRI")
 
 
   def getFieldType():Type = {
 
-    if (dataType == "int(11)") return typeOf[Int]
-    if (dataType == "int(15)") return typeOf[Long]
-    if (dataType == "int(6)")  return typeOf[Int]
-    if (dataType == "tinyint(1)") return typeOf[Short]
-    if (dataType == "bit(1)") return typeOf[Boolean]
-    if (dataType == "datetime") return typeOf[DateTime]
-    if (dataType == "longtext") return Reflector.getFieldTypeString()
-    if (dataType.startsWith("varchar")) return Reflector.getFieldTypeString()
-
-    typeOf[String]
+    dataType match {
+      case "int(11)"      => typeOf[Int]
+      case "int(15)"      => typeOf[Long]
+      case "int(6)"       => typeOf[Int]
+      case "tinyint(1)"   => typeOf[Short]
+      case "bit(1)"       => typeOf[Boolean]
+      case "datetime"     => typeOf[DateTime]
+      case "longtext"     => Reflector.getFieldTypeString()
+      case s if(isVar(s)) => Reflector.getFieldTypeString()
+      case _              => typeOf[String]
+    }
   }
 
 
   def maxLength():Int = {
-    if (dataType == "longtext") {
-      return -1
+    dataType match {
+      case "longtext"     => -1
+      case s if(isVar(s)) => lengthFromVar(s)
+      case _              => -1
     }
-    if (dataType.startsWith("varchar"))
-    {
-      val len = dataType.replaceAllLiterally(")", "").replaceAllLiterally("varchar(", "").toInt
-      return len
-    }
-    -1
+  }
+
+
+  def isVar(s:String): Boolean = s.startsWith("varchar")
+
+
+  def lengthFromVar(s:String):Int = {
+      s.replaceAllLiterally(")", "").replaceAllLiterally("varchar(", "").toInt
   }
 
 

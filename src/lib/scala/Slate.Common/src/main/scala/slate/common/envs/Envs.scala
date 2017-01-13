@@ -96,8 +96,8 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
   def apply(name:String): Result[EnvItem] = {
     val matched = all.filter( item => Strings.isMatch(item.name, name ))
     if(matched != null && matched.size > 0)
-      return success(matched.head)
-
-    failure(msg = Some(s"Unknown environment name : ${name} supplied"))
+      success(matched.head)
+    else
+      failure(msg = Some(s"Unknown environment name : ${name} supplied"))
   }
 }

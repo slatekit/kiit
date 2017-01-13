@@ -47,10 +47,10 @@ object Env {
     val tokens = Strings.split(env, ':')
 
     // e.g. "dev1", "dev", dev1:dev")
-    if(tokens.size == 1){
-      return EnvItem(tokens(0), tokens(0))
-    }
-    EnvItem(tokens(0), tokens(1))
+    if(tokens.size == 1)
+      EnvItem(tokens(0), tokens(0))
+    else
+      EnvItem(tokens(0), tokens(1))
   }
 
 }

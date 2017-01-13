@@ -39,12 +39,11 @@ class Db(private val _dbCon:DbConString) {
     */
   def open(): Db =
   {
-    if(_isOpened)
-      return this
-
-    //STEP 1: Register JDBC driver
-    Class.forName(_dbCon.driver)
-    _isOpened = true
+    if(!_isOpened) {
+      //STEP 1: Register JDBC driver
+      Class.forName(_dbCon.driver)
+      _isOpened = true
+    }
     this
   }
 

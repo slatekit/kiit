@@ -39,9 +39,7 @@ class InputArgs(protected val _map:Map[String,Any]) extends Inputs {
   /// <summary>
   override def getObject(key: String): AnyRef =
   {
-    if ( !containsKey(key) ) return null
-
-    _map(key).asInstanceOf[AnyRef]
+    if ( !containsKey(key) ) null else _map(key).asInstanceOf[AnyRef]
   }
 
 
