@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2016 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2016 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common
@@ -122,15 +122,18 @@ object Strings {
 
   def splitToMap(text:String, delimiter:Char = ',', trim:Boolean = true):Map[String,String] =
   {
-    if(isNullOrEmpty(text))
-      return Map[String,String]()
-    val tokens = text.split(delimiter)
-    val map = scala.collection.mutable.Map[String,String]()
-    for(token <- tokens ){
-      val finalToken = if(trim) token.trim else token
-      map(finalToken) = finalToken
+    if(isNullOrEmpty(text)) {
+      Map[String, String]()
     }
-    map.toMap
+    else {
+      val tokens = text.split(delimiter)
+      val map = scala.collection.mutable.Map[String, String]()
+      for (token <- tokens) {
+        val finalToken = if (trim) token.trim else token
+        map(finalToken) = finalToken
+      }
+      map.toMap
+    }
   }
 
 
@@ -169,11 +172,16 @@ object Strings {
 
   def compare(text1:String, text2:String, ignoreCase:Boolean = false):Int =
   {
-    if(text1 == null && text2 == null)       0
-    else if(text1 != null && text2 == null)  1
-    else if(text1 == null && text2 != null)  0
-    else if(ignoreCase) text2.compareToIgnoreCase(text2)
-    else                text1.compareTo(text2)
+    if(text1 == null && text2 == null)
+      0
+    else if(text1 != null && text2 == null)
+      1
+    else if(text1 == null && text2 != null)
+      0
+    else if(ignoreCase)
+      text2.compareToIgnoreCase(text2)
+    else
+      text1.compareTo(text2)
   }
 
 
@@ -190,43 +198,27 @@ object Strings {
 
   def maxLength(items:List[String]):Int =
   {
-    if (items != null && items.nonEmpty)
-      items.reduce( (a,b) => if (a.length > b.length ) a else b ).length
-    else
-      0
+    val len = if(items == null) 0 else items.length
+    len match {
+      case 0 => 0
+      case _ =>  items.reduce( (a,b) => if (a.length > b.length ) a else b ).length
+    }
   }
 
 
   def pad(text:String, max:Int):String =
   {
-    if (text.length == max)
-      return text
-    var pad = ""
-    var count = 0
-    while(count < max - text.length)
-    {
-      pad += " "
-      count = count + 1
-    }
-    text + pad
+    val len = if(isNullOrEmpty(text)) 0 else text.length
+    if( len == 0  )
+      text
+    else if ( len == max)
+      text
+    else
+      text + 0.until(max - text.length).foldLeft("")( (s, v) => s + " ")
   }
 
 
-  def delimited(values:String*):String = {
-    var buffer = ""
-    var ndx = 0
-    for(value <- values ){
-      if(ndx > 0){
-        buffer = buffer + ","
-      }
-      if(!Strings.isNullOrEmpty(value)){
-        val formatted = value.replaceAllLiterally(",","")
-        buffer = buffer + formatted
-      }
-      ndx = ndx + 1
-    }
-    buffer
-  }
+  def delimited(values:String*):String = values.mkString(",")
 
 
   def isInteger(input: String): Boolean = input.forall(_.isDigit)
@@ -255,11 +247,13 @@ object Strings {
 
   def toId(text:String, lowerCase:Boolean = true):String = {
     if(isNullOrEmpty(text)){
-      return "_"
+      "_"
     }
-    val formatted = text.trim.replaceAllLiterally(" ", "_")
-    val finalText = if(lowerCase) formatted.toLowerCase else formatted
-    finalText
+    else {
+      val formatted = text.trim.replaceAllLiterally(" ", "_")
+      val finalText = if (lowerCase) formatted.toLowerCase else formatted
+      finalText
+    }
   }
 
 

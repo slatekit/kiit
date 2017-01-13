@@ -69,23 +69,24 @@ object Files {
   {
     val file = loadUserAppFile(directory, fileName)
     val lines = readAllLines(file.getAbsolutePath)
-    if(lines == null || lines.size == 0)
-      return None
-
-    val config = new Config(Map[String,String]())
-    for(line <- lines )
-    {
-      val lineClean = line.trim
-      if(!lineClean.startsWith("#")) {
-        val ndxColon = line.indexOf(":")
-        if (ndxColon > 0) {
-          val key = line.substring(0, ndxColon)
-          val value = line.substring(ndxColon + 1)
-          config(key) = value.trim
+    if(lines == null || lines.size == 0) {
+      None
+    }
+    else {
+      val config = new Config(Map[String, String]())
+      for (line <- lines) {
+        val lineClean = line.trim
+        if (!lineClean.startsWith("#")) {
+          val ndxColon = line.indexOf(":")
+          if (ndxColon > 0) {
+            val key = line.substring(0, ndxColon)
+            val value = line.substring(ndxColon + 1)
+            config(key) = value.trim
+          }
         }
       }
+      Some(config)
     }
-    Some(config)
   }
 
 
@@ -261,12 +262,14 @@ object Files {
   def existsInUserDir(directory:String, fileName:String): Boolean = {
     val userHome = System.getProperty("user.home")
     if(Strings.isNullOrEmpty(userHome)) {
-      return false
+      false
     }
-    val dir = new File(userHome, directory)
-    val file   = new File(dir, fileName)
-    val isFound   = file.exists() && file.isFile()
-    isFound
+    else {
+      val dir = new File(userHome, directory)
+      val file = new File(dir, fileName)
+      val isFound = file.exists() && file.isFile()
+      isFound
+    }
   }
 
 

@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
 */
 
 
@@ -16,6 +16,7 @@ package slate.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
 import slate.common._
+import slate.common.queues.QueueSourceData
 import slate.common.results.ResultFuncs._
 import slate.core.cloud._
 
@@ -64,7 +65,8 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
 
   /**Gets the total number of items in the queue
-   * @return
+    *
+    * @return
    */
   override def count(): Int =
   {
@@ -85,21 +87,22 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
 
   /**Gets the next item in the queue
-   * @return : An message object from the underlying queue provider
+    *
+    * @return : An message object from the underlying queue provider
    */
   override def next():Option[Any] =
   {
     val result = nextBatch(1)
     if(result.isEmpty)
-      return None
-
-    val first = result.get.head
-    Some(first)
+      None
+    else
+      Some(result.get.head)
   }
 
 
   /**Gets the next batch of items in the queue
-   * @param size : The number of items to get at once
+    *
+    * @param size : The number of items to get at once
    * @return : A list of message object from the underlying queue provider
    */
   override def nextBatch(size:Int = 10):Option[List[Any]] =
@@ -119,13 +122,16 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
         }
       }
     })
-    if(results == null) return None
-    Some(results.toList)
+    if(results == null)
+      None
+    else
+      Some(results.toList)
   }
 
 
   /** Send a message using either a simple string or a map
     * contains the message data and attributes
+    *
     * @param msg: String message, or map containing the fields "message", and "atts"
     */
   override def send(msg: Any, tagName:String = "", tagValue:String = "") : Result[String] =
@@ -163,6 +169,7 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
 
   /**Sends the message with the attributes supplied to the queue
+    *
     * @param message : The message to send
     * @param attributes : Additional attributes to put into the message
     */
@@ -190,62 +197,67 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
 
   /** Abandons the message supplied    *
+    *
     * @param item : The message to abandon/delete
     */
-  override def abandon(item:Option[Any]):Unit =
-  {
-    if(item.isEmpty) return
-    discard(item.get, "abandon")
+  override def abandon(item:Option[Any]):Unit = {
+    if (item.nonEmpty) {
+      discard(item.get, "abandon")
+    }
   }
 
 
   /** Completes the message by deleting it from the queue
+    *
     * @param item : The message to complete
     */
   override def complete(item:Option[Any]):Unit =
   {
-    if(item.isEmpty) return
-    discard(item.get, "complete")
+    if(item.nonEmpty) {
+      discard(item.get, "complete")
+    }
   }
 
 
   /** Completes the message by deleting it from the queue
+    *
     * @param items : The messages to complete
     */
   override def completeAll(items:Option[List[Any]]):Unit =
   {
-    if(items.isEmpty) return
-    val all = items.get
-    for(item <- all)
-    {
-      discard(item, "complete")
+    if(items.nonEmpty) {
+      val all = items.get
+      for (item <- all) {
+        discard(item, "complete")
+      }
     }
   }
 
 
   override def getMessageBody(msgItem:Option[Any]):String =
   {
-    if(msgItem.isEmpty) return Strings.empty
-    val msg = msgItem.get
-    if(!msg.isInstanceOf[Message]) return Strings.empty
-    val sqsMsg = msg.asInstanceOf[Message]
-    val body = sqsMsg.getBody
-    body
+    getMessageItemProperty(msgItem, (item) => item.getBody )
   }
 
 
   def getMessageTag(msgItem:Option[Any], tagName:String):String =
   {
-    if(msgItem.isEmpty) return Strings.empty
-    val msg = msgItem.get
-    if(!msg.isInstanceOf[Message]) return Strings.empty
-    val sqsMsg = msg.asInstanceOf[Message]
-    val atts =  sqsMsg.getAttributes
-    if( atts == null) return Strings.empty
-    if(!atts.containsKey(tagName)) return Strings.empty
-    val tagVal = atts.get(tagName)
-    if(tagVal == null) return Strings.empty
-    tagVal.toString
+    getMessageItemProperty(msgItem, (sqsMsg) => {
+      val atts =  sqsMsg.getAttributes
+      if( atts == null)
+        Strings.empty
+      else {
+        if(!atts.containsKey(tagName))
+          Strings.empty
+        else {
+          val tagVal = atts.get(tagName)
+          if(tagVal == null)
+            Strings.empty
+          else
+            tagVal.toString
+        }
+      }
+    })
   }
 
 
@@ -263,9 +275,9 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   private def getOrDefault(map:Map[String,Any], key:String, defaultVal:Any): Any =
   {
     if(map == null || !map.contains(key))
-      return defaultVal
-
-    map(key)
+      defaultVal
+    else
+      map(key)
   }
 
 
@@ -284,6 +296,22 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
       case _ => {
         // TODO: Provide some callback/notification mechanism
       }
+    }
+  }
+
+
+  def getMessageItemProperty(msgItem:Option[Any], callback:(Message) => String) :String =
+  {
+    if(msgItem.isEmpty){
+      Strings.empty
+    }
+    else {
+      val item = msgItem.get
+      if(item.isInstanceOf[Message]){
+        callback(item.asInstanceOf[Message])
+      }
+      else
+        Strings.empty
     }
   }
 }

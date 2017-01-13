@@ -146,7 +146,7 @@ object Reflector {
     * @param anoType : The type of the annotation to check/retrieve
     * @return
     */
-  def getClassAnnotation(clsType:Type, anoType:Type): Any =
+  def getClassAnnotation(clsType:Type, anoType:Type): Option[Any] =
   {
     val clsSym = clsType.typeSymbol.asClass
     getAnnotation(clsType, anoType, clsSym)
@@ -163,7 +163,7 @@ object Reflector {
     * @param fieldName : The name of the field containing the annotations
     * @return
     */
-  def getMemberAnnotation(clsType:Type, anoType:Type, fieldName:String): Any =
+  def getMemberAnnotation(clsType:Type, anoType:Type, fieldName:String): Option[Any] =
   {
     val memSym = clsType.member(ru.TermName(fieldName)).asMethod
     getAnnotation(clsType, anoType, memSym)
@@ -179,7 +179,7 @@ object Reflector {
    * @param anoType   : The type of the annotation to check/retrieve
    * @return
    */
-  def getFieldAnnotation(clsType:Type, anoType:Type, fieldName:String): Any =
+  def getFieldAnnotation(clsType:Type, anoType:Type, fieldName:String): Option[Any] =
   {
     val fieldSym = clsType.decl(ru.TermName(fieldName)).asTerm.accessed.asTerm
     getAnnotation(clsType, anoType, fieldSym)
@@ -195,30 +195,32 @@ object Reflector {
    * @param anoType
    * @return
    */
-  def getAnnotation(clsType:Type, anoType:Type, mem:Symbol): Any =
+  def getAnnotation(clsType:Type, anoType:Type, mem:Symbol): Option[Any] =
   {
     val annotations = mem.annotations
     val annotation = annotations.find(a => a.tree.tpe == anoType)
-    if(annotation.isEmpty)
-      return null
+    if(annotation.isEmpty) {
+      None
+    }
+    else {
+      val annotationArgs = annotation.get.tree.children.tail
+      val annotationInputs = annotationArgs.map(a => {
+        var annoValue: Any = null
 
-    val annotationArgs = annotation.get.tree.children.tail
-    val annotationInputs = annotationArgs.map(a =>
-    {
-      var annoValue:Any = null
+        // NOTE: could use pattern matching
+        val pe0 = a.productElement(0)
+        if (pe0.isInstanceOf[ru.Constant])
+          annoValue = a.productElement(0).asInstanceOf[ru.Constant].value
+        else if (a.children != null && a.children.size > 1 && a.productElement(1)
+          .isInstanceOf[ru.Literal])
+          annoValue = a.productElement(1).asInstanceOf[ru.Literal].value.asInstanceOf[Constant].value
 
-      // NOTE: could use pattern matching
-      val pe0 = a.productElement(0)
-      if(pe0.isInstanceOf[ru.Constant])
-        annoValue = a.productElement(0).asInstanceOf[ru.Constant].value
-      else if (a.children != null && a.children.size > 1 && a.productElement(1)
-        .isInstanceOf[ru.Literal])
-        annoValue = a.productElement(1).asInstanceOf[ru.Literal].value.asInstanceOf[Constant].value
 
-      annoValue
-    })
-    val anoInstance = createInstance(anoType, Some(annotationInputs))
-    anoInstance
+        annoValue
+      })
+      val anoInstance = createInstance(anoType, Some(annotationInputs))
+      Option(anoInstance)
+    }
   }
 
 
@@ -376,26 +378,29 @@ object Reflector {
   {
     val list = ListBuffer[ReflectedArg]()
     val args = mem.typeSignature.paramLists
-    if(args == null || args.size == 0) return List[ReflectedArg]()
-
-    for(arg <- args)
-    {
-      var pos = 0
-      for(sym <- arg){
-        val term = sym.asTerm
-        val isDefault = term.isParamWithDefault
-        val typeSym = sym.typeSignature.typeSymbol
-        list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, isDefault))
-        pos += 1
-      }
+    if(args == null || args.size == 0) {
+      List[ReflectedArg]()
     }
-    list.toList
+    else {
+      for (arg <- args) {
+        var pos = 0
+        for (sym <- arg) {
+          val term = sym.asTerm
+          val isDefault = term.isParamWithDefault
+          val typeSym = sym.typeSignature.typeSymbol
+          list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, isDefault))
+
+          pos += 1
+        }
+      }
+      list.toList
+    }
   }
 
 
   def getMethodsWithAnnotations(instance:AnyRef, clsTpe:Type, anoTpe:Type,
                                 declaredInSelfType:Boolean = true):
-      ListBuffer[(String,MethodSymbol,MethodMirror,Any)] =
+      List[(String,MethodSymbol,MethodMirror,Any)] =
   {
     val m = ru.runtimeMirror(getClass.getClassLoader)
     val im = m.reflect(instance)
@@ -416,7 +421,7 @@ object Reflector {
         }
       }
     }
-    matches
+    matches.toList
   }
 
 

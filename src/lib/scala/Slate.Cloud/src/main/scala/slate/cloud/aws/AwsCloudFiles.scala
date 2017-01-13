@@ -1,14 +1,14 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
 */
 
 package slate.cloud.aws
@@ -75,9 +75,9 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
     */
   override def createRootFolder(rootFolder:String):Unit =
   {
-    if(Strings.isNullOrEmpty(rootFolder)) return
-    if(rootFolder == _defaultFolder) return
-    _s3.createBucket(rootFolder)
+    if(!Strings.isNullOrEmpty(rootFolder) && rootFolder != _defaultFolder) {
+      _s3.createBucket(rootFolder)
+    }
   }
 
 
@@ -222,12 +222,15 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
   private def getName(folder:String, name:String):String =
   {
     // Case 1: no folder supplied, assume in root bucket
-    if(Strings.isNullOrEmpty(folder)) return name
+    if(Strings.isNullOrEmpty(folder))
+      name
 
     // Case 2: folder == root folder
-    if(folder == _defaultFolder) return name
+    else if(folder == _defaultFolder)
+      name
 
     // Case 3: sub-folder
-    folder + "-" + name
+    else
+      folder + "-" + name
   }
 }
