@@ -13,15 +13,32 @@ package slate.common
 
 object Strings {
 
+  /**
+   * empty string
+   */
   val empty = ""
 
 
+  /**
+   * used in reflection
+   */
   val typeString = ""
 
 
+  /**
+   * shortcut for newline / lineseparator
+ *
+   * @return
+   */
   def newline():String = System.lineSeparator
 
 
+  /**
+   * serializes an object into a json string
+ *
+   * @param obj
+   * @return
+   */
   def serialize(obj:Any):String = {
     obj match {
       case null             => "null"
@@ -29,13 +46,13 @@ object Strings {
       case None             => "null"
       case s:Option[Any]    => serialize(s.getOrElse(None))
       case s:Result[Any]    => serialize(s.getOrElse(None))
-      case s:String         => Strings.stringRepresentation(s)
+      case s:String => toStringRep(s)
       case s:Int            => s.toString
       case s:Long           => s.toString
       case s:Double         => s.toString
       case s:Boolean        => s.toString.toLowerCase
       case s:DateTime       => "\"" + s.toString() + "\""
-      case s:Seq[Any]       => "[ " + serializeList(s, serialize) + "]"
+      case s:Seq[Any]       => "[ " + mkString[Any](s, serialize) + "]"
       case s: AnyRef        => { s.toString }
       case _                => obj.toString
     }
@@ -43,46 +60,63 @@ object Strings {
 
 
   /**
-   * prints a list ( recursive
-   *
-   * @param items
-   */
-  def serializeList(items:Seq[Any], serializer: (String) => String): String =
+    * make string implementation with a function callback to serialize an item
+    *
+    * @param items
+    */
+  def mkString[T](items:Seq[T], serializer: (T) => String, delimiter:String = ", "): String =
   {
     var text = ""
     for(ndx <- 0 until items.size)
     {
       val item = items(ndx)
       if(ndx > 0) {
-        text += ", "
+        text += delimiter
       }
-      text += serialize(item)
+      text += serializer(item)
     }
     text
   }
 
 
+  def valueOrDefault(text:String, defaultVal:String): String =
+  {
+    text match {
+      case null => defaultVal
+      case ""   => defaultVal
+      case _    => text
+    }
+  }
+
+
+  def valueOptionOrDefault(opt:Option[String], defaultVal:String): String = {
+    valueOrDefault(opt.getOrElse(null), defaultVal)
+  }
+
 
   def substring(text:String, pattern:String): Option[(String, String)] = {
-    if(isNullOrEmpty(text) || isNullOrEmpty(pattern)){
-      return None
+    if(!isNullOrEmpty(text) && isNullOrEmpty(pattern)) {
+      val ndxPattern = text.indexOf(pattern)
+      if (ndxPattern < 0) {
+        None
+      }
+      else {
+        val part1 = text.substring(0, ndxPattern + pattern.length)
+        val remainder = text.substring(ndxPattern + pattern.length)
+        Some((part1, remainder))
+      }
     }
-    val ndxPattern = text.indexOf(pattern)
-    if (ndxPattern < 0 ) {
-      return None
-    }
-    val part1 = text.substring(0, ndxPattern + pattern.length)
-    val remainder = text.substring(ndxPattern + pattern.length)
-    Some((part1, remainder))
+    else
+      None
   }
 
 
   def split(text:String, delimiter:Char):Array[String] =
   {
     if(isNullOrEmpty(text))
-      return Array[String]()
-    val tokens = text.split(delimiter)
-    tokens
+      Array[String]()
+    else
+      text.split(delimiter)
   }
 
 
@@ -100,82 +134,66 @@ object Strings {
   }
 
 
-  def isNullOrEmpty(text:String):Boolean =
+  def splitToMapWithPairs(text:String, delimiterPairs:Char = ',', delimiterKeyValue:Char = '=', trim:Boolean = true):Map[String,String] =
   {
-    if(text == null) return true
-    if(text == "") return true
-    false
+    Option(text).fold(Map[String,String]())( t => {
+      val map = scala.collection.mutable.Map[String,String]()
+      val pairs = text.split(delimiterPairs)
+      for(pair <- pairs ){
+        val finalPair = if(trim) pair.trim else pair
+        val tokens = finalPair.split(delimiterKeyValue)
+        val key = if(trim) tokens(0).trim else tokens(0)
+        val kval = if(trim) tokens(1).trim else tokens(1)
+        map(key) = kval
+      }
+      map.toMap
+    })
   }
+
+
+  def isNullOrEmpty(text:String):Boolean = text == null || text == ""
 
 
   def isMatch(text1:String, text2:String):Boolean =
   {
     if(text1 == null && text2 == null)
-      return true
-    if(text1 != null && text2 == null)
-      return false
-    if(text1 == null && text2 != null)
-      return false
-    text1 == text2
+      true
+    else if(text1 != null && text2 == null)
+      false
+    else if (text1 == null && text2 != null)
+      false
+    else
+      text1 == text2
   }
 
 
   def compare(text1:String, text2:String, ignoreCase:Boolean = false):Int =
   {
-    if(text1 == null && text2 == null)
-      return 0
-    if(text1 != null && text2 == null)
-      return 1
-    if(text1 == null && text2 != null)
-      return 0
-
-    if(ignoreCase)
-      return text2.compareToIgnoreCase(text2)
-
-    text1.compareTo(text2)
-  }
-
-
-  def valueOrDefault(text:String, defaultVal:String): String =
-  {
-    if(isNullOrEmpty(text))
-      return defaultVal
-    text
-  }
-
-
-  def valueOrDefault(opt:Option[String], text:String): String = {
-    if(!opt.isDefined)
-      return text
-    val primary = opt.get
-    if(!Strings.isNullOrEmpty(primary))
-      return primary
-
-    text
+    if(text1 == null && text2 == null)       0
+    else if(text1 != null && text2 == null)  1
+    else if(text1 == null && text2 != null)  0
+    else if(ignoreCase) text2.compareToIgnoreCase(text2)
+    else                text1.compareTo(text2)
   }
 
 
   def valueOrDefault(primary:String, secondary:String, defaultVal:String): String =
   {
     if(isNullOrEmpty(primary))
-      return primary
-    if(isNullOrEmpty(secondary))
-      return secondary
-    defaultVal
+      primary
+    else if(isNullOrEmpty(secondary))
+      secondary
+    else
+      defaultVal
   }
 
 
   def maxLength(items:List[String]):Int =
   {
-    if (items == null || items.isEmpty)
-      return 0
-    var maxLength = 1
-    for (item <- items)
-    {
-      if (item.length > maxLength)
-        maxLength = item.length
-    }
-    maxLength
+    if (items != null && items.nonEmpty)
+      items.reduce( (a,b) => if (a.length > b.length ) a else b ).length
+    else
+      0
   }
 
 
@@ -245,13 +263,12 @@ object Strings {
   }
 
 
-   def stringRepresentation(text:String):String = {
-    if (text == null) {
-      return "null"
+  def toStringRep(text:String):String = {
+    text match {
+      case null  => "null"
+      case ""    => "\"" + "\""
+      case _     => "\"" + text.replaceAllLiterally("\\", "\\\\")
+                    .replaceAllLiterally("\"", "\\\"") + "\""
     }
-    else if (Strings.isNullOrEmpty(text)) {
-      return "\"" + "\""
-    }
-    "\"" + text.replaceAllLiterally("\\", "\\\\").replaceAllLiterally("\"", "\\\"") + "\""
   }
 }

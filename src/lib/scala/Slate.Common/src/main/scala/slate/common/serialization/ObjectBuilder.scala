@@ -59,11 +59,9 @@ class ObjectBuilder(val indentEnabled:Boolean, protected var _indent:String) {
     if(_indentLevel == 0)
     {
       _indent = ""
-      return
     }
-    for(ndx <- 0 until _indentLevel)
-    {
-      _indent += "\t"
+    else {
+      0.until(_indentLevel).foreach( i => _indent += "\t")
     }
   }
 

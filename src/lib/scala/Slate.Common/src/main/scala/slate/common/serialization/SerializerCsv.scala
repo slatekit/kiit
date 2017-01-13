@@ -27,7 +27,7 @@ class SerializerCsv extends SerializerBase {
   {
     val finalText = value.fold[String]("null")( actual => {
       actual match {
-        case s:String   => Strings.stringRepresentation(s)
+        case s:String   => Strings.toStringRep(s)
         case s:Int      => s.toString
         case s:Long     => s.toString
         case s:Double   => s.toString

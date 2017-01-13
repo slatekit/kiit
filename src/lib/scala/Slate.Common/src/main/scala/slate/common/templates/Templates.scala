@@ -10,7 +10,7 @@
   */
 package slate.common.templates
 
-import slate.common.{Random, DateTime, Result, ListMap}
+import slate.common._
 import TemplateConstants._
 
 object Templates{
@@ -133,6 +133,20 @@ class Templates(val templates  :Option[Seq[Template]] = None,
   }
 
 
+  def resolveTemplateWithVars(name:String, vars:Option[Map[String,Any]]):Option[String]= {
+
+    val template = templates.fold[Option[Template]](None)( all =>
+      all.filter( t => t.name == name).headOption)
+
+    template.fold[Option[String]](None)( temp => {
+      if ( temp.valid )
+        resolvePartsWithVars(temp.parts.get, vars)
+      else
+        None
+    })
+  }
+
+
   /**
     * Processes the template with the variables supplied
     *
@@ -143,30 +157,65 @@ class Templates(val templates  :Option[Seq[Template]] = None,
     val result = parse(text)
 
     // Failed parsing ?
-    if (!result.success) {
-      return result.msg
+    if (result.success) {
+      // Get the individual substitution parts.
+      val tokens = result.getOrElse(List[TemplatePart]())
+      if (tokens == null || tokens.isEmpty) {
+        Some(text)
+      }
+      else
+        resolveParts(tokens, substitutions.getOrElse(subs))
     }
-
-    // Get the individual substitution parts.
-    val tokens = result.getOrElse(List[TemplatePart]())
-    if (tokens == null || tokens.isEmpty) {
-      return Some(text)
-    }
-    resolveParts(tokens, substitutions.getOrElse(subs))
+    else
+      result.msg
   }
 
 
   private def resolveParts(tokens:List[TemplatePart],
                            substitutions:Subs) : Option[String] = {
-    var finalText = ""
-    for(token <- tokens){
-      if(token.subType == TypeText){
-        finalText += token.text
+    val finalText =
+    tokens.foldLeft("")( (s, t) => {
+      t.subType match {
+        case TypeText => s + t.text
+        case TypeSub  => s + substitutions.lookup(t.text)
+        case _        => s + ""
       }
-      else if(token.subType == TypeSub){
-        finalText += substitutions.lookup(token.text)
-      }
-    }
-    Some(finalText)
+    })
+    Option(finalText)
   }
+
+
+    private def resolvePartsWithVars(tokens:List[TemplatePart], vars:Option[Map[String,Any]])
+      : Option[String] =
+    {
+      val finalText = tokens.foldLeft("")( (s, t) => {
+        t.subType match {
+          case TypeText => s + t.text
+          case TypeSub  => s + resolveToken(t, vars).getOrElse("").toString
+          case _        => s + ""
+        }
+      })
+      Some(finalText)
+    }
+
+
+    private def resolveToken(token:TemplatePart, vars:Option[Map[String,Any]]):Option[Any] = {
+      if(vars.isDefined) {
+        vars.fold[Option[Any]](None)( v => {
+          if(v.contains(token.text)){
+            Option(v(token.text))
+          }
+          else if ( subs.contains(token.text)){
+            Option(subs.apply(token.text))
+          }
+          else
+            None
+        })
+      }
+      else if ( subs.contains(token.text)){
+        Option(subs.apply(token.text))
+      }
+      else
+        None
+    }
 }

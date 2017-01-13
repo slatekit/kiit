@@ -22,16 +22,18 @@ object StringHelpers {
      */
     def pad(max:Int):String =
     {
-      if (text.length == max)
-        return text
-      var pad = ""
-      var count = 0
-      while(count < max - text.length)
-      {
-        pad += " "
-        count = count + 1
+      if (text.length == max) {
+        text
       }
-      text + pad
+      else {
+        var pad = ""
+        var count = 0
+        while (count < max - text.length) {
+          pad += " "
+          count = count + 1
+        }
+        text + pad
+      }
     }
 
 
@@ -42,16 +44,17 @@ object StringHelpers {
      */
     def repeat(max:Int):String =
     {
-      if (max == 0) return ""
-      if (max == 1) return text
-      var finalText = ""
-      var count = 0
-      while(count < max - text.length)
-      {
-        finalText += text
-        count = count + 1
+      if (max == 0) ""
+      else if (max == 1) text
+      else {
+        var finalText = ""
+        var count = 0
+        while (count < max - text.length) {
+          finalText += text
+          count = count + 1
+        }
+        finalText
       }
-      finalText
     }
 
 
@@ -63,9 +66,11 @@ object StringHelpers {
      */
     def toUrlPath():String =
     {
-      if(text == null)
-        return ""
-      text.trim().replaceAllLiterally(" ", "-")
+      text match {
+        case null => ""
+        case "" => ""
+        case _ => text.trim().replaceAllLiterally(" ", "-")
+      }
     }
   }
 }

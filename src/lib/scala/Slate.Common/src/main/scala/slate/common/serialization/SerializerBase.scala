@@ -38,9 +38,9 @@ class SerializerBase {
     onVisitItemBegin(item, 1, 1)
 
     val len = fields.size
-    var ndx = 0
-    for( field <- fields ) {
 
+    fields.indices.foreach( ndx => {
+      val field = fields(ndx)
       // Get name/value
       val propName = field.symbol.name.toString.trim()
       val value = Some(Reflector.getFieldValue(item, propName))
@@ -48,8 +48,7 @@ class SerializerBase {
       // Visit each field
       onVisitFieldBegin(item, propName, value, ndx, len)
       onVisitFieldEnd(item, propName, value, ndx, len)
-      ndx = ndx + 1
-    }
+    })
 
     // End
     onVisitItemEnd(item, 1, 1)
@@ -83,14 +82,9 @@ class SerializerBase {
 
 
   protected def onBeforeSerialize(fields:List[FieldMirror]):Unit = {
-    var maxLength = 1
-    for(field <- fields){
-      val len = field.symbol.name.toString.length
-      if(len > maxLength){
-        maxLength = len
-      }
-    }
-    _maxFieldLength = maxLength
+
+    val max = fields.maxBy[Int]( f => f.symbol.name.toString.length)
+    _maxFieldLength = max.symbol.name.toString.length
   }
 
 
@@ -116,14 +110,11 @@ class SerializerBase {
 
   protected def setIndent()
   {
-    if(_indentLevel == 0)
-    {
+    if(_indentLevel == 0) {
       _indent = ""
-      return
     }
-    for(ndx <- 0 until _indentLevel)
-    {
-      _indent += "\t"
+    else {
+      0.until(_indentLevel).foreach( i => _indent += "\t")
     }
   }
 }

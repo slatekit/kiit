@@ -11,7 +11,7 @@
 package slate.common.templates
 
 object TemplateConstants {
-  var TypeText :Short = 0
-  var TypeSub  :Short = 1
-  var TypeFunc :Short = 1
+  val TypeText :Short = 0
+  val TypeSub  :Short = 1
+  val TypeFunc :Short = 1
 }

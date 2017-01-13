@@ -57,10 +57,13 @@ class Subs(items:Option[List[(String,(TemplatePart)=> String)]] = None, setDefau
     */
   def lookup(key:String):String =
   {
-    if(!_groups.contains(key))
-      return ""
-    val sub = _groups(key)
-    sub(new TemplatePart(key, TemplateConstants.TypeText, -1, -1))
+    if(!_groups.contains(key)) {
+      ""
+    }
+    else {
+      val sub = _groups(key)
+      sub(new TemplatePart(key, TemplateConstants.TypeText, -1, -1))
+    }
   }
 
 

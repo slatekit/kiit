@@ -149,28 +149,29 @@ class TemplateParser(val text:String) {
     // 1. edge case ${}
     if( c == '}') {
       advance()
-      return new TemplatePart("", 0, start, end)
+      new TemplatePart("", 0, start, end)
     }
-    // 2. read sub
-    while (_state.pos <= _state.END && keepReading )
-    {
-      if ( c == '}' ) {
-        keepReading = false
-        end = _state.pos
+    else {
+      // 2. read sub
+      while (_state.pos <= _state.END && keepReading) {
+        if (c == '}') {
+          keepReading = false
+          end = _state.pos
+        }
+        if (keepReading && (_state.pos + 1 <= _state.END)) {
+          _state.pos += 1
+          c = _state.text(_state.pos)
+        }
+        else {
+          keepReading = false
+          end = _state.pos
+        }
       }
-      if(keepReading && (_state.pos + 1 <= _state.END ) ) {
-        _state.pos += 1
-        c = _state.text(_state.pos)
-      }
-      else {
-        keepReading = false
-        end = _state.pos
-      }
+      val text = _state.substringInclusive(start)
+      val sub = new TemplatePart(text, TypeSub, start, end)
+      _state.pos += 1
+      sub
     }
-    val text = _state.substringInclusive(start)
-    val sub = new TemplatePart(text, TypeSub, start, end)
-    _state.pos += 1
-    sub
   }
 
 
