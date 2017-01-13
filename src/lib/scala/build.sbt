@@ -2,7 +2,7 @@
 // http://www.sonatype.org/nexus/2015/06/02/how-to-publish-software-artifacts-to-maven-central/
 lazy val commonSettings = Seq(
   organization := "com.slatekit",
-  version := "1.2.0",
+  version := "1.3.0",
   scalaVersion := "2.11.8",
   homepage := Some(url("http://www.slatekit.com/")),
   scaladexKeywords := Seq("api", "arguments", "cli", "crypto", "database", "server", "shell", "utils"),
