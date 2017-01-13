@@ -148,9 +148,9 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
     val writer = new ConsoleWriter()
     val maxLen = maxLengthOfName
 
-    for(arg <- items) {
+    items.foreach( arg => {
       val semanticHelp = arg.semantic(Some("\t"), prefix, separator, Some(maxLen))
       writer.writeItems(semanticHelp)
-    }
+    })
   }
 }

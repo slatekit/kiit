@@ -10,7 +10,7 @@
   */
 package slate.common.console
 
-import slate.common.Strings
+import slate.common.{Strings}
 
 trait ConsoleWrites {
 
@@ -76,12 +76,7 @@ trait ConsoleWrites {
   /**
    * prints a empty line
    */
-  def lines(count:Int): Unit =
-  {
-    for(a <- 0 until count){
-      line()
-    }
-  }
+  def lines(count:Int): Unit = 0.to(count).foreach(i => line())
 
 
   /**
@@ -89,13 +84,7 @@ trait ConsoleWrites {
     *
     * @param count
     */
-  def tab(count:Int = 1)
-  {
-    for (ndx <- 0 to count)
-    {
-      print(TAB)
-    }
-  }
+  def tab(count:Int = 1): Unit = 0.to(count).foreach(i => print(TAB))
 
 
   /**
@@ -106,9 +95,7 @@ trait ConsoleWrites {
     */
   def title(text:String, endLine:Boolean = true):Unit =
   {
-    var finalText = text
-    if(!Strings.isNullOrEmpty(finalText))
-      finalText = finalText.toUpperCase
+    val finalText = if(!Strings.isNullOrEmpty(text)) text.toUpperCase else text
     write(Console.BLUE, finalText, endLine)
   }
 
@@ -188,12 +175,12 @@ trait ConsoleWrites {
 
   def list(items:Seq[_], isOrdered:Boolean = false ):Unit = {
 
-    for(ndx <- 0 to items.size) {
+    items.indices.foreach( ndx => {
       val item = items(ndx)
       val value = Strings.serialize(item)
       val prefix = if(isOrdered) (ndx + 1).toString + ". " else "- "
       text(TAB + prefix + value, endLine = true)
-    }
+    })
     line()
   }
 

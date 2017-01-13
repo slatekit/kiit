@@ -23,17 +23,21 @@ case class AppMeta(
     *
     * @return
     */
-  def info() : List[(String,Any)] = {
+  def info(categorize:Boolean = true) : List[(String,Any)] = {
+
     val items = new ListBuffer[(String,Any)]
 
-    items.append(("ABOUT", "==================================="))
-    for((k,v) <- Reflector.getFields(about)) { items.append((k,v)) }
+    def collect(area:String, metaPairs:Map[String,Any]):Unit = {
+      if(categorize){
+        items.append((area, "==================================="))
+      }
+      metaPairs.foreach( p => items.append((p._1, p._2)))
+    }
 
-    items.append(("HOST", "==================================="))
-    for((k,v) <- Reflector.getFields(host)) { items.append((k,v)) }
-
-    items.append(("LANG", "==================================="))
-    for((k,v) <- Reflector.getFields(lang)) { items.append((k,v)) }
+    // Collect all the metadata in corresponding areas.
+    collect("ABOUT", Reflector.getFields(about))
+    collect("HOST" , Reflector.getFields(host))
+    collect("LANG" , Reflector.getFields(lang))
 
     items.toList
   }

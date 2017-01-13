@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common.app
@@ -76,24 +76,7 @@ trait AppMetaSupport {
     * @return
    */
   def appInfo(addSeparator:Boolean = true) : List[(String,Any)] = {
-    val items = new ListBuffer[(String,Any)]
-
-    if(addSeparator) {
-      items.append(("ABOUT", "==================================="))
-    }
-    for((k,v) <- Reflector.getFields(appAbout)) { items.append((k,v)) }
-
-    if(addSeparator){
-      items.append(("HOST", "==================================="))
-    }
-    for((k,v) <- Reflector.getFields(appHost)) { items.append((k,v)) }
-
-    if(addSeparator){
-      items.append(("LANG", "==================================="))
-    }
-    for((k,v) <- Reflector.getFields(appLang)) { items.append((k,v)) }
-
-    items.toList
+    appMeta().info(addSeparator)
   }
 
 
@@ -164,15 +147,14 @@ trait AppMetaSupport {
     * @param callBack
     */
   def appInfoList(addSeparator:Boolean, callBack: (Int,(String,Any)) => Unit): Unit = {
+    // Get all the metadata ( List(( fieldname, value ) )
     val items = appInfo(addSeparator)
-    val keys = ListBuffer[String]()
-    for(item <- items ){
-      keys.append(item._1)
-    }
-    val maxLength =Strings.maxLength(keys.toList)
-    for(item <- items ){
-      callBack(maxLength, item)
-    }
+
+    // Find the max metadata property with the max length
+    val maxPropLength = items.maxBy( m => m._1.length)._1.length
+
+    // Supply each prop/value to caller
+    items.foreach( item => callBack(maxPropLength, item))
   }
 }
 

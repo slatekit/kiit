@@ -122,9 +122,9 @@ class Args(val raw         :List[String],
   def getVerb(pos:Int): String =
   {
     if(actionVerbs == null || pos >= actionVerbs.size )
-      return ""
-
-    actionVerbs(pos)
+      ""
+    else
+      actionVerbs(pos)
   }
 
 
@@ -199,14 +199,14 @@ object Args
     // build a single line from args
     var line = ""
     if(args != null && args.size > 0){
-      for(i <- 0 until args.size ){
+      args.indices.foreach( i => {
         if ( i > 0 ){
           line = line + " " + args(i)
         }
         else {
           line = args(i)
         }
-      }
+      })
     }
     new ArgsService().parse(line, prefix, sep, hasAction)
   }

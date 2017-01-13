@@ -15,6 +15,7 @@ package slate.common.console
   * Semantic console writer to print text in different colors and in Uppercase/lowercase for
   * things like title, subtitle, url etc.
   */
-class ConsoleWriter(val settings:ConsoleSettings = ConsoleFuncs.defaults()) extends ConsoleWrites
+class ConsoleWriter(val settings:ConsoleSettings = ConsoleFuncs.defaults()
+                    ) extends ConsoleWrites
 {
 }

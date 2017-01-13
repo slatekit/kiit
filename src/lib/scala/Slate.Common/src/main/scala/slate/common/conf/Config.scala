@@ -13,8 +13,6 @@ package slate.common.conf
 
 
 import slate.common.encrypt.Encryptor
-import slate.common.info.Folders
-import slate.common.subs.Subs
 
 import scala.collection.mutable.Map
 
@@ -53,9 +51,10 @@ class Config(
   /// <summary>
   override def getObject(key: String): AnyRef =
   {
-    if ( !containsKey(key) ) return null
-
-    _map(key).asInstanceOf[AnyRef]
+    if ( !containsKey(key) )
+      null
+    else
+      _map(key).asInstanceOf[AnyRef]
   }
 
 

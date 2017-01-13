@@ -12,6 +12,8 @@
 package slate.common.args
 
 
+import slate.common.Funcs
+import slate.common.Funcs._
 import slate.common.Funcs.loop
 import scala.collection.mutable.{ListBuffer, Map}
 
@@ -68,36 +70,32 @@ object ArgsHelper {
    */
   def isMetaArg(positional:List[String], pos:Int, possibleMatches:String*): Boolean =
   {
-    if(positional == null || positional.size == 0)
-      return false
-    if(pos >= positional.size)
-      return false
-
-    val arg = positional(pos)
-    var isMatch = false
-    var ndx = 0
-    while(ndx < possibleMatches.size && !isMatch)
+    executeWithGuards[Boolean](false, List[guard](
+      () => positional != null && positional.nonEmpty,
+      () => pos < positional.size
+    ),
     {
-      val possibleMatch = possibleMatches(ndx)
-      if(possibleMatch == arg)
-      {
-        isMatch = true
+      val arg = positional(pos)
+      var isMatch = false
+      var ndx = 0
+      while (ndx < possibleMatches.size && !isMatch) {
+        val possibleMatch = possibleMatches(ndx)
+        if (possibleMatch == arg) {
+          isMatch = true
+        }
+        else if ("-" + possibleMatch == arg) {
+          isMatch = true
+        }
+        else if ("--" + possibleMatch == arg) {
+          isMatch = true
+        }
+        else if ("/" + possibleMatch == arg) {
+          isMatch = true
+        }
+        ndx = ndx + 1
       }
-      else if( "-" + possibleMatch == arg)
-      {
-        isMatch = true
-      }
-      else if( "--" + possibleMatch == arg)
-      {
-        isMatch = true
-      }
-      else if("/" + possibleMatch == arg)
-      {
-        isMatch = true
-      }
-      ndx = ndx + 1
-    }
-    isMatch
+      isMatch
+    })
   }
 
 

@@ -35,7 +35,7 @@ import slate.common._
  *         1. company wide database       : {user}/{my-company}/db-master.conf
  */
 abstract class ConfigBase(
-                           protected var _encryptor:Option[Encryptor] = None
+                           protected val _encryptor:Option[Encryptor] = None
                           )
   extends Inputs with ConfigSupport {
 
@@ -52,34 +52,35 @@ abstract class ConfigBase(
     if(value.startsWith("@{decrypt('")){
       val end = value.indexOf("')}")
       val encrypted = value.substring(11, end)
-      return _encryptor.fold[String]( encrypted ) ( enc => {
+      _encryptor.fold[String]( encrypted ) ( enc => {
         enc.decrypt(encrypted)
       })
     }
-    value
+    else
+      value
   }
 
 
   override def getStringOrElse(key: String, defaultVal:String) : String =
   {
-    if (!containsKey(key))
-      return defaultVal
-
-    getString(key)
+    if (containsKey(key)) getString(key) else defaultVal
   }
 
 
   def getStringEnc(key: String ) : String =
   {
     if(!isEncrypted) {
-      return getStringOrElse(key, "")
+      getStringOrElse(key, "")
     }
-    val encrypted = getStringOrElse(key, "")
-    if(Strings.isNullOrEmpty(encrypted)){
-      return ""
+    else {
+      val encrypted = getStringOrElse(key, "")
+      if (Strings.isNullOrEmpty(encrypted)) {
+        ""
+      }
+      else {
+        _encryptor.get.decrypt(encrypted)
+      }
     }
-    val decrypted = _encryptor.get.decrypt(encrypted)
-    decrypted
   }
 
 

@@ -12,8 +12,6 @@
 package slate.common.conf
 
 import slate.common.encrypt.Encryptor
-import slate.common.info.Folders
-import slate.common.subs.Subs
 
 class Configs(private val _primary:ConfigBase,
               private val _secondary:ConfigBase,
@@ -28,35 +26,34 @@ class Configs(private val _primary:ConfigBase,
     val cfval = getObject(key)
 
     if (cfval.isInstanceOf[Integer]) {
-      return cfval.asInstanceOf[Integer].intValue()
+      cfval.asInstanceOf[Integer].intValue()
     }
     if (cfval.isInstanceOf[Double]){
-      return cfval.asInstanceOf[Double]
+      cfval.asInstanceOf[Double]
     }
     if (cfval.isInstanceOf[Boolean]){
-      return cfval.asInstanceOf[Boolean]
+      cfval.asInstanceOf[Boolean]
     }
-    0
+    else
+      0
   }
 
 
   /// <summary>
-  override def containsKey(key: String): Boolean = {
-    if(_primary.containsKey(key))
-      return true
-    if(_secondary.contains(key))
-      return true
-    false
-  }
+  override def containsKey(key: String): Boolean = getOrElse(_primary, _secondary, key)
 
 
   /// <summary>
   override def getObject(key: String): AnyRef = {
     if(_primary.containsKey(key))
-      return _primary.getObject(key)
-    if(_secondary.contains(key))
-      return _secondary.getObject(key)
-    null
+      _primary.getObject(key)
+    else
+      _secondary.getObject(key)
+  }
+
+
+  def getOrElse(first:ConfigBase, second:ConfigBase, key:String):Boolean = {
+    if(first.contains(key)) true else second.contains(key)
   }
 
 

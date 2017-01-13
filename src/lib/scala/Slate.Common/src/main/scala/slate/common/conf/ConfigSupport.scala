@@ -102,22 +102,23 @@ trait ConfigSupport {
   protected def map[T](key:String, mapper: (ConfigBase) => T ):Option[T] = {
 
     // Section not present!
-    if(!config.containsKey(key)) {
-      return None
-    }
+    if(config.containsKey(key)) {
+      // Location specified ?
+      val locationKey = key + ".location"
+      if (config.containsKey(locationKey)) {
 
-    // Location specified ?
-    val locationKey = key + ".location"
-    if(config.containsKey(locationKey)) {
-
-      // 1. "@{resource}/sms.conf"
-      // 2. "@{company.dir}/sms.conf"
-      // 3. "@{app.dir}/sms.conf"
-      // 3. "/conf/sms.conf"
-      val location = config.getString(locationKey)
-      val conf = config.loadFrom(Some(location))
-      return Some(mapper(conf.get))
+        // 1. "@{resource}/sms.conf"
+        // 2. "@{company.dir}/sms.conf"
+        // 3. "@{app.dir}/sms.conf"
+        // 3. "/conf/sms.conf"
+        val location = config.getString(locationKey)
+        val conf = config.loadFrom(Some(location))
+        Some(mapper(conf.get))
+      }
+      else
+        Some(mapper(config))
     }
-    Some( mapper(config) )
+    else
+      None
   }
 }

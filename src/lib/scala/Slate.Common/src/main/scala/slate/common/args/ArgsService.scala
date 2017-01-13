@@ -17,13 +17,14 @@ import slate.common.results.{ResultCode, ResultSupportIn}
 import scala.collection.mutable.ListBuffer
 import slate.common.Strings
 import slate.common.Result
+import slate.common.results.ResultFuncs._
 import slate.common.lex.Lexer
 
 
 /**
   * Parses arguments.
   */
-class ArgsService extends ResultSupportIn {
+class ArgsService {
 
   /**
    * Parses the arguments using the supplied prefix and separator for the args.
@@ -37,41 +38,39 @@ class ArgsService extends ResultSupportIn {
    */
   def parse(line:String, prefix:String = "-", sep:String = "=", hasAction:Boolean = false): Result[Args] =
   {
-    val err = "Error parsing arguments"
-
     // Check 1: Empty line ?
     if (Strings.isNullOrEmpty(line))
+    {
       return success( new Args(List[String](), "", List[String](), prefix, sep, None, None))
+    }
 
-    // Parse the line into words/args
+    // Check 2: Parse the line into words/args
     val lexer = new Lexer()
     val result = lexer.parse(line)
-    if(!result.success)
+    if ( !result.success)
     {
-      return failure(msg = Some(result.message))
+      failure(msg = Some(result.message))
     }
-    var args = result.tokens.map(t => t.text)
-    args = args.take(args.size - 1)
+    else {
+      // Get the text from the tokens except for the last token(end token)
+      val args = Option(result.tokens.map(t => t.text).take(result.tokens.size - 1))
+      val err = "Error parsing arguments"
 
-    // Check: Nothing ?
-    if (args == null || args.length == 0)
-      return failure(msg = Some(err))
+      // Any text ?
+      args.fold[Result[Args]]( failure(msg = Some(err)))( rargs => {
 
-    // Filter: Get only non-empty args
-
-    val filtered = args; //.filter(arg => !Strings.isNullOrEmpty(arg))
-
-    // Check: No arguments after filtering ?
-    if (filtered != null && filtered.size == 0)
-      return failure(msg = Some(err))
-
-    val finalArgs = filtered.toList
-    val parseResult = parseInternal(finalArgs, prefix, sep, hasAction)
-    if (!parseResult.success)
-    {
-      return failure(msg = Some(err))
+        // Now parse the lexically parsed text into arguments
+        val parseResult = parseInternal(rargs, prefix, sep, hasAction)
+        if (parseResult.success)
+        {
+          success(parseResult.get)
+        }
+        else
+        {
+          failure(msg = Some(err))
+        }
+      })
     }
-    success(parseResult.get)
   }
 
 
