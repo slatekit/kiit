@@ -13,24 +13,25 @@
 
 package slate.integration
 
-import slate.common.{Vars, Ensure, Result}
+import slate.common.{IO, Vars, Ensure, Result}
 import slate.core.apis.{Api, ApiAction}
 import slate.core.common.svcs.ApiWithSupport
 import slate.core.sms.{SmsService}
 
-@Api(area = "app", name = "sms", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
+@Api(area = "infra", name = "sms", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
 class SmsApi(private val svc:SmsService) extends ApiWithSupport
 {
 
   /**
-   * Registers a new template
-   * @param name    : The name of the template
-   * @param content : The content of the template
+   * sends a message
+   * @param message     : message to send
+   * @param countryCode : destination phone country code
+   * @param phone       : destination phone
    */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def addTemplate(name:String, content:String):Unit =
+  @ApiAction(name = "", desc= "send an sms", roles= "@parent", verb = "@parent", protocol = "@parent")
+  def send(message:String, countryCode:String, phone:String):Result[Boolean] =
   {
-    this.svc.addTemplate(name, content)
+    this.svc.send(message, countryCode, phone).run()
   }
 
 
@@ -42,22 +43,9 @@ class SmsApi(private val svc:SmsService) extends ApiWithSupport
    * @param vars        : values to replace the variables in template ( extra args on command line
    *                      will be automatically added into this collection )
    */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@cli")
-  def sendUsingTemplate(name:String, countryCode:String, phone:String, vars:Vars):Unit =
+  @ApiAction(name = "", desc= "send an sms using a template", roles= "@parent", verb = "@parent", protocol = "cli")
+  def sendUsingTemplate(name:String, countryCode:String, phone:String, vars:Vars):Result[Boolean] =
   {
-    this.svc.sendUsingTemplate(name, countryCode, phone, vars)
-  }
-
-
-  /**
-   * sends a message
-   * @param message     : message to send
-   * @param countryCode : destination phone country code
-   * @param phone       : destination phone
-   */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def send(message:String, countryCode:String, phone:String):Result[Boolean] =
-  {
-    this.svc.send(message, countryCode, phone)
+    this.svc.sendUsingTemplate(name, countryCode, phone, vars).run()
   }
 }

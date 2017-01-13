@@ -47,6 +47,12 @@ class AppApi extends ApiWithSupport
   }
 
 
+  @ApiAction(name = "", desc= "gets info about the folders", roles= "@parent", verb = "@parent", protocol = "@parent")
+  def dirs(format:String = "props"):Folders = {
+    context.dirs.getOrElse(new Folders())
+  }
+
+
   @ApiAction(name = "", desc= "gets info about the start up time", roles= "@parent", verb = "@parent", protocol = "@parent")
   def start(format:String = "props"):StartInfo = {
     context.app.start

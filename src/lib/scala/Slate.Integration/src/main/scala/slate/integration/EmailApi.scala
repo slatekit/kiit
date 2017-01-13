@@ -18,19 +18,22 @@ import slate.core.apis.{Api, ApiAction}
 import slate.core.common.svcs.ApiWithSupport
 import slate.core.email.EmailService
 
-@Api(area = "app", name = "emails", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
+@Api(area = "infra", name = "emails", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
 class EmailApi(private val svc:EmailService) extends ApiWithSupport
 {
 
   /**
-   * Registers a new template
-   * @param name    : The name of the template
-   * @param content : The content of the template
+   * Sends the email message
+   * @param to      : The destination email address
+   * @param subject : The subject of email
+   * @param body    : The body of the email
+   * @param html    : Whether or not the email is html formatted
+   * @return
    */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def addTemplate(name:String, content:String):Unit =
+  @ApiAction(name = "", desc= "send an email", roles= "@parent", verb = "@parent", protocol = "@parent")
+  def send(to:String, subject:String, body:String, html:Boolean) : Result[Boolean] =
   {
-    this.svc.addTemplate(name, content)
+    this.svc.send(to, subject, body, html).run()
   }
 
 
@@ -43,24 +46,9 @@ class EmailApi(private val svc:EmailService) extends ApiWithSupport
    * @param vars    : values to replace the variables in template ( extra args on command line
    *                      will be automatically added into this collection )
    */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@cli")
-  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, vars:Vars):Unit =
+  @ApiAction(name = "", desc= "send an email using a template", roles= "@parent", verb = "@parent", protocol = "cli")
+  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, vars:Vars):Result[Boolean] =
   {
-    this.svc.sendUsingTemplate(name, to, subject, html, vars)
-  }
-
-
-  /**
-   * Sends the email message
-   * @param to      : The destination email address
-   * @param subject : The subject of email
-   * @param body    : The body of the email
-   * @param html    : Whether or not the email is html formatted
-   * @return
-   */
-  @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def send(to:String, subject:String, body:String, html:Boolean):Result[Boolean] =
-  {
-    this.svc.send(to, subject, body, html)
+    this.svc.sendUsingTemplate(name, to, subject, html, vars).run()
   }
 }
