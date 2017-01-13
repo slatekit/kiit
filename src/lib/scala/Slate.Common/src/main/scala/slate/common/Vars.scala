@@ -11,6 +11,31 @@
 
 package slate.common
 
-class Vars extends ListMap[String,Any]{
+import scala.collection.mutable.ListBuffer
+
+class Vars(items:Option[List[(String,Any)]]) extends ListMap[String,Any]{
+
+  init(items)
+
+
+  private def init(items:Option[List[(String,Any)]]):Unit = {
+    items.fold(Unit)( all => {
+      all.foreach( item => {
+        this.add(item._1, item._2)
+      })
+      Unit
+    })
+  }
+}
+
+
+object Vars {
+
+  def apply(text:String): Vars = {
+    val data = Strings.splitToMapWithPairs(text)
+    val buf = ListBuffer[(String,Any)]()
+    data.foreach( p => buf.append(( p._1, p._2.asInstanceOf[Any])))
+    new Vars(Some(buf.toList))
+  }
 
 }

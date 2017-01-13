@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
 */
 
 package slate.common
@@ -22,6 +22,13 @@ import scala.collection.mutable.{ListBuffer, Map}
 
 
 object Files {
+
+  def getFileExtension(file:File):String = {
+    val fileName = file.getName()
+    if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+      fileName.substring(fileName.lastIndexOf(".")+1)
+    else ""
+  }
 
 
   def readAllText(path:String):String =

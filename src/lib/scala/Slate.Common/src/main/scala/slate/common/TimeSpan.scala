@@ -44,10 +44,10 @@ class TimeSpan (time:LocalTime)
 
   def toStringNumeric() : String =
   {
-    var time = ""
-    time = time + (if(hours   < 10 ) "0" + hours else hours )
-    time = time + (if(minutes < 10 ) "0" + minutes else minutes)
-    time = time + (if(seconds < 10 ) "0" + seconds else seconds)
+    val time = "" +
+               (if(hours   < 10 ) "0" + hours else hours )    +
+               (if(minutes < 10 ) "0" + minutes else minutes) +
+               (if(seconds < 10 ) "0" + seconds else seconds)
     time
   }
 }

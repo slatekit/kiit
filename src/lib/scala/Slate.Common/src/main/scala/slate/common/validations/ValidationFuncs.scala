@@ -66,22 +66,19 @@ object ValidationFuncs {
 
 
   def isMatch(pattern:String, text:String): Boolean = {
-    if(Strings.isNullOrEmpty(text)) return false
-    val result = new Regex(pattern).findFirstIn(text)
-    if(result.isDefined) true else false
+    if(Strings.isNullOrEmpty(text)) {
+      false
+    }
+    else {
+      new Regex(pattern).findFirstIn(text).isDefined
+    }
   }
 
 
   def contains(text:String, allowed:Map[Char,Boolean], count:Int):Boolean =
   {
-    var matched = 0
-    for(ch <- text ){
-      if(allowed.contains(ch))
-      {
-        matched += 1
-      }
-    }
-    matched == count
+    val total = text.foldLeft(0)( (t, ch) => t + (if (allowed.contains(ch)) 1 else 0) )
+    total == count
   }
 
 }

@@ -42,15 +42,16 @@ case class ResultTimed[+T](
 
   def withData(result:Any):ResultTimed[T] = {
     if(result == null){
-      return this
+      this
     }
-    if(result.isInstanceOf[ResultTimed[Any]]) {
-      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
+    else if(result.isInstanceOf[ResultTimed[Any]]) {
+      new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
     }
-    if(result.isInstanceOf[Result[Any]]) {
-      return new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
+    else if(result.isInstanceOf[Result[Any]]) {
+      new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
     }
-    new ResultTimed[T](start, end, duration, memory, NoResult, avg)
+    else
+      new ResultTimed[T](start, end, duration, memory, NoResult, avg)
   }
 
 

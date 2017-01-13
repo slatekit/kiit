@@ -13,12 +13,28 @@ package slate.common
 
 object Funcs {
 
+  type guard = () => Boolean
+
+
+  def executeResult[T](callback:() => T ):Result[T] = {
+    val result =  try {
+      val v = callback()
+      results.ResultFuncs.success[T](v)
+    }
+    catch{
+      case ex:Exception =>{
+        results.ResultFuncs.unexpectedError[T](msg = Option(ex.getMessage), err = Some(ex))
+      }
+    }
+    result
+  }
 
   def defaultOrExecute[T](condition:Boolean, defaultValue:T, f: => T): T = {
     if(condition){
-      return defaultValue
+      defaultValue
     }
-    f
+    else
+      f
   }
 
 
@@ -39,6 +55,27 @@ object Funcs {
     }
   }
 
+  def executeWithGuards[T](failureValue:T, guards:List[()=>Boolean], f: => T): T = {
+    var guardsOk = true
+    if(guards.nonEmpty ){
+      var pos = 0
+
+      // Stop checking on failure of first guard
+      while(guardsOk && pos < guards.size){
+        if(!guards(pos)()){
+          guardsOk = false
+        }
+        pos += 1
+      }
+    }
+    if(!guardsOk){
+      failureValue
+    }
+    else {
+      f
+    }
+  }
+
 
   /**
    * loops through the list with support for breaking the loop early
@@ -50,13 +87,12 @@ object Funcs {
   {
     var loop = true
     var ndx = start
-    if (args == null || args.size == 0 || ndx >= args.size)
-      return
+    if (args != null && args.size > 0 && ndx < args.size) {
 
-    while (loop && ndx < args.length)
-    {
-      loop = callback(ndx)
-      ndx = ndx + 1
+      while (loop && ndx < args.length) {
+        loop = callback(ndx)
+        ndx = ndx + 1
+      }
     }
   }
 

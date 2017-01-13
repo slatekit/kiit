@@ -28,7 +28,6 @@ import scala.collection.immutable.LinearSeq
   * @param ext     : Optional extra data / metadata
   * @param tag     : Optional tag used for tracking purposes
   * @param ref     : Optional reference to some original value
-  * @param format  : Optional format to indicate the format of data
   * @tparam T      : Type T
   */
 sealed abstract class Result[+T](
@@ -38,8 +37,7 @@ sealed abstract class Result[+T](
                                     val err     : Option[Throwable] = None,
                                     val ext     : Option[Any]       = None,
                                     val tag     : Option[String]    = None,
-                                    val ref     : Option[Any]       = None,
-                                    val format  : Option[String]    = None
+                                    val ref     : Option[Any]       = None
                                  ) extends Product with ResultChecks
 {
 
@@ -93,12 +91,13 @@ sealed abstract class Result[+T](
 
   def and[V >: T](other:Result[V]):Result[V] = {
     if(this.success && other.success){
-      return this.asInstanceOf[Result[V]]
+      this.asInstanceOf[Result[V]]
     }
-    if(!this.success){
-      return this.asInstanceOf[Result[V]]
+    else if(!this.success){
+      this.asInstanceOf[Result[V]]
     }
-    other
+    else
+      other
   }
 
 
@@ -143,7 +142,7 @@ sealed abstract class Result[+T](
       case None             => "null"
       case s:Option[Any]    => serialize(s.getOrElse(None))
       case s:Result[Any]    => serialize(s.getOrElse(None))
-      case s:String         => Strings.stringRepresentation(s)
+      case s:String         => Strings.toStringRep(s)
       case s:Int            => s.toString
       case s:Long           => s.toString
       case s:Double         => s.toString
@@ -163,6 +162,9 @@ sealed abstract class Result[+T](
    */
   def serializeList(items:Seq[Any]): String =
   {
+    // NOTE: For this serialization, this approach
+    // is faster than a more functional zipWithIndex, indices, etc.
+    // especially if the lists are big.
     var json = ""
     for(ndx <- 0 until items.size)
     {
@@ -183,7 +185,6 @@ sealed abstract class Result[+T](
   * @param msg     : Optional string message for more information
   * @param ext     : Optional extra data / metadata
   * @param tag     : Optional tag used for tracking purposes
-  * @param format  : Optional format to indicate the format of data
   * @tparam T
   */
 final case class SuccessResult[+T](
@@ -192,9 +193,8 @@ final case class SuccessResult[+T](
                                     override val msg    : Option[String]    = None,
                                     override val ext    : Option[Any]       = None,
                                     override val tag    : Option[String]    = None,
-                                    override val ref    : Option[Any]       = None,
-                                    override val format : Option[String]    = None
-                                  ) extends Result[T](true, code, msg, None, ext, tag, ref, format) {
+                                    override val ref    : Option[Any]       = None
+                                  ) extends Result[T](true, code, msg, None, ext, tag, ref) {
    def isEmpty = false
 
    def get = value
@@ -218,9 +218,8 @@ final case class FailureResult[+T](
                                     override val err    : Option[Throwable] = None,
                                     override val ext    : Option[Any]       = None,
                                     override val tag    : Option[String]    = None,
-                                    override val ref    : Option[Any]       = None,
-                                    override val format : Option[String]    = None
-                            )       extends Result[T](false, code, msg, err, ext, tag, ref, format) {
+                                    override val ref    : Option[Any]       = None
+                            )       extends Result[T](false, code, msg, err, ext, tag, ref) {
   def isEmpty = true
 
   def get = value.get
