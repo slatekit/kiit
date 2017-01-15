@@ -11,18 +11,17 @@
 
 package slate.test
 
-import slate.common.app.AppMeta
 import slate.common.envs.EnvItem
 import slate.entities.core.Entities
 import slate.test.common.{UserApi2, MyAuthProvider, UserApi}
-import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
+import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll}
 import slate.common.{ApiKey, Result}
 import slate.common.databases.DbConString
 import slate.common.databases.DbLookup._
 import slate.common.encrypt.Encryptor
-import slate.common.info.{Lang, Host, About}
+import slate.common.info.{About}
 import slate.common.logging.LoggerConsole
-import slate.common.results.{ResultSupportIn, ResultCode}
+import slate.common.results.{ResultSupportIn}
 import slate.core.apis._
 import slate.core.common.{Conf, AppContext}
 

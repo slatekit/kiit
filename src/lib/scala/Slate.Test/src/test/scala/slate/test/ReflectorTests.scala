@@ -70,6 +70,15 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
     }
 
 
+    it("can get method parameters") {
+
+      val api = new UserApi()
+      val sym = Reflector.getMethod(api, "create")
+      val result = Reflector.getMethodParameters(sym)
+      assert(result.size == 5)
+    }
+
+
     it("can get a class level annotation") {
       // NOTE: The annotation must be created with all parameters ( not named parameters )
       val anno = Reflector.getClassAnnotation(typeOf[UserApi], typeOf[Api])

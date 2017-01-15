@@ -2,7 +2,7 @@ package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.{SuccessResult, Result}
-import slate.common.results.{ResultCode, ResultSupportIn}
+import slate.common.results.{ResultFuncs, ResultCode, ResultSupportIn}
 
 /**
   * <slate_header>
@@ -33,6 +33,7 @@ class ResultTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll wi
     ensure(success(true), true, ResultCode.SUCCESS, "success", true)
   }
 
+
   test("can build success with type") {
     ensure(success[Int](123), true, ResultCode.SUCCESS, "success", 123)
   }
@@ -60,6 +61,19 @@ class ResultTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll wi
 
   test("can build not found") {
     ensure(notFound(), false, ResultCode.NOT_FOUND, "not found", null)
+  }
+
+
+  test("can build okFailure with error") {
+
+    val res = ResultFuncs.okOrFailure( {
+      val msg = "fail"
+      if(msg == "fail" ) {
+        throw new IllegalArgumentException("test")
+      }
+      msg
+    })
+    ensure(res, false, ResultCode.FAILURE, "test", null)
   }
 
 

@@ -13,7 +13,9 @@ package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.Result
-import slate.common.args.Args
+import slate.common.args.{ArgsHelper, Args}
+
+import scala.collection.mutable.ListBuffer
 
 
 class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
@@ -82,6 +84,45 @@ class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
       ("log.level"  , "info"),
       ("region.name", "ny"  )
     ), Some(List[String]("area", "api", "action")))
+  }
+
+
+  test("is meta arg with /help") {
+    assert( ArgsHelper.isMetaArg(List("help"  ), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("-help" ), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("--help"), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("/help" ), 0, "help", "info") )
+
+    assert( ArgsHelper.isMetaArg(List("info"  ), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("-info" ), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("--info"), 0, "help", "info") )
+    assert( ArgsHelper.isMetaArg(List("/info" ), 0, "help", "info") )
+
+    assert( !ArgsHelper.isMetaArg(List("/about" ), 0, "help", "info"))
+  }
+
+  test("is help on area ?") {
+    assert( ArgsHelper.isHelp(List[String]("app", "?"), 1) )
+  }
+
+
+  test("can parse args action") {
+    ensureAction( ArgsHelper.parseAction(List[String](), "-"), "", 0, 0 )
+    ensureAction( ArgsHelper.parseAction(List[String](""), "-"), "", 0, 1)
+    ensureAction( ArgsHelper.parseAction(List[String]("activate"), "-"), "activate", 1, 1)
+    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate"), "-"), "app.users.activate", 3, 5)
+    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate", "?"), "-"), "app.users.activate.?", 4, 6)
+    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate", "-", "a", "=", "1"), "-"), "app.users.activate", 3, 5)
+  }
+
+
+  private def ensureAction(result:(String, List[String], Int, Int),
+                            expectedAction:String,
+                            expectedVerbCount:Int,
+                            expectedLastIndex:Int):Unit = {
+    assert(result._1 == expectedAction)
+    assert(result._3 == expectedVerbCount)
+    assert(result._4 == expectedLastIndex)
   }
 
 

@@ -189,11 +189,11 @@ class CodeGenApi extends ApiWithSupport with ResultSupportIn
   private def generateJavascript(model:Model):String = {
 
     val builder = new ObjectBuilderJson(true, "    ")
-    builder.indentInc()
+    builder.indenter.inc()
     for (field <- model.fields) {
       builder.putString(field.name, "")
     }
-    builder.indentDec()
+    builder.indenter.dec()
     val modelJs = builder.toString()
     processTemplate(model.name, modelJs, "", "jsNew.txt")
   }

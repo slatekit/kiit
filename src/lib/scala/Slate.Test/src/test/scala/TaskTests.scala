@@ -1,8 +1,8 @@
 import slate.tests.common.ServiceFactory
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
-import slate.common.app.AppRunConst
+import slate.common.app.{AppMeta, AppRunConst}
 import slate.common.queues.QueueSourceDefault
-import slate.core.tasks.{TaskRunner, TaskQueue}
+import slate.core.tasks.{TaskSettings, TaskRunner, TaskQueue}
 
 /**
   * <slate_header>
@@ -41,7 +41,7 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
 
 
   test("can move states") {
-    val task = new TaskQueue()
+    val task = new TaskQueue("", new TaskSettings(), new AppMeta())
     task.start()
     assert(task.status().status == AppRunConst.STARTED)
     assert(task.isStarted())
