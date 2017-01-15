@@ -20,22 +20,10 @@ object TaskRunner extends ResultSupportIn {
 
   def run(task:Task, args:List[String]): Result[Any] =
   {
-    if ( task == null ) {
-      badRequest(Some("task not supplied"))
-    }
-    else {
-      // init should validate args
-      val initCheck = task.init(Some(args))
-      if (!initCheck.success) {
-        initCheck
-      }
-      else {
-
-        // core logic
-        val thread = new Thread(task)
-        thread.start()
-        success("started")
-      }
-    }
+    Option(task).fold(badRequest(Some("task not supplied")))( t => {
+      val thread = new Thread(task)
+      thread.start()
+      success("started")
+    })
   }
 }

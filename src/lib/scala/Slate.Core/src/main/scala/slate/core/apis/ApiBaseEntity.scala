@@ -14,6 +14,9 @@
 package slate.core.apis
 
 
+import slate.common.encrypt.Encryptor
+import slate.common.i18n.I18nStrings
+import slate.common.logging.LoggerBase
 import slate.common.query.Query
 import slate.entities.core.{EntityService, IEntity}
 

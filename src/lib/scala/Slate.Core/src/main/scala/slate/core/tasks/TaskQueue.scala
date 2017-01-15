@@ -13,6 +13,7 @@
 package slate.core.tasks
 
 import slate.common.Result
+import slate.common.app.AppMeta
 import slate.common.queues.QueueSource
 
 /**
@@ -43,16 +44,11 @@ import slate.common.queues.QueueSource
   * 2. You can
   * @param name
   */
-class TaskQueue(name:String = "") extends Task(name) {
+class TaskQueue(name:String = "", settings:TaskSettings, meta:AppMeta, args:Option[Any] = None)
+  extends Task(name, settings, meta, args) {
 
   var queue:QueueSource = null
   private var _continueRunning = true
-
-
-  def this(name:String, settings:TaskSettings) = {
-    this(name)
-    _settings = settings
-  }
 
 
   /**

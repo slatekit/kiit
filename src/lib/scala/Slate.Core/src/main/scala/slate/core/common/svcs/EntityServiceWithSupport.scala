@@ -11,10 +11,10 @@
 
 package slate.core.common.svcs
 
-import slate.common.encrypt.{EncryptSupportIn}
+import slate.common.encrypt.{Encryptor, EncryptSupportIn}
 import slate.entities.core.{EntityService, IEntity}
 import slate.common.i18n.{I18nSupportIn}
-import slate.common.logging.{LogSupportIn}
+import slate.common.logging.{LoggerBase, LogSupportIn}
 import slate.common.results.ResultSupportIn
 import slate.core.common.AppContext
 

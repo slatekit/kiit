@@ -40,7 +40,7 @@ class ShellAPI(private val creds:Credentials                   ,
   val apis = new ApiContainerCLI(ctx, Some(auth), apiItems)
 
   // configure the root directory in user directory for this app.
-  configure(appDir, s".${appDir}", true)
+  //configure(appDir, s".${appDir}", true)
 
 
   /**

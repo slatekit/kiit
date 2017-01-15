@@ -28,7 +28,9 @@ package slate.core.cmds
 </slate_header>
   */
 
-import slate.common.DateTime
+import slate.common.{NoResult, FailureResult, SuccessResult, DateTime}
+import slate.common.DateTime._
+import slate.common.Funcs._
 
 
 /**
@@ -62,34 +64,28 @@ class Cmd(val name: String) {
    */
   def execute(args:Array[Any] = null): CmdResult =
   {
-    // track state
-    val start = DateTime.now
-    var end = start
-    var success = false
-    var msg = ""
-    var executionResult:AnyRef = null
+    _state = _state.copy(lastRuntime = now())
 
-    try
-    {
-      _state = _state.copy(lastRuntime = start)
-      executionResult = executeInternal(args)
-      success = true
-    }
-    catch {
-      case e: Exception => {
-        _state = _state.copy(errorCount = _state.errorCount + 1)
-        msg = e.getMessage
-      }
-    }
-    finally
-    {
-      _state = _state.copy(runCount = _state.runCount + 1, hasRun = true)
-    }
+    val resultTimed = attemptTimed( () => {
+      executeInternal(args)
+    })
 
-    // calculate total time
-    end = DateTime.now
+   // Update run count
+    _state = _state.copy(runCount = _state.runCount + 1, hasRun = true)
 
-    _result = new CmdResult(name, success, msg, Some(executionResult), 0, start, end, _state.runCount)
+   // Update errors.
+    val result = resultTimed.result
+   if(!result.success){
+     _state = _state.copy(errorCount = _state.errorCount + 1)
+   }
+
+    val data = resultTimed.result match {
+      case s:SuccessResult[AnyRef] => Option(s.get)
+      case f:FailureResult[AnyRef] => None
+      case NoResult                => None
+      case _                       => None
+    }
+    _result = new CmdResult(name, result.success, result.msg.getOrElse(""), data, 0, resultTimed.start, resultTimed.end, _state.runCount)
     _result
   }
 

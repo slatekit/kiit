@@ -16,7 +16,6 @@ package slate.core.apis
 import slate.common._
 import slate.common.args.Args
 import slate.common.results.{ResultSupportIn}
-import slate.common.Funcs.execute
 import slate.core.apis.support.{ApiCallReflect, ApiCallHelper, ApiCallCheck}
 import slate.core.common.AppContext
 
@@ -51,10 +50,11 @@ class ApiContainer(val ctx:AppContext                           ,
    * registers all the apis.
    */
   def registerAll():Unit = {
-    execute[List[ApiReg]](apis, all => {
+    apis.map( all => {
       all.foreach( reg => {
         register(reg.api, reg.declaredOnly, reg.roles, reg.auth, reg.protocol)
       })
+      Unit
     })
   }
 
@@ -75,7 +75,8 @@ class ApiContainer(val ctx:AppContext                           ,
     val clsType = Reflector.getTypeFromInstance(api)
 
     // 1. get the annotation on the class
-    val apiAnnoOrign = Reflector.getClassAnnotation(clsType, typeOf[Api]).asInstanceOf[Api]
+    val apiAnnoOpt = Reflector.getClassAnnotation(clsType, typeOf[Api]).map( i => i.asInstanceOf[Api])
+    val apiAnnoOrign = apiAnnoOpt.get
 
     // 2. Create a copy of the final annotation taking into account the overrides.
     val apiAnno = ApiHelper.copyApiAnnotation(apiAnnoOrign, roles, auth, protocol)

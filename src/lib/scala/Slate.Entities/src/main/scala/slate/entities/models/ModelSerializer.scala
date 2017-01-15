@@ -44,48 +44,48 @@ class ModelSerializer extends ObjectBuilder(true, "  ") {
 
 
   def comment(text:String):Unit = {
-    _buffer = _buffer + "// " + text + Strings.newline()
+    _buffer.append("// " + text + Strings.newline())
   }
 
 
   def comments(text:String):Unit = {
-    _buffer = _buffer + "/* " + text + Strings.newline() + " */" + Strings.newline()
+    _buffer.append("/* " + text + Strings.newline() + " */" + Strings.newline())
   }
 
 
   def header(name:String):Unit = {
-    _buffer = _buffer + s"[$name]" + Strings.newline()
-    indentInc()
+    _buffer.append(s"[$name]" + Strings.newline())
+    _indenter.inc()
   }
 
 
   def keyValue(name:String, value:String):Unit = {
-    _buffer = _buffer + s"$name: " + value + Strings.newline()
+    _buffer.append(s"$name: " + value + Strings.newline())
   }
 
 
   def fieldDef(field:ModelField):Unit = {
-    _buffer = _buffer + field.name + ","
-    _buffer = _buffer + field.dataTypeSimple() + ","
-    _buffer = _buffer + field.isRequired + ","
-    _buffer = _buffer + field.defaultVal.getOrElse("") + ","
-    _buffer = _buffer + field.storedName + ","
-    _buffer = _buffer + field.key + ","
-    _buffer = _buffer + field.extra + Strings.newline()
+    _buffer.append(field.name + ",")
+    _buffer.append(field.dataTypeSimple() + ","        )
+    _buffer.append(field.isRequired + ","              )
+    _buffer.append(field.defaultVal.getOrElse("") + ",")
+    _buffer.append(field.storedName + ","              )
+    _buffer.append(field.key + ","                     )
+    _buffer.append(field.extra + Strings.newline()     )
   }
 
 
   def actionDef(name:String, value:String):Unit = {
-    _buffer = _buffer + s"$name: " + value + Strings.newline()
+    _buffer.append(s"$name: " + value + Strings.newline())
   }
 
 
   def newline(name:String):Unit = {
-    _buffer = Strings.newline()
+    _buffer.append(Strings.newline())
   }
 
 
   override def end():Unit = {
-    indentDec()
+    _indenter.dec()
   }
 }

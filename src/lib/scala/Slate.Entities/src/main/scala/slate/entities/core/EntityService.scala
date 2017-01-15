@@ -15,6 +15,8 @@ package slate.entities.core
 
 import slate.common._
 import slate.common.encrypt.Encryptor
+import slate.common.i18n.I18nStrings
+import slate.common.logging.LoggerBase
 import slate.common.query.IQuery
 
 
@@ -28,10 +30,11 @@ class EntityService[T >: Null <: IEntity]
   extends IEntityService
 {
   var _repo: EntityRepo[T] = null
+  protected var _log:Option[LoggerBase] = None
+  protected var _enc:Option[Encryptor] = None
+  protected var _res:Option[I18nStrings] = None
 
-  var encryptor:Option[Encryptor] = None
-  
-  
+
   def this(repo:EntityRepo[T]) =
   {
     this()

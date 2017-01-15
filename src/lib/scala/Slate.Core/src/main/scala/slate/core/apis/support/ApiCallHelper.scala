@@ -52,7 +52,7 @@ object ApiCallHelper extends ResultSupportIn {
     if(totalErrors > 0)
     {
       error = error + " )"
-      badRequest( Some(false), Some("bad request: action " + callReflect.name + error))
+      badRequest( msg = Some("bad request: action " + callReflect.name + error))
     }
     else {
       // Ok!

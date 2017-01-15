@@ -451,7 +451,10 @@ class ShellService(
       yesWithCode(ResultCode.HELP, msg = Some("area.api ?"), tag = Some(cmd.args.action))
     }
     // Case 3d: Help on action ?
-    else if (ArgsHelper.isHelp(cmd.args.positional, 0) && !Strings.isNullOrEmpty(cmd.args.action))
+    else if (!Strings.isNullOrEmpty(cmd.args.action) &&
+                ( ArgsHelper.isHelp(cmd.args.positional, 0) ||
+                  ArgsHelper.isHelp(verbs, 3))
+            )
     {
       showHelpFor(cmd, ShellConstants.VerbPartAction)
       yesWithCode(ResultCode.HELP, msg = Some("area.api.action ?"), tag = Some(cmd.args.action))

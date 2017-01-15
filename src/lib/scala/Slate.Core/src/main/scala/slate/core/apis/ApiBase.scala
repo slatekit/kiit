@@ -17,6 +17,9 @@ import java.io.File
 import java.nio.file.Paths
 
 import slate.common._
+import slate.common.encrypt.Encryptor
+import slate.common.i18n.I18nStrings
+import slate.common.logging.LoggerBase
 import slate.common.results.{ResultCode, ResultTimed}
 import slate.core.apis.support.{ApiCallReflect}
 import slate.core.common.AppContext
@@ -29,6 +32,9 @@ class ApiBase {
   val isErrorEnabled = false
 
   protected  val _lookup = new ListMap[String, ApiCallReflect]()
+  protected var _log:Option[LoggerBase] = None
+  protected var _enc:Option[Encryptor] = None
+  protected var _res:Option[I18nStrings] = None
 
   /**
    * The context of the application. Contains references to the
@@ -135,21 +141,23 @@ class ApiBase {
       result = callback()
     })
 
-    resultTimed.withData(result)
+    resultTimed
   }
 
 
   protected def interpretUri(path:String): Option[String] = {
     val pathParts = Strings.substring(path, "://")
     pathParts.fold(Option(path))( parts => {
-      parts._1 match {
-        case "user://"    => Option(new File(System.getProperty("user.home"), parts._2).toString)
-        case "temp://"    => Option(new File(System.getProperty("java.io.tmpdir"), parts._2).toString)
-        case "file://"    => Option(new File(parts._2).toString)
-        case "inputs://"  => Option(new File(this.context.dirs.get.pathToInputs , parts._2).toString)
-        case "outputs://" => Option(new File(this.context.dirs.get.pathToOutputs, parts._2).toString)
-        case "logs://"    => Option(new File(this.context.dirs.get.pathToLogs   , parts._2).toString)
-        case "cache://"   => Option(new File(this.context.dirs.get.pathToCache  , parts._2).toString)
+      val uri = parts._1
+      val loc = parts._2
+      uri match {
+        case "user://"    => Option(new File(System.getProperty("user.home")     , loc).toString)
+        case "temp://"    => Option(new File(System.getProperty("java.io.tmpdir"), loc).toString)
+        case "file://"    => Option(new File(loc).toString)
+        case "inputs://"  => Option(new File(this.context.dirs.get.pathToInputs  , loc).toString)
+        case "outputs://" => Option(new File(this.context.dirs.get.pathToOutputs , loc).toString)
+        case "logs://"    => Option(new File(this.context.dirs.get.pathToLogs    , loc).toString)
+        case "cache://"   => Option(new File(this.context.dirs.get.pathToCache   , loc).toString)
         case _            => Option(path)
       }
     })

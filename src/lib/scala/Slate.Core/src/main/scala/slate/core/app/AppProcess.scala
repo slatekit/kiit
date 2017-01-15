@@ -18,12 +18,12 @@ import slate.common.args.{Arg, ArgsHelper, ArgsSchema, Args}
 import slate.common.conf.ConfigBase
 import slate.common.console.ConsoleWriter
 import slate.common.databases.DbLookup
-import slate.common.encrypt.EncryptSupportIn
+import slate.common.encrypt.{Encryptor, EncryptSupportIn}
 import slate.common.envs.{Envs, EnvItem, Env}
-import slate.common.i18n.I18nSupportIn
+import slate.common.i18n.{I18nStrings, I18nSupportIn}
 import slate.common.info._
 import slate.common._
-import slate.common.logging.{Logger, LoggerConsole, LogSupportIn, LogLevel}
+import slate.common.logging.{LoggerBase, LoggerConsole, LogSupportIn, LogLevel}
 import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.common.templates.Subs
 import slate.core.common.{Conf, AppContext}
@@ -73,6 +73,9 @@ class AppProcess extends AppMetaSupport
 
   // The selected environment at startup ( can come from command line or conf )
   protected var env:EnvItem = null
+  protected var _log:Option[LoggerBase] = None
+  protected var _enc:Option[Encryptor] = None
+  protected var _res:Option[I18nStrings] = None
 
 
   /**
@@ -216,29 +219,26 @@ class AppProcess extends AppMetaSupport
    */
   def exec(): Result[Any] =
   {
-    meta.status.started = DateTime.now
-    meta.status.status = "started"
+    meta.status.start(Some("started"))
 
     if(options.printSummaryBeforeExec)
     {
       logStart()
     }
 
-    var res:Result[Any] = null
+    val res:Result[Any] =
     try {
-      res = onExecute()
+      onExecute()
     }
     catch {
       case e: Exception => {
         error("error while executing app : " + e.getMessage)
-        meta.status.error = e.getMessage
-        meta.status.errors += 1
-        res = unexpectedError(msg = Some("Unexpected error : " + e.getMessage), err = Some(e))
+        meta.status.error(e.getMessage)
+        unexpectedError(msg = Some("Unexpected error : " + e.getMessage), err = Some(e))
       }
     }
 
-    meta.status.status = "ended"
-    meta.status.ended = DateTime.now
+    meta.status.end()
 
     res
   }
@@ -479,7 +479,7 @@ class AppProcess extends AppMetaSupport
     */
   protected def getLogLevel(): LogLevel = {
     val level = getOverrideSetting("log.level", Some("info"))
-    Logger.parseLogLevel(level)
+    slate.common.logging.Logger.parseLogLevel(level)
   }
 
 
@@ -514,6 +514,11 @@ class AppProcess extends AppMetaSupport
     Ensure.isTrue(key.isDefined, s"Api Key with name $name is not configured")
     key.get 
   }
+
+
+  override protected def log() = _log
+  override protected def enc() = _enc
+  override protected def res() = _res
 
 
   private def collectSummary(args:ListBuffer[(String,String)]): Unit =

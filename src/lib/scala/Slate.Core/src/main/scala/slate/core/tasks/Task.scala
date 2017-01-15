@@ -26,7 +26,11 @@ import slate.common._
  * amount of time it takes to complete some operation.
  * @param name
  */
-class Task(name:String = "")
+class Task(name:String = "",
+           protected val _settings:TaskSettings,
+           protected val meta:AppMeta,
+           protected val args:Option[Any] = None)
+
   extends AppLifeCycle
   with AppMetaSupport
   with AppStatusSupport
@@ -37,26 +41,12 @@ class Task(name:String = "")
   //protected var _state:TaskState  = null
   protected var _log:LoggerBase = null
   protected var _config:InputArgs       = null
-  protected var _settings:TaskSettings  = null
-
-
-  /**
-   * initialize via settings
-   * @param settings
-   */
-  def this(settings:TaskSettings) = {
-    this("")
-    _settings = settings
-  }
 
 
   /**
    * runs the task by executing the exec and end life-cycle methods
    */
   override def run():Unit = {
-    if(_settings == null){
-      _settings = new TaskSettings()
-    }
 
     // execute code
     exec()
@@ -66,18 +56,15 @@ class Task(name:String = "")
   }
 
 
-  override def appMeta(): AppMeta = _appMeta
+  override def appMeta(): AppMeta = meta
 
 
   /**
    * initialize this task and update current status
-    *
-    * @param args
    * @return
    */
-  override def init(args:Option[Any]): Result[Boolean] =
+  override def init(): Result[Boolean] =
   {
-    _rawArgs = args
     moveToState(AppRunConst.INITIALIZE)
     onInit(args)
   }

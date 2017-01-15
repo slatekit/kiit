@@ -44,7 +44,7 @@ object ApiValidator extends ResultSupportIn {
     */
   def validateCall(cmd:Request,
                    fetcher:(Request)=> Result[(ApiCallReflect,ApiBase)],
-                   allowSingleDefaultParam:Boolean = false): Result[Any] =
+                   allowSingleDefaultParam:Boolean = false): Result[ApiCallCheck] =
   {
     val fullName  = cmd.fullName
     val apiArea   = cmd.area
@@ -54,7 +54,7 @@ object ApiValidator extends ResultSupportIn {
     val checkResult = check(cmd, fetcher)
 
     if(!checkResult._1){
-      checkResult._2
+      badRequest[ApiCallCheck](msg =Some("bad request : " + fullName + ": inputs not supplied"))
     }
     else {
       val result = checkResult._3.get
@@ -74,11 +74,17 @@ object ApiValidator extends ResultSupportIn {
       }
       // 4b: Params - check args needed
       else if (!allowSingleDefaultParam && callReflect.hasArgs && args.size == 0)
-        badRequest(Some("bad request : " + fullName + ": inputs not supplied"))
+        badRequest[ApiCallCheck](msg =Some("bad request : " + fullName + ": inputs not supplied"))
 
       // 4c: Params - ensure matching args
-      else if (callReflect.hasArgs)
-        ApiCallHelper.validateArgs(callReflect, args)
+      else if (callReflect.hasArgs) {
+        val argCheck = ApiCallHelper.validateArgs(callReflect, args)
+        if(argCheck.success) {
+          success(data = new ApiCallCheck(true, apiArea, apiName, apiAction, false, api, cmd))
+        }
+        else
+          badRequest[ApiCallCheck](msg =Some("bad request : " + fullName + ": inputs not supplied"))
+      }
       else
         success(data = new ApiCallCheck(true, apiArea, apiName, apiAction, false, api, cmd))
     }
