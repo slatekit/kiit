@@ -10,16 +10,19 @@
   */
 package slate.common.serialization
 
-import slate.common.Strings
+import slate.common.{Indenter, Strings}
 
-class ObjectBuilder(val indentEnabled:Boolean, protected var _indent:String) {
+class ObjectBuilder(val indentEnabled:Boolean, protected val _indent:String) {
 
-  protected var _indentLevel = 0
-  protected var _buffer = ""
+  protected val _indenter = new Indenter()
+  protected val _buffer = new StringBuilder()
 
 
   def begin():Unit = {
   }
+
+
+  def indenter:Indenter = _indenter
 
 
   def putString(key:String, value:String) :Unit = {
@@ -27,46 +30,15 @@ class ObjectBuilder(val indentEnabled:Boolean, protected var _indent:String) {
 
 
   def putLine(text:String) :Unit = {
-    _buffer = _buffer + _indent + text + Strings.newline()
+    _buffer.append(_indent + text + Strings.newline())
   }
 
 
-  def newLine():Unit = {
-    _buffer = _buffer + Strings.newline()
-  }
+  def newLine():Unit = _buffer.append(Strings.newline())
 
 
-  def end():Unit = {
-  }
+  def end():Unit = {  }
 
 
-  def indentInc():Unit =
-  {
-    _indentLevel = _indentLevel + 1
-    setIndent()
-  }
-
-
-  def indentDec():Unit =
-  {
-    _indentLevel = _indentLevel - 1
-    setIndent()
-  }
-
-
-  def setIndent()
-  {
-    if(_indentLevel == 0)
-    {
-      _indent = ""
-    }
-    else {
-      0.until(_indentLevel).foreach( i => _indent += "\t")
-    }
-  }
-
-
-  override def toString():String = {
-    _buffer
-  }
+  override def toString():String = _buffer.toString()
 }

@@ -11,55 +11,71 @@
 
 package slate.common
 
+import slate.common.results.ResultFuncs._
+import slate.common.results.ResultTimed
+
 object Funcs {
 
   type guard = () => Boolean
 
 
-  def executeResult[T](callback:() => T ):Result[T] = {
+
+  /**
+    * attempts to run callback inside try/catch
+    * and returns a success, value from callback and optional exception
+    *
+    * @param callback
+    * @return
+    */
+  def attempt[T](callback:() => T ): Result[T] = {
     val result =  try {
       val v = callback()
-      results.ResultFuncs.success[T](v)
+      success(v)
     }
     catch{
-      case ex:Exception =>{
-        results.ResultFuncs.unexpectedError[T](msg = Option(ex.getMessage), err = Some(ex))
+      case ex:Exception => {
+        failure( err = Some(ex))
       }
     }
     result
   }
 
-  def defaultOrExecute[T](condition:Boolean, defaultValue:T, f: => T): T = {
-    if(condition){
-      defaultValue
+
+  /**
+    * attempts to run callback inside try/catch
+    * and returns a success, value from callback and optional exception
+    *
+    * @param callback
+    * @return
+    */
+  def attemptTimed[T](callback:() => T ): ResultTimed[T] = {
+    val started = DateTime.now()
+    val result =  try {
+      val v = callback()
+      ResultTimed.build[T](started, success(v))
     }
-    else
-      f
-  }
-
-
-  def execute[T](data:Option[T], f:(T) => Unit): Unit = {
-    data.fold(Unit)( item => {
-      f(item)
-      Unit
-    })
-  }
-
-
-  def executeIf[T](condition:Boolean, data:Option[T], f:(T) => Unit): Unit = {
-    if(condition) {
-      data.fold(Unit)(item => {
-        f(item)
-        Unit
-      })
+    catch{
+      case ex:Exception => {
+        ResultTimed.build[T](started, failure( err = Some(ex)))
+      }
     }
+    result
   }
 
+
+  /**
+    * executes the code if all of the guards pass
+    *
+    * @param failureValue
+    * @param guards
+    * @param f
+    * @tparam T
+    * @return
+    */
   def executeWithGuards[T](failureValue:T, guards:List[()=>Boolean], f: => T): T = {
     var guardsOk = true
     if(guards.nonEmpty ){
       var pos = 0
-
       // Stop checking on failure of first guard
       while(guardsOk && pos < guards.size){
         if(!guards(pos)()){
@@ -77,23 +93,37 @@ object Funcs {
   }
 
 
-  /**
-   * loops through the list with support for breaking the loop early
-   * @param args    : The list to iterate through
-   * @param callback: The callback to call
-   * @param start   : The index to the start with
-   */
-  def loop(args:Seq[Any], start:Int, callback:(Int) => Boolean):Unit =
+  def executeResult[T](source:String,
+                       action:String,
+                       tag:String = "",
+                       audit:Boolean = false,
+                       data:Option[Any],
+                       call:() => T ): Result[T] =
   {
-    var loop = true
-    var ndx = start
-    if (args != null && args.size > 0 && ndx < args.size) {
-
-      while (loop && ndx < args.length) {
-        loop = callback(ndx)
-        ndx = ndx + 1
+    val result = try
+    {
+      val resultValue = Option(call())
+      (true, "", resultValue)
+    }
+    catch {
+      case ex:Exception =>
+      {
+        (false, s"Error performing action $action on $source with tag $tag. $ex", None)
       }
     }
+    val success = result._1
+    val message = result._2
+    val resData = result._3
+    successOrError(success, resData, Option(message), Option(tag))
+  }
+
+
+  def defaultOrExecute[T](condition:Boolean, defaultValue:T, f: => T): T = {
+    if(condition){
+      defaultValue
+    }
+    else
+      f
   }
 
 

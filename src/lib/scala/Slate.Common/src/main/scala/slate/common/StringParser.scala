@@ -34,7 +34,6 @@ class StringParser(private val _content:String ) {
     moveInternal(token, ensure)
     if(_lastMatch)
     {
-
       val end = _pos - token.length
       val content = extract(start, end)
       _extracts(name) = content
@@ -53,15 +52,16 @@ class StringParser(private val _content:String ) {
   def moveInternal(token: String, ensure:Boolean = true): StringParser =
   {
     val ndxMatch = _content.indexOf(token, _pos)
-    if(ensure && ndxMatch < 0 )
-      throw new IllegalArgumentException ( s"Unable to find $token starting from ${_pos}")
+    if(ensure && ndxMatch < 0 ){
 
-    _lastMatch = ndxMatch >= 0
+    }
+    else {
+      _lastMatch = ndxMatch >= 0
 
-    if(ndxMatch >=0 )
-    {
-      // Update pos to next position
-      _pos = ndxMatch + token.length
+      if (ndxMatch >= 0) {
+        // Update pos to next position
+        _pos = ndxMatch + token.length
+      }
     }
     this
   }

@@ -126,13 +126,12 @@ class HttpClient {
       con.setDoOutput(true)
 
       // Parameters
-      var entity = ""
-      if(req.params.isDefined){
-        entity = HttpHelper.encodeParams(req).getOrElse("")
+      val entity = if(req.params.isDefined){
+        HttpHelper.encodeParams(req).getOrElse("")
       }
-      else if(req.entity.isDefined){
-        entity = req.entity.get
-      }
+      else
+        req.entity.getOrElse("")
+
       val writer = new DataOutputStream(con.getOutputStream)
       writer.writeBytes(entity)
       writer.flush()
@@ -147,39 +146,32 @@ class HttpClient {
 
   private def tryExecute(req:HttpRequest, callback:() => HttpURLConnection) : HttpResponse =
   {
-    var inputStream:InputStream = null
-    var success = false
-    var statusCode = 0
-    var content = ""
-
-
-    try
+    val result = try
     {
       // Let the caller build up the connection
       val con = callback()
 
       // Get the response code
-      statusCode = con.getResponseCode()
+      val statusCode = con.getResponseCode()
 
       // Get content
-      inputStream = con.getInputStream
-      content = io.Source.fromInputStream(inputStream).mkString
-      success = true
+      val inputStream = con.getInputStream
+      val content = io.Source.fromInputStream(inputStream).mkString
+      (true, statusCode, content, inputStream)
     }
     catch {
       case ex: Exception =>
       {
-        content = s"Error getting content from ${req.url}"
-        println(ex.getMessage)
-        success = false
+        val msg = s"Error getting content from ${req.url}"
+        (false, HttpStatus.s500.code, msg, null)
       }
     }
-    finally
-    {
-      if (inputStream != null) inputStream.close
-    }
+
+    val inputStream = result._4
+    if (inputStream != null) inputStream.close()
+
     // TODO: Get the headers and fill http response correctly.
-    val code = if(statusCode == HttpStatus.sOk.code) HttpStatus.sOk else HttpStatus.sErr
-    new HttpResponse(code, Map[String,Seq[String]](), Some(content))
+    val code = if(result._2 == HttpStatus.sOk.code) HttpStatus.sOk else HttpStatus.sErr
+    new HttpResponse(code, Map[String,Seq[String]](), Option(result._3))
   }
 }

@@ -108,19 +108,16 @@ trait ResultSupportIn {
 
 
   protected def okOrFailure(callback: => String) : Result[Boolean] = {
-    var success = true
-    var message = ""
-
-    try {
-      message = callback
+    val result =  try {
+      val msg = callback
+      success(true, Some(msg))
     }
-    catch {
+    catch{
       case ex:Exception => {
-        success = false
-        message = ex.getMessage
+        failure[Boolean](msg = Some(ex.getMessage), err = Some(ex))
       }
     }
-    okOrFailure(success, Some(message))
+    result
   }
 
 
@@ -182,22 +179,16 @@ trait ResultSupportIn {
 
 
   protected def successOrError[T](callback: => T) : Result[T] = {
-    var success = true
-    var message = ""
-    var result:Option[T] = None
-    try {
-      result = Some(callback)
+    val result =  try {
+      val v = callback
+      SuccessResult(v, ResultCode.SUCCESS)
     }
-    catch {
+    catch{
       case ex:Exception => {
-        success = false
-        message = ex.getMessage
+        FailureResult(code = ResultCode.FAILURE, msg = Some(ex.getMessage))
       }
     }
-    if(success)
-      new SuccessResult[T](result.get, ResultCode.SUCCESS, msg = Some(message))
-    else
-      new FailureResult[T](result, ResultCode.FAILURE, msg = Some(message), err = None)
+    result
   }
 
 

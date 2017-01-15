@@ -20,42 +20,7 @@ object StringHelpers {
      * @param max
      * @return
      */
-    def pad(max:Int):String =
-    {
-      if (text.length == max) {
-        text
-      }
-      else {
-        var pad = ""
-        var count = 0
-        while (count < max - text.length) {
-          pad += " "
-          count = count + 1
-        }
-        text + pad
-      }
-    }
-
-
-    /**
-     * pad the text to be x number of chars max
-     * @param max
-     * @return
-     */
-    def repeat(max:Int):String =
-    {
-      if (max == 0) ""
-      else if (max == 1) text
-      else {
-        var finalText = ""
-        var count = 0
-        while (count < max - text.length) {
-          finalText += text
-          count = count + 1
-        }
-        finalText
-      }
-    }
+    def pad(max:Int):String = Strings.pad(text, max)
 
 
     /**

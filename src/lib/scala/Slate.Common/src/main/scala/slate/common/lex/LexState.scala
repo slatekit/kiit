@@ -11,9 +11,14 @@
 
 package slate.common.lex
 
-
+/**
+ * Low-level status for char/text parsing.
+ * NOTE: Using var and basic while/for loops for
+ * higher performance
+ */
 class LexState {
 
+   // NOTE: Using vars here for low-level text parsing and higher performance
    var text    = ""
    var pos     = 0
    var line    = 0
@@ -39,6 +44,14 @@ class LexState {
 
     val len = pos - start
     charPos = charPos + len
+    t
+  }
+
+
+  def substringInclusive(start:Int): String =
+  {
+    val end = ( start + (pos - start) )
+    val t = text.substring(start, end)
     t
   }
 

@@ -30,14 +30,13 @@ object HttpHelper extends ResultSupportIn {
 
 
   def post(client: HttpClient, req:HttpRequest):Result[Boolean] = {
-    var res = (false, ResultCode.SUCCESS, "")
-    try {
+    val res = try {
       val result = client.post(req)
-      res = (result.is2xx, result.statusCode, result.result.getOrElse("").toString)
+      (result.is2xx, result.statusCode, result.result.getOrElse("").toString)
     }
     catch{
       case ex:Exception => {
-        res = (false, ResultCode.UNEXPECTED_ERROR, ex.getMessage)
+        (false, ResultCode.UNEXPECTED_ERROR, ex.getMessage)
       }
     }
     successOrErrorWithCode[Boolean](res._1, res._1, res._2, Option(res._3))
@@ -46,19 +45,16 @@ object HttpHelper extends ResultSupportIn {
 
   def createGetUrl(req:HttpRequest ):URL =
   {
-    var url:URL = null
-
     // The url has to be built up
     if(req.params.isDefined)
     {
       val params = encodeParams(req)
-      url = new URL( req.url + "?" + params )
+      new URL( req.url + "?" + params )
     }
     else
     {
-      url = new URL(req.url)
+      new URL(req.url)
     }
-    url
   }
 
 
@@ -88,19 +84,5 @@ object HttpHelper extends ResultSupportIn {
     }
     else
       None
-  }
-
-
-  def readInputStreamAsString(is:InputStream):String =
-  {
-    val reader = new BufferedReader(new InputStreamReader(is, "is-8859-1"), 8)
-    val sb= new StringBuilder()
-    var line = reader.readLine()
-    while (line != null) {
-      sb.append(line + "\n")
-      line = reader.readLine()
-    }
-    is.close()
-    sb.toString()
   }
 }

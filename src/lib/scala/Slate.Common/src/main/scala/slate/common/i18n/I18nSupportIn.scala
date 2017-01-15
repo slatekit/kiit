@@ -13,10 +13,10 @@ package slate.common.i18n
 
 trait I18nSupportIn {
 
-  protected var _res:Option[I18nStrings] = None
+  protected def res():Option[I18nStrings] = None
 
 
   protected def translate(name:String):String = {
-    if(_res.isDefined) _res.get.translate(name, "") else name
+    res().fold(name)( res => res.translate(name, ""))
   }
 }

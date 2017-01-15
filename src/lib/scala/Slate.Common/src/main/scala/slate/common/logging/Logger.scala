@@ -12,39 +12,7 @@
 package slate.common.logging
 
 
-object Logger extends LoggerBase {
-
-  private var _logger:Option[LoggerBase] = None
-
-
-  /**
-   * Initializes the logger
-   * @param level: The level of the logger
-   * @param logger: The logger
-   */
-  def init(level: LogLevel, logger: LoggerBase) = {
-    _logger = Option(logger)
-  }
-
-
-  /**
-   * Logs a message
-   * @param entry: The log entry
-   */
-  override protected def performLog(entry:LogEntry) =
-  {
-    try
-    {
-      _logger.fold[Unit](None)( l => l.log(entry) )
-    }
-    catch
-    {
-      case e:Exception =>
-      {
-        println("Error logging : unexpected")
-      }
-    }
-  }
+object Logger {
 
 
   def parseLogLevel(level:String):LogLevel = {

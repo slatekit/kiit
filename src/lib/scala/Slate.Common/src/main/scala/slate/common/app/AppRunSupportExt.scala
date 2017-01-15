@@ -15,7 +15,7 @@ import slate.common.results.ResultSupportIn
 
 trait AppRunSupportExt extends ResultSupportIn {
 
-  // TODO: Use monad here
+  // TODO: Look at making this immutable somehow ?
   protected var _state = new AppRunState()
   protected var _pauseSeconds = 0
 

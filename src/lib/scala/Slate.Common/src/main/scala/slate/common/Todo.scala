@@ -12,12 +12,7 @@
 package slate.common
 
 
-import slate.common.logging.Logger
-
-
 object Todo {
-
-  val enableLogging = false
 
   /**
    * Indicates that code is not implemented
@@ -83,10 +78,6 @@ object Todo {
 
     private def exec(msg: String, tag: String, callback: Option[() => Unit] = None): Unit =
     {
-      if(enableLogging)
-      {
-        Logger.error(msg, None, Some(tag))
-      }
       if(!callback.isEmpty)
       {
         callback.get()

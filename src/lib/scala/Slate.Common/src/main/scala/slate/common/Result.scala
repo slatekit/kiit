@@ -165,15 +165,17 @@ sealed abstract class Result[+T](
     // NOTE: For this serialization, this approach
     // is faster than a more functional zipWithIndex, indices, etc.
     // especially if the lists are big.
-    var json = ""
+    val buff = new StringBuilder()
     for(ndx <- 0 until items.size)
     {
       val item = items(ndx)
       if(ndx > 0) {
-        json += ", "
+        buff.append(", ")
       }
-      json += serialize(item)
+      val s = serialize(item)
+      buff.append(s)
     }
+    val json = buff.toString()
     json
   }
 }

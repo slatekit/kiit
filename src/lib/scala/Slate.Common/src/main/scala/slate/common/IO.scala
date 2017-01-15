@@ -56,19 +56,40 @@ object IO {
   {
     val reader = new BufferedReader(new InputStreamReader(input))
     val buffer = new StringBuilder()
-    var moreData = true
-    while (moreData) {
+
+    Loops.forever( {
       val line = reader.readLine()
-      if (line == null)
+      val more = if (line == null)
       {
-        moreData = false
+        false
       }
       else
       {
         buffer.append(line)
+        true
       }
-    }
+      more
+    })
     val content = buffer.toString()
     content
+  }
+
+
+  def toStringFromHttp(is:InputStream):String =
+  {
+    val reader = new BufferedReader(new InputStreamReader(is, "is-8859-1"), 8)
+    val sb= new StringBuilder()
+    Loops.until({
+      val line = reader.readLine()
+      if(line == null){
+        false
+      }
+      else {
+        sb.append(line + "\n")
+        true
+      }
+    })
+    is.close()
+    sb.toString()
   }
 }

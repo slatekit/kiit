@@ -23,7 +23,7 @@ class SerializerCsv extends SerializerBase {
   }
 
 
-  override def onVisitFieldBegin(item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
+  override def onVisitFieldBegin(maxFieldLength:Int, item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
   {
     val finalText = value.fold[String]("null")( actual => {
       actual match {

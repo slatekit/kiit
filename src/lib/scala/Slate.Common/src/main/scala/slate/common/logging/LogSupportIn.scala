@@ -11,11 +11,10 @@
 
 package slate.common.logging
 
-import slate.common.logging.LogLevel._
 
 trait LogSupportIn {
 
-  protected var _log: Option[LoggerBase] = None
+  protected def log(): Option[LoggerBase] = None
 
 
   /**
@@ -87,9 +86,9 @@ trait LogSupportIn {
    */
   protected def log(level: LogLevel, msg: String, ex: Option[Exception] = None, tag: Option[String] = None): Unit =
   {
-    val log = _log
-    if(log.isDefined ) {
-      log.get.log( level, msg, ex, tag)
+    val logger = log()
+    if(logger.isDefined ) {
+      logger.get.log( level, msg, ex, tag)
     }
   }
 }

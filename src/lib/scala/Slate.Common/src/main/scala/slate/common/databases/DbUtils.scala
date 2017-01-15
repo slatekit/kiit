@@ -41,23 +41,21 @@ object DbUtils {
     */
   def execute(con:DbConString, callback:(Connection) => Unit, error:(Exception) => Unit): Unit =
   {
-    var conn:Connection = null
-    try
+    val conn:Connection = try
     {
-      conn = connect(con)
-      callback(conn)
+      val c = connect(con)
+      callback(c)
+      c
     }
     catch
-      {
-        case ex:Exception =>
-        {
-          error(ex)
-        }
-      }
-    finally
     {
-      close(conn)
+      case ex:Exception =>
+      {
+        error(ex)
+        null
+      }
     }
+    close(conn)
   }
 
   /**
@@ -70,25 +68,22 @@ object DbUtils {
               callback:(Connection, Statement) => Unit,
               error:(Exception) => Unit): Unit =
   {
-    var conn:Connection = null
-    var stmt:Statement = null
-    try
+    val result = try
     {
-      conn = connect(con)
-      stmt = conn.createStatement()
-      callback(conn, stmt)
+      val c = connect(con)
+      val s = c.createStatement()
+      callback(c, s)
+      (c, s)
     }
     catch
-      {
-        case ex:Exception =>
-        {
-          error(ex)
-        }
-      }
-    finally
     {
-      close(stmt, conn)
+      case ex:Exception =>
+      {
+        error(ex)
+        (null, null)
+      }
     }
+    close(result._2, result._1)
   }
 
 
@@ -104,25 +99,21 @@ object DbUtils {
               callback:(Connection, PreparedStatement ) => Unit,
               error:(Exception) => Unit): Unit =
   {
-    var conn:Connection = null
-    var stmt:CallableStatement = null
-    try
-    {
-      conn = connect(con)
-      stmt = conn.prepareCall(sql)
-      callback(conn, stmt)
+    val result = try {
+      val c = connect(con)
+      val s = c.prepareCall(sql)
+      callback(c, s)
+      (c, s)
     }
     catch
-      {
-        case ex:Exception =>
-        {
-          error(ex)
-        }
-      }
-    finally
     {
-      close(stmt, conn)
+      case ex:Exception =>
+      {
+        error(ex)
+        (null, null)
+      }
     }
+    close(result._2, result._1)
   }
 
 

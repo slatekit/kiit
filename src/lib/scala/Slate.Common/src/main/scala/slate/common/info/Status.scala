@@ -13,16 +13,28 @@ package slate.common.info
 
 import slate.common.{TimeSpan, DateTime}
 
-class Status (
-               var started    : DateTime = DateTime.now()    ,
-               var ended      : DateTime = DateTime.now()    ,
-               var duration   : TimeSpan = TimeSpan(0,0,0)   ,
-               var status     : String   = "not-started"     ,
-               var errors     : Int      = 0                 ,
-               var error      : String   = "n/a"
-             )
+case class Status (
+                    started    : DateTime = DateTime.now()    ,
+                    ended      : DateTime = DateTime.now()    ,
+                    duration   : TimeSpan = TimeSpan(0,0,0)   ,
+                    status     : String   = "not-started"     ,
+                    errors     : Int      = 0                 ,
+                    error      : String   = "n/a"
+                  )
 {
+  def start(statusName:Option[String] = None): Status = {
+    copy(started = DateTime.now(), status = statusName.getOrElse("started"))
+  }
 
+
+  def error(msg:String):Status = {
+    copy(error = msg, errors = errors + 1)
+  }
+
+
+  def end(statusName:Option[String] = None): Status = {
+    copy(started = DateTime.now(), status = statusName.getOrElse("ended"))
+  }
 }
 
 

@@ -205,16 +205,16 @@ object Reflector {
     else {
       val annotationArgs = annotation.get.tree.children.tail
       val annotationInputs = annotationArgs.map(a => {
-        var annoValue: Any = null
 
         // NOTE: could use pattern matching
         val pe0 = a.productElement(0)
-        if (pe0.isInstanceOf[ru.Constant])
-          annoValue = a.productElement(0).asInstanceOf[ru.Constant].value
+        val annoValue = if (pe0.isInstanceOf[ru.Constant])
+          a.productElement(0).asInstanceOf[ru.Constant].value
         else if (a.children != null && a.children.size > 1 && a.productElement(1)
           .isInstanceOf[ru.Literal])
-          annoValue = a.productElement(1).asInstanceOf[ru.Literal].value.asInstanceOf[Constant].value
-
+          a.productElement(1).asInstanceOf[ru.Literal].value.asInstanceOf[Constant].value
+        else
+          null
 
         annoValue
       })
@@ -383,15 +383,13 @@ object Reflector {
     }
     else {
       for (arg <- args) {
-        var pos = 0
-        for (sym <- arg) {
+        arg.indices.foreach( pos => {
+          val sym = arg(pos)
           val term = sym.asTerm
           val isDefault = term.isParamWithDefault
           val typeSym = sym.typeSignature.typeSymbol
           list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, isDefault))
-
-          pos += 1
-        }
+        })
       }
       list.toList
     }
@@ -413,11 +411,11 @@ object Reflector {
         ( declaredInSelfType && mem.owner == clsTpe.typeSymbol)))
       {
         val anno = getAnnotation(clsTpe, anoTpe, mem)
-        if(anno != null )
+        if(anno != None )
         {
           val methodName = mem.name.toString()
           val methodMirror = im.reflectMethod(mem.asMethod)
-          matches.append((methodName,mem.asMethod,methodMirror, anno))
+          matches.append((methodName,mem.asMethod,methodMirror, anno.get))
         }
       }
     }
@@ -442,11 +440,11 @@ object Reflector {
         val fieldSym = mem.asTerm.accessed.asTerm
         val fieldType = mem.typeSignature.resultType
         val anno = getAnnotation(clsTpe, anoTpe, fieldSym)
-        if(anno != null )
+        if(anno != None )
         {
           val memberName = mem.name.toString()
           val memberMirror = im.reflectField(fieldSym)
-          matches.append((memberName,fieldSym,memberMirror, anno, fieldType))
+          matches.append((memberName,fieldSym,memberMirror, anno.get, fieldType))
         }
       }
     }

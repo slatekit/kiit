@@ -13,9 +13,9 @@ package slate.common
 
 
 import java.time.Duration
-import java.time.temporal.{ChronoUnit, TemporalUnit}
-import java.util.concurrent.TimeUnit
+import java.time.temporal.{ChronoUnit}
 
+import slate.common.DateTime._
 import slate.common.info.MemUsage
 import slate.common.results.{ResultSupportIn, ResultCode, ResultTimed}
 
@@ -32,36 +32,12 @@ object Timer extends ResultSupportIn
     * @param callback : the callback to execute
     * @return
     */
-  def once(desc:String, callback: => Unit): ResultTimed[Any] = {
+  def once(desc:String, callback: => Any): ResultTimed[Any] = {
 
-    val started = DateTime.now()
-    var msg = ""
-    var success = false
-    var used = 0L
-    val runtime = Runtime.getRuntime
-    val freeBefore = runtime.freeMemory()
-    try
-    {
-      callback
-      val freeAfter = runtime.freeMemory()
-      used = freeBefore - freeAfter
-      success = true
-    }
-    catch
-    {
-      case ex:Exception =>
-      {
-        success = false
-        msg = s"Error during benchmarking of : $desc"
-        val freeAfter = runtime.freeMemory()
-        used = freeBefore - freeAfter
-      }
-    }
-    val memory = MemUsage(used, runtime.freeMemory(), runtime.totalMemory(), runtime.maxMemory())
-    val ended = DateTime.now()
-    val duration = started.durationFrom(ended)
-    val result = okOrFailure(success, Some(msg))
-    new ResultTimed[Any](desc, started, ended, duration, memory, result, duration)
+    val res = wrap("", 1, () => {
+      Funcs.attempt[Any]( () => callback )
+    })
+    res
   }
 
 
@@ -126,21 +102,31 @@ object Timer extends ResultSupportIn
 
 
   def wrap(desc:String, count:Int, callback:() => Unit): ResultTimed[Any] = {
-    val started = DateTime.now
+
+    // Start time & memory info
+    val started = now()
     val runtime = Runtime.getRuntime
     val freeBefore = runtime.freeMemory()
 
     callback()
 
+    // End time and memory info
+    val ended = now()
     val freeAfter = runtime.freeMemory()
-    val ended = DateTime.now
-    val used = freeBefore - freeAfter
-    val memory = MemUsage(used, runtime.freeMemory(), runtime.totalMemory(), runtime.maxMemory())
+
+    // Diff: Time
     val duration = started.durationFrom(ended)
+
+    // Avg : Time
     val nano:Double = duration.getNano
     val averageNano = nano / count.toDouble
     val averageDuration = Duration.of(averageNano.toInt, ChronoUnit.NANOS)
+
+    // Diff: memory
+    val used = freeBefore - freeAfter
+    val memory = MemUsage(used, runtime.freeMemory(), runtime.totalMemory(), runtime.maxMemory())
+
     val result = okOrFailure(true)
-    new ResultTimed(desc, started, ended, duration, memory, result, averageDuration)
+    new ResultTimed(desc, started, ended, duration, result, Some(memory), Some(averageDuration))
   }
 }

@@ -13,6 +13,8 @@ package slate.common.args
 
 import slate.common.StringHelpers.StringExt
 
+import scala.collection.mutable.ListBuffer
+
 
 /**
  *
@@ -72,25 +74,25 @@ case class Arg (
   {
     val nameLen = maxWidth.getOrElse(name.length)
 
-    var logs = List[(String,String,Boolean)](
+    val logs = ListBuffer[(String,String,Boolean)](
       ( "highlight", prefix.getOrElse("-") + name.pad(nameLen), false),
       ( "text"     , separator.getOrElse("=")                 , false),
       ( "text"     , desc                   , true ),
-      ( "text"     , " ".repeat(nameLen + 6), false))
+      ( "text"     , " " * (nameLen + 6), false))
 
     if(isRequired)
     {
-      logs = logs :+ ("important", "!"           , false)
-      logs = logs :+ ("text"     , s"required "  , false)
+      logs.append(("important", "!"           , false))
+      logs.append(("text"     , s"required "  , false))
     }
     else
     {
-      logs = logs :+ ("success", "?"             , false)
-      logs = logs :+ ("text"   , s"optional "    , false)
+      logs.append(("success", "?"             , false))
+      logs.append(("text"   , s"optional "    , false))
     }
 
-    logs = logs :+ ("subTitle", s"[$dataType] "  , false)
-    logs = logs :+ ("text"    , s"e.g. $example" , true)
-    logs
+    logs.append(("subTitle", s"[$dataType] "  , false))
+    logs.append(("text"    , s"e.g. $example" , true ))
+    logs.toList
   }
 }

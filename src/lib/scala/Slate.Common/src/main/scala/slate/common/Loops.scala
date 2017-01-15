@@ -18,11 +18,13 @@ object Loops {
     * @param condition
     */
   def repeat( count:Int, condition:(Int) => Boolean ):Unit = {
-    var process = true
     var ndx = 0
-    while(process && ndx < count ) {
-      process = condition(ndx)
-      ndx += 1
+    while(ndx < count ) {
+      val success = condition(ndx)
+      if(success)
+        ndx += 1
+      else
+        ndx = count + 1
     }
   }
 
@@ -32,6 +34,15 @@ object Loops {
     * @param condition
     */
   def forever( condition: => Boolean ):Unit = {
+    until(condition)
+  }
+
+
+  /**
+   * Looping structure to remove use of "vars" in other places.
+   * @param condition
+   */
+  def until( condition: => Boolean ):Unit = {
     var process = true
     while(process ) {
       process = condition

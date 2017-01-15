@@ -1,12 +1,12 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common.results
@@ -21,11 +21,13 @@ case class ResultTimed[+T](
                         start       : DateTime,
                         end         : DateTime,
                         duration    : Duration,
-                        memory      : MemUsage,
                         result      : Result[T],
-                        avg         : Duration
+                        memory      : Option[MemUsage],
+                        avg         : Option[Duration] = None
                        )
 {
+  val dur = start.durationFrom(end)
+
   /**
    *
    * @param start
@@ -34,24 +36,9 @@ case class ResultTimed[+T](
    * @param mem
    * @param data
    */
-  def this(start:DateTime, end:DateTime, duration:Duration, mem:MemUsage, data:Result[T], avg:Duration)
+  def this(start:DateTime, end:DateTime, duration:Duration, data:Result[T], mem:Option[MemUsage], avg:Option[Duration])
   {
-    this("", start, end, duration, mem, data, avg)
-  }
-
-
-  def withData(result:Any):ResultTimed[T] = {
-    if(result == null){
-      this
-    }
-    else if(result.isInstanceOf[ResultTimed[Any]]) {
-      new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
-    }
-    else if(result.isInstanceOf[Result[Any]]) {
-      new ResultTimed[T] (start, end, duration, memory, result.asInstanceOf[Result[T]], avg)
-    }
-    else
-      new ResultTimed[T](start, end, duration, memory, NoResult, avg)
+    this("", start, end, duration, data, mem, avg)
   }
 
 
@@ -61,15 +48,29 @@ case class ResultTimed[+T](
     println("end            : " + end                )
     println("duration.secs  : " + duration.getSeconds)
     println("duration.nanos : " + duration.getNano   )
-    println("memory.used    : " + memory.used        )
-    println("memory.free    : " + memory.free        )
-    println("memory.total   : " + memory.total       )
-    println("memory.max     : " + memory.max         )
+
+    memory.map(mem => {
+      println("memory.used    : " + mem.used)
+      println("memory.free    : " + mem.free)
+      println("memory.total   : " + mem.total)
+      println("memory.max     : " + mem.max)
+      Unit
+    })
     println()
   }
 
 
   def toJson():String = {
     "not implemented"
+  }
+}
+
+
+object ResultTimed {
+
+  def build[T](started:DateTime, result:Result[T] ):ResultTimed[T] = {
+    val ended = DateTime.now()
+    val duration = started.durationFrom(ended)
+    new ResultTimed[T]("", started, ended, duration, result, None, None)
   }
 }

@@ -35,19 +35,20 @@ object SerializerUtils {
    */
   def asHtmlTable(items:Map[String,Any]*): String =
   {
-    var text = "<table>"
+    val buff = new StringBuilder("<table>")
     for(item <- items)
     {
       for ((k,v) <- item)
       {
-        text = text + "<tr>"
-        text = text + "<td>" + k + "</td><td>" + ( if ( v == null ) "" else v.toString) + "</td>"
-        text = text + "<tr>"
+        buff.append("<tr>")
+        buff.append("<td>" + k + "</td><td>" + ( if ( v == null ) "" else v.toString) + "</td>")
+        buff.append("<tr>")
       }
     }
 
-    text = text + "</table>"
-    text
+    buff.append("</table>")
+    val html = buff.toString()
+    html
   }
 
 
@@ -58,17 +59,18 @@ object SerializerUtils {
    */
   def asHtmlTable(items:List[(String,Any)]): String =
   {
-    var text = "<table>"
+    val buff = new StringBuilder("<table>")
     for(item <- items)
     {
-      text = text + "<tr>"
+      buff.append("<tr>")
       val value = if ( item._2 == null ) "" else item._2.toString
-      text = text + "<td>" + item._1 + "</td><td>" + value + "</td>"
-      text = text + "</tr>"
+      buff.append("<td>" + item._1 + "</td><td>" + value + "</td>")
+      buff.append("</tr>")
     }
 
-    text = text + "</table>"
-    text
+    buff.append("</table>")
+    val html = buff.toString()
+    html
   }
 
 
@@ -79,19 +81,20 @@ object SerializerUtils {
    */
   def asJson(items:List[(String,Any)]): String =
   {
-    var text = "{"
+    val buff = new StringBuilder("{")
     for(i <- items.indices)
     {
-      if( i > 0 ) text = text + ","
+      if( i > 0 ) buff.append(",")
 
       val item = items(i)
-      text = text + "\"" + item._1 + "\":"
+      buff.append("\"" + item._1 + "\":")
       val value = if ( item._2 == null ) "" else item._2.toString
-      text = text + "\"" + escapeJson(value) + "\""
+      buff.append("\"" + escapeJson(value) + "\"")
     }
 
-    text = text + "}"
-    text
+    buff.append("}")
+    val json = buff.toString()
+    json
   }
 
 

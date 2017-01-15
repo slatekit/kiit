@@ -16,17 +16,12 @@ import slate.common.Result
 
 trait AppLifeCycle extends ResultSupportIn {
 
-  protected var _rawArgs:Option[Any] = None
-  protected var _appMeta = new AppMeta()
-
 
   /**
    * initializes the application
     *
-    * @param args
    */
-  def init(args:Option[Any]): Result[Boolean] = {
-    _rawArgs = args
+  def init(): Result[Boolean] = {
     yes()
   }
 

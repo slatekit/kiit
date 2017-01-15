@@ -18,18 +18,18 @@ class SerializerJson(format:Boolean = true) extends SerializerBase {
   override def onVisitItemBegin(item:Any, pos:Int, total:Int):Unit =
   {
     append("{" + Strings.newline())
-    indentInc()
+    _identer.inc()
   }
 
 
   override def onVisitItemEnd(item:Any, pos:Int, total:Int):Unit =
   {
-    indentDec()
+    _identer.dec()
     append("}" + Strings.newline())
   }
 
 
-  override def onVisitFieldBegin(item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
+  override def onVisitFieldBegin(maxFieldLength:Int, item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
   {
     val finalText = value.fold[String]("null")( actual => {
       actual match {

@@ -11,39 +11,34 @@
 
 package slate.common.lex
 
+/*
 import slate.common.Ensure
 
 
-class Tokens(val _tokens:List[Token]) {
+class Tokens(val _tokens:Option[List[Token]]) {
   var _current:Token = null
   var _pos = 0
 
 
-  def count():Int =
-  {
-    if(_tokens == null) 0 else _tokens.size
-  }
+  def count():Int = _tokens.fold(0)( t => t.size )
 
 
   def peek(n:Int = 1): Option[Token] =
   {
+    _tokens.fold[Option[Token]](None)( t => {
     if (_pos + n >= _tokens.size)
       None
     else
-      Some(_tokens(_pos + n))
+      Some(t(_pos + n))
+    })
   }
 
 
-  def current(): Token =
-  {
-    _current
-  }
+  def current(): Token = _current
 
 
-  def advance(count:Int = 1): Token =
-  {
-    null
-  }
+  // TODO: Implement
+  def advance(count:Int = 1): Token = null
 
 
   def expect(tokenType:Int, err:String = ""): Unit =
@@ -117,10 +112,7 @@ class Tokens(val _tokens:List[Token]) {
   }
 
 
-  def getText(): String =
-  {
-    null
-  }
+  def getText(): String = ""
 
 
   protected def syntaxError(t:Token, msg:String):Unit =
@@ -128,3 +120,4 @@ class Tokens(val _tokens:List[Token]) {
 
   }
 }
+*/

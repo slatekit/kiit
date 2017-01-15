@@ -26,7 +26,7 @@ class Lexer {
 
   def parse(text:String): LexResult =
   {
-    val res = Funcs.executeResult( () => {
+    val res = Funcs.attempt( () => {
       _state.init(text)
       getTokens(-1)
     })
@@ -186,9 +186,6 @@ class Lexer {
     _state.incrementPos
     c = _state.text(_state.pos)
 
-    val startIndex = _state.count
-    val startLine  = _state.line
-    val startCpos  = _state.charPos
     val start      = _state.pos
     var text       = ""
 
@@ -229,8 +226,8 @@ class Lexer {
   def readLine(): String =
   {
     var c = _state.text(_state.pos)
-    val start = _state.pos
     var keepReading = true
+    val start = _state.pos
     while (_state.pos < _state.END && keepReading && c != '\r' && c != '\n')
     {
      _state.incrementPos

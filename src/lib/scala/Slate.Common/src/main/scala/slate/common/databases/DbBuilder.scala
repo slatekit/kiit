@@ -25,13 +25,13 @@ class DbBuilder() {
 
   def addTable(model:Model): String =
   {
-    var sql = ""
+    val buff = new StringBuilder()
 
     // 1. build the "CREATE <tablename>
-    sql += getCreateTable(model.name)
+    buff.append( getCreateTable(model.name) )
 
     // 2. build the primary key column
-    sql += getPrimaryKey("id") + ","
+    buff.append(getPrimaryKey("id") + ",")
 
     // 3. Now build all the columns
     // Get only fields ( excluding primary key )
@@ -42,10 +42,11 @@ class DbBuilder() {
       val sqlType = getTypeFromScala(field.dataType)
       this.addColNew(field.name, sqlType, field.isRequired, field.maxLength)
     }, ",")
-    sql += dataFieldSql
+    buff.append( dataFieldSql )
 
     // 4. finish the construction and get the sql.
-    sql += " );"
+    buff.append(" );")
+    val sql = buff.toString()
     sql
   }
 
@@ -67,8 +68,6 @@ class DbBuilder() {
   def addColNew(name:String, dataType:Int, required:Boolean = false, maxLen:Int = 0): String =
   {
     val nullText = if(required ) "NOT NULL" else ""
-    val isText = dataType == TypeString
-    var maxLenText = maxLen.toString
     val colType = getColType(dataType, maxLen)
     val colName = getColName(name)
 

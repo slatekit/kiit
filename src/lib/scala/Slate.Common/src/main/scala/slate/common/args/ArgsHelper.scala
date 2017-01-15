@@ -12,10 +12,8 @@
 package slate.common.args
 
 
-import slate.common.Funcs
 import slate.common.Funcs._
-import slate.common.Funcs.loop
-import scala.collection.mutable.{ListBuffer, Map}
+import slate.common.{Loops, Strings}
 
 
 object ArgsHelper {
@@ -76,89 +74,51 @@ object ArgsHelper {
     ),
     {
       val arg = positional(pos)
-      var isMatch = false
-      var ndx = 0
-      while (ndx < possibleMatches.size && !isMatch) {
-        val possibleMatch = possibleMatches(ndx)
-        if (possibleMatch == arg) {
-          isMatch = true
+      possibleMatches.foldLeft(false)( (isMatch, text) => {
+        if (text == arg) {
+          true
         }
-        else if ("-" + possibleMatch == arg) {
-          isMatch = true
+        else if ("-" + text == arg) {
+          true
         }
-        else if ("--" + possibleMatch == arg) {
-          isMatch = true
+        else if ("--" + text == arg) {
+          true
         }
-        else if ("/" + possibleMatch == arg) {
-          isMatch = true
+        else if ("/" + text == arg) {
+          true
         }
-        ndx = ndx + 1
-      }
-      isMatch
+        else
+          isMatch
+      })
     })
   }
 
 
   /**
    * parses the action from the command line args
-   * e.g. app.users.activate -id=2
+   * e.g. ["app", ".", "users", ".", "activate", "-", "id", "=", "2" ]
    * the action would be "app.users.activate"
    *
    * @param args
    * @param prefix
-   * @return
+   * @return ( action, actions, actionCount, end index )
+   *         ( "app.users.activate", ["app", 'users", "activate" ], 3, 5 )
    */
-  def parseAction(args:List[String], prefix:String): (String, ListBuffer[String], Int, Int) =
+  def parseAction(args:List[String], prefix:String): (String, List[String], Int, Int) =
   {
-    var action = ""
-    var lastIndex = 0
-    val verbs = ListBuffer[String]()
-    var verbCount = 0
-    var lastIndexIncluded = 0
+    // Get the first index of arg prefix ( e.g. "-" or "/"
+    val indexPrefix = args.indexWhere( arg => arg == prefix )
 
-    loop(args, 0, (ndx:Int) =>
-    {
-      val text = args(ndx)
-      var returnVal = true
+    // Get index after action "app.users.activate"
+    val indexLast = if(indexPrefix < 0 ) args.size else indexPrefix
 
-      // CASE 1: An action can not be more than 3 args
-      // e.g. area.name.action or stop once you hit a named arg -env:dev
-      if(lastIndex >= 5 || verbCount >= 3 || text == prefix)
-      {
-        returnVal = false
-      }
-      // CASE 2: "." name.action
-      // e.g. area.name.action
-      else if(text == ".")
-      {
-        action += text
-      }
-      // CASE 3: action without "."
-      // e.g. name action
-      else {
-        val isLastCharDot = action.endsWith(".")
-        if (isLastCharDot) {
-          action += text
-        }
-        else if (verbCount == 0) {
-          action += text
-        }
-        else {
-          action += "." + text
-        }
+    // Get all the words until last index
+    val actions = args.slice(0, indexLast)
+                      .filter( text => !Strings.isNullOrEmpty(text)
+                              && (text.trim() == "?" || text.matches("^[a-zA-Z0-9]*$") ) )
 
-        verbCount = verbCount + 1
-        verbs.append(text)
-      }
-      // Ensure the lastIndex includes index of the word included
-      if(returnVal)
-      {
-        lastIndex = ndx
-      }
-      returnVal
-    })
-
-    (action, verbs, verbCount, lastIndex)
+    val action = actions.mkString(".")
+    (action, actions, actions.size, indexLast)
   }
 
 
@@ -174,84 +134,74 @@ object ArgsHelper {
   def parseNamedArgs(args:List[String], startIndex:Int, prefix:String, sep:String)
     : (Map[String,String], Int) =
   {
-    var lastIndex = startIndex
-    var parseState = "none"
-    var lastKey = ""
-    var lastVal = ""
-    val resultArgs = Map[String,String]()
+    val resultArgs = scala.collection.mutable.Map[String,String]()
+    // State is false(n/a) | true(key/value pair)
 
-    loop(args, startIndex, (ndx:Int) =>
-    {
-      val curr = args(ndx)
-      val next = if(args.size <= (ndx+1)) "" else args(ndx+1)
-      var returnVal = true
+    // NOTE: Using var for lexical parsing rather than a fold/reduce/map.
+    var ndx = startIndex
+    while(ndx < args.size ) {
 
-      // "-" beginning of key/value pair -env:dev
-      if(curr == prefix)
-      {
-        parseState = "key"
-        lastVal = ""
+      val text = args(ndx)
+
+      // e.g. "-a=1"
+      if(text == prefix ){
+        val keyValuePair = parseKeyValuePair(ndx, sep,args)
+
+        // Matched so put into map
+        val advance = keyValuePair.fold[Int](args.size)( kv => {
+          resultArgs(kv._1) = kv._2
+          kv._3
+        })
+        ndx = advance
       }
-      // ":" separator between key/value pairs -eng:dev
-      else if(curr == sep)
-      {
-        parseState = "value"
-        lastVal = ""
-      }
-      // KEY ( 2 words )
-      else if(parseState == "key" && ( curr == "." ) )
-      {
-        lastKey += curr
-        lastVal = "."
-      }
-      // KEY ( 2 words )
-      else if(parseState == "key" && ( lastVal == "." ) )
-      {
-        lastKey += curr
-        lastVal = ""
-      }
-      // KEY ( 1 word )
-      else if(parseState == "key")
-      {
-        lastKey = curr
-        lastVal = ""
-      }
-      else if(parseState == "value" && curr == "." )
-      {
-        lastVal = lastVal + curr
-      }
-      // VAL
-      else if(parseState == "value")
-      {
-        if(lastVal != "") {
-          lastVal = lastVal + curr
-        }
-        else
-        {
-          lastVal = curr
-        }
-        if(curr == "\"\"")
-        {
-          lastVal = ""
-        }
-        if(next == null || next != ".") {
-          resultArgs(lastKey) = lastVal
-          lastVal = ""
-        }
-      }
-      // Must be positional parameter
       else
-      {
-        returnVal = false
-      }
-      // Ensure the lastIndex includes index of the word included
-      if(returnVal)
-      {
-        lastIndex = ndx
-      }
-      returnVal
-    })
+        ndx += 1
+    }
 
-    (resultArgs, lastIndex)
+    (resultArgs.toMap, ndx)
+  }
+
+
+  def parseKeyValuePair(ndx:Int, sep:String, args:List[String]):Option[(String, String, Int)] = {
+
+    // example: -a=1
+    // prefix: "-", key: "a", sep: "=", value="1"
+    var pos = ndx
+    if ( pos + 3 < args.size ) {
+
+      // Move past "-"
+      pos += 1
+
+      // Build the key e.g. "log" or "log.level"
+      val keyBuff = new StringBuilder(args(pos))
+
+      // Move to next part of key
+      pos += 1
+
+      // Keep building key until "." is done
+      while(pos < args.size && args(pos) == ".") {
+        // Move past "."
+        pos += 1
+        keyBuff.append("." + args(pos))
+        pos += 1
+      }
+
+      // Move past "="
+      pos += 1
+
+      // Get value
+      val value = args(pos)
+
+      // Move past value
+      pos += 1
+
+      // Now get key/value
+      val key = keyBuff.toString()
+      val end = pos
+
+      Some((key, value, pos))
+    }
+    else
+      None
   }
 }

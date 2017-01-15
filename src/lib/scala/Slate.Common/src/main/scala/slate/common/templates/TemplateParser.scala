@@ -11,6 +11,7 @@
 package slate.common.templates
 
 import slate.common._
+import slate.common.lex.LexState
 import slate.common.results.ResultCode
 
 import scala.collection.mutable.ListBuffer
@@ -35,38 +36,7 @@ import TemplateConstants._
   */
 class TemplateParser(val text:String) {
 
-  class ParseState {
-    var pos = 0
-    var text = ""
-    var count = 0
-    var line = 0
-    var END = 0
-
-
-    def init(text:String): Unit = {
-      this.text = text
-      this.pos = 0
-      this.line = 0
-      this.count = 0
-      this.END = text.length - 1
-    }
-
-
-    def substring(start:Int, excludeLast:Boolean = false): String =
-    {
-      val diff = if ( excludeLast ) 1 else 0
-      val end = ( start + (pos - start) ) - diff
-      val t = text.substring(start, end)
-      t
-    }
-
-
-    def substringInclusive(start:Int): String =
-    {
-      val end = ( start + (pos - start) )
-      val t = text.substring(start, end)
-      t
-    }
+  class ParseState extends LexState {
   }
 
 
@@ -80,6 +50,7 @@ class TemplateParser(val text:String) {
 
     try {
       _state.init(text)
+      _state.END = text.length - 1
       var lastText: String = ""
       var lastPos = _state.pos
 
@@ -142,9 +113,8 @@ class TemplateParser(val text:String) {
   def readSub(): TemplatePart = {
 
     advanceAndExpect('{')
-    var c = advance()
+    val c = advance()
     val start = _state.pos
-    var keepReading = true
     var end = start
     // 1. edge case ${}
     if( c == '}') {
@@ -153,14 +123,15 @@ class TemplateParser(val text:String) {
     }
     else {
       // 2. read sub
+      var keepReading = true
       while (_state.pos <= _state.END && keepReading) {
-        if (c == '}') {
+        val curr = _state.text(_state.pos)
+        if (curr == '}') {
           keepReading = false
           end = _state.pos
         }
         if (keepReading && (_state.pos + 1 <= _state.END)) {
           _state.pos += 1
-          c = _state.text(_state.pos)
         }
         else {
           keepReading = false

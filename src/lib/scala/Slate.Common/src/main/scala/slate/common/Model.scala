@@ -298,12 +298,7 @@ class Model(val name:String,
    * @return
    */
   def toJSFieldDefs(): String = {
-    var txt = ""
-    eachField( (field, pos) => {
-      val sep = if(pos == 0 )Strings.newline() else "," + Strings.newline()
-      txt = txt + sep + field.toJSDef()
-    })
-    txt
+    collect("", (field) => field.toJSDef())
   }
 
 
@@ -312,12 +307,7 @@ class Model(val name:String,
    * @return
    */
   def toJSFieldInstances(): String = {
-    var txt = ""
-    eachField( (field, pos) => {
-      val sep = if(pos == 0 ) Strings.newline() else "," + Strings.newline()
-      txt = txt + sep + field.toJSInstance()
-    })
-    txt
+    collect("", (field) => field.toJSInstance())
   }
 
 
@@ -326,11 +316,26 @@ class Model(val name:String,
    * @param callback
    */
   def eachField(callback:(ModelField, Int) => Unit ):Unit = {
-    executeIf[List[ModelField]](callback != null, _propList, props => {
-      props.indices.foreach( ndx => {
-        val field = props(ndx)
-        callback(field, ndx)
-      })
+    _propList.map( props => {
+      if(callback != null) {
+        props.indices.foreach( ndx => {
+          val field = props(ndx)
+          callback(field, ndx)
+        })
+      }
+      Unit
     })
+  }
+
+
+  def collect(start:String, callback:(ModelField) => String): String = {
+    _propList.map( props => {
+      props.indices.foldLeft(start)( (text,pos)  => {
+        val field = props(pos)
+        val sep = if(pos == 0 )Strings.newline() else "," + Strings.newline()
+        val result = text + sep + callback(field)
+        result
+      })
+    }).getOrElse(start)
   }
 }

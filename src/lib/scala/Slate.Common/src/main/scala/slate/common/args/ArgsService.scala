@@ -78,30 +78,34 @@ class ArgsService {
   {
     successOrError(
     {
-      var startOfNamedArgs = 0
-      var action = ""
-      var verbs = ListBuffer[String]()
-      if(hasAction)
+      val result = if(hasAction)
       {
         val actionResult = ArgsHelper.parseAction(tokens, prefix)
-        action = actionResult._1
-        verbs = actionResult._2
         // Start of named args is always 1 after the action
-        startOfNamedArgs = if(actionResult._3 == 0) 0 else actionResult._4 + 1
+        val startOfNamedArgs = if(actionResult._3 == 0) 0 else actionResult._4
+        (actionResult._1, actionResult._2, startOfNamedArgs)
       }
+      else
+        ("", List[String](), 0)
 
+      val action = result._1
+      val verbs = result._2
+      val startOfNamedArgs = result._3
       val argsResult =  ArgsHelper.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
-      var indexResult:List[String] = List[String]()
 
       // start of index args is always 1 after the named args
       val startOfIndexArgs =
         if(argsResult._2 == startOfNamedArgs) startOfNamedArgs
         else argsResult._2 + 1
 
-      if(tokens.size > 0 && startOfIndexArgs >= 0 && startOfIndexArgs <= (tokens.size - 1))
+      val indexResult:List[String] =
+        if(tokens.nonEmpty && startOfIndexArgs >= 0 && startOfIndexArgs <= (tokens.size - 1))
       {
-        indexResult = tokens.slice(argsResult._2, tokens.size)
+        tokens.slice(argsResult._2, tokens.size)
       }
+      else
+        List[String]()
+
       val args = new Args(tokens, action, verbs.toList, prefix, sep,
         Some(argsResult._1.toMap[String,String]), Some(indexResult))
       args

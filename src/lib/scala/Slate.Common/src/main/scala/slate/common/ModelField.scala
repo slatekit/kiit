@@ -144,16 +144,7 @@ object ModelField {
                 cat:String = "data"
                 ) : ModelField =
   {
-    var finalName = name
-    if(destName.nonEmpty)
-    {
-      if(destName.get.trim != "" )
-      {
-        finalName = destName.get
-      }
-    }
-
-
+    val finalName = Strings.valueOptionOrDefault(destName, name)
     val field = new ModelField(name = name, desc = desc, dataType = dataType,
       storedName = finalName, pos = 0,
       isRequired = isRequired, minLength = minLength, maxLength = maxLength,

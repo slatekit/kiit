@@ -18,7 +18,7 @@ class ObjectBuilderJson(indentEnabled:Boolean, indent:String)
   private var _propCount = 0
 
   override def begin():Unit = {
-    _buffer = "{ "
+    _buffer.append("{ ")
   }
 
   /**
@@ -73,15 +73,14 @@ class ObjectBuilderJson(indentEnabled:Boolean, indent:String)
 
   override def putString(key:String, value:String) :Unit = {
 
-    var finalValue = "\"" + "\""
-    if (value == null) {
-      finalValue = "null"
+    val finalValue = if (value == null) {
+      "null"
     }
     else if (Strings.isNullOrEmpty(value)) {
-      finalValue = "\"" + "\""
+      "\"" + "\""
     }
     else {
-      finalValue = "\"" + value.replaceAllLiterally("\"", "\\\"") + "\""
+      "\"" + value.replaceAllLiterally("\"", "\\\"") + "\""
     }
     putStringRaw(key, finalValue)
   }
@@ -89,18 +88,18 @@ class ObjectBuilderJson(indentEnabled:Boolean, indent:String)
 
   def putStringRaw(key:String, value:String): Unit = {
     val comma = if (_propCount > 0) ", " else " "
-    _buffer = _buffer + comma
+    _buffer.append(comma)
     if(indentEnabled){
-      _buffer = _buffer + Strings.newline()
-      _buffer = _buffer + _indent
+      _buffer.append(Strings.newline())
+      _buffer.append(_indent)
     }
 
-    _buffer = _buffer + "\"" + key + "\" : " + value
+    _buffer.append("\"" + key + "\" : " + value)
     _propCount = _propCount + 1
   }
 
 
   override def end():Unit = {
-    _buffer = _buffer + " }"
+    _buffer.append(" }")
   }
 }

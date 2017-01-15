@@ -33,8 +33,7 @@ object Files {
 
   def readAllText(path:String):String =
   {
-    var content = ""
-    read(path, (res) => content = res.mkString)
+    val content = read(path, "", (res) => res.mkString)
     content
   }
 
@@ -48,13 +47,8 @@ object Files {
 
   def readAllLines(path:String):List[String] =
   {
-    val lines = new ListBuffer[String]()
-    read(path, (res) =>
-    {
-      for(line <- res.getLines())
-        lines.append(line)
-    })
-    lines.toList
+    val lines = read[List[String]](path, List[String](), (res) => res.getLines().toList)
+    lines
   }
 
 
@@ -90,18 +84,22 @@ object Files {
   }
 
 
-  def read(path:String, callback:(BufferedSource) => Unit):Unit =
+  def read[T](path:String, defaultVal:T, callback:(BufferedSource) => T):T =
   {
-    var res:BufferedSource = null
-    try {
-      res = scala.io.Source.fromFile(path)
-      callback(res)
+    val res:(Boolean, T, BufferedSource) = try {
+      val c = scala.io.Source.fromFile(path)
+      val r = callback(c)
+      (true, r, c)
     }
-    finally {
-      if (res != null) {
-        res.close()
+    catch{
+      case ex:Exception => {
+        (false, defaultVal, null)
       }
     }
+    if(res._1){
+      res._3.close()
+    }
+    res._2
   }
 
 
@@ -123,17 +121,18 @@ object Files {
 
   def write(path:String,  callback:(BufferedWriter) => Unit):Unit =
   {
-    var bw:BufferedWriter = null
-    try {
+    val result:Option[BufferedWriter]= try {
       val file = new File(path)
-      bw = new BufferedWriter(new FileWriter(file))
+      val bw = new BufferedWriter(new FileWriter(file))
       callback(bw)
+      Some(bw)
     }
-    finally {
-      if (bw != null) {
-        bw.close()
+    catch{
+      case ex:Exception => {
+        None
       }
     }
+    result.fold[Unit](Unit)( b => b.close())
   }
 
 

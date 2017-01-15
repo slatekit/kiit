@@ -197,17 +197,18 @@ object Args
   : Result[Args] =
   {
     // build a single line from args
-    var line = ""
-    if(args != null && args.size > 0){
-      args.indices.foreach( i => {
-        if ( i > 0 ){
-          line = line + " " + args(i)
+    val line = if(args != null && args.size > 0) {
+      args.indices.foldLeft("")( (text, ndx) => {
+        if ( ndx > 0 ){
+          text + " " + args(ndx)
         }
         else {
-          line = args(i)
+          args(ndx)
         }
       })
     }
+    else
+      ""
     new ArgsService().parse(line, prefix, sep, hasAction)
   }
 

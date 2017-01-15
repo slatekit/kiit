@@ -13,17 +13,17 @@ package slate.common.encrypt
 
 trait EncryptSupportIn {
 
-  protected var _enc: Option[Encryptor] = None
+  protected def enc(): Option[Encryptor] = None
 
 
   protected def encrypt(text: String): String = {
-    val result = _enc.flatMap[String](e => Some(e.encrypt(text)))
+    val result = enc().flatMap[String](e => Some(e.encrypt(text)))
     result.getOrElse(text)
   }
 
 
   protected def decrypt(encrypted: String): String = {
-    val result = _enc.flatMap[String](e => Some(e.decrypt(encrypted)))
+    val result = enc().flatMap[String](e => Some(e.decrypt(encrypted)))
     result.getOrElse(encrypted)
   }
 }

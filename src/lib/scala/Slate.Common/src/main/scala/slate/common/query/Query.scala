@@ -17,8 +17,8 @@ class Query extends IQuery {
 
 
   protected var _lastCondition:Condition = null
-  protected val EmptyString = "''"
   protected var _limit = 0
+  protected val EmptyString = "''"
   protected val _data = new QueryData(new ListBuffer[ICondition](), new ListBuffer[FieldValue]())
 
 

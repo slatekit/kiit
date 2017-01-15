@@ -12,5 +12,5 @@ package slate.common.utils
 
 class Temp {
 
-  var typeString = ""
+  val typeString = ""
 }

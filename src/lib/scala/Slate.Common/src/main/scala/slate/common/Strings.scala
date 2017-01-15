@@ -66,15 +66,16 @@ object Strings {
     */
   def mkString[T](items:Seq[T], serializer: (T) => String, delimiter:String = ", "): String =
   {
-    var text = ""
+    val buff = new StringBuilder()
     for(ndx <- 0 until items.size)
     {
       val item = items(ndx)
       if(ndx > 0) {
-        text += delimiter
+        buff.append( delimiter )
       }
-      text += serializer(item)
+      buff.append(serializer(item))
     }
+    val text = buff.toString()
     text
   }
 
@@ -95,7 +96,7 @@ object Strings {
 
 
   def substring(text:String, pattern:String): Option[(String, String)] = {
-    if(!isNullOrEmpty(text) && isNullOrEmpty(pattern)) {
+    if(!isNullOrEmpty(text) && !isNullOrEmpty(pattern)) {
       val ndxPattern = text.indexOf(pattern)
       if (ndxPattern < 0) {
         None
@@ -225,23 +226,12 @@ object Strings {
 
 
   def isDouble(input: String): Boolean = {
-    var totalDecimal = 0
-    var ndx = 0
-    var isDouble = true
-    while(ndx < input.length && isDouble ){
-      val ch = input(ndx)
-      if (ch == '.'){
-        if(totalDecimal == 0)
-          totalDecimal += 1
-        else if (totalDecimal > 0 )
-          isDouble = false
-      }
-      else if( !ch.isDigit ) {
-        isDouble = false
-      }
-      ndx += 1
+    try {
+      java.lang.Double.parseDouble(input)
+      true
+    } catch {
+      case e: NumberFormatException => false
     }
-    isDouble
   }
 
 

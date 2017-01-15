@@ -19,18 +19,18 @@ class SerializerProps extends SerializerBase {
   override def onVisitItemBegin(item:Any, pos:Int, total:Int):Unit =
   {
     append("{" + Strings.newline())
-    indentInc()
+    _identer.inc()
   }
 
 
   override def onVisitItemEnd(item:Any, pos:Int, total:Int):Unit =
   {
-    indentDec()
+    _identer.dec()
     append("}" + Strings.newline())
   }
 
 
-  override def onVisitFieldBegin(item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
+  override def onVisitFieldBegin(maxFieldLength:Int, item:Any, name:String, value:Option[Any], pos:Int, total:Int):Unit =
   {
     val finalText = value.fold[String]("null")( actual => {
       actual match {
@@ -43,7 +43,7 @@ class SerializerProps extends SerializerBase {
         case _          => actual.toString
       }
     })
-    val finalName = Strings.pad(name, Math.max(_maxFieldLength, name.length))
+    val finalName = Strings.pad(name, Math.max(maxFieldLength, name.length))
     append(finalName + " : " + finalText + Strings.newline())
   }
 }
