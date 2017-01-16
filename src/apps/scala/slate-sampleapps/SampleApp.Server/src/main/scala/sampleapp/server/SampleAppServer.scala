@@ -17,24 +17,19 @@ import sampleapp.core.models.{Movie, User}
 import sampleapp.core.services.{MovieApi, MovieService, UserService, UserApi}
 import slate.common.args.ArgsSchema
 import slate.core.apis.ApiReg
-import slate.entities.models.ModelSettings
 
 // Slate Result Monad + database/logger/application metadata
 import slate.common.{Result}
-import slate.common.app.AppMeta
-import slate.common.databases.DbLookup
-import slate.common.info.{Lang, Host}
 import slate.common.logging.LoggerConsole
 
 // Slate Base Application ( to support command line args, environments, config etc )
-import slate.core.app.{AppRunner, AppProcess}
+import slate.core.app.{AppOptions, AppRunner, AppProcess}
 import slate.core.common.AppContext
 
 // Slate entities ( mini-ORM ) - Optional
 import slate.entities.core.Entities
-import slate.entities.repos.{EntityRepoMySql}
 
-import slate.integration.{EntitiesApi, VersionApi, AppApi}
+import slate.integration.{VersionApi, AppApi}
 import slate.server.core.Server
 import scala.reflect.runtime.universe.{typeOf}
 
@@ -92,6 +87,10 @@ class SampleAppServer extends AppProcess
             .text("domain"     , "domain association"       , false, "::0"  , "::0"  , "::0|mycompany.com")
             .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
 
+
+  // For server, print all info at startup
+  override lazy val options = new AppOptions(printSummaryBeforeExec = true)
+
   /**
     * initialize app context, database and ORM / entities.
     *
@@ -104,9 +103,6 @@ class SampleAppServer extends AppProcess
     */
   override def onInit(): Unit =
   {
-    // Shows startup summary before execution.
-    options.printSummaryBeforeExec = true
-
     // Initialize the context with common app info
     // The database can be set up in the "env.conf" shared inherited config or
     // overridden in the environment specific e.g. "env.qa.conf"
@@ -114,20 +110,12 @@ class SampleAppServer extends AppProcess
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(),
+      ent  = new Entities(Option(dbs())),
       inf  = aboutApp(),
-      con  = conf.dbCon(),
+      dbs  = Option(dbs()),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())
     )
-
-    // 3. Initialize the database if enabled
-    // NOTE(s):
-    // 1. There is a sample mysql database connection in common environment config "env.conf".
-    // 2. It is currently disabled for loading via the db.enabled = false flag.
-    // 3. To enable loading of the connection and making it available in ctx.con
-    //    set db.enabled = true
-    DbLookup.setDefault(ctx.con)
 
     // 4. Setup the User entity services
     // NOTE(s):
@@ -164,7 +152,7 @@ class SampleAppServer extends AppProcess
     // 1. Build the auth provider
     val sampleKeys = AppApiKeys.fetch()
     val selectedKey = sampleKeys(5)
-    val auth = new AppAuth("test-mode", "slatekit", "johndoe", selectedKey, sampleKeys)
+    val auth = new AppAuth("test-mode", "slatekit", "johndoe", selectedKey, Some(sampleKeys))
 
     // 2. Initialize server with port, domain, context (see above) and auth provider
     val server = new Server( args.getIntOrElse("port", 5000),

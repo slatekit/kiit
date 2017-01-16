@@ -40,19 +40,11 @@ class AppBase extends AppProcess
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(),
+      ent  = new Entities(Option(dbs())),
       inf  = aboutApp(),
-      con  = conf.dbCon(),
+      dbs  = Option(dbs()),
       enc  = Some(AppEncryptor)
     )
-
-    // Initialize the database if enabled
-    // NOTE(s):
-    // 1. There is a sample mysql database connection in common environment config "env.conf".
-    // 2. It is currently disabled for loading via the db.enabled = false flag.
-    // 3. To enable loading of the connection and making it available in ctx.con
-    //    set db.enabled = true
-    DbLookup.setDefault(ctx.con)
 
     // 4. Setup the User entity services
     // NOTE(s):

@@ -103,20 +103,12 @@ class SampleAppBatch extends AppProcess
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(),
+      ent  = new Entities(Option(dbs())),
       inf  = aboutApp(),
-      con  = conf.dbCon(),
+      dbs  = Option(dbs()),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())
     )
-
-    // Initialize the database if enabled
-    // NOTE(s):
-    // 1. There is a sample mysql database connection in common environment config "env.conf".
-    // 2. It is currently disabled for loading via the db.enabled = false flag.
-    // 3. To enable loading of the connection and making it available in ctx.con
-    //    set db.enabled = true
-    DbLookup.setDefault(ctx.con)
 
     // 4. Setup the User entity services
     // NOTE(s):
@@ -126,6 +118,8 @@ class SampleAppBatch extends AppProcess
     // 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
     ctx.ent.register[User](isSqlRepo= false, entityType = typeOf[User],
       serviceType= typeOf[UserService], repository= new EntityRepoInMemory[User](typeOf[User]))
+
+    _log = Option(ctx.log)
   }
 
 

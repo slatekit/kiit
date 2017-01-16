@@ -1,9 +1,9 @@
 ----------------------------------------------------------------------------------------
 @author : Kishore Reddy
 @website: www.slatekit.com 
-@date   : Dec 1, 2016
-@release: 1.2.0
-@build  : 1.2.0.3
+@date   : Jan 15, 2016
+@release: 1.3.0
+@build  : 1.3.0.2
 ----------------------------------------------------------------------------------------
 
 
@@ -11,7 +11,7 @@
 ----------------------------------------------------------------------------------------
 SLATE KIT
 ----------------------------------------------------------------------------------------
-This is Slate Kit 1.2 
+This is Slate Kit 1.3
 Slate Kit is a tool kit, utility library and server backend for mobile and web apps. 
 It is written in Scala and uses Akka-Http for the Server. 
 
@@ -128,7 +128,7 @@ Info  : SUMMARY :
 Info  : ===============================================================
 Info  : name             = Sample App - Console
 Info  : desc             = Sample console application to show the Slate Kit base app
-Info  : version          = 1.2.0
+Info  : version          = 1.3.0
 Info  : tags             = slate,shell,cli
 Info  : group            = Samples
 Info  : region           = ny

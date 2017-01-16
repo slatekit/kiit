@@ -107,20 +107,12 @@ class SampleAppCLI extends AppProcess
       env  = env,
       cfg  = conf,
       log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(),
+      ent  = new Entities(Option(dbs())),
       inf  = aboutApp(),
-      con  = conf.dbCon(),
+      dbs  = Option(dbs()),
       enc  = Some(AppEncryptor),
       dirs = Some(folders())
     )
-
-    // 3. Initialize the database if enabled
-    // NOTE(s):
-    // 1. There is a sample mysql database connection in common environment config "env.conf".
-    // 2. It is currently disabled for loading via the db.enabled = false flag.
-    // 3. To enable loading of the connection and making it available in ctx.con
-    //    set db.enabled = true
-    DbLookup.setDefault(ctx.con)
 
     // 4. Setup the User entity services
     // NOTE(s):
@@ -163,7 +155,7 @@ class SampleAppCLI extends AppProcess
     val sampleKeys = AppApiKeys.fetch()
     val selectedKey = sampleKeys(5)
     val creds = new Credentials("1", "john doe", "jdoe@gmail.com", key = selectedKey.key)
-    val auth = new AppAuth("test-mode", "slatekit", "johndoe", selectedKey, sampleKeys)
+    val auth = new AppAuth("test-mode", "slatekit", "johndoe", selectedKey, Some(sampleKeys))
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.

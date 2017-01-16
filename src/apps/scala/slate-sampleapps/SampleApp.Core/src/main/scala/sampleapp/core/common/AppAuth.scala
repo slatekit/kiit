@@ -26,7 +26,7 @@ import slate.core.common.Conf
   * @param keys        : the list of api keys when using api key based authorization.
   */
 class AppAuth (val mode:String, val appDir:String,
-               val user:String, val selectedKey:ApiKey, keys:List[ApiKey])
+               val user:String, val selectedKey:ApiKey, keys:Option[List[ApiKey]])
   extends ApiAuth(keys, None)
 with ResultSupportIn
 {

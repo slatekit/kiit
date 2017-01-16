@@ -12,7 +12,7 @@
 package sampleapp.core.services
 
 import sampleapp.core.models.User
-import slate.common.{RandomGen, Result, DateTime}
+import slate.common.{Random, Result, DateTime}
 import slate.core.common.svcs.EntityServiceWithSupport
 
 /**
@@ -27,7 +27,7 @@ class UserService extends EntityServiceWithSupport[User]()
     user.email = email
     user.firstName = first
     user.lastName = last
-    user.token = RandomGen.stringGuid(false)
+    user.token = Random.stringGuid(false)
     user.userName = email
     user.password = "12356789"
     user.country = country
@@ -36,6 +36,18 @@ class UserService extends EntityServiceWithSupport[User]()
     user.status = "pending"
     create(user)
     user
+  }
+
+
+  def updatePhone(id:Int, phone:String): Result[String] =
+  {
+    val user = get(id)
+    if(!user.isDefined){
+      return failure(Some("unable to find user with id : " + id))
+    }
+    user.get.phone = phone
+    update(user.get)
+    success(s"updated phone : " + user.get.phone)
   }
 
 

@@ -21,10 +21,24 @@ import scala.reflect.runtime.universe.{typeOf}
 @Api(area = "sampleapp", name = "users", desc = "api for users", roles= "ops", auth = "app-roles", verb = "post", protocol = "*")
 class UserApi extends ApiEntityWithSupport[User, UserService] with ResultSupportIn {
 
-  @ApiAction(name= "", desc= "creates a new user", roles= "@parent", verb = "@parent", protocol = "*")
+  @ApiAction(name= "", desc= "creates a new user", roles= "@parent", verb = "post", protocol = "*")
   def create(email:String, first:String, last:String, isMale:Boolean, age:Int, phone:String, country:String): User =
   {
     service.create(email, first, last, isMale, age, phone, country)
+  }
+
+
+  @ApiAction(name= "", desc= "updates", roles= "@parent", verb = "put", protocol = "*")
+  def updatePhone(id:Int, phone:String): Result[String] =
+  {
+    service.updatePhone(id,phone)
+  }
+
+
+  @ApiAction(name = "", desc = "gets the total users for the region", roles= "@parent", verb = "delete", protocol = "@parent")
+  def deleteById(id:Int): Boolean =
+  {
+    service.delete(id)
   }
 
 
@@ -44,13 +58,6 @@ class UserApi extends ApiEntityWithSupport[User, UserService] with ResultSupport
 
   @ApiAction(name = "", desc = "gets the total users for the region", roles= "@parent", verb = "*", protocol = "@parent")
   def getTotal(region:String): Int =
-  {
-    service.getTotal(region)
-  }
-
-
-  @ApiAction(name = "", desc = "gets the total users for the region", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def delete(region:String): Int =
   {
     service.getTotal(region)
   }
