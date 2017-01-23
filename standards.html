@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Setup</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-navbar navbar navbar-fixed-top">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Coding Standards</h1>
+                <h3>The philosophical approach and coding standards in Slate Kit<br />
+                </h3>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="features" class="section">
+          <div class="container">
+			
+            <div class="alert alert-info text-center" role="alert">
+				<h3>Simple and Practical</h3>
+			</div>
+			<br/>
+			
+			<div>	
+				<p>The high-level design approach of Slate Kit primarily involves an emphasis on <strong>simplicity</strong> and <strong>practicality</strong> while following best practices. There are certain items we <strong>avoid</strong> or specifically <strong>use</strong> ( see below ). We try to maintain a healthy balance between delivering new features, implementing new concepts, supporting valid and common use-cases, and incorporating functional programming as much as possible. Some of our other design choices include the following:</p>
+				<br/>
+				<h2>Best Practices</h2>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><strong>Name</strong></td>
+						<td class="col-sm-1"><strong>Source</strong></td>
+						<td class="col-sm-3"><strong>Url</strong></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><strong>The simple parts</strong></td>
+						<td class="col-sm-1"><strong>Martin Odersky</strong></td>
+						<td class="col-sm-3"><a class="url-ch" href="https://www.youtube.com/watch?v=ecekSCX3B4Q">Martin Odersky - Scala: The Simple Parts</a></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><strong>Effective Scala</strong></td>
+						<td class="col-sm-1"><strong>Twitter</strong></td>
+						<td class="col-sm-3"><a class="url-ch" href="http://twitter.github.io/effectivescala/">http://twitter.github.io/effectivescala/</a></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><strong>Best Practices</strong></td>
+						<td class="col-sm-1"><strong>Alexandru Nedelcu</strong></td>
+						<td class="col-sm-3"><a class="url-ch" href="https://github.com/alexandru/scala-best-practices">https://github.com/alexandru/scala-best-practices</a></td>
+					</tr>
+				</table>
+				<br/>
+				<h2>Approaches</h2>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-3"><strong>1.</strong> Easy to read code ( for code maintainance by anyone)</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>2.</strong> Pragmatic decisions ( consider costs, trade-offs, learning curves, complexity )</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>3.</strong> Modular components ( that can further be composed by end-users )</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>4.</strong> Minimal dependencies ( to avoid a large dependency chain ) </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>5.</strong> Avoid dogmatic approach to pure functional programming. </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-3"><strong>6.</strong> Refactor code as needed in the beginning of a new release </td>
+					</tr>
+				</table>
+				<br/>
+				<h1>1. Avoid</h1>
+				<p>To be in-line with functional programming, the following are either avoided completely or minimally used, to prevent side-effects and chaotic flow-control.</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-danger">return</span></h4></td>
+						<td class="col-sm-3"><strong>Avoid</strong> return expressions to prevent early exits or short circuiting of logic.</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-danger">null</span></h4></td>
+						<td class="col-sm-3"><strong>Avoid</strong> use of null and instead use <strong>Option[T]</strong> and/or our own <strong>Result[T]</strong>. </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-danger">throw</span></h4></td>
+						<td class="col-sm-3"><strong>Avoid</strong> throwing exceptions and instead use functional error-handling ( <strong>Option[T]</strong> or our own <strong>Result[T]</strong> )</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-danger">var</span></h4></td>
+						<td class="col-sm-3"><strong>Avoid</strong> vars as much as possible. Vars are kept to a bare minimum in the code base in low-level high-performance text parsing and other low-level areas.</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-warning">for</span></h4></td>
+						<td class="col-sm-3"><strong>Prefer</strong> foreach,map,reduce,fold, and aggregate functions over the typical <strong>for loop</strong>. </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-warning">if</span></h4></td>
+						<td class="col-sm-3"><strong>Prefer</strong> map/folds/getOrElse over if/else expressions</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-warning">try</span></h4></td>
+						<td class="col-sm-3"><strong>Prefer</strong> scala's <strong>Try</strong> or our own <strong>attempt</strong> function that is an alternative to language level try/catch expressions</td>
+					</tr>
+				</table>
+				<br/>
+				<h1>2. Use</h1>
+				<p>The following items are used and/or preferred.</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">val</span></h4></td>
+						<td class="col-sm-3">Enforce immutability as much as possible. </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">match</span></h4></td>
+						<td class="col-sm-3">Use pattern matching over if/else if/else</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">map</span></h4></td>
+						<td class="col-sm-3">Use map, reduce, filter where applicable</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">aggregates</span></h4></td>
+						<td class="col-sm-3">Use aggregate functions find, filter, indexOf, min, max, minBy, maxBy etc</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">for { }</span></h4></td>
+						<td class="col-sm-3">Use for comprehensions for easier chained use of map/flatmap</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">case</span></h4></td>
+						<td class="col-sm-3">Use case classes for easier immutable functionality</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">Future[T]</span></h4></td>
+						<td class="col-sm-3">Use Futures for asynchronous processing. <br/>
+						<strong>TODO:</strong> This is something we have to do in some areas such as the database functions.</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-success">HOF</span></h4></td>
+						<td class="col-sm-3">Use higher order functions where applicable.</td>
+					</tr>
+				</table>
+				<br/>
+				<h1>3. Next</h1>
+				<p>The following are items that will be incorporated in the near future</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Value classes</span></h4></td>
+						<td class="col-sm-3">Possibly use this for the entity id's </td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Phantom types</span></h4></td>
+						<td class="col-sm-3">Possibly use this in the Interruptable Task component</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Type classes</span></h4></td>
+						<td class="col-sm-3">Possibly use this in the separation of some application / service features</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Cats</span></h4></td>
+						<td class="col-sm-3">Look at integrating/using Cats</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Shapeless</span></h4></td>
+						<td class="col-sm-3">Look at integrating/using shapeless</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">IO Monad</span></h4></td>
+						<td class="col-sm-3">Use the IO monad where applicable</td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-1"><h4><span class="label label-info">Free Monad</span></h4></td>
+						<td class="col-sm-3">Use the free state monad where applicable</td>
+					</tr>
+				</table>
+			</div>
+			<br/><br/>
+          </div>
+        </section>
+        
+		<br/>
+		<br/>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Website: <a class="url" href="http://www.codehelix.co">http://www.codehelix.co</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "about us";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-84704317-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
