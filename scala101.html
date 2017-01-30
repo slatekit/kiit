@@ -171,6 +171,16 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
+      <td><strong>iteration</strong></td>
+      <td>how to iterate over collections</td>
+      <td class=" text-center"><a href="#scala-iterations" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>aggregates</strong></td>
+      <td>how to use aggregate functions</td>
+      <td class=" text-center"><a href="#scala-aggregates" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
       <td><strong>multiline strings</strong></td>
       <td>strings that span multiple lines</td>
       <td class=" text-center"><a href="#scala-multiline-strings" class="more"><span class="btn btn-primary">See more</span></a></td>
@@ -248,7 +258,20 @@ in Scala. For more in-depth documentation please refer to the resources below.</
   
   <span class="c1">// 3. Import all items from a pacakge using "_"
 </span>  <span class="k">import</span> <span class="nn">slate.common.logging._</span>
-
+  
+  
+  <span class="c1">// 4. Import 1 function from an Object ( Random )
+</span>  <span class="c1">// NOTE: An object is essentially a Singleton class 
+</span>  <span class="c1">// that serves as a "module" containing 1 or more functions
+</span>  <span class="k">import</span> <span class="nn">slate.common.Random.</span><span class="o">{</span> <span class="n">string6</span> <span class="o">}</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
+  
+  
+  <span class="c1">// 5. Import all functions from the Random module
+</span>  <span class="k">import</span> <span class="nn">slate.common.Random._</span> 
+  <span class="n">println</span><span class="o">(</span> <span class="n">string3</span><span class="o">()</span> <span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
+  
 </code></pre>
 </div>
 
@@ -387,33 +410,35 @@ in Scala. For more in-depth documentation please refer to the resources below.</
     <span class="c1">// 1. if only
 </span>    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
 
-	
     <span class="c1">// 2. No braces
-</span>    <span class="k">val</span> <span class="n">code1</span> <span class="k">=</span> <span class="mi">200</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="n">code1</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"ok"</span> <span class="o">)</span>
-    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code1</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
+    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"not found"</span><span class="o">)</span>
     <span class="k">else</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"unknown"</span> <span class="o">)</span>
 
-	  
-    <span class="c1">// 3. braces
-</span>    <span class="k">val</span> <span class="n">code2</span> <span class="k">=</span> <span class="mi">200</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="n">code2</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"ok"</span><span class="o">)</span>
-    <span class="o">}</span>
-    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code2</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"not found"</span><span class="o">)</span>
-    <span class="o">}</span>
-    <span class="k">else</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"unknown"</span><span class="o">)</span>
-    <span class="o">}</span>
-	
+    <span class="c1">// 3. If conditions are expressions!
+</span>    <span class="c1">// This means they return a value.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the 
+</span>    <span class="c1">// if to a value ( in this case message )
+</span>    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
+        <span class="s">"ok"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="s">"not found"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="o">{</span>
+        <span class="s">"unknown"</span>
+      <span class="o">}</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
 
-    <span class="c1">// 4. if else are expressions that can return a value
-</span>    <span class="k">val</span> <span class="n">code3</span> <span class="k">=</span> <span class="mi">200</span>
-    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span><span class="n">code3</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
+    <span class="c1">// 4. There is no ternary "? :" operation, but in scala
+</span>    <span class="c1">// you do not need it as a simple if/else is sufficient
+</span>    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
     <span class="n">println</span><span class="o">(</span><span class="n">status</span><span class="o">)</span>
 
 </code></pre>
@@ -468,26 +493,37 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-    <span class="k">try</span>
-    <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
-      <span class="k">throw</span> <span class="k">new</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"testing"</span><span class="o">)</span>
-    <span class="o">}</span>
-    <span class="k">catch</span>
-    <span class="o">{</span>
-      <span class="c1">// Catch exceptions using pattern mataching
-</span>      <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
+
+    <span class="c1">// Everything is an expression, which means that
+</span>    <span class="c1">// the try/catch will return a value.
+</span>    <span class="c1">// In this example, we return a tuple( boolean, string )
+</span>    <span class="c1">// indicating, success, and a message.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the try
+</span>    <span class="c1">// to a value ( in this case the result )
+</span>    <span class="k">val</span> <span class="n">result</span><span class="k">:</span><span class="o">(</span><span class="kt">Boolean</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+      <span class="k">try</span>
       <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"argument ex: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
+        <span class="o">(</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"success"</span> <span class="o">)</span>
       <span class="o">}</span>
-      <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
-      <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"ex: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+      <span class="k">catch</span>
+        <span class="o">{</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"bad argument: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"unexpected  : "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="k">finally</span> <span class="o">{</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
       <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="k">finally</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
-    <span class="o">}</span>
+
+    <span class="c1">// Now print the result ( tuple )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
 
 </code></pre>
 </div>
@@ -650,6 +686,81 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <p>Maps can be immutable ( readonly ) or mutable ( editable ). This shows the immutable version</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-iterations">Iterations</h2>
+<p>How to iterate over collections</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// NOTE: There are multiple ways to iterate over a collection
+</span>    <span class="c1">// without using traditional "while" or "for" loops with variables
+</span>    
+    <span class="c1">// Case 1: Indices
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">ndx</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">items</span><span class="o">(</span><span class="n">ndx</span><span class="o">)))</span>
+    <span class="n">println</span><span class="o">()</span>
+    
+    <span class="c1">// Case 2: Zip with index ( You get a tuple of ( value, index ) )
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">d</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="n">_1</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">_2</span><span class="o">)</span> <span class="o">)</span>
+    
+    <span class="c1">// Case 3: Zip with index with case
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">{</span> <span class="k">case</span><span class="o">(</span><span class="n">item</span><span class="o">,</span> <span class="n">index</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">item</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">index</span><span class="o">)</span> <span class="o">}</span>
+    
+    <span class="c1">// Case 4: Using a range
+</span>    <span class="mf">4.</span><span class="n">until</span><span class="o">(</span><span class="mi">6</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span> <span class="n">v</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">v</span> <span class="o">)</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-aggregates">Aggregates</h2>
+<p>How to use the built-in map, filter, reduce and aggregate functions</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
+    
+    <span class="c1">// Case 1: apply function to each
+</span>    <span class="c1">// Prints:
+</span>    <span class="c1">// 1
+</span>    <span class="c1">// 2
+</span>    <span class="c1">// 3
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+    
+    <span class="c1">// Case 2: map strings to new list of numbers
+</span>    <span class="c1">// Result: List[Int](1, 2, 3)
+</span>    <span class="k">val</span> <span class="n">nums</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">i</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toInt</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">nums</span><span class="o">)</span>
+    
+    <span class="c1">// Case 3: reduce to 1 value
+</span>    <span class="c1">// Result: "1:2:3"
+</span>    <span class="k">val</span> <span class="n">total</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">reduce</span><span class="o">(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">b</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"reduce: "</span> <span class="o">+</span> <span class="s">"'"</span> <span class="o">+</span> <span class="n">total</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">)</span>
+    
+    <span class="c1">// Case 4a: fold to single value from the Left side
+</span>    <span class="c1">// Result: "LEFT,1,2,3"
+</span>    <span class="k">val</span> <span class="n">totalLeft</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="s">"LEFT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"fold left: "</span> <span class="o">+</span> <span class="n">totalLeft</span><span class="o">)</span>
+    
+    <span class="c1">// Case 4b: fold to single value from the Right side
+</span>    <span class="c1">// Result:  "1,2,3,RIGHT"
+</span>    <span class="k">val</span> <span class="n">totalRight</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="s">"RIGHT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"fold right: "</span> <span class="o">+</span> <span class="n">totalRight</span><span class="o">)</span>
+    
+    <span class="c1">// Case 5: max
+</span>    <span class="c1">// Result: 3
+</span>    <span class="k">val</span> <span class="n">max</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">maxBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"max: "</span> <span class="o">+</span> <span class="n">max</span><span class="o">)</span>
+    
+    <span class="c1">// Case 6: min
+</span>    <span class="c1">// Result: 1
+</span>    <span class="k">val</span> <span class="n">min</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">minBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"min: "</span> <span class="o">+</span> <span class="n">min</span><span class="o">)</span>
+
 </code></pre>
 </div>
 
