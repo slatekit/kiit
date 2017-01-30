@@ -214,7 +214,7 @@
 				<div class="row">					
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-common" class="thumbnail">
-							<img src="themes/start/images/white/multitool.png" alt="..." width="80">
+							<a href="utils.html"><img src="themes/start/images/white/multitool.png" alt="..." width="80"></a>
 							<div class="caption">
 								<div class="text-center">
 									<h3 >Slate.Common</h3>
@@ -223,7 +223,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
+										<td><strong>package</strong></td>
 										<td>slate.common</td>
 									</tr>
 									<tr>
@@ -231,29 +231,37 @@
 										<td>slate.common.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common">Slate.Common</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="utils.html">Utils</a></td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>								
 											<ul>
 												<li>scala reflect</li>
-												<li>-</li>
-												<li>-</li>
+												<li>typesafe config</li>
+												<li>json-simple</li>
 											</ul>
 										</td>
-									</tr>
-									<tr>
-										<td><strong>scala docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
 									</tr>
 									<tr>
 										<td><strong>about</strong></td>
 										<td>														
 											<ul>
+												<li>Refer to <a class="url-ch" href="utils.html">Utils</a></li>
 												<li>Contains utility code used through SlateKit.</li>
-												<li>Also contains the ORM/Entities component.</li>
 												<li>Many other useful components that can be used in web or server</li>
 											</ul>
 										 </td>
@@ -268,7 +276,7 @@
 					</div>
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-entities" class="thumbnail">
-							<img src="themes/start/images/white/layers.png" alt="..." width="80">
+							<a href="orm.html"><img src="themes/start/images/white/layers.png" alt="..." width="80"></a>
 							<div class="caption">
 								<div class="text-center">
 									<h3 class="align-center">Slate.Entities</h3>
@@ -277,7 +285,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
+										<td><strong>package</strong></td>
 										<td>slate.entities</td>
 									</tr>
 									<tr>
@@ -285,11 +293,23 @@
 										<td>slate.entities.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Entities/src/main/scala/slate/entities">Slate.Entities</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="orm.html">Orm</a></td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
@@ -299,16 +319,13 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
 										<td><strong>about</strong></td>
 										<td>							
 											<ul>
+												<li>Refer to <a class="url-ch" href="orm.html">ORM</a></li>
 												<li>Light-weight, Domain Driven, Single-Table ORM</li>
-												<li>Implemented using a Generic Service/Repository approach.</li>
-												<li>Support for MySql, support for Sql-Server coming soon</li>
+												<li>Generic Service/Repo.</li>
+												<li>Support for MySql, Sql server coming later</li>
 											</ul>
 										</td>
 									</tr>
@@ -322,7 +339,7 @@
 					</div>					
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-core" class="thumbnail">
-							<img src="themes/start/images/white/build.png" alt="..." width="80">
+							<a href="infra.html"><img src="themes/start/images/white/build.png" alt="..." width="80"></a>
 							<div class="caption">
 								<div class="text-center">
 									<h3 class="align-center">Slate.Core</h3>
@@ -331,7 +348,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
+										<td><strong>package</strong></td>
 										<td>slate.core</td>
 									</tr>
 									<tr>
@@ -339,30 +356,38 @@
 										<td>slate.core.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core">Slate.Core</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="infra.html">Core</a></td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
-												<li>config.jar</li>
+												<li>slate.entities</li>
 												<li>-</li>
 											</ul>
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
 										<td><strong>about</strong></td>
 										<td>							
 											<ul>
-												<li>Includes abstractions / base implementations for Queues, Files, Tasks</li>
-												<li>A command line interface component to easily build CLI tools</li>
-												<li>Many other components</li>
+												<li>Refer to <a class="url-ch" href="infra.html">Core</a></li>
+												<li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
+												<li>Many other components available</li>
 											</ul>
 										</td>
 									</tr>
@@ -376,43 +401,51 @@
 					</div>
 				</div>
 				<br/><br/>
-				<div class="row">				
-					<div id="project-slate-cloud" class="col-sm-6 col-md-4">
+				<div class="row">
+					<div id="project-slate-api" class="col-sm-6 col-md-4">
 						<div class="thumbnail">
-							<img src="themes/start/images/white/cloud_sync.png" alt="..." width="80">
+							<a href="apis-detail.html"><img src="themes/start/images/white/webapi.png" alt="..." width="80"></a>
 							<div class="caption">
 								<div class="text-center">
-									<h3 class="align-center">Slate.Cloud</h3>
-									<p>Cloud integration with AWS</p>
+									<h3 class="align-center">Slate.API</h3>
+									<p>Protocol Independent APIs </p>
 									<br/>
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
-										<td>slate.cloud</td>
+										<td><strong>package</strong></td>
+										<td>slate.api</td>
 									</tr>
 									<tr>
 										<td><strong>jar</strong></td>
-										<td>slate.cloud.jar</td>
+										<td>slate.api.jar</td>
+									</tr>
+									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Api/src/main/scala/slate/core/apis">Slate.Api</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="apis-detail.html">APIs</a></td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip">download</a></td>
 									</tr>
 									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
+												<li>slate.entities</li>
 												<li>slate.core</li>
-												<li>aws-sdk</li>
 												<li>-</li>
 											</ul>
 										</td>
-									</tr>
-									<tr>
-										<td><strong>scala docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-scala-docs.zip">download</a></td>
 									</tr>
 									<tr>
 										<td><strong>about</strong></td>
@@ -434,6 +467,139 @@
 							</p>
 						</div>
 					</div>
+					<div id="project-slate-integration" class="col-sm-6 col-md-4">
+						<div class="thumbnail">
+							<img src="themes/start/images/white/gears.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Integration</h3>
+									<p>Integration APIs for AWS, and others</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>package</strong></td>
+										<td>slate.integration</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.integration.jar</td>
+									</tr>
+									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Integration/src/main/scala/slate/integration">Slate.Integration</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td>Coming soon</td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip">download</a></td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>lib</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>aws-sdk</li>
+												<li>-</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>							
+											<ul>
+												<li>Requires the AWS sdk jar for Java</li>
+												<li>Contains the implementations of components ( queue, files ) using AWS S3 / SQS</li>
+												<li>The S3 / Files api is abstracted out</li>
+												<li>The SQS / Queue api is abstracted out</li>
+												<li>The S3/SQS api can be embedded into the CLI</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
+					<div id="project-slate-cloud" class="col-sm-6 col-md-4">
+						<div class="thumbnail">
+							<img src="themes/start/images/white/cloud_sync.png" alt="..." width="80">
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Cloud</h3>
+									<p>Cloud integration with AWS</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>package</strong></td>
+										<td>slate.cloud</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slate.cloud.jar</td>
+									</tr>
+									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Cloud/src/main/scala/slate/cloud/aws">Slate.Cloud</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td>Coming soon</td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip">download</a></td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>lib</strong></td>
+										<td>									
+											<ul>
+												<li>slate.common</li>
+												<li>slate.core</li>
+												<li>aws-sdk</li>
+												<li>-</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>about</strong></td>
+										<td>							
+											<ul>
+												<li>Requires the AWS sdk jar for Java</li>
+												<li>Contains the implementations of components ( queue, files ) using AWS S3 / SQS</li>
+												<li>The S3 / Files api is abstracted out</li>
+												<li>The SQS / Queue api is abstracted out</li>
+												<li>The S3/SQS api can be embedded into the CLI</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
+				</div>
+				<br/><br/>
+				<div class="row">
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-ext" class="thumbnail">
 							<img src="themes/start/images/white/module.png" alt="..." width="80">
@@ -445,7 +611,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td class="col-sm-3"><strong>namespace</strong></td>
+										<td class="col-sm-3"><strong>package</strong></td>
 										<td>slate.ext</td>
 									</tr>
 									<tr>
@@ -453,11 +619,19 @@
 										<td>slate.ext.jar</td>
 									</tr>
 									<tr>
-										<td><strong>cost</strong></td>
-										<td>paid : coming in October</td>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Ext">Slate.Ext</a></td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="features.html">Extensions</a></td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>paid : coming soon</td>
+									</tr>
+									<tr>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
@@ -468,7 +642,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
+										<td><strong>docs</strong></td>
 										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
 									</tr>
 									<tr>
@@ -489,8 +663,8 @@
 								<a href="features.html" class="btn btn-primary" role="button">More</a> 
 							</p>
 						</div>
-					</div>				
-					<div class="col-sm-6 col-md-4">
+					</div>	
+					<div class="col-sm-6 col-md-4">	
 						<div id="project-slate-tools" class="thumbnail">
 							<img src="themes/start/images/white/gears.png" alt="..." width="80">
 							<div class="caption">
@@ -501,7 +675,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td class="col-sm-3"><strong>namespace</strong></td>
+										<td class="col-sm-3"><strong>package</strong></td>
 										<td>slate.tools</td>
 									</tr>
 									<tr>
@@ -509,11 +683,19 @@
 										<td>slate.tools.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Tools/src/main/scala/slate/tools">Slate.Tools</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td>N/A</td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td> 									
 											<ul>
 												<li>slate.common</li>
@@ -524,7 +706,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
+										<td><strong>docs</strong></td>
 										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
 									</tr>
 									<tr>
@@ -545,9 +727,6 @@
 							</p>
 						</div>
 					</div>
-				</div>
-				<br/><br/>
-				<div class="row">
 					<div id="project-slate-shell" class="col-sm-6 col-md-4">
 						<div class="thumbnail">
 							<img src="themes/start/images/white/terminal.png" alt="..." width="80">
@@ -559,7 +738,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
+										<td><strong>package</strong></td>
 										<td>slate.shell</td>
 									</tr>
 									<tr>
@@ -567,11 +746,19 @@
 										<td>slate.shell.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Shell/src/main/scala/slate/shell">Slate.Shell</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td>Coming soon</td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free : open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common.jar</li>
@@ -582,7 +769,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
+										<td><strong>docs</strong></td>
 										<td>-</td>
 									</tr>
 									<tr>
@@ -603,7 +790,10 @@
 								<a href="infra.html" class="btn btn-primary" role="button">more</a> 
 							</p>
 						</div>
-					</div>					
+					</div>
+				</div>
+				<br/><br/>
+				<div class="row">
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-server" class="thumbnail">
 							<img src="themes/start/images/white/connected.png" alt="..." width="80">
@@ -615,7 +805,7 @@
 								</div>
 								<table class="table table-bordered table-striped">
 									<tr>
-										<td><strong>namespace</strong></td>
+										<td><strong>package</strong></td>
 										<td>slate.server
 									</tr>
 									<tr>
@@ -623,11 +813,19 @@
 										<td>slate.server.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Server/src/main/scala/slate/server">Slate.Server</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="server.html">Server</a></td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free: open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
@@ -638,7 +836,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
+										<td><strong>docs</strong></td>
 										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
 									</tr>
 									<tr>
@@ -659,7 +857,7 @@
 								<a href="server.html" class="btn btn-primary" role="button">more</a> 
 							</p>
 						</div>
-					</div>					
+					</div>	
 					<div class="col-sm-6 col-md-4">
 						<div id="project-slate-examples" class="thumbnail">
 							<img src="themes/start/images/white/manual.png" alt="..." width="80">
@@ -679,11 +877,19 @@
 										<td>slate.examples.jar</td>
 									</tr>
 									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples">Slate.Examples</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td>Availabe per page, utils, core, orm</td>
+									</tr>
+									<tr>
 										<td><strong>cost</strong></td>
 										<td>free: open-source</td>
 									</tr>
 									<tr>
-										<td><strong>dependencies</strong></td>
+										<td><strong>lib</strong></td>
 										<td>									
 											<ul>
 												<li>slate.common</li>
@@ -694,7 +900,7 @@
 										</td>
 									</tr>
 									<tr>
-										<td><strong>scala docs</strong></td>
+										<td><strong>docs</strong></td>
 										<td>-</td>
 									</tr>
 									<tr>
