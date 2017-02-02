@@ -18,15 +18,15 @@ import slate.common.DateTime
 trait MappedSourceReader {
    def init(rec:List[String]) : Unit
 
-   def getVersion() : String
+   def getVersion()     : String
 
-   def get(pos:Int) : String
+   def get(pos:Int)     : String
    def get(name:String) : String
 
-   def getShort(pos:Int) : Int
-   def getShort(name:String) : Int
+   def getShort(pos:Int)     : Short
+   def getShort(name:String) : Short
 
-   def getInt(pos:Int) : Int
+   def getInt(pos:Int)     : Int
    def getInt(name:String) : Int
 
    def getLong(pos:Int) : Long

@@ -16,7 +16,6 @@ class Query extends IQuery {
   }
 
 
-  protected var _lastCondition:Condition = null
   protected var _limit = 0
   protected val EmptyString = "''"
   protected val _data = new QueryData(new ListBuffer[ICondition](), new ListBuffer[FieldValue]())
@@ -88,8 +87,8 @@ class Query extends IQuery {
     */
   def where(field:String, compare:String, fieldValue:Any) : IQuery =
   {
-    _lastCondition = buildCondition(field, compare, fieldValue)
-    _data.conditions.append(_lastCondition)
+    val condition = buildCondition(field, compare, fieldValue)
+    _data.conditions.append(condition)
     this
   }
 
@@ -118,8 +117,8 @@ class Query extends IQuery {
     */
   def and(field:String, compare:String, fieldValue:Any) : IQuery =
   {
-    _lastCondition = buildCondition(field, compare, fieldValue);
-    group("and")
+    val cond = buildCondition(field, compare, fieldValue);
+    group("and", cond)
     this
   }
 
@@ -139,8 +138,8 @@ class Query extends IQuery {
     * @return this instance
     */
   def or(field:String, compare:String, fieldValue:Any) : IQuery = {
-    _lastCondition = buildCondition(field, compare, fieldValue)
-    group("or")
+    val cond = buildCondition(field, compare, fieldValue)
+    group("or", cond)
     this
   }
 
@@ -176,7 +175,7 @@ class Query extends IQuery {
   }
 
 
-  protected def group(condition:String):Unit =
+  protected def group(op:String, condition:Condition):Unit =
   {
     // Pop the last one
     val last = _data.conditions.size - 1
@@ -184,7 +183,7 @@ class Query extends IQuery {
     _data.conditions.remove(last)
 
     // Build a binary condition from left and right
-    val group = new ConditionGroup(left, condition, _lastCondition)
+    val group = new ConditionGroup(left, op, condition)
 
     // Push back on condition list
     _data.conditions.append(group)

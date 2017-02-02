@@ -13,37 +13,17 @@
 
 package slate.common
 
+import java.util.concurrent.atomic.AtomicInteger
+
 class Indenter {
-  protected var _indentLevel = 0
-  protected var _buffer = ""
-  protected var _indent = ""
-  protected var _maxFieldLength = 10
+  val count = new AtomicInteger()
 
 
-  def value():String = _indent
+  def value():String = "\t" * count.get
 
 
-  def inc():Unit =
-  {
-    _indentLevel = _indentLevel + 1
-    calc()
-  }
+  def inc():Int = count.incrementAndGet()
 
 
-  def dec():Unit =
-  {
-    _indentLevel = _indentLevel - 1
-    calc()
-  }
-
-
-  private def calc()
-  {
-    if(_indentLevel == 0) {
-      _indent = ""
-    }
-    else {
-      0.until(_indentLevel).foreach( i => _indent += "\t")
-    }
-  }
+  def dec():Int = count.decrementAndGet()
 }

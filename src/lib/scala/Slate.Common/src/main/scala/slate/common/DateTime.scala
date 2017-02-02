@@ -332,7 +332,7 @@ object DateTime {
     val monthTxt = text.substring(4, 6)
     val dayTxt   = text.substring(6, 8)
     val month = Integer.parseInt(monthTxt)
-    new DateTime(Integer.parseInt(yearTxt), month - 1, Integer.parseInt(dayTxt))
+    new DateTime(Integer.parseInt(yearTxt), month, Integer.parseInt(dayTxt))
   }
 
 

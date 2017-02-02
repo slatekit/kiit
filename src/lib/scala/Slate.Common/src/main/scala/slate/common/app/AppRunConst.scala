@@ -13,19 +13,19 @@ package slate.common.app
 
 object AppRunConst {
 
-  val INITIALIZE = "initialize"
-  val EXECUTE    = "execute"
-  val WAITING    = "waiting"
-  val END        = "end"
-  val STARTED    = "started"
-  val STOPPED    = "stopped"
-  val PAUSED     = "paused"
-  val RESUMED    = "resumed"
-  val SUCCESS    = "success"
-  val FAILURE    = "failure"
+  val NOT_STARTED = "not-started"
+  val INITIALIZE  = "initialize"
+  val EXECUTE     = "execute"
+  val WAITING     = "waiting"
+  val END         = "end"
+  val STARTED     = "started"
+  val STOPPED     = "stopped"
+  val PAUSED      = "paused"
+  val RESUMED     = "resumed"
+  val SUCCESS     = "success"
+  val FAILURE     = "failure"
 
   val LOCATION_USERDIR = 0
   val LOCATION_PROGRAMS = 1
   val LOCATION_LOCAL = 2
-
 }

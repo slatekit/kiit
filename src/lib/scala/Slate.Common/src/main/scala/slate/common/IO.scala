@@ -15,6 +15,8 @@ import java.io.{InputStreamReader, BufferedReader, InputStream}
 import slate.common.http.HttpRequest
 import slate.common.results.ResultCode
 
+import scala.io.Codec
+
 //http://etorreborre.blogspot.com/2011/12/pragmatic-io.html
 //http://functionaltalks.org/2013/06/20/paul-chiusano-how-to-write-a-functional-program-with-io-mutation-and-other-effects/
 class IO[+A](ioAction:() => A)
@@ -49,47 +51,5 @@ object IO {
 
   def failedIO[A](msg:String): IO[Result[A]] = {
     new IO( () => new FailureResult[A](msg = Option(msg), code = ResultCode.BAD_REQUEST))
-  }
-
-
-  def toString(input: InputStream): String =
-  {
-    val reader = new BufferedReader(new InputStreamReader(input))
-    val buffer = new StringBuilder()
-
-    Loops.forever( {
-      val line = reader.readLine()
-      val more = if (line == null)
-      {
-        false
-      }
-      else
-      {
-        buffer.append(line)
-        true
-      }
-      more
-    })
-    val content = buffer.toString()
-    content
-  }
-
-
-  def toStringFromHttp(is:InputStream):String =
-  {
-    val reader = new BufferedReader(new InputStreamReader(is, "is-8859-1"), 8)
-    val sb= new StringBuilder()
-    Loops.until({
-      val line = reader.readLine()
-      if(line == null){
-        false
-      }
-      else {
-        sb.append(line + "\n")
-        true
-      }
-    })
-    is.close()
-    sb.toString()
   }
 }

@@ -14,11 +14,10 @@ package slate.common
 
 import java.io.{File, BufferedWriter, FileWriter}
 import slate.common.conf.Config
-import slate.common.databases.DbConString
-import slate.common.encrypt.Encryptor
+import slate.common.Require._
 
 import scala.io.BufferedSource
-import scala.collection.mutable.{ListBuffer, Map}
+import scala.collection.mutable.{Map}
 
 
 object Files {
@@ -193,7 +192,7 @@ object Files {
   def mkUserDir(dir:String):String =
   {
     val userHome = System.getProperty("user.home")
-    Ensure.isNotNull(userHome, "Unable to load user directory from 'user.home' system property")
+    requireText(userHome, "Unable to load user directory from 'user.home' system property")
     mkDir(userHome, dir)
   }
 
@@ -275,15 +274,12 @@ object Files {
   def loadUserAppFile(appName:String, fileName:String):File =
   {
     val userHome = System.getProperty("user.home")
-    Ensure.isNotNull(userHome, "Unable to load user directory from 'user.home' system property")
+    requireText(userHome, "Unable to load user directory from 'user.home' system property")
 
     val dir = new File(userHome, appName)
     val file   = new File(dir, fileName)
     val isFound   = file.exists() && file.isFile()
-    if (!isFound) {
-      val msg = s"Unable to load file from user directory: $appName, $fileName"
-      throw new IllegalArgumentException(msg)
-    }
+    require(isFound, s"Unable to load file from user directory: $appName, $fileName")
     file
   }
 
@@ -291,16 +287,13 @@ object Files {
   def loadUserAppFile(rootFolder:String, appFolder:String, fileName:String):File =
   {
     val userHome = System.getProperty("user.home")
-    Ensure.isNotNull(userHome, "Unable to load user directory from 'user.home' system property")
+    requireText(userHome, "Unable to load user directory from 'user.home' system property")
 
     val root = new File(userHome, rootFolder)
     val app  = new File(root, appFolder)
     val file = new File(app, fileName)
     val isFound   = file.exists() && file.isFile()
-    if (!isFound) {
-      val msg = s"Unable to load file from user directory: $rootFolder, $fileName"
-      throw new IllegalArgumentException(msg)
-    }
+    require(isFound, s"Unable to load file from user directory: $rootFolder, $fileName")
     file
   }
 
@@ -308,10 +301,8 @@ object Files {
   def loadUserAppDirectory(appName:String, directory:String):File =
   {
     val userHome = System.getProperty("user.home")
-    if (userHome == null) {
-      throw new IllegalArgumentException("Unable to load file from user directory: "
+    requireText(userHome, "Unable to load file from user directory: "
         + "'user.home' System property is not set.")
-    }
 
     val appDir = appName + File.separator + directory
     val dir = new File(userHome, appDir)

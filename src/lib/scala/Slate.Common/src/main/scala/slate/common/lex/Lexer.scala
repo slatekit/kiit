@@ -263,23 +263,23 @@ class Lexer {
 
   protected def buildWordToken(word:String, charPos:Int, ndx:Int) : Token =
   {
-    var t:Token = null
+    val t:Token =
     if (!_settings.enableBoolIdentifiers)
     {
-      t = new Token(word,word,TokenType.Ident,_state.line,charPos,ndx)
+      new Token(word,word,TokenType.Ident,_state.line,charPos,ndx)
     }
     // Case 1: true
     else if (Strings.isMatch(word, "true") || (_settings.enableBoolYesNoIdentifiers && Strings.equals(word, "yes")))
     {
-      t = new Token(word,true,TokenType.Boolean,_state.line,charPos,ndx)
+      new Token(word,true,TokenType.Boolean,_state.line,charPos,ndx)
     }
     // Case 2: false
     else if (Strings.isMatch(word, "false") || (_settings.enableBoolYesNoIdentifiers && Strings.equals(word, "no")))
     {
-      t = new Token(word,false,TokenType.Boolean,_state.line,charPos,ndx)
+      new Token(word,false,TokenType.Boolean,_state.line,charPos,ndx)
     }
     else {
-      t = new Token(word, word, TokenType.Ident, _state.line, charPos, ndx)
+      new Token(word, word, TokenType.Ident, _state.line, charPos, ndx)
     }
     t
   }

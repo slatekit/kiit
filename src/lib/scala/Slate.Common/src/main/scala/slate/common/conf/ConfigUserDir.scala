@@ -15,6 +15,7 @@ import java.io.File
 import slate.common._
 import slate.common.databases.DbConString
 import slate.common.encrypt.Encryptor
+import slate.common.Require._
 
 object ConfigUserDir {
 
@@ -95,7 +96,7 @@ object ConfigUserDir {
   def createFile(appName:String, name:String, callback: => String):String =
   {
     val userHome = System.getProperty("user.home")
-    Ensure.isNotNull(userHome, "Unable to load user directory from 'user.home' system property")
+    requireText(userHome, "Unable to load user directory from 'user.home' system property")
 
     Files.mkUserDir(appName)
 

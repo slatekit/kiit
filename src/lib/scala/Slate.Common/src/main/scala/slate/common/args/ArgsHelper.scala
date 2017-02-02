@@ -68,28 +68,25 @@ object ArgsHelper {
    */
   def isMetaArg(positional:List[String], pos:Int, possibleMatches:String*): Boolean =
   {
-    executeWithGuards[Boolean](false, List[guard](
-      () => positional != null && positional.nonEmpty,
-      () => pos < positional.size
-    ),
-    {
-      val arg = positional(pos)
-      possibleMatches.foldLeft(false)( (isMatch, text) => {
-        if (text == arg) {
-          true
-        }
-        else if ("-" + text == arg) {
-          true
-        }
-        else if ("--" + text == arg) {
-          true
-        }
-        else if ("/" + text == arg) {
-          true
-        }
-        else
-          isMatch
-      })
+    require(positional != null && positional.nonEmpty, "strings to check not supplied")
+    require(pos < positional.size, "pos is invalid")
+
+    val arg = positional(pos)
+    possibleMatches.foldLeft(false)( (isMatch, text) => {
+      if (text == arg) {
+        true
+      }
+      else if ("-" + text == arg) {
+        true
+      }
+      else if ("--" + text == arg) {
+        true
+      }
+      else if ("/" + text == arg) {
+        true
+      }
+      else
+        isMatch
     })
   }
 

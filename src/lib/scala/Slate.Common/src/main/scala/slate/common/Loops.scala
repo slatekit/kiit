@@ -10,42 +10,42 @@
   */
 package slate.common
 
+import scala.annotation.tailrec
+
 object Loops {
 
   /**
-    * Looping structure to remove use of "vars" in other places.
-    * @param count
+    * "do while" loop alternative with index/count using tail recursion
+    *
+    * @param max
     * @param condition
     */
-  def repeat( count:Int, condition:(Int) => Boolean ):Unit = {
-    var ndx = 0
-    while(ndx < count ) {
-      val success = condition(ndx)
-      if(success)
-        ndx += 1
-      else
-        ndx = count + 1
-    }
+  def repeat( max:Int, condition:(Int) => Boolean ):Unit = {
+    repeat(0, max, condition)
   }
 
 
   /**
-    * Looping structure to remove use of "vars" in other places.
+    * "do while" loop alternative with index/count using tail recursion
+    * @param ndx
+    * @param max
     * @param condition
     */
-  def forever( condition: => Boolean ):Unit = {
-    until(condition)
+  @tailrec
+  def repeat(ndx:Int, max:Int, condition:(Int) => Boolean ): Unit = {
+    if (ndx < max && condition(ndx))
+      repeat(ndx + 1, max, condition)
   }
 
 
   /**
-   * Looping structure to remove use of "vars" in other places.
+   * "do while" loop alternative
+   *
    * @param condition
-   */
-  def until( condition: => Boolean ):Unit = {
-    var process = true
-    while(process ) {
-      process = condition
-    }
+    */
+  @tailrec
+  def doUntil(condition: => Boolean ):Unit = {
+    if(condition)
+      doUntil(condition)
   }
 }

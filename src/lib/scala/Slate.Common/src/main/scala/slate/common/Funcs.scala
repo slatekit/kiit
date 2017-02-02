@@ -14,6 +14,8 @@ package slate.common
 import slate.common.results.ResultFuncs._
 import slate.common.results.ResultTimed
 
+import scala.annotation.tailrec
+
 object Funcs {
 
   type guard = () => Boolean
@@ -73,17 +75,20 @@ object Funcs {
     * @return
     */
   def executeWithGuards[T](failureValue:T, guards:List[()=>Boolean], f: => T): T = {
-    var guardsOk = true
-    if(guards.nonEmpty ){
-      var pos = 0
-      // Stop checking on failure of first guard
-      while(guardsOk && pos < guards.size){
-        if(!guards(pos)()){
-          guardsOk = false
-        }
-        pos += 1
-      }
+    @tailrec
+    def checkGuards(pos:Int, guards:List[()=>Boolean]):(Boolean, Int) = {
+      if(pos < guards.size && !guards(pos)())
+        (false, pos)
+      else
+        checkGuards(pos + 1, guards)
     }
+
+    val guardsOk =
+      if(guards.nonEmpty ) {
+        checkGuards(0, guards)._1
+      }
+      else
+        true
     if(!guardsOk){
       failureValue
     }
@@ -143,7 +148,7 @@ object Funcs {
 
 
   def getStringByOrderOrElse(key:String,
-                             f1:String=>Option[String],
+                             f1:String => Option[String],
                              f2:String => Option[String],
                              defaultValue:String ): String = {
     val result1 = f1(key)

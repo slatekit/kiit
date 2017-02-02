@@ -42,7 +42,7 @@ object Reflector {
     * @param tpe
    * @return
    */
-  def createInstance(tpe:Type, args:Option[Seq[_]] = None): Any = {
+  def createInstance(tpe:Type, args:Option[Seq[_]] = None): AnyRef = {
     val mirror = ru.runtimeMirror(getClass.getClassLoader)
     val clsSym = tpe.typeSymbol.asClass
     val clsMirror = mirror.reflectClass(clsSym)
@@ -56,7 +56,7 @@ object Reflector {
       constructorMethod(params: _*)
     }
     //val instance = constructorMethod(args: _*)
-    instance
+    instance.asInstanceOf[AnyRef]
   }
 
 
@@ -107,6 +107,12 @@ object Reflector {
     val instanceMirror = typeMirror.reflect(instance)
     val symbol = instanceMirror.symbol
     symbol.isCaseClass
+  }
+
+
+  def isCaseClass(tpe: Type): Boolean = {
+    val clsSym = tpe.typeSymbol.asClass
+    clsSym.isCaseClass
   }
 
 
@@ -198,7 +204,14 @@ object Reflector {
   def getAnnotation(clsType:Type, anoType:Type, mem:Symbol): Option[Any] =
   {
     val annotations = mem.annotations
-    val annotation = annotations.find(a => a.tree.tpe == anoType)
+    val annotation = annotations.find(a => {
+      val tree = a.tree
+      val tpe = tree.tpe
+      val sym = tpe.typeSymbol
+      val tsym = anoType.typeSymbol
+      //a.tree.tpe == anoType
+      sym == tsym
+    })
     if(annotation.isEmpty) {
       None
     }
@@ -276,6 +289,22 @@ object Reflector {
 
 
   /**
+   * Gets a field value from the instance
+   *
+   * @param item: The instance to get the field value from
+   * @param fieldSym: The name of the field to get
+   * @return
+   */
+  def getField(item:Any, fieldSym:TermSymbol) : FieldMirror =
+  {
+    val m = ru.runtimeMirror(getClass.getClassLoader)
+    val im = m.reflect(item)
+    val fmX = im.reflectField(fieldSym)
+    fmX
+  }
+
+
+  /**
     * Gets a field value from the instance
     *
     * @param item: The instance to get the field value from
@@ -310,6 +339,22 @@ object Reflector {
     val tpe = clsSym.selfType
     val fieldX = tpe.decl(ru.TermName(fieldName)).asTerm.accessed.asTerm
     val fmX = im.reflectField(fieldX)
+    fmX.set(v)
+  }
+
+
+  /**
+   * Sets a field value in the instance
+   *
+   * @param item: The instance to set the field value to
+   * @param fieldSym: The name of the field to set
+   * @param v
+   */
+  def setFieldValue(item:Any, fieldSym:TermSymbol, v:Any) =
+  {
+    val m = ru.runtimeMirror(getClass.getClassLoader)
+    val im = m.reflect(item)
+    val fmX = im.reflectField(fieldSym)
     fmX.set(v)
   }
 
@@ -424,11 +469,12 @@ object Reflector {
 
 
   def getFieldsWithAnnotations(instance:AnyRef, clsTpe:Type, anoTpe:Type,
-                               declaredInSelfType:Boolean = true):
+                               declaredInSelfType:Boolean = true,
+                               getFieldMirror:Boolean = true ):
       ListBuffer[(String,TermSymbol,FieldMirror,Any,Type)] =
   {
     val m = ru.runtimeMirror(getClass.getClassLoader)
-    val im = m.reflect(instance)
+    val im:InstanceMirror = if(getFieldMirror) m.reflect(instance) else null
 
     val matches = ListBuffer[(String,TermSymbol,FieldMirror,Any,Type)]()
     for(mem <- clsTpe.members)
@@ -443,7 +489,7 @@ object Reflector {
         if(anno != None )
         {
           val memberName = mem.name.toString()
-          val memberMirror = im.reflectField(fieldSym)
+          val memberMirror:FieldMirror = if(getFieldMirror) im.reflectField(fieldSym) else null
           matches.append((memberName,fieldSym,memberMirror, anno.get, fieldType))
         }
       }
@@ -463,6 +509,7 @@ object Reflector {
   }
 
 
+  /*
   def printParams(mem: Symbol): Unit =
   {
     val args = mem.typeSignature.paramLists
@@ -530,82 +577,6 @@ object Reflector {
         }
       }
     }
-  }
-
-
-  /*
-  def methodAnnotations[T: TypeTag]: Map[String, Map[String, Map[String, Any]]] = {
-    typeOf[T].decls.collect { case m: MethodSymbol => m }.withFilter {
-      _.annotations.length > 0
-    }.map { m =>
-      m.name.toString -> m.annotations.map { a =>
-        a.tree.tpe.typeSymbol.name.toString -> a.tree.children.withFilter {
-          _.productPrefix eq "AssignOrNamedArg"
-        }.map { tree =>
-          tree.productElement(0).toString -> tree.productElement(1)
-        }.toMap
-      }.toMap
-    }.toMap
-  }
-
-
-  def methodAnnotations2(typ:Type): Map[String, Map[String, Map[String, Any]]] = {
-    typ.decls.collect { case m: MethodSymbol => m }.withFilter {
-      _.annotations.length > 0
-    }.map { m =>
-      m.name.toString -> m.annotations.map { a =>
-        a.tree.tpe.typeSymbol.name.toString -> a.tree.children.withFilter {
-          _.productPrefix eq "AssignOrNamedArg"
-        }.map { tree =>
-          tree.productElement(0).toString -> tree.productElement(1)
-        }.toMap
-      }.toMap
-    }.toMap
-  }
-
-
-  def methodAnnotations3(typ:Type): Unit = {
-    val methods = typ.decls.collect { case m: MethodSymbol => m }.withFilter
-    { _.annotations.length > 0 }
-
-    for(method <- methods)
-    {
-      for(anno <- method.annotations)
-      {
-        println(anno.tree.tpe.typeSymbol.name.toString)
-
-        for(child <- anno.tree.children)
-        {
-          println("child: " + child)
-          println("prefix:" + child.productPrefix)
-          if(child.productElement(0).isInstanceOf[ru.Ident]) {
-            println(child.productElement(0))
-            println(child.productElement(1))
-          }
-        }
-      }
-    }
-  }
-
-
-
-
-  def getFields(item:Any, tpe:Type): String =
-  {
-    var info = ""
-
-    for(mem <- tpe.members)
-    {
-      // Method + Public + declared in type
-      //println(mem.fullName, mem.isMethod, mem.isTerm)
-
-      if(mem.isPublic && !mem.isMethod && mem.isTerm && mem.owner == tpe.typeSymbol)
-      {
-        info = info + "\r\n" + mem.fullName
-        info = info + "\r\n" + mem.name + ": " + getFieldValue(item, mem.name.toString)
-      }
-    }
-    info
   }
   */
 }
