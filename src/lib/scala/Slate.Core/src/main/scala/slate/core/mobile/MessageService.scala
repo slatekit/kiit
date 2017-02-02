@@ -14,7 +14,8 @@
 package slate.core.mobile
 
 import slate.common.queues.QueueSource
-import slate.common.{DateTime, Ensure, Result}
+import slate.common.{DateTime, Result}
+import slate.common.Require._
 import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import scala.collection.mutable.Map
 
@@ -31,8 +32,8 @@ class MessageService(val _queue:Option[QueueSource] = None) extends MessageServi
     */
   def register(platform:String, messageService: MessageService):Unit =
   {
-    Ensure.isNotNull(platform, "platform id not valid")
-    Ensure.isOneOfSupplied(platform, _platforms, "platform is not valid")
+    requireText(platform, "platform id not valid")
+    requireOneOf(platform, _platforms, "platform is not valid")
 
     _services(platform) = messageService
   }

@@ -15,7 +15,7 @@ package slate.core.shell
 
 
 import slate.common.console.ConsoleWriter
-import slate.common.serialization.{SerializerProps, SerializerJson}
+import slate.common.serialization.{SerializerProps}
 import slate.entities.core.{EntitySerializer, Entities, IEntity}
 import slate.common._
 
@@ -127,7 +127,7 @@ object ShellPrinter {
       // Entity ? Print it as text.
       val mapper = entities.get.getMapper(Reflector.getTypeFromInstance(entity))
       val serializer = new EntitySerializer()
-      val text = serializer.serializeToProps(entity, mapper)
+      val text = serializer.toStringProps(entity, mapper)
       writeText(text)
       writeLine()
     }

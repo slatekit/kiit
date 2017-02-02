@@ -17,6 +17,7 @@ import slate.common._
 import slate.common.app.{AppMetaSupport, AppMeta}
 import slate.common.args.{ArgsHelper, Args}
 import slate.common.console.ConsoleWriter
+import slate.common.Loops._
 import slate.common.info.Folders
 import slate.common.results.{ResultCode, ResultSupportIn}
 
@@ -102,7 +103,7 @@ class ShellService(
     handleStartupCommand()
 
     // Keep reading from console until ( exit, quit ) is hit.
-    Loops.forever( {
+    doUntil({
 
       // Show prompt
       _writer.text(":>", false)
@@ -111,7 +112,7 @@ class ShellService(
       val line = readLine()
 
       // Case 1: Nothing Keep going
-      if (Strings.isNullOrEmpty(line))
+      val keepReading = if (Strings.isNullOrEmpty(line))
       {
         display(msg = Some("No command/action provided"))
         true
@@ -126,6 +127,7 @@ class ShellService(
       {
         tryLine(line)
       }
+      keepReading
     })
   }
 

@@ -12,7 +12,8 @@
   */
 package slate.core.mobile
 
-import slate.common.{Ensure, Result}
+import slate.common.{Result}
+import slate.common.Require._
 
 abstract class MessageServiceBase {
 
@@ -35,9 +36,9 @@ abstract class MessageServiceBase {
     */
   def send(deviceId:String, platform:String, message:String):Result[Boolean] =
   {
-    Ensure.isNotEmptyText(deviceId, "device id not provided")
-    Ensure.isNotEmptyText(platform, "platform not provided")
-    Ensure.isNotEmptyText(message, "message not provided")
+    requireText(deviceId, "device id not provided")
+    requireText(platform, "platform not provided")
+    requireText(message, "message not provided")
 
     send(new Message(deviceId, platform, data = message))
   }

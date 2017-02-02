@@ -49,14 +49,6 @@ import slate.common.Funcs._
   */
 class Cmd(val name: String) {
 
-  var _state: CmdState = new CmdState(name, DateTime.now(), false, 0, 0, null)
-  var _result: CmdResult = null
-
-
-  def state : CmdState = _state.copy()
-
-  def result : CmdResult = _result.copy()
-
   /**
    * execute this command with optional arguments
    * @param args
@@ -64,29 +56,17 @@ class Cmd(val name: String) {
    */
   def execute(args:Array[Any] = null): CmdResult =
   {
-    _state = _state.copy(lastRuntime = now())
-
     val resultTimed = attemptTimed( () => {
       executeInternal(args)
     })
-
-   // Update run count
-    _state = _state.copy(runCount = _state.runCount + 1, hasRun = true)
-
-   // Update errors.
     val result = resultTimed.result
-   if(!result.success){
-     _state = _state.copy(errorCount = _state.errorCount + 1)
-   }
-
     val data = resultTimed.result match {
       case s:SuccessResult[AnyRef] => Option(s.get)
       case f:FailureResult[AnyRef] => None
       case NoResult                => None
       case _                       => None
     }
-    _result = new CmdResult(name, result.success, result.msg.getOrElse(""), data, 0, resultTimed.start, resultTimed.end, _state.runCount)
-    _result
+    new CmdResult(name, result.success, result.msg.getOrElse(""), data, 0, resultTimed.start, resultTimed.end, 1)
   }
 
 

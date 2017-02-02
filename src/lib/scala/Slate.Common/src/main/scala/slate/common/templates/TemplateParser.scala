@@ -148,7 +148,7 @@ class TemplateParser(val text:String) {
 
   def advanceAndExpect(expected:Char): Char = {
     val ch = advance()
-    Ensure.isTrue(ch == expected, s"Expected ${expected} but found ${ch}")
+    require(ch == expected, s"Expected ${expected} but found ${ch}")
     ch
   }
 

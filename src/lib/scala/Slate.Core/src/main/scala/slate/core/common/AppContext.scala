@@ -22,7 +22,7 @@ import slate.common.i18n.I18nStrings
 import slate.common.info.{Folders, Lang, Host, About}
 import slate.common.logging.{LoggerConsole, LoggerBase}
 import slate.core.auth.AuthBase
-import slate.core.common.tenants.Tenant
+import slate.core.tenants.Tenant
 
 /**
  *
@@ -54,7 +54,7 @@ case class AppContext(
                         subs:Option[Subs]               = None          ,
                         res :Option[I18nStrings]        = None          ,
                         tnt :Option[Tenant]             = None          ,
-                        svcs:Option[IocRunTime]                = None
+                        svcs:Option[IocRunTime]         = None
                      )
 {
   def app:AppMeta = { new AppMeta(inf, host, lang) }

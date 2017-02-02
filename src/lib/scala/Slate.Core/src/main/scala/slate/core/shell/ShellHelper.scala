@@ -14,8 +14,9 @@
 package slate.core.shell
 
 
+import slate.common.args.ArgsHelper
 import slate.common.info.Folders
-import slate.common.{Files}
+import slate.common.{Strings, BoolMessage, Files}
 
 
 object ShellHelper {

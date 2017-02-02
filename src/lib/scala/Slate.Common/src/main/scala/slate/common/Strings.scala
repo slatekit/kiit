@@ -160,6 +160,8 @@ object Strings {
 
   def isMatch(text1:String, text2:String):Boolean =
   {
+    // TODO: Remove this and use builtin
+    // Left over from before
     if(text1 == null && text2 == null)
       true
     else if(text1 != null && text2 == null)
@@ -168,21 +170,6 @@ object Strings {
       false
     else
       text1 == text2
-  }
-
-
-  def compare(text1:String, text2:String, ignoreCase:Boolean = false):Int =
-  {
-    if(text1 == null && text2 == null)
-      0
-    else if(text1 != null && text2 == null)
-      1
-    else if(text1 == null && text2 != null)
-      0
-    else if(ignoreCase)
-      text2.compareToIgnoreCase(text2)
-    else
-      text1.compareTo(text2)
   }
 
 

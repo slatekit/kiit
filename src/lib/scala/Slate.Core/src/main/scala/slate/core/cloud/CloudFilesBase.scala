@@ -120,5 +120,7 @@ abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFold
   }
 
 
-  protected def toString(input: InputStream): String = IO.toString(input)
+  protected def toString(input: InputStream): String = {
+    scala.io.Source.fromInputStream(input).getLines().mkString
+  }
 }

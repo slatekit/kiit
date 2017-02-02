@@ -501,17 +501,16 @@ class AppProcess extends AppMetaSupport
     * @return "myapp-dev-20160710-930am.log"
     */
   protected def interpolate(raw:String): String = {
-    var text = raw
-    text = text.replace("@{app}", ctx.inf.name)
-    text = text.replace("@{env}", ctx.env.name)
-    text = text.replace("@{date}", DateTime.now().toStringNumeric())
+    val text = raw.replace("@{app}", ctx.inf.name)
+              .replace("@{env}", ctx.env.name)
+              .replace("@{date}", DateTime.now().toStringNumeric())
     text
   }
 
 
   protected def getApiKey(name:String):ApiCredentials = {
     val key = ctx.cfg.apiKey(name)
-    Ensure.isTrue(key.isDefined, s"Api Key with name $name is not configured")
+    require(key.isDefined, s"Api Key with name $name is not configured")
     key.get 
   }
 
