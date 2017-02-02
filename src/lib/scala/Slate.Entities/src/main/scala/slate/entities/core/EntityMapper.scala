@@ -28,6 +28,7 @@ import scala.reflect.runtime.universe._
 class EntityMapper(model:Model) extends Mapper(model) {
 
   def mapToSql(item:AnyRef, update:Boolean, fullSql:Boolean = false): String = {
+
     if (!_model.any)
       Strings.empty
     else
@@ -40,60 +41,58 @@ class EntityMapper(model:Model) extends Mapper(model) {
     var sql = ""
     var cols = ""
 
+
     val len = _model.fields.size
     for( ndx <- 0 until len)
     {
       val mapping = _model.fields(ndx)
       val propName = mapping.name
       val colName = getColumnName(mapping.storedName)
-      var data = ""
-      var include = true
-      if(Strings.isMatch(propName, "id"))
-        include = false
+      val include = !Strings.isMatch(propName, "id")
 
       if(include)
       {
-        if( mapping.dataType == _tpeString )
+        val data = if( mapping.dataType == _tpeString )
         {
           val sVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[String]
           val sValFinal = Strings.valueOrDefault(sVal, "")
-          data = "'" + QueryEncoder.ensureValue(sValFinal) + "'"
+         "'" + QueryEncoder.ensureValue(sValFinal) + "'"
         }
         else if(mapping.dataType == typeOf[Boolean])
         {
           val bVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Boolean]
-          data = if(bVal)  "1" else "0"
+          if(bVal)  "1" else "0"
         }
         else if(mapping.dataType == typeOf[Int])
         {
           val iVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Int]
-          data = iVal.toString
+          iVal.toString
         }
         else if(mapping.dataType == typeOf[Short])
         {
           val iVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Short]
-          data = iVal.toString
+          iVal.toString
         }
         else if(mapping.dataType == typeOf[Long])
         {
           val lVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Long]
-          data = lVal.toString
+          lVal.toString
         }
         else if(mapping.dataType == typeOf[Double])
         {
           val dVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Double]
-          data = dVal.toString
+          dVal.toString
         }
         else if(mapping.dataType == typeOf[DateTime])
         {
           val dtVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[DateTime]
-          data = "'" + dtVal.toStringMySql() + "'"
+          "'" + dtVal.toStringMySql() + "'"
         }
         else // Object
         {
           val objVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Any]
-          data = if(objVal == null)  null else objVal.toString()
-          data = "'" + QueryEncoder.ensureValue(data) + "'"
+          val data = if(objVal == null)  null else objVal.toString()
+          "'" + QueryEncoder.ensureValue(data) + "'"
         }
 
         // Setup the inserts

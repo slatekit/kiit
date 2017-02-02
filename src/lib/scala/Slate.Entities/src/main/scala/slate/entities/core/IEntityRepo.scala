@@ -18,8 +18,5 @@ trait IEntityRepo {
   def count() : Long
 
 
-  def delete(id: Long): Boolean
-
-
   def mapper():EntityMapper
 }

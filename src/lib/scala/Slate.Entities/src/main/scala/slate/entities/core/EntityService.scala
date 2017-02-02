@@ -26,145 +26,225 @@ import slate.common.query.IQuery
   * on the entities for create/update operations
   * @tparam T
   */
-class EntityService[T >: Null <: IEntity]
+class EntityService[T >: Null <: IEntity](protected val dataRepo:EntityRepo[T])
   extends IEntityService
 {
-  var _repo: EntityRepo[T] = null
+  val _repo: EntityRepo[T] = dataRepo
   protected var _log:Option[LoggerBase] = None
   protected var _enc:Option[Encryptor] = None
   protected var _res:Option[I18nStrings] = None
 
 
-  def this(repo:EntityRepo[T]) =
-  {
-    this()
-    _repo = repo
-  }
+
+  /**
+    * gets the repo representing the underlying datastore
+    * @return
+    */
+  def repo():IEntityRepo = _repo
 
 
-  def init(repo: EntityRepo[T]):Unit =
-  {
-    this._repo = repo
-  }
-
-
-  def repo():IEntityRepo =
-  {
-    _repo
-  }
-
-
+  /**
+    * creates the entity in the datastore
+    * @param entity
+    * @return
+    */
   def create(entity: T) :Long =
   {
-    applyFieldData(1, Some(entity))
-    _repo.create(entity)
+    val finalEntity = applyFieldData(1, entity)
+    _repo.create(finalEntity)
   }
 
 
+  /**
+    * updates the entity in the datastore
+    * @param entity
+    * @return
+    */
   def update(entity: T) :Unit =
   {
-    applyFieldData(2, Some(entity))
-    _repo.update(entity)
+    val finalEntity = applyFieldData(2, entity)
+    _repo.update(finalEntity)
   }
 
 
+  /**
+    * updates the entity field in the datastore
+    * @param id: id of the entity
+    * @param field: the name of the field
+    * @param value: the value to set on the field
+    * @return
+    */
   def update(id:Long, field:String, value:String): Unit =
   {
     val item = get(id)
-    if(item.nonEmpty) {
-      val entity = item.get
+    item.map( entity => {
       Reflector.setFieldValue(entity, field, value)
-
       update(entity)
-    }
+      Unit
+    })
   }
 
 
+  /**
+    * deletes the entity in the datastore
+    * @param id
+    * @return
+    */
   def delete(id: Long) :Boolean =
   {
     _repo.delete(id)
   }
 
 
-  def get(id: Long):Option[T] =
-  {
-    _repo.get(id)
-  }
-
-
-  def getAll():List[T] =
-  {
-    _repo.getAll()
-  }
-
-
-  def count(): Long =
-  {
-    _repo.count()
-  }
-
-
-  def top(count:Int, desc:Boolean ): List[T] =
-  {
-    _repo.top(count, desc)
-  }
-
-
-  def any(): Boolean =
-  {
-    _repo.any()
-  }
-
-
+  /**
+    * deletes the entity in memory
+    *
+    * @param entity
+    */
   def delete(entity:Option[T]) :Unit =
   {
     _repo.delete(entity)
   }
 
 
-  def save(entity: Option[T]) =
+  /**
+    * gets the entity from the datastore using the id
+    * @param id
+    * @return
+    */
+  def get(id: Long):Option[T] =
   {
-    applyFieldData(3, entity)
-    _repo.save(entity)
+    _repo.get(id)
   }
 
 
-  def saveAll(seq: Seq[T]) =
+  /**
+    * gets all the entities from the datastore.
+    * @return
+    */
+  def getAll():List[T] =
   {
-    _repo.saveAll(seq)
+    _repo.getAll()
   }
 
 
+  /**
+    * gets the total number of entities in the datastore
+    * @return
+    */
+  def count(): Long =
+  {
+    _repo.count()
+  }
+
+
+  /**
+    * gets the top count entities in the datastore sorted by asc order
+    * @param count: Top / Limit count of entities
+    * @param desc : Whether to sort by descending
+    * @return
+    */
+  def top(count:Int, desc:Boolean ): List[T] =
+  {
+    _repo.top(count, desc)
+  }
+
+
+  /**
+    * determines if there are any entities in the datastore
+    * @return
+    */
+  def any(): Boolean =
+  {
+    _repo.any()
+  }
+
+
+  /**
+    * saves an entity by either creating it or updating it based on
+    * checking its persisted flag.
+    * @param entity
+    */
+  def save(entity: Option[T]):Unit =
+  {
+    entity.map( e => {
+      val finalEntity = applyFieldData(3, e)
+      _repo.save(Option(finalEntity))
+      Unit
+    })
+  }
+
+
+  /**
+    * saves all the entities
+    *
+    * @param items
+    */
+  def saveAll(items: Seq[T]) =
+  {
+    _repo.saveAll(items)
+  }
+
+
+  /**
+    * Gets the first/oldest item
+    * @return
+    */
   def first() : Option[T] =
   {
     _repo.first()
   }
 
 
+  /**
+    * Gets the last/recent item
+    * @return
+    */
   def last() : Option[T]  =
   {
     _repo.last()
   }
 
 
+  /**
+    * Gets the most recent n items represented by count
+    * @param count
+    * @return
+    */
   def recent(count:Int): List[T]  =
   {
     _repo.recent(count)
   }
 
 
+  /**
+    * Gets the most oldest n items represented by count
+    * @param count
+    * @return
+    */
   def oldest(count:Int): List[T]  =
   {
     _repo.oldest(count)
   }
 
 
-  def distinct[Ty](name:String):List[Ty] =
+  /**
+    * Gets distinct items by the field name ( used for derived sql implementations )
+    * @param field
+    * @tparam Ty
+    * @return
+    */
+  def distinct[Ty](field:String):List[Ty] =
   {
     List[Ty]()
   }
 
 
+  /**
+    * finds items based on the query
+    * @param query
+    * @return
+    */
   def find(query:IQuery):List[T] =
   {
     _repo.find(query)
@@ -181,30 +261,23 @@ class EntityService[T >: Null <: IEntity]
   }
 
 
+  /**
+    * Hook for derived classes to handle additional logic before saving
+    * @param entity
+    */
   protected def onBeforeSave(entity: T) = {
   }
 
 
-  def applyFieldData(mode:Int, entity:Option[T] ) : Unit =
+  /**
+    * Hook for derived to apply any other logic/field changes before create/update
+    * @param mode
+    * @param entity
+    * @return
+    */
+  protected def applyFieldData(mode:Int, entity:T ) : T =
   {
-    if (entity.isDefined) {
-
-      val item = entity.get
-
-      // 1. Time stamps
-      if (mode == 1 || !item.isPersisted()) {
-        item.createdAt = DateTime.now()
-      }
-      item.updatedAt = DateTime.now()
-
-      // 2. Unique id ( GUID )
-      if (item.isInstanceOf[IEntityUnique]) {
-        val unique = item.asInstanceOf[IEntityUnique]
-        if (Strings.isNullOrEmpty(unique.uniqueId)) {
-          unique.uniqueId = Random.stringGuid(false)
-        }
-      }
-    }
+    entity
   }
 }
 

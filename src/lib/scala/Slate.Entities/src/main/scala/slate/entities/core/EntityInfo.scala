@@ -66,20 +66,12 @@ case class EntityInfo(
   }
 
 
-  private def getTypeName(tpe:Option[Type]) : String =
-  {
-    if(tpe.nonEmpty && tpe.get != null)
-      tpe.get.typeSymbol.fullName
-    else
-      ""
+  private def getTypeName(tpe:Option[Type]) : String = {
+    tpe.fold("")( t => t.typeSymbol.fullName)
   }
 
 
-  private def getTypeNameFromInst(tpe:Option[AnyRef]) : String =
-  {
-    if(tpe.nonEmpty && tpe.get != null)
-      tpe.get.getClass.getName
-    else
-      ""
+  private def getTypeNameFromInst(tpe:Option[AnyRef]) : String = {
+    tpe.fold("")( t => t.getClass.getName)
   }
 }

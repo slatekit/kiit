@@ -1,29 +1,32 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.entities.core
 
+import scala.reflect.runtime.universe.{typeOf, Type}
+
 import slate.common.databases.{Db, DbConString, DbConstants, DbLookup}
 import slate.common.mapper.Mapper
-import slate.common.{Ensure, ListMap, Reflector, Strings}
-import slate.entities.repos.{EntityRepoSql, EntityRepoMySql, EntityRepoInMemory}
+import slate.common.{ListMap, Reflector, Strings}
+import slate.common.databases.DbConstants._
+import slate.entities.repos.{EntityRepoSqlServer, EntityRepoMySql, EntityRepoInMemory}
 
-import scala.collection.mutable.{ListBuffer, Map}
-import scala.reflect.runtime.universe.Type
+
+import scala.collection.mutable.{Map}
 
 
 /**
-  *  Registers all the entities and their corresponding services, repositories, database
+  *  A registry for all the entities and their corresponding services, repositories, database
   *  types, and connection keys.
   *
   *   // Case 1: In-memory
@@ -61,97 +64,42 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
 
 
   def register[T >: Null <: IEntity](
-                                      isSqlRepo    : Boolean             = true,
-                                      entityType   : Type                = null,
-                                      serviceType  : Type                = null,
-                                      repoType     : Type                = null,
-                                      mapperType   : Type                = null,
-                                      repository   : EntityRepo[T]       = null,
-                                      mapper       : EntityMapper        = null,
-                                      dbType       : String              = ""  ,
-                                      dbKey        : String              = ""  ,
-                                      dbShard      : String              = ""
+                                      isSqlRepo    : Boolean                           ,
+                                      entityType   : Type                              ,
+                                      serviceType  : Option[Type         ]       = None,
+                                      repoType     : Option[Type         ]       = None,
+                                      mapperType   : Option[Type         ]       = None,
+                                      repository   : Option[EntityRepo[T]]       = None,
+                                      mapper       : Option[EntityMapper ]       = None,
+                                      dbType       : Option[String       ]       = Some(DbMySql),
+                                      dbKey        : Option[String       ]       = None,
+                                      dbShard      : Option[String       ]       = None
                                     ): EntityInfo =
   {
-    // Create instance of repo ( memory or sql backed )
-    var repo = repository
-    if (repo == null)
-    {
-      if(!isSqlRepo)
-      {
-        repo = new EntityRepoInMemory[T](entityType)
-      }
-      else if(dbType == DbConstants.DbMySql)
-      {
-        val sqlRepo = new EntityRepoMySql[T](entityType)
-        sqlRepo.setDb(getDatabase(dbKey, dbShard))
-        repo = sqlRepo
-      }
-      else if(dbType == DbConstants.DbSqlServer)
-      {
-        val sqlRepo = new EntityRepoMySql[T](entityType)
-        sqlRepo.setDb(getDatabase(dbKey, dbShard))
-        repo = sqlRepo
-      }
-    }
-    else {
-      if(isSqlRepo){
-        repo.asInstanceOf[EntityRepoSql[T]].setDb(getDatabase(dbKey, dbShard))
-      }
-    }
-
     // Create mapper
-    var mapperFinal = mapper
-    val entityKey = entityType.typeSymbol.fullName
-    if(mapper == null && !_mappers.contains(entityKey))
-    {
-      // load attributes
-      val entity = Reflector.createInstance(entityType).asInstanceOf[T]
-      val model = Mapper.loadSchema(entity, entityType)
+    val mapr = buildMapper(isSqlRepo, entityType, mapper)
 
-      mapperFinal = new EntityMapper(model)
-      _mappers(entityKey) = mapperFinal
-    }
-    else if( mapper != null && isSqlRepo && !_mappers.contains(entityKey))
-    {
-      _mappers(entityKey) = mapperFinal
-    }
+    // Create repo
+    val repo = buildRepo[T](isSqlRepo, dbType.getOrElse(""), dbKey.getOrElse(""), dbShard.getOrElse(""), entityType, mapr)
 
     // Create the service
-    var service:EntityService[T] = null
-    if (serviceType == null)
-    {
-      service = new EntityService[T]()
-    }
-    else
-    {
-      service = Reflector.createInstance(serviceType).asInstanceOf[EntityService[T]]
-    }
-
-    // initialize the mapper
-    mapperFinal.init()
-
-    // setup the repo with the mapper
-    repo.setMapper(mapperFinal)
-
-    // setup the service with the repo
-    service.init(repo)
+    val service = buildService[T](serviceType, repo)
 
     // Now register
     val info = new EntityInfo (
-                                  Some(entityType       ),
-                                  Some(serviceType      ),
-                                  Some(repoType         ),
-                                  Some(mapperType       ),
-                                  Some(service          ),
-                                  Some(repo             ),
-                                  Some(mapperFinal      ),
+                                  Some(entityType)       ,
+                                  serviceType            ,
+                                  repoType               ,
+                                  mapperType             ,
+                                  Option(service)        ,
+                                  Option(repo   )        ,
+                                  Option(mapr   )        ,
                                   isSqlRepo              ,
-                                  dbType                 ,
-                                  dbKey                  ,
-                                  dbShard
-                              )
-    val key = getKey(entityType, dbKey, dbShard)
+                                  dbType .getOrElse("")  ,
+                                  dbKey  .getOrElse("")  ,
+                                  dbShard.getOrElse("")
+    )
+    val key = getKey(entityType, dbKey.getOrElse(""), dbShard.getOrElse(""))
     _info(key) = info
     info
   }
@@ -201,8 +149,14 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
   def getDatabase(dbKey:String = "", dbShard:String = ""): Db =
   {
     val con = getDbConnection()
-    Ensure.isTrue(con.isDefined, s"Database connection for ${dbKey} & ${dbShard} has not been set")
+    require(con.isDefined, s"Database connection for ${dbKey} & ${dbShard} has not been set")
     new Db( con.get ).open()
+  }
+
+
+  def getDb(dbKey:String = "", dbShard:String = ""): Db =
+  {
+    getDatabase(dbKey, dbShard)
   }
 
 
@@ -234,20 +188,12 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
   }
 
 
-  def getEntities(): List[EntityInfo] =
-  {
-    val copy = ListBuffer[EntityInfo]()
-    for( item <- _info.all())
-    {
-      copy += item
-    }
-    copy.toList
-  }
+  def getEntities(): List[EntityInfo] = _info.all.map( i => i )
 
 
   def getInfoByName(entityType:String, dbKey:String = "", dbShard:String = ""): EntityInfo =
   {
-    val key = getKeyByName(entityType, dbKey, dbShard)
+    val key = buildKey(entityType, dbKey, dbShard)
     if(!_info.contains(key))
       throw new IllegalArgumentException(s"invalid entity : $key")
     _info(key)
@@ -256,14 +202,60 @@ class Entities(private val _dbs:Option[DbLookup] = None) {
 
   private def getKey(entityType:Type, dbKey:String = "", dbShard:String = ""):String =
   {
-    val key = entityType.typeSymbol.fullName + ":" + dbKey + ":" + dbShard
-    key
+    buildKey(entityType.typeSymbol.fullName, dbKey, dbShard)
   }
 
 
-  private def getKeyByName(entityType:String, dbKey:String = "", dbShard:String = ""):String =
+  private def buildKey(entityType:String, dbKey:String = "", dbShard:String = ""):String =
   {
-    val key = entityType + ":" + dbKey + ":" + dbShard
-    key
+    entityType + ":" + dbKey + ":" + dbShard
+  }
+
+
+  private def buildMapper(isSqlRepo:Boolean, entityType: Type, mapper:Option[EntityMapper]):EntityMapper = {
+
+    val entityKey = entityType.typeSymbol.fullName
+
+    def createMapper(entityType:Type):EntityMapper = {
+      //val entity = Reflector.createInstance(entityType)
+      val model = Mapper.loadSchema(entityType)
+      val em  = new EntityMapper(model)
+      em
+    }
+    val entityMapper = mapper.getOrElse(createMapper(entityType))
+    _mappers(entityKey) = entityMapper
+    entityMapper
+  }
+
+
+  private def buildRepo[T >: Null <: IEntity](isSqlRepo:Boolean, dbType:String, dbKey:String, dbShard:String,
+                           entityType:Type, mapper:EntityMapper): EntityRepo[T] = {
+    // Currently only long supported
+    val entityIdType = typeOf[Long]
+    val repoType = if(!isSqlRepo) DbMemory else dbType
+    val repo = repoType match {
+
+      case DbMemory => {
+        new EntityRepoInMemory[T](entityType, Some(entityIdType), Some(mapper))
+      }
+      case DbMySql => {
+        new EntityRepoMySql[T](entityType, Some(entityIdType), Some(mapper), None, getDb(dbKey, dbShard))
+      }
+      case DbSqlServer => {
+        new EntityRepoSqlServer[T](entityType, Some(entityIdType), Some(mapper), None, getDb(dbKey, dbShard))
+      }
+      case _ => {
+        new EntityRepoInMemory[T](entityType, Some(entityIdType), Some(mapper))
+      }
+    }
+    repo
+  }
+
+
+  private def buildService[T >: Null <: IEntity](serviceType:Option[Type], repo:EntityRepo[T]): EntityService[T] = {
+    val service = serviceType.fold(new EntityService[T](repo))( s => {
+      Reflector.createInstance(s, Some(Seq(repo))).asInstanceOf[EntityService[T]]
+    })
+    service
   }
 }

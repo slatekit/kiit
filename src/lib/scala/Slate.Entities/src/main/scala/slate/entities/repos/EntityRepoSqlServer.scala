@@ -13,20 +13,27 @@
 
 package slate.entities.repos
 
-import slate.entities.core.IEntity
+import slate.common.databases.Db
+import slate.entities.core.{EntityMapper, IEntity}
 
 import scala.reflect.runtime.universe.Type
 
 
-class EntityRepoSqlServer [T >: Null <: IEntity ](entityType:Type)
-  extends EntityRepoSql[T](entityType)
+class EntityRepoSqlServer [T >: Null <: IEntity ](
+                                                   entityType  :Type,
+                                                   entityIdType:Option[Type]         = None,
+                                                   entityMapper:Option[EntityMapper] = None,
+                                                   nameOfTable :Option[String]       = None,
+                                                   val db:Db
+                                                 )
+  extends EntityRepoSql[T](entityType, entityIdType, entityMapper, nameOfTable, db)
 {
 
   override def top(count:Int, desc:Boolean ): List[T]  =
   {
     val orderBy = if(desc) " order by id desc" else " order by id asc"
-    val sql = "select top " + count + " * from " + _tableName + orderBy
-    val items = _db.mapMany(sql, _mapper).getOrElse(List[T]())
+    val sql = "select top " + count + " * from " + tableName + orderBy
+    val items = _db.mapMany(sql, _entityMapper).getOrElse(List[T]())
     items
   }
 

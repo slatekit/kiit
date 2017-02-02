@@ -14,16 +14,19 @@
 package slate.entities.repos
 
 import slate.common.ListMap
-import slate.entities.core.{EntityRepo, IEntity}
+import slate.entities.core.{IEntityUpdatable, EntityMapper, EntityRepo, IEntity}
 
 import scala.reflect.runtime.universe.Type
 
 
-class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
-  extends EntityRepo[T](entityType:Type)
+class EntityRepoInMemory[T >: Null <: IEntity](
+                                                 entityType  :Type,
+                                                 entityIdType:Option[Type]         = None,
+                                                 entityMapper:Option[EntityMapper] = None
+                                               )
+  extends EntityRepo[T](entityType, entityIdType, entityMapper, None)
 {
 
-  private var _id = 0L
   private val _items = new ListMap[Long,T]()
 
 
@@ -37,12 +40,18 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
     // Check 1: already persisted ?
     if(!entity.isPersisted()) {
       // get next id
-      entity.id = getNextId()
+      val id = getNextId()
+      val en = entity match {
+        case w:IEntityUpdatable[T] => w.withId(id)
+        case _                     => _entityMapper.copyWithId[T](id, entity)
+      }
 
       // store
-      _items.add(entity.id, entity)
+      _items.add(id, en)
+      id
     }
-    entity.id
+    else
+      entity.id
   }
 
 
@@ -51,12 +60,13 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
     *
     * @param entity
    */
-  override def update(entity: T) :Unit =
+  override def update(entity: T) :T =
   {
     // Check 1: already persisted ?
     if(entity.isPersisted()) {
       _items(entity.id) = entity
     }
+    entity
   }
 
 
@@ -111,9 +121,5 @@ class EntityRepoInMemory[T >: Null <: IEntity ](entityType:Type)
   }
 
 
-  private def getNextId(): Long =
-  {
-    _id = _id + 1
-    _id
-  }
+  private def getNextId(): Long = _items.size() + 1
 }

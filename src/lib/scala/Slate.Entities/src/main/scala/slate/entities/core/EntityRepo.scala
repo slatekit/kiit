@@ -13,62 +13,77 @@
 
 package slate.entities.core
 
+import slate.common.Model
+import slate.common.mapper.Mapper
 import slate.common.query.IQuery
 
 
-import scala.reflect.runtime.universe.Type
+import scala.reflect.runtime.universe.{typeOf,Type}
 
 /**
   * Base Entity repository using generics with support for all the CRUD methods.
-  * @param _entityType : The type of the entity
+  * NOTE: This is basically a GenericRepository implementation
+  * @param entityType
+  * @param entityIdType
+  * @param entityMapper
+  * @param nameOfTable
   * @tparam T
   */
-abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
+abstract class EntityRepo[T >: Null <: IEntity] (
+                                                  entityType  :Type                       ,
+                                                  entityIdType:Option[Type]         = None,
+                                                  entityMapper:Option[EntityMapper] = None,
+                                                  nameOfTable :Option[String]       = None
+                                                )
   extends IEntityRepo
 {
+  protected val _entityType  :Type         = entityType
+  protected val _entityIdType:Type         = entityIdType.getOrElse(typeOf[Long])
+  protected val _entityModel :Model        = entityMapper.fold(Mapper.loadSchema(entityType))(em => em.model())
+  protected val _entityMapper:EntityMapper = entityMapper.getOrElse(new EntityMapper(_entityModel))
 
-  protected val _tableName =  if(_entityType != null) _entityType.typeSymbol.name
-  protected var _mapper:EntityMapper = null
-
-
-  def setMapper(mapper:EntityMapper): Unit =
-  {
-    _mapper = mapper
-  }
-
-
-  override def mapper():EntityMapper =
-  {
-    _mapper
-  }
+  /**
+    * The name of the table in the datastore
+    */
+  def tableName():String =  nameOfTable.getOrElse(_entityType.typeSymbol.name.toString)
 
 
+  /**
+    * gets the internal mapper used to convert entities to sql or records to entity
+    * @return
+    */
+  override def mapper():EntityMapper = _entityMapper
+
+
+  /**
+   * the name of the id field.
+   * @return
+   */
+  def idName():String = _entityModel.idField.fold("id")( f => f.name)
+
+
+  /**
+    * creates the entity in the datastore
+    * @param entity
+    * @return
+    */
   def create(entity: T):Long
 
 
-  def update(entity: T): Unit
+  /**
+    * updates the entity in the datastore
+    * @param entity
+    * @return
+    */
+  def update(entity: T): T
 
 
+  /**
+    * deletes the entity in the datastore
+    * @param id
+    * @return
+    */
   def delete(id: Long): Boolean
-
-
-  def get(id: Long) : Option[T]
-
-
-  def getAll() : List[T]
-
-
-  def count() : Long
-
-
-  def top(count:Int, desc:Boolean ): List[T]
-
-
-
-  def any(): Boolean =
-  {
-    count() > 0
-  }
 
 
   /**
@@ -78,24 +93,61 @@ abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
     */
   def delete(entity:Option[T]): Boolean =
   {
-    if(entity.isEmpty) false else delete(entity.get.id)
+    entity.fold(false)( en => this.delete(en.id) )
   }
 
 
   /**
-    * saves an entity
-    *
+    * gets the entity from the datastore using the id
+    * @param id
+    * @return
+    */
+  def get(id: Long) : Option[T]
+
+
+  /**
+    * gets all the entities from the datastore.
+    * @return
+    */
+  def getAll() : List[T]
+
+
+  /**
+    * gets the total number of entities in the datastore
+    * @return
+    */
+  def count() : Long
+
+
+  /**
+    * gets the top count entities in the datastore sorted by asc order
+    * @param count: Top / Limit count of entities
+    * @param desc : Whether to sort by descending
+    * @return
+    */
+  def top(count:Int, desc:Boolean ): List[T]
+
+
+  /**
+    * determines if there are any entities in the datastore
+    * @return
+    */
+  def any(): Boolean =  count() > 0
+
+
+  /**
+    * saves an entity by either creating it or updating it based on
+    * checking its persisted flag.
     * @param entity
     */
   def save(entity: Option[T]): Unit =
   {
-    if(entity.nonEmpty) {
-      val item = entity.get
+    entity.map( item => {
       if (item.isPersisted())
         update(item)
       else
         create(item)
-    }
+    })
   }
 
 
@@ -104,63 +156,62 @@ abstract class EntityRepo[T >: Null <: IEntity] (val _entityType:Type)
     *
     * @param items
     */
-  def saveAll(items: Seq[T]) =
-  {
-    for(item <- items )
-    {
-      save(Some(item))
-    }
-  }
+  def saveAll(items: Seq[T]) = items.foreach(item => save(Some(item)))
 
 
-  def first() : Option[T] =
-  {
-    takeFirst( () => oldest(1))
-  }
+  /**
+    * Gets the first/oldest item
+    * @return
+    */
+  def first() : Option[T] = takeFirst( () => oldest(1))
 
 
-  def last() : Option[T]  =
-  {
-    takeFirst( () => recent(1))
-  }
+  /**
+    * Gets the last/recent item
+    * @return
+    */
+  def last() : Option[T]  = takeFirst( () => recent(1))
 
 
-  def recent(count:Int): List[T]  =
-  {
-    top(count, true)
-  }
+  /**
+    * Gets the most recent n items represented by count
+    * @param count
+    * @return
+    */
+  def recent(count:Int): List[T]  = top(count, true)
 
 
-  def oldest(count:Int): List[T]  =
-  {
-    top(count, false)
-  }
+  /**
+    * Gets the most oldest n items represented by count
+    * @param count
+    * @return
+    */
+  def oldest(count:Int): List[T]  = top(count, false)
 
 
+  /**
+    * takes the
+    * @param call
+    * @return
+    */
   def takeFirst(call:() => List[T]): Option[T] =
   {
-    val results = call()
-    if (results == null || results.isEmpty)
-      None
-    else
-      Some(results.head)
+    val results = Option(call())
+    results.flatMap( r => r.headOption)
   }
 
 
-  def find(query:IQuery):List[T] =
-  {
-    List[T]()
-  }
+  /**
+    * finds items based on the query
+    * @param query
+    * @return
+    */
+  def find(query:IQuery):List[T] = List[T]()
 
 
-  protected def onBeforeSave(entity: T) =
-  {
-
-  }
-
-
-  protected def tableName:String =
-  {
-    _tableName.toString
-  }
+  /**
+    * Hook for derived classes to handle additional logic before saving
+    * @param entity
+    */
+  protected def onBeforeSave(entity: T) = {}
 }

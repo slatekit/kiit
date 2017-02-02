@@ -106,30 +106,31 @@ class EntitySetupService(val _entities:Entities,
    */
   def generateSql(name:String, version:String = ""): Result[String] =
   {
-    var sql = ""
-    var success = true
-    var message = ""
-    try
+    val result = try
     {
       val fullName = name
       val svc = _entities.getServiceByName( fullName )
       val model = svc.repo().mapper().model()
-      sql = new DbBuilder().addTable(model)
+      val sql = new DbBuilder().addTable(model)
 
       if ( _settings.enableOutput && _folders.isDefined)
       {
         val folders = _folders.get
         Files.writeDatedFile(folders.pathToOutputs, s"model-${model.name}.sql", sql )
       }
+      (true, "", sql)
     }
     catch
     {
       case ex:Exception =>
       {
-        success = false
-        message = ex.getMessage
+        (false, ex.getMessage, "")
       }
     }
+    val success = result._1
+    val error = result._2
+    val sql = result._3
+
     val info = if (success ) s"generated sql for model: $name" else "error generating sql"
     successOrError(success, sql, Some(info))
   }
@@ -178,18 +179,17 @@ class EntitySetupService(val _entities:Entities,
   def eachEntity(callback:(EntityInfo) => Result[Any]): Result[String] =
   {
     val all = _entities.getEntities()
-    var results = ""
-    var success = true
-    for( item <- all )
-    {
-      val result = callback( item )
-      if(!result.success)
-      {
-        success = false
-        results += result.msg
+    val result = all.foldLeft((true, ""))( (acc, entity) => {
+      val result = callback( entity )
+      if(!result.success){
+        (false, acc._2 + result.msg)
       }
-    }
-    successOrError(success, results)
+      else
+        acc
+    })
+    val success = result._1
+    val message = result._2
+    successOrError(success, message)
   }
 
 

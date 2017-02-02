@@ -14,5 +14,4 @@
 package slate.entities.core
 
 trait IEntityUnique {
-  var uniqueId: String
 }

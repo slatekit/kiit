@@ -16,36 +16,36 @@ package slate.entities.repos
 
 import slate.common.databases.Db
 import slate.common.query.IQuery
-import slate.entities.core.{EntityRepo, IEntity}
+import slate.entities.core.{EntityMapper, EntityRepo, IEntity}
 
 import scala.reflect.runtime.universe.Type
 
 
-abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
-    extends EntityRepo[T](entityType) {
-
-  protected var _db:Db = null
-
-
-  def setDb(db:Db):Unit = {
-    _db = db
-  }
+abstract class EntityRepoSql [T >: Null <: IEntity ]
+    (
+      entityType  :Type                       ,
+      entityIdType:Option[Type]         = None,
+      entityMapper:Option[EntityMapper] = None,
+      nameOfTable :Option[String]       = None,
+      val _db:Db
+    )
+    extends EntityRepo[T](entityType, entityIdType, entityMapper, nameOfTable) {
 
 
   override def create(entity: T):Long =
   {
     val sql = mapFields(entity, false)
     val id = _db.insert(s"insert into ${tableName} " + sql + ";")
-    entity.id = id
     id
   }
 
 
-  override def update(entity: T):Unit =
+  override def update(entity: T):T =
   {
     val sql = mapFields(entity, true)
     val id = entity.id
-    sqlExecute(s"update ${tableName} set " + sql + s" where Id = ${id};")
+    sqlExecute(s"update ${tableName} set " + sql + s" where ${idName} = ${id};")
+    entity
   }
 
 
@@ -56,14 +56,14 @@ abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
     */
   override def delete(id: Long): Boolean =
   {
-    val count = sqlExecute(s"delete from ${tableName} where Id = ${id};")
+    val count = sqlExecute(s"delete from ${tableName} where ${idName} = ${id};")
     count > 0
   }
 
 
   def get(id: Long) : Option[T] =
   {
-    sqlMapOne(s"select * from ${tableName} where Id = ${id};")
+    sqlMapOne(s"select * from ${tableName} where ${idName} = ${id};")
   }
 
 
@@ -104,18 +104,18 @@ abstract class EntityRepoSql [T >: Null <: IEntity ](entityType:Type)
 
   private def sqlMapMany(sql: String) :Option[List[T]] =
   {
-    _db.mapMany[T](sql, _mapper)
+    _db.mapMany[T](sql, _entityMapper)
   }
 
 
   private def sqlMapOne(sql: String) :Option[T] =
   {
-    _db.mapOne[T](sql, _mapper)
+    _db.mapOne[T](sql, _entityMapper)
   }
 
 
   private def mapFields(item: IEntity, isUpdate: Boolean) : String =
   {
-    _mapper.mapToSql(item, isUpdate, false)
+    _entityMapper.mapToSql(item, isUpdate, false)
   }
 }
