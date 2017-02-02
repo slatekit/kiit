@@ -11,6 +11,7 @@
 
 package slate.test.common
 
+import slate.common.encrypt.{DecString, DecLong, DecDouble, DecInt}
 import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.common.{FailureResult, DateTime, Result}
 import slate.core.apis._
@@ -39,7 +40,8 @@ class UserApi3 extends ApiBaseEntity[User] with ResultSupportIn {
 
   /**
    * Handle error at the API level
-   * @param context
+    *
+    * @param context
    * @param request
    * @param ex
    * @return
@@ -141,11 +143,38 @@ class UserApi extends ApiBaseEntity[User] with ResultSupportIn
   }
 
 
-
   @ApiAction(name = "", desc = "invites a new user", roles= "@parent", verb = "@parent", protocol = "@parent")
   def register(user:User): Result[String] =
   {
     success("ok", Some(s"object user"))
+  }
+
+
+  @ApiAction(name = "", desc = "test decryption of int", roles= "*", verb = "@parent", protocol = "@parent")
+  def decInt(id:DecInt): Result[String] =
+  {
+    success("ok", Some(s"decrypted int : " + id.value))
+  }
+
+
+  @ApiAction(name = "", desc = "test decryption of int", roles= "*", verb = "@parent", protocol = "@parent")
+  def decLong(id:DecLong): Result[String] =
+  {
+    success("ok", Some(s"decrypted long : " + id.value))
+  }
+
+
+  @ApiAction(name = "", desc = "test decryption of int", roles= "*", verb = "@parent", protocol = "@parent")
+  def decDouble(id:DecDouble): Result[String] =
+  {
+    success("ok", Some(s"decrypted double : " + id.value))
+  }
+
+
+  @ApiAction(name = "", desc = "test decryption of int", roles= "*", verb = "@parent", protocol = "@parent")
+  def decString(id:DecString): Result[String] =
+  {
+    success("ok", Some(s"decrypted string : " + id.value))
   }
 
 

@@ -15,7 +15,7 @@ import java.nio.file.Paths
 import slate.common.{Result, Doc, Files}
 import slate.common.queues.{QueueSourceMsg, QueueSource}
 import slate.core.apis.{Api, ApiAction}
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 
 import scala.collection.mutable.ListBuffer
 

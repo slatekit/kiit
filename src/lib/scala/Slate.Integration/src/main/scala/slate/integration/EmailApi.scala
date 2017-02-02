@@ -15,7 +15,7 @@ package slate.integration
 
 import slate.common.{Vars, Files, Result}
 import slate.core.apis.{Api, ApiAction}
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 import slate.core.email.EmailService
 
 @Api(area = "infra", name = "emails", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")

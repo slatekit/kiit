@@ -13,7 +13,6 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.{Ensure}
 import slate.common.databases._
 import slate.common.databases.DbLookup._
 

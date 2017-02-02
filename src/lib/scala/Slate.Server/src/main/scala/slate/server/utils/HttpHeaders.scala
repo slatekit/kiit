@@ -14,7 +14,7 @@
 package slate.server.utils
 
 import akka.http.scaladsl.server.RequestContext
-import slate.common.{Strings, Ensure, Inputs}
+import slate.common.{Strings, Inputs}
 
 /**
   * abstraction layer over the akka http headers to support Protocol Independent APIs.

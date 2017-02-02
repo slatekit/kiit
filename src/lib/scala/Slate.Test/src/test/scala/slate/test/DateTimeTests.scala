@@ -13,10 +13,9 @@
 package slate.test
 
 import java.sql.Timestamp
-import java.util.Date
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.{DateTime, Ensure}
+import slate.common.{DateTime}
 
 
 
@@ -120,6 +119,6 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 
   def ensureTrue(date1:DateTime, comp:String, date2:DateTime, result:Boolean) : Unit = {
     println("comparing : " + date1.toString () + " " + comp + " " + date2.toString + " = " + result)
-    Ensure.isTrue(result, "Date comparision does not match")
+    require(result, "Date comparision does not match")
   }
 }

@@ -16,8 +16,7 @@ import slate.common.{ApiKey,Credentials}
 import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.core.apis.ApiAuth
 import slate.core.common.{AppContext}
-import slate.core.shell.ShellAPI
-import slate.integration.{VersionApi, AppApi}
+import slate.integration.{ShellAPI, VersionApi, AppApi}
 
 class ShellTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with ResultSupportIn {
 

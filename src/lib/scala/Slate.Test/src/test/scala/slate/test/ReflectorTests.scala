@@ -3,8 +3,7 @@ package slate.test
 import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.{Reflected, DateTime, Field, Reflector}
 import slate.core.apis.{Api, ApiAction}
-import slate.entities.core.EntityUnique
-import slate.test.common.{User2, User, UserApi}
+import slate.test.common.{UserNormal1, User2, User, UserApi}
 import scala.reflect.runtime.universe.{typeOf}
 
 /**
@@ -25,8 +24,8 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
 
     it("can create class normal") {
-      val inst = Reflector.createInstance(typeOf[User])
-      assert(inst.isInstanceOf[User])
+      val inst = Reflector.createInstance(typeOf[UserNormal1])
+      assert(inst.isInstanceOf[UserNormal1])
     }
 
 
@@ -36,9 +35,16 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
     }
 
 
-    it("can get a field value") {
+    it("can get a field value as var") {
       val user = new User()
       user.email = "johndoe@home.com"
+      val email = Reflector.getFieldValue(user, "email")
+      assert(email == user.email)
+    }
+
+
+    it("can get a field value as val in case class") {
+      val user:User2 = new User2(email = "johndoe@home.com" )
       val email = Reflector.getFieldValue(user, "email")
       assert(email == user.email)
     }

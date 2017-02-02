@@ -20,7 +20,7 @@ import akka.http.scaladsl.server._
 import akka.stream.ActorMaterializer
 import slate.common.{Result, DateTime}
 import slate.common.app.AppMeta
-import slate.common.results.{ResultSupportIn}
+import slate.common.results.{ResultSerializer, ResultSupportIn}
 import slate.server.utils.{HttpJson, HttpUtils}
 import spray.json.JsValue
 
@@ -94,7 +94,7 @@ with ResultSupportIn
             val jsFuture = jsMarshall(ctx.request)
             val json = jsFuture.value.get.get
             val res = callback(ctx, json)
-            res.toJson()
+            new ResultSerializer().toJson(res)
           })
         }
       } ~
@@ -107,7 +107,7 @@ with ResultSupportIn
             val jsFuture = jsMarshall(ctx.request)
             val json = jsFuture.value.get.get
             val res = callback(ctx, json)
-            res.toJson()
+            new ResultSerializer().toJson(res)
           })
         }
       } ~
@@ -120,7 +120,7 @@ with ResultSupportIn
             val jsFuture = jsMarshall(ctx.request)
             val json = jsFuture.value.get.get
             val res = callback(ctx, json)
-            res.toJson()
+            new ResultSerializer().toJson(res)
           })
         }
       } ~
@@ -130,7 +130,7 @@ with ResultSupportIn
         {
           completeAsJson(ctx, () => {
             val res = callback(ctx, null)
-            res.toJson()
+            new ResultSerializer().toJson(res)
           })
         }
       } ~

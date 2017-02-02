@@ -16,7 +16,7 @@ import slate.common.databases.Db
 import slate.common.info._
 import slate.common.serialization.{SerializerUtils, SerializerProps}
 import slate.core.apis.{Request, Api, ApiAction}
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 
 @Api(area = "app", name = "info", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
 class AppApi extends ApiWithSupport

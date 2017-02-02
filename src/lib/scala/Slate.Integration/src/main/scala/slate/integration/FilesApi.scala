@@ -14,7 +14,7 @@ import slate.common.{Doc, Result, Strings, Files}
 import slate.common.Files._
 import slate.core.apis.{ApiAction, Api}
 import slate.core.cloud.CloudFilesBase
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 
 
 @Api(area = "infra", name = "files", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")

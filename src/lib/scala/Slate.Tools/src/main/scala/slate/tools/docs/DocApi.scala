@@ -16,7 +16,7 @@ package slate.tools.docs
 import slate.common.Result
 import slate.common.results.{ResultSupportIn}
 import slate.core.apis.{Api, ApiAction}
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 
 @Api(area = "sys", name = "docs", desc= "help doc generator",
   roles= "@admin", auth = "app", verb = "post", protocol = "*")

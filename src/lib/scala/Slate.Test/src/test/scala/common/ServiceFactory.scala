@@ -26,8 +26,8 @@ object ServiceFactory {
   def init(): Unit = {
     val con = Conf.load(Some("user://blendlife/conf/db.conf")).dbCon("db")
     _entities = new Entities(Some(new DbLookup(con)))
-    _entities.register[User]  (isSqlRepo= true, entityType = typeOf[User]  , serviceType= typeOf[UserService]  , dbType = DbConstants.DbMySql)
-    _entities.register[Device](isSqlRepo= true, entityType = typeOf[Device], serviceType= typeOf[DeviceService], dbType = DbConstants.DbMySql)
+    _entities.register[User]  (isSqlRepo= true, entityType = typeOf[User]  , serviceType= Some(typeOf[UserService]  ))
+    _entities.register[Device](isSqlRepo= true, entityType = typeOf[Device], serviceType= Some(typeOf[DeviceService]))
   }
 
 

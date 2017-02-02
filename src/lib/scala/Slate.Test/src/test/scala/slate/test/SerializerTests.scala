@@ -25,7 +25,7 @@ class SerializerTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterA
     user.email     = "kishore@abc.com"
     user.firstName = "kishore"
     user.lastName  = "red"
-    user.id        = 2
+    //user.id        = 2
     user.isMale    = true
     user.age       = 37
     user.createdAt = DateTime.now

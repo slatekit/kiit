@@ -24,6 +24,7 @@ import slate.common.logging.LoggerConsole
 import slate.common.results.{ResultSupportIn}
 import slate.core.apis._
 import slate.core.common.{Conf, AppContext}
+import slate.tests.common.MyEncryptor
 
 
 class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with ResultSupportIn {
@@ -58,6 +59,49 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
         Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
         None,
         success("rolesNone", msg = Some("1 abc"))
+      )
+    }
+  }
+
+
+  describe( "API Decryption" ) {
+
+    it("can decrypt int") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.decInt",
+        Some(List[(String, String)](("id", MyEncryptor.encrypt("2")))),
+        None,
+        success("ok", msg = Some("decrypted int : 2"))
+      )
+    }
+
+
+    it("can decrypt long") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.decLong",
+        Some(List[(String, String)](("id", MyEncryptor.encrypt("2")))),
+        None,
+        success("ok", msg = Some("decrypted long : 2"))
+      )
+    }
+
+
+    it("can decrypt double") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.decDouble",
+        Some(List[(String, String)](("id", MyEncryptor.encrypt("2.2")))),
+        None,
+        success("ok", msg = Some("decrypted double : 2.2"))
+      )
+    }
+
+
+    it("can decrypt string") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.decString",
+        Some(List[(String, String)](("id", MyEncryptor.encrypt("slatekit")))),
+        None,
+        success("ok", msg = Some("decrypted string : slatekit"))
       )
     }
   }
@@ -301,7 +345,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       ent  = new Entities(),
       inf  = new About("myapp", "sample app", "product group 1", company = "slatekit", region = "ny", version = "1.1.0"),
       dbs  = Some(defaultDb(new DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi"))),
-      enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292"))
+      enc  = Some(MyEncryptor)
     )
     // 2. apis
     val apis = new ApiContainer(ctx, auth, protocol, apiRegs, errors)

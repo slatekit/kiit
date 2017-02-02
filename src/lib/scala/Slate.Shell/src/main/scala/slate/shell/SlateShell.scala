@@ -25,7 +25,7 @@ import slate.core.common.{Conf, AppContext}
 import slate.entities.core.Entities
 import slate.tools.codegen.CodeGenApi
 import slate.tools.docs.DocApi
-import slate.integration.{VersionApi,AppApi}
+import slate.integration.{ShellAPI, VersionApi, AppApi}
 import slate.core.shell._
 
 /**

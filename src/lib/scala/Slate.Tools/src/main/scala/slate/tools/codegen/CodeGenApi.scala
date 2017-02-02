@@ -16,13 +16,11 @@ package slate.tools.codegen
 import java.io.File
 
 import slate.common._
-import slate.common.databases.{DbBuilder, DbLookup}
+import slate.common.databases.{DbBuilder}
 import slate.common.results.ResultSupportIn
 import slate.common.serialization.{ObjectBuilderJson, ObjectBuilder}
 import slate.core.apis.{ApiAction, Api}
-import slate.core.common.svcs.ApiWithSupport
-import slate.entities.core.EntityMapper
-import slate.entities.models.ModelSerializer
+import slate.core.apis.svcs.ApiWithSupport
 import scala.reflect.runtime.universe.{Type,typeOf}
 
 @Api(area = "slate", name = "models", desc = "api info about the application and host", roles= "?", auth = "key-roles", verb = "post", protocol="*")

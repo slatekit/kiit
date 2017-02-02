@@ -14,9 +14,16 @@ package slate.test.common
 import slate.common.{DateTime, Field}
 import slate.entities.core._
 
-class User extends IEntity with IEntityUnique {
+class UserNormal1{
+  var name = "slatekit"
+}
 
-  override var id: Long = _
+
+class User(val id:Long) extends IEntity with IEntityUnique with IEntityUpdatable[User] {
+
+  def this() = {
+    this(0)
+  }
 
 
   @Field("",true, 50)
@@ -68,6 +75,23 @@ class User extends IEntity with IEntityUnique {
     firstName = first
     lastName = last
     this
+  }
+
+
+  override def withId(id:Long): User = {
+    val u = new User(id)
+    u.age = this.age
+    u.createdAt = this.createdAt
+    u.createdBy = this.createdBy
+    u.email = this.email
+    u.firstName = this.firstName
+    u.isMale = this.isMale
+    u.lastName = this.lastName
+    u.password = this.password
+    u.uniqueId = this.uniqueId
+    u.updatedAt = this.updatedAt
+    u.updatedBy = this.updatedBy
+    u
   }
 
 

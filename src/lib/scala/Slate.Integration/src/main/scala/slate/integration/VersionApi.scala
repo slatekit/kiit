@@ -14,7 +14,7 @@
 package slate.integration
 
 import slate.core.apis.{Api, ApiAction}
-import slate.core.common.svcs.ApiWithSupport
+import slate.core.apis.svcs.ApiWithSupport
 
 @Api(area = "sys", name = "version", desc = "api to get version information", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
 class VersionApi extends ApiWithSupport
