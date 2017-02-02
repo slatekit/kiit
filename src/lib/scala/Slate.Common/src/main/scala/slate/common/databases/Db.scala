@@ -30,26 +30,21 @@ import DbUtils._
  */
 class Db(private val _dbCon:DbConString) {
 
-  private var _isOpened = false
-
-
   /**
     * registers the jdbc driver
+ *
     * @return
     */
   def open(): Db =
   {
-    if(!_isOpened) {
-      //STEP 1: Register JDBC driver
-      Class.forName(_dbCon.driver)
-      _isOpened = true
-    }
+    Class.forName(_dbCon.driver)
     this
   }
 
 
   /**
    * creates a table in the database that matches the schema(fields) in the model supplied
+ *
    * @param model : The model associated with the table.
    */
   def createTable(model:Model): Unit =
@@ -62,26 +57,26 @@ class Db(private val _dbCon:DbConString) {
 
   /**
    * drops the table from the database
+ *
    * @param name : The name of the table
    */
   def dropTable(name:String): Unit =
   {
     val builder = new DbBuilder()
     val sql = builder.dropTable(name)
-    execute(_dbCon, (con, stmt) => stmt.execute(sql), error)
+    executeStmt(_dbCon, (con, stmt) => stmt.execute(sql), error)
   }
 
 
   /**
     * gets a scalar string value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
   def getScalar[T](sql:String, typ:Type, inputs:Option[List[Any]]): Option[T]  = {
 
-    var res:Option[T] = None
-
-    execute(_dbCon, sql, (rs, stmt) => {
+    val result = executePrepAs[Option[T]](_dbCon, sql, (rs, stmt) => {
 
       // fill all the arguments into the prepared stmt
       fillArgs(stmt, inputs)
@@ -89,16 +84,21 @@ class Db(private val _dbCon:DbConString) {
       // execute
       val rs = stmt.executeQuery()
       val any =  rs.next()
-      if(any) {
-        res = DbUtils.getScalar[T](rs, typ)
-      }
+      val res:Option[T] =
+        if(any) {
+          DbUtils.getScalar[T](rs, typ)
+        }
+        else
+          None
+      res
     }, error)
-    res
+    result.fold[Option[T]](None)( r => r )
   }
 
 
   /**
    * gets a scalar string value using the sql provided
+ *
    * @param sql : The sql text
    * @return
    */
@@ -109,6 +109,7 @@ class Db(private val _dbCon:DbConString) {
 
   /**
     * gets a scalar int value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
@@ -119,6 +120,7 @@ class Db(private val _dbCon:DbConString) {
 
   /**
     * gets a scalar long value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
@@ -129,6 +131,7 @@ class Db(private val _dbCon:DbConString) {
 
   /**
     * gets a scalar double value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
@@ -139,6 +142,7 @@ class Db(private val _dbCon:DbConString) {
 
   /**
     * gets a scalar bool value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
@@ -149,6 +153,7 @@ class Db(private val _dbCon:DbConString) {
 
   /**
     * gets a scalar bool value using the sql provided
+ *
     * @param sql : The sql text
     * @return
     */
@@ -159,82 +164,79 @@ class Db(private val _dbCon:DbConString) {
 
   /**
    * maps a single item using the sql supplied
+ *
    * @param sql    : The sql
    * @param mapper : THe mapper to map the item of type T
    * @tparam T     : The type of the item
    * @return
    */
   def mapOne[T >: Null](sql:String, mapper:Mapper, inputs:Option[List[Any]] = None): Option[T]  = {
-    var res:Option[Any] = None
-    executeQuery(sql, (rs) =>
+    val res = executeQuery[T](sql, (rs) =>
     {
       val rec = new MapperSourceRecord(rs)
       if(rs.next())
-      {
-        res = mapper.mapFrom(rec)
-      }
+        mapper.mapFrom(rec).asInstanceOf[T]
+      else
+        null
     }, false, inputs)
-
-    val finalResult = if( res.isEmpty ) None else Some(res.get.asInstanceOf[T])
-    finalResult
+    res
   }
 
 
   /**
    * maps multiple items using the sql supplied
+ *
    * @param sql    : The sql
    * @param mapper : THe mapper to map the item of type T
    * @tparam T     : The type of the item
    * @return
    */
   def mapMany[T](sql:String, mapper:Mapper, inputs:Option[List[Any]] = None): Option[List[T]]  = {
-    val res = new ListBuffer[T]()
-
-    executeQuery(sql, (rs) =>
+    val res = executeQuery[List[T]](sql, (rs) =>
     {
       val rec = new MapperSourceRecord(rs)
+      val buf = new ListBuffer[T]()
       while(rs.next())
       {
         val item = mapper.mapFrom(rec)
-        res.append(item.asInstanceOf[T])
+        buf.append(item.asInstanceOf[T])
       }
+      buf.toList
     }, false, inputs)
-    res.toList
-
-    val finalResult = if(res.size == 0) None else Some(res.toList)
-    finalResult
-  }
-
-
-  /**
-   * executes the update sql or stored proc
-   * @param sql     : The sql or stored proc
-   * @param inputs  : The inputs for the sql or stored proc
-   * @return        : The number of affected records
-   */
-  def update(sql:String, inputs:Option[List[Any]] = None):Int = {
-    var res = 0
-    DbUtils.execute(_dbCon, sql, (con, stmt) => {
-
-      // fill all the arguments into the prepared stmt
-      fillArgs(stmt, inputs)
-
-      // update and get number of affected records
-      res = stmt.executeUpdate()
-    }, error)
     res
   }
 
 
   /**
+   * executes the update sql or stored proc
+ *
+   * @param sql     : The sql or stored proc
+   * @param inputs  : The inputs for the sql or stored proc
+   * @return        : The number of affected records
+   */
+  def update(sql:String, inputs:Option[List[Any]] = None):Int = {
+    val result = executePrepAs[Int](_dbCon, sql, (con, stmt) => {
+
+      // fill all the arguments into the prepared stmt
+      fillArgs(stmt, inputs)
+
+      // update and get number of affected records
+      val count = stmt.executeUpdate()
+      count
+    }, error)
+    result.getOrElse(0)
+  }
+
+
+  /**
    * executes an insert using the sql or stored proc and gets the id
+ *
    * @param sql : The sql or stored proc
    * @param inputs  : The inputs for the sql or stored proc
    * @return    : The id ( primary key )
    */
   def insert(sql:String, inputs:Option[List[Any]] = None):Long = {
-    var res = 0L
-    DbUtils.execute(_dbCon, (con) => {
+    val res = execute[Long](_dbCon, (con:Connection) => {
 
       val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
 
@@ -245,21 +247,24 @@ class Db(private val _dbCon:DbConString) {
       stmt.executeUpdate()
 
       // get id.
-      val rs = stmt.getGeneratedKeys()
-      if (rs.next()){
-        res = rs.getLong(1)
+      val rs = stmt.getGeneratedKeys
+      val id = if (rs.next()){
+        rs.getLong(1)
       }
+      else
+        0L
       DbUtils.close(stmt)
+      id
     }, error)
-    res
+    res.getOrElse(0)
   }
 
 
-  private def executeQuery(sql:String,
-                           callback: (ResultSet) => Unit,
+  private def executeQuery[T](sql:String,
+                           callback: (ResultSet) => T,
                            moveNext:Boolean = true,
-                           inputs:Option[List[Any]] = None) = {
-    DbUtils.execute(_dbCon, sql, (con, stmt) =>
+                           inputs:Option[List[Any]] = None): Option[T] = {
+    val result = executePrepAs[Option[T]](_dbCon, sql, (con, stmt) =>
     {
 
       // fill all the arguments into the prepared stmt
@@ -270,10 +275,11 @@ class Db(private val _dbCon:DbConString) {
       
       val any =  if(moveNext) rs.next() else true
       if(any)
-      {
-        callback(rs)
-      }
+        Option(callback(rs))
+      else
+        None
     }, error)
+    result.fold[Option[T]](None)( r => r)
   }
 
 

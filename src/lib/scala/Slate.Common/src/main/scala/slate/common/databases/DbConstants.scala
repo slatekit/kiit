@@ -17,6 +17,7 @@ import slate.common.{TimeSpan, DateTime}
 
 object DbConstants {
 
+  val DbMemory = "memory"
   val DbMySql = "mysql"
   val DbSqlServer = "sqlserver"
 

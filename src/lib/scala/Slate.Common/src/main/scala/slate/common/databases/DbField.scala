@@ -17,15 +17,15 @@ import scala.reflect.runtime.universe.{Type, typeOf}
 /**
   * Internal USE ONLY
   */
-class DbField
+case class DbField(
+                    name       :String = "",
+                    dataType   :String = "",
+                    nullable   :String = "",
+                    key        :String = "",
+                    defaultVal :String = "",
+                    extra      :String = ""
+                  )
 {
-  var name       = ""
-  var dataType   = ""
-  var nullable   = ""
-  var key        = ""
-  var defaultVal = ""
-  var extra      = ""
-
   def isNull :Boolean = !Strings.isMatch(nullable, "NO")
 
 

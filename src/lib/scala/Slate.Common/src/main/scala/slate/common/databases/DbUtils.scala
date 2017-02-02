@@ -22,6 +22,7 @@ object DbUtils {
 
   /**
    * gets a new jdbc connection via Driver manager
+ *
    * @return
    */
   def connect(con:DbConString) : Connection =
@@ -34,32 +35,8 @@ object DbUtils {
 
 
   /**
-    * Execution template providing connection with error-handling and connection closing
-    * @param con       : The connection string
-    * @param callback  : The callback to call for when the connection is ready
-    * @param error     : The callback to call for when an error occurrs
-    */
-  def execute(con:DbConString, callback:(Connection) => Unit, error:(Exception) => Unit): Unit =
-  {
-    val conn:Connection = try
-    {
-      val c = connect(con)
-      callback(c)
-      c
-    }
-    catch
-    {
-      case ex:Exception =>
-      {
-        error(ex)
-        null
-      }
-    }
-    close(conn)
-  }
-
-  /**
     * Execution template providing connection, statement with error-handling and connection closing
+ *
     * @param con       : The connection string
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
@@ -76,49 +53,111 @@ object DbUtils {
       (c, s)
     }
     catch
-    {
-      case ex:Exception =>
       {
-        error(ex)
-        (null, null)
+        case ex:Exception =>
+        {
+          error(ex)
+          (null, null)
+        }
       }
-    }
     close(result._2, result._1)
   }
 
 
   /**
-    * Execution template providing connection, prepared statement with error-handling & conn closing
+    * Execution template providing connection with error-handling and connection closing
+ *
     * @param con       : The connection string
-    * @param sql       : The sql text or stored proc name.
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
     */
-  def execute(con:DbConString,
-              sql:String,
-              callback:(Connection, PreparedStatement ) => Unit,
-              error:(Exception) => Unit): Unit =
+  def execute[T](con: DbConString, callback:(Connection) => T, error:(Exception) => Unit): Option[T] =
   {
-    val result = try {
+    val result:(Connection,Option[T]) = try
+    {
       val c = connect(con)
-      val s = c.prepareCall(sql)
-      callback(c, s)
-      (c, s)
+      val r = callback(c)
+      (c, Option(r))
+    }
+    catch
+      {
+        case ex:Exception =>
+        {
+          error(ex)
+          (null, None)
+        }
+      }
+    close(result._1)
+    result._2
+  }
+
+
+  /**
+    * Execution template providing connection, statement with error-handling and connection closing
+ *
+    * @param con       : The connection string
+    * @param callback  : The callback to call for when the connection is ready
+    * @param error     : The callback to call for when an error occurrs
+    */
+  def executeStmt[T](con:DbConString,
+              callback:(Connection, Statement) => T,
+              error:(Exception) => Unit): Option[T] =
+  {
+    val result = try
+    {
+      val c = connect(con)
+      val s = c.createStatement()
+      val r = callback(c, s)
+      (c, s, Option(r))
     }
     catch
     {
       case ex:Exception =>
       {
         error(ex)
-        (null, null)
+        (null, null, None)
       }
     }
     close(result._2, result._1)
+    result._3
+  }
+
+
+  /**
+    * Execution template providing connection, prepared statement with error-handling & conn closing
+ *
+    * @param con       : The connection string
+    * @param sql       : The sql text or stored proc name.
+    * @param callback  : The callback to call for when the connection is ready
+    * @param error     : The callback to call for when an error occurrs
+    */
+  def executePrepAs[T](con:DbConString,
+              sql:String,
+              callback:(Connection, PreparedStatement ) => T,
+              error:(Exception) => Unit): Option[T] =
+  {
+    val result = try {
+      val c = connect(con)
+      val s = c.prepareCall(sql)
+      val res = callback(c, s)
+      (c, s, Option(res))
+    }
+    catch
+      {
+        case ex:Exception =>
+        {
+          error(ex)
+          (null, null, None)
+        }
+      }
+    close(result._2, result._1)
+    result._3
   }
 
 
   /**
     * convenience function to fill prepared statement with parameters
+ *
     * @param stmt
     * @param inputs
     */

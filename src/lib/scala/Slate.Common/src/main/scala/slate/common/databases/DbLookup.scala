@@ -11,9 +11,6 @@
 
 package slate.common.databases
 
-
-import slate.common.{Ensure, ListMap}
-
 /**
   * Lookup for database connections. Supports a default connection
   * 1. default connection: { connectionString }

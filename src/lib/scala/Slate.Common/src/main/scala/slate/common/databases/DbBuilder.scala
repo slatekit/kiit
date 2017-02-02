@@ -78,9 +78,9 @@ class DbBuilder() {
 
   def getColName(name:String): String =
   {
-    if (Strings.compare(name, "key", true) == 0)
+    if ("key".compareToIgnoreCase(name) == 0)
       "`" + name + "`"
-    else if (Strings.compare(name, "group", true) == 0)
+    else if ("group".compareToIgnoreCase(name) == 0)
       "`" + name + "`"
     else
       name + " "
