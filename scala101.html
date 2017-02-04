@@ -83,14 +83,14 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <br/>
 
 
-<h1 id="basics">Basics</h1>
+<h1 id="scala_101_basics">1. Basics</h1>
 <p>Some basic language features of scala.</p>
 
 <table id="overview" class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td><strong>import</strong></td>
-      <td>the different ways to import components from a package</td>
+      <td class="col-md-2"><strong>import</strong></td>
+      <td>the different ways to import components</td>
       <td class=" text-center"><a href="#scala-import" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
@@ -109,86 +109,198 @@ in Scala. For more in-depth documentation please refer to the resources below.</
       <td class=" text-center"><a href="#scala-vals" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>vars</strong></td>
+      <td><strong>vars *</strong></td>
       <td>declare mutable variables of different data types</td>
       <td class=" text-center"><a href="#scala-vars" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_types">2. Types</h1>
+<p>Data types available in Scala</p>
+
+<table id="overview" class="table table-striped table-bordered">
+  <tbody>
     <tr>
-      <td><strong>types</strong></td>
-      <td>declare value types implicitly and explicitly</td>
+      <td class="col-md-2"><strong>types</strong></td>
+      <td>an overview of the basic data types</td>
       <td class=" text-center"><a href="#scala-types" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>strings</strong></td>
-      <td>using interploated strings</td>
+      <td>strings and some string operations</td>
       <td class=" text-center"><a href="#scala-strings" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
-</table>
-<br/><br/>
-
-<h1>Language</h1>
-<p>Language features such as loops, conditions, functions, collections, etc.</p>
-<table id="language" class="table table-striped table-bordered">
-  <tbody>
     <tr>
-      <td><strong>conditions</strong></td>
-      <td>conditional expressions using if else</td>
-      <td class=" text-center"><a href="#scala-conditions" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>loops</strong></td>
-      <td>while loops and the different ways to use for loops</td>
-      <td class=" text-center"><a href="#scala-loops" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>try catch</strong></td>
-      <td>how to construct try catch finally blocks</td>
-      <td class=" text-center"><a href="#scala-trycatch" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>functions</strong></td>
-      <td>simple functions with return types, default parameters</td>
-      <td class=" text-center"><a href="#scala-functions" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td><strong>dates</strong></td>
+      <td>using date and time via java 8 types</td>
+      <td class=" text-center"><a href="#scala-dates" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>lists</strong></td>
-      <td>how to use immutable lists</td>
+      <td>declare, use and perform operations on lists</td>
       <td class=" text-center"><a href="#scala-lists" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>maps</strong></td>
-      <td>how to use immutable maps</td>
+      <td>declare, use and perform operations on maps</td>
       <td class=" text-center"><a href="#scala-maps" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>tuples</strong></td>
+      <td>declare, use and perform operations on tuples</td>
+      <td class=" text-center"><a href="#scala-tuples" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
   </tbody>
 </table>
-
 <br/><br/>
 
-<h1 id="scala-1">Scala</h1>
+<h1 id="scala_101_control">3. Control</h1>
+<p>Loops, conditions, functions, collections, etc.</p>
+<table id="language" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>conditions</strong></td>
+      <td>conditional expressions using if else</td>
+      <td class=" text-center"><a href="#scala-conditions" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>loops *</strong></td>
+      <td>using various types of loops</td>
+      <td class=" text-center"><a href="#scala-loops" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>try catch *</strong></td>
+      <td>constructing try catch finally blocks</td>
+      <td class=" text-center"><a href="#scala-trycatch" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>throw *</strong></td>
+      <td>throwing exceptions</td>
+      <td class=" text-center"><a href="#scala-throw" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>return *</strong></td>
+      <td>returning from a function/method</td>
+      <td class=" text-center"><a href="#scala-return" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>iteration</strong></td>
+      <td>various ways to iterate over collections</td>
+      <td class=" text-center"><a href="#scala-iterations" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>aggregates</strong></td>
+      <td>aggregate functions</td>
+      <td class=" text-center"><a href="#scala-aggregates" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_functions">4. Functions</h1>
+<p>Functions, methods and HOF's ( Higher Order Functions )</p>
+<table id="scala_101_functions_list" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>simple</strong></td>
+      <td>simple functions with return types</td>
+      <td class=" text-center"><a href="#scala-functions-simple" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>named parameters</strong></td>
+      <td>calling functions using named parameters</td>
+      <td class=" text-center"><a href="#scala-functions-named" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>default parameter values</strong></td>
+      <td>calling functions with default parameter values</td>
+      <td class=" text-center"><a href="#scala-functions-default" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Passing a function</strong></td>
+      <td>passing a function as a parameter</td>
+      <td class=" text-center"><a href="#scala-functions-hof-passing" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Returning a function</strong></td>
+      <td>return a function as a result from a function</td>
+      <td class=" text-center"><a href="#scala-functions-hof-return" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Call by name</strong></td>
+      <td>passing a block of code to a function</td>
+      <td class=" text-center"><a href="#scala-functions" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Partial function</strong></td>
+      <td>creating partially applied functions</td>
+      <td class=" text-center"><a href="#scala-functions-hof-partial" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Function composition</strong></td>
+      <td>composing functions together</td>
+      <td class=" text-center"><a href="#scala-functions-hof-compose" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+
+<h1 id="scala_101_classes">5. Classes</h1>
 <p>These are more specific features of the scala language</p>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td><strong>iteration</strong></td>
-      <td>how to iterate over collections</td>
-      <td class=" text-center"><a href="#scala-iterations" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td class="col-md-2"><strong>constructors</strong></td>
+      <td>creating instances of classes</td>
+      <td class=" text-center"><a href="#scala-classes-constructors" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>aggregates</strong></td>
-      <td>how to use aggregate functions</td>
-      <td class=" text-center"><a href="#scala-aggregates" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td><strong>access control</strong></td>
+      <td>restricting access to members</td>
+      <td class=" text-center"><a href="#scala-classes-access" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>multiline strings</strong></td>
-      <td>strings that span multiple lines</td>
-      <td class=" text-center"><a href="#scala-multiline-strings" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td><strong>traits</strong></td>
+      <td>interfaces with implemented methods</td>
+      <td class=" text-center"><a href="#scala-classes-traits" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>sub-classing</strong></td>
+      <td>creating derived classes and sub-classes</td>
+      <td class=" text-center"><a href="#scala-classes-subclassing" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>static methods</strong></td>
-      <td>scala approach to "static" methods via "object" classes</td>
-      <td class=" text-center"><a href="#scala-static-methods" class="more"><span class="btn btn-primary">See more</span></a></td>
+      <td>how to use static methods via "modules"</td>
+      <td class=" text-center"><a href="#scala-classes-static-methods" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>case classes</strong></td>
+      <td>easily build immutable classes</td>
+      <td class=" text-center"><a href="#scala-classes-case-classes" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>operators</strong></td>
+      <td>creating your own operators for types using operator overloading</td>
+      <td class=" text-center"><a href="#scala-classes-operators" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_misc">6. Misc</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>multiline strings</strong></td>
+      <td>strings that span multiple lines</td>
+      <td class=" text-center"><a href="#scala-multiline-strings" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>apply</strong></td>
@@ -206,34 +318,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
       <td class=" text-center"><a href="#scala-option" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
-      <td><strong>call by name</strong></td>
-      <td>passing a block of code to a function</td>
-      <td class=" text-center"><a href="#scala-callbyname" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>constructors</strong></td>
-      <td>declaring class members and initializing them at the same time in the constructor</td>
-      <td class=" text-center"><a href="#scala-classes" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>traits</strong></td>
-      <td>interfaces with implementated methods</td>
-      <td class=" text-center"><a href="#scala-traits" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>case classes</strong></td>
-      <td>easily build readonly classes</td>
-      <td class=" text-center"><a href="#scala-case-classes" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
       <td><strong>pattern match</strong></td>
       <td>pattern match on values, and types</td>
       <td class=" text-center"><a href="#scala-pattern-matching" class="more"><span class="btn btn-primary">See more</span></a></td>
-    </tr>
-    <tr>
-      <td><strong>operators</strong></td>
-      <td>creating your own operators for types using operator overloading</td>
-      <td class=" text-center"><a href="#scala-operators" class="more"><span class="btn btn-primary">See more</span></a></td>
     </tr>
     <tr>
       <td><strong>implicits</strong></td>
@@ -244,6 +331,93 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </table>
 <br/><br/>
 
+
+<h1 id="scala_101_futures">7. Futures</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>creation</strong></td>
+      <td>creating a future to run an asynchronous work</td>
+      <td class=" text-center"><a href="#scala-futures-creation" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>completion</strong></td>
+      <td>how to handle the result of a future</td>
+      <td class=" text-center"><a href="#scala-futures-completion" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>success</strong></td>
+      <td>handling the success result of a future</td>
+      <td class=" text-center"><a href="#scala-futures-success" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>failure</strong></td>
+      <td>handling the failure of a future</td>
+      <td class=" text-center"><a href="#scala-futures-failure" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>errors</strong></td>
+      <td>dealing with errors gracefully</td>
+      <td class=" text-center"><a href="#scala-futures-errors" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>nesting</strong></td>
+      <td>multiple futures and nesting of futures</td>
+      <td class=" text-center"><a href="#scala-futures-nesting" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>full example</strong></td>
+      <td>multiple futures and nesting of futures</td>
+      <td class=" text-center"><a href="#scala-futures-nesting" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+
+<h1 id="scala_101_futures">8. More</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>value classes</strong></td>
+      <td>strings that span multiple lines</td>
+      <td class=" text-center"><a href="#scala-types-value" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type alias</strong></td>
+      <td>how to create instances without using "new"</td>
+      <td class=" text-center"><a href="#scala-types-aliases" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type parameters</strong></td>
+      <td>create immutable values of different types</td>
+      <td class=" text-center"><a href="#scala-types-params" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type classes</strong></td>
+      <td>how to work with nullable values using Option, Some, None</td>
+      <td class=" text-center"><a href="#scala-types-classes" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type bounds</strong></td>
+      <td>strings that span multiple lines</td>
+      <td class=" text-center"><a href="#scala-types-bounds" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>phantom types</strong></td>
+      <td>passing a block of code to a function</td>
+      <td class=" text-center"><a href="#scala-types-phantom" class="more"><span class="btn btn-primary">See more</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/><br/>
+
+<h1>1. Basics</h1>
+<hr/>
 <h2 id="scala-import">Import</h2>
 <p>You can import items from a package in various ways, 1 item, multiple items, and all items from a package</p>
 
@@ -341,10 +515,16 @@ in Scala. For more in-depth documentation please refer to the resources below.</
    
 </code></pre>
 </div>
+<div class="alert alert-danger" role="alert">
+	<p><strong>NOTE :</strong> Usage of vars is discouraged in Scala in favor of vals to obtain immutability. Everything is an expression in functional languages, and things like if/else/try etc return values which you can assign to an val. You can leverage this basic concept to promote use of vals and immutability especically when starting out in Scala. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-types">Types</h2>
+<h1>2. Types</h1>
+<hr/>
+<h2 id="scala-types">Data Types</h2>
 <p>You can declare types implicitly using the values or explicitly by specifying the type name</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>	
@@ -369,7 +549,10 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><strong>NOTE :</strong> Because Scala is a hybrid Object-Functional and imperative/functional language, there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps ( more on this later ). See later sections on how to work with immutable lists and maps and convert one to the other.</p>	
+</div>
+<br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-strings">Strings</h2>
@@ -403,201 +586,12 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
-<h2 id="scala-conditions">Conditions</h2>
-<p>If conditions, using single line ( no braces ) and multi-line ( with braces ). there is no ternary "? :" operation.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>
-    <span class="c1">// 1. if only
-</span>    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
-
-    <span class="c1">// 2. No braces
-</span>    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
-    <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"ok"</span> <span class="o">)</span>
-    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"not found"</span><span class="o">)</span>
-    <span class="k">else</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"unknown"</span> <span class="o">)</span>
-
-    <span class="c1">// 3. If conditions are expressions!
-</span>    <span class="c1">// This means they return a value.
-</span>    <span class="c1">// NOTE: This helps with immutability
-</span>    <span class="c1">// as you can assign the result of the 
-</span>    <span class="c1">// if to a value ( in this case message )
-</span>    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
-      <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
-        <span class="s">"ok"</span>
-      <span class="o">}</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
-        <span class="s">"not found"</span>
-      <span class="o">}</span>
-      <span class="k">else</span> <span class="o">{</span>
-        <span class="s">"unknown"</span>
-      <span class="o">}</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
-
-    <span class="c1">// 4. There is no ternary "? :" operation, but in scala
-</span>    <span class="c1">// you do not need it as a simple if/else is sufficient
-</span>    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">status</span><span class="o">)</span>
-
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-loops">Loops</h2>
-<p>For loops and while loops</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>
-    <span class="c1">// 1. for loop inclusive ( 5 included )
-</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">){</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 2. for loop exclusive ( 5 excluded )
-</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o">){</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 3. for loop with setup using values
-</span>    <span class="k">val</span> <span class="n">start</span> <span class="k">=</span> <span class="mi">1</span>
-    <span class="k">val</span> <span class="n">end</span> <span class="k">=</span> <span class="mi">5</span>
-    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o">){</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 4. for loop over collection
-</span>    <span class="k">val</span> <span class="n">words</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a1"</span><span class="o">,</span> <span class="s">"b2"</span><span class="o">,</span> <span class="s">"c3"</span><span class="o">,</span> <span class="s">"d4"</span><span class="o">,</span> <span class="s">"e5"</span><span class="o">)</span>
-    <span class="k">for</span><span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o">){</span>
-      <span class="n">println</span><span class="o">(</span> <span class="n">word</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 5. while loop
-</span>    <span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">0</span>
-    <span class="k">while</span><span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">){</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
-      <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="o">}</span>
-
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-trycatch">Try/Catch</h2>
-<p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
+<h2 id="scala-maps">Dates</h2>
+<p>Date and time using Java 8</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Everything is an expression, which means that
-</span>    <span class="c1">// the try/catch will return a value.
-</span>    <span class="c1">// In this example, we return a tuple( boolean, string )
-</span>    <span class="c1">// indicating, success, and a message.
-</span>    <span class="c1">// NOTE: This helps with immutability
-</span>    <span class="c1">// as you can assign the result of the try
-</span>    <span class="c1">// to a value ( in this case the result )
-</span>    <span class="k">val</span> <span class="n">result</span><span class="k">:</span><span class="o">(</span><span class="kt">Boolean</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
-      <span class="k">try</span>
-      <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
-        <span class="o">(</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"success"</span> <span class="o">)</span>
-      <span class="o">}</span>
-      <span class="k">catch</span>
-        <span class="o">{</span>
-          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
-          <span class="o">{</span>
-            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"bad argument: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
-          <span class="o">}</span>
-          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
-          <span class="o">{</span>
-            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"unexpected  : "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
-          <span class="o">}</span>
-        <span class="o">}</span>
-      <span class="k">finally</span> <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
-      <span class="o">}</span>
-
-    <span class="c1">// Now print the result ( tuple )
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
-
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-functions">Functions</h2>
-<p>Scala has many features related to functions/methods. this is a partial list.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>  
-  <span class="c1">// 1. function does not return anything ( via "Unit" type )
-</span>  <span class="k">def</span> <span class="n">test1</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 2. function with default values for parameters ( via = value )
-</span>  <span class="k">def</span> <span class="n">test2</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 3. function with return value ( via :&lt;type&gt; )
-</span>  <span class="c1">// NOTES:
-</span>  <span class="c1">// 1. do not need a return keyword 
-</span>  <span class="c1">// 2. last expression is assumed to be the return value
-</span>  <span class="k">def</span> <span class="n">test3</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">account</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">)</span>
-      <span class="k">return</span> <span class="n">s</span><span class="s">"new user : ${name} ${account} ${isActive}"</span>
-
-    <span class="n">s</span><span class="s">"existing user: ${name}"</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 4. function with functions as parameters,
-</span>  <span class="c1">// Last expression is assumed to be the return value
-</span>  <span class="k">def</span> <span class="n">test4</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
-             <span class="n">hello1</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
-             <span class="n">hello2</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
-             <span class="n">hello3</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">String</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-
-    <span class="c1">// 1. first function takes 0 parameters, and returns nothing
-</span>    <span class="n">hello1</span><span class="o">()</span>
-
-    <span class="c1">// 2. second function takes 1 paramter, and returns nothing
-</span>    <span class="n">hello2</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
-
-    <span class="c1">// 3. third function takes 2 parameter and returns a value
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">hello3</span><span class="o">(</span><span class="s">"hey"</span><span class="o">,</span> <span class="s">"hello"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
-  <span class="o">}</span>
-  
-  
-  <span class="c1">// call the functions  
-</span>  <span class="k">def</span> <span class="n">testFunctions</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    
-    <span class="c1">// 1. function with parameters
-</span>    <span class="n">test1</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
-
-    <span class="c1">// 2. function with parameters with default values
-</span>    <span class="n">test2</span> <span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
-
-    <span class="c1">// 3. function with parameters with default values + return value
-</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="n">test3</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">123456789123L</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result1</span> <span class="o">)</span>
-
-    <span class="c1">// 4. function with functions as paramters
-</span>    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="n">test4</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span>
-        <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="nc">Unit</span> <span class="o">},</span>
-        <span class="o">(</span><span class="n">greeting1</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">greeting1</span> <span class="o">+</span> <span class="s">" john"</span><span class="o">),</span>
-        <span class="o">(</span><span class="n">greeting2</span><span class="o">,</span> <span class="n">greeting3</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">greeting2</span> <span class="o">+</span> <span class="s">" and "</span> <span class="o">+</span> <span class="n">greeting3</span> <span class="o">+</span> <span class="s">" john"</span>
-    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result2</span> <span class="o">)</span>
-  <span class="o">}</span>
+coming soon
 
 </code></pre>
 </div>
@@ -691,6 +685,185 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
+<h2 id="scala-maps">Tuples</h2>
+<p>Creating and using tuples</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+coming soon
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+
+<h1>3. Control</h1>
+<hr/>
+
+<h2 id="scala-conditions">Conditions</h2>
+<p>If conditions, using single line ( no braces ) and multi-line ( with braces ). there is no ternary "? :" operation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// 1. if only
+</span>    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
+
+    <span class="c1">// 2. No braces
+</span>    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"ok"</span> <span class="o">)</span>
+    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"not found"</span><span class="o">)</span>
+    <span class="k">else</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"unknown"</span> <span class="o">)</span>
+
+    <span class="c1">// 3. If conditions are expressions!
+</span>    <span class="c1">// This means they return a value.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the 
+</span>    <span class="c1">// if to a value ( in this case message )
+</span>    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
+        <span class="s">"ok"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="s">"not found"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="o">{</span>
+        <span class="s">"unknown"</span>
+      <span class="o">}</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+
+    <span class="c1">// 4. There is no ternary "? :" operation, but in scala
+</span>    <span class="c1">// you do not need it as a simple if/else is sufficient
+</span>    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">status</span><span class="o">)</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-loops">Loops</h2>
+<p>For loops and while loops</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// 1. for loop inclusive ( 5 included )
+</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 2. for loop exclusive ( 5 excluded )
+</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 3. for loop with setup using values
+</span>    <span class="k">val</span> <span class="n">start</span> <span class="k">=</span> <span class="mi">1</span>
+    <span class="k">val</span> <span class="n">end</span> <span class="k">=</span> <span class="mi">5</span>
+    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 4. for loop over collection
+</span>    <span class="k">val</span> <span class="n">words</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a1"</span><span class="o">,</span> <span class="s">"b2"</span><span class="o">,</span> <span class="s">"c3"</span><span class="o">,</span> <span class="s">"d4"</span><span class="o">,</span> <span class="s">"e5"</span><span class="o">)</span>
+    <span class="k">for</span><span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">word</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 5. while loop
+</span>    <span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">0</span>
+    <span class="k">while</span><span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">){</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
+      <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="o">}</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><strong>NOTE :</strong> You can generally avoid the traditional while/for loops in Scala in favor of some of the other ways, which are more of a functional way to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-trycatch">Try/Catch</h2>
+<p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Everything is an expression, which means that
+</span>    <span class="c1">// the try/catch will return a value.
+</span>    <span class="c1">// In this example, we return a tuple( boolean, string )
+</span>    <span class="c1">// indicating, success, and a message.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the try
+</span>    <span class="c1">// to a value ( in this case the result )
+</span>    <span class="k">val</span> <span class="n">result</span><span class="k">:</span><span class="o">(</span><span class="kt">Boolean</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+      <span class="k">try</span>
+      <span class="o">{</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
+        <span class="o">(</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"success"</span> <span class="o">)</span>
+      <span class="o">}</span>
+      <span class="k">catch</span>
+        <span class="o">{</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"bad argument: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"unexpected  : "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="k">finally</span> <span class="o">{</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
+      <span class="o">}</span>
+
+    <span class="c1">// Now print the result ( tuple )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-throw">Throw</h2>
+<p>Throwing exceptions in Scala.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+coming soon
+
+</code></pre>
+</div>
+<div class="alert alert-danger" role="alert">
+	<p><strong>NOTE :</strong> Throwing exceptions is generally discouraged in Scala in favor of functional error-handling using Option[T], Either or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, etc contribute to this.</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-return">Return</h2>
+<p>Returning from a function.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+coming soon
+
+</code></pre>
+</div>
+<div class="alert alert-danger" role="alert">
+	<p><strong>NOTE :</strong> Returning early or mid-way in a function is generally discouraged as the last expression in code block is automatically returned. Also, returning early from a function ( with the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a single return value</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
 <h2 id="scala-iterations">Iterations</h2>
 <p>How to iterate over collections</p>
 
@@ -764,7 +937,86 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+<br/><br/><br/>
+
+<h1>4. Functions</h1>
+<hr/>
+<h2 id="scala-functions">Functions</h2>
+<p>Scala has many features related to functions/methods. this is a partial list.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// 1. function does not return anything ( via "Unit" type )
+</span>  <span class="k">def</span> <span class="n">test1</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+
+  <span class="c1">// 2. function with default values for parameters ( via = value )
+</span>  <span class="k">def</span> <span class="n">test2</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+
+  <span class="c1">// 3. function with return value ( via :&lt;type&gt; )
+</span>  <span class="c1">// NOTES:
+</span>  <span class="c1">// 1. do not need a return keyword 
+</span>  <span class="c1">// 2. last expression is assumed to be the return value
+</span>  <span class="k">def</span> <span class="n">test3</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">account</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">)</span>
+      <span class="k">return</span> <span class="n">s</span><span class="s">"new user : ${name} ${account} ${isActive}"</span>
+
+    <span class="n">s</span><span class="s">"existing user: ${name}"</span>
+  <span class="o">}</span>
+  
+
+  <span class="c1">// 4. function with functions as parameters,
+</span>  <span class="c1">// Last expression is assumed to be the return value
+</span>  <span class="k">def</span> <span class="n">test4</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
+             <span class="n">hello1</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
+             <span class="n">hello2</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
+             <span class="n">hello3</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">String</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="c1">// 1. first function takes 0 parameters, and returns nothing
+</span>    <span class="n">hello1</span><span class="o">()</span>
+
+    <span class="c1">// 2. second function takes 1 paramter, and returns nothing
+</span>    <span class="n">hello2</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
+
+    <span class="c1">// 3. third function takes 2 parameter and returns a value
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">hello3</span><span class="o">(</span><span class="s">"hey"</span><span class="o">,</span> <span class="s">"hello"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">testFunctions</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">test1</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with parameters with default values
+</span>    <span class="n">test2</span> <span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+
+    <span class="c1">// 3. function with parameters with default values + return value
+</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="n">test3</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">123456789123L</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result1</span> <span class="o">)</span>
+
+    <span class="c1">// 4. function with functions as paramters
+</span>    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="n">test4</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span>
+        <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="nc">Unit</span> <span class="o">},</span>
+        <span class="o">(</span><span class="n">greeting1</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">greeting1</span> <span class="o">+</span> <span class="s">" john"</span><span class="o">),</span>
+        <span class="o">(</span><span class="n">greeting2</span><span class="o">,</span> <span class="n">greeting3</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">greeting2</span> <span class="o">+</span> <span class="s">" and "</span> <span class="o">+</span> <span class="n">greeting3</span> <span class="o">+</span> <span class="s">" john"</span>
+    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result2</span> <span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
 
 <h2 id="scala-multiline-strings">Multiline strings</h2>
 <p>Multiline strings begin with “””</p>

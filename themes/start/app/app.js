@@ -137,6 +137,7 @@ var codeHelixMeta = {
 	{ name: "More"          ,  page: "-"                , children: [
 		{ name: "Standards"        ,  page: "standards.html"    },
 		{ name: "Scala 101"        ,  page: "scala101.html"    },
+		{ name: "Functional 101"   ,  page: "scala101-functional.html"    },
 		{ name: "Sample Apps"      ,  page: "samples.html"     },
 		{ name: "About Us"         ,  page: "about.html"       }
 	  ]
