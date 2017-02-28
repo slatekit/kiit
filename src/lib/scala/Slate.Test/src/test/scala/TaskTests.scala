@@ -1,6 +1,7 @@
+import slate.common.status._
 import slate.tests.common.ServiceFactory
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
-import slate.common.app.{AppMeta, AppRunConst}
+import slate.common.app.AppMeta
 import slate.common.queues.QueueSourceDefault
 import slate.core.tasks.{TaskSettings, TaskRunner, TaskQueue}
 
@@ -41,29 +42,29 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
 
 
   test("can move states") {
-    val task = new TaskQueue("", new TaskSettings(), new AppMeta())
+    val task = new TaskQueue("", new TaskSettings(), new AppMeta(), None, new QueueSourceDefault())
     task.start()
-    assert(task.status().status == AppRunConst.STARTED)
+    assert(task.status().status == RunStateStarted.mode)
     assert(task.isStarted())
     assert(task.isStartedOrResumed())
 
     task.pause(30)
-    assert(task.status().status == AppRunConst.PAUSED)
+    assert(task.status().status == RunStatePaused.mode)
     assert(task.isPaused())
     assert(task.isStoppedOrPaused())
 
     task.resume()
-    assert(task.status().status == AppRunConst.RESUMED)
+    assert(task.status().status == RunStateResumed.mode)
     assert(task.isResumed())
     assert(task.isStartedOrResumed())
 
     task.stop()
-    assert(task.status().status == AppRunConst.STOPPED)
+    assert(task.status().status == RunStateStopped.mode)
     assert(task.isStopped())
     assert(task.isStoppedOrPaused())
 
     task.waiting()
-    assert(task.status().status == AppRunConst.WAITING)
+    assert(task.status().status == RunStateWaiting.mode)
     assert(task.isWaiting())
   }
 

@@ -76,7 +76,7 @@ class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
   }
 
 
-  test("can parse args actions") {
+  test("can parse actions with args") {
 
     val result = Args.parse("area.api.action -env.name='loc' -log.level='info' -region.name='ny'", "-", "=", true)
     ensure(result, true, 3, List[(String,String)](
@@ -86,6 +86,13 @@ class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     ), Some(List[String]("area", "api", "action")))
   }
 
+
+  // app.users.activate
+  test("can parse actions without args") {
+
+    val result = Args.parse("area.api.action", "-", "=", true)
+    ensure(result, true, 0, List[(String,String)](), Some(List[String]("area", "api", "action")))
+  }
 
   test("is meta arg with /help") {
     assert( ArgsHelper.isMetaArg(List("help"  ), 0, "help", "info") )

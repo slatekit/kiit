@@ -30,23 +30,21 @@ class SmsTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
     it("can send without template") {
       val svc = new SmsServiceTwilio("", "", "", sender = Some((req) => simulatePost(req)))
-      val io = svc.send(new SmsMessage("welcome", "us", "123-456-7890"))
-      val result = io.run()
-      println(result)
+      val result = svc.send(new SmsMessage("welcome", "us", "123-456-7890"))
+      assert(result.success)
     }
 
 
     it("can send with template") {
       val svc = new SmsServiceTwilio("", "", "", sender = Some((req) => simulatePost(req)))
-      val io = svc.send(new SmsMessage("welcome", "us", "123-456-7890"))
-      val result = io.run()
-      println(result)
+      val result = svc.send(new SmsMessage("welcome", "us", "123-456-7890"))
+      assert(result.success)
     }
   }
 
 
-  def simulatePost(req:HttpRequest): IO[Result[Boolean]] = {
-    new IO[Result[Boolean]]( () => new SuccessResult[Boolean](true, 200, Some("Simulation : " + req.params.get(2)._2)))
+  def simulatePost(req:HttpRequest): Result[Boolean] = {
+    new SuccessResult[Boolean](true, 200, Some("Simulation : " + req.params.get(2)._2))
   }
 
 

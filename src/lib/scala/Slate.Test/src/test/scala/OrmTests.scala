@@ -1,5 +1,5 @@
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSpec}
-import slate.common.databases.{DbLookup}
+import slate.common.databases.{DbTypeMySql, DbLookup}
 import slate.core.common.Conf
 import slate.entities.core.{EntityService, Entities}
 import slate.ext.invites.{InviteService, Invite}
@@ -62,7 +62,7 @@ class OrmTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll {
       ent.register[Invite](isSqlRepo= true,
           entityType = typeOf[Invite],
           serviceType= Some(typeOf[InviteService]),
-          dbType= Some("mysql"))
+          dbType= Some(DbTypeMySql))
 
       ent
     }

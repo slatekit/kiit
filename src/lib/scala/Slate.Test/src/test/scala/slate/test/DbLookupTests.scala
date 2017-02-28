@@ -81,7 +81,7 @@ class DbLookupTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
   }
 
 
-  def ensureDb(expected:DbConString, actual:DbConString):Unit = {
+  def ensureDb(expected:DbCon, actual:DbConString):Unit = {
     assert( expected.driver   == actual.driver )
     assert( expected.password == actual.password )
     assert( expected.url      == actual.url )

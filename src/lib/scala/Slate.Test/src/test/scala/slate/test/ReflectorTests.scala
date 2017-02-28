@@ -1,5 +1,6 @@
 package slate.test
 
+import slate.tests.common.MyAppContext
 import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.{Reflected, DateTime, Field, Reflector}
 import slate.core.apis.{Api, ApiAction}
@@ -58,7 +59,9 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
 
     it("can get method") {
-      val api = new UserApi()
+      val ent = MyAppContext.sample.ent
+      ent.register[User](false, typeOf[User], serviceCtx = Some(MyAppContext.sample))
+      val api = new UserApi(MyAppContext.sample)
       val sym = Reflector.getMethod(api, "info")
       assert(sym.name.toTermName.toString == "info")
     }
@@ -66,7 +69,10 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can call a method with parameters") {
 
-      val api = new UserApi()
+      val ent = MyAppContext.sample.ent
+      ent.register[User](false, typeOf[User], serviceCtx = Some(MyAppContext.sample))
+
+      val api = new UserApi(MyAppContext.sample)
       val result = Reflector.callMethod(api, "create", Array[Any]("superman@metro.com", "super", "man", true, 35))
       assert(api.user.email == "superman@metro.com")
       assert(api.user.firstName == "super")
@@ -78,7 +84,7 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
 
     it("can get method parameters") {
 
-      val api = new UserApi()
+      val api = new UserApi(MyAppContext.sample)
       val sym = Reflector.getMethod(api, "create")
       val result = Reflector.getMethodParameters(sym)
       assert(result.size == 5)

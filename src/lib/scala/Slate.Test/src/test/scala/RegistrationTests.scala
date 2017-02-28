@@ -32,9 +32,11 @@ class RegistrationTests extends FunSuite with BeforeAndAfter with BeforeAndAfter
   private var _usr:UserService = null
   private var _dvc:DeviceService = null
 
+
   override def beforeAll() {
     println("before all")
   }
+
 
   override def afterAll() {
     println("after all")

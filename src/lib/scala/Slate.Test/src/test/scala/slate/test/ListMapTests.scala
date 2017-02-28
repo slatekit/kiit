@@ -14,6 +14,7 @@ package slate.test
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.ListMap
 import slate.common.encrypt.Encryptor
+import slate.test.common.User
 
 
 class ListMapTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
@@ -41,9 +42,9 @@ class ListMapTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     items.add("a", 1)
     items.add("b", 2)
     items.add("c", 3)
-    assert( items.get("a") == Some(1))
-    assert( items.get("b") == Some(2))
-    assert( items.get("c") == Some(3))
+    assert( items.getOpt("a") == Some(1))
+    assert( items.getOpt("b") == Some(2))
+    assert( items.getOpt("c") == Some(3))
   }
 
 
@@ -52,9 +53,9 @@ class ListMapTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     items.add("a", 1)
     items.add("b", 2)
     items.add("c", 3)
-    assert( items.getAt(0) == Some(1))
-    assert( items.getAt(1) == Some(2))
-    assert( items.getAt(2) == Some(3))
+    assert( items.getAtOpt(0) == Some(1))
+    assert( items.getAtOpt(1) == Some(2))
+    assert( items.getAtOpt(2) == Some(3))
   }
 
 
@@ -69,9 +70,23 @@ class ListMapTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     assert( items.contains("a"))
     assert( !items.contains("b"))
     assert( items.contains("c"))
-    assert( items.get("a") == Some(1))
-    assert( items.get("c") == Some(3))
-    assert( items.getAt(0) == Some(1))
-    assert( items.getAt(1) == Some(3))
+    assert( items.getOpt("a") == Some(1))
+    assert( items.getOpt("c") == Some(3))
+    assert( items.getAtOpt(0) == Some(1))
+    assert( items.getAtOpt(1) == Some(3))
+  }
+
+
+  test("can add and remove") {
+    val items =  new ListMap[Int, User]()
+    items.add(1, new User(1))
+    items.add(2, new User(2))
+    items.add(3, new User(3))
+
+    items.remove(2)
+    assert(items(1).id == 1)
+    assert(items(3).id == 3)
+    assert( items.size() == 2)
+
   }
 }

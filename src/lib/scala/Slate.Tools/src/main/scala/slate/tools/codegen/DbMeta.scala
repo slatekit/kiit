@@ -11,12 +11,12 @@
 
 package slate.tools.codegen
 
-import slate.common.databases.{Db, DbConString, DbField, DbTableMapper}
+import slate.common.databases._
 import slate.common.{Model, Reflector}
 
 import scala.reflect.runtime.universe._
 
-class DbMeta(private val con:DbConString) {
+class DbMeta(private val con:DbCon) {
 
   private val fieldModel = asModel()
 

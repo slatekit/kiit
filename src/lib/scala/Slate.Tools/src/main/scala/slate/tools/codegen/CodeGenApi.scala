@@ -21,10 +21,11 @@ import slate.common.results.ResultSupportIn
 import slate.common.serialization.{ObjectBuilderJson, ObjectBuilder}
 import slate.core.apis.{ApiAction, Api}
 import slate.core.apis.svcs.ApiWithSupport
+import slate.core.common.AppContext
 import scala.reflect.runtime.universe.{Type,typeOf}
 
 @Api(area = "slate", name = "models", desc = "api info about the application and host", roles= "?", auth = "key-roles", verb = "post", protocol="*")
-class CodeGenApi extends ApiWithSupport with ResultSupportIn
+class CodeGenApi(context:AppContext) extends ApiWithSupport(context) with ResultSupportIn
 {
 
   private var _rootFolder      = ""

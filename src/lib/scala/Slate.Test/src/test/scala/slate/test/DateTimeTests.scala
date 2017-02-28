@@ -24,7 +24,7 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 
   test("can create via sql timestamp") {
     val date = Timestamp.valueOf("2016-09-18 09:45:30")
-    val dt = new DateTime(date)
+    val dt = DateTime(date)
 
     assert( dt.year    == 2016 )
     assert( dt.month   == 9)
@@ -37,7 +37,7 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 
   test("can get fields") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.year    == 2016 )
     assert( dt.month   == 8)
     assert( dt.day     == 10)
@@ -49,7 +49,7 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 
   test("can add time" ) {
 
-    val dt1 = new DateTime(2016, 7, 22, 8, 30, 45)
+    val dt1 = DateTime(2016, 7, 22, 8, 30, 45)
     assert( dt1.addYears(1)  .year    == 2017)
     assert( dt1.addMonths(1) .month   == 8)
     assert( dt1.addDays(1)   .day     == 23)
@@ -61,42 +61,42 @@ class DateTimeTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll
 
   test("to string numeric") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringNumeric() == "20160810")
   }
 
 
   test("to string YYYYMMDD") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringYYYYMMDD() == "20160810")
   }
 
 
   test("to string YYYYMMDDHHmmss") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringYYYYMMDDHHmmss() == "20160810123045")
   }
 
 
   test("to string sql: yyyy-MM-ddTHHmmss") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringSql() == "2016-08-10T123045")
   }
 
 
   test("to string my-sql:  yyyy-MM-dd HH:mm:ss") {
 
-    val dt = new DateTime(2016, 8, 10, 12, 30, 45)
+    val dt = DateTime(2016, 8, 10, 12, 30, 45)
     assert( dt.toStringMySql() == "2016-08-10 12:30:45")
   }
 
 
   test("can compare time" ) {
 
-    val dt1 = new DateTime(2016, 7, 22, 8, 30, 45)
+    val dt1 = DateTime(2016, 7, 22, 8, 30, 45)
     ensureTrue(dt1, "> ", dt1.addHours(-1), dt1 > dt1.addHours(-1))
     ensureTrue(dt1, ">=", dt1.addHours(-1), dt1 >= dt1.addHours(-1))
     ensureTrue(dt1, ">=", dt1.addHours(0), dt1 >= dt1.addHours(0))

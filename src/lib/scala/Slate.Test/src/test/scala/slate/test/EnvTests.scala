@@ -1,7 +1,7 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.envs.{Env, Envs, EnvItem}
+import slate.common.envs._
 
 /**
   * <slate_header>
@@ -16,31 +16,31 @@ import slate.common.envs.{Env, Envs, EnvItem}
 
 class EnvTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
-  private def ensureMatch(envs:Envs, name:String, envType:String, desc:String): Unit ={
+  private def ensureMatch(envs:Envs, name:String, envType:EnvMode, desc:String): Unit ={
     val env = envs(name)
     assert( env.isDefined )
     assert( env.get.name == name )
-    assert( env.get.env == envType)
+    assert( env.get.mode.name == envType.name)
     assert( env.get.desc == desc )
   }
 
 
   test("can construct") {
-    val env = new  EnvItem("qa1", "qa", "nyc")
-    assert( env.name   == "qa1" )
-    assert( env.env    == "qa"  )
-    assert( env.region == "nyc" )
+    val env = new  Env("qa1", Qa, "nyc")
+    assert( env.name      == "qa1" )
+    assert( env.mode.name == "qa"  )
+    assert( env.region    == "nyc" )
   }
 
 
   test("default envs can be created") {
     val envs = Env.defaults()
-    ensureMatch( envs, "loc", Env.DEV , "Dev environment (local)" )
-    ensureMatch( envs, "dev", Env.DEV , "Dev environment (shared)" )
-    ensureMatch( envs, "qa1", Env.QA  , "QA environment  (current release)" )
-    ensureMatch( envs, "qa2", Env.QA  , "QA environment  (last release)" )
-    ensureMatch( envs, "stg", Env.UAT , "STG environment (demo)" )
-    ensureMatch( envs, "pro", Env.PROD, "LIVE environment" )
+    ensureMatch( envs, "loc", Dev , "Dev environment (local)" )
+    ensureMatch( envs, "dev", Dev , "Dev environment (shared)" )
+    ensureMatch( envs, "qa1", Qa  , "QA environment  (current release)" )
+    ensureMatch( envs, "qa2", Qa  , "QA environment  (last release)" )
+    ensureMatch( envs, "stg", Uat , "STG environment (demo)" )
+    ensureMatch( envs, "pro", Prod, "LIVE environment" )
   }
 
 
@@ -48,7 +48,7 @@ class EnvTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     val envs = Env.defaults()
     assert( envs.current.isDefined )
     assert( envs.name == "loc")
-    assert( envs.env == Env.DEV )
+    assert( envs.env == Dev.name )
     assert( envs.isDev )
   }
 
@@ -58,7 +58,7 @@ class EnvTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     val envs = envAll.select("qa1")
     assert( envs.current.isDefined )
     assert( envs.name == "qa1")
-    assert( envs.env == Env.QA )
+    assert( envs.env == Qa.name )
     assert( envs.isQa )
   }
 
@@ -71,32 +71,32 @@ class EnvTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
 
 
   test("can build key") {
-    assert( EnvItem("qa1", "qa").key == "qa1:qa" )
+    assert( Env("qa1", Qa).key == "qa1:qa" )
   }
 
 
   test("can check loc") {
-    assert( EnvItem("loc", Env.DEV).isDev )
+    assert( Env("loc", Dev).isDev )
   }
 
 
   test("can check dev") {
-    assert( EnvItem("qa1", Env.QA).isQa )
+    assert( Env("qa1", Qa).isQa )
   }
 
 
   test("can check qa") {
-    assert( EnvItem("qa1", Env.QA).isQa )
+    assert( Env("qa1", Qa).isQa )
   }
 
 
   test("can check stg") {
-    assert( EnvItem("stg", Env.UAT).isUat )
+    assert( Env("stg", Uat).isUat )
   }
 
 
   test("can check pro") {
-    assert( EnvItem("pro", Env.PROD).isProd )
+    assert( Env("pro", Prod).isProd )
   }
 
 }

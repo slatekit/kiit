@@ -16,18 +16,20 @@ import slate.entities.core.{Entities}
 import slate.ext.devices.{Device, DeviceService}
 import slate.ext.reg.{RegHooks, RegService}
 import slate.ext.users.{User, UserService}
-import slate.tests.common.MyEncryptor
 import scala.reflect.runtime.universe.typeOf
 
 object ServiceFactory {
 
   var _entities:Entities = null
+  var appContext = MyAppContext.sample
 
   def init(): Unit = {
+
     val con = Conf.load(Some("user://blendlife/conf/db.conf")).dbCon("db")
     _entities = new Entities(Some(new DbLookup(con)))
-    _entities.register[User]  (isSqlRepo= true, entityType = typeOf[User]  , serviceType= Some(typeOf[UserService]  ))
-    _entities.register[Device](isSqlRepo= true, entityType = typeOf[Device], serviceType= Some(typeOf[DeviceService]))
+    appContext = MyAppContext.sample.copy(ent = _entities)
+    _entities.register[User]  (isSqlRepo= true, entityType = typeOf[User]  , serviceType= Some(typeOf[UserService]  ), serviceCtx = Some(appContext))
+    _entities.register[Device](isSqlRepo= true, entityType = typeOf[Device], serviceType= Some(typeOf[DeviceService]), serviceCtx = Some(appContext))
   }
 
 

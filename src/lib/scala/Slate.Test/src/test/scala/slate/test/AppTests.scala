@@ -12,13 +12,11 @@
 package slate.test
 
 import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
-import slate.common.envs.{Env, EnvItem}
+import slate.common.envs.Env
 import slate.common.results.ResultCode
 import slate.common.{SuccessResult, Result}
 import slate.common.args.{Arg, ArgsSchema}
-import slate.common.logging.{LogEntry, LoggerBase, LogLevel}
 import slate.core.app.{AppFuncs, AppRunner, AppProcess}
-
 
 class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
@@ -31,9 +29,8 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   describe("App Inputs") {
 
     it("can run process with null args schema without raw args") {
-      val app = new AppArgsSchemaNull()
       runApp((args) => {
-        val res = AppRunner.run(app, args)
+        val res = AppRunner.run(new AppArgsSchemaNull(args))
         assertResult(res, "ok", 200, "schema null")
         res
       })
@@ -41,9 +38,8 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
     it("can run process with empty args schema") {
-      val app = new AppArgsSchemaEmpty()
       runApp((args) => {
-        val res = AppRunner.run(app, args)
+        val res = AppRunner.run( new AppArgsSchemaEmpty(args))
         assertResult(res, "ok", 200, "schema empty")
         res
       })
@@ -51,9 +47,8 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
     it("can run process with empty args defined") {
-      val app = new AppArgsSchemaBasicNoneRequired()
       runApp((args) => {
-        val res = AppRunner.run(app, args)
+        val res = AppRunner.run(new AppArgsSchemaBasicNoneRequired(args))
         assertResult(res, "ok", 200, "schema basic")
         res
       })
@@ -64,25 +59,29 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   describe("App Help") {
 
     it("can request help") {
-      checkHelp(Array[String]("help", "-help", "--help", "/help", "?"))
+      checkHelp(Array[String]("help", "-help", "--help", "/help", "?"), ResultCode.HELP, "help")
     }
 
 
     it("can request about") {
-      checkHelp(Array[String]("about", "-about", "--about", "/about", "info"))
+      checkHelp(Array[String]("about", "-about", "--about", "/about", "info"), ResultCode.HELP, "help")
     }
 
 
     it("can request version") {
-      checkHelp(Array[String]("version", "-version", "--version", "/version", "ver"))
+      checkHelp(Array[String]("version", "-version", "--version", "/version", "ver"),ResultCode.HELP,  "help")
     }
 
 
-    def checkHelp(words:Array[String]):Unit = {
+    it("can request exit") {
+      checkHelp(Array[String]("exit", "-exit", "--exit", "/exit", "exit"),ResultCode.EXIT, "exit")
+    }
+
+
+    def checkHelp(words:Array[String], code:Int, msg:String):Unit = {
       for(word <- words){
-        val app = new AppArgsSchemaBasic1Required()
-        val res = AppRunner.run(app, Some(Array[String](word)))
-        assertResultBasic(res, ResultCode.HELP, "success")
+        val res = AppRunner.run(new AppArgsSchemaBasic1Required(Some(Array[String](word))))
+        assertResultBasic(res, code, msg)
       }
     }
   }
@@ -91,15 +90,13 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   describe("App Args") {
 
     it("can run process with args defined and required and missing") {
-      val app = new AppArgsSchemaBasic1Required()
-      val res = AppRunner.run(app, Some(Array[String]()))
+      val res = AppRunner.run(new AppArgsSchemaBasic1Required( Some(Array[String]())))
       assertResultBasic(res, ResultCode.BAD_REQUEST, "invalid arguments supplied")
     }
 
 
     it("can run process with args defined and required and supplied") {
-      val app = new AppArgsSchemaBasic1Required()
-      val res = AppRunner.run(app, Some(Array[String]("-env='loc'")))
+      val res = AppRunner.run(new AppArgsSchemaBasic1Required(Some(Array[String]("-env='loc'"))))
       assertResult(res, "ok", 200, "schema args 1")
     }
   }
@@ -108,53 +105,49 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   describe("App Envs") {
 
     it("can run process with env correct") {
-      val app = new AppArgsSchemaBasic1Required()
-      val res = AppRunner.run(app, Some(Array[String]("-env='loc'")))
+      val res = AppRunner.run(new AppArgsSchemaBasic1Required( Some(Array[String]("-env='loc'"))))
       assertResult(res, "ok", 200, "schema args 1")
     }
 
 
     it("can run process with env incorrect") {
-      val app = new AppArgsSchemaBasic1Required()
-      val res = AppRunner.run(app, Some(Array[String]("-env='abc'")))
-      assertResultBasic(res, 400, "Unexpected error running application: Unknown environment name : abc supplied")
+      val res = AppRunner.run(new AppArgsSchemaBasic1Required(Some(Array[String]("-env='abc'"))))
+      assertResultBasic(res, 400, "Unknown environment name : abc supplied")
     }
 
 
+    /*
     it("can run process with env custom") {
       val app = new AppCustomEnvs()
       val res = AppRunner.run(app, Some(Array[String]("-env='beta'")))
       assertResult(res, "ok", 200, "schema custom envs")
     }
+    */
   }
 
 
   describe("App Config") {
 
     it("can select and use env local") {
-      val app = new AppConfigTest()
-      val res = AppRunner.run(app, Some(Array[String]("-env='loc'")))
+      val res = AppRunner.run(new AppConfigTest(Some(Array[String]("-env='loc'"))))
       val res2 = res.asInstanceOf[Result[(String,String,Int,Double)]]
       assertConfigResult(res2, ("loc", "env loc", 1, 20.1), 200, null)
     }
 
     it("can select and use env dev") {
-      val app = new AppConfigTest()
-      val res = AppRunner.run(app, Some(Array[String]("-env='dev'")))
+      val res = AppRunner.run(new AppConfigTest(Some(Array[String]("-env='dev'"))))
       val res2 = res.asInstanceOf[Result[(String,String,Int,Double)]]
       assertConfigResult(res2, ("dev", "env dev", 2, 20.2), 200, null)
     }
 
     it("can select and use env qa1") {
-      val app = new AppConfigTest()
-      val res = AppRunner.run(app, Some(Array[String]("-env='qa1'")))
+      val res = AppRunner.run(new AppConfigTest(Some(Array[String]("-env='qa1'"))))
       val res2 = res.asInstanceOf[Result[(String,String,Int,Double)]]
       assertConfigResult(res2, ("qa1", "env qa1", 3, 20.3), 200, null)
     }
 
     it("can select and use env qa2") {
-      val app = new AppConfigTest()
-      val res = AppRunner.run(app, Some(Array[String]("-env='qa2'")))
+      val res = AppRunner.run(new AppConfigTest(Some(Array[String]("-env='qa2'"))))
       val res2 = res.asInstanceOf[Result[(String,String,Int,Double)]]
       assertConfigResult(res2, ("qa2", "env qa2", 4, 20.4), 200, null)
     }
@@ -164,8 +157,7 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   describe("App Error") {
 
     it("can handle unexpected error") {
-      val app = new AppErrorTest()
-      val res = AppRunner.run(app, Some(Array[String]("-env='loc'")))
+      val res = AppRunner.run(new AppErrorTest(Some(Array[String]("-env='loc'"))))
       assertResultBasic(res, 500, "Unexpected error : error test")
     }
   }
@@ -204,52 +196,85 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   }
 
 
-
-
-  class AppArgsSchemaNull extends AppProcess {
-    override lazy val argsSchema = null
+  /**
+    * Case: No schema
+    */
+  class AppArgsSchemaNull(args:Option[Array[String]])  extends AppProcess(None, args) {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200, Some("schema null"))
   }
 
 
-  class AppArgsSchemaEmpty extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema(List[Arg]())
+  /**
+    * Case: Empty schema
+    * @param schema
+    */
+  class AppArgsSchemaEmpty
+  (
+      args:Option[Array[String]],
+      schema: Option[ArgsSchema] = Some(new ArgsSchema(List[Arg]()))
+  )  extends AppProcess(None, args, schema) {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200, Some("schema empty"))
   }
 
 
-  class AppArgsSchemaBasicNoneRequired extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema()
-      .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
-      .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
-      .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+  /**
+    * Case args - none required
+    * @param schema
+    */
+  class AppArgsSchemaBasicNoneRequired
+  (
+      args:Option[Array[String]],
+      schema: Option[ArgsSchema]     = Some
+      (
+        new ArgsSchema()
+          .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+          .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
+          .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+      )
+  ) extends AppProcess(None, args, schema) {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200, Some("schema basic"))
   }
 
 
-  class AppArgsSchemaBasic1Required extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema()
+  /**
+    * Case args - 1 required
+    * @param schema
+    */
+  class AppArgsSchemaBasic1Required
+  (
+    args:Option[Array[String]],
+    schema: Option[ArgsSchema]     = Some
+    (
+      new ArgsSchema()
       .text("env"        , "the environment to run in", true, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
       .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
       .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+    )
+  ) extends AppProcess(None, args, schema) {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200, Some("schema args 1"))
   }
 
 
-  class AppArgsSchemaBasicAllRequired extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema()
+  class AppArgsSchemaBasicAllRequired
+  (
+    args:Option[Array[String]],
+    schema: Option[ArgsSchema]     = Some
+    (
+      new ArgsSchema()
       .text("env"        , "the environment to run in", true, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
       .text("region"     , "the region linked to app" , true, "us"   , "us"   , "us|europe|india|*")
       .text("log.level"  , "the log level for logging", true, "info" , "info" , "debug|info|warn|error")
+    )
+  ) extends AppProcess(None, args, schema) {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200)
   }
 
-
+/*
   class AppCustomEnvs extends AppProcess {
     override lazy val argsSchema = new ArgsSchema()
       .text("env"        , "the environment to run in", true, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
@@ -269,15 +294,16 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
     override def onExecute():Result[Any] = new SuccessResult[String]("ok", 200, Some("schema custom envs"))
   }
+  */
 
 
-  class AppConfigTest extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema()
-      .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+  class AppConfigTest(
+                       args:Option[Array[String]]
+                     )  extends AppProcess(None, args) {
 
     override def onExecute():Result[Any] = {
       val data = (
-        env.name,
+        ctx.env.name,
         conf.getString("test.string"),
         conf.getInt("test.integer"),
         conf.getDouble("test.double")
@@ -287,11 +313,9 @@ class AppTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
   }
 
 
-  class AppErrorTest extends AppProcess {
-    override lazy val argsSchema = new ArgsSchema()
-      .text("env"        , "the environment to run in", false, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
-      .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
-      .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+  class AppErrorTest(
+                      args:Option[Array[String]]
+                    ) extends AppProcess(None, args) {
 
     override def onExecute():Result[Any] = {
       if(conf != null ) {

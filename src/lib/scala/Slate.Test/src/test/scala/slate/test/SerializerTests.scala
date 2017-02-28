@@ -13,7 +13,7 @@ package slate.test
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 
 import slate.common.DateTime
-import slate.common.envs.EnvItem
+import slate.common.envs.{Env, Qa}
 import slate.common.serialization.{SerializerProps, SerializerJson, SerializerCsv}
 import slate.test.common.User
 
@@ -59,7 +59,7 @@ class SerializerTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterA
 
 
   test("can serialize case class to props") {
-    val env = new EnvItem("qa1", "QA", "qa1:QA")
+    val env = new Env("qa1", Qa, "qa1:QA")
     val serializer = new SerializerProps()
     val content = serializer.serialize(env)
     println(content)
@@ -67,7 +67,7 @@ class SerializerTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterA
 
 
   test("can serialize case class to CSV") {
-    val env = new EnvItem("qa1", "QA", "qa1:QA")
+    val env = new Env("qa1", Qa, "qa1:QA")
     val serializer = new SerializerCsv()
     val content = serializer.serialize(env)
     println(content)
@@ -76,7 +76,7 @@ class SerializerTests  extends FunSuite with BeforeAndAfter with BeforeAndAfterA
 
 
   test("can serialize case class to json") {
-    val env = new EnvItem("qa1", "QA", "qa1:QA")
+    val env = new Env("qa1", Qa, "qa1:QA")
     val serializer = new SerializerJson()
     val content = serializer.serialize(env)
     println(content)

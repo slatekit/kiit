@@ -11,20 +11,21 @@
 
 package slate.test
 
-import slate.common.envs.EnvItem
+import scala.reflect.runtime.universe.{typeOf, Type}
+import slate.common.args.Args
+import slate.common.envs.{Env, Dev}
 import slate.entities.core.Entities
-import slate.test.common.{UserApi2, MyAuthProvider, UserApi}
+import slate.test.common.{User, UserApi2, MyAuthProvider, UserApi}
 import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll}
 import slate.common.{ApiKey, Result}
 import slate.common.databases.DbConString
 import slate.common.databases.DbLookup._
-import slate.common.encrypt.Encryptor
 import slate.common.info.{About}
 import slate.common.logging.LoggerConsole
 import slate.common.results.{ResultSupportIn}
 import slate.core.apis._
 import slate.core.common.{Conf, AppContext}
-import slate.tests.common.MyEncryptor
+import slate.tests.common.{MyAppContext, MyEncryptor}
 
 
 class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with ResultSupportIn {
@@ -33,22 +34,25 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
 
     it("can register api") {
       val apis = getApis()
-      apis.register[UserApi](new UserApi())
+      apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
+      apis.register[UserApi](new UserApi(apis.ctx))
       assert(apis.getOrCreateArea("app") != null)
-      assert(apis.getOrCreateArea("app")("users").container == apis)
+      //assert(apis.getOrCreateArea("app")("users").container == apis)
     }
 
 
     it("can check action does NOT exist") {
       val apis = getApis()
-      apis.register[UserApi](new UserApi())
+      apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
+      apis.register[UserApi](new UserApi(apis.ctx))
       assert(!apis.contains("app.users.fakeMethod").success)
     }
 
 
     it("can check action exists") {
       val apis = getApis()
-      apis.register[UserApi](new UserApi())
+      apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
+      apis.register[UserApi](new UserApi(apis.ctx))
       assert(apis.contains("app.users.activate").success)
     }
 
@@ -339,11 +343,12 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
 
     // 1. context for common services
     val ctx = new AppContext (
-      env  = EnvItem("local", "dev"),
+      arg  = Args(),
+      env  = Env("local", Dev),
       cfg  = new Conf(),
       log  = new LoggerConsole(),
       ent  = new Entities(),
-      inf  = new About("myapp", "sample app", "product group 1", company = "slatekit", region = "ny", version = "1.1.0"),
+      inf  = new About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
       dbs  = Some(defaultDb(new DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi"))),
       enc  = Some(MyEncryptor)
     )
@@ -373,21 +378,23 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
                          opts:Option[List[(String,String)]],
                          expected:Result[String]):Unit = {
 
+    val appCtx = AppContext.sample("tests", "tests", "tests", "slatekit")
+    appCtx.ent.register[User](false, typeOf[User], serviceCtx = Some(appCtx))
     val cmd = ApiHelper.buildCmd(path, inputs, opts)
     val regs = List[ApiReg](
-      new ApiReg(new UserApi(), false, auth = Some(authMode)),
-      new ApiReg(new UserApi2(), false, auth = Some(authMode))
+      new ApiReg(new UserApi(appCtx), false, auth = Some(authMode)),
+      new ApiReg(new UserApi2(appCtx), false, auth = Some(authMode))
     )
 
     // set the auth
     val apis = if(user != null) {
       val keys = List[ApiKey](
-        new ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
-        new ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
-        new ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
-        new ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
-        new ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
-        new ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
+        ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
+        ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
+        ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
+        ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
+        ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
+        ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
       )
       val auth = Some(new MyAuthProvider(user._1, user._2, Some(keys)))
       val apis = getApis(protocolCt, auth, apiRegs = Some(regs), errors = errors)

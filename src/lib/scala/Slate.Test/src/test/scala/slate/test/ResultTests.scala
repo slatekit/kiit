@@ -19,12 +19,12 @@ import slate.common.results.{ResultFuncs, ResultCode, ResultSupportIn}
 class ResultTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll with ResultSupportIn {
 
   test("can build result") {
-    val res = new SuccessResult[String]("user01", 123, msg = Some("created"), ext = Some(20), tag = Some("code12"))
+    val res = new SuccessResult[String]("user01", 123, msg = Some("created"), ref = Some(20), tag = Some("code12"))
     assert( res.success == true )
     assert( res.msg == Some("created" ))
     assert( res.code == 123 )
     assert( res.get == "user01")
-    assert( res.ext == Some(20))
+    assert( res.ref == Some(20))
     assert( res.tag == Some("code12"))
   }
 
@@ -74,6 +74,49 @@ class ResultTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll wi
       msg
     })
     ensure(res, false, ResultCode.FAILURE, "test", null)
+  }
+
+
+  test("can map to another value"){
+    val yes = ok(msg = Some("m1"), tag = Some("t1"), ref = Some("GUID_123"))
+    val good  = yes.map( v => if(v) 1 else 0 )
+
+    assert( good.success )
+    assert( good.code == yes.code )
+    assert( good.msg == yes.msg )
+    assert( good.tag == yes.tag )
+    assert( good.ref == yes.ref )
+    assert( good.get == 1 )
+  }
+
+
+  test("can map failure"){
+    val fail = no(msg = Some("m1"), tag = Some("t1"), ref = Some("GUID_123"))
+    val fail2  = fail.map( v => if(v) 1 else 0 )
+
+    assert( !fail2.success )
+    assert( fail2.code == fail.code )
+    assert( fail2.msg  == Some("m1"))
+    assert( fail2.tag  == Some("t1"))
+    assert( fail2.ref  == Some("GUID_123"))
+    assert( fail2.isEmpty )
+  }
+
+
+  test("can flat map to another value"){
+    val yes = ok(msg = Some("m1"), tag = Some("t1"), ref = Some("GUID_123"))
+    val good  = yes.flatMap( v => {
+      if(v)
+        success(1, msg = Some("f_msg1"), tag = Some("f_tag1"), ref = Some("GUID_XYZ"))
+      else
+        failure[Int](msg = Some("f_msg2"), tag = Some("f_tag2"))
+    } )
+
+    assert( good.success )
+    assert( good.code == yes.code )
+    assert( good.msg  == Some("f_msg1") )
+    assert( good.tag  == Some("f_tag1") )
+    assert( good.ref  == Some("GUID_XYZ") )
   }
 
 

@@ -17,10 +17,12 @@ import slate.common.Result
 import slate.common.results.{ResultSupportIn}
 import slate.core.apis.{Api, ApiAction}
 import slate.core.apis.svcs.ApiWithSupport
+import slate.core.common.AppContext
+
 
 @Api(area = "sys", name = "docs", desc= "help doc generator",
   roles= "@admin", auth = "app", verb = "post", protocol = "*")
-class DocApi extends ApiWithSupport
+class DocApi(context:AppContext) extends ApiWithSupport(context)
   with ResultSupportIn {
 
 

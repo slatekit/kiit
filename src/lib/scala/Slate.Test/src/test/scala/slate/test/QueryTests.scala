@@ -54,7 +54,7 @@ class QueryTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
     it("can convert boolean datetime") {
-      assert( QueryEncoder.convertVal(new DateTime(2016, 10, 16)) == "'2016-10-16 12:00:00'")
+      assert( QueryEncoder.convertVal(DateTime(2016, 10, 16)) == "'2016-10-16 12:00:00'")
     }
 
 
@@ -87,7 +87,7 @@ class QueryTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
     it("can build where with 1 field of type datetime") {
-      assert( new Query().where("date", "=", new DateTime(2016, 10, 16)).toFilter() == "date = '2016-10-16 12:00:00'")
+      assert( new Query().where("date", "=", DateTime(2016, 10, 16)).toFilter() == "date = '2016-10-16 12:00:00'")
     }
 
 
@@ -121,7 +121,7 @@ class QueryTests extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
     it("can build where with 1 field of type datetime") {
-      assert( new Query().set("code", "1").where("date", "=", new DateTime(2016, 10, 16)).toUpdatesText() == "SET code='1' WHERE date = '2016-10-16 12:00:00'")
+      assert( new Query().set("code", "1").where("date", "=", DateTime(2016, 10, 16)).toUpdatesText() == "SET code='1' WHERE date = '2016-10-16 12:00:00'")
     }
 
 

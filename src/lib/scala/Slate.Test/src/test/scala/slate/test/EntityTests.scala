@@ -12,10 +12,10 @@
 package slate.test
 
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSpec}
-import slate.entities.core.{EntityService}
+import slate.entities.core.{IEntityRepo, EntityRepo, Entities, EntityService}
 import slate.entities.repos.EntityRepoInMemory
-import slate.test.common.User
-import scala.reflect.runtime.universe.typeOf
+import slate.test.common.{Phone, User}
+import scala.reflect.runtime.universe._
 
 class EntityTests  extends FunSpec with BeforeAndAfter with BeforeAndAfterAll {
 
@@ -34,6 +34,55 @@ class EntityTests  extends FunSpec with BeforeAndAfter with BeforeAndAfterAll {
         assert(user.uniqueId != "")
       }
       */
+    }
+
+
+    describe( "Registration" ) {
+      it("can register the entity") {
+        val ent = new Entities()
+        ent.register[User](isSqlRepo= false, entityType = typeOf[User])
+        ent.register[Phone](isSqlRepo= false, entityType = typeOf[Phone])
+      }
+
+
+      it("can get service") {
+        val ent = new Entities()
+        ent.register[User](isSqlRepo= false, entityType = typeOf[User])
+        ent.register[Phone](isSqlRepo= false, entityType = typeOf[Phone])
+
+        assert( ent.getSvc[User]().isInstanceOf[EntityService[User]])
+        assert( ent.getSvc[Phone]().isInstanceOf[EntityService[Phone]])
+      }
+
+
+      it("can get service with shards") {
+        val ent = new Entities()
+        ent.register[User](isSqlRepo= false, entityType = typeOf[User])
+        ent.register[Phone](isSqlRepo= false, entityType = typeOf[Phone])
+
+        assert( ent.getSvc[User]("", "").isInstanceOf[EntityService[User]])
+        assert( ent.getSvc[Phone]("", "").isInstanceOf[EntityService[Phone]])
+      }
+
+
+      it("can get repo") {
+        val ent = new Entities()
+        ent.register[User](isSqlRepo= false, entityType = typeOf[User])
+        ent.register[Phone](isSqlRepo= false, entityType = typeOf[Phone])
+
+        assert( ent.getRepo[User]().isInstanceOf[EntityRepo[User]])
+        assert( ent.getRepo[Phone]().isInstanceOf[EntityRepo[Phone]])
+      }
+
+
+      it("can get repo with shards") {
+        val ent = new Entities()
+        ent.register[User](isSqlRepo= false, entityType = typeOf[User])
+        ent.register[Phone](isSqlRepo= false, entityType = typeOf[Phone])
+
+        assert( ent.getRepo[User]("", "").isInstanceOf[EntityRepo[User]])
+        assert( ent.getRepo[Phone]("", "").isInstanceOf[EntityRepo[Phone]])
+      }
     }
 
 

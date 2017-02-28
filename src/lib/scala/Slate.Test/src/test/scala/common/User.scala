@@ -19,7 +19,8 @@ class UserNormal1{
 }
 
 
-class User(val id:Long) extends IEntity with IEntityUnique with IEntityUpdatable[User] {
+
+class User(val id:Long) extends EntityWithId with IEntityUnique with EntityUpdatable[User] {
 
   def this() = {
     this(0)
@@ -171,4 +172,43 @@ case class User2 (
   {
     email + ", " + firstName + ", " + lastName + ", " + isMale + ", " + age
   }
+}
+
+
+
+case class Phone (
+
+                   id: Long = 0,
+
+
+                   @Field("",true, 50)
+                   number :String = "",
+
+
+                   @Field("",true, 50)
+                   os :String = "",
+
+
+
+                   @Field("",true, 50)
+                   uniqueId :String = "",
+
+
+                   @Field("", true, -1)
+                   createdAt: DateTime = DateTime.now(),
+
+
+                   @Field("", true, -1)
+                   createdBy: Int  = 0,
+
+
+                   @Field("", true, -1)
+                   updatedAt : DateTime =  DateTime.now(),
+
+
+                   @Field("", true, -1)
+                   updatedBy : Int  = 0
+
+                 ) extends EntityWithId
+{
 }

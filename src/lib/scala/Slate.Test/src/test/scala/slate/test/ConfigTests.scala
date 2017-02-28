@@ -3,6 +3,7 @@ package slate.test
 
 import java.io.File
 
+import slate.common.app.LocationUserDir
 import slate.common.conf.{ConfigBase, ConfigUserDir}
 import slate.common.info.Folders
 import slate.common.{Files, ApiCredentials}
@@ -29,11 +30,7 @@ class ConfigTests  extends FunSpec  with BeforeAndAfter with BeforeAndAfterAll {
 
 
   def getFolders:Folders = {
-    new Folders(
-      root = Some("slatekit"),
-      group = Some("samples"),
-      app = "slate.tests"
-    )
+    Folders.userDir("slatekit", "samples", "slate.tests")
   }
 
 

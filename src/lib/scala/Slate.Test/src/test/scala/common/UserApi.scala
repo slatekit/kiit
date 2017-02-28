@@ -11,6 +11,7 @@
 
 package slate.test.common
 
+import scala.reflect.runtime.universe.{typeOf}
 import slate.common.encrypt.{DecString, DecLong, DecDouble, DecInt}
 import slate.common.results.{ResultCode, ResultSupportIn}
 import slate.common.{FailureResult, DateTime, Result}
@@ -19,7 +20,7 @@ import slate.core.common.AppContext
 
 @Api(area = "app", name = "users2", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi2 extends ApiBaseEntity[User] with ResultSupportIn {
+class UserApi2(context:AppContext) extends ApiBaseEntity[User](context, typeOf[User]) with ResultSupportIn {
 
   override val isErrorEnabled = true
 
@@ -34,7 +35,7 @@ class UserApi2 extends ApiBaseEntity[User] with ResultSupportIn {
 
 @Api(area = "app", name = "users2", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi3 extends ApiBaseEntity[User] with ResultSupportIn {
+class UserApi3(context:AppContext) extends ApiBaseEntity[User](context, typeOf[User]) with ResultSupportIn {
 
   override val isErrorEnabled = true
 
@@ -47,14 +48,14 @@ class UserApi3 extends ApiBaseEntity[User] with ResultSupportIn {
    * @return
    */
   override def onException(context:AppContext, request: Request, ex:Exception): Result[Any] = {
-    unexpectedError(Some(false), msg = Some("unexpected error in api"), err = Some(ex))
+    unexpectedError(msg = Some("unexpected error in api"), err = Some(ex))
   }
 }
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
   roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi extends ApiBaseEntity[User] with ResultSupportIn
+class UserApi(context:AppContext) extends ApiBaseEntity[User](context, typeOf[User]) with ResultSupportIn
 {
   var user = new User
 

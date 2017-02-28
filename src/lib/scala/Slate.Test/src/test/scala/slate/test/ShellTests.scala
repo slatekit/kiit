@@ -79,12 +79,12 @@ class ShellTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
     val ctx = AppContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
 
     val apiKeys = List[ApiKey](
-        new ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
-        new ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
-        new ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
-        new ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
-        new ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
-        new ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
+        ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
+        ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
+        ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
+        ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
+        ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
+        ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
       )
 
     // 1. Get the user login info from .slate
@@ -95,8 +95,8 @@ class ShellTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
     val shell = new ShellAPI(creds, ctx, new ApiAuth(Some(apiKeys), None), "sampleapp")
 
     // 4. Register the apis using default mode ( uses permissions in annotations on class )
-    shell.apis.register[AppApi]    (new AppApi()    , true, Some("qa"), protocol = Some("*"))
-    shell.apis.register[VersionApi](new VersionApi(), true, Some("qa"), protocol = Some("*") )
+    shell.apis.register[AppApi]    (new AppApi(ctx)    , true, Some("qa"), protocol = Some("*"))
+    shell.apis.register[VersionApi](new VersionApi(ctx), true, Some("qa"), protocol = Some("*") )
     shell.apis.init()
 
     shell
