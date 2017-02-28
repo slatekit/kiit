@@ -10,8 +10,11 @@
   */
 package slate.core.mods
 
+import slate.core.common.AppContext
 
-abstract class Module( val ctx:ModuleContext)
+
+abstract class Module( val appCtx:AppContext,
+                       val modCtx:ModuleContext)
 {
   val info:ModuleInfo
 
@@ -33,7 +36,7 @@ abstract class Module( val ctx:ModuleContext)
     if(info.isDbDependent ){
       info.models.fold(Unit)( models => {
         models.foreach( modelName => {
-          ctx.modelService.install(modelName, info.version, "", "")
+          modCtx.modelService.install(modelName, info.version, "", "")
         })
         Unit
       })
@@ -45,7 +48,7 @@ abstract class Module( val ctx:ModuleContext)
     if(info.isDbDependent ){
       info.models.fold(List[String]())( models => {
         models.map(modelName => {
-          ctx.modelService.generateSql(modelName, info.version)
+          modCtx.modelService.generateSql(modelName, info.version)
           modelName
         })
       })

@@ -16,7 +16,7 @@ package slate.core.mobile
 import slate.common.queues.QueueSource
 import slate.common.{DateTime, Result}
 import slate.common.Require._
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
+import slate.common.results.ResultFuncs._
 import scala.collection.mutable.Map
 
 class MessageService(val _queue:Option[QueueSource] = None) extends MessageServiceBase {
@@ -47,8 +47,7 @@ class MessageService(val _queue:Option[QueueSource] = None) extends MessageServi
     * @param msg
     */
   def send(userId:String, destId:String, msg:Message):Result[Boolean] = {
-    throw new NotImplementedException()
-    null
+    notImplemented()
   }
 
 

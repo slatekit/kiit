@@ -75,6 +75,6 @@ case class Mod(
                 @(Field@field)("",true, 50)
                 uniqueId: String = ""
               )
-  extends IEntity with IEntityUnique
+  extends EntityWithId with IEntityUnique
 {
 }

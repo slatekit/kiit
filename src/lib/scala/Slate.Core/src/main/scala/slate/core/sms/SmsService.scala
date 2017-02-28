@@ -13,10 +13,10 @@
 
 package slate.core.sms
 
-import slate.common.Strings._
 import slate.common.templates.Templates
-import slate.common._
-import slate.common.IO._
+import slate.common.{Result, BoolMessage,Vars}
+import slate.common.Strings.{isNullOrEmpty}
+import slate.common.results.ResultFuncs._
 
 abstract class SmsService(templates:Option[Templates] = None) {
 
@@ -27,7 +27,7 @@ abstract class SmsService(templates:Option[Templates] = None) {
    * @return
    * @note      : implement in derived class that can actually send the message
    */
-  def send(msg: SmsMessage): IO[Result[Boolean]]
+  def send(msg: SmsMessage): Result[Boolean]
 
 
   /**
@@ -37,14 +37,14 @@ abstract class SmsService(templates:Option[Templates] = None) {
    * @param countryCode : destination phone country code
    * @param phone       : destination phone
    */
-  def send(message:String, countryCode:String, phone:String):IO[Result[Boolean]] =
+  def send(message:String, countryCode:String, phone:String):Result[Boolean] =
   {
     val result = validate(countryCode, phone)
     if(result.success) {
       send(new SmsMessage(message, countryCode, phone))
     }
     else{
-      failedIO(result.message)
+      err(result.message)
     }
   }
 
@@ -57,18 +57,18 @@ abstract class SmsService(templates:Option[Templates] = None) {
    * @param phone       : destination phone
    * @param variables   : values to replace the variables in template
    */
-  def sendUsingTemplate(name:String, countryCode:String, phone:String, variables:Vars):IO[Result[Boolean]] =
+  def sendUsingTemplate(name:String, countryCode:String, phone:String, variables:Vars):Result[Boolean] =
   {
     val result = validate(countryCode, phone)
     if(result.success) {
-      templates.fold(failedIO[Boolean]("templates are not setup"))(t => {
+      templates.fold(err("templates are not setup"))(t => {
         val result = t.resolveTemplateWithVars(name, Option(variables.asMap()))
         val message = result.get
         send(new SmsMessage(message, countryCode, phone))
       })
     }
     else {
-      failedIO(result.message)
+      err(result.message)
     }
   }
 

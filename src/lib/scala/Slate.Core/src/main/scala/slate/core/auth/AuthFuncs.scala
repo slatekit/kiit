@@ -52,8 +52,8 @@ object AuthFuncs extends ResultSupportIn {
     val keyCheck = inputs.fold[Option[String]](None)( inp => {
 
       // Check 2: Key exists in request ?
-      if( inputs.get.contains(inputName) ) {
-        val key = inputs.get(inputName).toString()
+      if( inp.contains(inputName) ) {
+        val key = inp(inputName).toString()
 
         // Check 3: Key is non-empty ?
         if(Strings.isNullOrEmpty(key)) {
@@ -88,7 +88,8 @@ object AuthFuncs extends ResultSupportIn {
   def matchRoles(expectedRole:String, actualRoles:Map[String,String]): Result[Boolean] = {
 
     // 1. No roles ?
-    if(actualRoles == null || actualRoles.size == 0) {
+    val anyRoles = Option(actualRoles).fold(false)( roles => roles.nonEmpty)
+    if(!anyRoles) {
       unAuthorized()
     }
     // 2. Any role "*"
@@ -144,8 +145,7 @@ object AuthFuncs extends ResultSupportIn {
 
       val lookup = new ListMap[String,ApiKey]()
       for(key <- all) {
-        val rolesLookup = Strings.splitToMap(key.roles, ',', true)
-        lookup.add(key.key, new ApiKey(key.name, key.key, key.roles, rolesLookup))
+        lookup.add(key.key, key)
       }
       lookup
     })

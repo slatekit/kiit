@@ -54,7 +54,7 @@ class Cmd(val name: String) {
    * @param args
    * @return
    */
-  def execute(args:Array[Any] = null): CmdResult =
+  def execute(args:Array[Any]): CmdResult =
   {
     val resultTimed = attemptTimed( () => {
       executeInternal(args)
@@ -75,8 +75,5 @@ class Cmd(val name: String) {
    * @param args
    * @return
    */
-  protected def executeInternal(args: Any) : AnyRef =
-  {
-    null
-  }
+  protected def executeInternal(args: Any) : AnyRef = "not-implemented"
 }

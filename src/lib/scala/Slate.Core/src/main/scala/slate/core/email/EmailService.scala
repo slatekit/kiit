@@ -15,9 +15,9 @@ package slate.core.email
 
 
 import slate.common.templates.Templates
-import slate.common._
-import slate.common.IO._
+import slate.common.{Result, BoolMessage,Vars}
 import slate.common.Strings.{isNullOrEmpty}
+import slate.common.results.ResultFuncs._
 
 
 abstract class EmailService(templates:Option[Templates] = None) {
@@ -28,7 +28,7 @@ abstract class EmailService(templates:Option[Templates] = None) {
    * @param msg
    * @return
    */
-  def send(msg:EmailMessage):IO[Result[Boolean]]
+  def send(msg:EmailMessage):Result[Boolean]
 
 
   /**
@@ -39,7 +39,7 @@ abstract class EmailService(templates:Option[Templates] = None) {
    * @param html    : Whether or not the email is html formatted
    * @return
    */
-  def send(to:String, subject:String, body:String, html:Boolean): IO[Result[Boolean]] =
+  def send(to:String, subject:String, body:String, html:Boolean): Result[Boolean] =
   {
     // NOTE: This guards are more readable that other alternatives
     val result = validate(to, subject)
@@ -48,7 +48,7 @@ abstract class EmailService(templates:Option[Templates] = None) {
     }
     else
     {
-      failedIO(result.message)
+      err(result.message)
     }
   }
 
@@ -60,20 +60,20 @@ abstract class EmailService(templates:Option[Templates] = None) {
    * @param html    : Whether or not the email is html formatted
    * @param variables   : values to replace the variables in template
    */
-  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, variables:Vars):IO[Result[Boolean]] =
+  def sendUsingTemplate(name:String, to:String, subject:String, html:Boolean, variables:Vars):Result[Boolean] =
   {
     val result = validate(to, subject)
     if(result.success) {
       // Send the message
       //send(to, subject, message, html)
-      templates.fold(failedIO[Boolean]("templates are not setup"))(t => {
+      templates.fold(err("templates are not setup"))(t => {
         val result = t.resolveTemplateWithVars(name, Option(variables.asMap()))
         val message = result.get
         send(new EmailMessage(to, subject, message, html))
       })
     }
     else {
-      failedIO(result.message)
+      err(result.message)
     }
   }
 

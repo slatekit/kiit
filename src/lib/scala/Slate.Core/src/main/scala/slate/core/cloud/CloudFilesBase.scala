@@ -13,9 +13,9 @@
 
 package slate.core.cloud
 
-import java.io.{InputStreamReader, BufferedReader, InputStream, ByteArrayInputStream}
+import java.io.{InputStream, ByteArrayInputStream}
 
-import slate.common.{IO, Result, Files}
+import slate.common.{Result, Files}
 
 /**
   * Abstraction for cloud base file storage and retrieval.

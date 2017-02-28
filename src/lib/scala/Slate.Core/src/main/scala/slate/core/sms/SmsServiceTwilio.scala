@@ -14,8 +14,7 @@ package slate.core.sms
 
 import slate.common.http.common.{HttpConstants}
 import slate.common.http.common.HttpMethod.POST
-import slate.common.http.{HttpClient, HttpRequest, HttpCredentials}
-import slate.common.http.HttpHelper._
+import slate.common.http.{HttpHelper, HttpClient, HttpRequest, HttpCredentials}
 import slate.common.results.ResultSupportIn
 import slate.common._
 import slate.common.templates.Templates
@@ -38,7 +37,7 @@ class SmsServiceTwilio(key      :String ,
                        password :String ,
                        phone    :String ,
                        templates:Option[Templates] = None,
-                       sender   :Option[(HttpRequest) => IO[Result[Boolean]]] = None)
+                       sender   :Option[(HttpRequest) => Result[Boolean]] = None)
   extends SmsService(templates) with ResultSupportIn {
 
   val _settings = new SmsSettings(key, password, phone)
@@ -61,7 +60,7 @@ class SmsServiceTwilio(key      :String ,
     * @param msg : message to send
    * @return
    */
-  override def send(msg: SmsMessage): IO[Result[Boolean]] = {
+  override def send(msg: SmsMessage): Result[Boolean] = {
 
       val phoneFinal = massagePhone(msg.countryCode, msg.phone)
 
@@ -87,9 +86,9 @@ class SmsServiceTwilio(key      :String ,
   }
 
 
-  private def post(req:HttpRequest): IO[Result[Boolean]] = {
+  private def post(req:HttpRequest): Result[Boolean] = {
     val client = new HttpClient()
-    postIO(client, req)
+    HttpHelper.post(client, req)
   }
 
 

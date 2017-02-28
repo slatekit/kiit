@@ -13,19 +13,18 @@
 
 package slate.core.email
 
-import slate.common.http.HttpHelper._
 import slate.common.http.common.HttpConstants
 import slate.common.http.common.HttpMethod.POST
 import slate.common.templates.Templates
-import slate.common.{IO, ApiCredentials, Result}
-import slate.common.http.{HttpRequest, HttpCredentials, HttpClient}
+import slate.common.{ApiCredentials, Result}
+import slate.common.http.{HttpHelper, HttpRequest, HttpCredentials, HttpClient}
 import slate.common.results.ResultSupportIn
 
 class EmailServiceSendGrid(user      : String,
                            key       : String,
                            phone     : String,
                            templates : Option[Templates] = None,
-                           sender    : Option[(HttpRequest) => IO[Result[Boolean]]] = None )
+                           sender    : Option[(HttpRequest) => Result[Boolean]] = None )
   extends EmailService(templates) with ResultSupportIn {
 
   val _settings = new EmailSettings(user, key, phone)
@@ -41,7 +40,7 @@ class EmailServiceSendGrid(user      : String,
   }
 
 
-  override def send(msg: EmailMessage): IO[Result[Boolean]] = {
+  override def send(msg: EmailMessage): Result[Boolean] = {
 
     // Parameters
     val bodyArg = if (msg.html) "html" else "text"
@@ -71,8 +70,8 @@ class EmailServiceSendGrid(user      : String,
   }
 
 
-  private def post(req:HttpRequest): IO[Result[Boolean]] = {
+  private def post(req:HttpRequest): Result[Boolean] = {
     val client = new HttpClient()
-    postIO(client, req)
+    HttpHelper.post(client, req)
   }
 }
