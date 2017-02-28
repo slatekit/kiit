@@ -12,13 +12,14 @@ package slate.integration
 
 import slate.common.{Doc, Result, Strings, Files}
 import slate.common.Files._
-import slate.core.apis.{ApiAction, Api}
+import slate.core.apis.{ApiContainer, ApiAction, Api}
 import slate.core.cloud.CloudFilesBase
 import slate.core.apis.svcs.ApiWithSupport
+import slate.core.common.AppContext
 
 
 @Api(area = "infra", name = "files", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
-class FilesApi(val files:CloudFilesBase) extends ApiWithSupport {
+class FilesApi(val files:CloudFilesBase, context:AppContext ) extends ApiWithSupport(context) {
 
 
   @ApiAction(name = "", desc= "connect to the datasource", roles= "@parent", verb = "@parent", protocol = "@parent")
@@ -109,6 +110,6 @@ class FilesApi(val files:CloudFilesBase) extends ApiWithSupport {
     }
     else
       "PATH   : " + path
-    successOrError[String](result.success, output, result.msg, result.tag, result.ref)
+    successOrError[String](result.success, Option(output), result.msg, result.tag, result.ref)
   }
 }

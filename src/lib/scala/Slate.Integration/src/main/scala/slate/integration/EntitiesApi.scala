@@ -14,14 +14,15 @@
 package slate.integration
 
 import slate.common.Result
-import slate.common.databases.DbConString
-import slate.core.apis.{Api, ApiAction, ApiBase}
+import slate.common.databases.{DbCon, DbConString}
+import slate.core.apis.{ApiContainer, Api, ApiAction, ApiBase}
+import slate.core.common.AppContext
 import slate.entities.models.{EntitySetupService, ModelSettings}
 
 
 @Api(area = "sys", name = "models", desc = "api to access and manage data models",
   roles= "admin", auth = "key-roles", verb = "post", protocol = "cli")
-class EntitiesApi(val _settings:ModelSettings) extends ApiBase
+class EntitiesApi(_settings:ModelSettings, context:AppContext ) extends ApiBase(context)
 {
   @ApiAction(name = "", desc = "installs the model to the database shard", roles= "@parent", verb = "@parent", protocol = "@parent")
   def install(name:String, version:String = "", dbKey:String = "", dbShard:String = "")
@@ -60,21 +61,21 @@ class EntitiesApi(val _settings:ModelSettings) extends ApiBase
 
 
   @ApiAction(name = "", desc = "gets the default db connection", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectionByDefault(): Result[DbConString] =
+  def connectionByDefault(): Result[DbCon] =
   {
     service.connectionByDefault()
   }
 
 
   @ApiAction(name = "", desc = "gets the default db connection", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectionByName(name:String): Result[DbConString] =
+  def connectionByName(name:String): Result[DbCon] =
   {
     service.connectionByName(name)
   }
 
 
   @ApiAction(name = "", desc = "get the database connection for the db shard", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
+  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbCon] =
   {
     service.connectionByGroup(dbKey, dbShard)
   }

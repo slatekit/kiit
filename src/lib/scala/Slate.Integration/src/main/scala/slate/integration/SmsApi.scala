@@ -14,14 +14,14 @@
 package slate.integration
 
 import slate.common.{Vars, Result}
-import slate.core.apis.{Api, ApiAction}
+import slate.core.apis.{ApiContainer, Api, ApiAction}
 import slate.core.apis.svcs.ApiWithSupport
+import slate.core.common.AppContext
 import slate.core.sms.{SmsService}
 
 @Api(area = "infra", name = "sms", desc = "api to send emails", roles= "ops", auth="key-roles", verb = "*", protocol = "*")
-class SmsApi(private val svc:SmsService) extends ApiWithSupport
+class SmsApi(private val svc:SmsService, context:AppContext )extends ApiWithSupport(context)
 {
-
   /**
    * sends a message
    * @param message     : message to send
@@ -31,7 +31,7 @@ class SmsApi(private val svc:SmsService) extends ApiWithSupport
   @ApiAction(name = "", desc= "send an sms", roles= "@parent", verb = "@parent", protocol = "@parent")
   def send(message:String, countryCode:String, phone:String):Result[Boolean] =
   {
-    this.svc.send(message, countryCode, phone).run()
+    this.svc.send(message, countryCode, phone)
   }
 
 
@@ -46,6 +46,6 @@ class SmsApi(private val svc:SmsService) extends ApiWithSupport
   @ApiAction(name = "", desc= "send an sms using a template", roles= "@parent", verb = "@parent", protocol = "cli")
   def sendUsingTemplate(name:String, countryCode:String, phone:String, vars:Vars):Result[Boolean] =
   {
-    this.svc.sendUsingTemplate(name, countryCode, phone, vars).run()
+    this.svc.sendUsingTemplate(name, countryCode, phone, vars)
   }
 }

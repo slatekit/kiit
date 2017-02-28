@@ -13,14 +13,14 @@ package slate.integration
 import slate.common.Funcs._
 import slate.common._
 import slate.common.query.Query
-import slate.core.apis.{Api, ApiAction}
+import slate.core.apis.{ApiContainer, Api, ApiAction}
+import slate.core.common.AppContext
 import slate.core.mods.{Mod, Module, ModuleContext}
 import slate.core.apis.svcs.ApiWithSupport
 
-import scala.collection.mutable.ListBuffer
 
 @Api(area = "sys", name = "mods", desc = "management of system modules", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
-class ModuleApi(ctx:ModuleContext) extends ApiWithSupport {
+class ModuleApi(ctx:ModuleContext, context:AppContext ) extends ApiWithSupport(context) {
 
   private val _items = new ListMap[String,Module]()
 
@@ -39,34 +39,19 @@ class ModuleApi(ctx:ModuleContext) extends ApiWithSupport {
 
   @ApiAction(name = "", desc = "installs all modules from initial setup", roles = "@parent" )
   def install():Result[Any] = {
-    val results = ListBuffer[Result[Any]]()
-
-    // for each module, register
-    for(item <- _items.all() )
-    {
-      val mod = item
-      results.append( installMod(mod) )
-    }
-    val finalResult = results.reduce[Result[Any]]( (r1, r2) => r1.and(r2) )
+    val res = _items.all().map( module => installMod(module))
+    val finalResult = res.reduce[Result[Any]]( (r1, r2) => r1.and(r2) )
     finalResult
   }
 
 
   @ApiAction(name = "", desc = "generates sql scripts for all models", roles = "@parent" )
   def scripts():List[String] = {
-    val scripts = ListBuffer[String]()
-
-    // for each module, register
-    for(item <- _items.all() )
-    {
-      val mod = item
-      for(script <- mod.script()){
-        if(!Strings.isNullOrEmpty(script)){
-          scripts.append(script)
-        }
-      }
-    }
-    scripts.toList
+    val scripts = for {
+      module <- _items.all()
+      script <- module.script()
+    } yield script
+    scripts
   }
 
 

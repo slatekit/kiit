@@ -12,14 +12,15 @@
   */
 package slate.integration
 
-import slate.common.databases.Db
+
 import slate.common.info._
-import slate.common.serialization.{SerializerUtils, SerializerProps}
-import slate.core.apis.{Request, Api, ApiAction}
+import slate.common.serialization.{SerializerUtils}
+import slate.core.apis.{ApiContainer, Request, Api, ApiAction}
 import slate.core.apis.svcs.ApiWithSupport
+import slate.core.common.AppContext
 
 @Api(area = "app", name = "info", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
-class AppApi extends ApiWithSupport
+class AppApi( context:AppContext ) extends ApiWithSupport(context)
 {
 
   @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
@@ -49,7 +50,7 @@ class AppApi extends ApiWithSupport
 
   @ApiAction(name = "", desc= "gets info about the folders", roles= "@parent", verb = "@parent", protocol = "@parent")
   def dirs(format:String = "props"):Folders = {
-    context.dirs.getOrElse(new Folders())
+    context.dirs.getOrElse(Folders.none)
   }
 
 

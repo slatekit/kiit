@@ -12,7 +12,7 @@
   */
 package slate.integration
 
-import slate.common.{Credentials, InputArgs, Result}
+import slate.common.{Todo, Credentials, InputArgs, Result}
 import slate.core.apis._
 import slate.core.common.AppContext
 import slate.core.shell._
@@ -35,7 +35,7 @@ class ShellAPI(private val creds:Credentials                   ,
                settings   : ShellSettings = new ShellSettings(),
                apiItems   : Option[List[ApiReg]] = None
                )
-  extends ShellService(ctx.app, ctx.dirs.get, settings) {
+  extends ShellService(ctx.dirs.get, settings, ctx.app, _entities = Option(ctx.ent)) {
 
   // api container holding all the apis.
   val apis = new ApiContainerCLI(ctx, Some(auth), apiItems)
@@ -50,7 +50,7 @@ class ShellAPI(private val creds:Credentials                   ,
   override def onShellStart(): Unit =
   {
     // You don't need to override this as the base method displays help info
-    super.showHelp()
+    _view.showHelp()
     _writer.highlight(s"\tStarting up ${_appMeta.about.name} command line")
   }
 
@@ -109,7 +109,7 @@ class ShellAPI(private val creds:Credentials                   ,
 
   override protected def showHelp(): Unit =
   {
-    super.showHelp()
+    _view.showHelp()
     apis.handleHelp()
   }
 
@@ -146,9 +146,10 @@ class ShellAPI(private val creds:Credentials                   ,
   }
 
 
-  override protected def printResult(result:Result[Any]):Unit =
+  override protected def showResult(result:Result[Any]):Unit =
   {
-    ShellPrinter.setEntities(apis.ctx.ent)
-    ShellPrinter.printResult(result)
+    Todo.bug("entities")
+    //_printer.setEntities(apis.ctx.ent)
+    _printer.printResult(result)
   }
 }

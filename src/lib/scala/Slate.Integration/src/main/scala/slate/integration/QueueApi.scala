@@ -14,14 +14,13 @@ import java.nio.file.Paths
 
 import slate.common.{Result, Doc, Files}
 import slate.common.queues.{QueueSourceMsg, QueueSource}
-import slate.core.apis.{Api, ApiAction}
+import slate.core.apis.{ApiContainer, Api, ApiAction}
 import slate.core.apis.svcs.ApiWithSupport
-
-import scala.collection.mutable.ListBuffer
+import slate.core.common.AppContext
 
 
 @Api(area = "infra", name = "queues", desc = "api info about the application and host", roles= "admin", auth="key-roles", verb = "post", protocol = "*")
-class QueueApi ( val queue:QueueSource) extends ApiWithSupport {
+class QueueApi ( val queue:QueueSource, context:AppContext )extends ApiWithSupport(context) {
 
 
   @ApiAction(name = "", desc= "connect to the queue", roles= "@parent", verb = "@parent", protocol = "@parent")
@@ -87,13 +86,10 @@ class QueueApi ( val queue:QueueSource) extends ApiWithSupport {
   def nextBatchToFiles(size:Int = 10, complete:Boolean, fileNameLocal:String):Option[List[Option[String]]] =
   {
     val items = queue.nextBatch(size)
-    val messages = ListBuffer[Option[String]]()
     items.fold(Option(List[Option[String]](Some("No items available"))))( all => {
-      for(ndx <- 0 until all.size){
-        val item = all(ndx)
-        messages.append( writeToFile(Option(item), fileNameLocal, ndx, getContent) )
-      }
-      Option(messages.toList)
+
+      val result = all.indices.map( ndx => writeToFile(Option(all(ndx)), fileNameLocal, ndx, getContent))
+      Option(result.toList)
     })
   }
 
