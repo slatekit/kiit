@@ -16,24 +16,15 @@ package slate.common.lex
  * NOTE: Using var and basic while/for loops for
  * higher performance
  */
-class LexState {
+class LexState(val text:String, end:Option[Int] = None) {
 
    // NOTE: Using vars here for low-level text parsing and higher performance
-   var text    = ""
    var pos     = 0
    var line    = 0
    var charPos = 0
-   var END     = 0
    var count   = 0
+   val END     = end.getOrElse(Option(text).getOrElse("").length)
 
-
-  def init(text:String): Unit =
-  {
-    this.pos = 0.toShort
-    this.END = text.length
-    this.text = text
-    this.count = 0.toShort
-  }
 
 
   def substring(start:Int, excludeLast:Boolean = false): String =

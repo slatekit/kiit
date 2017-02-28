@@ -11,7 +11,6 @@
 
 package slate.common.logging
 
-import slate.common.logging.LogLevel._
 
 trait LogSupport {
 
@@ -25,7 +24,7 @@ trait LogSupport {
    */
   def debug(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
   {
-    log(LogLevel.Debug, msg, ex, tag)
+    log(Debug, msg, ex, tag)
   }
 
 
@@ -36,7 +35,7 @@ trait LogSupport {
    */
   def info(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
   {
-    log(LogLevel.Info, msg, ex, tag)
+    log(Info, msg, ex, tag)
   }
 
 
@@ -47,7 +46,7 @@ trait LogSupport {
    */
   def warn(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
   {
-    log(LogLevel.Warn, msg, ex, tag)
+    log(Warn, msg, ex, tag)
   }
 
 
@@ -58,7 +57,7 @@ trait LogSupport {
    */
   def error(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
   {
-    log(LogLevel.Error, msg, ex, tag)
+    log(Error, msg, ex, tag)
   }
 
 
@@ -70,7 +69,7 @@ trait LogSupport {
     */
   def fatal(msg: String, ex: Option[Exception] = None, tag: Option[String] = None):Unit =
   {
-    log(LogLevel.Fatal, msg, ex, tag)
+    log(Fatal, msg, ex, tag)
   }
 
 

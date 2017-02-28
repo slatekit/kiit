@@ -16,6 +16,7 @@ package slate.common.lex
   */
 object TokenType {
 
+  val None         = 0
   val Ident        = 1
   val String       = 2
   val Number       = 3

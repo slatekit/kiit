@@ -17,12 +17,12 @@ object Logger {
 
   def parseLogLevel(level:String):LogLevel = {
     level match {
-      case "debug" => LogLevel.Debug
-      case "info"  => LogLevel.Info
-      case "warn"  => LogLevel.Warn
-      case "error" => LogLevel.Error
-      case "fatal" => LogLevel.Fatal
-      case _       => LogLevel.Debug
+      case "debug" => Debug
+      case "info"  => Info
+      case "warn"  => Warn
+      case "error" => Error
+      case "fatal" => Fatal
+      case _       => Debug
     }
   }
 }

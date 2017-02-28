@@ -1,11 +1,10 @@
 package slate.common.logging
 
-import slate.common.DateTime
 
 /**
  * Created by kv on 10/14/2015.
  */
-case class LogLevel( name:String, code:Int ){
+abstract class LogLevel(val name:String, val code:Int ){
 
 
   def <  (lv:LogLevel): Boolean = compareTo(lv) == -1
@@ -19,10 +18,8 @@ case class LogLevel( name:String, code:Int ){
 }
 
 
-object LogLevel {
-  val Debug = new LogLevel("Debug", 1)
-  val Info  = new LogLevel("Info" , 2)
-  val Warn  = new LogLevel("Warn" , 3)
-  val Error = new LogLevel("Error", 4)
-  val Fatal = new LogLevel("Fatal", 5)
-}
+case object Debug extends LogLevel("Debug", 1)
+case object Info  extends LogLevel("Info" , 2)
+case object Warn  extends LogLevel("Warn" , 3)
+case object Error extends LogLevel("Error", 4)
+case object Fatal extends LogLevel("Fatal", 5)

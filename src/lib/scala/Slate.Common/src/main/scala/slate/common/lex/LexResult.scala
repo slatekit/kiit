@@ -24,12 +24,12 @@ import slate.common.Strings._
   * @param ex       : exception if failure
   */
 case class LexResult(
-                      success : Boolean      = false,
-                      message : String       = null,
-                      tokens  : List[Token] = null,
-                      total   : Int          = 0,
-                      isSubset: Boolean      = true,
-                      ex      : Exception    = null
+                      success : Boolean           ,
+                      message : String            ,
+                      tokens  : List[Token]       ,
+                      total   : Int               ,
+                      isSubset: Boolean           ,
+                      ex      : Option[Exception]
                     )
 {
   def toStringDetail():String =

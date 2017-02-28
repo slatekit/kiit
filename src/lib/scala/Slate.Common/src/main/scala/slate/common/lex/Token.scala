@@ -35,3 +35,8 @@ case class Token(
     s"$tType, line=$line, charPos=$charPos, index=$index $text"
   }
 }
+
+object Token {
+
+  val none = Token("", "", TokenType.None, -1, -1, -1)
+}

@@ -41,10 +41,10 @@ object ListMap {
  */
 class ListMap[A,B] {
 
-  case class ListMapEntry(key:A, value:B, index:Int) { }
+  case class ListMapEntry(key:A, value:B) { }
 
   private val _list = ListBuffer[ListMapEntry]()
-  private val _map = Map[A, ListMapEntry]()
+  private val _map = Map[A, Int]()
 
 
   /**
@@ -68,12 +68,7 @@ class ListMap[A,B] {
     *  @param  key the key of the mapping of interest
     *  @return     the value of the mapping, if it exists
     */
-  def get(key: A): Option[B] = {
-    if(contains(key))
-      Some( _map(key).value )
-    else
-      None
-  }
+  def get(key: A): B = _list(_map(key)).value
 
 
   /**
@@ -81,7 +76,29 @@ class ListMap[A,B] {
    * @param pos
    * @return
    */
-  def getAt(pos:Int): Option[B] = {
+  def getAt(pos:Int): B = _list(pos).value
+
+
+  /** Checks if this map maps `key` to a value and return the
+    *  value if it exists.
+    *
+    *  @param  key the key of the mapping of interest
+    *  @return     the value of the mapping, if it exists
+    */
+  def getOpt(key: A): Option[B] = {
+    if(contains(key))
+      Some( _list(_map(key)).value )
+    else
+      None
+  }
+
+
+  /**
+    * gets the value at the supplied index position.
+    * @param pos
+    * @return
+    */
+  def getAtOpt(pos:Int): Option[B] = {
     if ( pos < 0 || pos >= _list.size )
       None
     else
@@ -124,8 +141,8 @@ class ListMap[A,B] {
     }
 
     val index = _list.size
-    val entry = new ListMapEntry(key,value.asInstanceOf[B], index)
-    _map(key) =  entry
+    val entry = new ListMapEntry(key,value.asInstanceOf[B])
+    _map(key) =  index
     _list.append(entry)
     this
   }
@@ -138,9 +155,10 @@ class ListMap[A,B] {
   def remove(key:A): ListMap[A,B] =
   {
     if(contains(key)) {
-      val entry = _map(key)
-      _list.remove(entry.index, 1)
+      val index = _map(key)
+      _list.remove(index, 1)
       _map.remove(key)
+      remap()
     }
     this
   }
@@ -169,7 +187,7 @@ class ListMap[A,B] {
   {
     if(!contains(key))
       throw new IllegalArgumentException("key : " + key + " not found")
-    _map(key).value
+    _list(_map(key)).value
   }
 
 
@@ -194,6 +212,15 @@ class ListMap[A,B] {
       copy.add(entry.key, entry.value)
     })
     copy
+  }
+
+
+  private def remap():Unit = {
+
+    _list.indices.foreach( ndx => {
+      val item = _list(ndx)
+      _map(item.key) = ndx
+    })
   }
 
 }

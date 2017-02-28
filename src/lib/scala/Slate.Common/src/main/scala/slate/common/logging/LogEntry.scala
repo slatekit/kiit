@@ -17,7 +17,7 @@ import slate.common.DateTime
 
 case class LogEntry(
                       name  : String            = "",
-                      level : LogLevel          = LogLevel.Info,
+                      level : LogLevel          = Info,
                       msg   : String            = "",
                       time  : DateTime          = DateTime.now,
                       ex    : Option[Exception] = None,

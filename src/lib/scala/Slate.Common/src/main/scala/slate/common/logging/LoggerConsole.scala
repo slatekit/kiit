@@ -15,7 +15,7 @@ package slate.common.logging
 import slate.common.console.ConsoleWriter
 import scala.reflect.runtime.universe.Type
 
-class LoggerConsole(level:LogLevel = LogLevel.Debug,
+class LoggerConsole(level:LogLevel = Debug,
                     name:String          = "console",
                     logType:Option[Type] = None )
   extends LoggerBase(level, name, logType) {
@@ -32,12 +32,12 @@ class LoggerConsole(level:LogLevel = LogLevel.Debug,
   {
     val prefix = entry.
     level match {
-      case LogLevel.Debug => _writer.subTitle  (entry.level.name + " : "  + entry.msg)
-      case LogLevel.Info  => _writer.text      (entry.level.name + "  : " + entry.msg)
-      case LogLevel.Warn  => _writer.url       (entry.level.name + "  : " + entry.msg)
-      case LogLevel.Error => _writer.error     (entry.level.name + " : "  + entry.msg)
-      case LogLevel.Fatal => _writer.highlight (entry.level.name + " : "  + entry.msg)
-      case _              => _writer.text      (entry.level.name + " : "  + entry.msg)
+      case Debug => _writer.subTitle  (entry.level.name + " : "  + entry.msg)
+      case Info  => _writer.text      (entry.level.name + "  : " + entry.msg)
+      case Warn  => _writer.url       (entry.level.name + "  : " + entry.msg)
+      case Error => _writer.error     (entry.level.name + " : "  + entry.msg)
+      case Fatal => _writer.highlight (entry.level.name + " : "  + entry.msg)
+      case _     => _writer.text      (entry.level.name + " : "  + entry.msg)
     }
   }
 }

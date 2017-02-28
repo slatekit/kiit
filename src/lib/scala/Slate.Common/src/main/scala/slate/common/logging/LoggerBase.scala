@@ -15,7 +15,7 @@ package slate.common.logging
 import slate.common.DateTime
 import scala.reflect.runtime.universe.Type
 
-abstract class LoggerBase(val level:LogLevel       = LogLevel.Warn,
+abstract class LoggerBase(val level:LogLevel       = Warn,
                           val name:String          = "",
                           val logType:Option[Type] = None ) extends LogSupport
 {
