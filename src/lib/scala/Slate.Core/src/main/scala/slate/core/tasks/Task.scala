@@ -16,6 +16,8 @@ package slate.core.tasks
 import slate.common.app._
 import slate.common.logging.LoggerBase
 import slate.common._
+import slate.common.results.ResultCode
+import slate.common.status._
 
 
 /**
@@ -29,19 +31,17 @@ import slate.common._
 class Task(name:String = "",
            protected val _settings:TaskSettings,
            protected val meta:AppMeta,
-           protected val args:Option[Any] = None)
+           protected val args:Option[Any] = None,
+           protected val _log:Option[LoggerBase] = None,
+           protected val _config:Option[InputArgs] = None
+          )
 
   extends AppLifeCycle
   with AppMetaSupport
-  with AppStatusSupport
-  with AppRunSupportExt
+  with RunStatusNotifier
+  with RunStatusSupport
   with Runnable
 {
-
-  //protected var _state:TaskState  = null
-  protected var _log:LoggerBase = null
-  protected var _config:InputArgs       = null
-
 
   /**
    * runs the task by executing the exec and end life-cycle methods
@@ -65,7 +65,7 @@ class Task(name:String = "",
    */
   override def init(): Result[Boolean] =
   {
-    moveToState(AppRunConst.INITIALIZE)
+    moveToState(RunStateInitializing)
     onInit(args)
   }
 
@@ -77,7 +77,7 @@ class Task(name:String = "",
    */
   override def exec(): Result[Any] =
   {
-    moveToState(AppRunConst.STARTED)
+    moveToState(RunStateExecuting)
     onExec()
   }
 
@@ -88,7 +88,7 @@ class Task(name:String = "",
   override def end(): Unit =
   {
     onEnd()
-    moveToState(AppRunConst.END)
+    moveToState(RunStateEnded)
   }
 
 
@@ -98,16 +98,10 @@ class Task(name:String = "",
     * @param state
    * @return
    */
-  override protected def moveToState(state:String):AppRunState = {
-    _state = new AppRunState(status = state)
+  override protected def moveToState(state:RunState):RunStatus = {
+    _state = new RunStatus(status = state.mode)
 
-    // status update
-    if ( _statusMap.contains(state)) {
-      _statusMap(state)(None, None)
-    }
-    else {
-      statusUpdate(state)
-    }
+    this.statusUpdate(state, true, ResultCode.SUCCESS, None)
     _state
   }
 
@@ -115,13 +109,12 @@ class Task(name:String = "",
   /**
    * implementation of a status update
     *
-    * @param msg
    * @param code
-   * @param value
+   * @param message
    */
-  override def statusUpdate(msg:String, code:Int = 0, value:Option[Any] = None):Unit = {
+  override def statusUpdate(state:RunState, success:Boolean, code:Int, message:Option[String]):Unit = {
     // implement
-    println(msg)
+    println(message)
   }
 
 

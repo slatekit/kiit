@@ -10,9 +10,9 @@
   */
 package slate.core.tenants
 
-import slate.entities.core.IEntity
+import slate.entities.core.Entity
 
-trait ITenant extends IEntity {
+trait ITenant extends Entity {
 
   val tenantId : Int
 }

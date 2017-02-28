@@ -34,16 +34,16 @@ import slate.common.DateTime
   *         times of the last run
  */
 case class TaskResult (
-                          success           :Boolean  = false         ,
-                          statusCode        :Int      = 0             ,
-                          message           :String   = ""            ,
-                          name              :String   = ""            ,
-                          totalMilliseconds :Int      = 0             ,
-                          start             :DateTime = DateTime.now(),
-                          end               :DateTime = DateTime.now(),
-                          runCount          :Int      = 0             ,
-                          isOngoing         :Boolean  = false         ,
-                          result            :Any      = null
+                          success           :Boolean ,
+                          statusCode        :Int     ,
+                          message           :String  ,
+                          name              :String  ,
+                          totalMilliseconds :Int     ,
+                          start             :DateTime,
+                          end               :DateTime,
+                          runCount          :Int     ,
+                          isOngoing         :Boolean ,
+                          result            :Any
                       )
 {
 }

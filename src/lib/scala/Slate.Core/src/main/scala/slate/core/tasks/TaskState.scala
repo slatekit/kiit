@@ -25,12 +25,12 @@ import slate.common.DateTime
  * @param lastResult  : The last task result
  */
 case class TaskState(
-                        name          : String   = ""             ,
-                        lastRunTime   : DateTime = DateTime.now() ,
-                        hasRun        : Boolean  = false          ,
-                        runCount      : Int      = 0              ,
-                        errorCount    : Int      = 0              ,
-                        lastResult    : String   = null
+                        name          : String   ,
+                        lastRunTime   : DateTime ,
+                        hasRun        : Boolean  ,
+                        runCount      : Int      ,
+                        errorCount    : Int      ,
+                        lastResult    : String
                     )
 {
 }

@@ -18,12 +18,12 @@ import slate.common.results.{ResultSupportIn, ResultCode}
 
 object TaskRunner extends ResultSupportIn {
 
-  def run(task:Task, args:List[String]): Result[Any] =
+  def run(task:Task, args:List[String]): Result[Boolean] =
   {
-    Option(task).fold(badRequest(Some("task not supplied")))( t => {
+    Option(task).fold[Result[Boolean]](err("task not supplied"))( t => {
       val thread = new Thread(task)
       thread.start()
-      success("started")
+      success(true, Some("started"))
     })
   }
 }

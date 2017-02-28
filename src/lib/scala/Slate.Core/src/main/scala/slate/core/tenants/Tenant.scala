@@ -11,7 +11,7 @@
 package slate.core.tenants
 
 import slate.common.{DateTime, Field}
-import slate.entities.core.IEntity
+import slate.entities.core.{EntityWithId}
 
 case class Tenant (
                       @Field("",true, 50)
@@ -69,5 +69,5 @@ case class Tenant (
                       @Field("", true, -1)
                       updatedBy:Int  = 0
                       )
-  extends IEntity {
+  extends EntityWithId {
 }
