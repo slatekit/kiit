@@ -3,8 +3,6 @@ package slate.common.app
 import slate.common.Reflector
 import slate.common.info._
 
-import scala.collection.mutable.ListBuffer
-
 /**
  * Created by kv on 11/4/2015.
  */
@@ -25,7 +23,7 @@ case class AppMeta(
     */
   def info(categorize:Boolean = true) : List[(String,Any)] = {
 
-    val items = new ListBuffer[(String,Any)]
+    val items = new scala.collection.mutable.ListBuffer[(String,Any)]
 
     def collect(area:String, metaPairs:Map[String,Any]):Unit = {
       if(categorize){

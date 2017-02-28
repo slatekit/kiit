@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Console
+permalink: /mod-console
+---
+
 # Console
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors | 
-| **date**| 2016-11-21T16:49:15.673 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.098 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.console  |
 | **source core** | slate.common.console.Console.scala  |
@@ -15,11 +21,13 @@
 ## Import
 ```scala 
 // required 
+
+import slate.common.DateTime
 import slate.common.console.ConsoleWriter
-import slate.common.results.ResultSupportIn
 
 
 // optional 
+import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
 
 
@@ -73,12 +81,16 @@ n/a
     writer.keyValue("Name", "Superman")
     writer.lines(2)
 
-    // Case 12: Supply a list of items to print specifying the semantic mode ( title, url, etc )
-    writer.writeItems(List[(String,String,Boolean)](
-      ("title"     , "About App", true),
+    // Case 12: List of items ( unordered and ordered )
+    writer.list( List( 1, true , "www.slatekit.com", DateTime.now, 12.34 ), true)
+    writer.list( List( 2, false, "www.codehelix.co", DateTime.now, 56.78 ), true)
+
+    // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
+    writer.writeItemsByText(List[(String,String,Boolean)](
+      ("title"     , "About App"                   , true),
       ("subtitle"  , "Example of Console component", true),
-      ("url"       , "http://www.slatekit.com", true),
-      ("highlight" , "visit us for more info", true)
+      ("url"       , "http://www.slatekit.com"     , true),
+      ("highlight" , "visit us for more info"      , true)
     ))
     
 

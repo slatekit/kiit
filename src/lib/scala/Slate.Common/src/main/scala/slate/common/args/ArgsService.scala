@@ -12,9 +12,6 @@
 package slate.common.args
 
 
-import slate.common.results.{ResultCode, ResultSupportIn}
-
-import scala.collection.mutable.ListBuffer
 import slate.common.Strings
 import slate.common.Result
 import slate.common.results.ResultFuncs._
@@ -46,8 +43,8 @@ class ArgsService {
     }
     else {
       // Check 2: Parse the line into words/args
-      val lexer = new Lexer()
-      val result = lexer.parse(line)
+      val lexer = new Lexer(line)
+      val result = lexer.parse()
       if (!result.success) {
         failure(msg = Some(result.message))
       }
@@ -78,6 +75,8 @@ class ArgsService {
   {
     successOrError(
     {
+      // if input = "area.api.action -arg1="1" -arg2="2"
+      // result = "area.api.action"
       val result = if(hasAction)
       {
         val actionResult = ArgsHelper.parseAction(tokens, prefix)
@@ -88,10 +87,20 @@ class ArgsService {
       else
         ("", List[String](), 0)
 
+      // action= "area.api.action" e.g. "app.users.activate"
       val action = result._1
+
+      // e.g. ["area", "api", "action"]
       val verbs = result._2
+
+      // index after the action where the named arguments begin.
       val startOfNamedArgs = result._3
-      val argsResult =  ArgsHelper.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
+
+      // Check for args
+      val argsResult =  if(startOfNamedArgs >= tokens.size - 1)
+        (Map[String,String](),startOfNamedArgs)
+      else
+        ArgsHelper.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
 
       // start of index args is always 1 after the named args
       val startOfIndexArgs =

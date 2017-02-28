@@ -19,8 +19,7 @@ import slate.common.{Strings, Result, envs}
   * Store the currently selected environment ( local, dev, qa, stg, prod ) and provides some
   * utility functions to parse an environment
   */
-case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSupport with ResultSupportIn {
-
+case class Envs(all:List[Env], current:Option[Env] = None) extends EnvSupport with ResultSupportIn {
 
   /**
    * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
@@ -33,7 +32,7 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
    * Environment of the currently selected ( dev, qa, uat, pro )
    * @return
    */
-  def env: String = current.fold("")( c => c.env )
+  def env: String = current.fold("")( c => c.mode.name )
 
 
   /**
@@ -49,7 +48,17 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
    * @return
    */
   override def isEnv(env: String): Boolean = {
-    current.fold(false)( c => c.env == env)
+    current.fold(false)( c => c.mode.name == env)
+  }
+
+
+  /**
+    * whether the current environment matches the environment  supplied.
+    * @param env
+    * @return
+    */
+  override def isEnv(env: EnvMode): Boolean = {
+    current.fold(false)( c => c.mode.name == env.name)
   }
 
 
@@ -71,7 +80,7 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
    * @param env
    * @return
    */
-  def validate(env:envs.EnvItem): Result[envs.EnvItem] = {
+  def validate(env:envs.Env): Result[envs.Env] = {
     this.apply(env.name)
   }
 
@@ -93,9 +102,9 @@ case class Envs(all:List[EnvItem], current:Option[EnvItem] = None) extends EnvSu
    * @param name
    * @return
    */
-  def apply(name:String): Result[EnvItem] = {
+  def apply(name:String): Result[Env] = {
     val matched = all.filter( item => Strings.isMatch(item.name, name ))
-    if(matched != null && matched.size > 0)
+    if(Option(matched).fold(false)(m => m.nonEmpty))
       success(matched.head)
     else
       failure(msg = Some(s"Unknown environment name : ${name} supplied"))

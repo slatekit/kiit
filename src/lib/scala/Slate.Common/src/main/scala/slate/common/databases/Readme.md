@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Data
+permalink: /mod-data
+---
+
 # Data
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Database access utilty to query and manage data using JDBC for MySql. Other database support coming later. | 
-| **date**| 2016-11-21T16:49:15.678 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.107 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.databases  |
 | **source core** | slate.common.databases.Db.scala  |
@@ -17,18 +23,17 @@
 // required 
 import slate.common.databases._
 import slate.common.mapper.Mapper
-import slate.common.results.ResultSupportIn
-import slate.core.common.Conf
-import slate.entities.core.EntityMapper
-import slate.examples.common.User
 import slate.common.databases.DbLookup._
 
 
 
 // optional 
+import slate.common.results.ResultSupportIn
+import slate.core.common.Conf
 import slate.core.cmds.Cmd
-import slate.common.{Result}
+import slate.entities.core.EntityMapper
 import scala.reflect.runtime.universe.{typeOf}
+import slate.examples.common.User
 
 
 ```
@@ -156,16 +161,16 @@ n/a
     val total1 = db.getScalarInt("select count(*) from City")
 
     // CASE 9: Execute a sql insert
-    val id1 = db.executeInsertGetId("insert into `city`(`name`) values( 'ny' )" )
+    val id1 = db.insert("insert into `city`(`name`) values( 'ny' )" )
 
     // CASE 10: Execute a sql insert using
-    val id2 = db.executeInsertGetId("insert into `city`(`name`) values( 'ny' )" )
+    val id2 = db.insert("insert into `city`(`name`) values( 'ny' )" )
 
     // CASE 10: Execute a sql update
-    val total2 = db.executeUpdate("update `city` set `name` = 'ny' where id = 2")
+    val total2 = db.update("update `city` set `name` = 'ny' where id = 2")
 
     // CASE 11: Map a record to an model using the mapper component
-    val model = Mapper.loadSchema(new User(), typeOf[User])
+    val model = Mapper.loadSchema(typeOf[User])
     val mapper = new EntityMapper(model)
     val item1 = db.mapOne("select * from `city` where id = 1", mapper)
     println( item1 )

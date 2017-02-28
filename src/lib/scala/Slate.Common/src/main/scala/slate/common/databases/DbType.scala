@@ -11,14 +11,9 @@
 package slate.common.databases
 
 
-sealed class DbType(val name:String, val driver:String)
+abstract class DbType(val name:String, val driver:String)
 
+case object DbTypeMySql     extends DbType("mysql"    , "com.mysql.jdbc.Driver")
+case object DbTypeSqlServer extends DbType("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
+case object DbTypeMemory    extends DbType("memory"   , "com.slatekit.entities.repository-in-memory")
 
-/**
-  * Container for the different database types.
-  */
-object DbType {
-
-  object Mysql     extends DbType("mysql"    , "com.mysql.jdbc.Driver")
-  object SqlServer extends DbType("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
-}

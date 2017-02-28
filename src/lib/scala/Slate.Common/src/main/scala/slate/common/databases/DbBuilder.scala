@@ -13,7 +13,7 @@ package slate.common.databases
 
 
 import slate.common.{ModelField, Strings, Model}
-import slate.common.databases.DbConstants._
+import slate.common.databases.DbFuncs._
 import slate.common.query.{QueryEncoder}
 
 
@@ -65,7 +65,7 @@ class DbBuilder() {
   }
 
 
-  def addColNew(name:String, dataType:Int, required:Boolean = false, maxLen:Int = 0): String =
+  def addColNew(name:String, dataType:DbFieldType, required:Boolean = false, maxLen:Int = 0): String =
   {
     val nullText = if(required ) "NOT NULL" else ""
     val colType = getColType(dataType, maxLen)
@@ -76,22 +76,14 @@ class DbBuilder() {
   }
 
 
-  def getColName(name:String): String =
-  {
-    if ("key".compareToIgnoreCase(name) == 0)
-      "`" + name + "`"
-    else if ("group".compareToIgnoreCase(name) == 0)
-      "`" + name + "`"
-    else
-      name + " "
-  }
+  def getColName(name:String): String = "`" + name + "`"
 
 
-  def getColType(colType:Int, maxLen:Int): String =
+  def getColType(colType:DbFieldType, maxLen:Int): String =
   {
-    if(colType == TypeString && maxLen == -1)
+    if(colType == DbFieldTypeString && maxLen == -1)
       "longtext"
-    else if(colType == TypeString)
+    else if(colType == DbFieldTypeString)
       "VARCHAR(" + maxLen + ")"
     else
       getName(colType)

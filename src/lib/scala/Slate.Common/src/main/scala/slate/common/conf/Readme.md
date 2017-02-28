@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Config
+permalink: /mod-config
+---
+
 # Config
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys | 
-| **date**| 2016-11-21T16:49:15.670 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.092 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.conf  |
 | **source core** | slate.common.conf.Config.scala  |
@@ -15,17 +21,15 @@
 ## Import
 ```scala 
 // required 
-
-import slate.common.databases.DbConString
-import slate.common.encrypt.Encryptor
-import slate.common.envs.{Env, Envs, EnvItem}
 import slate.core.common.Conf
 
 
-
 // optional 
-import slate.core.cmds.Cmd
+import slate.common.databases.{DbCon, DbConString}
+import slate.common.encrypt.Encryptor
+import slate.common.envs.{Dev, Env}
 import slate.common.results.ResultSupportIn
+import slate.core.cmds.Cmd
 
 
 ```
@@ -50,8 +54,8 @@ n/a
 
 
     // CASE 2: Get the environment selection ( env, dev, qa ) from conf or default
-    val env = conf.env().getOrElse(new EnvItem("local", Env.DEV))
-    println( s"${env.name}, ${env.env}, ${env.key}")
+    val env = conf.env().getOrElse(new Env("local", Dev))
+    println( s"${env.name}, ${env.mode.name}, ${env.key}")
     println()
 
 
@@ -106,8 +110,8 @@ n/a
     // db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
     val encryptor = new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
     val confs5 = Conf.loadWithFallback("env.qa1.conf", "env.conf", enc = Some(encryptor) )
-    println ( "db user decrypted : " + confs5.getStringEnc("db.user") )
-    println ( "db pswd decrypted : " + confs5.getStringEnc("db.pswd") )
+    println ( "db user decrypted : " + confs5.getString("db.user") )
+    println ( "db pswd decrypted : " + confs5.getString("db.pswd") )
     println()
     
 

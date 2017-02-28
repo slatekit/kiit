@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Env
+permalink: /mod-env
+---
+
 # Env
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
-| **date**| 2016-11-21T16:49:15.685 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.120 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.envs  |
 | **source core** | slate.common.envs.Env.scala  |
@@ -15,13 +21,11 @@
 ## Import
 ```scala 
 // required 
-import slate.common.console.ConsoleWriter
 import slate.common.envs._
-import slate.common.results.ResultSupportIn
-import slate.common.{Ensure, ListMap, Todo}
 
 
 // optional 
+import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
 
 
@@ -40,13 +44,13 @@ n/a
 
 
     // CASE 1: Build a list of environments
-    val envs1 = new Envs(List[EnvItem](
-      EnvItem("loc", Env.DEV , desc = "Dev environment (local)" ),
-      EnvItem("dev", Env.DEV , desc = "Dev environment (shared)" ),
-      EnvItem("qa1", Env.QA  , desc = "QA environment  (current release)" ),
-      EnvItem("qa2", Env.QA  , desc = "QA environment  (last release)" ),
-      EnvItem("stg", Env.UAT , desc = "STG environment (demo)" ),
-      EnvItem("pro", Env.PROD, desc = "LIVE environment" )
+    val envs1 = new Envs(List[Env](
+      Env("loc", Dev , desc = "Dev environment (local)" ),
+      Env("dev", Dev , desc = "Dev environment (shared)" ),
+      Env("qa1", Qa  , desc = "QA environment  (current release)" ),
+      Env("qa2", Qa  , desc = "QA environment  (last release)" ),
+      Env("stg", Uat , desc = "STG environment (demo)" ),
+      Env("pro", Prod, desc = "LIVE environment" )
     ))
 
     // CASE 2: Use the default list of environments ( same as above )

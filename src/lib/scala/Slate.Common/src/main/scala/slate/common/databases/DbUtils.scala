@@ -25,7 +25,7 @@ object DbUtils {
  *
    * @return
    */
-  def connect(con:DbConString) : Connection =
+  def connect(con:DbCon) : Connection =
   {
     if(con.driver == "com.mysql.jdbc.Driver")
       DriverManager.getConnection(con.url, con.user, con.password)
@@ -41,7 +41,7 @@ object DbUtils {
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
     */
-  def execute(con:DbConString,
+  def execute(con:DbCon,
               callback:(Connection, Statement) => Unit,
               error:(Exception) => Unit): Unit =
   {
@@ -50,14 +50,14 @@ object DbUtils {
       val c = connect(con)
       val s = c.createStatement()
       callback(c, s)
-      (c, s)
+      (Option(c), Option(s))
     }
     catch
       {
         case ex:Exception =>
         {
           error(ex)
-          (null, null)
+          (None, None)
         }
       }
     close(result._2, result._1)
@@ -71,20 +71,20 @@ object DbUtils {
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
     */
-  def execute[T](con: DbConString, callback:(Connection) => T, error:(Exception) => Unit): Option[T] =
+  def execute[T](con: DbCon, callback:(Connection) => T, error:(Exception) => Unit): Option[T] =
   {
-    val result:(Connection,Option[T]) = try
+    val result:(Option[Connection],Option[T]) = try
     {
       val c = connect(con)
       val r = callback(c)
-      (c, Option(r))
+      (Option(c), Option(r))
     }
     catch
       {
         case ex:Exception =>
         {
           error(ex)
-          (null, None)
+          (None, None)
         }
       }
     close(result._1)
@@ -99,7 +99,7 @@ object DbUtils {
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
     */
-  def executeStmt[T](con:DbConString,
+  def executeStmt[T](con:DbCon,
               callback:(Connection, Statement) => T,
               error:(Exception) => Unit): Option[T] =
   {
@@ -108,14 +108,14 @@ object DbUtils {
       val c = connect(con)
       val s = c.createStatement()
       val r = callback(c, s)
-      (c, s, Option(r))
+      (Option(c), Option(s), Option(r))
     }
     catch
     {
       case ex:Exception =>
       {
         error(ex)
-        (null, null, None)
+        (None, None, None)
       }
     }
     close(result._2, result._1)
@@ -131,7 +131,7 @@ object DbUtils {
     * @param callback  : The callback to call for when the connection is ready
     * @param error     : The callback to call for when an error occurrs
     */
-  def executePrepAs[T](con:DbConString,
+  def executePrepAs[T](con:DbCon,
               sql:String,
               callback:(Connection, PreparedStatement ) => T,
               error:(Exception) => Unit): Option[T] =
@@ -140,14 +140,14 @@ object DbUtils {
       val c = connect(con)
       val s = c.prepareCall(sql)
       val res = callback(c, s)
-      (c, s, Option(res))
+      (Option(c), Option(s), Option(res))
     }
     catch
       {
         case ex:Exception =>
         {
           error(ex)
-          (null, null, None)
+          (None, None, None)
         }
       }
     close(result._2, result._1)
@@ -188,36 +188,29 @@ object DbUtils {
     else if(typ == typeOf[Long]    ) Option(rs.getLong(pos).asInstanceOf[T])
     else if(typ == typeOf[Double]  ) Option(rs.getDouble(pos).asInstanceOf[T])
     else if(typ == typeOf[Boolean] ) Option(rs.getBoolean(pos).asInstanceOf[T])
-    else if(typ == typeOf[DateTime]) Option(new DateTime(rs.getTimestamp(pos)).asInstanceOf[T])
+    else if(typ == typeOf[DateTime]) Option(DateTime(rs.getTimestamp(pos)).asInstanceOf[T])
     else None
   }
 
 
-  def close(con: Connection) =
-  {
-    if(con != null)
-      con.close()
-  }
+  def close(rs: ResultSet):Unit = Option(rs).fold[Unit](Unit)( r => r.close() )
 
 
-  def close(rs: ResultSet) =
-  {
-    if(rs != null)
-      rs.close()
-  }
+  def close(con: Connection):Unit = Option(con).fold[Unit](Unit)( c => c.close() )
 
 
-  def close(stmt:Statement) =
-  {
-    if(stmt != null)
-      stmt.close()
-  }
+  def close(con: Option[Connection]):Unit = con.fold[Unit](Unit)( c => c.close() )
 
 
-  def close(stmt: Statement, con:Connection): Unit =
-  {
-    close(stmt)
-    close(con)
+  def close(stmt:Statement):Unit = Option(stmt).fold[Unit](Unit)( s => s.close() )
+
+
+  def close(stmt: Statement, con:Connection): Unit = { close(stmt); close(con); }
+
+
+  def close(stmt: Option[Statement], con:Option[Connection]): Unit = {
+    stmt.foreach( s => close(s) )
+    con.foreach( c => close(c) )
   }
 
 

@@ -15,13 +15,20 @@ package slate.common
  * Represents a key for accessing an API securely.
  * @param name : "admin"
  * @param key  : "123456789123456789"
- * @param roles : "admin"
+ * @param rolesLookup : "admin" -> true, "dev" -> true
  */
 case class ApiKey(
                    name:String,
                    key :String,
-                   roles:String = "",
-                   rolesLookup:Map[String,String] = null
+                   rolesLookup:Map[String,String]
                  )
 {
+}
+
+
+object ApiKey {
+
+  def apply(name:String, key:String, roles:String): ApiKey = {
+    ApiKey(name, key, Option(roles).fold(Map[String,String]())( r => Strings.splitToMap(r, ',', true)))
+  }
 }

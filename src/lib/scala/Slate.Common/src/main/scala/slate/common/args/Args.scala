@@ -121,7 +121,7 @@ class Args(val raw         :List[String],
 
   def getVerb(pos:Int): String =
   {
-    if(actionVerbs == null || pos >= actionVerbs.size )
+    if(Option(actionVerbs).fold(true)( v => pos < 0 || pos >= v.size))
       ""
     else
       actionVerbs(pos)
@@ -164,6 +164,31 @@ class Args(val raw         :List[String],
 
 object Args
 {
+  def apply():Args = {
+    new Args(List[String](), "", List[String]())
+  }
+
+
+  /**
+    * Parses the arguments using the supplied prefix and separator for the args.
+    * e.g. users.activate -email:kishore@gmail.com -code:1234
+    *
+    * @param line     : the raw line of text to parse into {action} {key/value}* {position}*
+    * @param target   : the target object to apply the command line arguments on
+    * @param prefix   : the prefix for a named key/value pair e.g. "-" as in -env:dev
+    * @param sep      : the separator for a nmaed key/value pair e.g. ":" as in -env:dev
+    * @param hasAction: whether the line of text has an action before any named args.
+    *                   e.g. name.action {namedarg}*
+    * @return
+    */
+  def apply(line:String, target:Any, prefix:String = "-", sep:String = ":",
+            hasAction:Boolean = false): Result[Args] =
+  {
+    val result = new ArgsService().parse(line, prefix, sep, hasAction)
+    result
+  }
+
+
   /**
    * Parses the arguments using the supplied prefix and separator for the args.
    * e.g. users.activate -email:kishore@gmail.com -code:1234
@@ -197,7 +222,7 @@ object Args
   : Result[Args] =
   {
     // build a single line from args
-    val line = if(args != null && args.size > 0) {
+    val line = if( Option(args).fold(false)( a => a.nonEmpty)) {
       args.indices.foldLeft("")( (text, ndx) => {
         if ( ndx > 0 ){
           text + " " + args(ndx)
@@ -210,25 +235,5 @@ object Args
     else
       ""
     new ArgsService().parse(line, prefix, sep, hasAction)
-  }
-
-
-  /**
-   * Parses the arguments using the supplied prefix and separator for the args.
-   * e.g. users.activate -email:kishore@gmail.com -code:1234
-    *
-    * @param line     : the raw line of text to parse into {action} {key/value}* {position}*
-   * @param target   : the target object to apply the command line arguments on
-   * @param prefix   : the prefix for a named key/value pair e.g. "-" as in -env:dev
-   * @param sep      : the separator for a nmaed key/value pair e.g. ":" as in -env:dev
-   * @param hasAction: whether the line of text has an action before any named args.
-   *                   e.g. name.action {namedarg}*
-   * @return
-   */
-  def apply(line:String, target:Any, prefix:String = "-", sep:String = ":",
-            hasAction:Boolean = false): Result[Args] =
-  {
-    val result = new ArgsService().parse(line, prefix, sep, hasAction)
-    result
   }
 }

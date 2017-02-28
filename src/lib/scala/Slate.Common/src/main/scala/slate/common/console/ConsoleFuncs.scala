@@ -12,5 +12,5 @@ package slate.common.console
 
 object ConsoleFuncs {
 
-  def defaults():ConsoleSettings = new ConsoleSettings(darkMode = true, newLineAutomatic = false)
+  def defaults():ConsoleSettings = new ConsoleSettings(darkMode = true)
 }

@@ -17,16 +17,16 @@ package slate.common.databases
   * 2. named connection  : "qa1" => {connectionString}
   * 3. grouped shard     : ( group="usa", shard="01" ) => { connectionString }
   */
-class DbLookup(private val defaultCon:Option[DbConString] = None,
-               private val names:Option[Map[String, DbConString]] = None,
-               private val groups:Option[Map[String, Map[String,DbConString]]] = None){
+class DbLookup(private val defaultCon:Option[DbCon] = None,
+               private val names:Option[Map[String, DbCon]] = None,
+               private val groups:Option[Map[String, Map[String,DbCon]]] = None){
 
   /**
     * Gets the default database connection
     *
     * @return
     */
-  def default : Option[DbConString] = defaultCon
+  def default : Option[DbCon] = defaultCon
 
 
   /**
@@ -35,8 +35,8 @@ class DbLookup(private val defaultCon:Option[DbConString] = None,
     * @param key
     * @return
     */
-  def named(key:String) : Option[DbConString] =  {
-    names.fold[Option[DbConString]](None)( nameMap => {
+  def named(key:String) : Option[DbCon] =  {
+    names.fold[Option[DbCon]](None)( nameMap => {
       if ( nameMap.contains(key) ) Some(nameMap(key)) else None
     })
   }
@@ -48,9 +48,9 @@ class DbLookup(private val defaultCon:Option[DbConString] = None,
     * @param key
     * @return
     */
-  def group(groupName:String, key:String) : Option[DbConString] =
+  def group(groupName:String, key:String) : Option[DbCon] =
   {
-    groups.fold[Option[DbConString]](None)( groupMap => {
+    groups.fold[Option[DbCon]](None)( groupMap => {
       if( groupMap.contains(groupName)){
         val group = groupMap(groupName)
           if(group.contains(key)) Some(group(key)) else None
@@ -69,7 +69,7 @@ object DbLookup {
     * @param con
     * @return
     */
-  def defaultDb( con:DbConString ): DbLookup = {
+  def defaultDb( con:DbCon ): DbLookup = {
     val db = new DbLookup(defaultCon = Option(con))
     db
   }
@@ -81,8 +81,8 @@ object DbLookup {
     * @param items
     * @return
     */
-  def namedDbs( items:(String,DbConString)*): DbLookup = {
-    val named = Map[String,DbConString]( items.map( item => item._1 -> item._2 ): _*)
+  def namedDbs( items:(String,DbCon)*): DbLookup = {
+    val named = Map[String,DbCon]( items.map( item => item._1 -> item._2 ): _*)
     val db = new DbLookup(names = Some(named))
     db
   }
@@ -94,9 +94,9 @@ object DbLookup {
     * @param items
     * @return
     */
-  def groupedDbs( items:(String,List[(String,DbConString)])*): DbLookup = {
+  def groupedDbs( items:(String,List[(String,DbCon)])*): DbLookup = {
 
-    val groups = Map[String, Map[String,DbConString]](
+    val groups = Map[String, Map[String,DbCon]](
       items.map( group => group._1 -> named( group._2 ) ): _*
     )
     new DbLookup(groups = Some(groups))
@@ -109,8 +109,8 @@ object DbLookup {
     * @param items
     * @return
     */
-  private def named( items:List[(String,DbConString)]): Map[String,DbConString] = {
-    val named = Map[String,DbConString]( items.map( item => item._1 -> item._2 ): _*)
+  private def named( items:List[(String,DbCon)]): Map[String,DbCon] = {
+    val named = Map[String,DbCon]( items.map( item => item._1 -> item._2 ): _*)
     named
   }
 }

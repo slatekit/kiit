@@ -12,61 +12,10 @@
 package slate.common.app
 
 import slate.common.info.{About, Host, Lang}
-import slate.common.{Result, Reflector, Strings}
-
-import scala.collection.mutable.ListBuffer
 
 trait AppMetaSupport {
 
   def appMeta(): AppMeta = ???
-
-
-  /**
-   * info about this app
-    *
-    * @return
-   */
-  def appAbout: About = appMeta().about
-
-
-  /**
-    * url of the app
-    *
-    * @return
-    */
-  def appUrl: String =  appMeta().about.url
-
-
-  /**
-    * version of the app
-    *
-    * @return
-    */
-  def appVersion: String =  appMeta().about.version
-
-
-  /**
-    * examples of running the app
-    *
-    * @return
-    */
-  def appExamples: String =  appMeta().about.examples
-
-
-  /**
-    * info about the host computer hosting this app
-    *
-    * @return
-    */
-  def appHost: Host =  appMeta().host
-
-
-  /**
-   * info about the language and version used to run this app
-    *
-    * @return
-   */
-  def appLang: Lang =  appMeta().lang
 
 
   /**

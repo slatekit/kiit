@@ -14,17 +14,23 @@ package slate.common.envs
 trait EnvSupport {
 
 
-  def isProd:Boolean = isEnv(Env.PROD)
+  def isProd:Boolean = isEnv(Prod)
 
 
-  def isUat:Boolean = isEnv(Env.UAT)
+  def isUat:Boolean = isEnv(Uat)
 
 
-  def isQa:Boolean = isEnv(Env.QA)
+  def isQa:Boolean = isEnv(Qa)
 
 
-  def isDev:Boolean = isEnv(Env.DEV)
+  def isDev:Boolean = isEnv(Dev)
 
 
-  def isEnv(envMode: String):Boolean = ???
+  def isDis:Boolean = isEnv(Dis)
+
+
+  def isEnv(mode: String):Boolean = ???
+
+
+  def isEnv(mode: EnvMode):Boolean = ???
 }

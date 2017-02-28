@@ -11,19 +11,17 @@
 
 package slate.common.app
 
-import slate.common.results.{ResultSupportIn}
+import slate.common.results.ResultFuncs._
 import slate.common.Result
 
-trait AppLifeCycle extends ResultSupportIn {
+trait AppLifeCycle {
 
 
   /**
    * initializes the application
     *
    */
-  def init(): Result[Boolean] = {
-    yes()
-  }
+  def init(): Result[Boolean] = ok()
 
 
   /**
@@ -31,14 +29,11 @@ trait AppLifeCycle extends ResultSupportIn {
     *
     * @return
    */
-  def exec(): Result[Any] = {
-    success("default")
-  }
+  def exec(): Result[Any] = success("default")
 
 
   /**
    * shutdown hook to stop any services
    */
-  def end(): Unit = {
-  }
+  def end(): Unit = {  }
 }

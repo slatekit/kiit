@@ -39,6 +39,7 @@ abstract class ConfigBase(
                           )
   extends Inputs with ConfigSupport {
 
+
   def isEncrypted = _encryptor.isDefined
 
 
@@ -67,26 +68,7 @@ abstract class ConfigBase(
   }
 
 
-  def getStringEnc(key: String ) : String =
-  {
-    if(!isEncrypted) {
-      getStringOrElse(key, "")
-    }
-    else {
-      val encrypted = getStringOrElse(key, "")
-      if (Strings.isNullOrEmpty(encrypted)) {
-        ""
-      }
-      else {
-        _encryptor.get.decrypt(encrypted)
-      }
-    }
-  }
-
-
-  def loadFrom(file:Option[String]): Option[ConfigBase] = {
-    None
-  }
+  def loadFrom(file:Option[String]): Option[ConfigBase] = None
 
 
   override def config:ConfigBase = this

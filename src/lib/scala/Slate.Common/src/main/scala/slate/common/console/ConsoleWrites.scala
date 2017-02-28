@@ -10,12 +10,44 @@
   */
 package slate.common.console
 
-import slate.common.{Strings}
+import slate.common.{IoAction, Strings}
 
 trait ConsoleWrites {
 
   val settings:ConsoleSettings
   val TAB = "\t"
+
+  /**
+    * IO abstraction for system.println.
+    * Assists with testing and making code a bit more "purely functional"
+    * This is a simple, custom alternative to the IO Monad.
+    * Refer to IO.scala for details.
+    */
+  val _io:IoAction[Any,Unit]
+
+
+  /**
+    * Map the text type to functions that can implement it.
+    */
+  val lookup = Map[TextType, (String,Boolean) => Unit ](
+    Title      ->  title     ,
+    Subtitle   ->  subTitle  ,
+    Url        ->  url       ,
+    Important  ->  important ,
+    Highlight  ->  highlight ,
+    Success    ->  success   ,
+    Error      ->  error     ,
+    Text       ->  text
+  )
+
+  /**
+    * Write many items based on the semantic modes
+    *
+    * @param items
+    */
+  def writeItems(items:List[(TextType,String,Boolean)]): Unit = {
+    items.foreach( item => { writeItem( item._1, item._2, item._3) })
+  }
 
 
   /**
@@ -23,8 +55,8 @@ trait ConsoleWrites {
     *
     * @param items
     */
-  def writeItems(items:List[(String,String,Boolean)]): Unit = {
-    items.foreach( item => { writeItem( item._1, item._2, item._3) })
+  def writeItemsByText(items:List[(String,String,Boolean)]): Unit = {
+    items.foreach( item => { writeItem( convert(item._1), item._2, item._3) })
   }
 
 
@@ -35,17 +67,29 @@ trait ConsoleWrites {
     * @param msg
     * @param endLine
     */
-  def writeItem(mode:String, msg:String, endLine:Boolean): Unit = {
-    mode match {
-      case "title"     =>  title    ( msg, endLine )
-      case "subtitle"  =>  subTitle ( msg, endLine )
-      case "url"       =>  url      ( msg, endLine )
-      case "important" =>  important( msg, endLine )
-      case "highlight" =>  highlight( msg, endLine )
-      case "success"   =>  success  ( msg, endLine )
-      case "error"     =>  error    ( msg, endLine )
-      case "text"      =>  text     ( msg, endLine )
-      case _           =>
+  def writeItem(mode:TextType, msg:String, endLine:Boolean): Unit = {
+    if(lookup.contains(mode)){
+      lookup(mode)(msg, endLine)
+    }
+  }
+
+
+  /**
+    * Converts the string representation of a semantic text to the strongly typed object
+    *
+    * @param mode
+    */
+  def convert(mode:String): TextType = {
+    mode.toLowerCase() match {
+      case "title"      =>  Title
+      case "subtitle"   =>  Subtitle
+      case "url"        =>  Url
+      case "important"  =>  Important
+      case "highlight"  =>  Highlight
+      case "success"    =>  Success
+      case "srror"      =>  Error
+      case "text"       =>  Text
+      case _            =>  Text
     }
   }
 
@@ -58,19 +102,19 @@ trait ConsoleWrites {
     */
   def write(color:String, text:String, endLine:Boolean): Unit =
   {
-    print(color + " " + text )
-    if(endLine)
-      line()
+    val finalText = if(endLine)
+      color + " " + text + Strings.newline()
+    else
+      color + " " + text
+
+    _io.run(finalText)
   }
 
 
   /**
     * prints a empty line
     */
-  def line()
-  {
-    println()
-  }
+  def line():Unit = _io.run(Strings.newline())
 
 
   /**
@@ -88,16 +132,24 @@ trait ConsoleWrites {
 
 
   /**
+    * Writes the text using the TextType
+    *
+    * @param mode
+    * @param text
+    * @param endLine
+    */
+  def write(mode:TextType, text:String, endLine:Boolean = true): Unit = {
+    write(mode.color, mode.format(text), endLine)
+  }
+
+
+  /**
     * prints text in title format ( UPPERCASE and BLUE )
     *
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
-  def title(text:String, endLine:Boolean = true):Unit =
-  {
-    val finalText = if(!Strings.isNullOrEmpty(text)) text.toUpperCase else text
-    write(Console.BLUE, finalText, endLine)
-  }
+  def title(text:String, endLine:Boolean = true):Unit = write(Title, text, endLine)
 
 
   /**
@@ -106,10 +158,7 @@ trait ConsoleWrites {
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
-  def subTitle(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.CYAN, text, endLine)
-  }
+  def subTitle(text:String, endLine:Boolean = true):Unit = write(Subtitle, text, endLine)
 
 
   /**
@@ -118,10 +167,7 @@ trait ConsoleWrites {
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
-  def url(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.BLUE, text, endLine)
-  }
+  def url(text:String, endLine:Boolean = true):Unit = write(Url, text, endLine)
 
 
   /**
@@ -130,10 +176,7 @@ trait ConsoleWrites {
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
-  def important(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.RED, text, endLine)
-  }
+  def important(text:String, endLine:Boolean = true):Unit = write(Important, text, endLine)
 
 
   /**
@@ -142,10 +185,35 @@ trait ConsoleWrites {
     * @param text    : the text to print
     * @param endLine : whether or not to include a newline at the end
     */
-  def highlight(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.YELLOW, text, endLine)
-  }
+  def highlight(text:String, endLine:Boolean = true):Unit = write(Highlight, text, endLine)
+
+
+
+  /**
+    * prints text in title format ( UPPERCASE and BLUE )
+    *
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def success(text:String, endLine:Boolean = true):Unit = write(Success, text, endLine)
+
+
+  /**
+    * prints text in error format ( RED )
+    *
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def error(text:String, endLine:Boolean = true):Unit = write(Error, text, endLine)
+
+
+  /**
+    * prints text in normal format ( WHITE )
+    *
+    * @param text    : the text to print
+    * @param endLine : whether or not to include a newline at the end
+    */
+  def text(text:String, endLine:Boolean = true):Unit = write(Text, text, endLine)
 
 
   /**
@@ -162,17 +230,11 @@ trait ConsoleWrites {
 
 
   /**
-    * prints text in normal format ( WHITE )
+    * Prints a list of items with indentation
     *
-    * @param text    : the text to print
-    * @param endLine : whether or not to include a newline at the end
+    * @param items
+    * @param isOrdered
     */
-  def text(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.WHITE, text, endLine)
-  }
-
-
   def list(items:Seq[_], isOrdered:Boolean = false ):Unit = {
 
     items.indices.foreach( ndx => {
@@ -182,18 +244,6 @@ trait ConsoleWrites {
       text(TAB + prefix + value, endLine = true)
     })
     line()
-  }
-
-
-  /**
-    * prints text in error format ( RED )
-    *
-    * @param text    : the text to print
-    * @param endLine : whether or not to include a newline at the end
-    */
-  def error(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.RED, text, endLine)
   }
 
 
@@ -208,17 +258,5 @@ trait ConsoleWrites {
   {
     label(key + " = ", false)
     text(value, endLine)
-  }
-
-
-  /**
-    * prints text in title format ( UPPERCASE and BLUE )
-    *
-    * @param text    : the text to print
-    * @param endLine : whether or not to include a newline at the end
-    */
-  def success(text:String, endLine:Boolean = true):Unit =
-  {
-    write(Console.GREEN, text, endLine)
   }
 }

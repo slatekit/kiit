@@ -11,28 +11,46 @@
 
 package slate.common.envs
 
-import slate.common.Strings
+import slate.common.{Strings}
+
+
+/**
+  * Represents a system environment
+  * @param name   : e.g. Quality Assurance
+  * @param mode   : e.g. Qa
+  * @param region : New york
+  * @param desc   : Qa environment 1 in new york
+  */
+case class Env( name:String, mode:EnvMode, region:String = "", desc:String = "" ) extends EnvSupport {
+
+  /**
+    * "qa1:qa"
+    * @return
+    */
+  def key : String = name + ":" + mode.name
+
+
+  override def isEnv(envMode: String):Boolean = mode.name == envMode
+
+
+  override def isEnv(envMode: EnvMode):Boolean = mode == envMode
+}
+
 
 object Env {
-  
-  val PROD = "pro"
-  val DEV  = "dev"
-  val QA   = "qa"
-  val UAT  = "uat"
-
 
   /**
    * List of default environments supported in slate kit
    * @return
    */
   def defaults(): Envs = {
-    val all = List[EnvItem](
-      EnvItem("loc", Env.DEV , desc = "Dev environment (local)" ),
-      EnvItem("dev", Env.DEV , desc = "Dev environment (shared)" ),
-      EnvItem("qa1", Env.QA  , desc = "QA environment  (current release)" ),
-      EnvItem("qa2", Env.QA  , desc = "QA environment  (last release)" ),
-      EnvItem("stg", Env.UAT , desc = "STG environment (demo)" ),
-      EnvItem("pro", Env.PROD, desc = "LIVE environment" )
+    val all = List[Env](
+      Env("loc", Dev , desc = "Dev environment (local)" ),
+      Env("dev", Dev , desc = "Dev environment (shared)" ),
+      Env("qa1", Qa  , desc = "QA environment  (current release)" ),
+      Env("qa2", Qa  , desc = "QA environment  (last release)" ),
+      Env("stg", Uat , desc = "STG environment (demo)" ),
+      Env("pro", Prod, desc = "LIVE environment" )
     )
     new Envs(all, Some(all(0)))
   }
@@ -43,14 +61,32 @@ object Env {
    * @param env
    * @return
    */
-  def parse(env:String):EnvItem = {
+  def parse(env:String):Env = {
     val tokens = Strings.split(env, ':')
 
     // e.g. "dev1", "dev", dev1:dev")
-    if(tokens.size == 1)
-      EnvItem(tokens(0), tokens(0))
+    if(tokens.length == 1)
+      Env(tokens(0), interpret(tokens(0)))
     else
-      EnvItem(tokens(0), tokens(1))
+      Env(tokens(0), interpret(tokens(1)))
+  }
+
+
+  /**
+    * interprets the string representation of an environment into the type object
+    * @param mode
+    * @return
+    */
+  def interpret(mode:String):EnvMode = {
+    val m = Option(mode).getOrElse("").toLowerCase
+    m match {
+      case Dev.name  => Dev
+      case Qa.name   => Qa
+      case Uat.name  => Uat
+      case Prod.name => Prod
+      case Dis.name  => Dis
+      case _         => Other(mode)
+    }
   }
 
 }

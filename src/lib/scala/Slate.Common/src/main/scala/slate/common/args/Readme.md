@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Args
+permalink: /mod-args
+---
+
 # Args
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A lexical command line argument parser for command line parsing and support specifying routes / method calls | 
-| **date**| 2016-11-21T16:49:15.663 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.081 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.args  |
 | **source core** | slate.common.args.Args.scala  |
@@ -16,12 +22,12 @@
 ```scala 
 // required 
 import slate.common.args.{ArgsSchema, Args}
-import slate.common.results.ResultSupportIn
 
 
 
 // optional 
-import slate.common.{Result}
+import slate.common.Result
+import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
 
 
@@ -38,48 +44,50 @@ n/a
 ```scala
 
 
-    showResults( Args.parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
+    import Args.parse
+
+    showResults( parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
 
     // CASE 1: Defaults e..g prefix = "-", sep = ":"
-    showResults( Args.parse( "-env:dev -text:'hello world' -batch:10" ) )
+    showResults( parse( "-env:dev -text:'hello world' -batch:10" ) )
 
 
     // CASE 2: Custom prefix and sep e.g. "!" and separator "="
-    showResults( Args.parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
+    showResults( parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
 
 
     // CASE 3a: Check for method call in the beginning
-    showResults( Args.parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
+    showResults( parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
                  sep = "=", hasAction = true ) )
 
 
     // CASE 3b: Check for method call in the beginning
-    showResults( Args.parse( "service.method -env=dev -text='hello word' -batch=10", prefix = "-",
+    showResults( parse( "service.method -env=dev -text='hello word' -batch=10", prefix = "-",
                  sep = "=", hasAction = true ) )
 
 
     // CASE 3c: Check for method call in the beginning
-    showResults( Args.parse( "method", prefix = "-", sep = "=", hasAction = true ) )
+    showResults( parse( "method", prefix = "-", sep = "=", hasAction = true ) )
 
 
     // CASE 4: No args
-    showResults( Args.parse( "service.method", prefix = "-", sep = "=", hasAction = true ) )
+    showResults( parse( "service.method", prefix = "-", sep = "=", hasAction = true ) )
 
 
     // CASE 5a: Help request ( "?", "help")
-    showResults( Args.parse( "?"         ) )
+    showResults( parse( "?"         ) )
 
 
     // CASE 5b: Help request with method call ( "method.action" ? )
-    showResults( Args.parse( "service.method help"   , hasAction = true ) )
+    showResults( parse( "service.method help"   , hasAction = true ) )
 
 
     // CASE 6: Version request ( "ver", "version" )
-    showResults( Args.parse( "version"  ) )
+    showResults( parse( "version"  ) )
 
 
     // CASE 7: Exit request
-    showResults( Args.parse( "exit"     ) )
+    showResults( parse( "exit"     ) )
 
 
     // CASE 8: apply args to an object

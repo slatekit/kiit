@@ -1,19 +1,19 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
+  * <slate_header>
+  * author: Kishore Reddy
+  * url: https://github.com/kishorereddy/scala-slate
+  * copyright: 2015 Kishore Reddy
+  * license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
+  * desc: a scala micro-framework
+  * usage: Please refer to license on github for more info.
+  * </slate_header>
   */
 
 package slate.common.args
 
 
-import slate.common.Funcs._
-import slate.common.{Loops, Strings}
+import slate.common.{Strings}
+import slate.common.Loops._
 
 
 object ArgsHelper {
@@ -21,20 +21,23 @@ object ArgsHelper {
 
   /**
    * returns true if there is only 1 argument with value: help ?
-   * @return
+    *
+    * @return
    */
   def isHelp = isMetaArg(_:List[String], _:Int, "help", "?")
 
 
   /**
    * returns true if there is only 1 argument with value: version | ver
-   * @return
+    *
+    * @return
    */
   def isVersion = isMetaArg(_:List[String], _:Int, "version", "ver")
 
 
   /**
     * returns true if there is only 1 argument with value: version | ver
+    *
     * @return
     */
   def isAbout = isMetaArg(_:List[String], _:Int, "about", "info")
@@ -42,14 +45,16 @@ object ArgsHelper {
 
   /**
    * returns true if there is only 1 argument with value: pause
-   * @return
+    *
+    * @return
    */
   def isPause = isMetaArg(_:List[String], _:Int, "pause", "ver")
 
 
   /**
    * returns true if there is only 1 argument with value: --exit -quit /? -? ?
-   * @return
+    *
+    * @return
    */
   def isExit = isMetaArg(_:List[String], _:Int, "exit", "quit")
 
@@ -68,26 +73,31 @@ object ArgsHelper {
    */
   def isMetaArg(positional:List[String], pos:Int, possibleMatches:String*): Boolean =
   {
-    require(positional != null && positional.nonEmpty, "strings to check not supplied")
-    require(pos < positional.size, "pos is invalid")
+    val any = Option(positional).fold(false)( p => p.nonEmpty)
+    val posOk = Option(positional).fold(false)( p => pos < p.size)
 
-    val arg = positional(pos)
-    possibleMatches.foldLeft(false)( (isMatch, text) => {
-      if (text == arg) {
-        true
-      }
-      else if ("-" + text == arg) {
-        true
-      }
-      else if ("--" + text == arg) {
-        true
-      }
-      else if ("/" + text == arg) {
-        true
-      }
-      else
-        isMatch
-    })
+    if (!any || !posOk){
+      false
+    }
+    else {
+      val arg = positional(pos)
+      possibleMatches.foldLeft(false)((isMatch, text) => {
+        if (text == arg) {
+          true
+        }
+        else if ("-" + text == arg) {
+          true
+        }
+        else if ("--" + text == arg) {
+          true
+        }
+        else if ("/" + text == arg) {
+          true
+        }
+        else
+          isMatch
+      })
+    }
   }
 
 
@@ -132,30 +142,39 @@ object ArgsHelper {
     : (Map[String,String], Int) =
   {
     val resultArgs = scala.collection.mutable.Map[String,String]()
-    // State is false(n/a) | true(key/value pair)
 
-    // NOTE: Using var for lexical parsing rather than a fold/reduce/map.
-    var ndx = startIndex
-    while(ndx < args.size ) {
+    // Parses all named args e..g -a=1 -b=2
+    // Keep looping until the index where the named args ends
+    // NOTE: Get the index after the last named arg.
+    val endIndex = repeatWithIndex(startIndex, args.size, (ndx) => {
 
+      // GIVEN: -a=1 the tokens are : ( "-", "a", "=", "1" )
       val text = args(ndx)
 
       // e.g. "-a=1"
-      if(text == prefix ){
-        val keyValuePair = parseKeyValuePair(ndx, sep,args)
+      val nextIndex =
 
-        // Matched so put into map
-        val advance = keyValuePair.fold[Int](args.size)( kv => {
-          resultArgs(kv._1) = kv._2
-          kv._3
-        })
-        ndx = advance
-      }
-      else
-        ndx += 1
-    }
+        // Prefix ? "-"
+        if(text == prefix ){
 
-    (resultArgs.toMap, ndx)
+          // Get "a" "1" from ( "a", "=", "1" )
+          val keyValuePair = parseKeyValuePair(ndx, sep,args)
+
+          // Matched so put into map
+          val advance = keyValuePair.fold[Int](args.size)( kv => {
+            resultArgs(kv._1) = kv._2
+            kv._3
+          })
+
+          // The index position after the named arg
+          advance
+        }
+        else
+          ndx + 1
+      nextIndex
+    })
+
+    (resultArgs.toMap, endIndex)
   }
 
 
@@ -163,40 +182,42 @@ object ArgsHelper {
 
     // example: -a=1
     // prefix: "-", key: "a", sep: "=", value="1"
-    var pos = ndx
+    val pos = ndx
     if ( pos + 3 < args.size ) {
 
       // Move past "-"
-      pos += 1
+      val posKey = pos + 1
 
       // Build the key e.g. "log" or "log.level"
-      val keyBuff = new StringBuilder(args(pos))
+      val keyBuff = new StringBuilder(args(posKey))
 
       // Move to next part of key
-      pos += 1
+      val posKeyExt = posKey + 1
 
       // Keep building key until "." is done
-      while(pos < args.size && args(pos) == ".") {
-        // Move past "."
-        pos += 1
-        keyBuff.append("." + args(pos))
-        pos += 1
-      }
+      val posEndKey = repeatWithIndexAndBool(posKeyExt, args.size, (posNext) => {
+        if(args(posNext) == "."){
+          keyBuff.append("." + args(posNext + 1))
+          (true, posNext + 2)
+        }
+        else {
+          (false, posNext)
+        }
+      })
 
       // Move past "="
-      pos += 1
+      val posVal = posEndKey + 1
 
       // Get value
-      val value = args(pos)
-
-      // Move past value
-      pos += 1
+      val value = args(posVal)
 
       // Now get key/value
       val key = keyBuff.toString()
-      val end = pos
 
-      Some((key, value, pos))
+      // Move past value
+      val end = posVal + 1
+
+      Some((key, value, end))
     }
     else
       None

@@ -13,8 +13,6 @@ package slate.common.args
 
 import slate.common.StringHelpers.StringExt
 
-import scala.collection.mutable.ListBuffer
-
 
 /**
  *
@@ -74,7 +72,7 @@ case class Arg (
   {
     val nameLen = maxWidth.getOrElse(name.length)
 
-    val logs = ListBuffer[(String,String,Boolean)](
+    val logs = scala.collection.mutable.ListBuffer[(String,String,Boolean)](
       ( "highlight", prefix.getOrElse("-") + name.pad(nameLen), false),
       ( "text"     , separator.getOrElse("=")                 , false),
       ( "text"     , desc                   , true ),

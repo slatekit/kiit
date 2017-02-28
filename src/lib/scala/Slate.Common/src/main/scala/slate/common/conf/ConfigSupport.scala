@@ -11,9 +11,9 @@
 
 package slate.common.conf
 
-import slate.common.databases.DbConString
-import slate.common.envs.EnvItem
-import slate.common.{Strings, ApiCredentials, Credentials}
+import slate.common.databases.{DbCon, DbConString}
+import slate.common.envs.Env
+import slate.common.{ApiCredentials, Credentials}
 
 trait ConfigSupport {
 
@@ -25,13 +25,13 @@ trait ConfigSupport {
    *
    * @return
    */
-  def env() : Option[EnvItem] = {
+  def env() : Option[Env] = {
 
-    map[EnvItem]( "env", conf => {
+    mapTo[Env]( "env", conf => {
 
       val name = config.getString( "env.name" )
-      val env  = config.getString( "env.mode" )
-      new EnvItem(name, env, s"${env} : ${name}")
+      val mode  = config.getString( "env.mode" )
+      new Env(name, Env.interpret(mode), s"${mode} : ${name}")
     })
   }
 
@@ -44,15 +44,15 @@ trait ConfigSupport {
    */
   def login(): Option[Credentials] = {
 
-    map[Credentials]( "login", conf => {
+    mapTo[Credentials]( "login", conf => {
 
       new Credentials(
-        conf.getStringEnc( "login.id"     ),
-        conf.getStringEnc( "login.name"   ),
-        conf.getStringEnc( "login.email"  ),
-        conf.getStringEnc( "login.region" ),
-        conf.getStringEnc( "login.key"    ),
-        conf.getStringEnc( "login.env"    )
+        conf.getString( "login.id"     ),
+        conf.getString( "login.name"   ),
+        conf.getString( "login.email"  ),
+        conf.getString( "login.region" ),
+        conf.getString( "login.key"    ),
+        conf.getString( "login.env"    )
       )
     })
   }
@@ -66,14 +66,14 @@ trait ConfigSupport {
     */
   def apiKey(name:String): Option[ApiCredentials] = {
 
-    map[ApiCredentials]( name, conf => {
+    mapTo[ApiCredentials]( name, conf => {
 
       new ApiCredentials(
-        conf.getStringEnc( name + ".account" ),
-        conf.getStringEnc( name + ".key"     ),
-        conf.getStringEnc( name + ".pass"    ),
-        conf.getStringEnc( name + ".env"     ),
-        conf.getStringEnc( name + ".tag"     )
+        conf.getString( name + ".account" ),
+        conf.getString( name + ".key"     ),
+        conf.getString( name + ".pass"    ),
+        conf.getString( name + ".env"     ),
+        conf.getString( name + ".tag"     )
       )
     })
   }
@@ -85,21 +85,21 @@ trait ConfigSupport {
     * @param prefix
    * @return
    */
-  def dbCon(prefix:String = "db") : Option[DbConString] = {
+  def dbCon(prefix:String = "db") : Option[DbCon] = {
 
-    map[DbConString]( prefix, conf => {
+    mapTo[DbCon]( prefix, conf => {
 
       new DbConString(
-        conf.getString   ( prefix + ".driver"   ),
-        conf.getStringEnc( prefix + ".url"      ),
-        conf.getStringEnc( prefix + ".user"     ),
-        conf.getStringEnc( prefix + ".pswd"     )
+        conf.getString( prefix + ".driver"   ),
+        conf.getString( prefix + ".url"      ),
+        conf.getString( prefix + ".user"     ),
+        conf.getString( prefix + ".pswd"     )
       )
     })
   }
 
 
-  protected def map[T](key:String, mapper: (ConfigBase) => T ):Option[T] = {
+  protected def mapTo[T](key:String, mapper: (ConfigBase) => T ):Option[T] = {
 
     // Section not present!
     if(config.containsKey(key)) {

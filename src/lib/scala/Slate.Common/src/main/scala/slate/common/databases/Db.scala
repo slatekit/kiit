@@ -14,7 +14,6 @@ package slate.common.databases
 
 import java.sql._
 import scala.reflect.runtime.universe._
-import scala.collection.mutable.ListBuffer
 import slate.common.{DateTime, Model}
 import slate.common.mapper.{MapperSourceRecord, Mapper}
 import DbUtils._
@@ -28,7 +27,7 @@ import DbUtils._
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
   * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(private val _dbCon:DbConString) {
+class Db(private val _dbCon:DbCon) {
 
   /**
     * registers the jdbc driver
@@ -74,7 +73,18 @@ class Db(private val _dbCon:DbConString) {
     * @param sql : The sql text
     * @return
     */
-  def getScalar[T](sql:String, typ:Type, inputs:Option[List[Any]]): Option[T]  = {
+  def getScalar[T](sql:String, typ:Type, inputs:Option[List[Any]]): T  = {
+    getScalarOpt[T](sql, typ, inputs).get
+  }
+
+
+  /**
+    * gets a scalar string value using the sql provided
+    *
+    * @param sql : The sql text
+    * @return
+    */
+  def getScalarOpt[T](sql:String, typ:Type, inputs:Option[List[Any]]): Option[T]  = {
 
     val result = executePrepAs[Option[T]](_dbCon, sql, (rs, stmt) => {
 
@@ -103,7 +113,7 @@ class Db(private val _dbCon:DbConString) {
    * @return
    */
   def getScalarString(sql:String, inputs:Option[List[Any]] = None): String  = {
-    getScalar[String](sql, typeOf[String], inputs).get
+    getScalar[String](sql, typeOf[String], inputs)
   }
 
 
@@ -114,7 +124,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarInt(sql:String, inputs:Option[List[Any]] = None): Int  = {
-    getScalar[Int](sql, typeOf[Int], inputs).get
+    getScalar[Int](sql, typeOf[Int], inputs)
   }
 
 
@@ -125,7 +135,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarLong(sql:String, inputs:Option[List[Any]] = None): Long  = {
-    getScalar[Long](sql, typeOf[Long], inputs).get
+    getScalar[Long](sql, typeOf[Long], inputs)
   }
 
 
@@ -136,7 +146,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarDouble(sql:String, inputs:Option[List[Any]] = None): Double  = {
-    getScalar[Double](sql, typeOf[Double], inputs).get
+    getScalar[Double](sql, typeOf[Double], inputs)
   }
 
 
@@ -147,7 +157,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarBool(sql:String, inputs:Option[List[Any]] = None): Boolean  = {
-    getScalar[Boolean](sql, typeOf[Boolean], inputs).get
+    getScalar[Boolean](sql, typeOf[Boolean], inputs)
   }
 
 
@@ -158,7 +168,7 @@ class Db(private val _dbCon:DbConString) {
     * @return
     */
   def getScalarDate(sql:String, inputs:Option[List[Any]] = None): DateTime  = {
-    getScalar[DateTime](sql, typeOf[DateTime], inputs).get
+    getScalar[DateTime](sql, typeOf[DateTime], inputs)
   }
 
 
@@ -175,9 +185,9 @@ class Db(private val _dbCon:DbConString) {
     {
       val rec = new MapperSourceRecord(rs)
       if(rs.next())
-        mapper.mapFrom(rec).asInstanceOf[T]
+        Option(mapper.mapFrom(rec).asInstanceOf[T])
       else
-        null
+        None
     }, false, inputs)
     res
   }
@@ -195,13 +205,13 @@ class Db(private val _dbCon:DbConString) {
     val res = executeQuery[List[T]](sql, (rs) =>
     {
       val rec = new MapperSourceRecord(rs)
-      val buf = new ListBuffer[T]()
+      val buf = new scala.collection.mutable.ListBuffer[T]()
       while(rs.next())
       {
         val item = mapper.mapFrom(rec)
         buf.append(item.asInstanceOf[T])
       }
-      buf.toList
+      Option(buf.toList)
     }, false, inputs)
     res
   }
@@ -261,7 +271,7 @@ class Db(private val _dbCon:DbConString) {
 
 
   private def executeQuery[T](sql:String,
-                           callback: (ResultSet) => T,
+                           callback: (ResultSet) => Option[T],
                            moveNext:Boolean = true,
                            inputs:Option[List[Any]] = None): Option[T] = {
     val result = executePrepAs[Option[T]](_dbCon, sql, (con, stmt) =>
@@ -275,7 +285,7 @@ class Db(private val _dbCon:DbConString) {
       
       val any =  if(moveNext) rs.next() else true
       if(any)
-        Option(callback(rs))
+        callback(rs)
       else
         None
     }, error)

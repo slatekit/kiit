@@ -14,7 +14,8 @@ package slate.common.args
 import slate.common.console.ConsoleWriter
 import slate.common.results.ResultSupportIn
 import slate.common.Funcs.defaultOrExecute
-import slate.common.{Validation, Result}
+import slate.common.validations.ValidationFuncs
+import slate.common.{Result}
 
 import scala.reflect.runtime.universe.{Type, typeOf}
 
@@ -24,7 +25,7 @@ import scala.reflect.runtime.universe.{Type, typeOf}
   * @note  this schema is immutable and returns a new schema when adding additional arguments
   * @param items : the list of arguments.
   */
-class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with Validation {
+class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn {
 
   def any = { items.size > 0 }
 
@@ -105,7 +106,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
   def validate(args:Args):Result[Boolean] = {
 
-    validateResults[Arg,Boolean]( yes(), items)( (arg) =>
+    ValidationFuncs.validateResults[Arg,Boolean]( yes(), items)( (arg) =>
       if (arg.isRequired && !args.containsKey(arg.name)) {
         no ( msg = Some(s"arg: ${arg.name} was not supplied") )
       }
@@ -150,7 +151,7 @@ class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn with
 
     items.foreach( arg => {
       val semanticHelp = arg.semantic(Some("\t"), prefix, separator, Some(maxLen))
-      writer.writeItems(semanticHelp)
+      writer.writeItemsByText(semanticHelp)
     })
   }
 }

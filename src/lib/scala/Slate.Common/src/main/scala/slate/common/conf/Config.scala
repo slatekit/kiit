@@ -32,40 +32,22 @@ class Config(
    * @param key
    * @param value
    */
-  def update(key:String, value:String):Unit =
-  {
-    _map(key) =  value
-  }
+  def update(key:String, value:String):Unit = _map(key) =  value
 
 
-  /// <summary>
-  override def getValue(key: String): AnyVal =
-  {
-    if ( !containsKey(key) )
-      throw new IllegalArgumentException("key not found in arguments : " + key)
-
+  override def getValue(key: String): AnyVal = {
+    require(containsKey(key), "key not found in arguments : " + key)
     _map(key).asInstanceOf[AnyVal]
   }
 
 
-  /// <summary>
-  override def getObject(key: String): AnyRef =
-  {
-    if ( !containsKey(key) )
-      null
-    else
-      _map(key).asInstanceOf[AnyRef]
+  override def getObject(key: String): AnyRef = {
+    if ( !containsKey(key) ) null else _map(key).asInstanceOf[AnyRef]
   }
 
 
-  /// <summary>
-  override def containsKey(key: String): Boolean =
-  {
-    _map.contains(key)
-  }
+  override def containsKey(key: String): Boolean = _map.contains(key)
 
 
-  override def size(): Int = {
-    _map.size
-  }
+  override def size(): Int =  _map.size
 }

@@ -10,7 +10,6 @@
   */
 package slate.common.console
 
-case class ConsoleSettings( darkMode:Boolean = true,
-                            newLineAutomatic:Boolean = false ) {
+case class ConsoleSettings( darkMode:Boolean = true ) {
 
 }
