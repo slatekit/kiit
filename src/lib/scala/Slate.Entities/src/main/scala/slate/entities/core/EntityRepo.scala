@@ -23,13 +23,13 @@ import scala.reflect.runtime.universe.{typeOf,Type}
 /**
   * Base Entity repository using generics with support for all the CRUD methods.
   * NOTE: This is basically a GenericRepository implementation
-  * @param entityType
-  * @param entityIdType
-  * @param entityMapper
-  * @param nameOfTable
+  * @param entityType   : The data type of the entity/model
+  * @param entityIdType : The data type of the primary key/identity field
+  * @param entityMapper : The entity mapper that maps to/from entities / records
+  * @param nameOfTable  : The name of the table ( defaults to entity name )
   * @tparam T
   */
-abstract class EntityRepo[T >: Null <: IEntity] (
+abstract class EntityRepo[T >: Null <: Entity] (
                                                   entityType  :Type                       ,
                                                   entityIdType:Option[Type]         = None,
                                                   entityMapper:Option[EntityMapper] = None,
@@ -93,7 +93,7 @@ abstract class EntityRepo[T >: Null <: IEntity] (
     */
   def delete(entity:Option[T]): Boolean =
   {
-    entity.fold(false)( en => this.delete(en.id) )
+    entity.fold(false)( en => this.delete(en.identity()) )
   }
 
 

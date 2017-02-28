@@ -17,19 +17,19 @@ import slate.common.serialization.{SerializerJson, SerializerBase, SerializerPro
 
 class EntitySerializer {
 
-  def toStringProps(item:IEntity, mapper:EntityMapper):String =
+  def toStringProps(item:Entity, mapper:EntityMapper):String =
   {
     toString( new SerializerProps(), item, mapper)
   }
 
 
-  def toStringJson(item:IEntity, mapper:EntityMapper):String =
+  def toStringJson(item:Entity, mapper:EntityMapper):String =
   {
     toString(new SerializerJson(), item, mapper)
   }
 
 
-  def toString(serializer:SerializerBase, item:IEntity, mapper:EntityMapper):String =
+  def toString(serializer:SerializerBase, item:Entity, mapper:EntityMapper):String =
   {
     val content = serializer.serialize(item)
     content

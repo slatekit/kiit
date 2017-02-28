@@ -1,26 +1,24 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.entities.models
 
-import slate.common.app.AppMeta
-import slate.common.databases.{DbLookup, DbConString, DbBuilder}
+
+import slate.common.databases.{DbCon, DbLookup, DbConString, DbBuilder}
 import slate.common.info.Folders
 import slate.common.results.ResultSupportIn
 import slate.common.{NoResult, Files, Result}
 import slate.entities.core.{EntityInfo, Entities}
-
-import scala.collection.mutable.ListBuffer
 
 /**
   * Created by kreddy on 3/23/2016.
@@ -30,16 +28,7 @@ class EntitySetupService(val _entities:Entities,
                          val _settings:ModelSettings,
                          val _folders:Option[Folders]) extends ResultSupportIn {
 
-  def names(): List[String] = {
-    val names = ListBuffer[String]()
-    val all = _entities.getEntities()
-    for( item <- all )
-    {
-      val name = item.entityType.get.typeSymbol.fullName
-      names.append(name)
-    }
-    names.toList
-  }
+  def names(): List[String] = _entities.getEntities().map( _.entityTypeName)
 
 
   /**
@@ -51,8 +40,7 @@ class EntitySetupService(val _entities:Entities,
   {
     eachEntity( (entity) =>
     {
-      val name = entity.entityType.get.typeSymbol.fullName
-      install(name, "1", entity.dbKey, entity.dbShard )
+      install(entity.entityTypeName, "1", entity.dbKey, entity.dbShard )
     })
   }
 
@@ -66,8 +54,7 @@ class EntitySetupService(val _entities:Entities,
   {
     eachEntity( (entity) =>
     {
-      val name = entity.entityType.get.typeSymbol.fullName
-      generateSql(name, "1")
+      generateSql(entity.entityTypeName, "1")
     })
   }
 
@@ -84,16 +71,12 @@ class EntitySetupService(val _entities:Entities,
   def install(name:String, version:String = "", dbKey:String = "", dbShard:String = ""): Result[Boolean] =
   {
     val result = generateSql(name, version)
-    if(!result.success)
-    {
-      failure(msg = Some(s"Unable to install, can not generate sql for model ${name}"))
-    }
-    else {
-      val sql = result.get
+    val err = s"Unable to install, can not generate sql for model ${name}"
+    result.fold[Result[Boolean]](failure(msg = Some(err)))( sql => {
       val db = _entities.getDatabase(dbKey, dbShard)
       db.update(sql)
       ok()
-    }
+    })
   }
 
 
@@ -115,8 +98,9 @@ class EntitySetupService(val _entities:Entities,
 
       if ( _settings.enableOutput && _folders.isDefined)
       {
-        val folders = _folders.get
-        Files.writeDatedFile(folders.pathToOutputs, s"model-${model.name}.sql", sql )
+        _folders.fold()( folders => {
+          Files.writeDatedFile(folders.pathToOutputs, s"model-${model.name}.sql", sql )
+        })
       }
       (true, "", sql)
     }
@@ -132,23 +116,23 @@ class EntitySetupService(val _entities:Entities,
     val sql = result._3
 
     val info = if (success ) s"generated sql for model: $name" else "error generating sql"
-    successOrError(success, sql, Some(info))
+    successOrError(success, Option(sql), Some(info))
   }
 
 
-  def connectionByDefault(): Result[DbConString] =
+  def connectionByDefault(): Result[DbCon] =
   {
-    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs => {
-      dbs.default.fold[Result[DbConString]](NoResult)( con => success( con ))
+    val con = _dbs.fold[Result[DbCon]](NoResult)( dbs => {
+      dbs.default.fold[Result[DbCon]](NoResult)( con => success( con ))
     })
     con
   }
 
 
-  def connectionByName(name:String): Result[DbConString] =
+  def connectionByName(name:String): Result[DbCon] =
   {
-    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs => {
-      dbs.named(name).fold[Result[DbConString]](NoResult)( con => success( con ))
+    val con = _dbs.fold[Result[DbCon]](NoResult)( dbs => {
+      dbs.named(name).fold[Result[DbCon]](NoResult)( con => success( con ))
     })
     con
   }
@@ -161,11 +145,11 @@ class EntitySetupService(val _entities:Entities,
    * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
    * @return
    */
-  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbConString] =
+  def connectionByGroup(dbKey:String = "", dbShard:String = ""): Result[DbCon] =
   {
-    val con = _dbs.fold[Result[DbConString]](NoResult)( dbs =>
+    val con = _dbs.fold[Result[DbCon]](NoResult)( dbs =>
     {
-      dbs.group(dbKey, dbShard).fold[Result[DbConString]](NoResult)( con => success(con))
+      dbs.group(dbKey, dbShard).fold[Result[DbCon]](NoResult)( con => success(con))
     })
     con
   }
@@ -189,7 +173,7 @@ class EntitySetupService(val _entities:Entities,
     })
     val success = result._1
     val message = result._2
-    successOrError(success, message)
+    successOrError(success, Option(message))
   }
 
 
@@ -198,12 +182,7 @@ class EntitySetupService(val _entities:Entities,
     *
     * @return
    */
-  def eachEntity(callback:(EntityInfo) => Unit): Unit =
-  {
-    val all = _entities.getEntities()
-    for( item <- all )
-    {
-      callback( item )
-    }
+  def eachEntity(callback:(EntityInfo) => Unit): Unit = {
+    _entities.getEntities().foreach(callback)
   }
 }

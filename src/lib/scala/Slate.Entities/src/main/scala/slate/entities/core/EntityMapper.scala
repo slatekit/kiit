@@ -90,8 +90,8 @@ class EntityMapper(model:Model) extends Mapper(model) {
         }
         else // Object
         {
-          val objVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[Any]
-          val data = if(objVal == null)  null else objVal.toString()
+          val objVal = Reflector.getFieldValue(item, mapping.name)
+          val data = Option(objVal).fold("")( obj => obj.toString())
           "'" + QueryEncoder.ensureValue(data) + "'"
         }
 

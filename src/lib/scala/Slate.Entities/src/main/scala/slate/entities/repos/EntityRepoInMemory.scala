@@ -14,12 +14,12 @@
 package slate.entities.repos
 
 import slate.common.ListMap
-import slate.entities.core.{IEntityUpdatable, EntityMapper, EntityRepo, IEntity}
+import slate.entities.core._
 
 import scala.reflect.runtime.universe.Type
 
 
-class EntityRepoInMemory[T >: Null <: IEntity](
+class EntityRepoInMemory[T >: Null <: Entity](
                                                  entityType  :Type,
                                                  entityIdType:Option[Type]         = None,
                                                  entityMapper:Option[EntityMapper] = None
@@ -42,7 +42,8 @@ class EntityRepoInMemory[T >: Null <: IEntity](
       // get next id
       val id = getNextId()
       val en = entity match {
-        case w:IEntityUpdatable[T] => w.withId(id)
+        case w:EntityWithSetId[T]  => w.setId(id)
+        case w:EntityUpdatable[T]  => w.withId(id)
         case _                     => _entityMapper.copyWithId[T](id, entity)
       }
 
@@ -51,7 +52,7 @@ class EntityRepoInMemory[T >: Null <: IEntity](
       id
     }
     else
-      entity.id
+      entity.identity()
   }
 
 
@@ -64,7 +65,7 @@ class EntityRepoInMemory[T >: Null <: IEntity](
   {
     // Check 1: already persisted ?
     if(entity.isPersisted()) {
-      _items(entity.id) = entity
+      _items(entity.identity()) = entity
     }
     entity
   }
@@ -114,7 +115,7 @@ class EntityRepoInMemory[T >: Null <: IEntity](
       List[T]()
     }
     else {
-      val items = _items.all.sortBy(item => item.id)
+      val items = _items.all.sortBy(item => item.identity())
       val sorted = if (desc) items.reverse else items
       sorted.take(count)
     }

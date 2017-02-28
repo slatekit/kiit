@@ -14,18 +14,21 @@
 package slate.entities.repos
 
 import slate.common.databases.Db
-import slate.entities.core.{EntityMapper, IEntity}
+import slate.entities.core.{Entity, EntityMapper}
 
 import scala.reflect.runtime.universe.Type
 
 
 /**
   * Repository class specifically for MySql
-  *
-  * @param entityType
+  * @param entityType   : The data type of the entity/model
+  * @param entityIdType : The data type of the primary key/identity field
+  * @param entityMapper : The entity mapper that maps to/from entities / records
+  * @param nameOfTable  : The name of the table ( defaults to entity name )
+  * @param db
   * @tparam T
   */
-class EntityRepoMySql [T >: Null <: IEntity ](
+class EntityRepoMySql [T >: Null <: Entity ](
                                                entityType  :Type,
                                                entityIdType:Option[Type]         = None,
                                                entityMapper:Option[EntityMapper] = None,

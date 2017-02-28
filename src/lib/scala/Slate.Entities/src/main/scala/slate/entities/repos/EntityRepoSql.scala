@@ -16,12 +16,20 @@ package slate.entities.repos
 
 import slate.common.databases.Db
 import slate.common.query.IQuery
-import slate.entities.core.{EntityMapper, EntityRepo, IEntity}
+import slate.entities.core.{Entity, EntityMapper, EntityRepo}
 
 import scala.reflect.runtime.universe.Type
 
-
-abstract class EntityRepoSql [T >: Null <: IEntity ]
+/**
+  *
+  * @param entityType   : The data type of the entity/model
+  * @param entityIdType : The data type of the primary key/identity field
+  * @param entityMapper : The entity mapper that maps to/from entities / records
+  * @param nameOfTable  : The name of the table ( defaults to entity name )
+  * @param _db
+  * @tparam T
+  */
+abstract class EntityRepoSql [T >: Null <: Entity ]
     (
       entityType  :Type                       ,
       entityIdType:Option[Type]         = None,
@@ -43,7 +51,7 @@ abstract class EntityRepoSql [T >: Null <: IEntity ]
   override def update(entity: T):T =
   {
     val sql = mapFields(entity, true)
-    val id = entity.id
+    val id = entity.identity()
     sqlExecute(s"update ${tableName} set " + sql + s" where ${idName} = ${id};")
     entity
   }
@@ -114,7 +122,7 @@ abstract class EntityRepoSql [T >: Null <: IEntity ]
   }
 
 
-  private def mapFields(item: IEntity, isUpdate: Boolean) : String =
+  private def mapFields(item: Entity, isUpdate: Boolean) : String =
   {
     _entityMapper.mapToSql(item, isUpdate, false)
   }

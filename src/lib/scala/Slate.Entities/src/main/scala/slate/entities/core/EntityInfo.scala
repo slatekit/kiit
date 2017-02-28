@@ -14,6 +14,7 @@
 package slate.entities.core
 
 import slate.common.Strings
+import slate.common.databases.{DbTypeMySql, DbType}
 
 import scala.reflect.runtime.universe.Type
 
@@ -35,23 +36,25 @@ import scala.reflect.runtime.universe.Type
   *                               ( see DbLookup / Example_Database.scala )
   */
 case class EntityInfo(
-                       entityType            : Option[Type]   = None,
-                       entityServiceType     : Option[Type]   = None,
-                       entityRepoType        : Option[Type]   = None,
-                       entityMapperType      : Option[Type]   = None,
-                       entityServiceInstance : Option[AnyRef] = None,
-                       entityRepoInstance    : Option[AnyRef] = None,
-                       entityMapperInstance  : Option[AnyRef] = None,
-                       isSqlRepo             : Boolean = true,
-                       dbType                : String = "",
-                       dbKey                 : String = "",
-                       dbShard               : String = ""
+                       entityType            : Type,
+                       entityServiceType     : Option[Type]           = None,
+                       entityRepoType        : Option[Type]           = None,
+                       entityMapperType      : Option[Type]           = None,
+                       entityServiceInstance : Option[IEntityService] = None,
+                       entityRepoInstance    : Option[IEntityRepo]    = None,
+                       entityMapperInstance  : Option[EntityMapper]   = None,
+                       isSqlRepo             : Boolean                = true,
+                       dbType                : DbType                 = DbTypeMySql,
+                       dbKey                 : String                 = "",
+                       dbShard               : String                 = ""
                      )
 {
+  val entityTypeName = entityType.typeSymbol.fullName
+
 
   def toStringDetail():String =
   {
-    val text = "entity type  : " + getTypeName(entityType)                     + Strings.newline() +
+    val text = "entity type  : " + entityTypeName                              + Strings.newline() +
                "svc     type : " + getTypeName(entityServiceType)              + Strings.newline() +
                "svc     inst : " + getTypeNameFromInst(entityServiceInstance)  + Strings.newline() +
                "repo    type : " + getTypeName(entityRepoType)                 + Strings.newline() +

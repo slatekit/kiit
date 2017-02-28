@@ -14,12 +14,12 @@
 package slate.entities.repos
 
 import slate.common.databases.Db
-import slate.entities.core.{EntityMapper, IEntity}
+import slate.entities.core.{Entity, EntityMapper}
 
 import scala.reflect.runtime.universe.Type
 
 
-class EntityRepoSqlServer [T >: Null <: IEntity ](
+class EntityRepoSqlServer [T >: Null <: Entity ](
                                                    entityType  :Type,
                                                    entityIdType:Option[Type]         = None,
                                                    entityMapper:Option[EntityMapper] = None,

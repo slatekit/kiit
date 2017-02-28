@@ -26,15 +26,9 @@ import slate.common.query.IQuery
   * on the entities for create/update operations
   * @tparam T
   */
-class EntityService[T >: Null <: IEntity](protected val dataRepo:EntityRepo[T])
+class EntityService[T >: Null <: Entity](protected val _repo:EntityRepo[T])
   extends IEntityService
 {
-  val _repo: EntityRepo[T] = dataRepo
-  protected var _log:Option[LoggerBase] = None
-  protected var _enc:Option[Encryptor] = None
-  protected var _res:Option[I18nStrings] = None
-
-
 
   /**
     * gets the repo representing the underlying datastore
@@ -254,7 +248,8 @@ class EntityService[T >: Null <: IEntity](protected val dataRepo:EntityRepo[T])
   def findFirst(query:IQuery) : Option[T] =
   {
     val results = find(query)
-    if(results == null || results.size == 0)
+    val any = Option(results).fold(false)( r => r.nonEmpty)
+    if(any)
       None
     else
       results(0).asInstanceOf[Option[T]]
