@@ -41,10 +41,7 @@ class ApiContainer(val ctx:AppContext                           ,
   /**
    * initializes
    */
-  def init(): Unit =
-  {
-
-  }
+  def init(): Unit = { }
 
 
   /**
@@ -71,7 +68,7 @@ class ApiContainer(val ctx:AppContext                           ,
                           auth:Option[String] = None,
                           protocol:Option[String] = Some("*") ):Unit =
   {
-    require(api != null, "Api not provided")
+    require(Option(api).nonEmpty, "Api not provided")
 
     val clsType = Reflector.getTypeFromInstance(api)
 
@@ -81,7 +78,7 @@ class ApiContainer(val ctx:AppContext                           ,
 
     // 2. Create a copy of the final annotation taking into account the overrides.
     val apiAnno = ApiHelper.copyApiAnnotation(apiAnnoOrign, roles, auth, protocol)
-    require(apiAnno != null, "Api annotation not found on class : " + api.getClass().getName)
+    require(Option(apiAnno).nonEmpty, "Api annotation not found on class : " + api.getClass().getName)
 
     // 3. get the name of the api and its area ( category of apis )
     val apiName = apiAnno.name
@@ -112,29 +109,15 @@ class ApiContainer(val ctx:AppContext                           ,
       val parameters = Reflector.getMethodParameters(methodSymbol)
 
       // Add the action name and link it to the method + annotation
-      val anyParameters = parameters != null && parameters.size > 0
+      val anyParameters = Option(parameters).fold(false)( params => params.nonEmpty)
       val callReflect = new ApiCallReflect( actionName, apiAnno, apiActionAnno, methodMirror, anyParameters, parameters)
       api(actionName) = callReflect
     })
 
     // 7. Finally link up services and this runner to the api
-    api.context = ctx
-    api.container = this
 
     // 8. Notify completion.
     onRegistrationComplete(api)
-  }
-
-
-  /**
-    * handles the help on the action supplied.
-    *
-    * @param text
-    * @return
-    */
-  def help(text:String): Result[Any] =
-  {
-    parseHandle ( text, (cmd) => null )
   }
 
 
@@ -183,10 +166,6 @@ class ApiContainer(val ctx:AppContext                           ,
   {
     val result = ApiValidator.validateCall(cmd, getApiCallReflect)
     okOrFailure(result.success, msg = result.msg, tag = Some(cmd.fullName))
-
-    // Don't return the result from internal ( as it contains too much info )
-    val code = if(result.success) 1 else 0
-    no(result.msg, tag = Some(cmd.fullName))
   }
 
 
@@ -416,7 +395,7 @@ class ApiContainer(val ctx:AppContext                           ,
 
 
   private def callCommandInternal(cmd:Request): Result[Any] = {
-    var api:ApiBase = null
+    var api:Option[ApiBase] = None
 
     try {
       // 1. Check for method.
@@ -459,14 +438,14 @@ class ApiContainer(val ctx:AppContext                           ,
             else {
               // 6. Get api action
               // Get the call check which has all the relevant info about the call
-              val callCheck = checkResult.get.asInstanceOf[ApiCallCheck]
+              val callCheck = checkResult.get
 
               // 7. Get the call reflect from the api using the action
-              api = callCheck.api
+              api = Option(callCheck.api)
 
               // 8. Finally make call.
               val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get, allowIO, this.ctx.enc)
-              val returnVal = Reflector.callMethod(api, callCheck.apiAction, inputs)
+              val returnVal = Reflector.callMethod(callCheck.api, callCheck.apiAction, inputs)
 
               // 9. Already a Result object - don't wrap inside another result object
               if (returnVal.isInstanceOf[Result[Any]]) {
@@ -487,11 +466,11 @@ class ApiContainer(val ctx:AppContext                           ,
   }
 
 
-  def handleError(api:ApiBase, cmd:Request, ex:Exception):Result[Any] = {
+  def handleError(api:Option[ApiBase], cmd:Request, ex:Exception):Result[Any] = {
 
     // OPTION 1: API Level error handling enabled
-    if(api != null && api.isErrorEnabled) {
-      api.onException(this.ctx, cmd, ex)
+    if(api.fold(false)( a => a.isErrorEnabled)) {
+      api.get.onException(this.ctx, cmd, ex)
     }
     // OPTION 2: GLOBAL Level custom handler
     else if( errors.isDefined ) {

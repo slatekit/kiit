@@ -17,20 +17,19 @@ import slate.common.console.ConsoleWriter
 import slate.common.ReflectedArg
 import slate.core.apis.{ApiArg, ApiAction, Api}
 
+/**
+ * Generates help docs for the web.
+ * TODO: Refactor this code a bit. May be able to use
+ * recursion/tail-rec instead of some of the remnant visitor pattern.
+ */
 class ApiDocWeb extends ApiDocBase {
   protected val _writer = new ConsoleWriter()
 
 
-  override def result: AnyRef =
-  {
-    null
-  }
+  override def result: AnyRef = ""
 
 
-  override def isOutputSupported: Boolean =
-  {
-    false
-  }
+  override def isOutputSupported: Boolean = false
 
 
   override def onVisitApiBegin(api: Api): Unit =

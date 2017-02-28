@@ -11,37 +11,32 @@
 
 package slate.core.apis.svcs
 
-import slate.common.encrypt.{EncryptSupportIn, Encryptor}
+import scala.reflect.runtime.universe.{Type}
+import slate.common.encrypt.{EncryptSupportIn}
 import slate.common.results.ResultSupportIn
-import slate.core.common.{EntityServiceWithSupport, AppContextSupport}
-import slate.entities.core.{EntityService, IEntity}
-import slate.common.i18n.{I18nSupportIn, I18nStrings}
-import slate.common.logging.{LogSupportIn, LoggerBase}
-import slate.core.apis.ApiBaseEntity
+import slate.core.common.{AppContext, AppContextSupport}
+import slate.entities.core.{Entity}
+import slate.common.i18n.{I18nSupportIn}
+import slate.common.logging.{LogSupportIn}
+import slate.core.apis.{ApiBaseEntity}
 
 
-class ApiEntityWithSupport[T >: Null <: IEntity, TSvc >: Null]
-  extends ApiBaseEntity[T]
+
+class ApiEntityWithSupport[T >: Null <: Entity, TSvc >: Null]
+(
+  context:AppContext, tpe:Type
+)
+  extends ApiBaseEntity[T](context, tpe)
   with EncryptSupportIn
   with LogSupportIn
   with I18nSupportIn
   with ResultSupportIn
   with AppContextSupport
 {
-
-  protected def initContext(svc:EntityServiceWithSupport[T]):Unit =
-  {
-    svc.context = this.context
-    svc.initContext()
-    _service = svc.asInstanceOf[EntityService[T]]
-    _log = Option(context.log)
-    _enc = context.enc
-    _res = context.res
-  }
+  def service: TSvc = _service.asInstanceOf[TSvc]
 
 
-  def service: TSvc =
-  {
-    _service.asInstanceOf[TSvc]
-  }
+  override protected def log() = Option(context.log)
+  override protected def enc() = context.enc
+  override protected def res() = context.res
 }

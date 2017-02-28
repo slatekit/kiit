@@ -30,6 +30,16 @@ import scala.collection.mutable.ListBuffer
 object ApiCallHelper extends ResultSupportIn {
 
   protected val _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
+  protected val _typeDefaults = Map[String,Any](
+   "String"  -> "",
+   "Boolean" -> false,
+   "Int"     -> 0,
+   "Long"    -> 0L,
+   "Double"  -> 0d,
+   "DateTime"-> DateTime.now()
+  )
+
+
   protected val _decryptedTypes = Map[String,Boolean](
     "DecInt"    -> true,
     "DecLong"   -> true,
@@ -69,16 +79,19 @@ object ApiCallHelper extends ResultSupportIn {
 
 
   def fillArgs(callReflect:ApiCallReflect, cmd:Request, args:Inputs, allowLocalIO:Boolean = false,
-               enc:Option[Encryptor] = None): Array[Any] =
-  {
+               enc:Option[Encryptor] = None): Array[Any] = {
     // Check 1: No args ?
-    if(!callReflect.hasArgs)
+    if (!callReflect.hasArgs)
       Array[Any]()
     // Check 2: 1 param with default and no args
-    else if(callReflect.isSingleDefaultedArg() && args.size() == 0)
-      Array[Any](null)
-    else
+    else if (callReflect.isSingleDefaultedArg() && args.size() == 0) {
+      val argType = callReflect.paramList(0).typeName
+      val defaultVal = if(_typeDefaults.contains(argType))_typeDefaults(argType) else None
+      Array[Any](defaultVal)
+    }
+    else {
       fillArgsExact(callReflect, cmd, args, allowLocalIO, enc)
+    }
   }
 
 
@@ -96,12 +109,11 @@ object ApiCallHelper extends ResultSupportIn {
       val paramValue:Any = if(paramType == "String")
       {
         val text = args.getString(paramName)
-        if("null".equalsIgnoreCase(text.asInstanceOf[String]))
-        {
-          null
-        }
-        else
-          text
+        val isNull = "null".equalsIgnoreCase(text)
+
+        // As a design choice, this marshaller will only pass empty string to
+        // API methods instead of null
+        if(isNull) "" else text
       }
       else if(paramType == "Int")
       {

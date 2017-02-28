@@ -14,20 +14,20 @@
 package slate.core.apis
 
 
-import slate.common.encrypt.Encryptor
-import slate.common.i18n.I18nStrings
-import slate.common.logging.LoggerBase
 import slate.common.query.Query
-import slate.entities.core.{EntityService, IEntity}
+import slate.core.common.AppContext
+import slate.entities.core.{EntityService, Entity}
+
+import scala.reflect.runtime.universe.Type
 
 /**
   * Base class for an Api that is used to access/manage database models / entities using the
   * Slate Kit Orm ( Entities ).
   * @tparam T
   */
-class ApiBaseEntity[T >: Null <: IEntity] extends ApiBase {
+class ApiBaseEntity[T >: Null <: Entity](context:AppContext, tpe:Type) extends ApiBase(context) {
 
-  protected var _service:EntityService[T] = null
+  protected val _service:EntityService[T] = context.ent.getSvcByType[T](tpe)
 
 
   @ApiAction(name = "", desc= "gets the total number of users", roles= "@parent", verb = "get", protocol = "@parent")

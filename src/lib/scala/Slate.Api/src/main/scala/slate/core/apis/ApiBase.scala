@@ -25,42 +25,19 @@ import slate.core.apis.support.{ApiCallReflect}
 import slate.core.common.AppContext
 
 /**
-  * Base class for any Api, provides lookup functionality to check for exposed api actions.
-  */
-class ApiBase {
+ * Base class for any Api, provides lookup functionality to check for exposed api actions.
+ * @param context   : The context of the application ( logger, config, encryptor, etc )
+ */
+class ApiBase(val context:AppContext ) {
 
   val isErrorEnabled = false
-
   protected  val _lookup = new ListMap[String, ApiCallReflect]()
-  protected var _log:Option[LoggerBase] = None
-  protected var _enc:Option[Encryptor] = None
-  protected var _res:Option[I18nStrings] = None
-
-  /**
-   * The context of the application. Contains references to the
-   * 1. selected environment
-   * 2. logger
-   * 3. config
-   * 4. encryptor
-   * 5. authenticator
-   * 6. app info and more
-   */
-  var context:AppContext = null
-
-
-  /**
-   * The api parent container that actually executes the calls on this api
-   * and has a register of all the apis.
-   */
-  var container:ApiContainer = null
 
 
   /**
    * hook to allow api to initialize itself
    */
-  def init():Unit =
-  {
-  }
+  def init():Unit = {}
 
 
   /**
@@ -68,10 +45,7 @@ class ApiBase {
  *
    * @return
    */
-  def actions():ListMap[String,ApiCallReflect] =
-  {
-    _lookup.clone()
-  }
+  def actions():ListMap[String,ApiCallReflect] = _lookup.clone()
 
 
   /**
@@ -80,10 +54,7 @@ class ApiBase {
     * @param action : e.g. "invite" as in "users.invite"
    * @return
    */
-  def contains(action:String):Boolean =
-  {
-    _lookup.contains(action)
-  }
+  def contains(action:String):Boolean = _lookup.contains(action)
 
 
   /**
@@ -113,7 +84,7 @@ class ApiBase {
 
 
   def onException(context:AppContext, request: Request, ex:Exception): Result[Any] = {
-    new FailureResult[Boolean](Some(false), ResultCode.UNEXPECTED_ERROR, msg = Some("unexpected error in api"), err = Some(ex))
+    FailureResult[Boolean](ResultCode.UNEXPECTED_ERROR, msg = Some("unexpected error in api"), err = Some(ex))
   }
 
 
@@ -133,16 +104,7 @@ class ApiBase {
     * @param callback : the call to benchmark
    * @return : OperationResultBenchmarked
    */
-  def bench(callback:()=>Any ):ResultTimed[Any] =
-  {
-    var result:Any = null
-
-    val resultTimed = Timer.once("", () => {
-      result = callback()
-    })
-
-    resultTimed
-  }
+  def bench[T](callback:() => T ):ResultTimed[T] = Timer.once[T]("", { callback()})
 
 
   protected def interpretUri(path:String): Option[String] = {

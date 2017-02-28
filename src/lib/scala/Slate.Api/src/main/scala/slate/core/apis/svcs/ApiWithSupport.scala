@@ -14,10 +14,12 @@ import slate.common.encrypt.{EncryptSupportIn}
 import slate.common.i18n.{I18nSupportIn}
 import slate.common.logging.{LogSupportIn}
 import slate.common.results.ResultSupportIn
-import slate.core.apis.ApiBase
-import slate.core.common.AppContextSupport
+import slate.core.apis.{ApiContainer, ApiBase}
+import slate.core.common.{AppContext, AppContextSupport}
 
-class ApiWithSupport extends ApiBase
+class ApiWithSupport(
+                      context:AppContext
+                     ) extends ApiBase(context)
   with EncryptSupportIn
   with LogSupportIn
   with I18nSupportIn
@@ -25,10 +27,7 @@ class ApiWithSupport extends ApiBase
   with AppContextSupport
 {
 
-  protected def initContext():Unit =
-  {
-    _log = Option(context.log)
-    _enc = context.enc
-    _res = context.res
-  }
+  override protected def log() = Option(context.log)
+  override protected def enc() = context.enc
+  override protected def res() = context.res
 }

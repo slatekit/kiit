@@ -24,7 +24,8 @@ object ApiValidator extends ResultSupportIn {
   :(Boolean, Result[Any], Result[(ApiCallReflect,ApiBase)]) = {
     // e.g. "users.invite" = [ "users", "invite" ]
     // Check 1: at least 2 parts
-    if( cmd.parts == null || cmd.parts.size < 2) {
+    val totalParts = Option(cmd).map( c => c.parts.size).getOrElse(0)
+    if( totalParts < 2) {
       (false, badRequest(Some(cmd.action + ": invalid call")), NoResult)
     }
     else {

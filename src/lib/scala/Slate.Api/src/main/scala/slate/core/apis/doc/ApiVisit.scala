@@ -24,7 +24,7 @@ trait ApiVisit {
   def isOutputSupported : Boolean
 
 
-  def result : Object
+  def result : AnyRef
 
 
   def onVisitSeparator(): Unit

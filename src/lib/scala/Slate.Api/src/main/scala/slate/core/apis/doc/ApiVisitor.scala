@@ -44,7 +44,7 @@ class ApiVisitor {
         val api = apis(key)
         val actions = api.actions()
         if (actions.size() > 0) {
-          actions.getAt(0).fold(Unit)(apiAnno => {
+          actions.getAtOpt(0).fold(Unit)(apiAnno => {
             visitApi(apiAnno.api, visitor, actions, listActions = false, listArgs = false)
             Unit
           })
@@ -60,7 +60,7 @@ class ApiVisitor {
     val actions = apiBase.actions()
     if(actions.size() > 0)
     {
-      actions.getAt(0).fold(Unit)( apiAnno => {
+      actions.getAtOpt(0).fold(Unit)( apiAnno => {
         visitApi(apiAnno.api, visitor, actions, listActions = true, listArgs = false)
         Unit
       })
@@ -96,7 +96,7 @@ class ApiVisitor {
     val actions = apiBase.actions()
     if(actions.size() > 0)
     {
-      actions.getAt(0).fold(Unit)( apiAnno => {
+      actions.getAtOpt(0).fold(Unit)( apiAnno => {
 
         val api = apiAnno.api
         visitor.onVisitApiBegin(api)
