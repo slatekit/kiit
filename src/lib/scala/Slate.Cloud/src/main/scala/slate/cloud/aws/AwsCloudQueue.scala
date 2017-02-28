@@ -16,7 +16,6 @@ package slate.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
 import slate.common._
-import slate.common.queues.QueueSourceData
 import slate.common.results.ResultFuncs._
 import slate.core.cloud._
 
@@ -93,10 +92,7 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   override def next():Option[Any] =
   {
     val result = nextBatch(1)
-    if(result.isEmpty)
-      None
-    else
-      Some(result.get.head)
+    result.fold[Option[Any]](None)( res => Option(res.head))
   }
 
 
@@ -189,7 +185,7 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   override def sendFromFile(fileNameLocal:String, tagName:String = "", tagValue:String = "") : Result[String] =
   {
     val path = Uris.interpret(fileNameLocal)
-    path.fold(failure(Some(""), msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
+    path.fold[Result[String]](failure(msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
       val content = Files.readAllText(pathLocal)
       send(content, tagName, tagValue)
     })
@@ -201,9 +197,10 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     * @param item : The message to abandon/delete
     */
   override def abandon(item:Option[Any]):Unit = {
-    if (item.nonEmpty) {
-      discard(item.get, "abandon")
-    }
+    item.fold(Unit)( i => {
+      discard(i, "abandon")
+      Unit
+    })
   }
 
 
@@ -213,9 +210,10 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     */
   override def complete(item:Option[Any]):Unit =
   {
-    if(item.nonEmpty) {
-      discard(item.get, "complete")
-    }
+    item.fold(Unit)( i => {
+      discard( i, "complete")
+      Unit
+    })
   }
 
 
@@ -225,12 +223,10 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
     */
   override def completeAll(items:Option[List[Any]]):Unit =
   {
-    if(items.nonEmpty) {
-      val all = items.get
-      for (item <- all) {
-        discard(item, "complete")
-      }
-    }
+    items.fold(Unit)( all => {
+      all.foreach( item => discard(item, "complete"))
+      Unit
+    })
   }
 
 
@@ -244,18 +240,14 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   {
     getMessageItemProperty(msgItem, (sqsMsg) => {
       val atts =  sqsMsg.getAttributes
-      if( atts == null)
-        Strings.empty
-      else {
-        if(!atts.containsKey(tagName))
+      if( atts == null || !atts.containsKey(tagName))
           Strings.empty
-        else {
-          val tagVal = atts.get(tagName)
-          if(tagVal == null)
-            Strings.empty
-          else
-            tagVal.toString
-        }
+      else {
+        val tagVal = atts.get(tagName)
+        if(tagVal == null)
+          Strings.empty
+        else
+          tagVal.toString
       }
     })
   }
@@ -274,10 +266,8 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
   private def getOrDefault(map:Map[String,Any], key:String, defaultVal:Any): Any =
   {
-    if(map == null || !map.contains(key))
-      defaultVal
-    else
-      map(key)
+    Option(map).
+      fold(defaultVal)( m => if(m.contains(key)) map(key) else defaultVal)
   }
 
 
@@ -302,16 +292,12 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
   def getMessageItemProperty(msgItem:Option[Any], callback:(Message) => String) :String =
   {
-    if(msgItem.isEmpty){
-      Strings.empty
-    }
-    else {
-      val item = msgItem.get
+    msgItem.fold(Strings.empty)( item => {
       if(item.isInstanceOf[Message]){
         callback(item.asInstanceOf[Message])
       }
       else
         Strings.empty
-    }
+    })
   }
 }

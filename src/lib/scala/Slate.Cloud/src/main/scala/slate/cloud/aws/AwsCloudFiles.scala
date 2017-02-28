@@ -18,7 +18,7 @@ import java.io.File
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.s3.AmazonS3Client
-import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata, PutObjectRequest}
+import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata}
 import slate.common._
 
 import slate.core.cloud._
