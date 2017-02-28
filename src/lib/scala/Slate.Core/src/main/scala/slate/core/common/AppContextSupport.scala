@@ -11,5 +11,5 @@
 package slate.core.common
 
 trait AppContextSupport {
-  var context:AppContext
+  val context:AppContext
 }

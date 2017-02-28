@@ -10,12 +10,14 @@
   */
 package slate.core.common
 
-import slate.common.IocRunTime
-import slate.common.app.{AppRunConst, AppMeta}
+import slate.common.results.ResultCode
+import slate.common.{FailureResult, NoResult, Result, IocRunTime}
+import slate.common.app.{LocationUserDir, AppMeta}
+import slate.common.args.Args
 import slate.common.conf.ConfigBase
-import slate.common.databases.{DbLookup, DbConString}
+import slate.common.databases.{DbLookup}
 import slate.common.encrypt.Encryptor
-import slate.common.envs.{Env, Envs, EnvItem}
+import slate.common.envs.{Dev, Env, Envs}
 import slate.common.templates.Subs
 import slate.entities.core.Entities
 import slate.common.i18n.I18nStrings
@@ -25,22 +27,26 @@ import slate.core.auth.AuthBase
 import slate.core.tenants.Tenant
 
 /**
- *
- * @param dbs  : db connection strings lookup
- * @param enc  : encryption/decryption service
- * @param env  : environment selection ( dev, qa, staging, prod )
- * @param ent  : entity/orm registration server to get entity services/repositories
- * @param cfg  : config settings
- * @param log  : logger
- * @param dirs : directories used for the app
- * @param subs : substitutions( variables ) for the app
- * @param res  : translated resource strings ( i18n )
- * @param tnt   : tenant info ( if running in multi-tenant mode - not officially supported )
- * @param inf  : info only about the currently running application
- * @param auth : authentication service for security/permissions
- */
+  *
+  * @param arg  : command line arguments
+  * @param env  : environment selection ( dev, qa, staging, prod )
+  * @param cfg  : config settings
+  * @param log  : logger
+  * @param ent  : entity/orm registration server to get entity services/repositories
+  * @param inf  : info only about the currently running application
+  * @param host : host computer info
+  * @param lang : lang runtime info
+  * @param dbs  : db connection strings lookup
+  * @param enc  : encryption/decryption service
+  * @param dirs : directories used for the app
+  * @param subs : substitutions( variables ) for the app
+  * @param res  : translated resource strings ( i18n )
+  * @param tnt   : tenant info ( if running in multi-tenant mode - not officially supported )
+  * @param auth : authentication service for security/permissions
+  */
 case class AppContext(
-                        env :EnvItem                                    ,
+                        arg: Args                                       ,
+                        env :Env                                   ,
                         cfg :ConfigBase                                 ,
                         log :LoggerBase                                 ,
                         ent :Entities                                   ,
@@ -54,7 +60,8 @@ case class AppContext(
                         subs:Option[Subs]               = None          ,
                         res :Option[I18nStrings]        = None          ,
                         tnt :Option[Tenant]             = None          ,
-                        svcs:Option[IocRunTime]         = None
+                        svcs:Option[IocRunTime]         = None          ,
+                        state:Result[Boolean]           = NoResult
                      )
 {
   def app:AppMeta = { new AppMeta(inf, host, lang) }
@@ -63,17 +70,40 @@ case class AppContext(
 
 object AppContext {
 
-  def sample(id:String, name:String, about:String, company:String):AppContext = {
-    val ctx = new AppContext (
-      env  = EnvItem("test", Env.DEV),
+
+  def help():AppContext = err( ResultCode.HELP )
+
+
+  def exit():AppContext = err( ResultCode.EXIT )
+
+
+  def err(code:Int, msg:Option[String] = None): AppContext = {
+    new AppContext (
+      arg  = Args(),
+      env  = Env("test", Dev),
       cfg  = new Conf(),
       log  = new LoggerConsole(),
       ent  = new Entities(),
-      inf  = new About(id, name, about, company = company),
+      inf  = About.none,
+      host = Host.local(),
+      lang = Lang.asScala(),
+      state = FailureResult[Boolean](code, msg)
+    )
+  }
+
+
+  def sample(id:String, name:String, about:String, company:String):AppContext = {
+    val ctx = new AppContext (
+      arg  = Args(),
+      env  = Env("test", Dev),
+      cfg  = new Conf(),
+      log  = new LoggerConsole(),
+      ent  = new Entities(),
+      inf  = new About(id, name, about, company, "", "", "", "", "", "", ""),
       host = Host.local(),
       lang = Lang.asScala(),
       enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
-      dirs = Some(new Folders(AppRunConst.LOCATION_USERDIR, root = Some("slatekit"), group = Some("samples")))
+      dirs = Some(Folders.userDir("slatekit", "samples", "sample1"))
     )
     ctx
   }

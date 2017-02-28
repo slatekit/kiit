@@ -17,7 +17,7 @@ import com.typesafe.config._
 import slate.common._
 import slate.common.results.ResultSupportIn
 import slate.common.conf.{Configs, ConfigBase}
-import slate.common.databases.DbConString
+import slate.common.databases.{DbCon, DbConString}
 import slate.common.encrypt.Encryptor
 
 /**
@@ -145,7 +145,7 @@ object Conf extends ResultSupportIn {
     * @return
     */
   def readDbCon(fileName:Option[String] = None, enc:Option[Encryptor] = None,
-                sectionName:Option[String] = Some("db")) : Option[DbConString] = {
+                sectionName:Option[String] = Some("db")) : Option[DbCon] = {
     load(fileName, enc).dbCon(sectionName.getOrElse("db"))
   }
 
@@ -277,14 +277,21 @@ object Conf extends ResultSupportIn {
     */
   def loadTypeSafeConfig(fileName:Option[String]): Config = {
 
+    // This is here to debug loading app conf
+    val getDefaultConf = (name:Option[String]) => {
+      val finalName = name.getOrElse("application.conf")
+      val defaultConf = ConfigFactory.load(finalName)
+      defaultConf
+    }
+
     // CASE 1: No name supplied ( default to application.conf )
-    fileName.fold[Config]( ConfigFactory.load() )( name => {
+    fileName.fold[Config]( getDefaultConf(None) )( name => {
 
       // Check for uri : ( "jar://" | "user://" | "file://" )
       val parts = Strings.substring(name, "://")
 
       // CASE 2: No uri supplied ( use just the name of the file
-      parts.fold[Config]( ConfigFactory.load(name) ) ( parts => {
+      parts.fold[Config]( getDefaultConf(Option(name)) ) ( parts => {
 
         // CASE 3: URI Supplied
         val filePath = new File(System.getProperty("user.home"), parts._2)
