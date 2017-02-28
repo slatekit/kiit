@@ -16,7 +16,6 @@ package slate.server.core
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.RequestContext
-import akka.http.scaladsl.Http.ServerBinding
 import akka.stream.ActorMaterializer
 import slate.common._
 import slate.common.results.ResultSupportIn
@@ -94,11 +93,11 @@ class Server( val port       : Int    = 5000 ,
     // build up the akka-http routes to handle all
     val serverRoutes = new ServerRoutes(ctx.app)
     serverRoutes.init( system, executionContext, materializer)
-    var routes = serverRoutes.basic()
-    routes = serverRoutes.api(routes, handle)
+    val routesInitial = serverRoutes.basic()
+    val routesFinal = serverRoutes.api(routesInitial, handle)
 
     // No bind to server.
-    val bindingFuture = Http().bindAndHandle(handler = routes, interface = this.interface, port = this.port)
+    val bindingFuture = Http().bindAndHandle(handler = routesFinal, interface = this.interface, port = this.port)
 
      println(s"Server online at http://${interface}:${port}/\nPress RETURN to stop...")
 
@@ -128,13 +127,15 @@ class Server( val port       : Int    = 5000 ,
     val result = callCommand(apiCmd)
 
     // 3. return as a result.
-    if(result.isDefined ) {
-      val res = result.get
-      if(res.isInstanceOf[Option[Any]]) {
-        return new SuccessResult(res.asInstanceOf[Option[Any]].get, result.code, result.msg, result.ext, result.tag)
+    val finalResult = result.fold( result )( res => {
+      val formatted = if(res.isInstanceOf[Option[Any]]) {
+        new SuccessResult(res.asInstanceOf[Option[Any]].get, result.code, result.msg, result.tag)
       }
-    }
-    result
+      else
+        result
+      formatted
+    })
+    finalResult
   }
 
 

@@ -31,10 +31,7 @@ class HttpHeaders(private val _ctx:RequestContext) extends Inputs {
   override def getString(key: String) : String =
   {
     val header = _ctx.request.getHeader(key)
-    if(header.isPresent){
-      return header.get.value
-    }
-    ""
+    if(header.isPresent) header.get.value else ""
   }
 
 
@@ -47,10 +44,7 @@ class HttpHeaders(private val _ctx:RequestContext) extends Inputs {
   override def getStringOrElse(key: String, defaultVal:String) : String =
   {
     val header = _ctx.request.getHeader(key)
-    if(header.isPresent){
-      return header.get.value
-    }
-    defaultVal
+    if(header.isPresent) header.get.value else defaultVal
   }
 
 
@@ -63,12 +57,20 @@ class HttpHeaders(private val _ctx:RequestContext) extends Inputs {
   override def getValue(key: String): AnyVal =
   {
     val text = getStringOrElse(key, "").toLowerCase
-    if(text == "true") return true
-    if(text == "false") return false
-    if(Strings.isInteger(text)) return text.toInt
-    if(Strings.isDouble(text)) return text.toDouble
-    if(text.length == 1 && text(0).isLetterOrDigit) return text(0)
-    throw new IllegalArgumentException(s"key ${key} is not a value")
+    val result =
+      if(text == "true")
+        true
+      else if(text == "false")
+        false
+      else if(Strings.isInteger(text))
+        text.toInt
+      else if(Strings.isDouble(text))
+        text.toDouble
+      else if(text.length == 1 && text(0).isLetterOrDigit)
+        text(0)
+      else
+        throw new IllegalArgumentException(s"key ${key} is not a value")
+    result
   }
 
 
@@ -81,10 +83,7 @@ class HttpHeaders(private val _ctx:RequestContext) extends Inputs {
   override def getObject(key: String): AnyRef =
   {
     val header = _ctx.request.getHeader(key)
-    if(header.isPresent){
-      return header.get.value
-    }
-    ""
+    if(header.isPresent) header.get.value else ""
   }
 
 

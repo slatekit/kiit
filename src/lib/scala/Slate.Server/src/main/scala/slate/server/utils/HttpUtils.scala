@@ -37,19 +37,19 @@ object HttpUtils {
 
   def buildParams( uri: akka.http.javadsl.model.Uri ) : String =
   {
-    var text = ""
     val params = uri.query().toList
     val maps = uri.query.toMap
     for( key <- maps.keySet().toArray()){
       println(key + " : " + maps.get(key))
     }
-    for(ndx <- 0 until params.size() ) {
-        val pair = params.get(ndx)
-        val p:akka.japi.Pair[String,String] = pair.asInstanceOf[akka.japi.Pair[String,String]]
-        val key = p.first
-        val value = p.second
-        text = text + key + " = " + value + ", "
-      }
+    val text = 0.until(params.size()).indices.foldLeft("")( (acc, i) => {
+      val pair = params.get(i)
+      val p:akka.japi.Pair[String,String] = pair.asInstanceOf[akka.japi.Pair[String,String]]
+      val key = p.first
+      val value = p.second
+      val result = acc + key + " = " + value + ", "
+      result
+    })
     text
   }
 }

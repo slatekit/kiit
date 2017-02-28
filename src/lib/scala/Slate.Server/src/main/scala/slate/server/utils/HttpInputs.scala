@@ -100,13 +100,13 @@ class HttpInputs(private val _ctx:RequestContext,
   {
     // TODO: Refactor this code to remove runtime exception
     // involves changing Inputs class in common.
-    if ( !containsKey(key) )
-      throw new IllegalArgumentException("key not found in arguments : " + key)
+    require(contains(key), "key not found in arguments : " + key)
 
     if ( _json.isDefined && _json.get.fields.contains(key)) {
-       return _json.get.fields(key).asInstanceOf[AnyVal]
+       _json.get.fields(key).asInstanceOf[AnyVal]
     }
-    throw new IllegalArgumentException("Value not available")
+    else
+      throw new IllegalArgumentException("Value not available")
   }
 
 
@@ -118,10 +118,14 @@ class HttpInputs(private val _ctx:RequestContext,
     */
   override def getObject(key: String): AnyRef =
   {
-    if ( !containsKey(key) ) return null
-
-    val result = _json.get.fields(key).asInstanceOf[JsObject]
-    new HttpInputs(_ctx, Option(result))
+    // NOTE: Need to make a minor change to the Inputs trait/class
+    // to support avoid null
+    if ( !containsKey(key) )
+      null
+    else {
+      val result = _json.get.fields(key).asInstanceOf[JsObject]
+      new HttpInputs(_ctx, Option(result))
+    }
   }
 
 
@@ -145,18 +149,22 @@ class HttpInputs(private val _ctx:RequestContext,
 
 
   private def fromPostBody(key:String):Option[String] = {
-    if(_json.isDefined) {
-      val json = _json.get
-      if (json.fields.contains(key)) {
+    val jsonVal = _json.fold[Option[String]](None)( json => {
+      val result = if (json.fields.contains(key)) {
         val jsVal = json.fields(key)
         if (jsVal.isInstanceOf[JsString]) {
           val text = jsVal.asInstanceOf[JsString].value
-          return Option(text)
+          Option(text)
         }
-        val text = jsVal.asInstanceOf[JsValue].toString()
-        return Option(text)
+        else {
+          val text = jsVal.asInstanceOf[JsValue].toString()
+          Option(text)
+        }
       }
-    }
-    None
+      else
+        None
+      result
+    })
+    jsonVal
   }
 }

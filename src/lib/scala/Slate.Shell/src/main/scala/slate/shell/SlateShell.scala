@@ -12,7 +12,7 @@
   */
 package slate.shell
 
-import slate.common.app.{AppRunConst, AppMeta}
+import slate.common.app.AppMeta
 import slate.common.args.ArgsSchema
 import slate.common.databases.DbLookup
 import slate.common.encrypt.Encryptor
@@ -20,6 +20,7 @@ import slate.common.logging.LoggerConsole
 import slate.common._
 import slate.common.info.{Folders, Lang, Host, About}
 import slate.core.apis.{ApiReg, ApiAuth}
+import slate.core.app.AppRunner._
 import slate.core.app.{AppProcess, AppRunner}
 import slate.core.common.{Conf, AppContext}
 import slate.entities.core.Entities
@@ -28,49 +29,66 @@ import slate.tools.docs.DocApi
 import slate.integration.{ShellAPI, VersionApi, AppApi}
 import slate.core.shell._
 
-/**
-  * Created by kreddy on 3/23/2016.
-  */
-object SlateShell extends AppProcess {
+object SlateShell {
 
-
-  def main(args: Array[String]): Unit = {
-    AppRunner.run(this, Some(args))
-  }
-
-
-  // STEP 1. setup the command line arguments.
-  // NOTE:
-  // 1. These values can can be setup in the env.conf file
-  // 2. If supplied on command line, they override the values in .conf file
-  // 3. If any of these are required and not supplied, then an error is display and program exists
-  // 4. Help text can be easily built from this schema.
-  override lazy val argsSchema = new ArgsSchema()
-            .text("env"   , "the environment to run in", false, ""     , "dev"  , "dev1|qa1|stg1|pro" )
-            .text("log"   , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
+  /**
+    * STEP 1. setup the command line arguments.
+    * NOTE:
+    * 1. These values can can be setup in the env.conf file
+    * 2. If supplied on command line, they override the values in .conf file
+    * 3. If any of these are required and not supplied, then an error is display and program exists
+    * 4. Help text can be easily built from this schema.
+    */
+  val schema = new ArgsSchema()
+    .text("env", "the environment to run in", false, "", "dev", "dev1|qa1|stg1|pro")
+    .text("log", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
   /**
-    * initialize app and metadata
+    * Converts a built AppContext into a final one for use in this app.
+    * NOTE: This is allow customization of any member of the app context:
+    * e.g.
+    * - encryptor
+    * - logger
+    * - database
+    * - metadata etc
+    *
+    * @param ctx
+    * @return
     */
-  override def onInit(): Unit =
-  {
-    // 2. Initialize the context with common app info
-    // NOTE:
-    // - Environment selection ( dev, qa, prod ) is set in env.conf
-    // - Database selection.
-    ctx = new AppContext (
-      env  = env,
-      cfg  = conf,
-      log  = new LoggerConsole(getLogLevel()),
-      ent  = new Entities(Option(dbs())),
-      inf  = aboutApp(),
-      dbs  = Option(dbs()),
-      enc  = Option(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
-      dirs = Option(folders())
-    )
+  def convert(ctx: AppContext): AppContext = {
+    ctx.copy(enc = Option(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")))
   }
 
+
+  def main(args: Array[String]): Unit = {
+
+    // 1. Run calls the template methods ( init, exec, shutdown )
+    run (
+
+      // 2. Instance of AppProcess
+      new SlateShell (
+
+        // 3. Build the Application context for the app.
+        // NOTE: The app context contains the selected
+        // environment, logger, conf, command line args,
+        // database, encryptor, and many other components
+        build (
+          args      = Some(args),
+          schema    = Some(schema),
+          converter = Some(convert)
+        )
+      )
+    )
+  }
+}
+
+
+
+/**
+  * Created by kreddy on 3/23/2016.
+  */
+class SlateShell(context:Option[AppContext]) extends AppProcess(context) {
 
   /**
     * executes the app
@@ -92,10 +110,10 @@ object SlateShell extends AppProcess {
     // And setup the api container to hold all the apis.
     val shell = new ShellAPI(creds, ctx, auth, "sampleapp", new ShellSettings( enableLogging = true, enableOutput = true),
       apiItems = Some(List[ApiReg](
-        new ApiReg(new AppApi()    , true, Some("qa"), protocol = Some("*")),
-        new ApiReg(new VersionApi(), true, Some("qa"), protocol = Some("*")),
-        new ApiReg(new DocApi()    , true, Some("qa"), protocol = Some("*")),
-        new ApiReg(new CodeGenApi(), true, Some("qa"), protocol = Some("*"))
+        new ApiReg(new AppApi(ctx)    , true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new VersionApi(ctx), true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new DocApi(ctx)    , true, Some("qa"), protocol = Some("*")),
+        new ApiReg(new CodeGenApi(ctx), true, Some("qa"), protocol = Some("*"))
       )
     ))
 
@@ -112,7 +130,7 @@ object SlateShell extends AppProcess {
   /**
     * called when app is done
     */
-  override def onShutdown(): Unit =
+  override def onEnd(): Unit =
   {
     info("slate.shell shutting down")
   }

@@ -82,9 +82,9 @@ with ResultSupportIn
 
     import HttpJson._
 
-    var paths = route
+    val paths = route
 
-    paths = paths ~
+    val pathsFinal = paths ~
       post
       {
         ctx =>
@@ -129,7 +129,7 @@ with ResultSupportIn
         ctx =>
         {
           completeAsJson(ctx, () => {
-            val res = callback(ctx, null)
+            val res = callback(ctx, spray.json.JsObject.empty)
             new ResultSerializer().toJson(res)
           })
         }
@@ -142,7 +142,7 @@ with ResultSupportIn
         }
       }
 
-    paths
+    pathsFinal
   }
 }
 
