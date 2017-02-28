@@ -11,10 +11,9 @@
 package slate.common.info
 
 import java.io.File
-import java.nio.file.Path
 
 import slate.common.Files
-import slate.common.app.AppRunConst
+import slate.common.app.{LocationUserDir, AppLocation}
 
 /**
   * Represents folder locations for an application
@@ -44,16 +43,16 @@ import slate.common.app.AppRunConst
   * @param outputs : name of output folder for the application
   */
 case class Folders(
-                    location : Int    = 0,
-                    home     : String = System.getProperty("user.home"),
-                    root     : Option[String] = None,
-                    group    : Option[String] = None,
-                    app      : String = "app",
-                    cache    : String = "cache",
-                    inputs   : String = "input",
-                    logs     : String = "logs",
-                    outputs  : String = "output",
-                    conf     : String = "conf"
+                    location : AppLocation   ,
+                    home     : String        ,
+                    root     : Option[String],
+                    group    : Option[String],
+                    app      : String        ,
+                    cache    : String        ,
+                    inputs   : String        ,
+                    logs     : String        ,
+                    outputs  : String        ,
+                    conf     : String
                   )
 {
 
@@ -111,17 +110,22 @@ case class Folders(
 object Folders {
 
   val none = new Folders(
-    root    = None,
-    group   = None,
-    app     = "",
-    cache   = "",
-    inputs  = "",
-    logs    = "",
-    outputs = ""
+    location=LocationUserDir,
+    home    = System.getProperty("user.dir"),
+    root    = None    ,
+    group   = None    ,
+    app     = "app"   ,
+    cache   = "cache" ,
+    inputs  = "input" ,
+    logs    = "logs"  ,
+    outputs = "output",
+    conf    = "conf"
   )
 
 
   val default = new Folders(
+    location=LocationUserDir,
+    home    = System.getProperty("user.dir"),
     root    = Some("slatekit"),
     group   = Some("samples" ),
     app     = "app"     ,
@@ -131,4 +135,20 @@ object Folders {
     outputs = "output"  ,
     conf    = "conf"
   )
+
+
+  def userDir(root:String, app:String, group:String): Folders = {
+    new Folders(
+      LocationUserDir,
+      System.getProperty("user.home"),
+      root = Option(root),
+      group = Option(group),
+      app = app,
+      cache   = "cache",
+      inputs  = "input",
+      logs    = "logs",
+      outputs = "output",
+      conf    = "conf"
+    )
+  }
 }

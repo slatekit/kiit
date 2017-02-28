@@ -27,17 +27,17 @@ import slate.common.Strings._
  * @param tags    : tags describing the app
  */
 case class About (
-                     id       : String = "",
-                     name     : String = "",
-                     desc     : String = "",
-                     company  : String = "",
-                     group    : String = "",
-                     region   : String = "",
-                     url      : String = "",
-                     contact  : String = "",
-                     version  : String = "",
-                     tags     : String = "",
-                     examples : String = ""
+                     id       : String,
+                     name     : String,
+                     desc     : String,
+                     company  : String,
+                     group    : String,
+                     region   : String,
+                     url      : String,
+                     contact  : String,
+                     version  : String,
+                     tags     : String,
+                     examples : String
                  )
 {
 
@@ -89,6 +89,8 @@ object About
     region   = "",
     url      = "",
     contact  = "",
+    version  = "",
+    tags     = "",
     examples = ""
   )
 }

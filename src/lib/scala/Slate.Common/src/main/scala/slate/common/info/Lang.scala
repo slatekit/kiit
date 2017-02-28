@@ -21,12 +21,12 @@ package slate.common.info
  * @param ext1       : additional information about the language
  */
 case class Lang(
-                  name        : String = "",
-                  home        : String = "",
-                  versionNum  : String = "",
-                  version     : String = "",
-                  origin      : String = "",
-                  ext1        : String = ""
+                  name        : String,
+                  home        : String,
+                  versionNum  : String,
+                  version     : String,
+                  origin      : String,
+                  ext1        : String
                )
 {
 

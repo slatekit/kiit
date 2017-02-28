@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Info
+permalink: /mod-info
+---
+
 # Info
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Get/Set useful diagnostics about the system, language runtime, application and more | 
-| **date**| 2016-11-21T16:49:15.687 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.124 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.info  |
 | **source core** | slate.common.info._.scala  |
@@ -15,15 +21,12 @@
 ## Import
 ```scala 
 // required 
-
-import slate.common.envs.{Env, Envs}
 import slate.common.info._
-import slate.common.results.ResultSupportIn
-
 
 
 // optional 
-import slate.common.Result
+import slate.common.envs.{Qa, Env}
+import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
 
 
@@ -53,7 +56,7 @@ n/a
 
 
     // CASE 3: Set startup info ( env, config, log, args)
-    val startup = new StartInfo(Some(Array[String]("-level=error")), "{@app}-{@env}-{@date}.log", "{@app}.config", Env.QA)
+    val startup = new StartInfo(Some(Array[String]("-level=error")), "{@app}-{@env}-{@date}.log", "{@app}.config", Qa.name)
     startup.log( (name, value) => println( s"${name} : ${value}" ) )
     println()
 

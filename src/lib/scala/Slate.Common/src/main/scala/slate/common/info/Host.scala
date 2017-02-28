@@ -11,10 +11,6 @@
 
 package slate.common.info
 
-import slate.common.Reflector
-import slate.common.serialization.SerializerUtils
-
-import scala.collection.mutable.ListBuffer
 
 /**
  * Represents a host such as a cloud server. e.g. ec2
@@ -27,12 +23,12 @@ import scala.collection.mutable.ListBuffer
  * @param ext1    : additional information about the server
  */
 case class Host(
-                  name     : String = "",
-                  ip       : String = "",
-                  origin   : String = "",
-                  arch     : String = "",
-                  version  : String = "",
-                  ext1     : String = ""
+                  name     : String,
+                  ip       : String,
+                  origin   : String,
+                  arch     : String,
+                  version  : String,
+                  ext1     : String
                )
 {
 
