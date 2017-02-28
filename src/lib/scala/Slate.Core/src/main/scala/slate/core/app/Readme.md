@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_infra
+title: module App
+permalink: /mod-app
+---
+
 # App
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more | 
-| **date**| 2016-11-21T17:15:23.214 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.196 |
+| **version** | 1.2.0  |
 | **jar** | slate.core.jar  |
 | **namespace** | slate.core.app  |
 | **source core** | slate.core.app.AppProcess.scala  |
@@ -15,22 +21,20 @@
 ## Import
 ```scala 
 // required 
-import slate.common.app.AppMeta
+import slate.common.args.Args
 import slate.common.encrypt.Encryptor
-import slate.common.info.{Lang, Host, About}
+import slate.common.info.About
 import slate.common.logging.LoggerConsole
 import slate.core.app.{AppProcess, AppRunner}
-import slate.core.common.{AppContext, Conf}
+import slate.core.common.{Conf, AppContext}
 import slate.entities.core.Entities
-import slate.common.databases.DbLookup._
 
 
 
 // optional 
-import slate.common.{Result}
+import slate.common.Result
 import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
-import scala.collection.mutable.ListBuffer
 
 
 ```
@@ -39,7 +43,7 @@ import scala.collection.mutable.ListBuffer
 ```scala
 
 
-  class SampleApp extends AppProcess
+  class SampleApp(cctx:Option[AppContext]) extends AppProcess(cctx)
   {
 
     /**
@@ -47,28 +51,6 @@ import scala.collection.mutable.ListBuffer
      */
     override def onInit(): Unit =
     {
-      options.printSummaryBeforeExec = false
-      options.printSummaryOnShutdown = true
-
-      // The base init can take care of some things such as:
-      // 1. loading the common "resources/env.conf" config file as "confBase"
-      // 2. loading the selected environment "env" from either
-      //    the command line first ( -env="dev1:dev" ) or "env.conf"
-      // 3. setting up "conf" inherited config from "env.dev.conf" + "env.conf"
-
-      // Initialize the context with common app info
-      // The context contains all the various services that are common
-      // to most apps, you can then make this available to other parts of your application.
-
-      ctx = new AppContext (
-        env  = conf.env().get,
-        cfg  = conf,
-        log  = new LoggerConsole(getLogLevel()),
-        ent  = new Entities(Option(dbs())),
-        dbs  = Some(dbs()),
-        enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
-        inf  = aboutApp()
-      )
     }
 
 
@@ -87,15 +69,14 @@ import scala.collection.mutable.ListBuffer
       println( ctx.env.toString )
 
       // 2. Get the command line args and show the raw inputs supplied
-      println ( args.raw )
+      println ( ctx.arg.raw )
 
       // 3. Get the setting from base config ( common config that all other configs inherit from )
-      println ( confBase.getString("app.name") )
+      println ( conf.getString("app.name") )
 
       // 4. Get value from inherited config ( env.qa.conf ) that inherits
       // from the common config ( env.conf )
       println ( conf.getString("app.name") )
-      println ( conf.getBool("log.enabled") )
       println ( conf.dbCon() )
 
       // 5. Get and use logger
@@ -128,7 +109,7 @@ import scala.collection.mutable.ListBuffer
     /**
      * called when app is done
      */
-    override def onShutdown(): Unit =
+    override def onEnd(): Unit =
     {
       info("app shutting down")
     }
@@ -137,21 +118,9 @@ import scala.collection.mutable.ListBuffer
     override def collectSummaryExtra(): Option[List[(String,String)]] =
     {
       Some(List[(String,String)](
-        ( meta.about.name, " extra 1  = extra summary data1" ),
-        ( meta.about.name, " extra 2  = extra summary data2")
+        ( ctx.app.about.name, " extra 1  = extra summary data1" ),
+        ( ctx.app.about.name, " extra 2  = extra summary data2")
       ))
-    }
-
-
-    override def aboutApp():About = {
-      new About(
-        id = "slatekit.examples",
-        name = "Slate Sample App",
-        desc = "Sample to show the base application",
-        company = "slatekit",
-        version = "0.9.1",
-        contact = "kishore@codehelix.co"
-      )
     }
   }
   
@@ -162,7 +131,35 @@ import scala.collection.mutable.ListBuffer
 ```scala
 
 
-    AppRunner.run(new SampleApp(), Some(Array("-env='qa1.qa'", "-log.level=info")))
+    // 1. Load the config "env.conf" from resources
+    val conf = new Conf(Some("env.conf"))
+
+    // 2. Build the context
+    val ctx = new AppContext (
+      arg  = Args(),
+      env  = conf.env().get,
+      cfg  = conf,
+      log  = new LoggerConsole(),
+      ent  = new Entities(None),
+      dbs  = None,
+      enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
+      inf  = new About(
+        id = "slatekit.examples",
+        name = "Slate Sample App",
+        desc = "Sample to show the base application",
+        company = "slatekit",
+        version = "0.9.1",
+        contact = "kishore@abc.co",
+        region = "",
+        group = "",
+        url = "",
+        tags = "",
+        examples = ""
+      )
+    )
+
+    // 3. Now run the app with context info
+    AppRunner.run(new SampleApp(Some(ctx)))
     
 
 ```
