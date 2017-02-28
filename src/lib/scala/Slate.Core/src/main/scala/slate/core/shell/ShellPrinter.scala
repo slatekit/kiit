@@ -16,36 +16,20 @@ package slate.core.shell
 
 import slate.common.console.ConsoleWriter
 import slate.common.serialization.{SerializerProps}
-import slate.entities.core.{EntitySerializer, Entities, IEntity}
+import slate.entities.core.{EntitySerializer, Entities, Entity}
 import slate.common._
 
 import scala.collection.immutable.LinearSeq
 
 
-object ShellPrinter {
-
-  private var _entities:Option[Entities] = None
-  private val _writer = new ConsoleWriter()
-
-
-  def setEntities(entities:Entities): Unit =
-  {
-    _entities = Some(entities)
-  }
+class ShellPrinter(val _writer:ConsoleWriter, val _entities:Option[Entities]) {
 
 
   def printResult(result:Result[Any]):Unit = {
-
-    if (result.isEmpty) {
-      printEmpty()
-    }
-    else {
-      val data = result.get
-      if (data != null) {
-        printAny(data)
-      }
+    result.fold[Unit](printEmpty())( data => {
+      printAny(data)
       printSummary(result)
-    }
+    })
   }
 
 
@@ -93,7 +77,7 @@ object ShellPrinter {
       case s:Double         => writeText( s.toString )
       case s:Boolean        => writeText( s.toString.toLowerCase )
       case s:DateTime       => writeText( "\"" + s.toString() + "\"" )
-      case s:IEntity        => printEntity(s, _entities)
+      case s:Entity         => printEntity(s, _entities)
       case s:LinearSeq[Any] => printList(s)
       case s: AnyRef        => { val ser = new SerializerProps(); writeText(ser.serialize(s)); }
       case _                => { writeText(obj.toString); writeLine(); }
@@ -121,7 +105,7 @@ object ShellPrinter {
     * @param entity
    * @param entities
    */
-  def printEntity(entity:IEntity, entities:Option[Entities]):Unit =
+  def printEntity(entity:Entity, entities:Option[Entities]):Unit =
   {
     if(entities.isDefined) {
       // Entity ? Print it as text.

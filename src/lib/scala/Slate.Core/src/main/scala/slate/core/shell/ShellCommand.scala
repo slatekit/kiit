@@ -51,8 +51,7 @@ case class ShellCommand( area:String,
     * the area, name and action combined.
     * @return
     */
-  def fullName :String =
-  {
+  def fullName :String = {
     if(Strings.isNullOrEmpty(name))
       area
     else if(Strings.isNullOrEmpty(action))
@@ -69,11 +68,24 @@ case class ShellCommand( area:String,
     * @param action
     * @return
     */
-  def is(area:String, name:String, action:String):Boolean = {
+  def is(area:String, name:String, action:String):Boolean =
+  {
     (
          Strings.isMatch(this.area, area)
       && Strings.isMatch(this.name, name)
       && Strings.isMatch(this.action, action)
     )
+  }
+}
+
+
+object ShellCommand {
+
+  def apply(args:Args, line:String):ShellCommand =
+  {
+    val area = args.getVerb(0)
+    val name = args.getVerb(1)
+    val action = args.getVerb(2)
+    new ShellCommand(area, name, action, line, args)
   }
 }

@@ -19,9 +19,10 @@ import slate.common.args.{ArgsHelper, Args}
 import slate.common.console.ConsoleWriter
 import slate.common.Loops._
 import slate.common.info.Folders
-import slate.common.results.{ResultCode, ResultSupportIn}
-
-import scala.collection.mutable.ListBuffer
+import slate.common.Funcs._
+import slate.common.results.{ResultSupportIn}
+import slate.core.shell.ShellConstants._
+import slate.entities.core.Entities
 
 
 /**
@@ -35,14 +36,19 @@ import scala.collection.mutable.ListBuffer
   * @param settings : Settings for the shell functionality
   */
 class ShellService(
-                    protected val _appMeta:AppMeta,
                     val folders:Folders,
                     val settings:ShellSettings,
+                    protected val _appMeta:AppMeta,
                     protected val _startupCommand:String = "",
-                    protected val _writer:ConsoleWriter = new ConsoleWriter()
+                    protected val _writer:ConsoleWriter = new ConsoleWriter(),
+                    protected val _entities:Option[Entities] = None
                   )
   extends AppMetaSupport with ResultSupportIn
 {
+
+  val _printer = new ShellPrinter(_writer, _entities)
+  val _view = new ShellView(_writer, appInfoList)
+
 
   /**
     * gets the application metadata containing information about this shell application,
@@ -58,8 +64,8 @@ class ShellService(
     */
   def run():Unit =
   {
-    try
-    {
+    val result = attempt(() => {
+
       // Allow derived classes to initialize
       onShellInit()
 
@@ -71,13 +77,10 @@ class ShellService(
 
       // Hooks for after running is completed.
       onShellEnd()
-    }
-    catch
-    {
-      case ex:Exception =>
-      {
-        writeLine(ex.getMessage)
-      }
+    })
+
+    if(!result.success){
+      _writer.error(result.err.fold("")( e => e.getMessage))
     }
   }
 
@@ -100,7 +103,7 @@ class ShellService(
   def onShellRun(): Unit =
   {
     // Startup ( e.g. quick login, set environment etc )
-    handleStartupCommand()
+    handleStartup()
 
     // Keep reading from console until ( exit, quit ) is hit.
     doUntil({
@@ -109,7 +112,7 @@ class ShellService(
       _writer.text(":>", false)
 
       // Get line
-      val line = readLine()
+      val line = scala.io.StdIn.readLine()
 
       // Case 1: Nothing Keep going
       val keepReading = if (Strings.isNullOrEmpty(line))
@@ -154,7 +157,7 @@ class ShellService(
 
 
   /**
-    * Hook for command before it is executed
+    * hook for command before it is executed
     *
     * @param cmd
     * @return
@@ -163,77 +166,50 @@ class ShellService(
 
 
   /**
-    * Executes the command represented by the line
+    * executes the command workflow.
     *
-    * @param line
+    * @param cmd
     * @return
     */
-  def onCommandExecute(line:String): Result[ShellCommand] =
-  {
-    // 1st step, parse the command line into arguments
-    val results = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
+  def onCommandExecute(cmd:ShellCommand): Result[ShellCommand] = {
 
-    // Guard: Bad input !
-    if (!results.success)
-    {
-      showArgumentsError(results.msg)
-      failure[ShellCommand]( msg = results.msg )
-    }
-    else {
-      // Build up the command from inputs
-      val args = results.get
-      var cmd = buildCommand(args, line)
+      // before
+      onCommandBeforeExecute(cmd)
 
-      // Check for system level commands ( exit, help )
-      val assistanceCheck = checkForAssistance(cmd, results)
-
-      // Exit or help ? Do not proceed.
-      if (assistanceCheck.success) {
-        failureWithCode[ShellCommand](assistanceCheck.code, Some(cmd), assistanceCheck.msg,
-          tag = assistanceCheck.tag)
+      // Execute
+      val resultCmd = if (cmd.is("sys", "shell", "batch")) {
+        val batch = new ShellBatch(cmd, this)
+        batch.run()
       }
       else {
-        // Good to go for making calls.
-        // Before run
-        cmd = onCommandBeforeExecute(cmd)
-
-        // Execute
-        if (cmd.is("sys", "shell", "batch")) {
-          val batch = new ShellBatch(cmd, this)
-          cmd = batch.run()
-        }
-        else {
-          cmd = onCommandExecuteInternal(cmd)
-        }
-
-        // After
-        onCommandAfterExecute(cmd)
-
-        // Output
-        handleCommandOutput(cmd)
-
-        if (cmd.result == null) {
-          success(cmd, results.msg)
-        }
-        else {
-          // Return true to indicate continuing to the next command
-          // Only return false if "exit" or "quit" is typed.
-          success(cmd)
-        }
+        onCommandExecuteInternal(cmd)
       }
-    }
+
+      // after
+      onCommandAfterExecute(resultCmd)
+
+      success[ShellCommand](resultCmd)
   }
 
 
-  def onCommandExecuteInternal(cmd:ShellCommand):ShellCommand =
-  {
-    cmd
-  }
+  /**
+    * hook for derived classes to execute the command
+ *
+    * @param cmd
+    * @return
+    */
+  def onCommandExecuteInternal(cmd:ShellCommand):ShellCommand = { cmd }
 
 
+  /**
+    * hook for command after execution ( e.g. currently only does printing )
+ *
+    * @param cmd
+    * @return
+    */
   def onCommandAfterExecute(cmd:ShellCommand):ShellCommand =
   {
-    if(cmd.result != null)
+    if(Option(cmd.result).isDefined)
     {
       // Error ?
       if(cmd.result.success )
@@ -241,12 +217,12 @@ class ShellService(
         // Prints the result data to the screen
         if(settings.enableLogging)
         {
-          printResult(cmd.result)
+          showResult(cmd.result)
         }
         // Only prints whether the call was successful or not
         else
         {
-          ShellPrinter.printSummary(cmd.result)
+          _printer.printSummary(cmd.result)
         }
       }
       else
@@ -259,6 +235,18 @@ class ShellService(
 
 
   /**
+    * Executes the command represented by the line
+    *
+    * @param line
+    * @return
+    */
+  def onCommandExecute(line:String): Result[ShellCommand] =
+  {
+    executeLine(line, true)
+  }
+
+
+  /**
     * Executes a batch of commands ( 1 per line )
     *
     * @param lines
@@ -267,10 +255,10 @@ class ShellService(
     */
   def onCommandBatchExecute(lines:List[String], mode:Int): List[Result[ShellCommand]] = {
     // Keep track of all the command results per line
-    val results = ListBuffer[Result[ShellCommand]]()
+    val results = scala.collection.mutable.ListBuffer[Result[ShellCommand]]()
 
     // For x lines
-    Loops.repeat(lines.size, (ndx) => {
+    Loops.doUntilIndex(lines.size, (ndx) => {
       val line = lines(ndx)
 
       // Execute and store result
@@ -285,92 +273,7 @@ class ShellService(
   }
 
 
-  /**
-    * Shows general help info
-    */
-  protected def showHelp()
-  {
-    _writer.title("Please type your commands")
-    _writer.line()
-
-    _writer.tab(1)
-    _writer.highlight("Syntax")
-    showHelpCommandSyntax()
-
-    _writer.tab(1)
-    _writer.highlight("Examples")
-    showHelpCommandExample()
-
-    _writer.tab(1)
-    _writer.highlight("Available")
-    showHelpExtended()
-
-    _writer.line()
-    _writer.important("type 'exit' or 'quit' to quit program")
-    _writer.url("type 'info' for detailed information")
-    _writer.success("type '?'                 : to list all areas")
-    _writer.success("type 'area ?'            : to list all apis in an area")
-    _writer.success("type 'area.api ?'        : to list all actions in an api")
-    _writer.success("type 'area.api.action ?' : to list all parameters for an action")
-    _writer.line()
-  }
-
-
-  /**
-    * Shows help command structure
-    */
-  protected def showHelpCommandSyntax()
-  {
-    _writer.tab(1)
-    _writer.text("area.api.action  -key=value*")
-    _writer.line()
-  }
-
-
-  /**
-    * Shows help command example syntax
-    */
-  protected def showHelpCommandExample()
-  {
-    _writer.tab(1)
-    _writer.text("app.users.activate -email=johndoe@gmail.com -role=user")
-    _writer.line()
-  }
-
-
-  /**
-    * Shows extra help - useful for derived classes to show more help info
-    */
-  protected def showHelpExtended()
-  {
-  }
-
-
-  protected def showAbout() : Unit = {
-    _writer.line()
-
-    appInfoList(false, (maxLength, item) => {
-      _writer.text(Strings.pad(item._1, maxLength) + " : " + item._2)
-    })
-
-    _writer.line()
-  }
-
-
-  protected def showHelpFor(cmd:ShellCommand, mode:Int): Unit =
-  {
-    _writer.text("help for : " + cmd.fullName)
-  }
-
-
-  protected def showArgumentsError(message:Option[String]): Unit =
-  {
-    _writer.important("Unable to parse arguments")
-    _writer.important("Error : " + message.getOrElse(""))
-  }
-
-
-  protected def handleStartupCommand():Unit =
+  protected def handleStartup():Unit =
   {
     if(!Strings.isNullOrEmpty(_startupCommand))
     {
@@ -380,90 +283,67 @@ class ShellService(
   }
 
 
-  protected def handleCommandOutput(cmd:ShellCommand): Unit =
+  protected def handleOutput(cmd:ShellCommand): Unit =
   {
-    if (cmd.result != null && cmd.result.success && settings.enableOutput)
+    if (Option(cmd.result).isDefined && cmd.result.success && settings.enableOutput)
     {
-      val formatted = serialize(cmd.result)
-      val finalResult = if(formatted == null) "" else formatted.toString()
-      ShellHelper.log(folders, finalResult)
+      val formatted = Option(cmd.result).getOrElse("").toString()
+      ShellFuncs.log(folders, formatted)
     }
   }
 
 
-  def writeLine(text:String):Unit = println(text)
-
-
-  protected def printResult(result:Result[Any]):Unit = ShellPrinter.printResult(result)
-
-
-  protected def readLine():String = scala.io.StdIn.readLine()
-
-
-  protected def serialize(result:Any):String = Option(result).getOrElse("").toString
-
-
-  protected def buildCommand(args:Args, line:String):ShellCommand =
+  /**
+    * Checks the arguments for a help / meta command
+    * e.g.
+    * exit | version | about | help
+    * area ? | area.api ? | area.api.action ?
+    *
+    * @param cmd
+    */
+  protected def checkForHelp(cmd:ShellCommand): Result[Boolean] =
   {
-    val area = args.getVerb(0)
-    val name = args.getVerb(1)
-    val action = args.getVerb(2)
-    new ShellCommand(area, name, action, line, args)
+    handleHelp(cmd, ShellFuncs.checkForAssistance(cmd))
+  }
+
+  /**
+    * Handles the corresponding help / meta command
+    * e.g.
+    * exit | version | about | help
+    * area ? | area.api ? | area.api.action ?
+    *
+    * @param cmd
+    * @param result
+    */
+  def handleHelp(cmd:ShellCommand, result:Result[Boolean]): Result[Boolean] =
+  {
+    val msg = result.msg.getOrElse("")
+
+    msg match {
+      case EXIT         =>
+      case VERSION      => showAbout()
+      case ABOUT        => showHelp()
+      case HELP         => showHelp()
+      case HELP_AREA    => showHelpFor(cmd, ShellConstants.VerbPartArea)
+      case HELP_API     => showHelpFor(cmd, ShellConstants.VerbPartApi)
+      case HELP_ACTION  => showHelpFor(cmd, ShellConstants.VerbPartAction)
+      case _            =>
+    }
+    result
   }
 
 
-  protected def checkForAssistance(cmd:ShellCommand, results:Result[Any]): Result[Boolean] =
-  {
-    val words = cmd.args.raw
-    val verbs = cmd.args.actionVerbs
+  protected def showAbout(): Unit = _view.showAbout()
 
-    // Case 1: Exit ?
-    if (ArgsHelper.isExit(words, 0))
-    {
-      yesWithCode(ResultCode.EXIT, msg = Some("exit"), tag = Some(cmd.args.action))
-    }
-    // Case 2a: version ?
-    else if (ArgsHelper.isVersion(words, 0))
-    {
-      showAbout()
-      yesWithCode(ResultCode.HELP, msg = Some("version"), tag = Some(cmd.args.action))
-    }
-    // Case 2b: about ?
-    else if (ArgsHelper.isAbout(words, 0))
-    {
-      showAbout()
-      yesWithCode(ResultCode.HELP, msg = Some("about"), tag = Some(cmd.args.action))
-    }
-    // Case 3a: Help ?
-    else if (ArgsHelper.isHelp(words, 0))
-    {
-      showHelp()
-      yesWithCode(ResultCode.HELP, msg = Some("help"), tag = Some(cmd.args.action))
-    }
-    // Case 3b: Help on area ?
-    else if (ArgsHelper.isHelp(verbs, 1))
-    {
-      showHelpFor(cmd, ShellConstants.VerbPartArea)
-      yesWithCode(ResultCode.HELP, msg = Some("area ?"), tag = Some(cmd.args.action))
-    }
-    // Case 3c: Help on api ?
-    else if (ArgsHelper.isHelp(verbs, 2))
-    {
-      showHelpFor(cmd, ShellConstants.VerbPartApi)
-      yesWithCode(ResultCode.HELP, msg = Some("area.api ?"), tag = Some(cmd.args.action))
-    }
-    // Case 3d: Help on action ?
-    else if (!Strings.isNullOrEmpty(cmd.args.action) &&
-                ( ArgsHelper.isHelp(cmd.args.positional, 0) ||
-                  ArgsHelper.isHelp(verbs, 3))
-            )
-    {
-      showHelpFor(cmd, ShellConstants.VerbPartAction)
-      yesWithCode(ResultCode.HELP, msg = Some("area.api.action ?"), tag = Some(cmd.args.action))
-    }
-    else
-      no()
-  }
+
+  protected def showHelp(): Unit = _view.showHelp()
+
+
+  protected def showHelpFor(cmd:ShellCommand, mode:Int): Unit = _view.showHelpFor(cmd, mode)
+
+
+  protected def showResult(result:Result[Any]):Unit = _printer.printResult(result)
+
 
 
   private def display(msg:Option[String], err:Option[Exception] = None):Unit = {
@@ -474,42 +354,30 @@ class ShellService(
   }
 
 
-  private def executeLine(line:String, checkForHelp:Boolean):Result[ShellCommand] = {
+  private def executeLine(line:String, checkHelp:Boolean):Result[ShellCommand] = {
+
     // 1st step, parse the command line into arguments
-    val results = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
+    val argsResult = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
 
-    // Guard: Bad input !
-    if (!results.success)
-    {
-      showArgumentsError(results.msg)
-      badRequest[ShellCommand](msg = results.msg, tag = Some(line))
+    def error(argsResult:Result[Args]): Result[ShellCommand] = {
+      _view.showArgumentsError(argsResult.msg)
+      badRequest[ShellCommand](msg = argsResult.msg, tag = Some(line))
     }
-    else {
-      // Build up the command from inputs
-      val args = results.get
-      val cmd = buildCommand(args, line)
 
-      // Check for system level commands ( exit, help )
-      val checkResult = checkForAssistance(cmd, results)
+    argsResult.fold( error(argsResult) )( args => {
 
-      // Exit or help ? Do not proceed.
-      if (checkResult.success) {
-        failureWithCode[ShellCommand](checkResult.code, Some(cmd), checkResult.msg,
-          tag = checkResult.tag)
+      // Build command from arguments
+      val cmd = ShellCommand(args, line)
+
+      // Check for exit, help, about, etc
+      val help = if(checkHelp) checkForHelp(cmd) else no()
+
+      if (help.success) {
+        failureWithCode[ShellCommand](help.code, help.msg, tag = help.tag, ref = Some(cmd))
       }
       else {
-        // Good to go for making calls.
-        // Before run
-        onCommandBeforeExecute(cmd)
-
-        // Execute
-        onCommandExecuteInternal(cmd)
-
-        // After
-        onCommandAfterExecute(cmd)
-
-        success[ShellCommand](cmd)
+        onCommandExecute(cmd)
       }
-    }
+    })
   }
 }

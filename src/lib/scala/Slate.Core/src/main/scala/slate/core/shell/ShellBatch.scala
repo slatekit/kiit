@@ -13,7 +13,7 @@
 package slate.core.shell
 
 import slate.common.results.{ResultSupportIn, ResultCode}
-import slate.common.{Result, Strings, Files}
+import slate.common._
 
 class ShellBatch(val cmd:ShellCommand, val svc:ShellService) extends ResultSupportIn {
 
@@ -22,7 +22,7 @@ class ShellBatch(val cmd:ShellCommand, val svc:ShellService) extends ResultSuppo
 
     val path = svc.folders.inputs + "/" + cmd.args.getString("file")
     val lines = Files.readAllLines(path)
-    if(lines == null || lines.size == 0){
+    if(Option(lines).isEmpty || lines.isEmpty){
       cmd
     }
     else {
@@ -39,7 +39,7 @@ class ShellBatch(val cmd:ShellCommand, val svc:ShellService) extends ResultSuppo
         }
       })
       if (svc.settings.enableOutput) {
-        ShellHelper.log(svc.folders, messages)
+        ShellFuncs.log(svc.folders, messages)
       }
       val batchResult = cmd.copy(result = ok(Some("batch output written to output directory")))
       batchResult

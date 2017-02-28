@@ -20,4 +20,12 @@ object ShellConstants {
   val VerbPartArea = 1
   val VerbPartApi = 2
   val VerbPartAction = 3
+
+  val EXIT        = "exit"
+  val VERSION     = "version"
+  val ABOUT       = "about"
+  val HELP        = "help"
+  val HELP_AREA   = "area ?"
+  val HELP_API    = "area.api ?"
+  val HELP_ACTION = "area.api.action ?"
 }
