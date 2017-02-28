@@ -18,8 +18,14 @@ import scala.annotation.tailrec
 
 object Funcs {
 
-  type guard = () => Boolean
-
+  /**
+   * checks if there are any items in the list
+   * null, 0 size yield false
+   * @param items
+   * @tparam T
+   * @return
+   */
+  def any[T](items:Seq[T]):Boolean = Option(items).fold(false)( i => i.nonEmpty)
 
 
   /**

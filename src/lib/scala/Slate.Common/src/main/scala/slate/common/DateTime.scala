@@ -21,17 +21,16 @@ import java.util.{Date, Calendar}
   * Wraps the LocalDateTime / ZonedDateTime api into a singular
   * class with convenience properties / methods.
   *
-  * @param _date
+  * @param raw
   */
-class DateTime(private val _date: LocalDateTime )  {
+case class DateTime(val raw: LocalDateTime )  {
 
-  val year    = _date.getYear
-  val month   = _date.getMonth.getValue
-  val day     = _date.getDayOfMonth
-  val hours   = _date.getHour
-  val minutes = _date.getMinute
-  val seconds = _date.getSecond
-  val raw     = _date
+  def year    = raw.getYear
+  def month   = raw.getMonth.getValue
+  def day     = raw.getDayOfMonth
+  def hours   = raw.getHour
+  def minutes = raw.getMinute
+  def seconds = raw.getSecond
 
 
   /**
@@ -42,77 +41,37 @@ class DateTime(private val _date: LocalDateTime )  {
   def this(d:ZonedDateTime) = this(d.toLocalDateTime)
 
 
-  def this(d:Date) = this(DateTime.create(d))
-
-
-  /**
-    * Creates local datetime from zoned
-    *
-    * @param d
-    */
-  def this(d:DateTime) = this(d._date)
-
-
-  /**
-    * Creates a local datetime from date / time parts.
-    *
-    * @param year
-    * @param month
-    * @param day
-    * @param hours
-    * @param minutes
-    * @param seconds
-    */
-  def this( year: Int,  month: Int, day: Int, hours: Int, minutes: Int, seconds: Int )  =
-  {
-    this(LocalDateTime.of(year, month, day, hours, minutes, seconds))
-  }
-
-
-  /**
-    * Creates a local datetime from date only.
-    *
-    * @param year
-    * @param month
-    * @param day
-    */
-  def this( year: Int,  month: Int, day: Int)  =
-  {
-    this(year, month, day, 12, 0, 0)
-  }
-
-
   def date() : DateTime = {
-    val date = _date.toLocalDate
-    new DateTime(date.getYear, date.getMonth.getValue, date.getDayOfMonth)
+    val date = raw.toLocalDate
+    DateTime(date.getYear, date.getMonth.getValue, date.getDayOfMonth)
   }
 
 
   def time(): TimeSpan = {
-    val time = _date.toLocalTime
+    val time = raw.toLocalTime
     new TimeSpan(time.getHour, time.getMinute, time.getSecond)
   }
 
 
-  def addYears(years: Int) : DateTime = new DateTime(_date.plusYears(years))
+  def addYears(years: Int) : DateTime = new DateTime(raw.plusYears(years))
 
 
-  def addMonths(months: Int) : DateTime = new DateTime(_date.plusMonths(months))
+  def addMonths(months: Int) : DateTime = new DateTime(raw.plusMonths(months))
 
 
-  def addDays(days: Int) : DateTime = new DateTime(_date.plusDays(days))
+  def addDays(days: Int) : DateTime = new DateTime(raw.plusDays(days))
 
 
-  def addHours(hours: Int) : DateTime = new DateTime(_date.plusHours(hours))
+  def addHours(hours: Int) : DateTime = new DateTime(raw.plusHours(hours))
 
 
-  def addMins(mins: Int) : DateTime = new DateTime(_date.plusMinutes(mins))
+  def addMins(mins: Int) : DateTime = new DateTime(raw.plusMinutes(mins))
 
 
-  def addMinutes(mins: Int) : DateTime = new DateTime(_date.plusMinutes(mins))
+  def addMinutes(mins: Int) : DateTime = new DateTime(raw.plusMinutes(mins))
 
 
-  def addSeconds(secs: Int) : DateTime = new DateTime(_date.plusSeconds(secs))
+  def addSeconds(secs: Int) : DateTime = new DateTime(raw.plusSeconds(secs))
 
 
   def timeOfDay() : TimeSpan = new TimeSpan(hours, minutes, seconds)
@@ -137,26 +96,26 @@ class DateTime(private val _date: LocalDateTime )  {
 
 
   def compareTo(dt:DateTime) : Int = {
-    val result = _date.toInstant(ZoneOffset.UTC).compareTo(dt._date.toInstant(ZoneOffset.UTC))
+    val result = raw.toInstant(ZoneOffset.UTC).compareTo(dt.raw.toInstant(ZoneOffset.UTC))
     result
   }
 
 
-  def atUtc() : DateTime = new DateTime(_date.atZone(ZoneId.of(DateTime.UTC) ))
+  def atUtc() : DateTime = new DateTime(raw.atZone(ZoneId.of(DateTime.UTC) ))
 
 
-  def atZone(zone: String) : DateTime = new DateTime(_date.atZone(ZoneId.of(zone)))
+  def atZone(zone: String) : DateTime = new DateTime(raw.atZone(ZoneId.of(zone)))
 
 
   def durationFrom (dt:DateTime): Duration = {
-    val duration = Duration.between(_date.toInstant(ZoneOffset.UTC),
-      dt._date.toInstant(ZoneOffset.UTC))
+    val duration = Duration.between(raw.toInstant(ZoneOffset.UTC),
+      dt.raw.toInstant(ZoneOffset.UTC))
     duration
   }
 
 
   def periodFrom (dt:DateTime): Period = {
-    val period = Period.between(_date.toLocalDate, dt._date.toLocalDate )
+    val period = Period.between(raw.toLocalDate, dt.raw.toLocalDate )
     period
   }
 
@@ -228,7 +187,7 @@ class DateTime(private val _date: LocalDateTime )  {
 
 
   override def toString: String = {
-    _date.toString
+    raw.toString
   }
 }
 
@@ -237,6 +196,31 @@ class DateTime(private val _date: LocalDateTime )  {
 object DateTime {
 
   val UTC = "UTC"
+
+
+  def apply(d:Date):DateTime = new DateTime(create(d))
+
+
+  def apply(d:DateTime) = new DateTime(d.raw)
+
+
+  def apply( year: Int,  month: Int, day: Int, hours: Int, minutes: Int, seconds: Int )  =
+  {
+    new DateTime(LocalDateTime.of(year, month, day, hours, minutes, seconds))
+  }
+
+
+  /**
+   * Creates a local datetime from date only.
+   *
+   * @param year
+   * @param month
+   * @param day
+   */
+  def apply( year: Int,  month: Int, day: Int)  =
+  {
+    new DateTime(LocalDateTime.of(year, month, day, 12, 0, 0))
+  }
 
 
   def now(): DateTime = new DateTime(LocalDateTime.now())
@@ -248,7 +232,7 @@ object DateTime {
   def today(): DateTime =
   {
     val today = LocalDateTime.now()
-    val d = new DateTime(today.getYear, today.getMonth.getValue, today.getDayOfMonth)
+    val d = DateTime(today.getYear, today.getMonth.getValue, today.getDayOfMonth)
     d
   }
 
@@ -332,7 +316,7 @@ object DateTime {
     val monthTxt = text.substring(4, 6)
     val dayTxt   = text.substring(6, 8)
     val month = Integer.parseInt(monthTxt)
-    new DateTime(Integer.parseInt(yearTxt), month, Integer.parseInt(dayTxt))
+    DateTime(Integer.parseInt(yearTxt), month, Integer.parseInt(dayTxt))
   }
 
 
@@ -345,7 +329,7 @@ object DateTime {
     val month = Integer.parseInt(monthTxt)
     val hours = Integer.parseInt(hrsTxt)
     val mins  = Integer.parseInt(minTxt)
-    val date = new DateTime(Integer.parseInt(yearTxt), month - 1, Integer.parseInt(dayTxt), hours, mins, 0);
+    val date = DateTime(Integer.parseInt(yearTxt), month - 1, Integer.parseInt(dayTxt), hours, mins, 0);
     date
   }
 }

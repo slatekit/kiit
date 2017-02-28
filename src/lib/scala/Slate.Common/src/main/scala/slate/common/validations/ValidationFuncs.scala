@@ -14,7 +14,7 @@
 package slate.common.validations
 
 import slate.common.RegexPatterns._
-import slate.common.{Reference, Strings}
+import slate.common._
 import ValidationConsts._
 
 import scala.util.matching.Regex
@@ -65,12 +65,49 @@ object ValidationFuncs {
   def isPhoneUS           ( text: String ) : Boolean = isMatch( phoneUS          , text )
 
 
+
+  /**
+   * Validates the sequence of items. This is basically a foldLeft with the sequence supplied.
+   * This stops processing further items if one fails
+   * @param startValue : The starting value
+   * @param items      : The items to validate
+   * @param f          : The function to use to validate
+   * @tparam R         : The type of the result
+   * @tparam S         : The type of the item
+   * @return           : Type R result
+   */
+  def validateResults[S,R](startValue: Result[R], items:Seq[S])(f: (S) => Result[R])
+  : Result[R] =
+  {
+    if(Option(items).isEmpty) {
+      startValue
+    }
+    else {
+      Loops.repeatWithIndexResult[R](0, items.size, startValue, (ndx) => {
+        val item = items(ndx)
+        f(item)
+      })
+    }
+  }
+
+
+/*
   def isMatch(pattern:String, text:String): Boolean = {
     if(Strings.isNullOrEmpty(text)) {
       false
     }
     else {
       new Regex(pattern).findFirstIn(text).isDefined
+    }
+  }
+*/
+
+  def isMatch(pattern:Pattern, text:String): Boolean = {
+    if(Strings.isNullOrEmpty(text)) {
+      false
+    }
+    else {
+      new Regex(pattern.pattern).findFirstIn(text).isDefined
     }
   }
 

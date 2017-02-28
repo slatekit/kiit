@@ -11,8 +11,6 @@
 
 package slate.common
 
-import scala.util.Random
-
 
 object Random {
 
@@ -21,7 +19,7 @@ object Random {
   val LETTERS_ALL   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
   val ALPHA = "0123456789abcdefghijklmnopqrstuvwxyz"
   val ALPHASYM = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,./<>?"
-  val rnd = new Random()
+  val rnd = new scala.util.Random()
 
 
   def string3():String = stringN(3)

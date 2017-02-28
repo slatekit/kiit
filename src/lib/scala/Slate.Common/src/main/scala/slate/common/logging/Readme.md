@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Logger
+permalink: /mod-logger
+---
+
 # Logger
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple logger with extensibility for using other 3rd party loggers | 
-| **date**| 2016-11-21T16:49:15.693 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.133 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.logging  |
 | **source core** | slate.common.logging.Logger.scala  |
@@ -36,8 +42,10 @@ import slate.common.results.ResultSupportIn
   // 2. loggly
   // 3. new relic
   //
-  // Setup the static logger with implementation for logging to console.
-  Logger.init(LogLevel.Info, new LoggerConsole())
+  val _log = Some(new LoggerConsole())
+
+  override protected def log(): Option[LoggerBase] = _log
+
 
   // Setup a custom logger
   class MyCustomLogger extends LoggerBase {
@@ -63,28 +71,28 @@ import slate.common.results.ResultSupportIn
     // 1. message only
     // 2. message + exception
     // 3. message + exception + tag
-    Logger.debug("debug with message only")
-    Logger.info("info with message and exception", Some(ex))
-    Logger.warn("debug with message, exception, and tag", Some(ex), Some("APP1") )
-    Logger.fatal("fatal message", tag = Some("123"))
+    val logger = new LoggerConsole(Debug)
+    logger.debug("debug with message only")
+    logger.info("info with message and exception", Some(ex))
+    logger.warn("debug with message, exception, and tag", Some(ex), Some("APP1") )
+    logger.fatal("fatal message", tag = Some("123"))
 
     // CASE: 2 Standard info, warn, error levels available
     // Same overloads ( msg, ex, tag ) are available.
-    Logger.debug("debug")
-    Logger.info("info")
-    Logger.warn("warn")
-    Logger.error("error")
-    Logger.fatal("fatal")
+    logger.debug("debug")
+    logger.info("info")
+    logger.warn("warn")
+    logger.error("error")
+    logger.fatal("fatal")
 
 
     // CASE 3: Log explicitly using log method.
-    Logger.log(LogLevel.Error, "error", Some(ex), Some("APP1"))
+    logger.log(Error, "error", Some(ex), Some("APP1"))
 
 
     // CASE 4: You can extend a class with the LogSupportIn trait
     // to add logging methods to any class. The trait expects to have
     // a _log member variable available.
-    _log = Some(new LoggerConsole())
     debug("debug from trait")
     info ("info from trait")
     warn ("warn from trait")

@@ -317,12 +317,12 @@ class Model(val name:String,
    */
   def eachField(callback:(ModelField, Int) => Unit ):Unit = {
     _propList.map( props => {
-      if(callback != null) {
+      Option(callback).fold[Unit](Unit)( call => {
         props.indices.foreach( ndx => {
           val field = props(ndx)
-          callback(field, ndx)
+          call(field, ndx)
         })
-      }
+      })
       Unit
     })
   }

@@ -1,10 +1,16 @@
+---
+layout: start_page_mods_utils
+title: module Encrypt
+permalink: /mod-encrypt
+---
+
 # Encrypt
 
-| field | value  | 
+{: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Encryption using AES | 
-| **date**| 2016-11-21T16:49:15.683 |
-| **version** | 0.9.1  |
+| **date**| 2017-02-27T17:37:20.116 |
+| **version** | 1.2.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.encrypt  |
 | **source core** | slate.common.encrypt.Encryptor.scala  |
@@ -15,14 +21,14 @@
 ## Import
 ```scala 
 // required 
-import slate.common.encrypt.{Encryptor}
-import slate.common.results.ResultSupportIn
+import slate.common.encrypt.Encryptor
 
 
 
 // optional 
-import slate.common.{Ensure, Strings, Result}
-import slate.common.encrypt.{EncryptSupportIn}
+import slate.common.{Strings}
+import slate.common.encrypt.EncryptSupportIn
+import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd
 
 
@@ -60,12 +66,11 @@ import slate.core.cmds.Cmd
 
 
     // CASE 3: Ensure decrypted matches original
-    Ensure.isTrue(Strings.isMatch(input, decrypted), "Encryption / decrypting does not work")
+    require(Strings.isMatch(input, decrypted), "Encryption / decrypting does not work")
 
 
     // CASE 4: Use the EncryptSupportIn trait to have built in encrypt/decrypt methods
     // NOTE: You just have to have an _enc member field
-    _enc = Some(TestEncryptor)
     println( encrypt(input))
     println( decrypt(encrypted) )
 

@@ -11,22 +11,22 @@
 
 package slate.common.http
 
-import java.io.{InputStream, InputStreamReader, BufferedReader}
 import java.net.{URLEncoder, HttpURLConnection, URL}
 import java.nio.charset.StandardCharsets
 
-import slate.common.{Strings, IO, Result}
+import slate.common.{Strings, Result}
 import slate.common.results.{ResultSupportIn, ResultCode}
 
-//import com.sun.deploy.net.URLEncoder
 import com.sun.org.apache.xml.internal.security.utils.Base64
 
 
 object HttpHelper extends ResultSupportIn {
 
+  /*
   def postIO(client: HttpClient, req:HttpRequest): IO[Result[Boolean]] = {
     new IO[Result[Boolean]]( () => post(client, req) )
   }
+  */
 
 
   def post(client: HttpClient, req:HttpRequest):Result[Boolean] = {

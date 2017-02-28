@@ -17,7 +17,15 @@ import slate.common.results.ResultFuncs._
 import scala.collection.mutable.ListBuffer
 
 
-
+/**
+  * Simple in-memory implementation of a queue.
+  * This is used for ad-hoc light-weight implementations and for
+  * unit-tests for the unified queues.
+  *
+  * NOTE:
+  * This should not be used in production environment. In-stead, use
+  * the Slate.Cloud AWS SQS queue
+  */
 class QueueSourceDefault extends QueueSource with QueueSourceMsg {
 
   protected val _list = new ListBuffer[Any]()
@@ -86,7 +94,7 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
   override def sendFromFile(fileNameLocal:String, tagName:String = "", tagValue:String = "") : Result[String] =
   {
     val path = Uris.interpret(fileNameLocal)
-    path.fold(failure(Some(""), msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
+    path.fold[Result[String]](failure(msg = Some("Invalid file path: " + fileNameLocal)))( pathLocal => {
       val content = Files.readAllText(pathLocal)
       send(content, tagName, tagValue)
     })

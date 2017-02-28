@@ -62,7 +62,7 @@ object Files {
   {
     val file = loadUserAppFile(directory, fileName)
     val lines = readAllLines(file.getAbsolutePath)
-    if(lines == null || lines.size == 0) {
+    if(Option(lines).fold(true)( l => l.isEmpty)) {
       None
     }
     else {
@@ -85,18 +85,18 @@ object Files {
 
   def read[T](path:String, defaultVal:T, callback:(BufferedSource) => T):T =
   {
-    val res:(Boolean, T, BufferedSource) = try {
+    val res:(Boolean, T, Option[BufferedSource]) = try {
       val c = scala.io.Source.fromFile(path)
       val r = callback(c)
-      (true, r, c)
+      (true, r, Some(c))
     }
     catch{
       case ex:Exception => {
-        (false, defaultVal, null)
+        (false, defaultVal, None)
       }
     }
     if(res._1){
-      res._3.close()
+      res._3.foreach(c => c.close())
     }
     res._2
   }

@@ -13,22 +13,32 @@
 
 package slate.common
 
+/**
+  * Named pattern as a value class
+  * @param pattern
+  */
+class Pattern(val pattern:String) extends AnyVal
+
+
+/**
+  * Named regex pattern
+  */
 object RegexPatterns {
-  val email                                 = """(\w+)@([\w\.]+)"""
-  val alpha                                 = """^[a-zA-Z]*$"""
-  val alphaUpperCase                        = """^[A-Z]*$"""
-  val alphaLowerCase                        = """^[a-z]*$"""
-  val alphaNumeric                          = """^[a-zA-Z0-9]*$"""
-  val alphaNumericSpace                     = """^[a-zA-Z0-9 ]*$"""
-  val alphaNumericSpaceDash                 = """^[a-zA-Z0-9 \-]*$"""
-  val alphaNumericSpaceDashUnderscore       = """^[a-zA-Z0-9 \-_]*$"""
-  val alphaNumericSpaceDashUnderscorePeriod = """^[a-zA-Z0-9\. \-_]*$"""
-  val numeric                               = """^\-?[0-9]*\.?[0-9]*$"""
-  val socialSecurity                        = """\d{3}[-]?\d{2}[-]?\d{4}"""
-  val url                                   = """^^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_=]*)?$"""
-  val zipCodeUS                             = """^\d{5}$"""
-  val zipCodeUSWithFour                     = """\d{5}[-]\d{4}"""
-  val sipCodeUSWithFourOptional             = """\d{5}([-]\d{4})?"""
-  val phoneUS                               = """\d{3}[-]?\d{3}[-]?\d{4}"""
+  val email                                 = new Pattern("""(\w+)@([\w\.]+)""")
+  val alpha                                 = new Pattern("""^[a-zA-Z]*$""")
+  val alphaUpperCase                        = new Pattern("""^[A-Z]*$""")
+  val alphaLowerCase                        = new Pattern("""^[a-z]*$""")
+  val alphaNumeric                          = new Pattern("""^[a-zA-Z0-9]*$""")
+  val alphaNumericSpace                     = new Pattern("""^[a-zA-Z0-9 ]*$""")
+  val alphaNumericSpaceDash                 = new Pattern("""^[a-zA-Z0-9 \-]*$""")
+  val alphaNumericSpaceDashUnderscore       = new Pattern("""^[a-zA-Z0-9 \-_]*$""")
+  val alphaNumericSpaceDashUnderscorePeriod = new Pattern("""^[a-zA-Z0-9\. \-_]*$""")
+  val numeric                               = new Pattern("""^\-?[0-9]*\.?[0-9]*$""")
+  val socialSecurity                        = new Pattern("""\d{3}[-]?\d{2}[-]?\d{4}""")
+  val url                                   = new Pattern("""^^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_=]*)?$""")
+  val zipCodeUS                             = new Pattern("""^\d{5}$""")
+  val zipCodeUSWithFour                     = new Pattern("""\d{5}[-]\d{4}""")
+  val sipCodeUSWithFourOptional             = new Pattern("""\d{5}([-]\d{4})?""")
+  val phoneUS                               = new Pattern("""\d{3}[-]?\d{3}[-]?\d{4}""")
 }
 

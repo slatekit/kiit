@@ -91,7 +91,7 @@ object Strings {
 
 
   def valueOptionOrDefault(opt:Option[String], defaultVal:String): String = {
-    valueOrDefault(opt.getOrElse(null), defaultVal)
+    valueOrDefault(opt.getOrElse(defaultVal), defaultVal)
   }
 
 
@@ -158,19 +158,7 @@ object Strings {
   def isNullOrEmpty(text:String):Boolean = text == null || text == ""
 
 
-  def isMatch(text1:String, text2:String):Boolean =
-  {
-    // TODO: Remove this and use builtin
-    // Left over from before
-    if(text1 == null && text2 == null)
-      true
-    else if(text1 != null && text2 == null)
-      false
-    else if (text1 == null && text2 != null)
-      false
-    else
-      text1 == text2
-  }
+  def isMatch(text1:String, text2:String):Boolean = text1 == text2
 
 
   def valueOrDefault(primary:String, secondary:String, defaultVal:String): String =
@@ -186,7 +174,7 @@ object Strings {
 
   def maxLength(items:List[String]):Int =
   {
-    val len = if(items == null) 0 else items.length
+    val len = Option(items).fold(0)( all => all.size)
     len match {
       case 0 => 0
       case _ =>  items.reduce( (a,b) => if (a.length > b.length ) a else b ).length

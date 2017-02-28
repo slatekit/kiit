@@ -29,7 +29,7 @@ object HttpUtility {
     // Get content
     val inputStream = connection.getInputStream
     val content = io.Source.fromInputStream(inputStream).mkString
-    if (inputStream != null) inputStream.close
+    Option(inputStream).foreach( i => i.close())
     content
   }
 }

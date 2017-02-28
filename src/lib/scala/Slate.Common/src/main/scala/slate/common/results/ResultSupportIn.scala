@@ -8,7 +8,6 @@
   usage: Please refer to license on github for more info.
 </slate_header>
   */
-
 package slate.common.results
 
 import slate.common.{Reference, FailureResult, SuccessResult, Result}
@@ -23,8 +22,8 @@ trait ResultSupportIn {
    * @return
    */
   protected def help(msg:Option[String] = Some("success"),
-                     tag:Option[String] = None,
-                     ref:Option[Any]    = None): Result[String] =
+           tag:Option[String] = None,
+           ref:Option[Any]    = None): Result[String] =
   {
     new FailureResult[String](code = ResultCode.HELP, msg = msg, tag = tag, ref = ref)
   }
@@ -37,8 +36,8 @@ trait ResultSupportIn {
    * @return
    */
   protected def helpOn[T](msg:Option[String] = Some("success"),
-                          tag:Option[String] = None,
-                          ref:Option[Any]    = None): Result[T] =
+                tag:Option[String] = None,
+                ref:Option[Any]    = None): Result[T] =
   {
     new FailureResult[T](code = ResultCode.HELP, msg = msg, tag = tag, ref = ref)
   }
@@ -51,8 +50,8 @@ trait ResultSupportIn {
    * @return
    */
   protected def exit(msg:Option[String] = Some("exit"),
-                     tag:Option[String] = None,
-                     ref:Option[Any]    = None): Result[String] =
+           tag:Option[String] = None,
+           ref:Option[Any]    = None): Result[String] =
   {
     new FailureResult[String](code = ResultCode.EXIT, msg = msg, tag = tag, ref = ref)
   }
@@ -65,26 +64,24 @@ trait ResultSupportIn {
    * @return
    */
   protected def yes(msg   :Option[String] = None,
-                    tag   :Option[String] = None,
-                    ref   :Option[Any]    = None,
-                    format:Option[String] = None): Result[Boolean] =
+          tag   :Option[String] = None,
+          ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
 
 
   /**
-    * Boolean result : return a SomeResult with bool value of true
-    * @param code : Code
-    * @param msg  : Optional message
-    * @param tag  : Optional tag
-    * @return
-    */
+   * Boolean result : return a SomeResult with bool value of true
+   * @param code : Code
+   * @param msg  : Optional message
+   * @param tag  : Optional tag
+   * @return
+   */
   protected def yesWithCode( code  :Int,
-                             msg   :Option[String] = None,
-                             tag   :Option[String] = None,
-                             ref   :Option[Any]    = None,
-                             format:Option[String] = None): Result[Boolean] =
+                   msg   :Option[String] = None,
+                   tag   :Option[String] = None,
+                   ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, code, msg = msg, tag = tag, ref = ref)
   }
@@ -100,10 +97,27 @@ trait ResultSupportIn {
    *              available as part of the Result[T] class.
    */
   protected def no(msg:Option[String] = None,
-                   tag:Option[String] = None,
-                   ref:Option[Any]    = None): Result[Boolean] =
+         tag:Option[String] = None,
+         ref:Option[Any]    = None): Result[Boolean] =
   {
-    new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, tag = tag, ref = ref)
+    new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, tag = tag, ref = ref)
+  }
+
+
+  /**
+   * Boolean result : return a SomeResult with bool value of false
+   * @param msg : Optional message
+   * @param tag : Optional tag
+   * @return
+   * @note      : This is not to be confused as an error result, but a legitimate
+   *              return value of false ( along with the message, tag, etc being
+   *              available as part of the Result[T] class.
+   */
+  protected def err(msg:String,
+            tag:Option[String] = None,
+            ref:Option[Any]    = None): Result[Boolean] =
+  {
+    new FailureResult[Boolean](ResultCode.FAILURE, msg = Option(msg), tag = tag, ref = ref)
   }
 
 
@@ -128,53 +142,52 @@ trait ResultSupportIn {
    * @return
    */
   protected def okOrFailure(success:Boolean,
-                            msg:Option[String] = None,
-                            tag:Option[String] = None,
-                            ref:Option[Any]    = None): Result[Boolean] =
+                  msg:Option[String] = None,
+                  tag:Option[String] = None,
+                  ref:Option[Any]    = None): Result[Boolean] =
   {
     if(success)
       new SuccessResult[Boolean](true, ResultCode.SUCCESS, msg, tag)
     else
-      new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
+      new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
   }
 
-
   /**
-    * Builds either a SuccessResult or an FailureResult based on the success flag.
-    * @param msg : Optional message
-    * @param tag : Optional tag
-    * @return
-    */
-  protected def successOrError[T](success:Boolean,
-                                  data:T,
-                                  msg:Option[String] = None,
-                                  tag:Option[String] = None,
-                                  ref:Option[Any]    = None): Result[T] =
-  {
-    if(success)
-      new SuccessResult[T](data, ResultCode.SUCCESS, msg, tag)
-    else
-      new FailureResult[T](Option(data), ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
-  }
-
-
-  /**
-    * Builds either a SuccessResult or an FailureResult based on the success flag.
-    * @param msg : Optional message
-    * @param tag : Optional tag
-    * @return
-    */
+   * Builds either a SuccessResult or an FailureResult based on the success flag.
+   * @param msg : Optional message
+   * @param tag : Optional tag
+   * @return
+   */
   protected def successOrErrorWithCode[T](success:Boolean,
-                                          data:T,
-                                          code:Int,
-                                          msg:Option[String] = None,
-                                          tag:Option[String] = None,
-                                          ref:Option[Any]    = None): Result[T] =
+                                data:T,
+                                code:Int,
+                                msg:Option[String] = None,
+                                tag:Option[String] = None,
+                                ref:Option[Any]    = None): Result[T] =
   {
     if(success)
       new SuccessResult[T](data, code, msg, tag)
     else
-      new FailureResult[T](Option(data), code, msg = msg, err = None, tag = tag, ref = ref)
+      new FailureResult[T](code, msg = msg, err = None, tag = tag, ref = ref)
+  }
+
+
+  /**
+   * Builds either a SuccessResult or an FailureResult based on the success flag.
+   * @param msg : Optional message
+   * @param tag : Optional tag
+   * @return
+   */
+  protected def successOrError[T](success:Boolean,
+                        data:Option[T],
+                        msg:Option[String] = None,
+                        tag:Option[String] = None,
+                        ref:Option[Any]    = None): Result[T] =
+  {
+    if(success)
+      new SuccessResult[T](data.get, ResultCode.SUCCESS, msg, tag)
+    else
+      new FailureResult[T](ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
   }
 
 
@@ -199,10 +212,9 @@ trait ResultSupportIn {
    * @return
    */
   protected def success[T](data:T,
-                           msg   :Option[String] = Some("success"),
-                           tag   :Option[String] = None,
-                           ref   :Option[Any]    = None,
-                           format:Option[String] = None): Result[T] =
+                 msg   :Option[String] = Some("success"),
+                 tag   :Option[String] = None,
+                 ref   :Option[Any]    = None): Result[T] =
   {
     new SuccessResult[T](data, code = ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
@@ -215,9 +227,8 @@ trait ResultSupportIn {
    * @return
    */
   protected def ok( msg   :Option[String] = Some("success"),
-                    tag   :Option[String] = None,
-                    ref   :Option[Any]    = None,
-                    format:Option[String] = None): Result[Boolean] =
+          tag   :Option[String] = None,
+          ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, code = ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
@@ -230,9 +241,9 @@ trait ResultSupportIn {
    * @return
    */
   protected def confirm[T](data:T,
-                           msg:Option[String] = Some("confirm"),
-                           tag:Option[String] = None,
-                           ref:Option[Any]    = None): Result[T] =
+                 msg:Option[String] = Some("confirm"),
+                 tag:Option[String] = None,
+                 ref:Option[Any]    = None): Result[T] =
   {
     new SuccessResult[T](data, ResultCode.CONFIRM, msg = msg, tag = tag, ref = ref)
   }
@@ -244,30 +255,28 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def failure[T]( data:Option[T]        = None,
-                            msg:Option[String]    = Some("failure"),
-                            err:Option[Exception] = None,
-                            tag:Option[String]    = None,
-                            ref:Option[Reference]    = None): Result[T] =
+  protected def failure[T]( msg:Option[String]    = Some("failure"),
+                  err:Option[Exception] = None,
+                  tag:Option[String]    = None,
+                  ref:Option[Reference]    = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.FAILURE, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.FAILURE, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
   /**
-    * Builds an FailureResult with no value, and with code set to FAILURE
-    * @param msg : Optional message
-    * @param tag : Optional tag
-    * @return
-    */
+   * Builds an FailureResult with no value, and with code set to FAILURE
+   * @param msg : Optional message
+   * @param tag : Optional tag
+   * @return
+   */
   protected def failureWithCode[T]( code:Int,
-                                    data:Option[T]        = None,
-                                    msg:Option[String]    = Some("failure"),
-                                    err:Option[Exception] = None,
-                                    tag:Option[String]    = None,
-                                    ref:Option[Any]       = None): Result[T] =
+                          msg:Option[String]    = Some("failure"),
+                          err:Option[Exception] = None,
+                          tag:Option[String]    = None,
+                          ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, code, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](code, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -277,13 +286,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def unAuthorized[T]( data:Option[T]        = None,
-                                 msg:Option[String]    = Some("unauthorized"),
-                                 err:Option[Exception] = None,
-                                 tag:Option[String]    = None,
-                                 ref:Option[Any]       = None): Result[T] =
+  protected def unAuthorized[T]( msg:Option[String]    = Some("unauthorized"),
+                       err:Option[Exception] = None,
+                       tag:Option[String]    = None,
+                       ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -293,13 +301,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notFound[T]( data:Option[T]        = None,
-                             msg:Option[String]    = Some("not found"),
-                             err:Option[Exception] = None,
-                             tag:Option[String]    = None,
-                             ref:Option[Any]       = None): Result[T] =
+  protected def notFound[T]( msg:Option[String]    = Some("not found"),
+                   err:Option[Exception] = None,
+                   tag:Option[String]    = None,
+                   ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -309,13 +316,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def badRequest[T]( data:Option[T]        = None,
-                               msg:Option[String]    = Some("not found"),
-                               err:Option[Exception] = None,
-                               tag:Option[String]    = None,
-                               ref:Option[Any]       = None): Result[T] =
+  protected def badRequest[T]( msg:Option[String]    = Some("not found"),
+                     err:Option[Exception] = None,
+                     tag:Option[String]    = None,
+                     ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -325,13 +331,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def conflict[T]( data:Option[T]        = None,
-                             msg:Option[String]    = Some("conflict"),
-                             err:Option[Exception] = None,
-                             tag:Option[String]    = None,
-                             ref:Option[Any]       = None): Result[T] =
+  protected def conflict[T]( msg:Option[String]    = Some("conflict"),
+                   err:Option[Exception] = None,
+                   tag:Option[String]    = None,
+                   ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.CONFLICT, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.CONFLICT, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -341,13 +346,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def deprecated[T]( data:Option[T]        = None,
-                               msg:Option[String]    = Some("deprecated"),
-                               err:Option[Exception] = None,
-                               tag:Option[String]    = None,
-                               ref:Option[Any]       = None): Result[T] =
+  protected def deprecated[T]( msg:Option[String]    = Some("deprecated"),
+                     err:Option[Exception] = None,
+                     tag:Option[String]    = None,
+                     ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.DEPRECATED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.DEPRECATED, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -357,13 +361,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def unexpectedError[T]( data:Option[T]        = None,
-                                    msg:Option[String]    = Some("unexpected error"),
-                                    err:Option[Exception] = None,
-                                    tag:Option[String]    = None,
-                                    ref:Option[Any]       = None): Result[T] =
+  protected def unexpectedError[T]( msg:Option[String]    = Some("unexpected error"),
+                          err:Option[Exception] = None,
+                          tag:Option[String]    = None,
+                          ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -373,13 +376,12 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notAvailable[T]( data:Option[T]        = None,
-                                 msg:Option[String]    = Some("not available"),
-                                 err:Option[Exception] = None,
-                                 tag:Option[String]    = None,
-                                 ref:Option[Any]       = None): Result[T] =
+  protected def notAvailable[T]( msg:Option[String]    = Some("not available"),
+                       err:Option[Exception] = None,
+                       tag:Option[String]    = None,
+                       ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -389,12 +391,11 @@ trait ResultSupportIn {
    * @param tag : Optional tag
    * @return
    */
-  protected def notImplemented[T]( data:Option[T]        = None,
-                                   msg:Option[String]    = Some("not implemented"),
-                                   err:Option[Exception] = None,
-                                   tag:Option[String]    = None,
-                                   ref:Option[Any]       = None): Result[T] =
+  protected def notImplemented[T]( msg:Option[String]    = Some("not implemented"),
+                         err:Option[Exception] = None,
+                         tag:Option[String]    = None,
+                         ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag, ref = ref)
   }
 }

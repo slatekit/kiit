@@ -160,7 +160,7 @@ class Templates(val templates  :Option[Seq[Template]] = None,
     if (result.success) {
       // Get the individual substitution parts.
       val tokens = result.getOrElse(List[TemplatePart]())
-      if (tokens == null || tokens.isEmpty) {
+      if (Option(tokens).fold(true)( t => t.isEmpty)) {
         Some(text)
       }
       else

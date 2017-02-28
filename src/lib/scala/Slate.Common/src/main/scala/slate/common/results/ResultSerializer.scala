@@ -26,8 +26,8 @@ class ResultSerializer {
     json.putStringRaw ("value"    , serialize(res.getOrElse(None)))
     json.putString    ("msg"      , res.msg.getOrElse(""))
     json.putString    ("err"      , res.err.map[String]( e => e.getMessage ).getOrElse(""))
-    json.putString    ("ext"      , res.ext.getOrElse("").toString )
     json.putString    ("tag"      , res.tag.getOrElse("") )
+    json.putString    ("ref"      , res.ref.getOrElse("").toString )
     json.end()
     val text = json.toString()
     text

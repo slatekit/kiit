@@ -13,6 +13,7 @@ package slate.common.results
 import slate.common.{Reference, FailureResult, SuccessResult, Result}
 
 object ResultFuncs {
+
   /**
    * Help result : return success with string value "help" and status code of HELP
    * @param msg : Optional message
@@ -20,8 +21,8 @@ object ResultFuncs {
    * @return
    */
   def help(msg:Option[String] = Some("success"),
-                     tag:Option[String] = None,
-                     ref:Option[Any]    = None): Result[String] =
+           tag:Option[String] = None,
+           ref:Option[Any]    = None): Result[String] =
   {
     new FailureResult[String](code = ResultCode.HELP, msg = msg, tag = tag, ref = ref)
   }
@@ -34,8 +35,8 @@ object ResultFuncs {
    * @return
    */
   def helpOn[T](msg:Option[String] = Some("success"),
-                          tag:Option[String] = None,
-                          ref:Option[Any]    = None): Result[T] =
+                tag:Option[String] = None,
+                ref:Option[Any]    = None): Result[T] =
   {
     new FailureResult[T](code = ResultCode.HELP, msg = msg, tag = tag, ref = ref)
   }
@@ -48,8 +49,8 @@ object ResultFuncs {
    * @return
    */
   def exit(msg:Option[String] = Some("exit"),
-                     tag:Option[String] = None,
-                     ref:Option[Any]    = None): Result[String] =
+           tag:Option[String] = None,
+           ref:Option[Any]    = None): Result[String] =
   {
     new FailureResult[String](code = ResultCode.EXIT, msg = msg, tag = tag, ref = ref)
   }
@@ -62,9 +63,8 @@ object ResultFuncs {
    * @return
    */
   def yes(msg   :Option[String] = None,
-                    tag   :Option[String] = None,
-                    ref   :Option[Any]    = None,
-                    format:Option[String] = None): Result[Boolean] =
+          tag   :Option[String] = None,
+          ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
@@ -80,8 +80,7 @@ object ResultFuncs {
   def yesWithCode( code  :Int,
                              msg   :Option[String] = None,
                              tag   :Option[String] = None,
-                             ref   :Option[Any]    = None,
-                             format:Option[String] = None): Result[Boolean] =
+                             ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, code, msg = msg, tag = tag, ref = ref)
   }
@@ -97,10 +96,10 @@ object ResultFuncs {
    *              available as part of the Result[T] class.
    */
   def no(msg:Option[String] = None,
-                   tag:Option[String] = None,
-                   ref:Option[Any]    = None): Result[Boolean] =
+         tag:Option[String] = None,
+         ref:Option[Any]    = None): Result[Boolean] =
   {
-    new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, tag = tag, ref = ref)
+    new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, tag = tag, ref = ref)
   }
 
 
@@ -113,11 +112,11 @@ object ResultFuncs {
    *              return value of false ( along with the message, tag, etc being
    *              available as part of the Result[T] class.
    */
-  def error(msg:String,
-         tag:Option[String] = None,
-         ref:Option[Any]    = None): Result[Boolean] =
+  def err(msg:String,
+            tag:Option[String] = None,
+            ref:Option[Any]    = None): Result[Boolean] =
   {
-    new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = Option(msg), tag = tag, ref = ref)
+    new FailureResult[Boolean](ResultCode.FAILURE, msg = Option(msg), tag = tag, ref = ref)
   }
 
 
@@ -142,14 +141,14 @@ object ResultFuncs {
    * @return
    */
   def okOrFailure(success:Boolean,
-                            msg:Option[String] = None,
-                            tag:Option[String] = None,
-                            ref:Option[Any]    = None): Result[Boolean] =
+                  msg:Option[String] = None,
+                  tag:Option[String] = None,
+                  ref:Option[Any]    = None): Result[Boolean] =
   {
     if(success)
       new SuccessResult[Boolean](true, ResultCode.SUCCESS, msg, tag)
     else
-      new FailureResult[Boolean](Some(false), ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
+      new FailureResult[Boolean](ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
   }
 
   /**
@@ -159,16 +158,16 @@ object ResultFuncs {
    * @return
    */
   def successOrErrorWithCode[T](success:Boolean,
-                                          data:T,
-                                          code:Int,
-                                          msg:Option[String] = None,
-                                          tag:Option[String] = None,
-                                          ref:Option[Any]    = None): Result[T] =
+                                data:T,
+                                code:Int,
+                                msg:Option[String] = None,
+                                tag:Option[String] = None,
+                                ref:Option[Any]    = None): Result[T] =
   {
     if(success)
       new SuccessResult[T](data, code, msg, tag)
     else
-      new FailureResult[T](Option(data), code, msg = msg, err = None, tag = tag, ref = ref)
+      new FailureResult[T](code, msg = msg, err = None, tag = tag, ref = ref)
   }
 
 
@@ -179,15 +178,15 @@ object ResultFuncs {
    * @return
    */
   def successOrError[T](success:Boolean,
-                                data:Option[T],
-                                msg:Option[String] = None,
-                                tag:Option[String] = None,
-                                ref:Option[Any]    = None): Result[T] =
+                        data:Option[T],
+                        msg:Option[String] = None,
+                        tag:Option[String] = None,
+                        ref:Option[Any]    = None): Result[T] =
   {
     if(success)
       new SuccessResult[T](data.get, ResultCode.SUCCESS, msg, tag)
     else
-      new FailureResult[T](data, ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
+      new FailureResult[T](ResultCode.FAILURE, msg = msg, err = None, tag = tag, ref = ref)
   }
 
 
@@ -212,10 +211,9 @@ object ResultFuncs {
    * @return
    */
   def success[T](data:T,
-                           msg   :Option[String] = Some("success"),
-                           tag   :Option[String] = None,
-                           ref   :Option[Any]    = None,
-                           format:Option[String] = None): Result[T] =
+                 msg   :Option[String] = Some("success"),
+                 tag   :Option[String] = None,
+                 ref   :Option[Any]    = None): Result[T] =
   {
     new SuccessResult[T](data, code = ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
@@ -228,9 +226,8 @@ object ResultFuncs {
    * @return
    */
   def ok( msg   :Option[String] = Some("success"),
-                    tag   :Option[String] = None,
-                    ref   :Option[Any]    = None,
-                    format:Option[String] = None): Result[Boolean] =
+          tag   :Option[String] = None,
+          ref   :Option[Any]    = None): Result[Boolean] =
   {
     new SuccessResult[Boolean](true, code = ResultCode.SUCCESS, msg = msg, tag = tag, ref = ref)
   }
@@ -243,9 +240,9 @@ object ResultFuncs {
    * @return
    */
   def confirm[T](data:T,
-                           msg:Option[String] = Some("confirm"),
-                           tag:Option[String] = None,
-                           ref:Option[Any]    = None): Result[T] =
+                 msg:Option[String] = Some("confirm"),
+                 tag:Option[String] = None,
+                 ref:Option[Any]    = None): Result[T] =
   {
     new SuccessResult[T](data, ResultCode.CONFIRM, msg = msg, tag = tag, ref = ref)
   }
@@ -257,13 +254,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def failure[T]( data:Option[T]        = None,
-                            msg:Option[String]    = Some("failure"),
-                            err:Option[Exception] = None,
-                            tag:Option[String]    = None,
-                            ref:Option[Reference]    = None): Result[T] =
+  def failure[T]( msg:Option[String]    = Some("failure"),
+                  err:Option[Exception] = None,
+                  tag:Option[String]    = None,
+                  ref:Option[Reference]    = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.FAILURE, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.FAILURE, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -274,13 +270,12 @@ object ResultFuncs {
    * @return
    */
   def failureWithCode[T]( code:Int,
-                                    data:Option[T]        = None,
-                                    msg:Option[String]    = Some("failure"),
-                                    err:Option[Exception] = None,
-                                    tag:Option[String]    = None,
-                                    ref:Option[Any]       = None): Result[T] =
+                          msg:Option[String]    = Some("failure"),
+                          err:Option[Exception] = None,
+                          tag:Option[String]    = None,
+                          ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, code, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](code, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -290,13 +285,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def unAuthorized[T]( data:Option[T]        = None,
-                                 msg:Option[String]    = Some("unauthorized"),
-                                 err:Option[Exception] = None,
-                                 tag:Option[String]    = None,
-                                 ref:Option[Any]       = None): Result[T] =
+  def unAuthorized[T]( msg:Option[String]    = Some("unauthorized"),
+                       err:Option[Exception] = None,
+                       tag:Option[String]    = None,
+                       ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.UNAUTHORIZED, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -306,13 +300,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def notFound[T]( data:Option[T]        = None,
-                             msg:Option[String]    = Some("not found"),
-                             err:Option[Exception] = None,
-                             tag:Option[String]    = None,
-                             ref:Option[Any]       = None): Result[T] =
+  def notFound[T]( msg:Option[String]    = Some("not found"),
+                   err:Option[Exception] = None,
+                   tag:Option[String]    = None,
+                   ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_FOUND, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -322,13 +315,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def badRequest[T]( data:Option[T]        = None,
-                               msg:Option[String]    = Some("not found"),
-                               err:Option[Exception] = None,
-                               tag:Option[String]    = None,
-                               ref:Option[Any]       = None): Result[T] =
+  def badRequest[T]( msg:Option[String]    = Some("not found"),
+                     err:Option[Exception] = None,
+                     tag:Option[String]    = None,
+                     ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.BAD_REQUEST, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -338,13 +330,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def conflict[T]( data:Option[T]        = None,
-                             msg:Option[String]    = Some("conflict"),
-                             err:Option[Exception] = None,
-                             tag:Option[String]    = None,
-                             ref:Option[Any]       = None): Result[T] =
+  def conflict[T]( msg:Option[String]    = Some("conflict"),
+                   err:Option[Exception] = None,
+                   tag:Option[String]    = None,
+                   ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.CONFLICT, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.CONFLICT, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -354,13 +345,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def deprecated[T]( data:Option[T]        = None,
-                               msg:Option[String]    = Some("deprecated"),
-                               err:Option[Exception] = None,
-                               tag:Option[String]    = None,
-                               ref:Option[Any]       = None): Result[T] =
+  def deprecated[T]( msg:Option[String]    = Some("deprecated"),
+                     err:Option[Exception] = None,
+                     tag:Option[String]    = None,
+                     ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.DEPRECATED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.DEPRECATED, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -370,13 +360,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def unexpectedError[T]( data:Option[T]        = None,
-                                    msg:Option[String]    = Some("unexpected error"),
-                                    err:Option[Exception] = None,
-                                    tag:Option[String]    = None,
-                                    ref:Option[Any]       = None): Result[T] =
+  def unexpectedError[T]( msg:Option[String]    = Some("unexpected error"),
+                          err:Option[Exception] = None,
+                          tag:Option[String]    = None,
+                          ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.UNEXPECTED_ERROR, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -386,13 +375,12 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def notAvailable[T]( data:Option[T]        = None,
-                                 msg:Option[String]    = Some("not available"),
-                                 err:Option[Exception] = None,
-                                 tag:Option[String]    = None,
-                                 ref:Option[Any]       = None): Result[T] =
+  def notAvailable[T]( msg:Option[String]    = Some("not available"),
+                       err:Option[Exception] = None,
+                       tag:Option[String]    = None,
+                       ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_AVAILABLE, msg = msg, err = err, tag = tag, ref = ref)
   }
 
 
@@ -402,12 +390,11 @@ object ResultFuncs {
    * @param tag : Optional tag
    * @return
    */
-  def notImplemented[T]( data:Option[T]        = None,
-                                   msg:Option[String]    = Some("not implemented"),
-                                   err:Option[Exception] = None,
-                                   tag:Option[String]    = None,
-                                   ref:Option[Any]       = None): Result[T] =
+  def notImplemented[T]( msg:Option[String]    = Some("not implemented"),
+                         err:Option[Exception] = None,
+                         tag:Option[String]    = None,
+                         ref:Option[Any]       = None): Result[T] =
   {
-    new FailureResult[T](data, ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag, ref = ref)
+    new FailureResult[T](ResultCode.NOT_IMPLEMENTED, msg = msg, err = err, tag = tag, ref = ref)
   }
 }

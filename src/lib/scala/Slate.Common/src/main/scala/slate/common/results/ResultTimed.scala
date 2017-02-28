@@ -23,7 +23,7 @@ case class ResultTimed[+T](
                         duration    : Duration,
                         result      : Result[T],
                         memory      : Option[MemUsage],
-                        avg         : Option[Duration] = None
+                        avg         : Option[Long]
                        )
 {
   val dur = start.durationFrom(end)
@@ -36,7 +36,7 @@ case class ResultTimed[+T](
    * @param mem
    * @param data
    */
-  def this(start:DateTime, end:DateTime, duration:Duration, data:Result[T], mem:Option[MemUsage], avg:Option[Duration])
+  def this(start:DateTime, end:DateTime, duration:Duration, data:Result[T], mem:Option[MemUsage], avg:Option[Long])
   {
     this("", start, end, duration, data, mem, avg)
   }

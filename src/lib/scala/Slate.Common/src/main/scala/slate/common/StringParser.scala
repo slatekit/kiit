@@ -12,9 +12,15 @@
 package slate.common
 
 import scala.collection.mutable.Map
+
 /**
-  * Created by kreddy on 3/22/2016.
-  */
+ * For internal use only - used in auto-generating the docs
+ * NOTE: This should probably be moved into the .Tools project and/or
+ * the Api modified to make it stateless somehow.
+ *
+ * This is an remnant of the C# code
+ * @param _content
+ */
 class StringParser(private val _content:String ) {
 
   private val _extracts = Map[String,String]()
@@ -22,10 +28,7 @@ class StringParser(private val _content:String ) {
   private var _lastMatch = false
 
 
-  def extracts:Map[String,String] =
-  {
-    _extracts
-  }
+  def extracts:Map[String,String] = _extracts
 
 
   def saveUntil(token: String, name:String, ensure:Boolean = true): StringParser =
@@ -67,9 +70,5 @@ class StringParser(private val _content:String ) {
   }
 
 
-  def extract(start:Int, end:Int):String =
-  {
-    _content.substring(start, end)
-  }
-
+  def extract(start:Int, end:Int):String = _content.substring(start, end)
 }

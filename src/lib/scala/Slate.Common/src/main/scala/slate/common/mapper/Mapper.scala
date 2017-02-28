@@ -14,7 +14,6 @@ package slate.common.mapper
 
 import slate.common.utils.Temp
 
-import scala.collection.mutable.ListBuffer
 import scala.reflect.runtime.universe._
 import slate.common.Field
 import slate.common._
@@ -225,10 +224,10 @@ object Mapper {
     val modelNameFull = dataType.typeSymbol.asClass.fullName
 
     // Now add all the fields.
-    val matchedFieldsR = Reflector.getFieldsWithAnnotations(null, dataType, typeOf[Field], getFieldMirror = false)
+    val matchedFieldsR = Reflector.getFieldsWithAnnotations(None, dataType, typeOf[Field])
     val matchedFields = matchedFieldsR.reverse
     val fieldId = ModelField.id( name = "id" , autoIncrement = true, dataType = typeOf[Long])
-    val fields = new ListBuffer[ModelField]()
+    val fields = new scala.collection.mutable.ListBuffer[ModelField]()
     fields.append(fieldId)
 
     // Loop through each field

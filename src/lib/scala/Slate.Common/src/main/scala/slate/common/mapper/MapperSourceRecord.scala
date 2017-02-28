@@ -60,10 +60,10 @@ class MapperSourceRecord(val rs:ResultSet) extends MappedSourceReader {
   override def getVersion(): String = ""
 
 
-  override def getDate(pos: Int): DateTime = new DateTime(rs.getTimestamp(pos))
+  override def getDate(pos: Int): DateTime = DateTime(rs.getTimestamp(pos))
 
 
-  override def getDate(name:String): DateTime =  new DateTime(rs.getTimestamp(name))
+  override def getDate(name:String): DateTime =  DateTime(rs.getTimestamp(name))
 
 
   override def getOrDefault(pos: Int, defaultVal: String): String = rs.getString(pos)

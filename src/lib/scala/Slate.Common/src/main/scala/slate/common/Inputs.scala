@@ -122,11 +122,6 @@ abstract class Inputs {
   def contains(key:String): Boolean = containsKey(key)
 
 
-  /// <summary>
-  /// Convenience method for checking if config key exists.
-  /// </summary>
-  /// <param name="key"></param>
-  /// <returns></returns>
   def containsKey(key: String): Boolean
 
 

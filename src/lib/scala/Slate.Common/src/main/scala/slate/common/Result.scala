@@ -12,32 +12,24 @@
 package slate.common
 
 import slate.common.results.{ ResultChecks}
-import slate.common.serialization.{ObjectBuilderJson, SerializerJson}
 
 
 /**
   * Container for a Success/Failure value of type T with additional values to represent
   * a string message, code, tag, error and more.
   *
-  * @param success : True / False success flag
-  * @param code    : Numeric status code
-  * @param msg     : Optional string message for more information
-  * @param err     : Optional exception
-  * @param ext     : Optional extra data / metadata
-  * @param tag     : Optional tag used for tracking purposes
-  * @param ref     : Optional reference to some original value
   * @tparam T      : Type T
   */
-sealed abstract class Result[+T](
-                                    val success : Boolean                 ,
-                                    val code    : Int               = 0   ,
-                                    val msg     : Option[String]    = None,
-                                    val err     : Option[Throwable] = None,
-                                    val ext     : Option[Any]       = None,
-                                    val tag     : Option[String]    = None,
-                                    val ref     : Option[Any]       = None
-                                 ) extends Product with ResultChecks
+sealed abstract class Result[+T] extends Product with ResultChecks
 {
+  val code    : Int
+  val msg     : Option[String]
+  val err     : Option[Throwable]
+  val tag     : Option[String]
+  val ref     : Option[Any]
+
+  def success: Boolean
+
 
   def failure: Boolean = !success
 
@@ -63,7 +55,7 @@ sealed abstract class Result[+T](
     */
   def map[B](f: T => B): Result[B] =
     if (isEmpty) this.asInstanceOf[Result[B]]
-    else SuccessResult[B](f(this.get), code, msg, ext, tag)
+    else SuccessResult[B](f(this.get), code, msg, tag, ref)
 
 
   /** If the option is nonempty, return a function applied to its value,
@@ -87,6 +79,21 @@ sealed abstract class Result[+T](
     else f(this.get)
 
 
+  /** If the result is nonempty, return a function applied to its value.
+    *  Otherwise return None.
+    *
+    *  @param  f   the function to apply
+    */
+  def fold[B](ifEmpty: => B)(f: T => B): B =
+    if (isEmpty) ifEmpty else f(this.get)
+
+
+  def toOption: Option[T] = {
+    if (isEmpty) None
+    else Some(this.get)
+  }
+
+
   def and[V >: T](other:Result[V]):Result[V] = {
     if(this.success && other.success){
       this.asInstanceOf[Result[V]]
@@ -98,18 +105,6 @@ sealed abstract class Result[+T](
       other
   }
 
-
-  def print():Unit = {
-    println("success : " + success           )
-    println("code    : " + code              )
-    println("data    : " + (if(isEmpty) "Nothing" else getOrElse("null") ))
-    println("msg     : " + msg               )
-    println("err     : " + err               )
-    println("ext     : " + ext               )
-    println("tag     : " + tag               )
-    println("type    : " + ( if(isEmpty) "Nothing" else get.getClass.getName ))
-  }
-
   override def statusCode = code
 }
 
@@ -118,51 +113,66 @@ sealed abstract class Result[+T](
   * @param value   : The value for a successful result/action
   * @param code    : Numeric status code
   * @param msg     : Optional string message for more information
-  * @param ext     : Optional extra data / metadata
   * @param tag     : Optional tag used for tracking purposes
+  * @param ref     : Optional reference to some object ( intentional set as Any for now )
+  * @param err     : Optional exception
   * @tparam T
   */
 final case class SuccessResult[+T](
-                                    value               : T                       ,
-                                    override val code   : Int                     ,
-                                    override val msg    : Option[String]    = None,
-                                    override val ext    : Option[Any]       = None,
-                                    override val tag    : Option[String]    = None,
-                                    override val ref    : Option[Any]       = None
-                                  ) extends Result[T](true, code, msg, None, ext, tag, ref) {
+                                    value  : T                       ,
+                                    code   : Int                     ,
+                                    msg    : Option[String]    = None,
+                                    tag    : Option[String]    = None,
+                                    ref    : Option[Any]       = None,
+                                    err    : Option[Throwable] = None
+                                  ) extends Result[T] {
+
    def isEmpty = false
 
+
    def get = value
- }
+
+
+   def success:Boolean = true
+}
 
 
 /**
   * The failure branch of the Result
-  * @param value   : The value
   * @param code    : Numeric status code
   * @param msg     : Optional string message for more information
   * @param err     : Optional exception
-  * @param ext     : Optional extra data / metadata
   * @param tag     : Optional tag used for tracking purposes
+  * @param ref     : Optional reference to some object ( intentional set as Any for now )
   * @tparam T
   */
 final case class FailureResult[+T](
-                                    value               : Option[T]         = None,
-                                    override val code   : Int               = 0   ,
-                                    override val msg    : Option[String]    = None,
-                                    override val err    : Option[Throwable] = None,
-                                    override val ext    : Option[Any]       = None,
-                                    override val tag    : Option[String]    = None,
-                                    override val ref    : Option[Any]       = None
-                            )       extends Result[T](false, code, msg, err, ext, tag, ref) {
-  def isEmpty = true
+                                    code   : Int               = 0   ,
+                                    msg    : Option[String]    = None,
+                                    err    : Option[Throwable] = None,
+                                    tag    : Option[String]    = None,
+                                    ref    : Option[Any]       = None
+                                  ) extends Result[T] {
+  def isEmpty:Boolean = true
 
-  def get = value.get
+
+  def success:Boolean = false
+
+
+  def get = throw new NoSuchElementException("NoResult.get")
 }
 
 
-case object NoResult extends Result[Nothing](false, 0) {
+case object NoResult extends Result[Nothing] {
+  val code    : Int               = 0
+  val msg     : Option[String]    = None
+  val err     : Option[Throwable] = None
+  val tag     : Option[String]    = None
+  val ref     : Option[Any]       = None
+
   def isEmpty = true
+
+  def success:Boolean = false
 
   def get = throw new NoSuchElementException("NoResult.get")
 }

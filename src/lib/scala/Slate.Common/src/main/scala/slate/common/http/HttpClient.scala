@@ -16,7 +16,10 @@ import java.net.{URL, HttpURLConnection}
 
 import slate.common.http.common.{HttpStatus, HttpConstants, HttpMethod}
 
-
+/**
+  * Temporarily here. This Http Client Wrapper around Java.net will be replaced
+  * soon with a better alternative.
+  */
 class HttpClient {
 
   /**
@@ -157,18 +160,18 @@ class HttpClient {
       // Get content
       val inputStream = con.getInputStream
       val content = io.Source.fromInputStream(inputStream).mkString
-      (true, statusCode, content, inputStream)
+      (true, statusCode, content, Option(inputStream))
     }
     catch {
       case ex: Exception =>
       {
         val msg = s"Error getting content from ${req.url}"
-        (false, HttpStatus.s500.code, msg, null)
+        (false, HttpStatus.s500.code, msg, None)
       }
     }
 
     val inputStream = result._4
-    if (inputStream != null) inputStream.close()
+    inputStream.foreach( i => i.close())
 
     // TODO: Get the headers and fill http response correctly.
     val code = if(result._2 == HttpStatus.sOk.code) HttpStatus.sOk else HttpStatus.sErr

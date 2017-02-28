@@ -15,9 +15,6 @@ package slate.common.validations
 
 import slate.common._
 import ValidationConsts._
-import slate.common.RegexPatterns._
-
-import scala.util.matching.Regex
 
 object ValidationFuncsExt {
 

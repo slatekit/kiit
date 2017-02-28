@@ -41,7 +41,7 @@ object SerializerUtils {
       for ((k,v) <- item)
       {
         buff.append("<tr>")
-        buff.append("<td>" + k + "</td><td>" + ( if ( v == null ) "" else v.toString) + "</td>")
+        buff.append("<td>" + k + "</td><td>" + ( if ( Option(v).isEmpty ) "" else v.toString) + "</td>")
         buff.append("<tr>")
       }
     }
@@ -63,7 +63,7 @@ object SerializerUtils {
     for(item <- items)
     {
       buff.append("<tr>")
-      val value = if ( item._2 == null ) "" else item._2.toString
+      val value = if ( Option(item._2).isEmpty ) "" else item._2.toString
       buff.append("<td>" + item._1 + "</td><td>" + value + "</td>")
       buff.append("</tr>")
     }
@@ -88,7 +88,7 @@ object SerializerUtils {
 
       val item = items(i)
       buff.append("\"" + item._1 + "\":")
-      val value = if ( item._2 == null ) "" else item._2.toString
+      val value = if ( Option(item._2).isEmpty  ) "" else item._2.toString
       buff.append("\"" + escapeJson(value) + "\"")
     }
 

@@ -73,14 +73,10 @@ class ObjectBuilderJson(indentEnabled:Boolean, indent:String)
 
   override def putString(key:String, value:String) :Unit = {
 
-    val finalValue = if (value == null) {
-      "null"
-    }
-    else if (Strings.isNullOrEmpty(value)) {
-      "\"" + "\""
-    }
-    else {
-      "\"" + value.replaceAllLiterally("\"", "\\\"") + "\""
+    val finalValue = value match {
+      case null => "null"
+      case ""   => "\"\""
+      case _    => value.replaceAllLiterally("\"", "\\\"") + "\""
     }
     putStringRaw(key, finalValue)
   }

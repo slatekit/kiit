@@ -223,8 +223,8 @@ object Reflector {
         val pe0 = a.productElement(0)
         val annoValue = if (pe0.isInstanceOf[ru.Constant])
           a.productElement(0).asInstanceOf[ru.Constant].value
-        else if (a.children != null && a.children.size > 1 && a.productElement(1)
-          .isInstanceOf[ru.Literal])
+        else if (Option(a.children).fold(false)( c => c.size > 1 && a.productElement(1)
+          .isInstanceOf[ru.Literal]))
           a.productElement(1).asInstanceOf[ru.Literal].value.asInstanceOf[Constant].value
         else
           null
@@ -257,15 +257,8 @@ object Reflector {
 
   def getFieldsDeclared(item:Any): List[FieldMirror] =
   {
-    val info = ListBuffer[FieldMirror]()
-
-    for(mem <- item.getClass.getDeclaredFields)
-    {
-      val fieldName = mem.getName
-      val fieldMirror = getField(item, fieldName)
-      info.append(fieldMirror)
-    }
-    info.toList
+    val items = item.getClass.getDeclaredFields.map( mem => getField(item, mem.getName))
+    items.toList
   }
 
 
@@ -371,7 +364,7 @@ object Reflector {
     val m = ru.runtimeMirror(getClass.getClassLoader)
     val im = m.reflect(inst)
     val mem = im.symbol.typeSignature.member(ru.TermName(name)).asMethod
-    val result = if(inputs == null)
+    val result = if(Option(inputs).isEmpty)
       im.reflectMethod(mem).apply()
     else
       im.reflectMethod(mem).apply(inputs:_*)
@@ -423,7 +416,7 @@ object Reflector {
   {
     val list = ListBuffer[ReflectedArg]()
     val args = mem.typeSignature.paramLists
-    if(args == null || args.size == 0) {
+    if(Option(args).fold(false)( a => a.isEmpty)) {
       List[ReflectedArg]()
     }
     else {
@@ -468,13 +461,12 @@ object Reflector {
   }
 
 
-  def getFieldsWithAnnotations(instance:AnyRef, clsTpe:Type, anoTpe:Type,
-                               declaredInSelfType:Boolean = true,
-                               getFieldMirror:Boolean = true ):
-      ListBuffer[(String,TermSymbol,FieldMirror,Any,Type)] =
+  def getFieldsWithAnnotations(instance:Option[AnyRef], clsTpe:Type, anoTpe:Type,
+                               declaredInSelfType:Boolean = true):
+      List[(String,TermSymbol,FieldMirror,Any,Type)] =
   {
     val m = ru.runtimeMirror(getClass.getClassLoader)
-    val im:InstanceMirror = if(getFieldMirror) m.reflect(instance) else null
+    val im:Option[InstanceMirror] = instance.map(m.reflect)
 
     val matches = ListBuffer[(String,TermSymbol,FieldMirror,Any,Type)]()
     for(mem <- clsTpe.members)
@@ -489,12 +481,12 @@ object Reflector {
         if(anno != None )
         {
           val memberName = mem.name.toString()
-          val memberMirror:FieldMirror = if(getFieldMirror) im.reflectField(fieldSym) else null
-          matches.append((memberName,fieldSym,memberMirror, anno.get, fieldType))
+          val memberMirror:Option[FieldMirror] = im.map( _.reflectField(fieldSym))
+          matches.append((memberName,fieldSym, memberMirror.getOrElse(null), anno.get, fieldType))
         }
       }
     }
-    matches
+    matches.toList
   }
 
 
