@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-12-03T12:18:14.673</td>
+      <td>2017-02-27T17:37:20.181</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -126,7 +126,8 @@
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
 <span class="k">import</span> <span class="nn">slate.entities.repos._</span>
-<span class="k">import</span> <span class="nn">scala.reflect.runtime.universe._</span>
+<span class="k">import</span> <span class="nn">scala.annotation.meta.field</span>
+<span class="k">import</span> <span class="nn">scala.reflect.runtime.universe.</span><span class="o">{</span><span class="n">typeOf</span><span class="o">,</span><span class="nc">Type</span><span class="o">}</span>
 
 
 <span class="c1">// optional 
@@ -141,34 +142,66 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
   <span class="c1">// Example entity that the Repo with manage via CRUD operations
-</span>  <span class="k">class</span> <span class="nc">User</span> <span class="k">extends</span> <span class="nc">Entity</span> <span class="k">with</span> <span class="nc">IEntityUnique</span> <span class="o">{</span>
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span>
 
-    <span class="k">def</span> <span class="k">this</span><span class="o">(</span><span class="n">first</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">last</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">=</span> <span class="o">{</span>
-      <span class="k">this</span><span class="o">()</span>
-      <span class="n">firstName</span> <span class="k">=</span> <span class="n">first</span>
-      <span class="n">lastName</span> <span class="k">=</span> <span class="n">last</span>
-    <span class="o">}</span>
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+              <span class="n">id</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">firstName</span>  <span class="k">=</span> <span class="s">""</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastName</span>  <span class="k">=</span> <span class="s">""</span>
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+              <span class="n">email</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">email</span>  <span class="k">=</span> <span class="s">""</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastLogin</span>  <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+              <span class="n">firstName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">isEmailVerified</span>  <span class="k">=</span> <span class="kc">false</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">status</span>  <span class="k">=</span> <span class="mi">0</span>
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+              <span class="n">lastName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+              <span class="n">lastLogin</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">isEmailVerified</span><span class="k">:</span><span class="kt">Boolean</span>  <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">status</span><span class="k">:</span><span class="kt">Int</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">createdAt</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">createdBy</span><span class="k">:</span><span class="kt">Long</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">updatedAt</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span>  <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+              <span class="n">updatedBy</span><span class="k">:</span><span class="kt">Long</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+              <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span><span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+              <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
+
+              <span class="o">)</span>
+    <span class="k">extends</span> <span class="nc">EntityWithId</span>
+      <span class="k">with</span> <span class="nc">EntityWithMeta</span>
+      <span class="k">with</span> <span class="nc">EntityUpdatable</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+  <span class="o">{</span>
+    <span class="cm">/**
+      * sets the id on the entity and returns the entity with updated id.
+      * @param id
+      * @return
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">withId</span><span class="o">(</span><span class="n">id</span><span class="k">:</span><span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=</span> <span class="n">copy</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">id</span><span class="o">)</span>
   <span class="o">}</span>
 
   <span class="c1">// CASE 1: In-memory ( non-persisted ) repository has limited functionality
@@ -182,22 +215,19 @@
 </span>  <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Db</span><span class="o">(</span><span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/user_db"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"abcdefghi"</span><span class="o">))</span>
 
   <span class="c1">// 2. Setup the mapper
-</span>  <span class="k">var</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(),</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+</span>  <span class="k">var</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
   <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
 
 
   <span class="c1">// 3. Now create the repo with database and mapper
-</span>  <span class="k">val</span> <span class="n">repoMySql</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
-  <span class="n">repoMySql</span><span class="o">.</span><span class="n">setMapper</span><span class="o">(</span><span class="n">mapper</span><span class="o">)</span>
-  <span class="n">repoMySql</span><span class="o">.</span><span class="n">setDb</span><span class="o">(</span><span class="n">db</span><span class="o">)</span>
+</span>  <span class="k">val</span> <span class="n">repoMySql</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="nc">None</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">mapper</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user"</span><span class="o">),</span> <span class="n">db</span><span class="o">)</span>
 
   <span class="c1">// CASE 3: You can also extend from EntityRepositoryMySql
-</span>  <span class="k">class</span> <span class="nc">UserRepository</span><span class="o">()</span> <span class="k">extends</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+</span>  <span class="k">class</span> <span class="nc">UserRepository</span><span class="o">()</span>
+    <span class="k">extends</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span><span class="n">entityMapper</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">mapper</span><span class="o">),</span> <span class="n">db</span> <span class="k">=</span> <span class="n">db</span><span class="o">)</span>
   <span class="o">{</span>
   <span class="o">}</span>
   <span class="k">val</span> <span class="n">userRepo</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">UserRepository</span><span class="o">()</span>
-  <span class="n">userRepo</span><span class="o">.</span><span class="n">setMapper</span><span class="o">(</span><span class="n">mapper</span><span class="o">)</span>
-  <span class="n">userRepo</span><span class="o">.</span><span class="n">setDb</span><span class="o">(</span><span class="n">db</span><span class="o">)</span>
   
 
 </code></pre>
@@ -207,33 +237,33 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// CASE 1: Create 3-4 users for showing use-cases
-</span>    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"john"</span><span class="o">,</span> <span class="s">"doe-01"</span><span class="o">))</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"jane"</span><span class="o">,</span> <span class="s">"doe-02"</span><span class="o">))</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"john"</span><span class="o">,</span> <span class="s">"doe-03"</span><span class="o">))</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"jane"</span><span class="o">,</span> <span class="s">"doe-04"</span><span class="o">))</span>
+</span>    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"john"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-01"</span><span class="o">))</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"jane"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-02"</span><span class="o">))</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"john"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-03"</span><span class="o">))</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"jane"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-04"</span><span class="o">))</span>
 
     <span class="c1">// CASE 2: Get by id
-</span>    <span class="n">printOne</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="o">(</span> <span class="mi">2</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">printOne</span><span class="o">(</span><span class="s">"2"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="o">(</span> <span class="mi">2</span> <span class="o">)</span> <span class="o">)</span>
 
     <span class="c1">// CASE 3: Update
 </span>    <span class="k">val</span> <span class="n">item2</span> <span class="k">=</span> <span class="n">repo</span><span class="o">.</span><span class="n">get</span><span class="o">(</span> <span class="mi">2</span> <span class="o">)</span>
-    <span class="n">item2</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"user_two"</span>
-    <span class="n">repo</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="n">item2</span><span class="o">.</span><span class="n">get</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">item2b</span> <span class="k">=</span> <span class="n">item2</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"user_two"</span><span class="o">)</span>
+    <span class="n">repo</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="n">item2b</span><span class="o">)</span>
 
     <span class="c1">// CASE 4: Get all
-</span>    <span class="n">printAll</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">getAll</span><span class="o">()</span> <span class="o">)</span>
+</span>    <span class="n">printAll</span><span class="o">(</span><span class="s">"all"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">getAll</span><span class="o">()</span> <span class="o">)</span>
 
     <span class="c1">// CASE 5: Get recent users ( 03, 04 )
-</span>    <span class="n">printAll</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">recent</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">printAll</span><span class="o">(</span><span class="s">"recent"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">recent</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
 
     <span class="c1">// CASE 6: Get oldest users ( 01, 02 )
-</span>    <span class="n">printAll</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">oldest</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">printAll</span><span class="o">(</span><span class="s">"oldest"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">oldest</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
 
     <span class="c1">// CASE 7: Get first one ( oldest - 01 )
-</span>    <span class="n">printOne</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">first</span><span class="o">()</span> <span class="o">)</span>
+</span>    <span class="n">printOne</span><span class="o">(</span><span class="s">"first"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">first</span><span class="o">()</span> <span class="o">)</span>
 
     <span class="c1">// CASE 8: Get last one ( recent - 04 )
-</span>    <span class="n">printOne</span><span class="o">(</span> <span class="n">repo</span><span class="o">.</span><span class="n">last</span><span class="o">()</span> <span class="o">)</span>
+</span>    <span class="n">printOne</span><span class="o">(</span><span class="s">"last"</span><span class="o">,</span> <span class="n">repo</span><span class="o">.</span><span class="n">last</span><span class="o">()</span> <span class="o">)</span>
 
     <span class="c1">// CASE 9: Delete by id
 </span>    <span class="n">repo</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span> <span class="mi">4</span> <span class="o">)</span>
@@ -245,6 +275,33 @@
 
 </code></pre>
 </div>
+
+<h2 id="output">Output</h2>
+
+<pre><code class="language-bat">2
+User: 2, jane, doe-02
+
+ALL
+User: 1, john, doe-01
+User: 3, john, doe-03
+User: 4, jane, doe-04
+User: 2, user_two, doe-02
+
+RECENT
+User: 4, jane, doe-04
+User: 3, john, doe-03
+
+OLDEST
+User: 1, john, doe-01
+User: 2, user_two, doe-02
+
+FIRST
+User: 1, john, doe-01
+
+LAST
+User: 4, jane, doe-04
+3
+</code></pre>
 
 
 			</div>

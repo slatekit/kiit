@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-12-03T12:18:14.663</td>
+      <td>2017-02-27T17:37:20.179</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -122,6 +122,7 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
+<span class="k">import</span> <span class="nn">scala.annotation.meta.field</span>
 <span class="k">import</span> <span class="nn">scala.reflect.runtime.universe._</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
 <span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Field</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Reflector</span><span class="o">}</span>
@@ -139,28 +140,57 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-  <span class="k">class</span> <span class="nc">Consultant</span> <span class="k">extends</span> <span class="nc">Entity</span> <span class="k">with</span> <span class="nc">IEntityUnique</span> <span class="o">{</span>
+  <span class="k">case</span> <span class="k">class</span> <span class="nc">Consultant</span> <span class="o">(</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">firstName</span>  <span class="k">=</span> <span class="s">""</span>
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+                          <span class="n">id</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastName</span>  <span class="k">=</span> <span class="s">""</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">email</span>  <span class="k">=</span> <span class="s">""</span>
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+                          <span class="n">email</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastLogin</span>  <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">isEmailVerified</span>  <span class="k">=</span> <span class="kc">false</span>
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+                          <span class="n">firstName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">status</span>  <span class="k">=</span> <span class="mi">0</span>
 
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+                          <span class="n">lastName</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+                          <span class="n">lastLogin</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">isEmailVerified</span><span class="k">:</span><span class="kt">Boolean</span>  <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">status</span><span class="k">:</span><span class="kt">Int</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">createdAt</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">createdBy</span><span class="k">:</span><span class="kt">Long</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">updatedAt</span><span class="k">:</span><span class="kt">DateTime</span>  <span class="o">=</span>  <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+                          <span class="n">updatedBy</span><span class="k">:</span><span class="kt">Long</span>  <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+
+
+                          <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span><span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+                          <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span>
+
+                        <span class="o">)</span> <span class="k">extends</span> <span class="nc">EntityWithId</span> <span class="k">with</span> <span class="nc">EntityUpdatable</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">]</span>
+  <span class="o">{</span>
   <span class="o">}</span>
   
 
@@ -170,22 +200,21 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Create instance of entity via reflection
-</span>    <span class="k">val</span> <span class="n">person</span> <span class="k">=</span> <span class="nc">Reflector</span><span class="o">.</span><span class="n">createInstance</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">]).</span><span class="n">asInstanceOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">]</span>
-
-    <span class="c1">// CASE 2: Load the mapper with schema from the annotations on the model
-</span>    <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+    <span class="c1">// CASE 1: Load the mapper with schema from the annotations on the model
+</span>    <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
     <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
 
-    <span class="c1">// CASE 3: Create instance for testing
-</span>    <span class="n">person</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"share"</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">lastName</span> <span class="k">=</span> <span class="s">"job"</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">lastLogin</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">email</span> <span class="k">=</span> <span class="s">"john.doe@gmail.com"</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">isEmailVerified</span> <span class="k">=</span> <span class="kc">false</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">status</span> <span class="k">=</span> <span class="mi">0</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">createdAt</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-    <span class="n">person</span><span class="o">.</span><span class="n">updatedAt</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="c1">// CASE 2: Create instance for testing
+</span>    <span class="k">val</span> <span class="n">person</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Consultant</span><span class="o">(</span>
+     <span class="n">firstName</span> <span class="k">=</span> <span class="s">"share"</span><span class="o">,</span>
+     <span class="n">lastName</span> <span class="k">=</span> <span class="s">"job"</span><span class="o">,</span>
+     <span class="n">lastLogin</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+     <span class="n">email</span> <span class="k">=</span> <span class="s">"john.doe@gmail.com"</span><span class="o">,</span>
+     <span class="n">isEmailVerified</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span>
+     <span class="n">status</span> <span class="k">=</span> <span class="mi">0</span><span class="o">,</span>
+     <span class="n">createdAt</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+     <span class="n">updatedAt</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="o">)</span>
 
     <span class="c1">// CASE 4: Get the sql for create
 </span>    <span class="k">val</span> <span class="n">sqlCreate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>

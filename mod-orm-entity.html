@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2016-12-03T12:18:14.647</td>
+      <td>2017-02-27T17:37:20.176</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -123,7 +123,7 @@
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.entities.core._</span>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Random</span><span class="o">,</span> <span class="nc">Field</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Random</span><span class="o">,</span> <span class="nc">DateTime</span><span class="o">}</span>
 
 
 <span class="c1">// optional 
@@ -143,71 +143,84 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-  <span class="c1">// CASE 1 : Create a new entity class that implements IEntity trait
-</span>  <span class="c1">// with support for
+  <span class="c1">// CASE 1 : Create a new entity class that extends Entity base class with built in support for
 </span>  <span class="c1">// 1. id field ( primary key )
-</span>  <span class="c1">// 2. timestamps ( date created, date updated )
-</span>  <span class="c1">// 3. audit fields ( created by, updated by )
-</span>  <span class="k">class</span> <span class="nc">EmployeeV1</span> <span class="k">extends</span> <span class="nc">IEntity</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">var</span> <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-    <span class="k">var</span> <span class="n">updatedAt</span><span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-    <span class="k">var</span> <span class="n">updatedBy</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">var</span> <span class="n">createdBy</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">var</span> <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span>
-    <span class="k">var</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span>
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EmployeeV1</span> <span class="o">(</span>
+                          <span class="n">id</span>        <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">firstName</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"John"</span><span class="o">,</span>
+                          <span class="n">lastName</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Doe"</span>
+                        <span class="o">)</span>
+    <span class="k">extends</span> <span class="nc">EntityWithId</span>
+  <span class="o">{</span>
   <span class="o">}</span>
 
 
-  <span class="c1">// CASE 2 : Create a new entity class that extends Entity base class with built in support for
-</span>  <span class="c1">// 1. id field ( primary key )
-</span>  <span class="c1">// 2. timestamps ( created, updated )
-</span>  <span class="c1">// 3. audit fields ( created by, updated by )
-</span>  <span class="k">class</span> <span class="nc">EmployeeV2</span> <span class="k">extends</span> <span class="nc">Entity</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span>
-    <span class="k">var</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span>
+  <span class="c1">// CASE 2 : Create a new entity class with support for
+</span>  <span class="c1">// 1. id   ( primary key + auto inc )
+</span>  <span class="c1">// 2. time ( created at, updated at )
+</span>  <span class="c1">// 3. user ( created by, updated by )
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EmployeeV2</span> <span class="o">(</span>
+                          <span class="n">id</span>        <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">firstName</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"John"</span><span class="o">,</span>
+                          <span class="n">lastName</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Doe"</span><span class="o">,</span>
+                          <span class="n">createdAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                          <span class="n">updatedAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                          <span class="n">updatedBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">createdBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="o">)</span>
+    <span class="k">extends</span> <span class="nc">EntityWithId</span>
+      <span class="k">with</span> <span class="nc">EntityWithTime</span>
+      <span class="k">with</span> <span class="nc">EntityWithUser</span>
+  <span class="o">{</span>
   <span class="o">}</span>
 
 
-  <span class="c1">// CASE 3 : Create a new entity class that extends Entity and also UniqueId
-</span>  <span class="c1">// 1. id field ( primary key )
-</span>  <span class="c1">// 2. timestamps ( created, updated )
-</span>  <span class="c1">// 3. audit fields ( created by, updated by )
-</span>  <span class="k">class</span> <span class="nc">EmployeeV3</span> <span class="k">extends</span> <span class="nc">Entity</span> <span class="k">with</span> <span class="nc">IEntityUnique</span> <span class="o">{</span>
-
-    <span class="k">var</span> <span class="n">firstName</span> <span class="k">=</span> <span class="s">"John"</span>
-    <span class="k">var</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"Doe"</span>
-
+  <span class="c1">// CASE 3 : Create a new entity class with support for:
+</span>  <span class="c1">// 1. id   ( primary key + auto inc )
+</span>  <span class="c1">// 2. time ( created at, updated at )
+</span>  <span class="c1">// 3. user ( created by, updated by )
+</span>  <span class="c1">// 4. guid ( unique id              )
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EmployeeV3</span><span class="o">(</span>
+                         <span class="n">id</span>        <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                         <span class="n">firstName</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"John"</span><span class="o">,</span>
+                         <span class="n">lastName</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Doe"</span><span class="o">,</span>
+                         <span class="n">createdAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                         <span class="n">updatedAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                         <span class="n">updatedBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                         <span class="n">createdBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                         <span class="n">uniqueId</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+                       <span class="o">)</span>
+    <span class="k">extends</span> <span class="nc">EntityWithId</span>
+      <span class="k">with</span> <span class="nc">EntityWithTime</span>
+      <span class="k">with</span> <span class="nc">EntityWithUser</span>
+      <span class="k">with</span> <span class="nc">IEntityUnique</span>
+  <span class="o">{</span>
     <span class="c1">// The unique id is a guid and unique regardless of environment ( dev, qa, staging, prod )
 </span>    <span class="c1">// It serves as a easy way to check for existing items across different environments and
 </span>    <span class="c1">// also makes it easy to import/export items from 1 environment to another ( e.g. pro to dev )
-</span>    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
-  <span class="o">}</span>
+</span>  <span class="o">}</span>
 
 
-  <span class="c1">// CASE 4 : Create a new entity class that extends Entity and also has annotations on fields
-</span>  <span class="c1">// to indicate fields that are persisted to a database ( mapped to table columns )
-</span>  <span class="k">class</span> <span class="nc">EmployeeV4</span> <span class="k">extends</span> <span class="nc">Entity</span> <span class="k">with</span> <span class="nc">IEntityUnique</span> <span class="o">{</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">firstName</span>  <span class="k">=</span> <span class="s">""</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastName</span>  <span class="k">=</span> <span class="s">""</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">lastLogin</span>  <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">isEmailVerified</span>  <span class="k">=</span> <span class="kc">false</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">status</span>  <span class="k">=</span> <span class="mi">0</span>
-
-    <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-    <span class="k">var</span> <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+  <span class="c1">// CASE 4 : Create a new entity class with support for:
+</span>  <span class="c1">// 1. id   ( primary key + auto inc )
+</span>  <span class="c1">// 2. time ( created at, updated at )
+</span>  <span class="c1">// 3. user ( created by, updated by )
+</span>  <span class="c1">// 4. guid ( unique id              )
+</span>  <span class="c1">// using IEntityWithMeta trait which combines IEntityWithTime, IEntityWithUser, IEntityWithGuid
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EmployeeV4</span><span class="o">(</span>
+                          <span class="n">id</span>        <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">firstName</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"John"</span><span class="o">,</span>
+                          <span class="n">lastName</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Doe"</span><span class="o">,</span>
+                          <span class="n">createdAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                          <span class="n">updatedAt</span> <span class="k">:</span> <span class="kt">DateTime</span> <span class="o">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">(),</span>
+                          <span class="n">updatedBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">createdBy</span> <span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span>
+                          <span class="n">uniqueId</span>  <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+                        <span class="o">)</span>
+    <span class="k">extends</span> <span class="nc">EntityWithId</span>
+      <span class="k">with</span> <span class="nc">EntityWithMeta</span>
+  <span class="o">{</span>
   <span class="o">}</span>
   
 

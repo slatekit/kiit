@@ -70,17 +70,17 @@
 		
 		<section id="codeExample" class="section" >
 			<div class="container">
-				<h1 id="sms">Sms</h1>
+				<h1 id="email">Email</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>An Sms ( Text message ) service to send text messages to mobile phones for confirmation codes and invites.</td>
+      <td>An Email service to send emails with support for templates using SendGrid as the default implementation</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-28T16:29:52.397</td>
+      <td>2017-02-28T16:29:52.394</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -96,7 +96,7 @@
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.core.sms.SmsService.scala</td>
+      <td>slate.core.sms.EmailService.scala</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -104,7 +104,7 @@
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Sms.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Sms.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Email.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Email.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -115,10 +115,10 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common._</span>
-<span class="k">import</span> <span class="nn">slate.common.templates.</span><span class="o">{</span><span class="nc">TemplatePart</span><span class="o">,</span> <span class="nc">Template</span><span class="o">,</span> <span class="nc">Templates</span><span class="o">}</span>
+</span><span class="k">import</span> <span class="nn">slate.common.templates.</span><span class="o">{</span><span class="nc">TemplatePart</span><span class="o">,</span> <span class="nc">Template</span><span class="o">,</span> <span class="nc">Templates</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Vars</span><span class="o">,</span> <span class="nc">Uris</span><span class="o">,</span> <span class="nc">ApiCredentials</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.core.common.Conf</span>
-<span class="k">import</span> <span class="nn">slate.core.sms.</span><span class="o">{</span><span class="nc">SmsMessage</span><span class="o">,</span> <span class="nc">SmsServiceTwilio</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.core.email.</span><span class="o">{</span><span class="nc">EmailMessage</span><span class="o">,</span> <span class="nc">EmailServiceSendGrid</span><span class="o">}</span>
 
 
 <span class="c1">// optional 
@@ -135,21 +135,19 @@
 </span>    <span class="c1">// Load the config file from slatekit directory in user_home directory
 </span>    <span class="c1">// e.g. {user_home}/slatekit/conf/sms.conf
 </span>    <span class="c1">// NOTE: It is safer/more secure to store config files there.
-</span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"user://slatekit/conf/sms.conf"</span><span class="o">))</span>
+</span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Conf</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="s">"user://slatekit/conf/email.conf"</span><span class="o">))</span>
 
     <span class="c1">// Setup 2: Get the api key either through conf or explicitly
-</span>    <span class="k">val</span> <span class="n">apiKey1</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">apiKey</span><span class="o">(</span><span class="s">"sms"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">apiKey2</span> <span class="k">=</span> <span class="nc">ApiCredentials</span><span class="o">(</span><span class="s">"17181234567"</span><span class="o">,</span> <span class="s">"ABC1234567"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"twilio-sms"</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">apiKey1</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">apiKey</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">apiKey2</span> <span class="k">=</span> <span class="nc">ApiCredentials</span><span class="o">(</span><span class="s">"17181234567"</span><span class="o">,</span> <span class="s">"ABC1234567"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"sendgrid-email"</span><span class="o">)</span>
     <span class="k">val</span> <span class="n">apiKey</span>  <span class="k">=</span> <span class="n">apiKey1</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="n">apiKey2</span><span class="o">)</span>
 
-    <span class="c1">// Setup 3a: Setup the sms service ( basic ) with api key
-</span>    <span class="c1">// Note: The sms service will default to only USA ( you can customize this later )
-</span>    <span class="k">val</span> <span class="n">sms1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SmsServiceTwilio</span><span class="o">(</span><span class="n">apiKey</span><span class="o">.</span><span class="n">key</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">pass</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">account</span><span class="o">)</span>
+    <span class="c1">// Setup 3a: Setup the email service ( basic ) with api key
+</span>    <span class="k">val</span> <span class="n">email1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmailServiceSendGrid</span><span class="o">(</span><span class="n">apiKey</span><span class="o">.</span><span class="n">key</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">pass</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">account</span><span class="o">)</span>
 
     <span class="c1">// Setup 3b: Setup the sms service with support for templates
 </span>    <span class="k">val</span> <span class="n">templates</span> <span class="k">=</span> <span class="nc">Templates</span><span class="o">(</span>
       <span class="n">templates</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
-        <span class="k">new</span> <span class="nc">Template</span><span class="o">(</span><span class="s">"sms_welcome"</span><span class="o">,</span> <span class="nc">Uris</span><span class="o">.</span><span class="n">readText</span><span class="o">(</span><span class="s">"user://slatekit/templates/sms_welcome.txt"</span><span class="o">).</span><span class="n">get</span><span class="o">),</span>
         <span class="k">new</span> <span class="nc">Template</span><span class="o">(</span><span class="s">"email_welcome"</span><span class="o">,</span> <span class="nc">Uris</span><span class="o">.</span><span class="n">readText</span><span class="o">(</span><span class="s">"user://slatekit/templates/email_welcome.txt"</span><span class="o">).</span><span class="n">get</span><span class="o">),</span>
         <span class="k">new</span> <span class="nc">Template</span><span class="o">(</span><span class="s">"email_pass"</span><span class="o">,</span> <span class="nc">Uris</span><span class="o">.</span><span class="n">readText</span><span class="o">(</span><span class="s">"user://slatekit/templates/email_password.txt"</span><span class="o">).</span><span class="n">get</span><span class="o">)</span>
       <span class="o">),</span>
@@ -158,11 +156,7 @@
         <span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="o">(</span><span class="n">s</span><span class="k">:</span><span class="kt">TemplatePart</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"SlateKit.Sample"</span>  <span class="o">)</span>
       <span class="o">))</span>
     <span class="o">)</span>
-    <span class="k">val</span> <span class="n">sms2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SmsServiceTwilio</span><span class="o">(</span><span class="n">apiKey</span><span class="o">.</span><span class="n">key</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">pass</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">account</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">templates</span><span class="o">))</span>
-
-    <span class="c1">// Setup 3b: Setup the templates with support for different country codes
-</span>    <span class="k">val</span> <span class="n">countries</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">CountryCode</span><span class="o">](</span><span class="nc">CountryCode</span><span class="o">(</span><span class="s">"US"</span><span class="o">),</span><span class="nc">CountryCode</span><span class="o">(</span><span class="s">"FR"</span><span class="o">)))</span>
-    <span class="k">val</span> <span class="n">sms3</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SmsServiceTwilio</span><span class="o">(</span><span class="n">apiKey</span><span class="o">.</span><span class="n">key</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">pass</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">account</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">templates</span><span class="o">),</span> <span class="n">countries</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">email2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmailServiceSendGrid</span><span class="o">(</span><span class="n">apiKey</span><span class="o">.</span><span class="n">key</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">pass</span><span class="o">,</span> <span class="n">apiKey</span><span class="o">.</span><span class="n">account</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="n">templates</span><span class="o">))</span>
     
 
 </code></pre>
@@ -171,14 +165,14 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Send an invitation message to phone "234567890 in the United States.
-</span>    <span class="n">sms3</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="n">s</span><span class="s">"Invitation to MyApp.com"</span><span class="o">,</span> <span class="s">"us"</span><span class="o">,</span> <span class="s">"234567890"</span><span class="o">)</span>
+    <span class="c1">// Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">email2</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"kishore@abc.com"</span><span class="o">,</span> <span class="s">"Welcome to MyApp.com"</span><span class="o">,</span> <span class="s">"welcome!"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
 
     <span class="c1">// Use case 2: Send using a constructed message object
-</span>    <span class="n">sms3</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="nc">SmsMessage</span><span class="o">(</span><span class="s">"Invitation to MyApp.com"</span><span class="o">,</span> <span class="s">"us"</span><span class="o">,</span> <span class="s">"234567890"</span><span class="o">))</span>
+</span>    <span class="n">email2</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="nc">EmailMessage</span><span class="o">(</span><span class="s">"kishore@abc.com"</span><span class="o">,</span> <span class="s">"Welcome to MyApp.com"</span><span class="o">,</span> <span class="s">"welcome!"</span><span class="o">,</span> <span class="kc">false</span><span class="o">))</span>
 
     <span class="c1">// Use case 3: Send message using one of the setup templates
-</span>    <span class="n">sms3</span><span class="o">.</span><span class="n">sendUsingTemplate</span><span class="o">(</span><span class="s">"sms_welcome"</span><span class="o">,</span> <span class="s">"us"</span><span class="o">,</span> <span class="s">"234567890"</span><span class="o">,</span>
+</span>    <span class="n">email2</span><span class="o">.</span><span class="n">sendUsingTemplate</span><span class="o">(</span><span class="s">"email_welcome"</span><span class="o">,</span> <span class="s">"kishore@abc.com"</span><span class="o">,</span> <span class="s">"Welcome to MyApp.com"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span>
       <span class="k">new</span> <span class="nc">Vars</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">(</span>
         <span class="s">"greeting"</span>  <span class="o">-&gt;</span> <span class="s">"hello"</span><span class="o">,</span>
         <span class="s">"user.name"</span> <span class="o">-&gt;</span> <span class="s">"kishore"</span><span class="o">,</span>
