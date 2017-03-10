@@ -14,8 +14,6 @@
 package slate.core.apis
 
 import slate.common.results.ResultSupportIn
-
-import scala.collection.mutable.Map
 import slate.common.{InputArgs, Strings, Result}
 import slate.core.apis.support.ApiCallReflect
 
@@ -32,10 +30,9 @@ object ApiHelper extends ResultSupportIn {
   def buildArgs(inputs:Option[List[(String,String)]]):InputArgs = {
 
     // fill args
-    val rawArgs = Map[String,Any]()
-    inputs.fold(Unit)( all => {
-      all.foreach( input => rawArgs(input._1) = input._2)
-      Unit
+    val rawArgs =
+    inputs.fold(Map[String,Any]())( all => {
+      all.map( input => input._1 -> input._2).toMap
     })
     val args = new InputArgs(rawArgs)
     args
@@ -49,7 +46,7 @@ object ApiHelper extends ResultSupportIn {
     val tokens = Strings.split(path, '.').toList
     val args = Some(buildArgs(inputs))
     val opts = Some(buildArgs(headers))
-    val apiCmd = new Request(path, tokens, tokens(0), tokens(1), tokens(2), "get", args, opts)
+    val apiCmd = new Request(path, tokens, tokens(0), tokens(1), tokens(2), "get", args, opts, "")
     apiCmd
   }
 

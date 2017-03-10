@@ -16,7 +16,6 @@ package slate.core.apis
 import slate.common.{InputArgs, Inputs}
 import slate.core.apis.doc.{ApiVisitor, ApiDocConsole}
 import slate.core.common.AppContext
-import scala.collection.mutable.Map
 
 /**
   * A thin wrapper on the ApiContainer that only extends the base implementation by handling

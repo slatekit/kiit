@@ -14,7 +14,8 @@
 package slate.core.apis.doc
 
 import slate.common.console.ConsoleWriter
-import slate.common.{ReflectedArg, Strings}
+import slate.common.Strings
+import slate.common.reflect.ReflectedArg
 import slate.core.apis.{Api, ApiAction, ApiArg}
 
 /**
