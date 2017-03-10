@@ -29,13 +29,13 @@ package slate.common
 class RequestBase(
                 val path       :String            ,
                 val parts      :List[String]      ,
-                val area       :String            = "",
-                val name       :String            = "",
-                val action     :String            = "",
-                val verb       :String            = "",
-                val args       :Option[Inputs]    = None,
-                val opts       :Option[Inputs]    = None,
-                val tag        :String            = ""
+                val area       :String            ,
+                val name       :String            ,
+                val action     :String            ,
+                val verb       :String            ,
+                val args       :Option[Inputs]    ,
+                val opts       :Option[Inputs]    ,
+                val tag        :String
                )
 {
   def fullName :String =

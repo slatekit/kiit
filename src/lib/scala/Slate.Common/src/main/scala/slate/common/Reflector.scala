@@ -12,6 +12,7 @@
 package slate.common
 
 
+import slate.common.reflect.ReflectedArg
 import slate.common.utils.Temp
 
 import scala.collection.mutable.{ListBuffer}
@@ -60,48 +61,11 @@ object Reflector {
   }
 
 
-  /*
-    def createInstanceWithNoParams(tpe:Type, params:Option[List[Any]] = None): Any = {
-      val mirror = ru.runtimeMirror(getClass.getClassLoader)
-      val clsSym = tpe.typeSymbol.asClass
-      val clsMirror = mirror.reflectClass(clsSym)
-      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
-      val conMirror = clsMirror.reflectConstructor(conSym)
-      val instance = if(params.isEmpty) conMirror() else conMirror(params: _*)
-      instance
-    }
-
-
-    def createInstance(tpe:Type): Any = {
-      val mirror = ru.runtimeMirror(getClass.getClassLoader)
-      val clsSym = tpe.typeSymbol.asClass
-      val clsMirror = mirror.reflectClass(clsSym)
-
-      val conSym = tpe.decls.filter( s =>
-      {
-        s.isMethod && s.isConstructor && s.asMethod.paramLists.flatten.isEmpty
-      }).toList.apply(0).asMethod
-
-      if(conSym == null)
-        return null
-
-      val conMirror = clsMirror.reflectConstructor(conSym)
-      val instance = conMirror()
-      instance
-    }
-
-
-    def createInstanceWithParams(tpe:Type, args:List[Any]): Any = {
-      val mirror = ru.runtimeMirror(getClass.getClassLoader)
-      val clsSym = tpe.typeSymbol.asClass
-      val clsMirror = mirror.reflectClass(clsSym)
-      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
-      val conMirror = clsMirror.reflectConstructor(conSym)
-      val instance = conMirror(args: _*)
-      instance
-    }
-  */
-
+  /**
+   * Determines whether or not the type provided is a case class
+   * @param instance
+   * @return
+   */
   def isCaseClass(instance: Any): Boolean = {
     val typeMirror = runtimeMirror(instance.getClass.getClassLoader)
     val instanceMirror = typeMirror.reflect(instance)
@@ -110,12 +74,22 @@ object Reflector {
   }
 
 
+  /**
+   * Determines whether or not the type provided is a case class
+   * @param tpe
+   * @return
+   */
   def isCaseClass(tpe: Type): Boolean = {
     val clsSym = tpe.typeSymbol.asClass
     clsSym.isCaseClass
   }
 
 
+  /**
+   * Gets the default constructor
+   * @param tpe
+   * @return
+   */
   def getConstructorDefault(tpe:Type): scala.reflect.runtime.universe.MethodSymbol = {
    val conSymbol = tpe.decl(ru.termNames.CONSTRUCTOR)
     val defaultConstructor =
@@ -237,6 +211,12 @@ object Reflector {
   }
 
 
+  /**
+   * Gets the data type of the field name
+   * @param tpe
+   * @param fieldName
+   * @return
+   */
   def getFieldType(tpe:Type, fieldName:String): Type =
   {
     val fieldX = tpe.decl(ru.TermName(fieldName)).asTerm.accessed.asTerm
@@ -244,14 +224,44 @@ object Reflector {
   }
 
 
+  /**
+   * Used internally
+   * @return
+   */
   def getFieldTypeString(): Type = {
     getFieldType(typeOf[Temp], "typeString")
   }
 
 
-  def getFields(cc: AnyRef) :Map[String,Any]=
-  (Map[String, Any]() /: cc.getClass.getDeclaredFields) {(a, f) => f.setAccessible(true)
+  /**
+   * Get all the fields of the instance
+   * @param cc
+   * @return
+   */
+  def getFields(cc: AnyRef) :Map[String,Any] =
+  ( Map[String, Any]() /: cc.getClass.getDeclaredFields) {(a, f) => f.setAccessible(true)
      a + (f.getName -> f.get(cc))
+  }
+
+
+  /**
+   * Get fields by the type
+   * @tparam T
+   * @return
+   */
+  def getFields[T:TypeTag]():List[MethodSymbol] = getFieldsByType(typeOf[T])
+
+
+  /**
+   * Get fields by the type
+   * @param tpe
+   * @return
+   */
+  def getFieldsByType(tpe:Type):List[MethodSymbol] = {
+    val fields = tpe.members.sorted.collect {
+      case m: MethodSymbol if m.isCaseAccessor => m
+    }
+    fields
   }
 
 
@@ -353,26 +363,6 @@ object Reflector {
 
 
   /**
-    * calls a method on the instance supplied
-    *
-    * @param inst
-    * @param name
-    * @param inputs
-    */
-  def callMethod(inst:Any, name: String, inputs: Array[Any]):Any =
-  {
-    val m = ru.runtimeMirror(getClass.getClassLoader)
-    val im = m.reflect(inst)
-    val mem = im.symbol.typeSignature.member(ru.TermName(name)).asMethod
-    val result = if(Option(inputs).isEmpty)
-      im.reflectMethod(mem).apply()
-    else
-      im.reflectMethod(mem).apply(inputs:_*)
-    result
-  }
-
-
-  /**
    * Gets a method on the instance with the supplied name
     *
     * @param instance
@@ -434,6 +424,14 @@ object Reflector {
   }
 
 
+  /**
+   * Gets all the methods with the annotations.
+   * @param instance
+   * @param clsTpe
+   * @param anoTpe
+   * @param declaredInSelfType
+   * @return
+   */
   def getMethodsWithAnnotations(instance:AnyRef, clsTpe:Type, anoTpe:Type,
                                 declaredInSelfType:Boolean = true):
       List[(String,MethodSymbol,MethodMirror,Any)] =
@@ -461,6 +459,14 @@ object Reflector {
   }
 
 
+  /**
+   * Gets all the fields with the supplied annotation
+   * @param instance
+   * @param clsTpe
+   * @param anoTpe
+   * @param declaredInSelfType
+   * @return
+   */
   def getFieldsWithAnnotations(instance:Option[AnyRef], clsTpe:Type, anoTpe:Type,
                                declaredInSelfType:Boolean = true):
       List[(String,TermSymbol,FieldMirror,Any,Type)] =
@@ -490,6 +496,26 @@ object Reflector {
   }
 
 
+  /**
+   * calls a method on the instance supplied
+   *
+   * @param inst
+   * @param name
+   * @param inputs
+   */
+  def callMethod(inst:Any, name: String, inputs: Array[Any]):Any =
+  {
+    val m = ru.runtimeMirror(getClass.getClassLoader)
+    val im = m.reflect(inst)
+    val mem = im.symbol.typeSignature.member(ru.TermName(name)).asMethod
+    val result = if(Option(inputs).isEmpty)
+      im.reflectMethod(mem).apply()
+    else
+      im.reflectMethod(mem).apply(inputs:_*)
+    result
+  }
+
+
   def toFields(item:AnyRef):List[(String,Any)] = {
     val items = new ListBuffer[(String,Any)]
 
@@ -502,6 +528,50 @@ object Reflector {
 
 
   /*
+
+
+
+  /*
+    def createInstanceWithNoParams(tpe:Type, params:Option[List[Any]] = None): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = if(params.isEmpty) conMirror() else conMirror(params: _*)
+      instance
+    }
+
+
+    def createInstance(tpe:Type): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+
+      val conSym = tpe.decls.filter( s =>
+      {
+        s.isMethod && s.isConstructor && s.asMethod.paramLists.flatten.isEmpty
+      }).toList.apply(0).asMethod
+
+      if(conSym == null)
+        return null
+
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = conMirror()
+      instance
+    }
+
+
+    def createInstanceWithParams(tpe:Type, args:List[Any]): Any = {
+      val mirror = ru.runtimeMirror(getClass.getClassLoader)
+      val clsSym = tpe.typeSymbol.asClass
+      val clsMirror = mirror.reflectClass(clsSym)
+      val conSym = tpe.decl(ru.termNames.CONSTRUCTOR).asMethod
+      val conMirror = clsMirror.reflectConstructor(conSym)
+      val instance = conMirror(args: _*)
+      instance
+    }
+  */
   def printParams(mem: Symbol): Unit =
   {
     val args = mem.typeSignature.paramLists
