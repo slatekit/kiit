@@ -20,6 +20,7 @@ package slate.common
 case class ApiKey(
                    name:String,
                    key :String,
+                   roles:String,
                    rolesLookup:Map[String,String]
                  )
 {
@@ -29,6 +30,6 @@ case class ApiKey(
 object ApiKey {
 
   def apply(name:String, key:String, roles:String): ApiKey = {
-    ApiKey(name, key, Option(roles).fold(Map[String,String]())( r => Strings.splitToMap(r, ',', true)))
+    ApiKey(name, key, roles, Option(roles).fold(Map[String,String]())( r => Strings.splitToMap(r, ',', true)))
   }
 }

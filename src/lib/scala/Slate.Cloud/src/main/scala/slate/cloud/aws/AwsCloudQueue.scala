@@ -14,52 +14,32 @@
 
 package slate.cloud.aws
 
-import com.amazonaws.auth.AWSCredentials
 import slate.common._
 import slate.common.results.ResultFuncs._
 import slate.core.cloud._
 
-import com.amazonaws.regions.Region
-import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model._
 
 import scala.collection.mutable.ListBuffer
 
 
-class AwsCloudQueue(queue:String) extends CloudQueueBase
+class AwsCloudQueue(queue:String,
+                    path:Option[String] = None,
+                    section:Option[String] = None) extends CloudQueueBase
   with AwsSupport
 {
 
   private val _queue = queue
-  private var _queueUrl = ""
-  private var _sqs:AmazonSQSClient = null
+  private val _sqs:AmazonSQSClient = AwsFuncs.sqs(path, section)
+  private val _queueUrl = _sqs.getQueueUrl(_queue).getQueueUrl
   private val SOURCE  = "aws:sqs"
 
 
-  def this(apiKey:ApiCredentials) = {
-    this( apiKey.account)
-    connectWith(apiKey.key, apiKey.pass, apiKey.tag)
-  }
-
-
-  override def connectWith(key:String, password:String, tag:String):Unit =
-  {
-    execute(SOURCE, "connect", rethrow = true, data = None, call = () =>
-    {
-      val creds = credentials(key, password)
-      connect(creds)
-    })
-  }
-
-
-  override def connect(args:Any):Unit =
-  {
-    execute(SOURCE, "connect", rethrow = true, data = Some(args), call = () =>
-    {
-      val creds = credentialsFromLogon()
-      connect(creds)
-    })
+  /**
+    * hook for any initialization
+    */
+  override def init():Unit = {
   }
 
 
@@ -69,19 +49,18 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
    */
   override def count(): Int =
   {
-    var count = 0
-    execute(SOURCE, "count", rethrow = true, data = None, call = () =>
+    val count = execute[Int](SOURCE, "count", rethrow = true, data = None, call = () =>
     {
       val request = new GetQueueAttributesRequest(_queueUrl).withAttributeNames("All")
       val atts = _sqs.getQueueAttributes(request).getAttributes
 
       // get count
       if ( atts.containsKey("ApproximateNumberOfMessages"))
-      {
-        count = Integer.parseInt(atts.get("ApproximateNumberOfMessages"))
-      }
+        Integer.parseInt(atts.get("ApproximateNumberOfMessages"))
+      else
+        0
     })
-    count
+    count.getOrElse(0)
   }
 
 
@@ -103,25 +82,23 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
    */
   override def nextBatch(size:Int = 10):Option[List[Any]] =
   {
-    var results:ListBuffer[Any] = null
-
-    execute(SOURCE, "nextbatch", data = Some(size), call = () =>
+    val results = execute[List[Any]](SOURCE, "nextbatch", data = Some(size), call = () =>
     {
       val req = new ReceiveMessageRequest(_queueUrl).withMaxNumberOfMessages(size)
       val msgs = _sqs.receiveMessage(req).getMessages
-      if(msgs != null && msgs.size() > 0) {
-        results = new ListBuffer[Any]()
+      if(Option(msgs).nonEmpty && msgs.size() > 0) {
+        val results = new ListBuffer[Any]()
         for (ndx <- 0 to msgs.size() - 1)
         {
           val msg = msgs.get(ndx)
           results += msg
         }
+        results.toList
       }
+      else
+        List[Any]()
     })
-    if(results == null)
-      None
-    else
-      Some(results.toList)
+    results
   }
 
 
@@ -139,12 +116,16 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
         executeResult[String](SOURCE, "send", data = Some(""), call = () =>
         {
           val message = msg.asInstanceOf[String]
-          var req = new SendMessageRequest(_queueUrl, message)
-          if(!Strings.isNullOrEmpty(tagName))
+          val req = if(!Strings.isNullOrEmpty(tagName))
           {
             val finalTagValue = if(Strings.isNullOrEmpty(tagValue)) "" else tagValue
-            req = req.addMessageAttributesEntry(tagName, new MessageAttributeValue()
-              .withDataType("String").withStringValue(finalTagValue))
+            val req = new SendMessageRequest(_queueUrl, message)
+                          .addMessageAttributesEntry(tagName, new MessageAttributeValue()
+                          .withDataType("String").withStringValue(finalTagValue))
+            req
+          }
+          else {
+            new SendMessageRequest(_queueUrl, message)
           }
           val result = _sqs.sendMessage(req)
           result.getMessageId
@@ -240,34 +221,19 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
   {
     getMessageItemProperty(msgItem, (sqsMsg) => {
       val atts =  sqsMsg.getAttributes
-      if( atts == null || !atts.containsKey(tagName))
+      if( Option(atts).isEmpty || !atts.containsKey(tagName))
           Strings.empty
       else {
         val tagVal = atts.get(tagName)
-        if(tagVal == null)
-          Strings.empty
-        else
-          tagVal.toString
+        Option(tagVal).fold(Strings.empty)( t => t.toString())
       }
     })
   }
 
 
-  /**Connects to Amazon sqs queue supplied
-    */
-  protected def connect(credentials:AWSCredentials):Unit =
-  {
-      val usWest2 = Region.getRegion(Regions.US_WEST_2)
-      _sqs = new AmazonSQSClient(credentials)
-      _sqs.setRegion(usWest2)
-      _queueUrl = _sqs.getQueueUrl(_queue).getQueueUrl
-  }
-
-
   private def getOrDefault(map:Map[String,Any], key:String, defaultVal:Any): Any =
   {
-    Option(map).
-      fold(defaultVal)( m => if(m.contains(key)) map(key) else defaultVal)
+    Funcs.getOrElse(map, key, defaultVal)
   }
 
 
@@ -291,13 +257,8 @@ class AwsCloudQueue(queue:String) extends CloudQueueBase
 
 
   def getMessageItemProperty(msgItem:Option[Any], callback:(Message) => String) :String =
-  {
-    msgItem.fold(Strings.empty)( item => {
-      if(item.isInstanceOf[Message]){
-        callback(item.asInstanceOf[Message])
-      }
-      else
-        Strings.empty
-    })
-  }
+    msgItem.fold(Strings.empty) {
+      case m: Message => callback(m)
+      case _          => Strings.empty
+    }
 }

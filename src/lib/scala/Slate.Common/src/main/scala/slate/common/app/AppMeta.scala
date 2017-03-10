@@ -7,11 +7,11 @@ import slate.common.info._
  * Created by kv on 11/4/2015.
  */
 case class AppMeta(
-                     about  : About     =  About.none    ,
-                     host   : Host      =  Host.none     ,
-                     lang   : Lang      =  Lang.none     ,
-                     status : Status    =  Status.none   ,
-                     start  : StartInfo =  StartInfo.none
+                     about  : About    ,
+                     host   : Host     ,
+                     lang   : Lang     ,
+                     status : Status   ,
+                     start  : StartInfo
                   )
 {
 
@@ -39,4 +39,9 @@ case class AppMeta(
 
     items.toList
   }
+}
+
+
+object AppMeta {
+  val none = new AppMeta(About.none, Host.local(), Lang.asScala, Status.none, StartInfo.none)
 }

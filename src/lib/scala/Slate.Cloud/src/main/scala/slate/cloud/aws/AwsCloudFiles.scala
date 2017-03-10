@@ -15,8 +15,6 @@ package slate.cloud.aws
 
 import java.io.File
 
-import com.amazonaws.auth.AWSCredentials
-import com.amazonaws.regions.{Regions, Region}
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.{GetObjectRequest, ObjectMetadata}
 import slate.common._
@@ -24,47 +22,23 @@ import slate.common._
 import slate.core.cloud._
 
 
-class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
+class AwsCloudFiles(defaultFolder:String,
+                    createDefaultFolder:Boolean,
+                    path:Option[String] = None,
+                    section:Option[String] = None)
   extends CloudFilesBase(defaultFolder,createDefaultFolder) with AwsSupport {
 
   private val SOURCE  = "aws:s3"
-  private var _s3:AmazonS3Client = null
-
-
-  def this(apiKey:ApiCredentials) = {
-    this( apiKey.account, false)
-    connectWith(apiKey.key, apiKey.pass, apiKey.tag)
-  }
+  private val _s3:AmazonS3Client = AwsFuncs.s3(path, section)
 
 
   /**
-    * connects to the datasource using the key/password supplied.
-    *
-    * @param key
-    * @param password
+    * hook for any initialization
     */
-  override def connectWith(key:String, password:String, tag:String):Unit =
-  {
-    execute(SOURCE, "connect", rethrow = true, data = None, call = () =>
-    {
-      val creds = credentials(key, password)
-      connect(creds)
-    })
-  }
-
-
-  /**
-    * connects to the datasource using login credentials from default credentials file for aws
-    *
-    * @param args
-    */
-  override def connect(args:Any):Unit =
-  {
-    execute(SOURCE, "connect", rethrow = true, data = Some(args), call = () =>
-    {
-      val creds = credentialsFromLogon()
-      connect(creds)
-    })
+  override def init():Unit = {
+    if(_createDefaultFolder) {
+      _s3.createBucket(_defaultFolder)
+    }
   }
 
 
@@ -205,17 +179,6 @@ class AwsCloudFiles(defaultFolder:String, createDefaultFolder:Boolean)
       _s3.putObject(_defaultFolder, fullName, toInputStream(content), new ObjectMetadata())
       fullName
     })
-  }
-
-
-  protected def connect(credentials:AWSCredentials):Unit =
-  {
-      val usWest2 = Region.getRegion(Regions.US_WEST_2)
-      _s3 = new AmazonS3Client(credentials)
-      _s3.setRegion(usWest2)
-      if(_createDefaultFolder) {
-        _s3.createBucket(_defaultFolder)
-      }
   }
 
 
