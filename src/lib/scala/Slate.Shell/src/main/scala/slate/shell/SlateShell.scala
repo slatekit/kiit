@@ -12,18 +12,14 @@
   */
 package slate.shell
 
-import slate.common.app.AppMeta
+
 import slate.common.args.ArgsSchema
-import slate.common.databases.DbLookup
 import slate.common.encrypt.Encryptor
-import slate.common.logging.LoggerConsole
 import slate.common._
-import slate.common.info.{Folders, Lang, Host, About}
 import slate.core.apis.{ApiReg, ApiAuth}
 import slate.core.app.AppRunner._
-import slate.core.app.{AppProcess, AppRunner}
+import slate.core.app.{AppProcess}
 import slate.core.common.{Conf, AppContext}
-import slate.entities.core.Entities
 import slate.tools.codegen.CodeGenApi
 import slate.tools.docs.DocApi
 import slate.integration.{ShellAPI, VersionApi, AppApi}
@@ -138,12 +134,12 @@ class SlateShell(context:Option[AppContext]) extends AppProcess(context) {
 
   private def buildApiKeys():List[ApiKey] = {
     List[ApiKey](
-        new ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
-        new ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
-        new ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
-        new ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
-        new ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
-        new ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
+        ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
+        ApiKey("po"   , "0F66CD55079C42FF85C001846472343C", "user,po"                 ),
+        ApiKey("qa"   , "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"              ),
+        ApiKey("dev"  , "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"          ),
+        ApiKey("ops"  , "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"      ),
+        ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
       )
   }
 }

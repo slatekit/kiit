@@ -250,9 +250,9 @@ class EntityService[T >: Null <: Entity](protected val _repo:EntityRepo[T])
     val results = find(query)
     val any = Option(results).fold(false)( r => r.nonEmpty)
     if(any)
-      None
-    else
       results(0).asInstanceOf[Option[T]]
+    else
+      None
   }
 
 

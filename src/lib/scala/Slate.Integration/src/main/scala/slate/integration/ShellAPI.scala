@@ -17,8 +17,6 @@ import slate.core.apis._
 import slate.core.common.AppContext
 import slate.core.shell._
 
-import scala.collection.mutable.Map
-
 /**
   * Layer on top of the core ShellService to provide support for handling command line requests
   * to your APIs using the Protocol independent APIs in the api module.

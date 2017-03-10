@@ -52,6 +52,9 @@ class EntityMapper(model:Model) extends Mapper(model) {
 
       if(include)
       {
+        // =======================================================
+        // NOTE: Refactor this to use pattern matching ?
+        // Similar to the Mapper.scala class but reversed
         val data = if( mapping.dataType == _tpeString )
         {
           val sVal = Reflector.getFieldValue(item, mapping.name).asInstanceOf[String]

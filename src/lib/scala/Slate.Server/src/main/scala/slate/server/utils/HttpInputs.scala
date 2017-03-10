@@ -15,7 +15,7 @@ package slate.server.utils
 
 import akka.http.scaladsl.model.HttpMethods
 import akka.http.scaladsl.server.RequestContext
-import slate.common.{Inputs}
+import slate.common.{DateTime, InputFuncs, Inputs}
 import slate.common.Funcs.{getStringByOrder, getStringByOrderOrElse}
 import spray.json._
 
@@ -40,6 +40,44 @@ class HttpInputs(private val _ctx:RequestContext,
   def isPut       : Boolean = _ctx.request.method == HttpMethods.PUT
   def isDelete    : Boolean = _ctx.request.method == HttpMethods.DELETE
   def hasBody     : Boolean = isPost | isPut | isDelete
+
+  override def getDate     (key: String) : DateTime = InputFuncs.convertDate(getString(key))
+  override def getBool     (key: String) : Boolean  = getString(key).toBoolean
+  override def getInt      (key: String) : Int      = getString(key).toInt
+  override def getLong     (key: String) : Long     = getString(key).toLong
+  override def getDouble   (key: String) : Double   = getString(key).toDouble
+  override def getFloat    (key: String) : Float    = getString(key).toFloat
+  override def get(key: String) : Option[Any] = getObject(key)
+
+
+  /**
+   * gets an object from the JSON post data.
+   *
+   * @param key
+   * @return
+   */
+  override def getObject(key: String): Option[AnyRef] =
+  {
+    // NOTE: Need to make a minor change to the Inputs trait/class
+    // to support avoid null
+    if ( !containsKey(key) )
+      None
+    else {
+      val result = _json.get.fields(key).asInstanceOf[JsObject]
+      Some(new HttpInputs(_ctx, Option(result)))
+    }
+  }
+
+
+  /**
+   * Whether or not the key is present in the query string or in the post JSON post data.
+   *
+   * @param key
+   * @return
+   */
+  override def containsKey(key: String): Boolean = {
+    _uri.query.get(key).isPresent || (_json.isDefined && _json.get.fields.contains(key))
+  }
 
 
   /**
@@ -90,57 +128,6 @@ class HttpInputs(private val _ctx:RequestContext,
   }
 
 
-  /**
-    * Gets a value from the query string or JSON post data.
- *
-    * @param key
-    * @return
-    */
-  override def getValue(key: String): AnyVal =
-  {
-    // TODO: Refactor this code to remove runtime exception
-    // involves changing Inputs class in common.
-    require(contains(key), "key not found in arguments : " + key)
-
-    if ( _json.isDefined && _json.get.fields.contains(key)) {
-       _json.get.fields(key).asInstanceOf[AnyVal]
-    }
-    else
-      throw new IllegalArgumentException("Value not available")
-  }
-
-
-  /**
-    * gets an object from the JSON post data.
- *
-    * @param key
-    * @return
-    */
-  override def getObject(key: String): AnyRef =
-  {
-    // NOTE: Need to make a minor change to the Inputs trait/class
-    // to support avoid null
-    if ( !containsKey(key) )
-      null
-    else {
-      val result = _json.get.fields(key).asInstanceOf[JsObject]
-      new HttpInputs(_ctx, Option(result))
-    }
-  }
-
-
-  /**
-    * Whether or not the key is present in the query string or in the post JSON post data.
-    *
-    * @param key
-    * @return
-    */
-  override def containsKey(key: String): Boolean =
-  {
-    _uri.query.get(key).isPresent || (_json.isDefined && _json.get.fields.contains(key))
-  }
-
-
   private def fromQueryString(key:String):Option[String] = {
     val queryParam = _uri.query().get(key)
     val value = if(queryParam.isPresent) Option(queryParam.get) else None
@@ -167,4 +154,20 @@ class HttpInputs(private val _ctx:RequestContext,
     })
     jsonVal
   }
+
+
+
+  /*
+  override def getValue(key: String): AnyVal =
+  {
+    // involves changing Inputs class in common.
+    require(contains(key), "key not found in arguments : " + key)
+
+    if ( _json.isDefined && _json.get.fields.contains(key)) {
+      _json.get.fields(key).asInstanceOf[AnyVal]
+    }
+    else
+      throw new IllegalArgumentException("Value not available")
+  }
+  */
 }

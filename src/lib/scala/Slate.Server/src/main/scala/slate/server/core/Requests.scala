@@ -15,7 +15,6 @@ package slate.server.core
 
 import akka.http.scaladsl.model.HttpMethods
 import akka.http.scaladsl.server.RequestContext
-import slate.common.{Strings, InputArgs}
 import slate.common.args.Args
 import slate.core.apis.Request
 import slate.server.utils.{HttpHeaders, HttpInputs}

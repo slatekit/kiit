@@ -24,7 +24,7 @@ class AppApi( context:AppContext ) extends ApiWithSupport(context)
 {
 
   @ApiAction(name = "", desc= "get info about the application", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def app(format:String = "props"):About = {
+  def app(format:Option[String] = Some("props")):About = {
     context.app.about
   }
 
@@ -37,37 +37,37 @@ class AppApi( context:AppContext ) extends ApiWithSupport(context)
 
 
   @ApiAction(name = "", desc= "gets info about the language", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def lang(format:String = "props"):Lang = {
+  def lang():Lang = {
     context.app.lang
   }
 
 
   @ApiAction(name = "", desc= "gets info about the host", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def host(format:String = "props"):Host = {
+  def host():Host = {
     context.app.host
   }
 
 
   @ApiAction(name = "", desc= "gets info about the folders", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def dirs(format:String = "props"):Folders = {
+  def dirs():Folders = {
     context.dirs.getOrElse(Folders.none)
   }
 
 
   @ApiAction(name = "", desc= "gets info about the start up time", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def start(format:String = "props"):StartInfo = {
+  def start():StartInfo = {
     context.app.start
   }
 
 
   @ApiAction(name = "", desc= "gets info about the status", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def status(format:String = "props"):Status = {
+  def status():Status = {
     context.app.status
   }
 
 
   @ApiAction(name = "", desc= "gets all info", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def all(format:String = "props"):String = {
+  def all():String = {
     SerializerUtils.asJson(context.app.info())
   }
 }

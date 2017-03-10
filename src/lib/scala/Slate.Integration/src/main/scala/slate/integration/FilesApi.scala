@@ -22,13 +22,6 @@ import slate.core.common.AppContext
 class FilesApi(val files:CloudFilesBase, context:AppContext ) extends ApiWithSupport(context) {
 
 
-  @ApiAction(name = "", desc= "connect to the datasource", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectWith(key:String, password:String, tag:String):Unit =
-  {
-    files.connectWith(key, password, tag)
-  }
-
-
   @ApiAction(name = "", desc= "creates the root folder/bucket",
     roles= "@parent", verb = "@parent", protocol = "@parent")
   def createRootFolder(rootFolder:String):Unit = {

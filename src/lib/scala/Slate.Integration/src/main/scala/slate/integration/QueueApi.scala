@@ -23,13 +23,6 @@ import slate.core.common.AppContext
 class QueueApi ( val queue:QueueSource, context:AppContext )extends ApiWithSupport(context) {
 
 
-  @ApiAction(name = "", desc= "connect to the queue", roles= "@parent", verb = "@parent", protocol = "@parent")
-  def connectWith(key:String, password:String, tag:String):Unit =
-  {
-    queue.connectWith(key, password, tag)
-  }
-
-
   @ApiAction(name = "", desc= "close the queue", roles= "@parent", verb = "@parent", protocol = "@parent")
   def close(): Unit =
   {
