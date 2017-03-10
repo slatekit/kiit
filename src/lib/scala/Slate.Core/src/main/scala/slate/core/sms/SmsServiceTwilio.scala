@@ -20,14 +20,17 @@ import slate.common._
 import slate.common.templates.Templates
 
 /**
- * simple service to send sms messages using Twilio
+ * simple service to send sms messages using Twilio with support for templates and
+ * countries
  *
  * @param key      : The twilio sid / account
  * @param password : The twilio password
  * @param phone    : The twilio phone number
+ * @param templates: The templates supported ( See templates in utils for more info )
+ * @param ctns     : The countries supported
  * @note           :
  *
-    curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/ACb1234567890d49dcffd51736e0e2e123/Messages.json' \
+    curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/BCa1234567890d49dcffd51736e0e2e123/Messages.json' \
     --data-urlencode 'To=3475143333'  \
     --data-urlencode 'From=+17181234567'  \
     --data-urlencode 'Body=test from slate sms service' \
@@ -37,8 +40,9 @@ class SmsServiceTwilio(key      :String ,
                        password :String ,
                        phone    :String ,
                        templates:Option[Templates] = None,
+                       ctns:Option[List[CountryCode]] = None,
                        sender   :Option[(HttpRequest) => Result[Boolean]] = None)
-  extends SmsService(templates) with ResultSupportIn {
+  extends SmsService(templates, ctns) with ResultSupportIn {
 
   val _settings = new SmsSettings(key, password, phone)
   private val _baseUrl = s"https://api.twilio.com/2010-04-01/Accounts/${key}/Messages.json"
@@ -63,26 +67,28 @@ class SmsServiceTwilio(key      :String ,
   override def send(msg: SmsMessage): Result[Boolean] = {
 
       val phoneFinal = massagePhone(msg.countryCode, msg.phone)
+      phoneFinal.flatMap[Boolean]( phone => {
 
-      // Create an immutable http request.
-      val req = new HttpRequest (
-        url = _baseUrl,
-        method = POST,
-        params = Some(Seq[(String,String)](
-          ("To", phoneFinal),
-          ("From", _settings.account),
-          ("Body", msg.msg)
-        )),
-        headers = None,
-        credentials = Some(new HttpCredentials("Basic", _settings.key, _settings.password)),
-        entity = None,
-        connectTimeOut = HttpConstants.defaultConnectTimeOut,
-        readTimeOut = HttpConstants.defaultReadTimeOut
-      )
+        // Create an immutable http request.
+        val req = new HttpRequest (
+          url = _baseUrl,
+          method = POST,
+          params = Some(Seq[(String,String)](
+            ("To", phone),
+            ("From", _settings.account),
+            ("Body", msg.msg)
+          )),
+          headers = None,
+          credentials = Some(new HttpCredentials("Basic", _settings.key, _settings.password)),
+          entity = None,
+          connectTimeOut = HttpConstants.defaultConnectTimeOut,
+          readTimeOut = HttpConstants.defaultReadTimeOut
+        )
 
-      // This optionally uses the IO monad supplied or actually posts ( impure )
-      // This approach allows for testing this without actually sending a http request.
-      sender.fold( post(req) )( s => s(req) )
+        // This optionally uses the IO monad supplied or actually posts ( impure )
+        // This approach allows for testing this without actually sending a http request.
+        sender.fold( post(req) )( s => s(req) )
+      })
   }
 
 
@@ -92,16 +98,16 @@ class SmsServiceTwilio(key      :String ,
   }
 
 
-  private def massagePhone(countryCode:String, phone:String):String =
+  /**
+    * Format phone to ensure "+" and "iso" is present. e.g. "+{iso}{phone}"
+    * @param iso
+    * @param phone
+    * @return
+    */
+  override def massagePhone(iso:String, phone:String):Result[String] =
   {
-    val result = if (phone.length < 11 && Strings.isMatch("us", countryCode))
-      "1" + phone
-    else if (phone.length < 11 && Strings.isMatch("in", countryCode))
-      "91" + phone
-    else
-      phone
-
-    val finalPhone = if (!result.startsWith("+")) "+" + result else result
-    finalPhone
+    // Remove the "+" and allow base function to ensure the country code is present
+    val result = super.massagePhone(iso, Option(phone).getOrElse("").replace("+", ""))
+    result.map( r => "+" + r)
   }
 }

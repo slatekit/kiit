@@ -13,7 +13,7 @@
 package slate.core.app
 
 import slate.common.app._
-import slate.common.args.{Args, ArgsHelper}
+import slate.common.args.{Args, ArgsFuncs}
 import slate.common.databases.{DbConEmpty, DbConString, DbLookup}
 import slate.common.databases.DbLookup._
 import slate.common.envs._
@@ -177,16 +177,16 @@ object AppFuncs extends ResultSupportIn {
   def isMetaCommand(raw:List[String]):Result[String] = {
 
     // Case 1: Exit ?
-    if (ArgsHelper.isExit(raw, 0)) {
+    if (ArgsFuncs.isExit(raw, 0)) {
       exit()
     }
     // Case 2a: version ?
-    else if (ArgsHelper.isVersion(raw, 0)) {
+    else if (ArgsFuncs.isVersion(raw, 0)) {
       help()
     }
     // Case 2b: about ?
     // Case 3a: Help ?
-    else if (ArgsHelper.isAbout(raw, 0) || ArgsHelper.isHelp(raw, 0)) {
+    else if (ArgsFuncs.isAbout(raw, 0) || ArgsFuncs.isHelp(raw, 0)) {
       help()
     }
     else {

@@ -16,8 +16,8 @@ import java.io.File
 import com.typesafe.config._
 import slate.common._
 import slate.common.results.ResultSupportIn
-import slate.common.conf.{Configs, ConfigBase}
-import slate.common.databases.{DbCon, DbConString}
+import slate.common.conf.{ConfigBase}
+import slate.common.databases.{DbCon}
 import slate.common.encrypt.Encryptor
 
 /**
@@ -80,56 +80,73 @@ class Conf( fileName:Option[String] = None,
             enc:Option[Encryptor] = None,
             config:Option[Config] = None
           )
-  extends ConfigBase(enc) {
+  extends ConfigBase(enc.fold[Option[(String) => String]](None)( e => Some((t) => e.decrypt(t)))) {
 
 
-  private val _config:Config = config.getOrElse(
-    Conf.loadTypeSafeConfig(fileName)
-  )
+  /**
+    * Get or load the config object
+    */
+  private val _config:Config = config.getOrElse( Conf.loadTypeSafeConfig(fileName) )
+
+  override def getString   (key: String) : String   = InputFuncs.decrypt(_config.getString(key), _encryptor)
+  override def getDate     (key: String) : DateTime = InputFuncs.convertDate(_config.getString(key))
+  override def getBool     (key: String) : Boolean  = _config.getBoolean(key)
+  override def getInt      (key: String) : Int      = _config.getInt(key)
+  override def getLong     (key: String) : Long     = _config.getLong(key)
+  override def getDouble   (key: String) : Double   = _config.getDouble(key)
+  override def getFloat    (key: String) : Float    = _config.getDouble(key).toFloat
 
 
+  /**
+    * The reference to the raw underlying config ( TypeSafe config )
+    *
+    * @return
+    */
   override def raw:Any = _config
 
 
-  /// <summary>
-  override def getValue(key: String): AnyVal = {
-    val cfval = _config.getAnyRef(key)
-    if (cfval.isInstanceOf[Integer]){
-      cfval.asInstanceOf[Integer].intValue()
-    }
-    else if (cfval.isInstanceOf[Double]){
-      cfval.asInstanceOf[Double]
-    }
-    else if (cfval.isInstanceOf[Boolean]){
-      cfval.asInstanceOf[Boolean]
-    }
-    else
-      0
-  }
+  /**
+    * whether or not there is a key
+    *
+    * @param key
+    * @return
+    */
+  override def containsKey(key: String): Boolean = _config.hasPath(key)
 
 
-  /// <summary>
-  override def containsKey(key: String): Boolean = {
-    _config.hasPath(key)
-  }
+  /**
+    * size of the config in terms of root sections
+    *
+    * @return
+    */
+  override def size(): Int = _config.entrySet().size()
 
 
-  /// <summary>
-  override def getObject(key: String): AnyRef = {
-    _config.getAnyRef(key)
-  }
+  /**
+   * Gets a value from the underlying config
+   * @param key
+   * @return
+   */
+  override def get(key: String) : Option[Any] = getObject(key)
 
 
-  override def size(): Int = {
-    // Todo: can not get size from typesafe config
-    // Maybe not even needed ?!!
-    1000
-  }
+  /**
+    * gets a config object with the supplied key
+    *
+    * @param key
+    * @return
+    */
+  override def getObject(key: String): Option[AnyRef] = if(containsKey(key)) Option(_config.getAnyRef(key)) else None
 
 
-  override def loadFrom(file:Option[String]): Option[ConfigBase] = {
-    Some(Conf.load(file, enc))
-  }
+  /**
+   * Loads new config from the file path supplied
+   *
+   * @param file
+   * @return
+   */
+  override def loadFrom(file:Option[String]): Option[ConfigBase] = Some(Conf.load(file, enc))
+
 }
 
 

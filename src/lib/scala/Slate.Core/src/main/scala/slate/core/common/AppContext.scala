@@ -21,7 +21,7 @@ import slate.common.envs.{Dev, Env, Envs}
 import slate.common.templates.Subs
 import slate.entities.core.Entities
 import slate.common.i18n.I18nStrings
-import slate.common.info.{Folders, Lang, Host, About}
+import slate.common.info._
 import slate.common.logging.{LoggerConsole, LoggerBase}
 import slate.core.auth.AuthBase
 import slate.core.tenants.Tenant
@@ -64,7 +64,7 @@ case class AppContext(
                         state:Result[Boolean]           = NoResult
                      )
 {
-  def app:AppMeta = { new AppMeta(inf, host, lang) }
+  def app:AppMeta = { new AppMeta(inf, host, lang, Status.none, StartInfo.none ) }
 }
 
 

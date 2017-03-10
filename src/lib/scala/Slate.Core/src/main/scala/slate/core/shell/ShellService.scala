@@ -15,7 +15,7 @@ package slate.core.shell
 
 import slate.common._
 import slate.common.app.{AppMetaSupport, AppMeta}
-import slate.common.args.{ArgsHelper, Args}
+import slate.common.args.{ArgsFuncs, Args}
 import slate.common.console.ConsoleWriter
 import slate.common.Loops._
 import slate.common.info.Folders
@@ -121,7 +121,7 @@ class ShellService(
         true
       }
       // Case 2: "exit, quit" ?
-      else if ( ArgsHelper.isExit(List[String](line.trim()), 0) ) {
+      else if ( ArgsFuncs.isExit(List[String](line.trim()), 0) ) {
         display(msg = Some("Exiting..."))
         false
       }

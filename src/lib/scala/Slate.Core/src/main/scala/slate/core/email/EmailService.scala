@@ -22,7 +22,6 @@ import slate.common.results.ResultFuncs._
 
 abstract class EmailService(templates:Option[Templates] = None) {
 
-
   /**
    * Sends the email message
    * @param msg
@@ -43,11 +42,10 @@ abstract class EmailService(templates:Option[Templates] = None) {
   {
     // NOTE: This guards are more readable that other alternatives
     val result = validate(to, subject)
-    if(result.success){
+    if(result.success) {
       send( new EmailMessage(to, subject, body, html) )
     }
-    else
-    {
+    else {
       err(result.message)
     }
   }

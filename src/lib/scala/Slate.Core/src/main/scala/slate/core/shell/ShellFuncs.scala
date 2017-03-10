@@ -14,7 +14,7 @@
 package slate.core.shell
 
 
-import slate.common.args.ArgsHelper
+import slate.common.args.ArgsFuncs
 import slate.common.info.Folders
 import slate.common.results.ResultCode
 import slate.common.{Result, Strings, Files}
@@ -41,39 +41,39 @@ object ShellFuncs {
     val verbs = cmd.args.actionVerbs
 
     // Case 1: Exit ?
-    if (ArgsHelper.isExit(words, 0))
+    if (ArgsFuncs.isExit(words, 0))
     {
       yesWithCode(ResultCode.EXIT, msg = Some("exit"), tag = Some(cmd.args.action))
     }
     // Case 2a: version ?
-    else if (ArgsHelper.isVersion(words, 0))
+    else if (ArgsFuncs.isVersion(words, 0))
     {
       yesWithCode(ResultCode.HELP, msg = Some("version"), tag = Some(cmd.args.action))
     }
     // Case 2b: about ?
-    else if (ArgsHelper.isAbout(words, 0))
+    else if (ArgsFuncs.isAbout(words, 0))
     {
       yesWithCode(ResultCode.HELP, msg = Some("about"), tag = Some(cmd.args.action))
     }
     // Case 3a: Help ?
-    else if (ArgsHelper.isHelp(words, 0))
+    else if (ArgsFuncs.isHelp(words, 0))
     {
       yesWithCode(ResultCode.HELP, msg = Some("help"), tag = Some(cmd.args.action))
     }
     // Case 3b: Help on area ?
-    else if (ArgsHelper.isHelp(verbs, 1))
+    else if (ArgsFuncs.isHelp(verbs, 1))
     {
       yesWithCode(ResultCode.HELP, msg = Some("area ?"), tag = Some(cmd.args.action))
     }
     // Case 3c: Help on api ?
-    else if (ArgsHelper.isHelp(verbs, 2))
+    else if (ArgsFuncs.isHelp(verbs, 2))
     {
       yesWithCode(ResultCode.HELP, msg = Some("area.api ?"), tag = Some(cmd.args.action))
     }
     // Case 3d: Help on action ?
     else if (!Strings.isNullOrEmpty(cmd.args.action) &&
-      ( ArgsHelper.isHelp(cmd.args.positional, 0) ||
-        ArgsHelper.isHelp(verbs, 3))
+      ( ArgsFuncs.isHelp(cmd.args.positional, 0) ||
+        ArgsFuncs.isHelp(verbs, 3))
     )
     {
       yesWithCode(ResultCode.HELP, msg = Some("area.api.action ?"), tag = Some(cmd.args.action))

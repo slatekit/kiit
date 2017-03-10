@@ -22,10 +22,13 @@ import slate.common.{Result, Files}
   */
 abstract class CloudFilesBase (val _defaultFolder:String, val _createDefaultFolder:Boolean) extends CloudActions {
 
-  def connect(args:Any): Unit = { }
 
+  /**
+    * hook for any initialization
+    */
+  def init():Unit = {
 
-  def connectWith(key:String, pass:String, tag:String):Unit = { }
+  }
 
 
   def create(name:String, content:String): Unit =

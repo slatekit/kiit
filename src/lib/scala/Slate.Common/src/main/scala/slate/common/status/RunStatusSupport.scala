@@ -15,8 +15,21 @@ import slate.common.results.ResultSupportIn
 
 trait RunStatusSupport extends ResultSupportIn {
 
-  protected var _state = new RunStatus()
-  protected var _pauseSeconds = 0
+
+  /**
+   * gets the current state of execution
+   *
+   * @return
+   */
+  def state(): RunState
+
+
+  /**
+   * gets the current status of the application
+   *
+   * @return
+   */
+  def status(): RunStatus
 
 
   /**
@@ -24,7 +37,24 @@ trait RunStatusSupport extends ResultSupportIn {
     *
     * @return
    */
-  def start(): RunStatus = moveToState(RunStateStarted)
+  def start(): RunStatus = moveToState(RunStateExecuting)
+
+
+  /**
+   * moves the current state to waiting
+   *
+   * @return
+   */
+  def waiting(): RunStatus = moveToState(RunStateWaiting)
+
+
+  /**
+   * moves the current state to paused with a default time
+   *
+   * @param seconds
+   * @return
+   */
+  def pause(seconds:Int = 60): RunStatus = moveToState(RunStatePaused)
 
 
   /**
@@ -36,49 +66,59 @@ trait RunStatusSupport extends ResultSupportIn {
 
 
   /**
-   * moves the current state to paused with a default time
-    *
-    * @param seconds
-   * @return
-   */
-  def pause(seconds:Int = 60): RunStatus = {
-    this.synchronized {
-      _pauseSeconds = seconds
-    }
-    moveToState(RunStatePaused)
-  }
-
-
-  /**
    * moves the current state to resumed
     *
     * @return
    */
-  def resume():RunStatus = moveToState(RunStateResumed)
+  def resume():RunStatus = moveToState(RunStateExecuting)
 
 
   /**
-    * moves the current state to waiting
-    *
-    * @return
-    */
-  def waiting(): RunStatus = moveToState(RunStateWaiting)
-
-
-  /**
-   * gets the current status of the application
-    *
-    * @return
+   * moves the current state to complete
+   *
+   * @return
    */
-  def status(): RunStatus = _state
+  def complete(): RunStatus = moveToState(RunStateComplete)
 
 
   /**
-    * whether this is started
+   * moves the current state to failed
+   *
+   * @return
+   */
+  def failed(): RunStatus = moveToState(RunStateFailed)
+
+
+  /**
+   * whether this is started which could be any phase after not-started
+   *
+   * @return
+   */
+  def isStarted(): Boolean = state().value > RunStateNotStarted.value
+
+
+  /**
+    * whether this is executing
     *
     * @return
     */
-  def isStarted(): Boolean = isState(RunStateStarted)
+  def isExecuting(): Boolean = isState(RunStateExecuting)
+
+
+  /**
+   * whether this is waiting
+   *
+   * @return
+   */
+  def isWaiting(): Boolean = isState(RunStateWaiting)
+
+
+  /**
+   * whether this is paused
+   *
+   * @return
+   */
+  def isPaused(): Boolean = isState(RunStatePaused)
 
 
   /**
@@ -90,44 +130,19 @@ trait RunStatusSupport extends ResultSupportIn {
 
 
   /**
-    * whether this is paused
-    *
-    * @return
-    */
-  def isPaused(): Boolean = isState(RunStatePaused)
+   * whether this is complete
+   *
+   * @return
+   */
+  def isComplete(): Boolean = isState(RunStateComplete)
 
 
   /**
-    * whether this is resumed
-    *
-    * @return
-    */
-  def isResumed(): Boolean = isState(RunStateResumed)
-
-
-  /**
-    * whether this is waiting
-    *
-    * @return
-    */
-  def isWaiting(): Boolean = isState(RunStateResumed)
-
-
-  /**
-    * whether this is running ( started or resumed )
-    *
-    * @return
-    */
-  def isStartedOrResumed(): Boolean = isState(RunStateStarted) || isState(RunStateResumed)
-
-
-  /**
-    * whether this is running ( started or resumed )
-    *
-    * @return
-    */
-  def isStartedResumedWaiting(): Boolean = isState(RunStateStarted) ||
-    isState(RunStateResumed) || isState(RunStateWaiting)
+   * whether this has failed
+   *
+   * @return
+   */
+  def isFailed(): Boolean = isState(RunStateFailed)
 
 
   /**
@@ -141,17 +156,17 @@ trait RunStatusSupport extends ResultSupportIn {
   /**
     * whether the current state is at the one supplied.
     *
-    * @param state
+    * @param runState
     * @return
     */
-  def isState(state:RunState): Boolean = _state.status == state
+  def isState(runState:RunState): Boolean = state() == runState
 
 
-  protected def moveToState(state:RunState):RunStatus = {
-    this.synchronized {
-      _state = new RunStatus("", status = state.mode)
-      _state
-    }
-  }
+  /**
+   * moves this state to the one supplied
+   * @param state
+   * @return
+   */
+  protected def moveToState(state:RunState):RunStatus
 }
 

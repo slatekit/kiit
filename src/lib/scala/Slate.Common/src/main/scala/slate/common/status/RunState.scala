@@ -13,16 +13,25 @@ package slate.common.status
 
 trait RunState {
   val mode:String
+  val value:Int
 }
 
-case object RunStateHelpRequest  extends RunState { val mode:String = "help-request" }
-case object RunStateNotStarted   extends RunState { val mode:String = "not-started"  }
-case object RunStateInitializing extends RunState { val mode:String = "initializing" }
-case object RunStateStarted      extends RunState { val mode:String = "started"      }
-case object RunStateExecuting    extends RunState { val mode:String = "executing"    }
-case object RunStateWaiting      extends RunState { val mode:String = "waiting"      }
-case object RunStatePaused       extends RunState { val mode:String = "paused"       }
-case object RunStateResumed      extends RunState { val mode:String = "resumed"      }
-case object RunStateStopped      extends RunState { val mode:String = "stopped"      }
-case object RunStateEnded        extends RunState { val mode:String = "ended"        }
+// STATES:
+// 1. non-started : not-started
+// 2. executing   : currently executing
+// 3. waiting     : waiting for work
+// 4. paused      : paused for x amount of time before going back to executing
+// 5. stopped     : stopped indefinitely
+// 6. complete    : completed
+// 7. failed      : failed ( opposite of completed )
+
+case object RunStateHelpRequest  extends RunState { val value:Int = 0; val mode:String = "help-request" }
+case object RunStateNotStarted   extends RunState { val value:Int = 1; val mode:String = "not-started"  }
+case object RunStateInitializing extends RunState { val value:Int = 2; val mode:String = "initializing" }
+case object RunStateExecuting    extends RunState { val value:Int = 3; val mode:String = "executing"    }
+case object RunStateWaiting      extends RunState { val value:Int = 4; val mode:String = "waiting"      }
+case object RunStatePaused       extends RunState { val value:Int = 5; val mode:String = "paused"       }
+case object RunStateStopped      extends RunState { val value:Int = 6; val mode:String = "stopped"      }
+case object RunStateComplete     extends RunState { val value:Int = 7; val mode:String = "complete"     }
+case object RunStateFailed       extends RunState { val value:Int = 8; val mode:String = "failed"       }
 

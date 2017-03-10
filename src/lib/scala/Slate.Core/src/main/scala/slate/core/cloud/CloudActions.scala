@@ -19,24 +19,25 @@ import slate.common.results.ResultFuncs._
 
 trait CloudActions {
 
-  def execute(source:String, action:String, tag:String = "", audit:Boolean = false,
-              rethrow:Boolean = false, data:Option[Any], call:() => Unit ): Unit =
+  def execute[T](source:String, action:String, tag:String = "", audit:Boolean = false,
+              rethrow:Boolean = false, data:Option[Any], call:() => T ): Option[T] =
   {
-    try
+    val result = try
     {
-      call()
+      Option(call())
     }
     catch {
       case ex:Exception =>
       {
         onError(source, action, tag, data, Some(ex))
 
-        if(rethrow)
-        {
+        if(rethrow) {
           throw ex
         }
+        None
       }
     }
+    result
   }
 
 

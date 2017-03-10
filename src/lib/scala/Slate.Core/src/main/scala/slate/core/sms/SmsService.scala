@@ -14,11 +14,23 @@
 package slate.core.sms
 
 import slate.common.templates.Templates
-import slate.common.{Result, BoolMessage,Vars}
+import slate.common._
 import slate.common.Strings.{isNullOrEmpty}
 import slate.common.results.ResultFuncs._
 
-abstract class SmsService(templates:Option[Templates] = None) {
+/**
+  * Sms Service base class with support for templates and countries
+  * @param templates : The templates for the messages
+  * @param ctns : The supported countries ( Defaults to US )
+  */
+abstract class SmsService(val templates:Option[Templates] = None,
+                          ctns:Option[List[CountryCode]] = None) {
+
+  /**
+    * Default the supported countries to just USA
+    */
+  val countries = Country.filter( ctns.getOrElse(List(CountryCode("US"))) ).map( c => c.iso -> c).toMap
+
 
   /**
    * Sends the message
@@ -73,9 +85,41 @@ abstract class SmsService(templates:Option[Templates] = None) {
   }
 
 
+  /**
+    * massages the phone number to include the iso code if not supplied
+    * @param iso
+    * @param phone
+    * @return
+    */
+  def massagePhone(iso:String, phone:String):Result[String] = {
+    val finalIso = Option(iso).getOrElse("").toUpperCase
+
+    val result = validate(finalIso, phone)
+
+    // Case 1: Invalid params
+    if( !result.success) {
+      failure(Option(result.message))
+    }
+    // Case 2: Invalid iso or unsupported
+    else if(!countries.contains(finalIso)) {
+      failure(Option(s"$finalIso is not a valid country code"))
+    }
+    // Case 3: Inputs valid so massage
+    else {
+      val country = countries(finalIso)
+      val finalPhone = if(!phone.startsWith(country.phone)) {
+        s"${country.iso}${country.phone}"
+      } else {
+        phone
+      }
+      success(finalPhone)
+    }
+  }
+
+
   private def validate( countryCode:String, phone:String): BoolMessage = {
-    if(isNullOrEmpty(countryCode )) new BoolMessage(false, "country code not provided"    )
-    else if(isNullOrEmpty(phone) )  new BoolMessage(false, "phone not provided" )
+    if(isNullOrEmpty(countryCode )) BoolMessage(false, "country code not provided"    )
+    else if(isNullOrEmpty(phone) )  BoolMessage(false, "phone not provided" )
     else BoolMessage.True
   }
 }

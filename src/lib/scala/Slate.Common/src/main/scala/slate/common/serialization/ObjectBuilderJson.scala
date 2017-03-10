@@ -76,7 +76,7 @@ class ObjectBuilderJson(indentEnabled:Boolean, indent:String)
     val finalValue = value match {
       case null => "null"
       case ""   => "\"\""
-      case _    => value.replaceAllLiterally("\"", "\\\"") + "\""
+      case _    => "\"" + value.replaceAllLiterally("\"", "\\\"") + "\""
     }
     putStringRaw(key, finalValue)
   }

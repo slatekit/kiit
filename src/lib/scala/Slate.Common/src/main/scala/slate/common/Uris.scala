@@ -20,9 +20,9 @@ import slate.common.Files._
 object Uris {
   /**
    * Interprets the path URI to support references to various locations:
-   * 1. user dir: user:// ( user home directory for os  )
-   * 2. temp dir: temp:// ( temp files directory for os )
-   * 3. file dir: file:// ( absolution file location    )
+   * 1. user dir: user://{folder} ( user home directory for os  )
+   * 2. temp dir: temp://{folder} ( temp files directory for os )
+   * 3. file dir: file://{path}   ( absolution file location    )
    * @param uri
    * @return
    */
@@ -41,9 +41,9 @@ object Uris {
 
   /**
    * Reads the text file represented by uri after first interpreting the path.
-   * 1. user dir: user:// ( user home directory for os  )
-   * 2. temp dir: temp:// ( temp files directory for os )
-   * 3. file dir: file:// ( absolution file location    )
+   * 1. user dir: user://{folder} ( user home directory for os  )
+   * 2. temp dir: temp://{folder} ( temp files directory for os )
+   * 3. file dir: file://{path}   ( absolution file location    )
    * @param uri
    * @return
    */
@@ -65,9 +65,9 @@ object Uris {
 
   /**
    * Reads the text file represented by uri after first interpreting the path.
-   * 1. user dir: user:// ( user home directory for os  )
-   * 2. temp dir: temp:// ( temp files directory for os )
-   * 3. file dir: file:// ( absolution file location    )
+   * 1. user dir: user://{folder} ( user home directory for os  )
+   * 2. temp dir: temp://{folder} ( temp files directory for os )
+   * 3. file dir: file://{path}   ( absolution file location    )
    * @param uri
    * @return
    */
