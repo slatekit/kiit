@@ -13,7 +13,7 @@ package slate.test
 
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.Result
-import slate.common.args.{ArgsHelper, Args}
+import slate.common.args.{ArgsFuncs, Args}
 
 import scala.collection.mutable.ListBuffer
 
@@ -95,31 +95,31 @@ class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
   }
 
   test("is meta arg with /help") {
-    assert( ArgsHelper.isMetaArg(List("help"  ), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("-help" ), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("--help"), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("/help" ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("help"  ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("-help" ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("--help"), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("/help" ), 0, "help", "info") )
 
-    assert( ArgsHelper.isMetaArg(List("info"  ), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("-info" ), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("--info"), 0, "help", "info") )
-    assert( ArgsHelper.isMetaArg(List("/info" ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("info"  ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("-info" ), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("--info"), 0, "help", "info") )
+    assert( ArgsFuncs.isMetaArg(List("/info" ), 0, "help", "info") )
 
-    assert( !ArgsHelper.isMetaArg(List("/about" ), 0, "help", "info"))
+    assert( !ArgsFuncs.isMetaArg(List("/about" ), 0, "help", "info"))
   }
 
   test("is help on area ?") {
-    assert( ArgsHelper.isHelp(List[String]("app", "?"), 1) )
+    assert( ArgsFuncs.isHelp(List[String]("app", "?"), 1) )
   }
 
 
   test("can parse args action") {
-    ensureAction( ArgsHelper.parseAction(List[String](), "-"), "", 0, 0 )
-    ensureAction( ArgsHelper.parseAction(List[String](""), "-"), "", 0, 1)
-    ensureAction( ArgsHelper.parseAction(List[String]("activate"), "-"), "activate", 1, 1)
-    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate"), "-"), "app.users.activate", 3, 5)
-    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate", "?"), "-"), "app.users.activate.?", 4, 6)
-    ensureAction( ArgsHelper.parseAction(List[String]("app", ".", "users", ".", "activate", "-", "a", "=", "1"), "-"), "app.users.activate", 3, 5)
+    ensureAction( ArgsFuncs.parseAction(List[String](), "-"), "", 0, 0 )
+    ensureAction( ArgsFuncs.parseAction(List[String](""), "-"), "", 0, 1)
+    ensureAction( ArgsFuncs.parseAction(List[String]("activate"), "-"), "activate", 1, 1)
+    ensureAction( ArgsFuncs.parseAction(List[String]("app", ".", "users", ".", "activate"), "-"), "app.users.activate", 3, 5)
+    ensureAction( ArgsFuncs.parseAction(List[String]("app", ".", "users", ".", "activate", "?"), "-"), "app.users.activate.?", 4, 6)
+    ensureAction( ArgsFuncs.parseAction(List[String]("app", ".", "users", ".", "activate", "-", "a", "=", "1"), "-"), "app.users.activate", 3, 5)
   }
 
 
@@ -148,7 +148,7 @@ class ArgsTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll {
     // expected
     for(item <- expected ){
       assert( args.containsKey(item._1))
-      assert( args.get(item._1) == item._2)
+      assert( args.getString(item._1) == item._2)
     }
 
     if(parts.isDefined){

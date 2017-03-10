@@ -1,9 +1,12 @@
+import java.util.concurrent.atomic.AtomicReference
+
+import slate.common.info._
 import slate.common.status._
 import slate.tests.common.ServiceFactory
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSuite}
 import slate.common.app.AppMeta
 import slate.common.queues.QueueSourceDefault
-import slate.core.tasks.{TaskSettings, TaskRunner, TaskQueue}
+import slate.core.tasks.{TaskSettings, TaskQueue}
 
 /**
   * <slate_header>
@@ -41,12 +44,23 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
   }
 
 
+  test("can use atomic"){
+    val r = new AtomicReference[RunState](RunStateNotStarted)
+    assert( r.get() == RunStateNotStarted)
+
+    val v1 = r.get()
+    r.set(RunStateInitializing)
+    assert( v1 != r.get() )
+  }
+
+
   test("can move states") {
-    val task = new TaskQueue("", new TaskSettings(), new AppMeta(), None, new QueueSourceDefault())
+    val meta = AppMeta(About.none, Host.local(), Lang.asScala(), Status.none, StartInfo.none)
+    val task = new TaskQueue("", new TaskSettings(), meta, None, new QueueSourceDefault())
     task.start()
-    assert(task.status().status == RunStateStarted.mode)
+    assert(task.status().status == RunStateExecuting.mode)
     assert(task.isStarted())
-    assert(task.isStartedOrResumed())
+    assert(task.isExecuting())
 
     task.pause(30)
     assert(task.status().status == RunStatePaused.mode)
@@ -54,9 +68,9 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
     assert(task.isStoppedOrPaused())
 
     task.resume()
-    assert(task.status().status == RunStateResumed.mode)
-    assert(task.isResumed())
-    assert(task.isStartedOrResumed())
+    assert(task.status().status == RunStateExecuting.mode)
+    assert(task.isStarted())
+    assert(task.isExecuting())
 
     task.stop()
     assert(task.status().status == RunStateStopped.mode)
@@ -70,12 +84,6 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
 
 
   test("can pause") {
-    //val task = buildTask()
-    //TaskRunner.run(task)
-    //Thread.sleep(3000)
-    //task.pause()
-    //Thread.sleep(3000)
-    //assert(task.isPaused())
   }
 
 
@@ -91,15 +99,12 @@ class TaskTests extends FunSuite with BeforeAndAfter with BeforeAndAfterAll{
   }
 
 
-  private def buildTask():TaskQueue = {
+  private def buildTask():TaskQueue[_] = {
     val queue = new QueueSourceDefault()
-    queue.connect(null)
     for(ndx <-1 to 10) {
       queue.send(s"msg : ${ndx}")
     }
-    //val task = new TaskQueue(new TaskSettings(1, true, 5, 5, 60, true))
-    //task.queue = queue
-    //task
-    null
+    val task = new TaskQueue[Any]("sample", new TaskSettings(1, true, 5, 5, 60), AppMeta.none, None, queue)
+    task
   }
 }
