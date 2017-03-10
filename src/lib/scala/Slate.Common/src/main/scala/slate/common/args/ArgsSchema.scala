@@ -12,7 +12,7 @@
 package slate.common.args
 
 import slate.common.console.ConsoleWriter
-import slate.common.results.ResultSupportIn
+import slate.common.results.ResultFuncs._
 import slate.common.Funcs.defaultOrExecute
 import slate.common.validations.ValidationFuncs
 import slate.common.{Result}
@@ -25,9 +25,10 @@ import scala.reflect.runtime.universe.{Type, typeOf}
   * @note  this schema is immutable and returns a new schema when adding additional arguments
   * @param items : the list of arguments.
   */
-class ArgsSchema(val items:List[Arg] = List[Arg]()) extends ResultSupportIn {
+class ArgsSchema(val items:List[Arg] = List[Arg]()) {
 
-  def any = { items.size > 0 }
+  def any:Boolean = items.nonEmpty
+
 
   /**
     * Adds a argument of type text to the schema

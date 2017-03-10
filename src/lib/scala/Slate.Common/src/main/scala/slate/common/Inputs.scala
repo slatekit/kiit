@@ -10,120 +10,55 @@
   */
 package slate.common
 
+/**
+  * Base class to support retrieving inputs form multiple sources:
+  * 1. command line arguments
+  * 2. config settings
+  * 3. http requests
+  * 4. in-memory settings
+  *
+  * NOTE: This allows for abstracting the input source to accommodate
+  * Slate Kit protocol independent APIs
+  */
 abstract class Inputs {
 
-  /**
-    * gets the value with the supplied key
-    *
-    * @param key
-    * @return
-    */
-  def apply(key:String):Any =
-  {
-    if(!containsKey(key))
-      throw new IllegalArgumentException("key : " + key + " not found")
-    get(key)
-  }
+  // Get values for core data types, must be implemented in derived classes
+  def getString   (key: String) : String
+  def getDate     (key: String) : DateTime
+  def getBool     (key: String) : Boolean
+  def getInt      (key: String) : Int
+  def getLong     (key: String) : Long
+  def getDouble   (key: String) : Double
+  def getFloat    (key: String) : Float
+
+  def get(key: String)          : Option[Any]
+  def getObject(key: String)    : Option[AnyRef]
+  def containsKey(key: String)  : Boolean
+  def size():  Int
 
 
-  def get(key: String)       : Any = getObjectAs[String](key)
+  // Get values as Option[T]
+  def getStringOpt(key: String) : Option[String  ] = getOpt[String]   ( key, getString )
+  def getDateOpt  (key: String) : Option[DateTime] = getOpt[DateTime] ( key, getDate   )
+  def getBoolOpt  (key: String) : Option[Boolean ] = getOpt[Boolean]  ( key, getBool   )
+  def getIntOpt   (key: String) : Option[Int     ] = getOpt[Int]      ( key, getInt    )
+  def getLongOpt  (key: String) : Option[Long    ] = getOpt[Long]     ( key, getLong   )
+  def getDoubleOpt(key: String) : Option[Double  ] = getOpt[Double]   ( key, getDouble )
+  def getFloatOpt (key: String) : Option[Float   ] = getOpt[Float]    ( key, getFloat  )
 
 
-  def getString(key: String) : String = getObjectAs[String](key)
+  // Get value or default
+  def getStringOrElse(key: String, default: String  ) : String   = getOrElse[String]   ( key, getString  , default  )
+  def getDateOrElse  (key: String, default: DateTime) : DateTime = getOrElse[DateTime] ( key, getDate    , default  )
+  def getBoolOrElse  (key: String, default: Boolean ) : Boolean  = getOrElse[Boolean]  ( key, getBool    , default  )
+  def getIntOrElse   (key: String, default: Int     ) : Int      = getOrElse[Int]      ( key, getInt     , default  )
+  def getLongOrElse  (key: String, default: Long    ) : Long     = getOrElse[Long]     ( key, getLong    , default  )
+  def getDoubleOrElse(key: String, default: Double  ) : Double   = getOrElse[Double]   ( key, getDouble  , default  )
+  def getFloatOrElse (key: String, default: Float   ) : Float    = getOrElse[Float]    ( key, getFloat   , default  )
 
 
-  def getBool(key: String)   : Boolean = getValueAs[Boolean](key)
+  // Helpers
+  protected def getOpt[T](key: String,  fetcher:(String) => T ): Option[T] = if(containsKey(key)) Option(fetcher(key)) else None
+  protected def getOrElse[T](key: String, fetcher:(String) => T, default: T ): T = if(containsKey(key)) fetcher(key) else default
 
-
-  def getInt(key: String)    : Int = getValueAs[Int](key)
-
-
-  def getLong(key: String)   : Long = getValueAs[Long](key)
-
-
-  def getDouble(key: String) : Double = getValueAs[Double](key)
-
-
-  def getDate(key: String)   : DateTime = getValueAs[DateTime](key)
-
-
-  def getStringOrElse(key: String, defaultVal:String) : String =
-  {
-    getObjectOrElse[String](key, defaultVal)
-  }
-
-
-  def getBoolOrElse(key: String, defaultVal: Boolean): Boolean =
-  {
-    getValueOrElse[Boolean](key, defaultVal)
-  }
-
-
-  def getIntOrElse(key: String, defaultVal: Int) : Int =
-  {
-    getValueOrElse[Int](key, defaultVal)
-  }
-
-
-  def getLongOrElse(key: String, defaultVal: Long) : Long =
-  {
-    getValueOrElse[Long](key, defaultVal)
-  }
-
-
-  def getDoubleOrElse(key: String, defaultVal: Double) : Double =
-  {
-    getValueOrElse[Double](key, defaultVal)
-  }
-
-
-  def getDateOrElse(key: String, defaultVal: DateTime) : DateTime =
-  {
-    getObjectOrElse[DateTime](key, defaultVal)
-  }
-
-
-  def getValueAs[T](key: String): T =
-  {
-    getValue(key).asInstanceOf[T]
-  }
-
-
-  def getValueOrElse[T](key: String, defaultVal:T): T =
-  {
-    if (!containsKey(key))
-      defaultVal
-    else
-      getValueAs[T](key)
-  }
-
-
-  def getObjectAs[T >: Null](key: String): T =
-  {
-    getObject(key).asInstanceOf[T]
-  }
-
-
-  def getObjectOrElse[T >: Null](key: String, defaultVal:T): T =
-  {
-    if (!containsKey(key))
-      defaultVal
-    else
-      getObject(key).asInstanceOf[T]
-  }
-
-
-  def getValue(key: String): AnyVal
-
-
-  def getObject(key: String): AnyRef
-
-
-  def contains(key:String): Boolean = containsKey(key)
-
-
-  def containsKey(key: String): Boolean
-
-
-  def size(): Int
 }

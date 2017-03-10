@@ -20,8 +20,8 @@ trait MappedSourceReader {
 
    def getVersion()     : String
 
-   def get(pos:Int)     : String
-   def get(name:String) : String
+   def getString(pos:Int)     : String
+   def getString(name:String) : String
 
    def getShort(pos:Int)     : Short
    def getShort(name:String) : Short
@@ -31,6 +31,9 @@ trait MappedSourceReader {
 
    def getLong(pos:Int) : Long
    def getLong(name:String) : Long
+
+   def getFloat(pos:Int): Float
+   def getFloat(name:String): Float
 
    def getDouble(pos:Int): Double
    def getDouble(name:String): Double

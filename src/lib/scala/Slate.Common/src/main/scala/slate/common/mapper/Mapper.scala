@@ -28,6 +28,8 @@ import slate.common._
  */
 class Mapper(protected val _model:Model) {
 
+  import slate.common.reflect.ReflectConsts._
+
   protected val _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
 
 
@@ -99,40 +101,19 @@ class Mapper(protected val _model:Model) {
       //    slightly better performance.
       val data = _model.fields.map(mapping => {
         val colName = mapping.storedName
-        val fieldType = mapping.dataType
 
-        if (fieldType == _tpeString) {
-          val sVal = record.get(colName)
-          sVal
+        val dataValue = mapping.dataType match {
+          case BoolType    => record.getBool  (colName)
+          case ShortType   => record.getShort (colName)
+          case IntType     => record.getInt   (colName)
+          case LongType    => record.getLong  (colName)
+          case FloatType   => record.getFloat (colName)
+          case DoubleType  => record.getDouble(colName)
+          case DateType    => record.getDate  (colName)
+          case StringType  => record.getString(colName)
+          case _           => record.getString(colName)
         }
-        else if (fieldType == typeOf[Boolean]) {
-          val bVal = record.getBool(colName)
-          bVal
-        }
-        else if (fieldType == typeOf[Int]) {
-          val iVal = record.getInt(colName)
-          iVal
-        }
-        else if (fieldType == typeOf[Short]) {
-          val iVal = record.getShort(colName)
-          iVal
-        }
-        else if (fieldType == typeOf[Long]) {
-          val lVal = record.getLong(colName)
-          lVal
-        }
-        else if (fieldType == typeOf[Double]) {
-          val dVal = record.getDouble(colName)
-          dVal
-        }
-        else if (fieldType == typeOf[DateTime]) {
-          val dVal = record.getDate(colName)
-          dVal
-        }
-        else {
-          val sVal = record.get(colName)
-          sVal
-        }
+        dataValue
       })
       val entity = createEntityWithArgs(Some(data))
       Some(entity)
@@ -152,48 +133,22 @@ class Mapper(protected val _model:Model) {
   {
     if(_model.any) {
 
-      // NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // 1. Not using pattern matching here on the types for
-      //    slightly better performance.
       val entity: Any = createEntity()
       _model.fields.foreach(mapping => {
         val colName = mapping.storedName
-        val fieldType = mapping.dataType
 
-        if (fieldType == _tpeString) {
-          val sVal = record.get(colName)
-          Reflector.setFieldValue(entity, mapping.name, sVal)
+        val dataValue = mapping.dataType match {
+          case BoolType    => record.getBool  (colName)
+          case ShortType   => record.getShort (colName)
+          case IntType     => record.getInt   (colName)
+          case LongType    => record.getLong  (colName)
+          case FloatType   => record.getFloat (colName)
+          case DoubleType  => record.getDouble(colName)
+          case DateType    => record.getDate  (colName)
+          case StringType  => record.getString(colName)
+          case _           => record.getString(colName)
         }
-        else if (fieldType == typeOf[Boolean]) {
-          val bVal = record.getBool(colName)
-          Reflector.setFieldValue(entity, mapping.name, bVal)
-        }
-        else if (fieldType == typeOf[Int]) {
-          val iVal = record.getInt(colName)
-          Reflector.setFieldValue(entity, mapping.name, iVal)
-        }
-        else if (fieldType == typeOf[Short]) {
-          val iVal = record.getShort(colName)
-          Reflector.setFieldValue(entity, mapping.name, iVal)
-        }
-        else if (fieldType == typeOf[Long]) {
-          val lVal = record.getLong(colName)
-          Reflector.setFieldValue(entity, mapping.name, lVal)
-        }
-        else if (fieldType == typeOf[Double]) {
-          val dVal = record.getDouble(colName)
-          Reflector.setFieldValue(entity, mapping.name, dVal)
-        }
-        else if (fieldType == typeOf[DateTime]) {
-          val dVal = record.getDate(colName)
-          Reflector.setFieldValue(entity, mapping.name, dVal)
-        }
-        else {
-          if(_tpeString.toString == fieldType.toString){
-            val sVal = record.get(colName)
-            Reflector.setFieldValue(entity, mapping.name, sVal)
-          }
-        }
+        Reflector.setFieldValue(entity, mapping.name, dataValue)
       })
       Some(entity)
     }

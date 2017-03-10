@@ -1,5 +1,7 @@
 package slate.common.query
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import slate.common.Strings
 import slate.common.Strings._
 import slate.common.databases.{DbConstants}
@@ -16,7 +18,7 @@ class Query extends IQuery {
   }
 
 
-  protected var _limit = 0
+  protected val _limit = new AtomicInteger(0)
   protected val EmptyString = "''"
   protected val _data = new QueryData(new ListBuffer[ICondition](), new ListBuffer[FieldValue]())
 
@@ -152,7 +154,7 @@ class Query extends IQuery {
 
   def limit(max: Int): IQuery =
   {
-    this._limit = max
+    this._limit.set(max)
     this
   }
 
@@ -190,7 +192,7 @@ class Query extends IQuery {
   }
 
 
-  protected def anyLimit : Boolean = _limit > 0
+  protected def anyLimit : Boolean = _limit.get > 0
 
-  protected def anyConditions:Boolean = _data.conditions.size > 0
+  protected def anyConditions:Boolean = _data.conditions.nonEmpty
 }

@@ -67,6 +67,7 @@ case class Folders(
   }
 
 
+  def pathToConf    :String = { this.pathToApp + File.separator + s"${conf}"    }
   def pathToCache   :String = { this.pathToApp + File.separator + s"${cache}"   }
   def pathToInputs  :String = { this.pathToApp + File.separator + s"${inputs}"  }
   def pathToLogs    :String = { this.pathToApp + File.separator + s"${logs}"    }

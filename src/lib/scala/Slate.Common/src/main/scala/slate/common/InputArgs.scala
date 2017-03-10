@@ -10,47 +10,26 @@
   */
 package slate.common
 
-import scala.collection.mutable.Map
 
-class InputArgs(protected val _map:Map[String,Any]) extends Inputs {
+class InputArgs(protected val _map:Map[String,Any],
+                private val _decryptor:Option[(String) => String] = None) extends Inputs {
 
-  /**
-    * adds a key/value to this collection
-    *
-    * @param key
-    * @param value
-    */
-  def update(key:String, value:String):Unit =
-  {
-    _map(key) =  value
+  override def getString   (key: String) : String   = InputFuncs.decrypt(_map(key).toString, _decryptor)
+  override def getBool     (key: String) : Boolean  = _map(key).toString.toBoolean
+  override def getInt      (key: String) : Int      = _map(key).toString.toInt
+  override def getLong     (key: String) : Long     = _map(key).toString.toLong
+  override def getDouble   (key: String) : Double   = _map(key).toString.toDouble
+  override def getFloat    (key: String) : Float    = _map(key).toString.toFloat
+  override def getDate     (key: String) : DateTime = {
+    _map(key) match {
+      case d:DateTime => d
+      case s:String   => InputFuncs.convertDate(s)
+      case n:Long     => DateTime.parseNumericDate12(n.toString)
+    }
   }
 
-
-  /// <summary>
-  override def getValue(key: String): AnyVal =
-  {
-    if ( !containsKey(key) )
-      throw new IllegalArgumentException("key not found in arguments : " + key)
-
-    _map(key).asInstanceOf[AnyVal]
-  }
-
-
-  /// <summary>
-  override def getObject(key: String): AnyRef =
-  {
-    if ( !containsKey(key) ) null else _map(key).asInstanceOf[AnyRef]
-  }
-
-
-  /// <summary>
-  override def containsKey(key: String): Boolean =
-  {
-    _map.contains(key)
-  }
-
-
-  override def size(): Int = {
-    _map.size
-  }
+  override def get(key: String) : Option[Any]             = if (_map.contains(key)) Option(_map(key)) else None
+  override def getObject(key: String): Option[AnyRef]     = if (_map.contains(key)) Option(_map(key).asInstanceOf[AnyRef]) else None
+  override def containsKey(key: String): Boolean          = _map.contains(key)
+  override def size(): Int                                = _map.size
 }

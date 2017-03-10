@@ -79,7 +79,7 @@ class ArgsService {
       // result = "area.api.action"
       val result = if(hasAction)
       {
-        val actionResult = ArgsHelper.parseAction(tokens, prefix)
+        val actionResult = ArgsFuncs.parseAction(tokens, prefix)
         // Start of named args is always 1 after the action
         val startOfNamedArgs = if(actionResult._3 == 0) 0 else actionResult._4
         (actionResult._1, actionResult._2, startOfNamedArgs)
@@ -100,7 +100,7 @@ class ArgsService {
       val argsResult =  if(startOfNamedArgs >= tokens.size - 1)
         (Map[String,String](),startOfNamedArgs)
       else
-        ArgsHelper.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
+        ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
 
       // start of index args is always 1 after the named args
       val startOfIndexArgs =

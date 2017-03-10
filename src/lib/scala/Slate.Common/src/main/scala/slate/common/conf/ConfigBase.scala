@@ -11,65 +11,60 @@
 
 package slate.common.conf
 
-import slate.common.encrypt.Encryptor
 import slate.common._
 
 /**
  * Base class to get config settings with support for :
- * 1. decrypting settings
- * 2. location of config file ( resources, user directory )
- * 3. mapping settings from objects ( db connection, login, apiCredentials )
- * 4. referencing settings in other files
+  * 1. decrypting settings
+  * 2. referencing settings in other files
+  * 3. mapping settings from objects ( db connection, login, apiCredentials ) via ConfigSupport trait
  *
  * @param _encryptor: Optional encryptor for decrypting encrypted config settings.
- * @note : The reason for the root folder is to be able to :
- *         1. store some settings externally from the main config file
- *         2. store some settings in a global company specific folder in the user directory
- *         3. added security by saving settings in the user directory
- *         4. centralizing common company wide / project wide settings
- *         5. examples:
- *            - {user}/{my-company}/db.conf
- *            - {user}/{my-company}/email.conf
- * @note : So the folder structure can be :
- *
- *         1. company wide database       : {user}/{my-company}/db-master.conf
  */
-abstract class ConfigBase(
-                           protected val _encryptor:Option[Encryptor] = None
-                          )
+abstract class ConfigBase( protected val _encryptor:Option[(String) => String] = None )
   extends Inputs with ConfigSupport {
 
 
-  def isEncrypted = _encryptor.isDefined
-
-
+  /**
+    * access to raw config object. e.g. could be a type-safe config.
+    * @return
+    */
   def raw:Any = ???
 
 
-
+  /**
+    * Extends the config by supporting decryption via marker tags.
+    * e.g.
+    *  db.connection = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
+    *
+    * @param key : key: The name of the config key
+    * @return
+    */
   override def getString(key: String) : String =
   {
-    val value =getObjectAs[String](key)
-    if(value.startsWith("@{decrypt('")){
-      val end = value.indexOf("')}")
-      val encrypted = value.substring(11, end)
-      _encryptor.fold[String]( encrypted ) ( enc => {
-        enc.decrypt(encrypted)
-      })
-    }
-    else
-      value
+    val value = getObject(key).getOrElse("").toString
+    InputFuncs.decrypt(value, _encryptor)
   }
 
 
-  override def getStringOrElse(key: String, defaultVal:String) : String =
-  {
-    if (containsKey(key)) getString(key) else defaultVal
-  }
-
-
+  /**
+    * Loads a new config file from the file path supplied.
+    * Derived classes can override this to load configs of their own type.
+    *
+    * NOTE: An example could be
+    *     db
+    *     {
+    *       location: "user://myapp/conf/db.conf"
+    *     }
+    * @param file
+    * @return
+    */
   def loadFrom(file:Option[String]): Option[ConfigBase] = None
 
 
+  /**
+    * To support convenience methods
+    * @return
+    */
   override def config:ConfigBase = this
 }

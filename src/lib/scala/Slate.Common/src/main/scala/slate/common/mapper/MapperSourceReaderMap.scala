@@ -18,8 +18,8 @@ class MapperSourceReaderMap(rs:ListMap[String,Any]) extends MappedSourceReader {
   }
 
 
-  override def get(pos: Int): String          = rs.getAt(pos).asInstanceOf[String]
-  override def get(name:String): String       = rs.get(name).asInstanceOf [String]
+  override def getString(pos: Int): String          = rs.getAt(pos).asInstanceOf[String]
+  override def getString(name:String): String       = rs.get(name).asInstanceOf [String]
 
 
   override def getShort(pos: Int): Short      = rs.getAt(pos).asInstanceOf[Short]
@@ -28,6 +28,10 @@ class MapperSourceReaderMap(rs:ListMap[String,Any]) extends MappedSourceReader {
 
   override def getInt(pos: Int): Int          = rs.getAt(pos).asInstanceOf[Int]
   override def getInt(name:String): Int       = rs.get(name).asInstanceOf [Int]
+
+
+  override def getFloat(pos: Int): Float      = rs.getAt(pos).asInstanceOf[Float]
+  override def getFloat(name:String): Float   = rs.get(name).asInstanceOf [Float]
 
 
   override def getDouble(pos: Int): Double    = rs.getAt(pos).asInstanceOf[Double]

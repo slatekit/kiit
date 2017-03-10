@@ -11,43 +11,27 @@
 
 package slate.common.conf
 
-
-import slate.common.encrypt.Encryptor
+import slate.common.{InputFuncs, DateTime}
 
 import scala.collection.mutable.Map
 
 
-class Config(
-              private val _map:Map[String,String],
-              encryptor:Option[Encryptor] = None
-              )
-  extends ConfigBase(encryptor) {
+class Config( private val _map:Map[String,String],
+              decryptor:Option[(String) => String] = None
+            )
+  extends ConfigBase(decryptor) {
+
+  override def getString   (key: String) : String   = InputFuncs.decrypt(_map(key), decryptor)
+  override def getDate     (key: String) : DateTime = InputFuncs.convertDate(_map(key))
+  override def getBool     (key: String) : Boolean  = _map(key).toBoolean
+  override def getInt      (key: String) : Int      = _map(key).toInt
+  override def getLong     (key: String) : Long     = _map(key).toLong
+  override def getDouble   (key: String) : Double   = _map(key).toDouble
+  override def getFloat    (key: String) : Float    = _map(key).toFloat
 
   override def raw:Any = _map
-
-
-  /**
-   * adds a key/value to this collection
- *
-   * @param key
-   * @param value
-   */
-  def update(key:String, value:String):Unit = _map(key) =  value
-
-
-  override def getValue(key: String): AnyVal = {
-    require(containsKey(key), "key not found in arguments : " + key)
-    _map(key).asInstanceOf[AnyVal]
-  }
-
-
-  override def getObject(key: String): AnyRef = {
-    if ( !containsKey(key) ) null else _map(key).asInstanceOf[AnyRef]
-  }
-
-
-  override def containsKey(key: String): Boolean = _map.contains(key)
-
-
-  override def size(): Int =  _map.size
+  override def get(key: String) : Option[Any]             = if (_map.contains(key)) Option(_map(key)) else None
+  override def getObject(key: String): Option[AnyRef]     = if (_map.contains(key)) Option(_map(key).asInstanceOf[AnyRef]) else None
+  override def containsKey(key: String): Boolean          = _map.contains(key)
+  override def size(): Int                                = _map.size
 }

@@ -29,6 +29,42 @@ object Funcs {
 
 
   /**
+   * Gets a value in the list at the supplied position or returns the default value
+   * @param items
+   * @param pos
+   * @param default
+   * @tparam T
+   * @return
+   */
+  def getListValueOrElse[T](items:Seq[T], pos:Int, default:T):T = {
+    if(Option(items).isEmpty)
+      default
+    else if (pos < 0 || pos >= items.size)
+      default
+    else
+      items(pos)
+  }
+
+
+  /**
+   * Gets a value in the list at the supplied position or returns the default value
+   * @param items
+   * @param pos
+   * @param default
+   * @tparam T
+   * @return
+   */
+  def getListValueOrElse[T](items:Option[Seq[T]], pos:Int, default:T):T = {
+    items.fold[T]( default ) ( all => {
+      if (pos < 0 || pos >= items.size)
+        default
+      else
+        all(pos)
+    })
+  }
+
+
+  /**
     * attempts to run callback inside try/catch
     * and returns a success, value from callback and optional exception
     *
@@ -138,6 +174,11 @@ object Funcs {
   }
 
 
+  def getOrElse[K,V](map:Map[K,V], key:K, defaultVal:V): V = {
+    Option(map).fold(defaultVal)( m => if(m.contains(key)) map(key) else defaultVal)
+  }
+
+
   def getStringByOrder(key:String, f1:String=>Option[String], f2:String => Option[String]): String = {
     val result1 = f1(key)
 
@@ -173,5 +214,22 @@ object Funcs {
       f1Orf2Value
     })
     finalResult
+  }
+
+
+  /**
+    * Not a true flatten in the recursive sense.
+    * @param item
+    * @return
+    */
+  def flatten(item:Any): Option[Any] = {
+    item match {
+      case null             => None
+      case Unit             => None
+      case None             => None
+      case s:Option[Any]    => s
+      case r:Result[Any]    => r.toOption
+      case _                => Option(item)
+    }
   }
 }

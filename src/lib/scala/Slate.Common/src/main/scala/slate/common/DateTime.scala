@@ -201,7 +201,10 @@ object DateTime {
   def apply(d:Date):DateTime = new DateTime(create(d))
 
 
-  def apply(d:DateTime) = new DateTime(d.raw)
+  def apply(d:DateTime):DateTime = new DateTime(d.raw)
+
+
+  def apply(s:String):DateTime = DateTime.parseNumericDate12(s)
 
 
   def apply( year: Int,  month: Int, day: Int, hours: Int, minutes: Int, seconds: Int )  =

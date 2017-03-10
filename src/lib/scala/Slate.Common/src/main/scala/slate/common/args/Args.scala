@@ -13,7 +13,7 @@ package slate.common.args
 
 
 
-import slate.common.{Inputs, Result}
+import slate.common.{InputFuncs, DateTime, Inputs, Result}
 import slate.common.Funcs._
 
 
@@ -38,7 +38,8 @@ class Args(val raw         :List[String],
            val prefix      :String = "-",
            val separator   :String = "=",
            private val _namedArgs:Option[Map[String,String]] = None,
-           private val _indexArgs:Option[List[String]]       = None ) extends Inputs
+           private val _indexArgs:Option[List[String]]       = None,
+           private val _decryptor:Option[(String) => String] = None) extends Inputs
 {
 
   private val _metaIndex = 0
@@ -46,16 +47,18 @@ class Args(val raw         :List[String],
 
   /**
    * gets read-only map of key-value based arguments
+ *
    * @return
    */
-  def named:Map[String,String] = _namedArgs.getOrElse(Map[String,String]())
+  val named:Map[String,String] = _namedArgs.getOrElse(Map[String,String]())
 
 
   /**
    * gets read-only list of index/positional based arguments.
+ *
    * @return
    */
-  def positional:List[String] = _indexArgs.getOrElse(List[String]())
+  val positional:List[String] = _indexArgs.getOrElse(List[String]())
 
 
   /**
@@ -64,7 +67,7 @@ class Args(val raw         :List[String],
     * @return
     */
   def size():Int = {
-    _namedArgs.fold(0)( named => named.size ) +
+    _namedArgs.fold(0)( named      => named.size ) +
     _indexArgs.fold(0)( positional => positional.size )
   }
 
@@ -83,7 +86,7 @@ class Args(val raw         :List[String],
     *
     * @return
    */
-  def isVersion: Boolean = ArgsHelper.isVersion(positional, _metaIndex)
+  def isVersion: Boolean = ArgsFuncs.isVersion(positional, _metaIndex)
 
 
   /**
@@ -92,7 +95,7 @@ class Args(val raw         :List[String],
     *
     * @return
    */
-  def isPause: Boolean = ArgsHelper.isPause(positional, _metaIndex)
+  def isPause: Boolean = ArgsFuncs.isPause(positional, _metaIndex)
 
 
   /**
@@ -101,7 +104,7 @@ class Args(val raw         :List[String],
     *
     * @return
    */
-  def isExit: Boolean = ArgsHelper.isExit(positional, _metaIndex)
+  def isExit: Boolean = ArgsFuncs.isExit(positional, _metaIndex)
 
 
   /**
@@ -109,52 +112,49 @@ class Args(val raw         :List[String],
     *
     * @return
    */
-  def isHelp: Boolean = ArgsHelper.isHelp(positional, _metaIndex)
+  def isHelp: Boolean = ArgsFuncs.isHelp(positional, _metaIndex)
 
 
   /**
    * returns true if there is only 1 argument with value -about or -info
+ *
    * @return
    */
-  def isInfo: Boolean = ArgsHelper.isMetaArg(positional, _metaIndex, "about", "info")
+  def isInfo: Boolean = ArgsFuncs.isMetaArg(positional, _metaIndex, "about", "info")
 
 
-  def getVerb(pos:Int): String =
-  {
-    if(Option(actionVerbs).fold(true)( v => pos < 0 || pos >= v.size))
-      ""
-    else
-      actionVerbs(pos)
-  }
+  /**
+   * gets the verb at the supplied position
+   * @param pos
+   * @return
+   */
+  def getVerb(pos:Int): String = getListValueOrElse(actionVerbs, pos, "")
 
 
-  def getValueAt(pos:Int): String =
-  {
-    _indexArgs.fold("")( args =>
-    {
-      defaultOrExecute( pos >= args.size, "", { args(pos) } )
-    })
-  }
+  /**
+   * get the value of the indexed argumentd ( after named arguments ) at the supplied pos
+   * @param pos
+   * @return
+   */
+  def getValueAt(pos:Int): String = getListValueOrElse(_indexArgs, pos, "")
 
 
-  override def getValue(key: String): AnyVal =
-  {
-    _namedArgs.fold[AnyVal](false)( args =>
-    {
-      defaultOrExecute( !containsKey(key), false, { args(key).asInstanceOf[AnyVal] } )
-    })
-  }
+  /**
+   * Methods to get basic values
+   * NOTE: There are other methods for getStringOpt, and getStringOrElse
+   * @param key
+   * @return
+   */
+  override def getString   (key: String) : String   = InputFuncs.decrypt(named(key), _decryptor)
+  override def getDate     (key: String) : DateTime = InputFuncs.convertDate(named(key))
+  override def getBool     (key: String) : Boolean  = named(key).toBoolean
+  override def getInt      (key: String) : Int      = named(key).toInt
+  override def getLong     (key: String) : Long     = named(key).toLong
+  override def getDouble   (key: String) : Double   = named(key).toDouble
+  override def getFloat    (key: String) : Float    = named(key).toFloat
 
-
-  override def getObject(key: String): AnyRef =
-  {
-    _namedArgs.fold[AnyRef]("")( args =>
-    {
-      defaultOrExecute( !containsKey(key), "", { args(key).asInstanceOf[AnyRef] })
-    })
-  }
-
-
+  override def get(key: String) : Option[Any]             = if (named.contains(key)) Option(named(key)) else None
+  override def getObject(key: String): Option[AnyRef]     = if (named.contains(key)) Option(named(key).asInstanceOf[AnyRef]) else None
   override def containsKey(key: String): Boolean =
   {
     _namedArgs.fold(false)( args => args.contains(key))

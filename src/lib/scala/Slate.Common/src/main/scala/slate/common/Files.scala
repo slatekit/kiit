@@ -66,7 +66,7 @@ object Files {
       None
     }
     else {
-      val config = new Config(Map[String, String]())
+      val values = scala.collection.mutable.Map[String, String]()
       for (line <- lines) {
         val lineClean = line.trim
         if (!lineClean.startsWith("#")) {
@@ -74,11 +74,11 @@ object Files {
           if (ndxColon > 0) {
             val key = line.substring(0, ndxColon)
             val value = line.substring(ndxColon + 1)
-            config(key) = value.trim
+            values(key) = value.trim
           }
         }
       }
-      Some(config)
+      Some(new Config(values))
     }
   }
 

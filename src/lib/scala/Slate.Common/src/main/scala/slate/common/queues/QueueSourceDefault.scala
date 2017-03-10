@@ -18,18 +18,19 @@ import scala.collection.mutable.ListBuffer
 
 
 /**
-  * Simple in-memory implementation of a queue.
-  * This is used for ad-hoc light-weight implementations and for
-  * unit-tests for the unified queues.
+  * Used in Unit-Tests, for internal-use only.
+  * Refer to the AWS SQS Cloud Queue for an actual implementation.
   *
-  * NOTE:
-  * This should not be used in production environment. In-stead, use
-  * the Slate.Cloud AWS SQS queue
+  * NOTE: This should not be used in production environment.
   */
 class QueueSourceDefault extends QueueSource with QueueSourceMsg {
 
   protected val _list = new ListBuffer[Any]()
   private val _object = new Object()
+
+
+  def init():Unit = {
+  }
 
 
   override def count(): Int =
@@ -47,6 +48,14 @@ class QueueSourceDefault extends QueueSource with QueueSourceMsg {
     {
       if(_list.isEmpty) None else Some(_list.remove(0))
     }
+  }
+
+
+  override def nextBatchAs[T](size:Int = 10):Option[List[T]] = {
+    nextBatch(size).map[List[T]]( all => {
+      val items = all.map( item => item.asInstanceOf[T] )
+      items.toList
+    })
   }
 
 

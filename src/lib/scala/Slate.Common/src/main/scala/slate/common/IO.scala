@@ -12,6 +12,8 @@ package slate.common
 
 import slate.common.results.ResultCode
 
+import scala.concurrent.{ExecutionContext, Future}
+
 /**
   * ========================================================================
   * IO abstraction - serves as an light-weight alternative to IO Monad.
@@ -43,6 +45,49 @@ trait IoAction[I,+O] {
 }
 
 
+abstract class IoActionBase[I,+O] extends IoAction[I,O]
+{
+  /**
+   * Runs this IO operation synchronously with the supplied input
+   * @param input
+   * @return
+   */
+  def run(input:I): Result[O] = {
+    val result = try {
+      peformUnsafeIO(input)
+    }
+    catch {
+      case ex: Exception => FailureResult(ResultCode.FAILURE, err = Some(ex))
+    }
+    result
+  }
+
+
+  /**
+   * Runs this IO operation asynchronously with the supplied input.
+   * @param input
+   * @return
+   */
+  def runAsync(input:I)(implicit e :ExecutionContext) : Future[Result[O]] = {
+    Future {
+      // Allow future to handle the error
+      peformUnsafeIO(input)
+    }
+  }
+
+
+  /**
+   * Runs the IO operation, derived classes need to implement this.
+   * @param input
+   * @return
+   */
+  protected def peformUnsafeIO(input:I): Result[O] = ???
+}
+
+
+class Io[I,+O] extends IoActionBase
+
+
 /**
   *
   * @param action: The output parameter
@@ -50,17 +95,10 @@ trait IoAction[I,+O] {
   * @tparam O    : The type of the output parameter
   * @return      : Option[O] of output parameter
   */
-class IoWrap[I,+O](action:(I) => O) extends IoAction[I,O]
+class IoWrap[I,+O](action:(I) => O) extends IoActionBase[I,O]
 {
-  def run(input:I): Result[O] = {
-    val result = try {
-      val output = action(input)
-      new SuccessResult(output, ResultCode.SUCCESS)
-    }
-    catch {
-      case ex: Exception => new FailureResult(ResultCode.FAILURE, err = Some(ex))
-    }
-    result
+  override protected def peformUnsafeIO(input:I): Result[O] = {
+    SuccessResult(action(input), ResultCode.SUCCESS)
   }
 }
 
@@ -72,17 +110,10 @@ class IoWrap[I,+O](action:(I) => O) extends IoAction[I,O]
   * @tparam O    : The type of the output parameter as Result[O]
   * @return      : Result[O] of output parameter
   */
-class IoFlat[I,+O](action:(I) => Result[O]) extends IoAction[I,O]
+class IoFlat[I,+O](action:(I) => Result[O]) extends IoActionBase[I,O]
 {
-  def run(input:I): Result[O] = {
-    val result = try {
-      val output = action(input)
-      output
-    }
-    catch {
-      case ex: Exception => new FailureResult(ResultCode.FAILURE, err = Some(ex))
-    }
-    result
+  override protected def peformUnsafeIO(input:I): Result[O] = {
+    action(input)
   }
 }
 

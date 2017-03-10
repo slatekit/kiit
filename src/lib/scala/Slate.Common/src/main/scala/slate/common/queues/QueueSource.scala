@@ -16,10 +16,7 @@ import slate.common.{Result}
 
 abstract class QueueSource {
 
-  def connect(args:Any):Unit = { }
-
-
-  def connectWith(key:String, pass:String, tag:String):Unit = { }
+  def init():Unit
 
 
   def close(): Unit = { }
@@ -32,6 +29,9 @@ abstract class QueueSource {
 
 
   def nextBatch(size:Int = 10):Option[List[Any]] = { None }
+
+
+  def nextBatchAs[T](size:Int = 10):Option[List[T]] = { None }
 
 
   def complete(item:Option[Any]): Unit ={ }
