@@ -22,19 +22,18 @@ import slate.common.DateTime
   * @param message  : Message for success/error
   * @param result   : A resulting return value
   * @param totalMs  : Total time in milliseconds
-  * @param start    : The start time of the command
-  * @param end      : The end time of the command
-  * @param runCount : The total time the command was run
+  * @param started  : The start time of the command
+  * @param ended    : The end time of the command
   */
 case class CmdResult(
-                       name    : String          ,
-                       success : Boolean         ,
-                       message : String          ,
-                       result  : Option[AnyRef]  ,
-                       totalMs : Long            ,
-                       start   : DateTime        ,
-                       end     : DateTime        ,
-                       runCount: Int
+                       name    : String           ,
+                       success : Boolean          ,
+                       message : Option[String]   ,
+                       error   : Option[Throwable],
+                       result  : Option[Any]      ,
+                       started : DateTime         ,
+                       ended   : DateTime         ,
+                       totalMs : Long
                     )
 {
 }

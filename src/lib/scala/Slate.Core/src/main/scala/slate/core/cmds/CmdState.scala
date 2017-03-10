@@ -26,11 +26,30 @@ import slate.common.DateTime
   */
 case class CmdState(
                      name       : String,
+                     msg        : String,
                      lastRuntime: DateTime,
                      hasRun     : Boolean,
                      runCount   : Int,
                      errorCount : Int,
-                     lastResult : CmdResult
+                     lastResult : Option[CmdResult]
               )
 {
+  /**
+   * Builds a copy of the this state with bumped up numbers ( run count, error count, etc )
+   * based on the last execution result
+   * @param result
+   * @return
+   */
+  def update(result:CmdResult): CmdState = {
+
+    val updated = this.copy(
+      msg = result.message.getOrElse(""),
+      lastRuntime = result.started,
+      hasRun = true,
+      runCount = runCount + 1,
+      errorCount = errorCount + result.error.fold(0)(_ => 1),
+      lastResult = Option(result)
+    )
+    updated
+  }
 }

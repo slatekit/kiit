@@ -52,8 +52,8 @@ object AuthFuncs extends ResultSupportIn {
     val keyCheck = inputs.fold[Option[String]](None)( inp => {
 
       // Check 2: Key exists in request ?
-      if( inp.contains(inputName) ) {
-        val key = inp(inputName).toString()
+      if( inp.containsKey(inputName) ) {
+        val key = inp.getString(inputName).toString
 
         // Check 3: Key is non-empty ?
         if(Strings.isNullOrEmpty(key)) {

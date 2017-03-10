@@ -24,8 +24,7 @@ case class TaskSettings(
                          isOngoing             :Boolean  = false,
                          waitTimeInSeconds     :Int      = 5,
                          pauseTimeInSeconds    :Int      = 5,
-                         stopTimeInSeconds     :Int      = 30,
-                         pauseAfterProcessing  :Boolean  = false
+                         stopTimeInSeconds     :Int      = 30
                   )
 {
 

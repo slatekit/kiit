@@ -12,35 +12,33 @@
   */
 package slate.core.tasks
 
+import java.util.concurrent.atomic.AtomicBoolean
+
 import slate.common.Result
 import slate.common.app.AppMeta
 import slate.common.queues.QueueSource
 import slate.common.results.ResultCode
-import slate.common.status.RunStateExecuting
+import slate.common.status._
+import scala.annotation.tailrec
+import scala.reflect.runtime.universe.{Type,TypeTag,typeOf}
 
 /**
- * Task queue is background task/worker pattern to process items in a queue
+ * Task queue is background task/worker pattern to process items in a queue.
+ * This has a few notable design approaches:
  *
- * NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * This currently works on dedicated thread and polls a queue with optional blocking
- * via interrupted pausing or stopping. For a few low-cost processes in our system,
- * this is good enough. But this is not sufficient for heavy production use.
- * This will be modified in the upcoming releases to to async.
+ * DESIGN:
+ * 1. This can be interrupted
+ * 2. You can pause, stop, resume the task
+ * 3. This decouples the logic of running your code, states/actions, with scheduling.
+ * 4. You can supply our own implementation of statusUpdate to handle
+ *    scheduling either via a simple Timer or via Actors
  *
- *
- * ABOUT:
- * 1. This is an Interruptable task / worker pattern
- * 2. Please refer to the following for other implemenations of Task
- *
- * OTHER IMPLEMENTATIONS:
- * 1. https://monix.io/
- * 2.
  *
  * OPERATIONS:
- * 1. started : starts the task and processes the queue items
- * 2. stopped : stops the task completely
- * 3. paused  : pauses processing of queue for x seconds as specified in settings
- * 4. resumed : resumes processing of queue
+ * 1. start  : starts the task and processes the queue items
+ * 2. stop   : stops the task completely
+ * 3. pause  : pauses processing of queue for x seconds as specified in settings
+ * 4. resume : resumes processing of queue
  *
  * It also processes the queue items in a batch.
  *
@@ -63,7 +61,7 @@ import slate.common.status.RunStateExecuting
  * 2. You can
  * @param name
  */
-class TaskQueue(  name     : String       ,
+class TaskQueue[T:TypeTag](  name     : String       ,
                   settings : TaskSettings ,
                   meta     : AppMeta      ,
                   args     : Option[Any]  ,
@@ -71,73 +69,39 @@ class TaskQueue(  name     : String       ,
                 )
   extends Task(name, settings, meta, args) {
 
-  private var _continueRunning = true
-
 
   /**
-   * executes this task by processing items in the queue.
-   * this will wait / sleep for x seconds ( as configured ) if this task
-   * is paused or stopped.
-    *
-    * @return
+   * moves the current state to the name supplied and performs a status update
+   *
+   * @param state
+   * @return
    */
-  override protected def onExec():Result[Any] =
-  {
-    _continueRunning = true
-    while(_continueRunning) {
-
-      // CASE 1: Running
-      if (isStartedResumedWaiting() ){
-        process()
-      }
-      // CASE 2: Paused by caller: sleep for x seconds
-      else if (_settings.isOngoing && isPaused()) {
-        sleep()
-        resume()
-      }
-      // CASE 3: Stopped by caller
-      else if (_settings.isOngoing && isStopped()) {
-        _continueRunning = false
-      }
-      // CASE 4: Waiting / so sleep for x seconds
-      else if (_settings.isOngoing && isWaiting()) {
-        waiting()
-        sleep()
-      }
-    }
-    success("execution complete")
+  override protected def moveToState(state:RunState):RunStatus = {
+    // Change current state via the atomic ref in Task
+    super.moveToState(state)
+    this.statusUpdate(_runState.get(), true, ResultCode.SUCCESS, None)
+    _runStatus.get()
   }
 
 
-  protected def process(): Unit = {
+  override protected def process(): RunState = {
 
     // Get items from queue
-    val items = queue.nextBatch(_settings.batchSize)
+    val items = queue.nextBatchAs[T](_settings.batchSize)
     val anyItems = items.isDefined && items.fold(0)( all => all.length) > 0
 
-    // CASE 1: Items exist - process
-    if ( _settings.isOngoing && anyItems ) {
-
-      // status update
-      statusUpdate(RunStateExecuting, true, ResultCode.SUCCESS, None)
+    // process
+    if ( anyItems ) {
 
       // process
       processItems(items)
 
-      // take a break
-      if(_settings.pauseAfterProcessing) {
-        sleep()
-        resume()
-      }
+      // Indicate to keep going for next check
+      RunStateExecuting
     }
-    // CASE 2: No items, wait for x seconds if on-going
-    else if ( _settings.isOngoing && !anyItems ) {
-      waiting()
-      sleep()
-    }
-    // CASE 1c: 1 time run and no items!
-    else if ( !_settings.isOngoing && !anyItems ) {
-      _continueRunning = false
+    // wait fore more
+    else {
+      RunStateWaiting
     }
   }
 
@@ -148,7 +112,7 @@ class TaskQueue(  name     : String       ,
     *
     * @param items
    */
-  protected def processItems(items:Option[List[Any]]):Unit = {
+  protected def processItems(items:Option[List[T]]):Unit = {
 
     items.fold(Unit)( all => {
       all.foreach( item => {
@@ -172,20 +136,6 @@ class TaskQueue(  name     : String       ,
     *
     * @param item
    */
-  protected def processItem(item:Any): Unit = {
-  }
-
-
-  protected def sleep():Unit = {
-    val seconds =  Math.max(_pauseSeconds, _settings.pauseTimeInSeconds )
-    val finalSeconds = if(seconds == 0) 15 else seconds
-    sleep(Some(finalSeconds))
-  }
-
-
-  protected def sleep(seconds:Option[Int]): Unit = {
-    val secs = seconds.getOrElse(_settings.waitTimeInSeconds)
-    val msSeconds = secs * 1000
-    Thread.sleep(msSeconds)
+  protected def processItem(item:T): Unit = {
   }
 }

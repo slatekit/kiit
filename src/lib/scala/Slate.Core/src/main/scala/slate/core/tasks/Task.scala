@@ -13,19 +13,23 @@
 
 package slate.core.tasks
 
+import java.util.concurrent.atomic.AtomicReference
+
 import slate.common.app._
 import slate.common.logging.LoggerBase
 import slate.common._
 import slate.common.results.ResultCode
 import slate.common.status._
 
+import scala.annotation.tailrec
+
 
 /**
- * Slate Kit Task for performing short/long/continuously running operation as a background task.
- * While, actors are a great solution for async, queued message handling, this task
- * component provides more fine-grained control for cases where you want to start,
- * stop, pause and resume execution of code and only have a task work for a designated
- * amount of time it takes to complete some operation.
+ * Slate Kit interruptable Task for performing short/long/continuously running operation as a background task.
+ * This can be used in conjunction with actors for fine-grained control
+ * for cases where you want to start, pause, resume, stop execution of code
+ *
+ * NOTE: This decouples the scheduling from the processing.
  * @param name
  */
 class Task(name:String = "",
@@ -43,20 +47,47 @@ class Task(name:String = "",
   with Runnable
 {
 
+  protected val _runState  = new AtomicReference[RunState](RunStateNotStarted)
+  protected val _runStatus = new AtomicReference[RunStatus](new RunStatus())
+  protected val _runDelay  = new AtomicReference[Int](0)
+
+
   /**
    * runs the task by executing the exec and end life-cycle methods
    */
   override def run():Unit = {
 
-    // execute code
-    exec()
+    try {
 
-    // close services
-    end()
+      init()
+
+      exec()
+
+      end()
+    }
+    catch{
+      case ex:Exception => moveToState(RunStateFailed)
+    }
   }
 
 
   override def appMeta(): AppMeta = meta
+
+
+  /**
+   * gets the current state of execution
+   *
+   * @return
+   */
+  override def state(): RunState = _runState.get
+
+
+  /**
+   * gets the current status of the application
+   *
+   * @return
+   */
+  override def status(): RunStatus = _runStatus.get
 
 
   /**
@@ -88,7 +119,21 @@ class Task(name:String = "",
   override def end(): Unit =
   {
     onEnd()
-    moveToState(RunStateEnded)
+    moveToState(RunStateComplete)
+  }
+
+
+  /**
+   * moves the current state to paused with a default time
+   *
+   * @param seconds
+   * @return
+   */
+  override def pause(seconds:Int = 60): RunStatus = {
+
+    // Optimistic
+    _runDelay.set(seconds)
+    moveToState(RunStatePaused)
   }
 
 
@@ -99,10 +144,12 @@ class Task(name:String = "",
    * @return
    */
   override protected def moveToState(state:RunState):RunStatus = {
-    _state = new RunStatus(status = state.mode)
-
-    this.statusUpdate(state, true, ResultCode.SUCCESS, None)
-    _state
+    val last = _runStatus.get()
+    _runState.set(state)
+    _runStatus.set(new RunStatus(state.mode, DateTime.now(), state.mode, last.runCount + 1, last.runCount, ""))
+    _runStatus.get()
+    this.statusUpdate(_runState.get(), true, ResultCode.SUCCESS, None)
+    _runStatus.get()
   }
 
 
@@ -132,16 +179,63 @@ class Task(name:String = "",
    * provided for subclass task and implementing execution code in the derived class
    * @return
    */
+  /**
+   * executes this task by calling process and also checking
+   * for any state transitions
+   * @return
+   */
   protected def onExec():Result[Any] =
   {
-    ok()
+    @tailrec
+    def work(): RunState = {
+
+      // Process any items
+      val workState = process()
+
+      // e.g. paused, stopped, etc
+      // NOTE: This will take priority of the result
+      // of the workState via process
+      if (_runState.get() != RunStateExecuting)
+        _runState.get
+
+      // e.g. waiting for work
+      else if ( workState != RunStateExecuting )
+        workState
+
+      // keep going - more to do
+      else
+        work()
+    }
+
+    // Begin and keep going until either:
+    // 1. paused
+    // 2. waiting
+    // 3. stopped
+    val result = work()
+    success(result)
   }
 
 
   /**
    * provided for subclass task and implementing end code in the derived class
    */
-  protected def onEnd() : Unit =
-  {
+  protected def onEnd() : Unit = {
+  }
+
+
+  /**
+   * Should be implemented by derived classes
+   * @return
+   */
+  protected def process(): RunState = {
+
+    // e.g. derived classes( such as a task queue / worker )
+    // can process some items here, and instead of completing
+    // can return a RunStateExecuting state.
+    // See TaskQueue for more info.
+    //
+    // In this base class, we just return complete
+    moveToState(RunStateComplete)
+    RunStateComplete
   }
 }
