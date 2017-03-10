@@ -1,19 +1,21 @@
 /**
-<slate_header>
-  url: www.slatekit.com
-  git: www.github.com/code-helix/slatekit
-  org: www.codehelix.co
-  author: Kishore Reddy
-  copyright: 2016 CodeHelix Solutions Inc.
-  license: refer to website and/or github
-  about: A Scala utility library, tool-kit and server backend.
-  mantra: Simplicity above all else
-</slate_header>
+  * <slate_header>
+  * url: www.slatekit.com
+  * git: www.github.com/code-helix/slatekit
+  * org: www.codehelix.co
+  * author: Kishore Reddy
+  * copyright: 2016 CodeHelix Solutions Inc.
+  * license: refer to website and/or github
+  * about: A Scala utility library, tool-kit and server backend.
+  * mantra: Simplicity above all else
+  * </slate_header>
   */
 
 package slate.core.apis.support
 
 import slate.common.encrypt._
+import slate.common.reflect.ReflectConsts._
+import slate.common.reflect.{ReflectedClass, ReflectedArg}
 import slate.common.results.{ResultSupportIn}
 import slate.common.utils.Temp
 import slate.core.apis.Request
@@ -160,8 +162,13 @@ object ApiCallHelper extends ResultSupportIn {
         decrypted
       }
       else if (!parameter.isBasicType()){
-        val subObj = args.getObject(paramName).asInstanceOf[Inputs]
-        buildArgInstance(parameter, subObj)
+        val complexObj = args.getObject(paramName)
+        complexObj.fold[Any](null) {
+            case "null"  => None
+            case "none"  => None
+            case "\"\""  => None
+            case obj       => buildArgInstance(parameter, obj.asInstanceOf[Inputs])
+          }
       }
 
       inputs.append(paramValue)
@@ -171,49 +178,14 @@ object ApiCallHelper extends ResultSupportIn {
 
 
   private def buildArgInstance(parameter:ReflectedArg, inputs:Inputs):Any = {
-
     // Create object
-    val instance = Reflector.createInstance(parameter.asType())
-
-    // Get fields
-    val fields = Reflector.getFieldsDeclared(instance.asInstanceOf[AnyRef])
-
-    for(field <- fields) {
-      val name = field.symbol.name.toString().trim()
-      if ( inputs.containsKey(name)){
-
-        val dataType = field.symbol.typeSignature.resultType
-        if( dataType == _tpeString )
-        {
-          val sVal = inputs.getString(name)
-          Reflector.setFieldValue(instance, name, sVal)
-        }
-        else if(dataType == typeOf[Boolean])
-        {
-          val bVal = inputs.getBool(name)
-          Reflector.setFieldValue(instance, name, bVal)
-        }
-        else if(dataType == typeOf[Int])
-        {
-          val iVal = inputs.getInt(name)
-          Reflector.setFieldValue(instance, name, iVal)
-        }
-        else if(dataType == typeOf[Long])
-        {
-          val lVal = inputs.getLong(name)
-          Reflector.setFieldValue(instance, name, lVal)
-        }
-        else if(dataType == typeOf[Double])
-        {
-          val dVal = inputs.getDouble(name)
-          Reflector.setFieldValue(instance, name, dVal)
-        }
-        else if(dataType == typeOf[DateTime])
-        {
-          val dVal = inputs.getDate(name)
-          Reflector.setFieldValue(instance, name, dVal)
-        }
-      }
+    val isCaseClass = Reflector.isCaseClass(parameter.asType())
+    val reflector = new ReflectedClass(parameter.asType())
+    val instance = if(isCaseClass){
+      reflector.createWithDefaults(inputs)
+    }
+    else {
+      reflector.updateVars(inputs)
     }
     instance
   }

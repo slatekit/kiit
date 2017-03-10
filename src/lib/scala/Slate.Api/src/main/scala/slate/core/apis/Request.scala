@@ -31,13 +31,13 @@ import slate.common.args.Args
 class Request (
                      path       :String            ,
                      parts      :List[String]      ,
-                     area       :String            = "",
-                     name       :String            = "",
-                     action     :String            = "",
-                     verb       :String            = "",
-                     args       :Option[Inputs]    = None,
-                     opts       :Option[Inputs]    = None,
-                     tag        :String            = ""
+                     area       :String            ,
+                     name       :String            ,
+                     action     :String            ,
+                     verb       :String            ,
+                     args       :Option[Inputs]    ,
+                     opts       :Option[Inputs]    ,
+                     tag        :String
                    ) extends RequestBase ( path, parts, area, name, action, verb, args, opts, tag)
 {
 }
@@ -48,7 +48,7 @@ object Request
   def apply( path:String, args:Args, opts:Option[Inputs], verb:String) : Request =
   {
     new Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), verb,
-      Some(args), opts)
+      Some(args), opts, "")
   }
 
 
@@ -56,6 +56,6 @@ object Request
   {
 
     new Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), verb,
-      argsInputs, opts)
+      argsInputs, opts, "")
   }
 }

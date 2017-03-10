@@ -13,7 +13,7 @@
 
 package slate.core.apis.support
 
-import slate.common.ReflectedArg
+import slate.common.reflect.ReflectedArg
 import slate.core.apis.{Api, ApiAction}
 
 import scala.reflect.runtime.universe.Symbol
