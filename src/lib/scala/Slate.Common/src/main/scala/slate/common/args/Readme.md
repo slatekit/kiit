@@ -7,6 +7,7 @@ permalink: /mod-args
 # Args
 
 {: .table .table-striped .table-bordered}
+
 |:--|:--|
 | **desc** | A lexical command line argument parser for command line parsing and support specifying routes / method calls | 
 | **date**| 2017-02-27T17:37:20.081 |
