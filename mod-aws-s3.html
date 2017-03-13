@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-27T17:37:20.208</td>
+      <td>2017-03-12T23:33:49.224</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.2.0</td>
+      <td>1.4.0</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -115,7 +115,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.cloud.aws.AwsCloudFiles</span>
+</span><span class="k">import</span> <span class="nn">slate.cloud.aws.</span><span class="o">{</span><span class="nc">AwsCloudQueue</span><span class="o">,</span> <span class="nc">AwsCloudFiles</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 
 
@@ -132,9 +132,17 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Not storing any key/secret in source code for security purposes
-</span>    <span class="c1">// Using the recommended approach of aws to store a config file
-</span>    <span class="c1">// in the users directory
-</span>    <span class="k">val</span> <span class="n">files</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"blendlife-dev1"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
+</span>    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+</span>    <span class="k">val</span> <span class="n">files1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"app1-files-1"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
+
+    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
+</span>    <span class="c1">// Specify the api key section as "sqs"
+</span>    <span class="k">val</span> <span class="n">files2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"app1-files-1"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user://myapp/conf/files.conf"</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"s3"</span><span class="o">))</span>
+
+    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
+</span>    <span class="c1">// Specify the api key section as "sqs"
+</span>    <span class="k">val</span> <span class="n">files3</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"app1-queue-1"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user://myapp/conf/files.conf"</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"s3-1"</span><span class="o">))</span>
+
     
 
 </code></pre>
@@ -143,37 +151,38 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Connect using parameters ( DOCS comings soon )</span>    
-	
-	<span class="c1">// Use case 2: create using just name and content
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
+    <span class="c1">// Use case 1: Connect using parameters
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
+
+    <span class="c1">// Use case 2: create using just name and content
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
 
     <span class="c1">// Use case 3: update using just name and content
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
 
     <span class="c1">// Use case 4: create using folder and file name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
 
     <span class="c1">// Use case 5: update using folder and file name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
 
     <span class="c1">// Use case 6: get file as a text using just name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
 
     <span class="c1">// Use case 7: get file using folder and file name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
 
     <span class="c1">// Use case 8: download file to local folder
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"c:/dev/temp/"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"c:/dev/temp/"</span><span class="o">)</span>
 
     <span class="c1">// Use case 9: download using folder and file name to local folder
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"c:/dev/temp"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">,</span> <span class="s">"c:/dev/temp"</span><span class="o">)</span>
 
     <span class="c1">// Use case 10: delete file by just the name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
 
     <span class="c1">// Use case 11: delete using folder and name
-</span>    <span class="n">files</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
+</span>    <span class="n">files1</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"chi"</span><span class="o">)</span>
     
 
 </code></pre>

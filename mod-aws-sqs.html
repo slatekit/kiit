@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-27T17:37:20.209</td>
+      <td>2017-03-12T23:33:49.227</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.2.0</td>
+      <td>1.4.0</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -132,9 +132,17 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Not storing any key/secret in source code for security purposes
-</span>    <span class="c1">// Using the recommended approach of aws to store a config file
-</span>    <span class="c1">// in the users directory
-</span>    <span class="k">val</span> <span class="n">queue</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudQueue</span><span class="o">(</span><span class="s">"dev1-usa-001-shr"</span><span class="o">)</span>
+</span>    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+</span>    <span class="k">val</span> <span class="n">queue1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudQueue</span><span class="o">(</span><span class="s">"app1-queue-1"</span><span class="o">)</span>
+
+    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
+</span>    <span class="c1">// Reads from the section "sqs" by default
+</span>    <span class="k">val</span> <span class="n">queue2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudQueue</span><span class="o">(</span><span class="s">"app1-queue-1"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user://myapp/conf/queue.conf"</span><span class="o">))</span>
+
+    <span class="c1">// Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
+</span>    <span class="c1">// Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )
+</span>    <span class="k">val</span> <span class="n">queue3</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AwsCloudQueue</span><span class="o">(</span><span class="s">"app1-queue-1"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user://myapp/conf/queue.conf"</span><span class="o">),</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"sqs-1"</span><span class="o">))</span>
+
     
 
 </code></pre>
@@ -143,37 +151,37 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: connect using parameters ( docs coming soon )
-</span>
+    <span class="c1">// Use case 1: init()
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">init</span><span class="o">()</span>
 
     <span class="c1">// Use case 2: send 1 message
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 1"</span><span class="o">)</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 1"</span><span class="o">)</span>
 
     <span class="c1">// Use case 3: send multiple messages
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 2"</span><span class="o">)</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"scala test 2"</span><span class="o">)</span>
 
     <span class="c1">// Use case 4: send message with tags
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"user=kishore"</span><span class="o">,</span> <span class="n">tagName</span><span class="o">=</span><span class="s">"type"</span><span class="o">,</span> <span class="n">tagValue</span><span class="o">=</span><span class="s">"reg"</span><span class="o">)</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">send</span><span class="o">(</span><span class="s">"user=kishore"</span><span class="o">,</span> <span class="n">tagName</span><span class="o">=</span><span class="s">"type"</span><span class="o">,</span> <span class="n">tagValue</span><span class="o">=</span><span class="s">"reg"</span><span class="o">)</span>
 
     <span class="c1">// Use case 5: receive 1 message
-</span>    <span class="k">val</span> <span class="n">item1</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">next</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">getMessageBody</span><span class="o">(</span><span class="n">item1</span><span class="o">))</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">getMessageTag</span><span class="o">(</span><span class="n">item1</span><span class="o">,</span> <span class="s">"type"</span><span class="o">))</span>
+</span>    <span class="k">val</span> <span class="n">item1</span> <span class="k">=</span> <span class="n">queue2</span><span class="o">.</span><span class="n">next</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">queue2</span><span class="o">.</span><span class="n">getMessageBody</span><span class="o">(</span><span class="n">item1</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">queue2</span><span class="o">.</span><span class="n">getMessageTag</span><span class="o">(</span><span class="n">item1</span><span class="o">,</span> <span class="s">"type"</span><span class="o">))</span>
 
     <span class="c1">// Use case 6: recieve 2 messages
-</span>    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">nextBatch</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="n">queue2</span><span class="o">.</span><span class="n">nextBatch</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
 
     <span class="c1">// Use case 7: delete a message
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">complete</span><span class="o">(</span><span class="n">item1</span><span class="o">)</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">complete</span><span class="o">(</span><span class="n">item1</span><span class="o">)</span>
 
     <span class="c1">// Use case 8: delete many
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">completeAll</span><span class="o">(</span><span class="n">items</span><span class="o">)</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">completeAll</span><span class="o">(</span><span class="n">items</span><span class="o">)</span>
 
     <span class="c1">// Use case 9: abandon a message
-</span>    <span class="n">queue</span><span class="o">.</span><span class="n">abandon</span><span class="o">(</span><span class="n">queue</span><span class="o">.</span><span class="n">next</span><span class="o">())</span>
+</span>    <span class="n">queue2</span><span class="o">.</span><span class="n">abandon</span><span class="o">(</span><span class="n">queue2</span><span class="o">.</span><span class="n">next</span><span class="o">())</span>
 
     <span class="c1">// Use case 10: get count ( approximation )
-</span>    <span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
+</span>    <span class="k">val</span> <span class="n">count</span> <span class="k">=</span> <span class="n">queue2</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
     <span class="n">println</span><span class="o">(</span><span class="n">count</span><span class="o">)</span>
     
 

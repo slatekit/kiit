@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-27T17:37:20.206</td>
+      <td>2017-03-12T23:33:49.221</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.2.0</td>
+      <td>1.4.0</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -115,14 +115,17 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.core.tasks.</span><span class="o">{</span><span class="nc">TaskSettings</span><span class="o">,</span> <span class="nc">TaskRunner</span><span class="o">,</span> <span class="nc">TaskQueue</span><span class="o">,</span> <span class="nc">Task</span><span class="o">}</span>
+</span>
+<span class="k">import</span> <span class="nn">slate.core.tasks.</span><span class="o">{</span><span class="nc">TaskSettings</span><span class="o">,</span> <span class="nc">TaskQueue</span><span class="o">,</span> <span class="nc">Task</span><span class="o">}</span>
+<span class="k">import</span> <span class="nn">slate.ext.tasks.TaskRunner</span>
+
 
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">slate.common.Result</span>
-<span class="k">import</span> <span class="nn">slate.common.info.About</span>
+<span class="k">import</span> <span class="nn">slate.common.info._</span>
 <span class="k">import</span> <span class="nn">slate.common.queues.QueueSourceDefault</span>
 <span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 
@@ -151,7 +154,7 @@
       <span class="n">contact</span> <span class="k">=</span> <span class="s">"kishore@codehelix.co"</span><span class="o">,</span>
       <span class="n">tags</span> <span class="k">=</span> <span class="s">"slate,shell,cli"</span><span class="o">,</span>
       <span class="n">examples</span> <span class="k">=</span> <span class="s">""</span>
-    <span class="o">)</span>
+    <span class="o">),</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">asScala</span><span class="o">(),</span> <span class="nc">Status</span><span class="o">.</span><span class="n">none</span><span class="o">,</span> <span class="nc">StartInfo</span><span class="o">.</span><span class="n">none</span>
   <span class="o">))</span>
   <span class="o">{</span>
 
@@ -177,7 +180,7 @@
   <span class="c1">// Setup 2: Create a new task that is a long running background task
 </span>  <span class="c1">// that processes messages in a queue.
 </span>  <span class="c1">// NOTE: The queue can be any type of queue ( AWS-SQS, default queue )
-</span>  <span class="k">val</span> <span class="n">task2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TaskQueue</span><span class="o">(</span><span class="s">"sample task"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TaskSettings</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span> <span class="nc">None</span><span class="o">,</span> <span class="k">new</span> <span class="nc">QueueSourceDefault</span><span class="o">())</span>
+</span>  <span class="k">val</span> <span class="n">task2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">TaskQueue</span><span class="o">(</span><span class="s">"sample task"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TaskSettings</span><span class="o">(),</span> <span class="nc">AppMeta</span><span class="o">.</span><span class="n">none</span><span class="o">,</span> <span class="nc">None</span><span class="o">,</span> <span class="k">new</span> <span class="nc">QueueSourceDefault</span><span class="o">())</span>
 
 
   <span class="c1">// Send some messages to the in-memory default queue.

@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-27T17:37:20.203</td>
+      <td>2017-03-12T23:33:49.213</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.2.0</td>
+      <td>1.4.0</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -116,7 +116,7 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slate.common.app.AppMeta</span>
-<span class="k">import</span> <span class="nn">slate.common.info.Folders</span>
+<span class="k">import</span> <span class="nn">slate.common.info._</span>
 <span class="k">import</span> <span class="nn">slate.core.common.AppContext</span>
 <span class="k">import</span> <span class="nn">slate.core.shell._</span>
 
@@ -125,7 +125,7 @@
 </span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 <span class="k">import</span> <span class="nn">scala.collection.mutable.Map</span>
-<span class="k">import</span> <span class="nn">slate.common.InputArgs</span>
+<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Result</span><span class="o">,</span> <span class="nc">InputArgs</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.core.apis.</span><span class="o">{</span><span class="nc">ApiConstants</span><span class="o">,</span> <span class="nc">ApiContainer</span><span class="o">,</span> <span class="nc">Request</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.examples.common.UserApi</span>
 
@@ -240,7 +240,7 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// CASE 1: Create your own shell by extending the ShellService
-</span>    <span class="k">val</span> <span class="n">shell</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppShell</span><span class="o">(</span><span class="k">new</span> <span class="nc">AppMeta</span><span class="o">(),</span> <span class="nc">Folders</span><span class="o">.</span><span class="n">default</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ShellSettings</span><span class="o">())</span>
+</span>    <span class="k">val</span> <span class="n">shell</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppShell</span><span class="o">(</span><span class="nc">AppMeta</span><span class="o">.</span><span class="n">none</span><span class="o">,</span> <span class="nc">Folders</span><span class="o">.</span><span class="n">default</span><span class="o">,</span> <span class="k">new</span> <span class="nc">ShellSettings</span><span class="o">())</span>
 
 
     <span class="c1">// CASE 2: (Optional) configure a startup command

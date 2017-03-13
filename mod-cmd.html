@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
-    <title>Slate Kit - Utilities</title>
+    <title>Slate Kit - Architecture</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -56,10 +56,12 @@
 			<div class="row">
 
               <aside class="widget">
-                <h1 class="widget-title">Utilities</h1>
-                <h3>
-                  The ultimate utility belt for your dev needs.<br />
-                </h3>
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
               </aside>
 
             </div>
@@ -74,15 +76,15 @@
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A light-weight implementation of a command pattern with extra features</td>
+      <td>A variation to the command pattern to support ad-hoc execution of code, with support for metrics and time-stamps</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-02-27T17:37:20.201</td>
+      <td>2017-03-12T23:33:49.185</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.2.0</td>
+      <td>1.4.0</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -102,7 +104,7 @@
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Cmd.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Cmd.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Command.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Command.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -113,24 +115,100 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds._</span>
+<span class="k">import</span> <span class="nn">slate.common.Result</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultFuncs._</span>
+
 
 <span class="c1">// optional 
-</span><span class="n">coming</span> <span class="n">soon</span>
+</span>
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="o">-</span>
+
+  <span class="cm">/**
+   * Sample command to cleanup the temp directory.
+   */</span>
+  <span class="k">class</span> <span class="nc">CmdCleanTempDirectory</span> <span class="k">extends</span> <span class="nc">Cmd</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">)</span>  <span class="o">{</span>
+
+    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">executeInternal</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]])</span> <span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="c1">// Your code here
+</span>      <span class="n">success</span><span class="o">(</span><span class="s">"temp directory cleared"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+
+  <span class="cm">/**
+   * Sample command to create a set of test users
+   */</span>
+  <span class="k">class</span> <span class="nc">CmdCreateTestUsers</span> <span class="k">extends</span> <span class="nc">Cmd</span><span class="o">(</span><span class="s">"create_test_users"</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="n">executeInternal</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]])</span> <span class="k">:</span> <span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="c1">// Your code here
+</span>      <span class="n">success</span><span class="o">(</span><span class="s">"demo users created"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">val</span> <span class="n">commands</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Cmds</span><span class="o">(</span>
+    <span class="nc">List</span><span class="o">[</span><span class="kt">Cmd</span><span class="o">](</span>
+        <span class="k">new</span> <span class="nc">CmdCleanTempDirectory</span><span class="o">(),</span>
+        <span class="k">new</span> <span class="nc">CmdCreateTestUsers</span><span class="o">()</span>
+      <span class="o">)</span>
+  <span class="o">)</span>
+  
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">coming</span> <span class="n">soon</span>
+
+    <span class="c1">// Use case 1: get all the commands available
+</span>    <span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">names</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">names</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 2: get the size of the commands
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">commands</span><span class="o">.</span><span class="n">size</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 3: run a single command by its name
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
+
+    <span class="c1">// Print info about the result and time stamps.
+</span>    <span class="c1">// - name   : name of the command
+</span>    <span class="c1">// - success: whether the command was successful or not
+</span>    <span class="c1">// - message: message from the command
+</span>    <span class="c1">// - started: start time of the command
+</span>    <span class="c1">// - ended  : end time of the command
+</span>    <span class="c1">// - result : the result of the command
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">name</span>    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">message</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">started</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">ended</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span>  <span class="o">)</span>
+
+    <span class="c1">// Use case 4: get the current state of the command
+</span>    <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">state</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">)</span>
+
+    <span class="c1">// Print state of the command
+</span>    <span class="c1">// - name        : name of the command
+</span>    <span class="c1">// - msg         : message from the command
+</span>    <span class="c1">// - hasRun      : whether or not the command has run at all
+</span>    <span class="c1">// - runCount    : number of time the command was run
+</span>    <span class="c1">// - lastRunTime : the timestamp of the last run
+</span>    <span class="c1">// - errorCount  : the number or errors
+</span>    <span class="c1">// - lastResult  : the result of the last run ( see above )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">name</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">msg</span>         <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">hasRun</span>      <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">runCount</span>    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastRuntime</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">errorCount</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastResult</span>  <span class="o">)</span>
+    
 
 </code></pre>
 </div>
@@ -201,9 +279,9 @@
     <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
     <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
 	<script type="text/javascript">
-		var _codehelixAppPage = "utils";
+		var _codehelixAppPage = "core";
 	</script>
     <script type="text/javascript" src="themes/start/app/app.js"></script>
   </body>
