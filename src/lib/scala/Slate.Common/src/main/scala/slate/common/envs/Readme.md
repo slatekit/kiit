@@ -9,8 +9,8 @@ permalink: /mod-env
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
-| **date**| 2017-02-27T17:37:20.120 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.970 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.envs  |
 | **source core** | slate.common.envs.Env.scala  |
@@ -21,6 +21,8 @@ permalink: /mod-env
 ## Import
 ```scala 
 // required 
+
+import slate.common.Result
 import slate.common.envs._
 
 

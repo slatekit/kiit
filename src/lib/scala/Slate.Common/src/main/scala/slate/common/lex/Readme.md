@@ -9,8 +9,8 @@ permalink: /mod-lex
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Lexer for parsing text into tokens | 
-| **date**| 2017-02-27T17:37:20.129 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.990 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.lex  |
 | **source core** | slate.common.lex.Lexer.scala  |
@@ -21,6 +21,8 @@ permalink: /mod-lex
 ## Import
 ```scala 
 // required 
+
+import slate.common.Result
 import slate.common.lex.{Token, TokenType, Lexer}
 
 

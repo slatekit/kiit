@@ -9,8 +9,8 @@ permalink: /mod-app
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more | 
-| **date**| 2017-02-27T17:37:20.196 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:49.165 |
+| **version** | 1.4.0  |
 | **jar** | slate.core.jar  |
 | **namespace** | slate.core.app  |
 | **source core** | slate.core.app.AppProcess.scala  |

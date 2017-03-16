@@ -9,8 +9,8 @@ permalink: /mod-info
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Get/Set useful diagnostics about the system, language runtime, application and more | 
-| **date**| 2017-02-27T17:37:20.124 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.985 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.info  |
 | **source core** | slate.common.info._.scala  |
@@ -21,6 +21,8 @@ permalink: /mod-info
 ## Import
 ```scala 
 // required 
+
+import slate.common.Result
 import slate.common.info._
 
 

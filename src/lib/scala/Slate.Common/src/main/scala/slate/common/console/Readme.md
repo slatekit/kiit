@@ -9,8 +9,8 @@ permalink: /mod-console
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors | 
-| **date**| 2017-02-27T17:37:20.098 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.921 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.console  |
 | **source core** | slate.common.console.Console.scala  |
@@ -21,8 +21,7 @@ permalink: /mod-console
 ## Import
 ```scala 
 // required 
-
-import slate.common.DateTime
+import slate.common.{Result, DateTime}
 import slate.common.console.ConsoleWriter
 
 

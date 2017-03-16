@@ -12,9 +12,8 @@
   */
 package slate.core.app
 
-import slate.common.app._
 import slate.common.args.{Args, ArgsFuncs}
-import slate.common.databases.{DbConEmpty, DbConString, DbLookup}
+import slate.common.databases.{DbConEmpty, DbLookup}
 import slate.common.databases.DbLookup._
 import slate.common.envs._
 import slate.common.logging.{LoggerConsole, LogLevel}
@@ -49,12 +48,12 @@ object AppFuncs extends ResultSupportIn {
     */
   def envs(): List[Env] = {
     List(
-      Env("loc", Dev , desc = "Dev environment (local)" ),
+      Env("loc", Dev , desc = "Dev environment (local)"  ),
       Env("dev", Dev , desc = "Dev environment (shared)" ),
       Env("qa1", Qa  , desc = "QA environment  (current release)" ),
-      Env("qa2", Qa  , desc = "QA environment  (last release)" ),
+      Env("qa2", Qa  , desc = "QA environment  (last release)"    ),
       Env("stg", Uat , desc = "STG environment (demo)" ),
-      Env("pro", Prod, desc = "LIVE environment" )
+      Env("pro", Prod, desc = "LIVE environment"       )
     )
   }
 

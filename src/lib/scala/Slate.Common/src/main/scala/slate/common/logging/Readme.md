@@ -9,8 +9,8 @@ permalink: /mod-logger
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple logger with extensibility for using other 3rd party loggers | 
-| **date**| 2017-02-27T17:37:20.133 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:49 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.logging  |
 | **source core** | slate.common.logging.Logger.scala  |

@@ -9,8 +9,8 @@ permalink: /mod-data
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Database access utilty to query and manage data using JDBC for MySql. Other database support coming later. | 
-| **date**| 2017-02-27T17:37:20.107 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.950 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.databases  |
 | **source core** | slate.common.databases.Db.scala  |
@@ -21,6 +21,8 @@ permalink: /mod-data
 ## Import
 ```scala 
 // required 
+
+import slate.common.Result
 import slate.common.databases._
 import slate.common.mapper.Mapper
 import slate.common.databases.DbLookup._

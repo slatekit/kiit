@@ -13,6 +13,9 @@
 
 package slate.tools.docs
 
+import java.io.File
+import java.nio.file.Path
+
 import slate.common._
 import slate.common.console.ConsoleWriter
 import slate.common.results.ResultSupportIn
@@ -20,10 +23,11 @@ import slate.common.results.ResultSupportIn
 import scala.collection.immutable.List
 import scala.collection.mutable.Map
 
-class DocService(val _rootdir:String, val _outputDir:String, val _templatePath:String) extends ResultSupportIn {
+class DocService(val _rootdir:String, val _outputDir:String, val templatePath:String) extends ResultSupportIn {
 
+  private val _templatePath = new File(_rootdir, templatePath).toString
   private var _template = ""
-  private var _writer = new ConsoleWriter()
+  private val _writer = new ConsoleWriter()
 
 
   private val _docs = List[Doc](
@@ -35,6 +39,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val _templatePath:S
     ,new Doc("DateTime"     ,  "slate.common.DateTime"                     , "1.4.0", "Example_DateTime"         , true  , false, false, "utils", "", "slate.common.jar"  , ""                    , "DataTime wrapper around Java 8 LocalDateTime providing a simplified interface, some convenience, extra features.")
     ,new Doc("Encrypt"      ,  "slate.common.encrypt.Encryptor"            , "1.4.0", "Example_Encryptor"        , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "Encryption using AES")
     ,new Doc("Env"          ,  "slate.common.envs.Env"                     , "1.4.0", "Example_Env"              , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "Environment selector and validator for environments such as (local, dev, qa, stg, prod) )")
+    ,new Doc("Folders"      ,  "slate.common.info.Folders"                 , "1.4.0", "Example_Folders"          , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "Standardized application folder setup; includes conf, cache, inputs, logs, outputs")
     ,new Doc("Info"         ,  "slate.common.info._"                       , "1.4.0", "Example_Info"             , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "Get/Set useful diagnostics about the system, language runtime, application and more")
     ,new Doc("Lex"          ,  "slate.common.lex.Lexer"                    , "1.4.0", "Example_Lexer"            , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "Lexer for parsing text into tokens")
     ,new Doc("Logger"       ,  "slate.common.logging.Logger"               , "1.4.0", "Example_Logger"           , true  , false, true , "utils", "", "slate.common.jar"  , ""                    , "A simple logger with extensibility for using other 3rd party loggers")
@@ -58,11 +63,12 @@ class DocService(val _rootdir:String, val _outputDir:String, val _templatePath:S
     ,new Doc("Orm-Repo"     ,  "slate.common.entities.EntityRepo"          , "1.4.0", "Example_Entities_Repo"    , true  , false, false, "orm"  , "", "slate.entities.jar", "com"                 , "A repository pattern for entity/model CRUD operations")
     ,new Doc("Orm-Service"  ,  "slate.common.entities.EntityService"       , "1.4.0", "Example_Entities_Service" , true  , false, false, "orm"  , "", "slate.entities.jar", "com"                 , "A service pattern for entity/model CRUD + business operations")
     ,new Doc("Orm-Setup"    ,  "slate.common.entities.Entities"            , "1.4.0", "Example_Entities_Reg"     , true  , false, false, "orm"  , "", "slate.entities.jar", "com"                 , "A registration system for entities and their corresponding repository/service impelementations")
-    ,new Doc("Api"          ,  "slate.core.apis.ApiContainer"              , "1.4.0", "Example_Api"              , true  , false, true, "infra", "", "slate.core.jar"    , "com"                 , "An API Container to host protocol agnostic apis to run on the command line or web")
+    ,new Doc("Api"          ,  "slate.core.apis.ApiContainer"              , "1.4.0", "Example_Api"              , true  , false, true , "infra", "", "slate.core.jar"    , "com"                 , "An API Container to host protocol agnostic apis to run on the command line or web")
     ,new Doc("App"          ,  "slate.core.app.AppProcess"                 , "1.4.0", "Example_App"              , true  , false, true , "infra", "", "slate.core.jar"    , "com"                 , "A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more")
     ,new Doc("Auth"         ,  "slate.core.auth.Auth"                      , "1.4.0", "Example_Auth"             , true  , false, false, "utils", "", "slate.core.jar"    , "com"                 , "A simple authentication component to check current user role and permissions")
+    ,new Doc("Cache"        ,  "slate.core.cache.Cache"                    , "1.4.0", "Example_Cache"            , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "Light-weight cache to load, store, and refresh data, with support for metrics and time-stamps. Default in-memory implementation available")
     ,new Doc("Ctx"          ,  "slate.core.common.AppContext"              , "1.4.0", "Example_Context"          , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "An application context to contain common dependencies such as configs, logger, encryptor, etc, to be accessible to other components")
-    ,new Doc("Cmd"          ,  "slate.core.cmds.Cmd"                       , "1.4.0", "Example_Cmd"              , false , false, false, "utils", "", "slate.core.jar"    , "com"                 , "A light-weight implementation of a command pattern with extra features")
+    ,new Doc("Cmd"          ,  "slate.core.cmds.Cmd"                       , "1.4.0", "Example_Command"          , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "A variation to the command pattern to support ad-hoc execution of code, with support for metrics and time-stamps")
     ,new Doc("Email"        ,  "slate.core.sms.EmailService"               , "1.4.0", "Example_Email"            , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "An Email service to send emails with support for templates using SendGrid as the default implementation")
     ,new Doc("Shell"        ,  "slate.core.shell.ShellService"             , "1.4.0", "Example_Shell"            , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "A CLI ( Command Line Interface ) you can extend / hook into to run handle user. Can also be used to execute your APIs")
     ,new Doc("Sms"          ,  "slate.core.sms.SmsService"                 , "1.4.0", "Example_Sms"              , true  , false, false, "infra", "", "slate.core.jar"    , "com"                 , "An Sms ( Text message ) service to send text messages to mobile phones for confirmation codes and invites.")

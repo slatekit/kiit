@@ -9,8 +9,8 @@ permalink: /mod-encrypt
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Encryption using AES | 
-| **date**| 2017-02-27T17:37:20.116 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.962 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.encrypt  |
 | **source core** | slate.common.encrypt.Encryptor.scala  |
@@ -26,7 +26,7 @@ import slate.common.encrypt.Encryptor
 
 
 // optional 
-import slate.common.{Strings}
+import slate.common.{Result, Strings}
 import slate.common.encrypt.EncryptSupportIn
 import slate.common.results.ResultSupportIn
 import slate.core.cmds.Cmd

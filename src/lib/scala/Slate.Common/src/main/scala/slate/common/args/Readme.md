@@ -7,11 +7,10 @@ permalink: /mod-args
 # Args
 
 {: .table .table-striped .table-bordered}
-
 |:--|:--|
 | **desc** | A lexical command line argument parser for command line parsing and support specifying routes / method calls | 
-| **date**| 2017-02-27T17:37:20.081 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.893 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.args  |
 | **source core** | slate.common.args.Args.scala  |

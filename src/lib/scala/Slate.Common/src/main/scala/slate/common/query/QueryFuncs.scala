@@ -15,19 +15,13 @@ package slate.common.query
 
 object QueryFuncs {
 
-  object == extends Op( "==" )
-  object != extends Op( "!=" )
-  object <= extends Op( "<=" )
-  object >= extends Op( ">=" )
-  object <  extends Op( "<"  )
-  object >  extends Op( ">"  )
-  object in extends Op( "in" )
-
-
-  def select(names:String*) : Query =
-  {
-    new Query()
-  }
+  object Eq     extends Op( "=" )
+  object Neq    extends Op( "<>" )
+  object LessEq extends Op( "<=" )
+  object MoreEq extends Op( ">=" )
+  object Less   extends Op( "<"  )
+  object More   extends Op( ">"  )
+  object In     extends Op( "in" )
 
 
   def where(field:String, op:Op, value:Any) : IQuery =

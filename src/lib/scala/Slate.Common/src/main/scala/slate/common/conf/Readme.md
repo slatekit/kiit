@@ -9,8 +9,8 @@ permalink: /mod-config
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys | 
-| **date**| 2017-02-27T17:37:20.092 |
-| **version** | 1.2.0  |
+| **date**| 2017-03-12T23:33:48.914 |
+| **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
 | **namespace** | slate.common.conf  |
 | **source core** | slate.common.conf.Config.scala  |
@@ -21,6 +21,8 @@ permalink: /mod-config
 ## Import
 ```scala 
 // required 
+
+import slate.common.Result
 import slate.core.common.Conf
 
 
