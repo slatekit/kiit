@@ -5,10 +5,8 @@ It is written in Scala, uses MySql, AWS, and Akka-Http in the Server.
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
-- **date**: Dec 1, 2016
-- **release**: 1.2.0
-- **build**: 1.2.0.3
-- **url**: www.slatekit.com
+- **date**: Mar 16, 2016
+- **release**: 1.4.1
 
 
 # LINKS
@@ -33,7 +31,7 @@ concepts. These include the following. ( Please refer to website for more detail
 
 
 
-# LIBRARIES
+# MODULES
 - sampleapp-batch.jar    : sample console app to showcase the Slate Kit - Base App   
 - sampleapp-cli.jar      : sample cli to showing Slate Kit - Shell component and hosting and using Protocol independent APIs 
 - sampleapp-core.jar     : sample library showing creation of Protocol independent APIs
