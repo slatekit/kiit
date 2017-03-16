@@ -21,12 +21,18 @@ import slate.common._
 
 import slate.core.cloud._
 
-
-class AwsCloudFiles(defaultFolder:String,
-                    createDefaultFolder:Boolean,
+/**
+ *
+ * @param bucket       : Name of the bucket to store files in
+ * @param createBucket : Whether or not to create the bucket
+ * @param path         : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
+ * @param section      : Name of section in conf file for api key. e.g. Some("sqs")
+ */
+class AwsCloudFiles(bucket:String,
+                    createBucket:Boolean,
                     path:Option[String] = None,
                     section:Option[String] = None)
-  extends CloudFilesBase(defaultFolder,createDefaultFolder) with AwsSupport {
+  extends CloudFilesBase(bucket,createBucket) with AwsSupport {
 
   private val SOURCE  = "aws:s3"
   private val _s3:AmazonS3Client = AwsFuncs.s3(path, section)

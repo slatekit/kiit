@@ -23,7 +23,12 @@ import com.amazonaws.services.sqs.model._
 
 import scala.collection.mutable.ListBuffer
 
-
+/**
+ *
+ * @param queue   : Name of the SQS Queue
+ * @param path    : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
+ * @param section : Name of section in conf file for api key. e.g. Some("sqs")
+ */
 class AwsCloudQueue(queue:String,
                     path:Option[String] = None,
                     section:Option[String] = None) extends CloudQueueBase
