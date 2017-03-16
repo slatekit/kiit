@@ -108,7 +108,7 @@ abstract class SmsService(val templates:Option[Templates] = None,
     else {
       val country = countries(finalIso)
       val finalPhone = if(!phone.startsWith(country.phone)) {
-        s"${country.iso}${country.phone}"
+        s"${country.phone}${phone}"
       } else {
         phone
       }
