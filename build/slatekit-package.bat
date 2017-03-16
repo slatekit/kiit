@@ -65,10 +65,39 @@ xcopy %SLATE_SOURCE%\src\lib\scala\Slate.Shell\src\main\resources               
 
 
 REM ===============================================
-REM copy the license files to releases\{version}\licenses
-xcopy %SLATE_SOURCE%\licenses   %SLATE_DEST%\licenses\          /s /e /h /y      
+REM copy the script files to run the sample apps to releases\{version}\
+xcopy %SLATE_SOURCE%\scripts\samples   %SLATE_DEST%\          /s /e /h /y      
 
 
 REM ===============================================
-REM copy the script files to run the sample apps to releases\{version}\
-xcopy %SLATE_SOURCE%\scripts\samples   %SLATE_DEST%\          /s /e /h /y      
+REM copy the sample apps to releases\{version}\samples
+del %SLATE_SOURCE%\src\apps\scala\Slate.SampleApp\*.jar /f /s /q
+del %SLATE_SOURCE%\src\apps\scala\Slate.SampleApp\*.class /f /s /q
+xcopy %SLATE_SOURCE%\src\apps\scala\Slate.SampleApp   %SLATE_DEST%\samples\          /s /e /h /y    
+rd %SLATE_DEST%\samples\SampleApp.Batch\.idea   /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Batch\lib     /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Batch\project /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Batch\target  /S /Q
+
+rd %SLATE_DEST%\samples\SampleApp.CLI\.idea   /S /Q
+rd %SLATE_DEST%\samples\SampleApp.CLI\lib     /S /Q
+rd %SLATE_DEST%\samples\SampleApp.CLI\project /S /Q
+rd %SLATE_DEST%\samples\SampleApp.CLI\target  /S /Q
+
+rd %SLATE_DEST%\samples\SampleApp.Core\.idea   /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Core\lib     /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Core\project /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Core\target  /S /Q
+
+rd %SLATE_DEST%\samples\SampleApp.Server\.idea   /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Server\lib     /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Server\project /S /Q
+rd %SLATE_DEST%\samples\SampleApp.Server\target  /S /Q
+
+
+REM ===============================================
+REM copy the license files to releases\{version}\licenses
+xcopy %SLATE_SOURCE%\licenses   %SLATE_DEST%\licenses\          /s /e /h /y      
+copy %SLATE_SOURCE%\doc\LICENSE.txt %SLATE_DEST%\LICENSE.txt 
+copy %SLATE_SOURCE%\doc\README.txt  %SLATE_DEST%\README.txt  
+
