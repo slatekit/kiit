@@ -74,15 +74,11 @@ object HttpHelper extends ResultSupportIn {
 
   def encodeParams(req: HttpRequest):Option[String] =
   {
-    if(req.params.isDefined && req.params.get.size == 0) {
-      val params = req.params.fold("")(params => {
-        Strings.mkString[(String, String)](params, p => {
+    req.params.fold[Option[String]](None)( params => {
+      val encoded = Strings.mkString[(String, String)]( params, p => {
           URLEncoder.encode(p._1, "UTF-8") + "=" + URLEncoder.encode(p._2, "UTF-8")
         }, "&")
-      })
-      Some(params)
-    }
-    else
-      None
+      Some(encoded)
+    })
   }
 }

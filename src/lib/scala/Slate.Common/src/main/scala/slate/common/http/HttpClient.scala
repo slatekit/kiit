@@ -165,7 +165,7 @@ class HttpClient {
     catch {
       case ex: Exception =>
       {
-        val msg = s"Error getting content from ${req.url}"
+        val msg = s"Error getting content from ${req.url}." + ex.getMessage()
         (false, HttpStatus.s500.code, msg, None)
       }
     }
