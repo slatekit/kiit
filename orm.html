@@ -83,9 +83,13 @@
 				
 				<div> 
 					<h1>About</h1>
-					<p>The Scala ORM component in Slate Kit is designed with simplicity in mind. 
-						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasource. 
-						The ORM is designed in form of an "Entities" based approach ( as you will see in the docs ). The following features are supported:
+					<p>The Scala ORM in Slate Kit is designed with simplicity in mind. 
+						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasources. 
+						The ORM is designed using a <strong>DDD</strong> (Domain Driven Design) approach 
+						with <strong>Entities, Services and Repositories</strong>.
+						Also, to be inline with functional programming, the entities can be <strong>case classes</strong>
+						to support <strong>immutability</strong>. 
+						The following features are supported:
 					</p>
 				</div>
 				<br/>
@@ -118,22 +122,22 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Entity</strong></td>
-						<td class="col-sm-6">An entity trait that defines entities with fields annotated for persistence</td>
+						<td class="col-sm-6">A base entity with identity fields for persistence</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Standardized Entity</strong></td>
-						<td class="col-sm-6">Standardization of entities using common fields like Id, TimeStamps, Audit Fields, Uniqueness and others</td>
+						<td class="col-sm-6">An entity with common fields like Id, TimeStamps, Audit Fields, Uniqueness and others</td>
 					<tr>
 						<td class="col-sm-2"><strong>Generic Service</strong></td>
-						<td class="col-sm-6">A general purpose service <strong>( EntityService[T] )</strong> for Entities to support CRUD operations business logic; delegates calls to the Repository</td>
+						<td class="col-sm-6">A generic entity service <strong>( EntityService[T] )</strong> for Entities to support CRUD operations business logic; delegates calls to the Repository</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Generic Repository</strong></td>
-						<td class="col-sm-6">A general purpose repository <strong>( EntityRepo[T] )</strong> for Entities to support CRUD operations, Find methods, and other features.</td>
+						<td class="col-sm-6">A generic entity repository <strong>( EntityRepo[T] )</strong> for Entities to support CRUD operations, Find methods, and other features.</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Generic Query</strong></td>
-						<td class="col-sm-6">A query pattern for specifying sql queries to accommodate for database differences. Direct SQL use is still supported</td>
+						<td class="col-sm-6">A query builder specifying sql queries to accommodate for database differences. Direct SQL use is still supported</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Generic Mapper</strong></td>
@@ -150,7 +154,7 @@
 					</tr>
 					<tr> 
 						<td><strong>1. Databases</strong></td>
-						<td>Setup your entities to use multiple and/or different databases.
+						<td>Setup your entities to use 1 or more databases.
 						</td>
 					</tr>
 					<tr> 
@@ -245,26 +249,19 @@
 				
 				<div>
 					<br/><br/>
-					<div class="alert alert-info" role="alert">
-						<h4>This current version of the ORM is <strong>not</strong> immutable/functional</h4>	
-						<br/>
-						<ol>
-						  <li>The entity/model classes are currently mutable via usage of "var" fields</li>
-						  <li>The <strong>next release</strong> will provide optional support of <strong>entities as case classes</strong></li>
-						  <li>The <strong>next release</strong> will provide support for a <strong>IO/Reader Monad for database operations</strong></li>							  
-						</ol>
-					</div>
-					<br/>
 					<div> 
 						<h2 id="orm-database">1. Databases</h2>
 						<p>You can register database connections using a <strong>database lookup</strong> called
 						a <strong>DbLookup</strong> which can hold a <strong>default database</strong>, and/or many 
 						<strong>named databases</strong>.
 						Then you connect a specific model/entities to a named database. 
-						This approach  allows for flexibility in supporting multiple databases
-						in the mapper. However, in terms of types of database, currently, only <strong>MySql</strong> is supported.
+						This approach allows for flexibility in supporting multiple databases. However, in terms of types of database, currently, only <strong>MySql</strong> is supported.
 						</p>
 						<br/>
+						<div class="alert alert-warning text-left" role="alert">
+							<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-data.html" class="url-ch">Db</a></strong> component in utils to register and lookup databases.
+							</p>
+						</div>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>    
   <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
@@ -315,16 +312,26 @@
 </code></pre>
 </div>				
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>								
 							  <li>Slate Kit currently supports <strong>MySql</strong></li>
 							  <li>Support for <strong>multiple databases</strong> is available</li>
-							  <li>See the <strong>config</strong> component in the utilities page for getting database info out of config files</li>
-							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
-							  <li>Load connection info from a config file in user directory e.g. {user}./slate <strong>( for added security )</strong></li>
+							  <li>See the <strong><a href="mod-config.html" class="url-ch">Config</a></strong> component in the utilities page for getting database info out of config files</li>
+							  <li>Ensure your database driver is referenced by the project. e.g. <strong>"mysql-connector-java-5.1.38-bin.jar"</strong></li>
 							</ol>
 						</div>	
+						<br/>
+						<div class="alert alert-danger text-left" role="alert">
+							<p><i class="fa fa-lock"></i></p>
+							<ol>								
+							  <li>Secure your connection strings via encryption</li>
+							  <li>Do not place connection strings in source code</li>
+							  <li>You can create dedicated config files for connection strings </li>
+							  <li>You can store config files in the <strong>user</strong> directory and refer to them from your config</li>
+							  <li>See the <strong><a href="mod-config.html" class="url-ch">Config</a></strong> component in the utilities for working with connection strings</li>
+							</ol>
+						</div>
 						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
@@ -334,48 +341,76 @@
 					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-entity">2. Entities</h2>
-						<p>Each class that you want persisted and mapped to a database table/record must extend the IEntity trait.
-						IEntity provides some consistent fields and behaviour to facilitate the ORM.
+						<p>Each class that you want persisted and mapped to a database table/record must extend one of the Entity traits.
+						The traits ( refer to link below ) provides some consistent fields and behaviour to facilitate persistance and mapping.
+						There are various traits you can use to represent your entity.
+						This is to support various design approaches and fields within the entity.
+						The entities are typically <strong>case classes</strong> to support <strong>immutability</strong>
 						</p>	
+						<p>By default, the column mappings are represented using <strong>annotations</strong>.
+						While this may be considered more like java, we believe this is still highly practical, involves less work,
+						and is also more <strong>type-safe</strong>.
+						However, you can also manually setup the mappings using the <strong>Model</strong> class (shown later).
+						</p>
 						<br/>
+						<div class="alert alert-warning text-left" role="alert">
+							<p><i class="fa fa-link"></i> Refer to 
+								<strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/scala/Slate.Entities/src/main/scala/slate/entities/core/IEntity.scala" class="url-ch">Entity.scala</a></strong> for more info on the traits and fields.
+							</p>
+						</div>
 						<h3>Example</h3>
 						<div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
 
   <span class="c1">// 1. Extend from IEntity
 </span>  <span class="c1">// 2. Add @Field annotations for fields that should be mapped
-</span>  <span class="k">class</span> <span class="nc">User</span> <span class="k">extends</span> <span class="nc">IEntity</span>
-  <span class="o">{</span>
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span> <span class="o">(</span>
+
       <span class="c1">// Primary key
-</span>      <span class="k">var</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">0L</span>
+</span>      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">id</span> <span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
   
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">userName</span>  <span class="k">=</span> <span class="s">""</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+      <span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
   
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">email</span>  <span class="k">=</span> <span class="s">""</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
+      <span class="n">email</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
   
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">password</span>  <span class="k">=</span> <span class="s">""</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+      <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+	  
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">,</span>
   
-      <span class="c1">// The timestamp and audit fields
-</span>      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">createdAt</span>  <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">createdBy</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span>
   
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">createdBy</span>  <span class="k">=</span> <span class="mi">0</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">updatedAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">,</span>
   
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">updatedAt</span>  <span class="k">=</span>  <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-  
-      <span class="nd">@Field</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="k">var</span> <span class="n">updatedBy</span>  <span class="k">=</span> <span class="mi">0</span>
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">updatedBy</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span>
+
+      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
+      <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span>	  
+  <span class="o">)</span>
+   <span class="k">extends</span> <span class="nc">EntityWithId</span>
+      <span class="k">with</span> <span class="nc">EntityWithMeta</span>
+      <span class="k">with</span> <span class="nc">EntityUpdatable</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
+  <span class="o">{</span>
+    <span class="cm">/**
+      * support for "copy on write" to set the id on the entity and return a copy.
+      * @param id
+      * @return
+      */</span>
+    <span class="k">override</span> <span class="k">def</span> <span class="n">withId</span><span class="o">(</span><span class="n">id</span><span class="k">:</span><span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=</span> <span class="n">copy</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">id</span><span class="o">)</span>
   <span class="o">}</span>
 
 </code></pre>
 </div>	
 						<br/>
 						<h3>Fields</h3>
+						<p>These are some of the fields available in the various traits</p>
 						<table class="table table-bordered table-striped">
 							<tr>
 								<td class="col-sm-2"><strong>Field</strong></td>
@@ -390,7 +425,7 @@
 								<td>long</td>
 								<td>yes</td>
 								<td>yes</td>
-								<td>IEntity</td>
+								<td>Entity</td>
 								<td>primary key of the table</td>
 							</tr>
 							<tr>
@@ -398,7 +433,7 @@
 								<td>DateTime</td>
 								<td>yes</td>
 								<td>yes</td>
-								<td>IEntity</td>
+								<td>EntityWithTime</td>
 								<td>Create date timestamp</td>
 							</tr>
 							<tr>
@@ -406,7 +441,7 @@
 								<td>long</td>
 								<td>config</td>
 								<td>yes</td>
-								<td>IEntity</td>
+								<td>EntityWithUser</td>
 								<td>User id who created item</td>
 							</tr>
 							<tr>
@@ -414,7 +449,7 @@
 								<td>DateTime</td>
 								<td>yes</td>
 								<td>yes</td>
-								<td>IEntity</td>
+								<td>EntityWithTime</td>
 								<td >Update date timestamp</td>
 							</tr>
 							<tr>
@@ -422,38 +457,27 @@
 								<td>long</td>
 								<td>config</td>
 								<td>yes</td>
-								<td>IEntity</td>
+								<td>EntityWithUser</td>
 								<td>User id who updated item</td>
-							</tr>
-							<tr>
-								<td><strong>tag</strong></td>
-								<td>string</td>
-								<td>no</td>
-								<td>no</td>
-								<td>IEntityTag</td>
-								<td>useful for segmenting entities by some key</td>
 							</tr>
 							<tr>
 								<td><strong>uniqueId</strong></td>
 								<td>string</td>
 								<td>yes</td>
 								<td>no</td>
-								<td>IEntityUnique</td>
+								<td>EntityWithGuid</td>
 								<td>a unique guid generated 1 time used for cross-environment uniquess and import/export.</td>
 							</tr>
 						</table>	
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
-							  <li>Each entity to be used in the ORM <strong>MUST</strong> extend <strong>IEntity</strong></li>
+							  <li>Each entity <strong>MUST</strong> at least extend from <strong>Entity</strong></li>
 							  <li>The primary key is a field <strong>id</strong> with type <strong>Long</strong></li>
-							  <li>The entity must have annotations to tell the ORM which fields are mapped to columns</li>
-							  <li>The timestamps ( <strong>createdAt</strong>, <strong>updatedAt</strong> ) are managed by the ORM.</li>
-							  <li>Extending from IEntityUnique allows ORM to auto-create guid for the uniqueId field.</li>
+							  <li>The intent of the EntityUnique is to support a guid for the uniqueId field.</li>
 							</ol>
-						</div>	
-						<br/>						
+						</div>					
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
@@ -463,8 +487,17 @@
 					<br/><br/><br/>				
 					<div>
 						<h2 id="orm-setup">3. Setup</h2>
-						<p>Once you setup entities and services(optional), you simply register your components to have the ORM wire everything together.</p>
-						<br/>
+						<p>Once you create your entities ( and <strong>optional</strong> services, repositories ), you simply 
+						register your entities using the <strong>Entities</strong> class to connect your entity to a database, service, repo, and mapper. For convenience to support average use-cases,
+						there are methods in the Entities class to handle a default setup.
+						Each entity can have a corresponding:
+						</p>
+						<ol>
+							<li>Connection: e.g. tied to a default database or a named database</li>
+							<li>Service: e.g. UserService extends EntityService[User]...</li>
+							<li>Repository e.g. UserRepo extends EntityRepoMySql[User]...</li>
+							<li>Mapper e.g. EntityMapper(typeof[User])...</li>
+						</ol>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
@@ -511,15 +544,15 @@
 </code></pre>
 </div>
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
-							  <li>The simplest case is you only create an entity and use the pre-built service and repo classes.</li>
+							  <li>The simplest setup is to only create an entity and use the pre-built service and repo classes.</li>
 							  <li>You are free to create your own <strong>service</strong> or <strong>repository</strong> classes.</li>
 							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>							  
 							</ol>
 						</div>	
-						<br/>				
+						<br/>			
 						<h3>More</h3>
 						<a href="mod-orm-setup.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -527,7 +560,10 @@
 					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-service">4. Service</h2>
-						<p>A Service layer ( a default implementation is provided ) must be set up for each entity and provides many boiler-plate features such as CRUD, search, timestamps and auditing.
+						<p>Each entity has a corresponding service that provides boiler-plate CRUD and search operations.
+						You do <strong>NOT</strong> have to create one by default, you can simply use the built-in <strong>EntityService[T]</strong> class.
+						The EntityService[T] class is essentially an implementation of a <strong>Generic Entity Service</strong> pattern. 
+						You can ofcourse create a custom service class for your entity by extending from EntityService[T].
 						</p>
 						<br/>
 						<h3>Example</h3>
@@ -572,7 +608,7 @@
   <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span> <span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> 
                            <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
                            <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
-                           <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">)</span>
+                           <span class="n">dbType</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">DbTypeMySql</span><span class="o">))</span>
     
   <span class="c1">// EXAMPLES: 
 </span>  <span class="c1">// 1. Create 
@@ -601,6 +637,7 @@
 
 						<br/>
 						<h3>Features</h3>
+						<p>The purpose of the service class is to provide the following features:</p>
 						<table class="table table-bordered table-striped">
 							<tr>
 								<td class="col-sm-1"><strong>Area</strong></td>
@@ -629,22 +666,17 @@
 							</tr>
 						</table>
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
-							  <li>You do <strong>NOT</strong> need to write your own Service class.</li>							  
-							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
-							  <li>If you want to incorporate custom logic or avoid using generics, then you can extend from the EntityService[T] class</li>
-							  <li>The base service is <strong>EntityService[T >: Null <: IEntity]</strong></li>
+							  <li>If you want to add custom logic or avoid generics, extend from the EntityService[T] class</li>
 							  <li>You can simply use the base service for your Entity via <strong>new EntityService[User]()</strong></li>
 							  <li>You can subclass the EntityService to avoid generics <strong>class UserService extends EntityService[User]</strong></li>
-							  <li>The service layer uses a <strong>EntityRepo</strong>(Repository) class/instance ( see below ) to perform the actual CRUD operations</li>
-							  <li>The service layer is <strong>independent</strong> of the underlying database/repository implementation.</li>
+							  <li>The service layer uses a <strong>EntityRepo</strong>( see below ) to perform CRUD operations</li>
+							  <li>The service layer is <strong>independent</strong> of the underlying database/repository.</li>
 							  <li>Use the <strong>Entities</strong> component for registering all your entities.</li>
-							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
 							</ol>
 						</div>
-						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
@@ -653,7 +685,12 @@
 					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-repository">5. Repo</h2>
-						<p>The Repository layer ( a default mysql implementation is provided ) must be set up to support all of the CRUD operations on your entity.						
+						<p>Similar to the <strong>Service</strong> class above,
+						each entity has a corresponding repository that provides the actual CRUD and search operations 
+						for your entity against the data store. You do <strong>NOT</strong> have to create a Repository by default, 
+						you can simply use the built-in <strong>EntityRepo[T]</strong> class(s).
+						The EntityRepo[T] class is essentially an implementation of a <strong>Generic Entity Repository</strong> pattern. 
+						You can ofcourse create a custom repo class for your entity by extending from EntityRepo[T] or EntityRepoMySql[T].
 						</p>
 						<br/>
 						<h3>Example</h3>
@@ -696,7 +733,7 @@
                            <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
                            <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
                            <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">UserRepository</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]),</span> 
-                           <span class="n">dbType</span><span class="k">=</span> <span class="s">"mysql"</span> 
+                           <span class="n">dbType</span><span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">DbTypeMySql</span><span class="o">)</span>
                          <span class="o">)</span>
   
   <span class="c1">// =====================================================
@@ -717,6 +754,7 @@
 
 						<br/>						
 						<h3>Features</h3>
+						<p>The purpose of the repo class is to provide the following features:</p>						
 						<table class="table table-bordered table-striped">
 							<tr>
 								<td class="col-sm-1"><strong>Area</strong></td>
@@ -735,18 +773,13 @@
 							</tr>
 						</table>
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
-							  <li>You do <strong>NOT</strong> need to write your own Repository for single table entities.</li>							  
-							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
-							  <li>If you want to incorporate stored procs, then you will need to extend from EntityRepo and add your custom features</li>
-							  <li>The base repo is <strong>EntityRepo[T >: Null <: IEntity]</strong> in the slate.entities.jar</li>
-							  <li>You can simply use the base repo for your Entity via <strong>new EntityRepoMySql[User](typeOf[User])</strong></li>
+							  <li>If you want to add custom logic or avoid generics, extend from the EntityRepo[T] class</li>
+							  <li>There is repo implementation for MySql <strong>EntityRepoMySql[User]</strong></li>
 							  <li>You can subclass the EntityRepo if you need to provide your own implementation of method(s)</li>
-							  <li>The repository uses a <strong>EntityMapper</strong>(Mapper) class/instance ( see below ) to map between objects to SQL</li>
-							  <li>A repository implementation exists for <strong>MySql</strong></li>
-							  <li>Ensure your database driver is referenced by the project. e.g. "mysql-connector-java-5.1.38-bin.jar"</li>
+							  <li>The repository uses a <strong>EntityMapper</strong>( see below ) to map between objects to SQL</li>							  
 							</ol>
 						</div>
 						<br/>
@@ -758,7 +791,9 @@
 					<br/><br/><br/>
 					<div> 
 						<h2 id="orm-mapper">6. Mapper</h2>
-						<p>The mapper component ( a default mysql entity mapper is provided ) is used map fields in the entity to/from SQL. It is designed to be general enough to support conversion to/from other formats such as JSON. You can write your own mapper. There is a built in Mapper for MySql.
+						<p>The mapper component is used map fields in the entity to/from SQL. 
+						It is decoupled from the Repository and is designed to be general enough to support conversion to/from other formats such as JSON.
+						You do <strong>NOT</strong> need to write a mapper, a default mysql entity mapper is provided.
 						</p>
 						<br/>
 						<h3>Example</h3>
@@ -767,31 +802,25 @@
   <span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
   <span class="k">import</span> <span class="nn">slate.entities.core._</span>
   
-  <span class="c1">// STEP 1: Create instance of entity class
-</span>  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">()</span>
-
-  <span class="c1">// STEP 2: Create a new mapper that loads fields/annotations mappings from the entity class
-</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Consultant</span><span class="o">])</span>
+  <span class="c1">// STEP 1: Create a new mapper that loads fields/annotations mappings from the entity class
+</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
   <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
   
+  <span class="c1">// STEP 2: Create instance of entity class
+</span>  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"john"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-01"</span><span class="o">,</span> <span class="n">email</span> <span class="k">=</span> <span class="s">"john@abc.com"</span><span class="o">)</span>
 
-  <span class="c1">// STEP 3: Create instance for testing
-</span>  <span class="n">user</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"john"</span>
-  <span class="n">user</span><span class="o">.</span><span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe"</span>
-  <span class="n">user</span><span class="o">.</span><span class="n">email</span> <span class="k">=</span> <span class="s">"john.doe@gmail.com"</span>
-
-  <span class="c1">// STEP 4: Get the sql for create
+  <span class="c1">// STEP 3: Get the sql for create
 </span>  <span class="k">val</span> <span class="n">sqlCreate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
   <span class="n">println</span><span class="o">(</span><span class="n">sqlCreate</span><span class="o">)</span>
 
-  <span class="c1">// STEP 5: Get the sql for update
+  <span class="c1">// STEP 4: Get the sql for update
 </span>  <span class="k">val</span> <span class="n">sqlForUpdate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
   <span class="n">println</span><span class="o">(</span><span class="n">sqlForUpdate</span><span class="o">)</span>
 
-  <span class="c1">// STEP 6: Generate the table schema for mysql from the model schema
-</span>  <span class="n">println</span><span class="o">(</span> <span class="s">"table sql : "</span> <span class="o">+</span> <span class="k">new</span> <span class="nc">DbBuilder</span><span class="o">().</span><span class="n">addTable</span><span class="o">(</span><span class="n">modelSchema</span><span class="o">))</span>
+  <span class="c1">// STEP 5: Generate the table schema for mysql from the model schema
+</span>  <span class="n">println</span><span class="o">(</span> <span class="s">"table sql : "</span> <span class="o">+</span> <span class="k">new</span> <span class="nc">DbBuilder</span><span class="o">().</span><span class="n">addTable</span><span class="o">(</span><span class="n">model</span><span class="o">))</span>
 </code></pre>
-</div>						
+</div>				
 						<br/>
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
@@ -819,17 +848,13 @@
 						<br/>
 						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
-							  <li>You do <strong>NOT</strong> need to write your own mapper.</li>							  
-							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
 							  <li>The base mapper is <strong>EntityMapper</strong> which is available in the slate.entities.jar</li>
-							  <li>You can simply use the base mapper for your Entity via <strong>new EntityMapper(typeOf[User])</strong></li>
-							  <li>You can subclass the EntityMapper if you need to provide your own implementation of method(s)</li>
-							  <li>The mapper requires your entity to have annotations on it which tells it what fields to map</li>
-							  <li>The mapper creates an internal Model Definition( see models below ) to store the schema of your entity for mapping purposes. </li>
+							  <li>The <strong>EntityMapper(typeOf[User])</strong> is used when registering your entity, unless you explicity supply one</li>
+							  <li>The mapper creates an internal Model Definition(see below) to store the schema of your entity. </li>
 							</ol>
 						</div>
-						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-mapper.html" class="more"><span class="btn btn-primary">See full code</span></a>
@@ -870,15 +895,14 @@
 	   </code></pre>
 </div>						
 						<br/>
-						<h3>Notes</h3>
 						<div class="alert alert-info" role="alert">
+							<p><i class="fa fa-info-circle"></i></p>
 							<ol>
 							  <li>You do <strong>NOT</strong> need to write your own model definition.</li>							  
 							  <li>This code is shown here to mostly to explain concepts and some basic internals.</li>
 							  <li>The model definition is also internally for the code generator ( document not yet available )</li>							  
 							</ol>
 						</div>
-						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
 						<a href="mod-orm-model.html" class="more"><span class="btn btn-primary">See full code</span></a>
@@ -908,15 +932,6 @@
 					<p>You can view more information on projects available in SlateKit in the overview page</p>
 					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
 					<br/><br/>
-				</div>
-				<div> 
-					<h2>Notes</h2>	
-					<ul>
-						<li>The entities ORM is model using a Model, Repository, Service approach.</li>
-						<li>Mapping of fields is done by placing annotations on the model fields</li>
-						<li>You only need to implement the model. You can use base Repository and Service implementions.</li>
-						<li>You can create you own custom Service implementation</li>
-					</ul>					
 				</div>
 			</div>
 		</section>
