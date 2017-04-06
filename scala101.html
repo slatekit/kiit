@@ -505,7 +505,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i> Generally speaking, usage of vars is discouraged in Scala in favor of vals to obtain immutability. Everything is an expression in functional languages, and things like if/else/try etc can return values which you can assign to a val. You can leverage this basic concept to promote use of vals and immutability especically when starting out in Scala. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
+	<p><i class="fa fa-warning"></i> Generally speaking, usage of vars is discouraged in Scala in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last value in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
 <br/>
@@ -539,13 +539,13 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> Because Scala is a hybrid Object-Functional and imperative/functional language, there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps ( more on this later ). See later sections on how to work with immutable lists and maps and convert one to the other.</p>	
+	<p><i class="fa fa-info-circle"></i> Scala is a hybrid Object-Functional and imperative/functional language, and so there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps.</p>	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-strings">Strings</h2>
-<p>Here are some basic String operations along with some 
+<p>Here are some basic String operations along with 
   examples on string interpolation ( referencing of other values/expressions inside a string )</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code>    
@@ -711,7 +711,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of List[T] is the ListBuffer[T]. It has methods to append to items and you can call <strong>toList</strong> to convert an instance of the mutable ListBuffer[T] to an instance of an immutable List[T]</p>	
+</div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
@@ -790,7 +792,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-  <p><i class="fa fa-info-circle"></i> Once you are familiar with functional programming and/or using the Option[T] class ( or something similar to Option[T] ), you can replace some uses of if/else conditions with the built-in map/flatMap functions on Option[T] and also by using for comprehensions. More on this later.</p>
+  <p><i class="fa fa-info-circle"></i> Once you are familiar with functional programming and using <strong>Option[T]</strong> or alternatives, there are times when you can replace if/else conditions with functional equivalents ( such as map/flatMap/for comprehensions )</p>
   
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
@@ -836,7 +838,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in Scala in favor of some of the other ways, which are more of a functional way to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
+	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in Scala in favor of functional approaches to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
@@ -880,7 +882,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-  <p><i class="fa fa-info-circle"></i> An alternative to using the built-in try/catch is to use Scala Try class.</p>  
+  <p><i class="fa fa-info-circle"></i> An alternative to using the built-in try/catch is to use Scala <strong>Try</strong> class.</p>  
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
@@ -894,7 +896,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i>  Throwing exceptions is generally discouraged in Scala in favor of functional error-handling using Option[T], Either or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, etc contribute to this.</p>
+	<p><i class="fa fa-warning"></i>  Throwing exceptions is generally discouraged in Scala in favor of functional error-handling, using Option[T], Either[A,B] or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and other imperative constructs result in side-effects.</p>
 	
 </div>
 <br/>
@@ -914,7 +916,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i> Returning early or mid-way in a function is generally discouraged as the last expression in code block is automatically returned. Also, returning early from a function ( with the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a single return value</p>
+	<p><i class="fa fa-warning"></i> Returning early or mid-way in a function is generally discouraged as the last expression in a code block is automatically returned. Also, returning early from a function ( with arguably the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a return value.</p>
 	
 </div>
 <br/>
@@ -946,7 +948,10 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> While there are several functional approaches to looping over items ( as shown above ), keep in mind there may be a cost. In some functional loops, intermediary collections are created.</p>
+	
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-aggregates">Aggregates</h2>
@@ -994,7 +999,10 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i>These built in aggregate methods on collections ( <strong>map, reduce, fold, indexOf, minBy, maxBy, etc</strong>) are incredibly powerful. You can generally avoid looping through and / or converting items in collections manually, and instead rely on these built-in functions.</p>
+	
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 <br/><br/><br/>
 
