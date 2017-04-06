@@ -89,9 +89,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <table id="overview" class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td class="col-md-2"><strong>import</strong></td>
-      <td>the different ways to import components</td>
-      <td class="col-md-2 text-center"><a href="#scala-import" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td><strong>main</strong></td>
+      <td>a simple main method as the entry point for your app</td>
+      <td class=" text-center"><a href="#scala-main" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>package</strong></td>
@@ -99,9 +99,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
       <td class=" text-center"><a href="#scala-package" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
-      <td><strong>main</strong></td>
-      <td>a simple main method as the entry point for your app</td>
-      <td class=" text-center"><a href="#scala-main" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="col-md-2"><strong>import</strong></td>
+      <td>the different ways to import components</td>
+      <td class="col-md-2 text-center"><a href="#scala-import" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>vals</strong></td>
@@ -405,11 +405,45 @@ in Scala. For more in-depth documentation please refer to the resources below.</
   </tbody>
 </table>
 <br/><br/><br/>
-
 <h1>1. Basics</h1>
 <hr/>
+<h2 id="scala-main">Main</h2>
+<p>Simple main method as entry point into application. use println to print to the system console</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="k">package</span> <span class="nn">slate.examples.sampleApp</span>
+  
+  <span class="k">object</span> <span class="nc">Examples</span> <span class="o">{</span>
+
+    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"hello world"</span> <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-package">Package</h2>
+<p>Declaring your code in a pacakge</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="k">package</span> <span class="nn">slate.common.logging</span>
+  
+  <span class="k">class</span> <span class="nc">Logger</span> <span class="o">{</span>
+  
+    <span class="c1">// ....
+</span>  
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
 <h2 id="scala-import">Import</h2>
-<p>You can import items from a package in various ways, 1 item, multiple items, and all items from a package</p>
+<p>You can import items from a package in various ways, 1 item, multiple items, all items from a package, or functions from a module</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// 1. Import 1 item from a package 
@@ -435,41 +469,6 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </span>  <span class="k">import</span> <span class="nn">slate.common.Random._</span> 
   <span class="n">println</span><span class="o">(</span> <span class="n">string3</span><span class="o">()</span> <span class="o">)</span>
   <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
-  
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-package">Package</h2>
-<p>Declaring your code in a pacakge</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>  
-  <span class="k">package</span> <span class="nn">slate.common.logging</span>
-  
-  <span class="k">class</span> <span class="nc">Logger</span> <span class="o">{</span>
-  
-    <span class="c1">// ....
-</span>  
-  <span class="o">}</span>
-
-</code></pre>
-</div>
-
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-<h2 id="scala-main">Main</h2>
-<p>Simple main method as entry point into application. use println to print to the system console</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>  
-  <span class="k">package</span> <span class="nn">slate.examples.sampleApp</span>
-  
-  <span class="k">object</span> <span class="nc">Examples</span> <span class="o">{</span>
-
-    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"hello world"</span> <span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
   
 </code></pre>
 </div>
@@ -506,7 +505,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-danger" role="alert">
-	<p><strong>NOTE :</strong> Usage of vars is discouraged in Scala in favor of vals to obtain immutability. Everything is an expression in functional languages, and things like if/else/try etc return values which you can assign to an val. You can leverage this basic concept to promote use of vals and immutability especically when starting out in Scala. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
+	<p><i class="fa fa-warning"></i> Generally speaking, usage of vars is discouraged in Scala in favor of vals to obtain immutability. Everything is an expression in functional languages, and things like if/else/try etc can return values which you can assign to a val. You can leverage this basic concept to promote use of vals and immutability especically when starting out in Scala. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
 <br/>
@@ -540,37 +539,53 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><strong>NOTE :</strong> Because Scala is a hybrid Object-Functional and imperative/functional language, there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps ( more on this later ). See later sections on how to work with immutable lists and maps and convert one to the other.</p>	
+	<p><i class="fa fa-info-circle"></i> Because Scala is a hybrid Object-Functional and imperative/functional language, there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps ( more on this later ). See later sections on how to work with immutable lists and maps and convert one to the other.</p>	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-strings">Strings</h2>
-<p>Strings can be interpolated ( referencing of other values/expressions inside a string )</p>
+<p>Here are some basic String operations along with some 
+  examples on string interpolation ( referencing of other values/expressions inside a string )</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
-    <span class="k">val</span> <span class="n">age</span> <span class="k">=</span> <span class="mi">35</span>
-    <span class="k">val</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">1234567890L</span>
-    <span class="k">val</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">false</span>
-    <span class="k">val</span> <span class="n">salary</span> <span class="k">=</span> <span class="mf">20.5</span>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>    
+    <span class="c1">// 1. Declaring strings
+</span>    <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
+    
+
+    <span class="c1">// 2. Adding strings together
+</span>    <span class="k">val</span> <span class="n">fullName</span> <span class="k">=</span> <span class="s">"Clark"</span> <span class="o">+</span> <span class="s">", Kent"</span> 
+
+
+    <span class="c1">// 3. Getting a char position in a string e.g. 1st pos
+</span>    <span class="k">var</span> <span class="n">c1</span> <span class="k">=</span> <span class="s">"Batman"</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+
+
+    <span class="c1">// 4. Convert strings to other types
+</span>    <span class="k">val</span> <span class="n">age</span>     <span class="k">=</span> <span class="s">"30"</span><span class="o">.</span><span class="n">toInt</span>
+    <span class="k">val</span> <span class="n">isActive</span>  <span class="k">=</span> <span class="s">"true"</span><span class="o">.</span><span class="n">toBoolean</span>
+    <span class="k">val</span> <span class="n">salary</span>  <span class="k">=</span> <span class="s">"20.5"</span><span class="o">.</span><span class="n">toDouble</span>
+
+
+    <span class="c1">// 5. String interpolation
+</span>    <span class="k">val</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">1234567890L</span>
     <span class="k">val</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
 
-	
-    <span class="c1">// 1. String interpolation
-</span>    <span class="k">val</span> <span class="n">info1</span> <span class="k">=</span> <span class="n">s</span><span class="s">"$name $age $account $isActive $salary $date"</span>
+    <span class="k">val</span> <span class="n">info1</span> <span class="k">=</span> <span class="n">s</span><span class="s">"$name $age $account $isActive $salary $date"</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">info1</span> <span class="o">)</span>
-	
+  
 
-    <span class="c1">// 2. String interpolation ( with braces )
+    <span class="c1">// 6. String interpolation ( with braces )
 </span>    <span class="c1">// Use this explicit approach when you dont have spaces
 </span>    <span class="k">val</span> <span class="n">info2</span> <span class="k">=</span> <span class="n">s</span><span class="s">"${name}${age}${account}${isActive}${salary}${date}"</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">info2</span> <span class="o">)</span>
-	
+  
 
-    <span class="c1">// 3. String interpolation with more expressions
+    <span class="c1">// 7. String interpolation with more expressions
 </span>    <span class="k">val</span> <span class="n">info3</span> <span class="k">=</span> <span class="n">s</span><span class="s">"${name} salary is now ${salary + 200} start on ${date}"</span>
     <span class="n">println</span><span class="o">(</span> <span class="n">info3</span> <span class="o">)</span>
-	
+    
+  
 </code></pre>
 </div>
 
@@ -610,11 +625,14 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <h2 id="scala-dates">Dates</h2>
 <p>Date and time using Java 8</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-
-coming soon
-
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// Refer to Java 8 Date/Time classes
+</span>   
 </code></pre>
+</div>
+
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-link"></i> If you are using Java 8, you can use the new built-in Date/Time classes.</p>  
 </div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
@@ -700,7 +718,9 @@ coming soon
 <h2 id="scala-maps">Maps</h2>
 <p>Maps can be immutable ( readonly ) or mutable ( editable ). This shows the immutable version</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// Coming soon
+</span>   
 </code></pre>
 </div>
 
@@ -709,10 +729,18 @@ coming soon
 <h2 id="scala-tuples">Tuples</h2>
 <p>Creating and using tuples</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// 1. Create a tuple of 3 items of string, bool, int
+</span>   <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="o">(</span> <span class="s">"John"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">3</span> <span class="o">)</span>
 
-coming soon
+   <span class="c1">// 2. Access the individual items 
+</span>   <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_1</span> 
+   <span class="k">val</span> <span class="n">active</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_2</span> 
+   <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_3</span> 
 
+   <span class="c1">// 3. Declare a tuple explicity
+</span>   <span class="k">val</span> <span class="n">user2</span><span class="k">:</span> <span class="o">(</span> <span class="kt">String</span><span class="o">,</span> <span class="kt">Boolean</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">2</span> <span class="o">)</span>
+   
 </code></pre>
 </div>
 
@@ -761,7 +789,10 @@ coming soon
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-info-circle"></i> Once you are familiar with functional programming and/or using the Option[T] class ( or something similar to Option[T] ), you can replace some uses of if/else conditions with the built-in map/flatMap functions on Option[T] and also by using for comprehensions. More on this later.</p>
+  
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-loops">Loops</h2>
@@ -805,7 +836,7 @@ coming soon
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><strong>NOTE :</strong> You can generally avoid the traditional while/for loops in Scala in favor of some of the other ways, which are more of a functional way to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
+	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in Scala in favor of some of the other ways, which are more of a functional way to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
@@ -848,20 +879,22 @@ coming soon
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-info-circle"></i> An alternative to using the built-in try/catch is to use Scala Try class.</p>  
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-throw">Throw</h2>
 <p>Throwing exceptions in Scala.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-
-coming soon
-
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="k">throw</span> <span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">"testing throwing of exception"</span><span class="o">)</span>
+   
 </code></pre>
 </div>
+
 <div class="alert alert-danger" role="alert">
-	<p><strong>NOTE :</strong> Throwing exceptions is generally discouraged in Scala in favor of functional error-handling using Option[T], Either or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, etc contribute to this.</p>
+	<p><i class="fa fa-warning"></i>  Throwing exceptions is generally discouraged in Scala in favor of functional error-handling using Option[T], Either or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, etc contribute to this.</p>
 	
 </div>
 <br/>
@@ -870,14 +903,18 @@ coming soon
 <h2 id="scala-return">Return</h2>
 <p>Returning from a function.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// To return from a function that returns int
+</span>   <span class="k">return</span> <span class="mi">1</span>
 
-coming soon
-
+   <span class="c1">// To return from a function that returns "unit" 
+</span>   <span class="k">return</span> <span class="nc">Unit</span>
+   
 </code></pre>
 </div>
+
 <div class="alert alert-danger" role="alert">
-	<p><strong>NOTE :</strong> Returning early or mid-way in a function is generally discouraged as the last expression in code block is automatically returned. Also, returning early from a function ( with the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a single return value</p>
+	<p><i class="fa fa-warning"></i> Returning early or mid-way in a function is generally discouraged as the last expression in code block is automatically returned. Also, returning early from a function ( with the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a single return value</p>
 	
 </div>
 <br/>
