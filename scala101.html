@@ -1012,69 +1012,17 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <p>Scala has many features related to functions/methods. this is a partial list.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
-  <span class="c1">// 1. function does not return anything ( via "Unit" type )
-</span>  <span class="k">def</span> <span class="n">test1</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 2. function with default values for parameters ( via = value )
-</span>  <span class="k">def</span> <span class="n">test2</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 3. function with return value ( via :&lt;type&gt; )
-</span>  <span class="c1">// NOTES:
-</span>  <span class="c1">// 1. do not need a return keyword 
-</span>  <span class="c1">// 2. last expression is assumed to be the return value
-</span>  <span class="k">def</span> <span class="n">test3</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">account</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">)</span>
-      <span class="k">return</span> <span class="n">s</span><span class="s">"new user : ${name} ${account} ${isActive}"</span>
-
-    <span class="n">s</span><span class="s">"existing user: ${name}"</span>
-  <span class="o">}</span>
-  
-
-  <span class="c1">// 4. function with functions as parameters,
-</span>  <span class="c1">// Last expression is assumed to be the return value
-</span>  <span class="k">def</span> <span class="n">test4</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
-             <span class="n">hello1</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
-             <span class="n">hello2</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">,</span>
-             <span class="n">hello3</span><span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nc">String</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-
-    <span class="c1">// 1. first function takes 0 parameters, and returns nothing
-</span>    <span class="n">hello1</span><span class="o">()</span>
-
-    <span class="c1">// 2. second function takes 1 paramter, and returns nothing
-</span>    <span class="n">hello2</span><span class="o">(</span><span class="s">"hello"</span><span class="o">)</span>
-
-    <span class="c1">// 3. third function takes 2 parameter and returns a value
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">hello3</span><span class="o">(</span><span class="s">"hey"</span><span class="o">,</span> <span class="s">"hello"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+  <span class="c1">// Sample function to simulate creating a new user.
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
   <span class="o">}</span>
   
   
   <span class="c1">// call the functions  
-</span>  <span class="k">def</span> <span class="n">testFunctions</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
     
     <span class="c1">// 1. function with parameters
-</span>    <span class="n">test1</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
-
-    <span class="c1">// 2. function with parameters with default values
-</span>    <span class="n">test2</span> <span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
-
-    <span class="c1">// 3. function with parameters with default values + return value
-</span>    <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="n">test3</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="mi">123456789123L</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result1</span> <span class="o">)</span>
-
-    <span class="c1">// 4. function with functions as paramters
-</span>    <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="n">test4</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span>
-        <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span> <span class="nc">Unit</span> <span class="o">},</span>
-        <span class="o">(</span><span class="n">greeting1</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">greeting1</span> <span class="o">+</span> <span class="s">" john"</span><span class="o">),</span>
-        <span class="o">(</span><span class="n">greeting2</span><span class="o">,</span> <span class="n">greeting3</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">greeting2</span> <span class="o">+</span> <span class="s">" and "</span> <span class="o">+</span> <span class="n">greeting3</span> <span class="o">+</span> <span class="s">" john"</span>
-    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result2</span> <span class="o">)</span>
+</span>    <span class="n">createUser</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
   <span class="o">}</span>
 
 </code></pre>
@@ -1086,8 +1034,22 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <h2 id="scala-functions-named">Named Parameters</h2>
 <p>Function calls with named parameters</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Sample function to simulate creating a new user.
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with named parameters
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+  <span class="o">}</span>
 
 </code></pre>
 </div>
@@ -1097,8 +1059,22 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <h2 id="scala-functions-default">Default Parameter Value</h2>
 <p>Supplying default function parameter values</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Function has last parameter defaulted
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">account</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with all parameters supplied
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with last parameter defaulted
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">)</span>
+  <span class="o">}</span>
 
 </code></pre>
 </div>
@@ -1108,10 +1084,34 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <h2 id="scala-functions-hof-passing">HOF: Passing a function</h2>
 <p>One type of Higher Order Functions ( HOF ) is a function that is passed as a parameter to another function</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Sample function to simulate creating a new user with a callback
+</span>  <span class="c1">// function supplied. This function takes 1 parameter of type Int
+</span>  <span class="c1">// and returns nothing ( Unit ).
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">onComplete</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+    
+    <span class="c1">// simulate saving to database....
+</span>    <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">2</span>
+    
+    <span class="c1">// notify caller 
+</span>    <span class="n">onComplete</span><span class="o">(</span> <span class="n">id</span> <span class="o">)</span> 
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">(</span><span class="n">newId</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"new id: "</span> <span class="o">+</span> <span class="n">newId</span><span class="o">)</span> <span class="o">)</span>
+  <span class="o">}</span>
 
 </code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> In this example, a simple 1 parameter callback was used to notify the caller with the id of the newly created user. In a real production example, you want to be using <strong>Asynchronous</strong> programming with Scala <strong>Futures or alternatives</strong></p>
+	
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
@@ -1170,24 +1170,16 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 
-
-<h2 id="scala-functions-hof-partial">HOF: Partial Functions</h2>
-<p>Partial functions</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-
-
 <h2 id="scala-functions-hof-compose">HOF: Function composition</h2>
 <p>Another type of Higher Order Functions ( HOF ) is a function that is returned from another function</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// coming soon</span>
 
 </code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> Function composition is one of the fundamental concepts in functional programming, and leads to other more sophisticated concepts such as currying.</p>
+	
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
