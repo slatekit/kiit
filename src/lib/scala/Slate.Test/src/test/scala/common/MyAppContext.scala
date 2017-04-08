@@ -13,9 +13,15 @@
 
 package slate.tests.common
 
+import scala.reflect.runtime.universe.typeOf
 import slate.core.common.AppContext
+import slate.test.common.User
 
 object MyAppContext {
 
-  val sample = AppContext.sample("tests", "tests", "tests", "slatekit")
+  def sample = {
+    val ctx = AppContext.sample("tests", "tests", "tests", "slatekit")
+    ctx.ent.register[User](false, typeOf[User])
+    ctx
+  }
 }

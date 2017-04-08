@@ -14,7 +14,7 @@ package slate.test
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfter, FunSpec}
 import slate.common.{ApiKey,Credentials}
 import slate.common.results.{ResultCode, ResultSupportIn}
-import slate.core.apis.ApiAuth
+import slate.core.apis.core.Auth
 import slate.core.common.{AppContext}
 import slate.integration.{ShellAPI, VersionApi, AppApi}
 
@@ -92,7 +92,7 @@ class ShellTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = new ShellAPI(creds, ctx, new ApiAuth(Some(apiKeys), None), "sampleapp")
+    val shell = new ShellAPI(creds, ctx, new Auth(Some(apiKeys), None), "sampleapp")
 
     // 4. Register the apis using default mode ( uses permissions in annotations on class )
     shell.apis.register[AppApi]    (new AppApi(ctx)    , true, Some("qa"), protocol = Some("*"))

@@ -1,13 +1,15 @@
 package slate.test
 
-import slate.common.reflect.{ReflectedClass, ReflectedClassT}
+import slate.common.encrypt.DecString
+import slate.common.reflect.{ReflectConsts, ReflectedClass, ReflectedClassT}
+import slate.common.reflect.ReflectConsts._
 import slate.tests.common.MyAppContext
 import org.scalatest.{FunSpec, BeforeAndAfter, BeforeAndAfterAll, FunSuite}
 import slate.common.{InputArgs, DateTime, Field, Reflector}
 import slate.core.apis.{Api, ApiAction}
 import slate.test.common.{UserNormal1, User2, User, UserApi}
 import scala.reflect.runtime.universe.{typeOf}
-
+import scala.reflect.ClassTag
 /**
   * <slate_header>
   * author: Kishore Reddy
@@ -62,6 +64,52 @@ class ReflectorTests extends  FunSpec with BeforeAndAfter with BeforeAndAfterAll
       val sym = Reflector.getMethod(api, "create")
       val result = Reflector.getMethodParameters(sym)
       assert(result.size == 5)
+    }
+
+
+    it("can get method parameter types") {
+      val ctx = MyAppContext.sample
+      val api = new UserApi(ctx)
+      val sym = Reflector.getMethod(api, "testArgs")
+      val result = Reflector.getMethodParameters(sym)
+      assert(result.size == 5)
+      println(result(0).tpe.typeSymbol.fullName)
+      assert(result(0).tpe == typeOf[String])
+      assert(result(1).tpe == typeOf[Int])
+      assert(result(2).tpe == typeOf[Boolean])
+      assert(result(3).tpe == typeOf[DateTime])
+      assert(result(4).tpe == typeOf[DecString])
+
+      assert(result(0).tpe == StringType)
+      assert(result(1).tpe == IntType)
+      assert(result(2).tpe == BoolType)
+      assert(result(3).tpe == DateType)
+    }
+
+
+    it("can create dynamic list") {
+      val ctx = MyAppContext.sample
+      val api = new UserApi(ctx)
+      val args = List[Any]("a", "b", "c")
+      val res = Reflector.callMethod(api, "argTypeList", Array[Any](args))
+      println(res)
+    }
+
+
+    it("Can get type params"){
+      val ctx = MyAppContext.sample
+      val api = new UserApi(ctx)
+      val mem = Reflector.getMethod(api, "argTypeList")
+      val args = Reflector.getMethodParameters(mem)
+      println(args(0).tpe.toString)
+      val first = args(0).tpe.typeArgs.head
+      val firstType = first.typeSymbol.info
+      println(firstType.typeSymbol.fullName)
+
+      println ( firstType =:= ReflectConsts.StringType)
+      val t = typeOf[List[Int]]
+      val a1 = t.typeArgs.head
+      println( a1 )
     }
   }
 

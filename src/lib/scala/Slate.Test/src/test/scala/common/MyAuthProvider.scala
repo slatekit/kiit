@@ -12,14 +12,15 @@ package slate.test.common
 
 import slate.common.{Strings, Result, ApiKey}
 import slate.common.results.ResultSupportIn
-import slate.core.apis.{Request, ApiAuth}
+import slate.core.apis.Request
+import slate.core.apis.core.Auth
 
 // =======================================================================================
 // AUTH PROVIDER: Implement your own custom authentication/permission provider.
 // NOTE: You can also use own pre-built authorization provider which has
 // support for users, roles, permissions
 // =======================================================================================
-class MyAuthProvider(val user:String, val roles:String, keys:Option[List[ApiKey]]) extends ApiAuth(keys, None)
+class MyAuthProvider(val user:String, val roles:String, keys:Option[List[ApiKey]]) extends Auth(keys, None)
   with ResultSupportIn
 {
 

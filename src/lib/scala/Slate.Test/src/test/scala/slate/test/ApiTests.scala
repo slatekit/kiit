@@ -12,6 +12,10 @@
 package slate.test
 
 
+import slate.core.apis.containers.ApiContainerCLI
+import slate.core.apis.core.{Errors, Auth}
+import slate.core.apis.support.ApiHelper
+
 import scala.reflect.runtime.universe.{typeOf, Type}
 import slate.common.args.Args
 import slate.common.envs.{Env, Dev}
@@ -37,7 +41,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       val apis = getApis()
       apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
       apis.register[UserApi](new UserApi(apis.ctx))
-      assert(apis.getOrCreateArea("app") != null)
+      assert(apis.getLookup("app") != null)
       //assert(apis.getOrCreateArea("app")("users").container == apis)
     }
 
@@ -46,7 +50,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       val apis = getApis()
       apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
       apis.register[UserApi](new UserApi(apis.ctx))
-      assert(!apis.contains("app.users.fakeMethod").success)
+      assert(!apis.asInstanceOf[ApiContainerCLI].contains("app.users.fakeMethod").success)
     }
 
 
@@ -54,16 +58,79 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       val apis = getApis()
       apis.ctx.ent.register[User](false, typeOf[User], serviceCtx = Some(apis.ctx))
       apis.register[UserApi](new UserApi(apis.ctx))
-      assert(apis.contains("app.users.activate").success)
+      assert(apis.asInstanceOf[ApiContainerCLI].contains("app.users.activate").success)
     }
 
 
     it("can execute public action") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, null, None,
         "app.users.rolesNone",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         success("rolesNone", msg = Some("1 abc"))
+      )
+    }
+  }
+
+
+  describe( "API Data-types" ) {
+
+    it("can get raw request") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeRequest",
+        Some(List[(String, Any)](("id", "2"))),
+        None,
+        success("ok", msg = Some("raw request id: 2"))
+      )
+    }
+
+
+    it("can get file") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeFile",
+        Some(List[(String, Any)](("doc", "user://slatekit/temp/test1.txt"))),
+        None,
+        success("ok", msg = Some("slatekit file reference test 1"))
+      )
+    }
+
+
+    it("can get list") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeListInt",
+        Some(List[(String, Any)](("items", List[Int](1,2,3)))),
+        None,
+        success("ok", msg = Some(",1,2,3"))
+      )
+    }
+
+
+    it("can get list via conversion") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeListInt",
+        Some(List[(String, Any)](("items", "1,2,3"))),
+        None,
+        success("ok", msg = Some(",1,2,3"))
+      )
+    }
+
+
+    it("can get map") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeMapInt",
+        Some(List[(String, Any)](("items", Map[String,Int]("a" -> 1, "b" -> 2)))),
+        None,
+        success("ok", msg = Some(",a=1,b=2"))
+      )
+    }
+
+
+    it("can get map via conversion") {
+      ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
+        "app.users.argTypeMapInt",
+        Some(List[(String, Any)](("items", "a=1,b=2"))),
+        None,
+        success("ok", msg = Some(",a=1,b=2"))
       )
     }
   }
@@ -74,7 +141,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can decrypt int") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.decInt",
-        Some(List[(String, String)](("id", MyEncryptor.encrypt("2")))),
+        Some(List[(String, Any)](("id", MyEncryptor.encrypt("2")))),
         None,
         success("ok", msg = Some("decrypted int : 2"))
       )
@@ -84,7 +151,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can decrypt long") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.decLong",
-        Some(List[(String, String)](("id", MyEncryptor.encrypt("2")))),
+        Some(List[(String, Any)](("id", MyEncryptor.encrypt("2")))),
         None,
         success("ok", msg = Some("decrypted long : 2"))
       )
@@ -94,7 +161,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can decrypt double") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.decDouble",
-        Some(List[(String, String)](("id", MyEncryptor.encrypt("2.2")))),
+        Some(List[(String, Any)](("id", MyEncryptor.encrypt("2.2")))),
         None,
         success("ok", msg = Some("decrypted double : 2.2"))
       )
@@ -104,7 +171,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can decrypt string") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.decString",
-        Some(List[(String, String)](("id", MyEncryptor.encrypt("slatekit")))),
+        Some(List[(String, Any)](("id", MyEncryptor.encrypt("slatekit")))),
         None,
         success("ok", msg = Some("decrypted string : slatekit"))
       )
@@ -117,14 +184,14 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can handle error via global default handler") {
       var errorCount = 0
       var errorPath = ""
-      val errorHandler = new ApiErrorHandler(Some((ctx, req, ex) => {
+      val errorHandler = new Errors(Some((ctx, req, ex) => {
         errorCount += 1
         errorPath = req.fullName
         this.badRequest(msg=Some("customer handler"))
       }))
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, null, None,
         "app.users.testException",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         unexpectedError(msg=Some("error executing : app.users.testException, check inputs"))
       )
@@ -136,14 +203,14 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can handle error via global custom handler") {
       var errorCount = 0
       var errorPath = ""
-      val errorHandler = new ApiErrorHandler(Some((ctx, req, ex) => {
+      val errorHandler = new Errors(Some((ctx, req, ex) => {
         errorCount += 1
         errorPath = req.fullName
         this.unexpectedError(msg=Some("global custom handler"))
       }))
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, null, Some(errorHandler),
         "app.users.testException",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         unexpectedError(msg=Some("global custom handler"))
       )
@@ -155,7 +222,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("can handle error via api custom handler") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, null, None,
         "app.users2.testException",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         unexpectedError(msg=Some("unexpected error in api"))
       )
@@ -171,7 +238,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work when role is any ( * )") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
           "app.users.rolesAny",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           success("rolesAny", msg=Some("1 abc"))
         )
@@ -181,7 +248,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should fail for any role ( * ) with no user") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, null, None,
           "app.users.rolesAny",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           unAuthorized[String](msg = Some("Unable to authorize, authorization provider not set"))
         )
@@ -191,7 +258,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work for a specific role") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
           "app.users.rolesSpecific",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           success("rolesSpecific", msg=Some("1 abc"))
         )
@@ -201,7 +268,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should fail for a specific role when user has a different role") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "ops"), None,
           "app.users.rolesSpecific",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           unAuthorized[String](Some("unauthorized"))
         )
@@ -211,7 +278,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work for a specific role when referring to its parent role") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "admin"), None,
           "app.users.rolesParent",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           success("rolesParent", msg=Some("1 abc"))
         )
@@ -221,7 +288,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should fail for a specific role when referring to its parent role when user has a different role") {
         ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
           "app.users.rolesParent",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
           None,
           unAuthorized[String](Some("unauthorized"))
         )
@@ -234,8 +301,8 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work when role is any ( * )") {
         ensureCall("*", "*", ApiConstants.AuthModeKeyRole, ("kishore", "dev"), None,
           "app.users.rolesAny",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
-          Some(List[(String, String)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
           success("rolesAny", msg=Some("1 abc"))
         )
       }
@@ -254,8 +321,8 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work for a specific role") {
         ensureCall("*", "*", ApiConstants.AuthModeKeyRole, ("kishore", "dev"), None,
           "app.users.rolesSpecific",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
-          Some(List[(String, String)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
           success("rolesSpecific", msg=Some("1 abc"))
         )
       }
@@ -264,8 +331,8 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should fail for a specific role when user has a different role") {
         ensureCall("*", "*", ApiConstants.AuthModeKeyRole, ("kishore", "qa"), None,
           "app.users.rolesSpecific",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
-          Some(List[(String, String)](("api-key", "EB7EB37764AD4411A1763E6A593992BD"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("api-key", "EB7EB37764AD4411A1763E6A593992BD"))),
           unAuthorized[String](Some("unauthorized"))
         )
       }
@@ -274,8 +341,8 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should work for a specific role when referring to its parent role") {
         ensureCall("*", "*", ApiConstants.AuthModeKeyRole, ("kishore", "admin"), None,
           "app.users.rolesParent",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
-          Some(List[(String, String)](("api-key", "54B1817194C1450B886404C6BEA81673"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("api-key", "54B1817194C1450B886404C6BEA81673"))),
           success("rolesParent", msg=Some("1 abc"))
         )
       }
@@ -284,8 +351,8 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       it("should fail for a specific role when referring to its parent role when user has a different role") {
         ensureCall("*", "*", ApiConstants.AuthModeKeyRole, ("kishore", "dev"), None,
           "app.users.rolesParent",
-          Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
-          Some(List[(String, String)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
+          Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
+          Some(List[(String, Any)](("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD"))),
           unAuthorized[String](Some("unauthorized"))
         )
       }
@@ -299,7 +366,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("should work when setup as protocol * and request is CLI") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.protocolAny",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         success("protocolAny", msg=Some("1 abc"))
       )
@@ -309,7 +376,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("should work when setup as protocol CLI and request is CLI") {
       ensureCall("*", "cli", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.protocolCLI",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         success("protocolCLI", msg=Some("1 abc"))
       )
@@ -319,7 +386,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("should work when setup as parent protocol CLI and request is CLI") {
       ensureCall("*", "*", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.protocolParent",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         success("protocolParent", msg=Some("1 abc"))
       )
@@ -329,7 +396,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     it("should FAIL when setup as protocol WEB and request is CLI") {
       ensureCall("cli", "web", ApiConstants.AuthModeAppRole, ("kishore", "dev"), None,
         "app.users.protocolWeb",
-        Some(List[(String, String)](("code", "1"), ("tag", "abc"))),
+        Some(List[(String, Any)](("code", "1"), ("tag", "abc"))),
         None,
         notFound[String](msg = Some("app.users.protocolWeb not found"))
       )
@@ -338,9 +405,9 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
 
 
   private def getApis(protocol:String = "cli",
-                      auth:Option[ApiAuth] = None,
+                      auth:Option[Auth] = None,
                       apiRegs:Option[List[ApiReg]] = None,
-                      errors:Option[ApiErrorHandler] = None):ApiContainer = {
+                      errors:Option[Errors] = None):ApiContainer = {
 
     // 1. context for common services
     val ctx = new AppContext (
@@ -354,7 +421,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
       enc  = Some(MyEncryptor)
     )
     // 2. apis
-    val apis = new ApiContainer(ctx, auth, protocol, apiRegs, errors)
+    val apis = new ApiContainerCLI(ctx, auth, apiRegs, errors)
     apis
   }
 
@@ -373,10 +440,10 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
                          protocolApi:String,
                          authMode:String,
                          user:(String,String),
-                         errors:Option[ApiErrorHandler],
+                         errors:Option[Errors],
                          path:String,
-                         inputs:Option[List[(String,String)]],
-                         opts:Option[List[(String,String)]],
+                         inputs:Option[List[(String,Any)]],
+                         opts:Option[List[(String,Any)]],
                          expected:Result[String]):Unit = {
 
     val appCtx = AppContext.sample("tests", "tests", "tests", "slatekit")
@@ -407,7 +474,7 @@ class ApiTests extends FunSpec with BeforeAndAfter with BeforeAndAfterAll with R
     }
 
     //apis.register[UserApi](new UserApi(), auth = Some(authMode), protocol = Some(protocolApi))
-    val actual = apis.callCommand( cmd )
+    val actual = apis.call( cmd )
 
     assert( actual.code == expected.code)
     assert( actual.success == expected.success)

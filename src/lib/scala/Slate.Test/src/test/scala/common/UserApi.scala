@@ -14,7 +14,7 @@ package slate.test.common
 import scala.reflect.runtime.universe.{typeOf}
 import slate.common.encrypt.{DecString, DecLong, DecDouble, DecInt}
 import slate.common.results.{ResultCode, ResultSupportIn}
-import slate.common.{FailureResult, DateTime, Result}
+import slate.common.{Doc, FailureResult, DateTime, Result}
 import slate.core.apis._
 import slate.core.common.AppContext
 
@@ -176,6 +176,50 @@ class UserApi(context:AppContext) extends ApiBaseEntity[User](context, typeOf[Us
   def decString(id:DecString): Result[String] =
   {
     success("ok", Some(s"decrypted string : " + id.value))
+  }
+
+
+  @ApiAction(name = "testArgs", desc = "test types", roles= "*", verb = "@parent", protocol = "@parent")
+  def testArgs(phone:String, code:Int, isPremiumUser:Boolean, date:DateTime, key:DecString): Result[String] =
+  {
+    success("ok", Some(s"$phone $code $isPremiumUser, $key"))
+  }
+
+
+  @ApiAction(name = "", desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  def argTypeRequest(req:Request): Result[String] =
+  {
+    success("ok", Some("raw request id: " + req.args.get.getInt("id")))
+  }
+
+
+  @ApiAction(name = "", desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  def argTypeFile(doc:Doc): Result[String] =
+  {
+    success("ok", Some(doc.content))
+  }
+
+
+  @ApiAction(name = "", desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  def argTypeListString(items:List[String]): Result[String] =
+  {
+    success("ok", Some(items.fold("")( (acc, curr) => acc + "," + curr)))
+  }
+
+
+  @ApiAction(name = "", desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  def argTypeListInt(items:List[Int]): Result[String] =
+  {
+    success("ok", Some(items.foldLeft("")( (acc, curr) => acc + "," + curr.toString)))
+  }
+
+
+  @ApiAction(name = "", desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  def argTypeMapInt(items:Map[String,Int]): Result[String] =
+  {
+    val sortedPairs = items.keys.toList.sortBy( k => k ).map( key => (key, items(key)))
+    val delimited = sortedPairs.foldLeft("")( (acc, curr) => acc + "," + curr._1 + "=" + curr._2 )
+    success("ok", Some(delimited))
   }
 
 
