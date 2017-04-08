@@ -16,12 +16,7 @@ package slate.core.auth
 import slate.common.results.ResultSupportIn
 import slate.common._
 
-/**
- * This class is intended for desktop apps where only 1 person can be logged in at a time.
- * Because of this reason, this class provides static access to the auth implementation (_auth)
- * and represents more of a provider pattern.
- * NOTE: do not use this for web apps
- */
+
 object AuthFuncs extends ResultSupportIn {
 
   val guest = new User(id = "guest")

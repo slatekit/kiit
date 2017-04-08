@@ -21,7 +21,7 @@ import slate.common.encrypt.Encryptor
 import slate.common.i18n.I18nStrings
 import slate.common.logging.LoggerBase
 import slate.common.results.{ResultCode, ResultTimed}
-import slate.core.apis.support.{ApiCallReflect}
+import slate.core.apis.core.Action
 import slate.core.common.AppContext
 
 /**
@@ -31,7 +31,7 @@ import slate.core.common.AppContext
 class ApiBase(val context:AppContext ) {
 
   val isErrorEnabled = false
-  protected  val _lookup = new ListMap[String, ApiCallReflect]()
+  protected  val _lookup = new ListMap[String, Action]()
 
 
   /**
@@ -45,7 +45,7 @@ class ApiBase(val context:AppContext ) {
  *
    * @return
    */
-  def actions():ListMap[String,ApiCallReflect] = _lookup.clone()
+  def actions():ListMap[String,Action] = _lookup.clone()
 
 
   /**
@@ -63,11 +63,26 @@ class ApiBase(val context:AppContext ) {
     * @param action
    * @return
    */
-  def apply(action:String):ApiCallReflect =
+  def apply(action:String):Action =
   {
     if(!contains(action))
       throw new IllegalArgumentException("action : " + action + " not found")
     _lookup(action)
+  }
+
+
+  /**
+   * gets the value with the supplied key(action)
+   *
+   * @param action
+   * @return
+   */
+  def getOpt(action:String):Option[Action] =
+  {
+    if(!contains(action))
+      None
+    else
+      Some(_lookup(action))
   }
 
 
@@ -77,7 +92,7 @@ class ApiBase(val context:AppContext ) {
     * @param action
    * @param value
    */
-  def update(action:String, value:ApiCallReflect) =
+  def update(action:String, value:Action) =
   {
     _lookup(action) = value
   }

@@ -28,6 +28,7 @@ sealed abstract class Result[+T] extends Product with ResultChecks
   val tag     : Option[String]
   val ref     : Option[Any]
 
+
   def success: Boolean
 
 

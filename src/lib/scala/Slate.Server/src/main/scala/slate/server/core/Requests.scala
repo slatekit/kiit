@@ -63,7 +63,7 @@ object Requests {
     val inputArgs = new HttpInputs(ctx, inputJson)
 
     // 6. Now have an abstract request.
-    val args = new Args(rawTokens,action, actionParts.toList, "-", "=", None, Some(indexArgs))
+    val args = new Args("", rawTokens,action, actionParts.toList, "-", "=", None, Some(indexArgs))
     val cmd = Request(action, args, Some(inputArgs), Some(inputOpts), verb)
     cmd
   }

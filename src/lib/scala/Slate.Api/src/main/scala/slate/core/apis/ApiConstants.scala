@@ -14,9 +14,17 @@
 package slate.core.apis
 
 /**
-  * Created by kreddy on 2/24/2016.
+  * NOTE: The type-safe versions of theses constants are located in:
+ * 1. ApiProtocol.scala
+ * 2. ApiAuthMode.scala
+ * 3. ApiRoleRefs.scala
+ *
+ * These are only available here as constants to allow checking against
+ * 1. Api's setup via annotations ( in which case they have to reference strings )
+ * 2. Api's setup via configuration files ( again in which case they have to reference strings )
   */
 object ApiConstants {
+  val ProtocolAny = "*"
   val ProtocolCLI = "cli"
   val ProtocolWeb = "web"
 
@@ -28,12 +36,5 @@ object ApiConstants {
   val AuthModeAppKey = "app-key"
   val AuthModeAppRole = "app-roles"
   val AuthModeKeyRole = "key-roles"
-
-  val StatusError = 0
-  val StatusExit = 2
-  val StatusOk = 1
-
-  val ErrorArguments = "Invalid inputs"
-  val ErrorApiNotFound = "Api not found"
-  val ErrorApiDoesNotHaveMethod = "Api does not have the command supplied"
 }
+

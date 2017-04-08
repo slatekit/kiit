@@ -16,7 +16,8 @@ package slate.shell
 import slate.common.args.ArgsSchema
 import slate.common.encrypt.Encryptor
 import slate.common._
-import slate.core.apis.{ApiReg, ApiAuth}
+import slate.core.apis.ApiReg
+import slate.core.apis.core.Auth
 import slate.core.app.AppRunner._
 import slate.core.app.{AppProcess}
 import slate.core.common.{Conf, AppContext}
@@ -100,7 +101,7 @@ class SlateShell(context:Option[AppContext]) extends AppProcess(context) {
 
     // 1. Get the user login info from .slate
     val creds = new Credentials("1", "john doe", "jdoe@gmail.com", key = buildApiKeys()(5).key)
-    val auth = new ApiAuth(Some(buildApiKeys()), None)
+    val auth = new Auth(Some(buildApiKeys()), None)
 
     // 2. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.

@@ -10,16 +10,13 @@
   mantra: Simplicity above all else
 </slate_header>
   */
+package slate.core.apis.doc
 
-package slate.core.apis
-
-/**
-  * Created by kreddy on 3/25/2016.
-  */
-case class ApiSettings(
-                        enableFileInputs  :Boolean = false,
-                        enableLogging     :Boolean = false,
-                        enableOutput      :Boolean = false
-                      )
+class DocSettings(
+                          var maxLengthApi     :Int     = 0    ,
+                          var maxLengthAction  :Int     = 0    ,
+                          var maxLengthArg     :Int     = 0    ,
+                          var enableDetailMode :Boolean = false
+                        )
 {
 }

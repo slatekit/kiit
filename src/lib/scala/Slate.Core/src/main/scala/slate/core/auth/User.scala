@@ -13,7 +13,6 @@
 
 package slate.core.auth
 
-import javax.swing.text.html.HTML.Tag
 
 import slate.common.Strings
 
@@ -35,7 +34,7 @@ import slate.common.Strings
  * @param country          : The country where user is in ( 2 digit county code )
  * @param region           : The region of the user ( can use as a shard )
  * @param tag              : A tag used for external links
- * @param schema           : The scheam or version of this model
+ * @param version          : The schema version of this model
  */
 case class User (
                     id              :String    = ""    ,
@@ -53,14 +52,10 @@ case class User (
                     country         :String    = ""    ,
                     region          :String    = ""    ,
                     tag             :String    = ""    ,
-                    schema          :String    = ""    ,
+                    version         :String    = ""    ,
                     token           :String    = ""
                   )
 {
 
-
-  def isMatch(user:User):Boolean =
-  {
-    Strings.isMatch(user.id, this.id)
-  }
+  def isMatch(user:User):Boolean = Option(user).fold(false)( u => user.id == this.id)
 }

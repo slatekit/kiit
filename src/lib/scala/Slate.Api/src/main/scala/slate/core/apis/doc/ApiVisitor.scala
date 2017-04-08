@@ -14,7 +14,7 @@
 package slate.core.apis.doc
 
 import slate.common.{Strings, ListMap}
-import slate.core.apis.support.ApiCallReflect
+import slate.core.apis.core.Action
 import slate.core.apis.{ApiArg, Api, ApiBase}
 
 
@@ -22,12 +22,12 @@ class ApiVisitor {
 
   def visitAreas( areas:List[String], visitor:ApiVisit ) : Unit =
   {
-    visitor.onVisitAreasBegin()
+    visitor.onAreasBegin()
     areas.foreach( area => {
-      visitor.onVisitAreaBegin(area)
-      visitor.onVisitAreaEnd(area)
+      visitor.onAreaBegin(area)
+      visitor.onAreaEnd(area)
     })
-    visitor.onVisitAreasEnd()
+    visitor.onAreasEnd()
   }
 
 
@@ -38,7 +38,7 @@ class ApiVisitor {
       val keys = apis.keys()
       visitor.settings.maxLengthApi = Strings.maxLength(keys)
 
-      visitor.onVisitApisBegin(area)
+      visitor.onApisBegin(area)
       val sorted = keys.sortBy(s => s)
       sorted.foreach(key => {
         val api = apis(key)
@@ -50,7 +50,7 @@ class ApiVisitor {
           })
         }
       })
-      visitor.onVisitApisEnd(area)
+      visitor.onApisEnd(area)
     }
   }
 
@@ -65,14 +65,14 @@ class ApiVisitor {
         Unit
       })
     }
-    visitor.onVisitApiActionSyntax()
+    visitor.onApiActionSyntax()
   }
 
 
-  def visitApi(api:Api, visitor:ApiVisit, actions:ListMap[String,ApiCallReflect],
+  def visitApi(api:Api, visitor:ApiVisit, actions:ListMap[String,Action],
                listActions:Boolean = true, listArgs:Boolean = false) : Unit =
   {
-    visitor.onVisitApiBegin(api)
+    visitor.onApiBegin(api)
     if (actions.size > 0)
     {
       if ( listActions ) {
@@ -87,7 +87,7 @@ class ApiVisitor {
         })
       }
     }
-    visitor.onVisitApiEnd(api)
+    visitor.onApiEnd(api)
   }
 
 
@@ -99,13 +99,13 @@ class ApiVisitor {
       actions.getAtOpt(0).fold(Unit)( apiAnno => {
 
         val api = apiAnno.api
-        visitor.onVisitApiBegin(api)
+        visitor.onApiBegin(api)
         visitor.onVisitSeparator()
         val call = actions(actionName)
         visitApiAction(call, visitor, detailMode = true)
 
         if ( true ) {
-          visitor.onVisitApiActionExample(api, call.name, call.action, call.paramList)
+          visitor.onApiActionExample(api, call.name, call.action, call.paramList)
         }
         Unit
       })
@@ -113,28 +113,28 @@ class ApiVisitor {
   }
 
 
-  def visitApiAction(action:ApiCallReflect, visitor:ApiVisit, detailMode:Boolean = true):Unit =
+  def visitApiAction(action:Action, visitor:ApiVisit, detailMode:Boolean = true):Unit =
   {
     // action
-    visitor.onVisitApiActionBegin(action.action, action.name)
+    visitor.onApiActionBegin(action.action, action.name)
 
     if( detailMode )
     {
       visitArgs(action, visitor)
     }
     // args here.
-    visitor.onVisitApiActionEnd(action.action, action.name)
+    visitor.onApiActionEnd(action.action, action.name)
   }
 
 
-  def visitArgs(info:ApiCallReflect, visitor:ApiVisit):Unit =
+  def visitArgs(info:Action, visitor:ApiVisit):Unit =
   {
     if(info.hasArgs) {
       val names = info.paramList.map((item) => item.name)
       val maxLength = Strings.maxLength(names)
       visitor.settings.maxLengthArg = maxLength
       info.paramList.foreach(argInfo => {
-        visitor.onVisitApiArgBegin(new ApiArg(name = argInfo.name, ""))
+        visitor.onArgBegin(new ApiArg(name = argInfo.name, ""))
       })
     }
   }

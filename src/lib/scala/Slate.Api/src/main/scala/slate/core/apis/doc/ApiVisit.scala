@@ -14,62 +14,54 @@
 package slate.core.apis.doc
 
 import slate.common.reflect.ReflectedArg
-import slate.common.{ListMap, Strings}
-import slate.core.apis.{ApiBase, Api, ApiAction, ApiArg}
+import slate.core.apis.{Api, ApiAction, ApiArg}
 
 trait ApiVisit {
 
-  def settings:ApiDocSettings
-
-
-  def isOutputSupported : Boolean
-
-
-  def result : AnyRef
+  def settings:DocSettings
 
 
   def onVisitSeparator(): Unit
 
 
-  def onVisitAreasBegin(): Unit
+  def onAreasBegin(): Unit
 
 
-  def onVisitAreaBegin(area:String): Unit
+  def onAreaBegin(area:String): Unit
 
 
-  def onVisitAreaEnd(area:String): Unit
+  def onAreaEnd(area:String): Unit
 
 
-  def onVisitAreasEnd(): Unit
+  def onAreasEnd(): Unit
 
 
-  def onVisitApisBegin(area:String): Unit
+  def onApisBegin(area:String): Unit
 
 
-  def onVisitApiBegin(api:Api): Unit
+  def onApiBegin(api:Api): Unit
 
 
-  def onVisitApiEnd(api:Api): Unit
+  def onApiEnd(api:Api): Unit
 
 
-  def onVisitApiActionSyntax(): Unit
+  def onApiActionSyntax(): Unit
 
 
-  def onVisitApisEnd(area:String): Unit
+  def onApisEnd(area:String): Unit
 
 
-  def onVisitApiActionBegin(action:ApiAction, name:String): Unit
+  def onApiActionBegin(action:ApiAction, name:String): Unit
 
 
-  def onVisitApiActionEnd(action:ApiAction, name:String): Unit
+  def onApiActionEnd(action:ApiAction, name:String): Unit
 
 
-  def onVisitApiActionExample(api: Api, actionName: String, action: ApiAction,
-                              args:List[ReflectedArg]): Unit
+  def onApiActionExample(api: Api, actionName: String, action: ApiAction, args:List[ReflectedArg]): Unit
 
 
-  def onVisitApiArgBegin(arg:ApiArg): Unit
+  def onArgBegin(arg:ApiArg): Unit
 
 
-  def onVisitApiArgEnd(arg:ApiArg): Unit
+  def onArgEnd(arg:ApiArg): Unit
 }

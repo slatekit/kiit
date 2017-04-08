@@ -15,7 +15,9 @@ package slate.server.utils
 
 import akka.http.scaladsl.model.HttpMethods
 import akka.http.scaladsl.server.RequestContext
-import slate.common.{DateTime, InputFuncs, Inputs}
+import scala.collection.mutable.ListBuffer
+import scala.reflect.runtime.universe.{typeOf,Type}
+import slate.common._
 import slate.common.Funcs.{getStringByOrder, getStringByOrderOrElse}
 import spray.json._
 
@@ -66,6 +68,67 @@ class HttpInputs(private val _ctx:RequestContext,
       val result = _json.get.fields(key).asInstanceOf[JsObject]
       Some(new HttpInputs(_ctx, Option(result)))
     }
+  }
+
+  // Get list and maps
+  /**
+   * gets a list of items of the type supplied.
+   * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+   * @param key
+   * @param tpe
+   * @return
+   */
+  override def getList(key:String, tpe:Type):List[Any] = {
+    val converter = Converter.converterFor(tpe)
+    val json = _json.get
+    val result = if (json.fields.contains(key)) {
+      val jsVal = json.fields(key)
+      jsVal match {
+        case JsNull => Nil
+        case jsArray:JsArray => {
+          val items = ListBuffer[Any]()
+          jsArray.elements.foreach( jsVal => items.append(converter(jsVal.toString())))
+          items.toList
+        }
+        case _  => Nil
+      }
+    }
+    else
+      Nil
+    result
+  }
+
+
+  /**
+   * gets a map of items of the type supplied.
+   * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+   * @param key
+   * @return
+   */
+  override def getMap(key:String, tpeKey:Type, tpeVal:Type):Map[_,_] = {
+    val keyConverter = Converter.converterFor(tpeKey)
+    val valConverter = Converter.converterFor(tpeVal)
+    val json = _json.get
+    val emptyMap = Map.empty[Any,Any]
+    val result = if (json.fields.contains(key)) {
+      val jsVal = json.fields(key)
+      jsVal match {
+        case JsNull => emptyMap
+        case jsObj:JsObject => {
+          val items = scala.collection.mutable.Map[Any,Any]()
+          jsObj.fields.foreach( pair => {
+            val pKey = keyConverter(pair._1)
+            val pVal = valConverter(pair._2.toString())
+            items(pKey) = pVal
+          })
+          items.toMap
+        }
+        case _  => emptyMap
+      }
+    }
+    else
+      emptyMap
+    result
   }
 
 
@@ -139,13 +202,11 @@ class HttpInputs(private val _ctx:RequestContext,
     val jsonVal = _json.fold[Option[String]](None)( json => {
       val result = if (json.fields.contains(key)) {
         val jsVal = json.fields(key)
-        if (jsVal.isInstanceOf[JsString]) {
-          val text = jsVal.asInstanceOf[JsString].value
-          Option(text)
-        }
-        else {
-          val text = jsVal.asInstanceOf[JsValue].toString()
-          Option(text)
+        jsVal match {
+          case JsNull     => None
+          case s:JsString => Option(s.value)
+          case o:JsObject => Some(o.toString())
+          case _          => None
         }
       }
       else

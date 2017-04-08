@@ -14,10 +14,11 @@
 package slate.core.apis
 
 import slate.common._
-import slate.common.args.Args
-import slate.common.Require._
-import slate.common.results.{ResultSupportIn}
-import slate.core.apis.support.{ApiCallReflect, ApiCallHelper, ApiCallCheck}
+import slate.common.results.{ResultFuncs, ResultSupportIn}
+import slate.core.apis.core._
+import slate.core.apis.doc.DocConsole
+import slate.core.apis.middleware.{Control, Filter, Hook}
+import slate.core.apis.support.{ApiHelper, ApiValidator}
 import slate.core.common.AppContext
 
 import scala.reflect.runtime.universe.{typeOf, Type}
@@ -25,21 +26,72 @@ import scala.reflect.runtime.universe.{typeOf, Type}
 /**
   * This is the core container hosting, managing and executing the protocol independent apis.
   */
-class ApiContainer(val ctx:AppContext                           ,
-                       auth     : Option[ApiAuth]         = None,
-                       protocol : String                  = "*",
-                       apis     : Option[List[ApiReg]]    = None,
-                       errors   : Option[ApiErrorHandler] = None,
-                       allowIO: Boolean                 = true ) extends ResultSupportIn {
+class ApiContainer(val ctx      : AppContext                            ,
+                   val allowIO  : Boolean                               ,
+                   val auth     : Option[Auth]          = None          ,
+                   val protocol : ApiProtocol           = ApiProtocolAny,
+                   val apis     : Option[List[ApiReg]]  = None          ,
+                   val errors   : Option[Errors]        = None          ,
+                   val hooks    : Option[List[Hook]]    = None          ,
+                   val filters  : Option[List[Filter]]  = None          ,
+                   val controls : Option[List[Control]] = None
+                    ) extends ResultSupportIn {
 
-  protected val _lookup = new ListMap[String, ApiLookup]()
+  /**
+   * The lookup/map for all the areas in the container
+   * e.g. Slate Kit apis are in a 3 part route format :
+   *
+   *    e.g. area/api/action
+   *         app/users/activate
+   *
+   * 1. area  : top level category containing 1 or more apis
+   * 2. api   : an api represents a specific resource and has 1 or more actions
+   * 3. action: the lowest level endpoint that maps to a scala method/function.
+   *
+   * NOTES:
+   *
+   * 1. The _lookup stores all the top level "areas" in the container
+   *    as a mapping between area -> ApiLookup.
+   * 2. The ApiLookup contains all the Apis as a mapping between "api" names to
+   *    an ApiBase ( which is what you extend from to create your own api )
+   * 3. The ApiBase then has a lookup of all "actions" mapped to scala methods.
+   */
+  protected val _lookup = new ListMap[String, Apis]()
+
+
+  /**
+   * The validator for requests, checking protocol, parameter validation, etc
+   */
+  protected val _validator = new Validation(this)
+
+
+  /**
+   * The error handler that responsible for several expected errors/bad-requests
+   * and also to handle unexpected errors
+   */
+  val errs = errors.getOrElse(new Errors(None))
+
+
+  /**
+   * The settings for the api ( limited for now )
+   */
   val settings = new ApiSettings()
 
 
-  registerAll()
+  /**
+   * The help class to handle help on an area, api, or action
+   */
+  val help = new Help(this, _lookup, new DocConsole())
+
 
   /**
-   * initializes
+   * registers all the apis supplied
+   */
+  registerAll()
+
+
+  /**
+   * hook for derivied classes to handle initialization
    */
   def init(): Unit = { }
 
@@ -59,8 +111,6 @@ class ApiContainer(val ctx:AppContext                           ,
 
   /**
    * registers an api for dynamic calls
-   *
-   *
    */
   def register[A >: Null](api:ApiBase,
                           declaredOnly:Boolean = true,
@@ -84,8 +134,8 @@ class ApiContainer(val ctx:AppContext                           ,
     val apiName = apiAnno.name
     val apiArea = Strings.valueOrDefault(apiAnno.area, "")
 
-    // 4. get the lookup containing all the apis in a specific area/category
-    val apiLookup = getOrCreateArea(apiArea)
+    // 4. get the lookup containing all the apis in a specific area
+    val apiLookup = getLookup(apiArea)
 
     // 5. now register the api in that area
     apiLookup(apiName) = api
@@ -110,80 +160,54 @@ class ApiContainer(val ctx:AppContext                           ,
 
       // Add the action name and link it to the method + annotation
       val anyParameters = Option(parameters).fold(false)( params => params.nonEmpty)
-      val callReflect = new ApiCallReflect( actionName, apiAnno, apiActionAnno, methodMirror, anyParameters, parameters)
+      val callReflect = new Action( actionName, apiAnno, apiActionAnno, methodMirror, anyParameters, parameters)
       api(actionName) = callReflect
     })
 
     // 7. Finally link up services and this runner to the api
 
     // 8. Notify completion.
-    onRegistrationComplete(api)
+    api.init()
   }
 
 
   /**
-   * whether or not the api call ( represented by the text ) exists
- *
-   * @param text : e.g. "users.invite"
+    * validates the request by checking for the api/action, and ensuring inputs are valid.
+    *
+    * @param req
+    * @return
+    */
+  def check(req:Request): Result[Boolean] =
+  {
+    val result = ApiValidator.validateCall(req, get)
+    okOrFailure(result.success, msg = result.msg, tag = Some(req.fullName))
+  }
+
+
+  /**
+   * gets the api info associated with the request
+   * @param cmd
    * @return
    */
-  def contains(text:String):Result[Any] =
+  def get(cmd:Request): Result[(Action,ApiBase)]  =
   {
-    parseHandle ( text, (cmd) => getApiCallReflect(cmd.area, cmd.name, cmd.action))
+    getMappedAction(cmd.area, cmd.name, cmd.action)
   }
 
 
   /**
-    * validates the action call supplied as args.
- *
-    * @param text
-    * @return
-    */
-  def check(text:String): Result[Any] =
+   * calls the api/action associated with the request
+   * @param req
+   * @return
+   */
+  def call(req:Request): Result[Any] =
   {
-    parseHandle ( text, (cmd) => checkCommand( cmd ) )
-  }
-
-
-  /**
-    * Calls the action with the argument specified in the text supplied.
-    *
-    * @param text : e.g. "users.invite -email:'johndoe@gmail.com' -phone:1234567890 -promoCode:abc"
-    * @return
-    */
-  def call(text:String): Result[Any] = {
-    parseHandle ( text, (cmd) => callCommand( cmd ) )
-  }
-
-
-  /**
-    * validates the action call supplied as args but only returns limited information
- *
-    * @param cmd
-    * @return
-    */
-  def checkCommand(cmd:Request): Result[Boolean] =
-  {
-    val result = ApiValidator.validateCall(cmd, getApiCallReflect)
-    okOrFailure(result.success, msg = result.msg, tag = Some(cmd.fullName))
-  }
-
-
-  def callCommand(cmd:Request): Result[Any] =
-  {
-    // Now invoke the action/method
-    val result:Result[Any] = try
-    {
-      callCommandInternal(cmd)
+    val result:Result[Any] = try {
+      execute(req)
     }
-    catch
-    {
-      case ex:Exception =>
-      {
-        errors.fold[Result[Any]]( onError(ctx, cmd, ex) )( e =>
-        {
-          e.onException(ctx, cmd, ex)
-        })
+    catch {
+      case ex:Exception => {
+        errs.error(ctx, req, ex)
       }
     }
     result
@@ -191,278 +215,91 @@ class ApiContainer(val ctx:AppContext                           ,
 
 
   /**
-    * handles help reqeust for all the areas supported
- *
-    * @return
-    */
-  def handleHelp():Unit =
-  {
-
-  }
-
-
-  /**
-    * handles help request for a specific area
- *
-    * @param area
-    * @return
-    */
-  def handleHelpForArea(area:String):Unit =
-  {
-
-  }
-
-
-  /**
-    * handles help request for a specific api
- *
-    * @param area
-    * @param api
-    * @return
-    */
-  def handleHelpForApi(area:String, api:String):Unit =
-  {
-
-  }
-
-
-  /**
-    * handles help request for a specific api action
- *
-    * @param area
-    * @param api
-    * @param name
-    * @return
-    */
-  def handleHelpForAction(area:String, api:String, name:String):Unit =
-  {
-
-  }
-
-
-  def getOptions(ctx:Option[Any]): Option[Inputs] = {
-    None
-  }
-
-
-  def getApiInfo(apiArea:String, apiName:String, apiAction:String): Result[(Api,ApiAction)]  =
-  {
-    val check = getApiCallReflect(apiArea, apiName, apiAction)
-    if ( !check.success ) {
-      failure(msg = check.msg)
-    }
-    else {
-      val callReflect = check.get._1
-      success((callReflect.api, callReflect.action))
-    }
-  }
-
-
-  def onError(context:AppContext, request:Request, ex:Exception):Result[Any] = {
-    println(ex.getMessage)
-    unexpectedError(msg = Some("error executing : " + request.fullName + ", check inputs"))
-  }
-
-
-  /**
-   * callback for when the input text representing the call is invalid
- *
-   * @param text
-   * @param result
+   * gets or creates a new lookup that stores all the apis in a specific area
+   * in the 3 part route system area/api/action.
+   * @param area
+   * @return
    */
-  def onErrorInputsInvalid(text:String, result:Result[Any]):Unit =
-  {
-    onError("inputs", "Invalid inputs supplied", text, result)
-  }
-
-
-  /**
-   * callback for when the action to call is not found
- *
-   * @param text
-   * @param result
-   */
-  def onErrorActionNotFound(text:String, result:Result[Any]):Unit =
-  {
-    onError("api", "api action not found, check api/action name(s)", text, result)
-  }
-
-
-  /**
-   * callback for when the action to call failed
- *
-   * @param text
-   * @param result
-   */
-  def onErrorActionFailed(text:String, result:Result[Any]):Unit =
-  {
-    onError("api", "api action call failed, check api action input(s)", text, result)
-  }
-
-
-  /**
-   * handles an error specified by the type, message, originating text and result
- *
-   * @param errType :
-   * @param errMsg  :
-   * @param text    :
-   * @param result  :
-   */
-  def onError(errType:String, errMsg:String, text:String, result:Result[Any]) : Unit =
-  {
-    println(errType + ": " + errMsg)
-    println("source: " + text)
-    println()
-  }
-
-
-  def onRegistrationComplete(api:ApiBase):Unit=
-  {
-    api.init()
-  }
-
-
-  def getOrCreateArea(area:String):ApiLookup =
+  def getLookup(area:String):Apis =
   {
     if(_lookup.contains(area)) {
       _lookup(area)
     }
     else {
-      val apiLookup = new ApiLookup()
+      val apiLookup = new Apis()
       _lookup(area) = apiLookup
       apiLookup
     }
   }
 
 
-  def getApiCallReflect(cmd:Request): Result[(ApiCallReflect,ApiBase)]  =
+  /**
+   * gets the mapped scala method associated with the api action.
+   * @param apiArea
+   * @param apiName
+   * @param apiAction
+   * @return
+   */
+  def getMappedAction(apiArea:String, apiName:String, apiAction:String): Result[(Action,ApiBase)]  =
   {
-    getApiCallReflect(cmd.area, cmd.name, cmd.action)
+    val result = for {
+      name   <- successOr(Option(apiArea)        , badRequest(Some("api name not supplied")))
+      action <- successOr(Option(apiAction)      , badRequest(Some("api action not supplied")))
+      area   <- successOr(_lookup.getOpt(apiArea), notFound  (Some(s"area   : $apiArea not found")))
+      api    <- successOr(area.getOpt(apiName)   , notFound  (Some(s"api    : $apiName not found in area: $apiArea")))
+      call   <- successOr(api.getOpt(apiAction)  , notFound  (Some(s"action : $apiAction not found in area: $apiArea, api: $apiName")))
+    } yield (call, api)
+    result
   }
 
 
-  def getApiCallReflect(apiArea:String, apiName:String, apiAction:String): Result[(ApiCallReflect,ApiBase)]  =
-  {
-    //Ensure.isNotEmptyText( apiArea  , "api area not supplied" )
-    requireText( apiName  , "api name not supplied" )
-    requireText( apiAction, "api action not supplied" )
+  /**
+   * executes the api request in a pipe-line of various checks and validations.
+   * @param cmd
+   * @return
+   */
+  private def execute(cmd:Request): Result[Any] = {
 
-    // 1. Check area exists
-    if( !_lookup.contains(apiArea)) {
-      notFound(msg = Some(s"not found: area $apiArea"))
-    }
-    else {
-
-      // 2. Check api exists
-      val apiLookup = _lookup(apiArea)
-      if (!apiLookup.contains(apiName)) {
-        notFound(msg = Some(s"not found: api $apiName not found in area: $apiArea"))
-      }
-      else {
-        // 3. Check method exists
-        val api = apiLookup(apiName)
-        if (!api.contains(apiAction)) {
-          notFound(msg = Some(s"not found: action $apiAction not found in area: $apiArea, api: $apiName"))
-        }
-        else {
-          // 4a: Params - check no args needed
-          val callReflect = api(apiAction)
-          success(data = (callReflect, api))
-        }
-      }
-    }
-  }
-
-
-  protected def parseHandle(text:String, callback: (Request) => Result[Any],
-                            errorOnBadArgs:Boolean = false ): Result[Any] =
-  {
-    // Parse the string into words.
-    val result = Args.parse(text, "-", ":", hasAction = true)
-
-    if(!result.success)
-    {
-      onErrorInputsInvalid(text, result)
-      result
-    }
-    else {
-      val args = result.get
-      val cmd = Request(text, args, None, "get")
-      val finalResult = callback(cmd)
-      finalResult
-    }
-  }
-
-
-  private def callCommandInternal(cmd:Request): Result[Any] = {
-    var api:Option[ApiBase] = None
-
-    try {
-      // 1. Check for method.
-      val existsCheck = getApiCallReflect(cmd)
-      if (!existsCheck.success) {
-        existsCheck
-      }
-      else {
-        // 2. Ensure verb is correct get/post
-        val callInfo = existsCheck.get
-        val callReflect = callInfo._1
-        val actualVerb = callReflect.action.actualVerb(callReflect.api)
-        val actualProtocol = callReflect.action.actualProtocol(callReflect.api)
-        val supportedProtocol = actualProtocol
-        val isCliOk = isCliAllowed(cmd, supportedProtocol)
-        val isWeb = protocol == ApiConstants.ProtocolWeb
-
-        // 2. Ensure verb is correct
-        if (isWeb && !ApiHelper.isValidMatch(actualVerb, cmd.verb)) {
-          badRequest(msg = Some(s"expected verb ${actualVerb}, but got ${cmd.verb}"))
-        }
-
-        // 3. Ensure protocol is correct get/post
-        else if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, protocol)) {
-          notFound(msg = Some(s"${cmd.fullName} not found"))
-        }
-        else {
-          // 4. Validate api access
-          val apiKeyCheck = ApiHelper.isAuthorizedForCall(cmd, callReflect, auth)
-          if (!apiKeyCheck.success) {
-            apiKeyCheck
-          }
-          else {
-            // 5. Bad request
-            val checkResult = ApiValidator.validateCall(cmd, getApiCallReflect, true)
-            if (!checkResult.success) {
-              // Don't return the result from internal ( as it contains too much info )
-              badRequest(checkResult.msg, tag = Some(cmd.action))
-            }
-            else {
-              // 6. Get api action
-              // Get the call check which has all the relevant info about the call
-              val callCheck = checkResult.get
-
-              // 7. Get the call reflect from the api using the action
-              api = Option(callCheck.api)
-
-              // 8. Finally make call.
-              val inputs = ApiCallHelper.fillArgs(callReflect, cmd, cmd.args.get, allowIO, this.ctx.enc)
-              val returnVal = Reflector.callMethod(callCheck.api, callCheck.apiAction, inputs)
-
-              // 9. Already a Result object - don't wrap inside another result object
-              if (returnVal.isInstanceOf[Result[Any]]) {
-                returnVal.asInstanceOf[Result[Any]]
-              }
-              else
-                success(data = returnVal)
-            }
-          }
-        }
-      }
+    val result = try {
+      for {
+        callCheck    <- _validator.validateApi(cmd)
+        protoCheck   <- _validator.validateProtocol(callCheck._1, callCheck._2, cmd)
+        authCheck    <- _validator.validateAuthorization(callCheck._1, cmd)
+        midCheck     <- _validator.validateMiddleware(cmd)
+        api          <- _validator.validateParameters(cmd)
+        apiResult    <- execute(cmd, api, callCheck._1)
+      } yield apiResult
     }
     catch{
       case ex:Exception => {
+        val apiInfo = _validator.validateApi(cmd)
+        val api = apiInfo.fold[Option[ApiBase]](None)( info => Some(info._2))
         handleError(api, cmd, ex)
+        //failure(Some("Unexpected error handling request: " + ex.getMessage))
       }
     }
+    result
+  }
+
+
+  /**
+   * executes the api request. this is the last step in the api request pipeline.
+   * @param req
+   * @param api
+   * @param action
+   * @return
+   */
+  private def execute(req:Request, api:ApiBase, action:Action): Result[Any] = {
+    // Finally make call.
+    val inputs = ApiHelper.fillArgs(action, req, req.args.get, allowIO, this.ctx.enc)
+    val returnVal = Reflector.callMethod(api, req.action, inputs)
+
+    // Already a Result object - don't wrap inside another result object
+    if (returnVal.isInstanceOf[Result[Any]]) {
+      returnVal.asInstanceOf[Result[Any]]
+    }
+    else
+      success(data = returnVal)
   }
 
 
@@ -474,12 +311,26 @@ class ApiContainer(val ctx:AppContext                           ,
     }
     // OPTION 2: GLOBAL Level custom handler
     else if( errors.isDefined ) {
-      errors.get.onException(ctx, cmd, ex)
+      errs.error(ctx, cmd, ex)
     }
     // OPTION 3: GLOBAL Level default handler
     else {
-      onError(ctx, cmd, ex)
+      error(ctx, cmd, ex)
     }
+  }
+
+
+  /**
+   * global handler for an unexpected error ( for derived classes to override )
+   *
+   * @param ctx    : the application context
+   * @param req    : the request
+   * @param ex     : the exception
+   * @return
+   */
+  def error(ctx:AppContext, req:Request, ex:Exception):Result[Any] = {
+    println(ex.getMessage)
+    ResultFuncs.unexpectedError(msg = Some("error executing : " + req.path + ", check inputs"))
   }
 
 

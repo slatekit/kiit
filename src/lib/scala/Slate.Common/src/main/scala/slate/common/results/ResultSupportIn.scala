@@ -205,6 +205,22 @@ trait ResultSupportIn {
   }
 
 
+  def successOr1[T]( data : Option[T],
+                     code : Int,
+                     msg  : Option[String] = Some("not found")
+                     ): Result[T] = {
+    data.fold[Result[T]](new FailureResult[T](code, msg))( d => {
+      new SuccessResult[T](d, code = ResultCode.SUCCESS)
+    })
+  }
+
+  def successOr[T]( data : Option[T], failure: => Result[T]): Result[T] = {
+    data.fold[Result[T]](failure)( d => {
+      new SuccessResult[T](d, code = ResultCode.SUCCESS)
+    })
+  }
+
+
   /**
    * Builds an FailureResult with no value, and error code of NOT_IMPLEMENTED
    * @param msg : Optional message

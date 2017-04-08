@@ -16,14 +16,19 @@ package slate.core.apis
 import slate.common.Strings
 
 /**
-  * Annotation used in conjunction with the Api annotation, to designate your scala method
-  * as an api action that is exposed for use.
-  * @param name     : the name of the action, leave empty to use the method name this is applied to
-  * @param desc     : the description of the action
-  * @param roles    : the roles allowed ( use @parent to refer to parent Api anntoation roles )
-  * @param verb     : the verb ( "get", "post", "cli", "*" ) allowed.
-  * @param protocol : the protocol ( "web, "cli", "*" ) required to access this action
-  */
+ * Annotation used in conjunction with the Api annotation, to designate your scala method
+ * as an api action that is exposed for use.
+ *
+ *  NOTE: Apis in SlateKit are organized into 3 parts in the route.
+ *  e.g. area/api/action
+ *       app/user/invite
+ *
+ * @param name     : the name of the action, leave empty to use the method name this is applied to
+ * @param desc     : the description of the action
+ * @param roles    : the roles allowed ( use @parent to refer to parent Api anntoation roles )
+ * @param verb     : the verb ( "get", "post", "cli", "*" ) allowed.
+ * @param protocol : the protocol ( "web, "cli", "*" ) required to access this action
+ */
 case class ApiAction(
                       name     : String = "" ,
                       desc     : String = "" ,

@@ -416,7 +416,8 @@ object Reflector {
           val term = sym.asTerm
           val isDefault = term.isParamWithDefault
           val typeSym = sym.typeSignature.typeSymbol
-          list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, isDefault))
+          val typeAsType = sym.info
+          list.append(new ReflectedArg(sym.name.toString, typeSym.name.toString, pos, typeSym, typeAsType, isDefault))
         })
       }
       list.toList

@@ -14,6 +14,11 @@ package slate.core.apis
 
 /**
   * Annotation to designate a Scala class as an API
+  *
+  *  NOTE: Apis in SlateKit are organized into 3 parts in the route.
+  *  e.g. area/api/action
+  *       app/user/invite
+  *
   * @param area   : the top level area/category of the api "sys", "app", "ops"
   * @param name   : the name of the api "users"
   * @param desc   : description of the api
@@ -34,3 +39,4 @@ case class Api (area     : String = "",
 {
 
 }
+

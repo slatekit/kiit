@@ -106,6 +106,13 @@ class Conf( fileName:Option[String] = None,
 
 
   /**
+   * The origin file path of the config
+   * @return
+   */
+  override def origin():String = fileName.getOrElse(_config.origin().filename())
+
+
+  /**
     * whether or not there is a key
     *
     * @param key

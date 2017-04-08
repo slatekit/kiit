@@ -93,4 +93,18 @@ object About
     tags     = "",
     examples = ""
   )
+
+
+  /**
+   * builds the about object using just the parameters supplied.
+   * @param id
+   * @param name
+   * @param desc
+   * @param company
+   * @param version
+   * @return
+   */
+  def simple(id:String, name:String, desc:String, company:String, version:String): About = {
+    About(id, name, desc, company, "", "", "", "", version, "", "")
+  }
 }

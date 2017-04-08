@@ -39,7 +39,7 @@ class ArgsService {
     // Check 1: Empty line ?
     if (Strings.isNullOrEmpty(line))
     {
-      success( new Args(List[String](), "", List[String](), prefix, sep, None, None))
+      success( new Args("", List[String](), "", List[String](), prefix, sep, None, None))
     }
     else {
       // Check 2: Parse the line into words/args
@@ -57,7 +57,7 @@ class ArgsService {
         args.fold[Result[Args]](failure(msg = Some(err)))(rargs => {
 
           // Now parse the lexically parsed text into arguments
-          val parseResult = parseInternal(rargs, prefix, sep, hasAction)
+          val parseResult = parseInternal(line, rargs, prefix, sep, hasAction)
           if (parseResult.success) {
             success(parseResult.get)
           }
@@ -70,7 +70,7 @@ class ArgsService {
   }
 
 
-  private def parseInternal(tokens: List[String], prefix: String, sep: String, hasAction:Boolean)
+  private def parseInternal(line:String, tokens: List[String], prefix: String, sep: String, hasAction:Boolean)
     : Result[Args] =
   {
     successOrError(
@@ -115,7 +115,7 @@ class ArgsService {
       else
         List[String]()
 
-      val args = new Args(tokens, action, verbs.toList, prefix, sep,
+      val args = new Args(line, tokens, action, verbs.toList, prefix, sep,
         Some(argsResult._1.toMap[String,String]), Some(indexResult))
       args
     })

@@ -23,7 +23,7 @@ import slate.entities.core.Entities
 import slate.common.i18n.I18nStrings
 import slate.common.info._
 import slate.common.logging.{LoggerConsole, LoggerBase}
-import slate.core.auth.AuthBase
+import slate.core.auth.Auth
 import slate.core.tenants.Tenant
 
 /**
@@ -42,7 +42,6 @@ import slate.core.tenants.Tenant
   * @param subs : substitutions( variables ) for the app
   * @param res  : translated resource strings ( i18n )
   * @param tnt   : tenant info ( if running in multi-tenant mode - not officially supported )
-  * @param auth : authentication service for security/permissions
   */
 case class AppContext(
                         arg: Args                                       ,
@@ -53,7 +52,6 @@ case class AppContext(
                         inf :About                                      ,
                         host:Host                       = Host.local()  ,
                         lang:Lang                       = Lang.asScala(),
-                        auth:Option[AuthBase]           = None          ,
                         dbs :Option[DbLookup]           = None          ,
                         enc :Option[Encryptor]          = None          ,
                         dirs:Option[Folders]            = None          ,
@@ -64,7 +62,7 @@ case class AppContext(
                         state:Result[Boolean]           = NoResult
                      )
 {
-  def app:AppMeta = { new AppMeta(inf, host, lang, Status.none, StartInfo.none ) }
+  val app:AppMeta = new AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()) )
 }
 
 

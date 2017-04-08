@@ -10,6 +10,10 @@
   */
 package slate.common
 
+import slate.common.reflect.ReflectConsts._
+
+import scala.reflect.runtime.universe.{Type,typeOf}
+
 /**
   * Base class to support retrieving inputs form multiple sources:
   * 1. command line arguments
@@ -57,8 +61,55 @@ abstract class Inputs {
   def getFloatOrElse (key: String, default: Float   ) : Float    = getOrElse[Float]    ( key, getFloat   , default  )
 
 
+  // Get list and maps
+  /**
+   * gets a list of items of the type supplied.
+   * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+   * @param key
+   * @param tpe
+   * @return
+   */
+  def getList(key:String, tpe:Type):List[Any] = {
+    val converter = Converter.converterFor(tpe)
+    val input = get(key)
+    val result = input.fold[List[Any]](Nil) {
+      case "null" => Nil
+      case "\"\"" => Nil
+      case s: String => Strings.split(s, ',').toList.map(converter)
+      case l: List[tpe] => l
+      case _ => Nil
+    }
+    result
+  }
+
+
+  /**
+   * gets a map of items of the type supplied.
+   * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+   * @param key
+   * @return
+   */
+  def getMap(key:String, tpeKey:Type, tpeVal:Type):Map[_,_] = {
+    val keyConverter = Converter.converterFor(tpeKey)
+    val valConverter = Converter.converterFor(tpeVal)
+    val input = get(key)
+    val emptyMap = Map.empty[Any,Any]
+    val result = input.fold[Map[Any,Any]](emptyMap) {
+      case "null" => emptyMap
+      case "\"\"" => emptyMap
+      case s: String => Strings.splitToMapOfType(s, ',', true, Some('='),
+        Some(keyConverter),
+        Some(valConverter)).asInstanceOf[Map[Any,Any]]
+      case l: Map[tpeKey,tpeVal] => l.asInstanceOf[Map[Any,Any]]
+      case _ => emptyMap
+    }
+    result
+  }
+
+
   // Helpers
   protected def getOpt[T](key: String,  fetcher:(String) => T ): Option[T] = if(containsKey(key)) Option(fetcher(key)) else None
   protected def getOrElse[T](key: String, fetcher:(String) => T, default: T ): T = if(containsKey(key)) fetcher(key) else default
+
 
 }

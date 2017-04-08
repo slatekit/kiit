@@ -14,6 +14,8 @@ package slate.integration
 
 import slate.common.{Todo, Credentials, InputArgs, Result}
 import slate.core.apis._
+import slate.core.apis.containers.ApiContainerCLI
+import slate.core.apis.core.Auth
 import slate.core.common.AppContext
 import slate.core.shell._
 
@@ -28,7 +30,7 @@ import slate.core.shell._
   */
 class ShellAPI(private val creds:Credentials                   ,
                val ctx    : AppContext                         ,
-               val auth   : ApiAuth                            ,
+               val auth   : Auth                            ,
                val appDir : String                             ,
                settings   : ShellSettings = new ShellSettings(),
                apiItems   : Option[List[ApiReg]] = None
@@ -88,7 +90,7 @@ class ShellAPI(private val creds:Credentials                   ,
     // Supply the api-key into each command.
     val opts = Some(new InputArgs(Map[String,Any]("api-key" -> creds.key)))
     val apiCmd = Request(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI)
-    cmd.copy(result = apis.callCommand(apiCmd))
+    cmd.copy(result = apis.call(apiCmd))
   }
 
 
@@ -108,7 +110,7 @@ class ShellAPI(private val creds:Credentials                   ,
   override protected def showHelp(): Unit =
   {
     _view.showHelp()
-    apis.handleHelp()
+    apis.help.help()
   }
 
 
@@ -128,17 +130,17 @@ class ShellAPI(private val creds:Credentials                   ,
       // 1: {area} ? = help on area
       case ShellConstants.VerbPartArea =>
       {
-        apis.handleHelpForArea(cmd.args.getVerb(0))
+        apis.help.helpForArea(cmd.args.getVerb(0))
       }
       // 2. {area}.{api} = help on api
       case ShellConstants.VerbPartApi =>
       {
-        apis.handleHelpForApi(cmd.args.getVerb(0), cmd.args.getVerb(1))
+        apis.help.helpForApi(cmd.args.getVerb(0), cmd.args.getVerb(1))
       }
       // 3. {area}.{api}.{action} = help on api action
       case _ =>
       {
-        apis.handleHelpForAction(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
+        apis.help.helpForAction(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
       }
     }
   }

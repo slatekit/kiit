@@ -11,15 +11,12 @@
 </slate_header>
   */
 
-package slate.core.apis
+package slate.core.auth
 
 /**
-  * Created by kreddy on 3/25/2016.
-  */
-case class ApiSettings(
-                        enableFileInputs  :Boolean = false,
-                        enableLogging     :Boolean = false,
-                        enableOutput      :Boolean = false
-                      )
-{
+ * This class is intended for console / desktop / batch apps where
+ * only 1 person can be logged in at a time.
+ */
+class AuthConsole(isAuthenticated:Boolean, user:User, roles:String)
+  extends Auth(isAuthenticated, user, roles) {
 }

@@ -33,6 +33,13 @@ abstract class ConfigBase( protected val _encryptor:Option[(String) => String] =
 
 
   /**
+   * The origin of the config ( e.g. file name for now )
+   * @return
+   */
+  def origin():String = ""
+
+
+  /**
     * Extends the config by supporting decryption via marker tags.
     * e.g.
     *  db.connection = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"

@@ -123,15 +123,34 @@ object Strings {
 
   def splitToMap(text:String, delimiter:Char = ',', trim:Boolean = true):Map[String,String] =
   {
+    // By default string
+    splitToMapOfType(text, delimiter, trim, None, None).asInstanceOf[Map[String,String]]
+  }
+
+
+  def splitToMapOfType(text:String,
+                       delimeterPairs:Char = ',',
+                       trim:Boolean = true,
+                       delimiterValue:Option[Char] = None,
+                       keyConverter:Option[(String)=>Any] = None,
+                       valConverter:Option[(String)=>Any] = None ):Map[_,_] =
+  {
     if(isNullOrEmpty(text)) {
-      Map[String, String]()
+      Map[Any, Any]()
     }
     else {
-      val tokens = text.split(delimiter)
-      val map = scala.collection.mutable.Map[String, String]()
-      for (token <- tokens) {
-        val finalToken = if (trim) token.trim else token
-        map(finalToken) = finalToken
+      val pairs = text.split(delimeterPairs)
+      val map = scala.collection.mutable.Map[Any, Any]()
+      for (pair <- pairs) {
+        val keyVal:(String,String) = delimiterValue.fold((pair,pair))( d => {
+          val tokens = pair.split(d)
+          (tokens(0), tokens(1))
+        })
+        val pkey = if(trim) keyVal._1.trim() else keyVal._1
+        val pval = if(trim) keyVal._2.trim() else keyVal._2
+        val finalKey = keyConverter.fold[Any](pkey)( k => k(pkey))
+        val finalVal = valConverter.fold[Any](pval)( c => c(pval))
+        map(finalKey) = finalVal
       }
       map.toMap
     }

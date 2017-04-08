@@ -15,10 +15,11 @@ package slate.core.apis.support
 
 import slate.common.encrypt._
 import slate.common.reflect.ReflectConsts._
-import slate.common.reflect.{ReflectedClass, ReflectedArg}
+import slate.common.reflect.{ReflectedArg, ReflectedClass}
 import slate.common.results.{ResultSupportIn}
 import slate.common.utils.Temp
 import slate.core.apis.Request
+import slate.core.apis.core.Action
 
 import scala.reflect.runtime.universe.typeOf
 import slate.common._
@@ -31,73 +32,133 @@ import scala.collection.mutable.ListBuffer
   */
 object ApiCallHelper extends ResultSupportIn {
 
-  protected val _tpeString:Type = Reflector.getFieldType(typeOf[Temp], "typeString")
-  protected val _typeDefaults = Map[String,Any](
-   "String"  -> "",
-   "Boolean" -> false,
-   "Int"     -> 0,
-   "Long"    -> 0L,
-   "Double"  -> 0d,
-   "DateTime"-> DateTime.now()
-  )
+  protected val TypeDecString = typeOf[DecString]
+  protected val TypeDecInt    = typeOf[DecInt]
+  protected val TypeDecLong   = typeOf[DecLong]
+  protected val TypeDecDouble = typeOf[DecDouble]
+  protected val TypeDoc       = typeOf[Doc]
+  protected val TypeVars      = typeOf[Vars]
+  protected val TypeRequest   = typeOf[Request]
 
 
-  protected val _decryptedTypes = Map[String,Boolean](
-    "DecInt"    -> true,
-    "DecLong"   -> true,
-    "DecDouble" -> true,
-    "DecString" -> true
-    )
+  /**
+   * Builds a string parameter ensuring that nulls are avoided.
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleStringParam(args:Inputs, paramName:String): String = {
+    val text = args.getString(paramName)
+    val isNull = "null".equalsIgnoreCase(text)
+
+    // As a design choice, this marshaller will only pass empty string to
+    // API methods instead of null
+    if (isNull || text == null )
+      ""
+    else
+      text
+  }
 
 
-  def validateArgs(callReflect:ApiCallReflect, args:Inputs): Result[Boolean] =
-  {
-    var error = ": inputs missing or invalid "
-    var totalErrors = 0
+  /**
+   * Builds a Doc object by reading the file content from the referenced uri
+   * e.g.
+   * 1. "user://slatekit/temp/file1.txt"    reference user directory
+   * 2. "file://c:/slatekit/temp/file.txt"  reference file explicitly
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleDocParam(args:Inputs, paramName:String): Doc = {
+    val uri = args.getString(paramName)
+    val doc = Uris.readDoc(uri)
+    doc.getOrElse(new Doc("", "", "", 0))
+  }
 
-    // Check each parameter to api call
-    for(input <- callReflect.paramList )
-    {
-      // parameter not supplied ?
-      val paramName = input.name
-      if(!args.containsKey(paramName))
-      {
-        val separator = if(totalErrors == 0 ) "( " else ","
-        error += separator + paramName
-        totalErrors = totalErrors + 1
+
+  /**
+   * Builds a Vars object which is essentially a lookup of items by both index and key
+   * TODO: Add support for construction for various types, e..g string, list, map.
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleVarsParam(args:Inputs, paramName:String): Vars = {
+    val text = args.getString(paramName)
+    Vars(text)
+  }
+
+
+  /**
+   * Handles building of a list from various source types
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleList(parameter:ReflectedArg, args:Inputs,  paramName:String): List[Any] = {
+    val listType = parameter.tpe.typeArgs.head
+    val items = args.getList(paramName, listType)
+    items
+  }
+
+
+  /**
+   * Handle building of a map from various sources
+   * @param parameter
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleMap(parameter:ReflectedArg, args:Inputs, paramName:String): Map[_,_] = {
+    val keyType = parameter.tpe.typeArgs.head
+    val valType = parameter.tpe.typeArgs(1)
+    val items = args.getMap(paramName, keyType, valType)
+    items
+  }
+
+
+  /**
+   * Handle building of an object from various sources.
+   * @param parameter
+   * @param args
+   * @param paramName
+   * @return
+   */
+  def handleObject(parameter:ReflectedArg, args:Inputs, paramName:String): AnyRef = {
+    val complexObj = args.getObject(paramName)
+    complexObj.fold[Any](null) {
+        case "null"  => None
+        case "\"\""  => None
+        case obj       => buildArgInstance(parameter, obj.asInstanceOf[Inputs])
       }
+    complexObj
+  }
+
+
+  /**
+   * Builds a complex object
+   * @param args
+   * @param parameter
+   * @param paramName
+   * @return
+   */
+  def handleComplex(args:Inputs, parameter:ReflectedArg, paramName:String): AnyRef = {
+    val fullName = parameter.tpe.typeSymbol.asClass.fullName
+    if(fullName == "scala.collection.immutable.List") {
+      handleList(parameter, args, paramName)
     }
-    // Any errors ?
-    if(totalErrors > 0)
-    {
-      error = error + " )"
-      badRequest( msg = Some("bad request: action " + callReflect.name + error))
+    else if(fullName == "scala.collection.immutable.Map") {
+      handleMap(parameter, args, paramName)
     }
     else {
-      // Ok!
-      ok()
+      handleObject(parameter, args, paramName)
     }
   }
 
 
-  def fillArgs(callReflect:ApiCallReflect, cmd:Request, args:Inputs, allowLocalIO:Boolean = false,
-               enc:Option[Encryptor] = None): Array[Any] = {
-    // Check 1: No args ?
-    if (!callReflect.hasArgs)
-      Array[Any]()
-    // Check 2: 1 param with default and no args
-    else if (callReflect.isSingleDefaultedArg() && args.size() == 0) {
-      val argType = callReflect.paramList(0).typeName
-      val defaultVal = if(_typeDefaults.contains(argType))_typeDefaults(argType) else None
-      Array[Any](defaultVal)
-    }
-    else {
-      fillArgsExact(callReflect, cmd, args, allowLocalIO, enc)
-    }
-  }
-
-
-  def fillArgsExact(callReflect:ApiCallReflect, cmd:Request, args:Inputs, allowLocalIO:Boolean = false,
+  // Improve: Check this article:
+  // http://www.cakesolutions.net/teamblogs/ways-to-pattern-match-generic-types-in-scala
+  def fillArgsExact(callReflect:Action, cmd:Request, args:Inputs, allowLocalIO:Boolean = false,
                     enc:Option[Encryptor] = None): Array[Any] =
   {
     // Check each parameter to api call
@@ -107,71 +168,39 @@ object ApiCallHelper extends ResultSupportIn {
       // Get each parameter to the method
       val parameter = callReflect.paramList(ndx)
       val paramName = parameter.name
-      val paramType = parameter.typeName
-      val paramValue:Any = if(paramType == "String")
-      {
-        val text = args.getString(paramName)
-        val isNull = "null".equalsIgnoreCase(text)
+      val paramType = parameter.tpe
+      val result = paramType match {
 
-        // As a design choice, this marshaller will only pass empty string to
-        // API methods instead of null
-        if(isNull) "" else text
-      }
-      else if(paramType == "Int")
-      {
-        args.getString(paramName).toInt
-      }
-      else if(paramType == "Boolean")
-      {
-        args.getString(paramName).toBoolean
-      }
-      else if(paramType == "Long")
-      {
-        args.getString(paramName).toLong
-      }
-      else if(paramType == "Double")
-      {
-        args.getString(paramName).toDouble
-      }
-      else if(paramType == "DateTime")
-      {
-        DateTime.parseNumericVal(args.getString(paramName))
-      }
-      else if(paramType == "ApiCmd")
-      {
-        cmd
-      }
-      else if(allowLocalIO && paramType == "Doc"){
-        val uri = args.getString(paramName)
-        val doc = Uris.readDoc(uri)
-        doc.getOrElse(new Doc("", "", "", 0))
-      }
-      else if(paramType == "Vars"){
-        val text = args.getString(paramName)
-        Vars(text)
-      }
-      else if(_decryptedTypes.contains(paramType)){
-        val text = args.getString(paramName)
-        val decrypted:Any  = paramType match {
-          case "DecInt"    => enc.fold(new DecInt(0))    ( e => new DecInt(e.decrypt(text).toInt      ))
-          case "DecLong"   => enc.fold(new DecLong(0L))  ( e => new DecLong(e.decrypt(text).toLong    ))
-          case "DecDouble" => enc.fold(new DecDouble(0D))( e => new DecDouble(e.decrypt(text).toDouble))
-          case "DecString" => enc.fold(new DecString(""))( e => new DecString(e.decrypt(text)         ))
-          case _           => DecString("")
-        }
-        decrypted
-      }
-      else if (!parameter.isBasicType()){
-        val complexObj = args.getObject(paramName)
-        complexObj.fold[Any](null) {
-            case "null"  => None
-            case "none"  => None
-            case "\"\""  => None
-            case obj       => buildArgInstance(parameter, obj.asInstanceOf[Inputs])
-          }
+        // Basic types
+        case BoolType       => args.getString(paramName).toBoolean
+        case ShortType      => args.getString(paramName).toShort
+        case IntType        => args.getString(paramName).toInt
+        case LongType       => args.getString(paramName).toLong
+        case FloatType      => args.getString(paramName).toFloat
+        case DoubleType     => args.getString(paramName).toDouble
+        case StringType     => handleStringParam(args, paramName)
+        case DateType       => DateTime.parseNumericVal(args.getString(paramName))
+
+        // Raw request
+        case TypeRequest    => cmd
+
+        // Doc/File reference ( only if allowed )
+        case TypeDoc        => handleDocParam(args, paramName)
+
+        // Map from string string delimited pairs
+        case TypeVars       => handleVarsParam(args, paramName)
+
+        // Decryption from encrypted types
+        case TypeDecInt     => enc.fold(new DecInt(0))    ( e => new DecInt(e.decrypt(args.getString(paramName)).toInt      ))
+        case TypeDecLong    => enc.fold(new DecLong(0L))  ( e => new DecLong(e.decrypt(args.getString(paramName)).toLong    ))
+        case TypeDecDouble  => enc.fold(new DecDouble(0D))( e => new DecDouble(e.decrypt(args.getString(paramName)).toDouble))
+        case TypeDecString  => enc.fold(new DecString(""))( e => new DecString(e.decrypt(args.getString(paramName))         ))
+
+        // Complex type
+        case _              => handleComplex(args, parameter, paramName)
       }
 
-      inputs.append(paramValue)
+      inputs.append(result)
     }
     inputs.toArray[Any]
   }

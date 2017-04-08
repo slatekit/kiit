@@ -20,6 +20,8 @@ import akka.stream.ActorMaterializer
 import slate.common._
 import slate.common.results.ResultSupportIn
 import slate.core.apis._
+import slate.core.apis.containers.ApiContainerWeb
+import slate.core.apis.core.Auth
 import slate.core.common.AppContext
 import spray.json.JsValue
 
@@ -39,13 +41,13 @@ import scala.io.StdIn
 class Server( val port       : Int    = 5000 ,
               val interface  : String = "::0",
               val ctx        : AppContext    ,
-              val auth       : ApiAuth       ,
+              val auth       : Auth       ,
               apiItems       :Option[List[ApiReg]] = None
             )
             extends ResultSupportIn
 {
   // api container holding all the apis.
-  val apis = new ApiContainer(ctx, Some(auth), "web", apiItems)
+  val apis = new ApiContainerWeb(ctx, Some(auth), apiItems)
 
 
   /**
@@ -146,7 +148,7 @@ class Server( val port       : Int    = 5000 ,
    * @return
    */
   protected def callCommand(cmd:Request): Result[Any] = {
-    apis.callCommand(cmd)
+    apis.call(cmd)
   }
 }
 

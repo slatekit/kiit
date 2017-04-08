@@ -24,6 +24,7 @@ import slate.common.Funcs._
  *
  *  @example usage: app.users.invite -email="john@gmail.com" -role="guest"
   *
+  * @param line        : the raw line ( if available )
   * @param raw         : the raw text that was parsed into arguments.
   * @param action      : "app.users.invite"
   * @param actionVerbs : ["app", "users", "invite" ]
@@ -32,8 +33,10 @@ import slate.common.Funcs._
   * @param _namedArgs  : the map of named arguments ( key / value ) pairs
   * @param _indexArgs  : the list of positional arguments ( index based )
   */
-class Args(val raw         :List[String],
-           val action      :String,
+class Args(
+           val line        :String      ,
+           val raw         :List[String],
+           val action      :String      ,
            val actionVerbs :List[String],
            val prefix      :String = "-",
            val separator   :String = "=",
@@ -165,7 +168,7 @@ class Args(val raw         :List[String],
 object Args
 {
   def apply():Args = {
-    new Args(List[String](), "", List[String]())
+    new Args("", List[String](), "", List[String]())
   }
 
 

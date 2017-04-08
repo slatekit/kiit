@@ -26,7 +26,8 @@ import scala.reflect.runtime.universe.{Type, TypeSymbol}
 case class ReflectedArg(name:String,
                         typeName:String,
                         pos:Int,
-                        sym:AnyRef,
+                        sym:scala.reflect.runtime.universe.Symbol,
+                        tpe:scala.reflect.runtime.universe.Type,
                         isParamDefaulted:Boolean = false) {
 
   def asType():Type = sym.asInstanceOf[TypeSymbol].toType
