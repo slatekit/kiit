@@ -1048,7 +1048,13 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <h1>4. Functions</h1>
 <hr/>
 <h2 id="scala-functions-simple">Functions</h2>
-<p>Scala has many features related to functions/methods. this is a partial list. But before you read these examples, you should first understand the difference between methods and functions. <a href="" class="url_ch">See methods vs functions</a></p>
+<p>Scala has many features related to functions/methods. this is a partial list. 
+	But before you read these examples, you should first understand the difference between methods and functions. See these links: </p>
+<ol>
+	<li><a href="http://stackoverflow.com/questions/2529184/difference-between-method-and-function-in-scala" class="url_ch">StackOverflow</a>
+	<li><a href="https://tpolecat.github.io/2014/06/09/methods-functions.html" class="url_ch">Methods are not functions</a>
+</ol>
+				
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// Sample function to simulate creating a new user.
@@ -1184,7 +1190,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 
 <h2 id="scala-functions-hof-compose">HOF: Function composition</h2>
-<p>Another type of Higher Order Functions ( HOF ) is a function that is returned from another function</p>
+<p>Functions can be composed, allowing 1 function to be the composite of 2 functions.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// Function 1 to generate html for h1
 </span>    <span class="k">val</span> <span class="n">h1</span> <span class="k">=</span> <span class="o">(</span><span class="n">text</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"&lt;h1&gt;"</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s">"&lt;/h1&gt;"</span>
