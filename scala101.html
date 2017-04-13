@@ -500,8 +500,8 @@ in Scala. For more in-depth documentation please refer to the resources below.</
    
 </code></pre>
 </div>
-<div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i> Generally speaking, usage of vars is discouraged in Scala in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last value in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
 <br/>
@@ -715,7 +715,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of List[T] is the ListBuffer[T]. It has methods to append to items and you can call <strong>toList</strong> to convert an instance of the mutable ListBuffer[T] to an instance of an immutable List[T]</p>	
+	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> versions of List[T] are in the <strong>scala.collection.mutable</strong> package, such as the ListBuffer[T]. It has methods to append to items and you can call <strong>toList</strong> to convert an instance of the mutable ListBuffer[T] to an instance of an immutable List[T]</p>	
 </div>
 
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
@@ -935,7 +935,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i>  Throwing exceptions is generally discouraged in Scala in favor of functional error-handling, using Option[T], Either[A,B] or alternatives. The reasoning is that functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and other imperative constructs result in side-effects.</p>
+	<p><i class="fa fa-warning"></i> If you are incorporating functional programming, then throwing exceptions is <strong>generally</strong> discouraged in favor of functional error-handling using Option[T], Either[A,B] or alternatives. Functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and early exists can result in unexpected behaviour.</p>
 	
 </div>
 <br/>
@@ -955,7 +955,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i> Returning early or mid-way in a function is generally discouraged as the last expression in a code block is automatically returned. Also, returning early from a function ( with arguably the exception of guards ) is also not inline with functional programming. The reasoning being that you want to avoid short-circuiting of logic and have a full flow to a return value.</p>
+	<p><i class="fa fa-warning"></i>If you are incorporating functional programming, returning early or mid-way in a function is generally discouraged, as the last expression in a code block is automatically returned. Returning early from a function ( with arguably the exception of guards ) results in short-circuiting of logic and breaks a clean flow to a return value.</p>
 	
 </div>
 <br/>
@@ -1039,7 +1039,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i>These built in aggregate methods on collections ( <strong>map, reduce, fold, indexOf, minBy, maxBy, etc</strong>) are incredibly powerful. You can generally avoid looping through and / or converting items in collections manually, and instead rely on these built-in functions.</p>
+	<p><i class="fa fa-info-circle"></i>These built in aggregate methods on collections ( <strong>map, reduce, filter, fold, indexOf, minBy, maxBy, etc</strong>) are incredibly powerful. You can generally avoid looping through and / or converting items in collections manually, and instead rely on these built-in functions.</p>
 	
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -1048,7 +1048,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <h1>4. Functions</h1>
 <hr/>
 <h2 id="scala-functions-simple">Functions</h2>
-<p>Scala has many features related to functions/methods. this is a partial list.</p>
+<p>Scala has many features related to functions/methods. this is a partial list. But before you read these examples, you should first understand the difference between methods and functions. <a href="" class="url_ch">See methods vs functions</a></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// Sample function to simulate creating a new user.
