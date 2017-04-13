@@ -80,7 +80,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-03-12T23:33:49.155</td>
+      <td>2017-04-12T22:59:15.522</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -115,7 +115,11 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">scala.reflect.runtime.universe.</span><span class="o">{</span><span class="n">typeOf</span><span class="o">}</span>
+</span>
+<span class="k">import</span> <span class="nn">slate.core.apis.containers.ApiContainerCLI</span>
+<span class="k">import</span> <span class="nn">slate.core.apis.core.Auth</span>
+
+<span class="k">import</span> <span class="nn">scala.reflect.runtime.universe.</span><span class="o">{</span><span class="n">typeOf</span><span class="o">}</span>
 <span class="k">import</span> <span class="nn">slate.common.args.Args</span>
 <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
 <span class="k">import</span> <span class="nn">slate.common.encrypt.Encryptor</span>
@@ -219,7 +223,7 @@
 </span>  <span class="c1">// NOTE: You can also use own pre-built authorization provider which has
 </span>  <span class="c1">// support for users, roles, permissions
 </span>  <span class="c1">// =======================================================================================
-</span>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">]])</span> <span class="k">extends</span> <span class="nc">ApiAuth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
+</span>  <span class="k">class</span> <span class="nc">MyAuthProvier</span><span class="o">(</span><span class="n">keys</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">ApiKey</span><span class="o">]])</span> <span class="k">extends</span> <span class="nc">Auth</span><span class="o">(</span><span class="n">keys</span><span class="o">,</span> <span class="nc">None</span><span class="o">)</span>
     <span class="k">with</span> <span class="nc">ResultSupportIn</span>
   <span class="o">{</span>
 
