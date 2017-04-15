@@ -8,7 +8,7 @@ permalink: /mod-args
 
 {: .table .table-striped .table-bordered}
 |:--|:--|
-| **desc** | A lexical command line argument parser for command line parsing and support specifying routes / method calls | 
+| **desc** | A lexical command line argument parser with optional support for specifying a schema for the arguments. | 
 | **date**| 2017-04-12T22:59:11.988 |
 | **version** | 1.4.0  |
 | **jar** | slate.common.jar  |
