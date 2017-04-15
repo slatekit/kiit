@@ -447,21 +447,21 @@ in Scala. For more in-depth documentation please refer to the resources below.</
   
   
   <span class="c1">// 2. Import multiple items from a package using { ... }
-</span>  <span class="k">import</span> <span class="nn">slate.common.logging.</span><span class="o">{</span><span class="nc">Logger</span><span class="o">,</span> <span class="nc">LogLevel</span><span class="o">}</span>
+</span>  <span class="k">import</span> <span class="nn">slate.common.logging.</span><span class="o">{</span> <span class="nc">Logger</span><span class="o">,</span> <span class="nc">LogLevel</span> <span class="o">}</span>
 
   
   <span class="c1">// 3. Import all items from a pacakge using "_"
 </span>  <span class="k">import</span> <span class="nn">slate.common.logging._</span>
   
   
-  <span class="c1">// 4. Import 1 function from an Object ( Random )
+  <span class="c1">// 4. Import 1 method ( string6 ) from an Object ( Random )
 </span>  <span class="c1">// NOTE: An object is essentially a Singleton class 
 </span>  <span class="c1">// that serves as a "module" containing 1 or more functions
 </span>  <span class="k">import</span> <span class="nn">slate.common.Random.</span><span class="o">{</span> <span class="n">string6</span> <span class="o">}</span>
   <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
   
   
-  <span class="c1">// 5. Import all functions from the Random module
+  <span class="c1">// 5. Import all methods from the Random module
 </span>  <span class="k">import</span> <span class="nn">slate.common.Random._</span> 
   <span class="n">println</span><span class="o">(</span> <span class="n">string3</span><span class="o">()</span> <span class="o">)</span>
   <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
@@ -501,7 +501,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong>Functional 101</strong> page for more info on how to avoid vars and make things immutable.</p>
+	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong><a class="url-ch" href="scala101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
 <br/>
@@ -510,10 +510,10 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <h1>2. Types</h1>
 <hr/>
 <h2 id="scala-types">Data Types</h2>
-<p>You can declare types implicitly using the values or explicitly by specifying the type name</p>
+<p>You can declare types simply using the values or explicitly specifying the type name</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>	
-    <span class="c1">// Implicit
+    <span class="c1">// Inferred types
 </span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
     <span class="k">val</span> <span class="n">age1</span>      <span class="k">=</span> <span class="mi">35</span>
     <span class="k">val</span> <span class="n">account1</span>  <span class="k">=</span> <span class="mi">1234567890L</span>
@@ -523,7 +523,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
     <span class="k">val</span> <span class="n">tuple1</span>    <span class="k">=</span> <span class="o">(</span><span class="s">"john doe"</span><span class="o">,</span> <span class="mi">35</span><span class="o">,</span> <span class="mi">123456789L</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="mf">20.5</span> <span class="o">)</span>
 	
 
-    <span class="c1">// Explicit
+    <span class="c1">// Specified types
 </span>    <span class="k">val</span> <span class="n">name2</span>     <span class="k">:</span><span class="kt">String</span>        <span class="o">=</span> <span class="s">"john doe"</span>
     <span class="k">val</span> <span class="n">age2</span>      <span class="k">:</span><span class="kt">Int</span>           <span class="o">=</span> <span class="mi">35</span>
     <span class="k">val</span> <span class="n">account2</span>  <span class="k">:</span><span class="kt">Long</span>          <span class="o">=</span> <span class="mi">1234567890L</span>
@@ -841,13 +841,13 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// 1. for loop inclusive ( 5 included )
-</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">){</span>
+</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o"> ) {</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
     <span class="o">}</span>
 	
 
     <span class="c1">// 2. for loop exclusive ( 5 excluded )
-</span>    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o">){</span>
+</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o"> ) {</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
     <span class="o">}</span>
 	
@@ -855,21 +855,21 @@ in Scala. For more in-depth documentation please refer to the resources below.</
     <span class="c1">// 3. for loop with setup using values
 </span>    <span class="k">val</span> <span class="n">start</span> <span class="k">=</span> <span class="mi">1</span>
     <span class="k">val</span> <span class="n">end</span> <span class="k">=</span> <span class="mi">5</span>
-    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o">){</span>
+    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o"> ) {</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
     <span class="o">}</span>
 	
 
     <span class="c1">// 4. for loop over collection
 </span>    <span class="k">val</span> <span class="n">words</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a1"</span><span class="o">,</span> <span class="s">"b2"</span><span class="o">,</span> <span class="s">"c3"</span><span class="o">,</span> <span class="s">"d4"</span><span class="o">,</span> <span class="s">"e5"</span><span class="o">)</span>
-    <span class="k">for</span><span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o">){</span>
+    <span class="k">for</span> <span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o"> ) {</span>
       <span class="n">println</span><span class="o">(</span> <span class="n">word</span> <span class="o">)</span>
     <span class="o">}</span>
 	
 
     <span class="c1">// 5. while loop
 </span>    <span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">0</span>
-    <span class="k">while</span><span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o">){</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o"> ) {</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
       <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="o">}</span>
@@ -969,8 +969,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// NOTE: There are multiple ways to iterate over a collection
-</span>    <span class="c1">// without using traditional "while" or "for" loops with variables
-</span>    
+</span>    <span class="c1">// without using traditional "while" or "for" loops with variables</span>    
+    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
+    
     <span class="c1">// Case 1: Indices
 </span>    <span class="n">items</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">ndx</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">items</span><span class="o">(</span><span class="n">ndx</span><span class="o">)))</span>
     <span class="n">println</span><span class="o">()</span>
@@ -1218,7 +1219,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-functions-hof-callbyname">HOF: Call by name</h2>
-<p>The call by name feature allows passing in a code block to a function in a concise approach.</p>
+<p>The call by name feature allows passing in a code block to a function, such that the code block is only evaluated when used <strong>inside the function</strong>. It has also has a slightly more concise approach to passing a 0 parameter code block. </p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// CALL BY NAME: takes a code block using syntax : =&gt;
 </span>  <span class="k">def</span> <span class="n">refactor1</span><span class="o">(</span><span class="n">block</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
@@ -1255,7 +1256,9 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> This provides a way to have parameters evaluated only when used in the function, and also a little bit of clean syntax for creating custom control structures.</p>
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 
@@ -1453,12 +1456,10 @@ of specifying the access level right at the constructor level.</p>
 <p>Case classes provide a convenient way to make all members of the class readonly/vals. Boiler-plate code such as copy methods are automatically created,
 and they are used for pattern-matching.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  
   <span class="c1">// CASE Classes
-</span>  <span class="c1">// 1. members in constructor are immutable by default
+</span>  <span class="c1">// 1. members in constructor are immutable by default ( e.g. val )
 </span>  <span class="c1">// 2. copy support built-in
 </span>  <span class="c1">// 3. useful for pattern-matching ( explained later )
-</span>  <span class="c1">// 
 </span>  <span class="c1">// Just add "case" before the class name
 </span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">email</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span>
   <span class="o">{</span>
@@ -1477,7 +1478,11 @@ and they are used for pattern-matching.</p>
   
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> You can declare members in the case class constructor to also be <strong>var</strong>. However, if you are incorporating functional programming, then you should avoid vars in case classes. 
+	Also, you should <strong>generally</strong> avoid using default values for parameters in case classes. The reasoning is that if you add/remove a field later on, you <strong>may</strong> easily break existing code by having the constructor still work with different sequence of similarly typed parameters but which have different meanings.</p>
+</div>
+<br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 
@@ -1547,30 +1552,32 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 <h1>6. Misc</h1>
 <hr/>
 <h2 id="scala-apply">Apply</h2>
-<p>By using object classes ( see above ), you can create factory methods for a class removing the need for "new"</p>
+<p>By using <strong>object</strong> classes with an <strong>apply</strong> method, you can call the apply method simply using the name of the object. The apply method can act like a factory method while removing the need for using the "new" keyword.<br/></p>
+
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="c1">// Represents an environment ( e.g. "qa1", "qa" environment )
 </span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">key</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="o">{</span>
   
   <span class="o">}</span>
   
-  
-  <span class="k">object</span> <span class="nc">EnvItem</span>
-  <span class="o">{</span>
+  <span class="c1">// Object class with apply ( acts as a factory method to build an EnvItem )</span>  
+  <span class="k">object</span> <span class="nc">EnvItem</span> <span class="o">{</span>
     <span class="k">def</span> <span class="n">apply</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">EnvItem</span> <span class="o">=</span> <span class="o">{</span>
       <span class="nc">EnvItem</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">env</span><span class="o">,</span> <span class="n">s</span><span class="s">"$name.$env"</span><span class="o">)</span>
     <span class="o">}</span>
   <span class="o">}</span>
 
   
-  <span class="c1">// Build up with class constructor ( key = "name"."mode" )
+  <span class="c1">// 1. Build up with class constructor ( key = "name"."mode" )
 </span>  <span class="k">val</span> <span class="n">qa1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">,</span> <span class="s">"dev1.env"</span><span class="o">)</span>
   
-  <span class="c1">// Build up with .apply ( do NOT need "new" )
+  <span class="c1">// 2. Build up with object apply ( do NOT need "new" )
 </span>  <span class="k">val</span> <span class="n">qa2</span> <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">)</span>
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> When you have a class implemented using both the standard <strong>class</strong> keyword and also a corresponding <strong>object</strong> keyword, the object is considered the <strong>Companion object</strong> to the class.</p>
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-immutable">Immutable</h2>
@@ -1596,7 +1603,7 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-option">Option</h2>
-<p>Option classes are used for nullable values to represent if there is a value ( Some ) or not ( None )</p>
+<p>Option classes can be used to "wrap" values and to represent if there is a value ( Some ) or not ( None ). This allows for avoiding nulls in code.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// Value
 </span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
@@ -1647,7 +1654,9 @@ It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to comp
 
 </code></pre>
 </div>
-
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> The concept behind Option is one the fundamentals of functional programming. It offers not only a way to avoid nulls, but the ability to "map" or convert the value inside an option to another option, and to be able to "chain" a sequence of operations that also involve usage of Option.</p>
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 
