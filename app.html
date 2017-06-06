@@ -182,23 +182,23 @@
 					</tr>
 					<tr> 
 						<td><strong>1. Args</strong></td>
-						<td><a class="url-ch" href="mod-args.html">Arguments</a> from command line ( which can override some config settings )
+						<td><a class="url-ch" href="scala-mod-args.html">Arguments</a> from command line ( which can override some config settings )
 						</td>
 						<td>-env=dev -log.level=info -region=ny</td>
 					</tr>
 					<tr> 
 						<td><strong>2. Envs</strong></td>
-						<td><a class="url-ch" href="mod-env.html">Environment</a> selection and validation support</td>
+						<td><a class="url-ch" href="scala-mod-env.html">Environment</a> selection and validation support</td>
 						<td>local, dev, qa, stg, pro</td>
 					</tr>
 					<tr> 
 						<td><strong>3. Logs</strong></td>
-						<td><a class="url-ch" href="mod-logger.html">Logging</a> and error handling ( any log provider can be easily added )</td>
+						<td><a class="url-ch" href="scala-mod-logger.html">Logging</a> and error handling ( any log provider can be easily added )</td>
 						<td>console / file logger, custom logger</td>
 					</tr>
 					<tr> 
 						<td><strong>4. Config</strong></td>
-						<td><a class="url-ch" href="mod-config.html">Configuration</a> files for each environment ( with support for config inheritance )</td>
+						<td><a class="url-ch" href="scala-mod-config.html">Configuration</a> files for each environment ( with support for config inheritance )</td>
 						<td>env.conf, env.local.conf, env.qa.conf</td>
 					</tr>
 					<tr> 
@@ -208,7 +208,7 @@
 					</tr>
 					<tr> 
 						<td><strong>6. Encryption</strong></td>
-						<td><a class="url-ch" href="mod-encrypt.html">Encryption</a>  and decryption support</td>
+						<td><a class="url-ch" href="scala-mod-encrypt.html">Encryption</a>  and decryption support</td>
 						<td>Using AES</td>
 					</tr>
 					<tr> 
@@ -218,12 +218,12 @@
 					</tr>
 					<tr> 
 						<td><strong>8. Context</strong></td>
-						<td><a class="url-ch" href="mod-ctx.html">Application Context</a> to contain and provide access to many services</td>
+						<td><a class="url-ch" href="scala-mod-ctx.html">Application Context</a> to contain and provide access to many services</td>
 						<td>encryptor, logger, settings, environment, etc</td>
 					</tr>
 					<tr> 
 						<td><strong>9. Help</strong></td>
-						<td><a class="url-ch" href="mod-info.html">App Info</a>, version, and command line args can be displayed</td>
+						<td><a class="url-ch" href="scala-mod-info.html">App Info</a>, version, and command line args can be displayed</td>
 						<td>on command line type {app} ? | help | about </td>
 					</tr>
 					<tr> 
@@ -519,7 +519,7 @@
 				<h1 id="app-env">2. Environments</h1>
 				<p>You can setup different environments ( local, dev, qa1, qa2, etc ) for your application and have the app validate, describe, and also load the corresponding config file for the environment.<p>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-env.html" class="url-ch">Env</a></strong> component in utils to setup logical application environments such as local, dev, qa, uat, live.
+					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-env.html" class="url-ch">Env</a></strong> component in utils to setup logical application environments such as local, dev, qa, uat, live.
 					</p>
 				</div>
 				<h3>a) Concept</h3>
@@ -663,7 +663,7 @@
 				<div class="alert alert-info text-left" role="alert">
 					<p><i class="fa fa-info-circle"></i></p>
 					<ol>					  
-					  <li>You can create custom environments, refer to <strong><a href="mod-env.html" class="url-ch">Env</a></strong> for more info</li>
+					  <li>You can create custom environments, refer to <strong><a href="scala-mod-env.html" class="url-ch">Env</a></strong> for more info</li>
 					  <li><strong>AppFuncs.scala</strong> contains misc convenience functions used in the App component.<strong></strong></li>
 					</ol>
 				</div>
@@ -678,7 +678,7 @@
 				All the environment configs are located in the <strong>resources</strong> directory. Slate Kit supports inherited configs, so you can setup your env.dev.conf to inherit from env.conf.
 				</p>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-config.html" class="url-ch">Config</a></strong> component in utils to load and access config files.
+					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-config.html" class="url-ch">Config</a></strong> component in utils to load and access config files.
 					</p>
 				</div>
 				<h3>a) Concept</h3>
@@ -814,7 +814,7 @@
 					</ol>
 				</div>
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-				<a href="mod-config.html" class="more"><span class="btn btn-primary">See config component for more info</span></a>
+				<a href="scala-mod-config.html" class="more"><span class="btn btn-primary">See config component for more info</span></a>
 				<br/><br/><br/>
             </div>	
 			<div>			
@@ -906,7 +906,7 @@
 					<ol>
 					  <li>It is recommended to <strong>encrypt</strong> settings ( see the config component in utils for more info )</li>
 					  <li>It is also recommended to store <strong>Database</strong>, <strong>AWS</strong> and other sensitive settings in separate files in the <strong>user directory</strong></li>
-					   <li>Check the <strong><a class="url-ch" href="mod-config.html">Config</a></strong> component for more examples of using config files, encryption, and getting database settings</li>
+					   <li>Check the <strong><a class="url-ch" href="scala-mod-config.html">Config</a></strong> component for more examples of using config files, encryption, and getting database settings</li>
 					</ol>
 				</div>
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -918,7 +918,7 @@
 				<p>You can setup command line args for your application by building an argument schema. 
 				This uses the <strong>Args</strong> component from Slate Kit Utilities</p>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-args.html" class="url-ch">Args</a></strong> component in utils for parsing command line arguments.
+					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-args.html" class="url-ch">Args</a></strong> component in utils for parsing command line arguments.
 					</p>
 				</div>
 				
@@ -957,7 +957,7 @@
 				<p>You can add information about an app which can be displayed in command line help. <br/>There are 2 ways of doing this: ( see below ).</p>
 								
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-info.html" class="url-ch">About</a></strong> component to the Info package of the utils.
+					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-info.html" class="url-ch">About</a></strong> component to the Info package of the utils.
 					</p>
 				</div>
 				
@@ -1066,7 +1066,7 @@
 				<p>Every application ( Console, CLI, Server ) is setup with a AppContext that contains many common services.
 				</p>				
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="mod-ctx.html" class="url-ch">Context</a></strong> component to contain common dependencies and services.
+					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-ctx.html" class="url-ch">Context</a></strong> component to contain common dependencies and services.
 					</p>
 				</div>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
@@ -1288,7 +1288,7 @@
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Context</strong></td>
-						<td class="col-sm-6">Building up the <strong><a href="mod-ctx.html" class="url-ch">Context</a></strong> for your application</td>
+						<td class="col-sm-6">Building up the <strong><a href="scala-mod-ctx.html" class="url-ch">Context</a></strong> for your application</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Help</strong></td>
