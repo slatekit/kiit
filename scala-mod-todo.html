@@ -68,17 +68,17 @@
 		
 		<section id="codeExample" class="section" >
 			<div class="container">
-				<h1 id="folders">Folders</h1>
+				<h1 id="todo">Todo</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Standardized application folder setup; includes conf, cache, inputs, logs, outputs</td>
+      <td>A programmatic approach to marking and tagging code that is strongly typed and consistent</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-03-12T23:33:48.980</td>
+      <td>2017-06-05T23:25:00.701</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -90,19 +90,19 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common.info</td>
+      <td>slate.common</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.info.Folders.scala</td>
+      <td>slate.common.Todo.scala</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/info">/src/lib/scala/Slate.Common/src/main/scala/slate/common/info</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common">/src/lib/scala/Slate.Common/src/main/scala/slate/common/common</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Folders.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Folders.scala</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Todo.scala">/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Todo.scala</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -113,14 +113,14 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slate.common.Result</span>
-<span class="k">import</span> <span class="nn">slate.common.app.LocationUserDir</span>
-<span class="k">import</span> <span class="nn">slate.common.info.Folders</span>
+</span>
+<span class="k">import</span> <span class="nn">slate.common.Result</span>
+<span class="k">import</span> <span class="nn">slate.common.Todo._</span>
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
-<span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+</span><span class="k">import</span> <span class="nn">slate.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slate.common.results.ResultSupportIn</span>
 
 
 </code></pre>
@@ -136,52 +136,25 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
+    <span class="c1">// About: Strongly typed, structured representation of code notes/tasks
+</span>    <span class="c1">// This is in code to enforce consistent usage and to be able
+</span>    <span class="c1">// to track code usages
+</span>
+    <span class="c1">// Use case 1: Implement
+</span>    <span class="n">implement</span><span class="o">(</span><span class="s">"Component 1"</span><span class="o">,</span> <span class="s">"This code needs further error handling"</span> <span class="o">)</span>
 
-    <span class="c1">// CASE 1: Build a folder structure for an application
-</span>    <span class="c1">// Explicitly indicate user-directory with the following folder structure
-</span>    <span class="c1">// NOTE: Slate Kit based applications are setup this way.
-</span>    <span class="c1">//
-</span>    <span class="c1">// /c/users/{user}/
-</span>    <span class="c1">//  - company-1
-</span>    <span class="c1">//    - department-1
-</span>    <span class="c1">//      - app-1
-</span>    <span class="c1">//        - conf
-</span>    <span class="c1">//        - cache
-</span>    <span class="c1">//        - inputs
-</span>    <span class="c1">//        - logs
-</span>    <span class="c1">//        - outputs
-</span>    <span class="k">val</span> <span class="n">folders</span> <span class="k">=</span> <span class="nc">Folders</span><span class="o">(</span>
-      <span class="n">location</span> <span class="k">=</span> <span class="nc">LocationUserDir</span><span class="o">,</span>
-      <span class="n">home</span>     <span class="k">=</span> <span class="nc">System</span><span class="o">.</span><span class="n">getProperty</span><span class="o">(</span><span class="s">"user.dir"</span><span class="o">),</span>
-      <span class="n">root</span>     <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"company-1"</span><span class="o">),</span>
-      <span class="n">group</span>    <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"department-1"</span><span class="o">),</span>
-      <span class="n">app</span>      <span class="k">=</span> <span class="s">"app-1"</span><span class="o">,</span>
-      <span class="n">cache</span>    <span class="k">=</span> <span class="s">"cache"</span><span class="o">,</span>
-      <span class="n">inputs</span>   <span class="k">=</span> <span class="s">"input"</span><span class="o">,</span>
-      <span class="n">logs</span>     <span class="k">=</span> <span class="s">"logs"</span><span class="o">,</span>
-      <span class="n">outputs</span>  <span class="k">=</span> <span class="s">"output"</span><span class="o">,</span>
-      <span class="n">conf</span>     <span class="k">=</span> <span class="s">"conf"</span>
-    <span class="o">)</span>
+    <span class="c1">// Use case 2: Supply a block of code to refactor
+</span>    <span class="n">refactor</span><span class="o">(</span><span class="s">"Feature 2"</span><span class="o">,</span> <span class="s">"Refactor logic to handle empty values"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span>
+      <span class="c1">// Your code to refactor goes here
+</span>    <span class="o">}))</span>
 
-    <span class="c1">// CASE 2: Build a folder structure for an application
-</span>    <span class="c1">// Same as Case 1 above but using a short-hand approach
-</span>    <span class="k">val</span> <span class="n">folders2</span> <span class="k">=</span> <span class="nc">Folders</span><span class="o">.</span><span class="n">userDir</span><span class="o">(</span>
-      <span class="n">root</span>     <span class="k">=</span> <span class="s">"company-1"</span><span class="o">,</span>
-      <span class="n">group</span>    <span class="k">=</span> <span class="s">"department-1"</span><span class="o">,</span>
-      <span class="n">app</span>      <span class="k">=</span> <span class="s">"app-1"</span>
-    <span class="o">)</span>
+    <span class="c1">// Use case 3: Mark a bug
+</span>    <span class="n">bug</span><span class="o">(</span><span class="s">"Component 3"</span><span class="o">,</span> <span class="s">"invalid data, bug fix needed"</span><span class="o">,</span> <span class="s">"JIRA:12434"</span> <span class="o">)</span>
 
-    <span class="c1">// CASE 3: Create the folders if they do not exist
-</span>    <span class="n">folders</span><span class="o">.</span><span class="n">create</span><span class="o">()</span>
-
-    <span class="c1">// CASE 4: Get the individual paths to the folders
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"app    :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToApp</span><span class="o">())</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"cache  :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToCache</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"conf   :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToConf</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"input  :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToInputs</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"logs   :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToLogs</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"output :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToOutputs</span><span class="o">)</span>
-
+    <span class="c1">// Use case 4: Code removal tag
+</span>    <span class="n">remove</span><span class="o">(</span><span class="s">"Story 123"</span><span class="o">,</span> <span class="s">"@kishore, this code no longer needed"</span><span class="o">,</span> <span class="nc">Some</span><span class="o">(</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span>
+      <span class="c1">// Your code to remove here.
+</span>    <span class="o">}))</span>
     
 
 </code></pre>
