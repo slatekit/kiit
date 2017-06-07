@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Utilities</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Utilities</h1>
+                <h3>
+                  The ultimate utility belt for your dev needs.<br />
+                </h3>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="validations">Validations</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A set of validation related components, simple validation checks, RegEx checks, error collection and custom validators</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2017-06-06T23:36:25.061</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>1.4.0</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slate.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slate.common.validation</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slate.common.validation.ValidationFuncs.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/masterslate-common/src/main/kotlin/slatekit/common/validation">slate-common/src/main/kotlin/slatekit/common/validation</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_Validation.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_Validation.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.common.RefField</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isAlpha</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isAlphaLowerCase</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isAlphaNumeric</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isAlphaUpperCase</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isEmail</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isEmpty</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isMinLength</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isNumeric</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isPhoneUS</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isUrl</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncs.isZipCodeUS</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationFuncsExt.isEmpty</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.Validator</span>
+
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.ValidationResults</span>
+<span class="k">import</span> <span class="nn">slatekit.common.validations.Validations.collect</span>
+
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="c1">// CASE 1: Simple true/false checks
+</span>  <span class="n">fun</span> <span class="n">showSimple</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+
+    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">1</span><span class="kt">:</span> <span class="kt">Simple</span> <span class="kt">true/false</span> <span class="kt">checks</span><span class="err">"</span><span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isEmpty</span>      <span class="o">(</span><span class="err">""</span><span class="o">)</span>              <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isNotEmpty</span>   <span class="o">(</span><span class="err">"123"</span><span class="o">)</span>           <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isLength</span>     <span class="o">(</span><span class="err">"123"</span><span class="o">,</span> <span class="err">3</span><span class="o">)</span>        <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isMinLength</span>  <span class="o">(</span><span class="err">"123"</span><span class="o">,</span> <span class="err">3</span><span class="o">)</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isMaxLength</span>  <span class="o">(</span><span class="s">"12"</span> <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isMinValue</span>   <span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isMaxValue</span>   <span class="o">(</span><span class="mi">99</span> <span class="o">,</span> <span class="mi">100</span><span class="o">)</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">hasDigits</span>    <span class="o">(</span><span class="s">"a1b2c3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">hasCharsLCase</span><span class="o">(</span><span class="s">"a1b2c3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">hasCharsUCase</span><span class="o">(</span><span class="s">"A1B2C3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">hasSymbols</span>   <span class="o">(</span><span class="s">"A$B%C^"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="c1">// CASE 2: Simple RegEx based checks returning true/false
+</span>  <span class="n">fun</span> <span class="n">showSimpleRegEx</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+
+    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">2</span><span class="kt">:</span> <span class="kt">Simple</span> <span class="kt">RegEx</span> <span class="kt">based</span> <span class="kt">checks</span> <span class="kt">returning</span> <span class="kt">true/false</span><span class="err">"</span><span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isEmail</span>         <span class="o">(</span><span class="err">"</span><span class="kt">wonderwoman@amazonian.com</span><span class="err">"</span><span class="o">))</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isUrl</span>           <span class="o">(</span><span class="err">"</span><span class="kt">http://slatekit.com</span><span class="err">"</span><span class="o">)</span> <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlpha</span>         <span class="o">(</span><span class="err">"</span><span class="kt">abcDEF</span><span class="err">"</span><span class="o">)</span>      <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaUpperCase</span><span class="o">(</span><span class="err">"</span><span class="kt">ABCDEFG</span><span class="err">"</span><span class="o">)</span>     <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaLowerCase</span><span class="o">(</span><span class="err">"</span><span class="kt">abcdefg</span><span class="err">"</span><span class="o">)</span>     <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaNumeric</span>  <span class="o">(</span><span class="err">"</span><span class="kt">abCD12</span><span class="err">"</span><span class="o">)</span>      <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isNumeric</span>       <span class="o">(</span><span class="err">"123456"</span><span class="o">)</span>      <span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isPhoneUS</span>       <span class="o">(</span><span class="err">"123</span><span class="kt">-</span><span class="err">456</span><span class="kt">-</span><span class="err">7890"</span><span class="o">))</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isZipCodeUS</span>     <span class="o">(</span><span class="err">"12345"</span><span class="o">)</span>       <span class="o">)</span>
+    <span class="kt">println</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="c1">// CASE 3: Same checks above but these return a ValidationResult
+</span>  <span class="c1">// which contains success(true/false), message, reference, and status code
+</span>  <span class="c1">// You can supply a reference to a field/position refer to common\Reference.scala
+</span>  <span class="n">fun</span> <span class="n">showValidationResult</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+
+    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">3</span><span class="kt">:</span> <span class="kt">Same</span> <span class="kt">checks</span> <span class="kt">above</span> <span class="kt">but</span> <span class="kt">these</span> <span class="kt">return</span> <span class="kt">a</span> <span class="kt">ValidationResult</span><span class="err">"</span><span class="o">)</span>
+    <span class="kt">println</span><span class="o">(</span> <span class="kt">isEmpty</span>       <span class="o">(</span><span class="err">""</span>      <span class="o">,</span>    <span class="kt">RefField</span><span class="o">(</span><span class="err">"</span><span class="kt">Email</span><span class="err">"</span>   <span class="o">)</span> <span class="o">,</span> <span class="err">"</span><span class="kt">Email</span> <span class="kt">is</span> <span class="kt">required</span><span class="err">"</span>   <span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isAlphaNumeric</span><span class="o">(</span><span class="s">"abCD12"</span><span class="o">,</span>    <span class="nc">RefField</span><span class="o">(</span><span class="s">"Password"</span><span class="o">)</span> <span class="o">,</span> <span class="s">"Password is invalid"</span> <span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isZipCodeUS</span>   <span class="o">(</span><span class="s">"12345"</span> <span class="o">,</span>    <span class="nc">RefField</span><span class="o">(</span><span class="s">"ZipCode"</span> <span class="o">)</span> <span class="o">,</span> <span class="s">"ZipCode is required"</span> <span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">isMinLength</span>   <span class="o">(</span><span class="s">"12"</span>    <span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Name"</span>    <span class="o">)</span> <span class="o">,</span> <span class="s">"Min 3 chars required"</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="c1">// CASE 4: Collect errors via thunks(0 parameter functions)
+</span>  <span class="n">fun</span> <span class="n">showErrorCollection</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+
+    <span class="kt">val</span> <span class="kt">password</span> <span class="o">=</span> <span class="err">"</span><span class="kt">abc123XYZ</span><span class="err">"</span>
+    <span class="kt">val</span> <span class="kt">reference</span> <span class="o">=</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Email"</span><span class="o">)</span>
+
+    <span class="n">println</span><span class="o">(</span><span class="s">"CASE 4: Collect errors via thunks(0 parameter functions)"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="n">errors</span> <span class="k">=</span> <span class="n">collect</span> <span class="o">(</span>
+      <span class="n">listOf</span> <span class="o">(</span>
+        <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">isLength</span>      <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must be 9 characters"</span><span class="o">)</span>         <span class="o">}</span> <span class="o">,</span>
+        <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasCharsLCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="o">)}</span> <span class="o">,</span>
+        <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasCharsUCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="o">)}</span> <span class="o">,</span>
+        <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasDigits</span>     <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 digits"</span><span class="o">)</span>           <span class="o">}</span>
+      <span class="o">)</span>
+    <span class="o">)</span>
+    <span class="n">errors</span><span class="o">.</span><span class="n">forEach</span><span class="o">{</span> <span class="n">err</span> <span class="o">-&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">err</span> <span class="o">)</span> <span class="o">}</span>
+    <span class="n">println</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="c1">// Case 5: Custom validator object
+</span>  <span class="n">data</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="k">val</span> <span class="n">email</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">password</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+
+  <span class="c1">// Extend from Validation[T]
+</span>  <span class="k">class</span> <span class="nc">UserValidator</span> <span class="k">:</span> <span class="kt">Validator&lt;User&gt;</span><span class="o">()</span> <span class="o">{</span>
+
+    <span class="c1">// Implement your validation here and collect errors
+</span>    <span class="c1">// The validation results represents a contain for success, message, code, and errors.
+</span>    <span class="k">override</span> <span class="n">fun</span> <span class="n">validate</span><span class="o">(</span><span class="n">item</span><span class="k">:</span><span class="kt">User</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResults</span> <span class="o">{</span>
+
+      <span class="kt">val</span> <span class="kt">password</span> <span class="o">=</span> <span class="err">"</span><span class="kt">abc123XYZ</span><span class="err">"</span>
+      <span class="kt">val</span> <span class="kt">reference</span> <span class="o">=</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Email"</span><span class="o">)</span>
+
+      <span class="n">println</span><span class="o">(</span><span class="s">"Case 5: Custom validator object"</span><span class="o">)</span>
+      <span class="k">val</span> <span class="n">errors</span> <span class="k">=</span> <span class="n">collect</span> <span class="o">(</span>
+        <span class="n">listOf</span><span class="o">(</span>
+          <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">isLength</span>      <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must be 9 characters"</span><span class="o">)</span>          <span class="o">},</span>
+          <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasCharsLCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="o">)</span> <span class="o">},</span>
+          <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasCharsUCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="o">)</span> <span class="o">},</span>
+          <span class="o">{</span> <span class="o">-&gt;</span> <span class="n">hasDigits</span>     <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 digits"</span><span class="o">)</span>            <span class="o">}</span>
+        <span class="o">)</span>
+      <span class="o">)</span>
+      <span class="k">return</span> <span class="nc">ValidationResults</span><span class="o">(</span><span class="n">errors</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+
+</code></pre>
+</div>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "utils";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+  </body>
+</html>
