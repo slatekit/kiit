@@ -68,7 +68,7 @@
         <section id="features" class="section section-center  section-features">
           <div class="container">
 			<div class="alert alert-info" role="alert">
-				<h3>Core architecture components</h3>
+				<h3>Architecture components</h3>
 				<h5>The <strong><a class="url-ch" href="overview.html#project-slate-core">slate.core</a></strong> project contains <strong>abstractions</strong> and <strong>implementations</strong> for all components below. 
 				 <br/>Queues, file storage, data access are built for AWS, Linux, MySQL</h5>
 			</div>
@@ -79,21 +79,21 @@
             <div class="row">
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-					<a href="scala-mod-api.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
+					<a href="scala-core-apis.html"><img src="themes/start/images/white/webapi.png" width="80" alt=""></a>
 				</div>
-                <a href="scala-mod-api.html"><h4>APIs</h4></a>
+                <a href="scala-core-apis.html"><h4>APIs</h4></a>
                 <p>An <strong>protocol independent</strong> approach to building APIs in Slate so they run as Web APIs or on the CLI. 
-				See <a class="url-ch" href="apis-detail.html">concepts</a>, <a class="url-ch" href="scala-mod-api.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
+				See <a class="url-ch" href="scala-core-apis.html">concepts</a>, <a class="url-ch" href="scala-mod-api.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
 				</p>
               </div>
 			  
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-					<a href="scala-mod-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
+					<a href="scala-core-app.html"><img src="themes/start/images/white/desktop.png" width="80" alt=""></a>
 				</div>
-                <a href="scala-mod-app.html"><h4>App</h4></a>
+                <a href="scala-core-app.html"><h4>App</h4></a>
                 <p>A <strong>base App</strong> for Console, CLI, Batch, or Server apps with support for environments, logging, configs and more.
-				See <a class="url-ch" href="app.html">concepts</a>, <a class="url-ch" href="scala-mod-app.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
+				See <a class="url-ch" href="scala-core-app.html">concepts</a>, <a class="url-ch" href="scala-mod-app.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.
 				</p>
               </div>
 
@@ -168,11 +168,11 @@
 			<div class="row">  
 			  <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-					<a href="orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
+					<a href="scala-core-orm.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>
 				</div>
-                <a href="orm.html"><h4>ORM</h4></a>
+                <a href="scala-core-orm.html"><h4>ORM</h4></a>
                 <p>Light-weight domain-driven ORM to map entities to tables. And a database utility for querying, updating data.
-				See <a class="url-ch" href="orm.html">ORM</a>, <a class="url-ch" href="scala-mod-data.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
+				See <a class="url-ch" href="scala-core-orm.html">ORM</a>, <a class="url-ch" href="scala-mod-data.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
 				</p>
               </div>
 			  
@@ -186,11 +186,11 @@
 			  
               <div class="col-md-4 col-sm-6">
                 <div class="icon-wrap">
-					<a href="server.html"><img src="themes/start/images/white/server.png" width="80" alt=""></a>
+					<a href="scala-core-server.html"><img src="themes/start/images/white/server.png" width="80" alt=""></a>
 				</div>
-                <a href="server.html"><h4>Server</h4></a>
+                <a href="scala-core-server.html"><h4>Server</h4></a>
                 <p>A base Web Server to host your <a class="url-ch" href="scala-mod-server.html">protocol independent APIs</a> with built in support for many features. 
-				See <a class="url-ch" href="server.html">concepts</a>, <a class="url-ch" href="scala-mod-server.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
+				See <a class="url-ch" href="scala-core-server.html">concepts</a>, <a class="url-ch" href="scala-mod-server.html">example</a> and <a class="url-ch" href="releases.html#release-downloads">sample apps</a>.					
 				</p>
               </div>
 			</div>
@@ -222,7 +222,35 @@
         </section>
         <section id="project_references" class="section">
 			<div class="container">
-				<div>
+				<div class="row">
+				<!--
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Component</strong></td>
+						<td class="col-sm-2"><strong>Jar</strong></td>
+						<td class="col-sm-3"><strong>Package</strong></td>
+						<td class="col-sm-2"><strong>More</strong></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-2"><strong>API</strong></td>
+						<td class="col-sm-2">slatekit.api.jar</td>
+						<td class="col-sm-3">slatekit.apis</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-2"><strong>App</strong></td>
+						<td class="col-sm-2">slatekit.core.jar</td>
+						<td class="col-sm-3">slatekit.core.app</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>CLI</strong></td>
+						<td class="col-sm-2">slatekit.core.jar</td>
+						<td class="col-sm-3">slatekit.core.shell</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+				</table>
+				-->
 					<h2>Projects</h2>
 					<p>All these items are available in the following projects:</p>
 					<ul>
