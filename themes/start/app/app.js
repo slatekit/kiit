@@ -126,6 +126,8 @@ var codeHelixMeta = {
 	{ name: "Overview"      ,  page: "overview.html"    , children: null },
 	{ name: "Setup"         ,  page: "scala-setup.html"       , children: null },
 	{ name: "Architecture"  ,  page: "infra.html"       , children: null },
+	{ name: "Utilities"         ,  page: "utils.html"       , children: null },
+	{ name: "Features"      ,  page: "features.html"    , children: null },
 	{ name: "Components"    ,  page: "infra.html"       , children: [	
 			{ name: "App"           ,  page: "scala-core-app.html"         , children: null },
 			{ name: "APIs"          ,  page: "scala-core-apis.html" , children: null },
@@ -133,8 +135,6 @@ var codeHelixMeta = {
 			{ name: "ORM"           ,  page: "scala-core-orm.html"         , children: null }
 		]
 	},
-	{ name: "Utils"         ,  page: "utils.html"       , children: null },
-	{ name: "Extensions"      ,  page: "features.html"    , children: null },
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },	
 	{ name: "More"          ,  page: "-"                , children: [
 			{ name: "Standards"        ,  page: "scala-standards.html"    },
