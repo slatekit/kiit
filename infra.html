@@ -69,7 +69,7 @@
           <div class="container">
 			<div class="alert alert-info" role="alert">
 				<h3>Architecture components</h3>
-				<h5>The <strong><a class="url-ch" href="overview.html#project-slate-core">slate.core</a></strong> project contains <strong>abstractions</strong> and <strong>implementations</strong> for all components below. 
+				<h5> Pre-built <strong>abstractions</strong> and <strong>implementations</strong> for all components below. 
 				 <br/>Queues, file storage, data access are built for AWS, Linux, MySQL</h5>
 			</div>
 			<div class="row">				
@@ -222,46 +222,72 @@
         </section>
         <section id="project_references" class="section">
 			<div class="container">
-				<div class="row">
-				<!--
-				<table class="table table-bordered table-striped">
-					<tr class="">
-						<td class="col-sm-2"><strong>Component</strong></td>
-						<td class="col-sm-2"><strong>Jar</strong></td>
-						<td class="col-sm-3"><strong>Package</strong></td>
-						<td class="col-sm-2"><strong>More</strong></td>
-					</tr>
-					<tr class="">
-						<td class="col-sm-2"><strong>API</strong></td>
-						<td class="col-sm-2">slatekit.api.jar</td>
-						<td class="col-sm-3">slatekit.apis</td>
-						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
-					</tr>
-					<tr class="">
-						<td class="col-sm-2"><strong>App</strong></td>
-						<td class="col-sm-2">slatekit.core.jar</td>
-						<td class="col-sm-3">slatekit.core.app</td>
-						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>CLI</strong></td>
-						<td class="col-sm-2">slatekit.core.jar</td>
-						<td class="col-sm-3">slatekit.core.shell</td>
-						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
-					</tr>
-				</table>
-				-->
-					<h2>Projects</h2>
-					<p>All these items are available in the following projects:</p>
-					<ul>
-						<li><a class="url-ch" href="overview.html#project-slate-common">slate.common</a></li>
-						<li><a class="url-ch" href="overview.html#project-slate-core">slate.core</a></li>
-						<li><a class="url-ch" href="overview.html#project-slate-cloud">slate.cloud</a></li>
-						<li><a class="url-ch" href="overview.html#project-slate-server">slate.server</a></li>
-					</ul>
-					<p>You can view more information on projects available in SlateKit in the overview page</p>
-					<a href="overview.html" class="more"><span class="btn btn-primary">See overview</span></a>
-					<br/><br/>
+				<div class="row">					
+					<div class="">
+						<div id="project-slate-core" class="thumbnail">
+							<a href="infra.html"><img src="themes/start/images/white/build.png" alt="..." width="80"></a>
+							<div class="caption">
+								<div class="text-center">
+									<h3 class="align-center">Slate.Core</h3>
+									<p>Core architecture components</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td><strong>about</strong></td>
+										<td>The slatekit.core project contains <strong>most</strong> but not all of these components</td>
+									</tr>
+									<tr>
+										<td><strong>package</strong></td>
+										<td>slatekit.core</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slatekit.core.jar</td>
+									</tr>
+									<tr>
+										<td><strong>git</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core">Slatekit.Core</a></td>
+									</tr>
+									<tr>
+										<td><strong>url</strong></td>
+										<td><a class="url-ch" href="infra.html">Core</a></td>
+									</tr>
+									<tr>
+										<td><strong>docs</strong></td>
+										<td><a class="url-ch" href="docs/slate-scala-docs.zip?raw=true">download</a></td>
+									</tr>
+									<tr>
+										<td><strong>cost</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>									
+											<ul>
+												<li>slatekit.common</li>
+												<li>slatekit.entities</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>notes</strong></td>
+										<td>							
+											<ul>
+												<li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
+												<li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
+<strong>slatekit.cloud</strong>	projects</li>
+											</ul>
+										</td>
+									</tr>
+								</table>
+							</div>
+							
+							<p class=" text-center">
+								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
