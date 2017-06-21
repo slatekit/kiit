@@ -67,18 +67,63 @@
 		
 		<section id="features" class="section ">
           <div class="container">
-				
-				<div> 
-					<h1>About</h1>	
-					<p>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. It is available in <strong>Kotlin</strong> and <strong>Scala</strong>, 
-					uses <strong>Spark</strong> for Kotlin, and <strong>Akka-Http</strong> for Scala, for the Server, and works with <strong>AWS</strong> and <strong>MySql</strong>. 
-					Slate Kit is currently used to build the backend architecture for a few mobile beta apps.</a>. 
-					We have taken a simple and pragmatic approach to building the tool-kit. It is designed for <strong>simplicity</strong>, <strong>practicality</strong> and code <strong>maintainability</strong>.
-					</p>
-				</div>
-				<br/>
+								
 				<div class="alert alert-info text-center" role="alert">
 					<h3>Simple & Practical</h3><br/>
+				</div>
+				<br/>
+				<div> 
+					<h1>Slate Kit</h1>						
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td><strong>About</strong></td>
+							<td><br/>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. We have taken a simple and pragmatic approach to building the tool-kit. It is designed for <strong>simplicity</strong>, <strong>practicality</strong> and code <strong>maintainability</strong>.<br/><br/></td>
+						</tr>
+						<tr>
+							<td class="col-sm-2"><strong>Tech</strong></td>
+							<td>Built for the JVM, available in <strong>Scala</strong> and <strong>Kotlin</strong> ( coming very soon )<br/><br/>
+								<ol>
+									<li><strong>Akka-Http</strong> : As the server for Scala </li>
+									<li><strong>Spark</strong>:  As the server for Kotlin </li>
+									<li><strong>MySql</strong> : Uses MySql for data storage ( PostGres coming later )</li>
+									<li><strong>AWS</strong>: Integrates with S3, SQS for file storage and queues.</li>
+									<li><strong>Twilio</strong>: Used for SMS / Text messages</li>
+									<li><strong>SendGrid</strong>: Used for sending email</li>
+									<li><strong>Push</strong>: Integrates with Google Cloud Messaging for Android</li>
+								</ol>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Hosts</strong></td>
+							<td>You can deploy and run anywhere:<br/><br/>
+								<ol>
+									<li><strong>Cloud</strong> ( AWS, Azure, Google, Digital Ocean )</li>
+									<li><strong>Intranet</strong>: Run in a private network</li>
+									<li><strong>Locally</strong>: O`n your personal computer</li>
+								</ol>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Parts</strong></td>
+							<td>The system contains 3 parts. You can use as little or as much as you need. <br/><br/>
+								<ol>
+									<li><strong><a class="url-ch" href="utils.html">Utilities</a></strong>: A nice collection of 20+ utilities that can be used for any project.</li>
+									<li><strong><a class="url-ch" href="infra.html">Architecture</a></strong>: Over 12+ architectural components available ( API Server, CLI, ORM, and much more ) </li>
+									<li><strong><a class="url-ch" href="features.html">Features</a></strong>: Common features available out of the box such as Users, Registration, Invites, etc..</li>
+								</ol>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Uses</strong></td>
+							<td>This is essentially a SaaS ( Software as a Service ), tailored for supporting various types of Apps, such as:<br/><br/>
+								<ol>
+									<li><strong>Mobile Apps</strong>: The back-end for your mobile apps</li>
+									<li><strong>Startups</strong>: Provides a solid base architecture for start-ups</li>
+									<li><strong>Personal</strong>: Can be used for side / hobby projects</li>
+								</ol>
+							</td>
+						</tr>
+					</table>
 				</div>
 				<br/>
 				<div>
@@ -146,22 +191,16 @@
 					<table class="table table-bordered table-striped">
 						<tr>
 							<td class="col-sm-3"><strong>Tech</strong></td>
-							<td>100% architecture components, utilities, server code.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-3"><strong>System</strong></td>
-							<td>Designed for MySql, AWS ( S3, SQS ), Akka-Http.
-							</td>
+							<td>Built for the JVM, Linux/Windows, with Cloud Integration and designed to be hosted either in the cloud or locally</td>
 						</tr>
 						<tr>
 							<td><strong>Design</strong></td>
-							<td>This is designed as a modular <strong>Tool-Kit</strong> via a collection of project libraries containing components.
-								<br/>Use as little or as much as you need.
+							<td>Modular via a collection of project libraries containing components. Use as little or as much as you need.
 							</td>
 						</tr>
 						<tr>
 							<td class="col-sm-3"><strong>Standards</strong></td>
-							<td>Check our <a class="url-ch" href="standards.html">Coding Standards and approaches</a></td>
+							<td>Check our coding standards for <a class="url-ch" href="scala-standards.html">scala</a> and <a class="url-ch" href="kotlin-standards.html">kotlin</a></td>
 						</tr>
 						<tr>
 							<td class="col-sm-3"><strong>Approach</strong></td>
@@ -174,33 +213,28 @@
 						</tr>
 						<tr>
 							<td><strong>Portable</strong></td>
-							<td>Designed for low vendor lock-in via a "library" based approach.
-							<br/>This is <strong> NOT a framework</strong></td>
+							<td>Designed for low vendor lock-in via a "library" based approach. Easy to get out of this tool-kit</td>
 						</tr>
 						<tr>
 							<td><strong>Minimal</strong></td>
-							<td>Dependencies on external, 3rd-party libraries are kept to a minimum ( many are optional )</td>
-						</tr>
-						<tr>
-							<td class="col-sm-3"><strong>Style</strong></td>
-							<td>We aim for <strong>immutable</strong> data 
-								and <strong>functional programming</strong> as much as possible.<br/>
-								<br/>However, this is <strong>NOT</strong> a 100% purely functional tool-kit.
-								<br/>We also carefully avoid certain features in specific times/places in favor of simple, understandable, maintainable code.<br/>
-								</td>
-						</tr>
-						<tr>
-							<td><strong>Conventions</strong></td>
-							<td>Convention over configuration</td>
+							<td>Dependencies on external, 3rd-party libraries are kept to a minimum</td>
 						</tr>
 						<tr>
 							<td><strong>Open Source</strong></td>
-							<td>Hybrid Open-Source. All of Slate Kit is open-source except for the <a class="url-ch" href="#project-slate-ext">Slate.Ext</a> project 
+							<td>Hybrid Open-Source. Majority is open-source except for some parts of the <a class="url-ch" href="#project-slate-ext">SlateKit.Ext</a> project 
 								containing the mobile / web <a class="url-ch" href="features.html">features</a></td>
 						</tr>
 						<tr>
 							<td><strong>License</strong></td>
 							<td>Apache 2.0 : Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
+						</tr>
+						<tr>
+							<td class="col-sm-3"><strong>Style</strong></td>
+							<td>Emphasis on <strong>immutability</strong> 
+								and <strong>functional programming</strong> as much as possible.
+								<br/>However, this is <strong>NOT</strong> a 100% purely functional code base.
+								<br/>We also carefully avoid certain language features in specific times/places in favour of simple, understandable, maintainable code.<br/>
+								</td>
 						</tr>
 					</table>
 				</div>
