@@ -58,7 +58,7 @@
 
               <aside class="widget">
                 <h1 class="widget-title">Overview</h1>
-				<h3>An architecture, utility library and server backend.<br/></h3>
+				<h3>The tech stack, approach and features available in Slate Kit<br/></h3>
               </aside>
 
             </div>
@@ -69,7 +69,23 @@
           <div class="container">
 								
 				<div class="alert alert-info text-center" role="alert">
-					<h3>Simple & Practical</h3><br/>
+					<h3>Pre-built architecture for your mobile and web apps</h3><br/>
+				</div>
+				<div class="row text-center">
+					<div class="col-sm-2"><img src="themes/start/images/white/webapi.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/desktop.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/terminal.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/layers.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/mobile.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/connected.png" width="50" alt=""></div>
+					<!--
+					<div class="col-sm-2"><img src="themes/start/images/white/email.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/folders.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/speaker.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/layers.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/queue.png" width="50" alt=""></div>
+					<div class="col-sm-2"><img src="themes/start/images/white/server.png" width="50" alt=""></div>
+					-->
 				</div>
 				<br/>
 				<div> 
@@ -77,14 +93,15 @@
 					<table class="table table-bordered table-striped">
 						<tr>
 							<td><strong>About</strong></td>
-							<td><br/>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. We have taken a simple and pragmatic approach to building the tool-kit. It is designed for <strong>simplicity</strong>, <strong>practicality</strong> and code <strong>maintainability</strong>.<br/><br/></td>
+							<td><br/>Slate Kit is a tool kit, utility library, and server backend for mobile and web apps. 
+							<br/><br/></td>
 						</tr>
 						<tr>
 							<td class="col-sm-2"><strong>Tech</strong></td>
-							<td>Built for the JVM, available in <strong>Scala</strong> and <strong>Kotlin</strong> ( coming very soon )<br/><br/>
+							<td>Built for the JVM, available in <strong>Kotlin</strong> and <strong>Scala</strong><br/><br/>
 								<ol>
-									<li><strong>Akka-Http</strong> : As the server for Scala </li>
-									<li><strong>Spark</strong>:  As the server for Kotlin </li>
+									<li><strong>Spark</strong>:  Used as the Http server for Kotlin </li>
+									<li><strong>Akka-Http</strong> : Used as the Http server for Scala </li>
 									<li><strong>MySql</strong> : Uses MySql for data storage ( PostGres coming later )</li>
 									<li><strong>AWS</strong>: Integrates with S3, SQS for file storage and queues.</li>
 									<li><strong>Twilio</strong>: Used for SMS / Text messages</li>
@@ -94,28 +111,28 @@
 							</td>
 						</tr>
 						<tr>
-							<td><strong>Hosts</strong></td>
+							<td><strong>Deploy</strong></td>
 							<td>You can deploy and run anywhere:<br/><br/>
 								<ol>
 									<li><strong>Cloud</strong> ( AWS, Azure, Google, Digital Ocean )</li>
 									<li><strong>Intranet</strong>: Run in a private network</li>
-									<li><strong>Locally</strong>: O`n your personal computer</li>
+									<li><strong>Locally</strong>: On your personal computer</li>
 								</ol>
 							</td>
 						</tr>
 						<tr>
 							<td><strong>Parts</strong></td>
-							<td>The system contains 3 parts. You can use as little or as much as you need. <br/><br/>
+							<td>Slate Kit is comprised of 3 parts that are all reasonably modular. You can use as little or as much as you need. <br/><br/>
 								<ol>
-									<li><strong><a class="url-ch" href="utils.html">Utilities</a></strong>: A nice collection of 20+ utilities that can be used for any project.</li>
+									<li><strong><a class="url-ch" href="utils.html">Utilities</a></strong>: Over 20+ utilities that can be used for any application.</li>
 									<li><strong><a class="url-ch" href="infra.html">Architecture</a></strong>: Over 12+ architectural components available ( API Server, CLI, ORM, and much more ) </li>
-									<li><strong><a class="url-ch" href="features.html">Features</a></strong>: Common features available out of the box such as Users, Registration, Invites, etc..</li>
+									<li><strong><a class="url-ch" href="features.html">Features</a></strong>: Several features available out of the box such as Users, Registration, Invites, etc..</li>
 								</ol>
 							</td>
 						</tr>
 						<tr>
 							<td><strong>Uses</strong></td>
-							<td>This is essentially a SaaS ( Software as a Service ), tailored for supporting various types of Apps, such as:<br/><br/>
+							<td>This is essentially a private SaaS ( Software as a Service ), tailored for supporting various types of Apps, such as:<br/><br/>
 								<ol>
 									<li><strong>Mobile Apps</strong>: The back-end for your mobile apps</li>
 									<li><strong>Startups</strong>: Provides a solid base architecture for start-ups</li>
@@ -127,54 +144,63 @@
 				</div>
 				<br/>
 				<div>
-					<h1>Modules</h1>	
+					<h1>Components</h1>	
 					<p>Slate Kit is modular and contains many reusable components ( see list below ). 
 					One of the main design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" 
 					into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell. 
 					</p>
-					<table class="table table-bordered table-striped">
+					<table class="table table-bordered">
 						<tr>
 							<td class="col-sm-1"><strong>Component</strong></td>
+							<td class="col-sm-1"><strong>Visit</strong></td>
 							<td class="col-sm-2"><strong>About</strong></td>
 							<td class="col-md-4"><strong>Description</strong></td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="scala-core-app.html">1. App</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/desktop.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="scala-core-app.html">App</a></strong></td>
 							<td>Base Application</td>
 							<td>A powerful base app with support for command line args, environment selection, configs per environment, logging, life-cycle events, encryption, diagnostics and more</td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="scala-core-apis.html">2. APIs</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/webapi.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="scala-core-apis.html">API</a></strong></td>
 							<td>Protocol Independent APIs</td>
 							<td>Easily build protocol independent APIs using simple classes/methods with annotations, that can be hosted / run on both Slate Command Line Shell and/or as Web APIs in the Slate Server </td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="scala-mod-shell.html">3. CLI</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/terminal.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="scala-mod-shell.html">CLI</a></strong></td>
 							<td>Command Line Interface</td>
 							<td>A command line interface shell that you can extend to host your "Protocol Independent APIs" and/or hook into to handle and execute any user commands in a shell.</td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="scala-core-server.html">4. Server</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/layers.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="scala-core-orm.html">ORM</a></strong></td>
+							<td>Domain-Driven ORM</td>
+							<td>A simple, light-weight, Domain-Driven ORM to map your entities to and from database tables. MySql is currently supported with support for MS Sql Server coming soon.</td>
+						</tr>
+						<tr>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/server.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="scala-core-server.html">Server</a></strong></td>
 							<td>Web API Server</td>
 							<td>A Web API server built using Akka Http that can host your "Protocol Independent APIs". You can extend this server and register your own APIs.</td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="scala-core-orm.html">5. ORM</a></strong></td>
-							<td>Domain-Driven ORM</td>
-							<td>A simple, light-weight, Domain-Driven, single table ORM to map your entities to and from database tables. MySql is currently supported with support for MS Sql Server coming soon.</td>
-						</tr>
-						<tr>
-							<td><strong><a class="url-ch" href="infra.html">6. Architecture</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/build.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="infra.html">Architecture</a></strong></td>
 							<td>Architecture Components</td>
-							<td>Architectural abstractions and implementations for APIs, CLI, Files, Queues, Tasks and more. Files and Queues are easy to use abstractions over AWS S3 and SQS.</td>
+							<td>Architectural abstractions and implementations for Files, Queues, Tasks and more. Files and Queues are abstracted with default implementations for AWS S3, SQS.</td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="utils.html">7. Utilities</a></strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/multitool.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="utils.html">Utilities</a></strong></td>
 							<td>Utility Components</td>
 							<td>Many useful utility components and code that can be used for any application. All these are located in the Slate.Common project and independent and modular.</td>
 						</tr>
 						<tr>
-							<td><strong><a class="url-ch" href="features.html">8. Mobile</strong></td>
+							<td class="col-sm-1 text-center"><img src="themes/start/images/white/mobile.png" width="50" alt=""></td>
+							<td><strong><a class="url-ch" href="features.html">Mobile</strong></td>
 							<td>Mobile / Web Features</td>
 							<td>Mobile and web features for most applications, such as Users, Devices, Registration, Invites, Settings and more.</td>
 						</tr>
@@ -191,7 +217,7 @@
 					<table class="table table-bordered table-striped">
 						<tr>
 							<td class="col-sm-3"><strong>Tech</strong></td>
-							<td>Built for the JVM, Linux/Windows, with Cloud Integration and designed to be hosted either in the cloud or locally</td>
+							<td>Built for the JVM, Linux/Windows, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
 						</tr>
 						<tr>
 							<td><strong>Design</strong></td>
@@ -200,7 +226,7 @@
 						</tr>
 						<tr>
 							<td class="col-sm-3"><strong>Standards</strong></td>
-							<td>Check our coding standards for <a class="url-ch" href="scala-standards.html">scala</a> and <a class="url-ch" href="kotlin-standards.html">kotlin</a></td>
+							<td>Check our coding standards for <a class="url-ch" href="kotlin-standards.html">kotlin</a> and <a class="url-ch" href="scala-standards.html">scala</a></td>
 						</tr>
 						<tr>
 							<td class="col-sm-3"><strong>Approach</strong></td>

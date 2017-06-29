@@ -129,6 +129,7 @@ var codeHelixMeta = {
 	{ name: "Utilities"         ,  page: "utils.html"       , children: null },
 	{ name: "Features"      ,  page: "features.html"    , children: null },
 	{ name: "Components"    ,  page: "infra.html"       , children: [	
+			{ name: "Concepts"      ,  page: "kotlin-concepts.html"         , children: null },
 			{ name: "App"           ,  page: "scala-core-app.html"         , children: null },
 			{ name: "APIs"          ,  page: "scala-core-apis.html" , children: null },
 			{ name: "Server"        ,  page: "scala-core-server.html"      , children: null },
