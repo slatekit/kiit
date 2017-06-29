@@ -1,0 +1,24 @@
+*.class
+*.log
+*.iml
+*.xml
+*.jar
+*.bin
+*.kotlin_module
+
+# IDE
+.cache
+.history
+.worksheet
+.idea
+
+# ROOT DIRS
+.idea/
+lib/
+build/
+dist/
+target/
+
+
+# tests
+./src/tests/kotlin/*
