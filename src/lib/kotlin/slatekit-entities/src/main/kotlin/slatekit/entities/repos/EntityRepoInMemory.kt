@@ -1,0 +1,166 @@
+/**
+ * <slate_header>
+ * url: www.slatekit.com
+ * git: www.github.com/code-helix/slatekit
+ * org: www.codehelix.co
+ * author: Kishore Reddy
+ * copyright: 2016 CodeHelix Solutions Inc.
+ * license: refer to website and/or github
+ * about: A tool-kit, utility library and server-backend
+ * mantra: Simplicity above all else
+ * </slate_header>
+ */
+
+package slatekit.entities.repos
+
+import slatekit.common.DateTime
+import slatekit.common.ListMap
+import slatekit.common.Reflector
+import slatekit.common.Types
+import slatekit.entities.core.Entity
+import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.EntityRepo
+import slatekit.entities.core.EntityUpdatable
+import kotlin.reflect.KClass
+
+
+open class EntityRepoInMemory<T>(
+        entityType: KClass<*>,
+        entityIdType: KClass<*>? = null,
+        entityMapper: EntityMapper? = null
+)
+    : EntityRepo<T>(entityType, entityIdType, entityMapper, null) where T : Entity {
+
+    private var _items = ListMap<Long, T>(listOf())
+
+
+    /**
+     * create the entity in memory
+     *
+     * @param entity
+     */
+    override fun create(entity: T): Long {
+        // Check 1: already persisted ?
+        return if (!entity.isPersisted()) {
+            // get next id
+            val id = getNextId()
+            val en = when (entity) {
+                is EntityUpdatable<*> -> entity.withId(id)
+                else                  -> _entityMapper.copyWithId(id, entity)
+            }
+
+            // store
+            _items = _items.add(id, en as T)
+            id
+        }
+        else
+            entity.identity()
+    }
+
+
+    /**
+     * updates the entity in memory
+     *
+     * @param entity
+     */
+    override fun update(entity: T): T {
+        // Check 1: already persisted ?
+        if (entity.isPersisted()) {
+            _items = _items.add(entity.identity(), entity)
+        }
+        return entity
+    }
+
+
+    /**
+     * deletes the entity in memory
+     *
+     * @param id
+     */
+    override fun delete(id: Long): Boolean =
+            if (!_items.contains(id))
+                false
+            else {
+                _items = _items.remove(id)
+                true
+            }
+
+
+    /**
+     * gets the entity from memory with the specified id.
+     *
+     * @param id
+     */
+    override fun get(id: Long): T? {
+        return _items[id]
+    }
+
+
+    /**
+     * finds items based on the query
+     * @param query
+     * @return
+     */
+    override fun findBy(field: String, op: String, value: Any): List<T> {
+        val prop = Reflector.findProperty(_entityType, field)
+        val matched = prop?.let { property ->
+            val cls = Types.getClassFromType(property.returnType)
+
+            property.let { p ->
+                _items.all().filter { it ->
+                    val actual = Reflector.getFieldValue(it, p)
+                    val expected = value
+                    compare(cls, actual, expected)
+                }
+            }
+        } ?: listOf()
+        return matched
+    }
+
+
+    /**
+     * gets all the items from memory
+     *
+     * @return
+     */
+    override fun getAll(): List<T> = _items.all()
+
+
+    override fun count(): Long = _items.size.toLong()
+
+
+    override fun top(count: Int, desc: Boolean): List<T> {
+        return if (_items.size == 0) {
+            listOf()
+        }
+        else {
+            val items = _items.all().sortedBy { item -> item.identity() }
+            val sorted = if (desc) items.reversed() else items
+            sorted.take(count)
+        }
+    }
+
+
+    fun getNextId(): Long = _items.size.toLong() + 1
+
+
+    /**
+     * Simple equality comparison fields ( used mostly in
+     * testing / prototyping of models via this In-Memory Repository.
+     */
+    fun compare(cls: KClass<*>, a: Any?, b: Any): Boolean {
+        return a?.let { actual ->
+            when (cls) {
+                Types.BoolClass   -> (actual as Boolean) == (b as Boolean)
+                Types.ShortClass  -> (actual as Short) == (b as Short)
+                Types.IntClass    -> (actual as Int) == (b as Int)
+                Types.LongClass   -> (actual as Long) == (b as Long)
+                Types.FloatClass  -> (actual as Float) == (b as Float)
+                Types.DoubleClass -> (actual as Double) == (b as Double)
+                Types.DateClass   -> (actual as DateTime) == (b as DateTime)
+                Types.StringClass -> (actual as String) == (b as String)
+                else              -> false
+            }
+        } ?: false
+    }
+}

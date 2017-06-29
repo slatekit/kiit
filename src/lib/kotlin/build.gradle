@@ -1,0 +1,29 @@
+allprojects {
+    apply plugin: 'java'
+    repositories {
+        mavenCentral()
+    }
+    group = 'com.slatekit'
+    version = '0.9.2'
+	task hello {
+        doLast { task ->
+            println "Included : $task.project.name"
+        }
+    }
+}
+
+subprojects {
+   apply plugin: 'java'
+}
+
+task copyJars(type: Copy, dependsOn: subprojects.jar) {
+   from(subprojects.jar)
+   into project.file('dist')
+}
+
+task install(type: Copy) {
+	dependsOn build
+	from configurations.runtime
+	from jar
+	into "${project.projectDir}/lib"
+}
