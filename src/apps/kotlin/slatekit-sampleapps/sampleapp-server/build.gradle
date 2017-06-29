@@ -1,0 +1,40 @@
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+
+buildscript {
+    ext.kotlin_version = '1.1.2'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+	compile fileTree(dir: 'lib', include: '*.jar')	
+    compile "com.googlecode.json-simple:json-simple:1.1"
+    compile "com.sparkjava:spark-core:2.1"
+    compile project(":slatekit-common")
+    compile project(":slatekit-entities")
+    compile project(":slatekit-core")
+    compile project(":slatekit-apis")
+    compile project(":slatekit-integration")
+    compile project(":slatekit-server")
+    compile project(":sampleapp-core")
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+}
