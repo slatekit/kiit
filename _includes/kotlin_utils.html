@@ -1,3 +1,109 @@
+
+## Env
+
+### Definition 
+```kotlin 
+  /**
+   * Represents a system environment
+   * @param name   : e.g. Quality Assurance
+   * @param mode   : e.g. Qa
+   * @param region : new york
+   * @param desc   : Qa environment 1 in new york
+   */
+  data class Env(val name: String,
+                 val mode: EnvMode,
+                 val region: String = "",
+                 val desc: String = "") : EnvSupport {
+  
+      /**
+       * qa1:qa
+       * @return
+       */
+      val key: String get() = name + ":" + mode.name
+  
+      // ...
+  }
+
+```
+
+### Example 
+```kotlin
+  /**
+   * The list of defaults environments to choose from.
+   * An environment definition is defined by its name, mode
+   * The key is built up from name and mode as {name}.{mode}
+   * e.g. "qa1.QA"
+   *
+   * Each of these environments should map to an associated env.{name}.conf
+   * config file in the /resources/ directory. But there is no dependency
+   * on this Env component to a Config component
+   *
+   * e.g.
+   * /resources/env.conf     ( common      config )
+   * /resources/env.loc.conf ( local       config )
+   * /resources/env.dev.conf ( development config )
+   * /resources/env.qa1.conf ( qa1         config )
+   * /resources/env.qa2.conf ( qa2         config )
+   * /resources/env.stg.conf ( staging     config )
+   * /resources/env.pro.conf ( production  config )
+   *
+   * @return
+   */
+  fun defaults(): Envs =
+      Envs( listOf(
+          Env("loc", Dev , desc = "Dev environment (local)"),
+          Env("dev", Dev , desc = "Dev environment (shared)"),
+          Env("qa1", Qa  , desc = "QA environment  (current release)"),
+          Env("qa2", Qa  , desc = "QA environment  (last release)"),
+          Env("stg", Uat , desc = "STG environment (demo)"),
+          Env("pro", Prod, desc = "LIVE environment")
+      ))
+```
+
+
+# Config 
+
+### Example 
+```kotlin 
+  // Examples of just a few features...
+  // 1. Typed settings
+  // 2. Nullable
+  // 3. Defaults 
+  // 4. Lists/Maps 
+  // 5. Encryption/File Refs/Inheritance
+  
+  // Load the env.dev.conf file from /resources
+  val conf = Config("env.dev.conf")
+
+  // Get typed value: non-nullable
+  // NOTE: default value for typed returned if unavailable
+  println("bool  : " + conf.getBool("bVal"))
+  println("string: " + conf.getString("sVal"))
+  println("short : " + conf.getShort("hVal"))
+  println("int   : " + conf.getInt("iVal"))
+  println("long  : " + conf.getLong("lVal"))
+  println("float : " + conf.getFloat("fVal"))
+  println("double: " + conf.getDouble("dVal"))
+  
+  // Get typed value: with default value if unavailable.
+  println("bool  : " + conf.getBoolOrElse("bVal", false))
+  println("string: " + conf.getStringOrElse("sVal", "abc"))
+  println("short : " + conf.getShortOrElse("hVal", 0))
+  println("int   : " + conf.getIntOrElse("iVal", 0))
+  println("long  : " + conf.getLongOrElse("lVal", 0))
+  println("float : " + conf.getFloatOrElse("fVal", 0.0f))
+  println("double: " + conf.getDoubleOrElse("dVal", 0.0))
+  
+  // Get lists/maps
+  println("list  : " + conf.getList("listValInt", Int::class))
+  println("map   : " + conf.getMap("mapValInt", String::class, Int::class))
+  println()
+  
+  // More features such as decryption, file refs and more.
+  // ...
+```
+
+
 ## Request 
 
 ### Definition
@@ -111,67 +217,6 @@
   printResult(res5)
 ```
 
-
-## Env
-
-### Definition 
-```kotlin 
-  /**
-   * Represents a system environment
-   * @param name   : e.g. Quality Assurance
-   * @param mode   : e.g. Qa
-   * @param region : new york
-   * @param desc   : Qa environment 1 in new york
-   */
-  data class Env(val name: String,
-                 val mode: EnvMode,
-                 val region: String = "",
-                 val desc: String = "") : EnvSupport {
-  
-      /**
-       * qa1:qa
-       * @return
-       */
-      val key: String get() = name + ":" + mode.name
-  
-      // ...
-  }
-
-```
-
-### Example 
-```kotlin
-  /**
-   * The list of defaults environments to choose from.
-   * An environment definition is defined by its name, mode
-   * The key is built up from name and mode as {name}.{mode}
-   * e.g. "qa1.QA"
-   *
-   * Each of these environments should map to an associated env.{name}.conf
-   * config file in the /resources/ directory. But there is no dependency
-   * on this Env component to a Config component
-   *
-   * e.g.
-   * /resources/env.conf     ( common      config )
-   * /resources/env.loc.conf ( local       config )
-   * /resources/env.dev.conf ( development config )
-   * /resources/env.qa1.conf ( qa1         config )
-   * /resources/env.qa2.conf ( qa2         config )
-   * /resources/env.stg.conf ( staging     config )
-   * /resources/env.pro.conf ( production  config )
-   *
-   * @return
-   */
-  fun defaults(): Envs =
-      Envs( listOf(
-          Env("loc", Dev , desc = "Dev environment (local)"),
-          Env("dev", Dev , desc = "Dev environment (shared)"),
-          Env("qa1", Qa  , desc = "QA environment  (current release)"),
-          Env("qa2", Qa  , desc = "QA environment  (last release)"),
-          Env("stg", Uat , desc = "STG environment (demo)"),
-          Env("pro", Prod, desc = "LIVE environment")
-      ))
-```
 
 ## Context 
 

@@ -128,26 +128,32 @@
 						<td><a href="#concept-context" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>4. Apis</strong></td>
-						<td>APIs in Slate Kit are are normal methods on classes and are "protocol independent" which means they 
-						can be made accessible on the CLI ( command line ) or as an HTTP Endpoint</td>
-						<td><a href="#concept-apis" class="more"><span class="btn btn-primary">more</span></a></td>
-					</tr>
-					<tr> 
-						<td><strong>5. Cloud </strong></td>
+						<td><strong>4. Cloud </strong></td>
 						<td>Slate Kit integrates with Cloud infrastructure such as File Storage and Queues.
 						AWS ( S3, SQS ) is the default but its abstracted so you can easily customize
 						to other providers.</td>
 						<td><a href="#concept-cloud" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>6. Request </strong></td>
+						<td><strong>5. Apis</strong></td>
+						<td>APIs in Slate Kit are are normal methods on classes and are "protocol independent" which means they 
+						can be made accessible on the CLI ( command line ) or as an HTTP Endpoint</td>
+						<td><a href="#concept-apis" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>6. Routes </strong></td>
 						<td>Abstracts a request whether it is on the CLI ( command line ) or a HTTP Request.
 						This is used to build Slate Kit APIs ( which are protocol independent ).</td>
 						<td><a href="#concept-request" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>7. Result</strong></td>
+						<td><strong>7. Request </strong></td>
+						<td>Abstracts a request whether it is on the CLI ( command line ) or a HTTP Request.
+						This is used to build Slate Kit APIs ( which are protocol independent ).</td>
+						<td><a href="#concept-request" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>8. Result</strong></td>
 						<td>Abstracts a response and models success/failures, whether it's on the CLI (Command Line)
 						or an HTTP Response. This is used to build Slate Kit APIs and is compatible with HTTP status codes</td>
 						<td><a href="#concept-result" class="more"><span class="btn btn-primary">more</span></a></td>
@@ -159,64 +165,185 @@
 				This is accomplished using the Env component below. It is used in the Slate Kit App ( Base App )
 				<p>
 				<h3>Features</h3>
-				<ol>
-					<li>Validates the selected env at startup</li>
-					<li>Describe the selected env</li>
-					<li>Store selected environment from available ones</li>
-					<li>Naming convention to link to config files ( below )</li>
-					<li>Customize the environments supported</li>
-				</ol>				 
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Typed</strong></td>
+						<td>Environment name and mode is type-safe</td>
+					</tr>
+					<tr>
+						<td><strong>Validated</strong></td>
+						<td>Environment can be validated at startup</td>
+					</tr>
+					<tr>
+						<td><strong>About</strong></td>
+						<td>Clear description of the environment</td>
+					</tr>
+					<tr>
+						<td><strong>Defaults</strong></td>
+						<td>Choose from defaults available</td>
+					</tr>
+					<tr>
+						<td><strong>Names</strong></td>
+						<td>Allow for multiple environments by name and mode</td>
+					</tr>
+				</table>				
 				<h3>Source</h3>
-				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Source: <strong><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs" class="url-ch">Env</a></strong>
-					</p>
-				</div>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.common.envs</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs">slatekit.common.envs</a></td>
+					</tr>
+				</table>
 				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cm">/**
+   * The available environments to choose from.
+   * An environment key is built name and mode. e.g. "qa1.QA"
+   *
+   * Each of these environments should map to an associated env.{name}.conf
+   * config file in the /resources/ directory. 
+   *
+   * e.g.
+   * /resources/env.conf     ( common      config )
+   * /resources/env.dev.conf ( development config )
+   * etc ..
+   *
+   * @return
+   */</span>
+  <span class="k">fun</span> <span class="nf">defaults</span><span class="p">():</span> <span class="n">Envs</span> <span class="p">=</span>
+      <span class="n">Envs</span><span class="p">(</span> <span class="n">listOf</span><span class="p">(</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"loc"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (local)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (shared)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (current release)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"qa2"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (last release)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"stg"</span><span class="p">,</span> <span class="n">Uat</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"STG environment (demo)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"pro"</span><span class="p">,</span> <span class="n">Prod</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"LIVE environment"</span><span class="p">)</span>
+      <span class="p">))</span>
+</code></pre>
+</div>	 						
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Example: <strong><a href="scala-mod-env.html" class="url-ch">Env</a></strong>
+					<p><i class="fa fa-link"></i> Full example:  <strong><a href="scala-mod-env.html" class="url-ch">Env</a></strong>
 					</p>
 				</div>
-				<h3>Usage</h3>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> App: <strong><a href="kotlin-core-app#area_env.html" class="url-ch">App</a></strong>
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_env" class="url-ch">App</a></strong>
 					</p>
 				</div>
 				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
+			<br/><br/>	
 			<div>			
-				<h1 id="concept-config">2. Configs</h1>
+				<h1 id="concept-config">2. Config</h1>
 				<p>All the different types of Apps and Sample Apps using a common configuration scheme.
 				For each app, there is a single common configuration file <strong>env.conf</strong> and then
 				1 environment specific configuration file for each environment. e.g. <strong>env.dev.conf</strong>
 				All the environment configs are located in the <strong>resources</strong> directory but you can put
 				them and reference them anywhere. Slate Kit configs are simple abstractions over Java properties files.
-				It is used in the Slate Kit App ( Base App )
+				It is used in the Slate Kit App ( Base App ).
 				</p>
 				<h3>Features</h3>
-				<ol>
-					<li>Typed settings ( bool, string, short, int, long, float, double, date )</li>
-					<li>Lists of basic types</li>
-					<li>Maps of basic types</li>
-					<li>Default values if keys do not exist</li>
-					<li>Decryption for encrypted settings</li>
-					<li>Inheritance via loading a common config</li>
-					<li>Auto-mapping of custom objects (Db connections, Api-keys)</li>
-					<li>URI references to other config files/settings</li>
-				</ol>				 								 
-				<h3>Source</h3>
-				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Source: <strong><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf" class="url-ch">Conf</a></strong>
-					</p>
-				</div>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Typed</strong></td>
+						<td>Get typed values such as bool, int, long etc.</td>
+					</tr>
+					<tr>
+						<td><strong>Nullable</strong></td>
+						<td>Get nullable values such as Int?</td>
+					</tr>
+					<tr>
+						<td><strong>Defaults</strong></td>
+						<td>Get default values when unavailable</td>
+					</tr>
+					<tr>
+						<td><strong>Lists</strong></td>
+						<td>Get lists of basic types</td>
+					</tr>
+					<tr>
+						<td><strong>Maps</strong></td>
+						<td>Get maps of basic types</td>
+					</tr>
+					<tr>
+						<td><strong>Decryption</strong></td>
+						<td>Auto decrypt encrypted strings</td>
+					</tr>
+					<tr>
+						<td><strong>Objects</strong></td>
+						<td>Auto load objects from config such as Db connection, Api-Keys</td>
+					</tr>
+					<tr>
+						<td><strong>URIs</strong></td>
+						<td>Reference files in user directory to load objects for added security</td>
+					</tr>
+				</table>					 								 
+				<h3>Source</h3>				
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.common.conf</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf">slatekit.common.conf</a></td>
+					</tr>
+				</table>
 				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Examples of just a few features...
+</span>  <span class="c1">// 1. Typed settings
+</span>  <span class="c1">// 2. Nullable
+</span>  <span class="c1">// 3. Defaults 
+</span>  <span class="c1">// 4. Lists/Maps 
+</span>  <span class="c1">// 5. Encryption/File Refs/Inheritance
+</span>  
+  <span class="c1">// Load the env.dev.conf file from /resources
+</span>  <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">)</span>
+
+  <span class="c1">// Get typed value: non-nullable
+</span>  <span class="c1">// NOTE: default value for typed returned if unavailable
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShort</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"long  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getLong</span><span class="p">(</span><span class="s">"lVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDouble</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">))</span>
+  
+  <span class="c1">// Get typed value: with default value if unavailable.
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOrElse</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getStringOrElse</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShortOrElse</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"long  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getLongOrElse</span><span class="p">(</span><span class="s">"lVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloatOrElse</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">,</span> <span class="m">0.0f</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDoubleOrElse</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">,</span> <span class="m">0.0</span><span class="p">))</span>
+  
+  <span class="c1">// Get lists/maps
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"list  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getList</span><span class="p">(</span><span class="s">"listValInt"</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"map   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getMap</span><span class="p">(</span><span class="s">"mapValInt"</span><span class="p">,</span> <span class="n">String</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">()</span>
+  
+  <span class="c1">// More features such as decryption, file refs and more.
+</span>  <span class="c1">// ...
+</span></code></pre>
+</div>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Example: <strong><a href="scala-mod-config.html" class="url-ch">Conf</a></strong>
+					<p><i class="fa fa-link"></i> Full example: <strong><a href="scala-mod-config.html" class="url-ch">Config</a></strong>
 					</p>
 				</div>
-				<h3>Usage</h3>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> App: <strong><a href="kotlin-core-app#area_env.html" class="url-ch">App</a></strong>
+					<p><i class="fa fa-info-circle"></i> Usage in app: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
 					</p>
 				</div>	
 				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -229,65 +356,195 @@
 				Such items include the current environment ( dev, qa, pro, etc ), 
 				config settings, a logger, database info, encryptor, the host computer,
 				the runtime version of java, and access to the 
-				Entities that provide the ORM entity services. <br/><strong>It is created at startup and 
-				is read-only</strong>.</p>	
+				Entities that provide the ORM entity services. <strong>It is created at startup and 
+				is read-only</strong>.</p>
 				<h3>Features</h3>
-				<ol>
-					<li>Validates the selected env at startup</li>
-					<li>Describe the selected env</li>
-					<li>Store selected environment from available ones</li>
-					<li>Naming convention to link to config files ( below )</li>
-					<li>Customize the environments supported</li>
-				</ol>				
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
 				<h3>Source</h3>
-				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Source: <strong><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf" class="url-ch">Conf</a></strong>
-					</p>
-				</div>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
 				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> Example: <strong><a href="scala-mod-config.html" class="url-ch">Conf</a></strong>
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
 					</p>
 				</div>
-				<h3>Usage</h3>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> App: <strong><a href="kotlin-core-app#area_env.html" class="url-ch">App</a></strong>
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
 					</p>
-				</div>	
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>
+			<div>
+				<h1 id="concept_cloud">4. Cloud</h1>
+				<p>Info here</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
+					</p>
+				</div>
 				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
 			<br/><br/>		
 			<div>
-				<h1 id="concept_apis">4. APIs</h1>
+				<h1 id="concept_apis">5. APIs</h1>
 				<p>Info here</p>
-				<br/>
-				<h2>Definition</h2>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> See source: <strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Result.kt" class="url-ch">Result</a></strong>
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
 					</p>
 				</div>
-				<br/>
-				<h2>Example</h2>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> Note about result here.</p>					
-				</div>
-			</div>
-			<br/><br/>
-			<div>
-				<h1 id="concept_cloud">5. Cloud</h1>
-				<p>Info here</p>
-				<br/>
-				<h2>Definition</h2>
-				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> See source: <strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Result.kt" class="url-ch">Result</a></strong>
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
 					</p>
 				</div>
-				<br/>
-				<h2>Example</h2>
-				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> Note about result here.</p>					
-				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 			</div>
 			<br/><br/>
 			<div>
@@ -302,32 +559,129 @@
 				<p>The Request class abstracts a request whether it is on the CLI ( command line ) or a HTTP Request. This is used to build Slate Kit APIs ( which are protocol independent ).
 				
 				</p>
-				<h2>Definition</h2>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> See source: <strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Request.kt" class="url-ch">Request</a></strong>
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
 					</p>
 				</div>
-				<br/>
-				<h2>Example</h2>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> Note about request here.</p>					
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
+					</p>
 				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 			</div>
 			<br/><br/>
 			<div>
 				<h1 id="concept_result">8. Result</h1>
 				<p>Info here</p>
-				<br/>
-				<h2>Definition</h2>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td class="col-sm-2"><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> See source: <strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Result.kt" class="url-ch">Result</a></strong>
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
 					</p>
 				</div>
-				<br/>
-				<h2>Example</h2>
 				<div class="alert alert-info text-left" role="alert">
-					<p><i class="fa fa-info-circle"></i> Note about result here.</p>					
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
+					</p>
 				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 			</div>
           </div>
         </section>
