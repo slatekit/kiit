@@ -104,6 +104,22 @@
 ```
 
 
+## APIs
+```kotlin 
+ 
+  @Api(area = "app", name = "users", desc = "manage users",
+       roles= "admin", auth = "app", verb = "*", protocol = "*")
+  class UserApi(ctx:AppContext) : ApiBaseEntity<User>(ctx, User::class) {
+  
+      @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
+      @ApiArg("phone", "the phone number", true, "1-234-567-8901")
+      fun activate(phone:String, code:Int, isPremiumUser:Boolean): Result<Boolean> {
+          return ok("activated $phone, $code, $isPremiumUser")
+      }
+    // ...
+  }
+```
+
 ## Request 
 
 ### Definition
