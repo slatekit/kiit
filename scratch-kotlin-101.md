@@ -96,6 +96,15 @@ permalink: /scratch-kotlin-101
   val salary2  : Double            = 20.5
   val date2    : LocalDateTime     = LocalDateTime.now()
   val pair2    : Pair<String, Int> = Pair("john doe", 35)
+  
+  // Nullable
+  val name3    : String?            = "john doe"
+  val age3     : Int?               = 35
+  val account3 : Long?              = 12345678901L
+  val isActive3: Boolean?           = false
+  val salary3  : Double?            = 20.5
+  val date3    : LocalDateTime?     = LocalDateTime.now()
+  val pair3    : Pair<String, Int>? = Pair("john doe", 35)
 ```
 
 
@@ -306,4 +315,130 @@ permalink: /scratch-kotlin-101
   
   // 3. Declare a tuple explicity
   val user2: Triple<String, Boolean, Int> = Triple( "Jane", true, 2 )
+```
+
+# loops 
+```kotlin 
+  // 1. for loop inclusive ( 5 included )
+  for (a in 1..5) {
+      println("Value of a: " + a)
+  }
+  
+  // 2. for loop exclusive ( 5 excluded )
+  for (a in 1..5 - 1) {
+      println("Value of a: " + a)
+  }
+  
+  // 3. for loop with variable
+  val start = 1
+  val end = 5
+  for (a in start..end) {
+      println("Value of a: " + a)
+  }
+  
+  // 4. for loop over collection
+  val words = listOf("a1", "b2", "c3", "d4", "e5")
+  for (word in words) {
+      println(word)
+  }
+  
+  // 5. while loop
+  var a = 0
+  while (a < 4) {
+      println("Value of a: " + a)
+      a += 1
+  }
+```
+
+# try-catch
+```kotlin 
+  // Try/catch is an expression, which means that
+  // the try/catch will return a value.
+  // In this example, we return a tuple( boolean, string )
+  // indicating, success, and a message.
+  val result: Pair<Boolean, String> =
+      try {
+          println("try catch example")
+          Pair(true, "success")
+      }
+      catch(ex: IllegalArgumentException) {
+          Pair(false, "bad argument: " + ex.message)
+      }
+      catch(ex: Exception) {
+          Pair(false, "unexpected  : " + ex.message)
+      }
+      finally {
+          println("finally!")
+      }
+      
+  // Now print the result ( tuple )
+  println(result)
+```
+
+# iterations
+```kotlin 
+   val items = listOf("1","2", "3")
+
+  // Case 1: For each variable name
+  items.forEach { item -> println(item) }
+  
+  // Case 2: For each using auto-supplied "it" variable
+  items.forEach { println(it) }
+  
+  // Case 3: For each with lambda
+  items.forEach( ::println )
+  
+  // Case 4: For each with index
+  items.forEachIndexed { index, s -> print(" " + items[index]) }
+  println()
+  
+  // Case 5: Using a range
+  4.until(6).forEach{ v -> print(" " + v ) }
+
+```
+
+# aggregates
+```kotlin 
+  val items = listOf("1","2", "3")
+  
+  // Case 1: apply function to each
+  // Prints:
+  // 1
+  // 2
+  // 3
+  items.forEach( ::println )
+  
+  // Case 2: map strings to new list of numbers
+  // Result: List[Int](1, 2, 3)
+  val nums = items.map{ it.toInt() }
+  println(nums)
+  
+  // Case 3: filter ( find items > 2 )
+  val filtered = items.filter { it -> it.toInt() > 2 }
+  println( filtered )
+  
+  // Case 4: reduce to 1 value
+  // Result: "1:2:3"
+  val total = items.reduce{ a, b -> a + ":" + b }
+  println("reduce: '$total'")
+  
+  // Case 5a: fold to single value from the Left side
+  // Result: "LEFT,1,2,3"
+  val totalLeft = items.fold("LEFT", { acc, text -> acc + "," + text })
+  println("fold left: " + totalLeft)
+  
+  // Case 5b: fold to single value from the Right side
+  // Result:  "1,2,3,RIGHT"
+  val totalRight = items.foldRight("RIGHT", { acc, text -> acc + "," + text })
+  println("fold right: " + totalRight)
+  
+  // Case 6: max
+  // Result: 3
+  val max = items.maxBy(String::toInt)
+  println("max: " + max)
+  
+  // Case 7: min
+  // Result: 1
+  val min = items.minBy(String::toInt)
+  println("min: " + min)
 ```

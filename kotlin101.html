@@ -171,7 +171,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
       <td class=" text-center"><a href="#scala-loops" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
-      <td><strong>try catch *</strong></td>
+      <td><strong>try catch</strong></td>
       <td>constructing try catch finally blocks</td>
       <td class=" text-center"><a href="#scala-trycatch" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
@@ -520,6 +520,15 @@ in Scala. For more in-depth documentation please refer to the resources below.</
   <span class="kd">val</span> <span class="py">salary2</span>  <span class="p">:</span> <span class="n">Double</span>            <span class="p">=</span> <span class="m">20.5</span>
   <span class="kd">val</span> <span class="py">date2</span>    <span class="p">:</span> <span class="n">LocalDateTime</span>     <span class="p">=</span> <span class="n">LocalDateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
   <span class="kd">val</span> <span class="py">pair2</span>    <span class="p">:</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+  
+  <span class="c1">// Nullable
+</span>  <span class="kd">val</span> <span class="py">name3</span>    <span class="p">:</span> <span class="n">String</span><span class="p">?</span>            <span class="p">=</span> <span class="s">"john doe"</span>
+  <span class="kd">val</span> <span class="py">age3</span>     <span class="p">:</span> <span class="n">Int</span><span class="p">?</span>               <span class="p">=</span> <span class="m">35</span>
+  <span class="kd">val</span> <span class="py">account3</span> <span class="p">:</span> <span class="n">Long</span><span class="p">?</span>              <span class="p">=</span> <span class="m">12345678901L</span>
+  <span class="kd">val</span> <span class="py">isActive3</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">?</span>           <span class="p">=</span> <span class="k">false</span>
+  <span class="kd">val</span> <span class="py">salary3</span>  <span class="p">:</span> <span class="n">Double</span><span class="p">?</span>            <span class="p">=</span> <span class="m">20.5</span>
+  <span class="kd">val</span> <span class="py">date3</span>    <span class="p">:</span> <span class="n">LocalDateTime</span><span class="p">?</span>     <span class="p">=</span> <span class="n">LocalDateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+  <span class="kd">val</span> <span class="py">pair3</span>    <span class="p">:</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;?</span> <span class="p">=</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
 </code></pre>
 </div>
 <br/>
@@ -751,7 +760,7 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of Map[A,B] is also available in the <strong>scala.collection.mutable</strong> namespace</p>	
+	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of Map can be built using for example <strong>mutableListOf("a" to 1)</strong></p>	
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
@@ -821,132 +830,108 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 
 </code></pre>
 </div>
-<div class="alert alert-info" role="alert">
-  <p><i class="fa fa-info-circle"></i> Once you are familiar with functional programming and using <strong>Option[T]</strong> or alternatives, there are times when you can replace if/else conditions with functional equivalents ( such as map/flatMap/for comprehensions )</p>
-  
-</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-loops">Loops</h2>
 <p>For loops and while loops</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-    <span class="c1">// 1. for loop inclusive ( 5 included )
-</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o"> ) {</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 2. for loop exclusive ( 5 excluded )
-</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o"> ) {</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 3. for loop with setup using values
-</span>    <span class="k">val</span> <span class="n">start</span> <span class="k">=</span> <span class="mi">1</span>
-    <span class="k">val</span> <span class="n">end</span> <span class="k">=</span> <span class="mi">5</span>
-    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o"> ) {</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 4. for loop over collection
-</span>    <span class="k">val</span> <span class="n">words</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a1"</span><span class="o">,</span> <span class="s">"b2"</span><span class="o">,</span> <span class="s">"c3"</span><span class="o">,</span> <span class="s">"d4"</span><span class="o">,</span> <span class="s">"e5"</span><span class="o">)</span>
-    <span class="k">for</span> <span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o"> ) {</span>
-      <span class="n">println</span><span class="o">(</span> <span class="n">word</span> <span class="o">)</span>
-    <span class="o">}</span>
-	
-
-    <span class="c1">// 5. while loop
-</span>    <span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">0</span>
-    <span class="k">while</span> <span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o"> ) {</span>
-      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
-      <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="o">}</span>
-
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// 1. for loop inclusive ( 5 included )
+</span>  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="c1">// 2. for loop exclusive ( 5 excluded )
+</span>  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="c1">// 3. for loop with variable
+</span>  <span class="kd">val</span> <span class="py">start</span> <span class="p">=</span> <span class="m">1</span>
+  <span class="kd">val</span> <span class="py">end</span> <span class="p">=</span> <span class="m">5</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="n">start</span><span class="o">..</span><span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="c1">// 4. for loop over collection
+</span>  <span class="kd">val</span> <span class="py">words</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"a1"</span><span class="p">,</span> <span class="s">"b2"</span><span class="p">,</span> <span class="s">"c3"</span><span class="p">,</span> <span class="s">"d4"</span><span class="p">,</span> <span class="s">"e5"</span><span class="p">)</span>
+  <span class="k">for</span> <span class="p">(</span><span class="n">word</span> <span class="k">in</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+  <span class="p">}</span>
+  
+  <span class="c1">// 5. while loop
+</span>  <span class="kd">var</span> <span class="py">a</span> <span class="p">=</span> <span class="m">0</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">a</span> <span class="p">&lt;</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
+      <span class="n">a</span> <span class="p">+=</span> <span class="m">1</span>
+  <span class="p">}</span>
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in Scala in favor of functional approaches to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
+	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in favor of other iteration approaches. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-trycatch">Try/Catch</h2>
-<p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-
-    <span class="c1">// Everything is an expression, which means that
-</span>    <span class="c1">// the try/catch will return a value.
-</span>    <span class="c1">// In this example, we return a tuple( boolean, string )
-</span>    <span class="c1">// indicating, success, and a message.
-</span>    <span class="c1">// NOTE: This helps with immutability
-</span>    <span class="c1">// as you can assign the result of the try
-</span>    <span class="c1">// to a value ( in this case the result )
-</span>    <span class="k">val</span> <span class="n">result</span><span class="k">:</span><span class="o">(</span><span class="kt">Boolean</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
-      <span class="k">try</span>
-      <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
-        <span class="o">(</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"success"</span> <span class="o">)</span>
-      <span class="o">}</span>
-      <span class="k">catch</span>
-        <span class="o">{</span>
-          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
-          <span class="o">{</span>
-            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"bad argument: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
-          <span class="o">}</span>
-          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
-          <span class="o">{</span>
-            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"unexpected  : "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
-          <span class="o">}</span>
-        <span class="o">}</span>
-      <span class="k">finally</span> <span class="o">{</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
-      <span class="o">}</span>
-
-    <span class="c1">// Now print the result ( tuple )
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
-
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Try/catch is an expression, which means that
+</span>  <span class="c1">// the try/catch will return a value.
+</span>  <span class="c1">// In this example, we return a tuple( boolean, string )
+</span>  <span class="c1">// indicating, success, and a message.
+</span>  <span class="kd">val</span> <span class="py">result</span><span class="p">:</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;</span> <span class="p">=</span>
+      <span class="k">try</span> <span class="p">{</span>
+          <span class="n">println</span><span class="p">(</span><span class="s">"try catch example"</span><span class="p">)</span>
+          <span class="n">Pair</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="s">"success"</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">catch</span><span class="p">(</span><span class="n">ex</span><span class="p">:</span> <span class="n">IllegalArgumentException</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">Pair</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="s">"bad argument: "</span> <span class="p">+</span> <span class="n">ex</span><span class="p">.</span><span class="n">message</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">catch</span><span class="p">(</span><span class="n">ex</span><span class="p">:</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+          <span class="n">Pair</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="s">"unexpected  : "</span> <span class="p">+</span> <span class="n">ex</span><span class="p">.</span><span class="n">message</span><span class="p">)</span>
+      <span class="p">}</span>
+      <span class="k">finally</span> <span class="p">{</span>
+          <span class="n">println</span><span class="p">(</span><span class="s">"finally!"</span><span class="p">)</span>
+      <span class="p">}</span>
+      
+  <span class="c1">// Now print the result ( tuple )
+</span>  <span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre>
-</div>
-<div class="alert alert-info" role="alert">
-  <p><i class="fa fa-info-circle"></i> An alternative to using the built-in try/catch is to use Scala <strong>Try</strong> class.</p>  
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-throw">Throw</h2>
-<p>Throwing exceptions in Scala.</p>
+<p>Throwing exceptions.</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
-   <span class="k">throw</span> <span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">"testing throwing of exception"</span><span class="o">)</span>
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code>  
+   <span class="k">throw</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">"testing throwing of exception"</span><span class="o">)</span>
    
 </code></pre>
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i> If you are incorporating functional programming, then throwing exceptions is <strong>generally</strong> discouraged in favor of functional error-handling using Option[T], Either[A,B] or alternatives. Functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and early exists can result in unexpected behaviour.</p>
+	<p><i class="fa fa-warning"></i> If you want to incorporate functional programming, then throwing exceptions is <strong>generally</strong> discouraged
+	in favor of functional error-handling where you return something that models successes and failures.
+    See Slate Kit <strong><a href="kotlin-mod-results.html" class="url-ch">Result</a></strong> as an example. 
+	Functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and early exists can result in unexpected behaviour.</p>
 	
 </div>
 <br/>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-return">Return</h2>
-<p>Returning from a function.</p>
+<p>Returning from a function or method.</p>
 
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
    <span class="c1">// To return from a function that returns int
 </span>   <span class="k">return</span> <span class="mi">1</span>
-
-   <span class="c1">// To return from a function that returns "unit" 
-</span>   <span class="k">return</span> <span class="nc">Unit</span>
    
 </code></pre>
 </div>
 
 <div class="alert alert-danger" role="alert">
-	<p><i class="fa fa-warning"></i>If you are incorporating functional programming, returning early or mid-way in a function is generally discouraged, as the last expression in a code block is automatically returned. Returning early from a function ( with arguably the exception of guards ) results in short-circuiting of logic and breaks a clean flow to a return value.</p>
+	<p><i class="fa fa-warning"></i> If you want to incorporate functional programming,
+	returning early or mid-way in a function is generally discouraged, as the last expression in a code block is automatically returned. 
+	Returning early from a function ( with arguably the exception of guards ) results in short-circuiting of logic and breaks a clean flow to a return value.</p>
 	
 </div>
 <br/>
@@ -957,77 +942,74 @@ in Scala. For more in-depth documentation please refer to the resources below.</
 <h2 id="scala-iterations">Iterations</h2>
 <p>How to iterate over collections</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="highlighter-rouge"><pre class="highlight"><code>   <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
 
-    <span class="c1">// NOTE: There are multiple ways to iterate over a collection
-</span>    <span class="c1">// without using traditional "while" or "for" loops with variables</span>    
-    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
-    
-    <span class="c1">// Case 1: Indices
-</span>    <span class="n">items</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">ndx</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">items</span><span class="o">(</span><span class="n">ndx</span><span class="o">)))</span>
-    <span class="n">println</span><span class="o">()</span>
-    
-    <span class="c1">// Case 2: Zip with index ( You get a tuple of ( value, index ) )
-</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">d</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="n">_1</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">_2</span><span class="o">)</span> <span class="o">)</span>
-    
-    <span class="c1">// Case 3: Zip with index with case
-</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">{</span> <span class="k">case</span><span class="o">(</span><span class="n">item</span><span class="o">,</span> <span class="n">index</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">item</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">index</span><span class="o">)</span> <span class="o">}</span>
-    
-    <span class="c1">// Case 4: Using a range
-</span>    <span class="mf">4.</span><span class="n">until</span><span class="o">(</span><span class="mi">6</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span> <span class="n">v</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">v</span> <span class="o">)</span> <span class="o">)</span>
+  <span class="c1">// Case 1: For each variable name
+</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">}</span>
+  
+  <span class="c1">// Case 2: For each using auto-supplied "it" variable
+</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
+  
+  <span class="c1">// Case 3: For each with lambda
+</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
+  
+  <span class="c1">// Case 4: For each with index
+</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="n">print</span><span class="p">(</span><span class="s">" "</span> <span class="p">+</span> <span class="n">items</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="p">}</span>
+  <span class="n">println</span><span class="p">()</span>
+  
+  <span class="c1">// Case 5: Using a range
+</span>  <span class="m">4</span><span class="p">.</span><span class="n">until</span><span class="p">(</span><span class="m">6</span><span class="p">).</span><span class="n">forEach</span><span class="p">{</span> <span class="n">v</span> <span class="p">-&gt;</span> <span class="n">print</span><span class="p">(</span><span class="s">" "</span> <span class="p">+</span> <span class="n">v</span> <span class="p">)</span> <span class="p">}</span>
 
 </code></pre>
 </div>
 
-<div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> While there are several functional approaches to looping over items ( as shown above ), keep in mind there may be a cost. In some functional loops, intermediary collections are created.</p>
-	
-</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="scala-aggregates">Aggregates</h2>
 <p>How to use the built-in map, filter, reduce and aggregate functions</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>
-    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
-    
-    <span class="c1">// Case 1: apply function to each
-</span>    <span class="c1">// Prints:
-</span>    <span class="c1">// 1
-</span>    <span class="c1">// 2
-</span>    <span class="c1">// 3
-</span>    <span class="n">items</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
-    
-    <span class="c1">// Case 2: map strings to new list of numbers
-</span>    <span class="c1">// Result: List[Int](1, 2, 3)
-</span>    <span class="k">val</span> <span class="n">nums</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">i</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toInt</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">nums</span><span class="o">)</span>
-    
-    <span class="c1">// Case 3: reduce to 1 value
-</span>    <span class="c1">// Result: "1:2:3"
-</span>    <span class="k">val</span> <span class="n">total</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">reduce</span><span class="o">(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">b</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"reduce: "</span> <span class="o">+</span> <span class="s">"'"</span> <span class="o">+</span> <span class="n">total</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">)</span>
-    
-    <span class="c1">// Case 4a: fold to single value from the Left side
-</span>    <span class="c1">// Result: "LEFT,1,2,3"
-</span>    <span class="k">val</span> <span class="n">totalLeft</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="s">"LEFT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"fold left: "</span> <span class="o">+</span> <span class="n">totalLeft</span><span class="o">)</span>
-    
-    <span class="c1">// Case 4b: fold to single value from the Right side
-</span>    <span class="c1">// Result:  "1,2,3,RIGHT"
-</span>    <span class="k">val</span> <span class="n">totalRight</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="s">"RIGHT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"fold right: "</span> <span class="o">+</span> <span class="n">totalRight</span><span class="o">)</span>
-    
-    <span class="c1">// Case 5: max
-</span>    <span class="c1">// Result: 3
-</span>    <span class="k">val</span> <span class="n">max</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">maxBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"max: "</span> <span class="o">+</span> <span class="n">max</span><span class="o">)</span>
-    
-    <span class="c1">// Case 6: min
-</span>    <span class="c1">// Result: 1
-</span>    <span class="k">val</span> <span class="n">min</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">minBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"min: "</span> <span class="o">+</span> <span class="n">min</span><span class="o">)</span>
-
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
+  
+  <span class="c1">// Case 1: apply function to each
+</span>  <span class="c1">// Prints:
+</span>  <span class="c1">// 1
+</span>  <span class="c1">// 2
+</span>  <span class="c1">// 3
+</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
+  
+  <span class="c1">// Case 2: map strings to new list of numbers
+</span>  <span class="c1">// Result: List[Int](1, 2, 3)
+</span>  <span class="kd">val</span> <span class="py">nums</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">map</span><span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
+  <span class="n">println</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+  
+  <span class="c1">// Case 3: filter ( find items &gt; 2 )
+</span>  <span class="kd">val</span> <span class="py">filtered</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span> <span class="p">-&gt;</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">&gt;</span> <span class="m">2</span> <span class="p">}</span>
+  <span class="n">println</span><span class="p">(</span> <span class="n">filtered</span> <span class="p">)</span>
+  
+  <span class="c1">// Case 4: reduce to 1 value
+</span>  <span class="c1">// Result: "1:2:3"
+</span>  <span class="kd">val</span> <span class="py">total</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">reduce</span><span class="p">{</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">-&gt;</span> <span class="n">a</span> <span class="p">+</span> <span class="s">":"</span> <span class="p">+</span> <span class="n">b</span> <span class="p">}</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"reduce: '$total'"</span><span class="p">)</span>
+  
+  <span class="c1">// Case 5a: fold to single value from the Left side
+</span>  <span class="c1">// Result: "LEFT,1,2,3"
+</span>  <span class="kd">val</span> <span class="py">totalLeft</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">fold</span><span class="p">(</span><span class="s">"LEFT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"fold left: "</span> <span class="p">+</span> <span class="n">totalLeft</span><span class="p">)</span>
+  
+  <span class="c1">// Case 5b: fold to single value from the Right side
+</span>  <span class="c1">// Result:  "1,2,3,RIGHT"
+</span>  <span class="kd">val</span> <span class="py">totalRight</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">foldRight</span><span class="p">(</span><span class="s">"RIGHT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"fold right: "</span> <span class="p">+</span> <span class="n">totalRight</span><span class="p">)</span>
+  
+  <span class="c1">// Case 6: max
+</span>  <span class="c1">// Result: 3
+</span>  <span class="kd">val</span> <span class="py">max</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">maxBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"max: "</span> <span class="p">+</span> <span class="n">max</span><span class="p">)</span>
+  
+  <span class="c1">// Case 7: min
+</span>  <span class="c1">// Result: 1
+</span>  <span class="kd">val</span> <span class="py">min</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">minBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"min: "</span> <span class="p">+</span> <span class="n">min</span><span class="p">)</span>
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
