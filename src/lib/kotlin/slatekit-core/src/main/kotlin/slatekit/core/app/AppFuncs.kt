@@ -63,14 +63,14 @@ object AppFuncs {
      * @return
      */
     fun envs(): List<Env> =
-            listOf(
-                    Env("loc", Dev, desc = "Dev environment (local)"),
-                    Env("dev", Dev, desc = "Dev environment (shared)"),
-                    Env("qa1", Qa, desc = "QA environment  (current release)"),
-                    Env("qa2", Qa, desc = "QA environment  (last release)"),
-                    Env("stg", Uat, desc = "STG environment (demo)"),
-                    Env("pro", Prod, desc = "LIVE environment")
-            )
+        listOf(
+            Env("loc", Dev, desc = "Dev environment (local)"),
+            Env("dev", Dev, desc = "Dev environment (shared)"),
+            Env("qa1", Qa, desc = "QA environment  (current release)"),
+            Env("qa2", Qa, desc = "QA environment  (last release)"),
+            Env("stg", Uat, desc = "STG environment (demo)"),
+            Env("pro", Prod, desc = "LIVE environment")
+        )
 
 
     /**

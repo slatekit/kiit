@@ -21,6 +21,12 @@ package slatekit.common.envs
 data class Envs(val all: List<Env>, val current: Env? = null) : EnvSupport {
 
     /**
+     * Initialize with the first one
+     */
+    constructor(all:List<Env>): this(all, all.firstOrNull())
+
+
+    /**
      * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
      * @return
      */

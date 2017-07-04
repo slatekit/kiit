@@ -80,32 +80,32 @@ data class AppContext(
 
 
         fun err(code: Int, msg: String? = null): AppContext =
-                AppContext(
-                        arg = Args.default(),
-                        env = Env("test", Dev),
-                        cfg = Config(),
-                        log = LoggerConsole(),
-                        ent = Entities(),
-                        inf = About.none,
-                        host = Host.local(),
-                        lang = Lang.kotlin(),
-                        state = failureWithCode(code, msg)
-                )
+            AppContext(
+                arg = Args.default(),
+                env = Env("local", Dev),
+                cfg = Config(),
+                log = LoggerConsole(),
+                ent = Entities(),
+                inf = About.none,
+                host = Host.local(),
+                lang = Lang.kotlin(),
+                state = failureWithCode(code, msg)
+            )
 
 
         fun sample(id: String, name: String, about: String, company: String): AppContext =
-                AppContext(
-                        arg = Args.default(),
-                        env = Env("test", Dev),
-                        cfg = Config(),
-                        log = LoggerConsole(),
-                        ent = Entities(),
-                        inf = About(id, name, about, company, "", "", "", "", "", "", ""),
-                        host = Host.local(),
-                        lang = Lang.kotlin(),
-                        enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
-                        dirs = Folders.userDir("slatekit", "samples", "sample1")
-                )
+            AppContext(
+                arg = Args.default(),
+                env = Env("local", Dev),
+                cfg = Config(),
+                log = LoggerConsole(),
+                ent = Entities(),
+                inf = About(id, name, about, company, "", "", "", "", "", "", ""),
+                host = Host.local(),
+                lang = Lang.kotlin(),
+                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                dirs = Folders.userDir("slatekit", "samples", "sample1")
+            )
 
     }
 }

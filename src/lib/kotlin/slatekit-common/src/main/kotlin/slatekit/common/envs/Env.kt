@@ -19,10 +19,13 @@ import slatekit.common.Strings
  * Represents a system environment
  * @param name   : e.g. Quality Assurance
  * @param mode   : e.g. Qa
- * @param region :  york
- * @param desc   : Qa environment 1 in  york
+ * @param region : new york
+ * @param desc   : Qa environment 1 in new york
  */
-data class Env(val name: String, val mode: EnvMode, val region: String = "", val desc: String = "") : EnvSupport {
+data class Env(val name: String,
+               val mode: EnvMode,
+               val region: String = "",
+               val desc: String = "") : EnvSupport {
 
     /**
      * "qa1:qa"
@@ -37,26 +40,42 @@ data class Env(val name: String, val mode: EnvMode, val region: String = "", val
     override fun isEnv(envMode: EnvMode): Boolean = mode == envMode
 
 
-    companion object EnvStatic {
+    companion object {
 
         val empty = Env("", Dev, "", "")
 
 
         /**
-         * List of funault environments supported in slate kit
+         * The list of defaults environments to choose from.
+         * An environment definition is defined by its name, mode
+         * The key is built up from name and mode as {name}.{mode}
+         * e.g. "qa1.QA"
+         *
+         * Each of these environments should map to an associated env.{name}.conf
+         * config file in the /resources/ directory. But there is no dependency
+         * on this Env component to a Config component
+         *
+         * e.g.
+         * /resources/env.conf     ( common      config )
+         * /resources/env.loc.conf ( local       config )
+         * /resources/env.dev.conf ( development config )
+         * /resources/env.qa1.conf ( qa1         config )
+         * /resources/env.qa2.conf ( qa2         config )
+         * /resources/env.stg.conf ( staging     config )
+         * /resources/env.pro.conf ( production  config )
+         *
          * @return
          */
-        fun defaults(): Envs {
-            val all = listOf(
-                    Env("loc", Dev, desc = "Dev environment (local)"),
-                    Env("dev", Dev, desc = "Dev environment (shared)"),
-                    Env("qa1", Qa, desc = "QA environment  (current release)"),
-                    Env("qa2", Qa, desc = "QA environment  (last release)"),
-                    Env("stg", Uat, desc = "STG environment (demo)"),
-                    Env("pro", Prod, desc = "LIVE environment")
-            )
-            return Envs(all, all[0])
-        }
+        fun defaults(): Envs =
+            Envs(listOf(
+                Env("loc", Dev , desc = "Dev environment (local)"),
+                Env("dev", Dev , desc = "Dev environment (shared)"),
+                Env("qa1", Qa  , desc = "QA environment  (current release)"),
+                Env("qa2", Qa  , desc = "QA environment  (last release)"),
+                Env("stg", Uat , desc = "STG environment (demo)"),
+                Env("pro", Prod, desc = "LIVE environment")
+            ))
+
 
 
         /**
