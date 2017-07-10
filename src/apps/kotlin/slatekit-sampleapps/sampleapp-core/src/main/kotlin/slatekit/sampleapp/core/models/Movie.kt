@@ -24,20 +24,24 @@ data class Movie(
                     val title :String = "",
 
 
-                    @property:Field(required = true, length = 20)
-                    val desc :String = "",
-
-
-                    @property:Field(required = true, length = 20)
+                    @property:Field(length = 20)
                     val category :String = "",
 
 
-                    @property:Field(required = true, length = 30)
-                    val status :String = "",
+                    @property:Field(required = true)
+                    val playing :Boolean = false,
 
 
-                    @property:Field(required = true, length = 50)
-                    val country :String = "",
+                    @property:Field(required = true)
+                    val cost:Int,
+
+
+                    @property:Field(required = true)
+                    val rating: Double,
+
+
+                    @property:Field(required = true)
+                    val released: DateTime,
 
 
                     // These are the timestamp and audit fields.
@@ -58,4 +62,26 @@ data class Movie(
 )
 : EntityWithId
 {
+    companion object {
+        fun samples():List<Movie> = listOf(
+                Movie(
+                        title = "Indiana Jones: Raiders of the Lost Ark",
+                        category = "Adventure",
+                        playing = false,
+                        cost = 10,
+                        rating = 4.5,
+                        released = DateTime.of(1985, 8, 10)
+                ),
+                Movie(
+                        title = "WonderWoman",
+                        category = "action",
+                        playing = true,
+                        cost = 100,
+                        rating = 4.2,
+                        released = DateTime.of(2017, 7, 4)
+                )
+        )
+
+
+    }
 }

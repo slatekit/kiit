@@ -1,10 +1,7 @@
 package slatekit.sampleapp.core.services
 
 import slatekit.apis.*
-import slatekit.common.DateTime
-import slatekit.common.Doc
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
@@ -14,7 +11,7 @@ import slatekit.core.common.AppContext
 import slatekit.sampleapp.core.models.Movie
 
 
-@Api(area = "sampleapp", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
 class SampleApi(context: AppContext): ApiBase(context) {
 
     // SAMPLE API ACTIONS:
@@ -42,6 +39,18 @@ class SampleApi(context: AppContext): ApiBase(context) {
     @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
     fun inputRequest(req: Request): Result<String> {
         return success("ok", "raw request id: " + req.args!!.getInt("id"))
+    }
+
+
+    @ApiAction(desc = "auto-convert json to objects", roles= "*", verb = "post", protocol = "@parent")
+    fun inputObject(movie:Movie): Movie {
+        return movie
+    }
+
+
+    @ApiAction(desc = "auto-convert json to objects", roles= "*", verb = "post", protocol = "@parent")
+    fun inputObjectlist(movies:List<Movie>): List<Movie> {
+        return movies
     }
 
 
@@ -131,16 +140,43 @@ class SampleApi(context: AppContext): ApiBase(context) {
 
 
     @ApiAction(desc = "test getting return type custom object", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun outputObject(): Movie = Movie(1, "Indiana Jones", "The raiders of the lost ark", "Adventure", "archives")
+    fun outputObject(): Movie = Movie.samples()[0]
 
 
     @ApiAction(desc = "test getting return type list of custom objects", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun outputListOfObject(): List<Movie> {
-        return listOf(
-            Movie(1, "Indiana Jones", "The raiders of the lost ark", "Adventure", "archives"),
-            Movie(1, "Batman"       , "The very first Batman movie", "Action"   , "archives")
-        )
-    }
+    fun outputListOfObject(): List<Movie> = Movie.samples()
+
+
+    @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputContentCsv(): Content = Content.csv("user1,u1@a.com,true,1234\r\nuser2,u2@a.com,true,1234")
+
+
+    @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputContentHtml(): Content = Content.html("<html><head><title>content html</title></head><body>Explicitly set content type</body></html>")
+
+
+    @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputContentText(): Content = Content.text("user: kishore")
+
+
+    @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputContentXml(): Content = Content.xml("<user><name>kishore</name></user>")
+
+
+    @ApiAction(desc = "test getting Doc as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputDocCsv(): Doc = Doc.csv("file1.csv", "user1,u1@a.com,true,1234\r\nuser2,u2@a.com,true,1234")
+
+
+    @ApiAction(desc = "test getting Doc as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun outputDocHtml(): Doc = Doc.html("file1.html", "<html><head><title>Doc html</title></head><body>Explicitly set Doc type</body></html>")
+
+
+    @ApiAction(desc = "test getting Doc as xml", roles = "", verb = "@parent", protocol = "@parent")
+    fun outputDocText(): Doc = Doc.text("file1.txt", "user: kishore")
+
+
+    @ApiAction(desc = "test getting Doc as xml", roles = "", verb = "@parent", protocol = "@parent")
+    fun outputDocXml(): Doc = Doc.xml("file1.xml", "<user><name>kishore</name></user>")
 
 
     //====================================================================================

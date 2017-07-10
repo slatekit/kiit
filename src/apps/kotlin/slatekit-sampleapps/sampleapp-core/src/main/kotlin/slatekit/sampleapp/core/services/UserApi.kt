@@ -19,7 +19,7 @@ import slatekit.core.common.AppContext
 import slatekit.sampleapp.core.models.User
 
 
-@Api(area = "sampleapp", name = "users", desc = "api for users", roles= "ops", auth = "app-roles", verb = "post", protocol = "*")
+@Api(area = "app", name = "users", desc = "api for users", roles= "ops", auth = "app-roles", verb = "post", protocol = "*")
 class UserApi( context: AppContext)
   : ApiEntityWithSupport<User, UserService>(context, User::class) {
 
