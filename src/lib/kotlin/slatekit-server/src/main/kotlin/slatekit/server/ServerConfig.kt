@@ -14,7 +14,13 @@
 package slatekit.server
 
 
+/**
+ * @param port  : The port number to use
+ * @param prefix: An optional prefix for all the API routes e..g "/api/"
+ * @param info  : Whether to show info about the server on startup.
+ */
 data class ServerConfig(
-        val port: Int = 5000,
-        val prefix: String = "/api/"
+        val port  : Int     = 5000,
+        val prefix: String  = "/api/",
+        val info  : Boolean = true
 )

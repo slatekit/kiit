@@ -13,11 +13,31 @@
 
 package slatekit.server.spark
 
+import slatekit.common.Content
+import slatekit.common.Doc
 import slatekit.common.Result
 import slatekit.common.serialization.SerializerJson
 import spark.Response
+import com.sun.xml.internal.ws.streaming.XMLStreamWriterUtil.getOutputStream
+import com.sun.deploy.trace.Trace.flush
+import javax.servlet.http.HttpServletResponse
+import java.nio.file.Files.readAllBytes
+
+
 
 object HttpResponse {
+
+    /**
+     * Returns the value of the result as an html(string)
+     */
+    fun result(res: Response, result: Result<Any>): Any {
+        return when(result.value){
+            is Content -> content(res, result as Result<Content>)
+            is Doc     -> file(res, result as Result<Doc>)
+            else       -> json( res, result)
+        }
+    }
+
 
     /**
      * Returns the value of the resulut as JSON.
@@ -31,11 +51,31 @@ object HttpResponse {
 
 
     /**
-     * Returns the value of the result as an html(string)
+     * Explicitly supplied content
+     * Return the value of the result as a content with type
      */
-    fun html(res: Response, result: Result<Any>): String {
+    fun content(res: Response, result: Result<Content>): String {
         res.status(result.code)
-        res.type("text/html")
-        return result.value?.toString() ?: ""
+        res.type(result.value?.format ?: "text/plain")
+        return result.value?.text ?: ""
+    }
+
+
+    /**
+     * Returns the value of the result as a file document
+     */
+    fun file(res: Response, result: Result<Doc>): Any {
+        res.status(result.code)
+        val doc = result.value!!
+        val bytes = doc.content.toByteArray()
+        val raw = res.raw()
+
+        res.header("Content-Disposition", "attachment; filename=" + doc.name)
+        //res.type("application/force-download")
+        res.type(result.value!!.format)
+        raw.outputStream.write(bytes)
+        raw.outputStream.flush()
+        raw.outputStream.close()
+        return res.raw()
     }
 }

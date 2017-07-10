@@ -15,6 +15,7 @@ package slatekit.server.spark
 
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
+import slatekit.apis.ApiConstants
 import slatekit.common.Random
 import slatekit.core.common.AppContext
 import slatekit.server.ServerConfig
@@ -43,6 +44,7 @@ object HttpRequest {
                 area = parts[0],
                 name = parts[1],
                 action = parts[2],
+                protocol = ApiConstants.ProtocolWeb,
                 verb = req.requestMethod().toLowerCase(),
                 opts = HttpHeaders(req, ctx.enc),
                 args = HttpParams(req, ctx.enc),
@@ -54,8 +56,8 @@ object HttpRequest {
 
     fun loadJson(req: Request): JSONObject {
         val method = req.requestMethod().toLowerCase()
-        val hasBody = method == "put" || method == "post"
-        val json = if (hasBody) {
+        val isPosted = isBodyAllowed(method)
+        val json = if (isPosted && !req.body().isNullOrEmpty()) {
             val parser = JSONParser()
             val root = parser.parse(req.body())
             root as JSONObject
@@ -65,4 +67,7 @@ object HttpRequest {
         }
         return json
     }
+
+
+    fun isBodyAllowed(method:String):Boolean = method == "put" || method == "post" || method == "delete"
 }
