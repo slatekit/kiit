@@ -21,6 +21,10 @@ import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
 import slatekit.entities.core.EntityUpdatable
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZonedDateTime
 import kotlin.reflect.KClass
 
 
@@ -151,15 +155,19 @@ open class EntityRepoInMemory<T>(
     fun compare(cls: KClass<*>, a: Any?, b: Any): Boolean {
         return a?.let { actual ->
             when (cls) {
-                Types.BoolClass   -> (actual as Boolean) == (b as Boolean)
-                Types.ShortClass  -> (actual as Short) == (b as Short)
-                Types.IntClass    -> (actual as Int) == (b as Int)
-                Types.LongClass   -> (actual as Long) == (b as Long)
-                Types.FloatClass  -> (actual as Float) == (b as Float)
-                Types.DoubleClass -> (actual as Double) == (b as Double)
-                Types.DateClass   -> (actual as DateTime) == (b as DateTime)
-                Types.StringClass -> (actual as String) == (b as String)
-                else              -> false
+                Types.StringClass          -> (actual as String) == (b as String)
+                Types.BoolClass            -> (actual as Boolean) == (b as Boolean)
+                Types.ShortClass           -> (actual as Short) == (b as Short)
+                Types.IntClass             -> (actual as Int) == (b as Int)
+                Types.LongClass            -> (actual as Long) == (b as Long)
+                Types.FloatClass           -> (actual as Float) == (b as Float)
+                Types.DoubleClass          -> (actual as Double) == (b as Double)
+                Types.LocalDateClass       -> (actual as LocalDate) == (b as LocalDate)
+                Types.LocalTimeClass       -> (actual as LocalTime) == (b as LocalTime)
+                Types.LocalDateTimeClass   -> (actual as LocalDateTime) == (b as LocalDateTime)
+                Types.ZonedDateTimeClass   -> (actual as ZonedDateTime) == (b as ZonedDateTime)
+                Types.DateTimeClass        -> (actual as DateTime) == (b as DateTime)
+                else                       -> false
             }
         } ?: false
     }

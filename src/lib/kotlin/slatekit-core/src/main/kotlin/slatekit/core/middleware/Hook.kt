@@ -37,10 +37,11 @@ class Hook(
      * hook for before the api call is made
      * @param ctx   : The application context
      * @param req   : The request
+     * @param target: The target of the request
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    fun before(ctx: AppContext, req: Request, source: Any, args: Map<String, Any>): Unit {
+    fun before(ctx: AppContext, req: Request, target:Any, source: Any, args: Map<String, Any>): Unit {
     }
 
 
@@ -48,9 +49,10 @@ class Hook(
      * hook for after the api call is made
      * @param ctx   : The application context
      * @param req   : The request
+     * @param target: The target of the request
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    fun after(ctx: AppContext, req: Request, source: Any, args: Map<String, Any>): Unit {
+    fun after(ctx: AppContext, req: Request, target:Any, source: Any, args: Map<String, Any>): Unit {
     }
 }

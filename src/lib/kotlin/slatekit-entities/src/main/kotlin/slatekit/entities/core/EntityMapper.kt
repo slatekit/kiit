@@ -17,6 +17,8 @@ package slatekit.entities.core
 import slatekit.common.*
 import slatekit.common.mapper.Mapper
 import slatekit.common.query.QueryEncoder
+import java.time.*
+import java.time.format.DateTimeFormatter
 
 
 /**
@@ -24,12 +26,17 @@ import slatekit.common.query.QueryEncoder
  *
  * @param model
  */
-class EntityMapper(model: Model) : Mapper(model) {
+open class EntityMapper(model: Model, persistAsUtc:Boolean = false) : Mapper(model) {
+
+    protected val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    protected val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    protected val dateTimeFormat:DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
 
     fun mapToSql(item: Any, update: Boolean, fullSql: Boolean = false): String {
 
         return if (!_model.any)
-            Strings.empty
+            ""
         else
             mapFields(item, update, fullSql)
     }
@@ -50,10 +57,10 @@ class EntityMapper(model: Model) : Mapper(model) {
             if (include) {
                 // =======================================================
                 // NOTE: Refactor this to use pattern matching ?
-                // Similar to the Mapper.scala class but reversed
+                // Similar to the Mapper class but reversed
                 val data = if (mapping.dataType == Types.StringClass) {
                     val sVal = Reflector.getFieldValue(item, mapping.name) as String
-                    val sValFinal = Strings.valueOrDefault(sVal, "")
+                    val sValFinal = sVal.nonEmptyOrDefault("")
                     "'" + QueryEncoder.ensureValue(sValFinal) + "'"
                 }
                 else if (mapping.dataType == Types.BoolClass) {
@@ -80,9 +87,34 @@ class EntityMapper(model: Model) : Mapper(model) {
                     val dVal = Reflector.getFieldValue(item, mapping.name) as Double
                     dVal.toString()
                 }
-                else if (mapping.dataType == Types.DateClass) {
+                else if (mapping.dataType == Types.DateTimeClass) {
                     val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime
                     "'" + dtVal.toStringMySql() + "'"
+                }
+                else if (mapping.dataType == Types.LocalDateClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate
+                    //val dtVal = java.sql.Date.valueOf(raw)
+                    "'" + raw.format(dateFormat) + "'"
+                }
+                else if (mapping.dataType == Types.LocalTimeClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime
+                    //val dtVal = java.sql.Time.valueOf(raw)
+                    "'" + raw.format(timeFormat) + "'"
+                }
+                else if (mapping.dataType == Types.LocalDateTimeClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime
+                    val converted = if(_settings.persisteUTCDate) DateTime.of(raw).atUtc().local() else raw
+                    "'" + converted.format(dateTimeFormat) + "'"
+                }
+                else if (mapping.dataType == Types.ZonedDateTimeClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime
+                    val converted = if(_settings.persisteUTCDate) DateTime.of(raw).atUtc().raw else raw
+                    "'" + converted.format(dateTimeFormat) + "'"
+                }
+                else if (mapping.dataType == Types.InstantClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as Instant
+                    //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
+                    "'" + LocalDateTime.ofInstant(raw, ZoneId.systemDefault()).format(dateTimeFormat) + "'"
                 }
                 else // Object
                 {

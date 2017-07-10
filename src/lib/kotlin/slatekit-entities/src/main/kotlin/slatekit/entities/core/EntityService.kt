@@ -13,7 +13,6 @@
 
 package slatekit.entities.core
 
-import TODO
 import slatekit.common.Reflector
 import slatekit.common.query.IQuery
 import kotlin.reflect.KProperty
@@ -225,15 +224,6 @@ open class EntityService<T>(protected val _repo: EntityRepo<T>)
     fun findFirst(query: IQuery): T? {
         val results = find(query.limit(1))
         return results.firstOrNull()
-    }
-
-
-    /**
-     * Hook for derived classes to handle additional logic before saving
-     * @param entity
-     */
-    fun onBeforeSave(entity: T) {
-        TODO.IMPLEMENT("entity", "hooks for saving")
     }
 
 

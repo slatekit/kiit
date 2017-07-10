@@ -13,7 +13,7 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Strings.newline
+import slatekit.common.newline
 import slatekit.common.db.DbType
 import slatekit.common.db.DbTypeMySql
 import slatekit.common.kClass
@@ -53,17 +53,17 @@ data class EntityInfo(
 
 
     fun toStringDetail(): String {
-        val text = "entity type  : " + entityTypeName + newline() +
-                "svc     type : " + getTypeName(entityServiceType) + newline() +
-                "svc     inst : " + getTypeNameFromInst(entityServiceInstance) + newline() +
-                "repo    type : " + getTypeName(entityRepoType) + newline() +
-                "repo    inst : " + getTypeNameFromInst(entityRepoInstance) + newline() +
-                "mapper  type : " + getTypeName(entityMapperType) + newline() +
-                "mapper  inst : " + getTypeNameFromInst(entityMapperInstance) + newline() +
-                "is sql repo  : " + isSqlRepo + newline() +
-                "db type      : " + dbType + newline() +
-                "db key       : " + dbKey + newline() +
-                "db shard     : " + dbShard + newline()
+        val text = "entity type  : " + entityTypeName + newline +
+                "svc     type : " + getTypeName(entityServiceType) + newline +
+                "svc     inst : " + getTypeNameFromInst(entityServiceInstance) + newline +
+                "repo    type : " + getTypeName(entityRepoType) + newline +
+                "repo    inst : " + getTypeNameFromInst(entityRepoInstance) + newline +
+                "mapper  type : " + getTypeName(entityMapperType) + newline +
+                "mapper  inst : " + getTypeNameFromInst(entityMapperInstance) + newline +
+                "is sql repo  : " + isSqlRepo + newline +
+                "db type      : " + dbType + newline +
+                "db key       : " + dbKey + newline +
+                "db shard     : " + dbShard + newline
         return text
     }
 

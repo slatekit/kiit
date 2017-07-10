@@ -73,15 +73,16 @@ class Entities(private val _dbs: DbLookup? = null) {
             dbType: DbType? = DbTypeMySql,
             dbKey: String? = null,
             dbShard: String? = null,
+            tableName: String? = null,
             serviceCtx: Any? = null
     ): EntityInfo where T : Entity {
         val db = if (!isSqlRepo) DbTypeMemory else dbType ?: DbTypeMySql
 
         // Create mapper
-        val mapr = buildMapper(isSqlRepo, entityType, mapper)
+        val mapr = buildMapper(isSqlRepo, entityType, mapper, tableName)
 
         // Create repo
-        val repo = buildRepo<T>(isSqlRepo, db, dbKey ?: "", dbShard ?: "", entityType, mapr)
+        val repo = buildRepo<T>(isSqlRepo, db, dbKey ?: "", dbShard ?: "", entityType, mapr, tableName)
 
         // Create the service
         val service = buildService<T>(serviceType, repo, serviceCtx)
@@ -218,7 +219,7 @@ class Entities(private val _dbs: DbLookup? = null) {
             "$entityType:$dbKey:$dbShard"
 
 
-    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, mapper: EntityMapper?): EntityMapper {
+    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, mapper: EntityMapper?, tableName: String?): EntityMapper {
 
         val entityKey = entityType.qualifiedName
 
@@ -235,7 +236,7 @@ class Entities(private val _dbs: DbLookup? = null) {
 
 
     private fun <T> buildRepo(isSqlRepo: Boolean, dbType: DbType, dbKey: String, dbShard: String,
-                              entityType: KClass<*>, mapper: EntityMapper): EntityRepo<T> where T : Entity {
+                              entityType: KClass<*>, mapper: EntityMapper, tableName:String?): EntityRepo<T> where T : Entity {
         // Currently only long supported
         val entityIdType = Long::class
         val repoType = if (!isSqlRepo) DbTypeMemory else dbType
@@ -245,7 +246,7 @@ class Entities(private val _dbs: DbLookup? = null) {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
             }
             DbTypeMySql  -> {
-                EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, null)
+                EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName)
             }
             else         -> {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
