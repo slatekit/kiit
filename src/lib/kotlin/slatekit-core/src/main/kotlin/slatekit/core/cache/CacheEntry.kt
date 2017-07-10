@@ -62,7 +62,7 @@ data class CacheEntry(
      * The actual cache item which is updatd only when its refreshed.
      */
     val item = AtomicReference<CacheItem>(
-            CacheItem(key, null, text, null, seconds, now().addSeconds(seconds.toLong()), null, 0, null, null)
+            CacheItem(key, null, text, null, seconds, now().plusSeconds(seconds.toLong()), null, 0, null, null)
     )
 
 
@@ -112,7 +112,7 @@ data class CacheEntry(
         val updated = original.copy(
                 value = result,
                 updated = timestamp,
-                expires = timestamp.addSeconds(original.seconds.toLong()),
+                expires = timestamp.plusSeconds(original.seconds.toLong()),
                 accessed = timestamp,
                 accessCount = accessCount.get() + 1
         )

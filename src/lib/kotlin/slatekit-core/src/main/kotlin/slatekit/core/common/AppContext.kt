@@ -13,6 +13,7 @@
 
 package slatekit.core.common
 
+import slatekit.common.Context
 import slatekit.common.Result
 import slatekit.common.app.AppMeta
 import slatekit.common.args.Args
@@ -49,23 +50,20 @@ import slatekit.entities.core.Entities
   * @param tnt   : tenant info ( if running in multi-tenant mode - not officially supported )
   */
 data class AppContext(
-                        val arg  : Args                                ,
-                        val env  : Env                                 ,
-                        val cfg  : ConfigBase                          ,
-                        val log  : LoggerBase                          ,
-                        val ent  : Entities                            ,
-                        val inf  : About                               ,
-                        val host : Host                = Host.local()  ,
-                        val lang : Lang                = Lang.kotlin() ,
-                        val dbs  : DbLookup?           = null          ,
-                        val enc  : Encryptor?          = null          ,
-                        val dirs : Folders?            = null          ,
-                        //val subs : Subs?             = null        ,
-                        //val res  : I18nStrings?      = null          ,
-                        //val tnt  : Tenant?           = null          ,
-                        //val svcs : IocRunTime?       = null          ,
-                        val state: Result<Boolean>     = Result.none
-                     )
+                        override val arg  : Args                                ,
+                        override val env  : Env                                 ,
+                        override val cfg  : ConfigBase                          ,
+                        override val log  : LoggerBase                          ,
+                                 val ent  : Entities                            ,
+                        override val inf  : About                               ,
+                        override val host : Host                = Host.local()  ,
+                        override val lang : Lang                = Lang.kotlin() ,
+                        override val dbs  : DbLookup?           = null          ,
+                        override val enc  : Encryptor?          = null          ,
+                        override val dirs : Folders?            = null          ,
+                        override val extra:Map<String,Any>      = mapOf()       ,
+                        override val state: Result<Boolean>     = Result.none
+                     ) : Context
 {
     val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()))
 

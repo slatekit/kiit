@@ -13,9 +13,8 @@
 
 package slatekit.core.app
 
-import TODO
+
 import slatekit.common.Result
-import slatekit.common.Strings
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.args.ArgsFuncs.isExit
@@ -25,6 +24,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
+import slatekit.common.toId
 import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.common.info.Host
@@ -132,8 +132,8 @@ object AppFuncs {
         // The root directory can be overriden in the config
         // e..g app.dir = user://company/dept/app
         return Folders.userDir(
-                root = conf.getStringOrElse("app.dir", Strings.toId(abt.company)),
-                group = Strings.toId(abt.group),
+                root = conf.getStringOrElse("app.dir", abt.company.toId()),
+                group = abt.group.toId(),
                 app = abt.id
         )
     }
@@ -150,17 +150,17 @@ object AppFuncs {
     fun vars(conf: ConfigBase): Subs {
         val abt = about(conf)
         return Subs(listOf<Pair<String, (TemplatePart) -> String>>(
-                Pair("user.home", { _ -> System.getProperty("user.home") }),
-                Pair("company.id", { _ -> Strings.toId(abt.company) }),
+                Pair("user.home"   , { _ -> System.getProperty("user.home") }),
+                Pair("company.id"  , { _ -> abt.company.toId() }),
                 Pair("company.name", { _ -> abt.company }),
-                Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
-                Pair("root.dir", { _ -> "@{company.dir}" }),
-                Pair("group.id", { _ -> Strings.toId(abt.group) }),
-                Pair("group.name", { _ -> abt.group }),
-                Pair("group.dir", { _ -> "@{root.dir}/@{group.id}" }),
-                Pair("app.id", { _ -> abt.id }),
-                Pair("app.name", { _ -> abt.name }),
-                Pair("app.dir", { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
+                Pair("company.dir" , { _ -> "@{user.home}/@{company.id}" }),
+                Pair("root.dir"    , { _ -> "@{company.dir}" }),
+                Pair("group.id"    , { _ -> abt.group.toId() }),
+                Pair("group.name"  , { _ -> abt.group }),
+                Pair("group.dir"   , { _ -> "@{root.dir}/@{group.id}" }),
+                Pair("app.id"      , { _ -> abt.id }),
+                Pair("app.name"    , { _ -> abt.name }),
+                Pair("app.dir"     , { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
         ))
     }
 
@@ -289,9 +289,7 @@ object AppFuncs {
             // Now load the final environment specific override
             // for directory reference provide: "file://./conf/"
             val overrideConfPath = getConfPath(args, "env.${env.name}" + CONFIG_DEFAULT_SUFFIX, confBase)
-
-            TODO.IMPLEMENT("config", "inheritance")
-            val confEnv = Config(overrideConfPath, enc)
+            val confEnv = ConfigMulti(overrideConfPath, confBase, enc)
             success(AppInputs(args, envSelected, confBase, confEnv))
         } ?: failure<AppInputs>(msg = "Unknown environment name : $envName supplied")
     }

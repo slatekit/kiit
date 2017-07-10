@@ -23,6 +23,7 @@ import slatekit.common.args.Args
  * @param area      : action represented by route e.g. app in "app.reg.activateUser"
  * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
  * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
+ * @param protocol  : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
  * @param opts      : options representing settings/configurations ( similar to http-headers )
  * @param args      : arguments to the command
@@ -35,6 +36,7 @@ data class Request (
                      val area       :String              ,
                      val name       :String              ,
                      val action     :String              ,
+                     val protocol   :String              ,
                      val verb       :String              ,
                      val args       :Inputs?             ,
                      val opts       :Inputs?             ,
@@ -57,19 +59,15 @@ data class Request (
     }
 
 
-    companion object RequestCompanion {
+    companion object {
 
-        fun build(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
+        fun raw(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
             val path = "$area.$api.$action"
-            return Request(path, listOf(area, api, action), area, api, action, verb, InputArgs(args), opts = InputArgs(opts))
+            return Request(path, listOf(area, api, action), area, api, action, "cli", verb, InputArgs(args), opts = InputArgs(opts))
         }
 
 
-        fun build(path: String, args: Args, opts: Inputs?, verb: String): Request =
-                Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), verb, args, opts, "")
-
-
-        fun build(path: String, args: Args, argsInputs: Inputs?, opts: Inputs?, verb: String): Request =
-                Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), verb, argsInputs, opts, "")
+        fun cli(path: String, args: Args, opts: Inputs?, verb: String): Request =
+                Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), "cli", verb, args, opts, "")
     }
 }

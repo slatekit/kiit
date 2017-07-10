@@ -13,6 +13,7 @@
 
 package slatekit.cloud.aws
 
+import TODO.IMPROVE
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -35,7 +36,7 @@ object AwsFuncs {
         // Get credentials from either default location of specific config
         val credentials = creds(path, section)
 
-        // TODO: Default to west, look at determining this from conf
+        IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
         val sqs = AmazonSQSClient(credentials)
         sqs.setRegion(usWest2)
@@ -52,7 +53,7 @@ object AwsFuncs {
         // Get credentials from either default location of specific config
         val credentials = creds(path, section)
 
-        // TODO: Default to west, look at determining this from conf
+        IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
         val s3 = AmazonS3Client(credentials)
         s3.setRegion(usWest2)

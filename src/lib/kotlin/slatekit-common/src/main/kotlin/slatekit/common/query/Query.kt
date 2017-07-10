@@ -13,18 +13,17 @@
 
 package slatekit.common.query
 
-import slatekit.common.Strings
 import java.util.concurrent.atomic.AtomicInteger
 
 
 /**
  * Created by kreddy on 12/24/2015.
  */
-class Query : IQuery {
+open class Query : IQuery {
 
     class QueryData(val conditions: MutableList<ICondition>,
-                    val updates: MutableList<FieldValue>) {
-    }
+                    val updates: MutableList<FieldValue>)
+
 
 
     protected val _limit = AtomicInteger(0)
@@ -58,7 +57,7 @@ class Query : IQuery {
             sql
         }
         else
-            Strings.empty
+            ""
     }
 
 

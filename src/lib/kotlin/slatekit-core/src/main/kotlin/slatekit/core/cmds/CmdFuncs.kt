@@ -29,7 +29,7 @@ object CmdFuncs {
             CmdState(
                     name = name,
                     msg = "Not yet run",
-                    lastRuntime = DateTime.min(),
+                    lastRuntime = DateTime.MIN,
                     hasRun = false,
                     runCount = 0,
                     errorCount = 0,
@@ -51,8 +51,8 @@ object CmdFuncs {
                     message = null,
                     error = null,
                     result = null,
-                    started = DateTime.min(),
-                    ended = DateTime.min(),
+                    started = DateTime.MIN,
+                    ended = DateTime.MIN,
                     totalMs = 0
             )
 
@@ -64,7 +64,7 @@ object CmdFuncs {
      * @return
      */
     fun errorState(name: String, message: String): CmdState =
-            CmdState(name, message, DateTime.min(), false, 0, 0, null)
+            CmdState(name, message, DateTime.MIN, false, 0, 0, null)
 
 
     /**

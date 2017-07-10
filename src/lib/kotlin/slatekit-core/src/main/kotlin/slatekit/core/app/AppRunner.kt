@@ -13,15 +13,15 @@
 
 package slatekit.core.app
 
-import TODO
+
 import slatekit.common.Result
 import slatekit.common.Result.Results.attempt
-import slatekit.common.Strings.newline
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.newline
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.EXIT
 import slatekit.common.results.FAILURE
@@ -189,13 +189,14 @@ object AppRunner {
 
         when (result.code) {
             BAD_REQUEST -> {
-                writer.error(newline() + "Input parameters invalid" + newline())
-                TODO.IMPLEMENT("app.help") {}
+                writer.error(newline + "Input parameters invalid" + newline)
             }
             else        -> {
-                TODO.IMPLEMENT("app.help") {}
+                writer.error(newline + "Unexpected error: " + result.msg)
             }
         }
+        val helpText = schema?.buildHelp() ?: "Help text not available"
+        println(helpText)
     }
 
 
