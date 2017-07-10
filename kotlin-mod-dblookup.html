@@ -68,17 +68,17 @@
 		
 		<section id="codeExample" class="section" >
 			<div class="container">
-				<h1 id="folders">Folders</h1>
+				<h1 id="dblookup">DbLookup</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Standardized application folder setup; includes conf, cache, inputs, logs, outputs</td>
+      <td>Database access utilty to query and manage data using JDBC for MySql. Other database support coming later.</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-07-10T16:44:55.885</td>
+      <td>2017-07-10T16:51:36.782</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -90,19 +90,19 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slatekit.common.info</td>
+      <td>slatekit.common.db</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slatekit.common.info.Folders.kt</td>
+      <td>slatekit.common.db.DbLookup.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/masterslate-common/src/main/kotlin/slatekit/common/info">slate-common/src/main/kotlin/slatekit/common/info</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/masterslate-common/src/main/kotlin/slatekit/common/db">slate-common/src/main/kotlin/slatekit/common/db</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_Folders.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_Folders.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_DbLookup.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_DbLookup.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -118,10 +118,19 @@
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
-<span class="k">import</span> <span class="nn">slatekit.common.app.LocationUserDir</span>
-<span class="k">import</span> <span class="nn">slatekit.common.info.Folders</span>
+<span class="k">import</span> <span class="nn">slatekit.common.conf.ConfFuncs</span>
+<span class="k">import</span> <span class="nn">slatekit.common.conf.Config</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.Db</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbCon</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs</span>
+<span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
+<span class="k">import</span> <span class="nn">slatekit.examples.common.User</span>
 
 
 
@@ -138,55 +147,72 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
+        <span class="c1">// These examples just shows the database connection registration
+</span>        <span class="c1">// There is separate Db component in slatekit.common.db.Db
+</span>        <span class="c1">// that handles db functions: query, insert, update, delete, scalar
+</span>
+        <span class="c1">// CASE 1: The DbLookup component holds all the database
+</span>        <span class="c1">// connections associated with a name. You can also set
+</span>        <span class="c1">// the default database. In this case, no db connections
+</span>        <span class="c1">// have been registered, so it will be empty.
+</span>        <span class="k">val</span> <span class="n">dbs1</span> <span class="k">=</span> <span class="nc">DbLookup</span><span class="o">()</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs1</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
 
-        <span class="c1">// CASE 1: Build a folder structure for an application
-</span>        <span class="c1">// Explicitly indicate user-directory with the following folder structure
-</span>        <span class="c1">// NOTE: Slate Kit based applications are setup this way.
+
+        <span class="c1">// CASE 2: Create the DbLookup using just 1 explicit connection
+</span>        <span class="k">val</span> <span class="n">dbs3</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">defaultDb</span><span class="o">(</span>
+                <span class="nc">DbConString</span><span class="o">(</span>
+                        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+                        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
+                        <span class="s">"root"</span><span class="o">,</span>
+                        <span class="s">"abcdefghi"</span>
+                <span class="o">)</span>
+        <span class="o">)</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs3</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
+
+
+        <span class="c1">// CASE 3: Create the DbLookup using just 1 connection from a file in the user directory
+</span>        <span class="c1">// e.g. on windows: C:\Users\kv\slatekit\conf\db.txt
 </span>        <span class="c1">//
-</span>        <span class="c1">// /c/users/{user}/
-</span>        <span class="c1">//  - company-1
-</span>        <span class="c1">//    - department-1
-</span>        <span class="c1">//      - app-1
-</span>        <span class="c1">//        - conf
-</span>        <span class="c1">//        - cache
-</span>        <span class="c1">//        - inputs
-</span>        <span class="c1">//        - logs
-</span>        <span class="c1">//        - outputs
-</span>        <span class="c1">//        - temp
-</span>        <span class="k">val</span> <span class="n">folders</span> <span class="k">=</span> <span class="nc">Folders</span><span class="o">(</span>
-                <span class="n">location</span> <span class="k">=</span> <span class="nc">LocationUserDir</span><span class="o">,</span>
-                <span class="n">home</span> <span class="k">=</span> <span class="nc">System</span><span class="o">.</span><span class="n">getProperty</span><span class="o">(</span><span class="s">"user.dir"</span><span class="o">),</span>
-                <span class="n">root</span> <span class="k">=</span> <span class="s">"company-1"</span><span class="o">,</span>
-                <span class="n">group</span> <span class="k">=</span> <span class="s">"department-1"</span><span class="o">,</span>
-                <span class="n">app</span> <span class="k">=</span> <span class="s">"app-1"</span><span class="o">,</span>
-                <span class="n">cache</span> <span class="k">=</span> <span class="s">"cache"</span><span class="o">,</span>
-                <span class="n">inputs</span> <span class="k">=</span> <span class="s">"input"</span><span class="o">,</span>
-                <span class="n">logs</span> <span class="k">=</span> <span class="s">"logs"</span><span class="o">,</span>
-                <span class="n">outputs</span> <span class="k">=</span> <span class="s">"output"</span><span class="o">,</span>
-                <span class="n">temp</span> <span class="k">=</span> <span class="s">"temp"</span><span class="o">,</span>
-                <span class="n">conf</span> <span class="k">=</span> <span class="s">"conf"</span>
+</span>        <span class="c1">// NOTES:
+</span>        <span class="c1">// 1. This is much safer and the recommended approach to storing DB connections.
+</span>        <span class="c1">// 2. You should also encrypt the username/password
+</span>        <span class="c1">//
+</span>        <span class="c1">// driver:com.mysql.jdbc.Driver
+</span>        <span class="c1">// url:jdbc:mysql://localhost/World
+</span>        <span class="c1">// user:root
+</span>        <span class="c1">// password:123abc
+</span>        <span class="k">val</span> <span class="n">dbs2</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">readDbCon</span><span class="o">(</span><span class="s">"user://.slatekit/conf/db.txt"</span><span class="o">)!!)</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs2</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
+
+
+        <span class="c1">// CASE 4: Register connection and link to a key "user_db" using credentials from user folder
+</span>        <span class="k">val</span> <span class="n">dbs4</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">namedDbs</span><span class="o">(</span>
+            <span class="n">listOf</span><span class="o">(</span><span class="nc">Pair</span><span class="o">(</span><span class="s">"users"</span><span class="o">,</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">readDbCon</span><span class="o">(</span><span class="s">"user://.slatekit/conf/db_default.txt"</span><span class="o">)!!))</span>
         <span class="o">)</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">))</span>
 
-        <span class="c1">// CASE 2: Build a folder structure for an application
-</span>        <span class="c1">// Same as Case 1 above but using a short-hand approach
-</span>        <span class="k">val</span> <span class="n">folders2</span> <span class="k">=</span> <span class="nc">Folders</span><span class="o">.</span><span class="n">userDir</span><span class="o">(</span>
-                <span class="n">root</span> <span class="k">=</span> <span class="s">"company-1"</span><span class="o">,</span>
-                <span class="n">group</span> <span class="k">=</span> <span class="s">"department-1"</span><span class="o">,</span>
-                <span class="n">app</span> <span class="k">=</span> <span class="s">"app-1"</span>
-        <span class="o">)</span>
-
-        <span class="c1">// CASE 3: Create the folders if they do not exist
-</span>        <span class="n">folders</span><span class="o">.</span><span class="n">create</span><span class="o">()</span>
-
-        <span class="c1">// CASE 4: Get the individual paths to the folders
-</span>        <span class="n">println</span><span class="o">(</span><span class="s">"app    :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToApp</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"cache  :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToCache</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"conf   :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToConf</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"input  :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToInputs</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"logs   :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToLogs</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"output :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToOutputs</span><span class="o">)</span>
-        <span class="n">println</span><span class="o">(</span><span class="s">"output :"</span> <span class="o">+</span> <span class="n">folders</span><span class="o">.</span><span class="n">pathToTemp</span><span class="o">)</span>
-
+        <span class="c1">// CASE 5: Register multiple connections by api ( "users", "files" )
+</span>        <span class="k">val</span> <span class="n">dbs5</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span><span class="n">listOf</span><span class="o">(</span>
+            <span class="nc">Pair</span><span class="o">(</span>
+                <span class="s">"users"</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">(</span>
+                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+                    <span class="s">"jdbc:mysql://localhost/users"</span><span class="o">,</span>
+                    <span class="s">"root"</span><span class="o">,</span>
+                    <span class="s">"abcdefghi"</span>
+                    <span class="o">)</span>
+            <span class="o">),</span>
+            <span class="nc">Pair</span><span class="o">(</span>
+                <span class="s">"files"</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">(</span>
+                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
+                    <span class="s">"jdbc:mysql://localhost/files"</span><span class="o">,</span>
+                    <span class="s">"root"</span><span class="o">,</span>
+                    <span class="s">"abcdefghi"</span>
+                <span class="o">)</span>
+            <span class="o">)</span>
+        <span class="o">))</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs5</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">))</span>
+        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs5</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"files"</span><span class="o">))</span>
         
 
 </code></pre>

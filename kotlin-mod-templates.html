@@ -78,23 +78,23 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-06-06T23:36:25.057</td>
+      <td>2017-07-10T16:44:56.002</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.4.0</td>
+      <td>0.9.2</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slate.common.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common.templates</td>
+      <td>slatekit.common.templates</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.templates.Templates.kt</td>
+      <td>slatekit.common.templates.Templates.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -123,7 +123,7 @@
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
-<span class="k">import</span> <span class="nn">slate.common.Random</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Random</span>
 
 
 
@@ -140,18 +140,18 @@
 </span>    <span class="c1">// You can also use the Templates constructor directly.
 </span>    <span class="k">val</span> <span class="n">templates</span> <span class="k">=</span> <span class="nc">Templates</span><span class="o">.</span><span class="n">build</span><span class="o">(</span>
       <span class="n">templates</span> <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span>
-        <span class="nc">Template</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.name}, Welcome to @{company.name}."</span><span class="o">),</span>
-        <span class="nc">Template</span><span class="o">(</span><span class="s">"confirm"</span><span class="o">,</span> <span class="s">"Your confirmation code for @{app.name} is @{code}."</span><span class="o">)</span>
+        <span class="nc">Template</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">),</span>
+        <span class="nc">Template</span><span class="o">(</span><span class="s">"confirm"</span><span class="o">,</span> <span class="s">"Your confirmation code for @{app.api} is @{code}."</span><span class="o">)</span>
       <span class="o">),</span>
       <span class="n">subs</span> <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.home"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"c:/users/johndoe"</span>                <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.name"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"CodeHelix"</span>                       <span class="o">}</span> <span class="o">),</span>
+        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"CodeHelix"</span>                       <span class="o">}</span> <span class="o">),</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.dir"</span>  <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{user.home}/@{company.id}"</span>      <span class="o">}</span> <span class="o">),</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.confs"</span><span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{user.home}/@{company.id}/confs"</span><span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"slatekit.sampleapp"</span>              <span class="o">}</span> <span class="o">),</span>
+        <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.api"</span>     <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"slatekit.sampleapp"</span>              <span class="o">}</span> <span class="o">),</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.dir"</span>      <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{company.dir}/@{app.id}"</span>        <span class="o">}</span> <span class="o">),</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.confs"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{app.dir}/confs"</span>                <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.name"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"john.doe"</span>                        <span class="o">}</span> <span class="o">),</span>
+        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"john.doe"</span>                        <span class="o">}</span> <span class="o">),</span>
         <span class="nc">Pair</span><span class="o">(</span><span class="s">"code"</span>         <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="nc">Random</span><span class="o">.</span><span class="n">alpha6</span><span class="o">()</span>                   <span class="o">}</span> <span class="o">)</span>
     <span class="o">))</span>
     
@@ -163,27 +163,27 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Case 1: Parse text and get the result as individual parts
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span><span class="s">"Hi @{user.name}, Welcome to @{company.name}."</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"Case 1: Parse into individual parts"</span><span class="o">)</span>
     <span class="n">print</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="o">)</span>
 
     <span class="c1">// Case 2: Parse text into a template
-</span>    <span class="k">val</span> <span class="n">template</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parseTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.name}, Welcome to @{company.name}."</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">template</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parseTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"Case 2: Parse into a Template containing the parts"</span><span class="o">)</span>
     <span class="n">print</span><span class="o">(</span><span class="n">template</span><span class="o">)</span>
 
     <span class="c1">// Case 3: Resolve ( process ) the template on demand using the initial variables
-</span>    <span class="k">val</span> <span class="n">text3</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.name}, Welcome to @{company.name}."</span><span class="o">)</span>
+</span>    <span class="k">val</span> <span class="n">text3</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"Case 3: Resolve template with variables into a Option[String]"</span><span class="o">)</span>
     <span class="n">println</span><span class="o">(</span><span class="n">text3</span><span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 
     <span class="c1">// Case 4: Resolve ( process ) the template on demand using custom variables
-</span>    <span class="k">val</span> <span class="n">text4</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.name}, Welcome to @{company.name}."</span><span class="o">,</span>
+</span>    <span class="k">val</span> <span class="n">text4</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">,</span>
       <span class="nc">Templates</span><span class="o">.</span><span class="n">subs</span> <span class="o">(</span>
         <span class="n">listOf</span><span class="o">(</span>
-          <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.name"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}),</span>
-          <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.name"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">})</span>
+          <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}),</span>
+          <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">})</span>
         <span class="o">)</span>
       <span class="o">)</span>
     <span class="o">)</span>
@@ -200,8 +200,8 @@
     <span class="c1">// Case 6: Resolve ( process ) saved template using custom variables
 </span>    <span class="k">val</span> <span class="n">text6</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolveTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="nc">Templates</span><span class="o">.</span><span class="n">subs</span> <span class="o">(</span>
       <span class="n">listOf</span><span class="o">(</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.name"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.name"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">}</span> <span class="o">)</span>
+        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}</span> <span class="o">),</span>
+        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">}</span> <span class="o">)</span>
       <span class="o">)</span>
     <span class="o">))</span>
     <span class="n">println</span><span class="o">(</span><span class="s">"Case 6: Resolve named template with custom variables"</span><span class="o">)</span>
@@ -217,17 +217,17 @@
 
 <pre><code class="language-bat">  Case 1: Parse into individual parts
   type: txt, pos : 0, len : 3, text: Hi
-  type: sub, pos : 5, len : 14, var: user.name
+  type: sub, pos : 5, len : 14, var: user.api
   type: txt, pos : 15, len : 13, text: , Welcome to
-  type: sub, pos : 30, len : 42, var: company.name
+  type: sub, pos : 30, len : 42, var: company.api
   type: txt, pos : 43, len : 1, text: .
 
   Case 2: Parse into a Template containing the parts
-  name : welcome, content : Hi @{user.name}, Welcome to @{company.name}., group : None, path : None, parsed : true, valid : true, status : None
+  api : welcome, content : Hi @{user.api}, Welcome to @{company.api}., group : None, path : None, parsed : true, valid : true, status : None
   type: txt, pos : 0, len : 3, text: Hi
-  type: sub, pos : 5, len : 14, var: user.name
+  type: sub, pos : 5, len : 14, var: user.api
   type: txt, pos : 15, len : 13, text: , Welcome to
-  type: sub, pos : 30, len : 42, var: company.name
+  type: sub, pos : 30, len : 42, var: company.api
   type: txt, pos : 43, len : 1, text: .
 
   Case 3: Resolve template with variables into a Option[String]

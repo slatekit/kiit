@@ -78,7 +78,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-06-29T11:24:41.604</td>
+      <td>2017-07-10T16:44:55.962</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -86,15 +86,15 @@
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slate.common.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common</td>
+      <td>slatekit.common</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.Request.kt</td>
+      <td>slatekit.common.Request.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -170,16 +170,17 @@
 </span>        <span class="c1">// SparkJava request ( with a thin abstraction layer ). The requests are
 </span>        <span class="c1">// kept very simple/light for maximum performance and data is NEVER copied.
 </span>        <span class="k">val</span> <span class="n">request</span> <span class="k">=</span> <span class="nc">Request</span><span class="o">(</span>
-                <span class="n">path</span>   <span class="k">=</span> <span class="s">"app.users.activate"</span><span class="o">,</span>
-                <span class="n">parts</span>  <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span><span class="s">"app"</span><span class="o">,</span> <span class="s">"users"</span><span class="o">,</span> <span class="s">"activate"</span><span class="o">),</span>
-                <span class="n">area</span>   <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span>
-                <span class="n">name</span>   <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span>
-                <span class="n">action</span> <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span>
-                <span class="n">verb</span>   <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span>
-                <span class="n">opts</span>   <span class="k">=</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="n">mapOf</span><span class="o">(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"ABC-123"</span><span class="o">)),</span>
-                <span class="n">args</span>   <span class="k">=</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="n">mapOf</span><span class="o">(</span><span class="s">"userId"</span> <span class="n">to</span> <span class="mi">5001</span><span class="o">)),</span>
-                <span class="n">raw</span>    <span class="k">=</span> <span class="s">"the raw HTTP SparkJava request or CLI ShellCommand"</span><span class="o">,</span>
-                <span class="n">tag</span>    <span class="k">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">()</span>
+                <span class="n">path</span>     <span class="k">=</span> <span class="s">"app.users.activate"</span><span class="o">,</span>
+                <span class="n">parts</span>    <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span><span class="s">"app"</span><span class="o">,</span> <span class="s">"users"</span><span class="o">,</span> <span class="s">"activate"</span><span class="o">),</span>
+                <span class="n">area</span>     <span class="k">=</span> <span class="s">"app"</span><span class="o">,</span>
+                <span class="n">name</span>     <span class="k">=</span> <span class="s">"users"</span><span class="o">,</span>
+                <span class="n">action</span>   <span class="k">=</span> <span class="s">"activate"</span><span class="o">,</span>
+                <span class="n">protocol</span> <span class="k">=</span> <span class="s">"cli"</span><span class="o">,</span>
+                <span class="n">verb</span>     <span class="k">=</span> <span class="s">"post"</span><span class="o">,</span>
+                <span class="n">opts</span>     <span class="k">=</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="n">mapOf</span><span class="o">(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"ABC-123"</span><span class="o">)),</span>
+                <span class="n">args</span>     <span class="k">=</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="n">mapOf</span><span class="o">(</span><span class="s">"userId"</span> <span class="n">to</span> <span class="mi">5001</span><span class="o">)),</span>
+                <span class="n">raw</span>      <span class="k">=</span> <span class="s">"the raw HTTP SparkJava request or CLI ShellCommand"</span><span class="o">,</span>
+                <span class="n">tag</span>      <span class="k">=</span> <span class="nc">Random</span><span class="o">.</span><span class="n">stringGuid</span><span class="o">()</span>
         <span class="o">)</span>
 
         <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
@@ -189,7 +190,7 @@
         <span class="c1">// CASE 1: Get the path of the request
 </span>        <span class="n">println</span><span class="o">(</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">)</span>
 
-        <span class="c1">// CASE 2: Get the parts of the request
+        <span class="c1">// CASE 2: Get the parts of the path
 </span>        <span class="n">println</span><span class="o">(</span> <span class="n">request</span><span class="o">.</span><span class="n">parts</span> <span class="o">)</span>
 
         <span class="c1">// CASE 3: Get a header named "api-key"

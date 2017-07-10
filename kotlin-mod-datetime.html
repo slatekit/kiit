@@ -78,23 +78,23 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-06-06T23:36:24.996</td>
+      <td>2017-07-10T16:44:55.856</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.4.0</td>
+      <td>0.9.2</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slate.common.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common</td>
+      <td>slatekit.common</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.DateTime.kt</td>
+      <td>slatekit.common.DateTime.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -120,10 +120,11 @@
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.ext.days</span>
+<span class="k">import</span> <span class="nn">slatekit.common.ext.minutes</span>
+<span class="k">import</span> <span class="nn">slatekit.common.ext.months</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
-<span class="k">import</span> <span class="nn">java.time.LocalDate</span>
-<span class="k">import</span> <span class="nn">java.time.LocalTime</span>
-<span class="k">import</span> <span class="nn">java.time.Month</span>
+<span class="k">import</span> <span class="nn">java.time.ZoneId</span>
 
 
 
@@ -140,57 +141,100 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Case 1. local date time by default
+    <span class="c1">//
+</span>    <span class="c1">// NOTE:
+</span>    <span class="c1">// When working with new Java 8 Date/Time, which is a significant
+</span>    <span class="c1">// improvement over the older mutable Java Date/Time models,
+</span>    <span class="c1">// there is still some "cognitive overhead" ( IMHO ) in mentally
+</span>    <span class="c1">// managing the different LocalDateTime, ZonedDateTime and conversion
+</span>    <span class="c1">// to and from local/zoned functionality
+</span>    <span class="c1">//
+</span>    <span class="c1">// DESIGN:
+</span>    <span class="c1">// This DateTime is a unified DateTime for both LocalDateTime and ZonedDateime
+</span>    <span class="c1">// that wraps uses a ZonedDateTime internally ( defaulted to local timezone )
+</span>    <span class="c1">// and is used for representing a DateTime for either Local and/or other Zones.
+</span>    <span class="c1">// This makes the Java 8 datetime/zones a bit simpler &amp; concise while
+</span>    <span class="c1">// essentially adding syntactic sugar using Kotlin operators and extension methods
+</span>    <span class="c1">//
+</span>    <span class="c1">// IMPORTANT:
+</span>    <span class="c1">// This does NOT change the functionality of the Java 8 classes at all.
+</span>    <span class="c1">// It is simply "syntactic sugar" for using the classes.
+</span>
+    <span class="c1">// Case 1. Get datetime now, either locally, at utc and other zones
+</span>    <span class="c1">// These will return a DateTime that wraps a ZonedDateTime.
+</span>    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">nowUtc</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">nowAt</span><span class="o">(</span><span class="s">"America/New_York"</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">nowAt</span><span class="o">(</span><span class="s">"Europe/Athens"</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">nowAt</span><span class="o">(</span><span class="nc">ZoneId</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="s">"Europe/Athens"</span><span class="o">)))</span>
+
+
+    <span class="c1">// Case 2: Build datetime explicitly
+</span>    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2017</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">10</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2017</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2017</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="s">"America/New_York"</span><span class="o">))</span>
+    <span class="n">println</span><span class="o">(</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="mi">2017</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">11</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="nc">ZoneId</span><span class="o">.</span><span class="n">of</span><span class="o">(</span><span class="s">"America/New_York"</span><span class="o">)))</span>
+
+
+    <span class="c1">// Case 3. Get datetime fields
 </span>    <span class="k">val</span> <span class="n">dt</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"slate Current DateTime: "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"year  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">year</span>      <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"month : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span>     <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"day   : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">day</span>       <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"hour  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">hours</span>     <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"mins  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">minutes</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"secs  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">seconds</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"nano  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">nano</span>      <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"zone  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">zone</span><span class="o">().</span><span class="n">id</span> <span class="o">)</span>
 
-    <span class="c1">// Case 2. utc
-</span>    <span class="k">val</span> <span class="n">dateOnly</span> <span class="k">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">atUtc</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"dateOnly : "</span> <span class="o">+</span> <span class="n">dateOnly</span><span class="o">)</span>
 
-    <span class="c1">// Case 3. Date parts
-</span>    <span class="n">println</span><span class="o">(</span> <span class="s">"year  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">year</span>    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"month : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">month</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"day   : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">day</span>     <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"hour  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">hours</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"mins  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">minutes</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"secs  : "</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">day</span>     <span class="o">)</span>
+    <span class="c1">// Case 4: Conversion from now( local ) to utc, specific zone,
+</span>    <span class="c1">// LocalDate, LocalTime, and LocalDateTime
+</span>    <span class="k">val</span> <span class="n">now</span>      <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">date</span><span class="o">()</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">time</span><span class="o">()</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">local</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">atUtcLocal</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">now</span><span class="o">.</span><span class="n">atZone</span><span class="o">(</span><span class="s">"Europe/Athens"</span><span class="o">)</span> <span class="o">)</span>
 
-    <span class="c1">// Case 4. add time
-</span>    <span class="k">val</span> <span class="n">dt1</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">(</span><span class="mi">2016</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">22</span><span class="o">,</span> <span class="mi">8</span><span class="o">,</span> <span class="mi">30</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addSeconds</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addMinutes</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addDays</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span>    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addMonths</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addYears</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span>   <span class="o">)</span>
 
-    <span class="c1">// Case 5. Compare local
-</span>    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt; "</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt; "</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"=="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">==</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"!="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">2</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">!=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// Case 5: Idiomatic use of Kotlin operators and extension methods
+</span>    <span class="c1">// This uses the extensions from slatekit.common.ext.IntExtensions
+</span>    <span class="k">val</span> <span class="n">later</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">+</span> <span class="mf">3.</span><span class="n">minutes</span>
+    <span class="n">println</span><span class="o">(</span>    <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">+</span> <span class="mf">3.d</span><span class="n">ays</span>            <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span>    <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">-</span> <span class="mf">3.</span><span class="n">minutes</span>         <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span>    <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">-</span> <span class="mf">3.</span><span class="n">months</span>          <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span>    <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">().</span><span class="n">secondsTo</span><span class="o">(</span> <span class="n">later</span> <span class="o">)</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span>    <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">().</span><span class="n">minutesTo</span><span class="o">(</span> <span class="n">later</span> <span class="o">)</span>  <span class="o">)</span>
 
-    <span class="c1">// Case 6. Compare local with utc
-</span>    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt; "</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(-</span><span class="mi">1</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&gt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&gt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt; "</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">1</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"&lt;="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">&lt;=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"=="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">==</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">0</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">ensureTrue</span><span class="o">(</span><span class="n">dt1</span><span class="o">,</span> <span class="s">"!="</span><span class="o">,</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">2</span><span class="o">),</span> <span class="n">dt1</span> <span class="o">!=</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span> <span class="mi">2</span><span class="o">).</span><span class="n">atUtc</span><span class="o">()</span> <span class="o">)</span>
 
-    <span class="c1">// Case 7. Get the duration
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addSeconds</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addMinutes</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addHours</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addDays</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">addMonths</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">periodFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="c1">// Case 6. Add time ( just like Java 8 )
+</span>    <span class="k">val</span> <span class="n">dt1</span> <span class="k">=</span> <span class="nc">DateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusYears</span>  <span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusMonths</span> <span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusDays</span>   <span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusHours</span>  <span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusMinutes</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusSeconds</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="n">toString</span><span class="o">()</span> <span class="o">)</span>
+
+
+    <span class="c1">// Case 7. Compare
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&gt;</span>   <span class="n">dt1</span><span class="o">.</span><span class="n">plusYears</span>  <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&gt;=</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">plusMonths</span> <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&gt;=</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">plusDays</span>   <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&lt;</span>   <span class="n">dt1</span><span class="o">.</span><span class="n">plusHours</span>  <span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&lt;=</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">plusMinutes</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">&lt;=</span>  <span class="n">dt1</span><span class="o">.</span><span class="n">plusSeconds</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+
+
+    <span class="c1">// Case 8. Get duration (hours,mins,seconds) or period(days,months,years)
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusSeconds</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusMinutes</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusHours</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">durationFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusDays</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">periodFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusMonths</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">periodFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">dt1</span><span class="o">.</span><span class="n">plusYears</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="n">periodFrom</span><span class="o">(</span> <span class="n">dt1</span> <span class="o">)</span> <span class="o">)</span>
 
     
 

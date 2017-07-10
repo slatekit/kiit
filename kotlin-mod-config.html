@@ -78,23 +78,23 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2017-06-06T23:36:24.955</td>
+      <td>2017-07-10T16:44:55.813</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>1.4.0</td>
+      <td>0.9.2</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slate.common.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slate.common.conf</td>
+      <td>slatekit.common.conf</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slate.common.conf.Config.kt</td>
+      <td>slatekit.common.conf.Config.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -113,17 +113,17 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.core.common.Conf</span>
-
+</span>
 
 
 <span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
-<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.conf.ConfFuncs</span>
+<span class="k">import</span> <span class="nn">slatekit.common.conf.Config</span>
 <span class="k">import</span> <span class="nn">slatekit.common.db.DbCon</span>
 <span class="k">import</span> <span class="nn">slatekit.common.encrypt.Encryptor</span>
-<span class="k">import</span> <span class="nn">slatekit.common.envs.Dev</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 
 
 
@@ -140,118 +140,151 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Load up config from application.conf in resources
-</span>    <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"env.name: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"env.name"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"env.region: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"env.region"</span><span class="o">,</span> <span class="s">"usa"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"db.enabled: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"db.enabled"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+        <span class="c1">// CASE 1: Load up config from resources directory
+</span>        <span class="k">val</span> <span class="n">conf</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(</span><span class="s">"env.dev.conf"</span><span class="o">)</span>
 
+        <span class="c1">// CASE 2: Get typed value: non-nullable
+</span>        <span class="c1">// NOTE: default value for typed returned if unavailable
+</span>        <span class="n">println</span><span class="o">(</span><span class="s">"bool  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBool</span><span class="o">(</span><span class="s">"bVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"string: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"sVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"short : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getShort</span><span class="o">(</span><span class="s">"hVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"int   : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getInt</span><span class="o">(</span><span class="s">"iVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"long  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getLong</span><span class="o">(</span><span class="s">"lVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"float : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getFloat</span><span class="o">(</span><span class="s">"fVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"double: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getDouble</span><span class="o">(</span><span class="s">"dVal"</span><span class="o">))</span>
 
-    <span class="c1">// CASE 2: Get the environment selection ( env, dev, qa ) from conf or default
-</span>    <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"${env.name}, ${env.mode.name}, ${env.key}"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+        <span class="c1">// CASE 3: Get typed value: nullable e.g. Int?
+</span>        <span class="n">println</span><span class="o">(</span><span class="s">"bool  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBoolOpt</span><span class="o">(</span><span class="s">"bVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"string: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getStringOpt</span><span class="o">(</span><span class="s">"sVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"short : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getShortOpt</span><span class="o">(</span><span class="s">"hVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"int   : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getIntOpt</span><span class="o">(</span><span class="s">"iVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"long  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getLongOpt</span><span class="o">(</span><span class="s">"lVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"float : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getFloatOpt</span><span class="o">(</span><span class="s">"fVal"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"double: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getDoubleOpt</span><span class="o">(</span><span class="s">"dVal"</span><span class="o">))</span>
 
+        <span class="c1">// CASE 4: Get typed value: with default value if unavailable.
+</span>        <span class="n">println</span><span class="o">(</span><span class="s">"bool  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getBoolOrElse</span><span class="o">(</span><span class="s">"bVal"</span><span class="o">,</span> <span class="kc">false</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"string: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"sVal"</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"short : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getShortOrElse</span><span class="o">(</span><span class="s">"hVal"</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"int   : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getIntOrElse</span><span class="o">(</span><span class="s">"iVal"</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"long  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getLongOrElse</span><span class="o">(</span><span class="s">"lVal"</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"float : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getFloatOrElse</span><span class="o">(</span><span class="s">"fVal"</span><span class="o">,</span> <span class="mf">0.0f</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"double: "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getDoubleOrElse</span><span class="o">(</span><span class="s">"dVal"</span><span class="o">,</span> <span class="mf">0.0</span><span class="o">))</span>
 
-    <span class="c1">// CASE 3: Inherit config from another config in resources folder
-</span>    <span class="c1">// e.g. env.dev.conf ( dev environment ) can inherit from env.conf ( common )
-</span>    <span class="k">val</span> <span class="n">confs1</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.dev.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConInherited</span> <span class="k">=</span> <span class="n">confs1</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
-    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - inherited : "</span><span class="o">,</span> <span class="n">dbConInherited</span> <span class="o">)</span>
+        <span class="c1">// CASE 5: Get lists/maps
+</span>        <span class="n">println</span><span class="o">(</span><span class="s">"list  : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getList</span><span class="o">(</span><span class="s">"listValInt"</span><span class="o">,</span> <span class="nc">Int</span><span class="o">::</span><span class="n">class</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"map   : "</span> <span class="o">+</span> <span class="n">conf</span><span class="o">.</span><span class="n">getMap</span><span class="o">(</span><span class="s">"mapValInt"</span><span class="o">,</span> <span class="nc">String</span><span class="o">::</span><span class="n">class</span><span class="o">,</span> <span class="nc">Int</span><span class="o">::</span><span class="n">class</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">()</span>
 
-
-    <span class="c1">// CASE 4: Override inherited config settings
-</span>    <span class="c1">// e.g. env.loc.conf ( local environment ) overrides settings inherited from env.conf
-</span>    <span class="k">val</span> <span class="n">confs2</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.loc.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConOverride</span> <span class="k">=</span> <span class="n">confs2</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
-    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - override : "</span><span class="o">,</span> <span class="n">dbConOverride</span> <span class="o">)</span>
-
-
-    <span class="c1">// CASE 5: Multiple db settings, get 1 using a prefix
-</span>    <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefix.
-</span>    <span class="k">val</span> <span class="n">confs3</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">)</span>
-    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - multiple : "</span><span class="o">,</span> <span class="n">dbConMulti</span> <span class="o">)</span>
-
-
-    <span class="c1">// CASE 6: File from user directory:
-</span>    <span class="c1">// You can refer to a file path using a uri syntax:
-</span>    <span class="c1">//
-</span>    <span class="c1">// SYNTAX:
-</span>    <span class="c1">// - "jars://"  refer to resources directory in the jar.
-</span>    <span class="c1">// - "user://"  refer to user.home directory.
-</span>    <span class="c1">// - "file://"  refer to an explicit path to the file
-</span>    <span class="c1">// - "file://"  refer to a relative path to the file from working directory
+        <span class="c1">// More features such as decryption, file refs and more.
+</span>        <span class="c1">// ...
 </span>
-    <span class="c1">// EXAMPLES:
-</span>    <span class="c1">// - jar://env.qa.conf
-</span>    <span class="c1">// - user://slatekit/conf/env.qa.conf
-</span>    <span class="c1">// - file://c:/slatekit/system/slate.shell/conf/env.qa.conf
-</span>    <span class="c1">// - file://./conf/env.qa.conf
-</span>    <span class="c1">//
-</span>    <span class="c1">// CONFIG
-</span>    <span class="c1">//
-</span>    <span class="c1">// db {
-</span>    <span class="c1">//   location: "user://slatekit/conf/db.conf"
-</span>    <span class="c1">// }
-</span>    <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"db"</span><span class="o">)</span>
-    <span class="n">printDbCon</span> <span class="o">(</span> <span class="s">"db con - file ref: "</span><span class="o">,</span> <span class="n">dbConFile</span> <span class="o">)</span>
+        <span class="c1">// CASE 6: Get the environment selection ( env, dev, qa ) from conf or default
+</span>        <span class="k">val</span> <span class="n">env</span> <span class="k">=</span> <span class="n">conf</span><span class="o">.</span><span class="n">env</span><span class="o">()</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"${env.name}, ${env.mode.name}, ${env.key}"</span><span class="o">)</span>
+        <span class="n">println</span><span class="o">()</span>
 
 
-    <span class="c1">// CASE 7: Decryp encrypted strings in the config file
-</span>    <span class="c1">// e.g.
-</span>    <span class="c1">// db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
-</span>    <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">confs5</span> <span class="k">=</span> <span class="nc">Conf</span><span class="o">.</span><span class="n">loadWithFallback</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">,</span> <span class="n">enc</span> <span class="k">=</span> <span class="n">encryptor</span><span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"db user decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"db.user"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"db pswd decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"db.pswd"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
-    
+        <span class="c1">// CASE 7: Inherit config from another config in resources folder
+</span>        <span class="c1">// e.g. env.dev.conf ( dev environment ) can inherit from env.conf ( common )
+</span>        <span class="k">val</span> <span class="n">confs1</span> <span class="k">=</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">loadWithFallbackConfig</span><span class="o">(</span><span class="s">"env.dev.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">dbConInherited</span> <span class="k">=</span> <span class="n">confs1</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
+        <span class="n">printDbCon</span><span class="o">(</span><span class="s">"db con - inherited : "</span><span class="o">,</span> <span class="n">dbConInherited</span><span class="o">)</span>
+
+
+        <span class="c1">// CASE 8: Get overriden inherited config settings
+</span>        <span class="c1">// e.g. env.loc.conf ( local environment ) overrides settings inherited from env.conf
+</span>        <span class="k">val</span> <span class="n">confs2</span> <span class="k">=</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">loadWithFallbackConfig</span><span class="o">(</span><span class="s">"env.loc.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">dbConOverride</span> <span class="k">=</span> <span class="n">confs2</span><span class="o">.</span><span class="n">dbCon</span><span class="o">()</span>
+        <span class="n">printDbCon</span><span class="o">(</span><span class="s">"db con - override : "</span><span class="o">,</span> <span class="n">dbConOverride</span><span class="o">)</span>
+
+
+        <span class="c1">// CASE 9: Multiple db settings, get 1 using a prefix
+</span>        <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefix.
+</span>        <span class="k">val</span> <span class="n">confs3</span> <span class="k">=</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">loadWithFallbackConfig</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">dbConMulti</span> <span class="k">=</span> <span class="n">confs3</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">)</span>
+        <span class="n">printDbCon</span><span class="o">(</span><span class="s">"db con - multiple : "</span><span class="o">,</span> <span class="n">dbConMulti</span><span class="o">)</span>
+
+
+        <span class="c1">// CASE 6: File from user directory:
+</span>        <span class="c1">// You can refer to a file path using a uri syntax:
+</span>        <span class="c1">//
+</span>        <span class="c1">// SYNTAX:
+</span>        <span class="c1">// - "jars://"  refer to resources directory in the jar.
+</span>        <span class="c1">// - "user://"  refer to user.home directory.
+</span>        <span class="c1">// - "file://"  refer to an explicit path to the file
+</span>        <span class="c1">// - "file://"  refer to a relative path to the file from working directory
+</span>
+        <span class="c1">// EXAMPLES:
+</span>        <span class="c1">// - jar://env.qa.conf
+</span>        <span class="c1">// - user://slatekit/conf/env.qa.conf
+</span>        <span class="c1">// - file://c:/slatekit/system/slate.shell/conf/env.qa.conf
+</span>        <span class="c1">// - file://./conf/env.qa.conf
+</span>        <span class="c1">//
+</span>        <span class="c1">// CONFIG
+</span>        <span class="c1">//
+</span>        <span class="c1">// db {
+</span>        <span class="c1">//   location: "user://slatekit/conf/db.conf"
+</span>        <span class="c1">// }
+</span>        <span class="k">val</span> <span class="n">confs4</span> <span class="k">=</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">loadWithFallbackConfig</span><span class="o">(</span><span class="s">"env.pro.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">dbConFile</span> <span class="k">=</span> <span class="n">confs4</span><span class="o">.</span><span class="n">dbCon</span><span class="o">(</span><span class="n">prefix</span> <span class="k">=</span> <span class="s">"db"</span><span class="o">)</span>
+        <span class="n">printDbCon</span><span class="o">(</span><span class="s">"db con - file ref: "</span><span class="o">,</span> <span class="n">dbConFile</span><span class="o">)</span>
+
+
+        <span class="c1">// CASE 10: Decryp encrypted strings in the config file
+</span>        <span class="c1">// e.g.
+</span>        <span class="c1">// db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
+</span>        <span class="k">val</span> <span class="n">encryptor</span> <span class="k">=</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">confs5</span> <span class="k">=</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">loadWithFallbackConfig</span><span class="o">(</span><span class="s">"env.qa1.conf"</span><span class="o">,</span> <span class="s">"env.conf"</span><span class="o">,</span> <span class="n">enc</span> <span class="k">=</span> <span class="n">encryptor</span><span class="o">)</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"db user decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"db.user"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"db pswd decrypted : "</span> <span class="o">+</span> <span class="n">confs5</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"db.pswd"</span><span class="o">))</span>
+        <span class="n">println</span><span class="o">()</span>
+        
 
 </code></pre>
 </div>
 
 <h2 id="output">Output</h2>
 
-<pre><code class="language-bat"> env.name: lc1
-  db.enabled: true
+<p>```bat
+   env.api: lc1
+    db.enabled: true</p>
 
-  lc1, dev, dev : lc1
-
-
-  db con - inherited :
-  driver: com.mysql.jdbc.Driver
-  url   : jdbc:mysql://localhost/db1
-  user  : root
-  pswd  : 123456789
+<div class="highlighter-rouge"><pre class="highlight"><code>lc1, dev, dev : lc1
 
 
-  db con - override :
-  driver: com.mysql.jdbc.Driver
-  url   : jdbc:mysql://localhost/db1
-  user  : root
-  pswd  : 123456789
+db con - inherited :
+driver: com.mysql.jdbc.Driver
+url   : jdbc:mysql://localhost/db1
+user  : root
+pswd  : 123456789
 
 
-  db con - multiple :
-  driver: com.mysql.jdbc.Driver
-  url   : jdbc:mysql://localhost/db1
-  user  : root
-  pswd  : 123456789
+db con - override :
+driver: com.mysql.jdbc.Driver
+url   : jdbc:mysql://localhost/db1
+user  : root
+pswd  : 123456789
 
 
-  db con - file ref:
-  driver: com.mysql.jdbc.Driver
-  url   : jdbc:mysql://localhost/test1
-  user  : root
-  pswd  : t$123456789
+db con - multiple :
+driver: com.mysql.jdbc.Driver
+url   : jdbc:mysql://localhost/db1
+user  : root
+pswd  : 123456789
 
 
-  db user decrypted : root
-  db pswd decrypted : 123456789
+db con - file ref:
+driver: com.mysql.jdbc.Driver
+url   : jdbc:mysql://localhost/test1
+user  : root
+pswd  : t$123456789
+
+
+db user decrypted : root
+db pswd decrypted : 123456789   ```
 </code></pre>
+</div>
 
 
 			</div>
