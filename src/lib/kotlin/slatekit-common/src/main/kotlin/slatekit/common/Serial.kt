@@ -13,6 +13,9 @@
 
 package slatekit.common
 
+import java.time.*
+import java.time.format.DateTimeFormatter
+
 /**
  * Created by kishorereddy on 6/14/17.
  */
@@ -30,6 +33,10 @@ open class Serial {
     protected var _buff = StringBuilder()
     protected open val _standardizeWidth = false
     protected open val _standardizeResult = false
+    protected val dateFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    protected val timeFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
 
     enum class ParentType {
         ROOT_TYPE, LIST_TYPE, MAP_TYPE, OBJECT_TYPE
@@ -81,21 +88,26 @@ open class Serial {
      */
     protected open fun serializeValue(s: Any?, depth: Int): Unit {
         when (s) {
-            null         -> _buff.append("null")
-            is Unit      -> _buff.append("null")
-            is Char      -> _buff.append(serializeString(s.toString()))
-            is String    -> _buff.append(serializeString(s))
-            is Boolean   -> _buff.append(s.toString().toLowerCase())
-            is Short     -> _buff.append(s.toString())
-            is Int       -> _buff.append(s.toString())
-            is Long      -> _buff.append(s.toString())
-            is Float     -> _buff.append(s.toString())
-            is Double    -> _buff.append(s.toString())
-            is DateTime  -> _buff.append("\"" + s.toString() + "\"")
-            is Result<*> -> serializeResult(s, depth)
-            is List<*>   -> serializeList(s, depth + 1)
-            is Map<*, *> -> serializeMap(s, depth + 1)
-            else         -> serializeObject(s, depth + 1)
+            null             -> _buff.append("null")
+            is Unit          -> _buff.append("null")
+            is Char          -> _buff.append(serializeString(s.toString()))
+            is String        -> _buff.append(serializeString(s))
+            is Boolean       -> _buff.append(s.toString().toLowerCase())
+            is Short         -> _buff.append(s.toString())
+            is Int           -> _buff.append(s.toString())
+            is Long          -> _buff.append(s.toString())
+            is Float         -> _buff.append(s.toString())
+            is Double        -> _buff.append(s.toString())
+            is LocalDate     -> _buff.append("\"" + s.format(dateFormat) + "\"")
+            is LocalTime     -> _buff.append("\"" + s.format(timeFormat) + "\"")
+            is LocalDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
+            is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
+            is Instant       -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
+            is DateTime      -> _buff.append("\"" + s.toString() + "\"")
+            is Result<*>     -> serializeResult(s, depth)
+            is List<*>       -> serializeList(s, depth + 1)
+            is Map<*, *>     -> serializeMap(s, depth + 1)
+            else             -> serializeObject(s, depth + 1)
         }
     }
 
@@ -177,7 +189,7 @@ open class Serial {
 
             // Standardized width
             val finalPropName = if (_standardizeWidth) {
-                Strings.pad(propName, maxLen)
+                propName.padEnd(maxLen)
             }
             else {
                 propName

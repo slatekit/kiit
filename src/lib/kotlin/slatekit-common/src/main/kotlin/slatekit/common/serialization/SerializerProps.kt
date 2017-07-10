@@ -13,7 +13,7 @@
 
 package slatekit.common.serialization
 
-import slatekit.common.Strings
+import slatekit.common.newline
 
 /**
  * Created by kishorereddy on 6/3/17.
@@ -35,7 +35,7 @@ class SerializerProps(standardizeFieldWidth: Boolean = false) : Serializer() {
      */
     override fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
         if (depth <= 2) {
-            _buff.append(Strings.newline())
+            _buff.append(newline)
         }
     }
 
@@ -49,14 +49,14 @@ class SerializerProps(standardizeFieldWidth: Boolean = false) : Serializer() {
 
 
     override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?): Unit {
-        _buff.append(Strings.newline())
+        _buff.append(newline)
         _buff.append("$key = ")
         serializeValue(value, depth)
     }
 
 
     override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?): Unit {
-        _buff.append(Strings.newline())
+        _buff.append(newline)
         serializeValue(value, depth)
     }
 }

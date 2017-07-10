@@ -14,7 +14,7 @@
 package slatekit.common.serialization
 
 import slatekit.common.Serial
-import slatekit.common.Strings
+import slatekit.common.newline
 
 /**
  * Created by kishorereddy on 6/3/17.
@@ -34,7 +34,7 @@ class SerializerCsv : Serial() {
      */
     override fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
         if (depth <= 2) {
-            _buff.append(Strings.newline())
+            _buff.append(newline)
         }
     }
 

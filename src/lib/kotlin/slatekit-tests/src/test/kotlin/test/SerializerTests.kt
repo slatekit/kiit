@@ -15,8 +15,8 @@ package test
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.Serial
+import slatekit.common.newline
 import slatekit.common.serialization.SerializerCsv
-import slatekit.common.serialization.SerializerProps
 import test.common.User
 
 /**
@@ -57,9 +57,13 @@ class SerializerTests {
 
     @Test fun can_serialize_dates() {
         val serializer = Serial()
-        assert( serializer.serialize(DateTime(2017,6,1)) == "\"2017-06-01T00:00\"" )
-        assert( serializer.serialize(DateTime(2017,6,1,9,5,0)) == "\"2017-06-01T09:05\"" )
-        assert( serializer.serialize(DateTime(2017,6,1,9,5,5)) == "\"2017-06-01T09:05:05\"" )
+        val d1 = serializer.serialize(DateTime.of(2017,6,1))
+        val d2 = serializer.serialize(DateTime.of(2017,6,1,9,5,0))
+        val d3 = serializer.serialize(DateTime.of(2017,6,1,9,5,5))
+
+        assert( d1 == "\"2017-06-01T00:00-04:00[America/New_York]\"" )
+        assert( d2 == "\"2017-06-01T09:05-04:00[America/New_York]\"" )
+        assert( d3 == "\"2017-06-01T09:05:05-04:00[America/New_York]\"" )
     }
 
 
@@ -69,7 +73,7 @@ class SerializerTests {
         assert( serializer.serialize(listOf(1, 2, 3)) == "[1, 2, 3]")
         assert( serializer.serialize(listOf(true, false, true)) == "[true, false, true]")
         assert( serializer.serialize(listOf(1.2, 3.4, 5.6)) == "[1.2, 3.4, 5.6]")
-        assert( serializer.serialize(listOf("a", 1, 2.3, true, DateTime(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05\"]")
+        assert( serializer.serialize(listOf("a", 1, 2.3, true, DateTime.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00[America/New_York]\"]")
     }
 
 
@@ -102,8 +106,8 @@ class SerializerTests {
         val user2 = User(3, "b@abc.com", "bat"  , "man", true, 35)
         val users = listOf(user1, user2)
         val text = serializer.serialize(users)
-        val expected = """2, "c@abc.com", "super", "man", true, 35""" + "\n" +
-                       """3, "b@abc.com", "bat", "man", true, 35""" + "\n\n"
+        val expected = """2, "c@abc.com", "super", "man", true, 35""" + newline +
+                       """3, "b@abc.com", "bat", "man", true, 35""" + newline + newline
 
         assert(text == expected)
     }
