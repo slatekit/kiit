@@ -14,90 +14,205 @@
 package slatekit.common
 
 import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 /**
- * Wraps the LocalDateTime / ZonedDateTime api into a singular
- * class with convenience properties / methods.
+ * DateTime wraps a ZonedDateTime, making using the
+ * new Java 8 date/time/zones a bit simpler & concise,
+ * and essentially adding a lot of syntactic sugar.
+ *
+ *
+ * FEATURES
+ * 1. Zoned      : Always uses ZonedDateTime
+ * 2. Simpler    : Simpler usage of Dates/Times/Zones
+ * 3. Conversion : Simpler conversion to/from time zones
+ * 4. Idiomatic  : Idiomatic way to use DateTime in kotlin
+ *
+ *
+ * EXAMPLES:
+ *    Construction:
+ *    - DateTime.now()
+ *    - DateTime.today()
+ *    - DateTime.of(2017, 7, 1)
+ *
+ *
+ *    UTC:
+ *    - val d = DateTime.nowUtc()
+ *    - val d = DateTime.nowAt("Europe/Athens")
+ *
+ *
+ *    Conversion
+ *    - val now      = DateTime.now()
+ *    - val utc      = now.atUtc()
+ *    - val utcl     = now.atUtcLocal()
+ *    - val athens   = now.at("Europe/Athens")
+ *    - val date     = now.date()
+ *    - val time     = now.time()
+ *    - val local    = now.local()
+ *
+ *
+ *    IDIOMATIC
+ *    - val now      = DateTime.now()
+ *    - val later    = now() + 3.days
+ *    - val before   = now() - 3.minutes
+ *    - val duration = now() - later
+ *    - val seconds  = now().secondsTo( later )
+ *    - val minutes  = now().minutesTo( later )
+ *
+ *
+ *    Formatting
+ *    - val now      = DateTime.now()
+ *    - val txt      = now.toStringYYYYMMDD("-")
+ *    - val txt      = now.toStringMMDDYYYY("/")
+ *    - val txt      = now.toStringTime(":")
+ *    - val txt      = now.toStringNumeric("-")
+ *
  *
  * @param raw
  */
-data class DateTime(val raw: LocalDateTime) {
+data class DateTime(val raw: ZonedDateTime) {
 
-
-    constructor(year: Int, month: Int, day: Int, hours: Int = 0, minutes: Int = 0, seconds: Int = 0) :
-            this(createLocal(year, month, day, hours, minutes, seconds))
-
-    constructor(d: Date) :
-            this(create(d))
-
-    /**
-     * Creates local datetime from zoned
-     *
-     * @param d
-     */
-    constructor(d: ZonedDateTime) : this(d.toLocalDateTime())
-
-
-    val year get() = raw.year
-    val month get() = raw.month.value
-    val day get() = raw.dayOfMonth
-    val hours get() = raw.hour
+    val year    get() = raw.year
+    val month   get() = raw.month.value
+    val day     get() = raw.dayOfMonth
+    val hours   get() = raw.hour
     val minutes get() = raw.minute
     val seconds get() = raw.second
+    val nano    get() = raw.nano
 
 
-    fun date(): DateTime {
-        val date = raw.toLocalDate()
-        return build(date.year, date.month.value, date.dayOfMonth)
-    }
+    /**
+     * Gets the Local Date time from internal ZonedDateTime
+     */
+    fun local():LocalDateTime = raw.toLocalDateTime()
 
 
-    fun time(): TimeSpan {
-        val time = raw.toLocalTime()
-        return TimeSpan(time.hour, time.minute, time.second)
-    }
+    /**
+     * Gets the current ZonedDateTime as a LocalDate ( removing the time portion )
+     */
+    fun date(): LocalDate = raw.toLocalDate()
 
 
-    fun addYears(years: Long): DateTime = DateTime(raw.plusYears(years))
+    /**
+     * Gets the current ZonedDateTime as a LocalTime
+     */
+    fun time(): LocalTime = raw.toLocalTime()
 
 
-    fun addMonths(months: Long): DateTime = DateTime(raw.plusMonths(months))
+    /**
+     * Gets the current zone for this date/time.
+     */
+    fun zone(): ZoneId = raw.zone
 
 
-    fun addDays(days: Long): DateTime = DateTime(raw.plusDays(days))
+    /**
+     * Whether or not this is at the UTC zone
+     */
+    val isUtc:Boolean get() = raw.zone == ZoneId.of("UTC")
 
 
-    fun addHours(hours: Long): DateTime = DateTime(raw.plusHours(hours))
+    /**
+     * Whether or not this is at the UTC zone
+     */
+    fun isZone(id:String):Boolean = raw.zone.id == id
 
 
-    fun addMins(mins: Long): DateTime = DateTime(raw.plusMinutes(mins))
+    /**
+     * Gets the current ZonedDateTime at UTC at the same "instant"
+     * This essential converts the time from e.g. New York to UTC ( +4hr )
+     */
+    fun atUtc(): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.of("UTC")))
 
 
-    fun addMinutes(mins: Long): DateTime = DateTime(raw.plusMinutes(mins))
+    /**
+     * Gets the current ZonedDateTime at UTC at the same "local" time
+     * This essential converts the time from e.g. New York to UTC
+     */
+    fun atUtcLocal(): DateTime = DateTime(raw.withZoneSameLocal(ZoneId.of("UTC")))
 
 
-    fun addSeconds(secs: Long): DateTime = DateTime(raw.plusSeconds(secs))
+    /**
+     * Gets the current ZonedDateTime at the local timezone
+     */
+    fun atLocalInstant(): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.systemDefault()))
 
 
-    fun timeOfDay(): TimeSpan = TimeSpan(hours, minutes, seconds)
+    /**
+     * Gets the current ZonedDateTime at the same "instant" of timezone supplied.
+     * This essential converts the time from e.g. New York to Europe/Athens ( +7hr )
+     */
+    fun atZone(zone: String): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.of(zone)))
 
 
-    operator fun compareTo(dt: DateTime): Int {
-        val result = raw.toInstant(ZoneOffset.UTC).compareTo(dt.raw.toInstant(ZoneOffset.UTC))
-        return result
-    }
+    /**
+     * Gets the current ZonedDateTime at the same "instant" of timezone supplied.
+     * This essential converts the time from e.g. New York to Europe/Athens ( +7hr )
+     */
+    fun atZone(zone: ZoneId): DateTime = DateTime(raw.withZoneSameInstant(zone))
 
 
-    fun atUtc(): DateTime = DateTime(raw.atZone(ZoneId.of(DateTime.UTC)))
+    /**
+     * Format the date using the pattern supplied.
+     */
+    fun format(pattern:String):String = raw.format(DateTimeFormatter.ofPattern(pattern))
 
 
-    fun atZone(zone: String): DateTime = DateTime(raw.atZone(ZoneId.of(zone)))
+    fun plusYears(years: Long): DateTime = DateTime(raw.plusYears(years))
+    fun plusMonths(months: Long): DateTime = DateTime(raw.plusMonths(months))
+    fun plusDays(days: Long): DateTime = DateTime(raw.plusDays(days))
+    fun plusHours(hours: Long): DateTime = DateTime(raw.plusHours(hours))
+    fun plusMinutes(mins: Long): DateTime = DateTime(raw.plusMinutes(mins))
+    fun plusSeconds(secs: Long): DateTime = DateTime(raw.plusSeconds(secs))
+
+
+    fun withYear(year:Int): DateTime = DateTime(raw.withYear(year))
+    fun withMonth(month:Int): DateTime = DateTime(raw.withMonth(month))
+    fun withDayOfMonth(dayOfMonth:Int): DateTime = DateTime(raw.withDayOfMonth(dayOfMonth))
+    fun withHour(hour:Int): DateTime = DateTime(raw.withHour(hour))
+    fun withMinute(minutes:Int): DateTime = DateTime(raw.withMinute(minutes))
+    fun withSecond(seconds:Int): DateTime = DateTime(raw.withSecond(seconds))
+
+
+    operator fun compareTo(dt: DateTime): Int = raw.compareTo(dt.raw)
+
+
+    operator fun plus(duration: Duration):DateTime = DateTime(raw.plus(duration))
+
+
+    operator fun plus(period: Period):DateTime = DateTime(raw.plus(period))
+
+
+    operator fun minus(duration: Duration):DateTime = DateTime(raw.minus(duration))
+
+
+    operator fun minus(period: Period):DateTime = DateTime(raw.minus(period))
+
+
+    fun yearsTo(dt:DateTime):Int = periodFrom(dt).years
+
+
+    fun monthsTo(dt:DateTime):Int = periodFrom(dt).months
+
+
+    fun daysTo(dt:DateTime):Int = periodFrom(dt).days
+
+
+    fun hoursTo(dt:DateTime):Long = durationFrom(dt).toHours()
+
+
+    fun minutesTo(dt:DateTime):Duration = durationFrom(dt)
+
+
+    fun secondsTo(dt:DateTime):Duration = durationFrom(dt)
+
+
+    fun nanoTo(dt:DateTime):Duration = durationFrom(dt)
 
 
     fun durationFrom(dt: DateTime): Duration {
-        val duration = Duration.between(raw.toInstant(ZoneOffset.UTC),
-                dt.raw.toInstant(ZoneOffset.UTC))
+        val duration = Duration.between(raw.toInstant(), dt.raw.toInstant())
         return duration
     }
 
@@ -108,64 +223,19 @@ data class DateTime(val raw: LocalDateTime) {
     }
 
 
-    fun toStringLong(separator: String = "-"): String {
-        val sep = Strings.valueOrDefault(separator, "-")
-        val date = this.year.toString() + sep + this.month + sep + this.day + " "
-        val time = "" +
-                (if (hours < 10) "0" + hours else hours) +
-                (if (minutes < 10) "0" + minutes else minutes) +
-                (if (seconds < 10) "0" + seconds else seconds)
-        val longDisplay = date + time
-        return longDisplay
-    }
+    fun toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
 
 
-    fun toStringYYYYMMDD(): String {
-        val text = year.toString() +
-                (if (month < 10) "0" + month else month) +
-                (if (day < 10) "0" + day else day)
-        return text
-    }
+    fun toStringYYYYMMDD(sep:String = "-"): String = format("yyyy${sep}MM${sep}dd")
 
 
-    fun toStringYYYYMMDDHHmmss(): String {
-        val text = year.toString() +
-                (if (month < 10) "0" + month else month) +
-                (if (day < 10) "0" + day else day) +
-                (if (hours < 10) "0" + hours else hours) +
-                (if (minutes < 10) "0" + minutes else minutes) +
-                (if (seconds < 10) "0" + seconds else seconds)
-        return text
-    }
+    fun toStringMMDDYYYY(sep:String = "-"): String = format("MM${sep}dd${sep}yyyy")
 
 
-    fun toStringNumeric(): String = toStringYYYYMMDD()
+    fun toStringMySql(): String = format("yyyy-MM-dd HH:mm:ss")
 
 
-    fun toStringSql(): String {
-        // yyyy-MM-ddTHHmmss
-        val text = year.toString() +
-                "-" + (if (month < 10) "0" + month else month) +
-                "-" + (if (day < 10) "0" + day else day) +
-                "T" +
-                (if (hours < 10) "0" + hours else hours) +
-                (if (minutes < 10) "0" + minutes else minutes) +
-                (if (seconds < 10) "0" + seconds else seconds)
-        return text
-    }
-
-
-    fun toStringMySql(): String {
-        // yyyy-MM-dd HH:mm:ss
-        val text = year.toString() +
-                "-" + (if (month < 10) "0" + month else month) +
-                "-" + (if (day < 10) "0" + day else day) +
-                " " +
-                (if (hours < 10) "0" + hours else hours) +
-                ":" + (if (minutes < 10) "0" + minutes else minutes) +
-                ":" + (if (seconds < 10) "0" + seconds else seconds)
-        return text
-    }
+    fun toStringTime(sep:String = "-"): String = format("HH${sep}mm${sep}ss")
 
 
     override fun toString(): String = raw.toString()
@@ -173,145 +243,167 @@ data class DateTime(val raw: LocalDateTime) {
 
     companion object DateTimes {
 
-        val UTC = "UTC"
+        val UTC: ZoneId = ZoneId.of("UTC")
 
 
-        fun build(d: Date): DateTime = DateTime(create(d))
+        val MIN: DateTime = DateTime(LocalDateTime.MIN.atZone(ZoneId.systemDefault()))
 
 
-        fun build(d: DateTime): DateTime = DateTime(d.raw)
+        fun of(d:ZonedDateTime):DateTime = DateTime(d)
 
 
-        fun build(s: String): DateTime = DateTime.parseNumericDate12(s)
+        fun of(d:LocalDateTime):DateTime = DateTime(build(d))
 
 
-        fun build(year: Int, month: Int, day: Int, hours: Int, minutes: Int, seconds: Int): DateTime {
-            return DateTime(LocalDateTime.of(year, month, day, hours, minutes, seconds))
+        fun of(d: Date): DateTime = DateTime(build(d, ZoneId.systemDefault()))
+
+
+        fun of(d: Date, zoneId:ZoneId): DateTime = DateTime(build(d, zoneId))
+
+
+        fun of(d: LocalDate): DateTime = DateTime(build(d.year, d.month.value, d.dayOfMonth, zoneId = ZoneId.systemDefault()))
+
+
+        /**
+         * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
+         */
+        fun of(year   : Int    ,
+               month  : Int    ,
+               day    : Int    ,
+               hours  : Int = 0,
+               minutes: Int = 0,
+               seconds: Int = 0,
+               nano   : Int = 0,
+               zone   : String = ""): DateTime {
+            val zoneId = if(zone.isNullOrEmpty()) ZoneId.systemDefault() else ZoneId.of(zone)
+            return DateTime(build(year, month, day, hours, minutes, seconds, nano, zoneId))
         }
 
 
         /**
-         * Creates a local datetime from date only.
-         *
-         * @param year
-         * @param month
-         * @param day
+         * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
          */
-        fun build(year: Int, month: Int, day: Int): DateTime {
-            return DateTime(LocalDateTime.of(year, month, day, 0, 0, 0))
+        fun of(year   : Int    ,
+               month  : Int    ,
+               day    : Int    ,
+               hours  : Int = 0,
+               minutes: Int = 0,
+               seconds: Int = 0,
+               nano   : Int = 0,
+               zoneId : ZoneId ): DateTime {
+            return DateTime(build(year, month, day, hours, minutes, seconds, nano, zoneId))
         }
 
 
-        fun now(): DateTime = DateTime(LocalDateTime.now())
+        fun build(d:LocalDateTime):ZonedDateTime = d.atZone(ZoneId.systemDefault())
 
 
-        fun min(): DateTime = DateTime(LocalDateTime.MIN)
-
-
-        fun today(): DateTime {
-            val today = LocalDateTime.now()
-            val d = build(today.year, today.month.value, today.dayOfMonth)
-            return d
-        }
-
-
-        fun create(date: Date): LocalDateTime {
-            val dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault())
+        fun build(date: Date, zone:ZoneId): ZonedDateTime {
+            val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
             return dateTime
         }
 
 
-        fun create(year: Int, month: Int, day: Int, hours: Int = 12, minutes: Int = 0, seconds: Int = 0): Calendar {
-            val c = Calendar.getInstance()
-            c.set(year, month, day, hours, minutes, seconds)
-            c.set(Calendar.MILLISECOND, 0)
-            return c
+        /**
+         * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
+         */
+        fun build( year   : Int    ,
+                   month  : Int    ,
+                   day    : Int    ,
+                   hours  : Int = 0,
+                   minutes: Int = 0,
+                   seconds: Int = 0,
+                   nano   : Int = 0,
+                   zoneId : ZoneId): ZonedDateTime {
+            return ZonedDateTime.of(year, month, day, hours, minutes, seconds, nano, zoneId)
         }
 
 
-        fun createLocal(year: Int, month: Int, day: Int, hours: Int = 0, minutes: Int = 0, seconds: Int = 0): LocalDateTime {
-            return LocalDateTime.of(year, month, day, hours, minutes, seconds)
+        /**
+         * Builds a DateTime ( ZonedDateTime of system zone ) with current date/time.
+         */
+        fun now(): DateTime = DateTime(ZonedDateTime.now())
+
+
+        /**
+         * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
+         */
+        fun nowUtc(): DateTime = DateTime(ZonedDateTime.now(ZoneId.of("UTC")))
+
+
+        /**
+         * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
+         */
+        fun nowAt(zone:String): DateTime = DateTime(ZonedDateTime.now(ZoneId.of(zone)))
+
+
+        /**
+         * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
+         */
+        fun nowAt(zone:ZoneId): DateTime = DateTime(ZonedDateTime.now(zone))
+
+
+        fun today(): DateTime {
+            val now = ZonedDateTime.now()
+            return of(now.year, now.month.value, now.dayOfMonth)
         }
 
 
-        fun nextYear(): DateTime = today().addYears(1)
+        fun tomorrow(): DateTime = DateTime.today().plusDays(1)
 
 
-        fun lastYear(): DateTime = DateTime.today().addYears(-1)
+        fun yesterday(): DateTime = today().plusDays(-1)
 
 
-        fun lastMonth(): DateTime = DateTime.today().addMonths(-1)
+        fun daysAgo(days: Long): DateTime = DateTime.today().plusDays(-1 * days)
 
 
-        fun nextMonth(): DateTime = DateTime.today().addMonths(1)
+        fun daysFromNow(days: Long): DateTime = DateTime.today().plusDays(days)
 
 
-        fun yesterday(): DateTime = DateTime.today().addDays(-1)
-
-
-        fun tomorrow(): DateTime = DateTime.today().addDays(1)
-
-
-        fun daysAgo(days: Long): DateTime = DateTime.today().addDays(-1 * days)
-
-
-        fun daysFromNow(days: Long): DateTime = DateTime.today().addDays(days)
-
-
-        fun monthsAgo(months: Long): DateTime = DateTime.today().addMonths(-1 * months)
-
-
-        fun monthsFromNow(months: Long): DateTime = DateTime.today().addMonths(months)
-
-
-        fun parseNumericVal(value: String): DateTime {
+        fun parseNumeric(value: String): DateTime {
             val text = value.trim()
 
             // Check 1: Empty string ?
             val res = if (text.isNullOrEmpty()) {
-                DateTime.min()
+                DateTime.MIN
             }
             else if (text == "0") {
-                DateTime.min()
+                DateTime.MIN
             }
             // Check 2: Date only - no time ?
             // yyyymmdd = 8 chars
-            else if (text.length < 9) {
-                parseNumericDate8(text)
+            else if (text.length == 8) {
+                DateTime.of(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyyMMdd")))
             }
             // Check 3: Date with time
             // yyyymmddhhmm = 12chars
             else if (text.length == 12) {
-                parseNumericDate12(text)
+                val years = text.substring(0, 4).toInt()
+                val months = text.substring(4, 6).toInt()
+                val days = text.substring(6, 8).toInt()
+                val hrs = text.substring(8, 10).toInt()
+                val mins = text.substring(10, 12).toInt()
+                val date = of(years, months, days, hrs, mins, 0)
+                date
+            }
+            // Check 4: Date with time with seconds
+            // yyyymmddhhmmss = 14chars
+            else if (text.length == 14) {
+                val years = text.substring(0, 4).toInt()
+                val months = text.substring(4, 6).toInt()
+                val days = text.substring(6, 8).toInt()
+                val hrs = text.substring(8, 10).toInt()
+                val mins = text.substring(10, 12).toInt()
+                val secs = text.substring(12, 14).toInt()
+                val date = of(years, months, days, hrs, mins, secs)
+                date
             }
             else {
                 // Unexpected
-                DateTime.min()
+                DateTime.MIN
             }
             return res
-        }
-
-
-        fun parseNumericDate8(text: String): DateTime {
-            val yearTxt = text.substring(0, 4)
-            val monthTxt = text.substring(4, 6)
-            val dayTxt = text.substring(6, 8)
-            val month = monthTxt.toInt()
-            return build(yearTxt.toInt(), month, dayTxt.toInt())
-        }
-
-
-        fun parseNumericDate12(text: String): DateTime {
-            val yearTxt = text.substring(0, 4)
-            val monthTxt = text.substring(4, 6)
-            val dayTxt = text.substring(6, 8)
-            val hrsTxt = text.substring(8, 10)
-            val minTxt = text.substring(10, 12)
-            val month = Integer.parseInt(monthTxt)
-            val hours = Integer.parseInt(hrsTxt)
-            val mins = Integer.parseInt(minTxt)
-            val date = build(Integer.parseInt(yearTxt), month - 1, Integer.parseInt(dayTxt), hours, mins, 0)
-            return date
         }
     }
 }
