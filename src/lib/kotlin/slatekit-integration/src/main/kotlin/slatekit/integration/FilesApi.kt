@@ -16,10 +16,7 @@ package slatekit.integration
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.svcs.ApiWithSupport
-import slatekit.common.Doc
-import slatekit.common.Result
-import slatekit.common.Strings
-import slatekit.common.Uris
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.core.cloud.CloudFilesBase
 import slatekit.core.common.AppContext
@@ -104,7 +101,7 @@ class FilesApi(val files: CloudFilesBase, context: AppContext) : ApiWithSupport(
         val path = result.value ?: ""
         val output = if (display) {
             val text = File(path).readText()
-            "PATH   : " + path + Strings.newline() +
+            "PATH   : " + path + newline +
                     "CONTENT: " + text
         }
         else

@@ -26,7 +26,7 @@ import slatekit.core.common.AppContext
 class AppApi(context: AppContext) : ApiWithSupport(context) {
 
     @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun about(format: String? = "props"): About {
+    fun about(): About {
         return context.app.about
     }
 
