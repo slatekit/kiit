@@ -151,12 +151,13 @@ class ReflectorTests {
 
 
     @Test fun can_call_method() {
+        ctx.ent.register<User>(false, User::class)
         val api = UserApi(ctx)
-        val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTime(2017, 5, 27)))
+        val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTime.of(2017, 5, 27)))
         val result = res as Result<String>
         val v = result.value
         assert(v == "ok")
-        assert(result.msg == "activated 123456789, 987, true, 2017-05-27T12:00")
+        assert(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
     }
 
 
@@ -215,7 +216,7 @@ class ReflectorTests {
 
     @Test fun can_get_annotation_for_method() {
         val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class)
-        assertEquals(2, members.size )
+        assertEquals(36, members.size )
         assertEquals("activate", members[0].second?.name)
         assertEquals("", members[1].second?.name)
     }

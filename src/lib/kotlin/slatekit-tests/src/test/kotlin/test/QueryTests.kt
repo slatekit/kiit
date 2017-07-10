@@ -50,7 +50,7 @@ class QueryTests {
 
 
     @Test fun can_convert_boolean_datetime() {
-        assert( QueryEncoder.convertVal(DateTime(2016, 10, 16)) == "'2016-10-16 12:00:00'")
+        assert( QueryEncoder.convertVal(DateTime.of(2016, 10, 16)) == "'2016-10-16 00:00:00'")
     }
 
 
@@ -79,7 +79,7 @@ class QueryTests {
 
 
     @Test fun can_build_where_with_1_field_of_type_datetime() {
-        assert(  Query().where("date", "=", DateTime(2016, 10, 16)).toFilter() == "date = '2016-10-16 12:00:00'")
+        assert(  Query().where("date", "=", DateTime.of(2016, 10, 16)).toFilter() == "date = '2016-10-16 00:00:00'")
     }
 
 

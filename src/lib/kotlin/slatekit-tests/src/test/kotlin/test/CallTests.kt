@@ -18,6 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Reflector
 import slatekit.common.Request
+import slatekit.core.common.Converter
 import slatekit.tests.common.UserApi
 
 /**
@@ -63,11 +64,11 @@ class CallTests {
                 "name_quotes" to "''",
                 "name_value"  to "abc"
         ))
-        val call = Call()
-        assert( call.handleStringParam(inputs, "name_null") == "")
-        assert( call.handleStringParam(inputs, "name_empty") == "")
-        assert( call.handleStringParam(inputs, "name_quotes") == "''")
-        assert( call.handleStringParam(inputs, "name_value") == "abc")
+        val call = Converter()
+        assert( call.handleString("name_null") == "")
+        assert( call.handleString("name_empty") == "")
+        assert( call.handleString("name_quotes") == "''")
+        assert( call.handleString("name_value") == "abc")
     }
 
 
@@ -78,15 +79,15 @@ class CallTests {
                 "name_value"  to "a=1,b=2,c=3"
         ))
 
-        val call = Call()
+        val call = Converter()
 
-        val vars1 = call.handleVarsParam(inputs, "name_null")
+        val vars1 = call.handleVars("name_null")
         assert(vars1.size == 0 )
 
-        val vars2 = call.handleVarsParam(inputs, "name_empty")
+        val vars2 = call.handleVars("name_empty")
         assert(vars2.size == 0 )
 
-        val vars3 = call.handleVarsParam(inputs, "name_value")
+        val vars3 = call.handleVars("name_value")
         assert(vars3.size == 3 )
         assert(vars3["a"] == "1" )
         assert(vars3["b"] == "2" )
@@ -98,7 +99,7 @@ class CallTests {
 
         fun ensureTypes(inputs:InputArgs):Unit {
             val call = Call()
-            val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "app", "users", "testTypes", "post", inputs, null)
+            val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "app", "users", "testTypes", "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 
@@ -110,7 +111,7 @@ class CallTests {
             assert(args[4] == 123456.toLong())
             assert(args[5] == 2.5f)
             assert(args[6] == 900.99)
-            assert(args[7] == DateTime(2017, 5, 27))
+            assert(args[7] == DateTime.of(2017, 5, 27))
         }
         ensureTypes(InputArgs( mapOf<String,Any>(
                 "phone"         to "123456789"          ,
@@ -140,7 +141,7 @@ class CallTests {
         fun ensureList(inputs:InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
             val call = Call()
-            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "post", inputs, null)
+            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 
@@ -162,7 +163,7 @@ class CallTests {
         fun ensureMap(inputs:InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
             val call = Call()
-            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "post", inputs, null)
+            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 

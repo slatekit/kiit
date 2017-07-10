@@ -13,8 +13,8 @@ mantra: Simplicity above all else
 package test
 
 import org.junit.Test
-import slate.common.Model
-import slate.common.Random
+import slatekit.common.Model
+import slatekit.common.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.ListMap

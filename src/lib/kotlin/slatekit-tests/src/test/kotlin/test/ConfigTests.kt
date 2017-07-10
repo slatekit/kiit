@@ -88,7 +88,7 @@ class ConfigTests {
 
     @Test fun test_creds() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
-        val login = conf.login()
+        val login = conf.login("login")
         assert(login.id     == "user1")
         assert(login.name   == "user one")
         assert(login.email  == "user1@abc.com")
@@ -119,7 +119,7 @@ class ConfigTests {
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config("file:///Users/kishorereddy/.slatekit/conf/env.conf")
+        val conf  = Config("file:///Users/kv/.slatekit/conf/env.conf")
         val key = conf.apiKey("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }

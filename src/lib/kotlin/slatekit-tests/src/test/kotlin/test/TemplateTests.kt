@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test
 
 import org.junit.Test
-import slate.common.Random
+import slatekit.common.Random
 import slatekit.common.Result
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.*

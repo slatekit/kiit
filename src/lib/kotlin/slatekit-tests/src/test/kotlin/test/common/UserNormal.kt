@@ -12,8 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
-import com.sun.org.apache.xpath.internal.operations.Bool
-import slate.common.Random
+import slatekit.common.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.entities.core.Entity

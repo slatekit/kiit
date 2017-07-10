@@ -19,7 +19,7 @@ import slatekit.common.Credentials
 import slatekit.common.results.HELP
 import slatekit.core.common.AppContext
 import slatekit.integration.AppApi
-import slatekit.integration.ShellAPI
+import slatekit.integration.CliApi
 import slatekit.integration.VersionApi
 
 
@@ -28,19 +28,19 @@ class ShellTests  {
   
 
     @Test fun can_execute_command() {
-      val shell = getShell()
-      val result = shell.onCommandExecute("app.info.host")
+      val shell = getCli()
+      val result = shell.onCommandExecute("sys.app.host")
       assert( result.value != null )
-      assert( result.value!!.area == "app" )
-      assert( result.value!!.name == "info" )
+      assert( result.value!!.area == "sys" )
+      assert( result.value!!.name == "app" )
       assert( result.value!!.action == "host" )
-      assert( result.value!!.line == "app.info.host" )
+      assert( result.value!!.line == "sys.app.host" )
       assert( result.value!!.result!!.success)
     }
   
 
     @Test fun can_handle_help() {
-      val shell = getShell()
+      val shell = getCli()
       val result = shell.onCommandExecute("?")
       assert( result.value == null )
       assert( result.code == HELP )
@@ -49,7 +49,7 @@ class ShellTests  {
 
 
     @Test fun can_handle_help_for_area() {
-      val shell = getShell()
+      val shell = getCli()
       val result = shell.onCommandExecute("app ?")
       assert( result.value == null )
       assert( result.code == HELP )
@@ -58,7 +58,7 @@ class ShellTests  {
 
 
     @Test fun can_handle_help_for_area_api() {
-      val shell = getShell()
+      val shell = getCli()
       val result = shell.onCommandExecute("app.info ?")
       assert( result.value == null )
       assert( result.code == HELP )
@@ -67,7 +67,7 @@ class ShellTests  {
 
 
     @Test fun can_handle_help_for_area_api_action() {
-      val shell = getShell()
+      val shell = getCli()
       val result = shell.onCommandExecute("app.info.host ?")
       assert( result.value == null )
       assert( result.code == HELP )
@@ -76,7 +76,7 @@ class ShellTests  {
   
 
 
-  private fun getShell(): ShellAPI {
+  private fun getCli(): CliApi {
 
     val ctx = AppContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
 
@@ -100,7 +100,7 @@ class ShellTests  {
 
     // 3. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = ShellAPI(creds, ctx, Auth(apiKeys), "sampleapp", apiItems = apis)
+    val shell = CliApi(creds, ctx, Auth(apiKeys), "sampleapp", apiItems = apis)
     return shell
   }
 }
