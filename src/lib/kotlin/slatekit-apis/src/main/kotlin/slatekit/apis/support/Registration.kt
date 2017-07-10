@@ -19,10 +19,7 @@ import slatekit.apis.ApiBase
 import slatekit.apis.ApiReg
 import slatekit.apis.core.Action
 import slatekit.apis.core.Apis
-import slatekit.common.ListMap
-import slatekit.common.Reflector
-import slatekit.common.Strings
-import slatekit.common.kClass
+import slatekit.common.*
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -120,7 +117,7 @@ class Areas {
 
         // 3. get the name of the api and its area ( category of apis )
         val apiName = apiAnno.name
-        val apiArea = Strings.valueOrDefault(apiAnno.area, "")
+        val apiArea = apiAnno.area.nonEmptyOrDefault("")
 
         // 4. get the lookup containing all the apis in a specific area
         var apiLookup = getLookup(apiArea)
@@ -142,7 +139,7 @@ class Areas {
 
             // c) Annotation
             val apiActionAnno = item.second
-            val actionName = Strings.valueOrDefault(apiActionAnno.name, methodName)
+            val actionName = apiActionAnno.name.nonEmptyOrDefault(methodName)
 
             // d) Get the parameters to easily check/validate params later
             val parameters = member.parameters

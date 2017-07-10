@@ -17,15 +17,13 @@ import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
 import slatekit.apis.support.ApiInfo
 import slatekit.common.IO
-import slatekit.common.Strings
 import slatekit.common.console.ConsoleSettings
 import slatekit.common.console.ConsoleWrites
+import slatekit.common.nonEmptyOrDefault
 import kotlin.reflect.KParameter
 
 /**
  * Generates help docs on the console.
- * TODO: Refactor this code a bit. May be able to use
- * recursion/tail-rec instead of some of the remnant visitor pattern.
  */
 class DocConsole : Doc(), ConsoleWrites {
 
@@ -89,7 +87,7 @@ class DocConsole : Doc(), ConsoleWrites {
         // e.g. email  : ""
         highlight(getFormattedText(name, (options?.maxLength ?: 10) + 3), endLine = false)
         text(":", endLine = false)
-        text(Strings.valueOrDefault(desc, "\"\""), endLine = true)
+        text(desc.nonEmptyOrDefault("\"\""), endLine = true)
 
         // 2. required/optional
         tab(2)

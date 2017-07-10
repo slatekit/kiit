@@ -14,11 +14,9 @@
 package slatekit.apis
 
 import slatekit.apis.core.Action
-import slatekit.common.ListMap
-import slatekit.common.Request
-import slatekit.common.Result
-import slatekit.common.Strings
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.failureWithCode
+import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.UNEXPECTED_ERROR
 import slatekit.core.common.AppContext
 import java.io.File
@@ -30,7 +28,10 @@ import java.io.File
  */
 open class ApiBase(val context: AppContext) {
 
-    val isErrorEnabled = false
+    open val isErrorEnabled = false
+    open val isHookEnabled = false
+    open val isFilterEnabled = false
+
     var _lookup = ListMap<String, Action>()
 
 
@@ -91,13 +92,35 @@ open class ApiBase(val context: AppContext) {
     }
 
 
-    fun onException(context: AppContext, request: Request, ex: Exception): Result<Any> {
+    open fun onException(context: AppContext, request: Request, ex: Exception): Result<Any> {
         return failureWithCode(UNEXPECTED_ERROR, msg = "unexpected error in api", err = ex)
     }
 
 
+    /**
+     * Hook for before this api handles any request
+     */
+    open fun onBefore(context:AppContext, request:Request, target:Any): Unit {
+    }
+
+
+    /**
+     * Hook for after this api handles any request
+     */
+    open fun onAfter(context:AppContext, request:Request, target:Any): Unit {
+    }
+
+
+    /**
+     * Hook to first filter a request before it is handled by this api.
+     */
+    open fun onFilter(context:AppContext, request:Request, target:Any): Result<Any>  {
+        return success(true)
+    }
+
+
     protected fun interpretUri(path: String): String? {
-        val pathParts = Strings.substring(path, "://")
+        val pathParts = path.subStringPair("://")
         return pathParts?.let { parts ->
             val uri = parts.first
             val loc = parts.second

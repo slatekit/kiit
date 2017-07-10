@@ -8,6 +8,7 @@ import slatekit.apis.support.Areas
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
+import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.okOrFailure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
@@ -84,6 +85,13 @@ open class ApiContainer(
      * The help class to handle help on an area, api, or action
      */
     val help = Help(this, _lookup, DocConsole())
+
+
+    /**
+     * Success flag to indicate to proceeed to call without a filter
+     * This is pre-built to avoid rebuilding a static success flag each time
+     */
+    val proceedOk = ok()
 
 
     fun register(reg: ApiReg): Unit {
@@ -163,7 +171,7 @@ open class ApiContainer(
 
 
     fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Result<Any> {
-        val req = Request.build(area, api, action, verb, opts, args)
+        val req = Request.raw(area, api, action, verb, opts, args)
         return call(req)
     }
 
@@ -210,7 +218,7 @@ open class ApiContainer(
                         val md = _validator.validateMiddleware(cmd)
                         md.flatMap { m ->
                             val pm = _validator.validateParameters(cmd)
-                            execute(cmd, r.second, r.first)
+                            executeWithMiddleware(cmd, r.second, r.first)
                         }
                     }
                 }
@@ -227,13 +235,48 @@ open class ApiContainer(
 
 
     /**
-     * executes the api request. this is the last step in the api request pipeline.
+     * executes the api request factoring in the middleware filters and hooks.
      * @param req
      * @param api
      * @param action
      * @return
      */
-    private fun execute(req: Request, api: ApiBase, action: Action): Result<Any> {
+    private fun executeWithMiddleware(req: Request, api: ApiBase, action: Action): Result<Any> {
+
+        // Filter
+        val proceed = if (api.isFilterEnabled) {
+            api.onFilter(this.ctx, req, action)
+        } else {
+            proceedOk
+        }
+
+        // Ok to call.
+        val callResult = if ( proceed.success ) {
+
+            // Hook: Before
+            if (api.isHookEnabled) {
+                api.onBefore(this.ctx, req, action)
+            }
+
+            // Finally make the call here.
+            val result = execute(req, api, action)
+
+            // Hook: After
+            if (api.isHookEnabled) {
+                api.onAfter(this.ctx, req, action)
+            }
+
+            // Return the result
+            result
+
+        } else {
+            proceed
+        }
+        return callResult
+    }
+
+
+    fun execute(req: Request, api: ApiBase, action: Action): Result<Any> {
         // Finally make call.
         val inputs = ApiHelper.fillArgs(action, req, req.args!!, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(api.kClass, api, req.action, inputs)
@@ -246,6 +289,8 @@ open class ApiContainer(
                 success(res)
             }
         } ?: failure()
+
+        // Return the result
         return result
     }
 

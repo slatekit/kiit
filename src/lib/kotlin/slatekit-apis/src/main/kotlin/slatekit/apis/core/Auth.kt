@@ -20,10 +20,10 @@ import slatekit.apis.support.ApiHelper.getReferencedValue
 import slatekit.common.ApiKey
 import slatekit.common.Request
 import slatekit.common.Result
-import slatekit.common.Strings
 import slatekit.common.auth.AuthFuncs.convertKeys
 import slatekit.common.auth.AuthFuncs.isKeyValid
 import slatekit.common.auth.AuthFuncs.matchRoles
+import slatekit.common.splitToMapWithPairs
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.unAuthorized
 
@@ -105,7 +105,7 @@ open class Auth(
 
             // Get the user roles
             val actualRole = getUserRoles(cmd)
-            val actualRoles = Strings.splitToMapWithPairs(actualRole, ',')
+            val actualRoles = actualRole.splitToMapWithPairs(',')
 
             // Now match.
             matchRoles(expectedRoles, actualRoles)

@@ -65,14 +65,14 @@ object ApiHelper {
     /**
      * builds the request
      */
-    fun buildRequest(path: String,
-                     inputs: List<Pair<String, Any>>?,
-                     headers: List<Pair<String, Any>>?): Request {
+    fun buildCliRequest(path: String,
+                        inputs: List<Pair<String, Any>>?,
+                        headers: List<Pair<String, Any>>?): Request {
 
         val tokens = path.split('.').toList()
         val args = buildArgs(inputs)
         val opts = buildArgs(headers)
-        val apiCmd = Request(path, tokens, tokens[0], tokens[1], tokens[2], "get", args, opts)
+        val apiCmd = Request(path, tokens, tokens[0], tokens[1], tokens[2], ApiConstants.ProtocolCLI, "get", args, opts)
         return apiCmd
     }
 
