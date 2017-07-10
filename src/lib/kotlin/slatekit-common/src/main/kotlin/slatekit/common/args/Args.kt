@@ -13,10 +13,11 @@
 
 package slatekit.common.args
 
-import slatekit.common.DateTime
-import slatekit.common.InputFuncs
-import slatekit.common.Inputs
-import slatekit.common.Result
+import slatekit.common.*
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZonedDateTime
 
 
 /**
@@ -38,7 +39,7 @@ import slatekit.common.Result
 
 class Args(
         val line: String,
-        val raw: List<String>,
+        override val raw: List<String>,
         val action: String,
         val actionVerbs: List<String>,
         val prefix: String = "-",
@@ -163,14 +164,17 @@ class Args(
      * @return
      */
     override fun getString(key: String): String = InputFuncs.decrypt(named[key] ?: "", _decryptor)
-
-    override fun getDate(key: String): DateTime = InputFuncs.convertDate(named[key] ?: "")
-    override fun getBool(key: String): Boolean = (named[key] ?: "false").toBoolean()
-    override fun getShort(key: String): Short = (named[key] ?: "0").toShort()
-    override fun getInt(key: String): Int = (named[key] ?: "0").toInt()
-    override fun getLong(key: String): Long = (named[key] ?: "0").toLong()
-    override fun getDouble(key: String): Double = (named[key] ?: "0").toDouble()
-    override fun getFloat(key: String): Float = (named[key] ?: "0").toFloat()
+    override fun getBool(key: String): Boolean = Conversions.toBool(named[key] ?: "false")
+    override fun getShort(key: String): Short = Conversions.toShort(named[key] ?: "0")
+    override fun getInt(key: String): Int = Conversions.toInt(named[key] ?: "0")
+    override fun getLong(key: String): Long = Conversions.toLong(named[key] ?: "0")
+    override fun getFloat(key: String): Float = Conversions.toFloat(named[key] ?: "0")
+    override fun getDouble(key: String): Double = Conversions.toDouble(named[key] ?: "0")
+    override fun getLocalDate(key: String): LocalDate = Conversions.toLocalDate(named[key]  ?: "")
+    override fun getLocalTime(key: String): LocalTime = Conversions.toLocalTime(named[key]  ?: "")
+    override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(named[key]  ?: "")
+    override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(named[key]  ?: "")
+    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(named[key]  ?: "")
 
     override fun get(key: String): Any? = if (named.contains(key)) named[key] else null
     override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null

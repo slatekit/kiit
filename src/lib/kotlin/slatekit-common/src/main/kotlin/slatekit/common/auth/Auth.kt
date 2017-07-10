@@ -13,7 +13,6 @@
 
 package slatekit.common.auth
 
-import slatekit.common.Strings
 
 
 /**
@@ -74,7 +73,7 @@ open class Auth(val isAuthenticated: Boolean, userInfo: User?, roles: String) {
      * The user id
      * @return
      */
-    val userId: String get() = _user?.id ?: Strings.empty
+    val userId: String get() = _user?.id ?: ""
 
 
     /**

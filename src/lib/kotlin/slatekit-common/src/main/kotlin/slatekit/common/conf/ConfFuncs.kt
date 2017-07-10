@@ -227,7 +227,7 @@ object ConfFuncs {
         val config = fileName?.let { name ->
 
             // Check for uri : ( "jar://" | "user://" | "file://" )
-            val parts = Strings.substring(name, "://")
+            val parts = name.subStringPair("://")
 
             parts?.let { (uri, path) ->
                 when (uri) {
@@ -285,8 +285,7 @@ object ConfFuncs {
 
 
     fun createSection(name: String, keys: () -> List<Pair<String, String>>): String {
-        val newLine = Strings.newline()
-        val content = keys().fold("", { acc, c -> acc + name + "." + c.first + " = " + c.second + newLine }) + newLine
+        val content = keys().fold("", { acc, c -> acc + name + "." + c.first + " = " + c.second + newline }) + newline
         return content
     }
 

@@ -18,6 +18,7 @@ import slatekit.common.Inputs
 import slatekit.common.ListMap
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.no
+import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.yes
 
@@ -79,7 +80,7 @@ object AuthFuncs {
         }
         // 2. Any role "*"
         else if (expectedRole == AuthConstants.RoleAny) {
-            yes()
+            if(actualRoles.isNotEmpty()) yes() else unAuthorized()
         }
         else {
             // 3. Get all roles "dev,moderator,admin"

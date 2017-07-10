@@ -43,13 +43,14 @@ object InputFuncs {
      * @return
      */
     fun convertDate(value: String): DateTime =
-            when (value) {
-                ""             -> DateTime.now()
-                "@{today}"     -> DateTime.today()
-                "@{tomorrow}"  -> DateTime.today().addDays(1)
-                "@{yesterday}" -> DateTime.today().addDays(-1)
-                "@{now"        -> DateTime.now()
-                else           -> DateTime.parseNumericDate12(value)
-            }
+        when (value) {
+            ""             -> DateTime.now()
+            "@{today}"     -> DateTime.today()
+            "@{tomorrow}"  -> DateTime.today().plusDays(1)
+            "@{yesterday}" -> DateTime.today().plusDays(-1)
+            "@{now"        -> DateTime.now()
+            else           -> DateTime.parseNumeric(value)
+        }
+
 
 }

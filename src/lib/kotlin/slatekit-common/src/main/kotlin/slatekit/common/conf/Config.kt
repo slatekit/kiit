@@ -14,9 +14,14 @@
 package slatekit.common.conf
 
 
+import slatekit.common.Conversions
 import slatekit.common.DateTime
 import slatekit.common.InputFuncs
 import slatekit.common.encrypt.Encryptor
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZonedDateTime
 import java.util.*
 
 /**
@@ -89,21 +94,25 @@ class Config(fileName: String? = null,
      */
     private val _config: Properties = config ?: ConfFuncs.loadPropertiesFrom(fileName)
 
-
+    override val raw:Any = _config
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = _config.containsKey(key)
     override fun size(): Int = _config.values.size
 
 
-    override fun getString(key: String): String = InputFuncs.decrypt(_config.getProperty(key).trim(), _encryptor)
-    override fun getDate(key: String): DateTime = InputFuncs.convertDate(_config.getProperty(key).trim())
-    override fun getBool(key: String): Boolean = _config.getProperty(key)!!.trim().toBoolean()
-    override fun getShort(key: String): Short = _config.getProperty(key)!!.trim().toShort()
-    override fun getInt(key: String): Int = _config.getProperty(key)!!.trim().toInt()
-    override fun getLong(key: String): Long = _config.getProperty(key)!!.trim().toLong()
-    override fun getDouble(key: String): Double = _config.getProperty(key)!!.trim().toDouble()
-    override fun getFloat(key: String): Float = _config.getProperty(key)!!.trim().toFloat()
+    override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key), _encryptor)
+    override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
+    override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
+    override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))
+    override fun getLong(key: String): Long = Conversions.toLong(getStringRaw(key))
+    override fun getFloat(key: String): Float = Conversions.toFloat(getStringRaw(key))
+    override fun getDouble(key: String): Double = Conversions.toDouble(getStringRaw(key))
+    override fun getLocalDate(key: String): LocalDate = Conversions.toLocalDate(getStringRaw(key))
+    override fun getLocalTime(key: String): LocalTime = Conversions.toLocalTime(getStringRaw(key))
+    override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(getStringRaw(key))
+    override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
+    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
 
     /**
@@ -144,6 +153,9 @@ class Config(fileName: String? = null,
             null
         }
     }
+
+
+    fun getStringRaw(key:String):String = _config.getProperty(key)?.trim() ?: ""
 }
 
 

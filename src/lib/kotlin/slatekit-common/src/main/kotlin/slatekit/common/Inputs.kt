@@ -13,6 +13,10 @@
 
 package slatekit.common
 
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZonedDateTime
 import kotlin.reflect.KClass
 
 /**
@@ -28,15 +32,20 @@ import kotlin.reflect.KClass
 interface Inputs {
 
     // Get values for core value types, must be implemented in derived classes
-    fun getString(key: String): String
+    val raw:Any
 
-    fun getDate(key: String): DateTime
+    fun getString(key: String): String
     fun getBool(key: String): Boolean
     fun getShort(key: String): Short
     fun getInt(key: String): Int
     fun getLong(key: String): Long
     fun getFloat(key: String): Float
     fun getDouble(key: String): Double
+    fun getLocalDate(key: String): LocalDate
+    fun getLocalTime(key: String): LocalTime
+    fun getLocalDateTime(key: String): LocalDateTime
+    fun getZonedDateTime(key: String): ZonedDateTime
+    fun getDateTime(key: String): DateTime
 
     fun get(key: String): Any?
     fun getObject(key: String): Any?
@@ -46,26 +55,30 @@ interface Inputs {
 
     // Get values as Option[T]
     fun getStringOpt(key: String): String? = getOpt(key, { k: String -> getString(k) })
-
-    fun getDateOpt(key: String): DateTime? = getOpt(key, { k: String -> getDate(k) })
     fun getBoolOpt(key: String): Boolean? = getOpt(key, { k: String -> getBool(k) })
     fun getShortOpt(key: String): Short? = getOpt(key, { k: String -> getShort(k) })
     fun getIntOpt(key: String): Int? = getOpt(key, { k: String -> getInt(k) })
     fun getLongOpt(key: String): Long? = getOpt(key, { k: String -> getLong(k) })
-    fun getDoubleOpt(key: String): Double? = getOpt(key, { k: String -> getDouble(k) })
     fun getFloatOpt(key: String): Float? = getOpt(key, { k: String -> getFloat(k) })
-
+    fun getDoubleOpt(key: String): Double? = getOpt(key, { k: String -> getDouble(k) })
+    fun getLocalDateOpt(key: String): LocalDate? = getOpt(key, { k: String -> getLocalDate(k) })
+    fun getLocalTimeOpt(key: String): LocalTime? = getOpt(key, { k: String -> getLocalTime(k) })
+    fun getLocalDateTimeOpt(key: String): LocalDateTime? = getOpt(key, { k: String -> getLocalDateTime(k) })
+    fun getDateTimeOpt(key: String): DateTime? = getOpt(key, { k: String -> getDateTime(k) })
 
     // Get value or default
     fun getStringOrElse(key: String, default: String): String = getOrElse<String>(key, { k: String -> getString(k) }, default)
 
-    fun getDateOrElse(key: String, default: DateTime): DateTime = getOrElse<DateTime>(key, { k: String -> getDate(k) }, default)
     fun getBoolOrElse(key: String, default: Boolean): Boolean = getOrElse<Boolean>(key, { k: String -> getBool(k) }, default)
     fun getShortOrElse(key: String, default: Short): Short = getOrElse<Short>(key, { k: String -> getShort(k) }, default)
     fun getIntOrElse(key: String, default: Int): Int = getOrElse<Int>(key, { k: String -> getInt(k) }, default)
     fun getLongOrElse(key: String, default: Long): Long = getOrElse<Long>(key, { k: String -> getLong(k) }, default)
-    fun getDoubleOrElse(key: String, default: Double): Double = getOrElse<Double>(key, { k: String -> getDouble(k) }, default)
     fun getFloatOrElse(key: String, default: Float): Float = getOrElse<Float>(key, { k: String -> getFloat(k) }, default)
+    fun getDoubleOrElse(key: String, default: Double): Double = getOrElse<Double>(key, { k: String -> getDouble(k) }, default)
+    fun getLocalDateOrElse(key: String, default: LocalDate): LocalDate = getOrElse<LocalDate>(key, { k: String -> getLocalDate(k) }, default)
+    fun getLocalTimeOrElse(key: String, default: LocalTime): LocalTime = getOrElse<LocalTime>(key, { k: String -> getLocalTime(k) }, default)
+    fun getLocalDateTimeOrElse(key: String, default: LocalDateTime): LocalDateTime = getOrElse<LocalDateTime>(key, { k: String -> getLocalDateTime(k) }, default)
+    fun getDateTimeOrElse(key: String, default: DateTime): DateTime = getOrElse<DateTime>(key, { k: String -> getDateTime(k) }, default)
 
 
     // Get list and maps
@@ -77,14 +90,14 @@ interface Inputs {
      * @return
      */
     fun getList(key: String, tpe: KClass<*>): List<Any> {
-        val converter = Converter.converterFor(tpe)
+        val converter = Conversions.converterFor(tpe)
         val input = get(key)
         val result = input?.let { inputVal ->
 
             val result = when (inputVal) {
                 "null"     -> listOf()
                 "\"\""     -> listOf()
-                is String  -> Strings.split(inputVal.toString(), ',').toList().map(converter)
+                is String  -> inputVal.toString().split(',').toList().map(converter)
                 is List<*> -> (input as List<*>).map { it as Any }
                 else       -> listOf()
             }
@@ -100,8 +113,8 @@ interface Inputs {
      * @return
      */
     fun getMap(key: String, tpeKey: KClass<*>, tpeVal: KClass<*>): Map<*, *> {
-        val keyConverter = Converter.converterFor(tpeKey)
-        val valConverter = Converter.converterFor(tpeVal)
+        val keyConverter = Conversions.converterFor(tpeKey)
+        val valConverter = Conversions.converterFor(tpeVal)
         val input = get(key)
         val emptyMap = mapOf<Any, Any>()
         val result = input?.let { inputVal ->
@@ -109,7 +122,7 @@ interface Inputs {
             val result = when (inputVal) {
                 "null"       -> emptyMap
                 "\"\""       -> emptyMap
-                is String    -> Strings.splitToMapOfType(inputVal.toString(), ',', true, '=', keyConverter, valConverter)
+                is String    -> inputVal.toString().splitToMapOfType(',', true, '=', keyConverter, valConverter)
                 is Map<*, *> -> inputVal
                 else         -> emptyMap
             }
