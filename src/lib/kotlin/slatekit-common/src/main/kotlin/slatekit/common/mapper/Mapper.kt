@@ -27,10 +27,7 @@ import kotlin.reflect.jvm.jvmErasure
  * 2. can create a model that is a regular class
  * @param _model
  */
-open class Mapper(protected val _model: Model) {
-
-
-    protected val _tpeString = String::class
+open class Mapper(protected val _model: Model, protected val _settings:MapperSettings = MapperSettings()) {
 
 
     /**
@@ -91,23 +88,25 @@ open class Mapper(protected val _model: Model) {
     @Suppress("IMPLICIT_CAST_TO_ANY")
     fun mapFromToValType(record: MappedSourceReader): Any? {
         return if (_model.any) {
-
-            // NOTE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // 1. Not using pattern matching here on the types for
-            //    slightly better performance.
+            val isUTC = _settings.persisteUTCDate
             val data = _model.fields.map { mapping ->
                 val colName = mapping.storedName
 
                 val dataValue = when (mapping.dataType) {
-                    Types.BoolClass   -> record.getBool(colName)
-                    Types.ShortClass  -> record.getShort(colName)
-                    Types.IntClass    -> record.getInt(colName)
-                    Types.LongClass   -> record.getLong(colName)
-                    Types.FloatClass  -> record.getFloat(colName)
-                    Types.DoubleClass -> record.getDouble(colName)
-                    Types.DateClass   -> record.getDate(colName)
-                    Types.StringClass -> record.getString(colName)
-                    else              -> record.getString(colName)
+                    Types.StringClass        -> record.getString(colName)
+                    Types.BoolClass          -> record.getBool(colName)
+                    Types.ShortClass         -> record.getShort(colName)
+                    Types.IntClass           -> record.getInt(colName)
+                    Types.LongClass          -> record.getLong(colName)
+                    Types.FloatClass         -> record.getFloat(colName)
+                    Types.DoubleClass        -> record.getDouble(colName)
+                    Types.LocalDateClass     -> record.getLocalDate(colName)
+                    Types.LocalTimeClass     -> record.getLocalTime(colName)
+                    Types.LocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
+                    Types.ZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
+                    Types.DateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
+                    Types.InstantClass       -> record.getInstant(colName)
+                    else                     -> record.getString(colName)
                 }
                 dataValue
             }
@@ -129,20 +128,25 @@ open class Mapper(protected val _model: Model) {
     fun mapFromToVarType(record: MappedSourceReader): Any? {
         return if (_model.any) {
 
+            val isUTC = _settings.persisteUTCDate
             val entity: Any? = createEntity()
             _model.fields.forEach { mapping ->
                 val colName = mapping.storedName
 
                 val dataValue = when (mapping.dataType) {
-                    Types.BoolClass   -> record.getBool(colName)
-                    Types.ShortClass  -> record.getShort(colName)
-                    Types.IntClass    -> record.getInt(colName)
-                    Types.LongClass   -> record.getLong(colName)
-                    Types.FloatClass  -> record.getFloat(colName)
-                    Types.DoubleClass -> record.getDouble(colName)
-                    Types.DateClass   -> record.getDate(colName)
-                    Types.StringClass -> record.getString(colName)
-                    else              -> record.getString(colName)
+                    Types.StringClass        -> record.getString(colName)
+                    Types.BoolClass          -> record.getBool(colName)
+                    Types.ShortClass         -> record.getShort(colName)
+                    Types.IntClass           -> record.getInt(colName)
+                    Types.LongClass          -> record.getLong(colName)
+                    Types.FloatClass         -> record.getFloat(colName)
+                    Types.DoubleClass        -> record.getDouble(colName)
+                    Types.LocalDateClass     -> record.getLocalDate(colName)
+                    Types.LocalTimeClass     -> record.getLocalTime(colName)
+                    Types.LocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
+                    Types.ZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
+                    Types.DateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
+                    else                     -> record.getString(colName)
                 }
                 Reflector.setFieldValue(entity!!, mapping.name, dataValue)
             }
@@ -154,7 +158,7 @@ open class Mapper(protected val _model: Model) {
 
 
     override fun toString(): String =
-            _model.fields.fold("", { s, field -> s + field.toString() + Strings.newline() })
+            _model.fields.fold("", { s, field -> s + field.toString() + newline })
 
 
     companion object MapperCompanion {
@@ -172,7 +176,7 @@ open class Mapper(protected val _model: Model) {
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
 
-            // TODO: Handle other id types
+            TODO.IMPROVE( "Handle other id types")
             val fieldId = ModelField.id("id", Long::class)
             val fields = mutableListOf<ModelField>()
             fields.add(fieldId)

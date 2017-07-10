@@ -15,6 +15,7 @@ package slatekit.common.mapper
 
 import slatekit.common.DateTime
 import slatekit.common.ListMap
+import java.time.*
 
 
 class MapperSourceReaderMap(val rs: ListMap<String, Any>) : MappedSourceReader {
@@ -27,12 +28,20 @@ class MapperSourceReaderMap(val rs: ListMap<String, Any>) : MappedSourceReader {
     override fun getString(name: String): String = rs.get(name) as String
 
 
+    override fun getBool(pos: Int): Boolean = rs.getAt(pos) as Boolean
+    override fun getBool(name: String): Boolean = rs.get(name) as Boolean
+
+
     override fun getShort(pos: Int): Short = rs.getAt(pos) as Short
     override fun getShort(name: String): Short = rs.get(name) as Short
 
 
     override fun getInt(pos: Int): Int = rs.getAt(pos) as Int
     override fun getInt(name: String): Int = rs.get(name) as Int
+
+
+    override fun getLong(pos: Int): Long = rs.getAt(pos) as Long
+    override fun getLong(name: String): Long = rs.get(name) as Long
 
 
     override fun getFloat(pos: Int): Float = rs.getAt(pos) as Float
@@ -43,25 +52,26 @@ class MapperSourceReaderMap(val rs: ListMap<String, Any>) : MappedSourceReader {
     override fun getDouble(name: String): Double = rs.get(name) as Double
 
 
-    override fun getLong(pos: Int): Long = rs.getAt(pos) as Long
-    override fun getLong(name: String): Long = rs.get(name) as Long
+    override fun getLocalDate(pos: Int): LocalDate = ( rs.getAt(pos) as java.sql.Date ).toLocalDate()
+    override fun getLocalDate(name: String): LocalDate = ( rs.get(name) as java.sql.Date ).toLocalDate()
 
 
-    override fun getBool(pos: Int): Boolean = rs.getAt(pos) as Boolean
-    override fun getBool(name: String): Boolean = rs.get(name) as Boolean
+    override fun getLocalTime(pos: Int): LocalTime = ( rs.getAt(pos) as java.sql.Time ).toLocalTime()
+    override fun getLocalTime(name: String): LocalTime = ( rs.get(name) as java.sql.Time).toLocalTime()
 
 
-    override fun getVersion(): String = ""
+    override fun getLocalDateTime(pos: Int): LocalDateTime = ( rs.getAt(pos) as java.sql.Timestamp ).toLocalDateTime()
+    override fun getLocalDateTime(name: String): LocalDateTime = ( rs.get(name) as java.sql.Timestamp ).toLocalDateTime()
 
 
-    override fun getDate(pos: Int): DateTime = DateTime(rs.getAt(pos) as java.sql.Timestamp)
-    override fun getDate(name: String): DateTime = DateTime(rs.get(name) as java.sql.Timestamp)
+    override fun getInstant(pos: Int): Instant = ( rs.getAt(pos) as java.sql.Timestamp ).toInstant()
+    override fun getInstant(name: String): Instant = ( rs.get(name) as java.sql.Timestamp ).toInstant()
 
 
-    override fun getOrDefault(pos: Int, defaultVal: String): String = rs.getAt(pos) as String
-    override fun getOrDefault(name: String, defaultVal: String): String = rs.get(name) as String
+    override fun getDateTime(pos: Int): DateTime = DateTime.of(rs.getAt(pos) as java.sql.Timestamp)
+    override fun getDateTime(name: String): DateTime = DateTime.of(rs.get(name) as java.sql.Timestamp)
 
 
-    override fun getBoolOrDefault(pos: Int, defaultVal: Boolean): Boolean = rs.getAt(pos) as Boolean
-    override fun getBoolOrDefault(name: String, defaultVal: Boolean): Boolean = rs.get(name) as Boolean
+    override fun getDateTimeAsUTC(pos:Int):DateTime = DateTime.of(rs.getAt(pos) as java.sql.Timestamp, DateTime.UTC)
+    override fun getDateTimeAsUTC(name:String):DateTime = DateTime.of(rs.get(name) as java.sql.Timestamp, DateTime.UTC)
 }

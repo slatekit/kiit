@@ -15,6 +15,9 @@ package slatekit.common
 
 
 import slatekit.common.models.ModelField
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
@@ -37,7 +40,7 @@ class Model(val name:String,
   /**
    * The name of the table
    */
-  val table = Strings.valueOrDefault(tableName, name)
+  val table = tableName.nonEmptyOrDefault(name)
 
 
   /**
@@ -178,10 +181,61 @@ class Model(val name:String,
    * @param cat
    * @return
    */
-  fun addDate( name:String, desc:String = "", isRequired:Boolean = false,
+  fun addLocalDate( name:String, desc:String = "", isRequired:Boolean = false,
                storedName:String? = null, tag:String = "", cat:String = "data"): Model
   {
-    return addField(name, DateTime::class, desc, isRequired, 0, 0, storedName, DateTime.min(), tag, cat)
+    return addField(name, LocalDate::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+  }
+
+
+  /**
+   * builds a new model by adding a time field to the list of fields
+   * @param name
+   * @param desc
+   * @param isRequired
+   * @param storedName
+   * @param tag
+   * @param cat
+   * @return
+   */
+  fun addLocalTime( name:String, desc:String = "", isRequired:Boolean = false,
+               storedName:String? = null, tag:String = "", cat:String = "data"): Model
+  {
+    return addField(name, LocalTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+  }
+
+
+  /**
+   * builds a new model by adding a datetime field to the list of fields
+   * @param name
+   * @param desc
+   * @param isRequired
+   * @param storedName
+   * @param tag
+   * @param cat
+   * @return
+   */
+  fun addLocalDateTime( name:String, desc:String = "", isRequired:Boolean = false,
+               storedName:String? = null, tag:String = "", cat:String = "data"): Model
+  {
+    return addField(name, LocalDateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+  }
+
+
+  /**
+   * builds a new model by adding a date field to the list of fields
+   * @param name
+   * @param desc
+   * @param isRequired
+   * @param storedName
+   * @param tag
+   * @param cat
+   * @return
+   */
+  fun addDateTime(name:String, desc:String = "", isRequired:Boolean = false,
+                  storedName:String? = null, tag:String = "", cat:String = "data"): Model
+  {
+    return addField(name, DateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
   }
 
 
@@ -233,6 +287,23 @@ class Model(val name:String,
                storedName:String? = null, tag:String = "", cat:String = "data"): Model
   {
     return addField(name, Long::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+  }
+
+
+  /**
+   * builds a new model by adding a new double field to the list of fields.
+   * @param name
+   * @param desc
+   * @param isRequired
+   * @param storedName
+   * @param tag
+   * @param cat
+   * @return
+   */
+  fun addFloat( name:String, desc:String = "", isRequired:Boolean = false,
+                 storedName:String? = null, tag:String = "", cat:String = "data"): Model
+  {
+    return addField(name, Float::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
   }
 
 
@@ -315,9 +386,9 @@ class Model(val name:String,
   fun standardize(): Model {
     addText("uniqueId"   , isRequired = false, maxLength = 50  , tag = "standard", cat = "meta")
     addText("tag"        , isRequired = false, maxLength = 20  , tag = "standard", cat = "meta")
-    addDate("createdAt" , isRequired = false, tag = "standard", cat = "meta")
+    addDateTime("createdAt" , isRequired = false, tag = "standard", cat = "meta")
     addInt ("createdBy" , isRequired = false, tag = "standard", cat = "meta")
-    addDate("updatedAt" , isRequired = false, tag = "standard", cat = "meta")
+    addDateTime("updatedAt" , isRequired = false, tag = "standard", cat = "meta")
     addInt ("updatedBy" , isRequired = false, tag = "standard", cat = "meta")
     return this
   }
