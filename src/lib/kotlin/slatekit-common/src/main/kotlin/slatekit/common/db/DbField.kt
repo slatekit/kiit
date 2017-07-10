@@ -12,7 +12,12 @@
 package slatekit.common.db
 
 import slatekit.common.DateTime
+import slatekit.common.Types
 import slatekit.common.kClass
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import kotlin.reflect.KClass
 
 /**
@@ -33,17 +38,20 @@ data class DbField(
   val isKey  :Boolean get() = "PRI".compareTo(key, true) == 0
 
 
-  fun getFieldType(): KClass<Any> =
+  fun getFieldType(): KClass<*> =
 
     when (dataType) {
-      "int(11)"      -> Int::class.kClass
-      "int(15)"      -> Long::class.kClass
-      "int(6)"       -> Int::class.kClass
-      "tinyint(1)"   -> Short::class.kClass
-      "bit(1)"       -> Boolean::class.kClass
-      "datetime"     -> DateTime::class.kClass
-      "longtext"     -> String::class.kClass
-      else           -> String::class.kClass
+      "int(11)"      -> Types.IntClass
+      "int(15)"      -> Types.LongClass
+      "int(6)"       -> Types.IntClass
+      "tinyint(1)"   -> Types.ShortClass
+      "bit(1)"       -> Types.BoolClass
+      "date"         -> Types.LocalDateClass
+      "time"         -> Types.LocalTimeClass
+      "datetime"     -> Types.LocalDateTimeClass
+      "instant"      -> Types.InstantClass
+      "longtext"     -> Types.StringClass
+      else           -> Types.StringClass
     }
 
 
@@ -53,7 +61,6 @@ data class DbField(
       "longtext"     -> -1
       else           -> if(isVar(dataType)) lengthFromVar(dataType) else -1
     }
-
 
 
   fun isVar(s:String): Boolean = s.startsWith("varchar")

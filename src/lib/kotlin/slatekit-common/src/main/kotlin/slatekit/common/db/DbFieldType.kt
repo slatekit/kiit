@@ -23,12 +23,16 @@ package slatekit.common.db
 * */
 interface DbFieldType
 
-object DbFieldTypeNumber      : DbFieldType
-object DbFieldTypeShort       : DbFieldType
-object DbFieldTypeLong        : DbFieldType
-object DbFieldTypeString      : DbFieldType
-object DbFieldTypeBool        : DbFieldType
-object DbFieldTypeReal        : DbFieldType
-object DbFieldTypeDate        : DbFieldType
-object DbFieldTypeTime        : DbFieldType
-object DbFieldTypeEnum        : DbFieldType
+object DbFieldTypeNumber        : DbFieldType
+object DbFieldTypeShort         : DbFieldType
+object DbFieldTypeLong          : DbFieldType
+object DbFieldTypeString        : DbFieldType
+object DbFieldTypeBool          : DbFieldType
+object DbFieldTypeReal          : DbFieldType
+object DbFieldTypeLocalDate     : DbFieldType
+object DbFieldTypeLocalTime     : DbFieldType
+object DbFieldTypeLocalDateTime : DbFieldType
+object DbFieldTypeZonedDateTime : DbFieldType
+object DbFieldTypeInstant       : DbFieldType
+object DbFieldTypeDateTime      : DbFieldType
+object DbFieldTypeEnum          : DbFieldType

@@ -13,11 +13,10 @@ package slatekit.common.db.types
 
 
 import slatekit.common.Model
-import slatekit.common.Strings
 import slatekit.common.db.*
-import slatekit.common.db.DbFuncs.ensureField
-import slatekit.common.db.DbFuncs.getTypeFromLang
-
+import slatekit.common.db.DbUtils.getTypeFromLang
+import slatekit.common.db.DbUtils.ensureField
+import slatekit.common.newline
 
 
 /**
@@ -76,7 +75,7 @@ open class DbSourceMySql : DbSource {
     val colType = buildColType(dataType, maxLen)
     val colName = buildColName(name)
 
-    val sql = " " + Strings.newline() + colName + " " + colType + " " + nullText
+    val sql = " " + newline + colName + " " + colType + " " + nullText
     return sql
   }
 
@@ -104,15 +103,19 @@ open class DbSourceMySql : DbSource {
 
   protected fun getColTypeName(sqlType:DbFieldType):String {
     return when (sqlType) {
-      DbFieldTypeString -> "NVARCHAR"
-      DbFieldTypeBool   -> "BIT"
-      DbFieldTypeShort  -> "TINYINT"
-      DbFieldTypeNumber -> "INTEGER"
-      DbFieldTypeLong   -> "BIGINT"
-      DbFieldTypeReal   -> "REAL"
-      DbFieldTypeDate   -> "DATETIME"
-      DbFieldTypeTime   -> "INTEGER"
-      else              -> "INTEGER"
+      DbFieldTypeString        -> "NVARCHAR"
+      DbFieldTypeBool          -> "BIT"
+      DbFieldTypeShort         -> "TINYINT"
+      DbFieldTypeNumber        -> "INTEGER"
+      DbFieldTypeLong          -> "BIGINT"
+      DbFieldTypeReal          -> "REAL"
+      DbFieldTypeLocalDate     -> "DATE"
+      DbFieldTypeLocalTime     -> "TIME"
+      DbFieldTypeLocalDateTime -> "DATETIME"
+      DbFieldTypeZonedDateTime -> "DATETIME"
+      DbFieldTypeInstant       -> "INSTANT"
+      DbFieldTypeDateTime      -> "DATETIME"
+      else                     -> "INTEGER"
     }
   }
 
@@ -125,6 +128,6 @@ open class DbSourceMySql : DbSource {
 
 
   protected fun buildCreateTable(name:String): String =
-    "create table `" + name + "` ( " + Strings.newline()
+    "create table `" + name + "` ( " + newline
 
 }
