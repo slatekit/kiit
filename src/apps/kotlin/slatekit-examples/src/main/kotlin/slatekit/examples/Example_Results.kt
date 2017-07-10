@@ -54,7 +54,7 @@ class Example_Results : Cmd("results") {
         // - You can supply a type parameter for the data
         // - Convenience functions are available to mimick HTTP Status Codes( see samples below ).
 
-        // Build a result using the Success "branch" of Result
+        // Explicitly build result using the Success "branch" of Result
         val result1 = Success(
                 data = "userId:1234567890",
                 code = SUCCESS,
@@ -63,7 +63,7 @@ class Example_Results : Cmd("results") {
                 ref = "XY123"
         )
 
-        // Build a result using the Failure "branch" of Result
+        // Explicitly build a result using the Failure "branch" of Result
         val result2 = Failure<String>(
                 code = BAD_REQUEST,
                 msg = "user id not supplied",

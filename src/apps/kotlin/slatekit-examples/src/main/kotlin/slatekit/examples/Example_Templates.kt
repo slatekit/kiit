@@ -22,7 +22,7 @@ import slatekit.common.templates.Templates
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
-import slate.common.Random
+import slatekit.common.Random
 
 //</doc:import_examples>
 

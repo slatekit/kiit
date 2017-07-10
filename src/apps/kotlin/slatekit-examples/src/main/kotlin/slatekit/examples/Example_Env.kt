@@ -31,17 +31,17 @@ class Example_Env  : Cmd("env") {
     //<doc:examples>
 
     // CASE 1: Build a list of environments
-    val envs1 = slatekit.common.envs.Envs(listOf(
-            Env("loc", Dev, desc = "Dev environment (local)"),
-            Env("dev", Dev, desc = "Dev environment (shared)"),
-            Env("qa1", Qa, desc = "QA environment  (current release)"),
-            Env("qa2", Qa, desc = "QA environment  (last release)"),
-            Env("stg", Uat, desc = "STG environment (demo)"),
+    val envs1 = Envs(listOf(
+            Env("loc", Dev , desc = "Dev environment (local)"),
+            Env("dev", Dev , desc = "Dev environment (shared)"),
+            Env("qa1", Qa  , desc = "QA environment  (current release)"),
+            Env("qa2", Qa  , desc = "QA environment  (last release)"),
+            Env("stg", Uat , desc = "STG environment (demo)"),
             Env("pro", Prod, desc = "LIVE environment")
     ))
 
     // CASE 2: Use the default list of environments ( same as above )
-    val envs = slatekit.common.envs.Env.EnvStatic.defaults()
+    val envs = slatekit.common.envs.Env.defaults()
 
     // CASE 3: Get one of the environments by api
     val qa1 = envs.get("qa1")

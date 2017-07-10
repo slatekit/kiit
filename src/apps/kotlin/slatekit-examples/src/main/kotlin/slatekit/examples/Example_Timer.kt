@@ -21,7 +21,7 @@ import slatekit.core.cmds.Cmd
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultTimed
-import slate.common.Random
+import slatekit.common.Random
 
 //</doc:import_examples>
 

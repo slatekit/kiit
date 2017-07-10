@@ -1,3 +1,9 @@
+import slatekit.examples.Example_DateTime
+import slatekit.examples.Example_Serialization
+import slatekit.tutorial.Example_Kotlin_Basics
+import slatekit.tutorial.Example_Kotlin_Functions
+import slatekit.tutorial.Example_Kotlin_Misc
+
 /**
 <slate_header>
 url: www.slatekit.com
@@ -16,5 +22,7 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>):Unit  {
+    val cmd = Example_Serialization()
+    cmd.execute()
     println("hello kotlin examples")
 }

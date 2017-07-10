@@ -28,9 +28,12 @@ class Example_Args  : Cmd("args") {
   override fun executeInternal(args: Array<String>?) : Result<Any>
   {
     //<doc:examples>
+    // Example:
+    // Given on the the command line:
+    // -log.level=info -env=dev -text='hello world'
     showResults( Args.parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
 
-    // CASE 1: Defaults e..g prefix = "-", sep = ":"
+    // CASE 1: Parse using defaults. E.g. the key/value prefix = "-", separator = ":"
     showResults( Args.parse( "-env:dev -text:'hello world' -batch:10" ) )
 
 
@@ -38,7 +41,7 @@ class Example_Args  : Cmd("args") {
     showResults( Args.parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
 
 
-    // CASE 3a: Check for method call in the beginning
+    // CASE 3a: Check for action/method call in the beginning
     showResults( Args.parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
                  sep = "=", hasAction = true ) )
 
@@ -48,7 +51,7 @@ class Example_Args  : Cmd("args") {
                  sep = "=", hasAction = true ) )
 
 
-    // CASE 3c: Check for method call in the beginning
+    // CASE 3c: Check for only action name in the beginning.
     showResults( Args.parse( "method", prefix = "-", sep = "=", hasAction = true ) )
 
 

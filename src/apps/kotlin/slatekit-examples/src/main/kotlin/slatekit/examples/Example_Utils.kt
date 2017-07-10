@@ -13,9 +13,9 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slate.common.Require.requireOneOf
-import slate.common.Require.requireText
-import slate.common.Require.requireValidIndex
+import slatekit.common.Require.requireOneOf
+import slatekit.common.Require.requireText
+import slatekit.common.Require.requireValidIndex
 import slatekit.common.*
 
 //</doc:import_required>

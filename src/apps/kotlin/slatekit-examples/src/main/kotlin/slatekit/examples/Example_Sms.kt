@@ -32,7 +32,7 @@ import slatekit.core.sms.SmsServiceTwilio
 
 
 
-class Example_Sms : Cmd("auth") {
+class Example_Sms : Cmd("sms") {
 
   override fun executeInternal(args: Array<String>?) : Result<Any>
   {

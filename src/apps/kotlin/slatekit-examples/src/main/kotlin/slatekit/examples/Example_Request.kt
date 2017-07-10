@@ -24,7 +24,7 @@ import slatekit.common.Random
 //</doc:import_examples>
 
 
-class Example_Request : Cmd("results") {
+class Example_Request : Cmd("request") {
 
     override fun executeInternal(args: Array<String>?): Result<Any> {
         //<doc:examples>
@@ -61,16 +61,17 @@ class Example_Request : Cmd("results") {
         // SparkJava request ( with a thin abstraction layer ). The requests are
         // kept very simple/light for maximum performance and data is NEVER copied.
         val request = Request(
-                path   = "app.users.activate",
-                parts  = listOf("app", "users", "activate"),
-                area   = "app",
-                name   = "users",
-                action = "activate",
-                verb   = "post",
-                opts   = InputArgs(mapOf("api-key" to "ABC-123")),
-                args   = InputArgs(mapOf("userId" to 5001)),
-                raw    = "the raw HTTP SparkJava request or CLI ShellCommand",
-                tag    = Random.stringGuid()
+                path     = "app.users.activate",
+                parts    = listOf("app", "users", "activate"),
+                area     = "app",
+                name     = "users",
+                action   = "activate",
+                protocol = "cli",
+                verb     = "post",
+                opts     = InputArgs(mapOf("api-key" to "ABC-123")),
+                args     = InputArgs(mapOf("userId" to 5001)),
+                raw      = "the raw HTTP SparkJava request or CLI ShellCommand",
+                tag      = Random.stringGuid()
         )
 
         // NOTES: ResultSupport trait builds results that simulate Http Status codes
@@ -80,7 +81,7 @@ class Example_Request : Cmd("results") {
         // CASE 1: Get the path of the request
         println( request.path )
 
-        // CASE 2: Get the parts of the request
+        // CASE 2: Get the parts of the path
         println( request.parts )
 
         // CASE 3: Get a header named "api-key"
