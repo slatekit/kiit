@@ -13,4 +13,13 @@
 
 package slatekit.common
 
-data class Doc(val name: String, val content: String, val format: String, val size: Long)
+data class Doc(val name: String, val content: String, val format: String, val ext:String, val size:Long) {
+
+    companion object {
+        fun  csv (name:String, content:String):Doc =  Doc(name, content, "text/csv"        , "csv" , content.length.toLong())
+        fun  html(name:String, content:String):Doc =  Doc(name, content, "text/html"       , "html", content.length.toLong())
+        fun  json(name:String, content:String):Doc =  Doc(name, content, "application/json", "json", content.length.toLong())
+        fun  text(name:String, content:String):Doc =  Doc(name, content, "text/plain"      , "text", content.length.toLong())
+        fun  xml (name:String, content:String):Doc =  Doc(name, content, "application/xml" , "xml" , content.length.toLong())
+    }
+}

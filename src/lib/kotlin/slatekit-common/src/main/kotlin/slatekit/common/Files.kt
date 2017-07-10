@@ -23,7 +23,7 @@ object Files {
      * builds a folder name based on the date.
      * e.g. YYYYMMDD - 201705030
      */
-    fun folderNameByDate(): String = DateTime.now().toStringNumeric()
+    fun folderNameByDate(): String = DateTime.now().toStringYYYYMMDD()
 
 
     /**
@@ -65,7 +65,7 @@ object Files {
      * @return
      */
     fun writeFileForDateAsTimeStamp(directory: String, content: String): String {
-        val fileName = DateTime.now().toStringLong()
+        val fileName = DateTime.now().toStringNumeric()
                 .replace(":", "-")
                 .replace(" ", "-") + ".txt"
         return writeDatedFile(directory, fileName, content)

@@ -13,7 +13,6 @@
 
 package slatekit.common.envs
 
-import slatekit.common.Strings
 
 /**
  * Represents a system environment
@@ -87,7 +86,7 @@ data class Env(val name: String,
             if (text == "''" || text == "\"\"") {
                 return Env("", Dev, desc = "Default environment")
             }
-            val tokens = Strings.split(text, ':')
+            val tokens = text.split(':')
 
             // e.g. "dev1", "dev", dev1:dev")
             val env = if (tokens.size == 1)

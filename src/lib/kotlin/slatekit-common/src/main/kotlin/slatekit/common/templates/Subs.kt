@@ -86,12 +86,12 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
 
         // Default functions.
         _groups.add("today", { _ -> DateTime.today().toStringYYYYMMDD() })
-        _groups.add("yesterday", { _ -> DateTime.today().addDays(-1).toStringYYYYMMDD() })
-        _groups.add("tomorrow", { _ -> DateTime.today().addDays(1).toStringYYYYMMDD() })
+        _groups.add("yesterday", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
+        _groups.add("tomorrow", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
         _groups.add("t", { _ -> DateTime.today().toStringYYYYMMDD() })
-        _groups.add("t-1", { _ -> DateTime.today().addDays(-1).toStringYYYYMMDD() })
-        _groups.add("t+1", { _ -> DateTime.today().addDays(1).toStringYYYYMMDD() })
-        _groups.add("today+1", { _ -> DateTime.today().addDays(1).toStringYYYYMMDD() })
-        _groups.add("today-1", { _ -> DateTime.today().addDays(-1).toStringYYYYMMDD() })
+        _groups.add("t-1", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
+        _groups.add("t+1", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
+        _groups.add("today+1", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
+        _groups.add("today-1", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
     }
 }

@@ -13,7 +13,7 @@
 
 package slatekit.common.lex
 
-import slatekit.common.Strings.newline
+import slatekit.common.newline
 
 
 /**
@@ -35,7 +35,7 @@ data class LexResult(
 ) {
     fun toStringDetail(): String {
         val text = "$success, $message, total=$total, isSubset=$isSubset"
-        val tokenDetail = tokens.fold("", { s, t -> s + t.toStringDetail() + newline() })
-        return text + newline() + tokenDetail
+        val tokenDetail = tokens.fold("", { s, t -> s + t.toStringDetail() + newline })
+        return text + newline + tokenDetail
     }
 }

@@ -13,8 +13,8 @@
 
 package slatekit.common.info
 
-import slatekit.common.Strings.newline
-import slatekit.common.Strings.nonEmptyOrDefault
+import slatekit.common.newline
+import slatekit.common.nonEmptyOrDefault
 
 
 /**
@@ -59,22 +59,21 @@ data class About(
 
 
     fun toStringProps(): String {
-        val newLine = newline()
         val text = "" +
-                "name     : " + name + newLine +
-                "desc     : " + desc + newLine +
-                "group    : " + group + newLine +
-                "region   : " + region + newLine +
-                "url      : " + url + newLine +
-                "contact  : " + contact + newLine +
-                "version  : " + version + newLine +
-                "tags     : " + tags + newLine +
-                "examples : " + examples + newLine
+                "name     : " + name + newline +
+                "desc     : " + desc + newline +
+                "group    : " + group + newline +
+                "region   : " + region + newline +
+                "url      : " + url + newline +
+                "contact  : " + contact + newline +
+                "version  : " + version + newline +
+                "tags     : " + tags + newline +
+                "examples : " + examples + newline
         return text
     }
 
 
-    fun dir(): String = nonEmptyOrDefault(company, name).replace(" ", "-")
+    fun dir(): String = company.nonEmptyOrDefault(name).replace(" ", "-")
 
 
     companion object Abouts {

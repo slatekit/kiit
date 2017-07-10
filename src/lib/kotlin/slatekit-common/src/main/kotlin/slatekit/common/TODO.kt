@@ -48,6 +48,17 @@ object TODO {
 
 
     /**
+     * Indicates that an improvement is required
+     * @param tag
+     * @param msg
+     * @param callback
+     */
+    fun IMPROVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+        exec("TODO(improve): " + msg, tag, callback)
+    }
+
+
+    /**
      * Indicates that a refactoring is required
      * @param tag
      * @param msg

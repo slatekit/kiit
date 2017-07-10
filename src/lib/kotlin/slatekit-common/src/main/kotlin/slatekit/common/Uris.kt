@@ -34,7 +34,7 @@ object Uris {
      * @return
      */
     fun interpret(uri: String): String? {
-        val pathParts = Strings.substring(uri, "://")
+        val pathParts = uri.subStringPair("://")
         val finalPath = pathParts?.let { parts ->
             val prefix = parts.first
             val path = parts.second
@@ -58,7 +58,7 @@ object Uris {
      * @return
      */
     fun readText(uri: String): String? {
-        val pathParts = Strings.substring(uri, "://")
+        val pathParts = uri.subStringPair("://")
         val content = pathParts?.let { parts: Pair<String, String> ->
             val prefix = parts.first
             val path = parts.second
@@ -84,7 +84,7 @@ object Uris {
      * @return
      */
     fun readDoc(uri: String): Doc? {
-        val pathParts = Strings.substring(uri, "://")
+        val pathParts = uri.subStringPair("://")
         val doc = pathParts?.let { parts: Pair<String, String> ->
             val prefix = parts.first
             val path = parts.second
@@ -103,6 +103,6 @@ object Uris {
 
     fun buildDoc(file: File): Doc {
         val content = file.readText()
-        return Doc(file.name, content, file.extension, file.totalSpace)
+        return Doc.text(file.name, content)
     }
 }

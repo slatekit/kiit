@@ -19,7 +19,6 @@ import slatekit.common.validations.ValidationConsts.NUMS
 import slatekit.common.validations.ValidationConsts.SYMS
 import slatekit.common.validations.ValidationConsts.LETTERS_UCASE
 import slatekit.common.validations.ValidationConsts.LETTERS_LCASE
-import slatekit.common.Strings
 
 object ValidationFuncs {
 

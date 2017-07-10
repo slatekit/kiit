@@ -57,6 +57,7 @@ data class Folders(
         val inputs: String,
         val logs: String,
         val outputs: String,
+        val temp: String,
         val conf: String
 ) {
 
@@ -68,6 +69,7 @@ data class Folders(
         callback("inputs", app)
         callback("log", logs)
         callback("outputs", outputs)
+        callback("temp", temp)
     }
 
 
@@ -76,6 +78,7 @@ data class Folders(
     val pathToInputs: String get() = this.pathToApp + File.separator + inputs
     val pathToLogs: String get() = this.pathToApp + File.separator + logs
     val pathToOutputs: String get() = this.pathToApp + File.separator + outputs
+    val pathToTemp: String get() = this.pathToApp + File.separator + temp
 
 
     fun buildPath(part: String): String {
@@ -103,10 +106,11 @@ data class Folders(
         val groupPath = Files.mkDir(rootPath, group ?: "")
         val appPath = Files.mkDir(groupPath, app)
         Files.mkDir(appPath, cache)
+        Files.mkDir(appPath, conf)
         Files.mkDir(appPath, inputs)
         Files.mkDir(appPath, logs)
         Files.mkDir(appPath, outputs)
-        Files.mkDir(appPath, conf)
+        Files.mkDir(appPath, temp)
     }
 
 
@@ -122,6 +126,7 @@ data class Folders(
                 inputs = "input",
                 logs = "log",
                 outputs = "output",
+                temp = "temp",
                 conf = "conf"
         )
 
@@ -136,6 +141,7 @@ data class Folders(
                 inputs = "input",
                 logs = "log",
                 outputs = "output",
+                temp = "temp",
                 conf = "conf"
         )
 
@@ -151,6 +157,7 @@ data class Folders(
                         inputs = "input",
                         logs = "log",
                         outputs = "output",
+                        temp = "temp",
                         conf = "conf"
                 )
     }

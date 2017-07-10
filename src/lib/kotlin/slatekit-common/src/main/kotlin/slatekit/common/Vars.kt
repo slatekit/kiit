@@ -38,7 +38,7 @@ class Vars(items: List<Pair<String, Any>>) : ListMap<String, Any>(items) {
                 Vars(listOf())
             }
             else {
-                val data = Strings.splitToMapWithPairs(text)
+                val data = text.splitToMapWithPairs()
                 val buf = mutableListOf<Pair<String, Any>>()
                 data.forEach { p -> buf.add(Pair(p.key, p.value as Any)) }
                 Vars(buf.toList())

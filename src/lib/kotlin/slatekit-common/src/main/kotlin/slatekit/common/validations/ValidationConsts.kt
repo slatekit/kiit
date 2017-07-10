@@ -13,7 +13,7 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Strings.toCharMap
+import slatekit.common.toCharMap
 
 object ValidationConsts {
 

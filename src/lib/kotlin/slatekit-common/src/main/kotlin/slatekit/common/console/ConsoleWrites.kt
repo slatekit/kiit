@@ -14,7 +14,7 @@
 package slatekit.common.console
 
 import slatekit.common.IO
-import slatekit.common.Strings
+import slatekit.common.newline
 
 interface ConsoleWrites {
 
@@ -36,15 +36,15 @@ interface ConsoleWrites {
     /**
      * Map the text type to functions that can implement it.
      */
-    val lookup: Map<TextType, (String) -> Unit> get() = mapOf(
-            Title to { it -> title(it) },
-            Subtitle to { it -> subTitle(it) },
-            Url to { it -> url(it) },
-            Important to { it -> important(it) },
-            Highlight to { it -> highlight(it) },
-            Success to { it -> success(it) },
-            Error to { it -> error(it) },
-            Text to { it -> text(it) }
+    val lookup: Map<TextType, (String,Boolean) -> Unit> get() = mapOf(
+            Title      to  this::title,
+            Subtitle   to  this::subTitle,
+            Url        to  this::url,
+            Important  to  this::important,
+            Highlight  to  this::highlight,
+            Success    to  this::success,
+            Error      to  this::error,
+            Text       to  this::text
     )
 
 
@@ -76,9 +76,7 @@ interface ConsoleWrites {
      * @param endLine
      */
     fun writeItem(mode: TextType, msg: String, endLine: Boolean) {
-        if (lookup.contains(mode)) {
-            TODO("test")
-        }
+        lookup[mode]?.invoke(msg, endLine)
     }
 
 
@@ -111,7 +109,7 @@ interface ConsoleWrites {
      */
     fun write(color: String, text: String, endLine: Boolean) {
         val finalText = if (endLine)
-            color + " " + text + Strings.newline()
+            color + " " + text + newline
         else
             color + " " + text
 
@@ -122,7 +120,7 @@ interface ConsoleWrites {
     /**
      * prints a empty line
      */
-    fun line() = _io.run(Strings.newline())
+    fun line() = _io.run(newline)
 
 
     /**
