@@ -58,8 +58,7 @@
 
 				  <aside class="widget">
 					<h1 class="widget-title">APIs</h1>
-					<h3>                  
-						The heart of all your services.
+					<h3>Create APIs once and run them on the <strong>Web</strong> ( Http ), or <strong>CLI</strong>
 					</h3>
 				  </aside>
 				</div>
@@ -70,8 +69,7 @@
 			<div class="container">
 				
 				<div class="alert alert-info text-center" role="alert">
-					<h3 id="cli-areaapiaction">Protocol Independent APIs  </h3>
-					<h4> Create APIs, and run them on the <strong>Web</strong> ( Http ), <strong>CLI</strong> ( command line ) or in a <strong>Console</strong> App</h4>
+					<h3 id="cli-areaapiaction">Protocol Independent APIs  </h3>					
 				</div>
 				<br/>
 				
@@ -88,8 +86,8 @@
 							
 							<div class="caption">
 								<div class="text-center">
-									<h3 >Slate Kit Server </h3>
-									<p>Easily map, manage, your data/domain models using an Domain-Driven ORM.</p>
+									<h3 >Slate Kit APIS </h3>
+									<p>Protocol Independent APIs that can run as both HTTP and on the CLI</p>
 									<br/>
 								</div>
 								<div class="text-center">
@@ -100,23 +98,19 @@
 								<table class="table table-bordered table-striped">
 									<tr>
 										<td class="col-sm-2"><strong>package</strong></td>
-										<td>slatekit.core.app</td>
+										<td>slatekit.apis</td>
 									</tr>
 									<tr>
 										<td><strong>jar</strong></td>
-										<td>slatekit.core.jar</td>
+										<td>slatekit.apis.jar</td>
 									</tr>
 									<tr>
 										<td><strong>source</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/app">slatekit.core.app</a></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis">slatekit.apis</a></td>
 									</tr>
 									<tr>
 										<td><strong>sample</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch">SampleApp-Batch</a> : Full sample application </td>
-									</tr>
-									<tr>
-										<td><strong>example</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core">SampleApp-Core</a> : Full sample application </td>
 									</tr>
 									<tr>
 										<td><strong>license</strong></td>
@@ -134,9 +128,9 @@
 										<td><strong>notes</strong></td>
 										<td>														
 											<ul>
-												<li>The base app is contained in the slatekit.core project</li>
-												<li>The base app can be easily sub-classed and much of the functionality can be customized</li>
-												<li>Slate Kit Core has several other architechtural components</li>
+												<li>The APIs are plain annotated classes and methods</li>
+												<li>The Requests and Responses are abstracted out using the Request/Result utility components.</li>
+												<li>The Slate Kit API Container takes care of marshalling requests from CLI and HTTP to your methods.</li>
 											</ul>
 										 </td>
 									</tr>
@@ -679,25 +673,28 @@
  * @param area      : action represented by route e.g. app in "app.reg.activateUser"
  * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
  * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
+ * @param protocol  : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
  * @param opts      : options representing settings/configurations ( similar to http-headers )
  * @param args      : arguments to the command
- * @param tag       : Optional tag for tracking purposes
+ * @param raw       : Optional raw request ( e.g. either the HttpRequest via Spark or ShellCommmand via CLI )
+ * @param tag       : Optional tag for tracking individual requests and for error logging.
  */</span>
-<span class="k">class</span> <span class="nc">Request</span> <span class="o">(</span>
-                <span class="n">path</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">,</span>
-                <span class="n">parts</span>      <span class="k">:</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>      <span class="o">,</span>
-                <span class="n">area</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                <span class="n">name</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                <span class="n">action</span>     <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                <span class="n">verb</span>       <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
-                <span class="n">args</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
-                <span class="n">opts</span>       <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Inputs</span><span class="o">]</span>    <span class="k">=</span> <span class="nc">None</span><span class="o">,</span>
-                <span class="n">tag</span>        <span class="k">:</span><span class="kt">String</span>            <span class="o">=</span> <span class="s">""</span>
-              <span class="o">)</span> <span class="k">extends</span> <span class="nc">RequestBase</span> <span class="o">(</span> <span class="n">path</span><span class="o">,</span> <span class="n">parts</span><span class="o">,</span> <span class="n">area</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">action</span><span class="o">,</span> <span class="n">verb</span><span class="o">,</span> <span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">,</span> <span class="n">tag</span><span class="o">)</span>
-<span class="o">{</span>
-<span class="o">}</span>
-
+<span class="kd">data class</span> <span class="nc">Request</span> <span class="p">(</span>
+                     <span class="kd">val</span> <span class="py">path</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">parts</span>      <span class="p">:</span><span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span>        <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">area</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">name</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">action</span>     <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">protocol</span>   <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">verb</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">args</span>       <span class="p">:</span><span class="n">Inputs</span><span class="p">?</span>             <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">opts</span>       <span class="p">:</span><span class="n">Inputs</span><span class="p">?</span>             <span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">raw</span>        <span class="p">:</span><span class="n">Any</span><span class="p">?</span>          <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+                     <span class="kd">val</span> <span class="py">tag</span>        <span class="p">:</span><span class="n">String</span>        <span class="p">=</span> <span class="s">""</span>
+                   <span class="p">)</span> <span class="p">{</span>
+	<span class="c1">// ...
+</span><span class="p">}</span>
 </code></pre>
 </div>
 				<br/>				
@@ -802,62 +799,50 @@
 				</div>
 				<br/>
 				<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">SuccessResult</span><span class="o">,</span> <span class="nc">Result</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.common.results.</span><span class="o">{</span><span class="nc">ResultSupportIn</span><span class="o">,</span> <span class="nc">ResultCode</span><span class="o">}</span>
-<span class="k">import</span> <span class="nn">slate.examples.common.User</span>
-
-    <span class="c1">// CASE 1: The Result class is a container for the following
-</span>    <span class="c1">// 1. success / failure  - flag
-</span>    <span class="c1">// 2. message / error    - informative message
-</span>    <span class="c1">// 3. data               - data being returned
-</span>    <span class="c1">// 4. code               - matches http status codes
-</span>    <span class="c1">// 5. ref                - tag for external id references
-</span>    <span class="c1">// 6. exception          - error info
-</span>    <span class="c1">// 7. tag                - for referencing/tracking purposes
-</span>    
-    <span class="c1">// NOTES: The result is in an alternative to Scala's Option[T]
-</span>    <span class="c1">// and also the Try/Success/Failure. It provides a status code
-</span>    <span class="c1">// as an integer that can be set to Http Status codes.
-</span>    <span class="c1">// Also, the ResultSupportIn trait supports convenience functions
-</span>    <span class="c1">// that can be used to easily build up Success or Failure Results
-</span>    <span class="c1">// that match Http Status Codes ( see samples below ).
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SuccessResult</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span>
-      <span class="n">value</span>  <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
-      <span class="n">code</span>  <span class="k">=</span> <span class="nc">ResultCode</span><span class="o">.</span><span class="nc">SUCCESS</span><span class="o">,</span>
-      <span class="n">msg</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span>
-      <span class="n">tag</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"tag001"</span><span class="o">)</span>
-    <span class="o">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// Explicitly build result using the Success "branch" of Result
+</span>    <span class="kd">val</span> <span class="py">result1</span> <span class="p">=</span> <span class="n">Success</span><span class="p">(</span>
+            <span class="n">data</span> <span class="p">=</span> <span class="s">"userId:1234567890"</span><span class="p">,</span>
+            <span class="n">code</span> <span class="p">=</span> <span class="n">SUCCESS</span><span class="p">,</span>
+            <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span>
+            <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+            <span class="n">ref</span> <span class="p">=</span> <span class="s">"XY123"</span>
+    <span class="p">)</span>
     
-    <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
-</span>    <span class="c1">// This allows easy construction of results/status from a SERVICE layer
-</span>    <span class="c1">// instead of a controller/api layer, allowing more logic to be stored 
-</span>    <span class="c1">// in the service layer and to keep the controllers/APIs thin.
+    <span class="c1">// Explicitly build a result using the Failure "branch" of Result
+</span>    <span class="kd">val</span> <span class="py">result2</span> <span class="p">=</span> <span class="n">Failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span>
+            <span class="n">code</span> <span class="p">=</span> <span class="n">BAD_REQUEST</span><span class="p">,</span>
+            <span class="n">msg</span> <span class="p">=</span> <span class="s">"user id not supplied"</span><span class="p">,</span>
+            <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+            <span class="n">err</span> <span class="p">=</span> <span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"user id"</span><span class="p">),</span>
+            <span class="n">ref</span> <span class="p">=</span> <span class="k">null</span>
+    <span class="p">)</span>
+    
+    <span class="c1">// NOTES: ResultFuncs object contain methods to easily build up either
+</span>    <span class="c1">// success or failure results that align with Http Status codes.
+</span>    <span class="c1">// HTTP status codes are very general purpose with meaningful intents
+</span>    <span class="c1">// ( bad-request, unauthorized, unexpected, etc ), and since the
+</span>    <span class="c1">// Result class models success / failures, its useful to build up
+</span>    <span class="c1">// results from from a server layer and pass them back up to the top
+</span>    <span class="c1">// level controller / api layer.
 </span>    
     <span class="c1">// CASE 1: Success ( 200 )
-</span>    <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"user created"</span><span class="o">),</span> <span class="n">tag</span><span class="k">=</span><span class="nc">Some</span><span class="o">(</span><span class="s">"promoCode:ny001"</span><span class="o">))</span>
+</span>    <span class="kd">val</span> <span class="py">res1</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="m">123456</span><span class="p">,</span> <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"promoCode:ny001"</span><span class="p">)</span>
+    <span class="n">printResult</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span>
+    
     
     <span class="c1">// CASE 2: Failure ( 400 ) with message and ref tag
-</span>    <span class="k">val</span> <span class="n">res2a</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">),</span> <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"23SKASDF23"</span><span class="o">))</span>
+</span>    <span class="kd">val</span> <span class="py">res2a</span> <span class="p">=</span> <span class="n">failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"23SKASDF23"</span><span class="p">)</span>
+    <span class="n">printResult</span><span class="p">(</span><span class="n">res2a</span><span class="p">)</span>
+    
     
     <span class="c1">// CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
-</span>    <span class="k">val</span> <span class="n">res2b</span> <span class="k">=</span> <span class="n">failure</span><span class="o">(</span><span class="n">data</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">()),</span>  <span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">),</span> 
-                <span class="n">tag</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"23SKASDF23"</span><span class="o">))</span>
+</span>    <span class="kd">val</span> <span class="py">res2b</span> <span class="p">=</span> <span class="n">failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"23SKASDF23"</span><span class="p">)</span>
+    <span class="n">printResult</span><span class="p">(</span><span class="n">res2b</span><span class="p">)</span>
+    
     
     <span class="c1">// CASE 4: Unauthorized ( 401 )
-</span>    <span class="k">val</span> <span class="n">res3</span> <span class="k">=</span> <span class="n">unAuthorized</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
-    
-    <span class="c1">// CASE 5: Unexpected ( 500 )
-</span>    <span class="k">val</span> <span class="n">res4</span> <span class="k">=</span> <span class="n">unexpectedError</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"invalid email"</span><span class="o">))</span>
-    
-    <span class="c1">// CASE 6: Conflict ( 409 )
-</span>    <span class="k">val</span> <span class="n">res5</span> <span class="k">=</span> <span class="n">conflict</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"item already exists"</span><span class="o">))</span>
-    
-    <span class="c1">// CASE 7: Not found
-</span>    <span class="k">val</span> <span class="n">res6</span> <span class="k">=</span> <span class="n">notFound</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"action not found"</span><span class="o">))</span>
-    
-    <span class="c1">// CASE 8: Not available
-</span>    <span class="k">val</span> <span class="n">res7</span> <span class="k">=</span> <span class="n">notAvailable</span><span class="o">(</span><span class="n">msg</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"operation currently unavailable"</span><span class="o">))</span>
+</span>    <span class="kd">val</span> <span class="py">res3</span> <span class="p">=</span> <span class="n">unAuthorized</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">)</span>
+    <span class="n">printResult</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
 
 </code></pre>
 </div>
