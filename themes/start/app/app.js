@@ -130,10 +130,10 @@ var codeHelixMeta = {
 	{ name: "Features"      ,  page: "features.html"    , children: null },
 	{ name: "Components"    ,  page: "infra.html"       , children: [	
 			{ name: "Concepts"      ,  page: "kotlin-concepts.html"         , children: null },
-			{ name: "App"           ,  page: "scala-core-app.html"         , children: null },
-			{ name: "APIs"          ,  page: "scala-core-apis.html" , children: null },
-			{ name: "Server"        ,  page: "scala-core-server.html"      , children: null },
-			{ name: "ORM"           ,  page: "scala-core-orm.html"         , children: null }
+			{ name: "App"           ,  page: "kotlin-core-app.html"         , children: null },
+			{ name: "APIs"          ,  page: "kotlin-core-apis.html" , children: null },
+			{ name: "Server"        ,  page: "kotlin-core-server.html"      , children: null },
+			{ name: "ORM"           ,  page: "kotlin-core-orm.html"         , children: null }
 		]
 	},
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },	

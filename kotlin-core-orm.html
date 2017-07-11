@@ -58,7 +58,7 @@
 
               <aside class="widget">
                 <h1 class="widget-title">ORM</h1>
-                <h3>A light-weight single table ORM for domain-driven models<br />
+                <h3>Emphasis on simplicity and immutable data classes<br />
                 </h3>
               </aside>
 
@@ -71,26 +71,89 @@
             <div class="">
 				<div class="alert alert-info text-center" role="alert">
 					
-							<h3 id="cli-areaapiaction">A light-weight ORM for domain models</h3>
-							<h4>Easily map, manage, and find your data/domain models using the ORM.</h4>
+							<h3 id="cli-areaapiaction">A light-weight domain-driven ORM</h3>
 					
-				</div>
-				<br/>
-				<div class="text-center">
-					<img src="themes/start/images/white/layers.png" width="80" alt="">
 				</div>
 				<br/>
 				
 				<div> 
 					<h1>About</h1>
-					<p>The Scala ORM in Slate Kit is designed with simplicity in mind. 
-						Instead of an elaborate ORM, we focus on the basic features to support single-table based mapping of objects to tables or any other underling datasources. 
+					<p>The Slate Kit Entities is an ORM to manage your domain entities to/from a database.
 						The ORM is designed using a <strong>DDD</strong> (Domain Driven Design) approach 
-						with <strong>Entities, Services and Repositories</strong>.
-						Also, to be inline with functional programming, the entities can be <strong>case classes</strong>
-						to support <strong>immutability</strong>. 
-						The following features are supported:
+						with <strong>Entities, Services and Repositories</strong>, and an emphasis
+						towards immutable data classes and FP ( functional programming ).
 					</p>
+				</div>
+				<div class="row">					
+					<div class="">
+						<div id="project-slate-common" class="thumbnail">
+							<img src="themes/start/images/white/layers.png" alt="..." width="80">
+							
+							<div class="caption">
+								<div class="text-center">
+									<h3 >Slate Kit Entities </h3>
+									<p>Easily map, manage, your data/domain models using an Domain-Driven ORM.</p>
+									<br/>
+								</div>
+								<table class="table table-bordered table-striped">
+									<tr>
+										<td class="col-sm-2"><strong>package</strong></td>
+										<td>slatekit.core.app</td>
+									</tr>
+									<tr>
+										<td><strong>jar</strong></td>
+										<td>slatekit.core.jar</td>
+									</tr>
+									<tr>
+										<td><strong>source</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/app">slatekit.core.app</a></td>
+									</tr>
+									<tr>
+										<td><strong>sample</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch">SampleApp-Batch</a> : Full sample application </td>
+									</tr>
+									<tr>
+										<td><strong>example</strong></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
+									</tr>
+									<tr>
+										<td><strong>license</strong></td>
+										<td>free : open-source</td>
+									</tr>
+									<tr>
+										<td><strong>dependencies</strong></td>
+										<td>								
+											<ul>
+												<li>slatekit-common.jar</li>
+											</ul>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>notes</strong></td>
+										<td>														
+											<ul>
+												<li>The base app is contained in the slatekit.core project</li>
+												<li>The base app can be easily sub-classed and much of the functionality can be customized</li>
+												<li>Slate Kit Core has several other architechtural components</li>
+											</ul>
+										 </td>
+									</tr>
+									<tr>
+										<td><img src="themes/start/images/white/manual.png" width="50" alt=""></td>
+										<td>Check sample app ( containing a full sample code ), 
+										the example ( smaller reference on usage ), and source code for more info.
+										</td>
+									</tr>
+								</table>
+							</div>
+							<!--
+							<div class="alert alert-warning text-left" role="alert">
+								<p><i class="fa fa-link"></i> This feature uses the <strong><a href="kotlin-mod-env.html" class="url-ch">Env</a></strong> component in utils to setup logical application environments such as local, dev, qa, uat, live.
+								</p>
+							</div>
+							-->
+						</div>
+					</div>
 				</div>
 				<br/>
 				<h1 id="apis">Goals</h1>
