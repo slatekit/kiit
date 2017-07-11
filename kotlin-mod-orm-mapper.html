@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start - Responsive One Page Template</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top one-page-nav" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate-Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+              <ul id="navigation" class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#header" class="current">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#clients">Clients</a></li>
+                <li><a href="#contact">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="orm-mapper">Orm-Mapper</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A mapper that converts a entity to a sql create/updates</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>20170711</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.2</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.entities.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.entities</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.entities.EntityMapper.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/entities">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/entities</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Mapper.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Mapper.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.common.Field</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.types.DbSourceMySql</span>
+<span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityWithId</span>
+
+
+<span class="c1">// optional 
+</span>
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="n">data</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span>
+            <span class="k">override</span> <span class="k">val</span> <span class="n">id</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="mi">0L</span><span class="o">,</span>
+
+
+            <span class="nd">@property</span><span class="k">:</span><span class="kt">Field</span><span class="o">(</span><span class="kt">required</span> <span class="o">=</span> <span class="kt">true</span><span class="o">,</span> <span class="n">length</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+            <span class="k">val</span> <span class="n">email</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+
+
+            <span class="nd">@property</span><span class="k">:</span><span class="kt">Field</span><span class="o">(</span><span class="kt">required</span> <span class="o">=</span> <span class="kt">true</span><span class="o">,</span> <span class="n">length</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+            <span class="k">val</span> <span class="n">firstName</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+
+
+            <span class="nd">@property</span><span class="k">:</span><span class="kt">Field</span><span class="o">(</span><span class="kt">required</span> <span class="o">=</span> <span class="kt">true</span><span class="o">,</span> <span class="n">length</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
+            <span class="k">val</span> <span class="n">lastName</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">""</span><span class="o">,</span>
+
+
+            <span class="nd">@property</span><span class="k">:</span><span class="kt">Field</span><span class="o">(</span><span class="kt">required</span> <span class="o">=</span> <span class="kt">true</span><span class="o">)</span>
+            <span class="k">val</span> <span class="n">isMale</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
+
+
+            <span class="nd">@property</span><span class="k">:</span><span class="kt">Field</span><span class="o">(</span><span class="kt">required</span> <span class="o">=</span> <span class="kt">true</span><span class="o">)</span>
+            <span class="k">val</span> <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">35</span>
+
+    <span class="o">)</span> <span class="k">:</span> <span class="kt">EntityWithId</span> <span class="o">{</span>
+
+
+        <span class="kt">fun</span> <span class="kt">fullname</span><span class="o">()</span><span class="kt">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kt">firstName</span> <span class="kt">+</span> <span class="err">"</span> <span class="err">"</span> <span class="kt">+</span> <span class="kt">lastName</span>
+
+
+        <span class="k">override</span> <span class="n">fun</span> <span class="n">toString</span><span class="o">()</span><span class="k">:</span> <span class="kt">String</span> <span class="o">{</span>
+            <span class="kt">return</span> <span class="err">"</span><span class="kt">$email</span><span class="o">,</span> <span class="kt">$firstName</span><span class="o">,</span> <span class="nc">$lastName</span><span class="o">,</span> <span class="nc">$isMale</span><span class="o">,</span> <span class="nc">$age</span><span class="err">"</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+        <span class="c1">// CASE 1: Load the mapper with schema from the annotations on the model
+</span>        <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="nc">User</span><span class="o">::</span><span class="n">class</span><span class="o">)</span>
+        <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="nc">EntityMapper</span> <span class="o">(</span><span class="n">model</span><span class="o">)</span>
+
+        <span class="c1">// CASE 2: Create instance for testing
+</span>        <span class="k">val</span> <span class="n">person</span> <span class="k">=</span> <span class="nc">User</span> <span class="o">(</span>
+                <span class="n">email</span> <span class="k">=</span> <span class="s">"jdoe@a.com"</span><span class="o">,</span>
+                <span class="n">firstName</span> <span class="k">=</span> <span class="s">"john"</span><span class="o">,</span>
+                <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe"</span><span class="o">,</span>
+                <span class="n">isMale</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+                <span class="n">age</span> <span class="k">=</span> <span class="mi">38</span>
+        <span class="o">)</span>
+
+        <span class="c1">// CASE 4: Get the sql for create
+</span>        <span class="k">val</span> <span class="n">sqlCreate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+        <span class="n">println</span><span class="o">(</span><span class="n">sqlCreate</span><span class="o">)</span>
+
+        <span class="c1">// CASE 5: Get the sql for update
+</span>        <span class="k">val</span> <span class="n">sqlForUpdate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+        <span class="n">println</span><span class="o">(</span><span class="n">sqlForUpdate</span><span class="o">)</span>
+
+        <span class="c1">// CASE 6: Generate the table schema for mysql from the model
+</span>        <span class="n">println</span><span class="o">(</span><span class="s">"table sql : "</span> <span class="o">+</span> <span class="nc">DbSourceMySql</span><span class="o">().</span><span class="n">builAddTable</span><span class="o">(</span><span class="n">model</span><span class="o">))</span>
+        
+
+</code></pre>
+</div>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div class="street-address">416 Water St.</div>
+                    <span class="locality">New York</span>,
+                    <abbr class="region" title="New York">NY</abbr>,
+                    <span class="postal-code">10002</span>,
+                    <span class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="cmd">Cmd</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A variation to the command pattern to support ad-hoc execution of code, with support for metrics and time-stamps</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>20170711</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.2</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.core.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.core.cmds</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.core.cmds.Cmd.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Command.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Command.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.success</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmds</span>
+
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="cm">/**
+   * Sample command to cleanup the temp directory.
+   */</span>
+  <span class="k">class</span> <span class="nc">CmdCleanTempDirectory</span> <span class="k">:</span> <span class="kt">Cmd</span><span class="o">(</span><span class="err">"</span><span class="kt">clean_temp_dir</span><span class="err">"</span><span class="o">)</span>  <span class="o">{</span>
+
+    <span class="kt">override</span> <span class="kt">fun</span> <span class="kt">executeInternal</span><span class="o">(</span><span class="kt">args:</span> <span class="kt">Array&lt;String&gt;?</span><span class="o">)</span> <span class="kt">:</span> <span class="kt">Result&lt;Any&gt;</span> <span class="o">{</span>
+      <span class="c1">// Your code here
+</span>      <span class="kt">return</span> <span class="kt">success</span><span class="o">(</span><span class="err">"</span><span class="kt">temp</span> <span class="kt">directory</span> <span class="kt">cleared</span><span class="err">"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+
+  <span class="cm">/**
+   * Sample command to create a set of test users
+   */</span>
+  <span class="k">class</span> <span class="nc">CmdCreateTestUsers</span> <span class="k">:</span> <span class="kt">Cmd</span><span class="o">(</span><span class="err">"</span><span class="kt">create_test_users</span><span class="err">"</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="kt">override</span> <span class="kt">fun</span> <span class="kt">executeInternal</span><span class="o">(</span><span class="kt">args:</span> <span class="kt">Array&lt;String&gt;?</span><span class="o">)</span> <span class="kt">:</span> <span class="kt">Result&lt;Any&gt;</span> <span class="o">{</span>
+      <span class="c1">// Your code here
+</span>      <span class="kt">return</span> <span class="kt">success</span><span class="o">(</span><span class="err">"</span><span class="kt">demo</span> <span class="kt">users</span> <span class="kt">created</span><span class="err">"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+
+  <span class="k">val</span> <span class="n">commands</span> <span class="k">=</span>  <span class="nc">Cmds</span><span class="o">(</span>
+    <span class="n">listOf</span><span class="o">(</span>
+         <span class="nc">CmdCleanTempDirectory</span><span class="o">(),</span>
+         <span class="nc">CmdCreateTestUsers</span><span class="o">()</span>
+      <span class="o">)</span>
+  <span class="o">)</span>
+  
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Use case 1: get all the commands available
+</span>    <span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">names</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">names</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 2: get the size of the commands
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">commands</span><span class="o">.</span><span class="n">size</span> <span class="o">)</span>
+
+    <span class="c1">// Use case 3: run a single command by its api
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
+
+    <span class="c1">// Print info about the result and time stamps.
+</span>    <span class="c1">// - api   : api of the command
+</span>    <span class="c1">// - success: whether the command was successful or not
+</span>    <span class="c1">// - message: message from the command
+</span>    <span class="c1">// - started: start time of the command
+</span>    <span class="c1">// - ended  : end time of the command
+</span>    <span class="c1">// - result : the result of the command
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">name</span>    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">message</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">started</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">ended</span>   <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span>  <span class="o">)</span>
+
+    <span class="c1">// Use case 4: get the current state of the command
+</span>    <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">state</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">)</span>
+
+    <span class="c1">// Print state of the command
+</span>    <span class="c1">// - api        : api of the command
+</span>    <span class="c1">// - msg         : message from the command
+</span>    <span class="c1">// - hasRun      : whether or not the command has run at all
+</span>    <span class="c1">// - runCount    : number of time the command was run
+</span>    <span class="c1">// - lastRunTime : the timestamp of the last run
+</span>    <span class="c1">// - errorCount  : the number or errors
+</span>    <span class="c1">// - lastResult  : the result of the last run ( see above )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">name</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">msg</span>         <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">hasRun</span>      <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">runCount</span>    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastRuntime</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">errorCount</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastResult</span>  <span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
+	<script type="text/javascript">
+		var _codehelixAppPage = "core";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+  </body>
+</html>

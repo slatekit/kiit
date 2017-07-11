@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="cache">Cache</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Light-weight cache to load, store, and refresh data, with support for metrics and time-stamps. Default in-memory implementation available</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>20170711</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.2</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.core.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.core.cache</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.core.cache.Cache.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cache">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cache</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Cache.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Cache.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.core.cache.Cache</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cache.CacheSettings</span>
+
+
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+  <span class="n">data</span> <span class="k">class</span> <span class="nc">Movie</span><span class="o">(</span><span class="k">val</span> <span class="n">title</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span>
+
+  <span class="k">val</span> <span class="n">cache</span> <span class="k">=</span> <span class="nc">Cache</span><span class="o">(</span><span class="nc">CacheSettings</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span> <span class="o">)</span>
+  
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// CASE 1: Put a non-expiring item in the cache
+</span>    <span class="c1">// NOTE: This loads the data into the cache using the function ( fetchers param )
+</span>    <span class="c1">// supplied. The loading is done asynchronously in a future.
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">"recent-movies"</span><span class="o">,</span> <span class="s">"recent movies"</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="o">{</span> <span class="o">-&gt;</span>
+      <span class="n">listOf</span><span class="o">(</span><span class="nc">Movie</span><span class="o">(</span><span class="s">"Arrival"</span><span class="o">),</span> <span class="nc">Movie</span><span class="o">(</span><span class="s">"Lego Batman"</span><span class="o">))</span>
+    <span class="o">})</span>
+
+    <span class="c1">// CASE 2: Put an item that expires in 300 seconds ( 5 minutes )
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">"top"</span><span class="o">,</span> <span class="s">"top movies"</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="o">{</span> <span class="o">-&gt;</span>
+      <span class="n">listOf</span><span class="o">(</span><span class="nc">Movie</span><span class="o">(</span><span class="s">"Indiana Jones"</span><span class="o">),</span> <span class="nc">Movie</span><span class="o">(</span><span class="s">"Batman"</span><span class="o">))</span>
+    <span class="o">})</span>
+    <span class="n">cache</span><span class="o">.</span><span class="n">put</span><span class="o">(</span><span class="s">"trending"</span><span class="o">,</span> <span class="s">"trending movies"</span><span class="o">,</span> <span class="mi">300</span><span class="o">,</span> <span class="o">{</span> <span class="o">-&gt;</span>
+      <span class="n">listOf</span><span class="o">(</span><span class="nc">Movie</span><span class="o">(</span><span class="s">"Dr. Strange"</span><span class="o">))</span>
+    <span class="o">})</span>
+
+    <span class="c1">// CASE 3: Get the total number of items in cache
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">cache</span><span class="o">.</span><span class="n">size</span><span class="o">())</span>
+
+    <span class="c1">// CASE 4: Get one of the items in cache ( expects to be available and alive(not expired))
+</span>    <span class="k">val</span> <span class="n">recent</span> <span class="k">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Movie</span><span class="o">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recent</span> <span class="o">)</span>
+
+    <span class="c1">// CASE 5: Get one of the items in cache if it exists and isAlive,
+</span>    <span class="c1">// otherwise, loads/refreshes it again and gives you back a Future
+</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">getOrLoad</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Movie</span><span class="o">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">result</span><span class="o">)</span>
+
+    <span class="c1">// CASE 6: Get one of the items in cache via an explicit refresh
+</span>    <span class="k">val</span> <span class="n">refresh</span> <span class="k">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">getFresh</span><span class="o">&lt;</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Movie</span><span class="o">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">refresh</span><span class="o">)</span>
+
+    <span class="c1">// CASE 7: Explicitly refresh one of the items ( without caring about getting notified )
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">refresh</span><span class="o">(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 8: Invalidate a cache item by setting it to expired
+</span>    <span class="c1">// NOTE: This will result in :
+</span>    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item
+</span>    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">invalidate</span><span class="o">(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 9: Invalidates all the cache items setting their time to expired.
+</span>    <span class="c1">// NOTE: This will result in :
+</span>    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item
+</span>    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">invalidateAll</span><span class="o">()</span>
+
+    <span class="c1">// CASE 10: Removes the cache item completely.
+</span>    <span class="c1">// NOTE: This will not be accessible anymore until you call .put again.
+</span>    <span class="n">cache</span><span class="o">.</span><span class="n">remove</span><span class="o">(</span><span class="s">"top-movies"</span><span class="o">)</span>
+
+    <span class="c1">// CASE 11: Get the cache item entry ( contains data + metadata )
+</span>    <span class="k">val</span> <span class="n">recentEntry</span> <span class="k">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">getCacheItem</span><span class="o">(</span><span class="s">"recent-movies"</span><span class="o">)</span>
+
+    <span class="c1">// Print info about the cache item
+</span>    <span class="c1">// - key         : the name of the cache key
+</span>    <span class="c1">// - text        : an optional description of the cache item
+</span>    <span class="c1">// - seconds     : number of seconds to cache before it is invalidated
+</span>    <span class="c1">// - expires     : the expiration time
+</span>    <span class="c1">// - updated     : last time the item was refreshed/updated
+</span>    <span class="c1">// - accessCount : number of times accessed
+</span>    <span class="c1">// - accessed    : last time it was accessed
+</span>    <span class="c1">// - error       : last exception when refreshing
+</span>    <span class="c1">// - errorCount  : total number of exceptions
+</span>    <span class="c1">// NOTE: just using ".get" here for example purposes
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">key</span>         <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">text</span>        <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">seconds</span>     <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">expires</span>     <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">updated</span>     <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">accessCount</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">accessed</span>    <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">error</span>       <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">errorCount</span>  <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">recent</span> <span class="o">)</span>
+    
+
+</code></pre>
+</div>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
+	<script type="text/javascript">
+		var _codehelixAppPage = "core";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+  </body>
+</html>
