@@ -386,17 +386,12 @@
 						<td><a href="#app-context" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>9. Startup</strong></td>
-						<td>The Context object available in all apps</td>
-						<td><a href="#app-startup" class="more"><span class="btn btn-primary">more</span></a></td>
-					</tr>
-					<tr> 
-						<td><strong>10. Life-cycle</strong></td>
+						<td><strong>9. Life-cycle</strong></td>
 						<td>The application life-cycle</td>
 						<td><a href="#app-life-cycle" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
-						<td><strong>11. Execution</strong></td>
+						<td><strong>10. Execution</strong></td>
 						<td>The Context object available in all apps</td>
 						<td><a href="#app-exec" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
@@ -406,116 +401,7 @@
 						<td><a href="#app-output" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 				</table>
-				<h1 id="app-example">Example</h1>
-				<p>Example of the application template with life-cycle methods, context, and app metadata. You can 
-				run the app using the AppRunner helper class.
-				See <a class="url-ch" href="#app-details">details section</a> for more info.</p>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.core.app.AppProcess</span>
-  <span class="k">import</span> <span class="nn">slate.core.app.AppFuncs._</span>
-
-  <span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
-  <span class="o">{</span>
-    <span class="cm">/**
-     * life-cycle method: called at the beginning
-     * when app is starting up, and the context 
-     * has been setup.
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onInit</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"app init"</span><span class="o">)</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * life-cycle method: called to execute your logic 
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
-
-      <span class="c1">// simulate work
-</span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
-
-      <span class="n">success</span><span class="o">()</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * life-cycle method: called at the end
-     * when app is shutting down
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onEnd</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">info</span><span class="o">(</span><span class="s">"app shutting down"</span><span class="o">)</span>
-    <span class="o">}</span>
-
-
-    <span class="cm">/**
-     * fill extra items into the diagnostics summary shown at end of shutdown
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[(</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">)]]</span> <span class="k">=</span> <span class="o">{</span>
-      <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[(</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">)](</span>
-        <span class="o">(</span><span class="s">"region"</span>    <span class="o">,</span> <span class="s">"london"</span><span class="o">),</span>
-        <span class="o">(</span><span class="s">"department"</span><span class="o">,</span> <span class="s">"operations"</span><span class="o">)</span>
-      <span class="o">))</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-
-  
-  <span class="k">object</span> <span class="nc">SampleApp</span> <span class="o">{</span>
-
-    <span class="cm">/**
-      * STEP 1. setup the command line arguments.
-      * NOTE:
-      * 1. These values can can be setup in the env.conf file
-      * 2. If supplied on command line, they override the values in .conf file
-      * 3. If any of these are required and not supplied, then an error is display and program exists
-      * 4. Help text can be easily built from this schema.
-      */</span>
-    <span class="k">val</span> <span class="n">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ArgsSchema</span><span class="o">()</span>
-      <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span><span class="o">)</span>
-      <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"log"</span><span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">)</span>
-    
-    
-    <span class="cm">/**
-      * Converts a built AppContext into a final one for use in this app.
-      * NOTE: This is allow customization of any member of the app context:
-      * e.g.
-      * - encryptor
-      * - logger
-      * - database
-      * - metadata etc
-      *
-      * @param ctx
-      * @return
-      */</span>
-    <span class="k">def</span> <span class="n">convert</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">AppContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">AppContext</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">ctx</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">enc</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)))</span>
-    <span class="o">}</span>
-    
-    
-    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    
-      <span class="c1">// 1. Run calls the template methods ( init, exec, shutdown )
-</span>      <span class="n">run</span> <span class="o">(</span>
-    
-        <span class="c1">// 2. Instance of AppProcess
-</span>        <span class="k">new</span> <span class="nc">SampleApp</span> <span class="o">(</span>
-    
-          <span class="c1">// 3. Build the Application context for the app.
-</span>          <span class="c1">// NOTE: The app context contains the selected
-</span>          <span class="c1">// environment, logger, conf, command line args,
-</span>          <span class="c1">// database, encryptor, and many other components
-</span>          <span class="n">build</span> <span class="o">(</span>
-            <span class="n">args</span>      <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">),</span>
-            <span class="n">schema</span>    <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">schema</span><span class="o">),</span>
-            <span class="n">converter</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">convert</span><span class="o">)</span>
-          <span class="o">)</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>	
-</code></pre>
-</div>
-				<br/>
+				
 			</div>			
 			<br/><br/>
 			<div>
@@ -523,68 +409,74 @@
 				<p>You can create a new Application by subclassing <strong>AppProcess</strong>. You can run the app using the <strong>AppRunner</strong> helper class
 				</p>
 				<h3>Example</h3>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.core.app.AppProcess</span>
-  <span class="k">import</span> <span class="nn">slate.core.app.AppFuncs._</span>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Step 1: Extend your application from AppProcess which
+</span>  <span class="c1">// provides life-cycle methods, and much of the boiler-plate code.
+</span>  <span class="c1">//
+</span>  <span class="c1">// NOTE: Ensure your environment files are setup:
+</span>  <span class="c1">// Refer to sample app for more info.
+</span>  <span class="c1">// - resources/env.conf
+</span>  <span class="c1">// - resources/env.local.conf
+</span>  <span class="c1">// - resources/env.dev.conf
+</span>  <span class="c1">//
+</span>  <span class="c1">// CONTEXT:
+</span>  <span class="c1">// The AppProcess must have an AppContext ( see docs online and example below for more info)
+</span>  <span class="c1">// which is a container to store core dependencies such as
+</span>  <span class="c1">// - selected environment
+</span>  <span class="c1">// - config settings
+</span>  <span class="c1">// - logger
+</span>  <span class="c1">// - encryptor
+</span>  <span class="c1">// - info about app
+</span>  <span class="c1">//
+</span>  <span class="c1">// There are different ways you can build up the context
+</span>  <span class="c1">// 1. Manually      ( explictly supply the components - see below )
+</span>  <span class="c1">// 2. Automatically ( using helper functions to that check command line args )
+</span>  <span class="kd">class</span> <span class="nc">SimpleApp</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">AppContext</span><span class="p">)</span> <span class="p">:</span> <span class="n">AppProcess</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span> <span class="p">{</span>
 
-  <span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">AppProcess</span>
-  <span class="o">{</span>
-    <span class="cm">/**
-     * life-cycle method: called to execute your logic 
-     */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
-      <span class="n">info</span><span class="o">(</span><span class="s">"app executing now"</span><span class="o">)</span>
-
-      <span class="c1">// simulate work
-</span>      <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
-
-      <span class="n">success</span><span class="o">()</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-
+      <span class="cm">/**
+       * Life-cycle init hook: for your app to perform any initialization
+       */</span>
+      <span class="k">override</span> <span class="k">fun</span> <span class="nf">onInit</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+          <span class="n">println</span><span class="p">(</span><span class="s">"app initialized"</span><span class="p">)</span>
+      <span class="p">}</span>
   
-  <span class="k">object</span> <span class="nc">SampleApp</span> <span class="o">{</span>
+  
+      <span class="cm">/**
+       * Life-cycle execution hook: for your app to perform the main logic
+       *
+       * @return
+       */</span>
+      <span class="k">override</span> <span class="k">fun</span> <span class="nf">onExecute</span><span class="p">():</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;</span> <span class="p">{</span>
+  
+          <span class="c1">// Get access to context which has everything ( e.g env name )
+</span>          <span class="n">println</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">env</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+  
+          <span class="c1">// Execute your work here.
+</span>          <span class="n">info</span><span class="p">(</span><span class="s">"app executing now"</span><span class="p">)</span>
+  
+          <span class="k">return</span> <span class="n">ok</span><span class="p">()</span>
+      <span class="p">}</span>
+  
+  
+      <span class="cm">/**
+       * Life-cycle end hook: called when app is shutting down
+       */</span>
+      <span class="k">override</span> <span class="k">fun</span> <span class="nf">onEnd</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+          <span class="n">info</span><span class="p">(</span><span class="s">"app shutting down"</span><span class="p">)</span>
+      <span class="p">}</span>
+  
+  
+      <span class="cm">/**
+       * template method: allows you to build up info to show in the summary
+       * displayed at the end of the application
+       */</span>
+      <span class="k">override</span> <span class="k">fun</span> <span class="nf">collectSummaryExtra</span><span class="p">():</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Pair</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;&gt;?</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="n">listOf</span><span class="p">(</span>
+                  <span class="n">Pair</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">app</span><span class="p">.</span><span class="n">about</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="s">" extra 1  = extra summary data1"</span><span class="p">),</span>
+                  <span class="n">Pair</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">app</span><span class="p">.</span><span class="n">about</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="s">" extra 2  = extra summary data2"</span><span class="p">)</span>
+          <span class="p">)</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
 
-    <span class="cm">/**
-      * setup the command line arguments.
-      */</span>
-    <span class="k">val</span> <span class="n">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ArgsSchema</span><span class="o">()</span>
-      <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span><span class="o">)</span>
-      <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"log"</span><span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">)</span>
-    
-    
-    <span class="cm">/**
-      * Converts a built AppContext into a final one for use in this app.
-      * This is to allow customization of any member of the app context:
-      * e.g.
-      * - encryptor, logger, database 
-      */</span>
-    <span class="k">def</span> <span class="n">convert</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">AppContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">AppContext</span> <span class="o">=</span> <span class="o">{</span>
-      <span class="n">ctx</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">enc</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)))</span>
-    <span class="o">}</span>
-    
-    
-    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-    
-      <span class="c1">// 1. Run calls the template methods ( init, exec, shutdown )
-</span>      <span class="n">run</span> <span class="o">(</span>
-    
-        <span class="c1">// 2. Instance of AppProcess
-</span>        <span class="k">new</span> <span class="nc">SampleApp</span> <span class="o">(</span>
-    
-          <span class="c1">// 3. Build the Application context for the app.
-</span>          <span class="c1">// NOTE: The app context contains the selected
-</span>          <span class="c1">// environment, logger, conf, command line args,
-</span>          <span class="c1">// database, encryptor, and many other components
-</span>          <span class="n">build</span> <span class="o">(</span>
-            <span class="n">args</span>      <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">),</span>
-            <span class="n">schema</span>    <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">schema</span><span class="o">),</span>
-            <span class="n">converter</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">convert</span><span class="o">)</span>
-          <span class="o">)</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>	
 </code></pre>
 </div>
 			<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
@@ -644,44 +536,37 @@
 				<h3>b) Defaults</h3>
 				<p>In code, an environment is represented as an EnvItem. The default environments listed above are already setup
 				in the base App component.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Env</span><span class="o">,</span> <span class="nc">EnvItem</span><span class="o">}</span>
-
-  <span class="k">class</span> <span class="nc">AppProcess</span>
-  <span class="o">{</span>
-    
-    <span class="c1">// ... code </span>  
-	
-    <span class="cm">/**
-    * The list of available environments to choose from.
-    * An environment definition is defined by its name and mode
-    * The key is built up from name and mode as {name}.{mode}
-    * e.g. "qa1.QA"
-    *
-    * Each of these environments has an associated env.{name}.conf
-    * config file in the /resources/ directory.
-    * e.g.
-    * /resources/env.conf     ( common      config )
-    * /resources/env.loc.conf ( local       config )
-    * /resources/env.dev.conf ( development config )
-    * /resources/env.qa1.conf ( qa1         config )
-    * /resources/env.qa2.conf ( qa2         config )
-    * /resources/env.stg.conf ( staging     config )
-    * /resources/env.pro.conf ( production  config )
-    * @return
-    */</span>
-    <span class="k">def</span> <span class="n">envs</span><span class="o">()</span><span class="k">:</span> 
-      <span class="k">new</span> <span class="nc">Envs</span><span class="o">(</span><span class="nc">List</span><span class="o">[</span><span class="kt">Env</span><span class="o">](</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"loc"</span><span class="o">,</span> <span class="nc">Dev</span> <span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"Dev environment (local)"</span> <span class="o"> ),</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"dev"</span><span class="o">,</span> <span class="nc">Dev</span> <span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"Dev environment (shared)"</span> <span class="o">),</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Qa</span>  <span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"QA environment  (current release)"</span> <span class="o">),</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"qa2"</span><span class="o">,</span> <span class="nc">Qa</span>  <span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"QA environment  (last release)"</span> <span class="o">   ),</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"stg"</span><span class="o">,</span> <span class="nc">Uat</span> <span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"STG environment (demo)"</span> <span class="o">),</span>
-        <span class="nc">Env</span><span class="o">(</span><span class="s">"pro"</span><span class="o">,</span> <span class="nc">Prod</span><span class="o">,</span> <span class="n">desc</span> <span class="k">=</span> <span class="s">"LIVE environment"</span> <span class="o">      )</span>
-      <span class="o">))</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-	
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="cm">/**
+ * The list of defaults environments to choose from.
+ * An environment definition is defined by its name, mode
+ * The key is built up from name and mode as {name}.{mode}
+ * e.g. "qa1.QA"
+ *
+ * Each of these environments should map to an associated env.{name}.conf
+ * config file in the /resources/ directory. But there is no dependency
+ * on this Env component to a Config component
+ *
+ * e.g.
+ * /resources/env.conf     ( common      config )
+ * /resources/env.loc.conf ( local       config )
+ * /resources/env.dev.conf ( development config )
+ * /resources/env.qa1.conf ( qa1         config )
+ * /resources/env.qa2.conf ( qa2         config )
+ * /resources/env.stg.conf ( staging     config )
+ * /resources/env.pro.conf ( production  config )
+ *
+ * @return
+ */</span>
+<span class="k">fun</span> <span class="nf">defaults</span><span class="p">():</span> <span class="n">Envs</span> <span class="p">=</span>
+	<span class="n">Envs</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"loc"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (local)"</span><span class="p">),</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (shared)"</span><span class="p">),</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (current release)"</span><span class="p">),</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"qa2"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (last release)"</span><span class="p">),</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"stg"</span><span class="p">,</span> <span class="n">Uat</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"STG environment (demo)"</span><span class="p">),</span>
+        <span class="n">Env</span><span class="p">(</span><span class="s">"pro"</span><span class="p">,</span> <span class="n">Prod</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"LIVE environment"</span><span class="p">)</span>
+    <span class="p">))</span>
 </code></pre>
 </div>				
 				<br/>
@@ -708,30 +593,36 @@
 				<h3>d) Args</h3>
 				<p>You can set the environment as as command line arg with the following syntax. The command line will override the config setting.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// You can run your app and supply the environment on the command line
-</span> <span class="c1">// environemnt: -env=name 
-</span> <span class="c1">// log level  : -log-level=name 
-</span> 
- <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"loc:dev"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">debug</span> 
- <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"dev:dev"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">info</span> 
- <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"qa1:qa"</span>   <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">warn</span> 
- <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"stg:qa"</span>   <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">error</span> 
- <span class="k">&gt;:</span> <span class="n">sampleapp</span> <span class="o">-</span><span class="n">env</span><span class="o">=</span><span class="s">"pro:pro"</span>  <span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">level</span><span class="k">=</span><span class="n">error</span> 
- 
+<div class="highlighter-rouge"><pre class="highlight"><code> <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">-</span><span class="n">conf</span><span class="p">.</span><span class="n">dir</span><span class="p">=</span><span class="err">'</span><span class="n">file</span><span class="p">:</span><span class="c1">//./conf/sampleapp-batch/'
+</span> <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">-</span><span class="n">env</span><span class="p">=</span><span class="n">dev</span> <span class="p">-</span><span class="n">log</span><span class="p">.</span><span class="n">level</span><span class="p">=</span><span class="n">info</span> <span class="p">-</span><span class="n">config</span><span class="p">.</span><span class="n">location</span> <span class="p">=</span> <span class="s">"jars"</span>
+ <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">-</span><span class="n">env</span><span class="p">=</span><span class="n">dev</span> <span class="p">-</span><span class="n">log</span><span class="p">.</span><span class="n">level</span><span class="p">=</span><span class="n">info</span> <span class="p">-</span><span class="n">config</span><span class="p">.</span><span class="n">location</span> <span class="p">=</span> <span class="s">"conf"</span>
+ <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">-</span><span class="n">env</span><span class="p">=</span><span class="n">dev</span> <span class="p">-</span><span class="n">log</span><span class="p">.</span><span class="n">level</span><span class="p">=</span><span class="n">info</span> <span class="p">-</span><span class="n">config</span><span class="p">.</span><span class="n">location</span> <span class="p">=</span> <span class="s">"file://./conf-sample-batch"</span>
+ <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">--</span><span class="n">version</span>
+ <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">--</span><span class="n">about</span>
+ <span class="n">java</span> <span class="p">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">sampleapp</span><span class="p">.</span><span class="n">batch</span><span class="p">.</span><span class="n">SampleAppBatchKt</span> <span class="p">?</span>
+
 </code></pre>
 </div>
 				<br/>
 				<h3>e) Access</h3>
 				<p>You can access the selected environment in the code via the <strong>env</strong> data member.</p>
 				<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">onExecute</span><span class="o">()</span><span class="k">:</span><span class="kt">Result</span> <span class="o">=</span>
-  <span class="o">{</span>
-    <span class="c1">// You have access the the selected environment via the "env" member
-</span>    <span class="n">info</span><span class="o">(</span><span class="s">"selected environment is : "</span> <span class="o">+</span> <span class="n">env</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
-  
-    <span class="n">success</span><span class="o">()</span>
-  <span class="o">}</span>
- 
+
+    <span class="cm">/**
+     * Life-cycle execution hook: for your app to perform the main logic
+     *
+     * @return
+     */</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onExecute</span><span class="p">():</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;</span> <span class="p">{</span>
+
+        <span class="c1">// Get access to context which has everything ( e.g env name )
+</span>        <span class="n">println</span><span class="p">(</span><span class="s">"environment is: "</span> <span class="p">+</span> <span class="n">ctx</span><span class="p">.</span><span class="n">env</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1">// Execute your work here.
+</span>        <span class="n">info</span><span class="p">(</span><span class="s">"app executing now"</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ok</span><span class="p">()</span>
+    <span class="p">}</span>
 </code></pre>
 </div>
 				<br/>
@@ -997,24 +888,31 @@
 					</p>
 				</div>
 				
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">class</span> <span class="nc">SampleAppBatch</span> <span class="k">extends</span> <span class="nc">AppProcess</span> 
-<span class="o">{</span>
+				<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// APPROACH 2: Automatically build the AppContext using the AppRunner.build function
+// that will check the command line args for selected environment and other info
+// 1. args      : command line arguments
+// 2. enc       : the encryptor to handle encryption and decryption of args/settings etc.
+// 3. schema    : the schema representing allowed command line arguments
+// 4. converter : a callback to convert/modify the application 1 last time before it is
+//                finally supplied to your SampleApp constructor.
+// NOTES:
+// - Ensure your config files are available e.g. resources/env.conf
+// - Env : By default, the first supported environment is used which is local "env.local"
+// - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
+// - You can store info about the your app in your config file and that can be loaded.
+</span><span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">run</span> <span class="p">(</span> 
+    <span class="n">SampleApp</span> <span class="p">(</span>
+        <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span> <span class="p">(</span>
+            <span class="n">args</span>      <span class="p">=</span> <span class="n">args</span><span class="p">,</span>
+            <span class="n">enc</span>       <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+            <span class="n">schema</span>    <span class="p">=</span>  <span class="n">ArgsSchema</span><span class="p">()</span>
+                        <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"env"</span>      <span class="p">,</span> <span class="s">"the environment "</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"dev"</span>  <span class="p">,</span> <span class="s">"dev"</span>  <span class="p">,</span> <span class="s">"loc|dev|qa1"</span> <span class="p">)</span>
+                        <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"log.level"</span><span class="p">,</span> <span class="s">"the log level"</span>   <span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"info"</span> <span class="p">,</span> <span class="s">"info"</span> <span class="p">,</span> <span class="s">"debug|info"</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-  <span class="c1">// STEP 1. setup the command line arguments.
-</span>  <span class="c1">// NOTE:
-</span>  <span class="c1">// 1. These values can can be setup in the application.conf file
-</span>  <span class="c1">// 2. If supplied on command line, they override the values in .conf file
-</span>  <span class="c1">// 3. If any of these are required and not supplied, then an error is display and program exists
-</span>  <span class="c1">// 4. Help text can be easily built from this schema.
-</span>  <span class="n">argsSchema</span><span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"env"</span>   <span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">"dev"</span>  <span class="o">,</span> <span class="s">"dev"</span>  <span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span> <span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"log"</span>   <span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span> <span class="o">,</span> <span class="s">"info"</span> <span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">)</span>
-            <span class="o">.</span><span class="n">addFlag</span><span class="o">(</span><span class="s">"enc"</span>   <span class="o">,</span> <span class="s">"whether encryption is on"</span> <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"false"</span><span class="o">,</span> <span class="s">"false"</span><span class="o">,</span> <span class="s">"true|false"</span><span class="o">)</span>
-            <span class="o">.</span><span class="n">addText</span><span class="o">(</span><span class="s">"region"</span><span class="o">,</span> <span class="s">"the region linked to app"</span> <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"us"</span>   <span class="o">,</span> <span class="s">"us"</span>   <span class="o">,</span> <span class="s">"us|europe|india|*"</span><span class="o">)</span>
-
-
-	<span class="c1">// ...
-</span><span class="o">}</span>
+<span class="k">return</span> <span class="n">res</span>
 </code></pre>
 </div>
 				<div class="alert alert-info text-left" role="alert">
@@ -1068,31 +966,7 @@
 </div>			
 				<br/>
 				<h3>Option 2</h3>
-				<p>Option 2 is to override the buildAbout method and setup the information what ever way you want</p>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="cm">/**
-   * build information about this application for diagnostics
-   * @return
-   */</span>
-  <span class="k">override</span> <span class="k">def</span> <span class="n">buildAbout</span><span class="o">()</span><span class="k">:</span><span class="kt">About</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="c1">// Get info about app from base config "env.conf" which is common to all environments.
-</span>    <span class="k">new</span> <span class="nc">About</span><span class="o">(</span>
-      <span class="n">id</span>       <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.id"</span>       <span class="o">,</span> <span class="s">"sampleapp.console"</span><span class="o">),</span>
-      <span class="n">name</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.name"</span>     <span class="o">,</span> <span class="s">"Sample App"</span><span class="o">),</span>
-      <span class="n">desc</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.desc"</span>     <span class="o">,</span> <span class="s">"Sample to show the base application"</span><span class="o">),</span>
-      <span class="n">region</span>   <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.region"</span>   <span class="o">,</span> <span class="s">"ny"</span><span class="o">),</span>
-      <span class="n">version</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.version"</span>  <span class="o">,</span> <span class="s">"0.9.1"</span><span class="o">),</span>
-      <span class="n">url</span>      <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.url"</span>      <span class="o">,</span> <span class="s">"http://sampleapp.slatekit.com"</span><span class="o">),</span>
-      <span class="n">group</span>    <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.group"</span>    <span class="o">,</span> <span class="s">"codehelix.co"</span><span class="o">),</span>
-      <span class="n">contact</span>  <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.contact"</span>  <span class="o">,</span> <span class="s">"kishore@codehelix.co"</span><span class="o">),</span>
-      <span class="n">tags</span>     <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.tags"</span>     <span class="o">,</span> <span class="s">"slate,shell,cli"</span><span class="o">),</span>
-      <span class="n">examples</span> <span class="k">=</span> <span class="n">confBase</span><span class="o">.</span><span class="n">getStringOrElse</span><span class="o">(</span><span class="s">"app.examples"</span> <span class="o">,</span> <span class="s">""</span><span class="o">)</span>
-    <span class="o">)</span>
-  <span class="o">}</span>   
-
-  
-</code></pre>
-</div>
+				<p>Documentation coming soon</p>
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>
@@ -1144,30 +1018,31 @@
 					<p><i class="fa fa-link"></i> This feature uses the <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong> component to contain common dependencies and services.
 					</p>
 				</div>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-  
-    <span class="c1">// You can use AppFuncs.build to have the context built up for you:
-</span>    <span class="c1">// 1. loading the "env.conf" config file as "confBase"
-</span>    <span class="c1">// 2. loading the "env" from either the command line first ( -env="dev1:dev" ) or "env.conf"
-</span>    <span class="c1">// 3. setting up "conf" inherited confi from "env.dev.conf" + "env.conf"
-</span>
-    <span class="c1">// 2. Initialize the context with common app info
-</span>    <span class="c1">// The database can be set up in the "env.conf" shared inherited config or
-</span>    <span class="c1">// overridden in the environment specific e.g. "env.qa.conf"
-</span>    <span class="n">ctx</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AppContext</span> <span class="o">(</span>
-      <span class="n">env</span>  <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="s">"ny.dev.01"</span><span class="o">,</span> <span class="n">envs</span><span class="o">.</span><span class="nc">Env</span><span class="o">.</span><span class="nc">DEV</span> <span class="o">),</span>
-      <span class="n">cfg</span>  <span class="k">=</span> <span class="n">conf</span><span class="o">,</span>
-      <span class="n">log</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="n">getLogLevel</span><span class="o">()),</span>
-      <span class="n">ent</span>  <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">())),</span>
-      <span class="n">inf</span>  <span class="k">=</span> <span class="n">aboutApp</span><span class="o">(),</span>
-      <span class="n">dbs</span>  <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="n">dbs</span><span class="o">()),</span>
-      <span class="n">enc</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)),</span>
-      <span class="n">dirs</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">folders</span><span class="o">())</span>
-    <span class="o">)</span>
-
+				<div class="highlighter-rouge"><pre class="highlight"><code><span class="kd">val</span> <span class="py">ctx</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">(</span>
+                <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+                <span class="n">env</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">env</span><span class="p">(),</span>
+                <span class="n">cfg</span> <span class="p">=</span> <span class="n">conf</span><span class="p">,</span>
+                <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+                <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+                <span class="n">dbs</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>
+                <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+                <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span>
+                        <span class="n">id</span> <span class="p">=</span> <span class="s">"slatekit.examples"</span><span class="p">,</span>
+                        <span class="n">name</span> <span class="p">=</span> <span class="s">"Slate Sample App"</span><span class="p">,</span>
+                        <span class="n">desc</span> <span class="p">=</span> <span class="s">"Sample to show the base application with manually built context"</span><span class="p">,</span>
+                        <span class="n">company</span> <span class="p">=</span> <span class="s">"slatekit"</span><span class="p">,</span>
+                        <span class="n">version</span> <span class="p">=</span> <span class="s">"0.9.1"</span><span class="p">,</span>
+                        <span class="n">contact</span> <span class="p">=</span> <span class="s">"kishore@abc.co"</span><span class="p">,</span>
+                        <span class="n">region</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+                        <span class="n">group</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+                        <span class="n">url</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+                        <span class="n">tags</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+                        <span class="n">examples</span> <span class="p">=</span> <span class="s">""</span>
+                <span class="p">),</span>
+                <span class="n">state</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="s">"manually built"</span><span class="p">)</span>
+        <span class="p">)</span>
 </code></pre>
 </div>
-
 			
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
@@ -1228,116 +1103,38 @@
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
 			</div>	
-<div>			
-				<h1 id="app-startup">Startup</h1>
-				<p>All the different types of applications ( Console, CLI, Server - Web API ) all start up in the same way. This is accomplished by extending from the Slate Kit AppProcess class. Because most apps
-				will need to have a way to initialize the environment, configuration, logging and more, we have templated this process to make it easier while also allowing for easy customization. The following are the series of actions that occur during startup.
-				</p>
-				<table class="table table-bordered table-striped">
-					<tr class="">
-						<td class="col-sm-2"><strong>Step</strong></td>
-						<td class="col-sm-2"><strong>Reference</strong></td>
-						<td class="col-sm-2"><strong>Location</strong></td>
-						<td class="col-sm-2"><strong>Desc</strong></td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>1. Configure args</strong></td>
-						<td class="col-sm-2">argsSchema = new ArgsSchema()...</td>
-						<td class="col-sm-2">Your application<br/>see sample app</td>
-						<td class="col-sm-2">Configure the command line args( required | optional ) needed by your application.</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>2. Check args</strong></td>
-						<td class="col-sm-2">-env=dev -log.level=debug</td>
-						<td class="col-sm-2">AppRunner/AppFuncs ( see next section )</td>
-						<td class="col-sm-2">The command line args provided are validated against your args schema from step above.</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>3. Load config</strong></td>
-						<td class="col-sm-2">env.conf</td>
-						<td class="col-sm-2"></td>
-						<td class="col-sm-2">env</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>4. Load environment</strong></td>
-						<td class="col-sm-2">-env=dev</td>
-						<td class="col-sm-2">command line or env.conf </td>
-						<td class="col-sm-2">The environment selection is done by supplying the environment in the command line or by in the <strong>env.conf</strong>. The command line value overrides the value from the env.conf.</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>5. Build context</strong></td>
-						<td class="col-sm-2">ctx = new AppContext(...)</td>
-						<td class="col-sm-2">Your application</td>
-						<td class="col-sm-2">The <strong>AppContext</strong> must be created which holds many dependent common componens / services ( e.g. logger, conf, env, encryptor, etc ). This context is available</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>6. Execute app</strong></td>
-						<td class="col-sm-2">onExecute()</td>
-						<td class="col-sm-2">Your app</td>
-						<td class="col-sm-2">-</td>
-					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>7. Shutdown app</strong></td>
-						<td class="col-sm-2">onEnd()</td>
-						<td class="col-sm-2">Your app</td>
-						<td class="col-sm-2">Prints diagnostics and summary about the app</td>
-					</tr>
-				</table>
-				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-				<br/><br/><br/>
-			</div>			
+			
 			<div>	
 				<h1 id="app-exec">Execution</h1>
 				<p>You can run your application using the <strong>AppRunner</strong> convenience class. 
 				It handles various boiler-plate operations ( more info below ).
 				</p>			
 				<br/>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="k">package</span> <span class="nn">sampleapp.batch</span>
+				<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// APPROACH 2: Automatically build the AppContext using the AppRunner.build function
+// that will check the command line args for selected environment and other info
+// 1. args      : command line arguments
+// 2. enc       : the encryptor to handle encryption and decryption of args/settings etc.
+// 3. schema    : the schema representing allowed command line arguments
+// 4. converter : a callback to convert/modify the application 1 last time before it is
+//                finally supplied to your SampleApp constructor.
+// NOTES:
+// - Ensure your config files are available e.g. resources/env.conf
+// - Env : By default, the first supported environment is used which is local "env.local"
+// - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
+// - You can store info about the your app in your config file and that can be loaded.
+</span><span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">run</span> <span class="p">(</span> 
+    <span class="n">SampleApp</span> <span class="p">(</span>
+        <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span> <span class="p">(</span>
+            <span class="n">args</span>      <span class="p">=</span> <span class="n">args</span><span class="p">,</span>
+            <span class="n">enc</span>       <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+            <span class="n">schema</span>    <span class="p">=</span>  <span class="n">ArgsSchema</span><span class="p">()</span>
+                        <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"env"</span>      <span class="p">,</span> <span class="s">"the environment "</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"dev"</span>  <span class="p">,</span> <span class="s">"dev"</span>  <span class="p">,</span> <span class="s">"loc|dev|qa1"</span> <span class="p">)</span>
+                        <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"log.level"</span><span class="p">,</span> <span class="s">"the log level"</span>   <span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"info"</span> <span class="p">,</span> <span class="s">"info"</span> <span class="p">,</span> <span class="s">"debug|info"</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">)</span>
 
-<span class="k">import</span> <span class="nn">slate.core.app.AppRunner</span>
-
-<span class="k">object</span> <span class="nc">SampleAppRunner</span>
-<span class="o">{</span>
-  <span class="cm">/**
-    * setup the command line arguments.
-    */</span>
-  <span class="k">val</span> <span class="n">schema</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ArgsSchema</span><span class="o">()</span>
-    <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span><span class="o">)</span>
-    <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"log"</span><span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">)</span>
-
-
-  <span class="cm">/**
-    * Converts a built AppContext into a final one for use in this app.
-    * This is to allow customization encryptor, logger, database 
-    */</span>
-  <span class="k">def</span> <span class="n">convert</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">AppContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">AppContext</span> <span class="o">=</span> <span class="o">{</span>
-    <span class="n">ctx</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">enc</span> <span class="k">=</span> <span class="nc">Option</span><span class="o">(</span><span class="k">new</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">)))</span>
-  <span class="o">}</span>
-
-
-  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
-
-    <span class="c1">// 1. Run calls the template methods ( init, exec, shutdown )
-</span>    <span class="n">run</span> <span class="o">(</span>
-
-      <span class="c1">// 2. Instance of AppProcess
-</span>      <span class="k">new</span> <span class="nc">SampleApp</span> <span class="o">(</span>
-
-        <span class="c1">// 3. Build the Application context for the app.
-</span>        <span class="c1">// NOTE: The app context contains the selected
-</span>        <span class="c1">// environment, logger, conf, command line args,
-</span>        <span class="c1">// database, encryptor, and many other components
-</span>        <span class="n">build</span> <span class="o">(</span>
-          <span class="n">args</span>      <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">args</span><span class="o">),</span>
-          <span class="n">schema</span>    <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">schema</span><span class="o">),</span>
-          <span class="n">converter</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="n">convert</span><span class="o">)</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-
+<span class="k">return</span> <span class="n">res</span>
 </code></pre>
 </div>
 				<br/>
@@ -1413,55 +1210,60 @@
 				</p>	
 				<h3>Customize</h3>
 				<p>To add any extra diagnostics to the app, you can override the collectSummaryExtra method</p>
-				<div class="highlighter-rouge"><pre class="highlight"><code>
-
-  <span class="k">override</span> <span class="k">def</span> <span class="n">collectSummaryExtra</span><span class="o">()</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span>
-  <span class="o">{</span>
-    <span class="nc">Some</span><span class="o">(</span><span class="nc">List</span><span class="o">[(</span><span class="kt">String</span>,<span class="kt">String</span><span class="o">)](</span>
-      <span class="o">(</span><span class="s">"region"</span>    <span class="o">,</span> <span class="s">"london"</span>    <span class="o">),</span>
-      <span class="o">(</span><span class="s">"department"</span><span class="o">,</span> <span class="s">"operations"</span><span class="o">)</span>
-    <span class="o">))</span>
-  <span class="o">}</span>
-
+				<div class="highlighter-rouge"><pre class="highlight"><code>  
+      <span class="cm">/**
+       * template method: allows you to build up info to show in the summary
+       * displayed at the end of the application
+       */</span>
+      <span class="k">override</span> <span class="k">fun</span> <span class="nf">collectSummaryExtra</span><span class="p">():</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Pair</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;&gt;?</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="n">listOf</span><span class="p">(</span>
+                  <span class="n">Pair</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">app</span><span class="p">.</span><span class="n">about</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="s">" extra 1  = extra summary data1"</span><span class="p">),</span>
+                  <span class="n">Pair</span><span class="p">(</span><span class="n">ctx</span><span class="p">.</span><span class="n">app</span><span class="p">.</span><span class="n">about</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="s">" extra 2  = extra summary data2"</span><span class="p">)</span>
+          <span class="p">)</span>
+      <span class="p">}</span>
 </code></pre>
 </div>
 				
 				<h3>Log</h3>
 				<p>This is the output of the application</p>
-				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">executing</span> <span class="n">now</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">completed</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">app</span> <span class="n">shutting</span> <span class="n">down</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">SUMMARY</span> <span class="o">:</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">name</span>          <span class="o">=</span> <span class="n">sampleapp</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">desc</span>          <span class="o">=</span> <span class="n">sample</span> <span class="n">app</span> <span class="n">to</span> <span class="n">show</span> <span class="n">the</span> <span class="n">appprocess</span> <span class="n">base</span> <span class="kd">class</span><span class="err">,</span> <span class="nc">template</span> <span class="n">methods</span><span class="o">,</span> <span class="n">and</span> <span class="n">functionality</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">version</span>       <span class="o">=</span> <span class="mf">1.0</span><span class="o">.</span><span class="mf">0.3</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">tags</span>          <span class="o">=</span> <span class="n">feature_01</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">args</span>          <span class="o">=</span> <span class="n">Some</span><span class="o">([</span><span class="n">Ljava</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">String</span><span class="o">;</span><span class="err">@</span><span class="mi">9304022</span><span class="o">)</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">env</span>           <span class="o">=</span> <span class="n">qa</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">config</span>        <span class="o">=</span> <span class="n">qa</span><span class="o">.</span><span class="na">config</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">log</span>           <span class="o">=</span> <span class="n">sampleapp</span><span class="o">-</span><span class="n">qa</span><span class="o">-</span><span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="mi">14</span><span class="o">.</span><span class="na">log</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">region</span>        <span class="o">=</span> <span class="n">usa</span><span class="o">.</span><span class="na">ny</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">started</span>       <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">14</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">ended</span>         <span class="o">=</span> <span class="mi">2016</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="mi">13</span> <span class="mi">3</span><span class="o">:</span><span class="mi">1</span><span class="o">:</span><span class="mi">15</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">duration</span>      <span class="o">=</span> <span class="n">slate</span><span class="o">.</span><span class="na">common</span><span class="o">.</span><span class="na">TimeSpan</span><span class="err">@</span><span class="mi">3</span><span class="n">ec27ce4</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">status</span>        <span class="o">=</span> <span class="n">ended</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">errors</span>        <span class="o">=</span> <span class="mi">0</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">error</span>         <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="n">a</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">KREDDY</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">ip</span>       <span class="o">=</span> <span class="n">Windows</span> <span class="mi">7</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">origin</span>   <span class="o">=</span> <span class="n">local</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">host</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">6.1</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">name</span>     <span class="o">=</span> <span class="n">scala</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">version</span>  <span class="o">=</span> <span class="mf">2.11</span><span class="o">.</span><span class="mi">7</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">java</span>     <span class="o">=</span> <span class="n">local</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="n">lang</span><span class="o">.</span><span class="na">home</span>     <span class="o">=</span> <span class="nl">C:</span><span class="o">/</span><span class="n">Tools</span><span class="o">/</span><span class="n">Java</span><span class="o">/</span><span class="n">jdk1</span><span class="o">.</span><span class="mf">7.0</span><span class="n">_79</span><span class="o">/</span><span class="n">jre</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">1</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data1</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="nl">sampleapp:</span> <span class="n">extra</span> <span class="mi">2</span>  <span class="o">=</span> <span class="n">extra</span> <span class="n">summary</span> <span class="n">data2</span>
-  <span class="n">Info</span> <span class="o">:</span> <span class="o">===============================================================</span>
+				<pre><code class="language-bat"> Info  : app executing now
+ Info  : app completed
+ Info  : app shutting down
+ Info  : ===============================================================
+ Info  : SUMMARY :
+ Info  : ===============================================================
+ Info  : name              = Slate Sample App
+ Info  : desc              = Sample to show the base application
+ Info  : version           = 0.9.1
+ Info  : tags              =
+ Info  : group             =
+ Info  : region            =
+ Info  : contact           = kishore@abc.co
+ Info  : url               =
+ Info  : args              =
+ Info  : env               = dev
+ Info  : config            = env.conf
+ Info  : log               = local:dev
+ Info  : started           = 2017-07-11T11:54:13.132-04:00[America/New_York]
+ Info  : ended             = 2017-07-11T11:54:18.408-04:00[America/New_York]
+ Info  : duration          = PT5.276S
+ Info  : status            = ended
+ Info  : errors            = 0
+ Info  : error             = n/a
+ Info  : host.name         = KRPC1
+ Info  : host.ip           =
+ Info  : host.origin       = Windows 10
+ Info  : host.version      = 10.0
+ Info  : lang.name         = kotlin
+ Info  : lang.version      = 1.8.0_91
+ Info  : lang.vendor       = Oracle Corporation
+ Info  : lang.java         = local
+ Info  : lang.home         = C:/Tools/Java/jdk1.8.0_91/jre
+ Info  : Slate Sample App =  extra 1  = extra summary data1
+ Info  : Slate Sample App =  extra 2  = extra summary data2
+ Info  : ===============================================================
+
 </code></pre>
-</div>
 				<a href="#app-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 				<br/><br/><br/>
             </div>			
