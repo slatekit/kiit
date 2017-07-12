@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/logging">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/logging</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/logging" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/logging</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -113,7 +114,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.log.</span><span class="o">*</span>
+</span><span class="k">import</span> <span class="nn">slatekit.common.log.*</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
 
@@ -134,21 +135,21 @@
 </span>  <span class="c1">// 1. log4net
 </span>  <span class="c1">// 2. loggly
 </span>  <span class="c1">// 3. new relic
-</span>  <span class="k">override</span> <span class="k">val</span> <span class="n">logger</span><span class="k">:</span><span class="kt">LoggerBase?</span> <span class="o">=</span> <span class="nc">LoggerConsole</span><span class="o">()</span>
+</span>  <span class="k">override</span> <span class="kd">val</span> <span class="py">logger</span><span class="p">:</span><span class="n">LoggerBase</span><span class="p">?</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">()</span>
 
 
   <span class="c1">// Setup a custom logger
-</span>  <span class="k">class</span> <span class="nc">MyCustomLogger</span> <span class="k">:</span> <span class="kt">LoggerBase</span><span class="o">(</span><span class="kt">Warn</span><span class="o">)</span>  <span class="o">{</span>
+</span>  <span class="kd">class</span> <span class="nc">MyCustomLogger</span> <span class="p">:</span> <span class="n">LoggerBase</span><span class="p">(</span><span class="n">Warn</span><span class="p">)</span>  <span class="p">{</span>
 
 
-    <span class="kt">override</span> <span class="kt">val</span> <span class="kt">logger:LoggerBase?</span> <span class="o">=</span> <span class="kt">LoggerConsole</span><span class="o">()</span>
+    <span class="k">override</span> <span class="kd">val</span> <span class="py">logger</span><span class="p">:</span><span class="n">LoggerBase</span><span class="p">?</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">()</span>
 
 
-    <span class="kt">override</span> <span class="kt">fun</span> <span class="kt">performLog</span><span class="o">(</span><span class="kt">entry:</span> <span class="kt">LogEntry</span><span class="o">)</span><span class="kt">:</span> <span class="kt">Unit</span>
-    <span class="o">{</span>
-      <span class="n">println</span><span class="o">(</span><span class="s">"custom logger : "</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="n">level</span> <span class="o">+</span> <span class="s">" : "</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="n">msg</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">performLog</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="n">LogEntry</span><span class="p">):</span> <span class="n">Unit</span>
+    <span class="p">{</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"custom logger : "</span> <span class="p">+</span> <span class="n">entry</span><span class="p">.</span><span class="n">level</span> <span class="p">+</span> <span class="s">" : "</span> <span class="p">+</span> <span class="n">entry</span><span class="p">.</span><span class="n">msg</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
 
   
@@ -160,49 +161,49 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Sample exception
-</span>    <span class="k">val</span> <span class="n">ex</span> <span class="k">=</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"Example exception"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">ex</span> <span class="p">=</span> <span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"Example exception"</span><span class="p">)</span>
 
     <span class="c1">// CASE 1: Different ways to log with the static logger
 </span>    <span class="c1">// 1. message only
 </span>    <span class="c1">// 2. message + exception
 </span>    <span class="c1">// 3. message + exception + tag
-</span>    <span class="k">val</span> <span class="n">logger</span> <span class="k">=</span> <span class="nc">LoggerConsole</span><span class="o">(</span><span class="nc">Debug</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">"debug with message only"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"info with message and exception"</span><span class="o">,</span> <span class="n">ex</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="o">(</span><span class="s">"debug with message, exception, and tag"</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="s">"APP1"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">fatal</span><span class="o">(</span><span class="s">"fatal message"</span><span class="o">,</span> <span class="n">tag</span> <span class="k">=</span> <span class="s">"123"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">logger</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(</span><span class="n">Debug</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">"debug with message only"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"info with message and exception"</span><span class="p">,</span> <span class="n">ex</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">warn</span><span class="p">(</span><span class="s">"debug with message, exception, and tag"</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="s">"APP1"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">fatal</span><span class="p">(</span><span class="s">"fatal message"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"123"</span><span class="p">)</span>
 
     <span class="c1">// CASE: 2 Standard info, warn, error levels available
 </span>    <span class="c1">// Same overloads ( msg, ex, tag ) are available.
-</span>    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">"debug"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"info"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="o">(</span><span class="s">"warn"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error"</span><span class="o">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">fatal</span><span class="o">(</span><span class="s">"fatal"</span><span class="o">)</span>
+</span>    <span class="n">logger</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">"debug"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="s">"info"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">warn</span><span class="p">(</span><span class="s">"warn"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">"error"</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">fatal</span><span class="p">(</span><span class="s">"fatal"</span><span class="p">)</span>
 
 
     <span class="c1">// CASE 3: Log explicitly using log method.
-</span>    <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="o">(</span><span class="nc">Error</span><span class="o">,</span> <span class="s">"error"</span><span class="o">,</span> <span class="n">ex</span><span class="o">,</span> <span class="s">"APP1"</span><span class="o">)</span>
+</span>    <span class="n">logger</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">Error</span><span class="p">,</span> <span class="s">"error"</span><span class="p">,</span> <span class="n">ex</span><span class="p">,</span> <span class="s">"APP1"</span><span class="p">)</span>
 
 
     <span class="c1">// CASE 4: You can extend a class with the LogSupportIn trait
 </span>    <span class="c1">// to add logging methods to any class. The trait expects to have
 </span>    <span class="c1">// a _log member variable available.
-</span>    <span class="n">debug</span><span class="o">(</span><span class="s">"debug from trait"</span><span class="o">)</span>
-    <span class="n">info</span> <span class="o">(</span><span class="s">"info from trait"</span><span class="o">)</span>
-    <span class="n">warn</span> <span class="o">(</span><span class="s">"warn from trait"</span><span class="o">)</span>
-    <span class="n">error</span><span class="o">(</span><span class="s">"error from trait"</span><span class="o">)</span>
-    <span class="n">fatal</span><span class="o">(</span><span class="s">"fatal from trait"</span><span class="o">)</span>
+</span>    <span class="n">debug</span><span class="p">(</span><span class="s">"debug from trait"</span><span class="p">)</span>
+    <span class="n">info</span> <span class="p">(</span><span class="s">"info from trait"</span><span class="p">)</span>
+    <span class="n">warn</span> <span class="p">(</span><span class="s">"warn from trait"</span><span class="p">)</span>
+    <span class="n">error</span><span class="p">(</span><span class="s">"error from trait"</span><span class="p">)</span>
+    <span class="n">fatal</span><span class="p">(</span><span class="s">"fatal from trait"</span><span class="p">)</span>
 
 
     <span class="c1">// CASE 5: Custom logger ( see setup above )
 </span>    <span class="c1">// YOu just have to implement the log method.
-</span>    <span class="k">val</span> <span class="n">log</span> <span class="k">=</span> <span class="nc">MyCustomLogger</span><span class="o">()</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="o">(</span><span class="s">"debug from trait"</span><span class="o">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span> <span class="o">(</span><span class="s">"info from trait"</span><span class="o">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">warn</span> <span class="o">(</span><span class="s">"warn from trait"</span><span class="o">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error from trait"</span><span class="o">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">fatal</span><span class="o">(</span><span class="s">"fatal from trait"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">log</span> <span class="p">=</span> <span class="n">MyCustomLogger</span><span class="p">()</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">"debug from trait"</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">info</span> <span class="p">(</span><span class="s">"info from trait"</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">warn</span> <span class="p">(</span><span class="s">"warn from trait"</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">"error from trait"</span><span class="p">)</span>
+    <span class="n">log</span><span class="p">.</span><span class="n">fatal</span><span class="p">(</span><span class="s">"fatal from trait"</span><span class="p">)</span>
     
 
 </code></pre>

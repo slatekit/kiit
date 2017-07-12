@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Random.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Random.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Random.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Random.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -140,7 +141,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -149,43 +150,43 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// CASE 1: Create random strings ( characters only ) of different lengths
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"Random STRINGS - UPPER + lower case"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 3 : "</span> <span class="o">+</span> <span class="n">string3</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 6 : "</span> <span class="o">+</span> <span class="n">string6</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len n : "</span> <span class="o">+</span> <span class="n">stringN</span><span class="o">(</span><span class="mi">9</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="n">println</span><span class="p">(</span><span class="s">"Random STRINGS - UPPER + lower case"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 3 : "</span> <span class="p">+</span> <span class="n">string3</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 6 : "</span> <span class="p">+</span> <span class="n">string6</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len n : "</span> <span class="p">+</span> <span class="n">stringN</span><span class="p">(</span><span class="m">9</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
-    <span class="n">println</span><span class="o">(</span><span class="s">"Random STRINGS - lower case only"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 3 : "</span> <span class="o">+</span> <span class="n">stringN</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">allowUpper</span> <span class="k">=</span> <span class="kc">false</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 6 : "</span> <span class="o">+</span> <span class="n">stringN</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span> <span class="n">allowUpper</span> <span class="k">=</span> <span class="kc">false</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len n : "</span> <span class="o">+</span> <span class="n">stringN</span><span class="o">(</span><span class="mi">9</span><span class="o">,</span> <span class="n">allowUpper</span> <span class="k">=</span> <span class="kc">false</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Random STRINGS - lower case only"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 3 : "</span> <span class="p">+</span> <span class="n">stringN</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="n">allowUpper</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 6 : "</span> <span class="p">+</span> <span class="n">stringN</span><span class="p">(</span><span class="m">6</span><span class="p">,</span> <span class="n">allowUpper</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len n : "</span> <span class="p">+</span> <span class="n">stringN</span><span class="p">(</span><span class="m">9</span><span class="p">,</span> <span class="n">allowUpper</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// CASE 2: Create Guid
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"Random GUID"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"dashes - yes : "</span> <span class="o">+</span> <span class="n">stringGuid</span><span class="o">()</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"dashes - no  : "</span> <span class="o">+</span> <span class="n">stringGuid</span><span class="o">(</span><span class="n">includeDashes</span> <span class="k">=</span> <span class="kc">false</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="n">println</span><span class="p">(</span><span class="s">"Random GUID"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"dashes - yes : "</span> <span class="p">+</span> <span class="n">stringGuid</span><span class="p">()</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"dashes - no  : "</span> <span class="p">+</span> <span class="n">stringGuid</span><span class="p">(</span><span class="n">includeDashes</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// CASE 3: Create numbers of different lengths
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"Random NUMBERS"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 3 : "</span> <span class="o">+</span> <span class="n">digits3</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 6 : "</span> <span class="o">+</span> <span class="n">digits6</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len n : "</span> <span class="o">+</span> <span class="n">digitsN</span><span class="o">(</span><span class="mi">9</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="n">println</span><span class="p">(</span><span class="s">"Random NUMBERS"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 3 : "</span> <span class="p">+</span> <span class="n">digits3</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 6 : "</span> <span class="p">+</span> <span class="n">digits6</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len n : "</span> <span class="p">+</span> <span class="n">digitsN</span><span class="p">(</span><span class="m">9</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// CASE 4: Create alpha-numeric strings ( chars + digits ) of different lengths
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"Random ALPHA-NUMERIC"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 3 : "</span> <span class="o">+</span> <span class="n">alpha3</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 6 : "</span> <span class="o">+</span> <span class="n">alpha6</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len n : "</span> <span class="o">+</span> <span class="n">alphaN</span><span class="o">(</span><span class="mi">9</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="n">println</span><span class="p">(</span><span class="s">"Random ALPHA-NUMERIC"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 3 : "</span> <span class="p">+</span> <span class="n">alpha3</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 6 : "</span> <span class="p">+</span> <span class="n">alpha6</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len n : "</span> <span class="p">+</span> <span class="n">alphaN</span><span class="p">(</span><span class="m">9</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// CASE 5: Create alpha-numeric-symbol strings ( chars + digits + symbols ) of different lengths
-</span>    <span class="n">println</span><span class="o">(</span><span class="s">"Random ALPHA-NUMERIC-SYMBOL"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 3 : "</span> <span class="o">+</span> <span class="n">alphaSym3</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len 6 : "</span> <span class="o">+</span> <span class="n">alphaSym6</span><span class="o">()</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="s">"len n : "</span> <span class="o">+</span> <span class="n">alphaSymN</span><span class="o">(</span><span class="mi">9</span><span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">println</span><span class="p">(</span><span class="s">"Random ALPHA-NUMERIC-SYMBOL"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 3 : "</span> <span class="p">+</span> <span class="n">alphaSym3</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len 6 : "</span> <span class="p">+</span> <span class="n">alphaSym6</span><span class="p">()</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="s">"len n : "</span> <span class="p">+</span> <span class="n">alphaSymN</span><span class="p">(</span><span class="m">9</span><span class="p">)</span> <span class="p">)</span>
 
     
 

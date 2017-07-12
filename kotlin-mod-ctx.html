@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Context.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Context.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Context.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Context.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -144,7 +144,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -188,28 +188,28 @@
 </span>        <span class="c1">// - Config() representing conf settings from "env.conf"
 </span>        <span class="c1">// - default logger ( console )
 </span>        <span class="c1">// - entities ( registrations for orm )
-</span>        <span class="k">val</span> <span class="n">ctx1</span> <span class="k">=</span> <span class="nc">AppContext</span><span class="o">(</span>
-            <span class="n">arg</span> <span class="k">=</span> <span class="nc">Args</span><span class="o">.</span><span class="n">default</span><span class="o">(),</span>
-            <span class="n">env</span> <span class="k">=</span> <span class="nc">Env</span><span class="o">(</span><span class="s">"dev"</span><span class="o">,</span> <span class="nc">Dev</span><span class="o">,</span> <span class="s">"ny"</span><span class="o">,</span> <span class="s">"dev environment"</span><span class="o">),</span>
-            <span class="n">cfg</span> <span class="k">=</span> <span class="nc">Config</span><span class="o">(),</span>
-            <span class="n">log</span> <span class="k">=</span> <span class="nc">LoggerConsole</span><span class="o">(),</span>
-            <span class="n">ent</span> <span class="k">=</span> <span class="nc">Entities</span><span class="o">(),</span>
-            <span class="n">host</span> <span class="k">=</span> <span class="nc">Host</span><span class="o">.</span><span class="n">local</span><span class="o">(),</span>
-            <span class="n">lang</span> <span class="k">=</span> <span class="nc">Lang</span><span class="o">.</span><span class="n">kotlin</span><span class="o">(),</span>
-            <span class="n">inf</span> <span class="k">=</span> <span class="nc">About</span><span class="o">(</span>
-                    <span class="n">id</span> <span class="k">=</span> <span class="s">"sample-app-1"</span><span class="o">,</span>
-                    <span class="n">name</span> <span class="k">=</span> <span class="s">"Sample App-1"</span><span class="o">,</span>
-                    <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample application 1"</span><span class="o">,</span>
-                    <span class="n">company</span> <span class="k">=</span> <span class="s">"Company 1"</span><span class="o">,</span>
-                    <span class="n">group</span> <span class="k">=</span> <span class="s">"Department 1"</span><span class="o">,</span>
-                    <span class="n">region</span> <span class="k">=</span> <span class="s">"New York"</span><span class="o">,</span>
-                    <span class="n">url</span> <span class="k">=</span> <span class="s">"http://company1.com/dep1/sampleapp-1"</span><span class="o">,</span>
-                    <span class="n">contact</span> <span class="k">=</span> <span class="s">"dept1@company1.com"</span><span class="o">,</span>
-                    <span class="n">version</span> <span class="k">=</span> <span class="s">"1.0.1"</span><span class="o">,</span>
-                    <span class="n">tags</span> <span class="k">=</span> <span class="s">"sample app slatekit scala"</span><span class="o">,</span>
-                    <span class="n">examples</span> <span class="k">=</span> <span class="s">""</span>
-            <span class="o">)</span>
-        <span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">(</span>
+            <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+            <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">,</span> <span class="s">"ny"</span><span class="p">,</span> <span class="s">"dev environment"</span><span class="p">),</span>
+            <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+            <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+            <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+            <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+            <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+            <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span>
+                    <span class="n">id</span> <span class="p">=</span> <span class="s">"sample-app-1"</span><span class="p">,</span>
+                    <span class="n">name</span> <span class="p">=</span> <span class="s">"Sample App-1"</span><span class="p">,</span>
+                    <span class="n">desc</span> <span class="p">=</span> <span class="s">"Sample application 1"</span><span class="p">,</span>
+                    <span class="n">company</span> <span class="p">=</span> <span class="s">"Company 1"</span><span class="p">,</span>
+                    <span class="n">group</span> <span class="p">=</span> <span class="s">"Department 1"</span><span class="p">,</span>
+                    <span class="n">region</span> <span class="p">=</span> <span class="s">"New York"</span><span class="p">,</span>
+                    <span class="n">url</span> <span class="p">=</span> <span class="s">"http://company1.com/dep1/sampleapp-1"</span><span class="p">,</span>
+                    <span class="n">contact</span> <span class="p">=</span> <span class="s">"dept1@company1.com"</span><span class="p">,</span>
+                    <span class="n">version</span> <span class="p">=</span> <span class="s">"1.0.1"</span><span class="p">,</span>
+                    <span class="n">tags</span> <span class="p">=</span> <span class="s">"sample app slatekit scala"</span><span class="p">,</span>
+                    <span class="n">examples</span> <span class="p">=</span> <span class="s">""</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1">// CASE 2: Typically your application will want to derive the
 </span>        <span class="c1">// context from either the command line args and or the config
@@ -222,30 +222,30 @@
 </span>        <span class="c1">// but basically, this loads the env.dev.conf with fallback to env.conf
 </span>        <span class="c1">// 1. "env.dev.conf" ( environment specific )
 </span>        <span class="c1">// 2. "env.conf"     ( common / base line   )
-</span>        <span class="k">val</span> <span class="n">ctx2</span> <span class="k">=</span> <span class="nc">AppRunner</span><span class="o">.</span><span class="n">build</span><span class="o">(</span><span class="n">arrayOf</span><span class="o">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="o">))</span>
-        <span class="n">showContext</span><span class="o">(</span><span class="n">ctx2</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">ctx2</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">arrayOf</span><span class="p">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="p">))</span>
+        <span class="n">showContext</span><span class="p">(</span><span class="n">ctx2</span><span class="p">)</span>
 
         <span class="c1">// CASE 3: This example shows providing the args schema for parsing the args
 </span>        <span class="c1">// refer to Args in utils for more info.
 </span>        <span class="c1">// NOTE: There are additional parameters on the build function ( callbacks )
 </span>        <span class="c1">// to allow you to get the context and modify it before it is returned.
-</span>        <span class="k">val</span> <span class="n">ctx3</span> <span class="k">=</span> <span class="nc">AppRunner</span><span class="o">.</span><span class="n">build</span><span class="o">(</span>
-                    <span class="n">args</span>   <span class="k">=</span> <span class="n">arrayOf</span><span class="o">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="o">),</span>
-                    <span class="n">enc</span>    <span class="k">=</span> <span class="nc">Encryptor</span><span class="o">(</span><span class="s">"wejklhviuxywehjk"</span><span class="o">,</span> <span class="s">"3214maslkdf03292"</span><span class="o">),</span>
-                    <span class="n">schema</span> <span class="k">=</span> <span class="nc">ArgsSchema</span><span class="o">()</span>
-                            <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"the environment to run in"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"dev1|qa1|stg1|pro"</span><span class="o">)</span>
-                            <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"region"</span><span class="o">,</span> <span class="s">"the region linked to app"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"us"</span><span class="o">,</span> <span class="s">"us"</span><span class="o">,</span> <span class="s">"us|europe|india|*"</span><span class="o">)</span>
-                            <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"config.loc"</span><span class="o">,</span> <span class="s">"location of config files"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"jar"</span><span class="o">,</span> <span class="s">"jar"</span><span class="o">,</span> <span class="s">"jar|conf"</span><span class="o">)</span>
-                            <span class="o">.</span><span class="n">text</span><span class="o">(</span><span class="s">"log.level"</span><span class="o">,</span> <span class="s">"the log level for logging"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"info"</span><span class="o">,</span> <span class="s">"debug|info|warn|error"</span><span class="o">),</span>
-                    <span class="n">converter</span> <span class="k">=</span> <span class="o">{</span> <span class="n">context</span> <span class="o">-&gt;</span> <span class="n">context</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span> <span class="n">inf</span> <span class="k">=</span> <span class="n">context</span><span class="o">.</span><span class="n">inf</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span>
-                        <span class="n">desc</span> <span class="k">=</span> <span class="s">"Sample to show converter to convert context before final use"</span>
-                    <span class="o">))}</span>
-        <span class="o">)</span>
-        <span class="n">showContext</span><span class="o">(</span><span class="n">ctx3</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">ctx3</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
+                    <span class="n">args</span>   <span class="p">=</span> <span class="n">arrayOf</span><span class="p">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="p">),</span>
+                    <span class="n">enc</span>    <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+                    <span class="n">schema</span> <span class="p">=</span> <span class="n">ArgsSchema</span><span class="p">()</span>
+                            <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"env"</span><span class="p">,</span> <span class="s">"the environment to run in"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"dev1|qa1|stg1|pro"</span><span class="p">)</span>
+                            <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"region"</span><span class="p">,</span> <span class="s">"the region linked to app"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"us|europe|india|*"</span><span class="p">)</span>
+                            <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"config.loc"</span><span class="p">,</span> <span class="s">"location of config files"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"jar"</span><span class="p">,</span> <span class="s">"jar"</span><span class="p">,</span> <span class="s">"jar|conf"</span><span class="p">)</span>
+                            <span class="p">.</span><span class="n">text</span><span class="p">(</span><span class="s">"log.level"</span><span class="p">,</span> <span class="s">"the log level for logging"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"info"</span><span class="p">,</span> <span class="s">"info"</span><span class="p">,</span> <span class="s">"debug|info|warn|error"</span><span class="p">),</span>
+                    <span class="n">converter</span> <span class="p">=</span> <span class="p">{</span> <span class="n">context</span> <span class="p">-&gt;</span> <span class="n">context</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span> <span class="n">inf</span> <span class="p">=</span> <span class="n">context</span><span class="p">.</span><span class="n">inf</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span>
+                        <span class="n">desc</span> <span class="p">=</span> <span class="s">"Sample to show converter to convert context before final use"</span>
+                    <span class="p">))}</span>
+        <span class="p">)</span>
+        <span class="n">showContext</span><span class="p">(</span><span class="n">ctx3</span><span class="p">)</span>
 
         <span class="c1">// CASE 4: You can also build an error context representing an invalid context
-</span>        <span class="k">val</span> <span class="n">ctx4</span> <span class="k">=</span> <span class="nc">AppContext</span><span class="o">.</span><span class="n">err</span><span class="o">(</span><span class="nc">BAD_REQUEST</span><span class="o">,</span> <span class="s">"Bad context, invalid inputs supplied"</span><span class="o">)</span>
-        <span class="n">showContext</span><span class="o">(</span><span class="n">ctx4</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">ctx4</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">.</span><span class="n">err</span><span class="p">(</span><span class="n">BAD_REQUEST</span><span class="p">,</span> <span class="s">"Bad context, invalid inputs supplied"</span><span class="p">)</span>
+        <span class="n">showContext</span><span class="p">(</span><span class="n">ctx4</span><span class="p">)</span>
 
         
 

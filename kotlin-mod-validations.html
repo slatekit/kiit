@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/validation">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/validation</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/validation" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/validation</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -152,7 +153,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -161,97 +162,97 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
   <span class="c1">// CASE 1: Simple true/false checks
-</span>  <span class="n">fun</span> <span class="n">showSimple</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+</span>  <span class="k">fun</span> <span class="nf">showSimple</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
 
-    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">1</span><span class="kt">:</span> <span class="kt">Simple</span> <span class="kt">true/false</span> <span class="kt">checks</span><span class="err">"</span><span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isEmpty</span>      <span class="o">(</span><span class="err">""</span><span class="o">)</span>              <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isNotEmpty</span>   <span class="o">(</span><span class="err">"123"</span><span class="o">)</span>           <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isLength</span>     <span class="o">(</span><span class="err">"123"</span><span class="o">,</span> <span class="err">3</span><span class="o">)</span>        <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isMinLength</span>  <span class="o">(</span><span class="err">"123"</span><span class="o">,</span> <span class="err">3</span><span class="o">)</span>        <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">isMaxLength</span>  <span class="o">(</span><span class="s">"12"</span> <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>        <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">isMinValue</span>   <span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="mi">100</span><span class="o">)</span>        <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">isMaxValue</span>   <span class="o">(</span><span class="mi">99</span> <span class="o">,</span> <span class="mi">100</span><span class="o">)</span>        <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">hasDigits</span>    <span class="o">(</span><span class="s">"a1b2c3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">hasCharsLCase</span><span class="o">(</span><span class="s">"a1b2c3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">hasCharsUCase</span><span class="o">(</span><span class="s">"A1B2C3"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">hasSymbols</span>   <span class="o">(</span><span class="s">"A@B%C^"</span>  <span class="o">,</span> <span class="mi">3</span><span class="o">)</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
-  <span class="o">}</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CASE 1: Simple true/false checks"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isEmpty</span>      <span class="p">(</span><span class="s">""</span><span class="p">)</span>              <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isNotEmpty</span>   <span class="p">(</span><span class="s">"123"</span><span class="p">)</span>           <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isLength</span>     <span class="p">(</span><span class="s">"123"</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isMinLength</span>  <span class="p">(</span><span class="s">"123"</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isMaxLength</span>  <span class="p">(</span><span class="s">"12"</span> <span class="p">,</span> <span class="m">3</span><span class="p">)</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isMinValue</span>   <span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isMaxValue</span>   <span class="p">(</span><span class="m">99</span> <span class="p">,</span> <span class="m">100</span><span class="p">)</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">hasDigits</span>    <span class="p">(</span><span class="s">"a1b2c3"</span>  <span class="p">,</span> <span class="m">3</span><span class="p">)</span>   <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">hasCharsLCase</span><span class="p">(</span><span class="s">"a1b2c3"</span>  <span class="p">,</span> <span class="m">3</span><span class="p">)</span>   <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">hasCharsUCase</span><span class="p">(</span><span class="s">"A1B2C3"</span>  <span class="p">,</span> <span class="m">3</span><span class="p">)</span>   <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">hasSymbols</span>   <span class="p">(</span><span class="s">"A@B%C^"</span>  <span class="p">,</span> <span class="m">3</span><span class="p">)</span>   <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
+  <span class="p">}</span>
 
 
   <span class="c1">// CASE 2: Simple RegEx based checks returning true/false
-</span>  <span class="n">fun</span> <span class="n">showSimpleRegEx</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+</span>  <span class="k">fun</span> <span class="nf">showSimpleRegEx</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
 
-    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">2</span><span class="kt">:</span> <span class="kt">Simple</span> <span class="kt">RegEx</span> <span class="kt">based</span> <span class="kt">checks</span> <span class="kt">returning</span> <span class="kt">true/false</span><span class="err">"</span><span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isEmail</span>         <span class="o">(</span><span class="err">"</span><span class="kt">wonderwoman@amazonian.com</span><span class="err">"</span><span class="o">))</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isUrl</span>           <span class="o">(</span><span class="err">"</span><span class="kt">http://slatekit.com</span><span class="err">"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlpha</span>         <span class="o">(</span><span class="err">"</span><span class="kt">abcDEF</span><span class="err">"</span><span class="o">)</span>      <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaUpperCase</span><span class="o">(</span><span class="err">"</span><span class="kt">ABCDEFG</span><span class="err">"</span><span class="o">)</span>     <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaLowerCase</span><span class="o">(</span><span class="err">"</span><span class="kt">abcdefg</span><span class="err">"</span><span class="o">)</span>     <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isAlphaNumeric</span>  <span class="o">(</span><span class="err">"</span><span class="kt">abCD12</span><span class="err">"</span><span class="o">)</span>      <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isNumeric</span>       <span class="o">(</span><span class="err">"123456"</span><span class="o">)</span>      <span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isPhoneUS</span>       <span class="o">(</span><span class="err">"123</span><span class="kt">-</span><span class="err">456</span><span class="kt">-</span><span class="err">7890"</span><span class="o">))</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">isZipCodeUS</span>     <span class="o">(</span><span class="err">"12345"</span><span class="o">)</span>       <span class="o">)</span>
-    <span class="kt">println</span><span class="o">()</span>
-  <span class="o">}</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CASE 2: Simple RegEx based checks returning true/false"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isEmail</span>         <span class="p">(</span><span class="s">"wonderwoman@amazonian.com"</span><span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isUrl</span>           <span class="p">(</span><span class="s">"http://slatekit.com"</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isAlpha</span>         <span class="p">(</span><span class="s">"abcDEF"</span><span class="p">)</span>      <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isAlphaUpperCase</span><span class="p">(</span><span class="s">"ABCDEFG"</span><span class="p">)</span>     <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isAlphaLowerCase</span><span class="p">(</span><span class="s">"abcdefg"</span><span class="p">)</span>     <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isAlphaNumeric</span>  <span class="p">(</span><span class="s">"abCD12"</span><span class="p">)</span>      <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isNumeric</span>       <span class="p">(</span><span class="s">"123456"</span><span class="p">)</span>      <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isPhoneUS</span>       <span class="p">(</span><span class="s">"123-456-7890"</span><span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">isZipCodeUS</span>     <span class="p">(</span><span class="s">"12345"</span><span class="p">)</span>       <span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
+  <span class="p">}</span>
 
 
   <span class="c1">// CASE 3: Same checks above but these return a ValidationResult
 </span>  <span class="c1">// which contains success(true/false), message, reference, and status code
 </span>  <span class="c1">// You can supply a reference to a field/position refer to common\Reference.scala
-</span>  <span class="n">fun</span> <span class="n">showValidationResult</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+</span>  <span class="k">fun</span> <span class="nf">showValidationResult</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
 
-    <span class="kt">println</span><span class="o">(</span><span class="err">"</span><span class="kt">CASE</span> <span class="err">3</span><span class="kt">:</span> <span class="kt">Same</span> <span class="kt">checks</span> <span class="kt">above</span> <span class="kt">but</span> <span class="kt">these</span> <span class="kt">return</span> <span class="kt">a</span> <span class="kt">ValidationResult</span><span class="err">"</span><span class="o">)</span>
-    <span class="kt">println</span><span class="o">(</span> <span class="kt">ValidationFuncsExt.isEmpty</span>       <span class="o">(</span><span class="err">""</span>      <span class="o">,</span>    <span class="kt">RefField</span><span class="o">(</span><span class="err">"</span><span class="kt">Email</span><span class="err">"</span>   <span class="o">)</span> <span class="o">,</span> <span class="err">"</span><span class="kt">Email</span> <span class="kt">is</span> <span class="kt">required</span><span class="err">"</span>   <span class="o">))</span>
-    <span class="n">println</span><span class="o">(</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">isAlphaNumeric</span><span class="o">(</span><span class="s">"abCD12"</span><span class="o">,</span>    <span class="nc">RefField</span><span class="o">(</span><span class="s">"Password"</span><span class="o">)</span> <span class="o">,</span> <span class="s">"Password is invalid"</span> <span class="o">))</span>
-    <span class="n">println</span><span class="o">(</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">isZipCodeUS</span>   <span class="o">(</span><span class="s">"12345"</span> <span class="o">,</span>    <span class="nc">RefField</span><span class="o">(</span><span class="s">"ZipCode"</span> <span class="o">)</span> <span class="o">,</span> <span class="s">"ZipCode is required"</span> <span class="o">))</span>
-    <span class="n">println</span><span class="o">(</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">isMinLength</span>   <span class="o">(</span><span class="s">"12"</span>    <span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Name"</span>    <span class="o">)</span> <span class="o">,</span> <span class="s">"Min 3 chars required"</span><span class="o">))</span>
-    <span class="n">println</span><span class="o">()</span>
-  <span class="o">}</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CASE 3: Same checks above but these return a ValidationResult"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isEmpty</span>       <span class="p">(</span><span class="s">""</span>      <span class="p">,</span>    <span class="n">RefField</span><span class="p">(</span><span class="s">"Email"</span>   <span class="p">)</span> <span class="p">,</span> <span class="s">"Email is required"</span>   <span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isAlphaNumeric</span><span class="p">(</span><span class="s">"abCD12"</span><span class="p">,</span>    <span class="n">RefField</span><span class="p">(</span><span class="s">"Password"</span><span class="p">)</span> <span class="p">,</span> <span class="s">"Password is invalid"</span> <span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isZipCodeUS</span>   <span class="p">(</span><span class="s">"12345"</span> <span class="p">,</span>    <span class="n">RefField</span><span class="p">(</span><span class="s">"ZipCode"</span> <span class="p">)</span> <span class="p">,</span> <span class="s">"ZipCode is required"</span> <span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isMinLength</span>   <span class="p">(</span><span class="s">"12"</span>    <span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="n">RefField</span><span class="p">(</span><span class="s">"Name"</span>    <span class="p">)</span> <span class="p">,</span> <span class="s">"Min 3 chars required"</span><span class="p">))</span>
+    <span class="n">println</span><span class="p">()</span>
+  <span class="p">}</span>
 
 
   <span class="c1">// CASE 4: Collect errors via thunks(0 parameter functions)
-</span>  <span class="n">fun</span> <span class="n">showErrorCollection</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">{</span>
+</span>  <span class="k">fun</span> <span class="nf">showErrorCollection</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
 
-    <span class="kt">val</span> <span class="kt">password</span> <span class="o">=</span> <span class="err">"</span><span class="kt">abc123XYZ</span><span class="err">"</span>
-    <span class="kt">val</span> <span class="kt">reference</span> <span class="o">=</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Email"</span><span class="o">)</span>
+    <span class="kd">val</span> <span class="py">password</span> <span class="p">=</span> <span class="s">"abc123XYZ"</span>
+    <span class="kd">val</span> <span class="py">reference</span> <span class="p">=</span> <span class="n">RefField</span><span class="p">(</span><span class="s">"Email"</span><span class="p">)</span>
 
-    <span class="n">println</span><span class="o">(</span><span class="s">"CASE 4: Collect errors via thunks(0 parameter functions)"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">errors</span> <span class="k">=</span> <span class="n">collect</span> <span class="o">(</span> <span class="n">listOf</span> <span class="o">(</span>
-        <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">isLength</span>      <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must be 9 characters"</span><span class="o">)</span>          <span class="o">}</span> <span class="o">,</span>
-        <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasCharsLCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="o">)</span> <span class="o">}</span> <span class="o">,</span>
-        <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasCharsUCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="o">)</span> <span class="o">}</span> <span class="o">,</span>
-        <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasDigits</span>     <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 digits"</span><span class="o">)</span>            <span class="o">}</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
-    <span class="n">errors</span><span class="o">.</span><span class="n">forEach</span><span class="o">{</span> <span class="n">err</span> <span class="o">-&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">err</span> <span class="o">)</span> <span class="o">}</span>
-    <span class="n">println</span><span class="o">()</span>
-  <span class="o">}</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CASE 4: Collect errors via thunks(0 parameter functions)"</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">errors</span> <span class="p">=</span> <span class="n">collect</span> <span class="p">(</span> <span class="n">listOf</span> <span class="p">(</span>
+        <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isLength</span>      <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">9</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must be 9 characters"</span><span class="p">)</span>          <span class="p">}</span> <span class="p">,</span>
+        <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasCharsLCase</span> <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="p">)</span> <span class="p">}</span> <span class="p">,</span>
+        <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasCharsUCase</span> <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="p">)</span> <span class="p">}</span> <span class="p">,</span>
+        <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasDigits</span>     <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 digits"</span><span class="p">)</span>            <span class="p">}</span>
+      <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">errors</span><span class="p">.</span><span class="n">forEach</span><span class="p">{</span> <span class="n">err</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span> <span class="n">err</span> <span class="p">)</span> <span class="p">}</span>
+    <span class="n">println</span><span class="p">()</span>
+  <span class="p">}</span>
 
   <span class="c1">// Case 5: Custom validator object
-</span>  <span class="n">data</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span><span class="k">val</span> <span class="n">email</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">password</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+</span>  <span class="kd">data class</span> <span class="nc">User</span><span class="p">(</span><span class="kd">val</span> <span class="py">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">password</span><span class="p">:</span><span class="n">String</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
   <span class="c1">// Extend from Validation[T]
-</span>  <span class="k">class</span> <span class="nc">UserValidator</span> <span class="k">:</span> <span class="kt">Validator&lt;User&gt;</span><span class="o">()</span> <span class="o">{</span>
+</span>  <span class="kd">class</span> <span class="nc">UserValidator</span> <span class="p">:</span> <span class="n">Validator</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;()</span> <span class="p">{</span>
 
     <span class="c1">// Implement your validation here and collect errors
 </span>    <span class="c1">// The validation results represents a contain for success, message, code, and errors.
-</span>    <span class="k">override</span> <span class="n">fun</span> <span class="n">validate</span><span class="o">(</span><span class="n">item</span><span class="k">:</span><span class="kt">User</span><span class="o">)</span><span class="k">:</span> <span class="kt">ValidationResults</span> <span class="o">{</span>
+</span>    <span class="k">override</span> <span class="k">fun</span> <span class="nf">validate</span><span class="p">(</span><span class="n">item</span><span class="p">:</span><span class="n">User</span><span class="p">):</span> <span class="n">ValidationResults</span> <span class="p">{</span>
 
-      <span class="kt">val</span> <span class="kt">password</span> <span class="o">=</span> <span class="err">"</span><span class="kt">abc123XYZ</span><span class="err">"</span>
-      <span class="kt">val</span> <span class="kt">reference</span> <span class="o">=</span> <span class="nc">RefField</span><span class="o">(</span><span class="s">"Email"</span><span class="o">)</span>
+      <span class="kd">val</span> <span class="py">password</span> <span class="p">=</span> <span class="s">"abc123XYZ"</span>
+      <span class="kd">val</span> <span class="py">reference</span> <span class="p">=</span> <span class="n">RefField</span><span class="p">(</span><span class="s">"Email"</span><span class="p">)</span>
 
-      <span class="n">println</span><span class="o">(</span><span class="s">"Case 5: Custom validator object"</span><span class="o">)</span>
-      <span class="k">val</span> <span class="n">errors</span> <span class="k">=</span> <span class="n">collect</span> <span class="o">(</span> <span class="n">listOf</span><span class="o">(</span>
-          <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">isLength</span>      <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">9</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must be 9 characters"</span><span class="o">)</span>          <span class="o">},</span>
-          <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasCharsLCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="o">)</span> <span class="o">},</span>
-          <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasCharsUCase</span> <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="o">)</span> <span class="o">},</span>
-          <span class="o">{</span> <span class="o">-&gt;</span> <span class="nc">ValidationFuncsExt</span><span class="o">.</span><span class="n">hasDigits</span>     <span class="o">(</span> <span class="n">password</span><span class="o">,</span> <span class="mi">3</span> <span class="o">,</span> <span class="n">reference</span><span class="o">,</span> <span class="s">"Email must have 3 digits"</span><span class="o">)</span>            <span class="o">}</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-      <span class="k">return</span> <span class="nc">ValidationResults</span><span class="o">.</span><span class="n">build</span><span class="o">(</span><span class="n">errors</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+      <span class="n">println</span><span class="p">(</span><span class="s">"Case 5: Custom validator object"</span><span class="p">)</span>
+      <span class="kd">val</span> <span class="py">errors</span> <span class="p">=</span> <span class="n">collect</span> <span class="p">(</span> <span class="n">listOf</span><span class="p">(</span>
+          <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">isLength</span>      <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">9</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must be 9 characters"</span><span class="p">)</span>          <span class="p">},</span>
+          <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasCharsLCase</span> <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 lowercase letters"</span><span class="p">)</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasCharsUCase</span> <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 uppercase letters"</span><span class="p">)</span> <span class="p">},</span>
+          <span class="p">{</span> <span class="p">-&gt;</span> <span class="n">ValidationFuncsExt</span><span class="p">.</span><span class="n">hasDigits</span>     <span class="p">(</span> <span class="n">password</span><span class="p">,</span> <span class="m">3</span> <span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="s">"Email must have 3 digits"</span><span class="p">)</span>            <span class="p">}</span>
+        <span class="p">)</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="n">ValidationResults</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
   
 
 </code></pre>

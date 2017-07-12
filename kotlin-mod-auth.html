@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/auth">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/auth</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/auth" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/auth</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -140,8 +141,8 @@
 </span>    <span class="c1">// * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,
 </span>    <span class="c1">// *    and a roles based authentication, it leaves the login/logout and actual generating
 </span>    <span class="c1">// *    of tokens to libraries such as OAuth.
-</span>    <span class="k">val</span> <span class="n">user2</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="s">"john"</span><span class="o">,</span> <span class="s">"doe"</span><span class="o">,</span> <span class="s">"jdoe@gmail.com"</span><span class="o">,</span> <span class="s">"123-456-7890"</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">auth</span> <span class="k">=</span> <span class="nc">AuthConsole</span><span class="o">(</span><span class="n">isAuthenticated</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">user</span> <span class="k">=</span> <span class="n">user2</span><span class="o">,</span> <span class="n">roles</span> <span class="k">=</span> <span class="s">"admin"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"john doe"</span><span class="p">,</span> <span class="s">"john"</span><span class="p">,</span> <span class="s">"doe"</span><span class="p">,</span> <span class="s">"jdoe@gmail.com"</span><span class="p">,</span> <span class="s">"123-456-7890"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">auth</span> <span class="p">=</span> <span class="n">AuthConsole</span><span class="p">(</span><span class="n">isAuthenticated</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">user</span> <span class="p">=</span> <span class="n">user2</span><span class="p">,</span> <span class="n">roles</span> <span class="p">=</span> <span class="s">"admin"</span><span class="p">)</span>
     
 
 </code></pre>
@@ -151,14 +152,14 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// CASE 1: Use the auth to check user info
-</span>    <span class="n">println</span> <span class="o">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"user info         : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">user</span>                   <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"user id           : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">userId</span>                 <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is authenticated  : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">isAuthenticated</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is email verified : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">isEmailVerified</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is phone verified : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">isPhoneVerified</span>        <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is a moderator    : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"moderator"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">println</span> <span class="o">(</span> <span class="s">"is an admin       : "</span> <span class="o">+</span> <span class="n">auth</span><span class="o">.</span><span class="n">isInRole</span><span class="o">(</span> <span class="s">"admin"</span> <span class="o">)</span>    <span class="o">)</span>
+</span>    <span class="n">println</span> <span class="p">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"user info         : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">user</span>                   <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"user id           : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">userId</span>                 <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"is authenticated  : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isAuthenticated</span>        <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"is email verified : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isEmailVerified</span>        <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"is phone verified : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isPhoneVerified</span>        <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"is a moderator    : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isInRole</span><span class="p">(</span> <span class="s">"moderator"</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">println</span> <span class="p">(</span> <span class="s">"is an admin       : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isInRole</span><span class="p">(</span> <span class="s">"admin"</span> <span class="p">)</span>    <span class="p">)</span>
     
 
 </code></pre>

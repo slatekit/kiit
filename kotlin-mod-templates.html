@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/templates">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/templates</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/templates" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/templates</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Templates.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Templates.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Templates.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Templates.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -138,22 +139,22 @@
 </span>    <span class="c1">// NOTE: The Templates.apply method ( used here ) processes/parses the templates
 </span>    <span class="c1">// first so they don't have to be processed on demand.
 </span>    <span class="c1">// You can also use the Templates constructor directly.
-</span>    <span class="k">val</span> <span class="n">templates</span> <span class="k">=</span> <span class="nc">Templates</span><span class="o">.</span><span class="n">build</span><span class="o">(</span>
-      <span class="n">templates</span> <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span>
-        <span class="nc">Template</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">),</span>
-        <span class="nc">Template</span><span class="o">(</span><span class="s">"confirm"</span><span class="o">,</span> <span class="s">"Your confirmation code for @{app.api} is @{code}."</span><span class="o">)</span>
-      <span class="o">),</span>
-      <span class="n">subs</span> <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.home"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"c:/users/johndoe"</span>                <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"CodeHelix"</span>                       <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.dir"</span>  <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{user.home}/@{company.id}"</span>      <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.confs"</span><span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{user.home}/@{company.id}/confs"</span><span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.api"</span>     <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"slatekit.sampleapp"</span>              <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.dir"</span>      <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{company.dir}/@{app.id}"</span>        <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"app.confs"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"@{app.dir}/confs"</span>                <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"john.doe"</span>                        <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"code"</span>         <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="nc">Random</span><span class="o">.</span><span class="n">alpha6</span><span class="o">()</span>                   <span class="o">}</span> <span class="o">)</span>
-    <span class="o">))</span>
+</span>    <span class="kd">val</span> <span class="py">templates</span> <span class="p">=</span> <span class="n">Templates</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
+      <span class="n">templates</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+        <span class="n">Template</span><span class="p">(</span><span class="s">"welcome"</span><span class="p">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="p">),</span>
+        <span class="n">Template</span><span class="p">(</span><span class="s">"confirm"</span><span class="p">,</span> <span class="s">"Your confirmation code for @{app.api} is @{code}."</span><span class="p">)</span>
+      <span class="p">),</span>
+      <span class="n">subs</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"user.home"</span>    <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"c:/users/johndoe"</span>                <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"company.api"</span> <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"CodeHelix"</span>                       <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"company.dir"</span>  <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"@{user.home}/@{company.id}"</span>      <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"company.confs"</span><span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"@{user.home}/@{company.id}/confs"</span><span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"app.api"</span>     <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"slatekit.sampleapp"</span>              <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"app.dir"</span>      <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"@{company.dir}/@{app.id}"</span>        <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"app.confs"</span>    <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"@{app.dir}/confs"</span>                <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"user.api"</span>    <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"john.doe"</span>                        <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"code"</span>         <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="n">Random</span><span class="p">.</span><span class="n">alpha6</span><span class="p">()</span>                   <span class="p">}</span> <span class="p">)</span>
+    <span class="p">))</span>
     
 
 </code></pre>
@@ -163,50 +164,50 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Case 1: Parse text and get the result as individual parts
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 1: Parse into individual parts"</span><span class="o">)</span>
-    <span class="n">print</span><span class="o">(</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 1: Parse into individual parts"</span><span class="p">)</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">value</span><span class="p">)</span>
 
     <span class="c1">// Case 2: Parse text into a template
-</span>    <span class="k">val</span> <span class="n">template</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">parseTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 2: Parse into a Template containing the parts"</span><span class="o">)</span>
-    <span class="n">print</span><span class="o">(</span><span class="n">template</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">template</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">parseTemplate</span><span class="p">(</span><span class="s">"welcome"</span><span class="p">,</span> <span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 2: Parse into a Template containing the parts"</span><span class="p">)</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
 
     <span class="c1">// Case 3: Resolve ( process ) the template on demand using the initial variables
-</span>    <span class="k">val</span> <span class="n">text3</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 3: Resolve template with variables into a Option[String]"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">text3</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="kd">val</span> <span class="py">text3</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 3: Resolve template with variables into a Option[String]"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">text3</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// Case 4: Resolve ( process ) the template on demand using custom variables
-</span>    <span class="k">val</span> <span class="n">text4</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolve</span><span class="o">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="o">,</span>
-      <span class="nc">Templates</span><span class="o">.</span><span class="n">subs</span> <span class="o">(</span>
-        <span class="n">listOf</span><span class="o">(</span>
-          <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}),</span>
-          <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">})</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 4: Resolve template with custom variables"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">text4</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="kd">val</span> <span class="py">text4</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="s">"Hi @{user.api}, Welcome to @{company.api}."</span><span class="p">,</span>
+      <span class="n">Templates</span><span class="p">.</span><span class="n">subs</span> <span class="p">(</span>
+        <span class="n">listOf</span><span class="p">(</span>
+          <span class="n">Pair</span><span class="p">(</span><span class="s">"company.api"</span> <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"Gotham"</span>  <span class="p">}),</span>
+          <span class="n">Pair</span><span class="p">(</span><span class="s">"user.api"</span>    <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"batman"</span>  <span class="p">})</span>
+        <span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 4: Resolve template with custom variables"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">text4</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// Case 5: Resolve ( process ) saved template using the initial variables
-</span>    <span class="k">val</span> <span class="n">text5</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolveTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 5: Resolve named template"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">text5</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="kd">val</span> <span class="py">text5</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">resolveTemplate</span><span class="p">(</span><span class="s">"welcome"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 5: Resolve named template"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">text5</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     <span class="c1">// Case 6: Resolve ( process ) saved template using custom variables
-</span>    <span class="k">val</span> <span class="n">text6</span> <span class="k">=</span> <span class="n">templates</span><span class="o">.</span><span class="n">resolveTemplate</span><span class="o">(</span><span class="s">"welcome"</span><span class="o">,</span> <span class="nc">Templates</span><span class="o">.</span><span class="n">subs</span> <span class="o">(</span>
-      <span class="n">listOf</span><span class="o">(</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"company.api"</span> <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"Gotham"</span>  <span class="o">}</span> <span class="o">),</span>
-        <span class="nc">Pair</span><span class="o">(</span><span class="s">"user.api"</span>    <span class="o">,</span> <span class="o">{</span> <span class="n">s</span> <span class="o">-&gt;</span> <span class="s">"batman"</span>  <span class="o">}</span> <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">))</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"Case 6: Resolve named template with custom variables"</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">text6</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">()</span>
+</span>    <span class="kd">val</span> <span class="py">text6</span> <span class="p">=</span> <span class="n">templates</span><span class="p">.</span><span class="n">resolveTemplate</span><span class="p">(</span><span class="s">"welcome"</span><span class="p">,</span> <span class="n">Templates</span><span class="p">.</span><span class="n">subs</span> <span class="p">(</span>
+      <span class="n">listOf</span><span class="p">(</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"company.api"</span> <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"Gotham"</span>  <span class="p">}</span> <span class="p">),</span>
+        <span class="n">Pair</span><span class="p">(</span><span class="s">"user.api"</span>    <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">"batman"</span>  <span class="p">}</span> <span class="p">)</span>
+      <span class="p">)</span>
+    <span class="p">))</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"Case 6: Resolve named template with custom variables"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">text6</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">()</span>
 
     
 

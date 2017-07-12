@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -128,7 +129,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -139,53 +140,53 @@
     <span class="c1">// Example:
 </span>    <span class="c1">// Given on the the command line:
 </span>    <span class="c1">// -log.level=info -env=dev -text='hello world'
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"-log.level=info -env=dev -text='hello world'"</span><span class="o">,</span> <span class="n">sep</span><span class="o">=</span><span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"-log.level=info -env=dev -text='hello world'"</span><span class="p">,</span> <span class="n">sep</span><span class="p">=</span><span class="s">"="</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
     <span class="c1">// CASE 1: Parse using defaults. E.g. the key/value prefix = "-", separator = ":"
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"-env:dev -text:'hello world' -batch:10"</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"-env:dev -text:'hello world' -batch:10"</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 2: Custom prefix and sep e.g. "!" and separator "="
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"!env=dev !text='hello word' !batch=10 "</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"!"</span><span class="o">,</span> <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"!env=dev !text='hello word' !batch=10 "</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">=</span> <span class="s">"!"</span><span class="p">,</span> <span class="n">sep</span> <span class="p">=</span> <span class="s">"="</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 3a: Check for action/method call in the beginning
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"area.service.method -env=dev -text='hello word' -batch=10"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span>
-                 <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"area.service.method -env=dev -text='hello word' -batch=10"</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">=</span> <span class="s">"-"</span><span class="p">,</span>
+                 <span class="n">sep</span> <span class="p">=</span> <span class="s">"="</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 3b: Check for method call in the beginning
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method -env=dev -text='hello word' -batch=10"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span>
-                 <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"service.method -env=dev -text='hello word' -batch=10"</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">=</span> <span class="s">"-"</span><span class="p">,</span>
+                 <span class="n">sep</span> <span class="p">=</span> <span class="s">"="</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 3c: Check for only action name in the beginning.
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"method"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span> <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"method"</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">=</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">sep</span> <span class="p">=</span> <span class="s">"="</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 4: No args
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method"</span><span class="o">,</span> <span class="n">prefix</span> <span class="k">=</span> <span class="s">"-"</span><span class="o">,</span> <span class="n">sep</span> <span class="k">=</span> <span class="s">"="</span><span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"service.method"</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">=</span> <span class="s">"-"</span><span class="p">,</span> <span class="n">sep</span> <span class="p">=</span> <span class="s">"="</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 5a: Help request ( "?", "help")
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"?"</span>         <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"?"</span>         <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 5b: Help request with method call ( "method.action" ? )
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"service.method help"</span>   <span class="o">,</span> <span class="n">hasAction</span> <span class="k">=</span> <span class="kc">true</span> <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"service.method help"</span>   <span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 6: Version request ( "ver", "version" )
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"version"</span>  <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"version"</span>  <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 7: Exit request
-</span>    <span class="n">showResults</span><span class="o">(</span> <span class="nc">Args</span><span class="o">.</span><span class="n">parse</span><span class="o">(</span> <span class="s">"exit"</span>     <span class="o">)</span> <span class="o">)</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">"exit"</span>     <span class="p">)</span> <span class="p">)</span>
 
 
     <span class="c1">// CASE 8: Build up the schema
-</span>    <span class="k">val</span> <span class="n">schema</span> <span class="k">=</span> <span class="nc">ArgsSchema</span><span class="o">().</span><span class="n">text</span><span class="o">(</span><span class="s">"env"</span><span class="o">).</span><span class="n">flag</span><span class="o">(</span><span class="s">"log"</span><span class="o">).</span><span class="n">number</span><span class="o">(</span><span class="s">"level"</span><span class="o">)</span>
-    <span class="n">print</span><span class="o">(</span><span class="n">schema</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">schema</span> <span class="p">=</span> <span class="n">ArgsSchema</span><span class="p">().</span><span class="n">text</span><span class="p">(</span><span class="s">"env"</span><span class="p">).</span><span class="n">flag</span><span class="p">(</span><span class="s">"log"</span><span class="p">).</span><span class="n">number</span><span class="p">(</span><span class="s">"level"</span><span class="p">)</span>
+    <span class="n">print</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
 
     
 

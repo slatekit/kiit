@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -139,7 +140,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -155,20 +156,20 @@
 </span>        <span class="c1">// connections associated with a name. You can also set
 </span>        <span class="c1">// the default database. In this case, no db connections
 </span>        <span class="c1">// have been registered, so it will be empty.
-</span>        <span class="k">val</span> <span class="n">dbs1</span> <span class="k">=</span> <span class="nc">DbLookup</span><span class="o">()</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs1</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
+</span>        <span class="kd">val</span> <span class="py">dbs1</span> <span class="p">=</span> <span class="n">DbLookup</span><span class="p">()</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs1</span><span class="p">.</span><span class="n">default</span><span class="p">())</span>
 
 
         <span class="c1">// CASE 2: Create the DbLookup using just 1 explicit connection
-</span>        <span class="k">val</span> <span class="n">dbs3</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">defaultDb</span><span class="o">(</span>
-                <span class="nc">DbConString</span><span class="o">(</span>
-                        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-                        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
-                        <span class="s">"root"</span><span class="o">,</span>
+</span>        <span class="kd">val</span> <span class="py">dbs3</span><span class="p">:</span> <span class="n">DbLookup</span> <span class="p">=</span> <span class="n">defaultDb</span><span class="p">(</span>
+                <span class="n">DbConString</span><span class="p">(</span>
+                        <span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+                        <span class="s">"jdbc:mysql://localhost/default"</span><span class="p">,</span>
+                        <span class="s">"root"</span><span class="p">,</span>
                         <span class="s">"abcdefghi"</span>
-                <span class="o">)</span>
-        <span class="o">)</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs3</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
+                <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs3</span><span class="p">.</span><span class="n">default</span><span class="p">())</span>
 
 
         <span class="c1">// CASE 3: Create the DbLookup using just 1 connection from a file in the user directory
@@ -182,37 +183,37 @@
 </span>        <span class="c1">// url:jdbc:mysql://localhost/World
 </span>        <span class="c1">// user:root
 </span>        <span class="c1">// password:123abc
-</span>        <span class="k">val</span> <span class="n">dbs2</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">defaultDb</span><span class="o">(</span><span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">readDbCon</span><span class="o">(</span><span class="s">"user://.slatekit/conf/db.txt"</span><span class="o">)!!)</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs2</span><span class="o">.</span><span class="n">default</span><span class="o">())</span>
+</span>        <span class="kd">val</span> <span class="py">dbs2</span><span class="p">:</span> <span class="n">DbLookup</span> <span class="p">=</span> <span class="n">defaultDb</span><span class="p">(</span><span class="n">ConfFuncs</span><span class="p">.</span><span class="n">readDbCon</span><span class="p">(</span><span class="s">"user://.slatekit/conf/db.txt"</span><span class="p">)</span><span class="o">!!</span><span class="p">)</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs2</span><span class="p">.</span><span class="n">default</span><span class="p">())</span>
 
 
         <span class="c1">// CASE 4: Register connection and link to a key "user_db" using credentials from user folder
-</span>        <span class="k">val</span> <span class="n">dbs4</span><span class="k">:</span> <span class="kt">DbLookup</span> <span class="o">=</span> <span class="n">namedDbs</span><span class="o">(</span>
-            <span class="n">listOf</span><span class="o">(</span><span class="nc">Pair</span><span class="o">(</span><span class="s">"users"</span><span class="o">,</span> <span class="nc">ConfFuncs</span><span class="o">.</span><span class="n">readDbCon</span><span class="o">(</span><span class="s">"user://.slatekit/conf/db_default.txt"</span><span class="o">)!!))</span>
-        <span class="o">)</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">))</span>
+</span>        <span class="kd">val</span> <span class="py">dbs4</span><span class="p">:</span> <span class="n">DbLookup</span> <span class="p">=</span> <span class="n">namedDbs</span><span class="p">(</span>
+            <span class="n">listOf</span><span class="p">(</span><span class="n">Pair</span><span class="p">(</span><span class="s">"users"</span><span class="p">,</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">readDbCon</span><span class="p">(</span><span class="s">"user://.slatekit/conf/db_default.txt"</span><span class="p">)</span><span class="o">!!</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs4</span><span class="p">.</span><span class="n">named</span><span class="p">(</span><span class="s">"users"</span><span class="p">))</span>
 
         <span class="c1">// CASE 5: Register multiple connections by api ( "users", "files" )
-</span>        <span class="k">val</span> <span class="n">dbs5</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span><span class="n">listOf</span><span class="o">(</span>
-            <span class="nc">Pair</span><span class="o">(</span>
-                <span class="s">"users"</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">(</span>
-                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-                    <span class="s">"jdbc:mysql://localhost/users"</span><span class="o">,</span>
-                    <span class="s">"root"</span><span class="o">,</span>
+</span>        <span class="kd">val</span> <span class="py">dbs5</span> <span class="p">=</span> <span class="n">namedDbs</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
+            <span class="n">Pair</span><span class="p">(</span>
+                <span class="s">"users"</span><span class="p">,</span> <span class="n">DbConString</span><span class="p">(</span>
+                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+                    <span class="s">"jdbc:mysql://localhost/users"</span><span class="p">,</span>
+                    <span class="s">"root"</span><span class="p">,</span>
                     <span class="s">"abcdefghi"</span>
-                    <span class="o">)</span>
-            <span class="o">),</span>
-            <span class="nc">Pair</span><span class="o">(</span>
-                <span class="s">"files"</span><span class="o">,</span> <span class="nc">DbConString</span><span class="o">(</span>
-                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-                    <span class="s">"jdbc:mysql://localhost/files"</span><span class="o">,</span>
-                    <span class="s">"root"</span><span class="o">,</span>
+                    <span class="p">)</span>
+            <span class="p">),</span>
+            <span class="n">Pair</span><span class="p">(</span>
+                <span class="s">"files"</span><span class="p">,</span> <span class="n">DbConString</span><span class="p">(</span>
+                    <span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+                    <span class="s">"jdbc:mysql://localhost/files"</span><span class="p">,</span>
+                    <span class="s">"root"</span><span class="p">,</span>
                     <span class="s">"abcdefghi"</span>
-                <span class="o">)</span>
-            <span class="o">)</span>
-        <span class="o">))</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs5</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">))</span>
-        <span class="n">showResult</span><span class="o">(</span><span class="n">dbs5</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"files"</span><span class="o">))</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">))</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs5</span><span class="p">.</span><span class="n">named</span><span class="p">(</span><span class="s">"users"</span><span class="p">))</span>
+        <span class="n">showResult</span><span class="p">(</span><span class="n">dbs5</span><span class="p">.</span><span class="n">named</span><span class="p">(</span><span class="s">"files"</span><span class="p">))</span>
         
 
 </code></pre>

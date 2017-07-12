@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Results.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Results.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Results.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Results.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -139,7 +140,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -164,22 +165,22 @@
 </span>        <span class="c1">// - Convenience functions are available to mimick HTTP Status Codes( see samples below ).
 </span>
         <span class="c1">// Explicitly build result using the Success "branch" of Result
-</span>        <span class="k">val</span> <span class="n">result1</span> <span class="k">=</span> <span class="nc">Success</span><span class="o">(</span>
-                <span class="n">data</span> <span class="k">=</span> <span class="s">"userId:1234567890"</span><span class="o">,</span>
-                <span class="n">code</span> <span class="k">=</span> <span class="nc">SUCCESS</span><span class="o">,</span>
-                <span class="n">msg</span> <span class="k">=</span> <span class="s">"user created"</span><span class="o">,</span>
-                <span class="n">tag</span> <span class="k">=</span> <span class="s">"tag001"</span><span class="o">,</span>
-                <span class="n">ref</span> <span class="k">=</span> <span class="s">"XY123"</span>
-        <span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">result1</span> <span class="p">=</span> <span class="n">Success</span><span class="p">(</span>
+                <span class="n">data</span> <span class="p">=</span> <span class="s">"userId:1234567890"</span><span class="p">,</span>
+                <span class="n">code</span> <span class="p">=</span> <span class="n">SUCCESS</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span>
+                <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+                <span class="n">ref</span> <span class="p">=</span> <span class="s">"XY123"</span>
+        <span class="p">)</span>
 
         <span class="c1">// Explicitly build a result using the Failure "branch" of Result
-</span>        <span class="k">val</span> <span class="n">result2</span> <span class="k">=</span> <span class="nc">Failure</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span>
-                <span class="n">code</span> <span class="k">=</span> <span class="nc">BAD_REQUEST</span><span class="o">,</span>
-                <span class="n">msg</span> <span class="k">=</span> <span class="s">"user id not supplied"</span><span class="o">,</span>
-                <span class="n">tag</span> <span class="k">=</span> <span class="s">"tag001"</span><span class="o">,</span>
-                <span class="n">err</span> <span class="k">=</span> <span class="nc">IllegalArgumentException</span><span class="o">(</span><span class="s">"user id"</span><span class="o">),</span>
-                <span class="n">ref</span> <span class="k">=</span> <span class="kc">null</span>
-        <span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">result2</span> <span class="p">=</span> <span class="n">Failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span>
+                <span class="n">code</span> <span class="p">=</span> <span class="n">BAD_REQUEST</span><span class="p">,</span>
+                <span class="n">msg</span> <span class="p">=</span> <span class="s">"user id not supplied"</span><span class="p">,</span>
+                <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+                <span class="n">err</span> <span class="p">=</span> <span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"user id"</span><span class="p">),</span>
+                <span class="n">ref</span> <span class="p">=</span> <span class="k">null</span>
+        <span class="p">)</span>
 
         <span class="c1">// NOTES: ResultFuncs object contain methods to easily build up either
 </span>        <span class="c1">// success or failure results that align with Http Status codes.
@@ -190,43 +191,43 @@
 </span>        <span class="c1">// level controller / api layer.
 </span>
         <span class="c1">// CASE 1: Success ( 200 )
-</span>        <span class="k">val</span> <span class="n">res1</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="mi">123456</span><span class="o">,</span> <span class="n">msg</span> <span class="k">=</span> <span class="s">"user created"</span><span class="o">,</span> <span class="n">tag</span> <span class="k">=</span> <span class="s">"promoCode:ny001"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res1</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res1</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="m">123456</span><span class="p">,</span> <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"promoCode:ny001"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 2: Failure ( 400 ) with message and ref tag
-</span>        <span class="k">val</span> <span class="n">res2a</span> <span class="k">=</span> <span class="n">failure</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"invalid email"</span><span class="o">,</span> <span class="n">tag</span> <span class="k">=</span> <span class="s">"23SKASDF23"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res2a</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res2a</span> <span class="p">=</span> <span class="n">failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"23SKASDF23"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res2a</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
-</span>        <span class="k">val</span> <span class="n">res2b</span> <span class="k">=</span> <span class="n">failure</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"invalid email"</span><span class="o">,</span> <span class="n">tag</span> <span class="k">=</span> <span class="s">"23SKASDF23"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res2b</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res2b</span> <span class="p">=</span> <span class="n">failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"23SKASDF23"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res2b</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 4: Unauthorized ( 401 )
-</span>        <span class="k">val</span> <span class="n">res3</span> <span class="k">=</span> <span class="n">unAuthorized</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"invalid email"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res3</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res3</span> <span class="p">=</span> <span class="n">unAuthorized</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 5: Unexpected ( 500 )
-</span>        <span class="k">val</span> <span class="n">res4</span> <span class="k">=</span> <span class="n">unexpectedError</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"invalid email"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res4</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res4</span> <span class="p">=</span> <span class="n">unexpectedError</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res4</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 6: Conflict ( 409 )
-</span>        <span class="k">val</span> <span class="n">res5</span> <span class="k">=</span> <span class="n">conflict</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"item already exists"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res5</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res5</span> <span class="p">=</span> <span class="n">conflict</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"item already exists"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res5</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 7: Not found
-</span>        <span class="k">val</span> <span class="n">res6</span> <span class="k">=</span> <span class="n">notFound</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"action not found"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res6</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res6</span> <span class="p">=</span> <span class="n">notFound</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"action not found"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res6</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 8: Not available
-</span>        <span class="k">val</span> <span class="n">res7</span> <span class="k">=</span> <span class="n">notAvailable</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="n">msg</span> <span class="k">=</span> <span class="s">"operation currently unavailable"</span><span class="o">)</span>
-        <span class="n">printResult</span><span class="o">(</span><span class="n">res7</span><span class="o">)</span>
+</span>        <span class="kd">val</span> <span class="py">res7</span> <span class="p">=</span> <span class="n">notAvailable</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"operation currently unavailable"</span><span class="p">)</span>
+        <span class="n">printResult</span><span class="p">(</span><span class="n">res7</span><span class="p">)</span>
         
 
 </code></pre>

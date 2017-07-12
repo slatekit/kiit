@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/lex">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/lex</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/lex" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/lex</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -129,7 +130,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -137,14 +138,14 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="k">val</span> <span class="n">lexer</span> <span class="k">=</span> <span class="nc">Lexer</span><span class="o">(</span><span class="s">"-env:dev -text:'hello word' -batch:10 "</span><span class="o">)</span>
+    <span class="kd">val</span> <span class="py">lexer</span> <span class="p">=</span> <span class="n">Lexer</span><span class="p">(</span><span class="s">"-env:dev -text:'hello word' -batch:10 "</span><span class="p">)</span>
 
     <span class="c1">// CASE 1: Get all the tokens at once
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">lexer</span><span class="o">.</span><span class="n">parse</span><span class="o">()</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"tokens:"</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">total</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">lexer</span><span class="p">.</span><span class="n">parse</span><span class="p">()</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"tokens:"</span> <span class="p">+</span> <span class="n">result</span><span class="p">.</span><span class="n">total</span><span class="p">)</span>
 
     <span class="c1">// Print all the tokens
-</span>    <span class="n">result</span><span class="o">.</span><span class="n">tokens</span><span class="o">.</span><span class="n">forEach</span><span class="o">{</span> <span class="n">printToken</span><span class="o">(</span><span class="n">it</span><span class="o">)</span> <span class="o">}</span>
+</span>    <span class="n">result</span><span class="p">.</span><span class="n">tokens</span><span class="p">.</span><span class="n">forEach</span><span class="p">{</span> <span class="n">printToken</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
 
     <span class="c1">// Results:
 </span>    <span class="c1">// pos:1 , line:0, type:NonAlphaNum, text:'-'
@@ -170,8 +171,8 @@
 </span>    <span class="c1">// - line #
 </span>    <span class="c1">// - char #
 </span>    <span class="c1">// - index
-</span>    <span class="k">val</span> <span class="n">token</span> <span class="k">=</span> <span class="nc">Token</span><span class="o">(</span><span class="s">"env"</span><span class="o">,</span> <span class="s">"env"</span><span class="o">,</span> <span class="nc">TokenType</span><span class="o">.</span><span class="nc">Ident</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">token</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">token</span> <span class="p">=</span> <span class="n">Token</span><span class="p">(</span><span class="s">"env"</span><span class="p">,</span> <span class="s">"env"</span><span class="p">,</span> <span class="n">TokenType</span><span class="p">.</span><span class="n">Ident</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 
     <span class="c1">// CASE 3: Tokens list
 </span>    <span class="c1">// Coming soon. Tokens can be iterated over with assertions

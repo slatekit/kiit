@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/console">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/console</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/console" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/console</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Utils.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Utils.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Utils.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Utils.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -116,7 +117,7 @@
 </span><span class="k">import</span> <span class="nn">slatekit.common.Require.requireOneOf</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Require.requireText</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Require.requireValidIndex</span>
-<span class="k">import</span> <span class="nn">slatekit.common.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">slatekit.common.*</span>
 
 
 
@@ -131,7 +132,7 @@
 
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-<span class="n">n</span><span class="o">/</span><span class="n">a</span>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
@@ -144,34 +145,34 @@
     <span class="c1">// CASE 1: Api Credentials
 </span>    <span class="c1">// The ApiCredentials class provides a convenient container for most fields required to
 </span>    <span class="c1">// represent the access credentials some API such as AWS ( Amazon Web Services ) or Azure.
-</span>    <span class="k">val</span> <span class="n">awsS3</span>    <span class="k">=</span> <span class="nc">ApiLogin</span><span class="o">(</span><span class="s">"aws-s3"</span><span class="o">,</span> <span class="s">"ABCDEFG"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"user-profile"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">twilio</span>   <span class="k">=</span> <span class="nc">ApiLogin</span><span class="o">(</span><span class="s">"1-234-567-8901"</span><span class="o">,</span> <span class="s">"ABCEDEFG"</span><span class="o">,</span> <span class="s">"123456"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"sms"</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">sendgrid</span> <span class="k">=</span> <span class="nc">ApiLogin</span><span class="o">(</span><span class="s">"support@mystartup.com"</span><span class="o">,</span> <span class="s">"mystartup"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="s">"emails"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">awsS3</span>    <span class="p">=</span> <span class="n">ApiLogin</span><span class="p">(</span><span class="s">"aws-s3"</span><span class="p">,</span> <span class="s">"ABCDEFG"</span><span class="p">,</span> <span class="s">"123456"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"user-profile"</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">twilio</span>   <span class="p">=</span> <span class="n">ApiLogin</span><span class="p">(</span><span class="s">"1-234-567-8901"</span><span class="p">,</span> <span class="s">"ABCEDEFG"</span><span class="p">,</span> <span class="s">"123456"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"sms"</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">sendgrid</span> <span class="p">=</span> <span class="n">ApiLogin</span><span class="p">(</span><span class="s">"support@mystartup.com"</span><span class="p">,</span> <span class="s">"mystartup"</span><span class="p">,</span> <span class="s">"123456789"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"emails"</span><span class="p">)</span>
 
     <span class="c1">// CASE 2: Api Keys
-</span>    <span class="k">val</span> <span class="n">devKey</span> <span class="k">=</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"dev1"</span><span class="o">,</span> <span class="s">"B8779D64-6104-4244-88B6-F81B4D2AAF5B"</span><span class="o">,</span> <span class="s">"dev"</span><span class="o">,</span> <span class="n">mapOf</span><span class="o">())</span>
-    <span class="k">val</span> <span class="n">qaKey</span>  <span class="k">=</span> <span class="nc">ApiKey</span><span class="o">(</span><span class="s">"qa1"</span> <span class="o">,</span> <span class="s">"F01718FF-0AF5-43C2-84D7-D1E2B4234644"</span><span class="o">,</span> <span class="s">"qa"</span><span class="o">,</span> <span class="n">mapOf</span><span class="o">())</span>
+</span>    <span class="kd">val</span> <span class="py">devKey</span> <span class="p">=</span> <span class="n">ApiKey</span><span class="p">(</span><span class="s">"dev1"</span><span class="p">,</span> <span class="s">"B8779D64-6104-4244-88B6-F81B4D2AAF5B"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="n">mapOf</span><span class="p">())</span>
+    <span class="kd">val</span> <span class="py">qaKey</span>  <span class="p">=</span> <span class="n">ApiKey</span><span class="p">(</span><span class="s">"qa1"</span> <span class="p">,</span> <span class="s">"F01718FF-0AF5-43C2-84D7-D1E2B4234644"</span><span class="p">,</span> <span class="s">"qa"</span><span class="p">,</span> <span class="n">mapOf</span><span class="p">())</span>
 
     <span class="c1">// CASE 3: Guards ( Exceptions are discouraged in favor
 </span>    <span class="c1">// of functional error handling, however, there are times where
 </span>    <span class="c1">// a guard like approach to inputs is preferable
-</span>    <span class="n">requireText</span><span class="o">(</span><span class="s">"slate-kit"</span><span class="o">,</span> <span class="s">"Name must be supplied"</span> <span class="o">)</span>
-    <span class="n">requireOneOf</span><span class="o">(</span> <span class="s">"scala"</span><span class="o">,</span> <span class="n">listOf</span><span class="o">(</span><span class="s">"scala"</span><span class="o">,</span> <span class="s">"go"</span><span class="o">),</span> <span class="s">"Name not valid"</span><span class="o">)</span>
-    <span class="n">requireValidIndex</span><span class="o">(</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="s">"Index is must be 0 &lt;= index &lt;= 4"</span><span class="o">)</span>
+</span>    <span class="n">requireText</span><span class="p">(</span><span class="s">"slate-kit"</span><span class="p">,</span> <span class="s">"Name must be supplied"</span> <span class="p">)</span>
+    <span class="n">requireOneOf</span><span class="p">(</span> <span class="s">"scala"</span><span class="p">,</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"scala"</span><span class="p">,</span> <span class="s">"go"</span><span class="p">),</span> <span class="s">"Name not valid"</span><span class="p">)</span>
+    <span class="n">requireValidIndex</span><span class="p">(</span> <span class="m">3</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="s">"Index is must be 0 &lt;= index &lt;= 4"</span><span class="p">)</span>
 
     <span class="c1">// CASE 4: Db connection
-</span>    <span class="k">val</span> <span class="n">db</span> <span class="k">=</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/app1"</span><span class="o">,</span> <span class="s">"db1"</span><span class="o">,</span> <span class="s">"1245689"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">db</span> <span class="p">=</span> <span class="n">DbConString</span><span class="p">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span> <span class="s">"jdbc:mysql://localhost/app1"</span><span class="p">,</span> <span class="s">"db1"</span><span class="p">,</span> <span class="s">"1245689"</span><span class="p">)</span>
 
     <span class="c1">// CASE 5: Interpret URI represetning file locations
 </span>    <span class="c1">// - user dir: user://{folder} ( user home directory for os  )
 </span>    <span class="c1">// - temp dir: temp://{folder} ( temp files directory for os )
 </span>    <span class="c1">// - file dir: file://{path}   ( absolution file location    )
 </span>    <span class="c1">// This yeilds c:/users/{user1}/myapp1
-</span>    <span class="k">val</span> <span class="n">path1</span> <span class="k">=</span> <span class="nc">Uris</span><span class="o">.</span><span class="n">interpret</span><span class="o">(</span><span class="s">"user://myapp1"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">path1</span> <span class="p">=</span> <span class="n">Uris</span><span class="p">.</span><span class="n">interpret</span><span class="p">(</span><span class="s">"user://myapp1"</span><span class="p">)</span>
 
     <span class="c1">// CASE 6: BoolMessage
 </span>    <span class="c1">// combined bool / string instead of a tuple
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">BoolMessage</span><span class="o">(</span><span class="kc">true</span><span class="o">,</span> <span class="s">"successfuly created"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">BoolMessage</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="s">"successfuly created"</span><span class="p">)</span>
     
 
 </code></pre>

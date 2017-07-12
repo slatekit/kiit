@@ -8,6 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -78,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -98,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/serialization">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/serialization</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/serialization" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/serialization</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -114,7 +115,7 @@
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
-<span class="k">import</span> <span class="nn">slatekit.common.serialization.</span><span class="o">*</span>
+<span class="k">import</span> <span class="nn">slatekit.common.serialization.*</span>
 
 
 <span class="c1">// optional 
@@ -131,9 +132,9 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Setup some sample data to serialize
-</span>    <span class="k">val</span> <span class="n">user1</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="s">"superman@metro.com"</span><span class="o">,</span> <span class="s">"super"</span><span class="o">,</span> <span class="s">"man"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">35</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">user2</span> <span class="k">=</span> <span class="nc">User</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="s">"batman@gotham.com"</span> <span class="o">,</span> <span class="s">"bat"</span>  <span class="o">,</span> <span class="s">"man"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">35</span><span class="o">)</span>
-    <span class="k">val</span> <span class="n">users</span> <span class="k">=</span> <span class="n">listOf</span><span class="o">(</span><span class="n">user1</span><span class="o">,</span> <span class="n">user2</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">user1</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">"batman@gotham.com"</span> <span class="p">,</span> <span class="s">"bat"</span>  <span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">users</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">user1</span><span class="p">,</span> <span class="n">user2</span><span class="p">)</span>
     
 
 </code></pre>
@@ -152,24 +153,24 @@
 </span>    <span class="c1">// 4. Handle lists of type List&lt;*&gt; and maps of basic types Map&lt;*,*&gt;
 </span>
     <span class="c1">// Case 1: Serialize CSV
-</span>    <span class="k">val</span> <span class="n">csvSerializer</span> <span class="k">=</span> <span class="nc">SerializerCsv</span><span class="o">()</span>
-    <span class="k">val</span> <span class="n">csvData</span> <span class="k">=</span> <span class="n">csvSerializer</span><span class="o">.</span><span class="n">serialize</span><span class="o">(</span><span class="n">users</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"CSV ===================="</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">csvData</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">csvSerializer</span> <span class="p">=</span> <span class="n">SerializerCsv</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">csvData</span> <span class="p">=</span> <span class="n">csvSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CSV ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">csvData</span><span class="p">)</span>
 
 
     <span class="c1">// Case 2: Serialize Properties files
-</span>    <span class="k">val</span> <span class="n">propsSerializer</span> <span class="k">=</span> <span class="nc">SerializerProps</span><span class="o">()</span>
-    <span class="k">val</span> <span class="n">propsData</span> <span class="k">=</span> <span class="n">propsSerializer</span><span class="o">.</span><span class="n">serialize</span><span class="o">(</span><span class="n">users</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"HCON ===================="</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">propsData</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">propsSerializer</span> <span class="p">=</span> <span class="n">SerializerProps</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">propsData</span> <span class="p">=</span> <span class="n">propsSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"HCON ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">propsData</span><span class="p">)</span>
 
 
     <span class="c1">// Case 3: Serialize JSON
-</span>    <span class="k">val</span> <span class="n">jsonSerializer</span> <span class="k">=</span> <span class="nc">SerializerJson</span><span class="o">()</span>
-    <span class="k">val</span> <span class="n">jsonData</span> <span class="k">=</span> <span class="n">jsonSerializer</span><span class="o">.</span><span class="n">serialize</span><span class="o">(</span><span class="n">users</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="s">"JSON ===================="</span><span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span><span class="n">jsonData</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">jsonSerializer</span> <span class="p">=</span> <span class="n">SerializerJson</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">jsonData</span> <span class="p">=</span> <span class="n">jsonSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"JSON ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">jsonData</span><span class="p">)</span>
 
     
 

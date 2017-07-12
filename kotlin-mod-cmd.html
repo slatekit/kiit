@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cmds</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Command.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Command.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Command.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Command.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -136,33 +136,33 @@
   <span class="cm">/**
    * Sample command to cleanup the temp directory.
    */</span>
-  <span class="k">class</span> <span class="nc">CmdCleanTempDirectory</span> <span class="k">:</span> <span class="kt">Cmd</span><span class="o">(</span><span class="err">"</span><span class="kt">clean_temp_dir</span><span class="err">"</span><span class="o">)</span>  <span class="o">{</span>
+  <span class="kd">class</span> <span class="nc">CmdCleanTempDirectory</span> <span class="p">:</span> <span class="n">Cmd</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">)</span>  <span class="p">{</span>
 
-    <span class="kt">override</span> <span class="kt">fun</span> <span class="kt">executeInternal</span><span class="o">(</span><span class="kt">args:</span> <span class="kt">Array&lt;String&gt;?</span><span class="o">)</span> <span class="kt">:</span> <span class="kt">Result&lt;Any&gt;</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">executeInternal</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?)</span> <span class="p">:</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;</span> <span class="p">{</span>
       <span class="c1">// Your code here
-</span>      <span class="kt">return</span> <span class="kt">success</span><span class="o">(</span><span class="err">"</span><span class="kt">temp</span> <span class="kt">directory</span> <span class="kt">cleared</span><span class="err">"</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+</span>      <span class="k">return</span> <span class="n">success</span><span class="p">(</span><span class="s">"temp directory cleared"</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
 
   <span class="cm">/**
    * Sample command to create a set of test users
    */</span>
-  <span class="k">class</span> <span class="nc">CmdCreateTestUsers</span> <span class="k">:</span> <span class="kt">Cmd</span><span class="o">(</span><span class="err">"</span><span class="kt">create_test_users</span><span class="err">"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="kd">class</span> <span class="nc">CmdCreateTestUsers</span> <span class="p">:</span> <span class="n">Cmd</span><span class="p">(</span><span class="s">"create_test_users"</span><span class="p">)</span> <span class="p">{</span>
 
-    <span class="kt">override</span> <span class="kt">fun</span> <span class="kt">executeInternal</span><span class="o">(</span><span class="kt">args:</span> <span class="kt">Array&lt;String&gt;?</span><span class="o">)</span> <span class="kt">:</span> <span class="kt">Result&lt;Any&gt;</span> <span class="o">{</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">executeInternal</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?)</span> <span class="p">:</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;</span> <span class="p">{</span>
       <span class="c1">// Your code here
-</span>      <span class="kt">return</span> <span class="kt">success</span><span class="o">(</span><span class="err">"</span><span class="kt">demo</span> <span class="kt">users</span> <span class="kt">created</span><span class="err">"</span><span class="o">)</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
+</span>      <span class="k">return</span> <span class="n">success</span><span class="p">(</span><span class="s">"demo users created"</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 
 
-  <span class="k">val</span> <span class="n">commands</span> <span class="k">=</span>  <span class="nc">Cmds</span><span class="o">(</span>
-    <span class="n">listOf</span><span class="o">(</span>
-         <span class="nc">CmdCleanTempDirectory</span><span class="o">(),</span>
-         <span class="nc">CmdCreateTestUsers</span><span class="o">()</span>
-      <span class="o">)</span>
-  <span class="o">)</span>
+  <span class="kd">val</span> <span class="py">commands</span> <span class="p">=</span>  <span class="n">Cmds</span><span class="p">(</span>
+    <span class="n">listOf</span><span class="p">(</span>
+         <span class="n">CmdCleanTempDirectory</span><span class="p">(),</span>
+         <span class="n">CmdCreateTestUsers</span><span class="p">()</span>
+      <span class="p">)</span>
+  <span class="p">)</span>
   
 
 </code></pre>
@@ -172,14 +172,14 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
     <span class="c1">// Use case 1: get all the commands available
-</span>    <span class="k">val</span> <span class="n">names</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">names</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">names</span> <span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">names</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">names</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">names</span> <span class="p">)</span>
 
     <span class="c1">// Use case 2: get the size of the commands
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">commands</span><span class="o">.</span><span class="n">size</span> <span class="o">)</span>
+</span>    <span class="n">println</span><span class="p">(</span> <span class="n">commands</span><span class="p">.</span><span class="n">size</span> <span class="p">)</span>
 
     <span class="c1">// Use case 3: run a single command by its api
-</span>    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">run</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
 
     <span class="c1">// Print info about the result and time stamps.
 </span>    <span class="c1">// - api   : api of the command
@@ -188,15 +188,15 @@
 </span>    <span class="c1">// - started: start time of the command
 </span>    <span class="c1">// - ended  : end time of the command
 </span>    <span class="c1">// - result : the result of the command
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">name</span>    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">message</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">started</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">ended</span>   <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">result</span><span class="o">.</span><span class="n">result</span>  <span class="o">)</span>
+</span>    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">name</span>    <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">success</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">message</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">started</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">ended</span>   <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">result</span>  <span class="p">)</span>
 
     <span class="c1">// Use case 4: get the current state of the command
-</span>    <span class="k">val</span> <span class="n">state</span> <span class="k">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">state</span><span class="o">(</span><span class="s">"clean_temp_dir"</span><span class="o">)</span>
+</span>    <span class="kd">val</span> <span class="py">state</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">state</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">)</span>
 
     <span class="c1">// Print state of the command
 </span>    <span class="c1">// - api        : api of the command
@@ -206,13 +206,13 @@
 </span>    <span class="c1">// - lastRunTime : the timestamp of the last run
 </span>    <span class="c1">// - errorCount  : the number or errors
 </span>    <span class="c1">// - lastResult  : the result of the last run ( see above )
-</span>    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">name</span>        <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">msg</span>         <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">hasRun</span>      <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">runCount</span>    <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastRuntime</span> <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">errorCount</span>  <span class="o">)</span>
-    <span class="n">println</span><span class="o">(</span> <span class="n">state</span><span class="o">.</span><span class="n">lastResult</span>  <span class="o">)</span>
+</span>    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">name</span>        <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">msg</span>         <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">hasRun</span>      <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">runCount</span>    <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">lastRuntime</span> <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">errorCount</span>  <span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">lastResult</span>  <span class="p">)</span>
     
 
 </code></pre>

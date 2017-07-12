@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170711</td>
+      <td>20170712</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.2</td>
+      <td>0.9.3</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cli">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cli</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cli" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cli</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_CLI.kt">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_CLI.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_CLI.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_CLI.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -139,36 +139,36 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="k">class</span> <span class="nc">AppShell</span><span class="o">(</span><span class="n">meta</span><span class="k">:</span> <span class="kt">AppMeta</span><span class="o">,</span> <span class="n">folders</span><span class="k">:</span> <span class="kt">Folders</span><span class="o">,</span> <span class="n">settings</span><span class="k">:</span> <span class="kt">CliSettings</span><span class="o">)</span> <span class="k">:</span> <span class="kt">CliService</span><span class="o">(</span><span class="kt">folders</span><span class="o">,</span> <span class="kt">settings</span><span class="o">,</span> <span class="n">meta</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kd">class</span> <span class="nc">AppShell</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">AppMeta</span><span class="p">,</span> <span class="n">folders</span><span class="p">:</span> <span class="n">Folders</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">CliSettings</span><span class="p">)</span> <span class="p">:</span> <span class="n">CliService</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span> <span class="p">{</span>
         
         <span class="cm">/**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
          */</span>
-        <span class="k">override</span> <span class="n">fun</span> <span class="n">onShellStart</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">{</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onShellStart</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
             <span class="c1">// You don't need to override this as the base method displays help info
-</span>            <span class="k">_</span><span class="kt">view.showHelp</span><span class="o">()</span>
-            <span class="k">_</span><span class="kt">writer.highlight</span><span class="o">(</span><span class="err">"</span><span class="kt">\thook:</span> <span class="kt">onShellStart</span> <span class="kt">-</span> <span class="kt">starting</span> <span class="kt">myapp</span> <span class="kt">command</span> <span class="kt">line</span> <span class="kt">interface</span><span class="err">"</span><span class="o">)</span>
-        <span class="o">}</span>
+</span>            <span class="n">_view</span><span class="p">.</span><span class="n">showHelp</span><span class="p">()</span>
+            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onShellStart - starting myapp command line interface"</span><span class="p">)</span>
+        <span class="p">}</span>
 
 
         <span class="cm">/**
          * Use case 3b : ( OPTIONAL ) do some stuff before ending the shell this is called
          */</span>
-        <span class="k">override</span> <span class="n">fun</span> <span class="n">onShellEnd</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">{</span>
-            <span class="k">_</span><span class="kt">writer.highlight</span><span class="o">(</span><span class="err">"</span><span class="kt">\thook:</span> <span class="kt">onShellEnd</span> <span class="kt">-</span> <span class="kt">ending</span> <span class="kt">myapp</span> <span class="kt">command</span> <span class="kt">line</span> <span class="kt">interface</span><span class="err">"</span><span class="o">)</span>
-        <span class="o">}</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onShellEnd</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onShellEnd - ending myapp command line interface"</span><span class="p">)</span>
+        <span class="p">}</span>
 
 
-        <span class="kt">/**</span>
-         <span class="kt">*</span> <span class="kt">Use</span> <span class="kt">case</span> <span class="err">3</span><span class="kt">c</span> <span class="kt">:</span> <span class="o">(</span> <span class="kt">OPTIONAL</span> <span class="o">)</span> <span class="kt">do</span> <span class="kt">some</span> <span class="kt">stuff</span> <span class="kt">before</span> <span class="kt">executing</span> <span class="kt">the</span> <span class="kt">command</span>
-         <span class="o">*</span>
-         <span class="o">*</span> <span class="nd">@param</span> <span class="n">cmd</span>
-         <span class="o">*</span> <span class="nd">@return</span>
-         <span class="o">*/</span>
-        <span class="k">override</span> <span class="n">fun</span> <span class="n">onCommandBeforeExecute</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span> <span class="kt">CliCommand</span><span class="o">)</span><span class="k">:</span> <span class="kt">CliCommand</span> <span class="o">{</span>
-            <span class="k">_</span><span class="kt">writer.highlight</span><span class="o">(</span><span class="err">"</span><span class="kt">\thook:</span> <span class="kt">onCommandBeforeExecute</span> <span class="kt">-</span> <span class="kt">before</span> <span class="kt">command</span> <span class="kt">is</span> <span class="kt">executed</span><span class="err">"</span><span class="o">)</span>
-            <span class="kt">return</span> <span class="kt">cmd</span>
-        <span class="o">}</span>
+        <span class="cm">/**
+         * Use case 3c : ( OPTIONAL ) do some stuff before executing the command
+         *
+         * @param cmd
+         * @return
+         */</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCommandBeforeExecute</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">CliCommand</span><span class="p">):</span> <span class="n">CliCommand</span> <span class="p">{</span>
+            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onCommandBeforeExecute - before command is executed"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cmd</span>
+        <span class="p">}</span>
 
 
         <span class="cm">/**
@@ -177,37 +177,37 @@
          * @param cmd
          * @return
          */</span>
-        <span class="k">override</span> <span class="n">fun</span> <span class="n">onCommandExecuteInternal</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span> <span class="kt">CliCommand</span><span class="o">)</span><span class="k">:</span> <span class="kt">CliCommand</span> <span class="o">{</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCommandExecuteInternal</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">CliCommand</span><span class="p">):</span> <span class="n">CliCommand</span> <span class="p">{</span>
 
             <span class="c1">// 1. Here is where you can put in your code to handle the command.
-</span>            <span class="k">_</span><span class="kt">writer.highlight</span><span class="o">(</span><span class="err">"</span><span class="kt">\thook:</span> <span class="kt">onCommandExecuteInternal</span> <span class="kt">handling</span> <span class="kt">:</span> <span class="err">"</span> <span class="kt">+</span> <span class="kt">cmd.fullName</span><span class="o">())</span>
+</span>            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">fullName</span><span class="p">())</span>
 
             <span class="c1">// 2. You have access to all the command fields and arguments.
-</span>            <span class="n">println</span><span class="o">(</span><span class="s">"line   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">)</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"call   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">fullName</span><span class="o">())</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"area   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">area</span><span class="o">)</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"api   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">name</span><span class="o">)</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"action : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">action</span><span class="o">)</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"arg #  : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">size</span><span class="o">())</span>
-            <span class="n">println</span><span class="o">(</span><span class="s">"arg 1   : "</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">getString</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+</span>            <span class="n">println</span><span class="p">(</span><span class="s">"line   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"call   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">fullName</span><span class="p">())</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"area   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">area</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"api   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"action : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"arg #  : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"arg 1   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"email"</span><span class="p">))</span>
 
             <span class="c1">// 3. You can integrate with the API's feature ( for calling methods dynamically )
 </span>            <span class="c1">// Refer to the APIs module.
 </span>
             <span class="c1">// 3a. Create global inputs to the API ( e.g. api-keys )
-</span>            <span class="k">val</span> <span class="n">opts</span> <span class="k">=</span> <span class="nc">InputArgs</span><span class="o">(</span><span class="n">mapOf</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Any</span><span class="o">&gt;(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"123456789"</span><span class="o">))</span>
+</span>            <span class="kd">val</span> <span class="py">opts</span> <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Any</span><span class="p">&gt;(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"123456789"</span><span class="p">))</span>
 
             <span class="c1">// 3b. Convert the shell command to an api command
-</span>            <span class="k">val</span> <span class="n">req</span> <span class="k">=</span> <span class="nc">Request</span><span class="o">.</span><span class="n">cli</span><span class="o">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">line</span><span class="o">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">args</span><span class="o">,</span> <span class="n">opts</span><span class="o">,</span> <span class="nc">ApiConstants</span><span class="o">.</span><span class="nc">ProtocolCLI</span><span class="o">)</span>
+</span>            <span class="kd">val</span> <span class="py">req</span> <span class="p">=</span> <span class="n">Request</span><span class="p">.</span><span class="n">cli</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">,</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">ApiConstants</span><span class="p">.</span><span class="n">ProtocolCLI</span><span class="p">)</span>
 
             <span class="c1">// 3c. Do something with the request
 </span>            <span class="c1">// you logic goes here.
-</span>            <span class="k">val</span> <span class="n">res</span> <span class="k">=</span> <span class="n">success</span><span class="o">(</span><span class="s">"Sample result from CLI for req: "</span> <span class="o">+</span> <span class="n">req</span><span class="o">.</span><span class="n">path</span><span class="o">)</span>
+</span>            <span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="s">"Sample result from CLI for req: "</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
 
             <span class="c1">// 4. Now return the command w/ the new result.
-</span>            <span class="k">val</span> <span class="n">cliResult</span> <span class="k">=</span> <span class="n">cmd</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="n">result</span> <span class="k">=</span> <span class="n">res</span><span class="o">)</span>
+</span>            <span class="kd">val</span> <span class="py">cliResult</span> <span class="p">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">result</span> <span class="p">=</span> <span class="n">res</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">cliResult</span>
-        <span class="o">}</span>
+        <span class="p">}</span>
 
 
         <span class="cm">/**
@@ -216,11 +216,11 @@
          * @param cmd
          * @return
          */</span>
-        <span class="k">override</span> <span class="n">fun</span> <span class="n">onCommandAfterExecute</span><span class="o">(</span><span class="n">cmd</span><span class="k">:</span> <span class="kt">CliCommand</span><span class="o">)</span><span class="k">:</span> <span class="kt">CliCommand</span> <span class="o">{</span>
-            <span class="k">_</span><span class="kt">writer.highlight</span><span class="o">(</span><span class="err">"</span><span class="kt">\thook:</span> <span class="kt">onCommandAfterExecute</span> <span class="kt">-</span> <span class="kt">after</span> <span class="kt">command</span> <span class="kt">is</span> <span class="kt">executed</span><span class="err">"</span><span class="o">)</span>
-            <span class="kt">return</span> <span class="kt">cmd</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCommandAfterExecute</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">CliCommand</span><span class="p">):</span> <span class="n">CliCommand</span> <span class="p">{</span>
+            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onCommandAfterExecute - after command is executed"</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">cmd</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
     
 
 </code></pre>
@@ -230,7 +230,7 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
         <span class="c1">// CASE 1: Create your own shell by extending the ShellService
-</span>        <span class="k">val</span> <span class="n">shell</span> <span class="k">=</span> <span class="nc">AppShell</span><span class="o">(</span><span class="nc">AppMeta</span><span class="o">.</span><span class="n">none</span><span class="o">,</span> <span class="nc">Folders</span><span class="o">.</span><span class="n">default</span><span class="o">,</span> <span class="nc">CliSettings</span><span class="o">())</span>
+</span>        <span class="kd">val</span> <span class="py">shell</span> <span class="p">=</span> <span class="n">AppShell</span><span class="p">(</span><span class="n">AppMeta</span><span class="p">.</span><span class="n">none</span><span class="p">,</span> <span class="n">Folders</span><span class="p">.</span><span class="n">default</span><span class="p">,</span> <span class="n">CliSettings</span><span class="p">())</span>
 
 
         <span class="c1">// CASE 2: (Optional) configure a startup command
@@ -252,7 +252,7 @@
 
         <span class="c1">// CASE 4: Example command line ( simulating user entered text )
 </span>        <span class="c1">// NOTE: the action "app.users.invite" is translated to "area.api.action"
-</span>        <span class="n">shell</span><span class="o">.</span><span class="n">onCommandExecute</span><span class="o">(</span><span class="s">"app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'"</span><span class="o">)</span>
+</span>        <span class="n">shell</span><span class="p">.</span><span class="n">onCommandExecute</span><span class="p">(</span><span class="s">"app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'"</span><span class="p">)</span>
 
 
         <span class="c1">// CASE 5: exit
@@ -270,7 +270,7 @@
 </span>
 
         <span class="c1">// CASE 8: supply command line args ( e.g. from main )
-</span>        <span class="n">shell</span><span class="o">.</span><span class="n">run</span><span class="o">()</span>
+</span>        <span class="n">shell</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
         
 
 </code></pre>
