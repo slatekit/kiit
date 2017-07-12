@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+	<meta name="description" content="A tool-kit, utilities, and server back-end for web and mobile apps" />
     <title>Slate Kit - ORM / Entities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
@@ -98,23 +98,23 @@
 								<table class="table table-bordered table-striped">
 									<tr>
 										<td class="col-sm-2"><strong>package</strong></td>
-										<td>slatekit.core.app</td>
+										<td>slatekit.entities</td>
 									</tr>
 									<tr>
 										<td><strong>jar</strong></td>
-										<td>slatekit.core.jar</td>
+										<td>slatekit-entities.jar</td>
 									</tr>
 									<tr>
 										<td><strong>source</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/app">slatekit.core.app</a></td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-entities/src/main/kotlin/slatekit/entities">slatekit.entities</a></td>
 									</tr>
 									<tr>
 										<td><strong>sample</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch">SampleApp-Batch</a> : Full sample application </td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core">SampleApp-Core</a> : Full sample application </td>
 									</tr>
 									<tr>
 										<td><strong>example</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
+										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Orm_Service.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
 									</tr>
 									<tr>
 										<td><strong>license</strong></td>
@@ -182,29 +182,46 @@
 					<tr>
 						<td class="col-sm-2"><strong>Concept</strong></td>
 						<td class="col-sm-6"><strong>Description</strong></td>
+						<td class="col-sm-2"><strong>Example</strong></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Entity</strong></td>
-						<td class="col-sm-6">A base entity with identity fields for persistence</td>
+						<td><strong>Entities</strong></td>
+						<td>The top-most object in the system. Used to register entities, and get various services</td>
+						<td>Entities()</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Standardized Entity</strong></td>
-						<td class="col-sm-6">An entity with common fields like Id, TimeStamps, Audit Fields, Uniqueness and others</td>
-					<tr>
-						<td class="col-sm-2"><strong>Generic Service</strong></td>
-						<td class="col-sm-6">A generic entity service <strong>( EntityService[T] )</strong> for Entities to support CRUD operations business logic; delegates calls to the Repository</td>
+						<td><strong>Entity</strong></td>
+						<td>Represents your data model with identity fields for persistence</td>
+						<td>Movie</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Generic Repository</strong></td>
-						<td class="col-sm-6">A generic entity repository <strong>( EntityRepo[T] )</strong> for Entities to support CRUD operations, Find methods, and other features.</td>
+						<td><strong>Generic Entity</strong></td>
+						<td>An entity with common fields like Id, TimeStamps, Audit Fields, Uniqueness and others</td>
+						<td>EntityWithId</td>
+					<tr>
+						<td><strong>Generic Service</strong></td>
+						<td>A generic entity service to support CRUD operations, business logic; delegates calls to the Repository</td>						
+						<td>EntityService&lt;T&gt;</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Generic Query</strong></td>
-						<td class="col-sm-6">A query builder specifying sql queries to accommodate for database differences. Direct SQL use is still supported</td>
+						<td><strong>Generic Repository</strong></td>
+						<td>A generic entity repository to support CRUD operations, find methods, and other features.</td>
+						<td>EntityRepo&lt;T&gt;</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Generic Mapper</strong></td>
-						<td class="col-sm-6">A general purpose mapper <strong>( EntityMapper )</strong>  to map an entity to SQL create/updates and from records back to entities.</td>
+						<td><strong>Generic Mapper</strong></td>
+						<td>A general purpose mapper to map an entity to SQL, and from records back to entities.</td>
+						<td>EntityMapper</td>
+					</tr>
+					<tr>
+						<td><strong>Generic Query</strong></td>
+						<td>A query builder specifying sql queries. Direct SQL use is still supported</td>
+						<td>Query()</td>
+					</tr>
+					<tr>
+						<td><strong>Model</strong></td>
+						<td>A general purpose schema to store metadata about an Entity ( used by the Mapper )</td>
+						<td>Model(Movie::class)</td>
 					</tr>
 				</table>
 				<br/>
@@ -226,7 +243,7 @@
 					</tr>
 					<tr> 
 						<td><strong>3. Registration</strong></td>
-						<td>Multiple ways to register your entities, services, repositories</td>
+						<td>Multiple ways to register your entities, services, repositories, mappers</td>
 					</tr>
 					<tr> 
 						<td><strong>4. Defaults</strong></td>
@@ -322,65 +339,62 @@
 						</p>
 						<br/>
 						<div class="alert alert-warning text-left" role="alert">
-							<p><i class="fa fa-link"></i> This feature uses the <strong><a href="scala-mod-data.html" class="url-ch">Db</a></strong> component in utils to register and lookup databases.
+							<p><i class="fa fa-link"></i> This feature uses the <strong><a href="kotlin-mod-dblookup.html" class="url-ch">DbLookup</a></strong> component in utils to register and lookup databases.
 							</p>
 						</div>
 						<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>    
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
-  
-    <span class="c1">// CASE 1: Load database lookup using a single db connection
-</span>    <span class="k">val</span> <span class="n">dbLookup1</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
-      <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
-        <span class="s">"db1"</span><span class="o">,</span>
-        <span class="s">"abcdefghi"</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
-    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbLookup1</span><span class="o">.</span><span class="n">default</span> <span class="o">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbTypeMySql</span>
 
-    <span class="c1">// CASE 2. Load database lookup using a single db connection
-</span>    <span class="c1">// from a config file from .slatekit folder 
-</span>    <span class="k">val</span> <span class="n">dbLookup2</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span> <span class="nc">DbUtils</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slatekit"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">))</span>
-    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbLookup2</span><span class="o">.</span><span class="n">default</span> <span class="o">)</span>
 
-    <span class="c1">// CASE 3: Load database lookup using named db connection "users"
-</span>    <span class="k">val</span> <span class="n">dbLookup3</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span> <span class="o">(</span><span class="s">"users"</span><span class="o">,</span> <span class="nc">DbUtils</span><span class="o">.</span><span class="n">loadFromUserFolder</span><span class="o">(</span><span class="s">".slate"</span><span class="o">,</span> <span class="s">"db_default.txt"</span><span class="o">)</span> <span class="o">))</span>
-    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">)</span> <span class="o">)</span>
+<span class="c1">// 1. Create DbLookup using a connection from a file
+// NOTE: This is safer and more secure as it loads
+// the connection string from the user directory in folder ./slate
+</span><span class="kd">val</span> <span class="py">dbLookup1</span> <span class="p">=</span> <span class="n">defaultDb</span><span class="p">(</span><span class="n">ConfFuncs</span><span class="p">.</span><span class="n">readDbCon</span><span class="p">(</span><span class="s">"user://.slate/db_default.txt"</span><span class="p">)</span><span class="o">!!</span><span class="p">)</span>
 
-    <span class="c1">// CASE 4: Load database lookup using multiple 
-</span>	<span class="c1">// named db connections ( "users", "files" )
-</span>    <span class="k">val</span> <span class="n">dbs4</span> <span class="k">=</span> <span class="n">namedDbs</span><span class="o">(</span>
-      <span class="o">(</span>
-        <span class="s">"users"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-          <span class="s">"jdbc:mysql://localhost/users"</span><span class="o">,</span>
-          <span class="s">"root"</span><span class="o">,</span>
-          <span class="s">"abcdefghi"</span>
-        <span class="o">)</span>
-      <span class="o">),</span>
-      <span class="o">(</span>
-        <span class="s">"files"</span><span class="o">,</span> <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-          <span class="s">"jdbc:mysql://localhost/files"</span><span class="o">,</span>
-          <span class="s">"root"</span><span class="o">,</span>
-          <span class="s">"abcdefghi"</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
-    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"users"</span><span class="o">)</span> <span class="o">)</span>
-    <span class="n">showResult</span><span class="o">(</span> <span class="n">dbs4</span><span class="o">.</span><span class="n">named</span><span class="o">(</span><span class="s">"fiels"</span><span class="o">)</span> <span class="o">)</span>
+<span class="c1">// 2. Create a DbLookup using an explicit connection string
+// NOTE: Avoid using explicit connection strings in code.
+</span><span class="kd">val</span> <span class="py">dbLookup2</span> <span class="p">=</span> <span class="n">defaultDb</span><span class="p">(</span>
+	<span class="n">DbConString</span><span class="p">(</span>
+		<span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+		<span class="s">"jdbc:mysql://localhost/default"</span><span class="p">,</span>
+		<span class="s">"root"</span><span class="p">,</span>
+		<span class="s">"abcdefghi"</span>
+	<span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1">// 3. Create a DbLookup using multiple named databases.
+</span><span class="kd">val</span> <span class="py">dbLookup3</span> <span class="p">=</span> <span class="n">namedDbs</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
+	<span class="n">Pair</span><span class="p">(</span>
+		<span class="s">"movies"</span><span class="p">,</span> <span class="n">DbConString</span><span class="p">(</span>
+			<span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+			<span class="s">"jdbc:mysql://localhost/movies"</span><span class="p">,</span>
+			<span class="s">"root"</span><span class="p">,</span>
+			<span class="s">"abcdefghi"</span>
+		<span class="p">)</span>
+	<span class="p">),</span>
+	<span class="n">Pair</span><span class="p">(</span>
+		<span class="s">"files"</span><span class="p">,</span> <span class="n">DbConString</span><span class="p">(</span>
+			<span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+			<span class="s">"jdbc:mysql://localhost/files"</span><span class="p">,</span>
+			<span class="s">"root"</span><span class="p">,</span>
+			<span class="s">"abcdefghi"</span>
+		<span class="p">)</span>
+	<span class="p">)</span>
+<span class="p">))</span> 
 </code></pre>
-</div>				
+</div>		
 						<br/>
 						<div class="alert alert-info" role="alert">
 							<p><i class="fa fa-info-circle"></i></p>
 							<ol>								
 							  <li>Slate Kit currently supports <strong>MySql</strong></li>
 							  <li>Support for <strong>multiple databases</strong> is available</li>
-							  <li>See the <strong><a href="scala-mod-config.html" class="url-ch">Config</a></strong> component in the utilities page for getting database info out of config files</li>
+							  <li>See the <strong><a href="kotlin-mod-config.html" class="url-ch">Config</a></strong> component in the utilities page for getting database info out of config files</li>
 							  <li>Ensure your database driver is referenced by the project. e.g. <strong>"mysql-connector-java-5.1.38-bin.jar"</strong></li>
 							</ol>
 						</div>	
@@ -392,13 +406,13 @@
 							  <li>Do not place connection strings in source code</li>
 							  <li>You can create dedicated config files for connection strings </li>
 							  <li>You can store config files in the <strong>user</strong> directory and refer to them from your config</li>
-							  <li>See the <strong><a href="scala-mod-config.html" class="url-ch">Config</a></strong> component in the utilities for working with connection strings</li>
+							  <li>See the <strong><a href="kotlin-mod-config.html" class="url-ch">Config</a></strong> component in the utilities for working with connection strings</li>
 							</ol>
 						</div>
 						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-data.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-data.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 					<br/><br/><br/>
@@ -418,59 +432,96 @@
 						<br/>
 						<div class="alert alert-warning text-left" role="alert">
 							<p><i class="fa fa-link"></i> Refer to 
-								<strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/scala/Slate.Entities/src/main/scala/slate/entities/core/IEntity.scala" class="url-ch">Entity.scala</a></strong> for more info on the traits and fields.
+								<strong><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-entities/src/main/kotlin/slatekit/entities/core/IEntity.kt" class="url-ch">Entity.kt</a></strong> for more info on the traits and fields.
 							</p>
 						</div>
 						<h3>Example</h3>
 						<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.entities.core._</span>
+<span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Field</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityWithId</span>
+ 
+<span class="c1">// NOTES: You can entities properties to be persisted
+// in 3 different ways:
+// 1. annotations on the Entity
+// 2. building a Model and manually registering property references
+// 3. building a Model and manually registering via field/names
+//
+// See Example_Mapper.kt and slatekit.common.Model for more info.
+//
+// IMMUTABILITY:
+// The ORM is originally built for immutable Entities ( Data Classes )
+// It also supports Entities with "vars", but has not been tested.
+// In a future release, we will fully support var properties
+</span><span class="kd">data class</span> <span class="nc">Movie</span><span class="p">(</span>
+        <span class="k">override</span> <span class="kd">val</span> <span class="py">id</span> <span class="p">:</span><span class="n">Long</span> <span class="p">=</span> <span class="m">0L</span><span class="p">,</span>
 
-  <span class="c1">// 1. Extend from IEntity
-</span>  <span class="c1">// 2. Add @Field annotations for fields that should be mapped
-</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span> <span class="o">(</span>
 
-      <span class="c1">// Primary key
-</span>      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">id</span> <span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-      <span class="n">userName</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">50</span><span class="o">)</span>
-      <span class="n">email</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
-      <span class="n">password</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
-	  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">createdBy</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">updatedAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">,</span>
-  
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">updatedBy</span><span class="k">:</span><span class="kt">Long</span><span class="o">,</span>
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">50</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">title</span> <span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
 
-      <span class="o">@(</span><span class="nc">Field</span><span class="nd">@field</span><span class="o">)(</span><span class="s">""</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">)</span>
-      <span class="n">uniqueId</span><span class="k">:</span> <span class="kt">String</span>	  
-  <span class="o">)</span>
-   <span class="k">extends</span> <span class="nc">EntityWithId</span>
-      <span class="k">with</span> <span class="nc">EntityWithMeta</span>
-      <span class="k">with</span> <span class="nc">EntityUpdatable</span><span class="o">[</span><span class="kt">User</span><span class="o">]</span>
-  <span class="o">{</span>
-    <span class="cm">/**
-      * support for "copy on write" to set the id on the entity and return a copy.
-      * @param id
-      * @return
-      */</span>
-    <span class="k">override</span> <span class="k">def</span> <span class="n">withId</span><span class="o">(</span><span class="n">id</span><span class="k">:</span><span class="kt">Long</span><span class="o">)</span><span class="k">:</span> <span class="kt">User</span> <span class="o">=</span> <span class="n">copy</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="n">id</span><span class="o">)</span>
-  <span class="o">}</span>
 
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">length</span> <span class="p">=</span> <span class="m">20</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">category</span> <span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">playing</span> <span class="p">:</span><span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">cost</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">rating</span><span class="p">:</span> <span class="n">Double</span><span class="p">,</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">released</span><span class="p">:</span> <span class="n">DateTime</span><span class="p">,</span>
+
+
+        <span class="c1">// These are the timestamp and audit fields.
+</span>        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">createdAt</span> <span class="p">:</span> <span class="n">DateTime</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">createdBy</span> <span class="p">:</span><span class="n">Long</span>  <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">updatedAt</span> <span class="p">:</span> <span class="n">DateTime</span> <span class="p">=</span>  <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span>
+
+
+        <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">updatedBy</span> <span class="p">:</span><span class="n">Long</span>  <span class="p">=</span> <span class="m">0</span>
+<span class="p">)</span>
+    <span class="p">:</span> <span class="n">EntityWithId</span>
+<span class="p">{</span>
+    <span class="k">companion</span> <span class="kd">object</span> <span class="err">{
+        </span><span class="nc">fun</span> <span class="n">samples</span><span class="p">():</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+                <span class="n">Movie</span><span class="p">(</span>
+                        <span class="n">title</span> <span class="p">=</span> <span class="s">"Indiana Jones: Raiders of the Lost Ark"</span><span class="p">,</span>
+                        <span class="n">category</span> <span class="p">=</span> <span class="s">"Adventure"</span><span class="p">,</span>
+                        <span class="n">playing</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+                        <span class="n">cost</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
+                        <span class="n">rating</span> <span class="p">=</span> <span class="m">4.5</span><span class="p">,</span>
+                        <span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">1985</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+                <span class="p">),</span>
+                <span class="n">Movie</span><span class="p">(</span>
+                        <span class="n">title</span> <span class="p">=</span> <span class="s">"WonderWoman"</span><span class="p">,</span>
+                        <span class="n">category</span> <span class="p">=</span> <span class="s">"action"</span><span class="p">,</span>
+                        <span class="n">playing</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                        <span class="n">cost</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span>
+                        <span class="n">rating</span> <span class="p">=</span> <span class="m">4.2</span><span class="p">,</span>
+                        <span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
-</div>	
+</div>
 						<br/>
 						<h3>Fields</h3>
 						<p>These are some of the fields available in the various traits</p>
@@ -543,7 +594,7 @@
 						</div>					
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 						<br/>
 					</div>
@@ -563,47 +614,90 @@
 						</ol>
 						<h3>Example</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
-  
-<span class="c1">// Create database connection lookup
-// single connection in this example
-</span><span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
-      <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-        <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-        <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
-        <span class="s">"db1"</span><span class="o">,</span>
-        <span class="s">"abcdefghi"</span>
-      <span class="o">)</span>
-    <span class="o">)</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.Entities</span>
 
-<span class="c1">// Entities stores all the entity registrations 
-</span><span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span>
+ <span class="kd">val</span> <span class="py">dbLookup</span> <span class="p">=</span> <span class="n">defaultDb</span><span class="p">(</span>
+            <span class="n">DbConString</span><span class="p">(</span>
+                <span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span>
+                <span class="s">"jdbc:mysql://localhost/default"</span><span class="p">,</span>
+                <span class="s">"root"</span><span class="p">,</span>
+                <span class="s">"abcdefghi"</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+		
+<span class="c1">// The entities can be registered and set up in multiple ways.
+// They can be registered to :
+//
+// - use in-memory repository or a sql ( mysql ) repository
+// - use the default EntityService[T] or a custom EntityService
+// - use a singleton instance or new instance
+// - use a certain type of database ( mysql only for now )
+// - use the default EntityRepository ( mysql ) or a custom repository
+// - use a supplied EntityMapper or a custom mapper
+</span><span class="kd">val</span> <span class="py">entities</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(</span><span class="n">dbLookup</span><span class="p">)</span>
 
-<span class="c1">// Set up 1: Simple ( using default service, repo, connection ) 
-</span><span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">)</span>
+<span class="c1">// Case 1: In-memory
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 1"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
 
-<span class="c1">// Set up 2: Custom service, default repo, connection 
-</span><span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">)</span>
+<span class="c1">// Case 2: In-memory + with custom service
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 2"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
 
-<span class="c1">// Set up 3: Custom service, custom repo, default connection 
-</span><span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">UserRepository</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]),</span> <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">)</span>
+<span class="c1">// Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
+// Note: this uses the default database connection above
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 3"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">))</span>
 
-<span class="c1">// Set up 4: Custom service, repo and connection
-</span><span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">UserRepository</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]),</span> <span class="n">dbType</span> <span class="k">=</span> <span class="nc">DbConstants</span><span class="o">.</span><span class="nc">DbMySql</span><span class="o">,</span> <span class="n">dbKey</span> <span class="k">=</span> <span class="s">"user_db"</span><span class="o">)</span>
+<span class="c1">// Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
+// Note: this uses the default database connection above
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 4"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">))</span>
+
+<span class="c1">// Case 5: Custom repository
+// Note: this uses the default database connection above
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 5"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span><span class="p">(),</span> <span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">))</span>
+
+<span class="c1">// Case 6: Custom service type, custom repository, database type
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 6"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span> <span class="p">(),</span> <span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">))</span>
+
+<span class="c1">// Case 7: Custom service type, custom repository, database specified
+// Note: this uses the named database connection above called "Movie_db"
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 7"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span> <span class="p">(),</span>
+		<span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">,</span> <span class="n">dbKey</span> <span class="p">=</span> <span class="s">"Movie_db"</span><span class="p">))</span>
+
+<span class="c1">// Case 8: Custom service type, custom repository, database specified, mapper specified
+// Each registration will simply overwrite an existing registration for the same entity type
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 8"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span> <span class="p">(),</span>
+		<span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">))</span>
+
+<span class="c1">// Case 9: Provide a database db key ( e.g. for multiple database connections )
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 9"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span> <span class="p">(),</span>
+		<span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">,</span> <span class="n">dbKey</span> <span class="p">=</span> <span class="s">"Movie_db"</span><span class="p">))</span>
+
+<span class="c1">// Case 9: Provide a database db key ( e.g. for multiple database connections )
+</span><span class="n">showResults</span><span class="p">(</span><span class="s">"Case 10"</span><span class="p">,</span> <span class="n">entities</span><span class="p">.</span><span class="n">register</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">isSqlRepo</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">entityType</span> <span class="p">=</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span>
+		<span class="n">serviceType</span> <span class="p">=</span> <span class="n">MovieService</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">repository</span> <span class="p">=</span> <span class="n">MovieRepository</span> <span class="p">(),</span>
+		<span class="n">dbType</span> <span class="p">=</span> <span class="n">DbTypeMySql</span><span class="p">,</span> <span class="n">dbKey</span> <span class="p">=</span> <span class="s">"group1"</span><span class="p">,</span> <span class="n">dbShard</span> <span class="p">=</span> <span class="s">"shard1"</span><span class="p">))</span>
 
 <span class="c1">// Use case 1: Get repository
-</span><span class="k">val</span> <span class="n">repo</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getRepo</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+</span><span class="kd">val</span> <span class="py">repo</span> <span class="p">=</span> <span class="n">entities</span><span class="p">.</span><span class="n">getRepo</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
 <span class="c1">// Use case 2: Get the service
-</span><span class="k">val</span> <span class="n">svc</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getService</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+</span><span class="kd">val</span> <span class="py">svc</span> <span class="p">=</span> <span class="n">entities</span><span class="p">.</span><span class="n">getSvc</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
 <span class="c1">// Use case 3: Get the entity mapper
-</span><span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getMapper</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
+</span><span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">entities</span><span class="p">.</span><span class="n">getMapper</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
 <span class="c1">// Use case 4: Get the repo for a specific shard
-</span><span class="k">val</span> <span class="n">repoShard</span> <span class="k">=</span> <span class="n">entities</span><span class="o">.</span><span class="n">getRepo</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
-	
+</span><span class="kd">val</span> <span class="py">repoShar</span> <span class="p">=</span> <span class="n">entities</span><span class="p">.</span><span class="n">getRepo</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+        
 </code></pre>
 </div>
 						<br/>
@@ -617,7 +711,7 @@
 						</div>	
 						<br/>			
 						<h3>More</h3>
-						<a href="scala-mod-orm-setup.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-setup.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 					<br/><br/><br/>
@@ -629,75 +723,76 @@
 						You can ofcourse create a custom service class for your entity by extending from EntityService[T].
 						</p>
 						<br/>
-						<h3>Example</h3>
+						<h3>Declare</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.entities.core._</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
-  
+<span class="k">import</span> <span class="nn">slatekit.core.common.AppContext</span>
+<span class="k">import</span> <span class="nn">slatekit.core.common.EntityServiceWithSupport</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityRepo</span>
 
-  
-  <span class="c1">// Create database connection lookup
-</span>  <span class="c1">// single connection in this example
-</span>  <span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
-        <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-          <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
-          <span class="s">"db1"</span><span class="o">,</span>
-          <span class="s">"abcdefghi"</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-	  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 1: Use the existing EntityService[T] class
-</span>  <span class="k">val</span> <span class="n">svc1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityService</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">getUserRepo</span><span class="o">())</span>
-  
-  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 2: Create your own service to avoid generics
-</span>  <span class="k">class</span> <span class="nc">UserService</span><span class="o">(</span><span class="n">repo</span><span class="k">:</span><span class="kt">EntityRepo</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span> <span class="k">extends</span> <span class="nc">EntityService</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">repo</span><span class="o">)</span>
-  <span class="o">{</span>
-  <span class="o">}</span>  
-  <span class="k">var</span> <span class="n">svc</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">UserService</span><span class="o">(</span><span class="n">getUserRepo</span><span class="o">())</span>
-  
-  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 3: This is the most convenient way to wire up all the components.
-</span>  <span class="c1">// Entities is a registration system for your entities.
-</span>  <span class="c1">// a) database
-</span>  <span class="c1">// b) entity
-</span>  <span class="c1">// c) service 
-</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span> 
-  <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span> <span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> 
-                           <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
-                           <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
-                           <span class="n">dbType</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">DbTypeMySql</span><span class="o">))</span>
-    
-  <span class="c1">// EXAMPLES: 
-</span>  <span class="c1">// 1. Create 
-</span>  <span class="n">svc</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"user"</span><span class="o">,</span> <span class="s">"04"</span><span class="o">))</span>
-  
-  <span class="c1">// 2. Retrieve  
-</span>  <span class="k">val</span> <span class="n">item</span> <span class="k">=</span> <span class="n">svc</span><span class="o">.</span><span class="n">get</span><span class="o">(</span> <span class="mi">2</span> <span class="o">)</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">getAll</span><span class="o">()</span>
-  
-  <span class="c1">// 3. Update
-</span>  <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="o">.</span><span class="n">firstName</span> <span class="k">=</span> <span class="s">"user_two"</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="n">item2</span><span class="o">.</span><span class="n">get</span><span class="o">)</span>
-  
-  <span class="c1">// 4. Delete
-</span>  <span class="n">svc</span><span class="o">.</span><span class="n">delete</span><span class="o">(</span> <span class="mi">4</span> <span class="o">)</span>
-  
-  <span class="c1">// 5. Find by date
-</span>  <span class="n">svc</span><span class="o">.</span><span class="n">recent</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">oldest</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">first</span><span class="o">()</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">last</span><span class="o">()</span>
-  <span class="n">svc</span><span class="o">.</span><span class="n">count</span><span class="o">()</span>
-  
+
+<span class="kd">class</span> <span class="nc">MovieService</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">AppContext</span><span class="p">,</span> <span class="n">repo</span><span class="p">:</span> <span class="n">EntityRepo</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;)</span>
+  <span class="p">:</span> <span class="n">EntityServiceWithSupport</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">context</span><span class="p">,</span> <span class="n">repo</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="p">}</span>
 </code></pre>
 </div>
+						<br/>
+						<h3>Usage</h3>
+						<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// The Service layer initialized with an repository .
+// Purpose of the service layer is to:
+//
+// 1. Delegate to underlying repository for CRUD operations after applying any business logic.
+// 2. Provide a layer to insert business logic during other operations.
+// 3. Has some( not all ) methods that match the repository CRUD, Find, Delete methods
+// 4. Subclassed to perform more complex business logic that may still involve using the repo.
+//
+</span><span class="kd">val</span> <span class="py">ctx</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s">"sampleapp1"</span><span class="p">)</span>
+<span class="kd">val</span> <span class="py">service</span> <span class="p">=</span> <span class="n">MovieService</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">EntityRepoInMemory</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
 
+<span class="c1">// CASE 1: Create 3-4 users for showing use-cases
+</span><span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Batman Begins"</span>     <span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">4.2</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2005</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+<span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Dark Knight"</span>      <span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span><span class="m">4.5</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2012</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+<span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Dark Knight Rises"</span><span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">120</span><span class="p">,</span><span class="m">4.2</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2012</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+
+<span class="c1">// CASE 2: Get by id
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"2"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 3: Update
+</span><span class="kd">val</span> <span class="py">item2</span> <span class="p">=</span> <span class="n">service</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="n">item2</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span>
+	<span class="kd">val</span> <span class="py">updated</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">title</span> <span class="p">=</span> <span class="s">"Batman: Dark Knight"</span><span class="p">)</span>
+	<span class="n">service</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// CASE 4: Get all
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"all"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="n">getAll</span><span class="p">())</span>
+
+<span class="c1">// CASE 5: Get recent/last 2
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"recent"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="n">recent</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 6: Get oldest 2
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"oldest"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="n">oldest</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 7: Get first one ( oldest )
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"first"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="n">first</span><span class="p">())</span>
+
+<span class="c1">// CASE 8: Get last one ( recent )
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"last"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="n">last</span><span class="p">())</span>
+
+<span class="c1">// CASE 9: Delete by id
+</span><span class="n">service</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+
+<span class="c1">// CASE 10: Get total ( 4 )
+</span><span class="n">println</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">count</span><span class="p">())</span>
+
+<span class="c1">// CASE 11: Type-Safe queryusing property type reference
+</span><span class="n">println</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">findBy</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">playing</span><span class="p">,</span> <span class="k">true</span><span class="p">))</span>
+
+<span class="c1">// CASE 12: Query
+</span><span class="n">println</span><span class="p">(</span><span class="n">service</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">Query</span><span class="p">().</span><span class="k">where</span><span class="p">(</span><span class="s">"playing"</span><span class="p">,</span> <span class="s">"="</span><span class="p">,</span> <span class="k">true</span><span class="p">)))</span>
+
+</code></pre>
+</div>
 						<br/>
 						<h3>Features</h3>
 						<p>The purpose of the service class is to provide the following features:</p>
@@ -742,7 +837,7 @@
 						</div>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-service.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 					<br/><br/><br/>
@@ -756,66 +851,84 @@
 						You can ofcourse create a custom repo class for your entity by extending from EntityRepo[T] or EntityRepoMySql[T].
 						</p>
 						<br/>
-						<h3>Example</h3>
+						<h3>Declare</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.entities.repos._</span>  
-  <span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbConfig</span>
-  <span class="k">import</span> <span class="nn">slate.common.databases.DbLookup._</span>
-  
+<span class="k">import</span> <span class="nn">slatekit.common.db.Db</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
+<span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.Entities</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.repos.EntityRepoInMemory</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.repos.EntityRepoMySql</span>
 
-  <span class="c1">// Create database connection lookup
-</span>  <span class="c1">// single connection in this example
-</span>  <span class="k">val</span> <span class="n">dbLookup</span> <span class="k">=</span> <span class="n">defaultDb</span><span class="o">(</span>
-        <span class="k">new</span> <span class="nc">DbConString</span> <span class="o">(</span>
-          <span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span>
-          <span class="s">"jdbc:mysql://localhost/default"</span><span class="o">,</span>
-          <span class="s">"db1"</span><span class="o">,</span>
-          <span class="s">"abcdefghi"</span>
-        <span class="o">)</span>
-      <span class="o">)</span>
-	  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 1: Use existing implementation of Repo for MySql 
-</span>  <span class="k">val</span> <span class="n">repoMySql</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
-  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 2: Create your own repository for customization
-</span>  <span class="k">class</span> <span class="nc">UserRepository</span><span class="o">()</span> <span class="k">extends</span> <span class="nc">EntityRepoMySql</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
-  <span class="o">{</span>
-  <span class="o">}</span>
-  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 3: This is the most convenient way to wire up all the components.
-</span>  <span class="c1">// Entities is a registration system for your entities.
-</span>  <span class="c1">// a) database
-</span>  <span class="c1">// b) entity
-</span>  <span class="c1">// c) service 
-</span>  <span class="k">val</span> <span class="n">entities</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Entities</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="n">dbLookup</span><span class="o">))</span> 
-  <span class="n">entities</span><span class="o">.</span><span class="n">register</span><span class="o">[</span><span class="kt">User</span><span class="o">](</span> <span class="n">isSqlRepo</span><span class="k">=</span> <span class="kc">true</span><span class="o">,</span> 
-                           <span class="n">entityType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">],</span> 
-                           <span class="n">serviceType</span><span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">UserService</span><span class="o">],</span> 
-                           <span class="n">repository</span><span class="k">=</span> <span class="k">new</span> <span class="nc">UserRepository</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">]),</span> 
-                           <span class="n">dbType</span><span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">DbTypeMySql</span><span class="o">)</span>
-                         <span class="o">)</span>
-  
-  <span class="c1">// =====================================================
-</span>  <span class="c1">// SETUP 4: Manual configuration of db, mapper, repo.
-</span>  <span class="c1">// Create the database config 
-</span>  <span class="k">val</span> <span class="n">dbConfig</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">DbConString</span><span class="o">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">,</span> <span class="s">"jdbc:mysql://localhost/mydb"</span><span class="o">,</span> <span class="s">"root"</span><span class="o">,</span> <span class="s">"123456789"</span><span class="o">)</span>
-  
-  <span class="c1">// Create the mapper to map entity to/from SQL
-</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span>  <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="k">new</span> <span class="nc">User</span><span class="o">(),</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span> 
-  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
+<span class="c1">// CASE 1: In-memory ( non-persisted ) repository has limited functionality
+// but is very useful for rapid prototyping of a data model when you are trying to
+// figure out what fields/properties should exist on the model
+</span><span class="kd">val</span> <span class="py">repo</span> <span class="p">=</span> <span class="n">EntityRepoInMemory</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
-  <span class="c1">// Set db and mapper on the repo  
-</span>  <span class="n">repoMySql</span><span class="o">.</span><span class="n">setDb</span><span class="o">(</span><span class="n">dbConfig</span><span class="o">)</span>
-  <span class="n">repoMySql</span><span class="o">.</span><span class="n">setMapper</span><span class="o">(</span><span class="n">mapper</span><span class="o">)</span>
-  
+
+<span class="c1">// CASE 2: My-sql ( persisted ) repository can be easily setup
+// More examples of database setup/entity registration available in Setup/Registration docs.
+// 2.1: First setup the database
+</span><span class="kd">val</span> <span class="py">db</span> <span class="p">=</span> <span class="n">Db</span><span class="p">(</span><span class="n">DbConString</span><span class="p">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span> <span class="s">"jdbc:mysql://localhost/user_db"</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"abcdefghi"</span><span class="p">))</span>
+
+<span class="c1">// 2.2: Setup the mapper
+// NOTE: This assumes the entity has annotations on the properties.
+// If you do not want to use annotations, looks at the mapper/model
+// examples for alternative approaches.
+</span><span class="kd">val</span> <span class="py">model</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+<span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="c1">// 2.3: Now create the repo with database and mapper
+</span><span class="kd">val</span> <span class="py">repoMySql</span> <span class="p">=</span> <span class="n">EntityRepoMySql</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;(</span><span class="n">db</span><span class="p">,</span> <span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
+
 </code></pre>
 </div>
-
 						<br/>						
+						<h3>Usage</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// CASE 1: Create 3-4 users for showing use-cases
+</span><span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Batman Begins"</span>     <span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">50</span><span class="p">,</span> <span class="m">4.2</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2005</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+<span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Dark Knight"</span>      <span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">100</span><span class="p">,</span><span class="m">4.5</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2012</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+<span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="m">0L</span><span class="p">,</span> <span class="s">"Dark Knight Rises"</span><span class="p">,</span> <span class="s">"action"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="m">120</span><span class="p">,</span><span class="m">4.2</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2012</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">)))</span>
+
+<span class="c1">// CASE 2: Get by id
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"2"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 3: Update
+</span><span class="kd">val</span> <span class="py">item2</span> <span class="p">=</span> <span class="n">repo</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+<span class="n">item2</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span>
+	<span class="kd">val</span> <span class="py">updated</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">title</span> <span class="p">=</span> <span class="s">"Batman: Dark Knight"</span><span class="p">)</span>
+	<span class="n">repo</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// CASE 4: Get all
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"all"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">getAll</span><span class="p">())</span>
+
+<span class="c1">// CASE 5: Get recent/last 2
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"recent"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">recent</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 6: Get oldest 2
+</span><span class="n">printAll</span><span class="p">(</span><span class="s">"oldest"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">oldest</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+<span class="c1">// CASE 7: Get first one ( oldest )
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"first"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">first</span><span class="p">())</span>
+
+<span class="c1">// CASE 8: Get last one ( recent )
+</span><span class="n">printOne</span><span class="p">(</span><span class="s">"last"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">last</span><span class="p">())</span>
+
+<span class="c1">// CASE 9: Delete by id
+</span><span class="n">repo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+
+<span class="c1">// CASE 10: Get total ( 4 )
+</span><span class="n">println</span><span class="p">(</span><span class="n">repo</span><span class="p">.</span><span class="n">count</span><span class="p">())</span>
+
+<span class="c1">// CASE 11: Query
+</span><span class="n">println</span><span class="p">(</span><span class="n">repo</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">Query</span><span class="p">().</span><span class="k">where</span><span class="p">(</span><span class="s">"playing"</span><span class="p">,</span> <span class="s">"="</span><span class="p">,</span> <span class="k">true</span><span class="p">)))</span>
+
+</code></pre>
+</div>
+						<br/>
 						<h3>Features</h3>
 						<p>The purpose of the repo class is to provide the following features:</p>						
 						<table class="table table-bordered table-striped">
@@ -848,7 +961,7 @@
 						<br/>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-orm-repo.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-repo.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 					<br/><br/><br/>
@@ -859,32 +972,76 @@
 						You do <strong>NOT</strong> need to write a mapper, a default mysql entity mapper is provided.
 						</p>
 						<br/>
-						<h3>Example</h3>
+						<h3>Schema</h3>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  
-  <span class="k">import</span> <span class="nn">slate.common.mapper.Mapper</span>
-  <span class="k">import</span> <span class="nn">slate.entities.core._</span>
-  
-  <span class="c1">// STEP 1: Create a new mapper that loads fields/annotations mappings from the entity class
-</span>  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="nc">Mapper</span><span class="o">.</span><span class="n">loadSchema</span><span class="o">(</span><span class="n">typeOf</span><span class="o">[</span><span class="kt">User</span><span class="o">])</span>
-  <span class="k">val</span> <span class="n">mapper</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EntityMapper</span><span class="o">(</span><span class="n">model</span><span class="o">)</span>
-  
-  <span class="c1">// STEP 2: Create instance of entity class
-</span>  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="n">firstName</span> <span class="o">=</span><span class="s">"john"</span><span class="o">,</span> <span class="n">lastName</span> <span class="k">=</span> <span class="s">"doe-01"</span><span class="o">,</span> <span class="n">email</span> <span class="k">=</span> <span class="s">"john@abc.com"</span><span class="o">)</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Model</span>
+<span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
 
-  <span class="c1">// STEP 3: Get the sql for create
-</span>  <span class="k">val</span> <span class="n">sqlCreate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">false</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
-  <span class="n">println</span><span class="o">(</span><span class="n">sqlCreate</span><span class="o">)</span>
+<span class="c1">// CASE 1: Load the schema from the annotations on the model
+</span><span class="kd">val</span> <span class="py">schema1</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
-  <span class="c1">// STEP 4: Get the sql for update
-</span>  <span class="k">val</span> <span class="n">sqlForUpdate</span> <span class="k">=</span> <span class="n">mapper</span><span class="o">.</span><span class="n">mapToSql</span><span class="o">(</span><span class="n">person</span><span class="o">,</span> <span class="n">update</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">fullSql</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
-  <span class="n">println</span><span class="o">(</span><span class="n">sqlForUpdate</span><span class="o">)</span>
 
-  <span class="c1">// STEP 5: Generate the table schema for mysql from the model schema
-</span>  <span class="n">println</span><span class="o">(</span> <span class="s">"table sql : "</span> <span class="o">+</span> <span class="k">new</span> <span class="nc">DbBuilder</span><span class="o">().</span><span class="n">addTable</span><span class="o">(</span><span class="n">model</span><span class="o">))</span>
+<span class="c1">// CASE 2: Load the schema manually using properties for type-safety
+</span><span class="kd">val</span> <span class="py">schema2</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addId</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">title</span>     <span class="p">,</span> <span class="s">"Title of movie"</span>         <span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">30</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">category</span>  <span class="p">,</span> <span class="s">"Category (action|drama)"</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">playing</span>   <span class="p">,</span> <span class="s">"Whether its playing now"</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">rating</span>    <span class="p">,</span> <span class="s">"Rating from users"</span>      <span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">released</span>  <span class="p">,</span> <span class="s">"Date of release"</span>        <span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">createdAt</span> <span class="p">,</span> <span class="s">"Who created record"</span>     <span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">createdBy</span> <span class="p">,</span> <span class="s">"When record was created"</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">updatedAt</span> <span class="p">,</span> <span class="s">"Who updated record"</span>     <span class="p">)</span>
+		<span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">updatedBy</span> <span class="p">,</span> <span class="s">"When record was updated"</span><span class="p">)</span>
+
+
+<span class="c1">// CASE 3: Load the schema manually using named fields
+</span><span class="kd">val</span> <span class="py">schema3</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">Example_Mapper</span><span class="p">.</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addId</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addText</span>    <span class="p">(</span><span class="s">"title"</span>     <span class="p">,</span> <span class="s">"Title of movie"</span>         <span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">30</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addText</span>    <span class="p">(</span><span class="s">"category"</span>  <span class="p">,</span> <span class="s">"Category (action|drama)"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addBool</span>    <span class="p">(</span><span class="s">"playing"</span>   <span class="p">,</span> <span class="s">"Whether its playing now"</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addDouble</span>  <span class="p">(</span><span class="s">"rating"</span>    <span class="p">,</span> <span class="s">"Rating from users"</span>      <span class="p">)</span>
+		<span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"released"</span>  <span class="p">,</span> <span class="s">"Date of release"</span>        <span class="p">)</span>
+		<span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"createdAt"</span> <span class="p">,</span> <span class="s">"Who created record"</span>     <span class="p">)</span>
+		<span class="p">.</span><span class="n">addLong</span>    <span class="p">(</span><span class="s">"createdBy"</span> <span class="p">,</span> <span class="s">"When record was created"</span><span class="p">)</span>
+		<span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"updatedAt"</span> <span class="p">,</span> <span class="s">"Who updated record"</span>     <span class="p">)</span>
+		
 </code></pre>
-</div>				
+</div>			
 						<br/>
+						<h3>Usage</h3>
+						<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
+
+<span class="kd">val</span> <span class="py">schema</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+
+<span class="c1">// CASE 1: Create mapper with the schema
+</span><span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span> <span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+
+<span class="c1">// Create sample instance to demo the mapper
+</span><span class="kd">val</span> <span class="py">movie</span> <span class="p">=</span> <span class="n">Example_Mapper</span><span class="p">.</span><span class="n">Movie</span><span class="p">(</span>
+		<span class="n">title</span> <span class="p">=</span> <span class="s">"Man Of Steel"</span><span class="p">,</span>
+		<span class="n">category</span> <span class="p">=</span> <span class="s">"action"</span><span class="p">,</span>
+		<span class="n">playing</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+		<span class="n">cost</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span>
+		<span class="n">rating</span> <span class="p">=</span> <span class="m">4.0</span><span class="p">,</span>
+		<span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2015</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1">// CASE 2: Get the sql for create
+</span><span class="kd">val</span> <span class="py">sqlCreate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="n">sqlCreate</span><span class="p">)</span>
+
+<span class="c1">// CASE 3: Get the sql for update
+</span><span class="kd">val</span> <span class="py">sqlForUpdate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+<span class="n">println</span><span class="p">(</span><span class="n">sqlForUpdate</span><span class="p">)</span>
+
+<span class="c1">// CASE 4: Generate the table schema for mysql from the model
+</span><span class="n">println</span><span class="p">(</span><span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">DbSourceMySql</span><span class="p">().</span><span class="n">builAddTable</span><span class="p">(</span><span class="n">schema</span><span class="p">))</span>
+
+</code></pre>
+</div>					<br/>
 						<h3>Features</h3>
 						<table class="table table-bordered table-striped">
 							<tr>
@@ -920,7 +1077,7 @@
 						</div>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-orm-mapper.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-mapper.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>
 					<br/><br/><br/>
@@ -929,34 +1086,6 @@
 						<p>The ORM that map entities to tables automatically creates an underlying model definition for each mapped Entity. 
 						A model definition is the name of the model along with the fields to be persisted. This can be done 2 different ways. Either manually ( programmatically ) or automatically ( via annotations on your entity classes ). <br/>
 						</p>
-						<br/>
-						<h3>Example</h3>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="k">import</span> <span class="nn">slate.common.</span><span class="o">{</span><span class="nc">Model</span><span class="o">}</span>
-  
-  <span class="k">val</span> <span class="n">model</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Model</span><span class="o">(</span><span class="s">"Resource"</span><span class="o">,</span> <span class="s">"slate.ext.resources.Resource"</span><span class="o">)</span>
-
-  <span class="c1">// CASE 2. add a field for uniqueness / identity
-</span>  <span class="n">model</span><span class="o">.</span><span class="n">addId</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"id"</span><span class="o">,</span> <span class="n">autoIncrement</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">dataType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Long</span><span class="o">])</span>
-
-  <span class="c1">// CASE 3: add fields for text, bool, int, date etc.
-</span>  <span class="n">model</span><span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"key"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"name"</span>       <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"category"</span>   <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"country"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"region"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"aggRegion"</span>  <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"aggCategory"</span><span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"links"</span>      <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"owner"</span>      <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addText</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"status"</span>     <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">maxLength</span> <span class="k">=</span> <span class="mi">30</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addInt</span>   <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"recordState"</span><span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
-       <span class="o">.</span><span class="n">addObject</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"hostInfo"</span>   <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span> <span class="n">dataType</span> <span class="k">=</span> <span class="n">typeOf</span><span class="o">[</span><span class="kt">Host</span><span class="o">])</span>
-       <span class="o">.</span><span class="n">addDate</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"created"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span>                <span class="o">)</span>
-       <span class="o">.</span><span class="n">addDate</span>  <span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">"updated"</span>    <span class="o">,</span> <span class="n">isRequired</span> <span class="k">=</span> <span class="kc">true</span>                <span class="o">)</span>
-
-	   </code></pre>
-</div>						
 						<br/>
 						<div class="alert alert-info" role="alert">
 							<p><i class="fa fa-info-circle"></i></p>
@@ -968,7 +1097,7 @@
 						</div>
 						<h3>More</h3>
 						<p>For more information, see the full example that is part of the examples project</p>
-						<a href="scala-mod-orm-model.html" class="more"><span class="btn btn-primary">See full code</span></a>
+						<a href="kotlin-mod-orm-model.html" class="more"><span class="btn btn-primary">See full code</span></a>
 						<a href="#orm-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
 					</div>	
 					<br/><br/>				
