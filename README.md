@@ -1,12 +1,12 @@
 # SLATE KIT
 Slate Kit is a tool kit, utility library and server backend for web and mobile apps. 
-It is written in Scala, uses MySql, AWS, and Akka-Http in the Server. 
+It is written in Kotlin, uses MySql, AWS, and Spark Java. 
 
+It is partially available in Scala.
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
-- **date**: Mar 16, 2016
-- **release**: 1.4.1
+- **date**: July 12, 2017
 
 
 # LINKS
@@ -36,15 +36,15 @@ concepts. These include the following. ( Please refer to website for more detail
 - sampleapp-cli.jar      : sample cli to showing Slate Kit - Shell component and hosting and using Protocol independent APIs 
 - sampleapp-core.jar     : sample library showing creation of Protocol independent APIs
 - sampleapp-server.jar   : sample server showing Slate Kit - Server and hosting and using Protocol independent APIs 
-- slate-cloud.jar        : Slate Kit abstraction of Message Queues and Files with implementations for AWS SQS, S3 
-- slate-common.jar       : Slate Kit common components and utilities ( used by all other projects ) 
-- slate-core.jar         : Slate Kit core components ( Shell, Base App, Protocol Independent APIs, and more ) 
-- slate-entities.jar     : Slate Kit domain driven single-table ORM        
-- slate-ext.jar          : extensions for mobile/web backend features ( auth, registration, invites and more - not currently available )
-- slate-integration.jar  : Slate Kit integrations between 2 or more Slate Kit components ( to reduce cyclomatic complexity )
-- slate-server.jar       : Slate Kit Web API server that wraps Akka-Http ( hosts and manages Protocol independent APIs )
-- slate-shell.jar        : Slate Kit CLI interface ( includes a CLI access to code-generator and more - Work in progress ) 
-- slate-tools.jar        : Slate Kit tools as the Code Generator ( Work in progress ) 
+- slatekit-cloud.jar        : Slate Kit abstraction of Message Queues and Files with implementations for AWS SQS, S3 
+- slatekit-common.jar       : Slate Kit common components and utilities ( used by all other projects ) 
+- slatekit-core.jar         : Slate Kit core components ( Shell, Base App, Protocol Independent APIs, and more ) 
+- slatekit-entities.jar     : Slate Kit domain driven single-table ORM        
+- slatekit-ext.jar          : extensions for mobile/web backend features ( auth, registration, invites and more - not currently available )
+- slatekit-integration.jar  : Slate Kit integrations between 2 or more Slate Kit components ( to reduce cyclomatic complexity )
+- slatekit-server.jar       : Slate Kit Web API server that wraps Akka-Http ( hosts and manages Protocol independent APIs )
+- slatekit-shell.jar        : Slate Kit CLI interface ( includes a CLI access to code-generator and more - Work in progress ) 
+- slatekit-tools.jar        : Slate Kit tools as the Code Generator ( Work in progress ) 
 
 ## NOTES:
 - mysql: mysql-connector-java-5.1.38-bin.jar 
@@ -57,29 +57,18 @@ All the software below is required to run Scala and Slate Kit. Scala is dependen
 Using Sbt ( the Scala build tool ) will making building and packaging your apps easier.
 
 1. Java	            1.8	
-2. Scala	          2.11
-3. Sbt	            latest
+2. Kotlin	          1.1.2
+3. Gradle	          latest
 4. IntelliJ	        latest 
 5. MySql Connector	5.7	For JDBC connectios 
 
 
 ## Optional
-Slate Kit support building Web APIs using Akka-Http, Cloud Services ( Files, Queues ) using AWS and databases using MySql. 
+Slate Kit support building Web APIs using Spark Java, Cloud Services ( Files, Queues ) using AWS and databases using MySql. 
 The following are needed if you plan on using any of these.
 
-1. Akka-Http	2.4.10 
+1. Spark	2.1 
 2. AWS Sdk ( For Java )	latest	Cloud Storage of Files(S3), Queues(SQS)	download
 3. MySql 5.7	Database	download
 
-
-# PROJECT DEPENDENCIES
-- slate.common : none
-- slate.entities : slate.common, mysql-connector-java-5.1.38-bin.jar
-- slate.core : slate.common, slate.entities 
-- slate.integration : slate.common, slate.entities, slate.core
-- slate.tools : slate.common, slate.entities, slate.core
-- slate.cloud : slate.common, slate.entities, slate.core, aws libs ( see lib folder )
-- slate.shell : slate.common, slate.entities, slate.core, slate.integration
-- slate.server: slate.common, slate.entities, slate.core, slate.integration,  akka http libs ( see lib folder ) 
-- slate.ext : not currently available
 
