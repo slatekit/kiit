@@ -56,7 +56,7 @@ import slatekit.entities.core.Entities
 // There are different ways you can build up the context
 // 1. Manually      ( explictly supply the components - see below )
 // 2. Automatically ( using helper functions to that check command line args )
-class SampleApp(ctx: AppContext) : AppProcess(ctx) {
+class SimpleApp(ctx: AppContext) : AppProcess(ctx) {
 
     /**
      * Options for the application that you can override
@@ -85,47 +85,12 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
      * @return
      */
     override fun onExecute(): Result<Any> {
-        // The AppContext ( ctx ) is required for the AppProcess and will be
-        // available for derived classes to access its components.
 
-        // 1. Get the selected environment name/mode ( local.dev )
-        println(ctx.env.name)
-        println(ctx.env.mode)
-        println(ctx.env.toString())
+        // Get access to context which has everything ( e.g env name )
+        println("environment is: " + ctx.env.name)
 
-        // 2. Get the command line args and show the raw inputs supplied
-        println(ctx.arg.raw)
-
-        // 3. Get the setting from base config ( common config that all other configs inherit from )
-        println(conf.getString("app.api"))
-
-        // 4. Get value from inherited config ( env.qa.conf ) that inherits
-        // from the common config ( env.conf )
-        println(conf.getString("app.api"))
-        println(conf.dbCon())
-
-        // 5. Get and use logger
-        ctx.log.info("default logger ")
-
-        // 6. Get app info ( showing just 1 property )
-        println(ctx.app.about.name)
-
-        // 7. Get the host computer info
-        println(ctx.app.host)
-
-        // 8. Get the java runtime info
-        println(ctx.app.lang)
-
-        // 9. Get the encryptor to encrypt/decrypt
-        println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
-
-        // 10. Execute your work here.
+        // Execute your work here.
         info("app executing now")
-
-        // simulate work
-        Thread.sleep(1000)
-
-        info("app completed")
 
         return ok()
     }
@@ -153,7 +118,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
 //</doc:setup>
 
 
-class Example_App : Cmd("app") {
+class Example_Scratch_App : Cmd("auth") {
 
     override fun executeInternal(args: Array<String>?): Result<Any> {
         //<doc:examples>

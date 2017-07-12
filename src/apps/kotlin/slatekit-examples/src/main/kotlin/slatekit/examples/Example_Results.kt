@@ -135,8 +135,8 @@ class Example_Results : Cmd("results") {
     }
 
     /*
-    //<doc:output>
-  ```bat
+//<doc:output>
+```bat
     success: true
     message: user created
     code   : 200
@@ -184,7 +184,7 @@ class Example_Results : Cmd("results") {
     code   : 503
     data   : null
     ref    :
-  ```
-    //</doc:output>
+```
+//</doc:output>
     */
 }

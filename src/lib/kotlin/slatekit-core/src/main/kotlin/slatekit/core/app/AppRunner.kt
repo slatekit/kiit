@@ -70,9 +70,8 @@ object AppRunner {
      */
     fun build(
             args: Array<String>? = null,
-            schema: ArgsSchema? = null,
             enc: Encryptor? = null,
-            builder: ((AppInputs) -> AppContext)? = null,
+            schema: ArgsSchema? = null,
             converter: ((AppContext) -> AppContext)? = null
     ): AppContext {
         // 1. Ensure command line args

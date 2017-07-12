@@ -22,6 +22,7 @@ import slatekit.common.Result
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
@@ -71,22 +72,7 @@ class Example_Context : Cmd("cmd") {
         //    either extend the Context, and/or copy the AppContext
         //    with modifications
 
-        // CASE 1: Build info about the app ( to be reused for the examples below )
-        val info = About(
-            id = "sample-app-1",
-            name = "Sample App-1",
-            desc = "Sample application 1",
-            company = "Company 1",
-            group = "Department 1",
-            region = "New York",
-            url = "http://company1.com/dep1/sampleapp-1",
-            contact = "dept1@company1.com",
-            version = "1.0.1",
-            tags = "sample app slatekit scala",
-            examples = ""
-        )
-
-        // CASE 2: Build a simple context with minimal info that includes:
+        // CASE 1: Build a simple context with minimal info that includes:
         // - default arguments ( command line )
         // - dev environment
         // - Config() representing conf settings from "env.conf"
@@ -98,18 +84,30 @@ class Example_Context : Cmd("cmd") {
             cfg = Config(),
             log = LoggerConsole(),
             ent = Entities(),
-            inf = info,
             host = Host.local(),
-            lang = Lang.kotlin()
+            lang = Lang.kotlin(),
+            inf = About(
+                    id = "sample-app-1",
+                    name = "Sample App-1",
+                    desc = "Sample application 1",
+                    company = "Company 1",
+                    group = "Department 1",
+                    region = "New York",
+                    url = "http://company1.com/dep1/sampleapp-1",
+                    contact = "dept1@company1.com",
+                    version = "1.0.1",
+                    tags = "sample app slatekit scala",
+                    examples = ""
+            )
         )
 
-        // CASE 3: Typically your application will want to derive the
+        // CASE 2: Typically your application will want to derive the
         // context from either the command line args and or the config
         // There is a builder method takes command line arguments and
         // other inputs and constructs the context. This example shows
         // only providing the arguments to build the context
-
-        // CASE 3A: This checks for "-env" arg and loads the corresponding
+        //
+        // NOTE: This checks for "-env" arg and loads the corresponding
         // inherited config environment (refer to config in utils for more info )
         // but basically, this loads the env.dev.conf with fallback to env.conf
         // 1. "env.dev.conf" ( environment specific )
@@ -117,19 +115,25 @@ class Example_Context : Cmd("cmd") {
         val ctx2 = AppRunner.build(arrayOf("-env=dev -log -log.level=debug"))
         showContext(ctx2)
 
-        // CASE 3B: This example shows providing the args schema for parsing the args
+        // CASE 3: This example shows providing the args schema for parsing the args
         // refer to Args in utils for more info.
         // NOTE: There are additional parameters on the build function ( callbacks )
         // to allow you to get the context and modify it before it is returned.
-        val schema = ArgsSchema()
-            .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-            .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
-            .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
-            .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
-        val ctx3 = AppRunner.build(arrayOf("-env=dev -log -log.level=debug"), schema)
+        val ctx3 = AppRunner.build(
+                    args   = arrayOf("-env=dev -log -log.level=debug"),
+                    enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                    schema = ArgsSchema()
+                            .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+                            .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
+                            .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
+                            .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error"),
+                    converter = { context -> context.copy( inf = context.inf.copy(
+                        desc = "Sample to show converter to convert context before final use"
+                    ))}
+        )
         showContext(ctx3)
 
-        // CASE 3C: You can also build an error context representing an invalid context
+        // CASE 4: You can also build an error context representing an invalid context
         val ctx4 = AppContext.err(BAD_REQUEST, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 

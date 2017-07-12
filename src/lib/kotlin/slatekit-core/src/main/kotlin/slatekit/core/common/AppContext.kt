@@ -29,6 +29,8 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.failureWithCode
+import slatekit.common.toId
+import slatekit.common.toIdent
 import slatekit.entities.core.Entities
 
 
@@ -89,6 +91,21 @@ data class AppContext(
                 lang = Lang.kotlin(),
                 state = failureWithCode(code, msg)
             )
+
+
+        fun simple(name:String): AppContext =
+                AppContext(
+                        arg = Args.default(),
+                        env = Env("local", Dev),
+                        cfg = Config(),
+                        log = LoggerConsole(),
+                        ent = Entities(),
+                        inf = About.none,
+                        host = Host.local(),
+                        lang = Lang.kotlin(),
+                        dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
+                )
+
 
 
         fun sample(id: String, name: String, about: String, company: String): AppContext =

@@ -15,11 +15,12 @@ package slatekit.common.info
 
 import slatekit.common.DateTime
 import slatekit.common.TimeSpan
+import java.time.Duration
 
 data class Status(
         val started: DateTime = DateTime.now(),
         val ended: DateTime = DateTime.now(),
-        val duration: TimeSpan = TimeSpan(0, 0, 0),
+        val duration: Duration = started.durationFrom(ended),
         val status: String = "not-started",
         val errors: Int = 0,
         val error: String = "n/a"
@@ -32,7 +33,9 @@ data class Status(
 
 
     fun end(statusName: String? = null): Status {
-        return copy(started = DateTime.now(), status = statusName ?: "ended")
+        val now = DateTime.now()
+        val duration = started.durationFrom(now)
+        return copy(ended = DateTime.now(), status = statusName ?: "ended", duration = duration)
     }
 
 

@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
  * @param db
  * @tparam T
  */
-class EntityRepoMySql<T>(
+open class EntityRepoMySql<T>(
         db: Db,
         entityType: KClass<*>,
         entityIdType: KClass<*>? = null,

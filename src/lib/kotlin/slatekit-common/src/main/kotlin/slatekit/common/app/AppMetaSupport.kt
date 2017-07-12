@@ -13,6 +13,8 @@
 
 package slatekit.common.app
 
+import slatekit.common.info.Status
+
 
 interface AppMetaSupport {
 
@@ -59,7 +61,8 @@ interface AppMetaSupport {
     }
 
 
-    fun appLogEnd(callback: (String, String) -> Unit) {
+    fun appLogEnd(callback: (String, String) -> Unit,
+                  status: Status = appMeta().status) {
         val meta = appMeta()
         callback("name             ", meta.about.name)
         callback("desc             ", meta.about.desc)
@@ -73,12 +76,16 @@ interface AppMetaSupport {
         callback("env              ", meta.start.env)
         callback("config           ", meta.start.config)
         callback("log              ", meta.start.logFile)
-        callback("started          ", meta.status.started.toString())
-        callback("ended            ", meta.status.ended.toString())
-        callback("duration         ", meta.status.duration.toString())
-        callback("status           ", meta.status.status)
-        callback("errors           ", meta.status.errors.toString())
-        callback("error            ", meta.status.error)
+
+        // Status is different at start vs end
+        callback("started          ", status.started.toString())
+        callback("ended            ", status.ended.toString())
+        callback("duration         ", status.duration.toString())
+        callback("status           ", status.status)
+        callback("errors           ", status.errors.toString())
+        callback("error            ", status.error)
+
+        // Host
         callback("host.name        ", meta.host.name)
         callback("host.ip          ", meta.host.ip)
         callback("host.origin      ", meta.host.origin)

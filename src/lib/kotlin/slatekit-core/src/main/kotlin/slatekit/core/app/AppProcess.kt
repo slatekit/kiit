@@ -20,6 +20,7 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
@@ -35,7 +36,6 @@ open class AppProcess(context: AppContext?,
                       args: Array<String>? = null,
                       schema: ArgsSchema? = null,
                       enc: Encryptor? = null,
-                      builder: ((AppInputs) -> AppContext)? = null,
                       converter: ((AppContext) -> AppContext)? = null
 )
     : AppMetaSupport,
@@ -48,7 +48,7 @@ open class AppProcess(context: AppContext?,
     // 1. explicitly supplying it
     // 2. auto-built using inputs
     // 3. auto-built using defaults
-    val ctx = context ?: AppRunner.build(args, schema, enc, builder, converter)
+    val ctx = context ?: AppRunner.build(args, enc, schema, converter)
 
     // Options on output/logging
     open val options = AppOptions()
@@ -159,7 +159,10 @@ open class AppProcess(context: AppContext?,
             error("error while shutting down app : " + e.message)
         }
         if (options.printSummaryOnShutdown) {
-            logSummary()
+            // Make a copy of the original context
+            // with updates to the end time/status.
+            val finalState = appMeta().status.end()
+            logSummary(finalState)
         }
     }
 
@@ -194,14 +197,14 @@ open class AppProcess(context: AppContext?,
     /**
      * prints the summary of the arguments
      */
-    fun logSummary(): Unit {
+    fun logSummary(status: Status = appMeta().status): Unit {
         info("===============================================================")
         info("SUMMARY : ")
         info("===============================================================")
 
         // Standardized info
         // e.g. name, desc, env, log, start-time etc.
-        val args = collectSummary()
+        val args = collectSummary(status)
 
         // App specific fields to add onto
         val extra = collectSummaryExtra()
@@ -237,9 +240,9 @@ open class AppProcess(context: AppContext?,
     }
 
 
-    private fun collectSummary(): List<Pair<String, String>> {
+    private fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
-        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) })
+        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) }, status)
         return buf.toList()
     }
 }

@@ -75,12 +75,13 @@ class Example_Serialization : Cmd("serialization") {
 
 /*
 //<doc:output>
-```csv
+
+```bat
 2, "superman@metro.com", "super", "man", true, 35
 3, "batman@gotham.com", "bat", "man", true, 35
 ```
 
-```props
+```bat
 id = 2
 email = superman@metro.com
 firstName = super
@@ -97,7 +98,7 @@ isMale = true
 age = 35
 ```
 
-```json
+```bat
 [
   {"id" : 2, "email" : "superman@metro.com", "firstName" : "super", "lastName" : "man", "isMale" : true, "age" : 35},
   {"id" : 3, "email" : "batman@gotham.com", "firstName" : "bat", "lastName" : "man", "isMale" : true, "age" : 35}
