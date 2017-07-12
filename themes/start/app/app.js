@@ -132,14 +132,15 @@ var codeHelixMeta = {
 			{ name: "Concepts"      ,  page: "kotlin-concepts.html"         , children: null },
 			{ name: "App"           ,  page: "kotlin-core-app.html"         , children: null },
 			{ name: "APIs"          ,  page: "kotlin-core-apis.html" , children: null },
-			{ name: "Server"        ,  page: "kotlin-core-server.html"      , children: null },
-			{ name: "ORM"           ,  page: "kotlin-core-orm.html"         , children: null }
+			{ name: "ORM"           ,  page: "kotlin-core-orm.html"         , children: null },
+			{ name: "Server"        ,  page: "kotlin-core-server.html"      , children: null }
 		]
 	},
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },	
 	{ name: "More"          ,  page: "-"                , children: [
 			//{ name: "Functional Programming"  ,  page: "kotlin-101-functional.html"    },
 			//{ name: "_______________________" ,  page: ""    },
+			{ name: "Kotlin 101 - Coming soon"  ,  page: ""    },
 			//{ name: "Kotlin 101"              ,  page: "kotlin101.html"    },
 			{ name: "Kotlin Standards"        ,  page: "kotlin-standards.html"    },
 			//{ name: "Slate Kit: Kotlin Docs"             ,  page: "docs/slatekit_kotlin_v_0_9_2_docs.zip?raw=true" },
