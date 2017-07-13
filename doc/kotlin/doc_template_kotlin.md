@@ -1,7 +1,7 @@
 ---
 layout: start_page@{layout}
 title: module @{name}
-permalink: /mod-@{namelower}
+permalink: /kotlin-mod-@{namelower}
 ---
 
 # @{name}
@@ -13,13 +13,13 @@ permalink: /mod-@{namelower}
 | **version** | @{version}  |
 | **jar** | @{jar}  |
 | **namespace** | @{namespace}  |
-| **source core** | @{source}.scala  |
-| **source folder** | [@{sourceFolder}](https://github.com/kishorereddy/blend-server/tree/master@{sourceFolder})  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate.examples/@{example}.scala](https://github.com/kishorereddy/blend-server/tree/master@{examplefile}) |
+| **source core** | @{source}.@{lang-ext}  |
+| **source folder** | [@{sourceFolder}](https://github.com/code-helix/slatekit/tree/master/@{sourceFolder}){:.url-ch}  |
+| **example** | [/src/apps/@{lang}/slate-examples/src/main/@{lang}/slatekit/examples/@{example}.@{lang-ext}](https://github.com/code-helix/slatekit/tree/master/@{examplefile}){:.url-ch} |
 | **depends on** | @{dependencies}  |
 
 ## Import
-```scala 
+```kotlin 
 // required @{doc:import_required}
 
 // optional @{doc:import_examples}
@@ -27,14 +27,14 @@ permalink: /mod-@{namelower}
 ```
 
 ## Setup
-```scala
+```kotlin
 
 @{doc:setup}
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 @{doc:examples}
 
