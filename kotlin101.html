@@ -472,7 +472,7 @@ concise, reference style approach. For more in-depth documentation please refer 
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
-	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. For example, if/else and try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin-101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
+	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. For example, if/else and try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
 <br/>
@@ -481,7 +481,8 @@ concise, reference style approach. For more in-depth documentation please refer 
 <h1>2. Types</h1>
 <hr/>
 <h2 id="kotlin-types">Data Types</h2>
-<p>You can declare types simply using the values or explicitly specifying the type name</p>
+<p>You can declare types simply using the values (in which case the type is inferred),
+or by explicitly specifying the type name. To indicate a value can be null, use the <strong>?</strong> operator</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Inferred
 </span>  <span class="kd">val</span> <span class="py">name1</span>     <span class="p">=</span> <span class="s">"john doe"</span>
@@ -807,7 +808,10 @@ concise, reference style approach. For more in-depth documentation please refer 
 <br/>
 
 <h2 id="kotlin-nulls">Null handling</h2>
-<p>Null safety and handling</p>
+<p>Null safety and handling. Below are 2 functions with examples on using null.
+The first example is on basic types ( strings ). The second example shows usage of null with objects.
+<br/>There are different ways to ensure safe access to nullable values, which include ( null check, <strong>?</strong> operator,
+ <strong>?.let</strong> and the <strong>?:</strong> elvis operator)</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="kd">data class</span> <span class="nc">Hero</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">universe</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">identity</span><span class="p">:</span><span class="n">String</span><span class="p">?)</span>
   
@@ -931,6 +935,15 @@ concise, reference style approach. For more in-depth documentation please refer 
 
 </code></pre>
 </div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> 
+	Notice that the if / else condition returns an expression.
+	In Kotlin, if/else and try/catch return the last expression in their block of execution.
+	You can then assign this expression to a val.
+	This is a fundamental concept in functional programming, and you can use this principle
+    to replace vars and promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
+	
+</div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-loops">Loops</h2>
@@ -974,7 +987,8 @@ concise, reference style approach. For more in-depth documentation please refer 
 <br/>
 
 <h2 id="kotlin-when">When</h2>
-<p>Pattern matching using when</p>
+<p>Pattern matching using <strong>when</strong>. Pattern matching is incredibly powerful and can 
+generally be used as an alternative to if/else conditions.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="k">fun</span> <span class="nf">testWhen</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span> <span class="n">Unit</span> <span class="p">{</span>
 
@@ -1055,6 +1069,15 @@ concise, reference style approach. For more in-depth documentation please refer 
   <span class="c1">// Now print the result ( tuple )
 </span>  <span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> 
+	Notice that the try/catch condition returns an expression ( Pair ).
+	In Kotlin, if/else and try/catch return the last expression in their block of execution.
+	You can then assign this expression to a val.
+	This is a fundamental concept in functional programming, and you can use this principle
+    to replace vars and promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
+	
 </div>
 <a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
 

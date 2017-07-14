@@ -140,8 +140,7 @@ var codeHelixMeta = {
 	{ name: "More"          ,  page: "-"                , children: [
 			//{ name: "Functional Programming"  ,  page: "kotlin-101-functional.html"    },
 			//{ name: "_______________________" ,  page: ""    },
-			{ name: "Kotlin 101 - Coming soon"  ,  page: ""    },
-			//{ name: "Kotlin 101"              ,  page: "kotlin101.html"    },
+			{ name: "Kotlin 101"              ,  page: "kotlin101.html"    },
 			{ name: "Kotlin Standards"        ,  page: "kotlin-standards.html"    },
 			//{ name: "Slate Kit: Kotlin Docs"             ,  page: "docs/slatekit_kotlin_v_0_9_2_docs.zip?raw=true" },
 			//{ name: "Kotlin Sample Apps"      ,  page: "samples.html"     },
