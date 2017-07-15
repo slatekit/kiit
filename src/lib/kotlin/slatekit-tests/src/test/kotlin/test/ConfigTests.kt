@@ -14,9 +14,12 @@ package test
 
 import org.junit.Test
 import slatekit.common.ApiLogin
+import slatekit.common.DateTime
 import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
+import slatekit.common.envs.Dev
+import test.common.Movie
 import test.common.MyEncryptor
 import java.util.*
 import java.io.FileInputStream
@@ -76,7 +79,15 @@ class ConfigTests {
     }
 
 
-    @Test fun test_db_con() {
+    @Test fun test_model_env() {
+        val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
+        val env = conf.env()
+        assert(env.name == "local")
+        assert(env.mode == Dev)
+    }
+
+
+    @Test fun test_model_db_con() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
         val con = conf.dbCon()
         assert(con.driver == "mysql")
@@ -86,7 +97,20 @@ class ConfigTests {
     }
 
 
-    @Test fun test_creds() {
+    @Test fun test_model_movie() {
+        val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
+        val movie = conf.map<Movie>("movie", Movie::class, null)!!
+        assert(movie.id == 0L )
+        assert(movie.title == "Indiana Jones")
+        assert(movie.category == "adventure")
+        assert(!movie.playing )
+        assert(movie.cost == 30)
+        assert(movie.rating == 4.8)
+        assert(movie.released == DateTime.of(1981, 6, 12))
+    }
+
+
+    @Test fun test_model_creds() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
         val login = conf.login("login")
         assert(login.id     == "user1")
@@ -98,16 +122,16 @@ class ConfigTests {
     }
 
 
-    @Test fun test_read_api_from() {
-        val key = ConfFuncs.readApiKey("user://.slatekit/conf/env.conf", sectionName = "aws-sqs")
-        matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
-    }
-
-
-    @Test fun test_api_key() {
+    @Test fun test_model_api_key() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
         val key = conf.apiKey("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
+    }
+
+
+    @Test fun test_read_api_from() {
+        val key = ConfFuncs.readApiKey("user://.slatekit/conf/env.conf", sectionName = "aws-sqs")
+        matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
