@@ -14,10 +14,7 @@ package test
 
 import org.junit.Test
 import slatekit.apis.core.Call
-import slatekit.common.DateTime
-import slatekit.common.InputArgs
-import slatekit.common.Reflector
-import slatekit.common.Request
+import slatekit.common.*
 import slatekit.core.common.Converter
 import slatekit.tests.common.UserApi
 
@@ -58,36 +55,21 @@ class CallTests {
 
 
     @Test fun can_handle_string(){
-        val inputs = InputArgs(mapOf<String,Any>(
-                "name_null"   to "null",
-                "name_empty"  to "",
-                "name_quotes" to "''",
-                "name_value"  to "abc"
-        ))
-        val call = Converter()
-        assert( call.handleString("name_null") == "")
-        assert( call.handleString("name_empty") == "")
-        assert( call.handleString("name_quotes") == "''")
-        assert( call.handleString("name_value") == "abc")
+        assert(Conversions.handleString("null") == "")
+        assert(Conversions.handleString("") == "")
+        assert(Conversions.handleString("''") == "''")
+        assert(Conversions.handleString("abc") == "abc")
     }
 
 
     @Test fun can_handle_vars(){
-        val inputs = InputArgs(mapOf<String,Any>(
-                "name_null"   to "null",
-                "name_empty"  to "",
-                "name_value"  to "a=1,b=2,c=3"
-        ))
-
-        val call = Converter()
-
-        val vars1 = call.handleVars("name_null")
+        val vars1 = Conversions.toVars("null")
         assert(vars1.size == 0 )
 
-        val vars2 = call.handleVars("name_empty")
+        val vars2 = Conversions.toVars("")
         assert(vars2.size == 0 )
 
-        val vars3 = call.handleVars("name_value")
+        val vars3 = Conversions.toVars("a=1,b=2,c=3")
         assert(vars3.size == 3 )
         assert(vars3["a"] == "1" )
         assert(vars3["b"] == "2" )

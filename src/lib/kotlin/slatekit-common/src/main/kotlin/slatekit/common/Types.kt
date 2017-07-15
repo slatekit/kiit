@@ -37,6 +37,8 @@ object Types {
     val LocalDateTimeClass  = LocalDateTime::class
     val ZonedDateTimeClass  = ZonedDateTime::class
     val InstantClass        = Instant::class
+    val DocClass            = Doc::class
+    val VarsClass           = Vars::class
 
 
     val StringType        = String::class.createType()
@@ -52,6 +54,8 @@ object Types {
     val LocalDateTimeType = LocalDateTime::class.createType()
     val ZonedDateTimeType = ZonedDateTime::class.createType()
     val InstantType       = Instant::class.createType()
+    val DocType           = Doc::class.createType()
+    val VarsType          = Vars::class.createType()
 
 
     val TypeDecString = DecString::class.createType()
@@ -76,6 +80,8 @@ object Types {
             LocalDateTimeType -> LocalDateTimeClass
             ZonedDateTimeType -> ZonedDateTimeClass
             InstantType       -> InstantClass
+            DocType           -> DocClass
+            VarsType          -> VarsClass
             else              -> tpe.classifier as KClass<*>
         }
     }

@@ -56,7 +56,7 @@ class Call {
             val result = when (paramType) {
 
                 // Basic types
-                Types.StringType        -> converter.handleString(args.getString(paramName))
+                Types.StringType        -> Conversions.handleString(args.getString(paramName))
                 Types.BoolType          -> args.getBool(paramName)
                 Types.ShortType         -> args.getShort(paramName)
                 Types.IntType           -> args.getInt(paramName)
@@ -73,10 +73,10 @@ class Call {
                 TypeRequest             -> cmd
 
                 // Doc/File reference ( only if allowed )
-                TypeDoc                 -> converter.handleDoc(args.getString(paramName))
+                TypeDoc                 -> Conversions.toDoc(args.getString(paramName))
 
                 // Map from string string delimited pairs
-                TypeVars                -> converter.handleVars(args.getString(paramName))
+                TypeVars                -> Conversions.toVars(args.getString(paramName))
 
                 // Decryption from encrypted types
                 Types.TypeDecInt        -> enc?.let { e -> DecInt(e.decrypt(args.getString(paramName)).toInt()) } ?: DecInt(0)

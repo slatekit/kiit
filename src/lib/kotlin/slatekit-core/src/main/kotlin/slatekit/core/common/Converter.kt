@@ -73,7 +73,7 @@ class Converter(val enc:Encryptor? = null,
     fun convert(parent:Any, raw:Any?, paramType: KType): Any {
         return when (paramType) {
             // Basic types
-            Types.StringType        -> handleString(raw)
+            Types.StringType        -> Conversions.handleString(raw)
             Types.BoolType          -> raw as Boolean
             Types.ShortType         -> raw.toString().toShort()
             Types.IntType           -> raw.toString().toInt()
@@ -89,60 +89,11 @@ class Converter(val enc:Encryptor? = null,
             Types.TypeDecLong       -> enc?.let { e -> DecLong(e.decrypt(raw as String).toLong()) } ?: DecLong(0L)
             Types.TypeDecDouble     -> enc?.let { e -> DecDouble(e.decrypt(raw as String).toDouble()) } ?: DecDouble(0.0)
             Types.TypeDecString     -> enc?.let { e -> DecString(e.decrypt(raw as String)) } ?: DecString("")
-            TypeVars                -> handleVars(raw)
+            TypeVars                -> Conversions.toVars(raw)
 
             // Complex type
             else                    -> handleComplex(parent, raw, paramType)
         }
-    }
-
-
-    /**
-     * Builds a string parameter ensuring that nulls are avoided.
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleString(data:Any?): String {
-        // As a design choice, this marshaller will only pass empty string to
-        // API methods instead of null
-        return when(data) {
-            null      -> ""
-            "null"    -> ""
-            is String -> if(data.isNullOrEmpty()) "" else data
-            else      -> data.toString()
-        }
-    }
-
-
-    /**
-     * Builds a Vars object which is essentially a lookup of items by both index and key
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleVars(data:Any?): Vars {
-        return when(data) {
-            null      -> Vars.apply("")
-            "null"    -> Vars.apply("")
-            is String -> if(data.isNullOrEmpty()) Vars.apply("") else Vars.apply(data)
-            else      -> Vars.apply("")
-        }
-    }
-
-
-    /**
-     * Builds a Doc object by reading the file content from the referenced uri
-     * e.g.
-     * 1. "user://slatekit/temp/file1.txt"    reference user directory
-     * 2. "file://c:/slatekit/temp/file.txt"  reference file explicitly
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleDoc(uri:String): Doc {
-        val doc = Uris.readDoc(uri)
-        return doc ?: Doc.text("", "")
     }
 
 
