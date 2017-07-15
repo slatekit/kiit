@@ -131,7 +131,7 @@ class AwsCloudFiles(bucket: String,
         return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
             val content = getAsText(folder, name)
             val finalFolder = Uris.interpret(localFolder)
-            val localFile = File(finalFolder, fullName)
+            val localFile = File(finalFolder, name)
             val localFileName = localFile.absolutePath
             File(localFileName).writeText(content.value ?: "")
             localFileName

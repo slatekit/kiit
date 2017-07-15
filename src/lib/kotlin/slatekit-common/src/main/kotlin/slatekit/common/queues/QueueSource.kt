@@ -45,7 +45,7 @@ interface QueueSource {
     fun abandon(item: Any?): Unit {}
 
 
-    fun toString(item: Any?): String = ""
+    fun toString(item: Any?): String = item?.toString() ?: ""
 
 
     fun send(msg: Any, tagName: String = "", tagValue: String = ""): Result<String>

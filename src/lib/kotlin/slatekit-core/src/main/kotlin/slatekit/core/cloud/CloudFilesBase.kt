@@ -60,8 +60,13 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
     fun getAsText(name: String): Result<String> = getAsText(_defaultFolder, name)
 
 
-    fun download(name: String, localFolder: String): Unit {
-        download(_defaultFolder, name, localFolder)
+    fun download(name: String, localFolder: String): Result<String> {
+        return download(_defaultFolder, name, localFolder)
+    }
+
+
+    fun downloadToFile(name: String, localFilePath: String): Result<String> {
+        return downloadToFile(_defaultFolder, name, localFilePath)
     }
 
 
@@ -114,9 +119,6 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
 
 
     protected fun toString(input: InputStream): String {
-        TODO.IMPLEMENT("input stream") {
-            //scala.io.Source.fromInputStream(input).getLines().mkString
-        }
-        return ""
+        return input.bufferedReader().use { it.readText() }
     }
 }

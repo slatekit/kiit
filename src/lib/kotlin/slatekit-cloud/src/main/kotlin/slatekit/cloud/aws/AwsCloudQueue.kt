@@ -248,4 +248,12 @@ class AwsCloudQueue(queue: String,
             }
         } ?: ""
     }
+
+
+    override fun toString(item: Any?): String {
+        return when(item){
+            is Message -> getMessageBody(item)
+            else       -> item?.toString() ?: ""
+        }
+    }
 }
