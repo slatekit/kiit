@@ -38,7 +38,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun start(): RunStatus = moveToState(RunStateExecuting)
+    fun start(): RunStatus = moveToState(RunStateWorking)
 
 
     /**
@@ -46,7 +46,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun waiting(): RunStatus = moveToState(RunStateWaiting)
+    fun wait(): RunStatus = moveToState(RunStateIdle)
 
 
     /**
@@ -87,7 +87,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun failed(): RunStatus = moveToState(RunStateFailed)
+    fun fail(): RunStatus = moveToState(RunStateFailed)
 
 
     /**
@@ -111,7 +111,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun isWaiting(): Boolean = isState(RunStateWaiting)
+    fun isWaiting(): Boolean = isState(RunStateIdle)
 
 
     /**

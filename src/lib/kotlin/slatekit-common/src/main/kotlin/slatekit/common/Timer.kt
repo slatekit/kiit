@@ -17,7 +17,7 @@ import slatekit.common.info.Memory
 import slatekit.common.results.ResultTimed
 
 
-object Timer {
+object Measure {
 
     /**
      * benchmarks an operation once

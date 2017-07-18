@@ -28,47 +28,52 @@ interface RunState {
 // 7. failed      : failed ( opposite of completed )
 
 object RunStateHelpRequest : RunState {
-    override val value: Int = 0;
+    override val value: Int = 0
     override val mode: String = "help-request"
 }
 
 object RunStateNotStarted : RunState {
-    override val value: Int = 1;
+    override val value: Int = 1
     override val mode: String = "not-started"
 }
 
 object RunStateInitializing : RunState {
-    override val value: Int = 2;
+    override val value: Int = 2
     override val mode: String = "initializing"
 }
 
 object RunStateExecuting : RunState {
-    override val value: Int = 3;
+    override val value: Int = 3
     override val mode: String = "executing"
 }
 
-object RunStateWaiting : RunState {
-    override val value: Int = 4;
+object RunStateWorking : RunState {
+    override val value: Int = 3
+    override val mode: String = "executing"
+}
+
+object RunStateIdle : RunState {
+    override val value: Int = 4
     override val mode: String = "waiting"
 }
 
 object RunStatePaused : RunState {
-    override val value: Int = 5;
+    override val value: Int = 5
     override val mode: String = "paused"
 }
 
 object RunStateStopped : RunState {
-    override val value: Int = 6;
+    override val value: Int = 6
     override val mode: String = "stopped"
 }
 
 object RunStateComplete : RunState {
-    override val value: Int = 7;
+    override val value: Int = 7
     override val mode: String = "complete"
 }
 
 object RunStateFailed : RunState {
-    override val value: Int = 8;
+    override val value: Int = 8
     override val mode: String = "failed"
 }
 

@@ -12,7 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Timer
+import slatekit.common.Measure
 
 //</doc:import_required>
 
@@ -36,7 +36,7 @@ class Example_Timer : Cmd("timer") {
     // CASE 1: Benchmark an operation 1 time
     // NOTE: Using call-by-name
     showResult(
-      Timer.once("run once", {
+      Measure.once("run once", {
        val ms = Random.digits3()
         Thread.sleep(ms.toLong())
         ms
@@ -45,11 +45,11 @@ class Example_Timer : Cmd("timer") {
 
 
     // CASE 2: Benchmark an operation 10 times and get all individual results
-    showResults( Timer.many("run 2 times", { count ->  println( "operation : $count" ) }, 2))
+    showResults( Measure.many("run 2 times", { count ->  println( "operation : $count" ) }, 2))
 
 
     // CASE 3: Benchmark an operation 10 times and get an average
-    showResult( Timer.avg("avg of 10 times", 10, { count ->
+    showResult( Measure.avg("avg of 10 times", 10, { count ->
 
       Thread.sleep(Random.digits3().toLong())
     }))
