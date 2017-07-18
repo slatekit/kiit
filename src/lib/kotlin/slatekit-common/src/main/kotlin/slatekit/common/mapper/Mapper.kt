@@ -50,7 +50,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * @param args
      * @return
      */
-    fun createEntityWithArgs(args: List<Any>?): Any =
+    fun createEntityWithArgs(args: List<Any?>?): Any =
             Reflector.createWithArgs(_model.dataType!!, args?.toTypedArray() ?: arrayOf())
 
 

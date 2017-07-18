@@ -125,7 +125,7 @@ object ApiHelper {
 
 
     fun fillArgs(callReflect: Action, cmd: Request, args: Inputs, allowLocalIO: Boolean = false,
-                 enc: Encryptor? = null): Array<Any> {
+                 enc: Encryptor? = null): Array<Any?> {
         // Check 1: No args ?
         return if (!callReflect.hasArgs)
             arrayOf()
@@ -133,7 +133,7 @@ object ApiHelper {
         else if (callReflect.isSingleDefaultedArg() && args.size() == 0) {
             val argType = callReflect.paramList[0].type.toString()
             val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
-            arrayOf(defaultVal ?: "")
+            arrayOf<Any?>(defaultVal ?: "")
         }
         else {
             _call.fillArgsForMethod(callReflect.member, cmd, args, allowLocalIO, enc)

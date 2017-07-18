@@ -3,10 +3,7 @@ package slate.test
 import org.junit.Test
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.common.DateTime
-import slatekit.common.Field
-import slatekit.common.Reflector
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -15,12 +12,14 @@ import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
+import slatekit.common.types.PhoneUS
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.tests.common.UserApi
 import test.common.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
@@ -53,6 +52,14 @@ class ReflectorTests {
             dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
             enc  = MyEncryptor
     )
+
+
+    @Test fun can_check_subtype(){
+        val tpe = PhoneUS::class
+        tpe.supertypes.forEach { println(it) }
+        val ndx = tpe.supertypes.indexOf(SmartString::class.createType())
+        assert(ndx == 0)
+    }
 
 
     @Test fun can_test_types(){

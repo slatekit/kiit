@@ -39,6 +39,7 @@ object Types {
     val InstantClass        = Instant::class
     val DocClass            = Doc::class
     val VarsClass           = Vars::class
+    val SmartStringClass    = SmartString::class
 
 
     val StringType        = String::class.createType()
@@ -56,6 +57,7 @@ object Types {
     val InstantType       = Instant::class.createType()
     val DocType           = Doc::class.createType()
     val VarsType          = Vars::class.createType()
+    val SmartStringType   = SmartString::class.createType()
 
 
     val TypeDecString = DecString::class.createType()

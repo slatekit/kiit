@@ -46,7 +46,7 @@ object Reflector {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> createWithArgs(cls: KClass<*>, args: Array<Any>): T {
+    fun <T> createWithArgs(cls: KClass<*>, args: Array<Any?>): T {
         val con = cls.primaryConstructor!!
         val res = con.call(*args)
         return res as T
@@ -133,7 +133,7 @@ object Reflector {
     }
 
 
-    fun callMethod(cls: KClass<*>, inst: Any, name: String, args: Array<Any>): Any? {
+    fun callMethod(cls: KClass<*>, inst: Any, name: String, args: Array<Any?>): Any? {
         val mem = cls.members.find { m -> m.name == name }
         val params = arrayOf(inst, *args)
         return mem?.call(*params)

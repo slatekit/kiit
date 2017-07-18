@@ -33,18 +33,19 @@ class Call {
     val TypeDoc = Doc::class.createType()
     val TypeVars = Vars::class.createType()
 
+
     // Improve: Check this article:
     // http://www.cakesolutions.net/teamblogs/ways-to-pattern-match-generic-types-in-scala
     fun fillArgsExact(callReflect: Action, cmd: Request, allowLocalIO: Boolean = false,
-                      enc: Encryptor? = null): Array<Any> {
+                      enc: Encryptor? = null): Array<Any?> {
         return fillArgsForMethod(callReflect.member, cmd, cmd.args!!, allowLocalIO, enc)
     }
 
 
-    fun fillArgsForMethod(call: KCallable<*>, cmd: Request, args: Inputs, allowLocalIO: Boolean = false, enc: Encryptor? = null): Array<Any> {
+    fun fillArgsForMethod(call: KCallable<*>, cmd: Request, args: Inputs, allowLocalIO: Boolean = false, enc: Encryptor? = null): Array<Any?> {
 
         // Check each parameter to api call
-        val inputs = mutableListOf<Any>()
+        val inputs = mutableListOf<Any?>()
         val parameters = if (call.parameters.size == 1) listOf<KParameter>() else call.parameters.subList(1, call.parameters.size)
         val converter = Converter(enc)
         val jsonRaw = cmd.args?.raw as? JSONObject
@@ -85,7 +86,7 @@ class Call {
                 Types.TypeDecString     -> enc?.let { e -> DecString(e.decrypt(args.getString(paramName))) } ?: DecString("")
 
                 // Complex type
-                else                    -> handleComplex(converter, cmd, parameter, paramType, jsonRaw)
+                else                    -> handleComplex(converter, cmd, parameter, paramType, jsonRaw, args.getString(paramName))
             }
             inputs.add(result)
         }
@@ -100,15 +101,18 @@ class Call {
      * @param paramName
      * @return
      */
-    fun handleComplex(converter:Converter, req:Request, parameter:KParameter, tpe:KType, jsonRaw:JSONObject?): Any {
+    fun handleComplex(converter:Converter, req:Request, parameter:KParameter, tpe:KType, jsonRaw:JSONObject?, raw:Any?): Any? {
         val paramName = parameter.name!!
         return if(req.protocol == ApiConstants.ProtocolCLI){
             val cls = tpe.classifier as KClass<*>
+
+            // Case 1: List<*>
             if(cls == List::class){
                 val listType = tpe.arguments[0]!!.type!!
                 val listCls = Types.getClassFromType(listType)
                 req.args?.getList(paramName, listCls) ?: listOf<Any>()
             }
+            // Case 2: Map<*,*>
             else if(cls == Map::class){
                 val tpeKey = tpe.arguments[0].type!!
                 val tpeVal = tpe.arguments[1].type!!
@@ -117,6 +121,12 @@ class Call {
                 val emptyMap = mapOf<Any, Any>()
                 req.args?.getMap(paramName,clsKey, clsVal) ?: emptyMap
             }
+            // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
+            // Refer to slatekit.common.types
+            else if ( cls.supertypes.indexOf(Types.SmartStringType) >= 0 ) {
+                converter.handleSmartString(raw, tpe)
+            }
+            // Case 4: Object / Complex type
             else {
                 converter.convert(parameter, jsonRaw!!)
             }

@@ -18,6 +18,10 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
+import slatekit.common.types.Email
+import slatekit.common.types.PhoneUS
+import slatekit.common.types.SSN
+import slatekit.common.types.ZipCode
 import kotlin.reflect.*
 import kotlin.reflect.full.createType
 
@@ -26,7 +30,8 @@ import kotlin.reflect.full.createType
  * Json converter
  */
 class Converter(val enc:Encryptor? = null,
-                val converters:Map<String,(JSONObject, KType) -> Any> = mapOf()) {
+                val converters:Map<String,(JSONObject, KType) -> Any> = mapOf(),
+                val smartStrings:Map<String, SmartString> = mapOf()) {
 
     // This could be a reference to file doc e.g. user://myapp/conf/apikey.conf
     val TypeDoc = Doc::class.createType()
@@ -34,7 +39,7 @@ class Converter(val enc:Encryptor? = null,
     val TypeRequest = Request::class.createType()
 
 
-    fun convert(parameters:List<KParameter>, text:String): Array<Any> {
+    fun convert(parameters:List<KParameter>, text:String): Array<Any?> {
         val jsonObj = JSONParser().parse(text) as JSONObject
         return convert(parameters, jsonObj)
     }
@@ -45,7 +50,7 @@ class Converter(val enc:Encryptor? = null,
      * @param parameters: The parameter info to convert
      * @param jsonObj   : The json object to containing the data
      */
-    fun convert(parameters:List<KParameter>, jsonObj:JSONObject): Array<Any> {
+    fun convert(parameters:List<KParameter>, jsonObj:JSONObject): Array<Any?> {
 
         // Check each parameter to api call
         val params = parameters
@@ -60,8 +65,7 @@ class Converter(val enc:Encryptor? = null,
     /**
      * Gets data from the json object as an instance of the parameter type
      */
-    fun convert(parameter:KParameter, jsonObj: JSONObject): Any {
-
+    fun convert(parameter:KParameter, jsonObj: JSONObject): Any? {
         val paramName = parameter.name!!
         val paramType = parameter.type
         val data = jsonObj.get(paramName)
@@ -70,7 +74,7 @@ class Converter(val enc:Encryptor? = null,
     }
 
 
-    fun convert(parent:Any, raw:Any?, paramType: KType): Any {
+    fun convert(parent:Any, raw:Any?, paramType: KType): Any? {
         return when (paramType) {
             // Basic types
             Types.StringType        -> Conversions.handleString(raw)
@@ -103,7 +107,7 @@ class Converter(val enc:Encryptor? = null,
      * @param paramName
      * @return
      */
-    fun handleComplex(parent:Any, raw:Any?, tpe:KType): Any {
+    fun handleComplex(parent:Any, raw:Any?, tpe:KType): Any? {
         val cls = tpe.classifier as KClass<*>
         val fullName = cls.qualifiedName
         return if(cls == List::class){
@@ -114,6 +118,11 @@ class Converter(val enc:Encryptor? = null,
         }
         else if(converters.containsKey(fullName)){
             converters[fullName]?.invoke(parent as JSONObject, tpe)!!
+        }
+        // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
+        // Refer to slatekit.common.types
+        else if ( cls.supertypes.indexOf(Types.SmartStringType) >= 0 ) {
+            handleSmartString(raw, tpe)
         }
         else {
             handleObject(raw, tpe)!!
@@ -147,7 +156,7 @@ class Converter(val enc:Encryptor? = null,
      * @param paramName
      * @return
      */
-    fun handleMap(raw:Any?, tpe: KType): Map<*, *> {
+    fun handleMap(raw:Any?, tpe: KType): Map<*, *>? {
         val tpeKey = tpe.arguments[0].type!!
         val tpeVal = tpe.arguments[1].type!!
         val clsKey = Types.getClassFromType(tpeKey)
@@ -161,6 +170,21 @@ class Converter(val enc:Encryptor? = null,
             else          -> emptyMap
         }
         return items
+    }
+
+
+    /**
+     * Handles building of a list from various source types
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleSmartString(raw:Any?, paramType:KType): Any? {
+        return when (raw) {
+            null   -> null
+            "null" -> null
+            else   -> parseSmartString(raw?.toString() ?: "", paramType)
+        }
     }
 
 
@@ -212,5 +236,19 @@ class Converter(val enc:Encryptor? = null,
         }
         val instance = Reflector.createWithArgs<Any>(cls, items.toTypedArray())
         return instance
+    }
+
+
+    fun parseSmartString(txt:String, tpe:KType) : SmartString {
+
+        val cls = tpe.classifier as KClass<*>
+        val smartString = when ( cls ) {
+            PhoneUS::class -> PhoneUS(txt)
+            Email::class   -> Email(txt)
+            ZipCode::class -> ZipCode(txt)
+            SSN::class     -> SSN(txt)
+            else           -> Reflector.createWithArgs<Any>(cls, arrayOf(txt)) as SmartString
+        }
+        return smartString
     }
 }
