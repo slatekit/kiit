@@ -24,6 +24,9 @@ interface ConsoleWrites {
     val TAB: String get() = "    "
 
 
+    val NEWLINE: String get() = newline
+
+
     /**
      * IO abstraction for println.
      * Assists with testing and making code a bit more "purely functional"
@@ -120,17 +123,13 @@ interface ConsoleWrites {
     /**
      * prints a empty line
      */
-    fun line() = _io.run(newline)
+    fun line() = _io.run(NEWLINE)
 
 
     /**
      * prints a empty line
      */
-    fun lines(count: Int) {
-        for (i in 0..count) {
-            line()
-        }
-    }
+    fun lines(count: Int) = (0..count).forEach{ line() }
 
 
     /**
@@ -138,11 +137,7 @@ interface ConsoleWrites {
      *
      * @param count
      */
-    fun tab(count: Int = 1) {
-        for (i in 0..count) {
-            print(TAB)
-        }
-    }
+    fun tab(count: Int = 1) = (0..count).forEach{ _io.run(TAB) }
 
 
     /**
