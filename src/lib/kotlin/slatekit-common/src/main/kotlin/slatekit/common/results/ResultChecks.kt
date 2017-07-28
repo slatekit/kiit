@@ -20,11 +20,12 @@ interface ResultChecks {
     val isFailure: Boolean get() = statusCode() == FAILURE
     val isUnAuthorized: Boolean get() = statusCode() == UNAUTHORIZED
     val isNotFound: Boolean get() = statusCode() == NOT_FOUND
+    val isBadRequest: Boolean get() = statusCode() == BAD_REQUEST
     val isConflict: Boolean get() = statusCode() == CONFLICT
     val isDeprecated: Boolean get() = statusCode() == DEPRECATED
     val isUnexpectedError: Boolean get() = statusCode() == UNEXPECTED_ERROR
     val isNotImplemented: Boolean get() = statusCode() == NOT_IMPLEMENTED
     val isNotAvailable: Boolean get() = statusCode() == NOT_AVAILABLE
-    val isHelpRequest: Boolean get() = statusCode() == HELP
+    val isHelp: Boolean get() = statusCode() == HELP
     val isExit: Boolean get() = statusCode() == EXIT
 }

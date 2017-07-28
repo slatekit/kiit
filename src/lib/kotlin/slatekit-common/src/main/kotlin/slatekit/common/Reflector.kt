@@ -14,9 +14,7 @@
 package slatekit.common
 
 import kotlin.reflect.*
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
 
 
@@ -74,6 +72,14 @@ object Reflector {
 
 
     @Suppress("UNCHECKED_CAST")
+    fun <T> getAnnotationForClassOpt(cls: KClass<*>, anoType: KClass<*>): T? {
+
+        val ano = cls.annotations.filter { it -> it.annotationClass == anoType }.firstOrNull()
+        return ano as? T
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>): List<Pair<KCallable<*>, T>> {
 
         val members = cls.members.map { member ->
@@ -85,6 +91,16 @@ object Reflector {
         // 2. convert them to type T
         return members.filter { pair -> pair.second != null }
                 .map { (first, second) -> Pair(first, second as T) }
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getAnnotatedMembersOpt(cls: KClass<*>, anoType: KClass<*>, declared:Boolean = true): List<Pair<KCallable<*>, T?>> {
+
+        val members = if(declared) cls.declaredMemberFunctions else cls.memberFunctions
+        val filtered = members.filter{ it.visibility == KVisibility.PUBLIC }
+                              .map   { Pair( it, it.annotations.filter { anno -> anno.annotationClass == anoType }.firstOrNull() as? T )}
+        return filtered
     }
 
 

@@ -20,30 +20,30 @@ import slatekit.common.args.Args
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
  * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param area      : action represented by route e.g. app in "app.reg.activateUser"
- * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
- * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
  * @param protocol  : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
  * @param opts      : options representing settings/configurations ( similar to http-headers )
  * @param args      : arguments to the command
  * @param raw       : Optional raw request ( e.g. either the HttpRequest via Spark or ShellCommmand via CLI )
+ * @param output
+ * : Optional output format of the result e.g. json by default json | csv | props
  * @param tag       : Optional tag for tracking individual requests and for error logging.
  */
 data class Request (
                      val path       :String              ,
                      val parts      :List<String>        ,
-                     val area       :String              ,
-                     val name       :String              ,
-                     val action     :String              ,
                      val protocol   :String              ,
                      val verb       :String              ,
                      val args       :Inputs?             ,
                      val opts       :Inputs?             ,
                      val raw        :Any?          = null,
+                     val output     :String?       = "",
                      val tag        :String        = ""
                    ) {
 
+    /**
+     * The full path of the route
+     */
     val fullName: String get() {
         return if (name.isNullOrEmpty())
             area
@@ -54,6 +54,26 @@ data class Request (
     }
 
 
+    /**
+     * The top-most, first part of the route
+     * e.g. Given /app/users/activate  , the area is 'app'
+     */
+    val area = parts.getOrElse(0, { _ -> "" })
+
+
+    /**
+     * The second part of the route
+     * e.g. Given /app/users/activate , the name is 'users'
+     */
+    val name = parts.getOrElse(1, { _ -> "" })
+
+
+    /**
+     * The third part of the route
+     */
+    val action = parts.getOrElse(2, { _ -> "" })
+
+
     fun isPath(targetArea: String, targetName: String, targetAction: String): Boolean {
         return area == targetArea && name == targetName && action == targetAction
     }
@@ -62,12 +82,12 @@ data class Request (
     companion object {
 
         fun raw(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
-            val path = "$area.$api.$action"
-            return Request(path, listOf(area, api, action), area, api, action, "cli", verb, InputArgs(args), opts = InputArgs(opts))
+            val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
+            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), opts = InputArgs(opts))
         }
 
 
-        fun cli(path: String, args: Args, opts: Inputs?, verb: String): Request =
-                Request(path, args.actionVerbs, args.getVerb(0), args.getVerb(1), args.getVerb(2), "cli", verb, args, opts, "")
+        fun cli(path: String, args: Args, opts: Inputs?, verb: String, raw:Any?): Request =
+                Request(path, args.actionVerbs, "cli", verb, args, opts, raw, "")
     }
 }
