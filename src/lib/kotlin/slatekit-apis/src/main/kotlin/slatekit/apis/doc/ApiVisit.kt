@@ -13,10 +13,9 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
-import slatekit.apis.core.Action
-import slatekit.apis.support.ApiInfo
+import slatekit.apis.ApiReg
+import slatekit.apis.ApiRegAction
 import kotlin.reflect.KParameter
 
 
@@ -46,25 +45,25 @@ interface ApiVisit {
     fun onApisBegin(area: String): Unit
 
 
-    fun onApiBegin(api: ApiInfo, options: ApiVisitOptions? = null): Unit
+    fun onApiBegin(api: ApiReg, options: ApiVisitOptions? = null): Unit
 
 
-    fun onApiEnd(api: ApiInfo): Unit
+    fun onApiEnd(api: ApiReg): Unit
 
 
-    fun onApiActionSyntax(action: Action?): Unit
+    fun onApiActionSyntax(action: ApiRegAction?): Unit
 
 
     fun onApisEnd(area: String, exampleApi: String?): Unit
 
 
-    fun onApiActionBegin(action: ApiAction, name: String, options: ApiVisitOptions? = null): Unit
+    fun onApiActionBegin(action: ApiRegAction, name: String, options: ApiVisitOptions? = null): Unit
 
 
-    fun onApiActionEnd(action: ApiAction, name: String): Unit
+    fun onApiActionEnd(action: ApiRegAction, name: String): Unit
 
 
-    fun onApiActionExample(api: ApiInfo, actionName: String, action: ApiAction, args: List<KParameter>): Unit
+    fun onApiActionExample(api: ApiReg, actionName: String, action: ApiRegAction, args: List<KParameter>): Unit
 
 
     fun onArgBegin(arg: ApiArg, options: ApiVisitOptions? = null): Unit

@@ -13,61 +13,58 @@
 
 package slatekit.apis.doc
 
+
 import slatekit.apis.ApiArg
-import slatekit.apis.core.Action
-import slatekit.apis.support.ApiInfo
-import slatekit.common.IO
+import slatekit.apis.ApiReg
+import slatekit.apis.ApiRegAction
 import slatekit.common.console.ConsoleSettings
+import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.ConsoleWrites
+import slatekit.common.nonEmptyOrDefault
 import java.lang.Math.abs
+import kotlin.reflect.KParameter
 
 
-abstract class Doc : ApiVisit, ConsoleWrites {
+abstract class Doc : ApiVisit {
 
-    /**
-     * IO abstraction for system.println.
-     * Assists with testing and making code a bit more "purely functional"
-     * This is a simple, custom alternative to the IO Monad.
-     * Refer to IO.scala for details.
-     */
-    override val _io: IO<Any, Unit> = slatekit.common.Println
-    private val _settings = DocSettings()
-    private val _consoleSettings = ConsoleSettings()
-    override val docSettings: DocSettings get() = _settings
-    override val settings: ConsoleSettings get() = _consoleSettings
+    open protected val writer: ConsoleWrites = ConsoleWriter(ConsoleSettings())
+    override val docSettings= DocSettings()
+    open val pathSeparator = "."
+    open val helpSuffix = "?"
+    open val helpSeparator = " "
 
 
     fun lineBreak(): Unit {
-        text("---------------------------------------------------------------", endLine = true)
+        writer.text("---------------------------------------------------------------", endLine = true)
     }
 
 
     override fun onApiError(msg: String): Unit {
-        error(msg)
+        writer.error(msg)
     }
 
 
     override fun onVisitSeparator(): Unit {
-        line()
+        writer.line()
     }
 
 
     override fun onAreasBegin(): Unit {
         lineBreak()
-        title("supported areas: ", endLine = true)
-        line()
+        writer.title("supported areas: ", endLine = true)
+        writer.line()
     }
 
 
     override fun onAreasEnd(): Unit {
-        text("type '{area} ?' to list all apis in the area. ")
-        url("e.g. sys ?", endLine = true)
+        writer.text("use {area}$helpSeparator$helpSuffix to list all apis in the area. ")
+        writer.url("e.g. sys ?", endLine = true)
         lineBreak()
     }
 
 
     override fun onAreaBegin(area: String): Unit {
-        highlight(area, endLine = true)
+        writer.highlight(area, endLine = true)
     }
 
 
@@ -77,36 +74,36 @@ abstract class Doc : ApiVisit, ConsoleWrites {
 
     override fun onApisBegin(area: String): Unit {
         lineBreak()
-        title("supported apis: ", endLine = true)
-        line()
+        writer.title("supported apis: ", endLine = true)
+        writer.line()
     }
 
 
     override fun onApisEnd(area: String, exampleApi: String?): Unit {
         val eg = exampleApi ?: "sys.models"
-        line()
-        text("type {area}.{api} ? to list all actions on an api. ")
-        url("e.g. $eg ?", endLine = true)
+        writer.line()
+        writer.text("use {area}$pathSeparator{api}$helpSeparator$helpSuffix to list all actions on an api. ")
+        writer.url("e.g. $eg ?", endLine = true)
         lineBreak()
     }
 
 
-    override fun onApiEnd(api: ApiInfo): Unit {
-        line()
+    override fun onApiEnd(api: ApiReg): Unit {
+        writer.line()
     }
 
 
     override fun onArgEnd(arg: ApiArg): Unit {
-        line()
+        writer.line()
     }
 
 
-    override fun onApiActionSyntax(action: Action?): Unit {
+    override fun onApiActionSyntax(action: ApiRegAction?): Unit {
         val example = action?.let { it.api.area + "." + it.api.name + "." + it.name }
                 ?: "sys.models.install"
-        line()
-        text("type {area}.{api}.{action} ? to list inputs for an action. ")
-        url("e.g. $example ?", endLine = true)
+        writer.line()
+        writer.text("use {area}$pathSeparator{api}$pathSeparator{action}$helpSeparator$helpSuffix to list inputs for an action. ")
+        writer.url("e.g. $example ?", endLine = true)
         lineBreak()
     }
 
@@ -117,6 +114,79 @@ abstract class Doc : ApiVisit, ConsoleWrites {
         else {
             val remainder = " ".repeat(abs(max - text.length))
             text + remainder
+        }
+    }
+
+    override fun onApiBegin(api: ApiReg, options: ApiVisitOptions?): Unit {
+        writer.highlight(getFormattedText(api.name, (options?.maxLength ?: 0) + 3), endLine = false)
+        writer.text(":", endLine = false)
+        writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
+    }
+
+
+    override fun onApiActionBegin(action: ApiRegAction, name: String, options: ApiVisitOptions?): Unit {
+        writer.tab(1)
+        writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
+        writer.text(":", endLine = false)
+        writer.text(action.desc, endLine = false)
+    }
+
+
+    override fun onApiActionEnd(action: ApiRegAction, name: String): Unit {
+        writer.line()
+    }
+
+
+    override fun onApiActionExample(api: ApiReg, actionName: String, action: ApiRegAction,
+                                    args: List<KParameter>): Unit {
+        writer.line()
+        writer.tab(1)
+        val fullName = api.area + "." + api.name + "." + actionName
+        val txt = args.fold("", { s, arg ->
+            s + "-" + arg.name + "=" + arg.name!! + " "
+        })
+        writer.url(fullName + " ", endLine = false)
+        writer.text(txt, true)
+        writer.line()
+    }
+
+
+    override fun onArgBegin(arg: ApiArg, options: ApiVisitOptions?): Unit {
+        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaultVal, arg.eg, options)
+    }
+
+
+    override fun onArgBegin(
+            name: String,
+            desc: String,
+            required: Boolean,
+            type: String,
+            defaultVal: String,
+            eg: String,
+            options: ApiVisitOptions?
+    ): Unit {
+        writer.line()
+        writer.tab(2)
+
+        // 1. name of the argument and description
+        // e.g. email  : ""
+        writer.highlight(getFormattedText(name, (options?.maxLength ?: 10) + 3), endLine = false)
+        writer.text(":", endLine = false)
+        writer.text(desc.nonEmptyOrDefault("\"\""), endLine = true)
+
+        // 2. required/optional
+        writer.tab(2)
+        val space = getFormattedText("", (options?.maxLength ?: 10) + 3)
+        writer.text(space, endLine = false)
+
+        val txt = if (required) "!" else "?"
+        if (required) {
+            writer.important(txt, endLine = false)
+            writer.text("required : " + type, endLine = false)
+        }
+        else {
+            writer.text(txt, endLine = false)
+            writer.text("optional : " + type, endLine = false)
         }
     }
 }

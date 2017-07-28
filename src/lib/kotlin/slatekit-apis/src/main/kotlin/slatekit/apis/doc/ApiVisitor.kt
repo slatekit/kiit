@@ -14,9 +14,10 @@
 package slatekit.apis.doc
 
 import slatekit.apis.ApiBase
-import slatekit.apis.core.Action
-import slatekit.apis.support.ApiInfo
-import slatekit.apis.support.Areas
+import slatekit.apis.ApiReg
+import slatekit.apis.ApiRegAction
+import slatekit.apis.helpers.ApiLookup
+import slatekit.apis.helpers.Areas
 import slatekit.common.ListMap
 import slatekit.common.Types
 
@@ -76,9 +77,9 @@ class ApiVisitor {
     }
 
 
-    fun visitApi(apiBase: ApiBase, apiName: String, visitor: ApiVisit, listActions: Boolean = false): Unit {
+    fun visitApi(apiBase: ApiLookup, apiName: String, visitor: ApiVisit, listActions: Boolean = false): Unit {
         val actions = apiBase.actions()
-        val first: Action? = actions.all().firstOrNull()
+        val first: ApiRegAction? = actions.all().firstOrNull()
         if (actions.size > 0) {
             actions.getAt(0)?.let { apiAnno ->
                 visitApi(apiAnno.api, visitor, actions, listActions = listActions, listArgs = false)
@@ -88,7 +89,7 @@ class ApiVisitor {
     }
 
 
-    fun visitApi(api: ApiInfo, visitor: ApiVisit, actions: ListMap<String, Action>,
+    fun visitApi(api: ApiReg, visitor: ApiVisit, actions: ListMap<String, ApiRegAction>,
                  listActions: Boolean = true, listArgs: Boolean = false): Unit {
         visitor.onApiBegin(api)
         if (actions.size > 0) {
@@ -110,7 +111,7 @@ class ApiVisitor {
     }
 
 
-    fun visitApiAction(apiBase: ApiBase, apiName: String, actionName: String, visitor: ApiVisit): Unit {
+    fun visitApiAction(apiBase: ApiLookup, apiName: String, actionName: String, visitor: ApiVisit): Unit {
         val actions = apiBase.actions()
         if (actions.size > 0) {
             actions.getAt(0)?.let { apiAnno ->
@@ -122,7 +123,7 @@ class ApiVisitor {
                     visitApiAction(action, visitor, detailMode = true, options = null)
 
                     if (true) {
-                        visitor.onApiActionExample(api, call.name, call.action, call.paramList)
+                        visitor.onApiActionExample(api, call.name, call, call.paramList)
                     }
                 }
             }
@@ -130,19 +131,19 @@ class ApiVisitor {
     }
 
 
-    fun visitApiAction(action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
+    fun visitApiAction(action: ApiRegAction, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
         // action
-        visitor.onApiActionBegin(action.action, action.name, options)
+        visitor.onApiActionBegin(action, action.name, options)
 
         if (detailMode) {
             visitArgs(action, visitor)
         }
         // args here.
-        visitor.onApiActionEnd(action.action, action.name)
+        visitor.onApiActionEnd(action, action.name)
     }
 
 
-    fun visitArgs(info: Action, visitor: ApiVisit): Unit {
+    fun visitArgs(info: ApiRegAction, visitor: ApiVisit): Unit {
         if (info.hasArgs) {
             val names = info.paramList.map { item -> item.name }.filterNotNull()
             val maxLength = names.maxBy { it.length }?.length ?: 10
