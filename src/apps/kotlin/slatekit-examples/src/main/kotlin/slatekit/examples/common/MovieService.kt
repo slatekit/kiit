@@ -12,7 +12,7 @@
 package slatekit.examples.common
 
 import slatekit.core.common.AppContext
-import slatekit.core.common.EntityServiceWithSupport
+import slatekit.entities.support.EntityServiceWithSupport
 import slatekit.entities.core.EntityRepo
 
 

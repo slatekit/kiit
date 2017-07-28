@@ -63,9 +63,6 @@ class Example_Request : Cmd("request") {
         val request = Request(
                 path     = "app.users.activate",
                 parts    = listOf("app", "users", "activate"),
-                area     = "app",
-                name     = "users",
-                action   = "activate",
                 protocol = "cli",
                 verb     = "post",
                 opts     = InputArgs(mapOf("api-key" to "ABC-123")),
@@ -84,18 +81,23 @@ class Example_Request : Cmd("request") {
         // CASE 2: Get the parts of the path
         println( request.parts )
 
-        // CASE 3: Get a header named "api-key"
+        // CASE 3: Get the area/api/action
+        println( request.area )
+        println( request.name )
+        println( request.action)
+
+        // CASE 4a: Get a header named "api-key"
         println( request.opts?.getString("api-key") )
 
-        // CASE 4a: Get a header named "sample-id" as integer
+        // CASE 4b: Get a header named "sample-id" as integer
         // IF its not there, this will return a 0 as getInt
         // returns a non-nullable value
         println( request.opts?.getInt("sample-id") )
 
-        // CASE 4b: Get a header named "sample-id" as nullable integer
+        // CASE 4c: Get a header named "sample-id" as nullable integer
         println( request.opts?.getIntOpt("sample-id") )
 
-        // CASE 4c: Get a header named "sample-id" as integer with default
+        // CASE 4d: Get a header named "sample-id" as integer with default
         // value if its not there
         println( request.opts?.getIntOrElse("sample-id", -1) )
 

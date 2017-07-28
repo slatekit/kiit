@@ -1,4 +1,5 @@
 import slatekit.examples.Example_App
+import slatekit.examples.Example_ConsoleWeb
 import slatekit.examples.Example_DateTime
 import slatekit.examples.Example_Serialization
 import slatekit.tutorial.Example_Kotlin_Basics
@@ -23,7 +24,7 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>):Unit  {
-    val cmd = Example_App()
+    val cmd = Example_ConsoleWeb()
     cmd.execute()
     println("hello kotlin examples")
 }

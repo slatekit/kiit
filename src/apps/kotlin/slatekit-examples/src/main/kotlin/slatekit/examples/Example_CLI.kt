@@ -94,7 +94,7 @@ class Example_CLI : Cmd("auth") {
             val opts = InputArgs(mapOf<String, Any>("api-key" to "123456789"))
 
             // 3b. Convert the shell command to an api command
-            val req = Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI)
+            val req = Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
 
             // 3c. Do something with the request
             // you logic goes here.

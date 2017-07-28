@@ -14,7 +14,7 @@ package slatekit.examples.common
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
-import slatekit.apis.ApiBaseEntity
+import slatekit.integration.common.ApiBaseEntity
 import slatekit.common.DateTime
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.ok
