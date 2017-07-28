@@ -13,13 +13,13 @@
 
 package slatekit.server.spark
 
-import slatekit.common.Content
-import slatekit.common.Doc
-import slatekit.common.Result
 import slatekit.common.serialization.SerializerJson
 import spark.Response
 import com.sun.xml.internal.ws.streaming.XMLStreamWriterUtil.getOutputStream
 import com.sun.deploy.trace.Trace.flush
+import slatekit.common.*
+import slatekit.common.serialization.SerializerCsv
+import slatekit.common.serialization.SerializerProps
 import javax.servlet.http.HttpServletResponse
 import java.nio.file.Files.readAllBytes
 
@@ -56,7 +56,7 @@ object HttpResponse {
      */
     fun content(res: Response, result: Result<Content>): String {
         res.status(result.code)
-        res.type(result.value?.format ?: "text/plain")
+        res.type(result.value?.tpe?.http ?: "text/plain")
         return result.value?.text ?: ""
     }
 
@@ -72,7 +72,7 @@ object HttpResponse {
 
         res.header("Content-Disposition", "attachment; filename=" + doc.name)
         //res.type("application/force-download")
-        res.type(result.value!!.format)
+        res.type(result.value!!.tpe.http)
         raw.outputStream.write(bytes)
         raw.outputStream.flush()
         raw.outputStream.close()

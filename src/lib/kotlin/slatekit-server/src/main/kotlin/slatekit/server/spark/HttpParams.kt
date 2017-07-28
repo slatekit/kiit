@@ -13,10 +13,7 @@
 
 package slatekit.server.spark
 
-import slatekit.common.Conversions
-import slatekit.common.DateTime
-import slatekit.common.InputFuncs
-import slatekit.common.Inputs
+import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import spark.Request
 import java.time.LocalDate
@@ -25,7 +22,16 @@ import java.time.LocalTime
 import java.time.ZonedDateTime
 
 
-data class HttpParams(val req: Request, val enc: Encryptor?) : Inputs {
+/**
+ * @param req        : The raw request
+ * @param enc        : The encryptor
+ * @param extraParams: Additional parameters from SlateKit.
+ *                     These are useful for the middleware rewrite module
+ *                     which can rewrite routes add parameters
+ */
+data class HttpParams(val req: Request,
+                      val enc: Encryptor?,
+                      val extraParams:MutableMap<String,Any> = mutableMapOf()) : Inputs, InputsUpdateable {
 
     val method = req.requestMethod().toLowerCase()
     val hasBody = HttpRequest.isBodyAllowed(method)
@@ -52,7 +58,10 @@ data class HttpParams(val req: Request, val enc: Encryptor?) : Inputs {
 
 
     override fun containsKey(key: String): Boolean {
-        return if (hasBody && json.containsKey(key)) {
+        return if (extraParams.containsKey(key)) {
+            true
+        }
+        else if (hasBody && json.containsKey(key)) {
             true
         }
         else if (!hasBody) {
@@ -65,7 +74,10 @@ data class HttpParams(val req: Request, val enc: Encryptor?) : Inputs {
 
 
     fun getInternal(key: String): Any? {
-        val value = if (hasBody && json.containsKey(key)) {
+        val value = if (extraParams.containsKey(key)){
+            extraParams[key]
+        }
+        else if (hasBody && json.containsKey(key)) {
             json.get(key)
         }
         else if (!hasBody) {
@@ -79,7 +91,10 @@ data class HttpParams(val req: Request, val enc: Encryptor?) : Inputs {
 
 
     fun getInternalString(key: String): String {
-        val value = if (hasBody && json.containsKey(key)) {
+        val value =  if (extraParams.containsKey(key)){
+            extraParams[key].toString()
+        }
+        else if (hasBody && json.containsKey(key)) {
             json.get(key).toString()
         }
         else if (!hasBody) {
@@ -89,6 +104,20 @@ data class HttpParams(val req: Request, val enc: Encryptor?) : Inputs {
             ""
         }
         return value
+    }
+
+
+    /**
+     * This is to support the rewrite middleware which can rewrite
+     * requests to other requests ( e.g. routes and parameters )
+     */
+    override fun add(key:String, value:Any):Inputs {
+        if(hasBody){
+            json.put(key, value)
+        } else {
+            extraParams.put(key, value)
+        }
+        return this
     }
 
 
