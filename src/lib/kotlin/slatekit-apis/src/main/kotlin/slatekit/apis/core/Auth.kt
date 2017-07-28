@@ -13,19 +13,9 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.ApiConstants.AuthModeAppKey
-import slatekit.apis.ApiConstants.AuthModeAppRole
-import slatekit.apis.ApiConstants.AuthModeKeyRole
-import slatekit.apis.support.ApiHelper.getReferencedValue
-import slatekit.common.ApiKey
+import slatekit.apis.ApiConstants
 import slatekit.common.Request
 import slatekit.common.Result
-import slatekit.common.auth.AuthFuncs.convertKeys
-import slatekit.common.auth.AuthFuncs.isKeyValid
-import slatekit.common.auth.AuthFuncs.matchRoles
-import slatekit.common.splitToMapWithPairs
-import slatekit.common.results.ResultFuncs.ok
-import slatekit.common.results.ResultFuncs.unAuthorized
 
 
 /**
@@ -36,82 +26,67 @@ import slatekit.common.results.ResultFuncs.unAuthorized
  *
  * Need to initialize with api-keys
  */
-open class Auth(
-        protected val keys: List<ApiKey>?,
-        private val callback: ((String, Request, String, String) -> Result<Boolean>)? = null,
-        protected val headerApiKeyName: String = "api-key") {
+interface Auth {
 
-    private val _keyLookup = convertKeys(keys ?: listOf())
+    /**
+     * whether or not the authorization is valid for the auth mode and roles supplied.
+     * NOTE: This can be implemented any way, e.g.g Auth tokens/OAuth etc.
+     *
+     * @param authMode       : The mode of the authoriation as specified by annotation Api and attribute: auth
+     * @param rolesOnAction  : The values of the "roles" attribute on the annotation of the ApiAction ( method )
+     * @param rolesOnApi     : The values of the "roles" attribute on the annotation of the Api ( class )
+     * @return
+     */
+    fun isAuthorized(cmd: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean>
 
 
     /**
-     * whether or not the authorization is valid for the mode, roles supplied.
-     *
-     * @param mode
-     * @param roles
-     * @param roleParents
+     * Gets the user roles that are applicable for the supplied request.
+     * This can be implemented any way, e.g. Auth tokens/OAuth etc.
+     */
+    fun getUserRoles(cmd: Request): String = ""
+
+
+    /**
+     * Whether the role supplied is a guest role via "?"
+     */
+    fun isRoleGuest (role:String): Boolean = role == ApiConstants.RoleGuest
+
+
+    /**
+     * Whether the role supplied is any role via "*"
+     */
+    fun isRoleAny   (role:String): Boolean = role == ApiConstants.RoleAny
+
+
+    /**
+     * Whether the role supplied is a referent to the parent role via "@parent"
+     */
+    fun isRoleParent(role:String): Boolean = role == ApiConstants.RoleParent
+
+
+    /**
+     * Whether the role supplied is an empty role indicating public access.
+     */
+    fun isRoleEmpty(role:String): Boolean = role == ApiConstants.RoleNone
+
+
+    /**
+     * Whether the role is empty "" or a guest role "?"
+     */
+    fun isRoleEmptyOrGuest(role:String):Boolean = isRoleEmpty(role) || isRoleGuest(role)
+
+
+    /**
+     * gets the primary value supplied unless it references the parent value via "@parent"
+     * @param primary
+     * @param parent
      * @return
      */
-    open fun isAuthorized(cmd: Request, mode: String, roles: String, roleParents: String): Result<Boolean> {
-        // CASE 1: no roles ? authorization not applicable
-        return if (roles.isNullOrEmpty())
-            ok()
-
-        // CASE 2: Guest
-        else if (roles == "?")
-            ok()
-
-        // CASE 3: App Roles + Key Roles mode
-        else if (AuthModeKeyRole == mode) {
-            isKeyRoleValid(cmd, roles, roleParents)
-        }
-        // CASE 4: App-Role mode
-        else if (AuthModeAppRole == mode) {
-            isAppRoleValid(cmd, roles, roleParents)
-        }
-        // CASE 5: api-key + role
-        else if (AuthModeAppKey == mode) {
-            val keyResult = isKeyRoleValid(cmd, roles, roleParents)
-            if (!keyResult.success) {
-                keyResult
-            }
-            else {
-                isAppRoleValid(cmd, roles, roleParents)
-            }
-        }
+    fun determineRole(primary: String?, parent: String): String {
+        return if(primary != null && !primary.isNullOrEmpty() && primary != ApiConstants.RoleParent)
+            primary
         else
-            unAuthorized()
+            parent
     }
-
-
-    open fun isKeyRoleValid(cmd: Request, actionRoles: String, parentRoles: String): Result<Boolean> {
-
-        // Validate using the callback if supplied,
-        // otherwise use built-in key check
-        return callback?.let { call ->
-            call(AuthModeAppKey, cmd, actionRoles, parentRoles)
-        } ?: isKeyValid(cmd.opts, _keyLookup, headerApiKeyName, actionRoles, parentRoles)
-    }
-
-
-    open fun isAppRoleValid(cmd: Request, actionRoles: String, parentRoles: String): Result<Boolean> {
-
-        return if (callback != null) {
-            callback!!(AuthModeAppRole, cmd, actionRoles, parentRoles)
-        }
-        else {
-            // Get the expected role from either action or possible reference to parent
-            val expectedRoles = getReferencedValue(actionRoles, parentRoles)
-
-            // Get the user roles
-            val actualRole = getUserRoles(cmd)
-            val actualRoles = actualRole.splitToMapWithPairs(',')
-
-            // Now match.
-            matchRoles(expectedRoles, actualRoles)
-        }
-    }
-
-
-    protected open fun getUserRoles(cmd: Request): String = ""
 }

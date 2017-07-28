@@ -13,12 +13,9 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.ApiBase
-import slatekit.apis.ApiConstants
-import slatekit.apis.ApiContainer
-import slatekit.apis.ApiProtocolWeb
-import slatekit.apis.support.ApiHelper
-import slatekit.apis.support.ApiValidator
+import slatekit.apis.*
+import slatekit.apis.helpers.ApiHelper
+import slatekit.apis.helpers.ApiValidator
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.badRequest
@@ -29,49 +26,51 @@ import slatekit.common.results.ResultFuncs.success
 class Validation(val ctn: ApiContainer) {
 
 
-    fun validateApi(cmd: Request): Result<Pair<Action, ApiBase>> {
-        return ctn.getMappedAction(cmd.area, cmd.name, cmd.action)
+    fun validateApi(req: Request): Result<ApiRef> {
+        return ctn.getApi(req.area, req.name, req.action)
     }
 
 
-    fun validateProtocol(callReflect: Action, api: ApiBase, cmd: Request): Result<Any> {
+    fun validateProtocol(req: Request, apiRef:ApiRef): Result<Any> {
         // Ensure verb is correct get/post
-        val actualVerb = getReferencedValue(callReflect.action.verb, callReflect.api.verb)
-        val actualProtocol = getReferencedValue(callReflect.action.protocol, callReflect.api.protocol)
+        val action = apiRef.action
+        val api = apiRef.api
+        val actualVerb = getReferencedValue(action.verb, api.verb)
+        val actualProtocol = getReferencedValue(action.protocol, api.protocol)
         val supportedProtocol = actualProtocol
-        val isCliOk = ctn.isCliAllowed(cmd, supportedProtocol)
-        val isWeb = ctn.protocol == ApiProtocolWeb
+        val isCliOk = ctn.isCliAllowed(req, supportedProtocol)
+        val isWeb = ctn.protocol == WebProtocol
 
         // 1. Ensure verb is correct
-        return if (isWeb && !ApiHelper.isValidMatch(actualVerb, cmd.verb)) {
-            badRequest(msg = "expected verb ${actualVerb}, but got ${cmd.verb}")
+        return if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
+            badRequest(msg = "expected verb ${actualVerb}, but got ${req.verb}")
         }
 
         // 2. Ensure protocol is correct get/post
         else if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, ctn.protocol.name)) {
-            notFound(msg = "${cmd.fullName} not found")
+            notFound(msg = "${req.fullName} not found")
         }
         // 3. Good to go
         else
-            success(cmd)
+            success(req)
     }
 
 
-    fun validateMiddleware(cmd: Request): Result<Any> {
-        return success(cmd)
+    fun validateMiddleware(req: Request, apiRef:ApiRef): Result<Any> {
+        return success(req)
     }
 
 
-    fun validateAuthorization(callReflect: Action, cmd: Request): Result<Any> {
-        return ApiHelper.isAuthorizedForCall(cmd, callReflect, ctn.auth)
+    fun validateAuthorization(req: Request, apiRef:ApiRef): Result<Any> {
+        return ApiHelper.isAuthorizedForCall(req, apiRef, ctn.auth)
     }
 
 
-    fun validateParameters(cmd: Request): Result<ApiBase> {
-        val checkResult = ApiValidator.validateCall(cmd, { req -> ctn.get(cmd) }, true)
+    fun validateParameters(req: Request): Result<ApiRef> {
+        val checkResult = ApiValidator.validateCall(req, { req -> ctn.get(req) }, true)
         return if (!checkResult.success) {
             // Don't return the result from internal ( as it contains too much info )
-            badRequest(checkResult.msg, tag = cmd.action)
+            badRequest(checkResult.msg, tag = req.action)
         }
         else
             checkResult

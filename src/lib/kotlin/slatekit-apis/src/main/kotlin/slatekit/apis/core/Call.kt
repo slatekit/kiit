@@ -15,9 +15,10 @@ package slatekit.apis.core
 
 import org.json.simple.JSONObject
 import slatekit.apis.ApiConstants
+import slatekit.apis.ApiRegAction
 import slatekit.common.*
 import slatekit.common.encrypt.*
-import slatekit.core.common.Converter
+import slatekit.common.Converter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -34,9 +35,7 @@ class Call {
     val TypeVars = Vars::class.createType()
 
 
-    // Improve: Check this article:
-    // http://www.cakesolutions.net/teamblogs/ways-to-pattern-match-generic-types-in-scala
-    fun fillArgsExact(callReflect: Action, cmd: Request, allowLocalIO: Boolean = false,
+    fun fillArgsExact(callReflect: ApiRegAction, cmd: Request, allowLocalIO: Boolean = false,
                       enc: Encryptor? = null): Array<Any?> {
         return fillArgsForMethod(callReflect.member, cmd, cmd.args!!, allowLocalIO, enc)
     }
@@ -101,7 +100,7 @@ class Call {
      * @param paramName
      * @return
      */
-    fun handleComplex(converter:Converter, req:Request, parameter:KParameter, tpe:KType, jsonRaw:JSONObject?, raw:Any?): Any? {
+    fun handleComplex(converter: Converter, req:Request, parameter:KParameter, tpe:KType, jsonRaw:JSONObject?, raw:Any?): Any? {
         val paramName = parameter.name!!
         return if(req.protocol == ApiConstants.ProtocolCLI){
             val cls = tpe.classifier as KClass<*>
@@ -128,7 +127,21 @@ class Call {
             }
             // Case 4: Object / Complex type
             else {
-                converter.convert(parameter, jsonRaw!!)
+                val json = if(jsonRaw == null) {
+                    val obj = JSONObject()
+                    if(req.args is InputArgs){
+                        val map = (req.args as InputArgs)._map
+                        map.entries.forEach { pair ->
+                            obj.put(pair.key, pair.value)
+                        }
+                    }
+                    obj
+                }
+                else jsonRaw
+                // Wrap it
+                val jsonParent = JSONObject()
+                jsonParent.put(parameter.name, json)
+                converter.convert(parameter, jsonParent)
             }
         } else {
             converter.convert(parameter, jsonRaw!!)

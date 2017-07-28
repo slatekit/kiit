@@ -13,13 +13,13 @@
 
 package slatekit.apis.core
 
+import slatekit.common.Context
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.core.common.AppContext
 
 
-class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
+class Errors(val callback: ((Context, Request, Any, Exception) -> Result<Any>)?) {
 
     /**
      * handler for when an "area" is not found
@@ -28,7 +28,7 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param req    : the request
      * @param result : the result of the last validation check
      */
-    fun areaNotFound(ctx: AppContext, req: Request, result: Result<Any>): Unit {
+    fun areaNotFound(ctx: Context, req: Request, source:Any, result: Result<Any>): Unit {
         invalidRequest("api", "api area not found", req.path, result)
     }
 
@@ -40,7 +40,7 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param req    : the request
      * @param result : the result of the last validation check
      */
-    fun apiNotFound(ctx: AppContext, req: Request, result: Result<Any>): Unit {
+    fun apiNotFound(ctx: Context, req: Request, source:Any, result: Result<Any>): Unit {
         invalidRequest("api", "api action not found, check api/action name(s)", req.path, result)
     }
 
@@ -52,7 +52,7 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param req    : the request
      * @param result : the result of the last validation check
      */
-    fun actionNotFound(ctx: AppContext, req: Request, result: Result<Any>): Unit {
+    fun actionNotFound(ctx: Context, req: Request, source:Any, result: Result<Any>): Unit {
         invalidRequest("api", "action not found", req.path, result)
     }
 
@@ -64,7 +64,7 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param req    : the request
      * @param result : the result of the last validation check
      */
-    fun actionFailed(ctx: AppContext, req: Request, result: Result<Any>): Unit {
+    fun actionFailed(ctx: Context, req: Request, source:Any, result: Result<Any>): Unit {
         invalidRequest("api", "api action call failed, check api action input(s)", req.action, result)
     }
 
@@ -76,7 +76,7 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param req    : the request
      * @param result : the result of the last validation check
      */
-    fun actionInputsInvalid(ctx: AppContext, req: Request, result: Result<Any>): Unit {
+    fun actionInputsInvalid(ctx: Context, req: Request, source:Any, result: Result<Any>): Unit {
         invalidRequest("inputs", "Invalid inputs supplied", req.path, result)
     }
 
@@ -89,13 +89,13 @@ class Errors(val callback: ((AppContext, Request, Exception) -> Result<Any>)?) {
      * @param ex     : the exception
      * @return
      */
-    fun error(ctx: AppContext, req: Request, ex: Exception): Result<Any> {
+    fun error(ctx: Context, req: Request, source:Any, ex: Exception): Result<Any> {
 
         fun buildUnexpected(): Result<Any> {
             return unexpectedError(msg = "error executing : " + req.path + ", check inputs")
         }
         return callback?.let { call ->
-            call(ctx, req, ex)
+            call(ctx, req, source, ex)
         } ?: buildUnexpected()
     }
 
