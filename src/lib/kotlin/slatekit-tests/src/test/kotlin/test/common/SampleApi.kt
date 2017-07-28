@@ -10,15 +10,26 @@ import slatekit.common.results.ResultFuncs.success
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.core.common.AppContext
-
+import slatekit.sampleapp.core.models.Movie
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
 class SampleApi(context: AppContext): ApiBase(context) {
 
+    // For unit-tests
+    var inc = 0
+
+
     @ApiAction(desc = "accepts supplied basic data types from request", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun hello(greeting: String): String {
         return "$greeting back"
+    }
+
+
+    @ApiAction(desc = "increments a simple counter", roles = "", verb = "@parent", protocol = "@parent")
+    fun counter(): Int {
+        inc += 1
+        return inc
     }
 
 
@@ -33,8 +44,6 @@ class SampleApi(context: AppContext): ApiBase(context) {
     // 6. file handling            : accepting a file input
     // 7. error-handling           : handling errors either at the method, api level, globally
     // 8. reference to parent      : specifying meta-data using parent references via @parent
-
-
     //====================================================================================
     // INPUT / PARAMETER TESTS
     //====================================================================================

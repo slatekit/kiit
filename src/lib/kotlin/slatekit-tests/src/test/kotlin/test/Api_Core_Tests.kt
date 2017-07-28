@@ -17,7 +17,7 @@ import slatekit.apis.*
 import slatekit.apis.containers.ApiContainerCLI
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Errors
-import slatekit.apis.support.ApiHelper
+import slatekit.apis.helpers.ApiHelper
 import slatekit.common.ApiKey
 import slatekit.common.Result
 import slatekit.common.args.Args
@@ -29,15 +29,9 @@ import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
-import slatekit.common.results.BAD_REQUEST
-import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.results.SUCCESS
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
-import slatekit.integration.AppApi
-import slatekit.integration.VersionApi
 import slatekit.test.common.MyAuthProvider
 import slatekit.tests.common.UserApi
 import test.common.MyEncryptor
@@ -122,79 +116,32 @@ open class ApiTestsBase {
         assert( actual.success == expected.success)
         assert( actual.msg == expected.msg)
     }
+
+
+    fun buildUserApiRegSingleton(ctx: AppContext):ApiReg {
+        return ApiReg(UserApi(ctx))
+    }
 }
 
+
+// 1. setup ( singleton | annotations | area | declared )
+// 2. rest
+// 3. security
+// 4. types ( inputs   )
+// 5. types ( outputs  )
+// 6. types ( advanced )
+// 7. errors
+// 8. files
+// 9. middleware
+// 10. protocol
 
 
 class Api_Core_Tests : ApiTestsBase() {
 
 
 
-    @Test fun can_register_api() {
-        val apis = getApis(
-                apis = listOf(ApiReg(UserApi(ctx)))
-        )
-        assert(apis.getMappedAction("app", "users", "activate").success)
-        assert(apis.getMappedAction("app", "users", "testTypes").success)
-    }
-
-
-    @Test fun can_register_manually() {
-        val apis = getApis(
-                apis = listOf(ApiReg(UserApi(ctx)))
-        )
-        apis.register(AppApi(ctx))
-        apis.register(ApiReg(VersionApi(ctx)))
-
-        assert(apis.getMappedAction("app", "users", "activate").success)
-        assert(apis.getMappedAction("app", "users", "testTypes").success)
-        assert(apis.getMappedAction("sys", "app", "host").success)
-        assert(apis.getMappedAction("sys", "version", "java").success)
-    }
-
-
-    @Test fun can_register_after_initial_setup() {
-        val keys = buildKeys()
-        val auth = MyAuthProvider("kishore", "ops", keys)
-
-        val apis = ApiContainerCLI(ctx,
-                apis = listOf(ApiReg(UserApi(ctx))),
-                auth = auth
-        )
-        apis.register(AppApi(ctx))
-        apis.register(ApiReg(VersionApi(ctx)))
-
-        val result1 = apis.call("app", "users", "rolesNone", "get",
-                mapOf("api-key" to "5020F4A237A443B4BEDC37D8A08588A3"),
-                mapOf("code" to 123, "tag" to "abc"))
-        assert(result1.value == "rolesNone")
-
-        val result2 = apis.call("sys", "version", "java", "get",
-                mapOf("api-key" to "5020F4A237A443B4BEDC37D8A08588A3"),
-                mapOf())
-        assert(result2.value == "1.8.0_91")
-
-    }
-
-
-    @Test fun can_check_action_does_NOT_exist() {
-        val apis = getApis(
-                apis = listOf(ApiReg(UserApi(ctx)))
-        )
-        assert(!apis.contains("app.users.fakeMethod"))
-    }
-
-
-    @Test fun can_check_action_exists() {
-        val apis = getApis(
-                apis = listOf(ApiReg(UserApi(ctx)))
-        )
-        assert(apis.contains("app.users.activate"))
-    }
-
-
     @Test fun can_execute_public_action() {
-        ensureCall( listOf(ApiReg(UserApi(ctx))),
+        ensureCall( listOf(buildUserApiRegSingleton(ctx)),
                     "*", "*",
                     ApiConstants.AuthModeAppRole, null, null,
                     "app.users.rolesNone",
@@ -210,7 +157,7 @@ class Api_Core_Tests : ApiTestsBase() {
     // ===================================================================
     //describe( "API Data-types" ) {
     @Test fun can_execute_with_type_raw_request() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                     "*", "*",
                     ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                     "app.users.argTypeRequest",
@@ -222,7 +169,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
 
     @Test fun can_get_list() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
                 ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.argTypeListInt",
@@ -236,7 +183,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
 
     @Test fun can_get_list_via_conversion() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
                 ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.argTypeListInt",
@@ -249,7 +196,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
 
     @Test fun can_get_map() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
                 ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.argTypeMapInt",
@@ -261,7 +208,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
 
     @Test fun can_get_map_via_conversion() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
                 ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.argTypeMapInt",

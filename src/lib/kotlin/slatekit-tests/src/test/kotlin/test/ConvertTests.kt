@@ -8,7 +8,7 @@ import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
 import slatekit.common.encrypt.DecString
-import slatekit.core.common.Converter
+import slatekit.common.Converter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -152,7 +152,7 @@ class ConvertTests {
     fun test_custom_converter(tstr:String, tbool:Boolean, req: Request):Unit {}
     @Test fun can_parse_custom_types(){
         val test = """{ "tstr": "abc", "tbool": false }"""
-        val req = Request("a.b.c", listOf("a", "b", "c"), "a", "b", "c", "cli", "post", InputArgs(mapOf()), InputArgs(mapOf()))
+        val req = Request("a.b.c", listOf("a", "b", "c"), "cli", "post", InputArgs(mapOf()), InputArgs(mapOf()))
         val converter = Converter(null, mapOf("slatekit.common.Request" to { json, tpe -> req }))
         val results = converter.convert(this::test_custom_converter.parameters, test)
         assert(results[0] == "abc")

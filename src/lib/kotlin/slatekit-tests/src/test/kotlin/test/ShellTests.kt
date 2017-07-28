@@ -13,14 +13,14 @@ package slate.test
 
 import org.junit.Test
 import slatekit.apis.ApiReg
-import slatekit.apis.core.Auth
+import slatekit.apis.svcs.TokenAuth
 import slatekit.common.ApiKey
 import slatekit.common.Credentials
 import slatekit.common.results.HELP
 import slatekit.core.common.AppContext
-import slatekit.integration.AppApi
-import slatekit.integration.CliApi
-import slatekit.integration.VersionApi
+import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.CliApi
+import slatekit.integration.apis.VersionApi
 
 
 class ShellTests  {
@@ -94,13 +94,13 @@ class ShellTests  {
 
     // 2. Register the apis using default mode ( uses permissions in annotations on class )
     val apis = listOf(
-      ApiReg(AppApi(ctx)    , true, "qa", protocol = "*"),
-      ApiReg(VersionApi(ctx), true, "qa", protocol = "*")
+      ApiReg(AppApi(ctx)    , declaredOnly = true, roles = "qa", protocol = "*"),
+      ApiReg(VersionApi(ctx), declaredOnly = true, roles = "qa", protocol = "*")
     )
 
     // 3. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = CliApi(creds, ctx, Auth(apiKeys), "sampleapp", apiItems = apis)
+    val shell = CliApi(creds, ctx, TokenAuth(apiKeys), "sampleapp", apiItems = apis)
     return shell
   }
 }

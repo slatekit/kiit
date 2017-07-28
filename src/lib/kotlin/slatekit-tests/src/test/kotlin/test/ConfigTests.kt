@@ -19,7 +19,7 @@ import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.envs.Dev
-import test.common.Movie
+import slatekit.sampleapp.core.models.Movie
 import test.common.MyEncryptor
 import java.util.*
 import java.io.FileInputStream

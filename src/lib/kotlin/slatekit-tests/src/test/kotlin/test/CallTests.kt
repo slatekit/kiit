@@ -15,7 +15,6 @@ package test
 import org.junit.Test
 import slatekit.apis.core.Call
 import slatekit.common.*
-import slatekit.core.common.Converter
 import slatekit.tests.common.UserApi
 
 /**
@@ -81,7 +80,7 @@ class CallTests {
 
         fun ensureTypes(inputs:InputArgs):Unit {
             val call = Call()
-            val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "app", "users", "testTypes", "cli", "post", inputs, null)
+            val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 
@@ -123,7 +122,7 @@ class CallTests {
         fun ensureList(inputs:InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
             val call = Call()
-            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "cli", "post", inputs, null)
+            val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 
@@ -145,7 +144,7 @@ class CallTests {
         fun ensureMap(inputs:InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
             val call = Call()
-            val req = Request("app.users.$name", listOf("app", "users", name), "app", "users", name, "cli", "post", inputs, null)
+            val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
 

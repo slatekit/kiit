@@ -12,7 +12,7 @@ import java.io.File
 
 class AwsSqsTests {
 
-    @Test
+    //@Test
     fun can_test_create() {
 
         // Not storing any key/secret in source code for security purposes

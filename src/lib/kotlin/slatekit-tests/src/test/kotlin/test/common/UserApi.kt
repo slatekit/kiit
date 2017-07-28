@@ -11,66 +11,26 @@
 
 package slatekit.tests.common
 
-import slatekit.common.DateTime
-import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.success
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
-import slatekit.common.Doc
-import slatekit.common.Request
+import slatekit.common.*
 import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecString
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
-import slatekit.apis.ApiBaseEntity
+import slatekit.integration.common.ApiBaseEntity
 import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.common.AppContext
+import slatekit.entities.core.EntityService
 import test.common.User
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi(context: AppContext,
-              enableHooks:Boolean = false,
-              enableFilter :Boolean = false): ApiBaseEntity<User>(context, User::class)
+class UserApi(context: AppContext): ApiBaseEntity<User, EntityService<User>>(context, User::class)
 {
-  override val isHookEnabled = enableHooks
-  override val isFilterEnabled = enableFilter
-
-  var _user:User = User(0, "", "", "", true, 0)
-  var onBeforeHookCount = mutableListOf<Request>()
-  var onAfterHookCount = mutableListOf<Request>()
-
-
-  /**
-   * Hook for before this api handles any request
-   */
-  override fun onBefore(context:AppContext, request:Request, target:Any): Unit {
-    onBeforeHookCount.add(request)
-  }
-
-
-  /**
-   * Hook for after this api handles any request
-   */
-  override fun onAfter(context:AppContext, request:Request, target:Any): Unit {
-    onAfterHookCount.add(request)
-  }
-
-
-  /**
-   * Hook to first filter a request before it is handled by this api.
-   */
-  override fun onFilter(context:AppContext, request:Request, target:Any): Result<Any>  {
-    return if(request.action.startsWith("roles")) {
-      badRequest<Boolean>("filtered out")
-    } else {
-      ok()
-    }
-  }
-
 
   @ApiAction(name = "activate", desc = "activates a users account 3", roles= "@parent", verb = "@parent", protocol = "@parent")
   @ApiArg(name = "phone", desc = "phone number", eg = "123-456-789")
@@ -220,12 +180,5 @@ class UserApi(context: AppContext,
     val sortedPairs = items.keys.toList().sortedBy{ k:String -> k }.map{ key -> Pair(key, items[key]) }
     val delimited = sortedPairs.fold("", { acc, curr -> acc + "," + curr.first + "=" + curr.second } )
     return success("ok", delimited)
-  }
-
-
-  fun create(email:String, first:String, last:String, isMale:Boolean, age:Int): User
-  {
-    _user = _user.copy(_user.id, email, first, last, isMale, age)
-    return _user
   }
 }

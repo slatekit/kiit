@@ -14,34 +14,8 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.containers.ApiContainerCLI
-import slatekit.apis.core.Auth
-import slatekit.apis.core.Errors
-import slatekit.apis.support.ApiHelper
-import slatekit.common.ApiKey
-import slatekit.common.Result
-import slatekit.common.args.Args
-import slatekit.common.conf.Config
-import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
-import slatekit.common.envs.Dev
-import slatekit.common.envs.Env
-import slatekit.common.info.About
-import slatekit.common.log.LoggerConsole
-import slatekit.common.results.BAD_REQUEST
-import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.results.SUCCESS
-import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
-import slatekit.integration.AppApi
-import slatekit.integration.VersionApi
-import slatekit.test.common.MyAuthProvider
-import slatekit.tests.common.UserApi
-import test.common.MyEncryptor
-import test.common.User
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -53,7 +27,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     // ===================================================================
     //describe( "Authorization: using App roles on actions" ) {
     @Test fun roles_should_work_when_role_is_any() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.rolesAny",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -61,7 +35,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 success("rolesAny", msg="1 abc")
         )
 
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "qa"), null,
                 "app.users.rolesAny",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -69,7 +43,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 success("rolesAny", msg="1 abc")
         )
 
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", ""), null,
                 "app.users.rolesAny",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -80,7 +54,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_should_fail_for_any_role_any_with_no_user() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, null, null,
                 "app.users.rolesAny",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -91,7 +65,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_should_work_for_a_specific_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.rolesSpecific",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -102,7 +76,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_should_fail_for_a_specific_role_when_user_has_a_different_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "ops"), null,
                 "app.users.rolesSpecific",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -113,7 +87,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "admin"), null,
                 "app.users.rolesParent",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -124,7 +98,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
                 "app.users.rolesParent",
                 listOf( Pair("code", "1"), Pair("tag", "abc")),
@@ -136,7 +110,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     // ===================================================================
     //describe( "Authorization: using Key roles on actions" ) {
     @Test fun roles_by_key_should_work_when_role_is_any() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"), null,
                 "app.users.rolesAny",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
@@ -147,7 +121,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_by_key_should_fail_for_any_role_with_no_user() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, null, null,
                 "app.users.rolesAny",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
@@ -158,7 +132,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_by_key_should_work_for_a_specific_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"), null,
                 "app.users.rolesSpecific",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
@@ -169,7 +143,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_user_has_a_different_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "qa"), null,
                 "app.users.rolesSpecific",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
@@ -180,7 +154,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_by_key_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "admin"), null,
                 "app.users.rolesParent",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
@@ -191,7 +165,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
 
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
-        ensureCall(listOf(ApiReg(UserApi(ctx))),
+        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"), null,
                 "app.users.rolesParent",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),

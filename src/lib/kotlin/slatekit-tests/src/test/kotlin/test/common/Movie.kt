@@ -1,4 +1,5 @@
-package test.common
+package slatekit.sampleapp.core.models
+
 
 import slatekit.common.DateTime
 import slatekit.common.Field
@@ -53,6 +54,7 @@ data class Movie(
     companion object {
         fun samples():List<Movie> = listOf(
                 Movie(
+                        id = 1L,
                         title = "Indiana Jones: Raiders of the Lost Ark",
                         category = "Adventure",
                         playing = false,
@@ -61,6 +63,7 @@ data class Movie(
                         released = DateTime.of(1985, 8, 10)
                 ),
                 Movie(
+                        id = 2L,
                         title = "WonderWoman",
                         category = "action",
                         playing = true,
