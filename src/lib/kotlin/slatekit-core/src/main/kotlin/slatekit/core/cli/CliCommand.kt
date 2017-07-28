@@ -13,7 +13,10 @@
 
 package slatekit.core.cli
 
+import slatekit.common.Doc
+import slatekit.common.RequestSupport
 import slatekit.common.Result
+import slatekit.common.Uris
 import slatekit.common.args.Args
 
 
@@ -29,13 +32,13 @@ import slatekit.common.args.Args
  * @param line   : The raw line of text supplied by user.
  * @param args   : The arguments supplied.
  */
-data class CliCommand(val area: String,
+data class CliCommand(  val area: String,
                         val name: String,
                         val action: String,
                         val line: String,
                         val args: Args,
-                        val result: Result<Any>? = null) {
-
+                        val result: Result<Any>? = null) : RequestSupport
+{
     /**
      * the area, name and action combined.
      * @return
@@ -59,6 +62,15 @@ data class CliCommand(val area: String,
      */
     fun isAction(area: String, name: String, action: String): Boolean =
             this.area == area && this.name == name && this.action == action
+
+
+
+    override fun raw():Any? = this
+
+
+    override fun getDoc(name: String): Doc {
+        return Uris.readDoc(this.args.getString(name))!!
+    }
 
 
     companion object {

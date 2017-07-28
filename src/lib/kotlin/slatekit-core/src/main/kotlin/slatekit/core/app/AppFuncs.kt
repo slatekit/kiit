@@ -14,6 +14,7 @@
 package slatekit.core.app
 
 
+import slatekit.common.Context
 import slatekit.common.Result
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
@@ -39,7 +40,6 @@ import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Subs
 import slatekit.common.templates.TemplatePart
 import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
 
 object AppFuncs {
 
@@ -310,13 +310,13 @@ object AppFuncs {
                 cfg = conf,
                 enc = enc,
                 log = LoggerConsole(),
-                ent = Entities(dbs(conf)),
                 dbs = dbs(conf),
                 inf = about(conf),
                 host = Host.local(),
                 lang = Lang.kotlin(),
                 dirs = folders(conf),
                 state = success(true)
+                //ent = Entities(dbs(conf))
         )
     }
 }

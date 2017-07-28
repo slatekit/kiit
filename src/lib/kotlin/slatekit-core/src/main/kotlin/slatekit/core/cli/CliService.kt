@@ -55,7 +55,7 @@ open class CliService(
 )
     : AppMetaSupport {
 
-    val _printer = CliPrinter(_writer, null)
+    val _printer = CliPrinter(_writer)
     val _view = CliView(_writer, { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) })
 
 

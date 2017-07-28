@@ -16,10 +16,9 @@ package slatekit.core.cli
 import slatekit.common.Result
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.serialization.SerializerProps
-import slatekit.entities.core.Entities
 
 
-class CliPrinter(val _writer: ConsoleWriter, val _entities: Entities?) {
+class CliPrinter(val _writer: ConsoleWriter) {
 
     val serializer = SerializerProps(true)
 

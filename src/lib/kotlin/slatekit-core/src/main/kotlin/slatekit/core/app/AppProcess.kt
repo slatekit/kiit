@@ -13,6 +13,7 @@
 
 package slatekit.core.app
 
+import slatekit.common.Context
 import slatekit.common.Result
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
