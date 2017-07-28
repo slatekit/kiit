@@ -149,3 +149,21 @@ val String.toCharMap: Map<Char, Boolean> get() = this.toCharArray().map { c -> c
  */
 val newline:String get() = System.lineSeparator()
 
+
+fun String.escapeHtml(): String {
+    val escapedTxt = StringBuilder()
+    for (i in 0..this.length - 1) {
+        val tmp = this[i]
+        when (tmp) {
+            '<'  -> escapedTxt.append("&lt;")
+            '>'  -> escapedTxt.append("&gt;")
+            '&'  -> escapedTxt.append("&amp;")
+            '"'  -> escapedTxt.append("&quot;")
+            '\'' -> escapedTxt.append("&#x27;")
+            '/'  -> escapedTxt.append("&#x2F;")
+            else -> escapedTxt.append(tmp)
+        }
+    }
+    return escapedTxt.toString()
+}
+
