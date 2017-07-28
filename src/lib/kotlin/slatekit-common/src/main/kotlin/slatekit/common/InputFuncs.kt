@@ -48,7 +48,7 @@ object InputFuncs {
             "@{today}"     -> DateTime.today()
             "@{tomorrow}"  -> DateTime.today().plusDays(1)
             "@{yesterday}" -> DateTime.today().plusDays(-1)
-            "@{now"        -> DateTime.now()
+            "@{now}"       -> DateTime.now()
             else           -> DateTime.parseNumeric(value)
         }
 

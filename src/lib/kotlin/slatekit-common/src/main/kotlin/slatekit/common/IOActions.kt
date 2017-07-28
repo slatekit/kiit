@@ -33,3 +33,11 @@ object Readln : IO<Any, String> {
 
     override fun run(i: Any) = readLine() ?: ""
 }
+
+
+class StringWriter(val buffer:StringBuilder) : IO<Any, Unit> {
+
+    override fun run(i: Any):Unit {
+        buffer.append(i)
+    }
+}

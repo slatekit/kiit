@@ -24,6 +24,12 @@ import java.time.ZonedDateTime
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
+interface InputsUpdateable {
+    // Immutable add
+    fun add(key:String, value:Any):Inputs
+}
+
+
 /**
  * Base class to support retrieving inputs form multiple sources:
  * 1. command line arguments

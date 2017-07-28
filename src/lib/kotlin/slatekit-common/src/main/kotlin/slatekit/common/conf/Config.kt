@@ -14,9 +14,7 @@
 package slatekit.common.conf
 
 
-import slatekit.common.Conversions
-import slatekit.common.DateTime
-import slatekit.common.InputFuncs
+import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -93,7 +91,6 @@ class Config(fileName: String? = null,
      * Get or load the config object
      */
     private val _config: Properties = config ?: ConfFuncs.loadPropertiesFrom(fileName)
-
     override val raw:Any = _config
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)

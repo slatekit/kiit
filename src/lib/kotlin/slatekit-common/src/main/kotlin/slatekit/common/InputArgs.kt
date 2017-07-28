@@ -22,7 +22,7 @@ import java.time.ZonedDateTime
  * Created by kishorereddy on 5/25/17.
  */
 class InputArgs(val _map: Map<String, Any>,
-                private val _decryptor: ((String) -> String)? = null) : Inputs {
+                private val _decryptor: ((String) -> String)? = null) : Inputs, InputsUpdateable {
 
     override val raw:Any =_map
 
@@ -44,4 +44,9 @@ class InputArgs(val _map: Map<String, Any>,
     override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null
     override fun containsKey(key: String): Boolean = _map.contains(key)
     override fun size(): Int = _map.size
+
+    override fun add(key:String, value:Any):Inputs {
+        val newMap = _map.plus(key to value)
+        return InputArgs(newMap, _decryptor)
+    }
 }
