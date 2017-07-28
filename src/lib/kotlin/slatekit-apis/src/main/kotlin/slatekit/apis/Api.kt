@@ -14,7 +14,7 @@
 package slatekit.apis
 
 /**
-  * Annotation to designate a Scala class as an API
+  * Annotation to designate a class as an API
   *
   *  NOTE: Apis in SlateKit are organized into 3 parts in the route.
   *  e.g. area / api  / action

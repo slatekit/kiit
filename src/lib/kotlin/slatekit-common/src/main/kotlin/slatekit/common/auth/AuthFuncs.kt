@@ -47,8 +47,7 @@ object AuthFuncs {
     fun isKeyValid(inputs: Inputs?,
                    keys: ListMap<String, ApiKey>,
                    inputName: String,
-                   actionRoles: String,
-                   parentRoles: String): Result<Boolean> {
+                   expectedRoles: String): Result<Boolean> {
 
         val key = inputs?.getStringOpt(inputName) ?: ""
 
@@ -59,7 +58,7 @@ object AuthFuncs {
         else {
             // Check 4: CHeck if valid key
             if (keys.contains(key))
-                validateKey(key, keys, actionRoles, parentRoles)
+                validateKey(key, keys, expectedRoles)
             else
                 no("Api Key not provided or invalid")
         }
@@ -139,16 +138,12 @@ object AuthFuncs {
     }
 
 
-    private fun validateKey(key: String, keys: ListMap<String, ApiKey>,
-                            actionRoles: String, parentRoles: String): Result<Boolean> {
+    private fun validateKey(key: String, keys: ListMap<String, ApiKey>, expectedRoles: String): Result<Boolean> {
 
         // Now ensure that key contains roles matching one provided.
         val apiKey = keys[key]
 
-        // "Roles" could refer to "@parent" so get the final role(s)
-        val expectedRole = getReferencedValue(actionRoles, parentRoles)
-
         // Now match the roles.
-        return matchRoles(expectedRole, apiKey?.rolesLookup ?: emptyRoles)
+        return matchRoles(expectedRoles, apiKey?.rolesLookup ?: emptyRoles)
     }
 }

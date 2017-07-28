@@ -14,7 +14,7 @@
 package slatekit.apis
 
 /**
- * Annotation used in conjunction with the Api annotation, to designate your scala method
+ * Annotation used in conjunction with the Api annotation, to designate your method
  * as an api action that is exposed for use.
  *
  *  NOTE: Apis in SlateKit are organized into 3 parts in the route.

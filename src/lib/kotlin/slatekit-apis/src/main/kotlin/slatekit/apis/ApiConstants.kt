@@ -14,10 +14,7 @@
 package slatekit.apis
 
 /**
- * NOTE: The type-safe versions of theses constants are located in:
- * 1. ApiProtocol.scala
- * 2. ApiAuthMode.scala
- * 3. ApiRoleRefs.scala
+ * NOTE: The could be more type-safe but are needed as string for the annotations.
  *
  * These are only available here as constants to allow checking against
  * 1. Api's setup via annotations ( in which case they have to reference strings )
@@ -31,7 +28,7 @@ object ApiConstants {
     val RoleAny = "*"
     val RoleGuest = "?"
     val RoleParent = "@parent"
-    val RoleNone = "@none"
+    val RoleNone = ""
 
     val AuthModeAppKey = "app-key"
     val AuthModeAppRole = "app-roles"
