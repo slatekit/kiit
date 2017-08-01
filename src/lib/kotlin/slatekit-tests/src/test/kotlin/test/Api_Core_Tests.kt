@@ -30,8 +30,8 @@ import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.results.ResultFuncs.success
-import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
+import slatekit.integration.common.AppEntContext
 import slatekit.test.common.MyAuthProvider
 import slatekit.tests.common.UserApi
 import test.common.MyEncryptor
@@ -44,12 +44,12 @@ import test.common.User
 open class ApiTestsBase {
 
 
-    val ctx:AppContext = buildCtx()
+    val ctx:AppEntContext = buildCtx()
 
 
-    fun buildCtx(): AppContext {
+    fun buildCtx(): AppEntContext {
 
-        val ctx = AppContext (
+        val ctx = AppEntContext (
                 arg  = Args.default(),
                 env  = Env("local", Dev),
                 cfg  = Config(),
@@ -118,7 +118,7 @@ open class ApiTestsBase {
     }
 
 
-    fun buildUserApiRegSingleton(ctx: AppContext):ApiReg {
+    fun buildUserApiRegSingleton(ctx: AppEntContext):ApiReg {
         return ApiReg(UserApi(ctx))
     }
 }

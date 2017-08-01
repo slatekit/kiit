@@ -21,6 +21,7 @@ import slatekit.core.common.AppContext
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
+import slatekit.integration.common.AppEntContext
 
 
 class ShellTests  {
@@ -78,7 +79,7 @@ class ShellTests  {
 
   private fun getCli(): CliApi {
 
-    val ctx = AppContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
+    val ctx = AppEntContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
 
     val apiKeys = listOf(
         ApiKey("user" , "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"                    ),
@@ -100,7 +101,7 @@ class ShellTests  {
 
     // 3. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = CliApi(creds, ctx, TokenAuth(apiKeys), "sampleapp", apiItems = apis)
+    val shell = CliApi(creds, ctx.toAppContext(), TokenAuth(apiKeys), "sampleapp", apiItems = apis)
     return shell
   }
 }

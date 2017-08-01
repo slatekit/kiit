@@ -25,11 +25,12 @@ import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.common.AppContext
 import slatekit.entities.core.EntityService
+import slatekit.integration.common.AppEntContext
 import test.common.User
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi(context: AppContext): ApiBaseEntity<User, EntityService<User>>(context, User::class)
+class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(context, User::class)
 {
 
   @ApiAction(name = "activate", desc = "activates a users account 3", roles= "@parent", verb = "@parent", protocol = "@parent")

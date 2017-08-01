@@ -15,6 +15,7 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.types.PhoneUS
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
+import slatekit.integration.common.AppEntContext
 import slatekit.tests.common.UserApi
 import test.common.*
 import kotlin.reflect.KClass
@@ -42,7 +43,7 @@ class ReflectorTests {
 
 
 
-    val ctx: AppContext = AppContext (
+    val ctx: AppEntContext = AppEntContext (
             arg  = Args.default(),
             env  = Env("local", Dev),
             cfg  = Config(),

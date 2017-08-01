@@ -3,6 +3,7 @@ package slatekit.sampleapp.core.apis
 import slatekit.core.common.AppContext
 import slatekit.entities.core.EntityService
 import slatekit.integration.common.ApiBaseEntity
+import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 
 /**
@@ -38,7 +39,7 @@ import slatekit.sampleapp.core.models.Movie
  *      SampleREST.deleteById -id=1
  *      SampleREST.patch      -id=1 -title="abc"
  */
-class SampleEntityApi(ctx: AppContext) : ApiBaseEntity<Movie, EntityService<Movie>>(ctx, Movie::class) {
+class SampleEntityApi(ctx: AppEntContext) : ApiBaseEntity<Movie, EntityService<Movie>>(ctx, Movie::class) {
 
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }
