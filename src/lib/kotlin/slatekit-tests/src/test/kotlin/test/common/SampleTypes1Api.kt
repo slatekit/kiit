@@ -11,11 +11,14 @@ import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.unexpectedError
+import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.Movie
 
 
 @Api(area = "samples", name = "types1", desc = "sample api to test getting different values")
-class SampleTypes1Api(val enc: Encryptor) {
+class SampleTypes1Api {
+
+    val enc: Encryptor = AppEncryptor
 
     /**
      * GET localhost:{port}/samples/types1/basic_string

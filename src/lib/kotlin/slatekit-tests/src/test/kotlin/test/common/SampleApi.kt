@@ -10,11 +10,12 @@ import slatekit.common.results.ResultFuncs.success
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.core.common.AppContext
+import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class SampleApi(context: AppContext): ApiBase(context) {
+class SampleApi(context: AppEntContext): ApiBase(context) {
 
     // For unit-tests
     var inc = 0

@@ -12,7 +12,7 @@ import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 
 
-@Api(area = "samples", name = "types3", desc = "sample api to test other features")
+@Api(area = "samples", name = "files", desc = "sample api to test other features")
 class SampleFiles3Api {
 
     @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")

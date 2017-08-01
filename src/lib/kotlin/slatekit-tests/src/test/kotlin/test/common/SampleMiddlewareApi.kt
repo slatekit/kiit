@@ -6,11 +6,6 @@ import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.UNEXPECTED_ERROR
-import slatekit.common.validations.ValidationFuncs
-import test.common.User
 
 
 open class SampleMiddlewareApi(
@@ -23,7 +18,6 @@ open class SampleMiddlewareApi(
 
 
     // Used for demo/testing purposes
-    var _user: User = User(0, "", "", "", true, 0)
     var onBeforeHookCount = mutableListOf<Request>()
     var onAfterHookCount = mutableListOf<Request>()
 

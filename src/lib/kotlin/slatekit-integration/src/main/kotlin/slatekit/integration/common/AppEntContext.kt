@@ -103,6 +103,17 @@ data class AppEntContext(
             )
 
 
+        /**
+         * converts this to an app context which is basically
+         * the same context without the Entities
+         */
+        fun fromAppContext(ctx:AppContext):AppEntContext {
+            return AppEntContext(
+                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state
+            )
+        }
+
+
         fun simple(name:String): AppEntContext =
                 AppEntContext(
                         arg = Args.Companion.default(),
