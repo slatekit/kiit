@@ -21,6 +21,7 @@ import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
 import slatekit.common.log.LoggerConsole
+import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.integration.apis.AppApi
@@ -50,29 +51,12 @@ fun main(args: Array<String>): Unit {
     // You can build the context manually or automatically using the AppFuncs
     // build function which will factor in inputs from the command line.
     // Fore more info on the context, see the utils online.
-    val ctx = AppEntContext(
-            arg = Args.default(),
-            env = Env("dev", Dev, "ny", "dev environment"),
-            cfg = Config(),
-            log = LoggerConsole(),
-            ent = Entities(),
-            host = Host.local(),
-            lang = Lang.kotlin(),
-            inf = About(
-                    id = "sample-app-1",
-                    name = "Sample App-1",
-                    desc = "Sample application 1",
-                    company = "Company 1",
-                    group = "Department 1",
-                    region = "New York",
-                    url = "http://company1.com/dep1/sampleapp-1",
-                    contact = "dept1@company1.com",
-                    version = "1.0.1",
-                    tags = "sample app slatekit scala",
-                    examples = ""
-            )
+    val ctxRaw = AppRunner.build(
+            args = args,
+            enc = AppEncryptor
     )
-
+    val ctx = AppEntContext.fromAppContext(ctxRaw)
+    
     // =========================================================================
     // 2: Setup the entity services
     // =========================================================================
