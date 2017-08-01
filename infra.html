@@ -208,7 +208,7 @@
                 <div class="icon-wrap">
 					<a href="kotlin-mod-tasks.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>
 				</div>
-                <a href=""><h4>Tasks</h4></a>
+                <a href=""><h4>Workers</h4></a>
                 <p>Interruptable background tasks/worker pattern to handle, long-running or continuous background processing. Built in support for queue processing available.</p>
               </div>
             </div>
@@ -257,7 +257,6 @@
 										<td>									
 											<ul>
 												<li>slatekit.common</li>
-												<li>slatekit.entities</li>
 											</ul>
 										</td>
 									</tr>
@@ -268,6 +267,7 @@
 												<li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
 												<li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
 <strong>slatekit.cloud</strong>	projects</li>
+												<li>APIs for each component are available in the SlateKit.Integration project. This is so that the API, Core, Entities projects do not depend on each other.
 											</ul>
 										</td>
 									</tr>
