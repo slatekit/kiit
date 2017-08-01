@@ -19,6 +19,7 @@ import slatekit.apis.ApiBase
 import slatekit.common.Result
 import slatekit.common.db.DbCon
 import slatekit.core.common.AppContext
+import slatekit.entities.core.Entities
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
 
@@ -71,6 +72,6 @@ class EntitiesApi(context: slatekit.core.common.AppContext) : slatekit.apis.ApiB
 
 
     private fun service(): slatekit.entities.support.EntitySetupService {
-        return slatekit.entities.support.EntitySetupService(appContext.ent, context.dbs, EntitySetupSettings(), context.dirs)
+        return slatekit.entities.support.EntitySetupService(appContext.ent as Entities, context.dbs, EntitySetupSettings(), context.dirs)
     }
 }

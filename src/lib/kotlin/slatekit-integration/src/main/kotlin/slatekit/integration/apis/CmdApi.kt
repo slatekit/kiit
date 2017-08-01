@@ -24,7 +24,7 @@ import slatekit.core.cmds.Cmds
 import slatekit.core.common.AppContext
 
 
-@Api(area = "sys", name = "command", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "infra", name = "command", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
 class CmdApi(val cmd: Cmds, context: AppContext) {
 
     @ApiAction(name = "", desc = "get the number of commands available", roles = "@parent", verb = "@parent", protocol = "@parent")

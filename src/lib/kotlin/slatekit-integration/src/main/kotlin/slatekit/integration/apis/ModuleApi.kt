@@ -11,9 +11,11 @@
 package slatekit.integration.apis
 
 import slatekit.integration.mods.Module
+import slatekit.apis.Api
+import slatekit.apis.ApiAction
 
 
-@slatekit.apis.Api(area = "sys", name = "mods", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "sys", name = "mods", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
     private var _items = slatekit.common.ListMap<String, Module>()

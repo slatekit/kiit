@@ -16,11 +16,11 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.support.ApiWithSupport
-import slatekit.core.common.AppContext
+import slatekit.integration.common.AppEntContext
 
 
-@slatekit.apis.Api(area = "sys", name = "version", desc = "api to get version information", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
-class VersionApi(override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
+@Api(area = "sys", name = "version", desc = "api to get version information", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
+class VersionApi(override val context: AppEntContext) : ApiWithSupport {
 
     @ApiAction(desc = "get the version of the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun app(): String {

@@ -13,7 +13,10 @@
 
 package slatekit.integration.apis
 
-@slatekit.apis.Api(area = "infra", name = "queues", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+import slatekit.apis.Api
+import slatekit.apis.ApiAction
+
+@Api(area = "infra", name = "queues", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
 class QueueApi(val queue: slatekit.common.queues.QueueSource, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
 

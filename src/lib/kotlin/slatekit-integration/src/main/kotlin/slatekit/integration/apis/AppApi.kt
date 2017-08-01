@@ -18,11 +18,11 @@ import slatekit.apis.ApiAction
 import slatekit.common.Request
 import slatekit.common.Serial
 import slatekit.common.info.*
-import slatekit.core.common.AppContext
+import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "sys", name = "app", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
-class AppApi(val context: AppContext)  {
+class AppApi(val context: AppEntContext)  {
 
     @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun about(): About {

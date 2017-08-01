@@ -22,7 +22,6 @@ import slatekit.common.ApiLogin
 import slatekit.common.Credentials
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbType
 import slatekit.common.db.DbTypeMySql
 import slatekit.core.common.AppContext
 
@@ -48,7 +47,7 @@ class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWith
 
     @ApiAction(desc = "creates db login in the directory", roles = "*", verb = "@parent", protocol = "@parent")
     fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): slatekit.common.db.DbConString {
-        val dbCon = slatekit.common.db.DbConString(DbType.driver, url, user, pass)
+        val dbCon = DbConString(DbTypeMySql.driver, url, user, pass)
         slatekit.common.conf.ConfFuncs.createDbCon(rootDir, name, dbCon, context.enc)
         return dbCon
     }
