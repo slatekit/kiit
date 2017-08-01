@@ -25,7 +25,7 @@ import slatekit.apis.ApiConstants
  * @param settings : Settings for the shell functionality
  */
 class CliApi(private val creds: slatekit.common.Credentials,
-             val ctx: slatekit.core.common.AppContext,
+             val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
              val appDir: String,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),

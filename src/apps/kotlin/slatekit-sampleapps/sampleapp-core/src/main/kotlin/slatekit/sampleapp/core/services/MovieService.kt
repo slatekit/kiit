@@ -12,12 +12,13 @@
 package slatekit.sampleapp.core.services
 
 import slatekit.core.common.AppContext
-import slatekit.core.common.EntityServiceWithSupport
+import slatekit.entities.support.EntityServiceWithSupport
 import slatekit.entities.core.EntityRepo
+import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 
 
-class MovieService(context: AppContext, repo: EntityRepo<Movie>)
+class MovieService(context: AppEntContext, repo: EntityRepo<Movie>)
   : EntityServiceWithSupport<Movie>(context, repo)
 {
 }

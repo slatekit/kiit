@@ -16,16 +16,19 @@ import slatekit.common.Credentials
 import slatekit.common.DateTime
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings
-import slatekit.integration.AppApi
-import slatekit.integration.CliApi
-import slatekit.integration.EntitiesApi
-import slatekit.integration.VersionApi
+import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.CliApi
+import slatekit.integration.apis.EntitiesApi
+import slatekit.integration.apis.VersionApi
+import slatekit.integration.common.AppEntContext
+import slatekit.sampleapp.core.apis.*
 import slatekit.sampleapp.core.common.AppApiKeys
 import slatekit.sampleapp.core.common.AppAuth
 import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
+import test.common.SampleAnnoApi
 
 
 /**
@@ -37,10 +40,10 @@ fun main(args: Array<String>): Unit {
     // =========================================================================
     // NOTE: The app context contains the selected environment, logger,
     // conf, command line args database, encryptor, and many other components
-    val ctx = build(
+    val ctx = AppEntContext.fromAppContext(build(
             args = args,
             enc = AppEncryptor
-    )
+    ))
 
     // =========================================================================
     // 2: Setup the entity services
@@ -94,12 +97,49 @@ fun main(args: Array<String>): Unit {
     val shell = CliApi(creds, ctx, auth, "sampleapp",
             CliSettings(enableLogging = true, enableOutput = true),
             listOf(
-                    ApiReg(AppApi(ctx), true),
-                    ApiReg(VersionApi(ctx), true),
-                    ApiReg(UserApi(ctx), false),
-                    ApiReg(MovieApi(ctx), false),
-                    ApiReg(SampleApi(ctx), false),
-                    ApiReg(EntitiesApi(ctx), true)
+                    // Sample APIs for demo purposes
+                    // Instances are created per request.
+                    // The primary constructor must have either 0 parameters
+                    // or a single paramter taking the same Context as ctx above )
+
+                    // Example 1: without annotations ( pure kotlin objects )
+                    ApiReg(SamplePOKOApi::class      , area = "samples", declaredOnly = false),
+
+                    // Example 2: passing in and returning data-types
+                    ApiReg(SampleTypes1Api::class    , area = "samples", declaredOnly = false),
+                    ApiReg(SampleTypes2Api::class    , area = "samples", declaredOnly = false),
+
+                    // Example 3: annotations
+                    ApiReg(SampleTypes3Api::class    , declaredOnly = false),
+                    ApiReg(SampleAnnoApi::class      , declaredOnly = false),
+
+                    // Example 4: using REST ( you must register the REST rewrite module
+                    ApiReg(SampleRESTApi::class      , area = "samples", declaredOnly = false),
+
+                    // Example 5: File download
+                    ApiReg(SampleFiles3Api::class     , declaredOnly = false),
+
+                    // Example 6: Inheritance with APIs
+                    ApiReg(SampleExtendedApi::class     , area = "samples", declaredOnly = false),
+
+                    // Example 7: Singleton APIS - 1 instance for all requests
+                    // NOTE: be careful and ensure that your APIs are stateless
+                    // This example shows integration with the ORM
+                    ApiReg(SampleEntityApi(ctx)      , area = "samples", declaredOnly = false),
+
+                    // Example 8: Middleware
+                    ApiReg(SampleErrorsApi(true)           , area = "samples", declaredOnly = false),
+                    ApiReg(SampleMiddlewareApi(true, true) , area = "samples", declaredOnly = false),
+
+                    // Example 9: Provided by Slate Kit
+                    ApiReg(AppApi(ctx)          , declaredOnly = true ),
+                    ApiReg(VersionApi(ctx)      , declaredOnly = true ),
+
+                    // Example 10: More examples from the sample app
+                    ApiReg(UserApi(ctx)         , declaredOnly = false),
+                    ApiReg(MovieApi(ctx)        , declaredOnly = false),
+                    ApiReg(EntitiesApi(ctx)     , declaredOnly = false)
+
             )
     )
 

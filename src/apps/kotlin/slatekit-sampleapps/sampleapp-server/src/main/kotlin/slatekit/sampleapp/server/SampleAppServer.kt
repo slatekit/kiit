@@ -13,9 +13,20 @@ package slatekit.sampleapp.server
 
 import slatekit.apis.ApiReg
 import slatekit.common.DateTime
-import slatekit.core.app.AppRunner.build
-import slatekit.integration.AppApi
-import slatekit.integration.VersionApi
+import slatekit.common.args.Args
+import slatekit.common.conf.Config
+import slatekit.common.envs.Dev
+import slatekit.common.envs.Env
+import slatekit.common.info.About
+import slatekit.common.info.Host
+import slatekit.common.info.Lang
+import slatekit.common.log.LoggerConsole
+import slatekit.core.common.AppContext
+import slatekit.entities.core.Entities
+import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.VersionApi
+import slatekit.integration.common.AppEntContext
+import slatekit.sampleapp.core.apis.*
 import slatekit.sampleapp.core.common.AppApiKeys
 import slatekit.sampleapp.core.common.AppAuth
 import slatekit.sampleapp.core.common.AppEncryptor
@@ -23,6 +34,8 @@ import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
 import slatekit.server.Server
+import test.common.SampleAnnoApi
+import test.common.SampleApi
 
 
 /**
@@ -37,9 +50,27 @@ fun main(args: Array<String>): Unit {
     // You can build the context manually or automatically using the AppFuncs
     // build function which will factor in inputs from the command line.
     // Fore more info on the context, see the utils online.
-    val ctx = build(
-            args = args,
-            enc = AppEncryptor
+    val ctx = AppEntContext(
+            arg = Args.default(),
+            env = Env("dev", Dev, "ny", "dev environment"),
+            cfg = Config(),
+            log = LoggerConsole(),
+            ent = Entities(),
+            host = Host.local(),
+            lang = Lang.kotlin(),
+            inf = About(
+                    id = "sample-app-1",
+                    name = "Sample App-1",
+                    desc = "Sample application 1",
+                    company = "Company 1",
+                    group = "Department 1",
+                    region = "New York",
+                    url = "http://company1.com/dep1/sampleapp-1",
+                    contact = "dept1@company1.com",
+                    version = "1.0.1",
+                    tags = "sample app slatekit scala",
+                    examples = ""
+            )
     )
 
     // =========================================================================
@@ -89,18 +120,57 @@ fun main(args: Array<String>): Unit {
     val sampleKeys = AppApiKeys.fetch()
     val selectedKey = sampleKeys[5]
     val auth = AppAuth("header", "slatekit", "johndoe", selectedKey, sampleKeys)
+    val enc = AppEncryptor
     val server = Server(
-            port = 5000,
+            port   = 5000,
             prefix = "/api/",
-            info = true,
-            ctx = ctx,
-            auth = auth,
-            apis = listOf(
-                    ApiReg(AppApi(ctx), true),
-                    ApiReg(VersionApi(ctx), true),
-                    ApiReg(UserApi(ctx), false),
-                    ApiReg(MovieApi(ctx), false),
-                    ApiReg(SampleApi(ctx), false)
+            docs   = true,
+            docKey = "abc123",
+            auth   = auth,
+            ctx    = ctx,
+            apis   = listOf(
+                    // Sample APIs for demo purposes
+                    // Instances are created per request.
+                    // The primary constructor must have either 0 parameters
+                    // or a single paramter taking the same Context as ctx above )
+
+                    // Example 1: without annotations ( pure kotlin objects )
+                    ApiReg(SamplePOKOApi::class      , area = "samples", declaredOnly = false),
+
+                    // Example 2: passing in and returning data-types
+                    ApiReg(SampleTypes1Api::class    , area = "samples", declaredOnly = false),
+                    ApiReg(SampleTypes2Api::class    , area = "samples", declaredOnly = false),
+
+                    // Example 3: annotations
+                    ApiReg(SampleTypes3Api::class    , declaredOnly = false),
+                    ApiReg(SampleAnnoApi::class      , declaredOnly = false),
+
+                    // Example 4: using REST ( you must register the REST rewrite module
+                    ApiReg(SampleRESTApi::class      , area = "samples", declaredOnly = false),
+
+                    // Example 5: File download
+                    ApiReg(SampleFiles3Api::class     , declaredOnly = false),
+
+                    // Example 6: Inheritance with APIs
+                    ApiReg(SampleExtendedApi::class     , area = "samples", declaredOnly = false),
+
+                    // Example 7: Singleton APIS - 1 instance for all requests
+                    // NOTE: be careful and ensure that your APIs are stateless
+                    // This example shows integration with the ORM
+                    ApiReg(SampleEntityApi(ctx)      , area = "samples", declaredOnly = false),
+
+                    // Example 8: Middleware
+                    ApiReg(SampleErrorsApi(true)           , area = "samples", declaredOnly = false),
+                    ApiReg(SampleMiddlewareApi(true, true) , area = "samples", declaredOnly = false),
+
+                    // Example 9: Provided by Slate Kit
+                    ApiReg(AppApi(ctx)          , declaredOnly = true ),
+                    ApiReg(VersionApi(ctx)      , declaredOnly = true ),
+
+                    // Example 10: More examples from the sample app
+                    ApiReg(UserApi(ctx)         , declaredOnly = false),
+                    ApiReg(MovieApi(ctx)        , declaredOnly = false)
+
             )
     )
 
@@ -138,6 +208,13 @@ fun main(args: Array<String>): Unit {
 
     // LIMITATIONS:
     // 1. File upload ( WIP - Work in progress )
-    // 2. Default parameter values for api actions/methods
-    // 3. API classes are currently singletons - ( support creation mode: singleton | 1 instance per request )
+    // 2. Default parameter values for api actions/methods ( difficult to get metadata from reflection )
+
+    // SAMPLE APIS:
+    // 1. SampleApi   : Sample api showing basic usages
+    // 2. RestApi     : Restful apis
+    // 3. EntityApi   : Entity support built in
+    // 4. PokoApi     : No annotations - pure kotlin + Slate Kit Request/Result
+    // 5. AdvancedApi : Includes decryption, smart-strings, file download
+    // 6. AuthApi     : Authorization features
 }

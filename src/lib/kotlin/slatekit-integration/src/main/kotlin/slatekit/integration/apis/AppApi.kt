@@ -67,8 +67,8 @@ class AppApi(val context: AppEntContext)  {
     }
 
 
-    @ApiAction(desc = "gets all info", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun all(): String {
-        return Serial().serialize(context.app)
-    }
+    //@ApiAction(desc = "gets all info", roles = "@parent", verb = "@parent", protocol = "@parent")
+    //fun all(): String {
+    //    return Serial().serialize(context.app)
+    //}
 }

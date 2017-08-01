@@ -12,18 +12,18 @@ package slatekit.sampleapp.core.services
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.svcs.ApiEntityWithSupport
 import slatekit.common.DateTime
-import slatekit.core.common.AppContext
+import slatekit.integration.common.ApiBaseEntity
+import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 
 
 @Api(area = "app", name = "movies", desc = "api for users", roles= "*", auth = "app-roles", verb = "post", protocol = "*")
-class MovieApi( context: AppContext) : ApiEntityWithSupport<Movie, MovieService>(context, Movie::class)
+class MovieApi( context: AppEntContext) : ApiBaseEntity<Movie, MovieService>(context, Movie::class)
 {
     @ApiAction(roles = "", verb = "@parent", protocol = "*")
     fun createSample(title:String, category:String, playing:Boolean, cost:Int, rating:Double, released: DateTime):Long {
-        return _service.create(Movie(title    = title,
+        return service.create(Movie(title    = title,
               category = category,
               playing  = playing,
               cost     = cost,

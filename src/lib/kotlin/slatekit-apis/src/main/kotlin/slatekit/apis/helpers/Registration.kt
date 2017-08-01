@@ -147,7 +147,10 @@ class Areas(val namer:Namer?) {
         _areaApis[apiArea]?.let { it[apiName] = apiAnno }
 
         // 6. get all the methods with the apiAction annotation
-        val matches = Reflector.getAnnotatedMembersOpt<ApiAction>(clsType, ApiAction::class, reg.declaredOnly)
+        val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(clsType, ApiAction::class, reg.declaredOnly)
+        val matches = rawMatches.filter { mem ->
+            mem.first.name != "equals" && mem.first.name != "hashCode" && mem.first.name != "toString"
+        }
         matches.forEach { item ->
 
             // a) The member

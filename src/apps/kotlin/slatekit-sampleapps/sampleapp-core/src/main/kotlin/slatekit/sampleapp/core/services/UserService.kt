@@ -18,14 +18,15 @@ import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
-import slatekit.core.common.EntityServiceWithSupport
+import slatekit.entities.support.EntityServiceWithSupport
 import slatekit.entities.core.EntityRepo
+import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.User
 
 /**
  * The EntityService
  */
-class UserService(context:AppContext, repo:EntityRepo<User>)
+class UserService(context: AppEntContext, repo:EntityRepo<User>)
                   : EntityServiceWithSupport<User>(context,repo)
 {
   fun create(email:String, first:String, last:String, isMale:Boolean, age:Int, phone:String, country:String): User
