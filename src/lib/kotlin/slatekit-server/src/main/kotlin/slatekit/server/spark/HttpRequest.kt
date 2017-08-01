@@ -16,10 +16,7 @@ package slatekit.server.spark
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.common.ContentTypeHtml
-import slatekit.common.Doc
-import slatekit.common.Random
-import slatekit.common.RequestSupport
+import slatekit.common.*
 import slatekit.core.common.AppContext
 import slatekit.server.ServerConfig
 import spark.Request
@@ -67,7 +64,7 @@ class HttpRequest(val req: Request) : RequestSupport {
 
     companion object {
 
-        fun build(ctx: AppContext, req: Request, conf: ServerConfig): slatekit.common.Request {
+        fun build(ctx: Context, req: Request, conf: ServerConfig): slatekit.common.Request {
             val rawUri = req.uri()
             val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
             val parts = uri.split('/')

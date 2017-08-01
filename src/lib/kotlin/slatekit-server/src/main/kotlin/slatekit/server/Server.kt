@@ -14,10 +14,11 @@
 package slatekit.server
 
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiProtocolWeb
 import slatekit.apis.ApiReg
+import slatekit.apis.WebProtocol
 import slatekit.apis.core.Auth
 import slatekit.apis.doc.DocWeb
+import slatekit.common.Context
 import slatekit.common.DateTime
 import slatekit.common.Result
 import slatekit.common.app.AppMeta
@@ -34,8 +35,8 @@ import javax.servlet.MultipartConfigElement
 
 class Server(
         val config: ServerConfig,
-        val ctx   : AppContext  ,
-        val auth  : Auth?       ,
+        val ctx   : Context,
+        val auth  : Auth?,
         val apis  : List<ApiReg>
 ) : AppMetaSupport {
 
@@ -52,13 +53,12 @@ class Server(
                 docKey :String       = ""   ,
                 apis   :List<ApiReg>        ,
                 auth   :Auth?        = null ,
-                ctx    :AppContext   = AppContext.simple("slatekit-server")
+                ctx    :Context   = AppContext.simple("slatekit-server")
         ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey), ctx, auth, apis)
 
 
-    val container = ApiContainer(ctx, false, auth, ApiProtocolWeb, apis, docKey = config.docKey, docBuilder = ::DocWeb)
-
+    val container = ApiContainer(ctx, false, auth, WebProtocol, apis, docKey = config.docKey, docBuilder = ::DocWeb)
 
     override fun appMeta(): AppMeta = ctx.app
 
