@@ -1,14 +1,12 @@
 package slatekit.common
 
+import slatekit.common.app.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.ConfigBase
 import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
-import slatekit.common.info.About
-import slatekit.common.info.Folders
-import slatekit.common.info.Host
-import slatekit.common.info.Lang
+import slatekit.common.info.*
 import slatekit.common.log.LoggerBase
 
 
@@ -38,5 +36,6 @@ interface Context {
     val enc   : Encryptor?
     val dirs  : Folders?
     val extra : Map<String,Any>
+    val app   : AppMeta
     val state : Result<Boolean>
 }

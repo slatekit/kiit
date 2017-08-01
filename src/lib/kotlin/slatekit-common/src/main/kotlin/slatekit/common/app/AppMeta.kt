@@ -25,7 +25,7 @@ data class AppMeta(
 ) {
 
 
-    companion object AppMeta {
+    companion object {
         val none = AppMeta(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none)
     }
 

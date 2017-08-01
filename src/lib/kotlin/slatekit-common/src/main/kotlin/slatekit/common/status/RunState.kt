@@ -42,38 +42,38 @@ object RunStateInitializing : RunState {
     override val mode: String = "initializing"
 }
 
-object RunStateExecuting : RunState {
+object RunStatePending : RunState {
     override val value: Int = 3
-    override val mode: String = "executing"
+    override val mode: String = "pending"
 }
 
-object RunStateWorking : RunState {
-    override val value: Int = 3
-    override val mode: String = "executing"
+object RunStateBusy : RunState {
+    override val value: Int = 4
+    override val mode: String = "busy"
 }
 
 object RunStateIdle : RunState {
-    override val value: Int = 4
-    override val mode: String = "waiting"
+    override val value: Int = 5
+    override val mode: String = "idle"
 }
 
 object RunStatePaused : RunState {
-    override val value: Int = 5
+    override val value: Int = 6
     override val mode: String = "paused"
 }
 
 object RunStateStopped : RunState {
-    override val value: Int = 6
+    override val value: Int = 7
     override val mode: String = "stopped"
 }
 
 object RunStateComplete : RunState {
-    override val value: Int = 7
+    override val value: Int = 8
     override val mode: String = "complete"
 }
 
 object RunStateFailed : RunState {
-    override val value: Int = 8
+    override val value: Int = 9
     override val mode: String = "failed"
 }
 

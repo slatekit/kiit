@@ -15,7 +15,6 @@ package slatekit.integration.common
 
 
 import slatekit.apis.ApiBase
-import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityService
@@ -27,7 +26,7 @@ import kotlin.reflect.KClass
  * Slate Kit Orm ( Entities ).
  * @tparam T
  */
-open class ApiBaseEntity<T, TSvc>(context: AppContext, override val entityType: KClass<*>)
+open class ApiBaseEntity<T, TSvc>(context: AppEntContext, override val entityType: KClass<*>)
     : ApiBase(context), ApiWithEntitySupport<T, TSvc> where T : Entity, TSvc : EntityService<T> {
 
     override val entities: Entities = context.ent

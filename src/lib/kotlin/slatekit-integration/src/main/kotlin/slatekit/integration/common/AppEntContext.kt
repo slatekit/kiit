@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.common
+package slatekit.integration.common
 
 import slatekit.common.Context
 import slatekit.common.Result
@@ -30,6 +30,8 @@ import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.toIdent
+import slatekit.core.common.AppContext
+import slatekit.entities.core.Entities
 
 /**
   *
@@ -48,11 +50,12 @@ import slatekit.common.toIdent
   * @param res  : translated resource strings ( i18n )
   * @param tnt   : tenant info ( if running in multi-tenant mode - not officially supported )
   */
-data class AppContext(
+data class AppEntContext(
         override val arg  : Args,
         override val env  : Env,
         override val cfg  : ConfigBase,
         override val log  : LoggerBase,
+                 val ent  : Entities,
         override val inf  : About,
         override val host : Host = Host.local(),
         override val lang : Lang = Lang.kotlin(),
@@ -60,32 +63,39 @@ data class AppContext(
         override val enc  : Encryptor?          = null,
         override val dirs : Folders?            = null,
         override val extra:Map<String,Any>      = mapOf(),
-        override val state: Result<Boolean> = Result.none,
-
-        // NOTE: Fix this non-strongly typed Entities object.
-        // By using Any for the entities property, we avoid
-        // slatekit.core having a dependency on slatekit.entities!
-        val ent  : Any? = null
+        override val state: Result<Boolean> = Result.none
                      ) : Context
 {
     override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()))
 
 
+    /**
+     * converts this to an app context which is basically
+     * the same context without the Entities
+     */
+    fun toAppContext():AppContext {
+        return AppContext(
+                arg, env, cfg, log, inf, host, lang, dbs, enc, dirs, extra, state
+        )
+    }
+
+
     companion object {
 
 
-        fun help(): AppContext = err(HELP)
+        fun help(): AppEntContext = err(HELP)
 
 
-        fun exit(): AppContext = err(EXIT)
+        fun exit(): AppEntContext = err(EXIT)
 
 
-        fun err(code: Int, msg: String? = null): AppContext =
-            AppContext(
+        fun err(code: Int, msg: String? = null): AppEntContext =
+                AppEntContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
                 log = LoggerConsole(),
+                ent = Entities(),
                 inf = About.Abouts.none,
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),
@@ -93,12 +103,13 @@ data class AppContext(
             )
 
 
-        fun simple(name:String): AppContext =
-                AppContext(
+        fun simple(name:String): AppEntContext =
+                AppEntContext(
                         arg = Args.Companion.default(),
                         env = Env("local", Dev),
                         cfg = Config(),
                         log = LoggerConsole(),
+                        ent = Entities(),
                         inf = About.Abouts.none,
                         host = Host.Hosts.local(),
                         lang = Lang.Langs.kotlin(),
@@ -106,12 +117,14 @@ data class AppContext(
                 )
 
 
-        fun sample(id: String, name: String, about: String, company: String): AppContext =
-            AppContext(
+
+        fun sample(id: String, name: String, about: String, company: String): AppEntContext =
+                AppEntContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
                 log = LoggerConsole(),
+                ent = Entities(),
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),

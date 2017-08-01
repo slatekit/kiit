@@ -45,9 +45,6 @@ interface QueueSource {
     fun abandon(item: Any?): Unit {}
 
 
-    fun toString(item: Any?): String = item?.toString() ?: ""
-
-
     fun send(msg: Any, tagName: String = "", tagValue: String = ""): Result<String>
 
 
@@ -55,4 +52,12 @@ interface QueueSource {
 
 
     fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): Result<String>
+
+
+    fun toString(item: Any?): String {
+        return when(item){
+            is QueueSourceData -> item.message.toString()
+            else       -> item?.toString() ?: ""
+        }
+    }
 }

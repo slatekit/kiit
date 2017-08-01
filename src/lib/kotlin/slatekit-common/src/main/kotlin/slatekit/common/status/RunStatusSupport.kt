@@ -34,19 +34,11 @@ interface RunStatusSupport {
 
 
     /**
-     * moves the current state to started and calls the internal execute method
+     * moves the current state to idle.
      *
      * @return
      */
-    fun start(): RunStatus = moveToState(RunStateWorking)
-
-
-    /**
-     * moves the current state to waiting
-     *
-     * @return
-     */
-    fun wait(): RunStatus = moveToState(RunStateIdle)
+    fun start(): RunStatus = moveToState(RunStateIdle)
 
 
     /**
@@ -71,7 +63,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun resume(): RunStatus = moveToState(RunStateExecuting)
+    fun resume(): RunStatus = moveToState(RunStateIdle)
 
 
     /**
@@ -103,7 +95,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun isExecuting(): Boolean = isState(RunStateExecuting)
+    fun isBusy(): Boolean = isState(RunStateBusy)
 
 
     /**
@@ -111,7 +103,7 @@ interface RunStatusSupport {
      *
      * @return
      */
-    fun isWaiting(): Boolean = isState(RunStateIdle)
+    fun isIdle(): Boolean = isState(RunStateIdle)
 
 
     /**

@@ -21,6 +21,7 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.info.StartInfo
 import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
 import slatekit.common.results.ResultFuncs.success
@@ -60,6 +61,12 @@ open class AppProcess(context: AppContext?,
     // Config from context
     val conf = ctx.cfg
 
+
+    val meta: AppMeta = AppMeta(ctx.inf, ctx.host, ctx.lang, Status.none,
+            StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()))
+
+
+
     override val logger = ctx.log
     override val encryptor = ctx.enc
 
@@ -69,7 +76,7 @@ open class AppProcess(context: AppContext?,
      *
      * @return
      */
-    override fun appMeta(): AppMeta = ctx.app
+    override fun appMeta(): AppMeta = meta
 
 
     /**

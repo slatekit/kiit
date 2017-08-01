@@ -28,11 +28,10 @@ import java.io.File
  *
  * NOTE: This should not be used in production environment.
  */
-class QueueSourceDefault : QueueSource, QueueSourceMsg {
+class QueueSourceDefault(val converter:((Any) -> Any)? = null  ) : QueueSource, QueueSourceMsg {
 
-    protected val _list = mutableListOf<Any>()
+    private val _list = mutableListOf<Any>()
     private val _object = Object()
-
 
     override fun init(): Unit {
     }
@@ -61,8 +60,8 @@ class QueueSourceDefault : QueueSource, QueueSourceMsg {
                 else {
                     val results = mutableListOf<Any>()
                     val actualSize = Math.min(size, _list.size)
-                    for (ndx in 0..actualSize) {
-                        val msg = _list.remove(0)
+                    for (ndx in 0..actualSize - 1) {
+                        val msg = _list.removeAt(0)
                         results += msg
                     }
                     results.toList()
@@ -116,9 +115,6 @@ class QueueSourceDefault : QueueSource, QueueSourceMsg {
     override fun abandon(item: Any?): Unit {
         item?.let { discard(it) }
     }
-
-
-    override fun toString(item: Any?): String = item?.toString() ?: ""
 
 
     override fun getMessageBody(msgItem: Any?): String {
