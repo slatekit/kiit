@@ -19,7 +19,7 @@ open class Group(val name:String, val sys: System, manager:Manager? = null) : Ru
     /**
      * Manages the group.
      */
-    val manager = manager ?: Manager(this, sys)
+    val manager = manager ?: Manager(name, sys)
 
 
     /**

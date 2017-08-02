@@ -27,7 +27,7 @@ class Guide_APIs : Cmd("types") {
                 ctx  = ctx,
                 auth = null,
                 apis = listOf(
-                        ApiReg(MovieApi(ctx), false)
+                        ApiReg(MovieApi(ctx), declaredOnly = false)
                 ),
                 allowIO = false
         )

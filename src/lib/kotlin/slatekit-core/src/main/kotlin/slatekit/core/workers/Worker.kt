@@ -71,8 +71,8 @@ open class Worker<T>(
 
 ) : RunStatusSupport, Runnable {
 
-    constructor(name:String,
-                desc:String,
+    constructor(name:String     ,
+                desc:String = "",
                 notifier: WorkNotification? = null,
                 callback: WorkFunction<T> ? = null):
             this(WorkerMetadata(About.simple(name, name, desc, "", "1.0")), notifier = notifier, callback = callback)
@@ -81,6 +81,9 @@ open class Worker<T>(
     protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
     protected val _runDelay = AtomicReference<Int>(0)
     protected val _lastResult = AtomicReference<Result<T>>(ResultFuncs.failure("not started"))
+
+
+    val name:String = metadata.about.name
 
 
     /**

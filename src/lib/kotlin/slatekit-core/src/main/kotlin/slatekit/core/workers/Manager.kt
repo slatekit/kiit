@@ -9,7 +9,7 @@ import slatekit.common.status.RunStatePending
  * 2. providing workers with a work items from a queue ( if applicable )
  * 3. ensure the workers work method is done on a background thread ( ExecuteService )
  */
-open class Manager (val group: Group, val sys: System) {
+open class Manager (val groupName: String, val sys: System) {
 
     /**
      * Starts the group and continuously manages
@@ -19,11 +19,13 @@ open class Manager (val group: Group, val sys: System) {
      * the management ( e.g. based on priority, queues, etc )
      */
     open fun manage():Unit {
-
-        group.all.forEach{ worker ->
-            if ( worker.isIdle()) {
-                worker.moveToState(RunStatePending)
-                sys.sendToWork( worker )
+        val group = sys.get(groupName)
+        group?.let{ grp ->
+            grp.all.forEach{ worker ->
+                if ( worker.isIdle()) {
+                    worker.moveToState(RunStatePending)
+                    sys.sendToWork( worker )
+                }
             }
         }
     }

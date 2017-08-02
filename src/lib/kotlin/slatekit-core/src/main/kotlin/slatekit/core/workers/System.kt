@@ -31,17 +31,17 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     /**
      * register a worker into the default group
      */
-    fun <T> register(workerName:String, worker:Worker<T>, manager:Manager? = null):Unit {
-        register(defaultGroup, workerName, worker, manager)
+    fun <T> register(worker:Worker<T>, manager:Manager? = null):Unit {
+        register(defaultGroup, worker, manager)
     }
 
 
     /**
      * register a worker into the default group
      */
-    fun <T> register(groupName:String, workerName:String, worker:Worker<T>, manager:Manager? = null):Unit {
+    fun <T> register(groupName:String, worker:Worker<T>, manager:Manager? = null):Unit {
         val group = getOrCreate(groupName, manager)
-        group.add(workerName, worker)
+        group.add(worker.name, worker)
     }
 
 
