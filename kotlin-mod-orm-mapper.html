@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170712</td>
+      <td>20170802</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -121,7 +121,9 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Field</span>
+</span><span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Field</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Model</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.db.types.DbSourceMySql</span>
 <span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
@@ -140,37 +142,71 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="kd">data class</span> <span class="nc">User</span><span class="p">(</span>
-            <span class="k">override</span> <span class="kd">val</span> <span class="py">id</span><span class="p">:</span> <span class="n">Long</span> <span class="p">=</span> <span class="m">0L</span><span class="p">,</span>
+    <span class="kd">data class</span> <span class="nc">Movie</span><span class="p">(</span>
+            <span class="k">override</span> <span class="kd">val</span> <span class="py">id</span> <span class="p">:</span><span class="n">Long</span> <span class="p">=</span> <span class="m">0L</span><span class="p">,</span>
 
 
-            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
-            <span class="kd">val</span> <span class="py">email</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">50</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">title</span> <span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
 
 
-            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
-            <span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
-
-
-            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
-            <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">length</span> <span class="p">=</span> <span class="m">20</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">category</span> <span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
 
 
             <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
-            <span class="kd">val</span> <span class="py">isMale</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+            <span class="kd">val</span> <span class="py">playing</span> <span class="p">:</span><span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
 
 
             <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
-            <span class="kd">val</span> <span class="py">age</span><span class="p">:</span> <span class="n">Int</span> <span class="p">=</span> <span class="m">35</span>
-
-    <span class="p">)</span> <span class="p">:</span> <span class="n">EntityWithId</span> <span class="p">{</span>
+            <span class="kd">val</span> <span class="py">cost</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span>
 
 
-        <span class="k">fun</span> <span class="nf">fullname</span><span class="p">():</span> <span class="n">String</span> <span class="p">=</span> <span class="n">firstName</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">lastName</span>
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">rating</span><span class="p">:</span> <span class="n">Double</span><span class="p">,</span>
 
 
-        <span class="k">override</span> <span class="k">fun</span> <span class="nf">toString</span><span class="p">():</span> <span class="n">String</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="s">"$email, $firstName, $lastName, $isMale, $age"</span>
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">released</span><span class="p">:</span> <span class="n">DateTime</span><span class="p">,</span>
+
+
+            <span class="c1">// These are the timestamp and audit fields.
+</span>            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">createdAt</span> <span class="p">:</span> <span class="n">DateTime</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">createdBy</span> <span class="p">:</span><span class="n">Long</span>  <span class="p">=</span> <span class="m">0</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">updatedAt</span> <span class="p">:</span> <span class="n">DateTime</span> <span class="p">=</span>  <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">updatedBy</span> <span class="p">:</span><span class="n">Long</span>  <span class="p">=</span> <span class="m">0</span>
+    <span class="p">)</span>
+        <span class="p">:</span> <span class="n">EntityWithId</span>
+    <span class="p">{</span>
+        <span class="k">companion</span> <span class="kd">object</span> <span class="err">{
+            </span><span class="nc">fun</span> <span class="n">samples</span><span class="p">():</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+                    <span class="n">Movie</span><span class="p">(</span>
+                            <span class="n">title</span> <span class="p">=</span> <span class="s">"Indiana Jones: Raiders of the Lost Ark"</span><span class="p">,</span>
+                            <span class="n">category</span> <span class="p">=</span> <span class="s">"Adventure"</span><span class="p">,</span>
+                            <span class="n">playing</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+                            <span class="n">cost</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
+                            <span class="n">rating</span> <span class="p">=</span> <span class="m">4.5</span><span class="p">,</span>
+                            <span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">1985</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="n">Movie</span><span class="p">(</span>
+                            <span class="n">title</span> <span class="p">=</span> <span class="s">"WonderWoman"</span><span class="p">,</span>
+                            <span class="n">category</span> <span class="p">=</span> <span class="s">"action"</span><span class="p">,</span>
+                            <span class="n">playing</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+                            <span class="n">cost</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span>
+                            <span class="n">rating</span> <span class="p">=</span> <span class="m">4.2</span><span class="p">,</span>
+                            <span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="p">)</span>
         <span class="p">}</span>
     <span class="p">}</span>
     
@@ -181,29 +217,67 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-        <span class="c1">// CASE 1: Load the mapper with schema from the annotations on the model
-</span>        <span class="kd">val</span> <span class="py">model</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
-        <span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span> <span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="c1">// NOTE: There are 3 different ways to load the schema of the entity.
+</span>        <span class="c1">// 1. automatically using annotations
+</span>        <span class="c1">// 2. manually using properties references
+</span>        <span class="c1">// 3. manually using methods and string names
+</span>
 
-        <span class="c1">// CASE 2: Create instance for testing
-</span>        <span class="kd">val</span> <span class="py">person</span> <span class="p">=</span> <span class="n">User</span> <span class="p">(</span>
-                <span class="n">email</span> <span class="p">=</span> <span class="s">"jdoe@a.com"</span><span class="p">,</span>
-                <span class="n">firstName</span> <span class="p">=</span> <span class="s">"john"</span><span class="p">,</span>
-                <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe"</span><span class="p">,</span>
-                <span class="n">isMale</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
-                <span class="n">age</span> <span class="p">=</span> <span class="m">38</span>
-        <span class="p">)</span>
+        <span class="c1">// CASE 1: Load the schema from the annotations on the model
+</span>        <span class="kd">val</span> <span class="py">schema1</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
-        <span class="c1">// CASE 4: Get the sql for create
-</span>        <span class="kd">val</span> <span class="py">sqlCreate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+
+        <span class="c1">// CASE 2: Load the schema manually using properties for type-safety
+</span>        <span class="kd">val</span> <span class="py">schema2</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addId</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">title</span>     <span class="p">,</span> <span class="s">"Title of movie"</span>         <span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">30</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">category</span>  <span class="p">,</span> <span class="s">"Category (action|drama)"</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">playing</span>   <span class="p">,</span> <span class="s">"Whether its playing now"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">rating</span>    <span class="p">,</span> <span class="s">"Rating from users"</span>      <span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">released</span>  <span class="p">,</span> <span class="s">"Date of release"</span>        <span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">createdAt</span> <span class="p">,</span> <span class="s">"Who created record"</span>     <span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">createdBy</span> <span class="p">,</span> <span class="s">"When record was created"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">updatedAt</span> <span class="p">,</span> <span class="s">"Who updated record"</span>     <span class="p">)</span>
+                <span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">updatedBy</span> <span class="p">,</span> <span class="s">"When record was updated"</span><span class="p">)</span>
+
+
+        <span class="c1">// CASE 3: Load the schema manually using named fields
+</span>        <span class="kd">val</span> <span class="py">schema3</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addId</span><span class="p">(</span><span class="n">Movie</span><span class="o">::</span><span class="n">id</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addText</span>    <span class="p">(</span><span class="s">"title"</span>     <span class="p">,</span> <span class="s">"Title of movie"</span>         <span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">30</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addText</span>    <span class="p">(</span><span class="s">"category"</span>  <span class="p">,</span> <span class="s">"Category (action|drama)"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">20</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addBool</span>    <span class="p">(</span><span class="s">"playing"</span>   <span class="p">,</span> <span class="s">"Whether its playing now"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addDouble</span>  <span class="p">(</span><span class="s">"rating"</span>    <span class="p">,</span> <span class="s">"Rating from users"</span>      <span class="p">)</span>
+                <span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"released"</span>  <span class="p">,</span> <span class="s">"Date of release"</span>        <span class="p">)</span>
+                <span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"createdAt"</span> <span class="p">,</span> <span class="s">"Who created record"</span>     <span class="p">)</span>
+                <span class="p">.</span><span class="n">addLong</span>    <span class="p">(</span><span class="s">"createdBy"</span> <span class="p">,</span> <span class="s">"When record was created"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="s">"updatedAt"</span> <span class="p">,</span> <span class="s">"Who updated record"</span>     <span class="p">)</span>
+                <span class="p">.</span><span class="n">addLong</span>    <span class="p">(</span><span class="s">"updatedBy"</span> <span class="p">,</span> <span class="s">"When record was updated"</span><span class="p">)</span>
+
+
+        <span class="c1">// CASE 4: Now with a schema of the entity, you create a mapper
+</span>        <span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span> <span class="p">(</span><span class="n">schema1</span><span class="p">)</span>
+
+        <span class="c1">// Create sample instance to demo the mapper
+</span>        <span class="kd">val</span> <span class="py">movie</span> <span class="p">=</span> <span class="n">Movie</span><span class="p">(</span>
+                        <span class="n">title</span> <span class="p">=</span> <span class="s">"Man Of Steel"</span><span class="p">,</span>
+                        <span class="n">category</span> <span class="p">=</span> <span class="s">"action"</span><span class="p">,</span>
+                        <span class="n">playing</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+                        <span class="n">cost</span> <span class="p">=</span> <span class="m">100</span><span class="p">,</span>
+                        <span class="n">rating</span> <span class="p">=</span> <span class="m">4.0</span><span class="p">,</span>
+                        <span class="n">released</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2015</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="c1">// CASE 5: Get the sql for create
+</span>        <span class="kd">val</span> <span class="py">sqlCreate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="n">sqlCreate</span><span class="p">)</span>
 
-        <span class="c1">// CASE 5: Get the sql for update
-</span>        <span class="kd">val</span> <span class="py">sqlForUpdate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+        <span class="c1">// CASE 6: Get the sql for update
+</span>        <span class="kd">val</span> <span class="py">sqlForUpdate</span> <span class="p">=</span> <span class="n">mapper</span><span class="p">.</span><span class="n">mapToSql</span><span class="p">(</span><span class="n">movie</span><span class="p">,</span> <span class="n">update</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">fullSql</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="n">sqlForUpdate</span><span class="p">)</span>
 
-        <span class="c1">// CASE 6: Generate the table schema for mysql from the model
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">DbSourceMySql</span><span class="p">().</span><span class="n">builAddTable</span><span class="p">(</span><span class="n">model</span><span class="p">))</span>
+        <span class="c1">// CASE 7: Generate the table schema for mysql from the model
+</span>        <span class="n">println</span><span class="p">(</span><span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">DbSourceMySql</span><span class="p">().</span><span class="n">builAddTable</span><span class="p">(</span><span class="n">schema1</span><span class="p">))</span>
         
 
 </code></pre>

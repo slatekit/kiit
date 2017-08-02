@@ -86,7 +86,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170712</td>
+      <td>20170802</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -220,10 +220,10 @@
 </span>        <span class="kd">val</span> <span class="py">service</span> <span class="p">=</span> <span class="n">UserService</span><span class="p">(</span><span class="n">repo</span><span class="p">)</span>
 
         <span class="c1">// CASE 1: Create 3-4 users for showing use-cases
-</span>        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"john"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-01"</span><span class="p">))</span>
-        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"jane"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-02"</span><span class="p">))</span>
-        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"john"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-03"</span><span class="p">))</span>
-        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"jane"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-04"</span><span class="p">))</span>
+</span>        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"Indiana"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-01"</span><span class="p">))</span>
+        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"jane"</span>   <span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-02"</span><span class="p">))</span>
+        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"john"</span>   <span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-03"</span><span class="p">))</span>
+        <span class="n">service</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"jane"</span>   <span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-04"</span><span class="p">))</span>
 
         <span class="c1">// CASE 2: Get by id
 </span>        <span class="n">printOne</span><span class="p">(</span><span class="s">"2"</span><span class="p">,</span> <span class="n">service</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>

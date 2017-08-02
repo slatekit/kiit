@@ -8,7 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -79,7 +79,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170712</td>
+      <td>20170802</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -173,9 +173,6 @@
 </span>        <span class="kd">val</span> <span class="py">request</span> <span class="p">=</span> <span class="n">Request</span><span class="p">(</span>
                 <span class="n">path</span>     <span class="p">=</span> <span class="s">"app.users.activate"</span><span class="p">,</span>
                 <span class="n">parts</span>    <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"app"</span><span class="p">,</span> <span class="s">"users"</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">),</span>
-                <span class="n">area</span>     <span class="p">=</span> <span class="s">"app"</span><span class="p">,</span>
-                <span class="n">name</span>     <span class="p">=</span> <span class="s">"users"</span><span class="p">,</span>
-                <span class="n">action</span>   <span class="p">=</span> <span class="s">"activate"</span><span class="p">,</span>
                 <span class="n">protocol</span> <span class="p">=</span> <span class="s">"cli"</span><span class="p">,</span>
                 <span class="n">verb</span>     <span class="p">=</span> <span class="s">"post"</span><span class="p">,</span>
                 <span class="n">opts</span>     <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"ABC-123"</span><span class="p">)),</span>
@@ -194,18 +191,23 @@
         <span class="c1">// CASE 2: Get the parts of the path
 </span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">parts</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 3: Get a header named "api-key"
+        <span class="c1">// CASE 3: Get the area/api/action
+</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">area</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c1">// CASE 4a: Get a header named "api-key"
 </span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">opts</span><span class="o">?.</span><span class="n">getString</span><span class="p">(</span><span class="s">"api-key"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4a: Get a header named "sample-id" as integer
+        <span class="c1">// CASE 4b: Get a header named "sample-id" as integer
 </span>        <span class="c1">// IF its not there, this will return a 0 as getInt
 </span>        <span class="c1">// returns a non-nullable value
 </span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">opts</span><span class="o">?.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4b: Get a header named "sample-id" as nullable integer
+        <span class="c1">// CASE 4c: Get a header named "sample-id" as nullable integer
 </span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">opts</span><span class="o">?.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4c: Get a header named "sample-id" as integer with default
+        <span class="c1">// CASE 4d: Get a header named "sample-id" as integer with default
 </span>        <span class="c1">// value if its not there
 </span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">opts</span><span class="o">?.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
 

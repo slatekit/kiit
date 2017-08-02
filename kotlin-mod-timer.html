@@ -8,7 +8,7 @@
     <title>Slate Kit - Utilities</title>
     <link href="themes/start/assets/css/template.css" rel="stylesheet">	
     <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -79,7 +79,7 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170712</td>
+      <td>20170802</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -114,7 +114,7 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Timer</span>
+</span><span class="k">import</span> <span class="nn">slatekit.common.Measure</span>
 
 
 
@@ -143,7 +143,7 @@
     <span class="c1">// CASE 1: Benchmark an operation 1 time
 </span>    <span class="c1">// NOTE: Using call-by-name
 </span>    <span class="n">showResult</span><span class="p">(</span>
-      <span class="n">Timer</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s">"run once"</span><span class="p">,</span> <span class="p">{</span>
+      <span class="n">Measure</span><span class="p">.</span><span class="n">once</span><span class="p">(</span><span class="s">"run once"</span><span class="p">,</span> <span class="p">{</span>
        <span class="kd">val</span> <span class="py">ms</span> <span class="p">=</span> <span class="n">Random</span><span class="p">.</span><span class="n">digits3</span><span class="p">()</span>
         <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">ms</span><span class="p">.</span><span class="n">toLong</span><span class="p">())</span>
         <span class="n">ms</span>
@@ -152,11 +152,11 @@
 
 
     <span class="c1">// CASE 2: Benchmark an operation 10 times and get all individual results
-</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Timer</span><span class="p">.</span><span class="n">many</span><span class="p">(</span><span class="s">"run 2 times"</span><span class="p">,</span> <span class="p">{</span> <span class="n">count</span> <span class="p">-&gt;</span>  <span class="n">println</span><span class="p">(</span> <span class="s">"operation : $count"</span> <span class="p">)</span> <span class="p">},</span> <span class="m">2</span><span class="p">))</span>
+</span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Measure</span><span class="p">.</span><span class="n">many</span><span class="p">(</span><span class="s">"run 2 times"</span><span class="p">,</span> <span class="p">{</span> <span class="n">count</span> <span class="p">-&gt;</span>  <span class="n">println</span><span class="p">(</span> <span class="s">"operation : $count"</span> <span class="p">)</span> <span class="p">},</span> <span class="m">2</span><span class="p">))</span>
 
 
     <span class="c1">// CASE 3: Benchmark an operation 10 times and get an average
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="n">Timer</span><span class="p">.</span><span class="n">avg</span><span class="p">(</span><span class="s">"avg of 10 times"</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="p">{</span> <span class="n">count</span> <span class="p">-&gt;</span>
+</span>    <span class="n">showResult</span><span class="p">(</span> <span class="n">Measure</span><span class="p">.</span><span class="n">avg</span><span class="p">(</span><span class="s">"avg of 10 times"</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="p">{</span> <span class="n">count</span> <span class="p">-&gt;</span>
 
       <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">Random</span><span class="p">.</span><span class="n">digits3</span><span class="p">().</span><span class="n">toLong</span><span class="p">())</span>
     <span class="p">}))</span>

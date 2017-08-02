@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Architecture</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">    
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-header">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar navbar-static-top " role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Slate Kit</h1>
+                <p>
+                  Pre-built server architecture and backend for you applications.				  
+				  <br />
+				  Tools and utilities also included!
+                </p>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="workers">Workers</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Background workers that can be paused, resumed, stopped, with support for worker groups, metrics, and queue and more</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>20170802</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.3</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.core.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.core.workers</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.core.workers.Worker.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/workers" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/workers</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.core.workers.Manager</span>
+<span class="k">import</span> <span class="nn">slatekit.core.workers.Worker</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.success</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+        <span class="c1">// The background workers system is designed with a few basic
+</span>        <span class="c1">// principles and concepts:
+</span>        <span class="c1">//
+</span>        <span class="c1">// TERMINOLOGY:
+</span>        <span class="c1">// 1. Worker  : Actual background work that handles some work
+</span>        <span class="c1">// 2. Group   : Named collection of workers for organization
+</span>        <span class="c1">// 3. Manager : Manages a group and ensures each idle worker perform work
+</span>        <span class="c1">// 4. System  : Top level system that runs workers in a java executor service
+</span>        <span class="c1">// 5. Queued  : Interface for handling work from a queue
+</span>        <span class="kd">val</span> <span class="py">sys</span> <span class="p">=</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">workers</span><span class="p">.</span><span class="n">System</span><span class="p">()</span>
+
+        <span class="c1">// CASE 1: Register a named worker in the default group "default"
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"emailer"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
+</span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">success</span><span class="p">(</span><span class="s">"sent registration confirmation to email"</span><span class="p">)</span>
+        <span class="p">}))</span>
+
+        <span class="c1">// CASE 2: Register named workers in the group "notifications"
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">,</span> <span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"message_worker"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
+</span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">success</span><span class="p">(</span><span class="s">"sent message to user"</span><span class="p">)</span>
+        <span class="p">}))</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">,</span> <span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"reminder_worker"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
+</span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">success</span><span class="p">(</span><span class="s">"sent reminder to user"</span><span class="p">)</span>
+        <span class="p">}))</span>
+
+        <span class="c1">// CASE 3: Register named worker with manager in new group
+</span>        <span class="c1">// You can create / derive your own manager to include logic
+</span>        <span class="c1">// on how to manage the group. The default simply iterates
+</span>        <span class="c1">// through the workers and if they are idle simply dispatches
+</span>        <span class="c1">// to the system to perform work.
+</span>        <span class="c1">// NOTE: There is always 1 manager per group.
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"reports"</span><span class="p">,</span><span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span> <span class="s">"Active users"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
+            <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
+</span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">success</span><span class="p">(</span><span class="s">"generated a report of active users"</span><span class="p">)</span>
+        <span class="p">}),</span> <span class="n">manager</span> <span class="p">=</span> <span class="n">Manager</span><span class="p">(</span><span class="s">"reports"</span><span class="p">,</span> <span class="n">sys</span><span class="p">))</span>
+
+        <span class="c1">// CASE 4: Start the worker system
+</span>        <span class="c1">// This calls the start() on each group and continuously
+</span>        <span class="c1">// calls the manage method on the manager of the group.
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
+
+        <span class="c1">// Just for demo purposes
+</span>        <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">3000</span><span class="p">)</span>
+
+        <span class="c1">// COMING SOON:
+</span>        <span class="c1">// 1. Scheduled workers ( at recurrence intervals )
+</span>        
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+        <span class="c1">// Each group and work has its own status ( group can be working,
+</span>        <span class="c1">// but a specific worker can be idle.
+</span>
+        <span class="c1">// ===================================================
+</span>        <span class="c1">// GROUP: Examples of group lookup and properties
+</span>        <span class="c1">// CASE 1: Get a group by name
+</span>        <span class="kd">val</span> <span class="py">group1</span> <span class="p">=</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">group1</span><span class="o">?.</span><span class="n">name</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 2: Get the status of the group
+</span>        <span class="n">println</span><span class="p">(</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="n">state</span><span class="p">()</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 3: Get the size of the group
+</span>        <span class="n">println</span><span class="p">(</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="n">size</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 4: Get the manager of the group
+</span>        <span class="n">println</span><span class="p">(</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="n">manager</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 5: You can pause, resume, stop, start the group
+</span>        <span class="c1">// NOTE: The status of the group will be changed immediately
+</span>        <span class="c1">// however, some workers in the group may already be queued
+</span>        <span class="c1">// up for working, so they will only be effected after their
+</span>        <span class="c1">// current execution/run is complete
+</span>        <span class="n">group1</span><span class="o">?.</span><span class="n">pause</span><span class="p">(</span><span class="m">30</span><span class="p">)</span>
+        <span class="n">group1</span><span class="o">?.</span><span class="n">resume</span><span class="p">()</span>
+        <span class="n">group1</span><span class="o">?.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="n">group1</span><span class="o">?.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1">// ===================================================
+</span>        <span class="c1">// WORKER: Examples of worker lookup and properties
+</span>        <span class="c1">// CASE 1: Get a named worker in a group
+</span>        <span class="kd">val</span> <span class="py">worker1</span> <span class="p">=</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="k">get</span><span class="p">(</span><span class="s">"message_worker"</span><span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span><span class="n">worker1</span><span class="o">?.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1">// CASE 2: Get a named worker by index
+</span>        <span class="kd">val</span> <span class="py">worker2</span> <span class="p">=</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="k">get</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span><span class="n">worker2</span><span class="o">?.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="c1">// CASE 3: Get the run state of the worker
+</span>        <span class="n">println</span><span class="p">(</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="k">get</span><span class="p">(</span><span class="s">"message_worker"</span><span class="p">)</span><span class="o">?.</span><span class="n">state</span><span class="p">()</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 4: Get the status of a worker which provides more info
+</span>        <span class="kd">val</span> <span class="py">status</span> <span class="p">=</span> <span class="n">sys</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">)</span><span class="o">?.</span><span class="k">get</span><span class="p">(</span><span class="s">"message_worker"</span><span class="p">)</span><span class="o">?.</span><span class="n">status</span><span class="p">()</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">name</span>       <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">errorCount</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">lastResult</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">lastRunTime</span><span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">runCount</span>   <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">status</span><span class="o">?.</span><span class="n">status</span>     <span class="p">)</span>
+
+        <span class="c1">// CASE 5: You can pause, resume, stop, start the worker
+</span>        <span class="c1">// NOTE: The status of the worker will be changed immediately
+</span>        <span class="c1">// however, if the worker is queued up for working, it will
+</span>        <span class="c1">// only be effected after their current execution/run is complete
+</span>        <span class="n">worker1</span><span class="o">?.</span><span class="n">pause</span><span class="p">(</span><span class="m">30</span><span class="p">)</span>
+        <span class="n">worker1</span><span class="o">?.</span><span class="n">resume</span><span class="p">()</span>
+        <span class="n">worker1</span><span class="o">?.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="n">worker1</span><span class="o">?.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1">// ===================================================
+</span>        <span class="c1">// SYSTEM: Examples of system level features
+</span>
+        <span class="c1">// CASE 5: You can pause, resume, stop, start the group
+</span>        <span class="c1">// NOTE: The status of the system will be changed immediately
+</span>        <span class="c1">// however, some workers in the group may already be queued
+</span>        <span class="c1">// up for working, so they will only be effected after their
+</span>        <span class="c1">// current execution/run is complete
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">pause</span><span class="p">()</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">resume</span><span class="p">()</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
+
+        <span class="c1">// This completes the system and will stop all further processing.
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">complete</span><span class="p">()</span>
+
+        
+
+</code></pre>
+</div>
+
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>	
+	<script type="text/javascript">
+		var _codehelixAppPage = "core";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+  </body>
+</html>
