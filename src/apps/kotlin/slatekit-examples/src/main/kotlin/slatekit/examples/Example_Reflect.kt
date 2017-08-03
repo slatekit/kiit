@@ -27,6 +27,7 @@ import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.common.AppContext
 import slatekit.examples.common.User
 import slatekit.examples.common.UserApi
+import slatekit.integration.common.AppEntContext
 
 //</doc:import_examples>
 
@@ -55,7 +56,7 @@ class Example_Reflect : Cmd("reflect") {
     //</doc:setup>
 
     //<doc:examples>
-    val ctx = AppContext.sample("sample", "sample", "", "")
+    val ctx = AppEntContext.sample("sample", "sample", "", "")
     val api = UserApi(ctx)
 
     // CASE 1: Create instance of a class ( will pick a 0 parameter constructor )

@@ -7,6 +7,7 @@ import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.examples.common.*
+import slatekit.integration.common.AppEntContext
 
 
 /**
@@ -22,7 +23,7 @@ class Guide_APIs : Cmd("types") {
 
     fun setup():Unit {
 
-        val ctx = AppContext.simple("myapp")
+        val ctx = AppEntContext.simple("myapp")
         val container = ApiContainer(
                 ctx  = ctx,
                 auth = null,

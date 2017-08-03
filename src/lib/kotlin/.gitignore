@@ -17,7 +17,8 @@ lib/
 build/
 dist/
 target/
-
+.gradle/
+gradle/
 
 # tests
 ./src/tests/kotlin/*

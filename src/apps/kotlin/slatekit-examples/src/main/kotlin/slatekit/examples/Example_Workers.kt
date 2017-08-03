@@ -13,17 +13,19 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-
+import slatekit.common.DateTime
+import slatekit.core.workers.Manager
+import slatekit.core.workers.Worker
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.BoolMessage
 import slatekit.common.Result
+import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
-import slatekit.core.workers.Manager
-import slatekit.core.workers.Worker
+import slatekit.core.workers.WorkerSettings
+import slatekit.core.workers.WorkerWithQueue
 
 //</doc:import_examples>
 
@@ -47,20 +49,25 @@ class Example_Workers : Cmd("utils") {
         sys.register(Worker<String>("emailer", callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
+            println("email worker: " + DateTime.now().toString())
             success("sent registration confirmation to email")
         }))
+
 
         // CASE 2: Register named workers in the group "notifications"
         sys.register("notifications", Worker<String>("message_worker", callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
+            println("message worker: " + DateTime.now().toString())
             success("sent message to user")
         }))
         sys.register("notifications", Worker<String>("reminder_worker", callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
+            println("reminder worker: " + DateTime.now().toString())
             success("sent reminder to user")
         }))
+
 
         // CASE 3: Register named worker with manager in new group
         // You can create / derive your own manager to include logic
@@ -71,16 +78,46 @@ class Example_Workers : Cmd("utils") {
         sys.register("reports",Worker<String>( "Active users", callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
+            println("report worker: " + DateTime.now().toString())
             success("generated a report of active users")
         }), manager = Manager("reports", sys))
 
-        // CASE 4: Start the worker system
+
+        // CASE 4: Extend the worker class instead of providing a lambda
+        class MyWorker : Worker<String>("custom_1") {
+            override fun process(args: Array<Any>?): Result<String> {
+                println("custom worker: " + DateTime.now().toString())
+                return success("customer worker class")
+            }
+        }
+        sys.register("custom", MyWorker())
+
+
+        // CASE 5: Setup a worker to use a queue
+        // NOTE: You can you the AWS queue for production
+        // Queues have the interface QueueSource and there is a
+        // sample QueueSourceDefault available for prototyping/unit-tests purposes.
+        // This lambda specifies a converter for the message
+        val queue = QueueSourceDefault({ item -> item.toString().toInt() })
+
+        // Add some sample items to the queue
+        (1..10).forEachIndexed{ ndx, _ -> queue.send(ndx) }
+
+        // Register the worker as a WorkerWithQueue and supply a lamda to process
+        // each item from the queue. NOTE: The converter supplied to the queue
+        // will convert the messageBody to the type T supplied.
+        sys.register("queued", WorkerWithQueue<Int>("example", "", queue, null, WorkerSettings(batchSize = 2),
+            callback = { value ->
+            println("queue worker: " + DateTime.now().toString() + " : " + value )
+        }))
+
+        // CASE 6: Start the worker system
         // This calls the start() on each group and continuously
         // calls the manage method on the manager of the group.
         sys.run()
 
         // Just for demo purposes
-        Thread.sleep(3000)
+        Thread.sleep(4000)
 
         // COMING SOON:
         // 1. Scheduled workers ( at recurrence intervals )

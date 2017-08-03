@@ -109,10 +109,10 @@ class Example_Entities_Service : Cmd("service") {
         val service = UserService(repo)
 
         // CASE 1: Create 3-4 users for showing use-cases
-        service.create(User(firstName = "Indian", lastName = "doe-01"))
-        service.create(User(firstName = "jane", lastName = "doe-02"))
-        service.create(User(firstName = "john", lastName = "doe-03"))
-        service.create(User(firstName = "jane", lastName = "doe-04"))
+        service.create(User(firstName = "Indiana", lastName = "doe-01"))
+        service.create(User(firstName = "jane"   , lastName = "doe-02"))
+        service.create(User(firstName = "john"   , lastName = "doe-03"))
+        service.create(User(firstName = "jane"   , lastName = "doe-04"))
 
         // CASE 2: Get by id
         printOne("2", service.get(2))
