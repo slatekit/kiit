@@ -56,7 +56,7 @@ fun main(args: Array<String>): Unit {
             enc = AppEncryptor
     )
     val ctx = AppEntContext.fromAppContext(ctxRaw)
-    
+
     // =========================================================================
     // 2: Setup the entity services
     // =========================================================================
