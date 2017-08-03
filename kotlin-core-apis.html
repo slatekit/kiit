@@ -645,9 +645,6 @@
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
  * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param area      : action represented by route e.g. app in "app.reg.activateUser"
- * @param name      : name represented by route   e.g. reg in "app.reg.activateUser"
- * @param action    : action represented by route e.g. activateUser in "app.reg.activateUser"
  * @param protocol  : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
  * @param opts      : options representing settings/configurations ( similar to http-headers )
@@ -658,9 +655,6 @@
 <span class="kd">data class</span> <span class="nc">Request</span> <span class="p">(</span>
                      <span class="kd">val</span> <span class="py">path</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
                      <span class="kd">val</span> <span class="py">parts</span>      <span class="p">:</span><span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span>        <span class="p">,</span>
-                     <span class="kd">val</span> <span class="py">area</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
-                     <span class="kd">val</span> <span class="py">name</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
-                     <span class="kd">val</span> <span class="py">action</span>     <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
                      <span class="kd">val</span> <span class="py">protocol</span>   <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
                      <span class="kd">val</span> <span class="py">verb</span>       <span class="p">:</span><span class="n">String</span>              <span class="p">,</span>
                      <span class="kd">val</span> <span class="py">args</span>       <span class="p">:</span><span class="n">Inputs</span><span class="p">?</span>             <span class="p">,</span>
@@ -1221,28 +1215,28 @@
 						<td><strong>WEB</strong></td>
 						<td>areas</td>
 						<td>help</td>
-						<td>http://.../api-help</td>
+						<td>http://.../api/help</td>
 						<td>shows all the areas in system</td>
 					</tr>
 					<tr>
 						<td><strong>-</strong></td>
 						<td>apis</td>
-						<td>area-help</td>
-						<td>http://.../api/app-help</td>
+						<td>area/help</td>
+						<td>http://.../api/app/help</td>
 						<td>shows all the apis for the area</td>
 					</tr>
 					<tr>
 						<td><strong>-</strong></td>
 						<td>actions</td>
-						<td>area/api-help</td>
-						<td>http://.../api/app/users-help</td>
+						<td>area/api/help</td>
+						<td>http://.../api/app/users/help</td>
 						<td>shows all the actions for the api</td>
 					</tr>
 					<tr>
 						<td><strong>-</strong></td>
 						<td>action</td>
-						<td>area/api/action-help</td>
-						<td>http://.../api/app/users/activate-help</td>
+						<td>area/api/action/help</td>
+						<td>http://.../api/app/users/activate/help</td>
 						<td>shows signature of the api action</td>
 					</tr>
 				</table>
@@ -1456,9 +1450,9 @@
 				<br/><br/>
 				
 				<h1 id="api-server">11. Web</h1>
-				<p>See the <a class="url-ch" href="server.html">CLI</a> page and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Slate Server.</p>
+				<p>See the <a class="url-ch" href="kotlin-core-server.html">Server</a> page and <a class="url-ch" href="releases.html#release-downloads">Sample Apps</a> for more info on hosting your API on the Slate Server.</p>
 				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>	
-				<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>					
+				
 				<br/>
 			</div>
 		</section>

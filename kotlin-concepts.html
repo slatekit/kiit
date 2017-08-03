@@ -144,7 +144,7 @@
 						<td><strong>6. Routes </strong></td>
 						<td>Abstracts a request whether it is on the CLI ( command line ) or a HTTP Request.
 						This is used to build Slate Kit APIs ( which are protocol independent ).</td>
-						<td><a href="#concept-request" class="more"><span class="btn btn-primary">more</span></a></td>
+						<td><a href="#concept-routes" class="more"><span class="btn btn-primary">more</span></a></td>
 					</tr>
 					<tr> 
 						<td><strong>7. Request </strong></td>
@@ -586,7 +586,7 @@
 			</div>
 			<br/><br/>
 			<div>
-				<h1 id="concept_request">6. Routes</h1>
+				<h1 id="concept-routes">6. Routes</h1>
 				<p>In Slate Kit, all requests ( HTTP or CLI ) confirm to what is called the "Unified Routing Format" which is a 3 part 
 				routing structure defined below. This simple yet convenient approach ( while not fully REST Compliant by design ) is one part that 
 				helps make Slate Kit APIs protocol independent and thus available on both HTTP and CLI. 
@@ -628,10 +628,12 @@
 					</ol>
 					</p>
 				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+				<br/><br/><br/>
 			</div>
 			<br/><br/>
 			<div>
-				<h1 id="concept_request">7. Request</h1>
+				<h1 id="concept-request">7. Request</h1>
 				<p>The Request class abstracts a request whether it is on the CLI ( command line ) or a HTTP Request. This is used to build Slate Kit APIs ( which are protocol independent ).
 				
 				</p>
@@ -677,9 +679,6 @@
 </span>  <span class="kd">val</span> <span class="py">request</span> <span class="p">=</span> <span class="n">Request</span><span class="p">(</span>
       <span class="n">path</span>   <span class="p">=</span> <span class="s">"app.users.activate"</span><span class="p">,</span>
       <span class="n">parts</span>  <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"app"</span><span class="p">,</span> <span class="s">"users"</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">),</span>
-      <span class="n">area</span>   <span class="p">=</span> <span class="s">"app"</span><span class="p">,</span>
-      <span class="n">name</span>   <span class="p">=</span> <span class="s">"users"</span><span class="p">,</span>
-      <span class="n">action</span> <span class="p">=</span> <span class="s">"activate"</span><span class="p">,</span>
       <span class="n">verb</span>   <span class="p">=</span> <span class="s">"post"</span><span class="p">,</span>
       <span class="n">opts</span>   <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"ABC-123"</span><span class="p">)),</span>
       <span class="n">args</span>   <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"userId"</span> <span class="n">to</span> <span class="m">5001</span><span class="p">)),</span>
@@ -702,7 +701,7 @@
 			</div>
 			<br/><br/>
 			<div>
-				<h1 id="concept_result">8. Result</h1>
+				<h1 id="concept-result">8. Result</h1>
 				<p>The Result represents an abstraction for a response
 				and also models successes and failures using a combined set of fields for a code, value, message, and success/failure flag.
 				It is general purpose enough to be used anywhere. However, in Slate it is used in conjunction with the Request to allow Slate Kit APIs to be "protocol independent", allowing APIs to 

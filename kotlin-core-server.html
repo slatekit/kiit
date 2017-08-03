@@ -78,7 +78,7 @@
 				<br/>
 				<h1>About</h1>
 				<p>The Slate Kit Server is a Web API Server that can host Slate Kit 
-					<strong><a href="apis-detail.html" class="url-ch">Protocol Independent APIs</a></strong> which can run as both Web APIs and on the CLI ( Command Line ).
+					<strong><a href="kotlin-core-apis.html" class="url-ch">Protocol Independent APIs</a></strong> which can run as both Web APIs and on the CLI ( Command Line ).
 					The server uses <strong>Spark Java</strong> as the underlying http server.
 					The power of Slate Kits Protocol Independent APIs are that you write them once 
 					as normal Kotlin classes with annotations and they are made available on HTTP and conveniently
@@ -156,8 +156,8 @@
 						<td class="col-sm-6"><strong>Description</strong></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>Server Foundation</strong></td>
-						<td class="col-sm-6">Provide a strong foundation for quickly building an API server</td>
+						<td class="col-sm-2"><strong>Server Host</strong></td>
+						<td class="col-sm-6">The server is designed to simply be a host for existing classes and methods</td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Server Features</strong></td>
@@ -216,86 +216,140 @@
 						<td><p>How the APIs are implemented and hosted in the server</td>
 						<td><a href="#server-approach" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
+					<tr >
+						<td><strong>3. Examples</strong></td>
+						<td><p>Links to several examples of usage from the Sample Apps</td>
+						<td><a href="#server-examples" class="more"><span class="btn btn-primary">See more</span></a></td>
+					</tr>
 					<tr > 
-						<td><strong>3. Setup</strong></td>
+						<td><strong>4. Setup</strong></td>
 						<td>How to create and run an instance of the server</td>
 						<td><a href="#server-setup" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr > 
-						<td><strong>4. Routing</strong></td>
+						<td><strong>5. Options</strong></td>
+						<td>The configuration options available for the server</td>
+						<td><a href="#server-options" class="more"><span class="btn btn-primary">See more</span></a></td>
+					</tr>
+					<tr > 
+						<td><strong>6. Routing</strong></td>
 						<td>How the routing of Http requests are directed to your APIs</td>
 						<td><a href="#server-routing" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
+					<tr > 
+						<td><strong>7. Help</strong></td>
+						<td>How to enable and view help docs for the API</td>
+						<td><a href="#server-help" class="more"><span class="btn btn-primary">See more</span></a></td>
+					</tr>
+					<tr > 
+						<td><strong>8. Security</strong></td>
+						<td>How to create and run an instance of the server</td>
+						<td><a href="#server-security" class="more"><span class="btn btn-primary">See more</span></a></td>
+					</tr>
 					<tr> 
-						<td><strong>5. More</strong></td>
+						<td><strong>9. More</strong></td>
 						<td>How to configure security and write your own authentication/authorization scheme.</td>
-						<td><a href="#server-security" class="more"><span class="btn btn-primary">See more</span></a></td>						
+						<td><a href="#server-features" class="more"><span class="btn btn-primary">See more</span></a></td>						
 					</tr>
 					
 				</table>
-					<div > 
-						<br/><br/>
-						<h1 id="server-tech">Tech</h1>
-						<p>Built in 100% Kotlin and using Akka-Http and the Slate Components and Utilities.
-						</p>
-						<table class="table table-bordered table-striped">
-							<tr>
-								<td class="col-sm-2"><strong>Tech</strong></td>
-								<td class="col-sm-2"><strong>Version</strong></td>
-								<td><strong>Description</strong></td>
-							</tr>
-							<tr> 
-								<td>java</td>
-								<td>1.8</td>
-								<td>JRE</td>
-							</tr>
-							<tr> 
-								<td>Kotlin</td>
-								<td>1.1.2</td>
-								<td>Kotlin sdk</td>
-							</tr>
-							<tr> 
-								<td>Spark Java</td>
-								<td>2.1 ( 2.5 soon )</td>
-								<td>Http server</td>
-							</tr>
-							<tr> 
-								<td>slate.common</td>
-								<td>-</td>
-								<td>Using many of the <a class="url-ch" href="utils.html">Slate Utilities</a></td>
-							</tr>
-							<tr> 
-								<td>slatekit.core</td>
-								<td>-</td>
-								<td>This dependency will be removed soon</td>
-							</tr>
-							<tr> 
-								<td>slatekit.entities</td>
-								<td>-</td>
-								<td>This dependency will be removed soon</td>
-							</tr>
-						</table>
-						
+				<div > 
+					<br/><br/>
+					<h1 id="server-tech">1. Tech</h1>
+					<p>Built in 100% Kotlin and using Akka-Http and the Slate Components and Utilities.
+					</p>
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td class="col-sm-2"><strong>Tech</strong></td>
+							<td class="col-sm-2"><strong>Version</strong></td>
+							<td><strong>Description</strong></td>
+						</tr>
+						<tr> 
+							<td>java</td>
+							<td>1.8</td>
+							<td>JRE</td>
+						</tr>
+						<tr> 
+							<td>Kotlin</td>
+							<td>1.1.2</td>
+							<td>Kotlin sdk</td>
+						</tr>
+						<tr> 
+							<td>Spark Java</td>
+							<td>2.6</td>
+							<td>Http server</td>
+						</tr>
+						<tr> 
+							<td>slate.common</td>
+							<td>-</td>
+							<td>Using many of the <a class="url-ch" href="utils.html">Slate Utilities</a></td>
+						</tr>
+						<tr> 
+							<td>slatekit.core</td>
+							<td>-</td>
+							<td>This dependency may be removed soon.</td>
+						</tr>
+						<tr> 
+							<td>slatekit.apis</td>
+							<td>-</td>
+							<td>Hosts the Slate Kit APIs</td>
+						</tr>
+					</table>
+					
 
-						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-						<br/><br/><br/>
-					</div>
-					<div> 
-						<h1 id="server-approach">Approach</h1>
-						<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Kotlin APIs to run in the server and/or in the CLI. 
-						Our server code marshalls/routes WEB API calls to your APIs. You simply annotate your APIs to make them available.
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<br/>
+				<div> 
+					<h1 id="server-approach">2. Approach</h1>
+					<p>Follows a philosophy of "protocol independent modular APIs" where you embed regular Kotlin classes as APIs to run in the server and/or in the CLI. 
+					Our server code marshalls/routes WEB API calls to your APIs. You can optionally annotate your APIs to make more descriptive and configurable.
+					</p>
+					<h3>APIS</h3>
+					<p>The server is a container for your existing APIs. For more information see the APIs page</p>
+					<a href="kotlin-core-apis.html" class="apis"><span class="btn btn-primary">See APIs</span></a>
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<br/>
+				<div > 
+					<h1 id="server-examples">3. Examples</h1>
+					<p>There are multiple examples of using the server to host Web APIS.
+					</p>
+					<table class="table table-bordered table-striped">
+					<tr><td class="col-sm-1"><strong>example   </strong></td><td class="col-sm-1"><strong>link</strong></td><td class="col-sm-2"><strong>desc</strong></td></tr>
+					<tr><td><strong>POKOs          </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SamplePOKOApi.kt      ">SamplePOKOApi.kt      </a></td><td>Plain classes / methods without annotations</td></tr>
+					<tr><td><strong>Outputs        </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleTypes1Api.kt    ">SampleTypes1Api.kt    </a></td><td>Returning types, lists, maps, objects, etc</td></tr>
+					<tr><td><strong>Inputs         </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleTypes2Api.kt    ">SampleTypes2Api.kt    </a></td><td>Taking in types, lists, maps, objects, etc</td></tr>
+					<tr><td><strong>Smart Types    </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleTypes3Api.kt    ">SampleTypes3Api.kt    </a></td><td>Auto-decrypted values and "Smart-Strings"</td></tr>
+					<tr><td><strong>Annotations    </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleAnnoApi.kt      ">SampleAnnoApi.kt      </a></td><td>Annotations for descriptions and configuration</td></tr>
+					<tr><td><strong>Entities       </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleEntityApi.kt    ">SampleEntityApi.kt    </a></td><td>Using built-in entities/orm support</td></tr>
+					<tr><td><strong>REST support   </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleRESTApi.kt      ">SampleRESTApi.kt      </a></td><td>Support for REST based routes</td></tr>
+					<tr><td><strong>Inheritance    </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleInheritedApi.kt ">SampleInheritedApi.kt </a></td><td>Using inheritance with APIs</td></tr>
+					<tr><td><strong>Filters/Hooks  </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleMiddlewareApi.kt">SampleMiddlewareApi.kt</a></td><td>Enabling middle-ware ( hooks, filters ) for APIs</td></tr>
+					<tr><td><strong>Error handling </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleErrorsApi.kt    ">SampleErrorsApi.kt    </a></td><td>Different ways to handle errors</td></tr>
+					<tr><td><strong>Roles via Keys </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleRolesByApp.kt   ">SampleRolesByApp.kt   </a></td><td>Security via API keys</td></tr>
+					<tr><td><strong>Roles via Roles</strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleRolesByKey.kt   ">SampleRolesByKey.kt   </a></td><td>Security via Roles and authorization</td></tr>
+					<tr><td><strong>Files          </strong></td><td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/apis/SampleFilesApi.kt     ">SampleFilesApi.kt     </a></td><td>Handling of file types and content</td></tr>
+					</table>
+					<div class="alert alert-warning" role="alert">
+						<p><i class="fa fa-link"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-server/src/main/kotlin/slatekit/sampleapp/server/SampleAppServer.kt"> SampleAppServer.kt</a></strong> for setup.
 						</p>
-						<h3>APIS</h3>
-						<p>The server is implemented as a collection of APIs. For more information see the APIs page</p>
-						<a href="kotlin-core-apis.html" class="apis"><span class="btn btn-primary">See APIs</span></a>
-						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-						<br/><br/><br/>
-					</div>
-					<div> 
-						<h1 id="server-setup">Setup</h1>
-						<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+					</div>	
+					<div class="alert alert-info" role="alert">
+						<p><i class="fa fa-info-circle"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/apps/kotlin/slatekit-sampleapps/"> Sample Apps</a></strong> for more info.
 						</p>
-						<div class="highlighter-rouge"><pre class="highlight"><code> 
+					</div>						
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<br/>
+				<div> 
+					<h1 id="server-setup">4. Setup</h1>
+					<p>You can configure your Slate Server with the environment, other startup info, and APIs you want "embedded", and you are ready to have the server handle REST api calls. You can configure the port, environment, logs, and other settings in application.conf.
+					</p>
+					<div class="highlighter-rouge"><pre class="highlight"><code> 
     <span class="c1">// 1: Sample API ( Pure Kotlin annotated classes / methods 
 </span>    <span class="n">@Api</span><span class="p">(</span><span class="n">area</span> <span class="p">=</span> <span class="s">"app"</span><span class="p">,</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"tests"</span><span class="p">,</span> <span class="n">verb</span> <span class="p">=</span> <span class="s">"*"</span><span class="p">,</span> <span class="n">protocol</span> <span class="p">=</span> <span class="s">"*"</span><span class="p">)</span>
     <span class="kd">class</span> <span class="nc">SampleApi</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">AppContext</span><span class="p">):</span> <span class="n">ApiBase</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="p">{</span>
@@ -325,23 +379,48 @@
 </code></pre>
 </div>
 
-						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-						<br/><br/><br/>
-					</div>
-					<div>
-						<h1 id="server-routing">Routing</h1>
-						<p>The server routes WEB API calls to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
-						In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.
-						Refer to <a class="url-ch" href="kotlin-core-apis.html">APIs</a> for more info.
-						</p>
-				<br/>
-				<div class="alert alert-success" role="alert">
-					<h3>http://mycomany.com/api/<strong>{area}/{api}/{action}</strong></h3>
-					<br/>
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
 				</div>
 				<br/>
-				<h3>Example</h3>
-				<div class="highlighter-rouge">
+				<div > 
+					<h1 id="server-options">5. Options</h1>
+					<p>There are various options for configuring the server, with 
+					more options coming later.
+					</p>
+					<table class="table table-bordered table-striped">
+					<tr><td class="col-sm-1"><strong>option   </strong></td><td class="col-sm-1"><strong>type</strong></td><td class="col-sm-1"><strong>sample</strong></td><td class="col-sm-2"><strong>desc</strong></td></tr>
+					<tr><td><strong>port   </strong></td><td>Int          </td><td> 5000      </td><td>The port number to run on</td></tr>
+					<tr><td><strong>prefix </strong></td><td>String       </td><td> "/api/"   </td><td>A prefix for each route</td></tr>
+					<tr><td><strong>info   </strong></td><td>Boolean      </td><td> true      </td><td>Enable server startup info</td></tr>
+					<tr><td><strong>cors   </strong></td><td>Boolean      </td><td> false     </td><td>Enable CORS</td></tr>
+					<tr><td><strong>docs   </strong></td><td>Boolean      </td><td> false     </td><td>Enable help docs</td></tr>
+					<tr><td><strong>docKey </strong></td><td>String       </td><td> "ABC"     </td><td>API key for help docs</td></tr>
+					<tr><td><strong>apis   </strong></td><td>List&lt;<strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/ApiReg.kt">ApiReg</a></strong>&gt; </td><td>           </td><td>List of APIs to host</td></tr>
+					<tr><td><strong>auth   </strong></td><td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/core/Auth.kt">Auth?</a></strong></td><td> null      </td><td>The auth provider for securing access</td></tr>
+					<tr><td><strong>ctx    </strong></td><td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common/AppContext.kt">Context</a></strong>      </td><td>AppContext.simple("slatekit-server")</td><td>The context storing various core dependencies</td></tr>
+					</table>
+					<div class="alert alert-warning" role="alert">
+						<p><i class="fa fa-link"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-server/src/main/kotlin/slatekit/server/Server.kt"> Server.kt</a></strong> for more info.
+						</p>
+					</div>					
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<div>
+					<h1 id="server-routing">6. Routing</h1>
+					<p>The server routes WEB API calls to the classes and methods annotated to be publically accessible in your registered APIs. To simplify marshalling calls to your APIs, we have standardized routing conventions.
+					In Slate Kit, you can easily access your apis via Web(http) or command line (CLI ) using a simple routing format. We call this the <strong>unified routing format</strong>.
+					Refer to <a class="url-ch" href="kotlin-core-apis.html">APIs</a> for more info.
+					</p>
+					<br/>
+					<div class="alert alert-success" role="alert">
+						<h3>http://mycomany.com/api/<strong>{area}/{api}/{action}</strong></h3>
+						<br/>
+					</div>
+					<br/>
+					<h3>Example</h3>
+					<div class="highlighter-rouge">
 					<pre class="highlight">
 <code> 
 <span class="c1"> // 1. app.users.activate via Http GET ( query string )
@@ -360,9 +439,105 @@
  
 </code></pre>
 </div>
-						<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-						<br/><br/><br/>
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<br/>
+				<div>
+					<h1 id="api-discovery">7. Discovery</h1>
+					<p>Api discovery is simple with the unified routing formats. All the areas, apis inside areas, and actions inside apis can be easily discovered with the following syntax,
+					and replacing the part with the word <strong>help</strong>.
+					</p>	
+					<br/>
+					<div class="alert alert-success" role="alert">
+						<h3 id="cli-areaapiaction">/api/{area}/{api}/{action}</h3>
+						
+						<br/>
 					</div>
+					<br/>
+					
+					<h3>Examples</h3>
+					<p></p>
+
+					<table class="table table-bordered table-striped">
+						<tr>
+							<td class="col-sm-2"><strong>Type</strong></td>
+							<td class="col-sm-2"><strong>Format</strong></td>
+							<td class="col-sm-3"><strong>Example</strong></td>
+							<td><strong>Result</strong></td>
+						</tr>
+						<tr>
+							<td>areas</td>
+							<td>help</td>
+							<td>http://.../api/help</td>
+							<td>shows all the areas in system</td>
+						</tr>
+						<tr>
+							<td>apis</td>
+							<td>area/help</td>
+							<td>http://.../api/app/help</td>
+							<td>shows all the apis for the area</td>
+						</tr>
+						<tr>
+							<td>actions</td>
+							<td>area/api/help</td>
+							<td>http://.../api/app/users/help</td>
+							<td>shows all the actions for the api</td>
+						</tr>
+						<tr>
+							<td>action</td>
+							<td>area/api/action/help</td>
+							<td>http://.../api/app/users/activate/help</td>
+							<td>shows signature of the api action</td>
+						</tr>
+					</table>
+					<br/>
+					<h3>Notes</h3>
+					<div class="alert alert-info" role="alert">
+						<p><i class="fa fa-info-circle"></i>
+						<ol>
+						  <li>Ensure that the options for help docs are enabled and a doc-key is provided.</li>
+						  <li>Add either a query string param or header <strong>doc-key</strong> with a value matching
+						  the doc key value setup for the server e.g. <strong>doc-key=abc123</strong>. Refer to options for  more info</li>
+						</ol>
+						</p>
+					</div>	
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<div>
+					<h1 id="server-security">8. Security</h1>
+					<p>Security for the APIs is implemented by providing an implementation of the 
+					<strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/core/Auth.kt">Auth</a></strong> interface to the Server.
+					The APIs can be secured using either API-keys, roles based security and/or using your Auth implementation.
+					The Auth implementation simply validates a Request. 
+					</p>
+					<br/>
+					<h3>Annotations</h3>
+					<p>You can optionally annotate, classes and methods with roles and other attributes.
+					The API guide contains more information on this functionality. 
+					See the <strong><a class="url-ch" href="kotlin-core-apis.html#api-security">API Security</a></strong>
+					<br/>
+					<br/>
+					<h3>Auth classes</h3>
+					<p>There some interfaces, default implementations and samples of using and building your own auth implemenations.
+					Refer to the sources below</p>
+					<div class="alert alert-warning" role="alert">
+						<p><i class="fa fa-link"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/core/Auth.kt">Auth</a></strong> for more info on the Auth interface<br/>
+						   <i class="fa fa-link"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/svcs/TokenAuth.kt">TokenAuth</a></strong> for a base class support for Auth<br/>
+						   <i class="fa fa-link"></i> Refer to <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/blob/master/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/src/main/kotlin/slatekit/sampleapp/core/common/AppAuth.kt">AppAuth</a></strong> for a sample Auth implementation.<br/>
+						</p>
+					</div>
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
+				<div>
+					<h1 id="server-features">9. More</h1>
+					<p>There are many more features available. Refer to the <strong><a class="url-ch" href="kotlin-core-apis.html">API Guide</a></strong> for more info.
+					<br/><br/>
+					<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+					<br/><br/><br/>
+				</div>
             </div>
           </div>
         </section>
