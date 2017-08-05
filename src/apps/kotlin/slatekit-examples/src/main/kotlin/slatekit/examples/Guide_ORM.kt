@@ -192,13 +192,13 @@ class Guide_ORM : Cmd("types") {
         printOne("last", service.last())
 
         // CASE 9: Delete by id
-        service.delete(4)
+        service.deleteById(4)
 
         // CASE 10: Get total ( 4 )
         println(service.count())
 
         // CASE 11: Type-Safe queryusing property type reference
-        println(service.findBy(Movie::playing, true))
+        println(service.findByField(Movie::playing, true))
 
         // CASE 12: Query
         println(service.find(Query().where("playing", "=", true)))

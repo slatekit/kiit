@@ -116,13 +116,13 @@ interface ApiWithEntitySupport<T, TSvc> where T : Entity, TSvc : EntityService<T
 
     @ApiAction(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
     fun delete(item:T): Boolean {
-        return entitySvc.delete(item.identity())
+        return entitySvc.deleteById(item.identity())
     }
 
 
     @ApiAction(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
     fun deleteById(id: Long): Boolean {
-        return entitySvc.delete(id)
+        return entitySvc.deleteById(id)
     }
 
 

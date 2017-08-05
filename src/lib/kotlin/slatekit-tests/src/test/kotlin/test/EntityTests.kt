@@ -139,7 +139,7 @@ class EntityTests {
         assert(firstById?.email == "jdoe1@abc.com")
 
         // 10. Get by field
-        val second = svc.findBy(User5::email, "jdoe2@abc.com")
+        val second = svc.findByField(User5::email, "jdoe2@abc.com")
         assert(second.size == 1)
         assert(second[0].email == "jdoe2@abc.com")
 

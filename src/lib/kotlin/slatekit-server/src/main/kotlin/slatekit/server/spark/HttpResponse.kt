@@ -15,13 +15,7 @@ package slatekit.server.spark
 
 import slatekit.common.serialization.SerializerJson
 import spark.Response
-import com.sun.xml.internal.ws.streaming.XMLStreamWriterUtil.getOutputStream
-import com.sun.deploy.trace.Trace.flush
 import slatekit.common.*
-import slatekit.common.serialization.SerializerCsv
-import slatekit.common.serialization.SerializerProps
-import javax.servlet.http.HttpServletResponse
-import java.nio.file.Files.readAllBytes
 
 
 
