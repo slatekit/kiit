@@ -78,7 +78,28 @@ abstract class EntityRepo<T>(
 
 
     /**
-     * deletes the entity in the datastore
+     * updates items based on the field name
+     * @param prop: The property reference
+     * @param value: The value to set
+     * @return
+     */
+    abstract fun updateByField(field:String, value: Any): Int
+
+
+    /**
+     * updates items using the proc and args
+     */
+    abstract fun updateByProc(name:String, args:List<Any>? = null): Int
+
+
+    /**
+     * updates items using the query
+     */
+    abstract fun updateByQuery(query:IQuery): Int
+
+
+    /**
+     * deletes the entity by id
      * @param id
      * @return
      */
@@ -92,6 +113,21 @@ abstract class EntityRepo<T>(
      */
     fun delete(entity: T?): Boolean =
             entity?.let { item -> delete(item.identity()) } ?: false
+
+
+    /**
+     * deletes items based on the field name and value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    abstract fun deleteByField(field:String, value: Any): Int
+
+
+    /**
+     * deletes items using the query
+     */
+    abstract fun deleteByQuery(query:IQuery): Int
 
 
     /**
@@ -200,6 +236,14 @@ abstract class EntityRepo<T>(
      * @return
      */
     open fun findBy(field: String, op: String, value: Any): List<T> = listOf()
+
+
+    /**
+     * finds items by using the sql
+     * @param query
+     * @return
+     */
+    open fun findByProc(name:String, args:List<Any>?): List<T>? = listOf()
 
 
     /**

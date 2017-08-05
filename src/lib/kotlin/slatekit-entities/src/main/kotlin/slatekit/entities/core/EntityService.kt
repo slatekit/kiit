@@ -15,6 +15,7 @@ package slatekit.entities.core
 
 import slatekit.common.Reflector
 import slatekit.common.query.IQuery
+import slatekit.common.query.Query
 import kotlin.reflect.KProperty
 
 /**
@@ -75,20 +76,66 @@ open class EntityService<T>(protected val _repo: EntityRepo<T>)
 
 
     /**
-     * deletes the entity in the datastore
-     * @param id
+     * updates items based on the field name
+     * @param prop: The property reference
+     * @param value: The value to check for
      * @return
      */
-    fun delete(id: Long): Boolean = _repo.delete(id)
+    fun updateByField(prop: KProperty<*>, value: Any): Int {
+        return _repo.updateByField(prop.name, value)
+    }
 
 
     /**
-     * deletes the entity in memory
+     * updates items by a stored proc
+     */
+    fun updateByProc(name:String, args:List<Any>? = null): Int {
+        return _repo.updateByProc(name, args)
+    }
+
+
+    /**
+     * updates items using the query
+     */
+    fun updateByQuery(query:IQuery): Int {
+        return _repo.updateByQuery(query)
+    }
+
+
+    /**
+     * deletes the entity
      *
      * @param entity
      */
     fun delete(entity: T?): Unit {
         _repo.delete(entity)
+    }
+
+
+    /**
+     * deletes the entity by its id
+     * @param id
+     * @return
+     */
+    fun deleteById(id: Long): Boolean = _repo.delete(id)
+
+
+    /**
+     * deletes items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun deleteByField(prop: KProperty<*>, value: Any): Int {
+        return _repo.deleteByField(prop.name, value)
+    }
+
+
+    /**
+     * updates items using the query
+     */
+    fun deleteByQuery(query:IQuery): Int {
+        return _repo.deleteByQuery(query)
     }
 
 
@@ -212,15 +259,27 @@ open class EntityService<T>(protected val _repo: EntityRepo<T>)
 
 
     /**
-     * finds items based on the query
-     * @param query
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
      * @return
      */
-    fun findBy(prop: KProperty<*>, value: Any): List<T> {
+    fun findByField(prop: KProperty<*>, value: Any): List<T> {
         return _repo.findBy(prop.name, "=", value)
     }
 
 
+    /**
+     * finds items by a stored proc
+     */
+    fun findByProc(name:String, args:List<Any>? = null):List<T>? {
+        return _repo.findByProc(name, args)
+    }
+
+
+    /**
+     * finds the first item by the query
+     */
     fun findFirst(query: IQuery): T? {
         val results = find(query.limit(1))
         return results.firstOrNull()
@@ -236,5 +295,8 @@ open class EntityService<T>(protected val _repo: EntityRepo<T>)
     fun applyFieldData(mode: Int, entity: T): T {
         return entity
     }
+
+
+    open fun where(prop:KProperty<*>, op:String, value:Any): IQuery = Query().where(prop.name, op, value)
 }
 

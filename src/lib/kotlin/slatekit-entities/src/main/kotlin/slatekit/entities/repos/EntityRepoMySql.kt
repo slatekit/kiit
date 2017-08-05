@@ -14,6 +14,9 @@
 package slatekit.entities.repos
 
 import slatekit.common.db.Db
+import slatekit.common.db.DbUtils
+import slatekit.common.query.IQuery
+import slatekit.common.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import kotlin.reflect.KClass
@@ -45,7 +48,75 @@ open class EntityRepoMySql<T>(
     }
 
 
-    override protected fun scriptLastId(): String =
+    /**
+     * updates the table field using the value supplied
+     * @param field: The field name
+     * @param value: The value to set
+     */
+    override fun updateByField(field:String, value: Any): Int {
+        val query = Query().set(field, value)
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + tableName() + updateSql
+        return _db.update(sql)
+    }
+
+
+    /**
+     * updates items using the proc and args
+     */
+    override fun updateByProc(name:String, args:List<Any>?): Int {
+        return _db.callUpdate(name, args)
+    }
+
+
+    /**
+     * updates items using the query
+     * @param query: The query builder
+     */
+    override fun updateByQuery(query: IQuery): Int {
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + tableName() + updateSql
+        return _db.update(sql)
+    }
+
+
+    /**
+     * deletes items based on the field name and value
+     * @param field: The field name
+     * @param value: The value to check for
+     * @return
+     */
+    override fun deleteByField(field:String, value: Any): Int {
+        val query = Query().where(field, "=", value)
+        val filter = query.toFilter()
+        val sql = "delete from " + tableName() + " " + filter
+        return _db.update(sql)
+    }
+
+
+    /**
+     * deletes items using the query
+     * @param query: The query builder
+     * @return
+     */
+    override fun deleteByQuery(query: IQuery): Int {
+        val filter = query.toFilter()
+        val sql = "delete from " + tableName() + " " + filter
+        return _db.update(sql)
+    }
+
+
+    /**
+     * finds items by using the sql
+     * @param query
+     * @return
+     */
+    override fun findByProc(name:String, args:List<Any>?): List<T>? {
+        return _db.callQueryMapped(name, _entityMapper, args)
+    }
+
+
+    override fun scriptLastId(): String =
             "SELECT LAST_INSERT_ID();"
 
 

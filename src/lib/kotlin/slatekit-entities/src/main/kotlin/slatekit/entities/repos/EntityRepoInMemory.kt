@@ -17,6 +17,7 @@ import slatekit.common.DateTime
 import slatekit.common.ListMap
 import slatekit.common.Reflector
 import slatekit.common.Types
+import slatekit.common.query.IQuery
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
@@ -142,6 +143,27 @@ open class EntityRepoInMemory<T>(
             val sorted = if (desc) items.reversed() else items
             sorted.take(count)
         }
+    }
+
+
+    override fun updateByField(field: String, value: Any): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateByProc(name: String, args: List<Any>?): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateByQuery(query: IQuery): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun deleteByField(field: String, value: Any): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun deleteByQuery(query: IQuery): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 

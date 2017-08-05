@@ -365,12 +365,30 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
     fun <T> callQuery(procName: String,
                  callback: (ResultSet) -> T?,
                  moveNext: Boolean = true,
-                 inputs: List<Any>? = null): T? {
+                 inputs  : List<Any>? = null): T? {
 
         // {call create_author(?, ?)}
         val holders = inputs?.let{ all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
         return query(sql, callback, moveNext, inputs)
+    }
+
+
+    /**
+     * Calls a stored procedure
+     * @param procName : The name of the stored procedure e.g. get_by_id
+     * @param callback : The callback to handle the resultset
+     * @param moveNext : Whether or not to automatically move the resultset to the next/first row
+     * @param inputs   : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     */
+    fun <T> callQueryMapped(procName: String,
+                            mapper  : Mapper,
+                            inputs  : List<Any>? = null): List<T>? {
+
+        // {call create_author(?, ?)}
+        val holders = inputs?.let{ all -> "?".repeatWith(",", all.size) } ?: ""
+        val sql = "{call $procName($holders)}"
+        return mapMany(sql, mapper, inputs)
     }
 
 
