@@ -8,7 +8,7 @@ import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
 import slatekit.common.encrypt.DecString
-import slatekit.common.Converter
+import slatekit.meta.Converter
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

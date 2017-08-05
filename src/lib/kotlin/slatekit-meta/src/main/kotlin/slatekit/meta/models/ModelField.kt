@@ -11,10 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common.models
+package slatekit.meta.models
 
 import slatekit.common.DateTime
-import slatekit.common.kClass
 import kotlin.reflect.*
 
 

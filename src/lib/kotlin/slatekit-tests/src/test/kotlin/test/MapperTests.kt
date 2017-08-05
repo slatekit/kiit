@@ -13,18 +13,16 @@ mantra: Simplicity above all else
 package test
 
 import org.junit.Test
-import slatekit.common.Model
 import slatekit.common.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.ListMap
-import slatekit.common.mapper.MappedSourceReader
-import slatekit.common.mapper.Mapper
-import slatekit.common.mapper.MapperSourceReaderMap
+import slatekit.common.Mapper
+import slatekit.common.records.RecordMap
 import slatekit.entities.core.EntityMapper
-import java.util.*
+import slatekit.meta.models.Model
+import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 /**
  * Created by kishorereddy on 6/4/17.
@@ -33,7 +31,7 @@ import kotlin.reflect.KProperty
 class MapperTests {
 
     fun loadSchemaViaReflection(): Model {
-        val model = Mapper.loadSchema(AuthorR::class)
+        val model = ModelMapper.loadSchema(AuthorR::class)
         return model
     }
 
@@ -109,7 +107,7 @@ class MapperTests {
         Pair("salary", 400.5)
         ))
 
-        val source = MapperSourceReaderMap(data)
+        val source = RecordMap(data)
         val entity = mapper.mapFrom(source)!!as AuthorR
 
         assert( entity.id == 1L )

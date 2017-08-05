@@ -13,15 +13,14 @@ package slatekit.common.db
 
 
 import slatekit.common.DateTime
-import slatekit.common.Model
 import slatekit.common.db.DbUtils.executeCon
 import slatekit.common.db.DbUtils.executePrepAs
 import slatekit.common.db.DbUtils.executeStmt
 import slatekit.common.db.DbUtils.fillArgs
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.mapper.Mapper
-import slatekit.common.mapper.MapperSourceRecord
+import slatekit.common.Mapper
+import slatekit.common.records.RecordSet
 import slatekit.common.repeatWith
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -54,13 +53,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
     }
 
 
-    /**
-     * creates a table in the database that matches the schema(fields) in the model supplied
-     *
-     * @param model : The model associated with the table.
-     */
-    fun createTable(model: Model): Unit {
-        val sql = source.builAddTable(model)
+    fun execute(sql:String) {
         executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, this::errorHandler)
     }
 
@@ -321,7 +314,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
     fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>? = null): T? {
         val res = query(sql, { rs ->
 
-            val rec = MapperSourceRecord(rs)
+            val rec = RecordSet(rs)
             if (rs.next())
                 mapper.mapFrom(rec) as T
             else
@@ -343,7 +336,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
     fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>? = null): List<T>? {
         val res = query(sql, { rs ->
 
-            val rec = MapperSourceRecord(rs)
+            val rec = RecordSet(rs)
             val buf = mutableListOf<T>()
             while (rs.next()) {
                 val item = mapper.mapFrom(rec)

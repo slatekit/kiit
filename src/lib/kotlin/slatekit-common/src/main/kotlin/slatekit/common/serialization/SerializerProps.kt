@@ -21,7 +21,7 @@ import slatekit.common.newline
 
 class SerializerProps(standardizeFieldWidth: Boolean = false) : Serializer() {
 
-    override val _standardizeWidth = standardizeFieldWidth
+    override val standardizeWidth = standardizeFieldWidth
 
     /**
      * handler for when a container item has started

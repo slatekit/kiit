@@ -30,9 +30,9 @@ import java.time.format.DateTimeFormatter
  */
 open class Serial {
 
+    open val standardizeWidth = false
+    open val standardizeResult = false
     protected var _buff = StringBuilder()
-    protected open val _standardizeWidth = false
-    protected open val _standardizeResult = false
     protected val dateFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     protected val timeFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -176,7 +176,7 @@ open class Serial {
         val fields = Reflector.getProperties(item.kClass)
 
         // Standardize the display of the props
-        val maxLen = if (_standardizeWidth) {
+        val maxLen = if (standardizeWidth) {
             fields.maxBy { it.name.length }?.name?.length ?: 0
         }
         else {
@@ -188,7 +188,7 @@ open class Serial {
             val propName = field.name.trim()
 
             // Standardized width
-            val finalPropName = if (_standardizeWidth) {
+            val finalPropName = if (standardizeWidth) {
                 propName.padEnd(maxLen)
             }
             else {
@@ -213,7 +213,7 @@ open class Serial {
      * @param delimiter: The delimiter to use between key/value pairs
      */
     protected fun serializeResult(item: Result<*>, depth: Int): Unit {
-        if (_standardizeResult) {
+        if (standardizeResult) {
             // Begin
             onContainerStart(item, ParentType.OBJECT_TYPE, depth)
 
@@ -249,7 +249,7 @@ open class Serial {
     /**
      * handler for when a container item has started
      */
-    protected open fun onContainerStart(item: Any, type: ParentType, depth: Int): Unit {
+    open fun onContainerStart(item: Any, type: ParentType, depth: Int): Unit {
         when (type) {
             ParentType.LIST_TYPE   -> _buff.append("[")
             ParentType.MAP_TYPE    -> _buff.append("{")
@@ -263,7 +263,7 @@ open class Serial {
     /**
      * handle for when a container item has ended
      */
-    protected open fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
+    open fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
         when (type) {
             ParentType.LIST_TYPE   -> _buff.append("]")
             ParentType.MAP_TYPE    -> _buff.append("}")
@@ -274,7 +274,7 @@ open class Serial {
     }
 
 
-    protected open fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?): Unit {
+    open fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?): Unit {
         if (pos > 0) {
             _buff.append(", ")
         }

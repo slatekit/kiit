@@ -15,8 +15,9 @@ package slatekit.entities.core
 
 
 import slatekit.common.*
-import slatekit.common.mapper.Mapper
 import slatekit.common.query.QueryEncoder
+import slatekit.meta.models.Model
+import slatekit.meta.models.ModelMapper
 import java.time.*
 import java.time.format.DateTimeFormatter
 
@@ -26,7 +27,7 @@ import java.time.format.DateTimeFormatter
  *
  * @param model
  */
-open class EntityMapper(model: Model, persistAsUtc:Boolean = false) : Mapper(model) {
+open class EntityMapper(model: Model, persistAsUtc:Boolean = false) : ModelMapper(model) {
 
     protected val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     protected val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")

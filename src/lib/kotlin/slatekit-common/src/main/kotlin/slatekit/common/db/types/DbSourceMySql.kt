@@ -12,9 +12,7 @@
 package slatekit.common.db.types
 
 
-import slatekit.common.Model
 import slatekit.common.db.*
-import slatekit.common.db.DbUtils.getTypeFromLang
 import slatekit.common.db.DbUtils.ensureField
 import slatekit.common.newline
 
@@ -23,37 +21,6 @@ import slatekit.common.newline
   * Builds up database tables, indexes and other database components
   */
 open class DbSourceMySql : DbSource {
-
-  /**
-   * Builds the table DDL sql statement using the model supplied.
-   */
-  override fun builAddTable(model: Model): String
-  {
-    val buff = StringBuilder()
-
-    // 1. build the "CREATE <tablename>
-    buff.append( buildCreateTable(model.name) )
-
-    // 2. build the primary key column
-    buff.append(buildPrimaryKey("id"))
-
-    // 3. Now build all the columns
-    // Get only fields ( excluding primary key )
-    val dataFields = model.fields.filter{ "id".compareTo(it.name) != 0 }
-
-    // Build sql for the data fields.
-    val dataFieldSql = dataFields.fold("", { acc, field ->
-      val sqlType = getTypeFromLang(field.dataType)
-      acc + ", " + this.buildAddCol(field.name, sqlType, field.isRequired, field.maxLength)
-    })
-    buff.append( dataFieldSql )
-
-    // 4. finish the construction and get the sql.
-    buff.append(" );")
-    val sql = buff.toString()
-    return sql
-  }
-
 
   /**
    * Builds the drop table DDL for the name supplied.
@@ -75,7 +42,7 @@ open class DbSourceMySql : DbSource {
     val colType = buildColType(dataType, maxLen)
     val colName = buildColName(name)
 
-    val sql = " " + newline + colName + " " + colType + " " + nullText
+    val sql = " $newline$colName $colType $nullText"
     return sql
   }
 
@@ -118,16 +85,4 @@ open class DbSourceMySql : DbSource {
       else                     -> "INTEGER"
     }
   }
-
-
-  protected fun buildPrimaryKey(name:String): String
-  {
-    val finalName = ensureField(name)
-    return "`$finalName` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"
-  }
-
-
-  protected fun buildCreateTable(name:String): String =
-    "create table `" + name + "` ( " + newline
-
 }

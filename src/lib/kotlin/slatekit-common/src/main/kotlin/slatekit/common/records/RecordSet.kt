@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.mapper
+package slatekit.common.records
 
 import slatekit.common.DateTime
 import java.sql.ResultSet
@@ -21,7 +21,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 
-class MapperSourceRecord(val rs: ResultSet) : MappedSourceReader {
+class RecordSet(val rs: ResultSet) : Record {
 
 
     override fun init(rec: List<String>): Unit {}

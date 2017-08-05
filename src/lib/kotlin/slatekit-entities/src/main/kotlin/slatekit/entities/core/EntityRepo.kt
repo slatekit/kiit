@@ -13,9 +13,9 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Model
-import slatekit.common.mapper.Mapper
+import slatekit.meta.models.Model
 import slatekit.common.query.IQuery
+import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
 
@@ -38,7 +38,7 @@ abstract class EntityRepo<T>(
     protected val _nameOfTable = nameOfTable
     protected val _entityType: KClass<*> = entityType
     protected val _entityIdType: KClass<*> = entityIdType ?: Long::class
-    protected val _entityModel: Model = entityMapper?.model() ?: Mapper.loadSchema(entityType)
+    protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType)
     protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel)
 
     /**

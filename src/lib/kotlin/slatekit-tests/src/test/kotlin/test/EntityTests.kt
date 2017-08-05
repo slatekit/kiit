@@ -14,14 +14,13 @@ package slate.test
 import org.junit.Test
 import java.time.*
 import slatekit.common.Field
-import slatekit.common.Random
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbTypeMemory
 import slatekit.common.db.DbTypeMySql
-import slatekit.common.mapper.Mapper
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.meta.models.ModelMapper
 import test.common.Phone
 import test.common.User5
 
@@ -195,7 +194,7 @@ class EntityTests {
 
     private fun service(): EntityService<User5> {
         // 1. Setup the mapper
-        val model = Mapper.loadSchema(User5::class)
+        val model = ModelMapper.loadSchema(User5::class)
         val mapper = EntityMapper(model)
 
         // 2. Setup repo

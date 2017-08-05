@@ -18,7 +18,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiRegAction
 import slatekit.common.*
 import slatekit.common.encrypt.*
-import slatekit.common.Converter
+import slatekit.meta.Converter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter

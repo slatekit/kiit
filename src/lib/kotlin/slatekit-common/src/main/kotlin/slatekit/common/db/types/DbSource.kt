@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.common.db.types
 
-import slatekit.common.Model
+
 import slatekit.common.db.DbFieldType
 
 /**
@@ -20,10 +20,6 @@ import slatekit.common.db.DbFieldType
  */
 
 interface DbSource {
-    /**
-     * Builds the table DDL sql statement using the model supplied.
-     */
-    fun builAddTable(model: Model): String
 
     /**
      * Builds the drop table DDL for the name supplied.

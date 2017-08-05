@@ -11,14 +11,14 @@
  * </slate_header>
  */
 
-package slatekit.common.mapper
+package slatekit.common.records
 
 
 import slatekit.common.DateTime
 import java.time.*
 
 
-interface MappedSourceReader {
+interface Record {
     fun init(rec: List<String>): Unit
 
     fun getString(pos: Int): String

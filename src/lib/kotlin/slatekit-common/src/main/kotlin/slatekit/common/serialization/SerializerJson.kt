@@ -19,5 +19,5 @@ package slatekit.common.serialization
  */
 class SerializerJson : Serializer() {
 
-    override val _standardizeResult = true
+    override val standardizeResult = true
 }

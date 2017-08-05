@@ -11,11 +11,17 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.meta
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
+import slatekit.common.Doc
+import slatekit.common.Request
+import slatekit.common.Vars
+import slatekit.common.SmartString
+import slatekit.common.Types
+import slatekit.common.Conversions
 import slatekit.common.encrypt.*
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS

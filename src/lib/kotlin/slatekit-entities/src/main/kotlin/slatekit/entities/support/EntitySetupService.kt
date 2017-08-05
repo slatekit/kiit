@@ -26,7 +26,7 @@ import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
-
+import slatekit.meta.buildAddTable
 
 /**
  * Created by kreddy on 3/23/2016.
@@ -121,7 +121,7 @@ class EntitySetupService(val _entities: Entities,
             val fullName = name
             val svc = _entities.getServiceByName(fullName)
             val model = svc.repo().mapper().model()
-            val sql = _entities.getDbSource().builAddTable(model)
+            val sql = buildAddTable(_entities.getDbSource(), model)
             val filePath = if (_settings.enableOutput) {
                 _folders?.let { folders ->
                     val fileName = "model-${model.name}.sql"

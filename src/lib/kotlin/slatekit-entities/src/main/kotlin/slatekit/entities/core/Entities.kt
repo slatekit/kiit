@@ -18,9 +18,10 @@ import slatekit.common.Reflector
 import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.mapper.Mapper
+import slatekit.common.Mapper
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
+import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
 
@@ -224,7 +225,7 @@ class Entities(private val _dbs: DbLookup? = null) {
         val entityKey = entityType.qualifiedName
 
         fun createMapper(entityType: KClass<*>): EntityMapper {
-            val model = Mapper.loadSchema(entityType)
+            val model = ModelMapper.loadSchema(entityType)
             val em = EntityMapper(model)
             return em
         }

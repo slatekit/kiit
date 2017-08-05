@@ -11,13 +11,18 @@
  * </slate_header>
  */
 
-package slatekit.common.mapper
+package slatekit.meta.models
 
 
-import slatekit.common.*
-import slatekit.common.models.ModelField
+import slatekit.common.Field
+import slatekit.common.Mapper
+import slatekit.common.Types
+import slatekit.meta.Reflector
+import slatekit.common.newline
+import slatekit.common.records.Record
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
+
 
 
 /**
@@ -27,7 +32,7 @@ import kotlin.reflect.jvm.jvmErasure
  * 2. can create a model that is a regular class
  * @param _model
  */
-open class Mapper(protected val _model: Model, protected val _settings:MapperSettings = MapperSettings()) {
+open class ModelMapper(protected val _model: Model, protected val _settings: ModelMapperSettings = ModelMapperSettings()) : Mapper {
 
 
     /**
@@ -41,7 +46,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * Creates the entity/model expecting a 0 parameter constructor
      * @return
      */
-    fun createEntity(): Any? =
+    override fun createEntity(): Any? =
             _model.dataType?.let { type -> Reflector.create<Any>(type) }
 
 
@@ -50,7 +55,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * @param args
      * @return
      */
-    fun createEntityWithArgs(args: List<Any?>?): Any =
+    override fun createEntityWithArgs(args: List<Any?>?): Any =
             Reflector.createWithArgs(_model.dataType!!, args?.toTypedArray() ?: arrayOf())
 
 
@@ -63,7 +68,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * @param record
      * @return
      */
-    fun mapFrom(record: MappedSourceReader): Any? {
+    override fun mapFrom(record: Record): Any? {
         return if (_model.any && _model.dataType != null) {
             _model.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
@@ -86,7 +91,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * @return
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
-    fun mapFromToValType(record: MappedSourceReader): Any? {
+    override fun mapFromToValType(record: Record): Any? {
         return if (_model.any) {
             val isUTC = _settings.persisteUTCDate
             val data = _model.fields.map { mapping ->
@@ -125,7 +130,7 @@ open class Mapper(protected val _model: Model, protected val _settings:MapperSet
      * @return
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
-    fun mapFromToVarType(record: MappedSourceReader): Any? {
+    override fun mapFromToVarType(record: Record): Any? {
         return if (_model.any) {
 
             val isUTC = _settings.persisteUTCDate
