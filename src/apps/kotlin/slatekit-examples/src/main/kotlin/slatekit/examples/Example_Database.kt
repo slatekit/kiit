@@ -15,7 +15,6 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
-import slatekit.common.mapper.Mapper
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -24,6 +23,8 @@ import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.examples.common.User
+import slatekit.meta.createTable
+import slatekit.meta.models.ModelMapper
 
 //</doc:import_examples>
 
@@ -99,7 +100,7 @@ class Example_Database : Cmd("db") {
         // CASE 12: Map a record to an model using the mapper component
         // The mapper will load a schema from the User class by checking
         // for "Field" annotations
-        val userModelSchema = Mapper.loadSchema(User::class)
+        val userModelSchema = ModelMapper.loadSchema(User::class)
         val mapper = EntityMapper(userModelSchema)
         val item1 = db.mapOne<User>("select * from `user` where id = 1", mapper)
         println(item1)
@@ -111,7 +112,7 @@ class Example_Database : Cmd("db") {
         // CASE 14: Create the table using the model
         // Be careful with this, ensure you are using a connection string
         // with limited permissions
-        db.createTable(userModelSchema)
+        createTable(db, userModelSchema)
 
         // CASE 15: Drop a table
         // Be careful with this, ensure you are using a connection string

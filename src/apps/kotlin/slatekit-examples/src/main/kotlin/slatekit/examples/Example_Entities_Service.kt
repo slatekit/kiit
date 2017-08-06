@@ -16,7 +16,6 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.Field
 import slatekit.entities.core.*
-import slatekit.common.mapper.Mapper
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
 //</doc:import_required>
@@ -27,6 +26,7 @@ import slatekit.common.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
+import slatekit.meta.models.ModelMapper
 
 //</doc:import_examples>
 
@@ -71,7 +71,7 @@ class Example_Entities_Service : Cmd("service") {
     }
 
     // 1. Setup the mapper
-    val model = Mapper.loadSchema(User::class)
+    val model = ModelMapper.loadSchema(User::class)
     val mapper = EntityMapper(model)
 
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality

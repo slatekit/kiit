@@ -13,8 +13,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Model
-import slatekit.common.models.ModelField
+import slatekit.meta.models.*
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -25,6 +24,8 @@ import slatekit.common.auth.User
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.info.Host
 import slatekit.common.results.ResultFuncs.ok
+import slatekit.meta.buildAddTable
+
 //</doc:import_examples>
 
 
@@ -98,7 +99,7 @@ class Example_Model : Cmd("model") {
     showResult ("model api/fullName: " + model.name + ", " + model.fullName)
 
     // CASE 10. build up the table sql for this model
-    showResult( "table sql : " + DbSourceMySql().builAddTable(model))
+    showResult( "table sql : " + buildAddTable(DbSourceMySql(), model))
     //</doc:examples>
 
     return ok()

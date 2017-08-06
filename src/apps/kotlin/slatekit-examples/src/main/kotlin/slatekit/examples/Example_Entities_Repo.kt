@@ -17,7 +17,7 @@ import slatekit.common.Field
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
-import slatekit.common.mapper.Mapper
+import slatekit.common.Mapper
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -26,6 +26,7 @@ import slatekit.common.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
+import slatekit.meta.models.ModelMapper
 
 //</doc:import_examples>
 
@@ -79,7 +80,7 @@ class Example_Entities_Repo : Cmd("entities") {
     val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
 
     // 2. Setup the mapper
-    val model = Mapper.loadSchema(User::class)
+    val model = ModelMapper.loadSchema(User::class)
     val mapper = EntityMapper(model)
 
 

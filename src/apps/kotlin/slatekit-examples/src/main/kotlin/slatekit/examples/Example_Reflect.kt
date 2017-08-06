@@ -16,7 +16,7 @@ package slatekit.examples
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.common.Field
-import slatekit.common.Reflector
+import slatekit.meta.Reflector
 
 //</doc:import_required>
 
@@ -24,7 +24,6 @@ import slatekit.common.Reflector
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.ok
-import slatekit.core.common.AppContext
 import slatekit.examples.common.User
 import slatekit.examples.common.UserApi
 import slatekit.integration.common.AppEntContext

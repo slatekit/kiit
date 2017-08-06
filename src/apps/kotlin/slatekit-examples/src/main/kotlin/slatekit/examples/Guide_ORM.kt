@@ -1,7 +1,6 @@
 package slatekit.examples
 
 import slatekit.common.DateTime
-import slatekit.common.Model
 import slatekit.common.Result
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.Db
@@ -11,7 +10,8 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
 import slatekit.common.db.DbTypeMySql
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.mapper.Mapper
+import slatekit.meta.models.*
+import slatekit.common.Mapper
 import slatekit.common.query.Query
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.ok
@@ -23,6 +23,7 @@ import slatekit.entities.core.EntityMapper
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
 import slatekit.examples.common.*
+import slatekit.meta.buildAddTable
 
 
 /**
@@ -225,7 +226,7 @@ class Guide_ORM : Cmd("types") {
         // NOTE: This assumes the entity has annotations on the properties.
         // If you do not want to use annotations, looks at the mapper/model
         // examples for alternative approaches.
-        val model = Mapper.loadSchema(Movie::class)
+        val model = ModelMapper.loadSchema(Movie::class)
         val mapper = EntityMapper(model)
 
         // 2.3: Now create the repo with database and mapper
@@ -280,7 +281,7 @@ class Guide_ORM : Cmd("types") {
 
     fun mapper_setup():Unit {
         // CASE 1: Load the schema from the annotations on the model
-        val schema1 = Mapper.loadSchema(Movie::class)
+        val schema1 = ModelMapper.loadSchema(Movie::class)
 
 
         // CASE 2: Load the schema manually using properties for type-safety
@@ -314,7 +315,7 @@ class Guide_ORM : Cmd("types") {
 
 
     fun mapper_usage():Unit {
-        val schema = Mapper.loadSchema(Movie::class)
+        val schema = ModelMapper.loadSchema(Movie::class)
 
         // CASE 1: Create mapper with the schema
         val mapper = EntityMapper (schema)
@@ -338,7 +339,7 @@ class Guide_ORM : Cmd("types") {
         println(sqlForUpdate)
 
         // CASE 4: Generate the table schema for mysql from the model
-        println("table sql : " + DbSourceMySql().builAddTable(schema))
+        println("table sql : " + buildAddTable(DbSourceMySql(), schema))
     }
 
 

@@ -15,14 +15,17 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.common.Model
 import slatekit.common.Result
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.mapper.Mapper
+import slatekit.common.Mapper
+import slatekit.meta.models.Model
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
+import slatekit.meta.buildAddTable
+import slatekit.meta.models.ModelMapper
+
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -112,7 +115,7 @@ class Example_Mapper : Cmd("mapper") {
 
 
         // CASE 1: Load the schema from the annotations on the model
-        val schema1 = Mapper.loadSchema(Movie::class)
+        val schema1 = ModelMapper.loadSchema(Movie::class)
 
 
         // CASE 2: Load the schema manually using properties for type-safety
@@ -165,7 +168,7 @@ class Example_Mapper : Cmd("mapper") {
         println(sqlForUpdate)
 
         // CASE 7: Generate the table schema for mysql from the model
-        println("table sql : " + DbSourceMySql().builAddTable(schema1))
+        println("table sql : " + buildAddTable(DbSourceMySql(), schema1))
         //</doc:examples>
 
         return ok()

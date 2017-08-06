@@ -19,18 +19,13 @@ package slatekit.examples
 //<doc:import_examples>
 import slatekit.common.Result
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.conf.Config
-import slatekit.common.db.Db
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
-import slatekit.common.mapper.Mapper
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
-import slatekit.entities.core.EntityMapper
-import slatekit.examples.common.User
 
 //</doc:import_examples>
 
