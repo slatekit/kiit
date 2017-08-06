@@ -14,11 +14,10 @@
 package slatekit.common.log
 
 import slatekit.common.DateTime
-import kotlin.reflect.KClass
 
 abstract class LoggerBase(val level: LogLevel = Warn,
                           val name: String = "",
-                          val logType: KClass<Any>? = null) : LogSupport {
+                          val logType: Class<Any>? = null) : LogSupport {
     init {
 
     }
@@ -32,7 +31,7 @@ abstract class LoggerBase(val level: LogLevel = Warn,
      * @param lvl
      * @return
      */
-    fun getLogger(lvl: LogLevel, name: String, t: KClass<Any>? = null): LoggerBase {
+    fun getLogger(lvl: LogLevel, name: String, t: Class<Any>? = null): LoggerBase {
         return LoggerConsole(lvl, name, t)
     }
 

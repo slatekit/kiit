@@ -29,7 +29,6 @@ import java.sql.Statement
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import kotlin.reflect.KClass
 
 
 /**
@@ -75,7 +74,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalar(sql: String, typ: KClass<*>, inputs: List<Any>?): T? =
+    fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any>?): T? =
             getScalarOpt<T>(sql, typ, inputs)
 
 
@@ -86,7 +85,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarString(sql: String, inputs: List<Any>? = null): String =
-            getScalar<String>(sql, slatekit.common.Types.StringClass, inputs) ?: ""
+            getScalar<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
 
 
     /**
@@ -96,7 +95,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarShort(sql: String, inputs: List<Any>? = null): Short =
-            getScalar(sql, slatekit.common.Types.ShortClass, inputs) ?: 0.toShort()
+            getScalar(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
 
 
     /**
@@ -106,7 +105,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarInt(sql: String, inputs: List<Any>? = null): Int =
-            getScalar(sql, slatekit.common.Types.IntClass, inputs) ?: 0
+            getScalar(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
 
 
     /**
@@ -116,7 +115,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarLong(sql: String, inputs: List<Any>? = null): Long =
-            getScalar(sql, slatekit.common.Types.LongClass, inputs) ?: 0L
+            getScalar(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
 
 
     /**
@@ -126,7 +125,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarFloat(sql: String, inputs: List<Any>? = null): Float =
-            getScalar(sql, slatekit.common.Types.FloatClass, inputs) ?: 0.0f
+            getScalar(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
 
 
     /**
@@ -136,7 +135,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarDouble(sql: String, inputs: List<Any>? = null): Double =
-            getScalar(sql, slatekit.common.Types.DoubleClass, inputs) ?: 0.0
+            getScalar(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
 
 
     /**
@@ -146,7 +145,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarBool(sql: String, inputs: List<Any>? = null): Boolean =
-            getScalar(sql, slatekit.common.Types.BoolClass, inputs) ?: false
+            getScalar(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
 
 
     /**
@@ -156,7 +155,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarLocalDate(sql: String, inputs: List<Any>? = null): LocalDate =
-            getScalar(sql, slatekit.common.Types.LocalDateClass, inputs) ?: LocalDate.MIN
+            getScalar(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
 
 
     /**
@@ -166,7 +165,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarLocalTime(sql: String, inputs: List<Any>? = null): LocalTime =
-            getScalar(sql, slatekit.common.Types.LocalTimeClass, inputs) ?: LocalTime.MIN
+            getScalar(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
 
 
     /**
@@ -176,7 +175,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarLocalDateTime(sql: String, inputs: List<Any>? = null): LocalDateTime =
-            getScalar(sql, slatekit.common.Types.LocalDateTimeClass, inputs) ?: LocalDateTime.MIN
+            getScalar(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
 
 
     /**
@@ -186,7 +185,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @return
      */
     fun getScalarDate(sql: String, inputs: List<Any>? = null): DateTime =
-            getScalar(sql, slatekit.common.Types.DateTimeClass, inputs) ?: DateTime.MIN
+            getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTime.MIN
 
 
     /**
@@ -195,7 +194,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalarOpt(sql: String, typ: KClass<*>, inputs: List<Any>?): T? {
+    fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
         return executePrepAs<T>(_dbCon, sql, { _, stmt ->
 

@@ -13,20 +13,18 @@
 
 package slatekit.entities.core
 
-import slatekit.common.serialization.Serializer
-import slatekit.common.serialization.SerializerJson
-import slatekit.common.serialization.SerializerProps
-
+import slatekit.common.Serializer
+import slatekit.meta.Serialization
 
 class EntitySerializer {
 
     fun toStringProps(item: Entity, mapper: EntityMapper): String {
-        return toString(SerializerProps(), item, mapper)
+        return toString(Serialization.props(), item, mapper)
     }
 
 
     fun toStringJson(item: Entity, mapper: EntityMapper): String {
-        return toString(SerializerJson(), item, mapper)
+        return toString(Serialization.json(), item, mapper)
     }
 
 

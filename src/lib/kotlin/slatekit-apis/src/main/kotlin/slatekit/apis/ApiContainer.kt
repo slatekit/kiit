@@ -7,8 +7,6 @@ import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiLookup
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.Areas
-import slatekit.common.*
-import slatekit.common.Namer
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
@@ -17,11 +15,11 @@ import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.okOrFailure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.common.serialization.SerializerCsv
-import slatekit.common.serialization.SerializerJson
-import slatekit.common.serialization.SerializerProps
+import slatekit.meta.Reflector
 import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.ApiWithMiddleware
+import slatekit.common.*
+import slatekit.meta.Serialization
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -433,9 +431,9 @@ open class ApiContainer(
     fun serialize(format:String, data:Any?): Any? {
 
         val content = when (format) {
-            ContentTypeCsv .ext  -> Content.csv ( SerializerCsv().serialize(data)  )
-            ContentTypeJson.ext  -> Content.json( SerializerJson().serialize(data) )
-            ContentTypeProp.ext  -> Content.prop( SerializerProps().serialize(data))
+            ContentTypeCsv .ext  -> Content.csv ( Serialization.csv().serialize(data)  )
+            ContentTypeJson.ext  -> Content.json( Serialization.json().serialize(data) )
+            ContentTypeProp.ext  -> Content.prop( Serialization.props().serialize(data))
             else                 -> data
         }
         return content

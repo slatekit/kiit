@@ -21,7 +21,7 @@ package slatekit.common
  */
 class Vars(items: List<Pair<String, Any>>) : ListMap<String, Any>(items) {
 
-    companion object VarsCompanion {
+    companion object {
 
         /**
          * converts a text of "a=1,b=2,c=3" into a Vars object

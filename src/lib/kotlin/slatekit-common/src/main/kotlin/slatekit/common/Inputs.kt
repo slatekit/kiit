@@ -13,16 +13,10 @@
 
 package slatekit.common
 
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
 
 interface InputsUpdateable {
     // Immutable add
@@ -100,7 +94,7 @@ interface Inputs {
      * @param tpe
      * @return
      */
-    fun getList(key: String, tpe: KClass<*>): List<Any> {
+    fun getList(key: String, tpe: Class<*>): List<Any> {
         val converter = Conversions.converterFor(tpe)
         val input = get(key)
         val result = input?.let { inputVal ->
@@ -123,7 +117,7 @@ interface Inputs {
      * @param key
      * @return
      */
-    fun getMap(key: String, tpeKey: KClass<*>, tpeVal: KClass<*>): Map<*, *> {
+    fun getMap(key: String, tpeKey: Class<*>, tpeVal: Class<*>): Map<*, *> {
         val keyConverter = Conversions.converterFor(tpeKey)
         val valConverter = Conversions.converterFor(tpeVal)
         val input = get(key)
@@ -140,27 +134,6 @@ interface Inputs {
             result
         } ?: mapOf<Any, Any>()
         return result
-    }
-
-
-    fun <T> map(key:String, cls: KClass<*>, decryptor:((String) -> String)? = null): T ? {
-
-        //val cls = dataType.classifier as KClass<*>
-        val props = Reflector.getProperties(cls)
-        val converted = props.map { prop ->
-            val paramType = prop.returnType
-            val key = "${key}.${prop.name}"
-            val rawVal = getObject(key)
-
-            // Can not handle nulls/default values at the moment.
-            rawVal?.let { raw ->
-                val result = Conversions.convert("", paramType, raw, decryptor)
-                result
-            }
-        }
-        val filtered = converted.filterNotNull()
-        val instance = Reflector.createWithArgs<T>(cls, filtered.toTypedArray())
-        return instance
     }
 
 

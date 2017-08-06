@@ -45,12 +45,6 @@ interface IQuery {
     fun where(field: String, compare: Op, fieldValue: Any): IQuery
 
 
-    fun where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fieldValue: kotlin.Any): IQuery
-
-
-    fun and(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any): IQuery
-
-
     /// <summary>
     /// Adds an AND condition to the query.
     /// </summary>

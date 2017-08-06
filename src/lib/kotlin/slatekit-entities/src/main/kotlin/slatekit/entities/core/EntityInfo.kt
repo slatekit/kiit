@@ -16,7 +16,7 @@ package slatekit.entities.core
 import slatekit.common.newline
 import slatekit.common.db.DbType
 import slatekit.common.db.DbTypeMySql
-import slatekit.common.kClass
+import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
 

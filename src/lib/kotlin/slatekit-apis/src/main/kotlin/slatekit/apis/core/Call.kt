@@ -19,6 +19,7 @@ import slatekit.apis.ApiRegAction
 import slatekit.common.*
 import slatekit.common.encrypt.*
 import slatekit.meta.Converter
+import slatekit.meta.KTypes
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -31,8 +32,6 @@ import kotlin.reflect.full.createType
 class Call {
 
     val TypeRequest = Request::class.createType()
-    val TypeDoc = Doc::class.createType()
-    val TypeVars = Vars::class.createType()
 
 
     fun fillArgsExact(callReflect: ApiRegAction, cmd: Request, allowLocalIO: Boolean = false,
@@ -56,33 +55,33 @@ class Call {
             val result = when (paramType) {
 
                 // Basic types
-                Types.StringType        -> Conversions.handleString(args.getString(paramName))
-                Types.BoolType          -> args.getBool(paramName)
-                Types.ShortType         -> args.getShort(paramName)
-                Types.IntType           -> args.getInt(paramName)
-                Types.LongType          -> args.getLong(paramName)
-                Types.FloatType         -> args.getFloat(paramName)
-                Types.DoubleType        -> args.getDouble(paramName)
-                Types.LocalDateType     -> args.getLocalDate(paramName)
-                Types.LocalTimeType     -> args.getLocalTime(paramName)
-                Types.LocalDateTimeType -> args.getLocalDateTime(paramName)
-                Types.ZonedDateTimeType -> args.getZonedDateTime(paramName)
-                Types.DateTimeType      -> args.getDateTime(paramName)
+                KTypes.KStringType        -> Conversions.handleString(args.getString(paramName))
+                KTypes.KBoolType          -> args.getBool(paramName)
+                KTypes.KShortType         -> args.getShort(paramName)
+                KTypes.KIntType           -> args.getInt(paramName)
+                KTypes.KLongType          -> args.getLong(paramName)
+                KTypes.KFloatType         -> args.getFloat(paramName)
+                KTypes.KDoubleType        -> args.getDouble(paramName)
+                KTypes.KLocalDateType     -> args.getLocalDate(paramName)
+                KTypes.KLocalTimeType     -> args.getLocalTime(paramName)
+                KTypes.KLocalDateTimeType -> args.getLocalDateTime(paramName)
+                KTypes.KZonedDateTimeType -> args.getZonedDateTime(paramName)
+                KTypes.KDateTimeType      -> args.getDateTime(paramName)
 
                 // Raw request
                 TypeRequest             -> cmd
 
                 // Doc/File reference ( only if allowed )
-                TypeDoc                 -> Conversions.toDoc(args.getString(paramName))
+                KTypes.KDocType          -> Conversions.toDoc(args.getString(paramName))
 
                 // Map from string string delimited pairs
-                TypeVars                -> Conversions.toVars(args.getString(paramName))
+                KTypes.KVarsType         -> Conversions.toVars(args.getString(paramName))
 
                 // Decryption from encrypted types
-                Types.TypeDecInt        -> enc?.let { e -> DecInt(e.decrypt(args.getString(paramName)).toInt()) } ?: DecInt(0)
-                Types.TypeDecLong       -> enc?.let { e -> DecLong(e.decrypt(args.getString(paramName)).toLong()) } ?: DecLong(0L)
-                Types.TypeDecDouble     -> enc?.let { e -> DecDouble(e.decrypt(args.getString(paramName)).toDouble()) } ?: DecDouble(0.0)
-                Types.TypeDecString     -> enc?.let { e -> DecString(e.decrypt(args.getString(paramName))) } ?: DecString("")
+                KTypes.KDecIntType        -> enc?.let { e -> DecInt(e.decrypt(args.getString(paramName)).toInt()) } ?: DecInt(0)
+                KTypes.KDecLongType       -> enc?.let { e -> DecLong(e.decrypt(args.getString(paramName)).toLong()) } ?: DecLong(0L)
+                KTypes.KDecDoubleType     -> enc?.let { e -> DecDouble(e.decrypt(args.getString(paramName)).toDouble()) } ?: DecDouble(0.0)
+                KTypes.KDecStringType     -> enc?.let { e -> DecString(e.decrypt(args.getString(paramName))) } ?: DecString("")
 
                 // Complex type
                 else                    -> handleComplex(converter, cmd, parameter, paramType, jsonRaw, args.getString(paramName))
@@ -108,21 +107,21 @@ class Call {
             // Case 1: List<*>
             if(cls == List::class){
                 val listType = tpe.arguments[0]!!.type!!
-                val listCls = Types.getClassFromType(listType)
-                req.args?.getList(paramName, listCls) ?: listOf<Any>()
+                val listCls = KTypes.getClassFromType(listType)
+                req.args?.getList(paramName, listCls.java) ?: listOf<Any>()
             }
             // Case 2: Map<*,*>
             else if(cls == Map::class){
                 val tpeKey = tpe.arguments[0].type!!
                 val tpeVal = tpe.arguments[1].type!!
-                val clsKey = Types.getClassFromType(tpeKey)
-                val clsVal = Types.getClassFromType(tpeVal)
+                val clsKey = KTypes.getClassFromType(tpeKey)
+                val clsVal = KTypes.getClassFromType(tpeVal)
                 val emptyMap = mapOf<Any, Any>()
-                req.args?.getMap(paramName,clsKey, clsVal) ?: emptyMap
+                req.args?.getMap(paramName,clsKey.java, clsVal.java) ?: emptyMap
             }
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
-            else if ( cls.supertypes.indexOf(Types.SmartStringType) >= 0 ) {
+            else if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
                 converter.handleSmartString(raw, tpe)
             }
             // Case 4: Object / Complex type

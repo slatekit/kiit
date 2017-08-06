@@ -13,11 +13,13 @@
 
 package slatekit.common.serialization
 
+import slatekit.common.Serializer
+
 
 /**
  * Created by kishorereddy on 6/3/17.
  */
-class SerializerJson : Serializer() {
+class SerializerJson(objectSerializer: ((Serializer, Any, Int) -> Unit)? = null ) : Serializer(objectSerializer) {
 
     override val standardizeResult = true
 }

@@ -9,15 +9,10 @@
 </slate_header>
   */
 
-package slatekit.common.db
+package slatekit.meta.db
 
-import slatekit.common.DateTime
 import slatekit.common.Types
-import slatekit.common.kClass
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import slatekit.meta.KTypes
 import kotlin.reflect.KClass
 
 /**
@@ -41,17 +36,17 @@ data class DbField(
   fun getFieldType(): KClass<*> =
 
     when (dataType) {
-      "int(11)"      -> Types.IntClass
-      "int(15)"      -> Types.LongClass
-      "int(6)"       -> Types.IntClass
-      "tinyint(1)"   -> Types.ShortClass
-      "bit(1)"       -> Types.BoolClass
-      "date"         -> Types.LocalDateClass
-      "time"         -> Types.LocalTimeClass
-      "datetime"     -> Types.LocalDateTimeClass
-      "instant"      -> Types.InstantClass
-      "longtext"     -> Types.StringClass
-      else           -> Types.StringClass
+      "int(11)"      -> KTypes.KIntClass
+      "int(15)"      -> KTypes.KLongClass
+      "int(6)"       -> KTypes.KIntClass
+      "tinyint(1)"   -> KTypes.KShortClass
+      "bit(1)"       -> KTypes.KBoolClass
+      "date"         -> KTypes.KLocalDateClass
+      "time"         -> KTypes.KLocalTimeClass
+      "datetime"     -> KTypes.KLocalDateTimeClass
+      "instant"      -> KTypes.KInstantClass
+      "longtext"     -> KTypes.KStringClass
+      else           -> KTypes.KStringClass
     }
 
 

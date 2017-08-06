@@ -14,10 +14,8 @@ package slatekit.common.db
 
 import slatekit.common.DateTime
 import slatekit.common.Types
-import slatekit.common.kClass
 import java.sql.*
 import java.time.*
-import kotlin.reflect.KClass
 
 
 object DbUtils {
@@ -129,59 +127,60 @@ object DbUtils {
     fun fillArgs(stmt: PreparedStatement, inputs: List<Any>?): Unit {
         inputs?.forEachIndexed { index, arg ->
             val pos = index + 1
-            when (arg.kClass) {
-                Types.StringClass        -> stmt.setString(pos, arg.toString())
-                Types.BoolClass          -> stmt.setBoolean(pos, arg as Boolean)
-                Types.ShortClass         -> stmt.setShort(pos, arg as Short)
-                Types.IntClass           -> stmt.setInt(pos, arg as Int)
-                Types.LongClass          -> stmt.setLong(pos, arg as Long)
-                Types.FloatClass         -> stmt.setFloat(pos, arg as Float)
-                Types.DoubleClass        -> stmt.setDouble(pos, arg as Double)
-                Types.LocalDateClass     -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
-                Types.LocalTimeClass     -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
-                Types.LocalDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
-                Types.ZonedDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as ZonedDateTime).toLocalDateTime()))
-                Types.InstantClass       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault())))
-                Types.DateTimeClass      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as DateTime).local()))
+            val jcls = arg.javaClass
+            when (jcls) {
+                Types.JStringClass        -> stmt.setString(pos, arg.toString())
+                Types.JBoolClass          -> stmt.setBoolean(pos, arg as Boolean)
+                Types.JShortClass         -> stmt.setShort(pos, arg as Short)
+                Types.JIntClass           -> stmt.setInt(pos, arg as Int)
+                Types.JLongClass          -> stmt.setLong(pos, arg as Long)
+                Types.JFloatClass         -> stmt.setFloat(pos, arg as Float)
+                Types.JDoubleClass        -> stmt.setDouble(pos, arg as Double)
+                Types.JLocalDateClass     -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
+                Types.JLocalTimeClass     -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
+                Types.JLocalDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
+                Types.JZonedDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as ZonedDateTime).toLocalDateTime()))
+                Types.JInstantClass       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault())))
+                Types.JDateTimeClass      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as DateTime).local()))
             }
         }
     }
 
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getScalar(rs: ResultSet, typ: KClass<*>): T? {
+    fun <T> getScalar(rs: ResultSet, typ: Class<*>): T? {
         val pos = 1
 
-        return if (typ == Types.StringClass) rs.getString(pos) as T
-        else if (typ == Types.BoolClass) rs.getBoolean(pos) as T
-        else if (typ == Types.ShortClass) rs.getShort(pos) as T
-        else if (typ == Types.IntClass) rs.getInt(pos) as T
-        else if (typ == Types.LongClass) rs.getLong(pos) as T
-        else if (typ == Types.FloatClass) rs.getFloat(pos) as T
-        else if (typ == Types.DoubleClass) rs.getDouble(pos) as T
-        else if (typ == Types.LocalDateClass) rs.getDate(pos).toLocalDate() as T
-        else if (typ == Types.LocalTimeClass) rs.getTime(pos).toLocalTime() as T
-        else if (typ == Types.LocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == Types.ZonedDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == Types.InstantClass) rs.getTimestamp(pos).toInstant() as T
-        else if (typ == Types.DateTimeClass) DateTime.of(rs.getTimestamp(pos)) as T
+        return if (typ == Types.JStringClass) rs.getString(pos) as T
+        else if   (typ == Types.JBoolClass) rs.getBoolean(pos) as T
+        else if   (typ == Types.JShortClass) rs.getShort(pos) as T
+        else if   (typ == Types.JIntClass) rs.getInt(pos) as T
+        else if   (typ == Types.JLongClass) rs.getLong(pos) as T
+        else if   (typ == Types.JFloatClass) rs.getFloat(pos) as T
+        else if   (typ == Types.JDoubleClass) rs.getDouble(pos) as T
+        else if   (typ == Types.JLocalDateClass) rs.getDate(pos).toLocalDate() as T
+        else if   (typ == Types.JLocalTimeClass) rs.getTime(pos).toLocalTime() as T
+        else if   (typ == Types.JLocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if   (typ == Types.JZonedDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if   (typ == Types.JInstantClass) rs.getTimestamp(pos).toInstant() as T
+        else if   (typ == Types.JDateTimeClass) DateTime.of(rs.getTimestamp(pos)) as T
         else null
     }
 
 
-    fun getTypeFromLang(dataType: KClass<*>):DbFieldType =
-            if      (dataType == Types.BoolClass    ) DbFieldTypeBool
-            else if (dataType == Types.StringClass  ) DbFieldTypeString
-            else if (dataType == Types.ShortClass   ) DbFieldTypeShort
-            else if (dataType == Types.IntClass     ) DbFieldTypeNumber
-            else if (dataType == Types.LongClass    ) DbFieldTypeLong
-            else if (dataType == Types.DoubleClass  ) DbFieldTypeReal
-            else if (dataType == Types.LocalDateClass) DbFieldTypeLocalDate
-            else if (dataType == Types.LocalTimeClass) DbFieldTypeLocalTime
-            else if (dataType == Types.LocalDateTimeClass) DbFieldTypeLocalDateTime
-            else if (dataType == Types.ZonedDateTimeClass) DbFieldTypeZonedDateTime
-            else if (dataType == Types.InstantClass) DbFieldTypeInstant
-            else if (dataType == Types.DateTimeClass) DbFieldTypeDateTime
+    fun getTypeFromLang(dataType: Class<*>):DbFieldType =
+            if      (dataType == Types.JBoolClass    ) DbFieldTypeBool
+            else if (dataType == Types.JStringClass  ) DbFieldTypeString
+            else if (dataType == Types.JShortClass   ) DbFieldTypeShort
+            else if (dataType == Types.JIntClass     ) DbFieldTypeNumber
+            else if (dataType == Types.JLongClass    ) DbFieldTypeLong
+            else if (dataType == Types.JDoubleClass  ) DbFieldTypeReal
+            else if (dataType == Types.JLocalDateClass) DbFieldTypeLocalDate
+            else if (dataType == Types.JLocalTimeClass) DbFieldTypeLocalTime
+            else if (dataType == Types.JLocalDateTimeClass) DbFieldTypeLocalDateTime
+            else if (dataType == Types.JZonedDateTimeClass) DbFieldTypeZonedDateTime
+            else if (dataType == Types.JInstantClass) DbFieldTypeInstant
+            else if (dataType == Types.JDateTimeClass) DbFieldTypeDateTime
             else DbFieldTypeString
 
 

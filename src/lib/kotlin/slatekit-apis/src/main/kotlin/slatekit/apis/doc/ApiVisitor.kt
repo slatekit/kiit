@@ -13,13 +13,12 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.ApiBase
 import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
 import slatekit.apis.helpers.ApiLookup
 import slatekit.apis.helpers.Areas
 import slatekit.common.ListMap
-import slatekit.common.Types
+import slatekit.meta.KTypes
 
 
 class ApiVisitor {
@@ -150,7 +149,7 @@ class ApiVisitor {
             val options = ApiVisitOptions(maxLength)
             info.paramList.forEach { argInfo ->
 
-                val clsType = Types.getClassFromType(argInfo.type)
+                val clsType = KTypes.getClassFromType(argInfo.type)
                 visitor.onArgBegin(argInfo.name!!, "", !argInfo.isOptional, clsType.simpleName!!, options = options)
             }
         }

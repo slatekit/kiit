@@ -14,7 +14,6 @@
 package slatekit.common.query
 
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.reflect.KProperty
 
 
 /**
@@ -100,21 +99,6 @@ open class Query : IQuery {
     /**
      * builds up a where clause with the supplied arguments
      *
-     * @param field:  The property reference
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun where(field: KProperty<*>, compare: String, fieldValue: Any): IQuery {
-        val condition = buildCondition(field.name, compare, fieldValue)
-        _data.conditions.add(condition)
-        return this
-    }
-
-
-    /**
-     * builds up a where clause with the supplied arguments
-     *
      * @param field:  The field name
      * @param compare: The comparison operator ( =, >, >=, <, <=, != )
      * @param fieldValue: The field value
@@ -134,21 +118,6 @@ open class Query : IQuery {
      */
     override fun and(field: String, compare: String, fieldValue: Any): IQuery {
         val cond = buildCondition(field, compare, fieldValue)
-        group("and", cond)
-        return this
-    }
-
-
-    /**
-     * adds an and clause with the supplied arguments
-     *
-     * @param field:  The property reference
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun and(field: KProperty<*>, compare: String, fieldValue: Any): IQuery {
-        val cond = buildCondition(field.name, compare, fieldValue)
         group("and", cond)
         return this
     }

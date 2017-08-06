@@ -173,17 +173,17 @@ object Reflector {
 
     fun getTypeFromProperty(tpe: KProperty<*>): KClass<*> {
         return when (tpe.returnType.toString()) {
-            "kotlin.String"            -> Types.StringClass
-            "kotlin.Boolean"           -> Types.BoolClass
-            "kotlin.Short"             -> Types.ShortClass
-            "kotlin.Int"               -> Types.IntClass
-            "kotlin.Long"              -> Types.LongClass
-            "kotlin.Float"             -> Types.FloatClass
-            "kotlin.Double"            -> Types.DoubleClass
-            "java.time.LocalDate"      -> Types.LocalDateClass
-            "java.time.LocalTime"      -> Types.LocalTimeClass
-            "java.time.LocalDateTime"  -> Types.LocalDateTimeClass
-            "slatekit.common.DateTime" -> Types.DateTimeClass
+            "kotlin.String"            -> KTypes.KStringClass
+            "kotlin.Boolean"           -> KTypes.KBoolClass
+            "kotlin.Short"             -> KTypes.KShortClass
+            "kotlin.Int"               -> KTypes.KIntClass
+            "kotlin.Long"              -> KTypes.KLongClass
+            "kotlin.Float"             -> KTypes.KFloatClass
+            "kotlin.Double"            -> KTypes.KDoubleClass
+            "java.time.LocalDate"      -> KTypes.KLocalDateClass
+            "java.time.LocalTime"      -> KTypes.KLocalTimeClass
+            "java.time.LocalDateTime"  -> KTypes.KLocalDateTimeClass
+            "slatekit.common.DateTime" -> KTypes.KDateTimeClass
             else                       -> Any::class
         }
     }

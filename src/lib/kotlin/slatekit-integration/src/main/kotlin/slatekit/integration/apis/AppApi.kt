@@ -16,7 +16,6 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.common.Request
-import slatekit.common.Serial
 import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 
@@ -69,6 +68,6 @@ class AppApi(val context: AppEntContext)  {
 
     //@ApiAction(desc = "gets all info", roles = "@parent", verb = "@parent", protocol = "@parent")
     //fun all(): String {
-    //    return Serial().serialize(context.app)
+    //    return Serializer().serialize(context.app)
     //}
 }

@@ -14,11 +14,10 @@
 package slatekit.common.args
 
 import slatekit.common.Result
+import slatekit.common.Types
 import slatekit.common.console.ConsoleWriter
-import slatekit.common.kClass
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
-import kotlin.reflect.KClass
 
 
 /**
@@ -46,7 +45,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      */
     fun text(name: String, desc: String = "", required: Boolean = false, defaultVal: String = "",
              example: String = "", exampleMany: String = "", group: String = ""): ArgsSchema =
-            add(name, desc, String::class.kClass, required, defaultVal, example, exampleMany, group)
+            add(name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
 
 
     /**
@@ -63,7 +62,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      */
     fun flag(name: String, desc: String = "", required: Boolean = false, defaultVal: String = "",
              example: String = "", exampleMany: String = "", group: String = ""): ArgsSchema =
-            add(name, desc, Boolean::class.kClass, required, defaultVal, example, exampleMany, group)
+            add(name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
 
 
     /**
@@ -80,7 +79,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      */
     fun number(name: String, desc: String = "", required: Boolean = false, defaultVal: String = "",
                example: String = "", exampleMany: String = "", group: String = ""): ArgsSchema =
-            add(name, desc, Int::class.kClass, required, defaultVal, example, exampleMany, group)
+            add(name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
 
 
     /**
@@ -96,7 +95,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @param group       : Used to group arguments into categories
      * @return
      */
-    fun add(name: String, desc: String = "", dataType: KClass<Any>, required: Boolean = false, defaultVal: String = "",
+    fun add(name: String, desc: String = "", dataType: Class<*>, required: Boolean = false, defaultVal: String = "",
             example: String = "", exampleMany: String = "", group: String = ""): ArgsSchema {
         val typeName = dataType.simpleName
         val arg = Arg("", name, desc, typeName ?: "string", required, false, false, false, group, "", defaultVal, example, exampleMany)

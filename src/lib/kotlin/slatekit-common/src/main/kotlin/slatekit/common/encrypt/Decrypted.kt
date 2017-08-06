@@ -30,7 +30,7 @@ package slatekit.common.encrypt
  * use datas such as in the API component
  * @param value
  */
-data class DecInt(val value: Int)
+data class DecInt(val value: Int) { companion object }
 
 
 /**
@@ -39,7 +39,7 @@ data class DecInt(val value: Int)
  * use datas such as in the API component
  * @param value
  */
-data class DecLong(val value: Long)
+data class DecLong(val value: Long) { companion object }
 
 
 /**
@@ -48,7 +48,7 @@ data class DecLong(val value: Long)
  * use datas such as in the API component
  * @param value
  */
-data class DecDouble(val value: Double)
+data class DecDouble(val value: Double) { companion object }
 
 
 /**
@@ -57,6 +57,6 @@ data class DecDouble(val value: Double)
  * use datas such as in the API component
  * @param value
  */
-data class DecString(val value: String)
+data class DecString(val value: String) { companion object }
 
 

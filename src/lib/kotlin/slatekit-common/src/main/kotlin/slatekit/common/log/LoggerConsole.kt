@@ -14,12 +14,11 @@
 package slatekit.common.log
 
 import slatekit.common.console.ConsoleWriter
-import kotlin.reflect.KClass
 
 
 class LoggerConsole constructor(level: LogLevel = Debug,
                                 name: String = "console",
-                                logType: KClass<Any>? = null) : LoggerBase(level, name, logType) {
+                                logType: Class<Any>? = null) : LoggerBase(level, name, logType) {
 
     private val _writer = ConsoleWriter()
 

@@ -13,13 +13,15 @@
 
 package slatekit.common.serialization
 
+import slatekit.common.Serializer
 import slatekit.common.newline
 
 /**
  * Created by kishorereddy on 6/3/17.
  */
 
-class SerializerProps(standardizeFieldWidth: Boolean = false) : Serializer() {
+class SerializerProps(standardizeFieldWidth: Boolean = false,
+                      objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ) : Serializer(objectSerializer) {
 
     override val standardizeWidth = standardizeFieldWidth
 

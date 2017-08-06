@@ -40,7 +40,7 @@ fun buildAddTable(dbSrc:DbSource, model: Model): String
 
     // Build sql for the data fields.
     val dataFieldSql = dataFields.fold("", { acc, field ->
-        val sqlType = DbUtils.getTypeFromLang(field.dataType)
+        val sqlType = DbUtils.getTypeFromLang(field.dataType.java)
         acc + ", " + dbSrc.buildAddCol(field.name, sqlType, field.isRequired, field.maxLength)
     })
     buff.append( dataFieldSql )

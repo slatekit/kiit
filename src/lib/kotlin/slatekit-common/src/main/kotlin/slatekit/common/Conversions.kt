@@ -13,16 +13,10 @@
 
 package slatekit.common
 
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
-import kotlin.reflect.KClass
-import kotlin.reflect.KType
 
 
 /**
@@ -89,28 +83,47 @@ object Conversions {
     }
 
 
-    fun converterFor(tpe: KClass<*>): (String) -> Any {
+    fun converterFor(tpe: Class<*>): (String) -> Any {
         val converter = when (tpe) {
         // Basic types
-            Types.BoolClass          -> this::toBool
-            Types.ShortClass         -> this::toShort
-            Types.IntClass           -> this::toInt
-            Types.LongClass          -> this::toLong
-            Types.FloatClass         -> this::toFloat
-            Types.DoubleClass        -> this::toDouble
-            Types.LocalDateClass     -> this::toLocalDate
-            Types.LocalTimeClass     -> this::toLocalTime
-            Types.LocalDateTimeClass -> this::toLocalDateTime
-            Types.ZonedDateTimeClass -> this::toZonedDateTime
-            Types.DateTimeClass      -> this::toDateTime
-            Types.DocClass           -> this::toDoc
-            Types.VarsClass          -> this::toVars
+            Types.JBoolClass          -> this::toBool
+            Types.JShortClass         -> this::toShort
+            Types.JIntClass           -> this::toInt
+            Types.JLongClass          -> this::toLong
+            Types.JFloatClass         -> this::toFloat
+            Types.JDoubleClass        -> this::toDouble
+            Types.JLocalDateClass     -> this::toLocalDate
+            Types.JLocalTimeClass     -> this::toLocalTime
+            Types.JLocalDateTimeClass -> this::toLocalDateTime
+            Types.JZonedDateTimeClass -> this::toZonedDateTime
+            Types.JDateTimeClass      -> this::toDateTime
+            Types.JDocClass           -> this::toDoc
+            Types.JVarsClass          -> this::toVars
             else                     -> this::toString
         }
         return converter
     }
 
 
+    /**
+     * Builds a string parameter ensuring that nulls are avoided.
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleString(data:Any?): String {
+        // As a design choice, this marshaller will only pass empty string to
+        // API methods instead of null
+        return when(data) {
+            null      -> ""
+            "null"    -> ""
+            is String -> if(data.isNullOrEmpty()) "" else data
+            else      -> data.toString()
+        }
+    }
+
+
+    /*
     fun converterFor(tpe: KType): (String) -> Any {
         val converter = when (tpe) {
         // Basic types
@@ -131,53 +144,5 @@ object Conversions {
             else                     -> this::toString
         }
         return converter
-    }
-
-
-    fun convert(key:String, paramType: KType, rawVal:Any?, decryptor:((String) -> String)? = null): Any {
-
-        val result = when (paramType) {
-            // Basic types
-            Types.StringType        -> handleString(rawVal)
-            Types.BoolType          -> rawVal.toString().toBoolean()
-            Types.ShortType         -> rawVal.toString().toShort()
-            Types.IntType           -> rawVal.toString().toInt()
-            Types.LongType          -> rawVal.toString().toLong()
-            Types.FloatType         -> rawVal.toString().toFloat()
-            Types.DoubleType        -> rawVal.toString().toDouble()
-            Types.LocalDateType     -> Conversions.toLocalDate(rawVal as String)
-            Types.LocalTimeType     -> Conversions.toLocalTime(rawVal as String)
-            Types.LocalDateTimeType -> Conversions.toLocalDateTime(rawVal as String)
-            Types.ZonedDateTimeType -> Conversions.toZonedDateTime(rawVal as String)
-            Types.DateTimeType      -> Conversions.toDateTime(rawVal as String)
-            Types.TypeDecInt        -> decryptor?.let { e -> DecInt(e(rawVal as String).toInt()) } ?: DecInt(0)
-            Types.TypeDecLong       -> decryptor?.let { e -> DecLong(e(rawVal as String).toLong()) } ?: DecLong(0L)
-            Types.TypeDecDouble     -> decryptor?.let { e -> DecDouble(e(rawVal as String).toDouble()) } ?: DecDouble(0.0)
-            Types.TypeDecString     -> decryptor?.let { e -> DecString(e(rawVal as String)) } ?: DecString("")
-            Types.DocType           -> Conversions.toDoc(rawVal.toString())
-            Types.VarsType          -> Conversions.toVars(rawVal)
-
-            // Complex types not supported: e.g. Lists/Maps/Nested objects
-                else                    -> handleString(rawVal)
-            }
-        return result
-    }
-
-
-    /**
-     * Builds a string parameter ensuring that nulls are avoided.
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleString(data:Any?): String {
-        // As a design choice, this marshaller will only pass empty string to
-        // API methods instead of null
-        return when(data) {
-            null      -> ""
-            "null"    -> ""
-            is String -> if(data.isNullOrEmpty()) "" else data
-            else      -> data.toString()
-        }
-    }
+    }*/
 }

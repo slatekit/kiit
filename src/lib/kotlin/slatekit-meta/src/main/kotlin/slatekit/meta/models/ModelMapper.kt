@@ -20,6 +20,7 @@ import slatekit.common.Types
 import slatekit.meta.Reflector
 import slatekit.common.newline
 import slatekit.common.records.Record
+import slatekit.meta.KTypes
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
 
@@ -98,19 +99,19 @@ open class ModelMapper(protected val _model: Model, protected val _settings: Mod
                 val colName = mapping.storedName
 
                 val dataValue = when (mapping.dataType) {
-                    Types.StringClass        -> record.getString(colName)
-                    Types.BoolClass          -> record.getBool(colName)
-                    Types.ShortClass         -> record.getShort(colName)
-                    Types.IntClass           -> record.getInt(colName)
-                    Types.LongClass          -> record.getLong(colName)
-                    Types.FloatClass         -> record.getFloat(colName)
-                    Types.DoubleClass        -> record.getDouble(colName)
-                    Types.LocalDateClass     -> record.getLocalDate(colName)
-                    Types.LocalTimeClass     -> record.getLocalTime(colName)
-                    Types.LocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
-                    Types.ZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
-                    Types.DateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
-                    Types.InstantClass       -> record.getInstant(colName)
+                    KTypes.KStringClass        -> record.getString(colName)
+                    KTypes.KBoolClass          -> record.getBool(colName)
+                    KTypes.KShortClass         -> record.getShort(colName)
+                    KTypes.KIntClass           -> record.getInt(colName)
+                    KTypes.KLongClass          -> record.getLong(colName)
+                    KTypes.KFloatClass         -> record.getFloat(colName)
+                    KTypes.KDoubleClass        -> record.getDouble(colName)
+                    KTypes.KLocalDateClass     -> record.getLocalDate(colName)
+                    KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
+                    KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
+                    KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
+                    KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
+                    KTypes.KInstantClass       -> record.getInstant(colName)
                     else                     -> record.getString(colName)
                 }
                 dataValue
@@ -139,19 +140,19 @@ open class ModelMapper(protected val _model: Model, protected val _settings: Mod
                 val colName = mapping.storedName
 
                 val dataValue = when (mapping.dataType) {
-                    Types.StringClass        -> record.getString(colName)
-                    Types.BoolClass          -> record.getBool(colName)
-                    Types.ShortClass         -> record.getShort(colName)
-                    Types.IntClass           -> record.getInt(colName)
-                    Types.LongClass          -> record.getLong(colName)
-                    Types.FloatClass         -> record.getFloat(colName)
-                    Types.DoubleClass        -> record.getDouble(colName)
-                    Types.LocalDateClass     -> record.getLocalDate(colName)
-                    Types.LocalTimeClass     -> record.getLocalTime(colName)
-                    Types.LocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
-                    Types.ZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
-                    Types.DateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
-                    else                     -> record.getString(colName)
+                    KTypes.KStringClass        -> record.getString(colName)
+                    KTypes.KBoolClass          -> record.getBool(colName)
+                    KTypes.KShortClass         -> record.getShort(colName)
+                    KTypes.KIntClass           -> record.getInt(colName)
+                    KTypes.KLongClass          -> record.getLong(colName)
+                    KTypes.KFloatClass         -> record.getFloat(colName)
+                    KTypes.KDoubleClass        -> record.getDouble(colName)
+                    KTypes.KLocalDateClass     -> record.getLocalDate(colName)
+                    KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
+                    KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
+                    KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
+                    KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
+                    else                       -> record.getString(colName)
                 }
                 Reflector.setFieldValue(entity!!, mapping.name, dataValue)
             }

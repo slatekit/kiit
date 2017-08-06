@@ -14,11 +14,10 @@
 package slatekit.entities.core
 
 import slatekit.common.ListMap
-import slatekit.common.Reflector
 import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.Mapper
+import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
 import slatekit.meta.models.ModelMapper

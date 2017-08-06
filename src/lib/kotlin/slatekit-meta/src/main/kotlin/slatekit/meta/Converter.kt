@@ -16,11 +16,8 @@ package slatekit.meta
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.Doc
 import slatekit.common.Request
-import slatekit.common.Vars
 import slatekit.common.SmartString
-import slatekit.common.Types
 import slatekit.common.Conversions
 import slatekit.common.encrypt.*
 import slatekit.common.types.Email
@@ -39,8 +36,6 @@ class Converter(val enc: Encryptor? = null,
                 val smartStrings:Map<String, SmartString> = mapOf()) {
 
     // This could be a reference to file doc e.g. user://myapp/conf/apikey.conf
-    val TypeDoc = Doc::class.createType()
-    val TypeVars = Vars::class.createType()
     val TypeRequest = Request::class.createType()
 
 
@@ -82,23 +77,23 @@ class Converter(val enc: Encryptor? = null,
     fun convert(parent:Any, raw:Any?, paramType: KType): Any? {
         return when (paramType) {
             // Basic types
-            Types.StringType        -> Conversions.handleString(raw)
-            Types.BoolType          -> raw.toString().toBoolean()
-            Types.ShortType         -> raw.toString().toShort()
-            Types.IntType           -> raw.toString().toInt()
-            Types.LongType          -> raw.toString().toLong()
-            Types.FloatType         -> raw.toString().toFloat()
-            Types.DoubleType        -> raw.toString().toDouble()
-            Types.LocalDateType     -> Conversions.toLocalDate(raw as String)
-            Types.LocalTimeType     -> Conversions.toLocalTime(raw as String)
-            Types.LocalDateTimeType -> Conversions.toLocalDateTime(raw as String)
-            Types.ZonedDateTimeType -> Conversions.toZonedDateTime(raw as String)
-            Types.DateTimeType      -> Conversions.toDateTime(raw as String)
-            Types.TypeDecInt        -> enc?.let { e -> DecInt(e.decrypt(raw as String).toInt()) } ?: DecInt(0)
-            Types.TypeDecLong       -> enc?.let { e -> DecLong(e.decrypt(raw as String).toLong()) } ?: DecLong(0L)
-            Types.TypeDecDouble     -> enc?.let { e -> DecDouble(e.decrypt(raw as String).toDouble()) } ?: DecDouble(0.0)
-            Types.TypeDecString     -> enc?.let { e -> DecString(e.decrypt(raw as String)) } ?: DecString("")
-            TypeVars                -> Conversions.toVars(raw)
+            KTypes.KStringType        -> Conversions.handleString(raw)
+            KTypes.KBoolType          -> raw.toString().toBoolean()
+            KTypes.KShortType         -> raw.toString().toShort()
+            KTypes.KIntType           -> raw.toString().toInt()
+            KTypes.KLongType          -> raw.toString().toLong()
+            KTypes.KFloatType         -> raw.toString().toFloat()
+            KTypes.KDoubleType        -> raw.toString().toDouble()
+            KTypes.KLocalDateType     -> Conversions.toLocalDate(raw as String)
+            KTypes.KLocalTimeType     -> Conversions.toLocalTime(raw as String)
+            KTypes.KLocalDateTimeType -> Conversions.toLocalDateTime(raw as String)
+            KTypes.KZonedDateTimeType -> Conversions.toZonedDateTime(raw as String)
+            KTypes.KDateTimeType      -> Conversions.toDateTime(raw as String)
+            KTypes.KDecIntType        -> enc?.let { e -> DecInt(e.decrypt(raw as String).toInt()) } ?: DecInt(0)
+            KTypes.KDecLongType       -> enc?.let { e -> DecLong(e.decrypt(raw as String).toLong()) } ?: DecLong(0L)
+            KTypes.KDecDoubleType     -> enc?.let { e -> DecDouble(e.decrypt(raw as String).toDouble()) } ?: DecDouble(0.0)
+            KTypes.KDecStringType     -> enc?.let { e -> DecString(e.decrypt(raw as String)) } ?: DecString("")
+            KTypes.KVarsType          -> Conversions.toVars(raw)
 
             // Complex type
             else                    -> handleComplex(parent, raw, paramType)
@@ -126,7 +121,7 @@ class Converter(val enc: Encryptor? = null,
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types
-        else if ( cls.supertypes.indexOf(Types.SmartStringType) >= 0 ) {
+        else if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
             handleSmartString(raw, tpe)
         }
         else {
@@ -164,8 +159,8 @@ class Converter(val enc: Encryptor? = null,
     fun handleMap(raw:Any?, tpe: KType): Map<*, *>? {
         val tpeKey = tpe.arguments[0].type!!
         val tpeVal = tpe.arguments[1].type!!
-        val clsKey = Types.getClassFromType(tpeKey)
-        val clsVal = Types.getClassFromType(tpeVal)
+        val clsKey = KTypes.getClassFromType(tpeKey)
+        val clsVal = KTypes.getClassFromType(tpeVal)
         val emptyMap = mapOf<Any, Any>()
         val items = when (raw) {
             is JSONObject -> parseMap(raw, tpeKey, tpeVal)
@@ -221,7 +216,7 @@ class Converter(val enc: Encryptor? = null,
 
 
     fun parseMap(obj: JSONObject, tpeKey: KType, tpeVal: KType):Map<*,*> {
-        val keyConverter = Conversions.converterFor(tpeKey)
+        val keyConverter = Conversions.converterFor(tpeKey.javaClass)
         val items = obj.map { entry ->
             val key = keyConverter(entry.key?.toString()!!)
             val keyVal = convert(obj, entry.value, tpeVal)

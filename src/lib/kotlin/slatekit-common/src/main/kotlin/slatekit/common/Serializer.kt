@@ -13,6 +13,7 @@
 
 package slatekit.common
 
+import slatekit.common.serialization.Indenter
 import java.time.*
 import java.time.format.DateTimeFormatter
 
@@ -27,11 +28,16 @@ import java.time.format.DateTimeFormatter
  * NOTE: This is mostly used for the output in the Shell/CLI console and the
  * serialization of entities/models for the ORM for logging purposes.
  *
+ * @param objectSerializer: The function that can handle serialization of an option.
+ * This is supplied to remove kotlin reflect as a dependency on SlateKit.common project.
+ * Refer to slatekit.meta.serialization.serializeObject for a sample implementation.
+ *
  */
-open class Serial {
+open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ){
 
     open val standardizeWidth = false
     open val standardizeResult = false
+    protected val _indenter = Indenter()
     protected var _buff = StringBuilder()
     protected val dateFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     protected val timeFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -70,7 +76,7 @@ open class Serial {
 
         // Serialize
         val value = serializeValue(root, 0)
-        onMapItem(root, 0, 0, root.kClass.simpleName!!, value)
+        onMapItem(root, 0, 0, root.javaClass.simpleName!!, value)
 
         // End
         onContainerEnd(root, ParentType.ROOT_TYPE, 0)
@@ -107,7 +113,7 @@ open class Serial {
             is Result<*>     -> serializeResult(s, depth)
             is List<*>       -> serializeList(s, depth + 1)
             is Map<*, *>     -> serializeMap(s, depth + 1)
-            else             -> serializeObject(s, depth + 1)
+            else             -> objectSerializer?.invoke(this, s, depth + 1)
         }
     }
 
@@ -157,51 +163,6 @@ open class Serial {
 
         // End
         onContainerEnd(item, ParentType.MAP_TYPE, depth)
-    }
-
-
-    /**
-     * recursive serialization for a object.
-     *
-     * @param item: The object to serialize
-     * @param serializer: The serializer to serialize a value to a string
-     * @param delimiter: The delimiter to use between key/value pairs
-     */
-    protected fun serializeObject(item: Any, depth: Int): Unit {
-
-        // Begin
-        onContainerStart(item, ParentType.OBJECT_TYPE, depth)
-
-        // Get fields
-        val fields = Reflector.getProperties(item.kClass)
-
-        // Standardize the display of the props
-        val maxLen = if (standardizeWidth) {
-            fields.maxBy { it.name.length }?.name?.length ?: 0
-        }
-        else {
-            0
-        }
-
-        fields.forEachIndexed { index, field ->
-            // Get name/value
-            val propName = field.name.trim()
-
-            // Standardized width
-            val finalPropName = if (standardizeWidth) {
-                propName.padEnd(maxLen)
-            }
-            else {
-                propName
-            }
-            val value = Reflector.getFieldValue(item, propName)
-
-            // Entry
-            onMapItem(item, depth, index, finalPropName, value)
-        }
-
-        // End
-        onContainerEnd(item, ParentType.OBJECT_TYPE, depth)
     }
 
 

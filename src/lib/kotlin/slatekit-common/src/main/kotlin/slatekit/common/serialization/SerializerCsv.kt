@@ -13,14 +13,14 @@
 
 package slatekit.common.serialization
 
-import slatekit.common.Serial
+import slatekit.common.Serializer
 import slatekit.common.newline
 
 /**
  * Created by kishorereddy on 6/3/17.
  */
 
-class SerializerCsv : Serial() {
+class SerializerCsv(objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ) : Serializer(objectSerializer) {
 
     /**
      * handler for when a container item has started

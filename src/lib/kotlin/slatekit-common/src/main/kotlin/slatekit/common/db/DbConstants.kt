@@ -11,10 +11,6 @@
 
 package slatekit.common.db
 
-import slatekit.common.DateTime
-import slatekit.common.TimeSpan
-import slatekit.common.kClass
-import kotlin.reflect.KClass
 
 
 object DbConstants {

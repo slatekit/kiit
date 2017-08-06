@@ -13,9 +13,9 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Reflector
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
+import slatekit.meta.Reflector
 import kotlin.reflect.KProperty
 
 /**

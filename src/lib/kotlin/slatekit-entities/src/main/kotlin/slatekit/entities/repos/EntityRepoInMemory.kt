@@ -15,13 +15,13 @@ package slatekit.entities.repos
 
 import slatekit.common.DateTime
 import slatekit.common.ListMap
-import slatekit.common.Reflector
-import slatekit.common.Types
 import slatekit.common.query.IQuery
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
 import slatekit.entities.core.EntityUpdatable
+import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -109,7 +109,7 @@ open class EntityRepoInMemory<T>(
     override fun findBy(field: String, op: String, value: Any): List<T> {
         val prop = Reflector.findProperty(_entityType, field)
         val matched = prop?.let { property ->
-            val cls = Types.getClassFromType(property.returnType)
+            val cls = KTypes.getClassFromType(property.returnType)
 
             property.let { p ->
                 _items.all().filter { it ->
@@ -177,18 +177,18 @@ open class EntityRepoInMemory<T>(
     fun compare(cls: KClass<*>, a: Any?, b: Any): Boolean {
         return a?.let { actual ->
             when (cls) {
-                Types.StringClass          -> (actual as String) == (b as String)
-                Types.BoolClass            -> (actual as Boolean) == (b as Boolean)
-                Types.ShortClass           -> (actual as Short) == (b as Short)
-                Types.IntClass             -> (actual as Int) == (b as Int)
-                Types.LongClass            -> (actual as Long) == (b as Long)
-                Types.FloatClass           -> (actual as Float) == (b as Float)
-                Types.DoubleClass          -> (actual as Double) == (b as Double)
-                Types.LocalDateClass       -> (actual as LocalDate) == (b as LocalDate)
-                Types.LocalTimeClass       -> (actual as LocalTime) == (b as LocalTime)
-                Types.LocalDateTimeClass   -> (actual as LocalDateTime) == (b as LocalDateTime)
-                Types.ZonedDateTimeClass   -> (actual as ZonedDateTime) == (b as ZonedDateTime)
-                Types.DateTimeClass        -> (actual as DateTime) == (b as DateTime)
+                KTypes.KStringClass          -> (actual as String) == (b as String)
+                KTypes.KBoolClass            -> (actual as Boolean) == (b as Boolean)
+                KTypes.KShortClass           -> (actual as Short) == (b as Short)
+                KTypes.KIntClass             -> (actual as Int) == (b as Int)
+                KTypes.KLongClass            -> (actual as Long) == (b as Long)
+                KTypes.KFloatClass           -> (actual as Float) == (b as Float)
+                KTypes.KDoubleClass          -> (actual as Double) == (b as Double)
+                KTypes.KLocalDateClass       -> (actual as LocalDate) == (b as LocalDate)
+                KTypes.KLocalTimeClass       -> (actual as LocalTime) == (b as LocalTime)
+                KTypes.KLocalDateTimeClass   -> (actual as LocalDateTime) == (b as LocalDateTime)
+                KTypes.KZonedDateTimeClass   -> (actual as ZonedDateTime) == (b as ZonedDateTime)
+                KTypes.KDateTimeClass        -> (actual as DateTime) == (b as DateTime)
                 else                       -> false
             }
         } ?: false

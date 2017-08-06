@@ -14,7 +14,7 @@
 package slatekit.apis
 
 
-import slatekit.common.kClass
+import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
 
