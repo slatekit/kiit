@@ -19,6 +19,7 @@ import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.envs.Dev
+import slatekit.meta.map
 import slatekit.sampleapp.core.models.Movie
 import test.common.MyEncryptor
 import java.util.*
@@ -59,7 +60,7 @@ class ConfigTests {
 
     @Test fun test_list() {
         val conf = Config(CONFIG_DEFAULT_PROPERTIES)
-        val items = conf.getList("test_ints", Int::class)
+        val items = conf.getList("test_ints", Int::class.java)
 
         assert(items[0] == 1)
         assert(items[1] == 22)
@@ -70,7 +71,7 @@ class ConfigTests {
 
     @Test fun test_map() {
         val conf = Config(CONFIG_DEFAULT_PROPERTIES)
-        val items = conf.getMap("test_maps", String::class, Int::class)
+        val items = conf.getMap("test_maps", String::class.java, Int::class.java)
 
         assert(items["a"] == 1)
         assert(items["b"] == 22)

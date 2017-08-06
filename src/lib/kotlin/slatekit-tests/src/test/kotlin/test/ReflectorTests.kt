@@ -13,9 +13,10 @@ import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.types.PhoneUS
-import slatekit.core.common.AppContext
+import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
+import slatekit.meta.KTypes
 import slatekit.tests.common.UserApi
 import test.common.*
 import kotlin.reflect.KClass
@@ -53,6 +54,30 @@ class ReflectorTests {
             dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
             enc  = MyEncryptor
     )
+
+
+    @Test fun can_match_java_to_kotlin_types() {
+        assert(Types.JStringClass        == KTypes.KStringClass       .java)
+        assert(Types.JBoolClass          == KTypes.KBoolClass         .java)
+        assert(Types.JShortClass         == KTypes.KShortClass        .java)
+        assert(Types.JIntClass           == KTypes.KIntClass          .java)
+        assert(Types.JLongClass          == KTypes.KLongClass         .java)
+        assert(Types.JFloatClass         == KTypes.KFloatClass        .java)
+        assert(Types.JDoubleClass        == KTypes.KDoubleClass       .java)
+        assert(Types.JDateTimeClass      == KTypes.KDateTimeClass     .java)
+        assert(Types.JLocalDateClass     == KTypes.KLocalDateClass    .java)
+        assert(Types.JLocalTimeClass     == KTypes.KLocalTimeClass    .java)
+        assert(Types.JLocalDateTimeClass == KTypes.KLocalDateTimeClass.java)
+    }
+
+
+    @Test fun can_match_types_dynamically() {
+
+        val id:Any = 0
+        val actualCls = id.javaClass
+        val expectedCls = 0.javaClass
+        assert(expectedCls == actualCls)
+    }
 
 
     @Test fun can_check_subtype(){

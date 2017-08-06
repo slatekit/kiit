@@ -14,7 +14,11 @@ package test
 
 import org.junit.Test
 import slatekit.apis.core.Call
-import slatekit.common.*
+import slatekit.common.Conversions
+import slatekit.common.DateTime
+import slatekit.common.InputArgs
+import slatekit.common.Request
+import slatekit.meta.Reflector
 import slatekit.tests.common.UserApi
 
 /**
@@ -78,7 +82,7 @@ class CallTests {
 
     @Test fun can_handle_types(){
 
-        fun ensureTypes(inputs:InputArgs):Unit {
+        fun ensureTypes(inputs: InputArgs):Unit {
             val call = Call()
             val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, "testTypes")

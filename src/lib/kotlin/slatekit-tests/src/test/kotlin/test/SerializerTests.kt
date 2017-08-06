@@ -14,9 +14,10 @@ package test
 
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.Serial
+import slatekit.common.Serializer
 import slatekit.common.newline
 import slatekit.common.serialization.SerializerCsv
+import slatekit.meta.Serialization
 import test.common.User
 
 /**
@@ -27,7 +28,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_string() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         assert( serializer.serialize(null)       == "null")
         assert( serializer.serialize("")         == "\"\"")
         assert( serializer.serialize("abc")      == "\"abc\"")
@@ -39,7 +40,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_numbers() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         assert( serializer.serialize(123)            == "123" )
         assert( serializer.serialize(123L)           == "123" )
         assert( serializer.serialize(123.toShort())  == "123" )
@@ -49,14 +50,14 @@ class SerializerTests {
 
 
     @Test fun can_serialize_bools() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         assert( serializer.serialize(false)          == "false" )
         assert( serializer.serialize(true)           == "true"  )
     }
 
 
     @Test fun can_serialize_dates() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         val d1 = serializer.serialize(DateTime.of(2017,6,1))
         val d2 = serializer.serialize(DateTime.of(2017,6,1,9,5,0))
         val d3 = serializer.serialize(DateTime.of(2017,6,1,9,5,5))
@@ -68,7 +69,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_list() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         assert( serializer.serialize(listOf("a", "b", "c")) == "[\"a\", \"b\", \"c\"]")
         assert( serializer.serialize(listOf(1, 2, 3)) == "[1, 2, 3]")
         assert( serializer.serialize(listOf(true, false, true)) == "[true, false, true]")
@@ -78,7 +79,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_json_object() {
-        val serializer = Serial()
+        val serializer = Serialization.json()
         val user = User(2, "c@abc.com", "super", "man", true, 35)
         val text = serializer.serialize(user)
         println(text)
@@ -87,7 +88,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_json_objects(){
-        val serializer = Serial()
+        val serializer = Serialization.json()
         val user1 = User(2, "c@abc.com", "super", "man", true, 35)
         val user2 = User(3, "b@abc.com", "bat"  , "man", true, 35)
         val users = listOf(user1, user2)
@@ -101,7 +102,7 @@ class SerializerTests {
 
 
     @Test fun can_serialize_csv_records() {
-        val serializer = SerializerCsv()
+        val serializer = Serialization.csv()
         val user1 = User(2, "c@abc.com", "super", "man", true, 35)
         val user2 = User(3, "b@abc.com", "bat"  , "man", true, 35)
         val users = listOf(user1, user2)
