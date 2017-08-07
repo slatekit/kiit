@@ -1,1 +1,4 @@
 rootProject.name = 'slatekit-meta'
+
+include ':slatekit-common'
+project(':slatekit-common').projectDir=new File('../slatekit-common')
