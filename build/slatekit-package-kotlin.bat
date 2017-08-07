@@ -1,4 +1,4 @@
-set VERSION=0.9.4
+set VERSION=0.9.5
 set SLATE_SOURCE=C:\Dev\github\slatekit
 set SLATE_DEST=C:\Dev\github\slatekit\dist\slatekit\kotlin\releases\%VERSION%
 

@@ -27,6 +27,7 @@ dependencies {
     compile "com.googlecode.json-simple:json-simple:1.1"
     compile "com.sparkjava:spark-core:2.1"
     compile project(":slatekit-common")
+    compile project(":slatekit-meta")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")
     compile project(":slatekit-apis")
