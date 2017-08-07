@@ -71,13 +71,17 @@
           <div class="container">
 			
             <div class="alert alert-info text-center" role="alert">
-				<h3>Slate Kit will soon be available on Maven</h3>
-				<h5>* Download releases and use binaries for now</h5>
+				<h3>Slate Kit now available on Bintray!</h3>
+				<h5><strong><a class="url-ch" href="https://bintray.com/codehelixinc/slatekit">Slate Kit Binaries</a></strong></h5>
 			</div>
 			<br/>
 			
-			<div>			
-				<h1>Required</h1>
+			<div>	
+				<h1>1. Overview</h1>
+				<p>Here is an overview of all the software required to run Slate Kit ( which is built in Kotlin ).
+				Also listed are suggested tools for convenience</p>
+				<br/>
+				<h2>Required</h1>
 				<p>All the software below is required to run Kotlin and Slate Kit. Kotlin is dependent on 
 				<strong>Java</strong>. <strong>Gradle</strong> is used to build and package Kotlin projects
 				and is the build tool for Slate Kit.
@@ -101,17 +105,9 @@
 						<td class="col-sm-3">Kotlin</td>
 						<td class="col-sm-2"><a class="url-ch" href="#installation">see below</a></td>
 					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>Gradle</strong></td>
-						<td class="col-sm-2">3.5</td>
-						<td class="col-sm-3">Build tool</td>
-						<td class="col-sm-2"><a class="url-ch" href="#installation">see below</a></td>
-					</tr>
 				</table>
-			</div>
-			<br/><br/>
-			<div>			
-				<h1>Suggested</h1>
+				<br/><br/>	
+				<h2>Suggested</h1>
 				<p>The software below is recommended but not required. 
 				Slate Kit supports MySql with support for PostGres and Sql Server coming later. Having the MySql Java Connector will 
 				help with the sample apps and is also needed for the ORM ( entities ).
@@ -130,16 +126,14 @@
 						<td class="col-sm-2"><a class="url-ch" href="https://www.jetbrains.com/idea/download/">download</a></td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>MySql Connector</strong></td>
-						<td class="col-sm-2">5.7</td>
-						<td class="col-sm-3">Database connectivity</td>
-						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
+						<td class="col-sm-2"><strong>Gradle</strong></td>
+						<td class="col-sm-2">3.5</td>
+						<td class="col-sm-3">Build tool</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see below</a></td>
 					</tr>
-				</table>			
-            </div>
-			<br/><br/>
-			<div>			
-				<h1>Optional</h1>
+				</table>
+				<br/><br/>
+				<h2>Optional</h2>
 				<p>Slate Kit supports building Web APIs using <strong>Spark Java</strong>, Cloud Services ( Files, Queues ) using <strong>AWS</strong> and databases using <strong>MySql</strong>. The following are needed if you plan on using any of these.
 				</p>
 				<table class="table table-bordered table-striped">
@@ -148,6 +142,18 @@
 						<td class="col-sm-2"><strong>Version</strong></td>
 						<td class="col-sm-3"><strong>About</strong></td>
 						<td class="col-sm-2"><strong>Link</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>MySql</strong></td>
+						<td class="col-sm-2">5.7</td>
+						<td class="col-sm-3">Database Server</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/mysql/">download</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>MySql Connector</strong></td>
+						<td class="col-sm-2">5.7</td>
+						<td class="col-sm-3">For database connectivity and orm</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
 					</tr>
 					<tr>
 						<td class="col-sm-2"><strong>Spark Java</strong></td>
@@ -161,17 +167,11 @@
 						<td class="col-sm-3">File Storage( S3 ), Queues( SQS )</td>
 						<td class="col-sm-2"><a class="url-ch" href="https://aws.amazon.com/sdk-for-java/">download</a></td>
 					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>MySql</strong></td>
-						<td class="col-sm-2">5.7</td>
-						<td class="col-sm-3">Database Server</td>
-						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/mysql/">download</a></td>
-					</tr>
 				</table>				
             </div>
 			<br/><br/>
 			<div>			
-				<h1>Installation</h1>
+				<h1>2. Installation</h1>
 				<p>Installation of Java, Kotlin, Gradle and Slate Kit is fairly easy. We recommend the following installation steps and centralized location for simplicity.
 				</p>
 				<table class="table table-bordered table-striped">
@@ -216,25 +216,143 @@
 							</ul>
 						</td>
 					</tr>
-					<tr>
-						<td class="col-sm-2"><strong>Slate Kit</strong></td>
-						<td class="col-sm-2">0.9.2</td>
-						<td class="col-sm-2"><a class="url-ch" href="releases.html">download</a></td>
-						<td >							
-							<ul>
-								<li>download the current release from <strong><a class="url-ch" href="releases.html">Releases</a></strong></li>
-								<li>the binaries are located in <strong>ROOT\bin;</strong></li>
-								<li>SlateKit will be available via Maven soon</li>
-								<li>you will need to reference the jars until Slate Kit is on Maven</li>
-							</ul>
-						</td>
-					</tr>
 				</table>
             </div>
 			<br/><br/>
 			<div>
-				<h1>Dependencies</h1>
-				<p>Below is a list of all the libraries/jars needed for Slate Kit Components.
+				<h1>3. Setup</h1>
+				<p>Slate Kit is available in 3 different ways. You can use maven references from gradle, manually download from bintray or download the releases 
+				which contain both the binaries and sample apps.</p>
+				<br/>
+				<h2>a) Bintray</h2>
+				<p>You can manually download just the binaries from bintray. </p>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> See <a class="url-ch" href="https://bintray.com/codehelixinc/slatekit">Bintray</a> for just the binaries
+					</p>
+				</div>
+				<br/>
+				<h2>b) Releases</h2>
+				<p>You can download the release which contains both the binaries and sample apps</p>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> See <a class="url-ch" href="releases.html">Releases</a> for binaries + samples 					
+					</p>
+				</div>
+				<br/>
+				<h2>c) Gradle</h2>
+				<p>You can add references in your gradle scripts like this</p>				
+				<div>
+<pre>
+
+buildscript {
+    ext.kotlin_version = '1.1.2'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+    maven {
+        url  "http://dl.bintray.com/codehelixinc/slatekit"
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+	
+    // Reference the slate kit binaries here
+    compile 'com.slatekit:slatekit-common:0.9.5'
+    compile 'com.slatekit:slatekit-meta:0.9.5'
+}
+
+</pre>				
+				</div>
+				<br/>
+				<h3>Artifacts</h3>
+				<p>The groupId is <strong>com.slatekit</strong></p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><strong>Project</strong></td>
+						<td class="col-sm-2"><strong>Maven Reference</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Link</strong></td>
+					</tr>
+					<tr class="">
+						<td><strong>Common</strong></td>
+						<td>com.slatekit:slatekit-common:0.9.5</td>
+						<td>Utilities</td>
+						<td><a class="url-ch" href="kotlin-utils.html">Utils</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Meta</strong></td>
+						<td>com.slatekit:slatekit-meta:0.9.5</td>
+						<td>Reflection / Meta utils</td>
+						<td><a class="url-ch" href="">Meta</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Entities</strong></td>
+						<td>com.slatekit:slatekit-entities:0.9.5</td>
+						<td>Light-Weight ORM</td>
+						<td><a class="url-ch" href="kotlin-core-orm.html">Entities</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Core</strong></td>
+						<td>com.slatekit:slatekit-core:0.9.5</td>
+						<td>Core Architectural Components</td>
+						<td><a class="url-ch" href="kotlin-core.html">Core</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Apis</strong></td>
+						<td>com.slatekit:slatekit-apis:0.9.5</td>
+						<td>Protocol Independent APIs</td>
+						<td><a class="url-ch" href="kotlin-core-apis.html">Apis</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Integration</strong></td>
+						<td>com.slatekit:slatekit-integration:0.9.5</td>
+						<td>APIs for core components</td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slate-integration">Git</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Cloud</strong></td>
+						<td>com.slatekit:slatekit-cloud:0.9.5</td>
+						<td>AWS Integration</td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slate-cloud">Git</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Server</strong></td>
+						<td>com.slatekit:slatekit-server:0.9.5</td>
+						<td>API Server</td>
+						<td><a class="url-ch" href="kotlin-core-server.html">Server</a></td>
+					</tr>
+					<tr class="">
+						<td><strong>Extensions</strong></td>
+						<td>com.slatekit:slatekit-ext:0.9.5</td>
+						<td>Mobile back-end features ( Not yet available )</td>
+						<td>N/A</td>
+					</tr>
+				</table>
+				<br/>
+				<div class="alert alert-info" role="alert">
+					<p><i class="fa fa-info-circle"></i> You can simply only use what you need.
+					E.g. If you only want to use the utilities, reference the slatekit-common.jar.
+					The utilities project has been updated by removing the dependency on <strong>kotlin.reflect</strong>
+					which makes the slatekit-common utilities available for <strong>Android</strong>!.
+					</p>
+				</div>				
+				<br/>
+			</div>
+			<div>
+				<h1>4. Dependencies</h1>
+				<p>Below is an overview libraries/jars needed for Slate Kit Components.
 					Majority of the Slate Kit components ( Common, Core, ORM, etc ) only need the Kotlin libraries.
 				</p>
 				<div class="alert alert-warning text-left" role="alert">
@@ -314,7 +432,7 @@
 			</div>
 			<br/><br/>
 			<div>
-				<h1>Samples</h1>
+				<h1>5. Samples</h1>
 				<p>There are 3 sample apps available showing the components and features of Slate Kit. There is an 
 				emphasis on showing <strong>application setup</strong>, <strong>utilities</strong>, <strong>core architecture</strong> components and <strong>APIs</strong> using an approach that we call <strong>Protocol Independent APIs</strong>. 
 				<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
@@ -388,82 +506,12 @@
 			</div>
 			<br/><br/>
 			<div>
-				<h1>Compiling</h1>
-				<p>Slate Kit is not yet available on Maven ( work is in progress ). If you want to use the 
-				Slate Kit for building your app(s), then for the time being, you have 2 options 
-				in terms of using Slate Kit ( see option 1 / 2 below ). There are various projects / jars that you can use 
-				depending on what functionality you want.</p>
-				<br/>
-				<h2>Projects</h2>
-				<table class="table table-bordered table-striped">
-					<tr class="">
-						<td class="col-sm-1"><strong>Project</strong></td>
-						<td class="col-sm-2"><strong>Jar</strong></td>
-						<td class="col-sm-3"><strong>About</strong></td>
-						<td class="col-sm-2"><strong>Link</strong></td>
-					</tr>
-					<tr class="">
-						<td><strong>Common</strong></td>
-						<td>slatekit-common.jar</td>
-						<td>Utilities</td>
-						<td><a class="url-ch" href="kotlin-utils.html">Utils</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Entities</strong></td>
-						<td>slatekit-entities.jar</td>
-						<td>Light-Weight ORM</td>
-						<td><a class="url-ch" href="kotlin-core-orm.html">Entities</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Core</strong></td>
-						<td>slatekit-core.jar</td>
-						<td>Core Architectural Components</td>
-						<td><a class="url-ch" href="kotlin-core.html">Core</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Apis</strong></td>
-						<td>slatekit-apis.jar</td>
-						<td>Protocol Independent APIs</td>
-						<td><a class="url-ch" href="kotlin-core-apis.html">Apis</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Integration</strong></td>
-						<td>slatekit-integration.jar</td>
-						<td>APIs for core components</td>
-						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slate-integration">Git</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Cloud</strong></td>
-						<td>slatekit-cloud.jar</td>
-						<td>AWS Integration</td>
-						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slate-cloud">Git</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Server</strong></td>
-						<td>slatekit-server.jar</td>
-						<td>API Server</td>
-						<td><a class="url-ch" href="kotlin-core-server.html">Server</a></td>
-					</tr>
-					<tr class="">
-						<td><strong>Extensions</strong></td>
-						<td>slatekit-ext.jar</td>
-						<td>Mobile back-end features ( Not yet available )</td>
-						<td>N/A</td>
-					</tr>
-				</table>
-				<div class="alert alert-info" role="alert">
-					<p><i class="fa fa-info-circle"></i> You can simply only use what you need.
-					E.g. If you only want to use the utilities, reference the slatekit-common.jar
-					</p>
-				</div>
-				
-				<br/>
+				<h1>6. Compiling</h1>
 				<h2>Option 1: Using binaries from a release</h2>
-				<p>This is easiest way now ( until Maven releases are available ) to begin using Slate Kit. The release also contains 
-				all the sample apps and other other useful material. 
-				</p>
+				<p>If you want the binaries + sample apps, download the releases.</p>
 				<div class="alert alert-warning text-left" role="alert">
-					<p><i class="fa fa-link"></i> See <a class="url-ch" href="releases.html">Releases</a>
+					<p><i class="fa fa-link"></i> See <a class="url-ch" href="releases.html">Releases</a> for binaries + samples 
+					and <a class="url-ch" href="https://bintray.com/codehelixinc/slatekit">Bintray</a> for just the binaries
 					</p>
 				</div>
 				<table class="table table-bordered table-striped">
@@ -475,17 +523,17 @@
 					<tr class="">
 						<td><strong>1</strong></td>
 						<td>Download the release as a zip file</td>
-						<td>slatekit_kotlin_v_0_9_2.zip</td>
+						<td>slatekit_kotlin_v_0_9_5.zip</td>
 					</tr>
 					<tr class="">
 						<td><strong>2</strong></td>
 						<td>Extract to any location</td>
-						<td>c:\tools\lib\slatekit\0_9_2</td>
+						<td>c:\tools\lib\slatekit\0_9_5</td>
 					</tr>
 					<tr class="">
 						<td><strong>3</strong></td>
 						<td>Reference all the slatekit_* jars in the bin directory</td>
-						<td>c:\tools\lib\slatekit\0_9_2\bin</td>
+						<td>c:\tools\lib\slatekit\0_9_5\bin</td>
 					</tr>
 					<tr class="">
 						<td><strong>4</strong></td>
@@ -550,7 +598,7 @@
 			</div>
 			<br/><br/>
 			<div>			
-				<h1>Running</h1>
+				<h1>7. Running</h1>
 				<p>You can run your kotlin apps just like how you would run java apps.
 				The only thing to keep in mind is to ensure that the Kotlin runtime libraries
 				are available in your classpath.</p>
