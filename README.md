@@ -1,9 +1,9 @@
-# SLATE KIT
-Slate Kit is a tool kit, utility library and server backend for web and mobile apps. 
+# Slate Kit
+A Kotlin Mobile Back-end, Server Framework and Utility Library
 
-It is written in **Kotlin**, uses MySql, AWS, and Spark Java.
-
-It is partially available in Scala.
+![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
+![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
+![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
