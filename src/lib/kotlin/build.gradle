@@ -1,15 +1,44 @@
 allprojects {
     apply plugin: 'java'
+	apply plugin: 'maven'
+	
     repositories {
         mavenCentral()
     }
     group = 'com.slatekit'
     version = '0.9.5'
+	
 	task hello {
         doLast { task ->
             println "Included : $task.project.name"
         }
     }
+
+	task genPom << {
+		pom {
+			project {
+				groupId 'com.slatekit'
+				artifactId project.name
+				version project.version
+			
+				inceptionYear '2016'
+				licenses {
+					license {
+						name 'The Apache Software License, Version 2.0'
+						url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+						distribution 'repo'
+					}
+				}
+			}
+		}.writeTo("$buildDir/${project.name}-${project.version}.pom")
+	}
+
+	task installDependencies(type: Copy) {
+		dependsOn build
+		from configurations.runtime
+		from jar
+		into "${project.projectDir}/lib"
+	}
 }
 
 subprojects {
@@ -19,11 +48,4 @@ subprojects {
 task copyJars(type: Copy, dependsOn: subprojects.jar) {
    from(subprojects.jar)
    into project.file('dist')
-}
-
-task install(type: Copy) {
-	dependsOn build
-	from configurations.runtime
-	from jar
-	into "${project.projectDir}/lib"
 }

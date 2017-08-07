@@ -40,9 +40,9 @@ sourceSets {
     main.java.srcDirs += 'src/main/kotlin/'
 }
 
-task install(type: Copy) {
-	dependsOn build
-	from configurations.runtime
-	from jar
-	into "${project.projectDir}/lib"
-}
+//task install(type: Copy) {
+//	dependsOn build
+//	from configurations.runtime
+//	from jar
+//	into "${project.projectDir}/lib"
+//}
