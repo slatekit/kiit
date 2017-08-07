@@ -29,6 +29,7 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.25'
 	compile fileTree(dir: 'lib', include: '*.jar')
     compile project(":slatekit-common")
+    compile project(":slatekit-meta")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")
     compile project(":slatekit-apis")

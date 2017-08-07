@@ -1,1 +1,1 @@
-include 'slatekit-common', 'slatekit-entities', 'slatekit-core', 'slatekit-apis', 'slatekit-integration', 'slatekit-cloud', 'slatekit-server'
+include 'slatekit-common', 'slatekit-meta', 'slatekit-entities', 'slatekit-core', 'slatekit-apis', 'slatekit-integration', 'slatekit-cloud', 'slatekit-server'
