@@ -13,10 +13,9 @@
 
 package slatekit.server.spark
 
-import slatekit.common.serialization.SerializerJson
 import spark.Response
 import slatekit.common.*
-
+import slatekit.meta.Serialization
 
 
 object HttpResponse {
@@ -39,7 +38,7 @@ object HttpResponse {
     fun json(res: Response, result: Result<Any>): String {
         res.status(result.code)
         res.type("application/json")
-        val json = SerializerJson().serialize(result)
+        val json = Serialization.json().serialize(result)
         return json
     }
 

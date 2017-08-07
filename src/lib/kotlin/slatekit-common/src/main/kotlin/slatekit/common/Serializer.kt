@@ -113,7 +113,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             is Result<*>     -> serializeResult(s, depth)
             is List<*>       -> serializeList(s, depth + 1)
             is Map<*, *>     -> serializeMap(s, depth + 1)
-            else             -> objectSerializer?.invoke(this, s, depth + 1)
+            else             -> objectSerializer?.invoke(this, s, depth + 1) ?: "null"
         }
     }
 

@@ -433,7 +433,7 @@ open class ApiContainer(
         val content = when (format) {
             ContentTypeCsv .ext  -> Content.csv ( Serialization.csv().serialize(data)  )
             ContentTypeJson.ext  -> Content.json( Serialization.json().serialize(data) )
-            ContentTypeProp.ext  -> Content.prop( Serialization.props().serialize(data))
+            ContentTypeProp.ext  -> Content.prop( Serialization.props(true).serialize(data))
             else                 -> data
         }
         return content
