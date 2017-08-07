@@ -75,8 +75,7 @@ class ReflectorTests {
 
         val id:Any = 0
         val actualCls = id.javaClass
-        val expectedCls = 0.javaClass
-        assert(expectedCls == actualCls)
+        assert(Types.JIntAnyClass == actualCls)
     }
 
 

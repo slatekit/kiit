@@ -32,15 +32,6 @@ object DbUtils {
                 DriverManager.getConnection(con.url)
 
 
-    fun close(con: Connection?) = con?.close()
-
-
-    fun close(stmt: Statement?) = stmt?.close()
-
-
-    fun close(rs: ResultSet?) = rs?.close()
-
-
     /**
      * Execution template providing connection with error-handling and connection closing
      *
@@ -129,19 +120,19 @@ object DbUtils {
             val pos = index + 1
             val jcls = arg.javaClass
             when (jcls) {
-                Types.JStringClass        -> stmt.setString(pos, arg.toString())
-                Types.JBoolClass          -> stmt.setBoolean(pos, arg as Boolean)
-                Types.JShortClass         -> stmt.setShort(pos, arg as Short)
-                Types.JIntClass           -> stmt.setInt(pos, arg as Int)
-                Types.JLongClass          -> stmt.setLong(pos, arg as Long)
-                Types.JFloatClass         -> stmt.setFloat(pos, arg as Float)
-                Types.JDoubleClass        -> stmt.setDouble(pos, arg as Double)
-                Types.JLocalDateClass     -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
-                Types.JLocalTimeClass     -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
-                Types.JLocalDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
-                Types.JZonedDateTimeClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as ZonedDateTime).toLocalDateTime()))
-                Types.JInstantClass       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault())))
-                Types.JDateTimeClass      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as DateTime).local()))
+                Types.JStringAnyClass        -> stmt.setString(pos, arg.toString())
+                Types.JBoolAnyClass          -> stmt.setBoolean(pos, arg as Boolean)
+                Types.JShortAnyClass         -> stmt.setShort(pos, arg as Short)
+                Types.JIntAnyClass           -> stmt.setInt(pos, arg as Int)
+                Types.JLongAnyClass          -> stmt.setLong(pos, arg as Long)
+                Types.JFloatAnyClass         -> stmt.setFloat(pos, arg as Float)
+                Types.JDoubleAnyClass        -> stmt.setDouble(pos, arg as Double)
+                Types.JLocalDateAnyClass     -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
+                Types.JLocalTimeAnyClass     -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
+                Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
+                Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as ZonedDateTime).toLocalDateTime()))
+                Types.JInstantAnyClass       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault())))
+                Types.JDateTimeAnyClass      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as DateTime).local()))
             }
         }
     }
