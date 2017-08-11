@@ -8,7 +8,7 @@ A Kotlin Mobile Back-end, Server Framework and Utility Library
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
-- **company**: www.codehelix.com 
+- **company**: www.codehelix.co
 
 
 # Components
