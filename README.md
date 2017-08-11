@@ -7,7 +7,6 @@ A Kotlin Mobile Back-end, Server Framework and Utility Library
 
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
-- **date**: July 12, 2017
 
 
 # Links
@@ -15,20 +14,25 @@ A Kotlin Mobile Back-end, Server Framework and Utility Library
 2. www.codehelix.com 
 
 
+# Components
+Slate Kit contains many useful architecture components, utilities and applications features. The slatekit-common has 0 dependencies adn contains most of the common utilities and components used throughout all the other projects. 
+
+
+docs | source | desc | download
+------------ | ------------ | ------------- | -------------
+[slatekit-common](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-common)      | common utilities | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
+[slatekit-meta](http://www.slatekit.com/utils.html)                    | [src](src/lib/kotlin/slatekit-meta)        | meta/reflection utils | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-meta/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-meta/_latestVersion)
+[slatekit-core](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-core)        | architecture components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
+[slatekit-entities](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-entities)    | database entities/orm | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
+[slatekit-apis.jar](http://www.slatekit.com/kotlin-core-apis.html)     | [src](src/lib/kotlin/slatekit-apis)        | api container | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
+[slatekit-integration](https://www.slatekit.com)                       | [src](src/lib/kotlin/slatekit-integration) | integration components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-integration/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-integration/_latestVersion)
+[slatekit-cloud.jar](http://www.slatekit.com/infra.html)               | [src](src/lib/kotlin/slatekit-cloud)       | clouder servers ( AWS ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cloud/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-cloud/_latestVersion)
+[slatekit-server.jar](http://www.slatekit.com/kotlin-core-server.html) | [src](src/lib/kotlin/slatekit-server)      | Http Server ( using Spark ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
+                      
+
+
 # Gitter
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-
-# Components
-Slate Kit contains many useful components, utilities and infrastructure abstractions.
-In addition to these, Slate Kit contains some new concepts and implementations of those
-concepts. These include the following. ( Please refer to website for more details )
-
-1. Slate Kit - Base App 
-2. Slate Kit - Protocol Independent APIs
-3. Slate Kit - Domain Driven Single-Table ORM 
-4. Slate Kit - API Server
-5. Slate Kit - CLI 
 
 
 # Modules
