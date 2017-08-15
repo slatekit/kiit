@@ -30,6 +30,8 @@ import slatekit.server.spark.HttpResponse
 import spark.Request
 import spark.Response
 import spark.Spark
+import spark.Spark.staticFiles
+import java.io.File
 import javax.servlet.MultipartConfigElement
 
 
@@ -45,17 +47,19 @@ class Server(
      * initialize with port, prefix for api routes, and all the dependent items
      */
     constructor(
-                port   :Int          = 5000,
-                prefix :String       = ""  ,
-                info   :Boolean      = true ,
-                cors   :Boolean      = false,
-                docs   :Boolean      = false,
-                docKey :String       = ""   ,
-                apis   :List<ApiReg>        ,
-                auth   :Auth?        = null ,
-                ctx    :Context   = AppContext.simple("slatekit-server")
+                port      :Int          = 5000,
+                prefix    :String       = ""  ,
+                info      :Boolean      = true ,
+                cors      :Boolean      = false,
+                docs      :Boolean      = false,
+                static    :Boolean      = false,
+                staticDir :String       = ""   ,
+                docKey    :String       = ""   ,
+                apis      :List<ApiReg>        ,
+                auth      :Auth?        = null ,
+                ctx       :Context   = AppContext.simple("slatekit-server")
         ) :
-        this(ServerConfig(port, prefix, info, cors, docs, docKey), ctx, auth, apis)
+        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir), ctx, auth, apis)
 
 
     val container = ApiContainer(ctx, false, auth, WebProtocol, apis, docKey = config.docKey, docBuilder = ::DocWeb)
@@ -75,6 +79,16 @@ class Server(
         // Display startup
         if (config.info) {
             this.info()
+        }
+
+        // Static files
+        if(config.static) {
+            if(config.staticDir.isNullOrEmpty()){
+                staticFiles.location("/public");
+            }
+            else {
+                staticFiles.externalLocation(File(config.staticDir).absolutePath)
+            }
         }
 
         // Ping/Check
