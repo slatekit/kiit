@@ -63,7 +63,7 @@ open class TokenAuth(
      * 3. The token "abc123" maps internally to roles "dev,qa,ops"
      * 4. We check the role supplied to one of these roles
      */
-    fun isKeyRoleValid(req: Request, role:String): Result<Boolean> {
+    open fun isKeyRoleValid(req: Request, role:String): Result<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
@@ -84,7 +84,7 @@ open class TokenAuth(
      * 3. The token "abc123" maps internally to roles "dev,qa,ops"
      * 4. We check the role supplied to one of these roles
      */
-    fun isAppRoleValid(req: Request, role: String): Result<Boolean> {
+    open fun isAppRoleValid(req: Request, role: String): Result<Boolean> {
 
         return if (callback != null) {
             callback!!(ApiConstants.AuthModeAppRole, req, role)

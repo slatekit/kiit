@@ -75,7 +75,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
      * @param mod
      * @return
      */
-    fun register(mod: slatekit.integration.mods.Module): Unit {
+    fun register(mod: Module): Unit {
         mod.init()
         _items = _items.add(mod.info.name, mod)
         mod.register()

@@ -17,15 +17,14 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiBase
-import slatekit.apis.support.ApiWithSupport
 import slatekit.core.common.AppContext
 
 /**
  * Created by kreddy on 3/23/2016.
  */
-@slatekit.apis.Api(area = "sys", name = "encrypt", desc = "api to encryption and decryption",
+@Api(area = "sys", name = "encrypt", desc = "api to encryption and decryption",
         roles = "?", auth = "app", verb = "*", protocol = "*")
-class EncryptApi(context: slatekit.core.common.AppContext) : slatekit.apis.ApiBase(context) {
+class EncryptApi(context: AppContext) : ApiBase(context){
 
     @ApiAction(name = "", desc = "encryptes the text", roles = "")
     override fun encrypt(text: String): String {
