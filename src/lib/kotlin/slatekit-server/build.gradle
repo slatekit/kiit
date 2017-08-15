@@ -24,7 +24,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "com.googlecode.json-simple:json-simple:1.1"
-    //compile "com.sparkjava:spark-core:2.1"
     compile 'com.sparkjava:spark-core:2.6.0'
     compile 'org.slf4j:slf4j-simple:1.7.25'
 	compile fileTree(dir: 'lib', include: '*.jar')
