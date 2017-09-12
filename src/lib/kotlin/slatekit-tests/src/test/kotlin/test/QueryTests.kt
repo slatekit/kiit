@@ -16,6 +16,8 @@ import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.query.Query
 import slatekit.common.query.QueryEncoder
+import slatekit.meta.where
+import test.common.Book
 
 
 /**
@@ -86,5 +88,47 @@ class QueryTests {
     @Test fun can_build_where_with_2_fields() {
         assert(  Query().where("api", "=", "slate kit's").and("version", "=", 2).toFilter()
                 == "api = 'slate kit''s' and version = 2")
+    }
+
+
+    @Test fun can_build_where_typed() {
+        assert(  Query().where(Book::rating, ">", 3.0).toFilter()
+                == "rating > 3.0")
+    }
+
+
+    @Test fun can_build_condition_is_null() {
+        val filter = Query().where(Book::rating, "=", Query.Null).toFilter()
+        assert(  filter == "rating is null")
+    }
+
+
+    @Test fun can_build_condition_is_not_null() {
+        val filter = Query().where(Book::rating, "!=", Query.Null).toFilter()
+        assert(  filter == "rating is not null")
+    }
+
+
+    @Test fun can_build_condition_in() {
+        val filter = Query().where(Book::id, "in", listOf(1,3,5)).toFilter()
+        assert(  filter == "id in (1,3,5)")
+    }
+
+
+    @Test fun can_build_orderby_asc() {
+        val filter = Query().orderBy("id", Query.Asc).toFilter()
+        assert(  filter == " order by id asc")
+    }
+
+
+    @Test fun can_build_orderby_desc() {
+        val filter = Query().orderBy("id", Query.Desc).toFilter()
+        assert(  filter == " order by id desc")
+    }
+
+
+    @Test fun can_build_join() {
+        val filter = Query().join("users", "users.id", "movies.created_by").toFilter()
+        assert(  filter == "  join users on users.id = movies.created_by ")
     }
 }

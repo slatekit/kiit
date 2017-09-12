@@ -26,53 +26,32 @@ interface IQuery {
     fun toFilter(): String
 
 
-    /// <summary>
-    /// Adds a WHERE clause to the query.
-    /// </summary>
-    /// <param name="exp">Expression to retrieve property name.</param>
-    /// <returns>This instance.</returns>
     fun set(field: String, fieldValue: Any): IQuery
 
 
-    /// <summary>
-    /// Adds a WHERE clause to the query.
-    /// </summary>
-    /// <param name="exp">Expression to retrieve property name.</param>
-    /// <returns>This instance.</returns>
     fun where(field: String, compare: String, fieldValue: Any): IQuery
 
 
     fun where(field: String, compare: Op, fieldValue: Any): IQuery
 
 
-    /// <summary>
-    /// Adds an AND condition to the query.
-    /// </summary>
-    /// <param name="exp">Expression to retrieve property name.</param>
-    /// <returns>This instance.</returns>
     fun and(field: String, compare: String, fieldValue: Any): IQuery
 
 
     fun and(field: String, compare: Op, fieldValue: Any): IQuery
 
 
-    /// <summary>
-    /// Adds an OR condition to the query.
-    /// </summary>
-    /// <param name="exp">Expression to retrieve property name.</param>
-    /// <returns>This instance.</returns>
     fun or(field: String, compare: String, fieldValue: Any): IQuery
 
 
     fun or(field: String, compare: Op, fieldValue: Any): IQuery
 
-    fun orderBy(field: String): IQuery
 
-    fun asc(): IQuery
-
-
-    fun desc(): IQuery
+    fun orderBy(field: String, mode:String ): IQuery
 
 
     fun limit(max: Int): IQuery
+
+
+    fun join(model:String, modelField:String, refField:String): IQuery
 }

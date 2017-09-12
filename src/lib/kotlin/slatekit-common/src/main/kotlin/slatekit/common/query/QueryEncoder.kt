@@ -21,12 +21,15 @@ object QueryEncoder {
 
     fun convertVal(value: Any): String {
         return when (value) {
+            Query.Null  -> "null"
             is String   -> toString(value)
             is Int      -> value.toString()
             is Long     -> value.toString()
             is Double   -> value.toString()
             is Boolean  -> if (value) "1" else "0"
             is DateTime -> "'" + value.toStringMySql() + "'"
+            is List<*>  -> "(" + value.joinToString(",", transform = Any?::toString) + ")"
+            is Array<*> -> "(" + value.joinToString(",", transform = Any?::toString) + ")"
             else        -> value.toString()
         }
     }
@@ -52,7 +55,7 @@ object QueryEncoder {
                 ""
             }
             else {
-                text.toLowerCase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' }
+                text.toLowerCase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
             }
 
 
@@ -65,14 +68,16 @@ object QueryEncoder {
      */
     fun ensureCompare(compare: String): String =
             when (compare) {
-                "="  -> "="
-                ">"  -> ">"
-                ">=" -> ">="
-                "<"  -> "<"
-                "<=" -> "<="
-                "!=" -> "!="
-                "is" -> "is"
-                else -> "="
+                "="      -> "="
+                ">"      -> ">"
+                ">="     -> ">="
+                "<"      -> "<"
+                "<="     -> "<="
+                "!="     -> "<>"
+                "is"     -> "is"
+                "is not" -> "is not"
+                "in"     -> "in"
+                else     -> ensureField(compare)
             }
 
 

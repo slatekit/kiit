@@ -13,4 +13,4 @@
 
 package slatekit.common.query
 
-class Op(val value: String) {}
+class Op(val value: String)
