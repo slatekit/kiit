@@ -188,6 +188,12 @@ open class EntityService<T>(protected val _repo: EntityRepo<T>)
 
 
     /**
+     * whether this is an empty dataset
+     */
+    fun isEmpty():Boolean = !any()
+
+
+    /**
      * saves an entity by either creating it or updating it based on
      * checking its persisted flag.
      * @param entity

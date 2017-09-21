@@ -105,6 +105,16 @@ interface EntityWithGuid {
 /**
  * Entity with support for both create/update timestamps and create/update user id
  */
+interface EntityWithShard {
+    val shard: String
+    val tag  : String
+}
+
+
+
+/**
+ * Entity with support for both create/update timestamps and create/update user id
+ */
 interface EntityWithMeta
     : EntityWithTime
       , EntityWithUser

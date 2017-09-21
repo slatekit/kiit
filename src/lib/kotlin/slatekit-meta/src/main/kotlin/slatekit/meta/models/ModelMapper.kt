@@ -175,29 +175,28 @@ open class ModelMapper(protected val _model: Model, protected val _settings: Mod
          * @param dataType
          * @return
          */
-        fun loadSchema(dataType: KClass<*>): Model {
+        fun loadSchema(dataType: KClass<*>, idFieldName:String? = null): Model {
             val modelName = dataType.simpleName!!
             val modelNameFull = dataType.qualifiedName!!
 
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
 
-            TODO.IMPROVE( "Handle other id types")
-            val fieldId = ModelField.id("id", Long::class)
             val fields = mutableListOf<ModelField>()
-            fields.add(fieldId)
+            //val fieldId = ModelField.id("id", Long::class)
+            //fields.add(fieldId)
 
             // Loop through each field
             matchedFields.forEach { matchedField ->
                 matchedField.second?.let { anno ->
-                    if (anno.name != "id") {
-
+                    //if (anno.name != "id") {
+                        val cat = idFieldName?.let { "id" } ?: ""
                         val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
                         val required = anno.required
                         val length = anno.length
                         val fieldType = matchedField.first.returnType.jvmErasure
-                        fields.add(ModelField.build(name = name, dataType = fieldType, isRequired = required, maxLength = length))
-                    }
+                        fields.add(ModelField.build(name = name, dataType = fieldType, isRequired = required, maxLength = length, cat = cat))
+                    //}
                 }
             }
 
