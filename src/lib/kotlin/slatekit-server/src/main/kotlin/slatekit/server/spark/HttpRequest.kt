@@ -16,6 +16,8 @@ package slatekit.server.spark
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
+import slatekit.apis.core.Headers
+import slatekit.apis.core.Params
 import slatekit.common.*
 import slatekit.core.common.AppContext
 import slatekit.server.ServerConfig
@@ -68,6 +70,10 @@ class HttpRequest(val req: Request) : RequestSupport {
             val rawUri = req.uri()
             val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
             val parts = uri.split('/')
+            val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
+            val method = req.requestMethod().toLowerCase()
+            val isBodyOk = isBodyAllowed(method)
+            val json = loadJson(req)
 
             // e.g. api/app/users/register
             // parts  : [app, users, register]
@@ -78,13 +84,14 @@ class HttpRequest(val req: Request) : RequestSupport {
             // opts   : headers
             // args   : params
             // tag    : guid
+
             return slatekit.common.Request(
                     path = req.uri(),
                     parts = parts,
                     protocol = ApiConstants.ProtocolWeb,
                     verb = req.requestMethod().toLowerCase(),
-                    opts = HttpHeaders(req, ctx.enc),
-                    args = HttpParams(req, ctx.enc),
+                    opts = Headers(headers, ctx.enc),
+                    args = Params(req, method, isBodyOk, ctx.enc, json),
                     raw = HttpRequest(req),
                     tag = Random.stringGuid()
             )
