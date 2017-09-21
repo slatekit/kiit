@@ -59,7 +59,7 @@ data class AppContext(
         override val dbs  : DbLookup?           = null,
         override val enc  : Encryptor?          = null,
         override val dirs : Folders?            = null,
-        override val extra:Map<String,Any>      = mapOf(),
+        override val extra: MutableMap<String,Any> = mutableMapOf(),
         override val state: Result<Boolean> = Result.none,
 
         // NOTE: Fix this non-strongly typed Entities object.

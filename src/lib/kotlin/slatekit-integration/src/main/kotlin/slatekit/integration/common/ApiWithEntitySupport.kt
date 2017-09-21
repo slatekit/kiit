@@ -14,6 +14,7 @@
 package slatekit.integration.common
 
 import slatekit.apis.ApiAction
+import slatekit.common.Ignore
 import slatekit.common.query.Query
 import slatekit.entities.core.Entities
 import slatekit.entities.core.Entity
@@ -34,6 +35,10 @@ interface ApiWithEntitySupport<T, TSvc> where T : Entity, TSvc : EntityService<T
     fun total(): Long {
         return entitySvc.count()
     }
+
+
+    @ApiAction(name = "", desc = "whether or not this dataset is empty", roles = "@parent", verb = "get", protocol = "@parent")
+    fun isEmpty():Boolean = total() == 0L
 
 
     @ApiAction(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
@@ -126,6 +131,7 @@ interface ApiWithEntitySupport<T, TSvc> where T : Entity, TSvc : EntityService<T
     }
 
 
+    @Ignore
     fun createFrom(updatable: EntityUpdatable<T>): T {
         val copy = updatable.withId(0)
         val newId = entitySvc.create(copy)
