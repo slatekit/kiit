@@ -17,10 +17,14 @@ package slatekit.apis.doc
 import slatekit.apis.ApiArg
 import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
+import slatekit.common.Serializer
 import slatekit.common.console.ConsoleSettings
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.ConsoleWrites
 import slatekit.common.nonEmptyOrDefault
+import slatekit.common.serialization.SerializerJson
+import slatekit.meta.KTypes
+import slatekit.meta.Serialization
 import java.lang.Math.abs
 import kotlin.reflect.KParameter
 
@@ -99,11 +103,12 @@ abstract class Doc : ApiVisit {
 
 
     override fun onApiActionSyntax(action: ApiRegAction?): Unit {
-        val example = action?.let { it.api.area + "." + it.api.name + "." + it.name }
-                ?: "sys.models.install"
+        val exampleCli = action?.let{ it -> buildPath(it, null) } ?: "app.movies.last"
+        val exampleWeb = action?.let{ it -> buildPath(it, "/") }  ?: "app/movies/last"
         writer.line()
         writer.text("use {area}$pathSeparator{api}$pathSeparator{action}$helpSeparator$helpSuffix to list inputs for an action. ")
-        writer.url("e.g. $example ?", endLine = true)
+        writer.url("cli: $exampleCli ?", endLine = true)
+        writer.url("web: $exampleWeb ?", endLine = true)
         lineBreak()
     }
 
@@ -140,13 +145,35 @@ abstract class Doc : ApiVisit {
     override fun onApiActionExample(api: ApiReg, actionName: String, action: ApiRegAction,
                                     args: List<KParameter>): Unit {
         writer.line()
-        writer.tab(1)
-        val fullName = api.area + "." + api.name + "." + actionName
-        val txt = args.fold("", { s, arg ->
-            s + "-" + arg.name + "=" + arg.name!! + " "
+
+        val exampleCli = buildPath(api.area, api.name, actionName, null)
+        val exampleWeb = buildPath(api.area, api.name, actionName, "/" )
+        val paramsCli  = args.fold("", { s, arg ->
+            s + "-" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "'a bc'") + " "
         })
-        writer.url(fullName + " ", endLine = false)
-        writer.text(txt, true)
+        val paramsQuery  = args.fold("", { s, arg ->
+            s + "&" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "a%20bc")
+        })
+        val serializer = Serialization.json()
+        val paramsJsonMap  = args.map { arg ->
+            KTypes.getTypeExampleValuePair(arg.name!!, arg.type, "a%20bc")
+        }.toMap()
+        val paramsJson = serializer.serialize(paramsJsonMap)
+
+        writer.tab(1)
+        writer.url("1. cli      : $exampleCli ", endLine = false)
+        writer.text(paramsCli, true)
+
+        writer.tab(1)
+        writer.url("2. web/url  : $exampleWeb ", endLine = false)
+        writer.text(paramsQuery, true)
+
+        if(!actionName.startsWith("get")) {
+            writer.tab(1)
+            writer.url("3. web/json : $exampleWeb ", endLine = false)
+            writer.text(paramsJson, true)
+        }
+
         writer.line()
     }
 
@@ -188,5 +215,16 @@ abstract class Doc : ApiVisit {
             writer.text(txt, endLine = false)
             writer.text("optional : " + type, endLine = false)
         }
+    }
+
+
+    open fun buildPath(action: ApiRegAction, sep:String? = null) : String {
+        return buildPath(action.api.area, action.api.name, action.name, sep)
+    }
+
+
+    open fun buildPath(area:String, api:String, action:String, sep:String? = null) : String {
+        val separator = sep ?: pathSeparator
+        return area + separator + api + separator + action
     }
 }
