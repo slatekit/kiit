@@ -14,6 +14,7 @@
 package slatekit.apis.support
 
 import slatekit.common.Context
+import slatekit.common.Ignore
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
@@ -29,6 +30,7 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
     override val encryptor: Encryptor? get() = context.enc
 
 
+    @Ignore
     fun interpretUri(path: String): String? {
         val pathParts = path.subStringPair("://")
         return pathParts?.let { parts ->
@@ -50,6 +52,7 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
     }
 
 
+    @Ignore
     fun writeToFile(msg: Any?, fileNameLocal: String, count: Int,
                               contentFetcher: (Any?) -> String): String? {
         return msg?.let { item ->

@@ -13,6 +13,8 @@
 
 package slatekit.common.log
 
+import slatekit.common.Ignore
+
 interface LogSupport {
 
     val logger: LoggerBase?
@@ -23,6 +25,7 @@ interface LogSupport {
      * @param msg : The message
      * @param ex : The exception to log
      */
+    @Ignore
     fun debug(msg: String, ex: Exception? = null, tag: String? = null) {
         log(Debug, msg, ex, tag)
     }
@@ -33,6 +36,7 @@ interface LogSupport {
      * @param msg : The message
      * @param ex : The exception to log
      */
+    @Ignore
     fun info(msg: String, ex: Exception? = null, tag: String? = null) {
         log(Info, msg, ex, tag)
     }
@@ -43,6 +47,7 @@ interface LogSupport {
      * @param msg : The message
      * @param ex : The exception to log
      */
+    @Ignore
     fun warn(msg: String, ex: Exception? = null, tag: String? = null) {
         log(Warn, msg, ex, tag)
     }
@@ -53,6 +58,7 @@ interface LogSupport {
      * @param msg : The message
      * @param ex : The exception to log
      */
+    @Ignore
     fun error(msg: String, ex: Exception? = null, tag: String? = null) {
         log(Error, msg, ex, tag)
     }
@@ -64,6 +70,7 @@ interface LogSupport {
      * @param msg : The message
      * @param ex : The exception to log
      */
+    @Ignore
     fun fatal(msg: String, ex: Exception? = null, tag: String? = null) {
         log(Fatal, msg, ex, tag)
     }
@@ -75,6 +82,7 @@ interface LogSupport {
      * @param msg
      * @param ex
      */
+    @Ignore
     fun log(level: LogLevel, msg: String, ex: Exception? = null, tag: String? = null) {
         logger?.let { l -> l.log(level, msg, ex, tag) }
     }

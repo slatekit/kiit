@@ -31,6 +31,7 @@ interface ApiWithMiddleware : Api {
     val isFilterEnabled:Boolean
 
 
+    @Ignore
     fun onException(context: Context, request: Request, source:Any, ex: Exception): Result<Any> {
         return failureWithCode(UNEXPECTED_ERROR, msg = "unexpected error in api", err = ex)
     }
@@ -39,6 +40,7 @@ interface ApiWithMiddleware : Api {
     /**
      * Hook for before this api handles any request
      */
+    @Ignore
     fun onBefore(context:Context, request:Request, source:Any, target:Any): Unit {
     }
 
@@ -46,6 +48,7 @@ interface ApiWithMiddleware : Api {
     /**
      * Hook for after this api handles any request
      */
+    @Ignore
     fun onAfter(context:Context, request:Request,  source:Any, target:Any): Unit {
     }
 
@@ -53,6 +56,7 @@ interface ApiWithMiddleware : Api {
     /**
      * Hook to first filter a request before it is handled by this api.
      */
+    @Ignore
     fun onFilter(context:Context, request:Request, source:Any, target:Any): Result<Any>  {
         return success(true)
     }

@@ -13,18 +13,22 @@
 
 package slatekit.common.encrypt
 
+import slatekit.common.Ignore
+
 
 interface EncryptSupport {
 
     val encryptor: Encryptor?
 
 
+    @Ignore
     fun encrypt(text: String): String {
         val result = encryptor?.let { e -> e.encrypt(text) }
         return result ?: text
     }
 
 
+    @Ignore
     fun decrypt(encrypted: String): String {
         val result = encryptor?.let { e -> e.decrypt(encrypted) }
         return result ?: encrypted

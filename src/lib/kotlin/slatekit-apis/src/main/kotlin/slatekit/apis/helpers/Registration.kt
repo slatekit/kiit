@@ -14,10 +14,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.*
-import slatekit.common.Context
-import slatekit.common.ListMap
-import slatekit.common.Namer
-import slatekit.common.nonEmptyOrDefault
+import slatekit.common.*
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
@@ -152,6 +149,9 @@ class Areas(val namer:Namer?) {
 
         // 6. get all the methods with the apiAction annotation
         val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(clsType, ApiAction::class, reg.declaredOnly)
+        val rawIgnores = Reflector.getAnnotatedMembersOpt<Ignore>(clsType, Ignore::class, reg.declaredOnly)
+        val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map{ it -> Pair(it.first.name, true )}.toMap()
+
         val matches = rawMatches.filter { mem ->
             mem.first.name != "equals" && mem.first.name != "hashCode" && mem.first.name != "toString"
         }
@@ -160,27 +160,33 @@ class Areas(val namer:Namer?) {
             // a) The member
             val member = item.first
 
-            // b) Get the name of the action or default to method name
-            val methodName = member.name
+            // Ensure it does not have an Ignore annotation
+            if(rawIgnoresLookup.containsKey(member.name)) {
+                val ignored = member.name
+            }
+            else {
+                // b) Get the name of the action or default to method name
+                val methodName = member.name
 
-            // c) Annotation
-            val apiActionAnno = item.second
-            val actionNameRaw  = apiActionAnno?.name.nonEmptyOrDefault(methodName)
-            val actionRoles    = apiActionAnno?.roles    ?: apiAnno.roles
-            val actionVerb     = apiActionAnno?.verb     ?: apiAnno.verb
-            val actionProtocol = apiActionAnno?.protocol ?: apiAnno.protocol
-            val actionName     = namer?.name(actionNameRaw)?.text ?: actionNameRaw
+                // c) Annotation
+                val apiActionAnno = item.second
+                val actionNameRaw = apiActionAnno?.name.nonEmptyOrDefault(methodName)
+                val actionRoles = apiActionAnno?.roles ?: apiAnno.roles
+                val actionVerb = apiActionAnno?.verb ?: apiAnno.verb
+                val actionProtocol = apiActionAnno?.protocol ?: apiAnno.protocol
+                val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
 
-            // d) Get the parameters to easily check/validate params later
-            val parameters = member.parameters
+                // d) Get the parameters to easily check/validate params later
+                val parameters = member.parameters
 
-            // Add the action name and link it to the method + annotation
-            val anyParameters = parameters.isNotEmpty() && parameters.size > 1
-            val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?:"", actionRoles, actionVerb, actionProtocol, anyParameters)
-            endpointLookup.update(actionName, callReflect)
+                // Add the action name and link it to the method + annotation
+                val anyParameters = parameters.isNotEmpty() && parameters.size > 1
+                val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?: "", actionRoles, actionVerb, actionProtocol, anyParameters)
+                endpointLookup.update(actionName, callReflect)
 
-            // add the api to the class lookup
-            _apisToClasses["$apiArea.$apiName"] = apiAnno
+                // add the api to the class lookup
+                _apisToClasses["$apiArea.$apiName"] = apiAnno
+            }
         }
     }
 
