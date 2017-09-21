@@ -248,7 +248,7 @@ class ReflectorTests {
 
     @Test fun can_get_annotation_for_method() {
         val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class)
-        assertEquals(39, members.size )
+        assertEquals(40, members.size )
         assertEquals("activate", members[0].second?.name)
         assertEquals("", members[1].second?.name)
     }

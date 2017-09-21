@@ -243,6 +243,7 @@ class EntityTests {
      *
      */
     data class SampleEntity(
+            @property:Field(required = true)
             override val id: Long = 0,
 
             @property:Field(required = true)

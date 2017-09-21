@@ -31,7 +31,7 @@ import kotlin.reflect.KClass
 class MapperTests {
 
     fun loadSchemaViaReflection(): Model {
-        val model = ModelMapper.loadSchema(AuthorR::class)
+        val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
         return model
     }
 
@@ -120,6 +120,7 @@ class MapperTests {
 
 
     data class AuthorR(
+            @property:Field(required = true)
             val id: Long             = 0,
 
             @property:Field(required = true)
