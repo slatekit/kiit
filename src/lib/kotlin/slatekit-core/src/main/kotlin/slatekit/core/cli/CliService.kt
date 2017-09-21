@@ -23,7 +23,9 @@ import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.info.Folders
+import slatekit.common.info.Status
 import slatekit.common.results.ResultFuncs.badRequest
+import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success
@@ -34,6 +36,8 @@ import slatekit.core.cli.CliConstants.HELP_ACTION
 import slatekit.core.cli.CliConstants.HELP_API
 import slatekit.core.cli.CliConstants.HELP_AREA
 import slatekit.core.cli.CliConstants.VERSION
+import slatekit.core.common.AppContext
+import java.util.concurrent.atomic.AtomicReference
 
 
 /**
@@ -55,6 +59,7 @@ open class CliService(
 )
     : AppMetaSupport {
 
+    val _batchLevel = AtomicReference<Int>()
     val _printer = CliPrinter(_writer)
     val _view = CliView(_writer, { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) })
 
@@ -128,6 +133,7 @@ open class CliService(
             }
             // Case 2: "exit, quit" ?
             else if (ArgsFuncs.isExit(listOf<String>(line.trim()), 0)) {
+                logSummary()
                 display(msg = "Exiting...")
                 false
             }
@@ -180,8 +186,7 @@ open class CliService(
 
         // Execute
         val resultCmd = if (cmd.isAction("sys", "shell", "batch")) {
-            val batch = CliBatch(cmd, this)
-            batch.run()
+            onCommandExecuteBatch(cmd)
         }
         else {
             onCommandExecuteInternal(cmd)
@@ -191,6 +196,21 @@ open class CliService(
         onCommandAfterExecute(resultCmd)
 
         return success(resultCmd)
+    }
+
+
+    open protected fun onCommandExecuteBatch(cmd:CliCommand): CliCommand {
+        val blevel = _batchLevel.get()
+        return if(blevel > 0 ) {
+            CliCommand("sys", "shell", "batch", cmd.line, cmd.args, failure("already in batch mode"))
+        }
+        else {
+            _batchLevel.set(blevel + 1)
+            val batch = CliBatch(cmd, this)
+            val result = batch.run()
+            _batchLevel.set(blevel - 1)
+            result
+        }
     }
 
 
@@ -215,7 +235,7 @@ open class CliService(
             if (cmd.result.success) {
                 // Prints the result data to the screen
                 if (settings.enableLogging) {
-                    showResult(cmd.result)
+                    showResult(cmd, cmd.result)
                 }
                 // Only prints whether the call was successful or not
                 else {
@@ -334,7 +354,7 @@ open class CliService(
     open fun showHelpFor(cmd: CliCommand, mode: Int): Unit = _view.showHelpFor(cmd, mode)
 
 
-    open fun showResult(result: Result<Any>): Unit = _printer.printResult(result)
+    open fun showResult(cmd:CliCommand, result: Result<Any>): Unit = _printer.printResult(cmd, result)
 
 
     private fun display(msg: String?, err: Exception? = null): Unit {
@@ -369,4 +389,41 @@ open class CliService(
             }
         } ?: error(argsResult)
     }
+
+
+    /**
+     * prints the summary of the arguments
+     */
+    fun logSummary(): Unit {
+        _writer.text("===============================================================")
+        _writer.title("SUMMARY : ")
+        _writer.text("===============================================================")
+
+        // Standardized info
+        // e.g. name, desc, env, log, start-time etc.
+        val args = collectSummary(appMeta().status)
+        val maxLen = args.maxBy { item -> item.first.length }?.first?.length ?: 1
+
+        args.forEach { arg -> _writer.text(arg.first.padEnd(maxLen) + " = " + arg.second) }
+        _writer.text("===============================================================")
+    }
+
+
+    open protected fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
+        val buf = mutableListOf<Pair<String, String>>()
+
+        // All the pre-build info from appMeta
+        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) }, status)
+
+        // App specific fields to add onto
+        val extra = collectSummaryExtra()
+
+        // Combine both
+        buf.addAll(extra?.filterNotNull() ?: listOf())
+        return buf.toList()
+    }
+
+
+    open fun collectSummaryExtra(): List<Pair<String, String>>? = listOf()
+
 }

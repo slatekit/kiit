@@ -13,7 +13,17 @@
 
 package slatekit.integration.apis
 
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
+import slatekit.apis.core.Headers
+import slatekit.apis.core.Params
+import slatekit.common.Random
+import slatekit.common.Request
+import slatekit.common.Result
+import slatekit.common.Uris
+import slatekit.core.cli.CliCommand
+import java.io.File
 
 /**
  * Layer on top of the core CliService to provide support for handling command line requests
@@ -76,9 +86,9 @@ class CliApi(private val creds: slatekit.common.Credentials,
     override fun onCommandExecuteInternal(cmd: slatekit.core.cli.CliCommand): slatekit.core.cli.CliCommand {
         _writer.highlight("Executing ${_appMeta.about.name} api command " + cmd.fullName())
 
-        // Supply the api-key into each command.
-        val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
-        val apiCmd = slatekit.common.Request.Companion.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
+        // Create request from cmd
+        val apiCmd = createRequest(cmd)
+
         return cmd.copy(result = apis.call(apiCmd))
     }
 
@@ -129,7 +139,55 @@ class CliApi(private val creds: slatekit.common.Credentials,
     }
 
 
-    override fun showResult(result: slatekit.common.Result<Any>): Unit {
-        _printer.printResult(result)
+    override fun showResult(cmd: CliCommand, result: slatekit.common.Result<Any>): Unit {
+        _printer.printResult(cmd, result)
+    }
+
+
+    private fun createRequest(cmd:CliCommand): Request {
+
+        // Supplying params from file ?
+        return if(cmd.args.containsMetaKey("params")) {
+
+            // The file path
+            val rawPath = cmd.args.getMetaString("params")
+
+            // Get the json data
+            val json = rawPath?.let { raw ->
+                val path = Uris.interpret(raw)
+                val content = File(path).readText()
+                val parser = JSONParser()
+                val root = parser.parse(content)
+                val json = root as JSONObject
+                json
+
+            } ?: JSONObject()
+
+            // Create request
+            slatekit.common.Request(
+                    path = cmd.line,
+                    parts = cmd.args.actionVerbs,
+                    protocol =  ApiConstants.ProtocolCLI,
+                    verb =  ApiConstants.ProtocolCLI,
+                    opts = Headers(cmd.args.meta, ctx.enc),
+                    args = Params(cmd, "cli", true, ctx.enc, json),
+                    raw = cmd,
+                    tag = Random.stringGuid()
+            )
+        }
+        else {
+            // Supply the api-key into each command.
+            val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
+            val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
+            apiCmd
+        }
+    }
+
+    override fun collectSummaryExtra(): List<Pair<String, String>>? {
+        return listOf(
+                Pair("db.conn", ctx.dbs?.default()?.url ?: ""),
+                Pair("db.user", ctx.dbs?.default()?.user ?: ""),
+                Pair("dirs.app", ctx.dirs?.pathToApp ?: "" )
+        )
     }
 }

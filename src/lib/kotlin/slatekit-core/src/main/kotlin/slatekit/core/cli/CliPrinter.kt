@@ -22,12 +22,14 @@ import slatekit.meta.Serialization
 
 class CliPrinter(val _writer: ConsoleWriter) {
 
-    val serializer = Serialization.props(true)
+    val serializerProp = Serialization.props(true)
+    val serializerJson = Serialization.json()
+    val serializerCsv  = Serialization.csv()
 
 
-    fun printResult(result: Result<Any>): Unit {
+    fun printResult(cmd:CliCommand, result: Result<Any>): Unit {
         result.value?.let { value ->
-            printAny(value)
+            printAny(cmd, value)
             printSummary(result)
         } ?: printEmpty()
     }
@@ -62,9 +64,15 @@ class CliPrinter(val _writer: ConsoleWriter) {
      *
      * @param obj
      */
-    fun printAny(obj: Any?): Unit {
+    fun printAny(cmd:CliCommand, obj: Any?): Unit {
+        val format = cmd.args.getMetaStringOrElse("format", "props")
         _writer.text("===============================")
-        val text = serializer.serialize(obj)
+        val text = when(format) {
+            "csv"   -> serializerCsv.serialize(obj)
+            "json"  -> serializerJson.serialize(obj)
+            "prop"  -> serializerProp.serialize(obj)
+            else    -> serializerProp.serialize(obj)
+        }
         _writer.text(text)
         _writer.text("===============================")
     }
