@@ -45,6 +45,7 @@ class Args(
         val prefix: String = "-",
         val separator: String = "=",
         private val _namedArgs: Map<String, String>? = null,
+        private val _metaArgs: Map<String, String>? = null,
         private val _indexArgs: List<String>? = null,
         private val _decryptor: ((String) -> String)?) : Inputs {
 
@@ -57,6 +58,14 @@ class Args(
      * @return
      */
     val named: Map<String, String> = _namedArgs ?: mapOf()
+
+
+    /**
+     * gets read-only map of key-value based arguments
+     *
+     * @return
+     */
+    val meta: Map<String, String> = _metaArgs ?: mapOf()
 
 
     /**
@@ -143,6 +152,37 @@ class Args(
 
 
     /**
+     * whether or not this contains the key in the meta args
+     */
+    fun containsMetaKey(key:String):Boolean = _metaArgs?.let{ meta -> meta.containsKey(key) } ?: false
+
+
+    /**
+     * gets a string from the meta args
+     */
+    fun getMetaString(key:String):String? {
+       return if(containsMetaKey(key)) {
+           _metaArgs?.let { m -> m[key] } ?: ""
+       }
+       else {
+           null
+       }
+    }
+
+
+    /**
+     * gets a string from the meta args
+     */
+    fun getMetaStringOrElse(key:String, defaultValue:String):String? {
+        return if(containsMetaKey(key)) {
+            _metaArgs?.let { m -> m[key] } ?: ""
+        }
+        else {
+            defaultValue
+        }
+    }
+
+    /**
      * Gets a value in the list at the supplied position or returns the default value
      * @param items
      * @param pos
@@ -193,12 +233,13 @@ class Args(
          * @param prefix   : the prefix for a named key/value pair e.g. "-" as in -env:dev
          * @param sep      : the separator for a nmaed key/value pair e.g. ":" as in -env:dev
          * @param hasAction: whether the line of text has an action before any named args.
+         * @param metaChar : the prefix to designate arguments as meta arguments which are saved in a separate collection
          *                   e.g. name.action {namedarg}*
          * @return
          */
-        fun parse(line: String, prefix: String = "-", sep: String = ":", hasAction: Boolean = false)
+        fun parse(line: String, prefix: String = "-", sep: String = ":", hasAction: Boolean = false, metaChar:String = "@")
                 : Result<Args> {
-            return ArgsService().parse(line, prefix, sep, hasAction)
+            return ArgsService().parse(line, prefix, sep, hasAction, metaChar)
         }
 
 
@@ -213,7 +254,7 @@ class Args(
          *                   e.g. name.action {namedarg}*
          * @return
          */
-        fun parseArgs(args: Array<String>, prefix: String = "-", sep: String = ":", hasAction: Boolean = false)
+        fun parseArgs(args: Array<String>, prefix: String = "-", sep: String = ":", hasAction: Boolean = false, metaChar: String = "@")
                 : Result<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {
@@ -228,7 +269,7 @@ class Args(
             }
             else
                 ""
-            return ArgsService().parse(line, prefix, sep, hasAction)
+            return ArgsService().parse(line, prefix, sep, hasAction, metaChar)
         }
 
     }

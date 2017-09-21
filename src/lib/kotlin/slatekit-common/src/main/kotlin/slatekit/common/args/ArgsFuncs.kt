@@ -111,9 +111,9 @@ object ArgsFuncs {
      * @return ( action, actions, actionCount, end index )
      *         ( "app.users.activate", ["app", 'users", "activate" ], 3, 5 )
      */
-    fun parseAction(args: List<String>, prefix: String): ParsedItem {
+    fun parseAction(args: List<String>, prefix: String, prefixMeta:String): ParsedItem {
         // Get the first index of arg prefix ( e.g. "-" or "/"
-        val indexPrefix = args.indexOfFirst { it == prefix }
+        val indexPrefix = args.indexOfFirst { it == prefix || it == prefixMeta }
 
         // Get index after action "app.users.activate"
         val indexLast = if (indexPrefix < 0) args.size else indexPrefix
@@ -139,9 +139,11 @@ object ArgsFuncs {
      * @param sep
      * @return
      */
-    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String)
-            : Pair<Map<String, String>, Int> {
-        val resultArgs = mutableMapOf<String, String>()
+    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String, metaChar: String)
+            : Triple<Map<String, String>, Map<String,String>, Int> {
+
+        val namedArgs = mutableMapOf<String, String>()
+        val metaArgs   = mutableMapOf<String, String>()
 
         // Parses all named args e..g -a=1 -b=2
         // Keep looping until the index where the named args ends
@@ -152,13 +154,19 @@ object ArgsFuncs {
             val text = args[ndx]
 
             // e.g. "-a=1" Prefix ? "-"
-            val nextIndex = if (text == prefix) {
+            val nextIndex = if (text == prefix || text == metaChar) {
 
                 // Get "a" "1" from ( "a", "=", "1" )
                 val keyValuePair = parseKeyValuePair(ndx, args)
 
                 val advance: Int = keyValuePair?.let { kvp ->
-                    resultArgs[kvp.first] = kvp.second
+
+                    if(text == prefix) {
+                        namedArgs[kvp.first] = kvp.second
+                    }
+                    else {
+                        metaArgs[kvp.first] = kvp.second
+                    }
                     kvp.third
                 } ?: args.size
 
@@ -171,7 +179,7 @@ object ArgsFuncs {
             nextIndex
         })
 
-        return Pair(resultArgs.toMap(), endIndex)
+        return Triple(namedArgs.toMap(), metaArgs, endIndex)
     }
 
 

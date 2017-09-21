@@ -127,7 +127,24 @@ class ArgsTests {
             Pair("env.api"   , "loc" ),
             Pair("log.level"  , "info"),
             Pair("region.api", "ny"  )
-        ), listOf("area", "api", "action"))
+        ), null, listOf("area", "api", "action"))
+    }
+
+
+    @Test fun can_parse_meta_args() {
+
+        val result = Args.parse("area.api.action -env.api='loc' -log.level='info' @api.key='abc123'", "-", "=", true)
+        ensure(result, true, 2,
+
+                listOf(
+                    Pair("env.api"    , "loc" ),
+                    Pair("log.level"  , "info")
+                ),
+                listOf(
+                    Pair("api.key"    , "abc123" )
+                ),
+                listOf("area", "api", "action")
+        )
     }
 
 
@@ -135,7 +152,7 @@ class ArgsTests {
     @Test fun can_parse_actions_without_args() {
 
         val result = Args.parse("area.api.action", "-", "=", true)
-        ensure(result, true, 0, listOf(), listOf("area", "api", "action"))
+        ensure(result, true, 0, listOf(), null, listOf("area", "api", "action"))
     }
 
 
@@ -160,7 +177,8 @@ class ArgsTests {
 
 
     private fun ensure(result: Result<Args>, success:Boolean, size:Int,
-                       expected:List<Pair<String,String>>,
+                       expectedNamed:List<Pair<String,String>>,
+                       expectedMeta:List<Pair<String,String>>? = null,
                        parts:List<String>? = null) : Unit {
 
         // success / fail
@@ -172,9 +190,16 @@ class ArgsTests {
         assert( args.size() == size)
 
         // expected
-        for(item in expected ){
+        for(item in expectedNamed){
             assert( args.containsKey(item.first))
             assert( args.getString(item.first) == item.second)
+        }
+
+        expectedMeta?.let { metaArgs ->
+            for((first, second) in metaArgs){
+                assert( args.containsMetaKey(first))
+                assert( args.getMetaString(first) == second)
+            }
         }
 
         parts?.let { p ->

@@ -36,10 +36,10 @@ class ArgsService {
      *                   e.g. name.action {namedarg}*
      * @return
      */
-    fun parse(line: String, prefix: String = "-", sep: String = "=", hasAction: Boolean = false): Result<Args> {
+    fun parse(line: String, prefix: String = "-", sep: String = "=", hasAction: Boolean = false, metaChar: String = "@"): Result<Args> {
         // Check 1: Empty line ?
         return if (line.isNullOrEmpty()) {
-            success(Args("", listOf<String>(), "", listOf<String>(), prefix, sep, null, null, null))
+            success(Args("", listOf<String>(), "", listOf<String>(), prefix, sep, null, null, null, null))
         }
         else {
             // Check 2: Parse the line into words/args
@@ -59,7 +59,7 @@ class ArgsService {
                 }
                 else {
                     // Now parse the lexically parsed text into arguments
-                    val parseResult = parseInternal(line, args, prefix, sep, hasAction)
+                    val parseResult = parseInternal(line, args, prefix, sep, hasAction, metaChar)
                     parseResult
                 }
             }
@@ -67,14 +67,14 @@ class ArgsService {
     }
 
 
-    private fun parseInternal(line: String, tokens: List<String>, prefix: String, sep: String, hasAction: Boolean)
+    private fun parseInternal(line: String, tokens: List<String>, prefix: String, sep: String, hasAction: Boolean, metaChar: String)
             : Result<Args> {
         return successOrError(
                 {
                     // if input = "area.api.action -arg1="1" -arg2="2"
                     // result = "area.api.action"
                     val result = if (hasAction) {
-                        val actionResult = ArgsFuncs.parseAction(tokens, prefix)
+                        val actionResult = ArgsFuncs.parseAction(tokens, prefix, metaChar)
                         // Start of named args is always 1 after the action
                         val startOfNamedArgs = if (actionResult.pos == 0) 0 else actionResult.posLast
                         Triple(actionResult.action, actionResult.actions, startOfNamedArgs)
@@ -93,24 +93,24 @@ class ArgsService {
 
                     // Check for args
                     val argsResult = if (startOfNamedArgs >= tokens.size - 1)
-                        Pair(mapOf<String, String>(), startOfNamedArgs)
+                        Triple(mapOf<String, String>(), mapOf<String, String>(), startOfNamedArgs)
                     else
-                        ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep)
+                        ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep, metaChar)
 
                     // start of index args is always 1 after the named args
                     val startOfIndexArgs =
-                            if (argsResult.second == startOfNamedArgs) startOfNamedArgs
-                            else argsResult.second + 1
+                            if (argsResult.third == startOfNamedArgs) startOfNamedArgs
+                            else argsResult.third + 1
 
                     val indexResult: List<String> =
                             if (tokens.isNotEmpty() && startOfIndexArgs >= 0 && startOfIndexArgs <= (tokens.size - 1)) {
-                                tokens.subList(argsResult.second, tokens.size)
+                                tokens.subList(argsResult.third, tokens.size)
                             }
                             else
                                 listOf<String>()
 
                     val args = Args(line, tokens, action, verbs.toList(), prefix, sep,
-                            argsResult.first.toMap(), indexResult, null)
+                            argsResult.first.toMap(), argsResult.second.toMap(), indexResult, null)
                     args
                 })
     }
