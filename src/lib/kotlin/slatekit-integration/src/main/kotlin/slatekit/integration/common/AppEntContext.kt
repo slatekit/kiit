@@ -55,14 +55,14 @@ data class AppEntContext(
         override val env  : Env,
         override val cfg  : ConfigBase,
         override val log  : LoggerBase,
-                 val ent  : Entities,
+        val ent  : Entities,
         override val inf  : About,
         override val host : Host = Host.local(),
         override val lang : Lang = Lang.kotlin(),
         override val dbs  : DbLookup?           = null,
         override val enc  : Encryptor?          = null,
         override val dirs : Folders?            = null,
-        override val extra:Map<String,Any>      = mapOf(),
+        override val extra:MutableMap<String,Any>      = mutableMapOf(),
         override val state: Result<Boolean> = Result.none
                      ) : Context
 {

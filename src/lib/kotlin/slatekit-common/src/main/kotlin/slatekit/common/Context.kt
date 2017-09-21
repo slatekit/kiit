@@ -35,7 +35,7 @@ interface Context {
     val dbs   : DbLookup?
     val enc   : Encryptor?
     val dirs  : Folders?
-    val extra : Map<String,Any>
+    val extra : MutableMap<String,Any>
     val app   : AppMeta
     val state : Result<Boolean>
 }

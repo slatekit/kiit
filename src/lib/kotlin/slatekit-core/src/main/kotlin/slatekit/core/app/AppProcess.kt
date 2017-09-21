@@ -188,7 +188,6 @@ open class AppProcess(context: AppContext?,
      *
      * @return
      */
-    //fun info() : List<Pair<String,Any>> = appMeta().about
 
 
     /**
@@ -197,6 +196,30 @@ open class AppProcess(context: AppContext?,
     fun logStart(): Unit {
         info("===============================================================")
         this.appLogStart({ name: String, value: String -> info(name + " = " + value) })
+        info("STARTING : ")
+        info("===============================================================")
+    }
+
+
+    /**
+     * prints the summary of the arguments
+     */
+    fun logStartCustom(callback:() -> List<Pair<String,String>>): Unit {
+        info("===============================================================")
+
+        // extra key/value diagnostics
+        val extraInfo = callback()
+
+        // Get the max length of a key to format nicely
+        val maxlen = extraInfo.maxBy { it.first.length }?.first?.length ?: -1
+
+        // Log all the basic diagnostics
+        this.appLogStart({ name: String, value: String -> info(name + " = " + value) }, maxlen)
+
+        // Now log the extra diagnostics
+        val maxLenFinal = Math.max(maxlen, "lang.versionNum  ".length)
+        extraInfo.forEach { pair -> info(pair.first.padEnd(maxLenFinal) + " = " + pair.second) }
+
         info("STARTING : ")
         info("===============================================================")
     }

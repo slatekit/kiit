@@ -85,4 +85,60 @@ object KTypes {
             else              -> tpe.classifier as KClass<*>
         }
     }
+
+
+    fun getTypeExample(name:String, tpe: KType, textSample:String = "'abc'"): String {
+        return when (tpe) {
+        // Basic types
+            KStringType        -> textSample
+            KBoolType          -> "true"
+            KShortType         -> "0"
+            KIntType           -> "10"
+            KLongType          -> "100"
+            KFloatType         -> "10.0"
+            KDoubleType        -> "10.00"
+            KDateTimeType      -> DateTime.now().toStringNumeric("")
+            KLocalDateType     -> DateTime.now().toStringYYYYMMDD("")
+            KLocalTimeType     -> DateTime.now().toStringTime("")
+            KLocalDateTimeType -> DateTime.now().toStringNumeric()
+            KZonedDateTimeType -> DateTime.now().toStringNumeric()
+            KInstantType       -> DateTime.now().toStringNumeric()
+            KDocType           -> "user://myapp/conf/abc.conf"
+            KVarsType          -> "a=1,b=2,c=3"
+            KSmartStringType   -> "123-456-7890"
+            KDecStringType     -> "ALK342481SFA"
+            KDecIntType        -> "ALK342481SFA"
+            KDecLongType       -> "ALK342481SFA"
+            KDecDoubleType     -> "ALK342481SFA"
+            else               -> name
+        }
+    }
+
+
+    fun getTypeExampleValuePair(name:String, tpe: KType, textSample:String = "'abc'"): Pair<String, Any> {
+        return when (tpe) {
+        // Basic types
+            KStringType        -> Pair(name, textSample)
+            KBoolType          -> Pair(name, true)
+            KShortType         -> Pair(name, 0.toShort())
+            KIntType           -> Pair(name, 10)
+            KLongType          -> Pair(name, 100L)
+            KFloatType         -> Pair(name, 10.0.toFloat())
+            KDoubleType        -> Pair(name, 10.00)
+            KDateTimeType      -> Pair(name, DateTime.now())
+            KLocalDateType     -> Pair(name, DateTime.now().local().toLocalDate())
+            KLocalTimeType     -> Pair(name, DateTime.now().local().toLocalTime())
+            KLocalDateTimeType -> Pair(name, DateTime.now().local())
+            KZonedDateTimeType -> Pair(name, DateTime.now().raw)
+            KInstantType       -> Pair(name, DateTime.now().raw.toInstant())
+            KDocType           -> Pair(name, "user://myapp/conf/abc.conf")
+            KVarsType          -> Pair(name, "a=1,b=2,c=3")
+            KSmartStringType   -> Pair(name, "123-456-7890")
+            KDecStringType     -> Pair(name, "ALK342481SFA")
+            KDecIntType        -> Pair(name, "ALK342481SFA")
+            KDecLongType       -> Pair(name, "ALK342481SFA")
+            KDecDoubleType     -> Pair(name, "ALK342481SFA")
+            else               -> Pair(name, name)
+        }
+    }
 }
