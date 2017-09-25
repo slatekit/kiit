@@ -13,13 +13,6 @@ buildscript {
     }
 }
 
-group 'com.slatekit'
-if (project.hasProperty('projVersion')) {
-  project.version = project.projVersion
-} else {
-  project.version = '0.9.4'
-}
-
 repositories {
     mavenCentral()
 }

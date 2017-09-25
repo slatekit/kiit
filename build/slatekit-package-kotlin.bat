@@ -1,4 +1,4 @@
-set VERSION=0.9.5
+set VERSION=0.9.6
 set SLATE_SOURCE=C:\Dev\github\slatekit
 set SLATE_DEST=C:\Dev\github\slatekit\dist\slatekit\kotlin\releases\%VERSION%
 
@@ -14,7 +14,7 @@ mkdir %SLATE_DEST%\samples
 
 REM ===============================================
 REM copy all slatekit jars to releases\{version}\bin
-xcopy %SLATE_SOURCE%\src\lib\kotlin\dist\*.jar   %SLATE_DEST%\bin          /s /e /h /y      
+xcopy %SLATE_SOURCE%\src\lib\kotlin\dist\*%VERSION%.jar   %SLATE_DEST%\bin          /s /e /h /y      
 
 
 REM ===============================================

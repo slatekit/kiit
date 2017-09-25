@@ -106,13 +106,15 @@ fun main(args: Array<String>): Unit {
     val auth = AppAuth("header", "slatekit", "johndoe", selectedKey, sampleKeys)
     val enc = AppEncryptor
     val server = Server(
-            port   = 5000,
-            prefix = "/api/",
-            docs   = true,
-            docKey = "abc123",
-            auth   = auth,
-            ctx    = ctx,
-            apis   = listOf(
+            port      = 5000,
+            prefix    = "/api/",
+            static    = true,
+            staticDir = "",
+            docs      = true,
+            docKey    = "abc123",
+            auth      = auth,
+            ctx       = ctx,
+            apis      = listOf(
                     // Sample APIs for demo purposes
                     // Instances are created per request.
                     // The primary constructor must have either 0 parameters

@@ -6,7 +6,7 @@ allprojects {
         mavenCentral()
     }
     group = 'com.slatekit'
-    version = '0.9.5'
+    version = '0.9.6'
 	
 	task hello {
         doLast { task ->
@@ -30,7 +30,8 @@ allprojects {
 					}
 				}
 			}
-		}.writeTo("$buildDir/${project.name}-${project.version}.pom")
+		}.writeTo("../dist/${project.name}-${project.version}.pom")
+		// .writeTo("$buildDir/dist/${project.name}-${project.version}.pom")
 	}
 
 	task installDependencies(type: Copy) {
