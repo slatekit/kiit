@@ -99,7 +99,7 @@ object ApiValidator {
         var totalErrors = 0
 
         // Check each parameter to api call
-        for (index in 1..action.paramList.size - 1) {
+        for (index in 0..action.paramList.size - 1) {
             val input = action.paramList[index]
             // parameter not supplied ?
             val paramName = input.name!!

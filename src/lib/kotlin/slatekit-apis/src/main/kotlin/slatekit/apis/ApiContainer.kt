@@ -20,6 +20,7 @@ import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
 import slatekit.meta.Serialization
+import java.io.File
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -133,6 +134,20 @@ open class ApiContainer(
      */
     fun get(cmd: Request): Result<ApiRef> {
         return getApi(cmd.area, cmd.name, cmd.action)
+    }
+
+
+    fun sample(cmd: Request, path: File): Result<String> {
+        val action = get(cmd)
+        val sample = if(action.success) {
+                val parameters = action.value!!.action.paramList
+                val serializer = Serialization.sampler()
+                val text = serializer.serialize(parameters)
+                text
+        } else "Unable to find command: " + cmd.path
+
+        path.writeText(sample)
+        return success("sample call written to : ${path.absolutePath}")
     }
 
 
