@@ -122,9 +122,22 @@ abstract class Doc : ApiVisit {
         }
     }
 
+
     override fun onApiBegin(api: ApiReg, options: ApiVisitOptions?): Unit {
         writer.highlight(getFormattedText(api.name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
+        writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
+    }
+
+
+    override fun onApiBeginDetail(api: ApiReg, options: ApiVisitOptions?): Unit {
+
+        writer.subTitle("AREA   : ", false)
+        writer.highlight(api.area, true)
+
+        writer.subTitle("API    : ", false)
+        writer.highlight(api.name, endLine = false)
+        writer.text(" ", endLine = false)
         writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
     }
 
@@ -133,7 +146,17 @@ abstract class Doc : ApiVisit {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
-        writer.text(action.desc, endLine = false)
+        writer.text(action.desc, endLine = true)
+    }
+
+
+    override fun onApiActionBeginDetail(action: ApiRegAction, name: String, options: ApiVisitOptions?): Unit {
+        writer.subTitle("ACTION : ", false)
+        writer.highlight(name, endLine = false)
+        writer.text(" ", endLine = false)
+        writer.text(action.desc, endLine = true)
+        writer.subTitle("PATH   : ", false)
+        writer.highlight(buildPath(action.api.area, action.api.name, action.name, null), true)
     }
 
 
@@ -154,12 +177,8 @@ abstract class Doc : ApiVisit {
         val paramsQuery  = args.fold("", { s, arg ->
             s + "&" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "a%20bc")
         })
-        val serializer = Serialization.json()
-        val paramsJsonMap  = args.map { arg ->
-            KTypes.getTypeExampleValuePair(arg.name!!, arg.type, "a%20bc")
-        }.toMap()
-        val paramsJson = serializer.serialize(paramsJsonMap)
-
+        val serializer = Serialization.sampler()
+        val json = serializer.serialize(args)
         writer.tab(1)
         writer.url("1. cli      : $exampleCli ", endLine = false)
         writer.text(paramsCli, true)
@@ -171,10 +190,15 @@ abstract class Doc : ApiVisit {
         if(!actionName.startsWith("get")) {
             writer.tab(1)
             writer.url("3. web/json : $exampleWeb ", endLine = false)
-            writer.text(paramsJson, true)
+            writer.text(json, true)
         }
 
         writer.line()
+    }
+
+
+    override fun onArgsBegin(action: ApiRegAction): Unit {
+        writer.text("Inputs : ", true)
     }
 
 
