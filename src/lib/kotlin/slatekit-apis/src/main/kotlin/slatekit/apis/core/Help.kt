@@ -67,7 +67,7 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
             val api = apis[apiName]
             api?.let { apiBase ->
                 val visitor = ApiVisitor()
-                visitor.visitApi(apiBase, apiName, doc, true)
+                visitor.visitApiActions(apiBase, apiName, doc)
             }
         }
         return doc.toString()

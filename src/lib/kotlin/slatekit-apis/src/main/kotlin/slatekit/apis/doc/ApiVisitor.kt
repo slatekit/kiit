@@ -76,24 +76,11 @@ class ApiVisitor {
     }
 
 
-    fun visitApi(apiBase: ApiLookup, apiName: String, visitor: ApiVisit, listActions: Boolean = false): Unit {
+    fun visitApiActions(apiBase: ApiLookup, apiName: String, visitor: ApiVisit): Unit {
         val actions = apiBase.actions()
         val first: ApiRegAction? = actions.all().firstOrNull()
+        first?.let{ visitor.onApiBeginDetail(it.api) }
         if (actions.size > 0) {
-            actions.getAt(0)?.let { apiAnno ->
-                visitApi(apiAnno.api, visitor, actions, listActions = listActions, listArgs = false)
-            }
-        }
-        visitor.onApiActionSyntax(first)
-    }
-
-
-    fun visitApi(api: ApiReg, visitor: ApiVisit, actions: ListMap<String, ApiRegAction>,
-                 listActions: Boolean = true, listArgs: Boolean = false): Unit {
-        visitor.onApiBegin(api)
-        if (actions.size > 0) {
-            if (listActions) {
-
                 visitor.onVisitSeparator()
                 val actionNames = actions.keys().sortedBy { s -> s }
                 val maxLength = actionNames.maxBy { it.length }?.length ?: 10
@@ -101,12 +88,11 @@ class ApiVisitor {
                 actionNames.forEach { actionName ->
                     val action = actions[actionName]
                     action?.let { act ->
-                        visitApiAction(act, visitor, listArgs, options)
+                        visitor.onApiActionBegin(action, action.name, options)
                     }
                 }
-            }
         }
-        visitor.onApiEnd(api)
+        visitor.onApiActionSyntax(first)
     }
 
 
@@ -115,7 +101,7 @@ class ApiVisitor {
         if (actions.size > 0) {
             actions.getAt(0)?.let { apiAnno ->
                 val api = apiAnno.api
-                visitor.onApiBegin(api)
+                visitor.onApiBeginDetail(api)
                 visitor.onVisitSeparator()
                 val call = actions[actionName]
                 call?.let { action ->
@@ -132,7 +118,7 @@ class ApiVisitor {
 
     fun visitApiAction(action: ApiRegAction, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
         // action
-        visitor.onApiActionBegin(action, action.name, options)
+        visitor.onApiActionBeginDetail(action, action.name, options)
 
         if (detailMode) {
             visitArgs(action, visitor)
@@ -143,6 +129,7 @@ class ApiVisitor {
 
 
     fun visitArgs(info: ApiRegAction, visitor: ApiVisit): Unit {
+        visitor.onArgsBegin(info)
         if (info.hasArgs) {
             val names = info.paramList.map { item -> item.name }.filterNotNull()
             val maxLength = names.maxBy { it.length }?.length ?: 10

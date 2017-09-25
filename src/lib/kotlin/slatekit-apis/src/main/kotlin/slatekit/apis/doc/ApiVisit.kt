@@ -48,6 +48,9 @@ interface ApiVisit {
     fun onApiBegin(api: ApiReg, options: ApiVisitOptions? = null): Unit
 
 
+    fun onApiBeginDetail(api: ApiReg, options: ApiVisitOptions? = null): Unit
+
+
     fun onApiEnd(api: ApiReg): Unit
 
 
@@ -60,10 +63,16 @@ interface ApiVisit {
     fun onApiActionBegin(action: ApiRegAction, name: String, options: ApiVisitOptions? = null): Unit
 
 
+    fun onApiActionBeginDetail(action: ApiRegAction, name: String, options: ApiVisitOptions? = null): Unit
+
+
     fun onApiActionEnd(action: ApiRegAction, name: String): Unit
 
 
     fun onApiActionExample(api: ApiReg, actionName: String, action: ApiRegAction, args: List<KParameter>): Unit
+
+
+    fun onArgsBegin(action: ApiRegAction): Unit
 
 
     fun onArgBegin(arg: ApiArg, options: ApiVisitOptions? = null): Unit
