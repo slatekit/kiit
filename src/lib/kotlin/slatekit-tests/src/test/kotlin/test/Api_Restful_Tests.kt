@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test
 
+import org.json.simple.JSONObject
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.containers.ApiContainerCLI
@@ -100,19 +101,19 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test
     fun can_create(){
-        val data = mapOf(
-                "id"        to "0",
-                "title"     to "Indiana Jones",
-                "category"  to "adventure",
-                "playing"   to "false",
-                "cost"      to "30",
-                "rating"    to "4.8",
-                "released"  to "19810612",
-                "createdAt" to DateTime.of(2017, 7, 17).toStringYYYYMMDD(""),
-                "createdBy" to "0",
-                "updatedAt" to DateTime.of(2017, 7, 17).toStringYYYYMMDD(""),
-                "updatedBy" to "0"
-        )
+        val json = JSONObject()
+        json.put("id"        , "0")
+        json.put("title"     , "Indiana Jones")
+        json.put("category"  , "adventure")
+        json.put("playing"   , "false")
+        json.put("cost"      , "30")
+        json.put("rating"    , "4.8")
+        json.put("released"  , "19810612")
+        json.put("createdAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("createdBy" , "0")
+        json.put("updatedAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedBy" , "0")
+        val data = mapOf( "item" to json )
         val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(SampleRESTApi::class, "app")), auth = null, rewrites = listOf(Restify()))
         val r1 = apis.call(
                 "app", "SampleREST", "", "post",
@@ -128,19 +129,20 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test
     fun can_update(){
-        val data = mapOf(
-                "id"        to "1",
-                "title"     to "Indiana Jones",
-                "category"  to "adventure",
-                "playing"   to "false",
-                "cost"      to "30",
-                "rating"    to "4.8",
-                "released"  to "19810612",
-                "createdAt" to DateTime.of(2017, 7, 17).toStringYYYYMMDD(""),
-                "createdBy" to "0",
-                "updatedAt" to DateTime.of(2017, 7, 17).toStringYYYYMMDD(""),
-                "updatedBy" to "0"
-        )
+
+        val json = JSONObject()
+        json.put("id"        , "1")
+        json.put("title"     , "Indiana Jones")
+        json.put("category"  , "adventure")
+        json.put("playing"   , "false")
+        json.put("cost"      , "30")
+        json.put("rating"    , "4.8")
+        json.put("released"  , "19810612")
+        json.put("createdAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("createdBy" , "0")
+        json.put("updatedAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedBy" , "0")
+        val data = mapOf( "item" to json )
         val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(SampleRESTApi::class, "app")), auth = null, rewrites = listOf(Restify()))
         val r1 = apis.call(
                 "app", "SampleREST", "", "put",
