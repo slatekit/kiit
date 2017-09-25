@@ -82,6 +82,23 @@ object Files {
      * @param content   : The content to write
      * @return
      */
+    fun fileNameAsAsTimeStamp(): String {
+        return DateTime.now().toStringNumeric()
+                .replace(":", "-")
+                .replace(" ", "-") + ".txt"
+    }
+
+
+    /**
+     * writes a file to a date based directory inside an app directory inside the users home directory
+     *
+     * e.g. {user.home}/{appName}/{directory}/{date-today}/{datetime}.txt
+     *      c:/users/kreddy/myapp/logs/2016-03-20/2016-03-20-09-30-45.txt
+     *
+     * @param directory : The name of the sub directory in the app
+     * @param content   : The content to write
+     * @return
+     */
     fun writeDatedFile(directory: String, fileName: String, content: String): String {
         val dirInfo = createDirectoryForDate(directory)
         val dirPath = dirInfo.second

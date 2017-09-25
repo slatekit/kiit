@@ -38,6 +38,17 @@ data class Content(val text:String, val tpe:ContentType) {
 
     companion object {
 
+
+        fun from(format:String): ContentType {
+            return when(format.toLowerCase()){
+                "csv"  -> ContentTypeCsv
+                "json" -> ContentTypeJson
+                "prop" -> ContentTypeProp
+                else   -> ContentTypeJson
+            }
+        }
+
+
         fun  csv (text:String):Content =  Content(text, ContentTypeCsv )
         fun  html(text:String):Content =  Content(text, ContentTypeHtml)
         fun  json(text:String):Content =  Content(text, ContentTypeJson)

@@ -173,7 +173,7 @@ class Args(
     /**
      * gets a string from the meta args
      */
-    fun getMetaStringOrElse(key:String, defaultValue:String):String? {
+    fun getMetaStringOrElse(key:String, defaultValue:String):String {
         return if(containsMetaKey(key)) {
             _metaArgs?.let { m -> m[key] } ?: ""
         }
@@ -220,6 +220,7 @@ class Args(
     override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null
     override fun containsKey(key: String): Boolean = _namedArgs?.contains(key) ?: false
 
+    fun hasMetaArgs():Boolean = _metaArgs?.isNotEmpty() ?: false
 
     companion object {
         fun default(): Args = Args("", listOf(), "", listOf(), _decryptor = null)
