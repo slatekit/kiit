@@ -16,12 +16,9 @@ package slatekit.integration.apis
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.apis.core.Headers
+import slatekit.apis.ApiContainerCLI
 import slatekit.apis.core.Params
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.help
-import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cli.CliCommand
 import java.io.File
 
@@ -44,7 +41,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
 
     // api container holding all the apis.
-    val apis = slatekit.apis.containers.ApiContainerCLI(ctx, auth, apiItems)
+    val apis = ApiContainerCLI(ctx, auth, apiItems)
 
 
     /**
@@ -92,8 +89,17 @@ class CliApi(private val creds: slatekit.common.Credentials,
         return if (cmd.args.hasMetaArgs()) {
             val metaCmd = cmd.args.getMetaString("command")
             val cmdResult = when(metaCmd){
+
+                // Case 1: Generate a sample command to output/file
                 "sample" -> cmd.copy(result = buildSampleRequest(cmd))
+
+                // Case 2: Get command from params file and execute
                 "params" -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
+
+                // Case 3: Code Generation
+                "codegen" -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.ProtocolCLI, cmd)))
+
+                // Case 4: Unknown
                 else     -> {
                     ctx.log.error("Unknown meta command : $metaCmd")
                     cmd
@@ -105,7 +111,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
             // Supply the api-key into each command.
             val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
             val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
-            return cmd.copy(result = apis.call(apiCmd))
+            cmd.copy(result = apis.call(apiCmd))
         }
     }
 

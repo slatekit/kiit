@@ -16,7 +16,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.ApiBase
+import slatekit.apis.support.ApiBase
 import slatekit.core.common.AppContext
 
 /**

@@ -16,8 +16,6 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.ApiBase
-import slatekit.apis.support.ApiWithSupport
 import slatekit.core.cmds.CmdResult
 import slatekit.core.cmds.CmdState
 import slatekit.core.cmds.Cmds

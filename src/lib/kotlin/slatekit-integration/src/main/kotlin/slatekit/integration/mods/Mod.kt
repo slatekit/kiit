@@ -20,6 +20,7 @@ import slatekit.entities.core.EntityWithId
 
 
 data class Mod(
+        @property:Field()
         override val id: Long = 0L,
 
 
