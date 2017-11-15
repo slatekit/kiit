@@ -91,6 +91,14 @@ data class Folders(
     }
 
 
+    fun getConfFilePath(fileName: String): String = pathToConf + File.separator + fileName
+    fun getCacheFilePath(fileName: String): String = pathToCache + File.separator + fileName
+    fun getInputsFilePath(fileName: String): String = pathToInputs + File.separator + fileName
+    fun getOutputsFilePath(fileName: String): String = pathToOutputs + File.separator + fileName
+    fun getLogsFilePath(fileName: String): String = pathToLogs + File.separator + fileName
+    fun getTempFilePath(fileName: String): String = pathToTemp + File.separator + fileName
+
+
     val pathToApp: String get() {
         val sep = File.separator
         val homePath = home

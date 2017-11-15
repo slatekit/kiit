@@ -24,6 +24,14 @@ fun String.repeatWith(delimiter:String, count:Int):String {
 
 
 /**
+ * Converts the text to PascalCase e.g. "userName" becomes "UserName"
+ */
+fun String.pascalCase():String {
+    return this[0].toUpperCase() + this.substring(1)
+}
+
+
+/**
  * Converts a string to a "soft" id that has "_" instead of spaces.
  * e.g: "abc& $[]123" = "abc&_$[]123"
  */
