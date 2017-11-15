@@ -85,13 +85,15 @@ class HttpRequest(val req: Request) : RequestSupport {
             // args   : params
             // tag    : guid
 
+            // Reverting change to args.
             return slatekit.common.Request(
                     path = req.uri(),
                     parts = parts,
                     protocol = ApiConstants.ProtocolWeb,
                     verb = req.requestMethod().toLowerCase(),
                     opts = Headers(headers, ctx.enc),
-                    args = Params(req, method, isBodyOk, ctx.enc, json),
+                    //args = Params(req, method, isBodyOk, ctx.enc, json, queryParams = req.queryParams()),
+                    args = HttpParams(req, ctx.enc),
                     raw = HttpRequest(req),
                     tag = Random.stringGuid()
             )
