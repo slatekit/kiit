@@ -1,5 +1,6 @@
 package slatekit.apis
 
+import slatekit.apis.codegen.CodeGenJava
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
 import slatekit.apis.svcs.Format
@@ -110,6 +111,9 @@ open class ApiContainer(
     fun rename(text:String):String = namer?.name(text)?.text ?: text
 
 
+    internal fun lookup(): Areas = _lookup
+
+
     fun register(reg: ApiReg): Unit {
         _lookup.register(reg)
     }
@@ -165,6 +169,26 @@ open class ApiContainer(
             3    -> _lookup.contains(parts[0], parts[1], parts[2])
             else -> false
         }
+    }
+
+
+    fun codegen(req:Request): Result<Any> {
+        val lang = req.args?.getStringOrElse("lang", "java")
+        when(lang) {
+            "java" -> CodeGenJava(this,
+                        req.args?.getString("pathToTemplates") ?: "",
+                        req.args?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.args?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.args?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+            ).generate(req)
+            else   -> CodeGenJava(this,
+                        req.args?.getString("pathToTemplates") ?: "",
+                        req.args?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.args?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.args?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        ).generate(req)
+        }
+        return success("code gen WIP")
     }
 
 
