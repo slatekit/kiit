@@ -15,13 +15,12 @@ package test
 import org.json.simple.JSONObject
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.containers.ApiContainerCLI
+import slatekit.apis.ApiContainerCLI
 import slatekit.apis.svcs.Restify
 import slatekit.common.*
 import slatekit.common.results.SUCCESS
 import slatekit.sampleapp.core.apis.SampleRESTApi
 import slatekit.sampleapp.core.models.Movie
-import test.common.*
 
 /**
  * Created by kishorereddy on 6/12/17.

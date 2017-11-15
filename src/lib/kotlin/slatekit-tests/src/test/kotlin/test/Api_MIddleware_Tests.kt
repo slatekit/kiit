@@ -14,12 +14,10 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.containers.ApiContainerCLI
+import slatekit.apis.ApiContainerCLI
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.SUCCESS
 import slatekit.sampleapp.core.apis.SampleMiddlewareApi
-import slatekit.test.common.MyAuthProvider
-import slatekit.tests.common.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.

@@ -1,6 +1,7 @@
 package test.common
 
 import slatekit.apis.*
+import slatekit.apis.support.ApiBase
 import slatekit.common.*
 import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecInt
@@ -9,7 +10,6 @@ import slatekit.common.encrypt.DecString
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
-import slatekit.core.common.AppContext
 import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 

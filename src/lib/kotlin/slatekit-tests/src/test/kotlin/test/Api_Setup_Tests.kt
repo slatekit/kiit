@@ -2,7 +2,7 @@ package test
 
 import org.junit.Test
 import slatekit.apis.ApiReg
-import slatekit.apis.containers.ApiContainerCLI
+import slatekit.apis.ApiContainerCLI
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
 import slatekit.sampleapp.core.apis.SampleEntityApi

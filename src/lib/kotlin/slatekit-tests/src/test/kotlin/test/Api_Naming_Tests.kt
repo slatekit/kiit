@@ -2,7 +2,7 @@ package test
 
 import org.junit.Test
 import slatekit.apis.ApiReg
-import slatekit.apis.containers.ApiContainerCLI
+import slatekit.apis.ApiContainerCLI
 import slatekit.common.Namer
 import slatekit.common.lowerHyphen
 import slatekit.common.lowerUnderscore

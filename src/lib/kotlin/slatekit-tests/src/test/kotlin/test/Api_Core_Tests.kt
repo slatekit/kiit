@@ -14,7 +14,7 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.containers.ApiContainerCLI
+import slatekit.apis.ApiContainerCLI
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Errors
 import slatekit.apis.helpers.ApiHelper

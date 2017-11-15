@@ -14,11 +14,9 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.containers.ApiContainerCLI
-import slatekit.common.results.ResultFuncs.success
+import slatekit.apis.ApiContainerCLI
 import slatekit.sampleapp.core.apis.SampleTypes3Api
 import test.common.MyEncryptor
-import test.common.SampleApi
 
 /**
  * Created by kishorereddy on 6/12/17.
