@@ -41,7 +41,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @ApiAction(name = "", desc = "installs all modules from initial setup", roles = "@parent")
     fun install(): slatekit.common.Result<Any> {
-        val res = _items.all().map { module -> installMod(module) }
+        val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
     }
@@ -59,7 +59,13 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @ApiAction(name = "", desc = "installs a specific module", roles = "@parent")
     fun installByName(name: String): slatekit.common.Result<Any> {
-        return _items[name]?.let { installMod(it) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
+        return _items[name]?.let { installUpdate(it, false) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
+    }
+
+
+    @ApiAction(name = "", desc = "forces the install of a specific module or updates it. updates the mod entry and creates table", roles = "@parent")
+    fun forceInstallByName(name: String): slatekit.common.Result<Any> {
+        return _items[name]?.let { installUpdate(it, true) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
     }
 
 
@@ -82,7 +88,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
 
-    fun installMod(mod: slatekit.integration.mods.Module): slatekit.common.Result<Any> {
+    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent:Boolean = false): slatekit.common.Result<Any> {
 
         val checkResult = ctx.service.findFirst(slatekit.common.query.Query().where("name", "=", mod.info.name))
         if (checkResult == null) {
@@ -100,6 +106,12 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
                 //  return success(data = id)
                 //else
                 //  failure("error creating : " + mod.info.name)
+            }
+        }
+        else if(updateIfPresent){
+            checkResult.let { modentry ->
+                ctx.service.update(modentry)
+                mod.install()
             }
         }
         return slatekit.common.results.ResultFuncs.success("installed")
