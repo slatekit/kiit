@@ -20,8 +20,8 @@ import slatekit.common.info.About
 
 
 /**
- * A "Filter" based middle-ware that allows either allowing/disallowing an API call
- * of an API call, without any modification to the life-cycle/flow.
+ * A "Filter" based middle-ware that either allows/disallows an API call
+ * without any modification to the life-cycle/flow.
  *
  * NOTE: This is applied before conversion of request parameters( e.g. JSON )
  * to action parameters.

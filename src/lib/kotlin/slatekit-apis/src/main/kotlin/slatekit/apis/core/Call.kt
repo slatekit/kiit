@@ -137,10 +137,6 @@ class Call {
                     obj
                 }
                 else jsonRaw
-                // Wrap it
-                //val jsonParent = JSONObject()
-                //jsonParent.put(parameter.name, json)
-                //converter.convert(parameter, jsonParent)
                 converter.convert(parameter, json)
             }
         } else {

@@ -20,7 +20,7 @@ import slatekit.common.info.About
 
 
 /**
- * A "Control" based middle-ware that allows to basically take over the execution
+ * A "Control" based middle-ware that takes over the execution
  * of an API call right at the point of execution.
  *
  * @param about  : Info about the the filter

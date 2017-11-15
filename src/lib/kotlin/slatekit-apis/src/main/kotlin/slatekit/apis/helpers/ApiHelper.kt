@@ -18,6 +18,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Call
 import slatekit.common.*
+import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.unAuthorized
@@ -103,22 +104,23 @@ object ApiHelper {
     }
 
 
-    fun getReferencedValue(primaryValue: String, parentValue: String): String {
+    fun isWebProtocol(primaryValue: String, parentValue: String): Boolean {
+        val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
+        return when(finalValue) {
+            ApiConstants.ProtocolAny -> true
+            ApiConstants.ProtocolWeb -> true
+            else                     -> false
+        }
+    }
 
-        // Role!
-        return if (!primaryValue.isNullOrEmpty()) {
-            if (primaryValue == ApiConstants.RoleParent) {
-                parentValue
-            }
-            else
-                primaryValue
+
+    fun isCliProtocol(primaryValue: String, parentValue: String): Boolean {
+        val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
+        return when(finalValue) {
+            ApiConstants.ProtocolAny -> true
+            ApiConstants.ProtocolCLI -> true
+            else                     -> false
         }
-        // Parent!
-        else if (!parentValue.isNullOrEmpty()) {
-            parentValue
-        }
-        else
-            ""
     }
 
 

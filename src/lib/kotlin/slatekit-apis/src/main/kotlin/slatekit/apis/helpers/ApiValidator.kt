@@ -13,15 +13,12 @@
 
 package slatekit.apis.helpers
 
-import slatekit.apis.ApiBase
 import slatekit.apis.ApiRef
-import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
 import slatekit.common.Inputs
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 
