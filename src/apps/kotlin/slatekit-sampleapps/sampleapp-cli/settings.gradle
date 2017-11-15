@@ -3,6 +3,9 @@ rootProject.name = 'slatekit-sampleapp-cli'
 include ':slatekit-common'
 project(':slatekit-common').projectDir=new File('../../../../lib/kotlin/slatekit-common')
 
+include ':slatekit-meta'
+project(':slatekit-meta').projectDir=new File('../../../../lib/kotlin/slatekit-meta')
+
 include ':slatekit-entities'
 project(':slatekit-entities').projectDir=new File('../../../../lib/kotlin/slatekit-entities')
 
