@@ -71,7 +71,7 @@ object AwsFuncs {
         val credentials = path?.let { filePath ->
 
             // Get api key from config path supplied
-            val apiKey = Config(path).apiKey(section ?: "aws")
+            val apiKey = Config(filePath).apiKey(section ?: "aws")
 
             // Build creds from api key
             credsWithKeySecret(apiKey.key, apiKey.pass)

@@ -30,12 +30,12 @@ import java.io.File
  */
 class AwsCloudFiles(bucket: String,
                     createBucket: Boolean,
-                    path: String? = null,
+                    confPath: String? = null,
                     section: String? = null)
     : CloudFilesBase(bucket, createBucket), AwsSupport {
 
     private val SOURCE = "aws:s3"
-    private val _s3: AmazonS3Client = AwsFuncs.s3(path, section)
+    private val _s3: AmazonS3Client = AwsFuncs.s3(confPath, section)
 
 
     /**
