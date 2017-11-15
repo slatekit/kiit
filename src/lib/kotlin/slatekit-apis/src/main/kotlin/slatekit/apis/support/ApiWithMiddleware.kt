@@ -13,6 +13,7 @@
 
 package slatekit.apis.support
 
+import slatekit.apis.ApiRegAction
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.results.ResultFuncs.success
@@ -41,7 +42,7 @@ interface ApiWithMiddleware : Api {
      * Hook for before this api handles any request
      */
     @Ignore
-    fun onBefore(context:Context, request:Request, source:Any, target:Any): Unit {
+    fun onBefore(context:Context, request:Request, source:Any, target: ApiRegAction): Unit {
     }
 
 
@@ -49,7 +50,7 @@ interface ApiWithMiddleware : Api {
      * Hook for after this api handles any request
      */
     @Ignore
-    fun onAfter(context:Context, request:Request,  source:Any, target:Any): Unit {
+    fun onAfter(context:Context, request:Request,  source:Any, target:ApiRegAction): Unit {
     }
 
 
@@ -57,7 +58,7 @@ interface ApiWithMiddleware : Api {
      * Hook to first filter a request before it is handled by this api.
      */
     @Ignore
-    fun onFilter(context:Context, request:Request, source:Any, target:Any): Result<Any>  {
+    fun onFilter(context:Context, request:Request, source:Any, target:ApiRegAction): Result<Any>  {
         return success(true)
     }
 }
