@@ -131,7 +131,7 @@ class Areas(val namer:Namer?) {
         // 2. Create a copy of the final annotation taking into account the overrides.
         val hasAnnotations = apiAnnoRaw != null
         val apiAnno = apiAnnoRaw?.let { apiAnno ->
-            ApiHelper.buildApiInfo(apiAnnoRaw, reg)
+            ApiHelper.buildApiInfo(apiAnno, reg)
         } ?: ApiHelper.buildApiInfo(reg)
 
         // 3. get the name of the api and its area ( category of apis )

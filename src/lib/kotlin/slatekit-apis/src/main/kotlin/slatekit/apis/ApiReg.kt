@@ -54,6 +54,6 @@ data class ApiReg(val cls: KClass<*>,
                 roles: String  = "",
                 auth : String  = "",
                 verb : String  = "*",
-                protocol: String = "*",
+                protocol: String = "",
                 declaredOnly: Boolean = true) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance)
 }
