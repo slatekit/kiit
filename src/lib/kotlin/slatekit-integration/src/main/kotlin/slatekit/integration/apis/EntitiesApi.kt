@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiConstants
 import slatekit.apis.support.ApiBase
 import slatekit.common.Result
 import slatekit.common.db.DbCon
@@ -24,7 +25,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
-        roles = "admin", auth = "key-roles", verb = "post", protocol = "cli")
+        roles = "admin", auth = "key-roles", verb = "post", protocol = ApiConstants.ProtocolCLI)
 class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 

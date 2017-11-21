@@ -325,7 +325,7 @@ object ResultFuncs {
      * @param tag : Optional tag
      * @return
      */
-    fun <T> badRequest(msg: String? = "not found",
+    fun <T> badRequest(msg: String? = "bad request",
                        err: Exception? = null,
                        tag: String? = null,
                        ref: Any? = null): Result<T> {
