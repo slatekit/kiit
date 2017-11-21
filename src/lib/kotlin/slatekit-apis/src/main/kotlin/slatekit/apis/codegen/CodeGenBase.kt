@@ -17,6 +17,34 @@ import kotlin.reflect.full.declaredMemberFunctions
 
 open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOnly:Boolean = true) {
 
+
+    /** Represents type information for the purspose of code generation.
+     * @param isBasicType          : whether this is a number, boolean, String
+     * @param isCollection         : whether this is a list or map
+     * @param targetParameterType  : The target type name used as a parameter input: e.g. "int", "double"
+     * @param targetReturnType     : The target type name used as a return type. For parsing/generic purposes,
+     *                               this is the corresponding object type for a type. e.g. Integer for int.
+     *                               e.g. "Integer", "Double"
+     * @param containerType        : For collections, the Kotlin class representing the container type. e.g. "List::class", "Map::class"
+     * @param dataType             : The Kotlin class representing the data type.
+     * @param conversionType       : The Kotlin
+     */
+    data class TypeInfo(val isBasicType:Boolean,
+                        val isCollection:Boolean,
+                        val targetParameterType:String,
+                        val targetReturnType:String,
+                        val containerType:KClass<*>,
+                        val dataType:KClass<*>,
+                        val conversionType:String,
+                        val keyType:KClass<*>? = null) {
+
+        fun isList():Boolean = containerType == List::class
+        fun isMap():Boolean = containerType == Map::class
+        fun isObject():Boolean = !isBasicType && !isCollection
+        fun isPair():Boolean = isObject() && dataType.simpleName?.startsWith("Pair") ?: false
+    }
+
+
     open val templateClassSuffix = "Api"
 
 
@@ -47,43 +75,63 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         targetFolder.mkdir()
         apiFolder.mkdir()
         modelFolder.mkdir()
+        val log = this.container.ctx.log
+        log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
         this.container.lookup().visitApis({ apiReg, apiLookup ->
 
-            // Get only the declared members in the api/class
-            val declaredMembers = apiReg.cls.declaredMemberFunctions
-            val declaredMemberLookup = declaredMembers.map { func -> ( func.name to true ) }.toMap()
+            try {
+                if(ApiHelper.isWebProtocol(apiReg.protocol, "")) {
+                    println("API: " + apiReg.area + "." + apiReg.name)
 
-            // Get all the actions on the api
-            val buff = StringBuilder()
+                    // Get only the declared members in the api/class
+                    val declaredMembers = apiReg.cls.declaredMemberFunctions
+                    val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
 
-            // Iterate over all the api actions
-            apiLookup.actions().values().forEach { apiRegAction ->
+                    // Get all the actions on the api
+                    val buff = StringBuilder()
 
-                // Ok to generate ?
-                if(canGenerate(apiReg, apiRegAction, declaredMemberLookup)) {
+                    // Iterate over all the api actions
+                    apiLookup.actions().values().forEach { apiRegAction ->
 
-                    // Generate code here.
-                    val methodInfo = genMethod(req, apiReg, apiLookup, apiRegAction)
-                    this.container.ctx.log.info("generating method for: " + apiReg.area + "/" + apiReg.name + "/" + apiRegAction.name)
-                    buff.append(methodInfo)
-                    buff.append(newline)
+                        // Ok to generate ?
+                        if (canGenerate(apiReg, apiRegAction, declaredMemberLookup)) {
+
+                            // Generate code here.
+                            val methodInfo = genMethod(req, apiReg, apiLookup, apiRegAction)
+                            this.container.ctx.log.info("generating method for: " + apiReg.area + "/" + apiReg.name + "/" + apiRegAction.name)
+                            buff.append(methodInfo)
+                            buff.append(newline)
+                        }
+                    }
+
+                    // Get unique types
+                    // Iterate over all the api actions
+                    val uniqueTypes = apiLookup.actions().values().map { apiRegAction ->
+                        println(apiRegAction.member.name)
+                        val customTypes = apiRegAction.paramList.map { p -> buildTypeName(p.type) }
+                                .filter {
+                                    !it.isBasicType
+                                            && !it.isCollection
+                                            && it.dataType != Request::class
+                                            && it.dataType != Any::class
+                                            && it.dataType != Context::class
+                                }
+                        customTypes.forEach { typeInfo ->
+                            val cls = typeInfo.dataType
+                            genModel(req, modelFolder, apiReg, apiLookup, apiRegAction, cls)
+                        }
+                    }
+
+                    // Generate file.
+                    genClientApi(req, apiReg, apiLookup, apiFolder, buff.toString())
                 }
             }
-
-            // Get unique types
-            // Iterate over all the api actions
-            val uniqueTypes = apiLookup.actions().values().map{ apiRegAction ->
-                val customTypes = apiRegAction.paramList.map { p -> buildTypeName(p.type) }.filter{ !it.first }
-                customTypes.forEach { typeInfo ->
-                    val cls = typeInfo.third
-                    genModel(req, modelFolder, apiReg, apiLookup, apiRegAction, cls)
-                }
+            catch(ex:Exception){
+                log.error("Error inspecting and generating code for: ${apiReg.area}.${apiReg.name}")
+                throw ex
             }
-
-            // Generate file.
-            genClientApi(req, apiReg, apiLookup, apiFolder, buff.toString())
         })
     }
 
@@ -108,16 +156,10 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     fun genMethod(req: Request, apiReg: ApiReg, apiLookup:ApiLookup, apiRegAction:ApiRegAction): String {
         val info = buildMethodInfo(apiRegAction)
         val rawTemplate = this.templateMethod()
-        val template = rawTemplate
-                .replace("@{methodName}"   , info["method"]  ?: "")
-                .replace("@{methodDesc}"   , info["desc"]    ?: "")
-                .replace("@{methodParams}" , info["args"]    ?: "")
-                .replace("@{queryParams}"  , info["query"]   ?: "")
-                .replace("@{dataParams}"   , info["data"]    ?: "")
-                .replace("@{returnType}"   , info["returns"] ?: "")
-                .replace("@{route}"        , info["route"]   ?: "")
-                .replace("@{verb}"         , info["verb"]    ?: "")
-        return template
+        val finalTemplate = info.entries.fold( rawTemplate, { acc, entry ->
+            acc.replace("@{${entry.key}}", entry.value)
+        })
+        return finalTemplate
     }
 
 
@@ -134,16 +176,36 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     fun buildMethodInfo(reg: ApiRegAction):Map<String,String> {
+        val typeInfo = buildTypeName(reg.member.returnType)
+        val verb = buildVerb(reg.name)
         return mapOf(
-            "route"   to  reg.api.area + "/" + reg.api.name + "/" + reg.name,
-            "verb"    to  buildVerb(reg.name),
-            "method"  to  reg.name,
-            "desc"    to  reg.desc,
-            "returns" to  buildTypeName(reg.member.returnType).second,
-            "args"    to  buildArgs(reg),
-            "query"   to  buildQueryParams(reg),
-            "data"    to  buildDataParams(reg)
+            "route"                 to  reg.api.area + "/" + reg.api.name + "/" + reg.name,
+            "verb"                  to  verb,
+            "methodName"            to  reg.name,
+            "methodDesc"            to  reg.desc,
+            "methodParams"          to  buildArgs(reg),
+            "methodReturnType"      to  typeInfo.targetReturnType,
+            "queryParams"           to  buildQueryParams(reg),
+            "postDataDecl"          to  if(verb == "get") "" else "HashMap<String, Object> postData = new HashMap<>();",
+            "postDataVars"          to  buildDataParams(reg),
+            "postDataParam"         to  if(verb == "get") "" else "postData,",
+            "converterTypes"        to  typeInfo.conversionType,
+            "converterClass"        to  getConverterTypeName(typeInfo)
         )
+    }
+
+
+    fun getConverterTypeName(info:TypeInfo):String {
+        return if(info.isCollection)
+            if(info.isList())
+                "List"
+            else
+                "Map"
+        else
+            if ( info.isPair())
+                "Pair"
+            else
+                "Single"
     }
 
 
@@ -170,37 +232,68 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     /**
      * builds the name of the datatype for the target(Java) language.
      */
-    open fun buildTypeName(tpe: KType):Triple<Boolean, String, KClass<*>> {
+    open fun buildTypeName(tpe: KType): TypeInfo {
         return when (tpe) {
-        // Basic types
-            KTypes.KStringType        -> Triple(true, "String"  , KTypes.KStringClass       )
-            KTypes.KBoolType          -> Triple(true, "boolean" , KTypes.KBoolClass         )
-            KTypes.KShortType         -> Triple(true, "short"   , KTypes.KShortClass        )
-            KTypes.KIntType           -> Triple(true, "int"     , KTypes.KIntClass          )
-            KTypes.KLongType          -> Triple(true, "long"    , KTypes.KLongClass         )
-            KTypes.KFloatType         -> Triple(true, "float"   , KTypes.KFloatClass        )
-            KTypes.KDoubleType        -> Triple(true, "double"  , KTypes.KDoubleClass       )
-            KTypes.KDateTimeType      -> Triple(true, "DateTime", KTypes.KDateTimeClass     )
-            KTypes.KLocalDateType     -> Triple(true, "DateTime", KTypes.KLocalDateClass    )
-            KTypes.KLocalTimeType     -> Triple(true, "DateTime", KTypes.KLocalTimeClass    )
-            KTypes.KLocalDateTimeType -> Triple(true, "DateTime", KTypes.KLocalDateTimeClass)
-            KTypes.KZonedDateTimeType -> Triple(true, "DateTime", KTypes.KZonedDateTimeClass)
-            KTypes.KDocType           -> Triple(true, "String"  , KTypes.KDocClass          )
-            KTypes.KVarsType          -> Triple(true, "String"  , KTypes.KVarsClass         )
-            KTypes.KSmartStringType   -> Triple(true, "String"  , KTypes.KSmartStringClass  )
-            KTypes.KDecStringType     -> Triple(true, "String"  , KTypes.KDecStringClass    )
-            KTypes.KDecIntType        -> Triple(true, "String"  , KTypes.KDecIntClass       )
-            KTypes.KDecLongType       -> Triple(true, "String"  , KTypes.KDecLongClass      )
-            KTypes.KDecDoubleType     -> Triple(true, "String"  , KTypes.KDecDoubleClass    )
+            // Basic types
+            KTypes.KStringType        -> TypeInfo(true, false, "String"  , "String"  , KTypes.KStringClass       , KTypes.KStringClass       , "String"  + ".class")
+            KTypes.KBoolType          -> TypeInfo(true, false, "boolean" , "Boolean" , KTypes.KBoolClass         , KTypes.KBoolClass         , "Boolean" + ".class")
+            KTypes.KShortType         -> TypeInfo(true, false, "short"   , "Short"   , KTypes.KShortClass        , KTypes.KShortClass        , "Short"   + ".class")
+            KTypes.KIntType           -> TypeInfo(true, false, "int"     , "Integer" , KTypes.KIntClass          , KTypes.KIntClass          , "Integer" + ".class")
+            KTypes.KLongType          -> TypeInfo(true, false, "long"    , "Long"    , KTypes.KLongClass         , KTypes.KLongClass         , "Long"    + ".class")
+            KTypes.KFloatType         -> TypeInfo(true, false, "float"   , "Float"   , KTypes.KFloatClass        , KTypes.KFloatClass        , "Float"   + ".class")
+            KTypes.KDoubleType        -> TypeInfo(true, false, "double"  , "Double"  , KTypes.KDoubleClass       , KTypes.KDoubleClass       , "Double"  + ".class")
+            KTypes.KDateTimeType      -> TypeInfo(true, false, "Date"    , "Date"    , KTypes.KDateTimeClass     , KTypes.KDateTimeClass     , "Date"    + ".class")
+            KTypes.KLocalDateType     -> TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalDateClass    , KTypes.KLocalDateClass    , "Date"    + ".class")
+            KTypes.KLocalTimeType     -> TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalTimeClass    , KTypes.KLocalTimeClass    , "Date"    + ".class")
+            KTypes.KLocalDateTimeType -> TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalDateTimeClass, KTypes.KLocalDateTimeClass, "Date"    + ".class")
+            KTypes.KZonedDateTimeType -> TypeInfo(true, false, "Date"    , "Date"    , KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "Date"    + ".class")
+            KTypes.KDocType           -> TypeInfo(true, false, "String"  , "String"  , KTypes.KDocClass          , KTypes.KDocClass          , "String"  + ".class")
+            KTypes.KVarsType          -> TypeInfo(true, false, "String"  , "String"  , KTypes.KVarsClass         , KTypes.KVarsClass         , "String"  + ".class")
+            KTypes.KSmartStringType   -> TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass  , "String"  + ".class")
+            KTypes.KContentType       -> TypeInfo(true, false, "String"  , "String"  , KTypes.KContentClass      , KTypes.KContentClass      , "String"  + ".class")
+            KTypes.KDecStringType     -> TypeInfo(true, false, "String"  , "String"  , KTypes.KDecStringClass    , KTypes.KDecStringClass    , "String"  + ".class")
+            KTypes.KDecIntType        -> TypeInfo(true, false, "String"  , "String"  , KTypes.KDecIntClass       , KTypes.KDecIntClass       , "String"  + ".class")
+            KTypes.KDecLongType       -> TypeInfo(true, false, "String"  , "String"  , KTypes.KDecLongClass      , KTypes.KDecLongClass      , "String"  + ".class")
+            KTypes.KDecDoubleType     -> TypeInfo(true, false, "String"  , "String"  , KTypes.KDecDoubleClass    , KTypes.KDecDoubleClass    , "String"  + ".class")
+            KTypes.KAnyType           -> TypeInfo(false,false, "Object"  , "Object"  , KTypes.KAnyClass          , KTypes.KAnyClass          , "Object"  + ".class")
             else                      -> {
                 val cls = tpe.classifier as KClass<*>
-                if(cls == List::class){
+                if(cls == Result::class) {
+                    val genType = tpe.arguments[0]!!.type!!
+                    val finalType = buildTypeName(genType)
+                    finalType
+                }
+                else if (cls.supertypes.contains(KTypes.KSmartStringType)){
+                    TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass, "String.class")
+                }
+                else if(cls == List::class){
                     val listType = tpe.arguments[0]!!.type!!
                     val listCls = KTypes.getClassFromType(listType)
-                    Triple(false, "List<" + listCls.simpleName + ">", cls)
+                    val listTypeInfo = buildTypeName(listType)
+                    val typeSig = "List<" + listTypeInfo.targetReturnType + ">"
+                    TypeInfo(false, true, typeSig, typeSig, List::class, listCls, listTypeInfo.conversionType)
+                }
+                else if(cls == Map::class){
+                    val tpeKey = tpe.arguments[0].type!!
+                    val tpeVal = tpe.arguments[1].type!!
+                    val clsKey = KTypes.getClassFromType(tpeKey)
+                    val clsVal = KTypes.getClassFromType(tpeVal)
+                    val keyTypeInfo = buildTypeName(tpeKey)
+                    val valTypeInfo = buildTypeName(tpeVal)
+                    val sig = "Map<" + keyTypeInfo.targetReturnType + "," + valTypeInfo.targetReturnType + ">"
+                    TypeInfo(false, true, sig, sig, Map::class, clsVal, "${keyTypeInfo.conversionType},${valTypeInfo.conversionType}")
+                }
+                else if(cls == Pair::class) {
+                    val tpeFirst = tpe.arguments[0].type!!
+                    val tpeSecond = tpe.arguments[1].type!!
+                    val firstTypeInfo = buildTypeName(tpeFirst)
+                    val secondTypeInfo = buildTypeName(tpeSecond)
+                    val sig = "Pair<" + firstTypeInfo.targetReturnType + "," + secondTypeInfo.targetReturnType + ">"
+                    TypeInfo(false, false, sig, sig, cls, cls, "${firstTypeInfo.conversionType},${secondTypeInfo.conversionType}")
                 }
                 else {
-                    Triple(false, (tpe.classifier as KClass<*>).simpleName ?: "", cls)
+                    val sig = cls.simpleName ?: ""
+                    TypeInfo(false, false, sig, sig, cls, cls, sig + ".class")
                 }
             }
         }
@@ -221,7 +314,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     open fun buildQueryParams(reg:ApiRegAction): String {
         return if(buildVerb(reg.name) == "get" ) {
             reg.paramList.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
-                acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", " + param.name + ");" + newline
+                acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             })
         }
         else {
@@ -237,7 +330,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     open fun buildDataParams(reg:ApiRegAction): String {
         return if(buildVerb(reg.name) != "get") {
             reg.paramList.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
-                acc + (if (ndx > 0) "\t\t" else "") + "dataParams.put(\"" + param.name + "\", " + param.name + ");" + newline
+                acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             })
         }
         else {
@@ -247,7 +340,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     open fun buildArg(parameter:KParameter): String {
-        return buildTypeName(parameter.type).second + " " + parameter.name
+        return buildTypeName(parameter.type).targetParameterType + " " + parameter.name
     }
 
 
@@ -256,7 +349,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         val fields = props.foldIndexed( "", { ndx:Int, acc:String, prop:KProperty<*> ->
             val type = prop.returnType
             val typeInfo = buildTypeName(type)
-            val field = "public " + typeInfo.second + " " + prop.name + ";" + newline
+            val field = "public " + typeInfo.targetParameterType + " " + prop.name + ";" + newline
             acc + (if (ndx > 0) "\t" else "") + field
         })
         return fields
