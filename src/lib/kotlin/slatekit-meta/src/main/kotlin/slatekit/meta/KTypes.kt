@@ -1,9 +1,6 @@
 package slatekit.meta
 
-import slatekit.common.DateTime
-import slatekit.common.Doc
-import slatekit.common.SmartString
-import slatekit.common.Vars
+import slatekit.common.*
 import slatekit.common.encrypt.DecDouble
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
@@ -31,10 +28,12 @@ object KTypes {
     val KDocClass            = Doc::class
     val KVarsClass           = Vars::class
     val KSmartStringClass    = SmartString::class
-    val KDecStringClass     = DecString::class
-    val KDecIntClass        = DecInt::class
-    val KDecLongClass       = DecLong::class
-    val KDecDoubleClass     = DecDouble::class
+    val KContentClass        = Content::class
+    val KDecStringClass      = DecString::class
+    val KDecIntClass         = DecInt::class
+    val KDecLongClass        = DecLong::class
+    val KDecDoubleClass      = DecDouble::class
+    val KAnyClass            = DecDouble::class
 
 
     val KStringType        = String::class.createType()
@@ -53,10 +52,12 @@ object KTypes {
     val KDocType           = Doc::class.createType()
     val KVarsType          = Vars::class.createType()
     val KSmartStringType   = SmartString::class.createType()
+    val KContentType       = Content::class.createType()
     val KDecStringType     = DecString::class.createType()
     val KDecIntType        = DecInt::class.createType()
     val KDecLongType       = DecLong::class.createType()
     val KDecDoubleType     = DecDouble::class.createType()
+    val KAnyType           = Any::class.createType()
 
 
     fun getClassFromType(tpe: KType): KClass<*> {
@@ -78,6 +79,7 @@ object KTypes {
             KDocType           -> KDocClass
             KVarsType          -> KVarsClass
             KSmartStringType   -> KSmartStringClass
+            KContentType       -> KContentClass
             KDecStringType     -> KDecStringClass
             KDecIntType        -> KDecIntClass
             KDecLongType       -> KDecLongClass
@@ -106,6 +108,7 @@ object KTypes {
             KDocType           -> "user://myapp/conf/abc.conf"
             KVarsType          -> "a=1,b=2,c=3"
             KSmartStringType   -> "123-456-7890"
+            KContentType       -> "john@abc.com"
             KDecStringType     -> "ALK342481SFA"
             KDecIntType        -> "ALK342481SFA"
             KDecLongType       -> "ALK342481SFA"
@@ -134,6 +137,7 @@ object KTypes {
             KDocType           -> Pair(name, "user://myapp/conf/abc.conf")
             KVarsType          -> Pair(name, "a=1,b=2,c=3")
             KSmartStringType   -> Pair(name, "123-456-7890")
+            KContentType       -> Pair(name, "john@abc.com")
             KDecStringType     -> Pair(name, "ALK342481SFA")
             KDecIntType        -> Pair(name, "ALK342481SFA")
             KDecLongType       -> Pair(name, "ALK342481SFA")

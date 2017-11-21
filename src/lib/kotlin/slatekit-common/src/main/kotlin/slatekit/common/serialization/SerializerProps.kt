@@ -21,7 +21,9 @@ import slatekit.common.newline
  */
 
 class SerializerProps(standardizeFieldWidth: Boolean = false,
-                      objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ) : Serializer(objectSerializer) {
+                      objectSerializer: ((Serializer,Any,Int) -> Unit)? = null,
+                      isoDates:Boolean = false)
+    : Serializer(objectSerializer, isoDates) {
 
     override val standardizeWidth = standardizeFieldWidth
 

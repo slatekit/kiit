@@ -33,7 +33,8 @@ import java.time.format.DateTimeFormatter
  * Refer to slatekit.meta.serialization.serializeObject for a sample implementation.
  *
  */
-open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ){
+open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = null,
+                      val isoDates:Boolean = false){
 
     open val standardizeWidth = false
     open val standardizeResult = false
@@ -41,7 +42,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
     protected var _buff = StringBuilder()
     protected val dateFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     protected val timeFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME //DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
 
     enum class ParentType {
@@ -109,7 +110,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             is LocalDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is Instant       -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
-            is DateTime      -> _buff.append("\"" + s.toString() + "\"")
+            is DateTime      -> _buff.append("\"" + (if(isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
             is Result<*>     -> serializeResult(s, depth)
             is List<*>       -> serializeList(s, depth + 1)
             is Map<*, *>     -> serializeMap(s, depth + 1)

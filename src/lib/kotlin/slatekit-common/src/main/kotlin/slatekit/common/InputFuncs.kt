@@ -13,6 +13,8 @@
 
 package slatekit.common
 
+import java.time.format.DateTimeFormatter
+
 
 object InputFuncs {
 
@@ -49,7 +51,7 @@ object InputFuncs {
             "@{tomorrow}"  -> DateTime.today().plusDays(1)
             "@{yesterday}" -> DateTime.today().plusDays(-1)
             "@{now}"       -> DateTime.now()
-            else           -> DateTime.parseNumeric(value)
+            else           -> DateTime.parse(value)
         }
 
 

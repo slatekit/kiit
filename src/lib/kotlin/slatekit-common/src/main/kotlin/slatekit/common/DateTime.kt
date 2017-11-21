@@ -158,6 +158,11 @@ data class DateTime(val raw: ZonedDateTime) {
      */
     fun format(pattern:String):String = raw.format(DateTimeFormatter.ofPattern(pattern))
 
+    /**
+     * Format the date using the pattern supplied.
+     */
+    fun format(formatter:DateTimeFormatter):String = raw.format(formatter)
+
 
     fun plusYears(years: Long): DateTime = DateTime(raw.plusYears(years))
     fun plusMonths(months: Long): DateTime = DateTime(raw.plusMonths(months))
@@ -360,6 +365,24 @@ data class DateTime(val raw: ZonedDateTime) {
 
         fun daysFromNow(days: Long): DateTime = DateTime.today().plusDays(days)
 
+
+        fun parse(value:String): DateTime {
+            return if(value.contains("Z")){
+                DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+            }
+            else if(value.contains("T")){
+                DateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            }
+            else {
+                DateTime.parseNumeric(value)
+            }
+        }
+
+
+        fun parse(text:String, formatter:DateTimeFormatter): DateTime {
+            val zonedDt = ZonedDateTime.parse(text, formatter)
+            return DateTime(zonedDt)
+        }
 
         fun parseNumeric(value: String): DateTime {
             val text = value.trim()

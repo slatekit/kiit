@@ -38,7 +38,7 @@ object HttpResponse {
     fun json(res: Response, result: Result<Any>): String {
         res.status(result.code)
         res.type("application/json")
-        val json = Serialization.json().serialize(result)
+        val json = Serialization.json(true).serialize(result)
         return json
     }
 

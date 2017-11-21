@@ -20,7 +20,9 @@ import slatekit.common.newline
  * Created by kishorereddy on 6/3/17.
  */
 
-class SerializerCsv(objectSerializer: ((Serializer,Any,Int) -> Unit)? = null ) : Serializer(objectSerializer) {
+class SerializerCsv(objectSerializer: ((Serializer,Any,Int) -> Unit)? = null,
+                                        isoDates:Boolean = false)
+    : Serializer(objectSerializer, isoDates) {
 
     /**
      * handler for when a container item has started

@@ -7,10 +7,10 @@ import slatekit.common.serialization.SerializerProps
 
 
 object Serialization {
-    fun csv(): SerializerCsv     = SerializerCsv(this::serializeObject)
-    fun json(): SerializerJson   = SerializerJson(this::serializeObject)
-    fun sampler(): Serializer   = SerializerSample(this::serializeObject)
-    fun props(prettyPrint:Boolean = false): SerializerProps = SerializerProps(prettyPrint, this::serializeObject)
+    fun csv(isoDates:Boolean = false): SerializerCsv     = SerializerCsv(this::serializeObject, isoDates)
+    fun json(isoDates:Boolean = false): SerializerJson   = SerializerJson(this::serializeObject, isoDates)
+    fun sampler(isoDates:Boolean = false): Serializer   = SerializerSample(this::serializeObject, isoDates)
+    fun props(prettyPrint:Boolean = false, isoDates:Boolean = false): SerializerProps = SerializerProps(prettyPrint, this::serializeObject, isoDates)
 
 
     /**

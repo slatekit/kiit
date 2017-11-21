@@ -11,7 +11,9 @@ import kotlin.reflect.KType
 /**
  * Created by kishorereddy on 6/3/17.
  */
-class SerializerSample(objectSerializer: ((Serializer, Any, Int) -> Unit)? = null ) : Serializer(objectSerializer) {
+class SerializerSample(objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+                       isoDates:Boolean = false)
+    : Serializer(objectSerializer, isoDates) {
 
     override val standardizeResult = true
 
