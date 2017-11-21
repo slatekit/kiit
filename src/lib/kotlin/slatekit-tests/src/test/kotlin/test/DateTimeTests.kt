@@ -167,29 +167,53 @@ class DateTimeTests {
 
 
     @Test fun can_parse_numeric_dates() {
-        fun ensure(dt:DateTime, checkTime:Boolean = false, checkSeconds:Boolean = false):Unit {
-            assert(dt.raw is ZonedDateTime)
-            assert(dt.year    == 2017)
-            assert(dt.month   == 7)
-            assert(dt.day     == 10)
-            if(checkTime) {
-                assert(dt.hours == 12)
-                assert(dt.minutes == 30)
-            }
-            if(checkSeconds) {
-                assert(dt.seconds == 45)
-            }
-            assert(dt.zone()  == ZoneId.systemDefault())
-        }
         ensure(DateTime.parseNumeric("20170710"))
         ensure(DateTime.parseNumeric("201707101230"),true, false)
         ensure(DateTime.parseNumeric("20170710123045"), true, true)
     }
 
 
+    @Test fun can_parse_iso() {
+        ensure(DateTime.parse("2017-07-10T12:30:45Z"), ZoneId.of("Z"))
+        ensure(DateTime.parse("2017-07-10T12:30:45.048Z"), ZoneId.of("Z"))
+    }
+
+
     fun ensureTrue(date1:DateTime, comp:String, date2:DateTime, result:Boolean) {
         println("comparing : " + date1.toString () + " " + comp + " " + date2.toString() + " = " + result)
         assert(result, { "Date comparision does not match" } )
+    }
+
+
+
+    fun ensure(dt:DateTime, checkTime:Boolean = false, checkSeconds:Boolean = false):Unit {
+        assert(dt.raw is ZonedDateTime)
+        assert(dt.year    == 2017)
+        assert(dt.month   == 7)
+        assert(dt.day     == 10)
+        if(checkTime) {
+            assert(dt.hours == 12)
+            assert(dt.minutes == 30)
+        }
+        if(checkSeconds) {
+            assert(dt.seconds == 45)
+        }
+        assert(dt.zone()  == ZoneId.systemDefault())
+    }
+
+
+
+    fun ensure(dt:DateTime, zoneId:ZoneId):Unit {
+        assert(dt.raw is ZonedDateTime)
+        assert(dt.year    == 2017)
+        assert(dt.month   == 7)
+        assert(dt.day     == 10)
+        assert(dt.hours == 12)
+        assert(dt.minutes == 30)
+        assert(dt.seconds == 45)
+
+        val zone = dt.zone()
+        assert(zone == zoneId)
     }
 
     /*

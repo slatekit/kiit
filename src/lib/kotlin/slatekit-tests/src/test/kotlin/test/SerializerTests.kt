@@ -65,9 +65,9 @@ class SerializerTests {
         val d2 = serializer.serialize(DateTime.of(2017,6,1,9,5,0))
         val d3 = serializer.serialize(DateTime.of(2017,6,1,9,5,5))
 
-        assert( d1 == "\"2017-06-01T00:00-04:00[America/New_York]\"" )
-        assert( d2 == "\"2017-06-01T09:05-04:00[America/New_York]\"" )
-        assert( d3 == "\"2017-06-01T09:05:05-04:00[America/New_York]\"" )
+        assert( d1 == "\"2017-06-01T00:00:00-04:00\"" )
+        assert( d2 == "\"2017-06-01T09:05:00-04:00\"" )
+        assert( d3 == "\"2017-06-01T09:05:05-04:00\"" )
     }
 
 
@@ -77,7 +77,7 @@ class SerializerTests {
         assert( serializer.serialize(listOf(1, 2, 3)) == "[1, 2, 3]")
         assert( serializer.serialize(listOf(true, false, true)) == "[true, false, true]")
         assert( serializer.serialize(listOf(1.2, 3.4, 5.6)) == "[1.2, 3.4, 5.6]")
-        assert( serializer.serialize(listOf("a", 1, 2.3, true, DateTime.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00[America/New_York]\"]")
+        assert( serializer.serialize(listOf("a", 1, 2.3, true, DateTime.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00\"]")
     }
 
 
