@@ -6,7 +6,7 @@ allprojects {
         mavenCentral()
     }
     group = 'com.slatekit'
-    version = '0.9.6'
+    version = '0.9.7'
 	
 	task hello {
         doLast { task ->
