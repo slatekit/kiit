@@ -21,6 +21,7 @@ import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
+import kotlin.reflect.full.isSubtypeOf
 
 
 object ApiValidator {
@@ -69,7 +70,7 @@ object ApiValidator {
                 success(apiRef)
             }
             // Param: Raw ApiCmd itself!
-            else if (action.isSingleArg() && action.paramList[0].type.toString() == "Request") {
+            else if (action.isSingleArg() && action.paramList[0].type.toString() == "slatekit.common.Request") {
                 success(apiRef)
             }
             // Params - check args needed

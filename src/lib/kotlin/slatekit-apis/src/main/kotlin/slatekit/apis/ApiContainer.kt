@@ -268,7 +268,9 @@ open class ApiContainer(
                         val md = _validator.validateMiddleware(req, apiRef)
                         md.flatMap { m ->
                             val pm = _validator.validateParameters(req)
-                            executeWithMiddleware(req, apiRef)
+                            pm.flatMap { m ->
+                                executeWithMiddleware(req, apiRef)
+                            }
                         }
                     }
                 }
