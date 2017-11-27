@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiConstants
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Result
 import slatekit.common.Uris

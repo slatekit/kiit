@@ -16,6 +16,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiConstants
 import slatekit.apis.support.ApiBase
 import slatekit.core.common.AppContext
 
@@ -23,7 +24,7 @@ import slatekit.core.common.AppContext
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "sys", name = "encrypt", desc = "api to encryption and decryption",
-        roles = "?", auth = "app", verb = "*", protocol = "*")
+        roles = "?", auth = "app", verb = "*", protocol = ApiConstants.ProtocolCLI)
 class EncryptApi(context: AppContext) : ApiBase(context){
 
     @ApiAction(name = "", desc = "encryptes the text", roles = "")

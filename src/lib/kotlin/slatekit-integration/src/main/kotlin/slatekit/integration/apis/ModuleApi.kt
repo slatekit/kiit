@@ -13,9 +13,10 @@ package slatekit.integration.apis
 import slatekit.integration.mods.Module
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiConstants
 
 
-@Api(area = "sys", name = "mods", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "sys", name = "mods", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = ApiConstants.ProtocolCLI)
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
     private var _items = slatekit.common.ListMap<String, Module>()
@@ -70,7 +71,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
 
     @ApiAction(name = "", desc = "gets the names of the modules", roles = "@parent")
-    fun names(name: String): List<String> {
+    fun names(): List<String> {
         return _items.all().map { "${it.info.name} ver: ${it.info.version}" }
     }
 

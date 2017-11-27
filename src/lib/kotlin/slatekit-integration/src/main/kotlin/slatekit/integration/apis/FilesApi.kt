@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiConstants
 
 
 @Api(area = "infra", name = "files", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
