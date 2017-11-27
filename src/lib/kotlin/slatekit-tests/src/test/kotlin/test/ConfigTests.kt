@@ -90,7 +90,7 @@ class ConfigTests {
 
     @Test fun test_model_db_con() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
-        val con = conf.dbCon()
+        val con = conf.dbCon("db1")
         assert(con.driver == "mysql")
         assert(con.url == "localhost")
         assert(con.user == "root")

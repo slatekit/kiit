@@ -17,7 +17,7 @@ import slatekit.core.cache.CacheSettings
 
 class CacheTests {
 
-
+/*
     @Test fun can_put_item() {
       val cache = Cache(CacheSettings(10))
       cache.put("countries", "countries supported for mobile app", 60, { ->
@@ -86,4 +86,5 @@ class CacheTests {
 
       Thread.sleep(300)
     }
+    */
 }
