@@ -22,4 +22,5 @@ annotation class Field(val name: String = "",
                        val required: Boolean = true,
                        val length: Int = 0,
                        val defaultVal: String = "",
+                       val encrypt: Boolean = false,
                        val eg: String = "")

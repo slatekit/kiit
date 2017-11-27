@@ -101,10 +101,10 @@ class Model(val name: String,
      * @return
      */
     fun add(field: KProperty<*>, desc: String = "", minLength: Int = 0, maxLength: Int = 50, storedName: String? = null,
-            defaultValue: String = "", tag: String = "", cat: String = "data"
+            defaultValue: String = "", encrypt:Boolean = false, tag: String = "", cat: String = "data"
     ): Model {
         return addField(field.name, Reflector.getTypeFromProperty(field), desc, !field.returnType.isMarkedNullable,
-                minLength, maxLength, storedName, defaultValue, tag, cat)
+                minLength, maxLength, storedName, defaultValue, encrypt, tag, cat)
     }
 
 
@@ -147,10 +147,10 @@ class Model(val name: String,
      */
     fun addText(name: String, desc: String = "", isRequired: Boolean = false, minLength: Int = 0,
                 maxLength: Int = 50, storedName: String? = null, defaultValue: String = "",
-                tag: String = "", cat: String = "data"
+                encrypt:Boolean = false, tag: String = "", cat: String = "data"
     ): Model {
         return addField(name, String::class, desc, isRequired, minLength, maxLength, storedName,
-                defaultValue, tag, cat)
+                defaultValue, encrypt, tag, cat)
     }
 
 
@@ -166,7 +166,7 @@ class Model(val name: String,
      */
     fun addBool(name: String, desc: String = "", isRequired: Boolean = false,
                 storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Boolean::class, desc, isRequired, 0, 0, storedName, false, tag, cat)
+        return addField(name, Boolean::class, desc, isRequired, 0, 0, storedName, false, false, tag, cat)
     }
 
 
@@ -182,7 +182,7 @@ class Model(val name: String,
      */
     fun addLocalDate(name: String, desc: String = "", isRequired: Boolean = false,
                      storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, LocalDate::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+        return addField(name, LocalDate::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, false, tag, cat)
     }
 
 
@@ -198,7 +198,7 @@ class Model(val name: String,
      */
     fun addLocalTime(name: String, desc: String = "", isRequired: Boolean = false,
                      storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, LocalTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+        return addField(name, LocalTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, false, tag, cat)
     }
 
 
@@ -214,7 +214,7 @@ class Model(val name: String,
      */
     fun addLocalDateTime(name: String, desc: String = "", isRequired: Boolean = false,
                          storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, LocalDateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+        return addField(name, LocalDateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, false, tag, cat)
     }
 
 
@@ -230,7 +230,7 @@ class Model(val name: String,
      */
     fun addDateTime(name: String, desc: String = "", isRequired: Boolean = false,
                     storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, DateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, tag, cat)
+        return addField(name, DateTime::class, desc, isRequired, 0, 0, storedName, DateTime.MIN, false, tag, cat)
     }
 
 
@@ -246,7 +246,7 @@ class Model(val name: String,
      */
     fun addShort(name: String, desc: String = "", isRequired: Boolean = false,
                  storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Short::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+        return addField(name, Short::class, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
 
@@ -262,7 +262,7 @@ class Model(val name: String,
      */
     fun addInt(name: String, desc: String = "", isRequired: Boolean = false,
                storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Int::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+        return addField(name, Int::class, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
 
@@ -278,7 +278,7 @@ class Model(val name: String,
      */
     fun addLong(name: String, desc: String = "", isRequired: Boolean = false,
                 storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Long::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+        return addField(name, Long::class, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
 
@@ -294,7 +294,7 @@ class Model(val name: String,
      */
     fun addFloat(name: String, desc: String = "", isRequired: Boolean = false,
                  storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Float::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+        return addField(name, Float::class, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
 
@@ -310,7 +310,7 @@ class Model(val name: String,
      */
     fun addDouble(name: String, desc: String = "", isRequired: Boolean = false,
                   storedName: String? = null, tag: String = "", cat: String = "data"): Model {
-        return addField(name, Double::class, desc, isRequired, 0, 0, storedName, 0, tag, cat)
+        return addField(name, Double::class, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
 
@@ -326,7 +326,7 @@ class Model(val name: String,
      */
     fun addObject(name: String, desc: String = "", isRequired: Boolean = false, dataType: KClass<*>,
                   storedName: String? = null, defaultValue: Any? = null): Model {
-        return addField(name, dataType, desc, isRequired, 0, 0, storedName, defaultValue)
+        return addField(name, dataType, desc, isRequired, 0, 0, storedName, defaultValue, false)
     }
 
 
@@ -353,10 +353,11 @@ class Model(val name: String,
             maxLength: Int = -1,
             destName: String? = null,
             defaultValue: Any? = null,
+            encrypt:Boolean = false,
             tag: String = "",
             cat: String = "data"
     ): Model {
-        val field = ModelField.build(name, desc, dataType, isRequired, minLength, maxLength, destName, defaultValue, tag, cat)
+        val field = ModelField.build(name, desc, dataType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 

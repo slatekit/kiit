@@ -27,6 +27,7 @@ data class ModelField (
                          val minLength:Int           = -1,
                          val maxLength:Int           = -1,
                          val defaultVal:Any?         = null,
+                         val encrypt:Boolean         = false,
                          val key:String              = "",
                          val extra:String            = "",
                          val example:String          = "",
@@ -48,6 +49,7 @@ data class ModelField (
     text.append( ", minLength"  +  " : " + minLength   )
     text.append( ", maxLength"  +  " : " + maxLength   )
     text.append( ", defaultVal" +  " : " + defaultVal  )
+    text.append( ", encrypt"    +  " : " + encrypt  )
     text.append( ", example"    +  " : " + example     )
     text.append( ", key"        +  " : " + key         )
     text.append( ", extra"      +  " : " + extra       )
@@ -116,6 +118,7 @@ data class ModelField (
       maxLength:Int = -1,
       destName:String? = null,
       defaultValue:Any? = null,
+      encrypt:Boolean = false,
       tag:String = "",
       cat:String = "data"
       ) : ModelField
@@ -131,6 +134,7 @@ data class ModelField (
               minLength = minLength,
               maxLength = maxLength,
               defaultVal = defaultValue,
+              encrypt = encrypt,
               key = "",
               tag = tag,
               cat = cat

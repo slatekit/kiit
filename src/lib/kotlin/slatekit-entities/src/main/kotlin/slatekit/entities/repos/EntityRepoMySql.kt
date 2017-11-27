@@ -15,6 +15,7 @@ package slatekit.entities.repos
 
 import slatekit.common.db.Db
 import slatekit.common.db.DbUtils
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
 import slatekit.entities.core.Entity
@@ -36,9 +37,10 @@ open class EntityRepoMySql<T>(
         entityType: KClass<*>,
         entityIdType: KClass<*>? = null,
         entityMapper: EntityMapper? = null,
-        nameOfTable: String? = null
+        nameOfTable: String? = null,
+        encryptor: Encryptor? = null
 )
-    : EntityRepoSql<T>(db, entityType, entityIdType, entityMapper, nameOfTable) where T : Entity {
+    : EntityRepoSql<T>(db, entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"

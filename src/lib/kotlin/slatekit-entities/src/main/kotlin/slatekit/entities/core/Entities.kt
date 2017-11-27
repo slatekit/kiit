@@ -17,6 +17,7 @@ import slatekit.common.ListMap
 import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
+import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
@@ -56,7 +57,7 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-class Entities(private val _dbs: DbLookup? = null) {
+class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
     private var _info = ListMap<String, EntityInfo>(listOf())
     private val _mappers = mutableMapOf<String, EntityMapper>()
@@ -225,7 +226,7 @@ class Entities(private val _dbs: DbLookup? = null) {
 
         fun createMapper(entityType: KClass<*>): EntityMapper {
             val model = ModelMapper.loadSchema(entityType)
-            val em = EntityMapper(model)
+            val em = EntityMapper(model, encryptor = _enc)
             return em
         }
 
@@ -246,7 +247,7 @@ class Entities(private val _dbs: DbLookup? = null) {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
             }
             DbTypeMySql  -> {
-                EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName)
+                EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName, _enc)
             }
             else         -> {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)

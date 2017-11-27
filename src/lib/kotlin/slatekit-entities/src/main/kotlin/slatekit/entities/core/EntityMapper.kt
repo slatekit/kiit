@@ -16,6 +16,7 @@ package slatekit.entities.core
 
 
 import slatekit.common.DateTime
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.nonEmptyOrDefault
 import slatekit.common.query.QueryEncoder
 import slatekit.meta.KTypes
@@ -31,7 +32,7 @@ import java.time.format.DateTimeFormatter
  *
  * @param model
  */
-open class EntityMapper(model: Model, persistAsUtc:Boolean = false) : ModelMapper(model) {
+open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:Encryptor? = null) : ModelMapper(model, _encryptor = encryptor) {
 
     protected val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     protected val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -65,7 +66,10 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false) : ModelMappe
                 // Similar to the Mapper class but reversed
                 val data = if (mapping.dataType == KTypes.KStringClass) {
                     val sVal = Reflector.getFieldValue(item, mapping.name) as String
-                    val sValFinal = sVal.nonEmptyOrDefault("")
+
+                    // Only encrypt on create
+                    val sValEnc = if(!update && mapping.encrypt) _encryptor?.encrypt(sVal) ?: sVal else sVal
+                    val sValFinal = sValEnc.nonEmptyOrDefault("")
                     "'" + QueryEncoder.ensureValue(sValFinal) + "'"
                 }
                 else if (mapping.dataType == KTypes.KBoolClass) {

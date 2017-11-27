@@ -17,6 +17,7 @@ package slatekit.meta.models
 import slatekit.common.Field
 import slatekit.common.Mapper
 import slatekit.common.Types
+import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
 import slatekit.common.newline
 import slatekit.common.records.Record
@@ -33,7 +34,9 @@ import kotlin.reflect.jvm.jvmErasure
  * 2. can create a model that is a regular class
  * @param _model
  */
-open class ModelMapper(protected val _model: Model, protected val _settings: ModelMapperSettings = ModelMapperSettings()) : Mapper {
+open class ModelMapper(protected val _model: Model,
+                       protected val _settings: ModelMapperSettings = ModelMapperSettings(),
+                       protected val _encryptor:Encryptor? = null) : Mapper {
 
 
     /**
@@ -112,7 +115,7 @@ open class ModelMapper(protected val _model: Model, protected val _settings: Mod
                     KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
                     KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
                     KTypes.KInstantClass       -> record.getInstant(colName)
-                    else                     -> record.getString(colName)
+                    else                       -> record.getString(colName)
                 }
                 dataValue
             }
@@ -194,8 +197,9 @@ open class ModelMapper(protected val _model: Model, protected val _settings: Mod
                         val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
                         val required = anno.required
                         val length = anno.length
+                        val encrypt = anno.encrypt
                         val fieldType = matchedField.first.returnType.jvmErasure
-                        fields.add(ModelField.build(name = name, dataType = fieldType, isRequired = required, maxLength = length, cat = cat))
+                        fields.add(ModelField.build(name = name, dataType = fieldType, isRequired = required, maxLength = length, encrypt = encrypt, cat = cat))
                     //}
                 }
             }

@@ -14,6 +14,7 @@
 package slatekit.entities.repos
 
 import slatekit.common.db.Db
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
 import slatekit.entities.core.Entity
@@ -36,9 +37,10 @@ abstract class EntityRepoSql<T>
         entityType: KClass<*>,
         entityIdType: KClass<*>? = null,
         entityMapper: EntityMapper? = null,
-        nameOfTable: String? = null
+        nameOfTable: String? = null,
+        encryptor: Encryptor? = null
 )
-    : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable) where T : Entity {
+    : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
 
     protected val _db = db
 

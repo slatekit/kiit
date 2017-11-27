@@ -109,7 +109,7 @@ data class AppEntContext(
          */
         fun fromAppContext(ctx:AppContext):AppEntContext {
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(ctx.dbs), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state
+                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(ctx.dbs, ctx.enc), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state
             )
         }
 
