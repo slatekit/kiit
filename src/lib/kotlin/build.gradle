@@ -30,7 +30,7 @@ allprojects {
 					}
 				}
 			}
-		}.writeTo("../dist/${project.name}-${project.version}.pom")
+		}.writeTo("../dist/${version}/${project.name}-${project.version}.pom")
 		// .writeTo("$buildDir/dist/${project.name}-${project.version}.pom")
 	}
 
@@ -48,5 +48,5 @@ subprojects {
 
 task copyJars(type: Copy, dependsOn: subprojects.jar) {
    from(subprojects.jar)
-   into project.file('dist')
+   into project.file("dist/${version}")
 }
