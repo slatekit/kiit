@@ -21,12 +21,13 @@ data class AppMeta(
         val host: Host,
         val lang: Lang,
         val status: Status,
-        val start: StartInfo
+        val start: StartInfo,
+        val build: Build
 ) {
 
 
     companion object {
-        val none = AppMeta(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none)
+        val none = AppMeta(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none, Build.empty)
     }
 
 }

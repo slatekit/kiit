@@ -63,7 +63,7 @@ open class AppProcess(context: AppContext?,
 
 
     val meta: AppMeta = AppMeta(ctx.inf, ctx.host, ctx.lang, Status.none,
-            StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()))
+            StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()), ctx.build)
 
 
 

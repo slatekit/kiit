@@ -37,7 +37,7 @@ object CliFuncs {
 
     fun checkForAssistance(cmd: CliCommand): Result<Boolean> {
         val words = cmd.args.raw
-        val verbs = cmd.args.actionVerbs
+        val verbs = cmd.args.actionParts
 
         // Case 1: Exit ?
         return if (ArgsFuncs.isExit(words, 0)) {

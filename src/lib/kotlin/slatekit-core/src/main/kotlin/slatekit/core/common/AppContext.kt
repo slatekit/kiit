@@ -61,6 +61,7 @@ data class AppContext(
         override val dirs : Folders?            = null,
         override val extra: MutableMap<String,Any> = mutableMapOf(),
         override val state: Result<Boolean> = Result.none,
+        override val build: Build = Build.empty,
 
         // NOTE: Fix this non-strongly typed Entities object.
         // By using Any for the entities property, we avoid
@@ -68,7 +69,7 @@ data class AppContext(
         val ent  : Any? = null
                      ) : Context
 {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()))
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
 
     companion object {

@@ -77,6 +77,11 @@ interface AppMetaSupport {
         callback("config           ", meta.start.config)
         callback("log              ", meta.start.logFile)
 
+        // Commit info
+        callback("version          ", meta.build.version)
+        callback("commit           ", meta.build.commit)
+        callback("date             ", meta.build.date)
+
         // Status is different at start vs end
         callback("started          ", status.started.toString())
         callback("ended            ", status.ended.toString())

@@ -63,10 +63,11 @@ data class AppEntContext(
         override val enc  : Encryptor?          = null,
         override val dirs : Folders?            = null,
         override val extra:MutableMap<String,Any>      = mutableMapOf(),
-        override val state: Result<Boolean> = Result.none
+        override val state: Result<Boolean> = Result.none,
+        override val build: Build = Build.empty
                      ) : Context
 {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()))
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
 
     /**
@@ -109,7 +110,7 @@ data class AppEntContext(
          */
         fun fromAppContext(ctx:AppContext):AppEntContext {
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(ctx.dbs, ctx.enc), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state
+                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(ctx.dbs, ctx.enc), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state, ctx.build
             )
         }
 

@@ -25,11 +25,8 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
+import slatekit.common.info.*
 import slatekit.common.toId
-import slatekit.common.info.About
-import slatekit.common.info.Folders
-import slatekit.common.info.Host
-import slatekit.common.info.Lang
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
@@ -64,11 +61,11 @@ object AppFuncs {
      */
     fun envs(): List<Env> =
         listOf(
-            Env("loc", Dev, desc = "Dev environment (local)"),
-            Env("dev", Dev, desc = "Dev environment (shared)"),
-            Env("qa1", Qa, desc = "QA environment  (current release)"),
-            Env("qa2", Qa, desc = "QA environment  (last release)"),
-            Env("stg", Uat, desc = "STG environment (demo)"),
+            Env("loc", Dev , desc = "Dev environment (local)"),
+            Env("dev", Dev , desc = "Dev environment (shared)"),
+            Env("qa1", Qa  , desc = "QA environment  (current release)"),
+            Env("qa2", Qa  , desc = "QA environment  (last release)"),
+            Env("stg", Uat , desc = "STG environment (demo)"),
             Env("pro", Prod, desc = "LIVE environment")
         )
 
@@ -290,12 +287,23 @@ object AppFuncs {
             // for directory reference provide: "file://./conf/"
             val overrideConfPath = getConfPath(args, "env.${env.name}" + CONFIG_DEFAULT_SUFFIX, confBase)
             val confEnv = ConfigMulti(overrideConfPath, confBase, enc)
-            success(AppInputs(args, envSelected, confBase, confEnv))
+
+            success(AppInputs(args, envCheck, confBase, confEnv))
         } ?: failure<AppInputs>(msg = "Unknown environment name : $envName supplied")
     }
 
 
     fun buildContext(appInputs: AppInputs, enc: Encryptor?): AppContext {
+
+        val buildInfoExists = resourceExists("build.conf")
+        val build = if (buildInfoExists) {
+            val stamp = Config(getConfPath(appInputs.args, "build.conf", null), enc)
+            val info = stamp.buildStamp("build")
+            info
+        }
+        else {
+            Build.empty
+        }
 
         // The config is inheritance based.
         // Which means the base env.loc.conf inherits from env.conf.
@@ -311,12 +319,19 @@ object AppFuncs {
                 enc = enc,
                 log = LoggerConsole(),
                 dbs = dbs(conf),
-                inf = about(conf),
+                inf = about(conf).copy(version = build.version),
                 host = Host.local(),
                 lang = Lang.kotlin(),
                 dirs = folders(conf),
-                state = success(true)
+                state = success(true),
+                build = build
                 //ent = Entities(dbs(conf))
         )
+    }
+
+
+    fun resourceExists(path:String):Boolean {
+        val res = this.javaClass.getResource("/$path")
+        return res != null
     }
 }

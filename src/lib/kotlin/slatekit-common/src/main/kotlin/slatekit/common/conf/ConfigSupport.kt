@@ -19,6 +19,7 @@ import slatekit.common.db.DbCon
 import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbConString
 import slatekit.common.envs.Env
+import slatekit.common.info.Build
 
 interface ConfigSupport {
 
@@ -60,6 +61,23 @@ interface ConfigSupport {
                 )
             }) ?: Credentials.empty
 
+
+    /**
+     * Gets build stamp info
+     *
+     * @return
+     */
+    fun buildStamp(name: String): Build =
+
+            mapTo(name, { conf ->
+
+                Build(
+                        conf.getString(name + ".version"),
+                        conf.getString(name + ".commit"),
+                        conf.getString(name + ".branch"),
+                        conf.getString(name + ".date")
+                )
+            }) ?: Build.empty
 
     /**
      * Gets user credentials from the config.
