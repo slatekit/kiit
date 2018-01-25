@@ -27,6 +27,14 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile project(":slatekit-common")
+    compile project(":slatekit-meta")
+    compile project(":slatekit-entities")
+    compile project(":slatekit-core")
+    compile project(":slatekit-apis")
+    compile project(":slatekit-integration")
+    compile project(":slatekit-cloud")
+    compile project(":slatekit-ext")
     testCompile 'junit:junit:4.12'
     //testRuntime "org.junit.platform:junit-platform-runner"
     testCompile "org.jetbrains.kotlin:kotlin-test"
