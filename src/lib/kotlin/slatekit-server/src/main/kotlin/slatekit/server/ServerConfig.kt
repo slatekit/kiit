@@ -33,5 +33,6 @@ data class ServerConfig(
         val docs     : Boolean = false,
         val docKey   : String  = ""   ,
         val static   : Boolean = false,
-        val staticDir: String  = ""
+        val staticDir: String  = "",
+        val setup    : ((Any)  -> Unit)? = null
 )

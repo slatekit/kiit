@@ -57,9 +57,10 @@ class Server(
                 docKey    :String       = ""   ,
                 apis      :List<ApiReg>        ,
                 auth      :Auth?        = null ,
+                setup     :((Any) -> Unit)? = null,
                 ctx       :Context   = AppContext.simple("slatekit-server")
         ) :
-        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir), ctx, auth, apis)
+        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
 
     val container = ApiContainer(ctx, false, auth, WebProtocol, apis, docKey = config.docKey, docBuilder = ::DocWeb)
@@ -84,7 +85,7 @@ class Server(
         // Static files
         if(config.static) {
             if(config.staticDir.isNullOrEmpty()){
-                staticFiles.location("/public");
+                staticFiles.location("/public")
             }
             else {
                 staticFiles.externalLocation(File(config.staticDir).absolutePath)
@@ -116,6 +117,9 @@ class Server(
         Spark.put(config.prefix    + "/*", { req, res -> exec(req, res) })
         Spark.patch(config.prefix  + "/*", { req, res -> exec(req, res) })
         Spark.delete(config.prefix + "/*", { req, res -> exec(req, res) })
+
+        // Setup scrpt
+        config.setup?.let { c -> c("") }
 
         return success(true)
     }
