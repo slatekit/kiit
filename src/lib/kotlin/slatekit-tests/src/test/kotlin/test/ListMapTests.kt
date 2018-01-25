@@ -14,6 +14,7 @@ package test
 
 import org.junit.Test
 import slatekit.common.ListMap
+import slatekit.common.Vars
 import test.common.UserNormal2
 
 /**
@@ -97,5 +98,17 @@ class ListMapTests {
         assert(items2[3]!!.id == 3)
         assert( items2.size == 2)
 
+    }
+
+
+    @Test fun can_use_vars() {
+        val vars = Vars(listOf(
+                Pair("user.name" , "john.doe"),
+                Pair("app.name"  , "mobile.app1"),
+                Pair("app.confirmUrl", "http://myapp1.com/api/confirm?id=123"),
+                Pair("user.email", "john.doe@gmail.com")
+        ))
+        assert(vars.get("user.name") == "john.doe")
+        assert(vars.get("app.name") == "mobile.app1")
     }
 }

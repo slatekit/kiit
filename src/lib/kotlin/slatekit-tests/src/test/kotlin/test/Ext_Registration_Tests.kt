@@ -10,14 +10,14 @@ import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.entities.core.Entities
-import slatekit.ext.devices.Device
-import slatekit.ext.devices.DeviceService
-import slatekit.ext.registration.RegInfo
-import slatekit.ext.registration.RegService
-import slatekit.ext.users.User
-import slatekit.ext.users.UserConstants
-import slatekit.ext.users.Token
-import slatekit.ext.users.UserService
+import slatekit.ext.core.Device
+import slatekit.ext.accounts.devices.DeviceService
+import slatekit.ext.accounts.registration.RegInfo
+import slatekit.ext.accounts.registration.RegService
+import slatekit.ext.core.User
+import slatekit.ext.accounts.users.UserConstants
+import slatekit.ext.core.Token
+import slatekit.ext.accounts.users.UserService
 import slatekit.integration.common.AppEntContext
 import test.common.MyEncryptor
 
