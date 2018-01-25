@@ -12,16 +12,16 @@ abstract class Protocol(val name: String)
 /**
  * Used to setup an ApiContainer to allow any protocol
  */
-object AllProtocols : Protocol(slatekit.apis.ApiConstants.ProtocolAny)
+object AllProtocols : Protocol(slatekit.apis.ApiConstants.SourceAny)
 
 
 /**
  * Used to setup an ApiContainer to allow only the CLI ( command line interface ) protocol
  */
-object CliProtocol : Protocol(slatekit.apis.ApiConstants.ProtocolCLI)
+object CliProtocol : Protocol(slatekit.apis.ApiConstants.SourceCLI)
 
 
 /**
  * Used to setup an ApiContainer to allow only web/http protocol
  */
-object WebProtocol : Protocol(slatekit.apis.ApiConstants.ProtocolWeb)
+object WebProtocol : Protocol(slatekit.apis.ApiConstants.SourceWeb)

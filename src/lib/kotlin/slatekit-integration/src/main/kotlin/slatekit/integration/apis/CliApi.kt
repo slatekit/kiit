@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainerCLI
 import slatekit.apis.core.Params
+import slatekit.apis.core.Reqs
 import slatekit.common.*
 import slatekit.core.cli.CliCommand
 import java.io.File
@@ -97,7 +98,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
                 "params" -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
 
                 // Case 3: Code Generation
-                "codegen" -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.ProtocolCLI, cmd)))
+                "codegen" -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)))
 
                 // Case 4: Unknown
                 else     -> {
@@ -110,7 +111,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
         else {
             // Supply the api-key into each command.
             val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
-            val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
+            val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.SourceCLI, cmd)
             cmd.copy(result = apis.call(apiCmd))
         }
     }
@@ -178,7 +179,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
 
     private fun buildSampleRequest(cmd:CliCommand): Result<String> {
         val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
-        val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.ProtocolCLI, cmd)
+        val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.SourceCLI, cmd)
 
         // Generate sample json
         val defaultPath = File(ctx.dirs?.pathToOutputs, Files.fileNameAsAsTimeStamp()).absolutePath
@@ -192,31 +193,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
     private fun buildRequestFromFile(cmd:CliCommand): Request {
         // The file path
         val rawPath = cmd.args.getMetaString("file")
-
-        // Get the json data
-        val jsonRoot = rawPath?.let { raw ->
-            val path = Uris.interpret(raw)
-            val content = File(path).readText()
-            val parser = JSONParser()
-            val root = parser.parse(content)
-            val json = root as JSONObject
-            json
-
-        } ?: JSONObject()
-        val jsonArgs = jsonRoot.get("args") as JSONObject
-
-        // Create request
-        val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
-        return slatekit.common.Request(
-                path = cmd.line,
-                parts = cmd.args.actionVerbs,
-                protocol = ApiConstants.ProtocolCLI,
-                verb = ApiConstants.ProtocolCLI,
-                //opts = Headers(cmd.args.meta, ctx.enc),
-                opts = opts,
-                args = Params(cmd, "cli", true, ctx.enc, jsonArgs),
-                raw = cmd,
-                tag = Random.stringGuid()
-        )
+        val req = Reqs.fromFileWithMeta(rawPath ?: "", mapOf("api-key" to creds.key), ctx.enc)
+        return req
     }
 }

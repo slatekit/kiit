@@ -21,9 +21,12 @@ package slatekit.apis
  * 2. Api's setup via configuration files ( again in which case they have to reference strings )
  */
 object ApiConstants {
-    const val ProtocolAny = "*"
-    const val ProtocolCLI = "cli"
-    const val ProtocolWeb = "web"
+    const val Version = "1.0"
+    const val SourceAny = "*"
+    const val SourceCLI = "cli"
+    const val SourceWeb = "web"
+    const val SourceFile = "file"
+    const val SourceQueue = "queue"
 
     const val RoleAny = "*"
     const val RoleGuest = "?"

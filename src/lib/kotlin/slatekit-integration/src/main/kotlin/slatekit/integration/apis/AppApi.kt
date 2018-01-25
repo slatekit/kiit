@@ -29,6 +29,12 @@ class AppApi(val context: AppEntContext)  {
     }
 
 
+    @ApiAction(desc = "gets info about this build", roles = "*", verb = "get", protocol = "@parent")
+    fun build(): Build {
+        return context.app.build
+    }
+
+
     @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun cmd(cmd: Request): About {
         println(cmd.fullName)
