@@ -18,6 +18,20 @@ package slatekit.common
  * Repeats the text using a delimiter.
  * e.g. ?.repateWith(",", 3) = "?,?,?"
  */
+fun String.truncate(count:Int):String {
+    if(this.isNullOrEmpty())
+        return this
+    else if(this.length <= count)
+        return this
+    else
+        return this.substring(0, count)
+}
+
+
+/**
+ * Repeats the text using a delimiter.
+ * e.g. ?.repateWith(",", 3) = "?,?,?"
+ */
 fun String.repeatWith(delimiter:String, count:Int):String {
     return (0 until count).foldIndexed( "", {ndx, acc, _ -> acc + (if(ndx == 0) "" else delimiter ) + this})
 }

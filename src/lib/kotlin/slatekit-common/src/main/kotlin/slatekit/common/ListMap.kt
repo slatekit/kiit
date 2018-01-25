@@ -126,7 +126,7 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
     }
 
 
-    fun toMap(): Map<String, Any> = _map.map { entry -> entry.key.toString() to entry.value }.toMap()
+    fun toMap(): Map<String, Any> = _map.map { entry -> entry.key.toString() to _list[entry.value].second as Any }.toMap()
 
 
     companion object ListMapCompanion {
