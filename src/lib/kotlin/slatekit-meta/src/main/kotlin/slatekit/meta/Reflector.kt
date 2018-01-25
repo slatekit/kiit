@@ -80,6 +80,14 @@ object Reflector {
 
 
     @Suppress("UNCHECKED_CAST")
+    fun <T> getAnnotationForMember(member:KCallable<*>, anoType: KClass<*>): T? {
+
+        val anno = member.annotations.filter { it -> it.annotationClass == anoType }.firstOrNull()
+        return anno as? T
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>): List<Pair<KCallable<*>, T>> {
 
         val members = cls.members.map { member ->

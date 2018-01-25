@@ -43,11 +43,17 @@ class QueueSourceDefault(val converter:((Any) -> Any)? = null  ) : QueueSource, 
             })
 
 
-    override fun next(): Any? =
-            synchronized(_object, {
-                if (_list.isEmpty()) null else _list.remove(0)
-            })
-
+    override fun next(): Any? {
+        val item = synchronized(_object, {
+            if (_list.isEmpty()) {
+                null
+            }
+            else {
+                _list.removeAt(0)
+            }
+        })
+        return item
+    }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> nextBatchAs(size: Int): List<T>? =

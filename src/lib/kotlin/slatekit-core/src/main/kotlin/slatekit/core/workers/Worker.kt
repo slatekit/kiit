@@ -205,9 +205,10 @@ open class Worker<T>(
 
 
     private fun processInternal(args:Array<Any>?): Result<T> {
-        return when (this) {
-            is Queued<*> -> this.processQueue() as Result<T>
-            else         -> callback?.let{ it(null) } ?: process(null)
+        return when {
+            this is Queued<*> -> processQueue() as Result<T>
+            callback != null  -> callback.invoke(null)
+            else              -> process(null)
         }
     }
 }

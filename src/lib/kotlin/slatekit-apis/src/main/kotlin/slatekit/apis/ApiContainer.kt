@@ -20,8 +20,13 @@ import slatekit.meta.Reflector
 import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
+import slatekit.common.results.ResultFuncs.notFound
+import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.meta.Serialization
+import slatekit.meta.kClass
 import java.io.File
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -173,19 +178,19 @@ open class ApiContainer(
 
 
     fun codegen(req:Request): Result<Any> {
-        val lang = req.args?.getStringOrElse("lang", "java")
+        val lang = req.data?.getStringOrElse("lang", "java")
         when(lang) {
             "java" -> CodeGenJava(this,
-                        req.args?.getString("pathToTemplates") ?: "",
-                        req.args?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.args?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.args?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data?.getString("pathToTemplates") ?: "",
+                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
             ).generate(req)
             else   -> CodeGenJava(this,
-                        req.args?.getString("pathToTemplates") ?: "",
-                        req.args?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.args?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.args?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data?.getString("pathToTemplates") ?: "",
+                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
                         ).generate(req)
         }
         return success("code gen WIP")
@@ -234,6 +239,33 @@ open class ApiContainer(
                 success(ApiRef(reg, a, instance))
             } ?: badRequest("api route $area $name $action not found")
         } ?: badRequest("api route $area $name $action not found")
+        return result
+    }
+
+
+
+
+    /**
+     * gets the mapped method associated with the api action.
+     * @param area
+     * @param name
+     * @param action
+     * @return
+     */
+    fun getApi(clsType: KClass<*>, member:KCallable<*>): Result<ApiRef> {
+        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
+        val result = apiAnno?.let { anno ->
+
+            val area = anno.area
+            val api = anno.name
+            val actionAnno = Reflector.getAnnotationForMember<ApiAction>(member, ApiAction::class)
+            val action = actionAnno?.let { act ->
+                val action = if(act.name.isBlank()) member.name else act.name
+                action
+            } ?: member.name
+            val info = getApi(area, api, action)
+            info
+        } ?:  notFound("member/annotation not found for : ${member.name}")
         return result
     }
 
@@ -334,7 +366,7 @@ open class ApiContainer(
 
     protected open fun execute(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
-        val inputs = ApiHelper.fillArgs(apiRef, req, req.args!!, allowIO, this.ctx.enc)
+        val inputs = ApiHelper.fillArgs(apiRef, req, req.data!!, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
         val result = returnVal?.let { res ->
@@ -483,11 +515,11 @@ open class ApiContainer(
 
     fun isDocKeyAvailable(req:Request):Boolean {
         // Ensure that docs are only available w/ help key
-        val docKeyValue = if(req.opts?.containsKey("doc-key") ?: false){
-            req.opts?.get("doc-key") ?: ""
+        val docKeyValue = if(req.meta?.containsKey("doc-key") ?: false){
+            req.meta?.get("doc-key") ?: ""
         }
-        else if(req.args?.containsKey("doc-key") ?: false){
-            req.args?.get("doc-key") ?: ""
+        else if(req.data?.containsKey("doc-key") ?: false){
+            req.data?.get("doc-key") ?: ""
         }
         else
             ""
