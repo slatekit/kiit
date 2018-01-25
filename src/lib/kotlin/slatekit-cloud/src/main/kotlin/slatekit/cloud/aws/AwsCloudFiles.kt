@@ -13,9 +13,11 @@
 
 package slatekit.cloud.aws
 
+import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
+import slatekit.common.ApiLogin
 import slatekit.common.Result
 import slatekit.common.Uris
 import slatekit.core.cloud.CloudFilesBase
@@ -30,12 +32,26 @@ import java.io.File
  */
 class AwsCloudFiles(bucket: String,
                     createBucket: Boolean,
-                    confPath: String? = null,
-                    section: String? = null)
+                    creds:AWSCredentials)
     : CloudFilesBase(bucket, createBucket), AwsSupport {
 
     private val SOURCE = "aws:s3"
-    private val _s3: AmazonS3Client = AwsFuncs.s3(confPath, section)
+    private val _s3: AmazonS3Client = AwsFuncs.s3(creds)
+
+
+    constructor(bucket:String,
+                createBucket: Boolean,
+                apiKey: ApiLogin) : this(
+                bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
+    )
+
+
+    constructor(bucket:String,
+                createBucket: Boolean,
+                confPath: String? = null,
+                section: String? = null) : this (
+            bucket, createBucket, AwsFuncs.creds(confPath, section)
+    )
 
 
     /**
