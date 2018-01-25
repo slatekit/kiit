@@ -137,7 +137,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     fun genClientApi(req: Request, apiReg: ApiReg, apiLookup:ApiLookup, folder: File, methods:String):Unit {
-        val rawPackageName = req.args?.getStringOpt("package")
+        val rawPackageName = req.data?.getStringOpt("package")
         val packageName = rawPackageName ?: apiReg.cls.qualifiedName ?: ""
         val rawTemplate = this.templateClass()
         val template = rawTemplate
@@ -146,7 +146,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                 .replace("@{about}"      , "Client side API for " + apiReg.name.pascalCase())
                 .replace("@{description}", apiReg.desc)
                 .replace("@{route}"      , apiReg.area + "/" + apiReg.name)
-                .replace("@{version}"    , req.args?.getStringOrElse("version", "1.0.0") ?: "1.0.0")
+                .replace("@{version}"    , req.data?.getStringOrElse("version", "1.0.0") ?: "1.0.0")
                 .replace("@{methods}"    , methods)
 
         File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".java").writeText(template)

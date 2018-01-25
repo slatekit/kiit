@@ -36,7 +36,7 @@ class Call {
 
     fun fillArgsExact(callReflect: ApiRegAction, cmd: Request, allowLocalIO: Boolean = false,
                       enc: Encryptor? = null): Array<Any?> {
-        return fillArgsForMethod(callReflect.member, cmd, cmd.args!!, allowLocalIO, enc)
+        return fillArgsForMethod(callReflect.member, cmd, cmd.data!!, allowLocalIO, enc)
     }
 
 
@@ -46,7 +46,7 @@ class Call {
         val inputs = mutableListOf<Any?>()
         val parameters = if (call.parameters.size == 1) listOf<KParameter>() else call.parameters.subList(1, call.parameters.size)
         val converter = Converter(enc)
-        val jsonRaw = cmd.args?.raw as? JSONObject
+        val jsonRaw = cmd.data?.raw as? JSONObject
         for (ndx in 0..parameters.size - 1) {
             // Get each parameter to the method
             val parameter = parameters[ndx]
@@ -101,14 +101,14 @@ class Call {
      */
     fun handleComplex(converter: Converter, req:Request, parameter:KParameter, tpe:KType, jsonRaw:JSONObject?, raw:Any?): Any? {
         val paramName = parameter.name!!
-        return if(req.protocol == ApiConstants.ProtocolCLI){
+        return if(req.source == ApiConstants.SourceCLI){
             val cls = tpe.classifier as KClass<*>
 
             // Case 1: List<*>
             if(cls == List::class){
                 val listType = tpe.arguments[0]!!.type!!
                 val listCls = KTypes.getClassFromType(listType)
-                req.args?.getList(paramName, listCls.java) ?: listOf<Any>()
+                req.data?.getList(paramName, listCls.java) ?: listOf<Any>()
             }
             // Case 2: Map<*,*>
             else if(cls == Map::class){
@@ -117,7 +117,7 @@ class Call {
                 val clsKey = KTypes.getClassFromType(tpeKey)
                 val clsVal = KTypes.getClassFromType(tpeVal)
                 val emptyMap = mapOf<Any, Any>()
-                req.args?.getMap(paramName,clsKey.java, clsVal.java) ?: emptyMap
+                req.data?.getMap(paramName,clsKey.java, clsVal.java) ?: emptyMap
             }
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
@@ -128,8 +128,8 @@ class Call {
             else {
                 val json = if(jsonRaw == null) {
                     val obj = JSONObject()
-                    if(req.args is InputArgs){
-                        val map = (req.args as InputArgs)._map
+                    if(req.data is InputArgs){
+                        val map = (req.data as InputArgs)._map
                         map.entries.forEach { pair ->
                             obj.put(pair.key, pair.value)
                         }

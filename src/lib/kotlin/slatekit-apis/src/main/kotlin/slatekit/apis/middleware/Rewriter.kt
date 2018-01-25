@@ -46,7 +46,7 @@ open class Rewriter(override val about: About, val route: Match) : Middleware() 
         return req.copy(
                 path = "$first/$second/$newAction",
                 parts = listOf(first, second, newAction),
-                args = (req.args as InputsUpdateable).add(key, value)
+                data = (req.data as InputsUpdateable).add(key, value)
         )
     }
 }

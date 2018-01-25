@@ -20,25 +20,27 @@ import slatekit.common.args.Args
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
  * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param protocol  : protocol e.g. "cli" for command line and "http"
+ * @param source  : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
- * @param opts      : options representing settings/configurations ( similar to http-headers )
- * @param args      : arguments to the command
+ * @param meta      : options representing settings/configurations ( similar to http-headers )
+ * @param data      : arguments to the command
  * @param raw       : Optional raw request ( e.g. either the HttpRequest via Spark or ShellCommmand via CLI )
  * @param output
  * : Optional output format of the result e.g. json by default json | csv | props
  * @param tag       : Optional tag for tracking individual requests and for error logging.
  */
 data class Request (
-                     val path       :String              ,
-                     val parts      :List<String>        ,
-                     val protocol   :String              ,
-                     val verb       :String              ,
-                     val args       :Inputs?             ,
-                     val opts       :Inputs?             ,
-                     val raw        :Any?          = null,
-                     val output     :String?       = "",
-                     val tag        :String        = ""
+        val path       :String,
+        val parts      :List<String>,
+        val source     :String,
+        val verb       :String,
+        val data       :Inputs?,
+        val meta       :Inputs?,
+        val raw        :Any?          = null,
+        val output     :String?       = "",
+        val tag        :String        = "",
+        val version    :String        = "1.0",
+        val timestamp  :DateTime      = DateTime.now()
                    ) {
 
     /**
@@ -83,11 +85,11 @@ data class Request (
 
         fun raw(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
             val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
-            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), opts = InputArgs(opts))
+            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts))
         }
 
 
         fun cli(path: String, args: Args, opts: Inputs?, verb: String, raw:Any?): Request =
-                Request(path, args.actionVerbs, "cli", verb, args, opts, raw, "")
+                Request(path, args.actionParts, "cli", verb, args, opts, raw, "")
     }
 }

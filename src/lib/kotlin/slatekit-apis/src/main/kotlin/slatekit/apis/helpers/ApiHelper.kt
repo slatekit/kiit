@@ -22,6 +22,8 @@ import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.unAuthorized
+import slatekit.meta.Reflector
+import kotlin.reflect.KClass
 
 object ApiHelper {
     val _call = Call()
@@ -71,7 +73,8 @@ object ApiHelper {
         val tokens = path.split('.').toList()
         val args = buildArgs(inputs)
         val opts = buildArgs(headers)
-        val apiCmd = Request(path, tokens, ApiConstants.ProtocolCLI, "get", args, opts)
+        val apiCmd = Request(path, tokens, ApiConstants.SourceCLI, "get", args, opts,
+                null, "", "", ApiConstants.Version, DateTime.now())
         return apiCmd
     }
 
@@ -107,18 +110,8 @@ object ApiHelper {
     fun isWebProtocol(primaryValue: String, parentValue: String): Boolean {
         val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
         return when(finalValue) {
-            ApiConstants.ProtocolAny -> true
-            ApiConstants.ProtocolWeb -> true
-            else                     -> false
-        }
-    }
-
-
-    fun isCliProtocol(primaryValue: String, parentValue: String): Boolean {
-        val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
-        return when(finalValue) {
-            ApiConstants.ProtocolAny -> true
-            ApiConstants.ProtocolCLI -> true
+            ApiConstants.SourceAny -> true
+            ApiConstants.SourceWeb -> true
             else                     -> false
         }
     }

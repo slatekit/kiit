@@ -21,7 +21,6 @@ import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
-import kotlin.reflect.full.isSubtypeOf
 
 
 object ApiValidator {
@@ -55,7 +54,7 @@ object ApiValidator {
                      fetcher: (Request) -> Result<ApiRef>,
                      allowSingleDefaultParam: Boolean = false): Result<ApiRef> {
         val fullName = req.fullName
-        val args = req.args
+        val args = req.data
         val apiRefCheck = check(req, fetcher)
 
         return if (!apiRefCheck.success) {

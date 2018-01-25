@@ -17,9 +17,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Headers
-import slatekit.apis.core.Params
 import slatekit.common.*
-import slatekit.core.common.AppContext
 import slatekit.server.ServerConfig
 import spark.Request
 import java.io.BufferedReader
@@ -89,11 +87,10 @@ class HttpRequest(val req: Request) : RequestSupport {
             return slatekit.common.Request(
                     path = req.uri(),
                     parts = parts,
-                    protocol = ApiConstants.ProtocolWeb,
+                    source = ApiConstants.SourceWeb,
                     verb = req.requestMethod().toLowerCase(),
-                    opts = Headers(headers, ctx.enc),
-                    //args = Params(req, method, isBodyOk, ctx.enc, json, queryParams = req.queryParams()),
-                    args = HttpParams(req, ctx.enc),
+                    meta = Headers(headers, ctx.enc),
+                    data = HttpParams(req, ctx.enc),
                     raw = HttpRequest(req),
                     tag = Random.stringGuid()
             )

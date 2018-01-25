@@ -69,7 +69,7 @@ open class TokenAuth(
         // otherwise use built-in key check
         return callback?.let { call ->
             call(ApiConstants.AuthModeAppKey, req, role)
-        } ?: AuthFuncs.isKeyValid(req.opts, _keyLookup, headerKey, role)
+        } ?: AuthFuncs.isKeyValid(req.meta, _keyLookup, headerKey, role)
     }
 
 
