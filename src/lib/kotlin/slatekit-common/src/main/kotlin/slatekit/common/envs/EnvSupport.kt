@@ -31,6 +31,11 @@ interface EnvSupport {
     val isDis: Boolean get() = isEnv(Dis)
 
 
+    val isOther: Boolean get() {
+        return !isDev && !isQa && !isUat && !isProd && !isDis
+    }
+
+
     fun isEnv(envMode: EnvMode): Boolean
 
 

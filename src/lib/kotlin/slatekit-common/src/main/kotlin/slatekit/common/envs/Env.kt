@@ -92,7 +92,7 @@ data class Env(val name: String,
             val env = if (tokens.size == 1)
                 Env(tokens[0], interpret(tokens[0]))
             else
-                Env(tokens[0], interpret(tokens[0]))
+                Env(tokens[0], interpret(tokens[1]))
 
             return env
         }
