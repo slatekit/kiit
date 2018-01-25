@@ -15,16 +15,23 @@ package slatekit.common
 
 
 /**
- * Repeats the text using a delimiter.
- * e.g. ?.repateWith(",", 3) = "?,?,?"
+ * NOTE: Using object here due to STRANGE compile issues
+ * /w extension functions ( from library modules )
+ * being used downstream in client libraries.
  */
-fun String.truncate(count:Int):String {
-    if(this.isNullOrEmpty())
-        return this
-    else if(this.length <= count)
-        return this
-    else
-        return this.substring(0, count)
+object Strings {
+
+    /**
+     * returns a new string that truncates the string supplied by the count of chars.
+     */
+    fun truncate(text:String, count:Int):String {
+        return if (text.isNullOrEmpty())
+            text
+        else if (text.length <= count)
+            text
+        else
+            text.substring(0, count)
+    }
 }
 
 

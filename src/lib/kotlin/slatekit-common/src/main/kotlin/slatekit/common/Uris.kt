@@ -22,7 +22,8 @@ object Uris {
     val URI_PREFIX_TEMP = "temp://"
     val URI_PREFIX_FILE = "file://"
     val URI_PREFIX_JARS = "jars://"
-    val URI_PREFIX_RESR = "resr://"
+    val URI_PREFIX_CONF = "conf://"
+    val CONF_DIR = "conf"
 
 
     /**
@@ -41,6 +42,7 @@ object Uris {
             when (prefix) {
                 URI_PREFIX_USER -> File(System.getProperty("user.home"), path).toString()
                 URI_PREFIX_TEMP -> File(System.getProperty("java.io.tmpdir"), path).toString()
+                URI_PREFIX_CONF -> File(CONF_DIR, path).toString()
                 URI_PREFIX_FILE -> File(path).toString()
                 else            -> uri
             }
@@ -67,7 +69,9 @@ object Uris {
             when (prefix) {
                 URI_PREFIX_USER -> File(userDir, path).readText()
                 URI_PREFIX_TEMP -> File(tempDir, path).readText()
+                URI_PREFIX_CONF -> File(CONF_DIR, path).readText()
                 URI_PREFIX_FILE -> File(path).readText()
+                URI_PREFIX_JARS -> File(this.javaClass.getResource("/" + path).file).readText()
                 else            -> File(path).readText()
             }
         } ?: File(uri).readText()
@@ -93,7 +97,9 @@ object Uris {
             when (prefix) {
                 URI_PREFIX_USER -> buildDoc(File(userDir, path))
                 URI_PREFIX_TEMP -> buildDoc(File(tempDir, path))
+                URI_PREFIX_CONF -> buildDoc(File(CONF_DIR, path))
                 URI_PREFIX_FILE -> buildDoc(File(path))
+                URI_PREFIX_JARS -> buildDoc(File(this.javaClass.getResource("/" + path).file))
                 else            -> buildDoc(File(path))
             }
         } ?: buildDoc(File(uri))

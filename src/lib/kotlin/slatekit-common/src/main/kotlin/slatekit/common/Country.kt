@@ -21,10 +21,10 @@ package slatekit.common
  * @param phone : international dialing code
  * @param name  : name of country
  */
-data class Country(val iso: String, val iso3: String, val phone: String, val name: String) {
+data class Country(val iso: String, val iso3: String, val phone: String, val name: String)
 
 
-    companion object {
+object Countries {
 
         /**
          * get the countries by list of iso codes
@@ -300,5 +300,3 @@ data class Country(val iso: String, val iso3: String, val phone: String, val nam
          */
         val usa = all.find { it.iso == "US" }!!
     }
-
-}

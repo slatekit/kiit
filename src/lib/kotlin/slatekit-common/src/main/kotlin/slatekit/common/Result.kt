@@ -70,7 +70,7 @@ interface Result<out T> : ResultChecks {
                 }
             }
             catch (e: Exception) {
-                ResultFuncs.failure<T>()
+                ResultFuncs.unexpectedError<T>(e.message, e)
             }
         }
     }

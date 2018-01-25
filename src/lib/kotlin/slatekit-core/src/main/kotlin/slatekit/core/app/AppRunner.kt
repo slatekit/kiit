@@ -55,6 +55,19 @@ object AppRunner {
         // Reset any color changes
         println(Console.RESET)
 
+        // Error ?
+        if(!result.success){
+            println()
+            println("==================================")
+            println("ERROR !!")
+            println()
+            println("code: " + result.code)
+            println("msg : " + result.msg)
+            println()
+            println("err : " + result.err)
+            println("==================================")
+            println()
+        }
         return result
     }
 

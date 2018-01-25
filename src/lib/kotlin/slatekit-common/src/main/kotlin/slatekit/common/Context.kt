@@ -38,4 +38,5 @@ interface Context {
     val extra : MutableMap<String,Any>
     val app   : AppMeta
     val state : Result<Boolean>
+    val build : Build
 }
