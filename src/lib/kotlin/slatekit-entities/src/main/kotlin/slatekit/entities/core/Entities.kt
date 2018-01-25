@@ -18,6 +18,7 @@ import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.newline
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
@@ -170,8 +171,13 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
 
     fun getDb(dbKey: String = "", dbShard: String = ""): Db {
+        val err1 = "Error getting database for registration in Entities."
+        val err2 = "Database connection not setup and/or available in config."
+        val err3 = "Database connection not setup and/or available in config for ${dbKey} & ${dbShard}."
+        val err = if(dbKey.isNullOrEmpty()) err2 else err3
         val con = getDbCon()
-        require(con != null, { "Database connection for ${dbKey} & ${dbShard} has not been set" })
+        require(con != null, { err1 + " "+ err })
+        require( con != DbConEmpty, { err1 + " " + err })
         return Db(con!!).open()
     }
 
