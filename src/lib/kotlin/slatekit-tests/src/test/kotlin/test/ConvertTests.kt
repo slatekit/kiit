@@ -1,6 +1,7 @@
 package test
 
 import org.junit.Test
+import slatekit.apis.ApiConstants
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Request
@@ -152,7 +153,8 @@ class ConvertTests {
     fun test_custom_converter(tstr:String, tbool:Boolean, req: Request):Unit {}
     @Test fun can_parse_custom_types(){
         val test = """{ "tstr": "abc", "tbool": false }"""
-        val req = Request("a.b.c", listOf("a", "b", "c"), "cli", "post", InputArgs(mapOf()), InputArgs(mapOf()))
+        val req = Request("a.b.c", listOf("a", "b", "c"), ApiConstants.SourceCLI, "post",
+                InputArgs(mapOf()), InputArgs(mapOf()))
         val converter = Converter(null, mapOf("slatekit.common.Request" to { json, tpe -> req }))
         val results = converter.convert(this::test_custom_converter.parameters, test)
         assert(results[0] == "abc")

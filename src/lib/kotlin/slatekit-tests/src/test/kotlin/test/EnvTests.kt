@@ -106,4 +106,19 @@ class EnvTests {
     @Test fun can_check_pro() {
         assert( Env("pro", Prod).isProd )
     }
+
+
+    @Test fun can_parse_with_name() {
+        assert( Env.parse("dev").isDev)
+        assert( Env.parse("qa").isQa)
+        assert( Env.parse("uat").isUat)
+        assert( Env.parse("pro").isProd)
+        assert( Env.parse("dr").isDis)
+        assert( Env.parse("abc").isOther)
+    }
+
+
+    @Test fun can_parse_with_name_and_mode() {
+        assert( Env.parse("qa1:qa").isQa)
+    }
 }

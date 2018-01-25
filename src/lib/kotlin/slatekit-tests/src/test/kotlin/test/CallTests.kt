@@ -86,7 +86,7 @@ class CallTests {
             val call = Call()
             val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
-            val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
+            val args = call.fillArgsForMethod(method!!, req, req.data!!, false)
 
             assert(args.size == 8)
             assert(args[0] == "123456789")
@@ -128,7 +128,7 @@ class CallTests {
             val call = Call()
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
-            val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
+            val args = call.fillArgsForMethod(method!!, req, req.data!!, false)
 
             assert(args.size == 1)
             for(ndx in 0..expected.size -1 ) {
@@ -150,7 +150,7 @@ class CallTests {
             val call = Call()
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
-            val args = call.fillArgsForMethod(method!!, req, req.args!!, false)
+            val args = call.fillArgsForMethod(method!!, req, req.data!!, false)
 
             assert(args.size == 1)
             for(key in expected.keys ) {

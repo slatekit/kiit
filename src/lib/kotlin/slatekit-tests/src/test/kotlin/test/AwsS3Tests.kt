@@ -10,12 +10,14 @@ import java.io.File
 
 class AwsS3Tests {
 
+    val SLATEKIT_DIR = ".slatekit"
+
     @Test
     fun can_test_create(){
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val files = AwsCloudFiles("slatekit-unit-tests", false, "user://slatekit-kotlin/conf/aws.conf", "aws")
+        val files = AwsCloudFiles("slatekit-unit-tests", false, "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         files.init()
 
@@ -47,7 +49,7 @@ class AwsS3Tests {
         assert(result1.value == expectedContent)
 
         // Download
-        val folderPath = Uris.interpret("user://slatekit-kotlin/temp/")
+        val folderPath = Uris.interpret("user://$SLATEKIT_DIR/temp/")
         val downloadResult1 = files.download(fileName, folderPath!!)
         val downloadFilePath1 = downloadResult1.value!!
         val file1 = File(downloadFilePath1)
@@ -56,7 +58,7 @@ class AwsS3Tests {
 
         // Download as
         val newFileName = fileName + "-01"
-        val filePath = Uris.interpret("user://slatekit-kotlin/temp/$newFileName")
+        val filePath = Uris.interpret("user://$SLATEKIT_DIR/temp/$newFileName")
         val downloadResult2 = files.downloadToFile(fileName, filePath!!)
         val downloadFilePath2 = downloadResult2.value!!
         val file = File(downloadFilePath2)

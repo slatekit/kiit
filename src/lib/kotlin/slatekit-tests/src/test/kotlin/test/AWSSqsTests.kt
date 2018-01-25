@@ -12,12 +12,14 @@ import java.io.File
 
 class AwsSqsTests {
 
+    val SLATEKIT_DIR = ".slatekit"
+
     //@Test
     fun can_test_create() {
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue("slatekit-unit-tests", "user://slatekit-kotlin/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         queue.init()
 
@@ -41,7 +43,7 @@ class AwsSqsTests {
     fun can_test_update() {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue("slatekit-unit-tests", "user://slatekit-kotlin/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         queue.init()
 

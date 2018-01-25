@@ -3,11 +3,13 @@ package test
 import org.junit.Test
 import slatekit.apis.ApiReg
 import slatekit.apis.ApiContainerCLI
+import slatekit.core.common.AppContext
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
 import slatekit.sampleapp.core.apis.SampleEntityApi
 import slatekit.sampleapp.core.apis.SampleExtendedApi
 import slatekit.sampleapp.core.apis.SamplePOKOApi
+import test.common.WorkerSampleApi
 
 
 class Api_Setup_Tests : ApiTestsBase() {
@@ -115,5 +117,17 @@ class Api_Setup_Tests : ApiTestsBase() {
         val result = apis.call("", "SampleExtended", "getCounter", "", mapOf(), mapOf())
         assert(result.success)
         assert(result.value == 1)
+    }
+
+
+    @Test
+    fun can_get_api_info_from_method(){
+        val ctx = AppContext.simple("queues")
+        val api = WorkerSampleApi(ctx)
+        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apiRef = apis.getApi(WorkerSampleApi::class, WorkerSampleApi::test1)
+        assert( apiRef.value?.api?.area == "samples")
+        assert( apiRef.value?.api?.name == "workerqueue")
+        assert( apiRef.value?.action?.name == "test1")
     }
 }

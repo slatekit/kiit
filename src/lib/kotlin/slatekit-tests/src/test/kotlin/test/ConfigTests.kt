@@ -94,7 +94,7 @@ class ConfigTests {
         assert(con.driver == "mysql")
         assert(con.url == "localhost")
         assert(con.user == "root")
-        assert(con.password == "1234")
+        assert(con.password == "12345678")
     }
 
 
@@ -144,7 +144,7 @@ class ConfigTests {
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config("file:///Users/kv/.slatekit/conf/env.conf")
+        val conf  = Config("file:///Users/kishore.reddy/.slatekit/conf/env.conf")
         val key = conf.apiKey("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }

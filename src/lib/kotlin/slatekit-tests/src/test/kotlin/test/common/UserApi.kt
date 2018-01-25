@@ -21,9 +21,6 @@ import slatekit.common.encrypt.DecString
 import slatekit.common.encrypt.DecInt
 import slatekit.common.encrypt.DecLong
 import slatekit.integration.common.ApiBaseEntity
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.ok
-import slatekit.core.common.AppContext
 import slatekit.entities.core.EntityService
 import slatekit.integration.common.AppEntContext
 import test.common.User
@@ -154,7 +151,7 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
 
   @ApiAction(desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
   fun argTypeRequest(req: Request): Result<String> {
-    return success("ok", "raw request id: " + req.args!!.getInt("id"))
+    return success("ok", "raw request id: " + req.data!!.getInt("id"))
   }
 
 

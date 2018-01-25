@@ -205,7 +205,7 @@ class ArgsTests {
         parts?.let { p ->
 
             if(p.isNotEmpty()){
-                assert(args.actionVerbs.size == p.size)
+                assert(args.actionParts.size == p.size)
                 for(i in 0 .. p.size - 1){
                     val part = p[i]
                     assert( args.getVerb(i) == part)

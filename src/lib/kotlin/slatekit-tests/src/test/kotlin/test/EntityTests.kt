@@ -205,7 +205,7 @@ class EntityTests {
         return svc
     }
 
-    val con = ConfFuncs.readDbCon("user://slatekit/conf/db.conf")
+    val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
 
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)

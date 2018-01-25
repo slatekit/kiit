@@ -56,7 +56,7 @@ class SampleApi(context: AppEntContext): ApiBase(context) {
 
     @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
     fun inputRequest(req: Request): Result<String> {
-        return success("ok", "raw request id: " + req.args!!.getInt("id"))
+        return success("ok", "raw request id: " + req.data!!.getInt("id"))
     }
 
 
