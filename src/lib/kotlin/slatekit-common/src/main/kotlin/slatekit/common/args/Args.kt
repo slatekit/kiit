@@ -30,7 +30,7 @@ import java.time.ZonedDateTime
  * @param line        : the raw line ( if available )
  * @param raw         : the raw text that was parsed into arguments.
  * @param action      : "app.users.invite"
- * @param actionVerbs : ["app", "users", "invite" ]
+ * @param actionParts : ["app", "users", "invite" ]
  * @param prefix      : the letter used to prefix each key / name of named parameters e.g. "-"
  * @param separator   : the letter used to separate the key / name with value e.g. ":"
  * @param _namedArgs  : the map of named arguments ( key / value ) pairs
@@ -41,7 +41,7 @@ class Args(
         val line: String,
         override val raw: List<String>,
         val action: String,
-        val actionVerbs: List<String>,
+        val actionParts: List<String>,
         val prefix: String = "-",
         val separator: String = "=",
         private val _namedArgs: Map<String, String>? = null,
@@ -140,7 +140,7 @@ class Args(
      * @param pos
      * @return
      */
-    fun getVerb(pos: Int): String = getListValueOrElse(actionVerbs, pos, "")
+    fun getVerb(pos: Int): String = getListValueOrElse(actionParts, pos, "")
 
 
     /**
@@ -259,14 +259,7 @@ class Args(
                 : Result<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {
-                args.foldIndexed("", { ndx, _, text ->
-                    if (ndx > 0) {
-                        text + " " + args[ndx]
-                    }
-                    else {
-                        args[ndx]
-                    }
-                })
+                args.joinToString(" ")
             }
             else
                 ""

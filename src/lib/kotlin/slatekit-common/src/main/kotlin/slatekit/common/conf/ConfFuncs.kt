@@ -232,8 +232,8 @@ object ConfFuncs {
             parts?.let { (uri, path) ->
                 when (uri) {
                     Uris.URI_PREFIX_JARS -> loadPropertiesFromResources(path)
-                    Uris.URI_PREFIX_RESR -> loadPropertiesFromResources(path)
                     Uris.URI_PREFIX_USER -> loadProperties(File(System.getProperty("user.home"), path).absolutePath)
+                    Uris.URI_PREFIX_CONF -> loadProperties(File("conf", path).absolutePath)
                     Uris.URI_PREFIX_FILE -> loadProperties(File(path).absolutePath)
                     else                 -> loadPropertiesFromResources(name)
                 }
@@ -260,6 +260,7 @@ object ConfFuncs {
         conf.load(input)
         return conf
     }
+
 
     /**
      * creates a folder inside the app directory of the user home path
