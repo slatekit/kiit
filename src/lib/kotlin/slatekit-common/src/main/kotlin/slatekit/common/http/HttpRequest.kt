@@ -29,8 +29,8 @@ data class HttpRequest(
         val params: List<Pair<String, String>>?,
         val headers: List<Pair<String, String>>?,
         val credentials: HttpCredentials? = null,
-        val entity: String?,
-        val connectTimeOut: Int,
-        val readTimeOut: Int
+        val entity: String? = null,
+        val connectTimeOut: Int = 5000,
+        val readTimeOut: Int = 5000
 ) {
 }

@@ -77,7 +77,6 @@ object HttpClient {
             encoded
         } ?: ""
     }
-    /*
 
       /**
        * executes a get request and returns the string content only.
@@ -86,34 +85,38 @@ object HttpClient {
        */
       fun get(req:HttpRequest): HttpResponse
       {
-        val response = tryExecute( req, () ->
-        {
-          // Build the url with query string.
-          val url = HttpHelper.createGetUrl(req)
+          val response = tryExecute(req, {
 
-          // Connection
-          val con = url.openConnection.asInstanceOf[HttpURLConnection]
+              // 1. URL
+              val url = URL(req.url)
+              val con = url.openConnection() as HttpURLConnection
 
-          // Time outs
-          con.setConnectTimeout(req.connectTimeOut)
-          con.setReadTimeout(req.readTimeOut)
+              // 2. METHOD
+              con.requestMethod = HttpMethod.GET.toString()
 
-          // Headers
-          req.headers.fold(Unit)( headers -> {
-            headers.foreach( h -> con.setRequestProperty(h._1, h._2))
-            Unit
+              // 3. CREDS
+              setCredentials(con, req)
+
+              // 4. HEADERS
+              req.headers?.let { headers ->
+                  headers.forEach { (first, second) -> con.setRequestProperty(first, second) }
+              }
+
+              // 5. OUTPUT
+              con.setDoOutput(true)
+
+              val writer = DataOutputStream(con.outputStream)
+              writer.flush()
+              writer.close()
+
+              // Return build up con
+              con
           })
-          // Request method
-          con.setRequestMethod(HttpMethod.GET.stringVal)
-          HttpHelper.setCredentials(con, req)
-
-          // Return build up con
-          con
-        })
-        response
+          return HttpResponse(response.code, mapOf(), response.value)
       }
 
 
+    /*
       /**
        * executes a Post request and returns the string content only.
        * @param req
