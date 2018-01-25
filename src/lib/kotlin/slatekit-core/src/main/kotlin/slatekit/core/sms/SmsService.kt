@@ -31,7 +31,7 @@ abstract class SmsService(val templates: Templates? = null,
     /**
      * Default the supported countries to just USA
      */
-    val countries = Country.filter(ctns ?: listOf(CountryCode("US"))).map { c -> c.iso to c }.toMap()
+    val countries = Countries.filter(ctns ?: listOf(CountryCode("US"))).map { c -> c.iso to c }.toMap()
 
 
     /**
