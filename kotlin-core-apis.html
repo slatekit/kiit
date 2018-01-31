@@ -188,20 +188,20 @@
 						<td class="col-sm-6">APIs are annotated plain  classes and methods that can be accessed as Web API or CLI commands</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>3. Unified Routes</strong></td>
+						<td class="col-sm-2"><strong>3. Universal Routes</strong></td>
 						<td class="col-sm-6">A simple, 3-part hierarchical API <strong>routing</strong> approach to abstract both Web and CLI routes  ( e.g. <strong>{area}.{api}.{action}</strong> )</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>4. Unified Requests</strong></td>
+						<td class="col-sm-2"><strong>4. Universal Requests</strong></td>
 						<td class="col-sm-6">A data structure for API <strong>requests</strong> to abstract both Web and CLI requests</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>5. Unified Responses</strong></td>
+						<td class="col-sm-2"><strong>5. Universal Responses</strong></td>
 						<td class="col-sm-6">A data structure for API <strong>responses</strong> to abstract both Web and CLI responses</td>
 					</tr>
 					<tr>
-						<td class="col-sm-2"><strong>6. Unified Discovery</strong></td>
-						<td class="col-sm-6">An approach to API discovery and help docs for both Web and CLI levaraging Unified Routing</td>
+						<td class="col-sm-2"><strong>6. Universal Discovery</strong></td>
+						<td class="col-sm-6">An approach to API discovery and help docs for both Web and CLI levaraging Universal Routing</td>
 					</tr>
 				</table>
 				<br/>
@@ -306,12 +306,12 @@
 					</tr>
 					<tr > 
 						<td><strong>5. Routing</strong></td>
-						<td>How the API routing works using the <strong>Unified Routing Format</strong></td>
+						<td>How the API routing works using the <strong>Universal Routing Format</strong></td>
 						<td><a href="#api-routing" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr > 
 						<td><strong>6. Discovery</strong></td>
-						<td>How to easily discover APIs using the <strong>Unified Routing Format</strong></td>
+						<td>How to easily discover APIs using the <strong>Universal Routing Format</strong></td>
 						<td><a href="#api-discovery" class="more"><span class="btn btn-primary">See more</span></a></td>
 					</tr>
 					<tr> 
@@ -469,7 +469,7 @@
 				<h3>Notes</h3>
 				<div class="alert alert-info" role="alert">
 					<ol>
-					  <li>Each protocol specific request and response is <strong>abstracted</strong> out to a <strong>unified request and response</strong> structure for Web, CLI, Queue</li>
+					  <li>Each protocol specific request and response is <strong>abstracted</strong> out to a <strong>universal request and response</strong> structure for Web, CLI, Queue</li>
 					  <li>Your API code is kept as simple, <strong>plain old  objects</strong> with annotations to indicate APIs and actions</li>
 					</ol>
 				</div>
@@ -633,8 +633,8 @@
 				
 				
 				<h1 id="api-request">3. Request</h1>
-				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>unified</strong> request format. 
-				This unified format is implemented as what we call a <strong>Request</strong>
+				<p>Every protocol specific WEB and CLI API request is converted to a common or <strong>universal</strong> request format. 
+				This universal format is implemented as what we call a <strong>Request</strong>
 				( see below ). The Request is then executed by the ApiContainer. 
 				All the parameters and data are available in the args field.
 				Web Http headers are available in the opts field. 
@@ -734,8 +734,8 @@
 					  <li>Headers and parameters are <strong>NOT</strong> copied, they are wrapped by an abstraction layer.</li>
 					  <li>Copying of data is avoided to maintain high-performance.</li>
 					  <li>For Web APIs, the paramters are either query string or JSON post data.</li>
-					  <li>A marshaller converts each protocol request to the unified request</li>					  
-					  <li>A marshaller converts each unified response to the protocol response</li>				  
+					  <li>A marshaller converts each protocol request to the universal request</li>					  
+					  <li>A marshaller converts each universal response to the protocol response</li>				  
 					  <li>The marshaller can handle API action methods with parameters of basic types and simple non-nested objects</li>
 					</ol>
 				</div>
@@ -920,7 +920,7 @@
 				<h1 id="api-routing">5. Routing</h1>
 				<p>In Slate Kit, API routes are simplified using a 3-part hierarchical approach that is consistent
 				for both Web(http) or command line (CLI ). 
-				<br/>We call this the <strong>unified routing format</strong>.</p>
+				<br/>We call this the <strong>universal routing format</strong>.</p>
 				<br/>
 				<div class="alert alert-success" role="alert">
 					<h3>{area} . {api} . {action}  key=value*</h3>
@@ -1023,9 +1023,9 @@
 				<br/>
 				<h3>Example</h3>
 				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// NOTES: 
-</span> <span class="c1">// - Slate uses a unified routing format ( area/api/action ) 
+</span> <span class="c1">// - Slate uses a universal routing format ( area/api/action ) 
 </span> <span class="c1">//   for both Http and CLI requests.
-</span> <span class="c1">// - See the "Unified Routing" section for more info.
+</span> <span class="c1">// - See the "Universal Routing" section for more info.
 </span> 
  <span class="c1">// 1. app.users.activate via Http GET ( query string )
 </span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">code</span><span class="k">=</span><span class="mi">1</span><span class="o">&amp;</span><span class="n">phone</span><span class="k">=</span><span class="mi">123456789</span><span class="o">&amp;</span><span class="n">active</span><span class="k">=</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
@@ -1165,7 +1165,7 @@
 				
 				
 				<h1 id="api-discovery">6. Discovery</h1>
-				<p>Api discovery is simple with the unified routing formats. All the areas, apis inside areas, and actions inside apis can be easily discovered with the following syntax</p>
+				<p>Api discovery is simple with the universal routing formats. All the areas, apis inside areas, and actions inside apis can be easily discovered with the following syntax</p>
 				<br/>
 				<div class="alert alert-success" role="alert">
 					<h3 id="cli-areaapiaction">{area}.{api}.{action}?</h3>
@@ -1173,7 +1173,7 @@
 				</div>
 				<br/>
 				<h3>Examples</h3>
-				<p>With the unified routing format in place, we can easily support a simple and fast way to discover all the areas, apis, and actions in the system. The unified discovery approach</p>
+				<p>With the universal routing format in place, we can easily support a simple and fast way to discover all the areas, apis, and actions in the system. The universal discovery approach</p>
 
 				<table class="table table-bordered table-striped">
 					<tr>
