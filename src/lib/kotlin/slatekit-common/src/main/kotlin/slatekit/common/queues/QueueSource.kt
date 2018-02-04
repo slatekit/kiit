@@ -18,6 +18,8 @@ import slatekit.common.Result
 
 interface QueueSource {
 
+    val name:String
+
     fun init(): Unit {}
 
 

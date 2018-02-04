@@ -39,6 +39,7 @@ class AwsCloudQueue(queue: String,
     private val _sqs: AmazonSQSClient = AwsFuncs.sqs(path, section)
     private val _queueUrl = _sqs.getQueueUrl(_queue).queueUrl
     private val SOURCE = "aws:sqs"
+    override val name = queue
 
 
     /**
