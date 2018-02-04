@@ -19,41 +19,31 @@ import slatekit.common.Result
 import slatekit.common.Uris
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.results.ResultFuncs.successOrError
 import java.io.File
+import java.util.concurrent.LinkedBlockingQueue
 
 
 /**
- * Used in Unit-Tests, for internal-use only.
- * Refer to the AWS SQS Cloud Queue for an actual implementation.
- *
- * NOTE: This should not be used in production environment.
+ * For internal-use only for proto-typing/unit-tests
+ * Refer to the AWS SQS Cloud Queue for  implementation.
  */
-class QueueSourceDefault(val converter:((Any) -> Any)? = null  ) : QueueSource, QueueSourceMsg {
+class QueueSourceDefault(override val name:String = "",
+                         val converter:((Any) -> Any)? = null,
+                         val size:Int = -1 ) : QueueSource, QueueSourceMsg {
 
-    private val _list = mutableListOf<Any>()
+    private val _list = if(size <= 0 ) LinkedBlockingQueue<Any>() else LinkedBlockingQueue(size)
     private val _object = Object()
 
     override fun init(): Unit {
     }
 
 
-    override fun count(): Int =
-            synchronized(_object, {
-                _list.size
-            })
+    override fun count(): Int = _list.size
 
 
-    override fun next(): Any? {
-        val item = synchronized(_object, {
-            if (_list.isEmpty()) {
-                null
-            }
-            else {
-                _list.removeAt(0)
-            }
-        })
-        return item
-    }
+    override fun next(): Any? = _list.poll()
+
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> nextBatchAs(size: Int): List<T>? =
@@ -61,34 +51,32 @@ class QueueSourceDefault(val converter:((Any) -> Any)? = null  ) : QueueSource, 
 
 
     override fun nextBatch(size: Int): List<Any>? =
-            synchronized(_object, {
-                if (_list.isEmpty()) null
-                else {
-                    val results = mutableListOf<Any>()
-                    val actualSize = Math.min(size, _list.size)
-                    for (ndx in 0..actualSize - 1) {
-                        val msg = _list.removeAt(0)
+            if (_list.isEmpty()) null
+            else {
+                val results = mutableListOf<Any>()
+                val actualSize = Math.min(size, _list.size)
+                for (ndx in 0..actualSize - 1) {
+                    val msg = _list.poll()
+                    if(msg != null) {
                         results += msg
                     }
-                    results.toList()
                 }
-            })
+                results.toList()
+            }
 
 
-    override fun send(msg: Any, tagName: String, tagValue: String): Result<String> =
-            synchronized(_object, {
-                val id = stringGuid()
-                _list += QueueSourceData(msg, mapOf(tagName to tagValue), id)
-                success(id)
-            })
+    override fun send(msg: Any, tagName: String, tagValue: String): Result<String> {
+        val id = stringGuid()
+        val result = _list.offer(QueueSourceData(msg, mapOf(tagName to tagValue), id))
+        return successOrError(result, id)
+    }
 
 
-    override fun send(message: String, attributes: Map<String, Any>): Result<String> =
-            synchronized(_object, {
-                val id = Random.stringGuid()
-                _list += QueueSourceData(message, attributes, id)
-                success(id)
-            })
+    override fun send(message: String, attributes: Map<String, Any>): Result<String> {
+        val id = Random.stringGuid()
+        _list += QueueSourceData(message, attributes, id)
+        return success(id)
+    }
 
 
     override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Result<String> {
@@ -102,24 +90,17 @@ class QueueSourceDefault(val converter:((Any) -> Any)? = null  ) : QueueSource, 
 
 
     override fun complete(item: Any?): Unit {
-        item?.let { i -> discard(i) }
+        // Not implemented / needed for this type
     }
 
 
     override fun completeAll(items: List<Any>?): Unit {
-        synchronized(_object, {
-            items?.let { all ->
-                all.forEach { item ->
-                    val pos = _list.indexOf(item)
-                    _list.removeAt(pos)
-                }
-            }
-        })
+        // Not implemented / needed for this type
     }
 
 
     override fun abandon(item: Any?): Unit {
-        item?.let { discard(it) }
+        // Not implemented / needed for this type
     }
 
 
