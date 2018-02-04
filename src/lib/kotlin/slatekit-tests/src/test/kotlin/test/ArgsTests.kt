@@ -127,7 +127,7 @@ class ArgsTests {
             Pair("env.api"   , "loc" ),
             Pair("log.level"  , "info"),
             Pair("region.api", "ny"  )
-        ), null, listOf("area", "api", "action"))
+        ), null, null, listOf("area", "api", "action"))
     }
 
 
@@ -143,6 +143,26 @@ class ArgsTests {
                 listOf(
                     Pair("api.key"    , "abc123" )
                 ),
+                null,
+                listOf("area", "api", "action")
+        )
+    }
+
+
+    @Test fun can_parse_sys_args() {
+
+        val result = Args.parse("area.api.action -env.api='loc' @api.key='abc123' \$format=json", "-", "=", true)
+        ensure(result, true, 1,
+
+                listOf(
+                        Pair("env.api"    , "loc" )
+                ),
+                listOf(
+                        Pair("api.key"    , "abc123" )
+                ),
+                listOf(
+                        Pair("format"    , "json" )
+                ),
                 listOf("area", "api", "action")
         )
     }
@@ -152,7 +172,7 @@ class ArgsTests {
     @Test fun can_parse_actions_without_args() {
 
         val result = Args.parse("area.api.action", "-", "=", true)
-        ensure(result, true, 0, listOf(), null, listOf("area", "api", "action"))
+        ensure(result, true, 0, listOf(), null, null, listOf("area", "api", "action"))
     }
 
 
@@ -179,6 +199,7 @@ class ArgsTests {
     private fun ensure(result: Result<Args>, success:Boolean, size:Int,
                        expectedNamed:List<Pair<String,String>>,
                        expectedMeta:List<Pair<String,String>>? = null,
+                       expectedSys:List<Pair<String,String>>? = null,
                        parts:List<String>? = null) : Unit {
 
         // success / fail
@@ -199,6 +220,13 @@ class ArgsTests {
             for((first, second) in metaArgs){
                 assert( args.containsMetaKey(first))
                 assert( args.getMetaString(first) == second)
+            }
+        }
+
+        expectedSys?.let { sysArgs ->
+            for((first, second) in sysArgs){
+                assert( args.containsSysKey(first))
+                assert( args.getSysString(first) == second)
             }
         }
 

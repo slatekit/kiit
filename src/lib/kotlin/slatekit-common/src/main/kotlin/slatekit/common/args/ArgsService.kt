@@ -36,10 +36,17 @@ class ArgsService {
      *                   e.g. name.action {namedarg}*
      * @return
      */
-    fun parse(line: String, prefix: String = "-", sep: String = "=", hasAction: Boolean = false, metaChar: String = "@"): Result<Args> {
+    fun parse(line: String,
+              prefix: String = "-",
+              sep: String = "=",
+              hasAction: Boolean = false,
+              metaChar: String = "@",
+              sysChar : String = "$"
+    ): Result<Args> {
         // Check 1: Empty line ?
-        return if (line.isNullOrEmpty()) {
-            success(Args("", listOf<String>(), "", listOf<String>(), prefix, sep, null, null, null, null))
+        return if (line.isEmpty()) {
+            success(Args("", listOf<String>(), "", listOf<String>(),  prefix, sep,
+                    null, null, null, null, null))
         }
         else {
             // Check 2: Parse the line into words/args
@@ -59,7 +66,7 @@ class ArgsService {
                 }
                 else {
                     // Now parse the lexically parsed text into arguments
-                    val parseResult = parseInternal(line, args, prefix, sep, hasAction, metaChar)
+                    val parseResult = parseInternal(line, args, prefix, sep, hasAction, metaChar, sysChar)
                     parseResult
                 }
             }
@@ -67,7 +74,8 @@ class ArgsService {
     }
 
 
-    private fun parseInternal(line: String, tokens: List<String>, prefix: String, sep: String, hasAction: Boolean, metaChar: String)
+    private fun parseInternal(line: String, tokens: List<String>, prefix: String, sep: String,
+                              hasAction: Boolean, metaChar: String, sysChar: String)
             : Result<Args> {
         return successOrError(
                 {
@@ -93,24 +101,24 @@ class ArgsService {
 
                     // Check for args
                     val argsResult = if (startOfNamedArgs >= tokens.size - 1)
-                        Triple(mapOf<String, String>(), mapOf<String, String>(), startOfNamedArgs)
+                        ParsedArgs(mapOf<String, String>(), mapOf<String, String>(),mapOf<String, String>(), startOfNamedArgs)
                     else
-                        ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep, metaChar)
+                        ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep, metaChar, sysChar)
 
                     // start of index args is always 1 after the named args
                     val startOfIndexArgs =
-                            if (argsResult.third == startOfNamedArgs) startOfNamedArgs
-                            else argsResult.third + 1
+                            if (argsResult.ndx == startOfNamedArgs) startOfNamedArgs
+                            else argsResult.ndx + 1
 
                     val indexResult: List<String> =
                             if (tokens.isNotEmpty() && startOfIndexArgs >= 0 && startOfIndexArgs <= (tokens.size - 1)) {
-                                tokens.subList(argsResult.third, tokens.size)
+                                tokens.subList(argsResult.ndx, tokens.size)
                             }
                             else
                                 listOf<String>()
 
                     val args = Args(line, tokens, action, verbs.toList(), prefix, sep,
-                            argsResult.first.toMap(), argsResult.second.toMap(), indexResult, null)
+                            argsResult.named, argsResult.meta, argsResult.sys, indexResult, null)
                     args
                 })
     }

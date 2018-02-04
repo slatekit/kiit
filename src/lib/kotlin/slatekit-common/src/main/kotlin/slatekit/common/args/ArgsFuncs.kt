@@ -139,11 +139,12 @@ object ArgsFuncs {
      * @param sep
      * @return
      */
-    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String, metaChar: String)
-            : Triple<Map<String, String>, Map<String,String>, Int> {
+    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String, metaChar: String, sysChar:String)
+            : ParsedArgs {
 
         val namedArgs = mutableMapOf<String, String>()
         val metaArgs   = mutableMapOf<String, String>()
+        val sysArgs   = mutableMapOf<String, String>()
 
         // Parses all named args e..g -a=1 -b=2
         // Keep looping until the index where the named args ends
@@ -154,7 +155,7 @@ object ArgsFuncs {
             val text = args[ndx]
 
             // e.g. "-a=1" Prefix ? "-"
-            val nextIndex = if (text == prefix || text == metaChar) {
+            val nextIndex = if (text == prefix || text == metaChar || text == sysChar) {
 
                 // Get "a" "1" from ( "a", "=", "1" )
                 val keyValuePair = parseKeyValuePair(ndx, args)
@@ -164,8 +165,11 @@ object ArgsFuncs {
                     if(text == prefix) {
                         namedArgs[kvp.first] = kvp.second
                     }
-                    else {
+                    else if(text == metaChar) {
                         metaArgs[kvp.first] = kvp.second
+                    }
+                    else {
+                        sysArgs[kvp.first] = kvp.second
                     }
                     kvp.third
                 } ?: args.size
@@ -179,7 +183,7 @@ object ArgsFuncs {
             nextIndex
         })
 
-        return Triple(namedArgs.toMap(), metaArgs, endIndex)
+        return ParsedArgs(namedArgs.toMap(), metaArgs, sysArgs, endIndex)
     }
 
 

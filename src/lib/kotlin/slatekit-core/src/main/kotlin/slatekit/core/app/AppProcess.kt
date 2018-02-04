@@ -256,7 +256,6 @@ open class AppProcess(context: AppContext?,
 
 
     fun showHelp(code: Int): Unit {
-
     }
 
 

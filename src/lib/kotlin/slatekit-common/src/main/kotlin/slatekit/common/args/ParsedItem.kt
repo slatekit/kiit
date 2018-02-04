@@ -17,3 +17,11 @@ package slatekit.common.args
  * Created by kishorereddy on 5/25/17.
  */
 data class ParsedItem(val action: String, val actions: List<String>, val pos: Int, val posLast: Int)
+
+
+data class ParsedArgs(
+        val named: Map<String, String>,
+        val meta: Map<String,String>,
+        val sys: Map<String, String>,
+        val ndx: Int
+)
