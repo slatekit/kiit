@@ -73,6 +73,31 @@ interface Result<out T> : ResultChecks {
                 ResultFuncs.unexpectedError<T>(e.message, e)
             }
         }
+
+
+
+        fun <T> tryLog(name:String, desc:String, rethrow:Boolean, call: () -> T): Result<T> {
+            return try {
+                val data = call()
+                if (data is Result<*>) {
+                    data as Result<T>
+                }
+                else {
+                    ResultFuncs.success(data)
+                }
+            }
+            catch (e: Exception) {
+                println("Error during: $name")
+                println("$desc")
+                println(e.message)
+                println(e)
+
+                if(rethrow) {
+                    throw e
+                }
+                ResultFuncs.unexpectedError<T>(e.message, e)
+            }
+        }
     }
 }
 
