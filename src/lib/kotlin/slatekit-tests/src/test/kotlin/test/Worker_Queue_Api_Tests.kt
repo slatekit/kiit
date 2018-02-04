@@ -9,7 +9,7 @@ import slatekit.common.*
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.common.AppContext
 import slatekit.core.workers.*
-import slatekit.integration.workers.WorkerQueueApi
+import slatekit.integration.workers.WorkerWithQueuesApi
 import slatekit.sampleapp.core.apis.SampleTypes2Api
 import test.common.WorkerSampleApi
 
@@ -38,11 +38,11 @@ class Worker_Queue_Api_Tests {
         val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
 
         // 5. link container to api
-        api.container = apis
+        api._container = apis
 
         // 6. worker system
         val sys = System()
-        sys.register(WorkerQueueApi(apis, queues, null, null, WorkerSettings()))
+        sys.register(WorkerWithQueuesApi(apis, queues, null, null, WorkerSettings()))
 
         // 7. send method call to queue
         api.test1Queued("user1@abc.com", true, 123, DateTime.parseNumeric("20180127093045"))
@@ -58,7 +58,7 @@ class Worker_Queue_Api_Tests {
     fun can_run_from_queue() {
         val container = buildContainer()
         val queues = listOf(QueueSourceDefault())
-        val worker = WorkerQueueApi(container, queues,null, null, WorkerSettings())
+        val worker = WorkerWithQueuesApi(container, queues,null, null, WorkerSettings())
         val json1 = """
         {
              "version"  : "1.0",
