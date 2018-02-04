@@ -48,7 +48,7 @@ class Worker_Core_Tests {
 
     @Test
     fun can_use_Queue():Unit {
-        val queue = QueueSourceDefault( { item -> item.toString().toInt() })
+        val queue = QueueSourceDefault( converter = { item -> item.toString().toInt() })
         queue.send("101")
         queue.send("201")
         queue.send("301")

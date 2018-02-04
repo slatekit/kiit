@@ -35,7 +35,7 @@ class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithS
      * pauses the system
      */
     @ApiAction(desc = "shuts down the workers system", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun complete() = sys.complete()
+    fun complete() = sys.done()
 
 
     /**

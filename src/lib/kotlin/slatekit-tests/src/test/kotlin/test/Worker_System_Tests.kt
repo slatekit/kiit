@@ -66,7 +66,7 @@ class Worker_System_Tests {
         assert(group1.state() == RunStateBusy)
         assert(worker1.lastResult.value == "worktype 1:done")
         assert(worker2.lastResult.value == "worktype 2:done")
-        sys.complete()
+        sys.done()
     }
 
 

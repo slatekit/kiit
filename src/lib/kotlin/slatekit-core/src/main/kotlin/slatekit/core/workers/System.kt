@@ -4,11 +4,15 @@ import slatekit.common.status.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.TimeUnit
+
+
 
 open class System(service:ExecutorService? = null, val settings:SystemSettings = SystemSettings())
+    : Runnable
 {
     protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
-
+    protected var _thread:Thread? = null
 
     /**
      * You can extend the work system and
@@ -61,34 +65,32 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
      * runs all the workers in the groups within the work-flow of
      * init, exec, end
      */
-    fun run():Unit {
-        Thread({
+    override fun run():Unit {
 
-            // Initialize
-            moveToState(RunStateInitializing)
-            init()
+        // Initialize
+        moveToState(RunStateInitializing)
+        init()
 
-            // Work
-            moveToState(RunStateBusy)
-            var state = _runState.get()
-            while(state != RunStateComplete) {
+        // Work
+        moveToState(RunStateBusy)
+        var state = _runState.get()
+        while(state != RunStateComplete) {
 
-                // Prevent paused/stopped status from executing logic
-                if(state == RunStateBusy) {
-                    exec()
-                }
-
-                // Enable pause ?
-                if(settings.pauseBetweenCycles) {
-                    Thread.sleep(settings.pauseTimeInSeconds * 1000L)
-                }
-                state = _runState.get()
+            // Prevent paused/stopped status from executing logic
+            if(state == RunStateBusy) {
+                exec()
             }
 
-            // Ending/Complete
-            moveToState(RunStateComplete)
-            end()
-        }).start()
+            // Enable pause ?
+            if(settings.pauseBetweenCycles) {
+                Thread.sleep(settings.pauseTimeInSeconds * 1000L)
+            }
+            state = _runState.get()
+        }
+
+        // Ending/Complete
+        moveToState(RunStateComplete)
+        end()
     }
 
 
@@ -133,28 +135,53 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     }
 
 
-    /**
-     * pauses the system
-     */
-    fun pause() = moveToState(RunStatePaused)
+    fun start():Unit {
+        _thread = Thread(this)
+        _thread?.isDaemon = true
+        _thread?.start()
+    }
 
 
     /**
      * pauses the system
      */
-    fun complete() = moveToState(RunStateComplete)
+    fun pause() = {
+        moveToState(RunStatePaused)
+    }
 
 
     /**
      * resumes the system
      */
-    fun resume() = moveToState(RunStateBusy)
+    fun resume() = {
+        moveToState(RunStateBusy)
+    }
 
 
     /**
      * stops the system
      */
-    fun stop() = moveToState(RunStateStopped)
+    fun stop() = {
+        moveToState(RunStateStopped)
+    }
+
+
+    /**
+     * pauses the system
+     */
+    fun done() {
+        moveToState(RunStateComplete)
+
+        // Graceful shutdown
+        svc.shutdown()
+        try {
+            if (!svc.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+                svc.shutdownNow()
+            }
+        } catch (e: InterruptedException) {
+            svc.shutdownNow()
+        }
+    }
 
 
     /**

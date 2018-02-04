@@ -166,6 +166,8 @@ open class Worker<T>(
                     lastResult  = ""
                 )
             )
+
+            //log.error("Error handling message from queue: " + ex.message, ex)
             failure<T>("Unexpected error : " + ex.message)
         }
         moveToState(RunStateIdle)

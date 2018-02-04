@@ -7,5 +7,5 @@ package slatekit.core.workers
 data class SystemSettings(
         val enableAutoStart:Boolean = true,
         val pauseBetweenCycles:Boolean = false,
-        val pauseTimeInSeconds:Int = 3
+        val pauseTimeInSeconds:Int = 2
 )
