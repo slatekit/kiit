@@ -5,10 +5,10 @@ import slatekit.apis.ApiConstants
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Request
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
+import slatekit.common.encrypt.EncString
 import slatekit.meta.Converter
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -59,7 +59,7 @@ class ConvertTests {
     }
 
 
-    fun test_decrypted(decString: DecString, decInt: DecInt, decLong: DecLong, decDouble:DecDouble):Unit {}
+    fun test_decrypted(decString: EncString, decInt: EncInt, decLong: EncLong, decDouble: EncDouble):Unit {}
     @Test fun can_parse_decrypted(){
 
         val decStr = MyEncryptor.encrypt("abc123")
@@ -70,10 +70,10 @@ class ConvertTests {
         val test = """{ "decString": "$decStr", "decInt": "$decInt", "decLong": "$decLong", "decDouble": "$decDoub" }"""
         val converter = Converter(MyEncryptor)
         val results = converter.convert(this::test_decrypted.parameters, test)
-        assert((results[0] as DecString).value == "abc123")
-        assert((results[1] as DecInt).value == 123)
-        assert((results[2] as DecLong).value == 12345L)
-        assert((results[3] as DecDouble).value == 12345.67)
+        assert((results[0] as EncString).value == "abc123")
+        assert((results[1] as EncInt).value == 123)
+        assert((results[2] as EncLong).value == 12345L)
+        assert((results[3] as EncDouble).value == 12345.67)
     }
 
 

@@ -1,10 +1,10 @@
 package slatekit.meta
 
 import slatekit.common.*
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
+import slatekit.common.encrypt.EncString
 import java.time.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -29,11 +29,11 @@ object KTypes {
     val KVarsClass           = Vars::class
     val KSmartStringClass    = SmartString::class
     val KContentClass        = Content::class
-    val KDecStringClass      = DecString::class
-    val KDecIntClass         = DecInt::class
-    val KDecLongClass        = DecLong::class
-    val KDecDoubleClass      = DecDouble::class
-    val KAnyClass            = DecDouble::class
+    val KDecStringClass      = EncString::class
+    val KDecIntClass         = EncInt::class
+    val KDecLongClass        = EncLong::class
+    val KDecDoubleClass      = EncDouble::class
+    val KAnyClass            = EncDouble::class
 
 
     val KStringType        = String::class.createType()
@@ -53,10 +53,10 @@ object KTypes {
     val KVarsType          = Vars::class.createType()
     val KSmartStringType   = SmartString::class.createType()
     val KContentType       = Content::class.createType()
-    val KDecStringType     = DecString::class.createType()
-    val KDecIntType        = DecInt::class.createType()
-    val KDecLongType       = DecLong::class.createType()
-    val KDecDoubleType     = DecDouble::class.createType()
+    val KDecStringType     = EncString::class.createType()
+    val KDecIntType        = EncInt::class.createType()
+    val KDecLongType       = EncLong::class.createType()
+    val KDecDoubleType     = EncDouble::class.createType()
     val KAnyType           = Any::class.createType()
 
 

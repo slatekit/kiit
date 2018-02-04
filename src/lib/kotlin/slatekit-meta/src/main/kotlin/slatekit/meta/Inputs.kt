@@ -2,11 +2,10 @@ package slatekit.meta
 
 import slatekit.common.Conversions
 import slatekit.common.Inputs
-import slatekit.common.Types
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
+import slatekit.common.encrypt.EncString
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
@@ -48,10 +47,10 @@ fun convert(key:String, paramType: KType, rawVal:Any?, decryptor:((String) -> St
         KTypes.KLocalDateTimeType -> Conversions.toLocalDateTime(rawVal as String)
         KTypes.KZonedDateTimeType -> Conversions.toZonedDateTime(rawVal as String)
         KTypes.KDateTimeType      -> Conversions.toDateTime(rawVal as String)
-        KTypes.KDecIntType        -> decryptor?.let { e -> DecInt(e(rawVal as String).toInt()) } ?: DecInt(0)
-        KTypes.KDecLongType       -> decryptor?.let { e -> DecLong(e(rawVal as String).toLong()) } ?: DecLong(0L)
-        KTypes.KDecDoubleType     -> decryptor?.let { e -> DecDouble(e(rawVal as String).toDouble()) } ?: DecDouble(0.0)
-        KTypes.KDecStringType     -> decryptor?.let { e -> DecString(e(rawVal as String)) } ?: DecString("")
+        KTypes.KDecIntType        -> decryptor?.let { e -> EncInt(rawVal as String, e(rawVal).toInt()) } ?: EncInt("", 0)
+        KTypes.KDecLongType       -> decryptor?.let { e -> EncLong(rawVal as String, e(rawVal).toLong()) } ?: EncLong("", 0L)
+        KTypes.KDecDoubleType     -> decryptor?.let { e -> EncDouble(rawVal as String, e(rawVal).toDouble()) } ?: EncDouble("", 0.0)
+        KTypes.KDecStringType     -> decryptor?.let { e -> EncString(rawVal as String, e(rawVal)) } ?: EncString("", "")
         KTypes.KDocType           -> Conversions.toDoc(rawVal.toString())
         KTypes.KVarsType          -> Conversions.toVars(rawVal)
 

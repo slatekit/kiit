@@ -89,10 +89,10 @@ class Converter(val enc: Encryptor? = null,
             KTypes.KLocalDateTimeType -> Conversions.toLocalDateTime(raw as String)
             KTypes.KZonedDateTimeType -> Conversions.toZonedDateTime(raw as String)
             KTypes.KDateTimeType      -> Conversions.toDateTime(raw as String)
-            KTypes.KDecIntType        -> enc?.let { e -> DecInt(e.decrypt(raw as String).toInt()) } ?: DecInt(0)
-            KTypes.KDecLongType       -> enc?.let { e -> DecLong(e.decrypt(raw as String).toLong()) } ?: DecLong(0L)
-            KTypes.KDecDoubleType     -> enc?.let { e -> DecDouble(e.decrypt(raw as String).toDouble()) } ?: DecDouble(0.0)
-            KTypes.KDecStringType     -> enc?.let { e -> DecString(e.decrypt(raw as String)) } ?: DecString("")
+            KTypes.KDecIntType        -> enc?.let { e -> EncInt(raw as String, e.decrypt(raw ).toInt()) } ?: EncInt("", 0)
+            KTypes.KDecLongType       -> enc?.let { e -> EncLong(raw as String, e.decrypt(raw ).toLong()) } ?: EncLong("", 0L)
+            KTypes.KDecDoubleType     -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw ).toDouble()) } ?: EncDouble("", 0.0)
+            KTypes.KDecStringType     -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
             KTypes.KVarsType          -> Conversions.toVars(raw)
 
             // Complex type

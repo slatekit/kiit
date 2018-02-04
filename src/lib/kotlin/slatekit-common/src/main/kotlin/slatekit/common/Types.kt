@@ -13,10 +13,10 @@
 
 package slatekit.common
 
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
+import slatekit.common.encrypt.EncString
 import java.time.*
 
 object Types {
@@ -37,10 +37,10 @@ object Types {
     val JDocClass            = Doc.javaClass
     val JVarsClass           = Vars.javaClass
     val JSmartStringClass    = SmartString.javaClass
-    val JDecIntClass         = DecInt.javaClass
-    val JDecLongClass        = DecLong.javaClass
-    val JDecDoubleClass      = DecDouble.javaClass
-    val JDecStringClass      = DecString.javaClass
+    val JDecIntClass         = EncInt.javaClass
+    val JDecLongClass        = EncLong.javaClass
+    val JDecDoubleClass      = EncDouble.javaClass
+    val JDecStringClass      = EncString.javaClass
 
 
     val JStringAnyClass         = ("" as Any).javaClass

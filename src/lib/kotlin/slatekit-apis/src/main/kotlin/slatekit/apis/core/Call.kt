@@ -78,10 +78,10 @@ class Call {
                 KTypes.KVarsType         -> Conversions.toVars(args.getString(paramName))
 
                 // Decryption from encrypted types
-                KTypes.KDecIntType        -> enc?.let { e -> DecInt(e.decrypt(args.getString(paramName)).toInt()) } ?: DecInt(0)
-                KTypes.KDecLongType       -> enc?.let { e -> DecLong(e.decrypt(args.getString(paramName)).toLong()) } ?: DecLong(0L)
-                KTypes.KDecDoubleType     -> enc?.let { e -> DecDouble(e.decrypt(args.getString(paramName)).toDouble()) } ?: DecDouble(0.0)
-                KTypes.KDecStringType     -> enc?.let { e -> DecString(e.decrypt(args.getString(paramName))) } ?: DecString("")
+                KTypes.KDecIntType        -> enc?.let { e -> EncInt(args.getString(paramName), e.decrypt(args.getString(paramName)).toInt()) } ?: EncInt("", 0)
+                KTypes.KDecLongType       -> enc?.let { e -> EncLong(args.getString(paramName), e.decrypt(args.getString(paramName)).toLong()) } ?: EncLong("", 0L)
+                KTypes.KDecDoubleType     -> enc?.let { e -> EncDouble(args.getString(paramName), e.decrypt(args.getString(paramName)).toDouble()) } ?: EncDouble("", 0.0)
+                KTypes.KDecStringType     -> enc?.let { e -> EncString(args.getString(paramName), e.decrypt(args.getString(paramName))) } ?: EncString("", "")
 
                 // Complex type
                 else                    -> handleComplex(converter, cmd, parameter, paramType, jsonRaw, args.getString(paramName))

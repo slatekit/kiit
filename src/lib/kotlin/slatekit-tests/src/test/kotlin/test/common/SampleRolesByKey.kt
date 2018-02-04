@@ -2,15 +2,6 @@ package slatekit.sampleapp.core.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.common.Content
-import slatekit.common.Doc
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
-import slatekit.common.types.Email
-import slatekit.common.types.PhoneUS
-
 
 
 @Api(area = "samples", name = "roleskey", desc = "sample to test security", roles= "admin", auth = "key-roles", verb = "*", protocol = "*")

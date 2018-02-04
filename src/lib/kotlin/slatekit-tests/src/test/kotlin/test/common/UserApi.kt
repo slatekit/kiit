@@ -16,10 +16,10 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
 import slatekit.common.*
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecString
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncString
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.entities.core.EntityService
 import slatekit.integration.common.AppEntContext
@@ -117,33 +117,33 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
 
 
   @ApiAction(desc = "test decryption of int", roles= "*", verb = "@parent", protocol = "@parent")
-  fun decInt(id: DecInt): Result<String> {
+  fun decInt(id: EncInt): Result<String> {
     return success("ok", "decrypted int : " + id.value)
   }
 
 
   @ApiAction(desc = "test decryption of long", roles= "*", verb = "@parent", protocol = "@parent")
-  fun decLong(id: DecLong): Result<String> {
+  fun decLong(id: EncLong): Result<String> {
     return success("ok", "decrypted long : " + id.value)
   }
 
 
   @ApiAction(desc = "test decryption of double", roles= "*", verb = "@parent", protocol = "@parent")
-  fun decDouble(id: DecDouble): Result<String>
+  fun decDouble(id: EncDouble): Result<String>
   {
     return success("ok", "decrypted double : " + id.value)
   }
 
 
   @ApiAction(desc = "test decryption of string", roles= "*", verb = "@parent", protocol = "@parent")
-  fun decString(id: DecString): Result<String>
+  fun decString(id: EncString): Result<String>
   {
     return success("ok", "decrypted string : " + id.value)
   }
 
 
   @ApiAction(name = "testArgs", desc = "test types", roles= "*", verb = "@parent", protocol = "@parent")
-  fun testArgs(phone:String, code:Int, isPremiumUser:Boolean, date:DateTime, key:DecString): Result<String> 
+  fun testArgs(phone:String, code:Int, isPremiumUser:Boolean, date:DateTime, key: EncString): Result<String>
   {
     return success("ok", "$phone $code $isPremiumUser, $key")
   }
