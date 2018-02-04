@@ -68,7 +68,7 @@ object ConfFuncs {
      */
     fun readApiKey(fileName: String? = null, enc: Encryptor? = null,
                    sectionName: String? = CONFIG_DEFAULT_SECTION_API): ApiLogin? =
-            load(fileName, enc).apiKey(sectionName ?: CONFIG_DEFAULT_SECTION_API)
+            load(fileName, enc).apiLogin(sectionName ?: CONFIG_DEFAULT_SECTION_API)
 
 
     /**

@@ -125,7 +125,7 @@ class ConfigTests {
 
     @Test fun test_model_api_key() {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
-        val key = conf.apiKey("aws-sqs")
+        val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
@@ -138,14 +138,14 @@ class ConfigTests {
 
     @Test fun test_loading_from_dir_user() {
         val conf  = Config("user://.slatekit/conf/env.conf")
-        val key = conf.apiKey("aws-sqs")
+        val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_explicit() {
         val conf  = Config("file:///Users/kishore.reddy/.slatekit/conf/env.conf")
-        val key = conf.apiKey("aws-sqs")
+        val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 

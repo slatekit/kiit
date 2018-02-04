@@ -85,7 +85,7 @@ interface ConfigSupport {
      *
      * @return
      */
-    fun apiKey(name: String): ApiLogin =
+    fun apiLogin(name: String): ApiLogin =
 
             mapTo(name, { conf ->
 

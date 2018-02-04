@@ -22,6 +22,8 @@ import slatekit.common.ApiKey
 import slatekit.common.ApiLogin
 import slatekit.common.Credentials
 import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Config
+import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbTypeMySql
 
@@ -59,5 +61,53 @@ class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWith
         val credentials = Credentials(id, name, email, key, env, region)
         ConfFuncs.createLogin(rootDir, name, credentials, context.enc)
         return credentials
+    }
+
+
+    @ApiAction(desc = "loads and shows the database info from config", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showDbDefault(): DbCon? {
+        return context.cfg.dbCon()
+    }
+
+
+    @ApiAction(desc = "loads and shows the database info from config with supplied name", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showDbNamed(name:String): DbCon? {
+        return context.cfg.dbCon(name)
+    }
+
+
+    @ApiAction(desc = "loads and shows the database info from config with supplied name", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showDbFromUri(path:String, name:String): DbCon? {
+        val conf = Config(path)
+        val dbCon = conf.dbCon(name)
+        return dbCon
+    }
+
+
+    @ApiAction(desc = "loads and shows an api login info from config", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showApiLogin(name:String): ApiLogin {
+        return context.cfg.apiLogin(name)
+    }
+
+
+    @ApiAction(desc = "loads and shows an api key from config", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showApiLoginFromUri(path:String, name:String): ApiLogin {
+        val conf = Config(path)
+        val apiInfo = conf.apiLogin(name)
+        return apiInfo
+    }
+
+
+    @ApiAction(desc = "loads and shows an api key from config", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showApiKey(name:String): ApiLogin {
+        return context.cfg.apiLogin(name)
+    }
+
+
+    @ApiAction(desc = "loads and shows an api key from config", roles = "*", verb = "@parent", protocol = "@parent")
+    fun showApiKeyFromUri(path:String, name:String): ApiLogin {
+        val conf = Config(path)
+        val apiInfo = conf.apiLogin(name)
+        return apiInfo
     }
 }
