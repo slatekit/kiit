@@ -42,9 +42,9 @@ task copyAllJars(type: Copy) {
 
 task callCL(type: Exec) {
     println "call bash " + version
-    // commandLine '../../../build/kotlin/package-slatekit.sh', "${version}", 'qa'
+    commandLine '../../../build/kotlin/package-slatekit.sh', "${version}", 'qa'
 }
 
 task cleanBuildPackage(type: GradleBuild) {
-     tasks = ['clean', 'build', 'deleteAllJars', 'copyAllJars', 'callCL']
+     tasks = ['clean', 'build', 'deleteAllJars', 'copyAllJars']
 }

@@ -7,7 +7,6 @@
 .history
 .lib/
 .idea/
-.gradle/
 lib/
 build/
 out/

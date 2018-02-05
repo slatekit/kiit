@@ -150,7 +150,7 @@ rm -rf $APP_VERSION/*
 createDirs
 
 # Copy all the jars created by gradle into the release specific directory
-# cp $APP_SRC/lib/*   $APP_VERSION/
+cp $APP_SRC/lib/slatekit*   $APP_VERSION/bin
 
 # Copy all dependent jars
 cp $APP_HOME/lib/ext/json/*.jar       $APP_VERSION/ext/ 
@@ -172,10 +172,10 @@ cp  $APP_HOME/doc/kotlin/LICENSE.txt  $APP_VERSION/LICENSE.txt
 cp  $APP_HOME/doc/kotlin/README.txt   $APP_VERSION/README.txt 
 
 # Copy the jar from libs ( this is not auto-copied for some reason )
-cp  $APP_SRC/sampleapp-batch/build/libs/sampleapp-batch-${VERSION}.jar   $APP_VERSION/sampleapp-batch.jar
-cp  $APP_SRC/sampleapp-cli/build/libs/sampleapp-cli-${VERSION}.jar       $APP_VERSION/sampleapp-cli.jar
-cp  $APP_SRC/sampleapp-core/build/libs/sampleapp-core-${VERSION}.jar     $APP_VERSION/sampleapp-core.jar
-cp  $APP_SRC/sampleapp-server/build/libs/sampleapp-server-${VERSION}.jar $APP_VERSION/sampleapp-server.jar
+cp  $APP_SRC/sampleapp-batch/build/libs/sampleapp-batch-${VERSION}.jar   $APP_VERSION/bin/sampleapp-batch.jar
+cp  $APP_SRC/sampleapp-cli/build/libs/sampleapp-cli-${VERSION}.jar       $APP_VERSION/bin/sampleapp-cli.jar
+cp  $APP_SRC/sampleapp-core/build/libs/sampleapp-core-${VERSION}.jar     $APP_VERSION/bin/sampleapp-core.jar
+cp  $APP_SRC/sampleapp-server/build/libs/sampleapp-server-${VERSION}.jar $APP_VERSION/bin/sampleapp-server.jar
 
 # Create a timestamp file
 # createStamp
