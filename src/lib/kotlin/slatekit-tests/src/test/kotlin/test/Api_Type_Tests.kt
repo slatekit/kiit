@@ -14,7 +14,6 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.ApiContainerCLI
 import slatekit.sampleapp.core.apis.SampleTypes3Api
 import test.common.MyEncryptor
 
@@ -30,7 +29,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_int() {
         val encryptedText = MyEncryptor.encrypt("123")
         val api = SampleTypes3Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecInt", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
         assert(r1.value == "decrypted int : 123")
@@ -40,7 +39,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_long() {
         val encryptedText = MyEncryptor.encrypt("123456")
         val api = SampleTypes3Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecLong", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
         assert(r1.value == "decrypted long : 123456")
@@ -50,7 +49,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_double() {
         val encryptedText = MyEncryptor.encrypt("123.456")
         val api = SampleTypes3Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecDouble", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
         assert(r1.value == "decrypted double : 123.456")
@@ -60,7 +59,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_string() {
         val encryptedText = MyEncryptor.encrypt("slate-kit")
         val api = SampleTypes3Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecString", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
         assert(r1.value == "decrypted string : slate-kit")
@@ -87,7 +86,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     fun ensureSmartString(method:String, text:String, expected:String) {
         val api = SampleTypes3Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)),allowIO = false,  auth = null )
         val r1 = apis.call("samples", "types3", method, "get", mapOf(), mapOf("text" to text))
 
         assert(r1.success)

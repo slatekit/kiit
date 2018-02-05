@@ -14,7 +14,6 @@ package test
 
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.ApiContainerCLI
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Errors
 import slatekit.apis.helpers.ApiHelper
@@ -83,7 +82,7 @@ open class ApiTestsBase {
                 errors  : Errors? = null): ApiContainer {
 
         // 2. apis
-        val container = ApiContainerCLI(ctx, auth, apis, errors)
+        val container = ApiContainer(ctx, false, auth, errors = errors, apis = apis)
         return container
     }
 

@@ -12,15 +12,11 @@ mantra: Simplicity above all else
  */
 package test
 
-import com.sun.org.apache.xml.internal.serializer.utils.SerializerMessages_sv
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.Serializer
 import slatekit.common.ext.tail
 import slatekit.common.newline
-import slatekit.common.serialization.SerializerCsv
 import slatekit.meta.Serialization
-import slatekit.meta.SerializerSample
 import test.common.User
 
 /**

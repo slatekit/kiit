@@ -168,6 +168,21 @@ class ArgsTests {
     }
 
 
+    @Test fun can_parse_sys_args_only() {
+
+        // app.reg.createSampleUser $command=sample
+        val result = Args.parse("area.api.action \$format=json", "-", "=", true)
+        ensure(result, true, 0,
+                listOf<Pair<String,String>>(),
+                listOf<Pair<String,String>>(),
+                listOf(
+                        Pair("format"    , "json" )
+                ),
+                listOf("area", "api", "action")
+        )
+    }
+
+
     // app.users.activate
     @Test fun can_parse_actions_without_args() {
 

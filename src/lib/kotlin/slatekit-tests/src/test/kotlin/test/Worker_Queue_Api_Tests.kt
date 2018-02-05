@@ -3,7 +3,6 @@ package test
 import org.junit.Test
 
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiContainerCLI
 import slatekit.apis.ApiReg
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceDefault
@@ -18,7 +17,7 @@ class Worker_Queue_Api_Tests {
     fun buildContainer(): ApiContainer {
         val ctx = AppContext.simple("queues")
         val api = SampleTypes2Api()
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false)
         return apis
     }
 
@@ -35,19 +34,16 @@ class Worker_Queue_Api_Tests {
         val api = WorkerSampleApi(ctx, queues)
 
         // 4. container
-        val apis = ApiContainerCLI(ctx, apis = listOf(ApiReg(api)), auth = null )
+        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), auth = null, allowIO = false )
 
-        // 5. link container to api
-        api._container = apis
-
-        // 6. worker system
+        // 5. worker system
         val sys = System()
         sys.register(WorkerWithQueuesApi(apis, queues, null, null, WorkerSettings()))
 
-        // 7. send method call to queue
+        // 6. send method call to queue
         api.test1Queued("user1@abc.com", true, 123, DateTime.parseNumeric("20180127093045"))
 
-        // 8. run worker
+        // 7. run worker
         assert(api._lastResult == "")
         sys.get(sys.defaultGroup)?.get(0)?.work()
         assert(api._lastResult == "user1@abc.com, true, 123, 2018-01-27T14:30:45Z")
