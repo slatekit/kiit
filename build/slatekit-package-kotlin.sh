@@ -28,7 +28,7 @@ cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-server/build/libs/s
 cp $SLATE_HOME/lib/ext/json/*.jar       $SLATE_DIST/ext/ 
 cp $SLATE_HOME/lib/ext/mysql/*.jar      $SLATE_DIST/ext/      
 cp $SLATE_HOME/lib/ext/kotlin/*.jar     $SLATE_DIST/lib/    
-cp $SLATE_HOME/lib/ext/spark/2.6/*.jar  $SLATE_DIST/lib
+cp $SLATE_HOME/lib/ext/spark/2.6/*.jar  $SLATE_DIST/lib/
 
 # Copy the sample app resources/conf files 
 cp -a $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch/src/main/resources/.    $SLATE_DIST/conf/sampleapp-batch/
