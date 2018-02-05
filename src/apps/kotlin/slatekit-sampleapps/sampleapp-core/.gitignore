@@ -14,6 +14,7 @@
 .gradle
 
 # ROOT DIRS
+out/
 lib/
 build/
 dist/

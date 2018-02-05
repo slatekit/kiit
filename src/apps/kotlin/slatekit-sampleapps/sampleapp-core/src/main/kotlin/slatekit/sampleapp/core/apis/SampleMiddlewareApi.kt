@@ -1,5 +1,6 @@
 package slatekit.sampleapp.core.apis
 
+import slatekit.apis.ApiRegAction
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
 import slatekit.common.Request
@@ -27,7 +28,7 @@ open class SampleMiddlewareApi(
     /**
      * Hook for before this api handles any request
      */
-    override fun onBefore(context:Context, request:Request, source:Any, target:Any): Unit {
+    override fun onBefore(context:Context, request:Request, source:Any, target: ApiRegAction): Unit {
         onBeforeHookCount.add(request)
     }
 
@@ -35,7 +36,7 @@ open class SampleMiddlewareApi(
     /**
      * Hook for after this api handles any request
      */
-    override fun onAfter(context:Context, request:Request, source:Any, target:Any): Unit {
+    override fun onAfter(context:Context, request:Request, source:Any, target:ApiRegAction): Unit {
         onAfterHookCount.add(request)
     }
 
@@ -43,7 +44,7 @@ open class SampleMiddlewareApi(
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override fun onFilter(context: Context, request:Request, source:Any, target:Any): Result<Any>  {
+    override fun onFilter(context: Context, request:Request, source:Any, target:ApiRegAction): Result<Any>  {
         return if(request.action.startsWith("hi")) {
             badRequest<Boolean>("filtered out")
         } else {

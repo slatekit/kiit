@@ -8,6 +8,7 @@
 .lib/
 .idea/
 build/
+out/
 dist/*
 target/
 ext/

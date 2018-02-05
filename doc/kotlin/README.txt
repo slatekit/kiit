@@ -184,25 +184,25 @@ http://www.slatekit.com/apis-detail.html
 EXAMPLES 
 :> ?
 :> sys.version.java
-:> app.info.lang
-:> app.info.host
-:> app.info.app
-:> sampleapp.users ?
-:> sampleapp.users.total
-:> sampleapp.users.create  -email="batman@gotham.com" -first="bruce" -last="wayne" -isMale=true -age=32 -phone="123456789" -country="us" 
-:> sampleapp.users.create  -email="superman@metropolis.com" -first="clark" -last="kent" -isMale=true -age=32 -phone="987654321" -country="us" 
-:> sampleapp.users.create  -email="wonderwoman@metropolis.com" -first="diana" -last="price" -isMale=false -age=32 -phone="111111111" -country="br" 
-:> sampleapp.users.getById -id=1
-:> sampleapp.users.getAll
-:> sampleapp.users.updatePhone -id=1 -phone=1112223334
-:> sampleapp.users.first          
-:> sampleapp.users.getById -id=2   
-:> sampleapp.users.last           
-:> sampleapp.users.recent -count=2
-:> sampleapp.users.oldest -count=2
-:> sampleapp.users.deleteById -id=2     
-:> sampleapp.users.total
-:> sampleapp.users.getAll          
+:> sys.app.lang
+:> sys.app.host
+:> sys.app.app
+:> app.users ?
+:> app.users.total
+:> app.users.createWith  -email="batman@gotham.com" -first="bruce" -last="wayne" -isMale=true -age=32 -phone="123456789" -country="us" 
+:> app.users.createWith  -email="superman@metropolis.com" -first="clark" -last="kent" -isMale=true -age=32 -phone="987654321" -country="us" 
+:> app.users.createWith  -email="wonderwoman@metropolis.com" -first="diana" -last="price" -isMale=false -age=32 -phone="111111111" -country="br" 
+:> app.users.getById -id=1
+:> app.users.getAll
+:> app.users.updatePhone -id=1 -phone=1112223334
+:> app.users.first          
+:> app.users.getById -id=2   
+:> app.users.last           
+:> app.users.recent -count=2
+:> app.users.oldest -count=2
+:> app.users.deleteById -id=2     
+:> app.users.total
+:> app.users.getAll          
 
 
 :> exit
@@ -233,6 +233,7 @@ Use POSTMAN for easy testing of the APIs below:
 
 HEADERS:
 api-key : 54B1817194C1450B886404C6BEA81673
+Authorization : 54B1817194C1450B886404C6BEA81673
 
 VERB,  HEADERS,      URL                                                BODY ( json )
 get    see above   http://localhost:5000/api/sys/version/java         { }

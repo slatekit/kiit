@@ -1,11 +1,12 @@
 package slatekit.sampleapp.core.services
 
 import slatekit.apis.*
+import slatekit.apis.support.ApiBase
 import slatekit.common.*
-import slatekit.common.encrypt.DecDouble
-import slatekit.common.encrypt.DecInt
-import slatekit.common.encrypt.DecLong
-import slatekit.common.encrypt.DecString
+import slatekit.common.encrypt.EncDouble
+import slatekit.common.encrypt.EncInt
+import slatekit.common.encrypt.EncLong
+import slatekit.common.encrypt.EncString
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
 import slatekit.sampleapp.core.models.Movie
@@ -38,7 +39,7 @@ class SampleApi(context: AppContext): ApiBase(context) {
 
     @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
     fun inputRequest(req: Request): Result<String> {
-        return success("ok", "raw request id: " + req.args!!.getInt("id"))
+        return success("ok", "raw request id: " + req.data!!.getInt("id"))
     }
 
 
@@ -75,26 +76,26 @@ class SampleApi(context: AppContext): ApiBase(context) {
 
 
     @ApiAction(desc = "accepts an encrypted int that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecInt(id: DecInt): Result<String> {
+    fun inputDecInt(id: EncInt): Result<String> {
         return success("ok", "decrypted int : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted long that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecLong(id: DecLong): Result<String> {
+    fun inputDecLong(id: EncLong): Result<String> {
         return success("ok", "decrypted long : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted double that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecDouble(id: DecDouble): Result<String>
+    fun inputDecDouble(id: EncDouble): Result<String>
     {
         return success("ok", "decrypted double : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted string that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecString(id: DecString): Result<String>
+    fun inputDecString(id: EncString): Result<String>
     {
         return success("ok", "decrypted string : " + id.value)
     }

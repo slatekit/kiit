@@ -87,7 +87,7 @@ class AppAuth(val mode: String, val appDir: String,
         // CASE 3: Running a web server and using an api-key for roles
         // Get the roles from the opts abstraction member representing http headers
         val roles = if (mode == "header") {
-            val headers = cmd.opts
+            val headers = cmd.meta
 
             // NOTE: Handle roles what ever way you want here....
             // This is just here for sample purpose to show getting auth/user info from

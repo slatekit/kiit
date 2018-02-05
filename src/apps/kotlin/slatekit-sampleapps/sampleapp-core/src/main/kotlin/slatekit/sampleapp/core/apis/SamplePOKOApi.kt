@@ -44,7 +44,7 @@ open class SamplePOKOApi {
     fun hello(greeting: String): String = "$greeting back"
 
 
-    fun request(req: Request): String = req.args?.getString("greeting") ?: "hi"
+    fun request(req: Request): String = req.data?.getString("greeting") ?: "hi"
 
 
     fun response(guess:Int): Result<Int> = if(guess == 1) success(1, "Correct") else failure("Try again")
