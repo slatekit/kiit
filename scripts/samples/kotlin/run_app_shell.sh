@@ -4,4 +4,4 @@ echo "Shell API"
 APP_HOME="."
 APP_CLASSPATH="${APP_HOME}/bin/*:${APP_HOME}/lib/*:${APP_HOME}/ext/*"
 echo $APP_CLASSPATH
-java -cp "${APP_CLASSPATH}" slatekit.sampleapp.cli.SampleAppCLIKt -conf.dir='conf/sampleapp-shell/'
+java -cp "${APP_CLASSPATH}" slatekit.sampleapp.cli.SampleAppCLIKt -conf.dir="\"file://./conf/sampleapp-shell/\""
