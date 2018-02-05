@@ -179,10 +179,9 @@ cp  $APP_SRC/sampleapp-server/build/libs/sampleapp-server-${VERSION}.jar $APP_VE
 
 # Create a timestamp file
 # createStamp
-exit 
 
 # Zip up the entires release version directory
 cd $APP_RELS
-zip -r ${APP_NAME}-${VERSION}.zip $VERSION
+zip -r ${APP_NAME}_kotlin_v_${VERSION}.zip $VERSION
 
 cd $APP_BUILD
