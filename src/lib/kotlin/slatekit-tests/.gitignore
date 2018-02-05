@@ -13,6 +13,7 @@
 .idea
 
 # ROOT DIRS
+out/
 lib/
 build/
 dist/

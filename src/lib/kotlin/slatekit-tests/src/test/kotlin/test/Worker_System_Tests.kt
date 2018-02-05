@@ -57,7 +57,7 @@ class Worker_System_Tests {
         val sys = build()
 
         sys.init()
-        sys.run()
+        sys.start()
         Thread.sleep(4000)
 
         val group1 = sys.get("group 1")!!
