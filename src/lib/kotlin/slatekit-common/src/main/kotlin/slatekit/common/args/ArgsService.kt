@@ -82,7 +82,7 @@ class ArgsService {
                     // if input = "area.api.action -arg1="1" -arg2="2"
                     // result = "area.api.action"
                     val result = if (hasAction) {
-                        val actionResult = ArgsFuncs.parseAction(tokens, prefix, metaChar)
+                        val actionResult = ArgsFuncs.parseAction(tokens, prefix, metaChar, sysChar)
                         // Start of named args is always 1 after the action
                         val startOfNamedArgs = if (actionResult.pos == 0) 0 else actionResult.posLast
                         Triple(actionResult.action, actionResult.actions, startOfNamedArgs)

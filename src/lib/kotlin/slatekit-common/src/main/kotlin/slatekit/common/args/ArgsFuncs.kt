@@ -111,9 +111,9 @@ object ArgsFuncs {
      * @return ( action, actions, actionCount, end index )
      *         ( "app.users.activate", ["app", 'users", "activate" ], 3, 5 )
      */
-    fun parseAction(args: List<String>, prefix: String, prefixMeta:String): ParsedItem {
+    fun parseAction(args: List<String>, prefix: String, prefixMeta:String, prefixSys:String): ParsedItem {
         // Get the first index of arg prefix ( e.g. "-" or "/"
-        val indexPrefix = args.indexOfFirst { it == prefix || it == prefixMeta }
+        val indexPrefix = args.indexOfFirst { it == prefix || it == prefixMeta || it == prefixSys}
 
         // Get index after action "app.users.activate"
         val indexLast = if (indexPrefix < 0) args.size else indexPrefix

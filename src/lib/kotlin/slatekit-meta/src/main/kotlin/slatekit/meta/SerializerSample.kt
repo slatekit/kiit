@@ -19,6 +19,27 @@ class SerializerSample(objectSerializer: ((Serializer, Any, Int) -> Unit)? = nul
 
 
     /**
+     * serializes an object, factoring in a root item.
+     */
+    fun serializeParams(s: List<KParameter>): String {
+        _buff = StringBuilder()
+
+
+        // Begin
+        onContainerStart(s, ParentType.MAP_TYPE, 0)
+
+        // Pairs
+        s.forEachIndexed { index, entry -> onListItem(s, 0, index, entry)}
+
+        // End
+        onContainerEnd(s, ParentType.MAP_TYPE, 0)
+
+        val text = _buff.toString()
+        return text
+    }
+
+
+    /**
      * Recursive serializer for a value of basic types.
      * Used for printing items to the console
      * in various places and components.
