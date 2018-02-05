@@ -2,6 +2,7 @@ package test.common
 
 import slatekit.apis.Api
 import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHostAware
 import slatekit.apis.support.ApiQueueSupport
 import slatekit.common.DateTime
 import slatekit.common.queues.QueueSource
@@ -9,12 +10,14 @@ import slatekit.core.common.AppContext
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
-class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf()) : ApiQueueSupport {
+class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf())
+    : ApiQueueSupport, ApiHostAware {
 
     var _container:ApiContainer? = null
     var _lastResult = ""
 
 
+    override fun setApiHost(host: ApiContainer):Unit { _container = host }
     override fun container():ApiContainer = _container!!
     override fun queues(): List<QueueSource> = queues
 

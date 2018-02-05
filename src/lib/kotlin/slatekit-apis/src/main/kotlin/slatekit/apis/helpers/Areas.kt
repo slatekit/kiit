@@ -27,7 +27,7 @@ import kotlin.reflect.full.primaryConstructor
  * Emphermeral class to register the apis into a ListMap which is ultimately
  * returned from there and used by the ApiContainer.
  */
-class Areas(val namer:Namer?) {
+class Areas(val apiHost:ApiContainer, val namer:Namer?) {
 
     /**
      *  ListMap will eventually contain all the areas by name.
@@ -188,6 +188,8 @@ class Areas(val namer:Namer?) {
                 _apisToClasses["$apiArea.$apiName"] = apiAnno
             }
         }
+        // if singleton and api host aware, set the host
+        setApiHost(reg.singleton)
     }
 
 
@@ -203,6 +205,7 @@ class Areas(val namer:Namer?) {
         else {
             Reflector.createWithArgs<Any>(reg.cls, arrayOf(ctx))
         }
+        setApiHost(instance)
         return instance
     }
 
@@ -298,5 +301,12 @@ class Areas(val namer:Namer?) {
             lookup
         }
         return result
+    }
+
+
+    private fun setApiHost(item:Any?):Unit {
+        if(item is ApiHostAware) {
+            item.setApiHost(apiHost)
+        }
     }
 }

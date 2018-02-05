@@ -23,6 +23,7 @@ import slatekit.common.*
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.meta.Serialization
+import slatekit.meta.SerializerSample
 import slatekit.meta.kClass
 import java.io.File
 import kotlin.reflect.KCallable
@@ -72,7 +73,7 @@ open class ApiContainer(
      *    an ApiBase ( which is what you extend from to create your own api )
      * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
      */
-    protected val _lookup = Areas(namer).registerAll(apis)
+    protected val _lookup = Areas(this, namer).registerAll(apis)
 
 
     /**
@@ -150,8 +151,8 @@ open class ApiContainer(
         val action = get(cmd)
         val sample = if(action.success) {
                 val parameters = action.value!!.action.paramList
-                val serializer = Serialization.sampler()
-                val text = serializer.serialize(parameters)
+                val serializer = Serialization.sampler() as SerializerSample
+                val text = serializer.serializeParams(parameters)
                 text
         } else "Unable to find command: " + cmd.path
 
