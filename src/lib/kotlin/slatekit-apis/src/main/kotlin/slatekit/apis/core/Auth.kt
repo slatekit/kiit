@@ -37,14 +37,14 @@ interface Auth {
      * @param rolesOnApi     : The values of the "roles" attribute on the annotation of the Api ( class )
      * @return
      */
-    fun isAuthorized(cmd: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean>
+    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean>
 
 
     /**
      * Gets the user roles that are applicable for the supplied request.
      * This can be implemented any way, e.g. Auth tokens/OAuth etc.
      */
-    fun getUserRoles(cmd: Request): String = ""
+    fun getUserRoles(req: Request): String = ""
 
 
     /**

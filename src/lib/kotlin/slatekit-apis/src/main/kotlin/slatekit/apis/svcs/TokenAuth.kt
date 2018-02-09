@@ -6,47 +6,53 @@ import slatekit.common.ApiKey
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.auth.AuthFuncs
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs
 import slatekit.common.splitToMapWithPairs
 
 
 /**
  * Class used to authenticate an api with support for 3 modes:
- * 1. app-key : user needs to supply an api-key to authenticate ( api-keys are not unique to users )
- * 2. app-role: user needs to login to get an Authorization token ( the token is unique to a user )
- * 3. key-role: dual authentication mode that will validate key + role.
  *
- * Need to initialize with api-keys
+ * 1. api-key : user needs to supply an api-key to authenticate ( api-keys are not unique to users )
+ * 2. token   : user needs to login to get an Authorization token ( the token is unique to a user )
+ * 3. hybrid  : dual authentication mode that will validate key + token.
+ *
+ * @param keys        : The list of api keys supported ( which contain roles ).
+ *                      These are used for actions where 1 ore more keys are used by many users
+ * @param callback    : Callback used for handing the actual logic for validating an action
  */
 open class TokenAuth(
-        protected val keys: List<ApiKey>?,
+        protected val keys: List<ApiKey>,
+        protected val enc: Encryptor?,
         private val callback: ((String, Request, String) -> Result<Boolean>)? = null,
-        protected val headerKey: String = "api-key") : Auth {
+        private val headerKey: String = "api-key") : Auth {
 
-    private val _keyLookup = AuthFuncs.convertKeys(keys ?: listOf())
+    private val _keyLookup = AuthFuncs.convertKeys(keys )
 
 
     /**
      * whether or not the authorization is valid for the mode, roles supplied.
      *
-     * @param mode
-     * @param roles
-     * @param roleParents
+     * @param req          : The api request object
+     * @param authMode     : The auth mode for the api
+     * @param rolesOnAction: The roles setup for the action on the api
+     * @param rolesOnApi   : The roles setup for the api itself
      * @return
      */
-    override fun isAuthorized(req: Request, mode: String, roles: String, roleParents: String): Result<Boolean> {
+    override fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean> {
         // 1. No roles or guest ?
-        if (isRoleEmptyOrGuest(roles))
+        if (isRoleEmptyOrGuest(rolesOnAction))
             return ResultFuncs.ok()
 
         // 2. Get the actual role if the action references the parent via @parent
-        val role = determineRole(roles, roleParents)
+        val role = determineRole(rolesOnAction, rolesOnApi)
 
         // 3. Now determine roles based on api-key or role
-        return when(mode){
+        return when(authMode){
             ApiConstants.AuthModeKeyRole -> isKeyRoleValid(req, role)
-            ApiConstants.AuthModeAppRole -> isAppRoleValid(req, role)
-            ApiConstants.AuthModeAppKey  -> isAppRoleKeyValid(req, role)
+            ApiConstants.AuthModeAppRole -> isTokenRoleValid(req, role)
+            ApiConstants.AuthModeAppKey  -> isKeyTokenRoleValid(req, role)
             else                         -> ResultFuncs.unAuthorized()
         }
     }
@@ -54,14 +60,16 @@ open class TokenAuth(
 
     /**
      * Determines whether the request is authorized based on an api-key based role.
-     * This maps a header key to a token to roles
-     * e.g e.g. api-key = abc123 = dev,qa,ops
+     * This expects a meta parameter named "api-key" containing a guid that matches
+     * one of the keys this was initialized with.
+     *
+     * @sample: "api-key" = abc123
      *
      * NOTES:
-     * 1. Headers/Inputs has key "api-key"
+     * 1. Meta parameter has key "api-key"
      * 2. "api-key" has value "abc123"
-     * 3. The token "abc123" maps internally to roles "dev,qa,ops"
-     * 4. We check the role supplied to one of these roles
+     * 3. The api key "abc123" maps internally to one of key in @see: keys
+     * 4. The matched key has associated roles
      */
     open fun isKeyRoleValid(req: Request, role:String): Result<Boolean> {
 
@@ -74,20 +82,19 @@ open class TokenAuth(
 
 
     /**
-     * Determines whether the request is authorized based on role.
-     * This maps a header key to a token to roles
-     * e.g e.g. Authorization = abc123 = dev,qa,ops
+     * Determines whether the request is authorized based on a token.
+     * This expects a meta parameter named "Authorization" containing a string token
      *
      * NOTES:
-     * 1. Headers/Inputs has key "Authorization"
-     * 2. "Authorization" has value "abc123"
-     * 3. The token "abc123" maps internally to roles "dev,qa,ops"
-     * 4. We check the role supplied to one of these roles
+     * 1. Meta parameter has key "Authorization"
+     * 2. Authorization" has value "abc123"
+     * 3. The token "abc123" maps internally to a user
+     * 4. We look up the user identified by the token and get their roles
      */
-    open fun isAppRoleValid(req: Request, role: String): Result<Boolean> {
+    open fun isTokenRoleValid(req: Request, role: String): Result<Boolean> {
 
         return if (callback != null) {
-            callback!!(ApiConstants.AuthModeAppRole, req, role)
+            callback?.invoke(ApiConstants.AuthModeAppRole, req, role)
         }
         else {
 
@@ -104,10 +111,9 @@ open class TokenAuth(
     /**
      * performs both app role validation and key role validation.
      */
-    fun isAppRoleKeyValid(req:Request, roles:String): Result<Boolean> {
+    private fun isKeyTokenRoleValid(req:Request, roles:String): Result<Boolean> {
         val keyResult = isKeyRoleValid(req, roles)
         if(!keyResult.success) return keyResult
-        val appResult = isAppRoleValid(req, roles)
-        return appResult
+        return isTokenRoleValid(req, roles)
     }
 }

@@ -14,4 +14,9 @@ object Ioc {
         val instance = creator.invoke(name) as T
         return instance
     }
+
+
+    fun  contains(name:String): Boolean {
+       return lookup.containsKey(name)
+    }
 }
