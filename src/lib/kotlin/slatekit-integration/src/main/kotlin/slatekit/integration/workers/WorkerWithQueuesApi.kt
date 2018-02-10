@@ -30,7 +30,7 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
         val rawBody = queue.getMessageBody(msg)
 
         // Convert json to request format.
-        val req = Reqs.fromJson(msg, ApiConstants.SourceQueue, rawBody, container.ctx.enc)
+        val req = Reqs.fromJson(null, msg, ApiConstants.SourceQueue, rawBody, container.ctx.enc)
 
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.

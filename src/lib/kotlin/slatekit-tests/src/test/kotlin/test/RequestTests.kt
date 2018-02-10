@@ -25,7 +25,7 @@ class RequestTests {
              }
         }
         """
-        val req = Reqs.fromJson("json", ApiConstants.SourceFile, json, MyEncryptor)
+        val req = Reqs.fromJson(null,"json", ApiConstants.SourceFile, json, MyEncryptor)
         assert( req.path == "app.users.activate")
         assert( req.parts == listOf("app", "users", "activate"))
         assert( req.source == ApiConstants.SourceFile)

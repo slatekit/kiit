@@ -22,11 +22,11 @@ object Reqs {
 
         // Parse json
         val content = File(filePath).readText()
-        return fromJson(rawPath, ApiConstants.SourceFile, content, enc)
+        return fromJson(null, rawPath, ApiConstants.SourceFile, content, enc)
     }
 
 
-    fun fromFileWithMeta(rawPath:String, keys: Map<String,String>, enc: Encryptor?): Request {
+    fun fromFileWithMeta(route:String, rawPath:String, keys: Map<String,String>, enc: Encryptor?): Request {
 
         // Interpret the path as it could have slatekit supported URIS:
         // e.g. user:// | file:// | temp://
@@ -34,7 +34,7 @@ object Reqs {
 
         // Parse json
         val content = File(filePath).readText()
-        val req = fromJson(rawPath, ApiConstants.SourceFile, content, enc)
+        val req = fromJson(route, rawPath, ApiConstants.SourceFile, content, enc)
         req.meta?.let { meta ->
             val jsonObj = meta.raw as JSONObject
             keys.forEach { pair ->
@@ -49,11 +49,12 @@ object Reqs {
      * The json structure for the request will match 1 to 1.
      * NOTE: The following fields can be omitted:
      *
-     * 1. parts    : populated based on path. "area.api.action". e.g. [ "area", "api"  , "action" ]
-     * 2. source   : defaulted to "file"
-     * 3. verb     : defaulted to "file"
-     * 4. timestamp: current time
-     * 5. version  : defaulted to 1.0
+     * 1. path     : the 3 part route structure, as it could be specified on command line
+     * 2. parts    : populated based on path. "area.api.action". e.g. [ "area", "api"  , "action" ]
+     * 3. source   : defaulted to "file"
+     * 4. verb     : defaulted to "file"
+     * 5. timestamp: current time
+     * 6. version  : defaulted to 1.0
      *
      * EXAMPLE:
      * {
@@ -68,7 +69,7 @@ object Reqs {
      *      }
      * }
      */
-    fun fromJson(rawSource:Any, source:String, content:String, enc: Encryptor?): Request {
+    fun fromJson(route:String?, rawSource:Any, source:String, content:String, enc: Encryptor?): Request {
 
         val parser = JSONParser()
         val doc = parser.parse(content)
@@ -77,7 +78,7 @@ object Reqs {
         // Meta
         val hasVersion = jsonRoot.containsKey("version")
         val version = if(hasVersion)jsonRoot.get("version") as String else ApiConstants.Version
-        val path = jsonRoot.get("path") as String
+        val path = route ?: jsonRoot.get("path") as String
         val tag = jsonRoot.get("tag") as String
 
         val jsonData = jsonRoot.get("data") as JSONObject
