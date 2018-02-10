@@ -169,7 +169,7 @@ class Args(
     /**
      * whether or not this contains the key in the meta args
      */
-    fun containsSysKey(key:String):Boolean = _metaArgs?.let{ meta -> sys.containsKey(key) } ?: false
+    fun containsSysKey(key:String):Boolean = _sysArgs?.let{ sys -> sys.containsKey(key) } ?: false
 
 
     /**
@@ -215,7 +215,7 @@ class Args(
      * gets a string from the meta args
      */
     fun getSysStringOrElse(key:String, defaultValue:String):String {
-        return if(containsMetaKey(key)) {
+        return if(containsSysKey(key)) {
             _sysArgs?.let { m -> m[key] } ?: ""
         }
         else {

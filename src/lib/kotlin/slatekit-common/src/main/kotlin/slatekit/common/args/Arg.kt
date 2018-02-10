@@ -68,10 +68,13 @@ data class Arg(
             prefix: String? = "-",
             separator: String? = "=",
             maxWidth: Int? = null): List<ConsoleItem> {
+
         val nameLen = maxWidth ?: name.length
+        val nameFill = name.padEnd(nameLen)
+        val namePart = (prefix ?: "-" ) + nameFill
 
         val logs = mutableListOf(
-                ConsoleItem(Highlight, prefix ?: "-" + name.padEnd(nameLen), false),
+                ConsoleItem(Highlight, namePart, false),
                 ConsoleItem(Text, separator ?: "=", false),
                 ConsoleItem(Text, desc, true),
                 ConsoleItem(Text, " ".repeat(nameLen + 6), false))
