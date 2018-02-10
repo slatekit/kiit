@@ -217,7 +217,6 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             ParentType.MAP_TYPE    -> _buff.append("{")
             ParentType.OBJECT_TYPE -> _buff.append("{")
             ParentType.ROOT_TYPE   -> _buff.append("{")
-            else                   -> _buff.append("{")
         }
     }
 
@@ -231,7 +230,6 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             ParentType.MAP_TYPE    -> _buff.append("}")
             ParentType.OBJECT_TYPE -> _buff.append("}")
             ParentType.ROOT_TYPE   -> _buff.append("}")
-            else                   -> _buff.append("}")
         }
     }
 

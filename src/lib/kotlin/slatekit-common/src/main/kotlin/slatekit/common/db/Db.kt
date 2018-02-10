@@ -62,7 +62,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
      *
      * @param name : The name of the table
      */
-    fun dropTable(name: String): Unit {
+    fun dropTable(name: String) {
         val sql = source.buildDropTable(name)
         executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, this::errorHandler)
     }

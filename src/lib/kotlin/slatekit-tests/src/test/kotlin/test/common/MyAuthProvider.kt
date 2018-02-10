@@ -21,7 +21,7 @@ import slatekit.common.Request
 // NOTE: You can also use own pre-built authorization provider which has
 // support for users, roles, permissions
 // =======================================================================================
-class MyAuthProvider(val user:String, val roles:String, keys:List<ApiKey>?) : TokenAuth(keys)
+class MyAuthProvider(val user:String, val roles:String, keys:List<ApiKey>?) : TokenAuth(keys ?: listOf(), null)
 {
 
   override fun getUserRoles(cmd: Request):String{

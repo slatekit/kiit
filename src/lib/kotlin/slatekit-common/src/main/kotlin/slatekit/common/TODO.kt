@@ -14,6 +14,15 @@
 
 object TODO {
 
+    private var logger:((String) -> Unit)? = null
+
+
+    /**
+     * sets the logger for messages
+     */
+    fun CONFIGURE(logger:((String) -> Unit)?) { this.logger = logger }
+
+
     /**
      * Indicates that code is not implemented
      * @param tag
@@ -82,5 +91,9 @@ object TODO {
 
 
     private fun exec(msg: String, tag: String, callback: (() -> Unit)? = null) {
+        logger?.let { log ->
+            log("$tag:$msg")
+        }
+        callback?.invoke()
     }
 }
