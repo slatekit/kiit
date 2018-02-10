@@ -46,7 +46,7 @@ data class CliCommand(  val area: String,
     fun fullName(): String {
         return if (name.isNullOrEmpty())
             area
-        else if (action.isNotEmpty())
+        else if (action.isNullOrEmpty())
             area + "." + name
         else
             area + "." + name + "." + action
