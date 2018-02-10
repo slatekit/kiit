@@ -56,7 +56,7 @@ object AppRunner {
         println(Console.RESET)
 
         // Error ?
-        if(!result.success){
+        if(!result.success && !result.isHelp){
             println()
             println("==================================")
             println("ERROR !!")
@@ -203,6 +203,9 @@ object AppRunner {
             BAD_REQUEST -> {
                 writer.error(newline + "Input parameters invalid" + newline)
             }
+            HELP -> {
+                writer.line()
+            }
             else        -> {
                 writer.error(newline + "Unexpected error: " + result.msg)
             }
@@ -213,7 +216,9 @@ object AppRunner {
 
 
     fun failed(app: AppProcess): Result<Any> {
-        println("Application context invalid... exiting running of app.")
+        if(!app.ctx.state.isHelp) {
+            println("Application context invalid... exiting running of app.")
+        }
         return failureWithCode(code = app.ctx.state.code, msg = app.ctx.state.msg)
     }
 
