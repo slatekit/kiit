@@ -17,7 +17,9 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Reqs
 import slatekit.common.*
+import slatekit.common.console.ConsoleWriter
 import slatekit.core.cli.CliCommand
+import slatekit.core.cli.CliConstants
 import java.io.File
 
 /**
@@ -26,48 +28,27 @@ import java.io.File
  * @param creds  : credentials for authentication/authorization purposes.
  * @param ctx    : the app context hosting the selected environment, logger, configs and more
  * @param auth   : the auth provider
- * @param appDir : deprecated
  * @param settings : Settings for the shell functionality
  */
 class CliApi(private val creds: slatekit.common.Credentials,
              val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
-             val appDir: String,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
              apiItems: List<slatekit.apis.ApiReg>? = null
 )
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
+
+    val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
     val apis = ApiContainer(ctx, true, auth, apis = apiItems)
 
 
     /**
-     * Exposed life-cycle hook for when the shell is starting up.
-     */
-    override fun onShellStart(): Unit {
-        // You don't need to override this as the base method displays help info
-        _view.showHelp()
-        _writer.highlight("\tStarting up ${_appMeta.about.name} command line")
-    }
-
-
-    /**
      * Exposed life-cycle hook for when the shell is ending/shutting down.
      */
-    override fun onShellEnd(): Unit {
-        _writer.highlight("\tShutting down ${_appMeta.about.name} command line")
-    }
-
-
-    /**
-     * Exposed life-cycle hook to do some work before executing the command
-     * @param cmd : The raw user entered command
-     * @return
-     */
-    override fun onCommandBeforeExecute(cmd: slatekit.core.cli.CliCommand): slatekit.core.cli.CliCommand {
-        _writer.highlight("\t")
-        return cmd
+    override fun onShellEnd() {
+        _writer.highlight("Shutting down ${_appMeta.about.name} command line")
     }
 
 
@@ -81,27 +62,22 @@ class CliApi(private val creds: slatekit.common.Credentials,
     override fun onCommandExecuteInternal(cmd: slatekit.core.cli.CliCommand): slatekit.core.cli.CliCommand {
         _writer.highlight("Executing ${_appMeta.about.name} api command " + cmd.fullName())
 
-        // Create request from cmd
-
         // Supplying params from file ?
-        return if (cmd.args.sys.isNotEmpty()) {
-            val metaCmd = cmd.args.getSysString("command")
+        return if (containsRequestLevelSystemCommand(cmd)) {
+            val metaCmd = cmd.args.sys.keys.first()
             val cmdResult = when(metaCmd){
 
                 // Case 1: Generate a sample command to output/file
-                "sample" -> cmd.copy(result = buildSampleRequest(cmd))
+                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd))
 
                 // Case 2: Get command from params file and execute
-                "request" -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
+                CliConstants.SysFile   -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
 
                 // Case 3: Code Generation
-                "codegen" -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)))
+                CliConstants.SysCodeGen -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)))
 
                 // Case 4: Unknown
-                else     -> {
-                    ctx.log.error("Unknown meta command : $metaCmd")
-                    cmd
-                }
+                else     -> cmd
             }
             cmdResult
         }
@@ -115,21 +91,13 @@ class CliApi(private val creds: slatekit.common.Credentials,
     }
 
 
-    /**
-     * Use case 3d: ( OPTIONAL ) do some stuff after the command execution
-     *
-     * @param cmd
-     * @return
-     */
-    override fun onCommandAfterExecute(cmd: slatekit.core.cli.CliCommand): slatekit.core.cli.CliCommand {
-        return super.onCommandAfterExecute(cmd)
-        // Do anything app specific else here.
+    override fun showExtendedHelp(writer: ConsoleWriter) {
+        apis.help.help()
     }
 
 
-    override fun showHelp(): Unit {
+    override fun showHelp() {
         _view.showHelp()
-        apis.help.help()
     }
 
 
@@ -143,7 +111,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
      * @param cmd
      * @param mode
      */
-    override fun showHelpFor(cmd: slatekit.core.cli.CliCommand, mode: Int): Unit {
+    override fun showHelpFor(cmd: slatekit.core.cli.CliCommand, mode: Int) {
         when (mode) {
             // 1: {area} ? = help on area
             slatekit.core.cli.CliConstants.VerbPartArea -> {
@@ -161,11 +129,6 @@ class CliApi(private val creds: slatekit.common.Credentials,
     }
 
 
-    override fun showResult(cmd: CliCommand, result: slatekit.common.Result<Any>): Unit {
-        _printer.printResult(cmd, result)
-    }
-
-
     override fun collectSummaryExtra(): List<Pair<String, String>>? {
         return listOf(
                 Pair("db.conn", ctx.dbs?.default()?.url ?: ""),
@@ -175,23 +138,36 @@ class CliApi(private val creds: slatekit.common.Credentials,
     }
 
 
-    private fun buildSampleRequest(cmd:CliCommand): Result<String> {
-        val opts = slatekit.common.InputArgs(mapOf<String, Any>("api-key" to creds.key))
+    private fun buildRequestSample(cmd:CliCommand): Result<String> {
+        val opts = slatekit.common.InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
         val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.SourceCLI, cmd)
 
         // Generate sample json
-        val defaultPath = File(ctx.dirs?.pathToOutputs, Files.fileNameAsAsTimeStamp()).absolutePath
-        val path = cmd.args.getMetaStringOrElse("file", defaultPath)
-        val file = File(path)
-        val sample = apis.sample(apiCmd, file)
-        return sample
+        val fileName = cmd.args.getSysString(CliConstants.SysSample)
+        val filePath = File(ctx.dirs?.pathToOutputs, fileName).absolutePath
+        val file = File(filePath)
+        return apis.sample(apiCmd, file)
     }
 
 
     private fun buildRequestFromFile(cmd:CliCommand): Request {
         // The file path
-        val rawPath = cmd.args.getMetaString("file")
-        val req = Reqs.fromFileWithMeta(rawPath ?: "", mapOf("api-key" to creds.key), ctx.enc)
+        val rawPath = cmd.args.getSysString(CliConstants.SysFile)
+        val route = cmd.fullName()
+        val req = Reqs.fromFileWithMeta(
+                route,
+                rawPath ?: "",
+                mapOf(metaNameForApiKey to creds.key),
+                ctx.enc)
         return req
+    }
+
+
+    private fun containsRequestLevelSystemCommand(cmd:CliCommand):Boolean {
+        return cmd.args.sys.isNotEmpty() &&
+                (    cmd.args.sys.containsKey(CliConstants.SysFile)
+                  || cmd.args.sys.containsKey(CliConstants.SysSample)
+                  || cmd.args.sys.containsKey(CliConstants.SysCodeGen)
+                )
     }
 }

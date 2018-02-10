@@ -59,9 +59,11 @@ open class CliService(
 )
     : AppMetaSupport {
 
-    val _batchLevel = AtomicReference<Int>()
+    val _batchLevel = AtomicReference<Int>(0)
     val _printer = CliPrinter(_writer)
-    val _view = CliView(_writer, { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) })
+    val _view = CliView(_writer,
+            { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) },
+            { writer:ConsoleWriter -> showExtendedHelp(writer) })
 
 
     /**
@@ -100,7 +102,7 @@ open class CliService(
     /**
      * Hook for initialization for derived classes
      */
-    open fun onShellInit(): Unit {}
+    open fun onShellInit() {}
 
 
     /**
@@ -149,7 +151,7 @@ open class CliService(
     /**
      * Hook for shutdown for derived classes
      */
-    open fun onShellEnd(): Unit {}
+    open fun onShellEnd() {}
 
 
     fun tryLine(line: String): Boolean =
@@ -185,7 +187,7 @@ open class CliService(
         onCommandBeforeExecute(cmd)
 
         // Execute
-        val resultCmd = if (cmd.isAction("sys", "shell", "batch")) {
+        val resultCmd = if (cmd.isAction("sys", "cli", "batch")) {
             onCommandExecuteBatch(cmd)
         }
         else {
@@ -202,7 +204,7 @@ open class CliService(
     open protected fun onCommandExecuteBatch(cmd:CliCommand): CliCommand {
         val blevel = _batchLevel.get()
         return if(blevel > 0 ) {
-            CliCommand("sys", "shell", "batch", cmd.line, cmd.args, failure("already in batch mode"))
+            CliCommand("sys", "cli", "batch", cmd.line, cmd.args, failure("already in batch mode"))
         }
         else {
             _batchLevel.set(blevel + 1)
@@ -241,6 +243,7 @@ open class CliService(
                 else {
                     _printer.printSummary(cmd.result)
                 }
+
             }
             else {
                 _writer.error(result.msg ?: "")
@@ -354,7 +357,12 @@ open class CliService(
     open fun showHelpFor(cmd: CliCommand, mode: Int): Unit = _view.showHelpFor(cmd, mode)
 
 
-    open fun showResult(cmd:CliCommand, result: Result<Any>): Unit = _printer.printResult(cmd, result)
+    open fun showExtendedHelp(writer:ConsoleWriter) {}
+
+
+    open fun showResult(cmd:CliCommand, result: Result<Any>) {
+        _printer.printResult(cmd, result, folders.pathToOutputs)
+    }
 
 
     private fun display(msg: String?, err: Exception? = null): Unit {
@@ -394,7 +402,7 @@ open class CliService(
     /**
      * prints the summary of the arguments
      */
-    fun logSummary(): Unit {
+    private fun logSummary() {
         _writer.text("===============================================================")
         _writer.title("SUMMARY : ")
         _writer.text("===============================================================")
@@ -409,7 +417,7 @@ open class CliService(
     }
 
 
-    open protected fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
+    protected open fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
 
         // All the pre-build info from appMeta
