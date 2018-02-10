@@ -28,4 +28,10 @@ object CliConstants {
     val HELP_AREA = "area ?"
     val HELP_API = "area.api ?"
     val HELP_ACTION = "area.api.action ?"
+
+    val SysSample  = "sample"
+    val SysFile    = "file"
+    val SysFormat  = "format"
+    val SysLog     = "log"
+    val SysCodeGen = "codegen"
 }

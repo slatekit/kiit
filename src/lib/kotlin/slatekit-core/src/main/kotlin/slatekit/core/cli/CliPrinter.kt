@@ -14,22 +14,24 @@
 package slatekit.core.cli
 
 
+import slatekit.common.Files
 import slatekit.common.Result
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.serialization.SerializerProps
 import slatekit.meta.Serialization
+import java.io.File
 
 
 class CliPrinter(val _writer: ConsoleWriter) {
 
-    val serializerProp = Serialization.props(true)
-    val serializerJson = Serialization.json()
-    val serializerCsv  = Serialization.csv()
+    private val serializerProp = Serialization.props(true)
+    private val serializerJson = Serialization.json()
+    private val serializerCsv  = Serialization.csv()
 
 
-    fun printResult(cmd:CliCommand, result: Result<Any>): Unit {
+    fun printResult(cmd:CliCommand, result: Result<Any>, outputDir:String): Unit {
         result.value?.let { value ->
-            printAny(cmd, value)
+            printAny(cmd, value, outputDir)
             printSummary(result)
         } ?: printEmpty()
     }
@@ -64,8 +66,8 @@ class CliPrinter(val _writer: ConsoleWriter) {
      *
      * @param obj
      */
-    fun printAny(cmd:CliCommand, obj: Any?): Unit {
-        val format = cmd.args.getMetaStringOrElse("format", "props")
+    fun printAny(cmd:CliCommand, obj: Any?, outputDir:String): Unit {
+        val format = cmd.args.getSysStringOrElse(CliConstants.SysFormat, "props")
         _writer.text("===============================")
         val text = when(format) {
             "csv"   -> serializerCsv.serialize(obj)
@@ -75,5 +77,14 @@ class CliPrinter(val _writer: ConsoleWriter) {
         }
         _writer.text(text)
         _writer.text("===============================")
+
+        // Writer to log
+        val log = cmd.args.getSysStringOrElse(CliConstants.SysLog, "false")
+        if(log.trim() == "true") {
+            val fileName = Files.fileNameAsAsTimeStamp()
+            val filePath = File(outputDir, fileName)
+            filePath.writeText(text)
+            _writer.text("Wrote content to: ${filePath.absolutePath}")
+        }
     }
 }

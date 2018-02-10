@@ -17,6 +17,8 @@ package slatekit.core.cli
 import slatekit.common.Files
 import slatekit.common.newline
 import slatekit.common.results.ResultFuncs.yes
+import java.io.File
+import java.io.FileNotFoundException
 
 
 class CliBatch(val cmd: CliCommand, val svc: CliService) {
@@ -24,8 +26,12 @@ class CliBatch(val cmd: CliCommand, val svc: CliService) {
 
     fun run(): CliCommand {
 
-        val path = svc.folders.inputs + "/" + cmd.args.getString("file")
-        val lines = Files.readLines(path)
+        val fileName = cmd.args.getSysString("file")
+        val filePath = File(svc.folders.pathToInputs, fileName)
+        if(!filePath.exists()) {
+            throw FileNotFoundException(filePath.absolutePath)
+        }
+        val lines = Files.readLines(filePath.absolutePath)
         return if (lines.isEmpty()) {
             cmd
         }
