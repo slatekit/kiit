@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170802</td>
+      <td>2018-02-10</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.3</td>
+      <td>0.9.9</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/workers" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/workers</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/" class="url-ch">src/lib/kotlin/slatekit/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Workers.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -115,15 +115,20 @@
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.core.workers.Manager</span>
+</span><span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+<span class="k">import</span> <span class="nn">slatekit.core.workers.Manager</span>
 <span class="k">import</span> <span class="nn">slatekit.core.workers.Worker</span>
 
 
 <span class="c1">// optional 
 </span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.queues.QueueSourceDefault</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.success</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.core.workers.WorkerSettings</span>
+<span class="k">import</span> <span class="nn">slatekit.core.workers.WorkerWithQueue</span>
+
 
 
 </code></pre>
@@ -147,20 +152,25 @@
 </span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"emailer"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
             <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
 </span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"email worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">())</span>
             <span class="n">success</span><span class="p">(</span><span class="s">"sent registration confirmation to email"</span><span class="p">)</span>
         <span class="p">}))</span>
+
 
         <span class="c1">// CASE 2: Register named workers in the group "notifications"
 </span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">,</span> <span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"message_worker"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
             <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
 </span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"message worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">())</span>
             <span class="n">success</span><span class="p">(</span><span class="s">"sent message to user"</span><span class="p">)</span>
         <span class="p">}))</span>
         <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"notifications"</span><span class="p">,</span> <span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"reminder_worker"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
             <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
 </span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"reminder worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">())</span>
             <span class="n">success</span><span class="p">(</span><span class="s">"sent reminder to user"</span><span class="p">)</span>
         <span class="p">}))</span>
+
 
         <span class="c1">// CASE 3: Register named worker with manager in new group
 </span>        <span class="c1">// You can create / derive your own manager to include logic
@@ -171,16 +181,46 @@
 </span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"reports"</span><span class="p">,</span><span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span> <span class="s">"Active users"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
             <span class="c1">// NOTE: Simulating work, do not use thread.sleep in a real environment
 </span>            <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"report worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">())</span>
             <span class="n">success</span><span class="p">(</span><span class="s">"generated a report of active users"</span><span class="p">)</span>
         <span class="p">}),</span> <span class="n">manager</span> <span class="p">=</span> <span class="n">Manager</span><span class="p">(</span><span class="s">"reports"</span><span class="p">,</span> <span class="n">sys</span><span class="p">))</span>
 
-        <span class="c1">// CASE 4: Start the worker system
+
+        <span class="c1">// CASE 4: Extend the worker class instead of providing a lambda
+</span>        <span class="kd">class</span> <span class="nc">MyWorker</span> <span class="p">:</span> <span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"custom_1"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">process</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">Array</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;?):</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">{</span>
+                <span class="n">println</span><span class="p">(</span><span class="s">"custom worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">())</span>
+                <span class="k">return</span> <span class="n">success</span><span class="p">(</span><span class="s">"customer worker class"</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"custom"</span><span class="p">,</span> <span class="n">MyWorker</span><span class="p">())</span>
+
+
+        <span class="c1">// CASE 5: Setup a worker to use a queue
+</span>        <span class="c1">// NOTE: You can you the AWS queue for production
+</span>        <span class="c1">// Queues have the interface QueueSource and there is a
+</span>        <span class="c1">// sample QueueSourceDefault available for prototyping/unit-tests purposes.
+</span>        <span class="c1">// This lambda specifies a converter for the message
+</span>        <span class="kd">val</span> <span class="py">queue</span> <span class="p">=</span> <span class="n">QueueSourceDefault</span><span class="p">(</span><span class="s">"queue1"</span><span class="p">,</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span> <span class="n">item</span><span class="p">.</span><span class="n">toString</span><span class="p">().</span><span class="n">toInt</span><span class="p">()</span> <span class="p">})</span>
+
+        <span class="c1">// Add some sample items to the queue
+</span>        <span class="p">(</span><span class="m">1</span><span class="o">..</span><span class="m">10</span><span class="p">).</span><span class="n">forEachIndexed</span><span class="p">{</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span> <span class="n">queue</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">ndx</span><span class="p">)</span> <span class="p">}</span>
+
+        <span class="c1">// Register the worker as a WorkerWithQueue and supply a lamda to process
+</span>        <span class="c1">// each item from the queue. NOTE: The converter supplied to the queue
+</span>        <span class="c1">// will convert the messageBody to the type T supplied.
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="s">"queued"</span><span class="p">,</span> <span class="n">WorkerWithQueue</span><span class="p">&lt;</span><span class="n">Int</span><span class="p">&gt;(</span><span class="s">"example"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">WorkerSettings</span><span class="p">(</span><span class="n">batchSize</span> <span class="p">=</span> <span class="m">2</span><span class="p">),</span>
+            <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span> <span class="n">value</span> <span class="p">-&gt;</span>
+            <span class="n">println</span><span class="p">(</span><span class="s">"queue worker: "</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">()</span> <span class="p">+</span> <span class="s">" : "</span> <span class="p">+</span> <span class="n">value</span> <span class="p">)</span>
+        <span class="p">}))</span>
+
+        <span class="c1">// CASE 6: Start the worker system
 </span>        <span class="c1">// This calls the start() on each group and continuously
 </span>        <span class="c1">// calls the manage method on the manager of the group.
 </span>        <span class="n">sys</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
 
         <span class="c1">// Just for demo purposes
-</span>        <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">3000</span><span class="p">)</span>
+</span>        <span class="n">Thread</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="m">4000</span><span class="p">)</span>
 
         <span class="c1">// COMING SOON:
 </span>        <span class="c1">// 1. Scheduled workers ( at recurrence intervals )
@@ -264,7 +304,7 @@
         <span class="n">sys</span><span class="p">.</span><span class="n">stop</span><span class="p">()</span>
 
         <span class="c1">// This completes the system and will stop all further processing.
-</span>        <span class="n">sys</span><span class="p">.</span><span class="n">complete</span><span class="p">()</span>
+</span>        <span class="n">sys</span><span class="p">.</span><span class="n">done</span><span class="p">()</span>
 
         
 
