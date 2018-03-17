@@ -1,433 +1,542 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
-    <title>Slate Kit - Utilities</title>
-    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<html lang="zxx">
+   <head>
+      <meta charset="utf-8">
+      <!-- Responsive meta -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- IE Compatibility meta -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Description meta -->
+      <meta name="description" content="Kotlin Tool-Kit">
+      <!-- Author meta -->
+      <meta name="author" content="...">
 
-  <body>
-    <div id="page">
-      <header id="header" class="site-navbar navbar navbar-fixed-top">
-        <nav id="topbar" class="site-topbar visible-lg visible-md">
-          <div class="container">
-            <div class="row">
-              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
-              <div class="social-links col-sm-6">
-                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
-                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
-                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
-                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+      <!-- Page Title -->
+      <title>Slate Kit</title>
+
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="themes/perfo/assets/img/favicon.ico">
+      <!-- Font Awesome Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/font-awesome.css">
+      <!-- Bootstrap Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/bootstrap.css">
+      <!-- Mockup Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/device-mockups.min.css">
+      <!-- Owl Carousel Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/owl.carousel.min.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/animate.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/preloader.css">
+      <!-- Custom Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/style.default.css">
+   </head>
+   <body>
+
+
+      <div class="page-header">
+          <!--=============== Navbar ===============-->
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      <!-- Navbar Brand -->
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    <!-- Toggle Button -->
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      <!-- Navbar Menu -->
+                      <ul class="navbar-nav ml-auto">
+                          <li class="nav-item">
+                              <a href="#about" class="nav-link link-scroll">About</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="overview.html" class="nav-link link-scroll">Overview</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#services" class="nav-link link-scroll">Setup</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Architecture</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Utilities</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Releases</a>
+                          </li>
+                          <!--
+                          <li class="nav-item">
+                              <a href="#screens" class="nav-link link-scroll">Screens</a>
+                          </li>
+                          -->
+                          <!--
+                          <li class="nav-item">
+                              <a href="#testimonials" class="nav-link link-scroll">Testimonials</a>
+                          </li>
+                          -->
+                      </ul>
+                  </div>
+
               </div>
-            </div>
-          </div>
-        </nav>
+          </nav><!--=============== /. Navbar ===============-->
 
-        <nav id="navbar" class="site-navbar navbar" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <i class="fa fa-bars"></i>
-              </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse-1">
-               <ul id="navigation" class="nav navbar-nav navbar-right">
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </header>
 
-      <main id="main" class="site-main">
+          <!--=============== Separator Section ===============-->
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Scalable apps">
+              <div class="container">
 
-		<footer class="site-footer">
-			<div class="container">
-			<div class="row">
+                  <div class="row">
+                      <!-- Mockup Image -->
+                      <div class="image col-md-6 hidden-sm-down">
+                          <img src="themes/perfo/assets/img/iphone.png" alt="...." class="img-fluid">
+                      </div>
 
-              <aside class="widget">
-                <h1 class="widget-title">Utilities</h1>
-                <h3>
-                  The ultimate utility belt of components for any app<br />
-                </h3>
-              </aside>
+                      <!-- Heading Area -->
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Extended <br/> Standard <br/> Library </h2>
+                      </div>
+                  </div>
 
-            </div>
-			</div>
-		</footer>
-		
-		<section id="features" class="section section-center section-features">
-          <div class="container">
-			<div class="alert alert-info" role="alert">
-				<h3>Keep code clean, light and organized</h3>
-				<h5>Utilities offer productivity and facilitate separation of concerns</h5>
-			</div>
-			<div class="row">				
-				<br/>
-				<br/>
-			</div>
-            <div class="row">
-              <div class="col-md-4 col-sm-6">
-				<div class="icon-wrap">
-					<a href="kotlin-mod-args.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>			
-				</div>
-				<a href="kotlin-mod-args.html"><h4>Args</h4></a>
-				<p>A lexical command line arguments parser</p>
+              </div>
+          </section>
+          <!--=============== /. Separator Section ===============-->
+
+
+          <!--=============== About Section ===============-->
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="About">About</h2>
+                  </header>
+
+                  <p class="lead limited-width">
+                      Slate Kit Architecture components are a collection of Kotlin 
+                      libraries that help you to quickly build robust, testable, 
+                      and scalable applications on the JVM. 
+                  </p>
+                  <a href="#" class="btn btn-template">Learn More</a>
+
+              </div>
+          </section>
+          <!--=============== /. About Section ===============-->
+
+
+          <!--=============== Services Section ===============-->
+          <section id="services" class="services">
+              <div class="container">
+
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Utilities">Utilities</h2>
+                  </header>
+
+                  <div class="row text-center">
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+        				<div class="icon-wrap">
+        					<a href="kotlin-mod-args.html"><img src="themes/start/images/white/gears.png" width="80" alt=""></a>			
+        				</div>
+        				<a href="kotlin-mod-args.html"><h4>Args</h4></a>
+        				<p>A lexical command line arguments parser</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-auth.html"><img src="themes/start/images/white/male.png" width="70" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-auth.html"><img src="themes/start/images/white/male.png" width="70" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-auth.html"><h4>Auth</h4></a>
                 <p>Easily access authentication information</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-config.html"><img src="themes/start/images/white/settings.png" width="65" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-config.html"><img src="themes/start/images/white/settings.png" width="65" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-config.html"><h4>Config</h4></a>
                 <p>Java props with types, lists, encryption, and more</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-console.html"><img src="themes/start/images/white/console.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-console.html"><img src="themes/start/images/white/console.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-console.html"><h4>Console</h4></a>
                 <p>Console writer with semantics and colors</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-data.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-data.html"><img src="themes/start/images/white/layers.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-data.html"><h4>Database</h4></a>
                 <p>JDBC database access and utilities</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-datetime.html"><img src="themes/start/images/white/calendar.PNG" width="60" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-datetime.html"><img src="themes/start/images/white/calendar.PNG" width="60" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-datetime.html"><h4>DateTime</h4></a>
                 <p>Easier Java 8 DateTime and Timezone usage</p>
               </div>
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-encrypt.html"><img src="themes/start/images/white/lock.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-encrypt.html"><img src="themes/start/images/white/lock.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-encrypt.html"><h4>Encrypt</h4></a>
                 <p>AES encryption/decryption support</p>
               </div>    
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-env.html"><img src="themes/start/images/white/nodes.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-env.html"><img src="themes/start/images/white/nodes.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-env.html"><h4>Env</h4></a>
                 <p>Environment selector ( dev, qa, stg, prod )</p>
               </div>     
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-env.html"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-env.html"><img src="themes/start/images/white/folders.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-folders.html"><h4>Folders</h4></a>
                 <p>Standardized runtime app folders and structure.</p>
               </div>              
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-info.html"><img src="themes/start/images/white/info.png" width="65" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-info.html"><img src="themes/start/images/white/info.png" width="65" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-info.html"><h4>Info</h4></a>
                 <p>Useful information about app, host, runtime</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-lex.html"><img src="themes/start/images/white/document.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-lex.html"><img src="themes/start/images/white/document.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-lex.html"><h4>Lex</h4></a>
                 <p>A light-weight lexer to parse text into tokens</p>
               </div>             
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-logger.html"><img src="themes/start/images/white/error.png" width="60" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-logger.html"><img src="themes/start/images/white/error.png" width="60" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-logger.html"><h4>Logs</h4></a>
                 <p>Simple, extensible, customizable logger</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-model.html"><img src="themes/start/images/white/prototype.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-model.html"><img src="themes/start/images/white/prototype.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-model.html"><h4>Model</h4></a>
                 <p>Builts schemas to map models and generate code</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-random.html"><img src="themes/start/images/white/question.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-random.html"><img src="themes/start/images/white/question.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-random.html"><h4>Random</h4></a>
                 <p>Random generator for strings, numbers, alpha, guids</p>
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-reflect.html"><img src="themes/start/images/white/search.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-reflect.html"><img src="themes/start/images/white/search.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-reflect.html"><h4>Reflection</h4></a>
                 <p>Reflection utils for classes, methods, annotations</p> 
               </div>
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-request.html"><img src="themes/start/images/white/request.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-request.html"><img src="themes/start/images/white/request.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-request.html"><h4>Request</h4></a>
                 <p>Abstracts and represents HTTP and CLI requests</p> 
               </div> 
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-results.html"><img src="themes/start/images/white/result.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-results.html"><img src="themes/start/images/white/result.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-results.html"><h4>Result</h4></a>
                 <p>Models response with success and failures.</p> 
               </div> 
               
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-serialization.html"><img src="themes/start/images/white/print.png" width="80" alt=""></a>			
-				</div>
+				          <a href="kotlin-mod-serialization.html"><img src="themes/start/images/white/print.png" width="80" alt=""></a>			
+				        </div>
                 <a href="kotlin-mod-serialization.html"><h4>Serialization</h4></a>
                 <p>Csv, Json, HoCon serialization of data classes</p>
               </div> 
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-templates.html"><img src="themes/start/images/white/share.png" width="80" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-templates.html"><img src="themes/start/images/white/share.png" width="80" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-templates.html"><h4>Templates</h4></a>
                 <p>A micro template system</p>
               </div>
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-timer.html"><img src="themes/start/images/white/timer.png" width="80" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-timer.html"><img src="themes/start/images/white/timer.png" width="80" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-timer.html"><h4>Timer</h4></a>
                 <p>Timer class to benchmark code</p>
               </div>
 			  
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-todo.html"><img src="themes/start/images/white/notes.png" width="80" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-todo.html"><img src="themes/start/images/white/notes.png" width="80" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-todo.html"><h4>Todo</h4></a>
                 <p>Programmatic approach to marking TODOs in code</p>
               </div>
               
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-utils.html"><img src="themes/start/images/white/settings2.png" width="80" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-utils.html"><img src="themes/start/images/white/settings2.png" width="80" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-utils.html"><h4>Utils</h4></a>
                 <p>Miscellaneous utilities</p>
               </div>
               
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href="kotlin-mod-validations.html"><img src="themes/start/images/white/checklist.png" width="80" alt=""></a>			
-				</div>
+        				  <a href="kotlin-mod-validations.html"><img src="themes/start/images/white/checklist.png" width="80" alt=""></a>			
+        				</div>
                 <a href="kotlin-mod-validations.html"><h4>Validations</h4></a>
                 <p>Functional validation</p>
               </div>
               
 
-              <div class="col-md-4 col-sm-6">
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
                 <div class="icon-wrap">
-				<a href=""><img src="themes/start/images/white/gears.png" width="80" alt=""></a>			
-				</div>
+        				  <a href=""><img src="themes/start/images/white/gears.png" width="80" alt=""></a>			
+        				</div>
                 <a href=""><h4>Extensions</h4></a>
                 <p>Extension methods ( Coming soon )</p>
               </div>
-            </div>
-          </div>
-        </section>
-        <section id="project_references" class="section">
-			<div class="container">
-				<div class="row">					
-					<div class="">
-						<div id="project-slate-common" class="thumbnail">
-							<a href="utils.html"><img src="themes/start/images/white/multitool.png" alt="..." width="80"></a>
-							<div class="caption">
-								<div class="text-center">
-									<h3 >Slatekit.Common</h3>
-									<p>Collection of utilities</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>about</strong></td>
-										<td>The slatekit.common project contains all these components</td>
-									</tr>
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.common</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.common.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common">Slatekit.Common</a></td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>dependencies</strong></td>
-										<td>								
-											<ul>
-												<li>language reflection library</li>
-												<li>json-simple</li>
-											</ul>
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>														
-											<ul>
-												<li>The utility components are very independent</li>
-												<li>The utility project is the only project which contains some cyclomatic complexity, but it is kept to a minimum</li>
-												<li>The utility components are general purpose and can be used across any project.</li>
-											</ul>
-										 </td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="overview.html#slatekit-all-projects" class="btn btn-primary" role="button">see all projects</a> 
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<br/>
-		<br/>
-      </main>
 
-      <footer id="footer" class="site-footer">
-        <div class="container">
-
-          <div id="sidebar-footer-1">
-            <div class="row">
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">About Us</h5>
-                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Contact</h5>
-                <div class="textwidget">
-                  <div class="adr">
-                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
-                    <span id="footer_addr_city"    class="locality">New York</span>,
-                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
-                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
-                    <span id="footer_addr_country" class="country-name">U.S.A</span>
                   </div>
-                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
-                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
-                </div>
-              </aside>
+              </div>
+          </section>
+          <!--=============== /. Services Section ===============-->
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Need Help?</h5>
-                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
+          <!--=============== Features Section ===============-->
+          <section id="features" class="features no-padding-bottom">
+              <div class="container">
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Goals">Goals</h2>
+                  </header>
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Get in touch</h5>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Your Email">
-                  <span class="input-group-btn">
-                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
-                  </span>
-                </div>
-                <ul class="social-links">
-                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
-                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
-                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                </ul>
-              </aside>
+                  <p class="lead limited-width">
+                      Goals of Slate Kit ... place holder text
+                  </p>
 
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                          <strong class="text-primary">01</strong>
+                          <h3>Functional</h3>
+                          <p>An emphasis on immutable and functional code</p>
+                      </div><!-- End item -->
+
+                      <!-- item -->
+                      <div class="item col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                          <strong class="text-primary">02</strong>
+                          <h3>Modern</h3>
+                          <p>A modern set of libraries to enhance the standard library</p>
+                      </div><!-- End item -->
+
+                      <!-- item -->
+                      <div class="item col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                          <strong class="text-primary">03</strong>
+                          <h3>Integrations</h3>
+                          <p>Support for cloud integrated components like AWS S3, SQS</p>
+                      </div><!-- End item -->
+                  </div>
+
+              </div>
+          </section>
+          <!--=============== /. Features Section ===============-->
+
+    <section id="project" class="features no-padding-bottom">
+      <div class="container">
+        <header>
+            <h2 class="with-bg-text has-line" data-text="Project">Project</h2>
+        </header>
+        <div class="row">         
+          <div class="">
+            <div id="project-slate-core" class="thumbnail">
+              <div class="caption">
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>about</strong></td>
+                    <td>The slatekit.core project contains <strong>most</strong> but not all of these components</td>
+                  </tr>
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.core</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.core.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core">Slatekit.Core</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>dependencies</strong></td>
+                    <td>                  
+                      <ul>
+                        <li>slatekit.common</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>              
+                      <ul>
+                        <li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
+                        <li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
+                            <strong>slatekit.cloud</strong> projects</li>
+                        <li>APIs for each component are available in the SlateKit.Integration project. This is so that the API, Core, Entities projects do not depend on each other.
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="overview.html#slatekit-all-projects" class="btn btn-template" role="button">see all projects</a> 
+              </p>
             </div>
           </div>
-
-          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </section>
+           <!--=============== Footer ===============-->
+           <footer id="main-footer" class="main-footer">
+               <div class="container text-center">
 
-    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
-  
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
-	<script type="text/javascript">
-		var _codehelixAppPage = "Utilities";
-	</script>
-    <script type="text/javascript" src="themes/start/app/app.js"></script>
-	<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                   <!-- Brand -->
+                   <div class="logo">
+                       <strong class="brand-text">Slate Kit</strong>
+                   </div>
+                   <!-- Description -->
+                   <p class="description">Connect with us on our various channels and reach out for more info.</p>
 
-  ga('create', 'UA-84704317-1', 'auto');
-  ga('send', 'pageview');
+                   <!-- Social Icons Menu -->
+                   <ul class="social list-inline">
+                       <li class="list-inline-item">
+                           <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                       </li>
+                   </ul>
+               </div>
 
-</script>
-  </body>
+              <!-- Copyrights -->
+               <div class="copyrights">
+                   <div class="container">
+                       <div class="row">
+                           <div class="col-md-6">
+                               <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+                           </div>
+                           <div class="col-md-6 text-right">
+                               <ul class="list-inline">
+                                   <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                   <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                                   <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div> <!-- End Copyrights -->
+           </footer>
+           <!--=============== /. Footer ===============-->
+
+
+           <!--=============== Preloader ===============-->
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           <!--=============== /. Preloader ===============-->
+
+
+           <!--=============== Scroll To Top ===============-->
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           <!--=============== /. Scroll To Top ===============-->
+      </div>
+
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <!-- Bootstrap 4 Alpha -->
+        <script src="themes/perfo/assets/js/bootstrap.min.js"></script>
+        <!-- Owl Carousel -->
+        <script src="themes/perfo/assets/js/owl.carousel.min.js"></script>
+        <!-- Easy Scroll -->
+        <script src="themes/perfo/assets/js/easyscroll.min.js"></script>
+        <!-- WOW JS -->
+        <script src="themes/perfo/assets/js/wow.min.js"></script>
+        <!-- Custom Js -->
+        <script src="themes/perfo/assets/js/script.js"></script>
+    </body>
 </html>
+
+
+

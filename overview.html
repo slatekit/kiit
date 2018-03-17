@@ -1,984 +1,345 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
-    <title>Slate Kit - Overview</title>
-    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<html lang="zxx">
+   <head>
+      <meta charset="utf-8">
+      <!-- Responsive meta -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- IE Compatibility meta -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Description meta -->
+      <meta name="description" content="Kotlin Tool-Kit">
+      <!-- Author meta -->
+      <meta name="author" content="...">
 
-  <body>
-    <div id="page">
-      <header id="header" class="site-navbar navbar navbar-fixed-top">
-        <nav id="topbar" class="site-topbar visible-lg visible-md">
-          <div class="container">
-            <div class="row">
-              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
-              <div class="social-links col-sm-6">
-                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
-                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
-                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
-                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
-              </div>
-            </div>
-          </div>
-        </nav>
+      <!-- Page Title -->
+      <title>Slate Kit</title>
 
-        <nav id="navbar" class="site-navbar navbar" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <i class="fa fa-bars"></i>
-              </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse-1">
-               <ul id="navigation" class="nav navbar-nav navbar-right">
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </header>
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="themes/perfo/assets/img/favicon.ico">
+      <!-- Font Awesome Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/font-awesome.css">
+      <!-- Bootstrap Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/bootstrap.css">
+      <!-- Mockup Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/device-mockups.min.css">
+      <!-- Owl Carousel Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/owl.carousel.min.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/animate.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/preloader.css">
+      <!-- Custom Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/style.default.css">
+   </head>
+   <body>
 
-      <main id="main" class="site-main">
 
-		<footer class="site-footer">
-			<div class="container">
-			<div class="row">
+      <div class="page-header">
+          <!--=============== Navbar ===============-->
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
 
-              <aside class="widget">
-                <h1 class="widget-title">Overview</h1>
-				<h3>The tech stack, approach and features available<br/></h3>
-              </aside>
-            </div>
-			</div>
-		</footer>
-		
-		<section id="features" class="section ">
-          <div class="container">
-								
-				<div class="alert alert-info text-center" role="alert">
-					<h3>A simple and pragmatic tool-kit for apps</h3>
-				</div>
-				<div class="row text-center">
-					<div class="col-sm-2"><img src="themes/start/images/white/webapi.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/desktop.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/terminal.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/layers.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/mobile.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/connected.png" width="50" alt=""></div>
-					<!--
-					<div class="col-sm-2"><img src="themes/start/images/white/email.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/folders.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/speaker.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/layers.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/queue.png" width="50" alt=""></div>
-					<div class="col-sm-2"><img src="themes/start/images/white/server.png" width="50" alt=""></div>
-					-->
-				</div>
-				<br/>
-				<div> 
-					<h1>Slate Kit</h1>						
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td><strong>About</strong></td>
-							<td><br/>Slate Kit is an <strong>open-source mobile back-end and server framework</strong> for mobile and web apps. <br/><br/>
-								It is pre-built architecture composed of an API Server, ORM, CLI, Background-Workers and more, 
-								a comprehensive utility library, and app features ( such as users, groups, registration ).
-								
-							<br/><br/></td>
-						</tr>
-						<tr>
-							<td><strong>Goal</strong></td>
-							<td><br/>We are designing Slate Kit to be an open-source <strong>alternative to Parse, FireBase, </strong> and other 
-							BaaS ( Back-end as a Service ) providers for you applications. It offers the following:
-							<br/><br/>
-							<ol>
-								<li>Host your code anywhere</li>
-								<li>You own your server code and data</li>
-								<li>Extendible and customizable code base</li>
-								<li>Built in Kotlin for modern programming</li>
-							</ol><br/></td>
-						</tr>
-						<tr>
-							<td><strong>Design</strong></td>
-							<td><br/>The components are built like libraries and decoupled enough that you can use 
-								as little as you want, or everything for a full ready-to-go architectural foundation.
-								With Slate Kit, you can build your start-up idea, mobile app, pet-project, or even enterprise application.
-								
-							<br/><br/></td>
-						</tr>
-						<tr>
-							<td class="col-sm-2"><strong>Tech</strong></td>
-							<td><br/>Built for the JVM, available in <strong>Kotlin</strong><br/>
-								<ol>
-									<li><strong>Spark</strong>:  Used as the Http server for Kotlin </li>
-									<li><strong>MySql</strong> : Uses MySql for data storage ( PostGres coming later )</li>
-									<li><strong>AWS</strong>: Integrates with S3, SQS for file storage and queues.</li>
-									<li><strong>Twilio</strong>: Used for SMS / Text messages</li>
-									<li><strong>SendGrid</strong>: Used for sending email</li>
-									<li><strong>Push</strong>: Integrates with Google Cloud Messaging for Android</li>
-								</ol>
-								<p>Slate Kit is also available in Scala but is not stable yet ( Coming later )</p>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Deploy</strong></td>
-							<td><br/>This is open-source, so you can deploy and host your mobile back-end anywhere:<br/><br/>
-								<ol>
-									<li><strong>Cloud</strong> ( AWS, Azure, Google, Digital Ocean )</li>
-									<li><strong>Intranet</strong>: Run in a private network</li>
-									<li><strong>Locally</strong>: On your personal computer</li>
-								</ol>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Parts</strong></td>
-							<td><br/>Slate Kit is reasonably modular. Use as little or as much as you need. <br/><br/>
-								<ol>
-									<li><strong><a class="url-ch" href="utils.html">Utilities</a></strong>: Over 20+ utilities that can be used for any application.</li>
-									<li><strong><a class="url-ch" href="infra.html">Architecture</a></strong>: Over 12+ architectural components available ( API Server, CLI, ORM, and much more ) </li>
-									<li><strong><a class="url-ch" href="features.html">Features</a></strong>: Several features available out of the box such as Users, Registration, Invites, etc..</li>
-								</ol>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Uses</strong></td>
-							<td><br/>This is essentially a private BaaS ( Backend as a Service ), tailored for:<br/><br/>
-								<ol>
-									<li><strong>Startups</strong>: Use a strong base architecture for start-up ideas</li>
-									<li><strong>Mobile Apps</strong>: Build the back-end for your mobile apps</li>
-									<li><strong>Enterprise</strong>: Build enterprise applications on the JVM with a modern tool-kit and languages</li>
-									<li><strong>Personal</strong>: Learn Kotlin/Scala, functional programming, and best practices for self-improvement</li>
-								</ol>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Learn</strong></td>
-							<td><br/>Slate Kit is designed with simplicity and maintainability in mind.
-								It is fairly straight-forward to learn and we have samples, guides, reference examples available.
-								<ol>
-									<li><strong>Guides</strong>: See the guides for 
-									<strong><a class="url-ch" href="kotlin-core-app.html">App</a></strong>,
-									<strong><a class="url-ch" href="kotlin-core-apis.html">API</a></strong>,
-									<strong><a class="url-ch" href="kotlin-core-orm.html">ORM</a></strong>,
-									<strong><a class="url-ch" href="kotlin-core-server.html">Server</a></strong> 
-									More docs coming soon.
-									</li>
-									<li><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps">Sample Apps</a></strong>: 4 Sample apps available: Core ( models/services ), Batch, CLI, Server </li>
-									<li><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples">Examples</a></strong>: Examples of all the utility and architectural components available.</li>
-								</ol>
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Cost</strong></td>
-							<td><br/>The architecture components, utility libraries are free. 
-							    The soon to be available app features and client-side ( java/kotlin/swift mobile client libraries )
-								will be mostly free and/or freemium ( we are still figuring this out ), but we do plan on 
-								making things as open-source as possible. 
-								A web-based dashboard will however be a premium feature.
-								We will also be offering some premium services to start-ups ( coming soon ).
-							</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div>
-					<h1>Components</h1>	
-					<p>Slate Kit is modular and contains many reusable components ( see list below ). 
-					One of the main design philosophies has been to build <strong>protocol independent API's</strong> that can be "embedded" 
-					into a <strong>Web API Server</strong> or "embedded" into a <strong>CLI</strong> (Command Line Interface) Shell. 
-					</p>
-					<table class="table table-bordered">
-						<tr>
-							<td class="col-sm-1"><strong>Component</strong></td>
-							<td class="col-sm-1"><strong>Visit</strong></td>
-							<td class="col-sm-2"><strong>About</strong></td>
-							<td class="col-md-4"><strong>Description</strong></td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/desktop.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="kotlin-core-app.html">App</a></strong></td>
-							<td>Base Application</td>
-							<td>A powerful base app with support for command line args, environment selection, configs per environment, logging, life-cycle events, encryption, diagnostics and more</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/webapi.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="kotlin-core-apis.html">API</a></strong></td>
-							<td>Protocol Independent APIs</td>
-							<td>Easily build protocol independent APIs using simple classes/methods with annotations, that can be hosted / run on both Slate Command Line Shell and/or as Web APIs in the Slate Server </td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/terminal.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="kotlin-mod-shell.html">CLI</a></strong></td>
-							<td>Command Line Interface</td>
-							<td>A command line interface shell that you can extend to host your "Protocol Independent APIs" and/or hook into to handle and execute any user commands in a shell.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/layers.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="kotlin-core-orm.html">ORM</a></strong></td>
-							<td>Domain-Driven ORM</td>
-							<td>A simple, light-weight, Domain-Driven ORM to map your entities to and from database tables. MySql is currently supported with support for MS Sql Server coming soon.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/server.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="kotlin-core-server.html">Server</a></strong></td>
-							<td>Web API Server</td>
-							<td>A Web API server built using Akka Http that can host your "Protocol Independent APIs". You can extend this server and register your own APIs.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/build.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="infra.html">Architecture</a></strong></td>
-							<td>Architecture Components</td>
-							<td>Architectural abstractions and implementations for Files, Queues, Tasks and more. Files and Queues are abstracted with default implementations for AWS S3, SQS.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/multitool.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="utils.html">Utilities</a></strong></td>
-							<td>Utility Components</td>
-							<td>Many useful utility components and code that can be used for any application. All these are located in the Slate.Common project and independent and modular.</td>
-						</tr>
-						<tr>
-							<td class="col-sm-1 text-center"><img src="themes/start/images/white/mobile.png" width="50" alt=""></td>
-							<td><strong><a class="url-ch" href="features.html">Mobile</strong></td>
-							<td>Mobile / Web Features</td>
-							<td>Mobile and web features for most applications, such as Users, Devices, Registration, Invites, Settings and more.</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div> 					
-					<h1>Philosophy</h1>						
-					
-					<div class="alert alert-info text-center" role="alert">
-						<h3>Simplicity above all else</h3><br/>
-					</div>
-				
-					<table class="table table-bordered table-striped">
-						<tr>
-							<td class="col-sm-3"><strong>Tech</strong></td>
-							<td>Built for the JVM, Linux/Windows, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
-						</tr>
-						<tr>
-							<td><strong>Design</strong></td>
-							<td>Library based approach instead of a "Framework". Use as little or as much as you need.
-							</td>
-						</tr>
-						<tr>
-							<td class="col-sm-3"><strong>Standards</strong></td>
-							<td>Check our coding standards for <a class="url-ch" href="kotlin-standards.html">kotlin</a> and <a class="url-ch" href="kotlin-standards.html">scala</a></td>
-						</tr>
-						<tr>
-							<td class="col-sm-3"><strong>Approach</strong></td>
-							<td><strong>Simplicity</strong> and <strong>Practicality</strong> above all else</td>
-						</tr>
-						<tr>
-							<td><strong>Components</strong></td>
-							<td>Composable, single-purpose components as building blocks. Organized into various projects.
-							</td>
-						</tr>
-						<tr>
-							<td><strong>Portable</strong></td>
-							<td>Designed for low vendor lock-in via a "library" based approach. Easy to get out of this tool-kit</td>
-						</tr>
-						<tr>
-							<td><strong>Minimal</strong></td>
-							<td>Dependencies on external, 3rd-party libraries are kept to a minimum</td>
-						</tr>
-						<tr>
-							<td><strong>Open Source</strong></td>
-							<td>Hybrid Open-Source. Majority is open-source except for some parts of the <a class="url-ch" href="#project-slate-ext">SlateKit.Ext</a> project 
-								containing the mobile / web <a class="url-ch" href="features.html">features</a></td>
-						</tr>
-						<tr>
-							<td><strong>License</strong></td>
-							<td>Apache 2.0 : Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
-						</tr>
-						<tr>
-							<td class="col-sm-3"><strong>Style</strong></td>
-							<td>Emphasis on <strong>immutability</strong> 
-								and <strong>functional programming</strong> as much as possible.
-								<br/>However, this is <strong>NOT</strong> a 100% purely functional code base.
-								<br/>We also carefully avoid certain language features in specific times/places in favour of simple, understandable, maintainable code.<br/>
-								</td>
-						</tr>
-					</table>
-				</div>
-				<br/>
-				<div id="slatekit-all-projects">
-					<h1>Projects</h1>
-					<p>All the utilities, components, architectural components, server and features are broken out in various projects.</p>
-					<br/><br/>
-				</div>
-				<div class="row">					
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-common" class="thumbnail">
-							<a href="utils.html"><img src="themes/start/images/white/multitool.png" alt="..." width="80"></a>
-							<div class="caption">
-								<div class="text-center">
-									<h3 >SlateKit Common</h3>
-									<p>Collection of utilities</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.common</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit-common.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common">SlateKit.Common</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="utils.html">Utils</a></td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>libs</strong></td>
-										<td>json-simple
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Contains all the utilities. All code here 
-										can be used in any project.
-										 </td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="utils.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-entities" class="thumbnail">
-							<a href="orm.html"><img src="themes/start/images/white/layers.png" alt="..." width="80"></a>
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Entities</h3>
-									<p>Light-weight single table ORM</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.entities</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.entities.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-entities/src/main/kotlin/slatekit/entities">SlateKit.Entities</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="kotlin-core-orm.html">Orm</a></td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>libs</strong></td>
-										<td>common, mysql
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Light-Weight, functional, and Domain Driven / Generic service / repo design
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="orm.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>					
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-core" class="thumbnail">
-							<a href="infra.html"><img src="themes/start/images/white/build.png" alt="..." width="80"></a>
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Core</h3>
-									<p>Core architecture components</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.core</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.core.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core">SlateKit.Core</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="infra.html">Core</a></td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Abstractions and implementations for architectural components.										
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>
-				</div>
-				<br/><br/>
-				<div class="row">
-					<div id="project-slate-api" class="col-sm-6 col-md-4">
-						<div class="thumbnail">
-							<a href="apis-detail.html"><img src="themes/start/images/white/webapi.png" alt="..." width="80"></a>
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.API</h3>
-									<p>Protocol Independent APIs </p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.api</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.api.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis">SlateKit.Api</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="kotlin-core-apis.html">APIs</a></td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Protocol-independent APIs. Design and run APIs in the web and/or on the CLI.
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>
-					<div id="project-slate-integration" class="col-sm-6 col-md-4">
-						<div class="thumbnail">
-							<img src="themes/start/images/white/gears.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Integration</h3>
-									<p>Integration APIs for AWS, and others</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.integration</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.integration.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-integration/src/main/kotlin/slatekit/integration">SlateKit.Integration</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td>Coming soon</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common, Entities, Core, API
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Integration of components from Core/APIs. Reduces cyclomatic complexity.
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>
-					<div id="project-slate-cloud" class="col-sm-6 col-md-4">
-						<div class="thumbnail">
-							<img src="themes/start/images/white/cloud_sync.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Cloud</h3>
-									<p>Cloud integration with AWS</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.cloud</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.cloud.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud/src/main/kotlin/slatekit/cloud/aws">SlateKit.Cloud</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td>Coming soon</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common, Core
-										</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Cloud components work only with AWS, other cloud services coming later.
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="infra.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>
-				</div>
-				<br/><br/>
-				<div class="row">
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-ext" class="thumbnail">
-							<img src="themes/start/images/white/module.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Ext</h3>
-									<p>Embeddable Mobile / Web Features</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td class="col-sm-3"><strong>package</strong></td>
-										<td>slatekit.ext</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.ext.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td>SlateKit.Ext</td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="features.html">Extensions</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>freemium : coming soon</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common, Core, Entities, API, Integration
-										</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Represents all the mobile back-end features. Coming soon.
-										</td>
-									</tr>
-								</table>
-							</div>
-							
-							<p class=" text-center">
-								<a href="features.html" class="btn btn-primary" role="button">More</a> 
-							</p>
-						</div>
-					</div>	
-					<div class="col-sm-6 col-md-4">	
-						<div id="project-slate-tools" class="thumbnail">
-							<img src="themes/start/images/white/gears.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Tools</h3>
-									<p>Miscellaneous tools and code generator</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td class="col-sm-3"><strong>package</strong></td>
-										<td>slatekit.tools</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.tools.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td>SlateKit.Tools</td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td>N/A</td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common, Entities, Core, API, Integration
-										</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Internal use only, contains tools for the SlateKit CLI ( coming soon )
-										</td>
-									</tr>
-								</table>
-							</div>							
-							<p class=" text-center">
-								<a href="" class="btn btn-primary" role="button">see source code</a> 
-							</p>
-						</div>
-					</div>
-					<div id="project-slate-shell" class="col-sm-6 col-md-4">
-						<div class="thumbnail">
-							<img src="themes/start/images/white/terminal.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Shell</h3>
-									<p>CLI for Slate Features</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.shell</td>
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.shell.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td>SlateKit.Shell</td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td>Coming soon</td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free : open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>*
-										</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td>-</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>The SlateKit CLI ( coming soon ) to create and configure projects.
-										</td>
-									</tr>
-								</table>
-							</div>						
-							<p class=" text-center">
-								<a href="infra.html" class="btn btn-primary" role="button">more</a> 
-							</p>
-						</div>
-					</div>
-				</div>
-				<br/><br/>
-				<div class="row">
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-server" class="thumbnail">
-							<img src="themes/start/images/white/connected.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Server</h3>
-									<p>Backend Server and API container</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">
-									<tr>
-										<td><strong>package</strong></td>
-										<td>slatekit.server
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.server.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-server/src/main/kotlin/slatekit/server">SlateKit.Server</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td><a class="url-ch" href="kotlin-core-server.html">Server</a></td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free: open-source</td>
-									</tr>
-									<tr>
-										<td><strong>lib</strong></td>
-										<td>Common,Entities,Core,API,Integration, Spark
-										</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>A thin abstraction layer over an Http-Server, to host the protocol-independent APIs.
-										</td>
-									</tr>
-								</table>
-							</div>						
-							<p class=" text-center">
-								<a href="server.html" class="btn btn-primary" role="button">more</a> 
-							</p>
-						</div>
-					</div>	
-					<div class="col-sm-6 col-md-4">
-						<div id="project-slate-examples" class="thumbnail">
-							<img src="themes/start/images/white/manual.png" alt="..." width="80">
-							<div class="caption">
-								<div class="text-center">
-									<h3 class="align-center">SlateKit.Examples</h3>
-									<p>Examples and Sample apps</p>
-									<br/>
-								</div>
-								<table class="table table-bordered table-striped">								
-									<tr>
-										<td><strong>namespace</strong></td>
-										<td>slatekit.examples
-									</tr>
-									<tr>
-										<td><strong>jar</strong></td>
-										<td>slatekit.examples.jar</td>
-									</tr>
-									<tr>
-										<td><strong>git</strong></td>
-										<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples">SlateKit.Examples</a></td>
-									</tr>
-									<tr>
-										<td><strong>url</strong></td>
-										<td>-</td>
-									</tr>
-									<tr>
-										<td><strong>cost</strong></td>
-										<td>free: open-source</td>
-									</tr>
-									<tr>
-										<td><strong>libs</strong></td>
-										<td>
-										</td>
-									</tr>
-									<tr>
-										<td><strong>docs</strong></td>
-										<td>-</td>
-									</tr>
-									<tr>
-										<td><strong>notes</strong></td>
-										<td>Contains examples of all the utilities and architecture components
-										</td>
-									</tr>
-								</table>
-							</div>						
-							<p class=" text-center">
-								<a href="" class="btn btn-primary" role="button">see source code</a> 
-							</p>
-						</div>
-					</div>
-				</div>
-          </div>
-        </section>
-        
-      </main>
+                  <div class="navbar-header">
+                      <!-- Navbar Brand -->
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
 
-      <footer id="footer" class="site-footer">
-        <div class="container">
-
-          <div id="sidebar-footer-1">
-            <div class="row">
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">About Us</h5>
-                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Contact</h5>
-                <div class="textwidget">
-                  <div class="adr">
-                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
-                    <span id="footer_addr_city"    class="locality">New York</span>,
-                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
-                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
-                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                    <!-- Toggle Button -->
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
                   </div>
-                  <div>Website: <a class="url" href="http://www.codehelix.co">http://www.codehelix.co</a></div>
-                </div>
-              </aside>
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Need Help?</h5>
-                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      <!-- Navbar Menu -->
+                      <ul class="navbar-nav ml-auto">
+                          <li class="nav-item">
+                              <a href="#about" class="nav-link link-scroll">About</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="overview.html" class="nav-link link-scroll">Overview</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#services" class="nav-link link-scroll">Setup</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Architecture</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Utilities</a>
+                          </li>
+                          <li class="nav-item">
+                              <a href="#features" class="nav-link link-scroll">Releases</a>
+                          </li>
+                          <!--
+                          <li class="nav-item">
+                              <a href="#screens" class="nav-link link-scroll">Screens</a>
+                          </li>
+                          -->
+                          <!--
+                          <li class="nav-item">
+                              <a href="#testimonials" class="nav-link link-scroll">Testimonials</a>
+                          </li>
+                          -->
+                      </ul>
+                  </div>
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Get in touch</h5>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Your Email">
-                  <span class="input-group-btn">
-                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
-                  </span>
-                </div>
-                <ul class="social-links">
-                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
-                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
-                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                </ul>
-              </aside>
+              </div>
+          </nav><!--=============== /. Navbar ===============-->
 
+
+          <!--=============== Separator Section ===============-->
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Scalable apps">
+              <div class="container">
+
+                  <div class="row">
+                      <!-- Mockup Image -->
+                      <div class="image col-md-6 hidden-sm-down">
+                          <img src="themes/perfo/assets/img/iphone.png" alt="...." class="img-fluid">
+                      </div>
+
+                      <!-- Heading Area -->
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Overview </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          <!--=============== /. Separator Section ===============-->
+
+
+          <!--=============== Features Section ===============-->
+          <!--=============== Features Section ===============-->
+          <section id="features" class="features no-padding-bottom">
+              <div class="container">
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Goals">Goals</h2>
+                  </header>
+
+                  <p class="lead limited-width">
+                      Host anywhere
+                  </p>
+
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp">
+                          <strong class="text-primary">Deploy</strong>
+                          <h3>Goal</h3>
+                          <p>An emphasis on immutable and functional code</p>
+                      </div><!-- End item -->
+                  </div>
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp" data-wow-delay="0.2s">
+                          <strong class="text-primary">Host</strong>
+                          <h3>Design</h3>
+                          <p>A modern set of libraries to enhance the standard library</p>
+                      </div><!-- End item -->
+
+                  </div>
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp" data-wow-delay="0.4s">
+                          <strong class="text-primary">Cloud</strong>
+                          <h3>Tech</h3>
+                          <p>Support for cloud integrated components like AWS S3, SQS</p>
+                      </div><!-- End item -->
+                  </div>
+
+              </div>
+          </section>
+
+          <!--=============== Features Section ===============-->
+          <section id="features" class="features no-padding-bottom">
+              <div class="container">
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Operational">Operational</h2>
+                  </header>
+
+                  <p class="lead limited-width">
+                      Host anywhere
+                  </p>
+
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp">
+                          <strong class="text-primary">Deploy</strong>
+                          <h3>Goal</h3>
+                          <p>An emphasis on immutable and functional code</p>
+                      </div><!-- End item -->
+                  </div>
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp" data-wow-delay="0.2s">
+                          <strong class="text-primary">Host</strong>
+                          <h3>Design</h3>
+                          <p>A modern set of libraries to enhance the standard library</p>
+                      </div><!-- End item -->
+
+                  </div>
+                  <div class="row">
+                      <!-- item -->
+                      <div class="item col-md-12 wow fadeInUp" data-wow-delay="0.4s">
+                          <strong class="text-primary">Cloud</strong>
+                          <h3>Tech</h3>
+                          <p>Support for cloud integrated components like AWS S3, SQS</p>
+                      </div><!-- End item -->
+                  </div>
+
+              </div>
+          </section>
+
+    <section id="project" class="features no-padding-bottom">
+      <div class="container">
+        <header>
+            <h2 class="with-bg-text has-line" data-text="Philosophy">Philosophy</h2>
+        </header>
+        <div class="row">         
+          <div class="">
+            <div id="project-slate-core" class="thumbnail">
+              <div class="caption">
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>Tech</strong></td>
+                    <td>Built for the JVM, Linux/Windows, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Design</strong></td>
+                    <td>Library based approach instead of a "Framework". Use as little or as much as you need.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Standards</strong></td>
+                    <td>Check our coding standards for kotlin</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Approach</strong></td>
+                    <td>Simplicity and Practicality above all else</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Components</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Portable</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Minimal</strong></td>
+                    <td>                  
+                      <ul>
+                        <li>slatekit.common</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>              
+                      <ul>
+                        <li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
+                        <li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
+                            <strong>slatekit.cloud</strong> projects</li>
+                        <li>APIs for each component are available in the SlateKit.Integration project. This is so that the API, Core, Entities projects do not depend on each other.
+                      </ul>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="overview.html#slatekit-all-projects" class="btn btn-template" role="button">see all projects</a> 
+              </p>
             </div>
           </div>
-
-          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </section>
+           <!--=============== Footer ===============-->
+           <footer id="main-footer" class="main-footer">
+               <div class="container text-center">
 
-    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
-  
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
-	<script type="text/javascript">
-		var _codehelixAppPage = "overview";
-	</script>
-    <script type="text/javascript" src="themes/start/app/app.js"></script>
-	<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                   <!-- Brand -->
+                   <div class="logo">
+                       <strong class="brand-text">Slate Kit</strong>
+                   </div>
+                   <!-- Description -->
+                   <p class="description">Connect with us on our various channels and reach out for more info.</p>
 
-  ga('create', 'UA-84704317-1', 'auto');
-  ga('send', 'pageview');
+                   <!-- Social Icons Menu -->
+                   <ul class="social list-inline">
+                       <li class="list-inline-item">
+                           <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                       </li>
+                   </ul>
+               </div>
 
-</script>
-  </body>
+              <!-- Copyrights -->
+               <div class="copyrights">
+                   <div class="container">
+                       <div class="row">
+                           <div class="col-md-6">
+                               <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+                           </div>
+                           <div class="col-md-6 text-right">
+                               <ul class="list-inline">
+                                   <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                   <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                                   <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div> <!-- End Copyrights -->
+           </footer>
+           <!--=============== /. Footer ===============-->
+
+
+           <!--=============== Preloader ===============-->
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           <!--=============== /. Preloader ===============-->
+
+
+           <!--=============== Scroll To Top ===============-->
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           <!--=============== /. Scroll To Top ===============-->
+      </div>
+
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <!-- Bootstrap 4 Alpha -->
+        <script src="themes/perfo/assets/js/bootstrap.min.js"></script>
+        <!-- Owl Carousel -->
+        <script src="themes/perfo/assets/js/owl.carousel.min.js"></script>
+        <!-- Easy Scroll -->
+        <script src="themes/perfo/assets/js/easyscroll.min.js"></script>
+        <!-- WOW JS -->
+        <script src="themes/perfo/assets/js/wow.min.js"></script>
+        <!-- Custom Js -->
+        <script src="themes/perfo/assets/js/script.js"></script>
+    </body>
 </html>
