@@ -79,11 +79,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170802</td>
+      <td>2018-02-10</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.3</td>
+      <td>0.9.9</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -99,11 +99,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/" class="url-ch">src/lib/kotlin/slatekit/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Database.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Database.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Database.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Database.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -116,7 +116,6 @@
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
 </span><span class="k">import</span> <span class="nn">slatekit.common.db.Db</span>
 <span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
-<span class="k">import</span> <span class="nn">slatekit.common.mapper.Mapper</span>
 
 
 <span class="c1">// optional 
@@ -125,6 +124,8 @@
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
 <span class="k">import</span> <span class="nn">slatekit.examples.common.User</span>
+<span class="k">import</span> <span class="nn">slatekit.meta.createTable</span>
+<span class="k">import</span> <span class="nn">slatekit.meta.models.ModelMapper</span>
 
 
 
@@ -209,7 +210,7 @@
 </span>        <span class="c1">// CASE 12: Map a record to an model using the mapper component
 </span>        <span class="c1">// The mapper will load a schema from the User class by checking
 </span>        <span class="c1">// for "Field" annotations
-</span>        <span class="kd">val</span> <span class="py">userModelSchema</span> <span class="p">=</span> <span class="n">Mapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+</span>        <span class="kd">val</span> <span class="py">userModelSchema</span> <span class="p">=</span> <span class="n">ModelMapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span><span class="p">(</span><span class="n">userModelSchema</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">item1</span> <span class="p">=</span> <span class="n">db</span><span class="p">.</span><span class="n">mapOne</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="s">"select * from `user` where id = 1"</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="n">item1</span><span class="p">)</span>
@@ -221,7 +222,7 @@
         <span class="c1">// CASE 14: Create the table using the model
 </span>        <span class="c1">// Be careful with this, ensure you are using a connection string
 </span>        <span class="c1">// with limited permissions
-</span>        <span class="n">db</span><span class="p">.</span><span class="n">createTable</span><span class="p">(</span><span class="n">userModelSchema</span><span class="p">)</span>
+</span>        <span class="n">createTable</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">userModelSchema</span><span class="p">)</span>
 
         <span class="c1">// CASE 15: Drop a table
 </span>        <span class="c1">// Be careful with this, ensure you are using a connection string

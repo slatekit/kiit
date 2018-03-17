@@ -80,11 +80,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>20170802</td>
+      <td>2018-02-10</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.3</td>
+      <td>0.9.9</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -100,11 +100,11 @@
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/sms" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/sms</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/" class="url-ch">src/lib/kotlin/slatekit/</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Sms.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Sms.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Sms.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Sms.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -146,7 +146,7 @@
 </span>    <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span>  <span class="n">Config</span><span class="p">(</span><span class="s">"user://slatekit/conf/sms.conf"</span><span class="p">)</span>
 
     <span class="c1">// Setup 2: Get the api key either through conf or explicitly
-</span>    <span class="kd">val</span> <span class="py">apiKey1</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">apiKey</span><span class="p">(</span><span class="s">"sms"</span><span class="p">)</span>
+</span>    <span class="kd">val</span> <span class="py">apiKey1</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">apiLogin</span><span class="p">(</span><span class="s">"sms"</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">apiKey2</span> <span class="p">=</span> <span class="n">ApiLogin</span><span class="p">(</span><span class="s">"17181234567"</span><span class="p">,</span> <span class="s">"ABC1234567"</span><span class="p">,</span> <span class="s">"password"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"twilio-sms"</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">apiKey</span>  <span class="p">=</span> <span class="n">apiKey1</span> <span class="o">?:</span> <span class="n">apiKey2</span>
 
