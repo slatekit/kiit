@@ -1,73 +1,105 @@
+
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Kotlin 101 tutorial and cheat sheet" />
-    <title>Slate Kit - Kotlin 101 Tutorial</title>
-    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
-    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+<html lang="zxx">
+   <head>
+      <meta charset="utf-8">
+      <!-- Responsive meta -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- IE Compatibility meta -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Description meta -->
+      <meta name="description" content="Kotlin Tool-Kit">
+      <!-- Author meta -->
+      <meta name="author" content="CodeHelix">
 
-  <body>
-    <div id="page">
-      <header id="header" class="site-navbar navbar navbar-fixed-top">
-        <nav id="topbar" class="site-topbar visible-lg visible-md">
-          <div class="container">
-            <div class="row">
-              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
-              <div class="social-links col-sm-6">
-                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
-                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
-                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
-                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+      <!-- Page Title -->
+      <title>Slate Kit</title>
+
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="themes/perfo/assets/img/favicon.ico">
+      <!-- Font Awesome Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/font-awesome.css">
+      <!-- Bootstrap Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/bootstrap.css">
+      <!-- Mockup Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/device-mockups.min.css">
+      <!-- Owl Carousel Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/owl.carousel.min.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/animate.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/preloader.css">
+      <!-- Custom Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/style.default.css">
+      <link rel="stylesheet" type="text/css" href="themes/_common/css/lang.css" media="screen">
+      <link rel="stylesheet" href="themes/perfo/app/app.css">
+   </head>
+   <body>
+
+
+      <div class="page-header">
+          <!--=============== Navbar ===============-->
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      <!-- Navbar Brand -->
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    <!-- Toggle Button -->
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      <!-- Navbar Menu -->
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
               </div>
-            </div>
-          </div>
-        </nav>
+          </nav><!--=============== /. Navbar ===============-->
 
-        <nav id="navbar" class="site-navbar navbar" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <i class="fa fa-bars"></i>
-              </button>
-              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
-            </div>
-            <div class="collapse navbar-collapse" id="navbar-collapse-1">
-               <ul id="navigation" class="nav navbar-nav navbar-right">
-              </ul>
-            </div>
-          </div>
-        </nav>
-      </header>
 
-      <main id="main" class="site-main">
+          <!--=============== Separator Section ===============-->
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
 
-		<footer class="site-footer">
-			<div class="container">
-				<div class="row">
+                  <div class="row">
+                      <!-- Mockup Image  -->
+                      <div class="image col-md-6 hidden-sm-down">
+                          <img src="themes/perfo/assets/img/iphone.png" alt="...." class="img-fluid">
+                      </div>
+                     
+                      <!-- Heading Area -->
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Kotlin 101<br/> </h2>
+                      </div>
+                  </div>
 
-				  <aside class="widget">
-					<h1 class="widget-title">Kotlin 101</h1>
-					<h3>                  
-						An intro to Kotlin and its specific features!
-					</h3>
-				  </aside>
-				</div>
-			</div>
-		</footer>
-		
-		<section id="codeExample" class="section" >
-			<div class="container">
+              </div>
+          </section>
+          <!--=============== /. Separator Section ===============-->
+
+
+          <!--=============== About Section ===============-->
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Team">Kotlin 101</h2>
+                  </header>
+                <p>We are a small, focused team building mobile apps, websites, and open-source software.
+                  Slate Kit was extracted out of an internal set of libraries in Kotlin that we were using 
+                  to build mobile apps and the corresponding server side back-end for the apps.
+                </p>
+                <br/>
+                  <a href="https://github.com/code-helix/slatekit/" class="btn btn-template">Visit us on GitHub</a>
+
 				<h1 id="kotlin">Kotlin 101</h1>
 <p>This is a introduction to Kotlin which covers the language features in a 
 concise, reference style approach. For more in-depth documentation please refer to the resources below.</p>
@@ -98,9 +130,9 @@ concise, reference style approach. For more in-depth documentation please refer 
       <td class=" text-center"><a href="#kotlin-main" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
-      <td class="col-md-2"><strong>import</strong></td>
+      <td><strong>import</strong></td>
       <td>the different ways to import components</td>
-      <td class="col-md-2 text-center"><a href="#kotlin-import" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-import" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>vals</strong></td>
@@ -122,9 +154,9 @@ concise, reference style approach. For more in-depth documentation please refer 
 <table id="overview" class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td class="col-md-2"><strong>types</strong></td>
+      <td><strong>types</strong></td>
       <td>an overview of the basic data types</td>
-      <td class="col-md-2 text-center"><a href="#kotlin-types" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-types" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>strings</strong></td>
@@ -170,14 +202,14 @@ concise, reference style approach. For more in-depth documentation please refer 
 <table id="language" class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td class="col-md-2"><strong>conditions</strong></td>
+      <td><strong>conditions</strong></td>
       <td>conditional expressions using if else</td>
-      <td class="col-md-2 text-center"><a href="#kotlin-conditions" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-conditions" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>loops *</strong></td>
       <td>using various types of loops</td>
-      <td class=" text-center"><a href="#kotlin-loops" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-loops" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>when</strong></td>
@@ -218,9 +250,9 @@ concise, reference style approach. For more in-depth documentation please refer 
 <table id="kotlin_101_functions_list" class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td class="col-md-2"><strong>simple</strong></td>
+      <td class=""><strong>simple</strong></td>
       <td>simple functions with return types</td>
-      <td class="col-md-2 text-center"><a href="#kotlin-functions-simple" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-functions-simple" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>named parameters</strong></td>
@@ -263,9 +295,9 @@ concise, reference style approach. For more in-depth documentation please refer 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
-      <td class="col-md-2"><strong>Basics</strong></td>
+      <td class=""><strong>Basics</strong></td>
       <td>creating instances of classes</td>
-      <td class="col-md-2 text-center"><a href="#kotlin-classes-basics" class="more"><span class="btn btn-primary">More</span></a></td>
+      <td class="text-center"><a href="#kotlin-classes-basics" class="more"><span class="btn btn-primary">More</span></a></td>
     </tr>
     <tr>
       <td><strong>access control</strong></td>
@@ -398,7 +430,7 @@ concise, reference style approach. For more in-depth documentation please refer 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-main">Main</h2>
 <p>Simple main method as entry point into application. use println to print to the system console</p>
@@ -413,23 +445,27 @@ concise, reference style approach. For more in-depth documentation please refer 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-import">Import</h2>
 <p>You can import items from a package in various ways, 1 item, multiple items, all items from a package, or functions from a module</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// 1. Import 1 item from a package 
-</span>  <span class="k">import</span> <span class="nn">slatekit.common.log.Logger</span>
+</span>  
+  <span class="k">import</span> <span class="nn">slatekit.common.log.Logger</span>
   
   
   <span class="c1">// 2. Import all items from a pacakge using "*"
-</span>  <span class="k">import</span> <span class="nn">slatekit.common.log.*</span>
+</span>  
+  <span class="k">import</span> <span class="nn">slatekit.common.log.*</span>
   
   
   <span class="c1">// 3. Import 1 method ( string6 ) from an Object ( Random )
-</span>  <span class="c1">// NOTE: An object is essentially a Singleton class 
-</span>  <span class="k">import</span> <span class="nn">slatekit.common.Random.string6</span>
+</span>  
+  <span class="c1">// NOTE: An object is essentially a Singleton class 
+</span>  
+  <span class="k">import</span> <span class="nn">slatekit.common.Random.string6</span>
   
  
   <span class="k">fun</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">:</span><span class="n">Array</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;):</span><span class="n">Unit</span> <span class="p">{</span>
@@ -440,7 +476,7 @@ concise, reference style approach. For more in-depth documentation please refer 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-vals">Vals</h2>
 <p>Constants / immutable values are declared using <strong>val</strong></p>
@@ -456,7 +492,7 @@ concise, reference style approach. For more in-depth documentation please refer 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-vars">Vars</h2>
 <p>Variables are declared using <strong>var</strong></p>
@@ -476,7 +512,7 @@ concise, reference style approach. For more in-depth documentation please refer 
 	
 </div>
 <br/>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/><br/>
 
 <h1>2. Types</h1>
 <hr/>
@@ -484,7 +520,8 @@ concise, reference style approach. For more in-depth documentation please refer 
 <p>You can declare types simply using the values (in which case the type is inferred),
 or by explicitly specifying the type name. To indicate a value can be null, use the <strong>?</strong> operator</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Inferred
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Inferred
 </span>  <span class="kd">val</span> <span class="py">name1</span>     <span class="p">=</span> <span class="s">"john doe"</span>
   <span class="kd">val</span> <span class="py">age1</span>      <span class="p">=</span> <span class="m">35</span>
   <span class="kd">val</span> <span class="py">account1</span>  <span class="p">=</span> <span class="m">12345678901L</span>
@@ -523,26 +560,30 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 </code></pre>
 </div>
 <br/>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-strings">Strings</h2>
 <p>Basic String operations and string interpolation ( referencing of other values/expressions inside a string )</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// 1. Declaring strings
-</span>  <span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="s">"john doe"</span>
+</span>  
+  <span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="s">"john doe"</span>
   
   
   <span class="c1">// 2. Adding strings together
-</span>  <span class="kd">val</span> <span class="py">fullName</span> <span class="p">=</span> <span class="s">"Clark"</span> <span class="p">+</span> <span class="s">", Kent"</span>
+</span>  
+  <span class="kd">val</span> <span class="py">fullName</span> <span class="p">=</span> <span class="s">"Clark"</span> <span class="p">+</span> <span class="s">", Kent"</span>
   
   
   <span class="c1">// 3. Getting a char position in a string e.g. 1st pos
-</span>  <span class="kd">var</span> <span class="py">c1</span> <span class="p">=</span> <span class="s">"Batman"</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+</span>  
+  <span class="kd">val</span> <span class="py">c1</span> <span class="p">=</span> <span class="s">"Batman"</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
   
   
   <span class="c1">// 4. Convert strings to other types
-</span>  <span class="kd">val</span> <span class="py">age</span>     <span class="p">=</span> <span class="s">"30"</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span>
+</span>  
+  <span class="kd">val</span> <span class="py">age</span>     <span class="p">=</span> <span class="s">"30"</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span>
   <span class="kd">val</span> <span class="py">isActive</span>  <span class="p">=</span> <span class="s">"true"</span><span class="p">.</span><span class="n">toBoolean</span><span class="p">()</span>
   <span class="kd">val</span> <span class="py">salary</span>  <span class="p">=</span> <span class="s">"20.5"</span><span class="p">.</span><span class="n">toDouble</span><span class="p">()</span>
   
@@ -555,19 +596,22 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   
   
   <span class="c1">// 6. String interpolation ( with braces )
-</span>  <span class="c1">// Use this explicit approach when you dont have spaces
-</span>  <span class="kd">val</span> <span class="py">info2</span> <span class="p">=</span> <span class="s">"${name}${age}${account}${isActive}${salary}${date}"</span>
+</span>  
+  <span class="c1">// Use this explicit approach when you dont have spaces
+</span>  
+  <span class="kd">val</span> <span class="py">info2</span> <span class="p">=</span> <span class="s">"${name}${age}${account}${isActive}${salary}${date}"</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">info2</span> <span class="p">)</span>
   
   
   <span class="c1">// 7. String interpolation with more expressions
-</span>  <span class="kd">val</span> <span class="py">info3</span> <span class="p">=</span> <span class="s">"${name} salary is now ${salary + 200} start on ${date}"</span>
+</span>  
+  <span class="kd">val</span> <span class="py">info3</span> <span class="p">=</span> <span class="s">"${name} salary is now ${salary + 200} start on ${date}"</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">info3</span> <span class="p">)</span>
 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -576,29 +620,32 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="c1">// 1. Space / indentation is preserved
-</span>  <span class="kd">val</span> <span class="py">example1</span> <span class="p">=</span> <span class="s">""" app.users.activate
-                - userid: number ( required )
-                - phone : string ( required )
-                - email : string ( required )
-             """</span>
+</span>  
+  <span class="kd">val</span> <span class="py">example1</span> <span class="p">=</span> <span class="s">""" app.users.activate
+          - userid: number ( required )
+          - phone : string ( required )
+          - email : string ( required )
+       """</span>
   
   <span class="c1">// 2. Indentation is stripped and next line starts after "|"
-</span>  <span class="kd">val</span> <span class="py">example2</span> <span class="p">=</span> <span class="s">""" app.users.activate
-               | - userid: number ( required )
-               | - phone : string ( required )
-               | - email : string ( required )
-               | """</span><span class="p">.</span><span class="n">trimIndent</span><span class="p">()</span>
-  
+</span>  
+  <span class="kd">val</span> <span class="py">example2</span> <span class="p">=</span> <span class="s">""" app.users.activate
+         | - userid: number ( required )
+         | - phone : string ( required )
+         | - email : string ( required )
+         | """</span><span class="p">.</span><span class="n">trimIndent</span><span class="p">()</span>
+
   <span class="c1">// 3. Indentation is stripped and next line starts after "#"
-</span>  <span class="kd">val</span> <span class="py">example3</span> <span class="p">=</span> <span class="s">""" app.users.activate
-               # - userid: number ( required )
-               # - phone : string ( required )
-               # - email : string ( required )
-               # """</span><span class="p">.</span><span class="n">trimMargin</span><span class="p">(</span><span class="s">"#"</span><span class="p">)</span>
+</span>  
+  <span class="kd">val</span> <span class="py">example3</span> <span class="p">=</span> <span class="s">""" app.users.activate
+         # - userid: number ( required )
+         # - phone : string ( required )
+         # - email : string ( required )
+         # """</span><span class="p">.</span><span class="n">trimMargin</span><span class="p">(</span><span class="s">"#"</span><span class="p">)</span>
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-enums">Enums</h2>
@@ -627,7 +674,7 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-dates">Dates</h2>
@@ -650,62 +697,86 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 
 <div class="highlighter-rouge"><pre class="highlight"><code> 
   <span class="c1">// 1. Declare an empty Immutable list
-</span>  <span class="kd">val</span> <span class="py">items0</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;()</span>
+</span>  
+  <span class="kd">val</span> <span class="py">items0</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;()</span>
   
   <span class="c1">// 2. Declare an immutable list of 3 items
-</span>  <span class="c1">// NOTE: Later in this example we will show how to
-</span>  <span class="c1">// iterate over the items and also how to convert the
-</span>  <span class="c1">// items from strings to numbers without manual loops
-</span>  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
+</span>  
+  <span class="c1">// NOTE: Later in this example we will show how to
+</span>  
+  <span class="c1">// iterate over the items and also how to convert the
+</span>  
+  <span class="c1">// items from strings to numbers without manual loops
+</span>  
+  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
   
   <span class="c1">// 3. Get the size
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
   
   <span class="c1">// 4. Get an item by key
 </span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="m">1</span><span class="p">])</span>
   
   <span class="c1">// 5. Get the first item ( head )
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">first</span><span class="p">())</span>
+</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">first</span><span class="p">())</span>
   
   <span class="c1">// 6. Get all the items after the first
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
+</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">drop</span><span class="p">(</span><span class="m">1</span><span class="p">))</span>
   
   <span class="c1">// 7. Get all last one
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">last</span><span class="p">())</span>
+</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">last</span><span class="p">())</span>
   
   <span class="c1">// 8. Get the first N elements
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items</span><span class="p">.</span><span class="n">take</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
   
   <span class="c1">// 9. Add item ( to the end )
-</span>  <span class="c1">// NOTE: this is immutable so it will return a new instance
-</span>  <span class="kd">val</span> <span class="py">items2</span> <span class="p">=</span> <span class="n">items</span> <span class="p">+</span> <span class="s">"4"</span>
+</span>  
+  <span class="c1">// NOTE: this is immutable so it will return a new instance
+</span>  
+  <span class="kd">val</span> <span class="py">items2</span> <span class="p">=</span> <span class="n">items</span> <span class="p">+</span> <span class="s">"4"</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">)</span>
   
   <span class="c1">// 10. Add item ( to the beginning )
-</span>  <span class="c1">// NOTE: this is immutable so it will return a new instance
-</span>  <span class="kd">val</span> <span class="py">items3</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"0"</span><span class="p">)</span> <span class="p">+</span> <span class="n">items2</span>
+</span>  
+  <span class="c1">// NOTE: this is immutable so it will return a new instance
+</span>  
+  <span class="kd">val</span> <span class="py">items3</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"0"</span><span class="p">)</span> <span class="p">+</span> <span class="n">items2</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items3</span><span class="p">)</span>
   
   <span class="c1">// 11. Update a key ( set the ndx 1 = 10
-</span>  <span class="c1">// TODO: This could be an extension function and/or there 
-</span>  <span class="c1">// may already be a better way to do this
-</span>  <span class="kd">val</span> <span class="py">items4</span> <span class="p">=</span> <span class="n">items3</span><span class="p">.</span><span class="n">mapIndexed</span> <span class="p">{</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="k">if</span> <span class="p">(</span><span class="n">ndx</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="s">"10"</span> <span class="k">else</span> <span class="n">value</span> <span class="p">}</span>
+</span>  
+  <span class="c1">// TODO: This could be an extension function and/or there 
+</span>  
+  <span class="c1">// may already be a better way to do this
+</span>  
+  <span class="kd">val</span> <span class="py">items4</span> <span class="p">=</span> <span class="n">items3</span><span class="p">.</span><span class="n">mapIndexed</span> <span class="p">{</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="k">if</span> <span class="p">(</span><span class="n">ndx</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span> <span class="s">"10"</span> <span class="k">else</span> <span class="n">value</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items4</span><span class="p">)</span>
  
   <span class="c1">// 12. Insert at position ( lets fix the values )
-</span>  <span class="c1">// TODO: This could be an extension function and/or there 
-</span>  <span class="c1">// may already be a better way to do this
-</span>  <span class="kd">val</span> <span class="py">items5</span> <span class="p">=</span> <span class="n">items4</span><span class="p">.</span><span class="n">subList</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="p">+</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">)</span> <span class="p">+</span> <span class="n">items4</span><span class="p">.</span><span class="n">subList</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">items4</span><span class="p">.</span><span class="n">size</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span>
+</span>  
+  <span class="c1">// TODO: This could be an extension function and/or there 
+</span>  
+  <span class="c1">// may already be a better way to do this
+</span>  
+  <span class="kd">val</span> <span class="py">items5</span> <span class="p">=</span> <span class="n">items4</span><span class="p">.</span><span class="n">subList</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="p">+</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">)</span> <span class="p">+</span> <span class="n">items4</span><span class="p">.</span><span class="n">subList</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="n">items4</span><span class="p">.</span><span class="n">size</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items5</span><span class="p">)</span>
   
   <span class="c1">// 13. Remove an item at index 3
-</span>  <span class="kd">val</span> <span class="py">items6</span> <span class="p">=</span> <span class="n">items5</span><span class="p">.</span><span class="n">filterIndexed</span> <span class="p">{</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span> <span class="n">ndx</span> <span class="p">!=</span> <span class="m">3</span> <span class="p">}</span>
+</span>  
+  <span class="kd">val</span> <span class="py">items6</span> <span class="p">=</span> <span class="n">items5</span><span class="p">.</span><span class="n">filterIndexed</span> <span class="p">{</span> <span class="n">ndx</span><span class="p">,</span> <span class="n">_</span> <span class="p">-&gt;</span> <span class="n">ndx</span> <span class="p">!=</span> <span class="m">3</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items6</span><span class="p">)</span>
   
   <span class="c1">// 14. Convert to map
-</span>  <span class="c1">// All the items in the list are converted to key/value pairs
-</span>  <span class="c1">// and then these are used to create a map.
-</span>  <span class="kd">val</span> <span class="py">map</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="n">Pair</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="p">}.</span><span class="n">toMap</span><span class="p">()</span>
+</span>  
+  <span class="c1">// All the items in the list are converted to key/value pairs
+</span>  
+  <span class="c1">// and then these are used to create a map.
+</span>  
+  <span class="kd">val</span> <span class="py">map</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="n">Pair</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="p">}.</span><span class="n">toMap</span><span class="p">()</span>
   <span class="n">println</span><span class="p">(</span><span class="n">map</span><span class="p">)</span>
   
   <span class="c1">// 15. Iterate over pairs
@@ -713,8 +784,10 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   <span class="n">items6</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">}</span>
   
   <span class="c1">// 16. Convert each item in the list to an integer
-</span>  <span class="c1">// NOTE: You don't need to iterate yourself.
-</span>  <span class="kd">val</span> <span class="py">numsA</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span><span class="p">(</span> <span class="n">String</span><span class="o">::</span><span class="n">toInt</span> <span class="p">)</span>
+</span>  
+  <span class="c1">// NOTE: You don't need to iterate yourself.
+</span>  
+  <span class="kd">val</span> <span class="py">numsA</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span><span class="p">(</span> <span class="n">String</span><span class="o">::</span><span class="n">toInt</span> <span class="p">)</span>
   <span class="kd">val</span> <span class="py">numsB</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span><span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
   <span class="kd">val</span> <span class="py">numsC</span> <span class="p">=</span> <span class="n">items6</span><span class="p">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">text</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="n">numsA</span><span class="p">)</span>
@@ -722,7 +795,8 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   <span class="n">println</span><span class="p">(</span><span class="n">numsC</span><span class="p">)</span>
   
   <span class="c1">// 17. Finally, combine 2 lists together
-</span>  <span class="kd">val</span> <span class="py">items7</span> <span class="p">=</span> <span class="n">items6</span> <span class="p">+</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"6"</span><span class="p">,</span> <span class="s">"7"</span><span class="p">)</span>
+</span>  
+  <span class="kd">val</span> <span class="py">items7</span> <span class="p">=</span> <span class="n">items6</span> <span class="p">+</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"6"</span><span class="p">,</span> <span class="s">"7"</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items7</span><span class="p">)</span>
   
 </code></pre>
@@ -732,7 +806,7 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 	and <strong>mutableMapOf("a" to 1)</strong> respectively. You can also convert mutable versions to immutable versions via <strong>toList() and toMap()</strong>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-maps">Maps</h2>
 <p>Maps can be immutable ( readonly ) or mutable ( editable ). Examples of using the immutable version are below.</p>
@@ -782,13 +856,14 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 <div class="alert alert-info" role="alert">
 	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of Map can be built using for example <strong>mutableListOf("a" to 1)</strong></p>	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-tuples">Tuples</h2>
 <p>Tuples are not supported, but you can use the Pair and Triple classes in the standard library.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// 1. Create a pair of string and int
-</span>  <span class="kd">val</span> <span class="py">pair1</span> <span class="p">=</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+</span>  
+  <span class="kd">val</span> <span class="py">pair1</span> <span class="p">=</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">pair1</span><span class="p">.</span><span class="n">first</span> <span class="p">)</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">pair1</span><span class="p">.</span><span class="n">second</span> <span class="p">)</span>
   
@@ -796,15 +871,17 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 </span>  <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"John"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">3</span> <span class="p">)</span>
   
   <span class="c1">// 3. Access the individual items
-</span>  <span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">first</span>
+</span>  
+  <span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">first</span>
   <span class="kd">val</span> <span class="py">active</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">second</span>
   <span class="kd">val</span> <span class="py">id</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">third</span>
   
   <span class="c1">// 3. Declare a tuple explicity
-</span>  <span class="kd">val</span> <span class="py">user2</span><span class="p">:</span> <span class="n">Triple</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"Jane"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">2</span> <span class="p">)</span>
+</span>  
+  <span class="kd">val</span> <span class="py">user2</span><span class="p">:</span> <span class="n">Triple</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"Jane"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">2</span> <span class="p">)</span>
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/><br/>
 <br/>
 
 <h2 id="kotlin-nulls">Null handling</h2>
@@ -888,7 +965,7 @@ The first example is on basic types ( strings ). The second example shows usage 
     
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/><br/>
 <br/>
 
 
@@ -900,10 +977,12 @@ The first example is on basic types ( strings ). The second example shows usage 
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
     <span class="c1">// 1. if only
-</span>    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
+</span>    
+    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
 
     <span class="c1">// 2. No braces
-</span>    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
+</span>    
+    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
     <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"ok"</span> <span class="o">)</span>
     <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
@@ -944,30 +1023,34 @@ The first example is on basic types ( strings ). The second example shows usage 
     to replace vars and promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-loops">Loops</h2>
 <p>For loops and while loops</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// 1. for loop inclusive ( 5 included )
-</span>  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span><span class="p">)</span> <span class="p">{</span>
+</span>  
+  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
   <span class="p">}</span>
   
   <span class="c1">// 2. for loop exclusive ( 5 excluded )
-</span>  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
+</span>  
+  <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
   <span class="p">}</span>
   
   <span class="c1">// 3. for loop with variable
-</span>  <span class="kd">val</span> <span class="py">start</span> <span class="p">=</span> <span class="m">1</span>
+</span>  
+  <span class="kd">val</span> <span class="py">start</span> <span class="p">=</span> <span class="m">1</span>
   <span class="kd">val</span> <span class="py">end</span> <span class="p">=</span> <span class="m">5</span>
   <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="n">start</span><span class="o">..</span><span class="n">end</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
   <span class="p">}</span>
   
   <span class="c1">// 4. for loop over collection
-</span>  <span class="kd">val</span> <span class="py">words</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"a1"</span><span class="p">,</span> <span class="s">"b2"</span><span class="p">,</span> <span class="s">"c3"</span><span class="p">,</span> <span class="s">"d4"</span><span class="p">,</span> <span class="s">"e5"</span><span class="p">)</span>
+</span>  
+  <span class="kd">val</span> <span class="py">words</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"a1"</span><span class="p">,</span> <span class="s">"b2"</span><span class="p">,</span> <span class="s">"c3"</span><span class="p">,</span> <span class="s">"d4"</span><span class="p">,</span> <span class="s">"e5"</span><span class="p">)</span>
   <span class="k">for</span> <span class="p">(</span><span class="n">word</span> <span class="k">in</span> <span class="n">words</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
   <span class="p">}</span>
@@ -983,7 +1066,7 @@ The first example is on basic types ( strings ). The second example shows usage 
 <div class="alert alert-info" role="alert">
 	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in favor of other iteration approaches. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-when">When</h2>
@@ -995,7 +1078,8 @@ generally be used as an alternative to if/else conditions.</p>
         <span class="k">when</span> <span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">{</span>
 
             <span class="c1">// 1. exact value match
-</span>            <span class="k">true</span>                       <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"ok"</span><span class="p">)</span>
+</span>            
+            <span class="k">true</span>                       <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"ok"</span><span class="p">)</span>
             <span class="m">7</span>                          <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"lucky 7"</span><span class="p">)</span>
             <span class="m">7.7</span>                        <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"lucky 7.7"</span><span class="p">)</span>
             <span class="s">"cat"</span>                      <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"meow"</span><span class="p">)</span>
@@ -1003,13 +1087,15 @@ generally be used as an alternative to if/else conditions.</p>
             <span class="m">1</span><span class="o">..</span><span class="m">3</span>                       <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"range"</span><span class="p">)</span>
 
             <span class="c1">// 2. data class value
-</span>            <span class="n">Account</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"john"</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>   <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"john "</span><span class="p">)</span>
+</span>            
+            <span class="n">Account</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="s">"john"</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>   <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"john "</span><span class="p">)</span>
             <span class="n">Account</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"jane"</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>   <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"jane "</span><span class="p">)</span>
             <span class="n">Account</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">"flash"</span><span class="p">,</span><span class="k">true</span><span class="p">)</span>   <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"flash"</span><span class="p">)</span>
             <span class="n">Pair</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>               <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"pair "</span><span class="p">)</span>
 
             <span class="c1">// 3. data type match
-</span>            <span class="k">is</span> <span class="n">Boolean</span>                 <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"bool:   "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
+</span>            
+            <span class="k">is</span> <span class="n">Boolean</span>                 <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"bool:   "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
             <span class="k">is</span> <span class="n">Int</span>                     <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"number: "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
             <span class="k">is</span> <span class="n">Double</span>                  <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
             <span class="k">is</span> <span class="n">String</span>                  <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"text:   "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
@@ -1017,7 +1103,8 @@ generally be used as an alternative to if/else conditions.</p>
             <span class="k">is</span> <span class="n">Pair</span><span class="p">&lt;*,*&gt;</span>               <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"pair:   "</span> <span class="p">+</span> <span class="n">item</span><span class="p">)</span>
 
             <span class="c1">// 4. default case
-</span>            <span class="k">else</span>                       <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span>
+</span>            
+            <span class="k">else</span>                       <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"unknown"</span><span class="p">)</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
@@ -1042,7 +1129,7 @@ generally be used as an alternative to if/else conditions.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-trycatch">Try/Catch</h2>
@@ -1079,7 +1166,7 @@ generally be used as an alternative to if/else conditions.</p>
     to replace vars and promote use of vals and immutability. Check the <strong><a class="url-ch" href="kotlin101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
 	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-throw">Throw</h2>
 <p>Throwing exceptions.</p>
@@ -1098,7 +1185,7 @@ generally be used as an alternative to if/else conditions.</p>
 	
 </div>
 <br/>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-return">Return</h2>
 <p>Returning from a function or method.</p>
@@ -1117,70 +1204,86 @@ generally be used as an alternative to if/else conditions.</p>
 	
 </div>
 <br/>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
 <h2 id="kotlin-iterations">Iterations</h2>
 <p>How to iterate over collections</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>   <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>   
+  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
 
   <span class="c1">// Case 1: For each with variable name
-</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">}</span>
+</span>  
+  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">}</span>
   
   <span class="c1">// Case 2: For each with auto-supplied "it" variable
-</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
+</span>  
+  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">println</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
   
   <span class="c1">// Case 3: For each with lambda
-</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
+</span>  
+  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
   
   <span class="c1">// Case 4: For each with index
 </span>  <span class="n">items</span><span class="p">.</span><span class="n">forEachIndexed</span> <span class="p">{</span> <span class="n">index</span><span class="p">,</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="n">print</span><span class="p">(</span><span class="s">" "</span> <span class="p">+</span> <span class="n">items</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">()</span>
   
   <span class="c1">// Case 5: Using a range
-</span>  <span class="m">4</span><span class="p">.</span><span class="n">until</span><span class="p">(</span><span class="m">6</span><span class="p">).</span><span class="n">forEach</span><span class="p">{</span> <span class="n">v</span> <span class="p">-&gt;</span> <span class="n">print</span><span class="p">(</span><span class="s">" "</span> <span class="p">+</span> <span class="n">v</span> <span class="p">)</span> <span class="p">}</span>
+</span>  
+  <span class="m">4</span><span class="p">.</span><span class="n">until</span><span class="p">(</span><span class="m">6</span><span class="p">).</span><span class="n">forEach</span><span class="p">{</span> <span class="n">v</span> <span class="p">-&gt;</span> <span class="n">print</span><span class="p">(</span><span class="s">" "</span> <span class="p">+</span> <span class="n">v</span> <span class="p">)</span> <span class="p">}</span>
 
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-aggregates">Aggregates</h2>
 <p>How to use the built-in map, filter, reduce and aggregate functions</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
   
   <span class="c1">// Case 1: apply function to each
 </span>  <span class="c1">// Prints:
 </span>  <span class="c1">// 1
 </span>  <span class="c1">// 2
 </span>  <span class="c1">// 3
-</span>  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
+</span>  
+  <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
   
   <span class="c1">// Case 2: map strings to new list of numbers
-</span>  <span class="c1">// Result: List[Int](1, 2, 3)
-</span>  <span class="kd">val</span> <span class="py">nums</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">map</span><span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
+</span>  
+  <span class="c1">// Result: List[Int](1, 2, 3)
+</span>  
+  <span class="kd">val</span> <span class="py">nums</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">map</span><span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
   
   <span class="c1">// Case 3: filter ( find items &gt; 2 )
-</span>  <span class="kd">val</span> <span class="py">filtered</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span> <span class="p">-&gt;</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">&gt;</span> <span class="m">2</span> <span class="p">}</span>
+</span>  
+  <span class="kd">val</span> <span class="py">filtered</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span> <span class="p">-&gt;</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">&gt;</span> <span class="m">2</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">filtered</span> <span class="p">)</span>
   
   <span class="c1">// Case 4: reduce to 1 value
-</span>  <span class="c1">// Result: "1:2:3"
-</span>  <span class="kd">val</span> <span class="py">total</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">reduce</span><span class="p">{</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">-&gt;</span> <span class="n">a</span> <span class="p">+</span> <span class="s">":"</span> <span class="p">+</span> <span class="n">b</span> <span class="p">}</span>
+</span>  
+  <span class="c1">// Result: "1:2:3"
+</span>  
+  <span class="kd">val</span> <span class="py">total</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">reduce</span><span class="p">{</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">-&gt;</span> <span class="n">a</span> <span class="p">+</span> <span class="s">":"</span> <span class="p">+</span> <span class="n">b</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"reduce: '$total'"</span><span class="p">)</span>
   
   <span class="c1">// Case 5a: fold to single value from the Left side
-</span>  <span class="c1">// Result: "LEFT,1,2,3"
-</span>  <span class="kd">val</span> <span class="py">totalLeft</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">fold</span><span class="p">(</span><span class="s">"LEFT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
+</span> 
+  <span class="c1">// Result: "LEFT,1,2,3"
+</span>  
+  <span class="kd">val</span> <span class="py">totalLeft</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">fold</span><span class="p">(</span><span class="s">"LEFT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"fold left: "</span> <span class="p">+</span> <span class="n">totalLeft</span><span class="p">)</span>
   
   <span class="c1">// Case 5b: fold to single value from the Right side
-</span>  <span class="c1">// Result:  "1,2,3,RIGHT"
-</span>  <span class="kd">val</span> <span class="py">totalRight</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">foldRight</span><span class="p">(</span><span class="s">"RIGHT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
+</span>  
+  <span class="c1">// Result:  "1,2,3,RIGHT"
+</span>  
+  <span class="kd">val</span> <span class="py">totalRight</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">foldRight</span><span class="p">(</span><span class="s">"RIGHT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"fold right: "</span> <span class="p">+</span> <span class="n">totalRight</span><span class="p">)</span>
   
   <span class="c1">// Case 6: max
@@ -1198,7 +1301,7 @@ generally be used as an alternative to if/else conditions.</p>
 	<p><i class="fa fa-info-circle"></i>These built in aggregate methods on collections ( <strong>map, reduce, filter, fold, indexOf, minBy, maxBy, etc</strong>) are incredibly powerful. You can generally avoid looping through and / or converting items in collections manually, and instead rely on these built-in functions.</p>
 	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a>
 <br/><br/><br/>
 
 <h1>4. Functions</h1>
@@ -1222,7 +1325,7 @@ generally be used as an alternative to if/else conditions.</p>
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -1243,7 +1346,7 @@ generally be used as an alternative to if/else conditions.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -1268,7 +1371,7 @@ generally be used as an alternative to if/else conditions.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -1299,7 +1402,7 @@ generally be used as an alternative to if/else conditions.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -1335,7 +1438,7 @@ generally be used as an alternative to if/else conditions.</p>
   <span class="p">}</span>
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 <h2 id="kotlin-functions-hof-compose">HOF: Function composition</h2>
@@ -1371,7 +1474,7 @@ generally be used as an alternative to if/else conditions.</p>
 	<p><i class="fa fa-info-circle"></i> Function composition is one of the fundamental concepts in functional programming, and leads to other more sophisticated concepts such as currying.</p>
 	
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 <h2 id="kotlin-functions-syntax">HOF: Syntax</h2>
 <p>When the last parameter to a function is a function itself, it allows interesting approaches
@@ -1411,7 +1514,7 @@ to the syntax of the calls.</p>
 <div class="alert alert-info" role="alert">
 	<p><i class="fa fa-info-circle"></i> This provides a way to simulate custom control structures.</p>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 
 
 
@@ -1451,7 +1554,7 @@ to the syntax of the calls.</p>
 </code></pre>
 </div>
 
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 
@@ -1483,7 +1586,7 @@ of specifying the access level right at the constructor level.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-classes-subclassing">Inheritance</h2>
@@ -1506,7 +1609,7 @@ of specifying the access level right at the constructor level.</p>
   
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-classes-data">Data classes</h2>
@@ -1537,7 +1640,7 @@ and they are used for pattern-matching.</p>
   
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-classes-traits">Interfaces</h2>
@@ -1583,7 +1686,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-classes-static">Static methods</h2>
@@ -1616,7 +1719,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 
@@ -1651,7 +1754,7 @@ and they are used for pattern-matching.</p>
   
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-operators">Operators</h2>
@@ -1738,7 +1841,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-type-alias">Type Alias</h2>
@@ -1780,7 +1883,7 @@ and they are used for pattern-matching.</p>
   <span class="p">}</span>
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-todo">TODO</h2>
@@ -1802,7 +1905,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-member-reference">Member Reference</h2>
@@ -1828,7 +1931,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-annotations">Annotations</h2>
@@ -1870,7 +1973,7 @@ and they are used for pattern-matching.</p>
 
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
 <h2 id="kotlin-deprecation">Deprecation</h2>
@@ -1905,153 +2008,118 @@ varying levels</p>
   <span class="p">}</span>
 </code></pre>
 </div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+<a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
 <br/>
 
-
-<!--
-<h1>8. More</h1>
-<hr/>
-
-<h2 id="kotlin-types-values">Value classes</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+              </div>
+          </section>
+          <!--=============== /. About Section ===============-->
 
 
-<h2 id="kotlin-types-alias">Type alias</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
+          
 
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+          
+
+    
+           <!--=============== Footer ===============-->
+           <footer id="main-footer" class="main-footer">
+               <div class="container text-center">
+
+                   <!-- Brand -->
+                   <div class="logo">
+                       <strong class="brand-text">Slate Kit</strong>
+                   </div>
+                   <!-- Description -->
+                   <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+                   <!-- Social Icons Menu -->
+                   <ul class="social list-inline">
+                       <li class="list-inline-item">
+                           <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                       </li>
+                   </ul>
+               </div>
+
+              <!-- Copyrights -->
+               <div class="copyrights">
+                   <div class="container">
+                       <div class="row">
+                           <div class="col-md-6">
+                               <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+                           </div>
+                           <div class="col-md-6 text-right">
+                               <ul class="list-inline">
+                                   <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                   <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                                   <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div> <!-- End Copyrights -->
+           </footer>
+           <!--=============== /. Footer ===============-->
 
 
-<h2 id="kotlin-types-params">Type parameters</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-
-<h2 id="kotlin-types-classes">Type classes</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-
-<h2 id="kotlin-types-bounds">Type bounds</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
-
-
-<h2 id="kotlin-types-phantom">Phantom types</h2>
-<p>Coming soon...</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// coming soon</span>
-
-</code></pre>
-</div>
-<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
--->
-
-			</div>
-		</section>
-      </main>
-
-      <footer id="footer" class="site-footer">
-        <div class="container">
-
-          <div id="sidebar-footer-1">
-            <div class="row">
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">About Us</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
-
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Contact</h5>
-                <div class="textwidget">
-                  <div class="adr">
-                    <div class="street-address">416 Water St.</div>
-                    <span class="locality">New York</span>,
-                    <abbr class="region" title="New York">NY</abbr>,
-                    <span class="postal-code">10002</span>,
-                    <span class="country-name">U.S.A</span>
-                  </div>
-                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
-                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+           <!--=============== Preloader ===============-->
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
                 </div>
-              </aside>
+                <div class="text">Slate Kit</div>
+           </div>
+           <!--=============== /. Preloader ===============-->
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Need Help?</h5>
-                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
-              </aside>
 
-              <aside class="widget col-md-3 col-sm-6">
-                <h5 class="widget-title">Get in touch</h5>
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="Your Email">
-                  <span class="input-group-btn">
-                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
-                  </span>
-                </div>
-                <ul class="social-links">
-                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
-                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
-                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
-                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                </ul>
-              </aside>
+           <!--=============== Scroll To Top ===============-->
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           <!--=============== /. Scroll To Top ===============-->
+      </div>
 
-            </div>
-          </div>
 
-          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
-        </div>
-      </footer>
-    </div>
 
-    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
-  
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
-    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
-    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
-	<script type="text/javascript">
-		var _codehelixAppPage = "kotlin 101";
-	</script>
-    <script type="text/javascript" src="themes/start/app/app.js"></script>
-	<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <!-- Bootstrap 4 Alpha -->
+        <script src="themes/perfo/assets/js/bootstrap.min.js"></script>
+        <!-- Owl Carousel -->
+        <script src="themes/perfo/assets/js/owl.carousel.min.js"></script>
+        <!-- Easy Scroll -->
+        <script src="themes/perfo/assets/js/easyscroll.min.js"></script>
+        <!-- WOW JS -->
+        <script src="themes/perfo/assets/js/wow.min.js"></script>
+        <!-- Custom Js -->
+        <script src="themes/perfo/assets/js/script.js"></script>
 
-  ga('create', 'UA-84704317-1', 'auto');
-  ga('send', 'pageview');
+        <script type="text/javascript">
+          var _codehelixAppPage = "about";
+        </script>
+          <script type="text/javascript" src="themes/perfo/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-</script>
-  </body>
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+    </body>
 </html>

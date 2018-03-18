@@ -126,14 +126,7 @@ var codeHelixMeta = {
 	{ name: "Architecture"  ,  page: "infra.html"       , children: null },
 	{ name: "Utilities"     ,  page: "utils.html"       , children: null },
 	{ name: "Features"      ,  page: "features.html"    , children: null },
-	{ name: "Components"    ,  page: "infra.html"       , children: [	
-			{ name: "Concepts"      ,  page: "kotlin-concepts.html"         , children: null },
-			{ name: "App"           ,  page: "kotlin-core-app.html"         , children: null },
-			{ name: "APIs"          ,  page: "kotlin-core-apis.html" , children: null },
-			{ name: "ORM"           ,  page: "kotlin-core-orm.html"         , children: null },
-			{ name: "Server"        ,  page: "kotlin-core-server.html"      , children: null }
-		]
-	},
+	{ name: "Components"    ,  page: "components.html"       , children: null },
 	{ name: "Releases"      ,  page: "releases.html"    , children: null },	
 	{ name: "More"          ,  page: "more.html"        , children: null }
   ]
