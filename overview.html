@@ -277,50 +277,54 @@
             <div id="project-slate-core" class="thumbnail">
               <div class="caption">
                 <table class="table table-bordered table-striped">
-                  <tr>
-                    <td><strong>Tech</strong></td>
-                    <td>Built for the JVM, Linux/Windows, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Design</strong></td>
-                    <td>Library based approach instead of a "Framework". Use as little or as much as you need.</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Standards</strong></td>
-                    <td>Check our coding standards for kotlin</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Approach</strong></td>
-                    <td>Simplicity and Practicality above all else</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Components</strong></td>
-                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
-                  </tr>
-                  <tr>
-                    <td><strong>Portable</strong></td>
-                    <td>free : open-source</td>
-                  </tr>
-                  <tr>
-                    <td><strong>Minimal</strong></td>
-                    <td>                  
-                      <ul>
-                        <li>slatekit.common</li>
-                      </ul>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td><strong>notes</strong></td>
-                    <td>              
-                      <ul>
-                        <li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
-                        <li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
-                            <strong>slatekit.cloud</strong> projects</li>
-                        <li>APIs for each component are available in the SlateKit.Integration project. This is so that the API, Core, Entities projects do not depend on each other.
-                      </ul>
-                    </td>
-                  </tr>
-                </table>
+            <tbody><tr>
+              <td ><strong>Tech</strong></td>
+              <td>Built for the JVM, Linux/Windows, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
+            </tr>
+            <tr>
+              <td><strong>Design</strong></td>
+              <td>Library based approach instead of a "Framework". Use as little or as much as you need.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Standards</strong></td>
+              <td>Check our coding standards for <a class="url-ch" href="kotlin-standards.html">kotlin</a> and <a class="url-ch" href="kotlin-standards.html">scala</a></td>
+            </tr>
+            <tr>
+              <td><strong>Approach</strong></td>
+              <td><strong>Simplicity</strong> and <strong>Practicality</strong> above all else</td>
+            </tr>
+            <tr>
+              <td><strong>Components</strong></td>
+              <td>Composable, single-purpose components as building blocks. Organized into various projects.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Portable</strong></td>
+              <td>Designed for low vendor lock-in via a "library" based approach. Easy to get out of this tool-kit</td>
+            </tr>
+            <tr>
+              <td><strong>Minimal</strong></td>
+              <td>Dependencies on external, 3rd-party libraries are kept to a minimum</td>
+            </tr>
+            <tr>
+              <td><strong>Open Source</strong></td>
+              <td>Hybrid Open-Source. Majority is open-source except for some parts of the <a class="url-ch" href="#project-slate-ext">SlateKit.Ext</a> project 
+                containing the mobile / web <a class="url-ch" href="features.html">features</a></td>
+            </tr>
+            <tr>
+              <td><strong>License</strong></td>
+              <td>Apache 2.0 : Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
+            </tr>
+            <tr>
+              <td><strong>Style</strong></td>
+              <td>Emphasis on <strong>immutability</strong> 
+                and <strong>functional programming</strong> as much as possible.
+                <br>However, this is <strong>NOT</strong> a 100% purely functional code base.
+                <br>We also carefully avoid certain language features in specific times/places in favour of simple, understandable, maintainable code.<br>
+                </td>
+            </tr>
+          </tbody></table>
               </div>
               
               <p class=" text-center">
@@ -329,6 +333,601 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+
+    <section id="projects" class="features no-padding-bottom">
+      <div class="container">
+        <header>
+            <h2 class="with-bg-text has-line" data-text="Projects">Projects</h2>
+        </header>
+        <div class="row">         
+          <div class="col-sm-6 col-md-4">
+            <div id="project-slate-common" class="thumbnail">
+              <div class="text-center"><a href="utils.html"><img src="themes/start/images/white/multitool.png" alt="..." width="80"></a></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 >SlateKit Common</h3>
+                  <p>Collection of utilities</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.common</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit-common.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common">SlateKit.Common</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="utils.html">Utils</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>libs</strong></td>
+                    <td>json-simple
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Contains all the utilities. All code here 
+                    can be used in any project.
+                     </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="utils.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-4">
+            <div id="project-slate-entities" class="thumbnail">
+              <div class="text-center"><a href="orm.html"><img src="themes/start/images/white/layers.png" alt="..." width="80"></a></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Entities</h3>
+                  <p>Light-weight single table ORM</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.entities</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.entities.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-entities/src/main/kotlin/slatekit/entities">SlateKit.Entities</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="kotlin-core-orm.html">Orm</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>libs</strong></td>
+                    <td>common, mysql
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Light-Weight, functional, and Domain Driven ORM and Entity Services
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="orm.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>          
+          <div class="col-sm-6 col-md-4">
+            <div id="project-slate-core" class="thumbnail">
+              <div class="text-center"><a href="infra.html"><img src="themes/start/images/white/build.png" alt="..." width="80"></a></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Core</h3>
+                  <p>Core architecture components</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.core</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.core.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core">SlateKit.Core</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="infra.html">Core</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Common
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Abstractions and implementations for architectural components.                    
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="infra.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>
+        </div>
+        <br/><br/>
+        <div class="row">
+          <div id="project-slate-api" class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+              <div class="text-center"><a href="apis-detail.html"><img src="themes/start/images/white/webapi.png" alt="..." width="80"></a></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.API</h3>
+                  <p>Protocol Independent APIs </p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.api</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.api.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis">SlateKit.Api</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="kotlin-core-apis.html">APIs</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Common
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Protocol-independent APIs. Design and run APIs in the web and/or on the CLI.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="infra.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>
+          <div id="project-slate-integration" class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/gears.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Integration</h3>
+                  <p>Integration APIs for AWS, and others</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.integration</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.integration.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-integration/src/main/kotlin/slatekit/integration">SlateKit.Integration</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td>Coming soon</td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Refer to gradle file
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Integration of components from Core/APIs. Reduces cyclomatic complexity.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="infra.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>
+          <div id="project-slate-cloud" class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/cloud_sync.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Cloud</h3>
+                  <p>Cloud integration with AWS</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.cloud</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.cloud.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud/src/main/kotlin/slatekit/cloud/aws">SlateKit.Cloud</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td>Coming soon</td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Common, Core
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Cloud components work currently with AWS SQS,S3, other services  coming later.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="infra.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>
+        </div>
+        <br/><br/>
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div id="project-slate-ext" class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/module.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Ext</h3>
+                  <p>Embeddable Mobile / Web Features</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td class="col-sm-3"><strong>package</strong></td>
+                    <td>slatekit.ext</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.ext.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td>SlateKit.Ext</td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="features.html">Extensions</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>freemium : coming soon</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Refer to gradle file
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Represents all the mobile back-end features. Coming soon.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="features.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>  
+          <div class="col-sm-6 col-md-4"> 
+            <div id="project-slate-tools" class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/gears.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Tools</h3>
+                  <p>Miscellaneous tools</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td class="col-sm-3"><strong>package</strong></td>
+                    <td>slatekit.tools</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.tools.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td>SlateKit.Tools</td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Refer to gradle file
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Internal use only, contains tools for the SlateKit CLI ( coming soon )
+                    </td>
+                  </tr>
+                </table>
+              </div>              
+              <p class=" text-center">
+                <a href="" class="btn btn-template" role="button">see source code</a> 
+              </p>
+            </div>
+          </div>
+          <div id="project-slate-shell" class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/terminal.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Shell</h3>
+                  <p>CLI for Slate Features</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td><strong>package</strong></td>
+                    <td>slatekit.shell</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.shell.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td>SlateKit.Shell</td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td>Coming soon</td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free : open-source</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>*
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>The SlateKit CLI ( coming soon ) to create and configure projects.
+                    </td>
+                  </tr>
+                </table>
+              </div>            
+              <p class=" text-center">
+                <a href="infra.html" class="btn btn-template" role="button">more</a> 
+              </p>
+            </div>
+          </div>
+        </div>
+        <br/><br/>
+       <br/><br/>
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div id="project-slate-server" class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/connected.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Server</h3>
+                  <p>Backend Server and API Container</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td class="col-sm-3"><strong>package</strong></td>
+                    <td>slatekit.server</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.server.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td>SlateKit.Server</td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td><a class="url-ch" href="kotlin-core-server.html">Server</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free</td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>Spark Java, Refer to gradle
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>A thin abstraction layer over an HTTP server (Spark Java) to host protocol independent APIs.
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <p class=" text-center">
+                <a href="features.html" class="btn btn-template" role="button">More</a> 
+              </p>
+            </div>
+          </div>  
+          <div class="col-sm-6 col-md-4"> 
+            <div id="project-slate-tools" class="thumbnail">
+              <div class="text-center"><img src="themes/start/images/white/manual.png" alt="..." width="80"></div>
+              <div class="caption">
+                <div class="text-center">
+                  <h3 class="align-center">SlateKit.Examples</h3>
+                  <p>Miscellaneous tools</p>
+                  <br/>
+                </div>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <td class="col-sm-3"><strong>package</strong></td>
+                    <td>slatekit.examples</td>
+                  </tr>
+                  <tr>
+                    <td><strong>jar</strong></td>
+                    <td>slatekit.examples.jar</td>
+                  </tr>
+                  <tr>
+                    <td><strong>git</strong></td>
+                    <td>SlateKit.Tools</td>
+                  </tr>
+                  <tr>
+                    <td><strong>url</strong></td>
+                    <td>N/A</td>
+                  </tr>
+                  <tr>
+                    <td><strong>cost</strong></td>
+                    <td>free </td>
+                  </tr>
+                  <tr>
+                    <td><strong>lib</strong></td>
+                    <td>All projects
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>docs</strong></td>
+                    <td><a class="url-ch" href="docs/slate-kotlin-docs.zip?raw=true">download</a></td>
+                  </tr>
+                  <tr>
+                    <td><strong>notes</strong></td>
+                    <td>Contains examples of all utilities and components
+                    </td>
+                  </tr>
+                </table>
+              </div>              
+              <p class=" text-center">
+                <a href="" class="btn btn-template" role="button">see source code</a> 
+              </p>
+            </div>
+          </div>
+          <div id="project-slate-shell" class="col-sm-6 col-md-4">
+            
+          </div>
+        </div>
+        <br/><br/>
       </div>
     </section>
            <!--=============== Footer ===============-->
