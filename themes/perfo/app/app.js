@@ -38,7 +38,7 @@ var codehelixUtils = {
 	
 	
 	buildMenuIndicator: function(item) {
-		return '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">'
+		return '<a href="#" class="nav-link link-scroll " data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">'
 				+ item.name 
 				+ ' &nbsp;<span class="caret"></span></a>';
 	},
@@ -48,7 +48,7 @@ var codehelixUtils = {
 	  var html = '<ul class="' + cls + '">';
 	  for(var ndx = 0; ndx < items.length; ndx++){
 		  var item = items[ndx];
-		  html += '<li><a href="' + item.page + '">' + item.name + '</a></li>';
+		  html += '<li><a href="' + item.page + '" class="nav-link link-scroll">' + item.name + '</a></li>';
 	  }
 	  html += "</ul>";
 	  return html;
