@@ -90,7 +90,7 @@
 
 
           <!--=============== Separator Section ===============-->
-          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Scalable apps">
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
               <div class="container">
 
                   <div class="row">
@@ -101,7 +101,7 @@
 
                       <!-- Heading Area -->
                       <div class="text text-right col-md-6 col-sm-12">
-                          <h2 class="h1 has-text-shadow">Extended <br/> Standard <br/> Library </h2>
+                          <h2 class="h1 has-text-shadow">Extended <br/> Standard <br/> Library <br/></h2>
                       </div>
                   </div>
 
@@ -119,9 +119,9 @@
                   </header>
 
                   <p class="lead limited-width">
-                      Slate Kit Architecture components are a collection of Kotlin 
-                      libraries that help you to quickly build robust, testable, 
-                      and scalable applications on the JVM. 
+                      Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard library, 
+                      by offering a powerful set of general purpose 
+                      Kotlin components that can be used for any application.
                   </p>
                   <a href="#" class="btn btn-template">Learn More</a>
 
@@ -347,43 +347,7 @@
           </section>
           <!--=============== /. Services Section ===============-->
 
-          <!--=============== Features Section ===============-->
-          <section id="features" class="features no-padding-bottom">
-              <div class="container">
-                  <header>
-                      <h2 class="with-bg-text has-line" data-text="Goals">Goals</h2>
-                  </header>
-
-                  <p class="lead limited-width">
-                      Goals of Slate Kit ... place holder text
-                  </p>
-
-                  <div class="row">
-                      <!-- item -->
-                      <div class="item col-lg-4 col-md-6 wow fadeInUp">
-                          <strong class="text-primary">01</strong>
-                          <h3>Functional</h3>
-                          <p>An emphasis on immutable and functional code</p>
-                      </div><!-- End item -->
-
-                      <!-- item -->
-                      <div class="item col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
-                          <strong class="text-primary">02</strong>
-                          <h3>Modern</h3>
-                          <p>A modern set of libraries to enhance the standard library</p>
-                      </div><!-- End item -->
-
-                      <!-- item -->
-                      <div class="item col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
-                          <strong class="text-primary">03</strong>
-                          <h3>Integrations</h3>
-                          <p>Support for cloud integrated components like AWS S3, SQS</p>
-                      </div><!-- End item -->
-                  </div>
-
-              </div>
-          </section>
-          <!--=============== /. Features Section ===============-->
+          
 
     <section id="project" class="features no-padding-bottom">
       <div class="container">
@@ -397,19 +361,19 @@
                 <table class="table table-bordered table-striped">
                   <tr>
                     <td><strong>about</strong></td>
-                    <td>The slatekit.core project contains <strong>most</strong> but not all of these components</td>
+                    <td>The slatekit.common project contains all these components</td>
                   </tr>
                   <tr>
                     <td><strong>package</strong></td>
-                    <td>slatekit.core</td>
+                    <td>slatekit.common</td>
                   </tr>
                   <tr>
                     <td><strong>jar</strong></td>
-                    <td>slatekit.core.jar</td>
+                    <td>slatekit.common.jar</td>
                   </tr>
                   <tr>
                     <td><strong>git</strong></td>
-                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core">Slatekit.Core</a></td>
+                    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common">Slatekit.Common</a></td>
                   </tr>
                   <tr>
                     <td><strong>docs</strong></td>
@@ -421,22 +385,22 @@
                   </tr>
                   <tr>
                     <td><strong>dependencies</strong></td>
-                    <td>                  
+                    <td>                
                       <ul>
-                        <li>slatekit.common</li>
+                        <li>language reflection library</li>
+                        <li>json-simple</li>
                       </ul>
                     </td>
                   </tr>
                   <tr>
                     <td><strong>notes</strong></td>
-                    <td>              
+                    <td>                            
                       <ul>
-                        <li>Includes abstractions / base implementations for Queues, Files, Tasks, CLI</li>
-                        <li>The APIs, ORM, Queues/Files are located in the <strong>slatekit.apis</strong>, <strong>slatekit.entities</strong>,
-                            <strong>slatekit.cloud</strong> projects</li>
-                        <li>APIs for each component are available in the SlateKit.Integration project. This is so that the API, Core, Entities projects do not depend on each other.
+                        <li>The utility components are very independent</li>
+                        <li>The utility project is the only project which contains some cyclomatic complexity, but it is kept to a minimum</li>
+                        <li>The utility components are general purpose and can be used across any project.</li>
                       </ul>
-                    </td>
+                     </td>
                   </tr>
                 </table>
               </div>
