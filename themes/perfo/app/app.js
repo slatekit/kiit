@@ -120,7 +120,7 @@ var codeHelixMeta = {
   
   menu: 
   [
-	{ name: "Home"          ,  page: "index2.html"       , children: null },
+	{ name: "Home"          ,  page: "index.html"       , children: null },
 	{ name: "Overview"      ,  page: "overview.html"    , children: null },
 	{ name: "Setup"         ,  page: "kotlin-setup.html"       , children: null },
 	{ name: "Architecture"  ,  page: "infra.html"       , children: null },
