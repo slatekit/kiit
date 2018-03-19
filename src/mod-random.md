@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Random
-permalink: /mod-random
+permalink: /kotlin-mod-random
 ---
 
 # Random
@@ -9,39 +9,51 @@ permalink: /mod-random
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A random generator for strings, guids, numbers, alpha-numeric, and alpha-numeric-symbols for various lengths | 
-| **date**| 2017-04-12T22:59:15.165 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common  |
-| **source core** | slate.common.Random.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/common](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Random.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Random.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common  |
+| **source core** | slatekit.common.Random.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Random.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Random.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.Random._
-import slate.common.Result
+import slatekit.common.Random.alpha3
+import slatekit.common.Random.alpha6
+import slatekit.common.Random.alphaN
+import slatekit.common.Random.alphaSym3
+import slatekit.common.Random.alphaSym6
+import slatekit.common.Random.alphaSymN
+import slatekit.common.Random.digits3
+import slatekit.common.Random.digits6
+import slatekit.common.Random.digitsN
+import slatekit.common.Random.string3
+import slatekit.common.Random.string6
+import slatekit.common.Random.stringGuid
+import slatekit.common.Random.stringN
 
 
 
 // optional 
-import slate.core.cmds.Cmd
-import slate.common.results.ResultSupportIn
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // CASE 1: Create random strings ( characters only ) of different lengths

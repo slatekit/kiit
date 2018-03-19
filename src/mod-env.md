@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Env
-permalink: /mod-env
+permalink: /kotlin-mod-env
 ---
 
 # Env
@@ -9,64 +9,64 @@ permalink: /mod-env
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
-| **date**| 2017-04-12T22:59:14.581 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.envs  |
-| **source core** | slate.common.envs.Env.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/envs](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/envs)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Env.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Env.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.envs  |
+| **source core** | slatekit.common.envs.Env.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Env.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Env.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
+import slatekit.common.envs.*
 
-import slate.common.Result
-import slate.common.envs._
 
 
 // optional 
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
 
     // CASE 1: Build a list of environments
-    val envs1 = new Envs(List[Env](
-      Env("loc", Dev , desc = "Dev environment (local)" ),
-      Env("dev", Dev , desc = "Dev environment (shared)" ),
-      Env("qa1", Qa  , desc = "QA environment  (current release)" ),
-      Env("qa2", Qa  , desc = "QA environment  (last release)" ),
-      Env("stg", Uat , desc = "STG environment (demo)" ),
-      Env("pro", Prod, desc = "LIVE environment" )
+    val envs1 = Envs(listOf(
+            Env("loc", Dev , desc = "Dev environment (local)"),
+            Env("dev", Dev , desc = "Dev environment (shared)"),
+            Env("qa1", Qa  , desc = "QA environment  (current release)"),
+            Env("qa2", Qa  , desc = "QA environment  (last release)"),
+            Env("stg", Uat , desc = "STG environment (demo)"),
+            Env("pro", Prod, desc = "LIVE environment")
     ))
 
     // CASE 2: Use the default list of environments ( same as above )
-    val envs = Env.defaults()
+    val envs = slatekit.common.envs.Env.defaults()
 
-    // CASE 3: Get one of the environments by name
-    val qa1 = envs("qa1")
+    // CASE 3: Get one of the environments by api
+    val qa1 = envs.get("qa1")
     println( qa1 )
 
-    // CASE 4: Validate one of the environments by name
+    // CASE 4: Validate one of the environments by api
     println( envs.isValid("qa2") )
 
     // CASE 5: Current environment ( nothing - none selected )
-    println( envs.current.isDefined )
+    println( envs.current )
 
     // CASE 6: Select an environment
     val envs2 = envs.select("dev")

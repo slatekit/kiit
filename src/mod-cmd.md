@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_infra
 title: module Cmd
-permalink: /mod-cmd
+permalink: /kotlin-mod-cmd
 ---
 
 # Cmd
@@ -9,40 +9,44 @@ permalink: /mod-cmd
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A variation to the command pattern to support ad-hoc execution of code, with support for metrics and time-stamps | 
-| **date**| 2017-04-12T22:59:15.697 |
-| **version** | 1.4.0  |
-| **jar** | slate.core.jar  |
-| **namespace** | slate.core.cmds  |
-| **source core** | slate.core.cmds.Cmd.scala  |
-| **source folder** | [/src/lib/scala/Slate.Core/src/main/scala/slate/core/cmds](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/cmds)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Command.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Command.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.core.jar  |
+| **namespace** | slatekit.core.cmds  |
+| **source core** | slatekit.core.cmds.Cmd.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Command.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Command.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.core.cmds._
-import slate.common.Result
-import slate.common.results.ResultFuncs._
+import slatekit.core.cmds.Cmd
+
 
 
 // optional 
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.results.ResultFuncs.success
+import slatekit.core.cmds.Cmds
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 
   /**
    * Sample command to cleanup the temp directory.
    */
-  class CmdCleanTempDirectory extends Cmd("clean_temp_dir")  {
+  class CmdCleanTempDirectory : Cmd("clean_temp_dir")  {
 
-    override protected def executeInternal(args: Option[Array[String]]) : Result[Any] = {
+    override fun executeInternal(args: Array<String>?) : Result<Any> {
       // Your code here
-      success("temp directory cleared")
+      return success("temp directory cleared")
     }
   }
 
@@ -50,18 +54,19 @@ import slate.common.results.ResultFuncs._
   /**
    * Sample command to create a set of test users
    */
-  class CmdCreateTestUsers extends Cmd("create_test_users") {
+  class CmdCreateTestUsers : Cmd("create_test_users") {
 
-    override protected def executeInternal(args: Option[Array[String]]) : Result[Any] = {
+    override fun executeInternal(args: Array<String>?) : Result<Any> {
       // Your code here
-      success("demo users created")
+      return success("demo users created")
     }
   }
 
-  val commands = new Cmds(
-    List[Cmd](
-        new CmdCleanTempDirectory(),
-        new CmdCreateTestUsers()
+
+  val commands =  Cmds(
+    listOf(
+         CmdCleanTempDirectory(),
+         CmdCreateTestUsers()
       )
   )
   
@@ -69,7 +74,7 @@ import slate.common.results.ResultFuncs._
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // Use case 1: get all the commands available
@@ -79,11 +84,11 @@ import slate.common.results.ResultFuncs._
     // Use case 2: get the size of the commands
     println( commands.size )
 
-    // Use case 3: run a single command by its name
-    val result = commands.run("clean_temp_dir", None)
+    // Use case 3: run a single command by its api
+    val result = commands.run("clean_temp_dir", null)
 
     // Print info about the result and time stamps.
-    // - name   : name of the command
+    // - api   : api of the command
     // - success: whether the command was successful or not
     // - message: message from the command
     // - started: start time of the command
@@ -100,7 +105,7 @@ import slate.common.results.ResultFuncs._
     val state = commands.state("clean_temp_dir")
 
     // Print state of the command
-    // - name        : name of the command
+    // - api        : api of the command
     // - msg         : message from the command
     // - hasRun      : whether or not the command has run at all
     // - runCount    : number of time the command was run

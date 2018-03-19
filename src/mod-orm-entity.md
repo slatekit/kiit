@@ -1,7 +1,7 @@
 ---
-layout: start_page
+layout: start_page_mods_utils
 title: module Orm-Entity
-permalink: /mod-orm-entity
+permalink: /kotlin-mod-orm-entity
 ---
 
 # Orm-Entity
@@ -9,71 +9,67 @@ permalink: /mod-orm-entity
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base class for persistent domain entities | 
-| **date**| 2017-04-12T22:59:15.465 |
-| **version** | 1.4.0  |
-| **jar** | slate.entities.jar  |
-| **namespace** | slate.common.entities  |
-| **source core** | slate.common.entities.Entity.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Entities.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Entities.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.entities.jar  |
+| **namespace** | slatekit.common.entities  |
+| **source core** | slatekit.common.entities.Entity.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Entities.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Entities.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.results.ResultSupportIn
-import slate.entities.core._
-import slate.common.{Result, Random, DateTime}
+import slatekit.entities.core.*
 
 
 // optional 
-import slate.core.cmds.Cmd
+import slatekit.common.DateTime
+import slatekit.common.Random
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.core.cmds.Cmd
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
   // CASE 1 : Create a new entity class that extends Entity base class with built in support for
   // 1. id field ( primary key )
-  case class EmployeeV1 (
-                          id        : Long = 0,
-                          firstName : String = "John",
-                          lastName  : String = "Doe"
-                        )
-    extends EntityWithId
-  {
-  }
-
+  data class EmployeeV1 (
+                          override val id        : Long = 0,
+                          val firstName : String = "John",
+                          val lastName  : String = "Doe"
+                        ) : EntityWithId
 
 
   // CASE 2 : Create a new entity class with support for
   // 1. id   ( primary key + auto inc )
   // 2. time ( created at, updated at )
   // 3. user ( created by, updated by )
-  case class EmployeeV2 (
-                          id        : Long = 0,
-                          firstName : String = "John",
-                          lastName  : String = "Doe",
-                          createdAt : DateTime = DateTime.now(),
-                          updatedAt : DateTime = DateTime.now(),
-                          updatedBy : Long = 0,
-                          createdBy : Long = 0
+  data class EmployeeV2 (
+                            override val id        : Long = 0,
+                            val firstName : String = "John",
+                            val lastName  : String = "Doe",
+                            override val createdAt : DateTime = DateTime.now(),
+                            override val updatedAt : DateTime = DateTime.now(),
+                            override val updatedBy : Long = 0,
+                            override val createdBy : Long = 0
                         )
-    extends EntityWithId
-      with EntityWithTime
-      with EntityWithUser
-  {
-  }
+    : EntityWithId, EntityWithTime, EntityWithUser
+
 
 
   // CASE 3 : Create a new entity class with support for:
@@ -81,20 +77,17 @@ n/a
   // 2. time ( created at, updated at )
   // 3. user ( created by, updated by )
   // 4. guid ( unique id              )
-  case class EmployeeV3(
-                         id        : Long = 0,
-                         firstName : String = "John",
-                         lastName  : String = "Doe",
-                         createdAt : DateTime = DateTime.now(),
-                         updatedAt : DateTime = DateTime.now(),
-                         updatedBy : Long = 0,
-                         createdBy : Long = 0,
-                         uniqueId  : String = Random.stringGuid(false)
+  data class EmployeeV3(
+                         override val id        : Long = 0,
+                         val firstName : String = "John",
+                         val lastName  : String = "Doe",
+                         override val createdAt : DateTime = DateTime.now(),
+                         override val updatedAt : DateTime = DateTime.now(),
+                         override val updatedBy : Long = 0,
+                         override val createdBy : Long = 0,
+                         override val uniqueId  : String = Random.stringGuid(false)
                        )
-    extends EntityWithId
-      with EntityWithTime
-      with EntityWithUser
-      with IEntityUnique
+    : EntityWithId, EntityWithTime, EntityWithUser, EntityWithGuid
   {
     // The unique id is a guid and unique regardless of environment ( dev, qa, staging, prod )
     // It serves as a easy way to check for existing items across different environments and
@@ -108,21 +101,19 @@ n/a
   // 3. user ( created by, updated by )
   // 4. guid ( unique id              )
   // using IEntityWithMeta trait which combines IEntityWithTime, IEntityWithUser, IEntityWithGuid
-  case class EmployeeV4(
-                          id        : Long = 0,
-                          firstName : String = "John",
-                          lastName  : String = "Doe",
-                          createdAt : DateTime = DateTime.now(),
-                          updatedAt : DateTime = DateTime.now(),
-                          updatedBy : Long = 0,
-                          createdBy : Long = 0,
-                          uniqueId  : String = Random.stringGuid(false)
+  data class EmployeeV4(
+                          override val id        : Long = 0,
+                          val firstName : String = "John",
+                          val lastName  : String = "Doe",
+                          override val createdAt : DateTime = DateTime.now(),
+                          override val updatedAt : DateTime = DateTime.now(),
+                          override val updatedBy : Long = 0,
+                          override val createdBy : Long = 0,
+                          override val uniqueId  : String = Random.stringGuid(false)
                         )
-    extends EntityWithId
-      with EntityWithMeta
-  {
-  }
-  
+    : EntityWithId, EntityWithMeta
+
+
 
 ```
 

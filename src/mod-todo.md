@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Todo
-permalink: /mod-todo
+permalink: /kotlin-mod-todo
 ---
 
 # Todo
@@ -9,39 +9,44 @@ permalink: /mod-todo
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A programmatic approach to marking and tagging code that is strongly typed and consistent | 
-| **date**| 2017-04-12T22:59:15.335 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common  |
-| **source core** | slate.common.Todo.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/common](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Todo.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Todo.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common  |
+| **source core** | slatekit.common.Todo.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Todo.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Todo.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
+import TODO.BUG
+import TODO.IMPLEMENT
+import TODO.REFACTOR
+import TODO.REMOVE
+import slatekit.common.DateTime
+import slatekit.common.console.*
 
-import slate.common.Result
-import slate.common.Todo._
 
 
 // optional 
-import slate.core.cmds.Cmd
-import slate.common.results.ResultSupportIn
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // About: Strongly typed, structured representation of code notes/tasks
@@ -49,20 +54,20 @@ n/a
     // to track code usages
 
     // Use case 1: Implement
-    implement("Component 1", "This code needs further error handling" )
+    IMPLEMENT("Component 1", "This code needs further error handling" )
 
     // Use case 2: Supply a block of code to refactor
-    refactor("Feature 2", "Refactor logic to handle empty values", Some( () => {
+    REFACTOR("Feature 2", "Refactor logic to handle empty values", {
       // Your code to refactor goes here
-    }))
+    })
 
     // Use case 3: Mark a bug
-    bug("Component 3", "invalid data, bug fix needed", "JIRA:12434" )
+    BUG("Component 3", "invalid data, bug fix needed", "JIRA:12434" )
 
     // Use case 4: Code removal tag
-    remove("Story 123", "@kishore, this code no longer needed", Some( () => {
+    REMOVE("Story 123", "@kishore, this code no longer needed", {
       // Your code to remove here.
-    }))
+    })
     
 
 ```

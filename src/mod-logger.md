@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Logger
-permalink: /mod-logger
+permalink: /kotlin-mod-logger
 ---
 
 # Logger
@@ -9,31 +9,32 @@ permalink: /mod-logger
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple logger with extensibility for using other 3rd party loggers | 
-| **date**| 2017-04-12T22:59:14.850 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.logging  |
-| **source core** | slate.common.logging.Logger.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/logging](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/logging)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Logger.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Logger.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.log  |
+| **source core** | slatekit.common.log.Logger.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.logging._
+import slatekit.common.log.*
+import slatekit.common.results.ResultFuncs.ok
+
 
 
 // optional 
-import slate.core.cmds.Cmd
-import slate.common.results.ResultSupportIn
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
 
 
 ```
 
 ## Setup
-```scala
-
+```kotlin
 
 
   // NOTE: The logger is very simple and designed to be extended for customization
@@ -41,41 +42,43 @@ import slate.common.results.ResultSupportIn
   // 1. log4net
   // 2. loggly
   // 3. new relic
-  //
-  val _log = Some(new LoggerConsole())
-
-  override protected def log(): Option[LoggerBase] = _log
+  override val logger:LoggerBase? = LoggerConsole()
 
 
   // Setup a custom logger
-  class MyCustomLogger extends LoggerBase {
+  class MyCustomLogger : LoggerBase(Warn)  {
 
-    override def performLog(entry:LogEntry)
-      : Unit =
+
+    override val logger:LoggerBase? = LoggerConsole()
+
+
+    override fun performLog(entry: LogEntry): Unit
     {
       println("custom logger : " + entry.level + " : " + entry.msg)
     }
   }
+
+
   
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // Sample exception
-    val ex = new IllegalArgumentException("Example exception")
+    val ex = IllegalArgumentException("Example exception")
 
     // CASE 1: Different ways to log with the static logger
     // 1. message only
     // 2. message + exception
     // 3. message + exception + tag
-    val logger = new LoggerConsole(Debug)
+    val logger = LoggerConsole(Debug)
     logger.debug("debug with message only")
-    logger.info("info with message and exception", Some(ex))
-    logger.warn("debug with message, exception, and tag", Some(ex), Some("APP1") )
-    logger.fatal("fatal message", tag = Some("123"))
+    logger.info("info with message and exception", ex)
+    logger.warn("debug with message, exception, and tag", ex, "APP1")
+    logger.fatal("fatal message", tag = "123")
 
     // CASE: 2 Standard info, warn, error levels available
     // Same overloads ( msg, ex, tag ) are available.
@@ -87,7 +90,7 @@ import slate.common.results.ResultSupportIn
 
 
     // CASE 3: Log explicitly using log method.
-    logger.log(Error, "error", Some(ex), Some("APP1"))
+    logger.log(Error, "error", ex, "APP1")
 
 
     // CASE 4: You can extend a class with the LogSupportIn trait
@@ -102,7 +105,7 @@ import slate.common.results.ResultSupportIn
 
     // CASE 5: Custom logger ( see setup above )
     // YOu just have to implement the log method.
-    val log = new MyCustomLogger()
+    val log = MyCustomLogger()
     log.debug("debug from trait")
     log.info ("info from trait")
     log.warn ("warn from trait")

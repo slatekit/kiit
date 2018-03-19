@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Timer
-permalink: /mod-timer
+permalink: /kotlin-mod-timer
 ---
 
 # Timer
@@ -9,59 +9,63 @@ permalink: /mod-timer
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A timer to benchmark time/duration of code blocks | 
-| **date**| 2017-04-12T22:59:15.258 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common  |
-| **source core** | slate.common.Timer.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/common](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/common)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Timer.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Timer.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common  |
+| **source core** | slatekit.common.Timer.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Timer.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Timer.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.results.{ResultSupportIn, ResultTimed}
-import slate.common.{Result, Random, Timer}
+import slatekit.common.Measure
 
 
 
 // optional 
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.results.ResultTimed
+import slatekit.common.Random
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // CASE 1: Benchmark an operation 1 time
     // NOTE: Using call-by-name
     showResult(
-      Timer.once[Int]("run once", {
+      Measure.once("run once", {
        val ms = Random.digits3()
-        Thread.sleep(ms)
+        Thread.sleep(ms.toLong())
         ms
       })
     )
 
 
     // CASE 2: Benchmark an operation 10 times and get all individual results
-    showResults( Timer.many("run 2 times", (count) => { println( s"operation : $count" ) }, 2))
+    showResults( Measure.many("run 2 times", { count ->  println( "operation : $count" ) }, 2))
 
 
     // CASE 3: Benchmark an operation 10 times and get an average
-    showResult( Timer.avg("avg of 10 times", 10, (count) =>
-    {
-      Thread.sleep(Random.digits3())
+    showResult( Measure.avg("avg of 10 times", 10, { count ->
+
+      Thread.sleep(Random.digits3().toLong())
     }))
 
     

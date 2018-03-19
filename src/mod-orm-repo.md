@@ -1,7 +1,7 @@
 ---
-layout: start_page
+layout: start_page_mods_utils
 title: module Orm-Repo
-permalink: /mod-orm-repo
+permalink: /kotlin-mod-orm-repo
 ---
 
 # Orm-Repo
@@ -9,169 +9,147 @@ permalink: /mod-orm-repo
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A repository pattern for entity/model CRUD operations | 
-| **date**| 2017-04-12T22:59:15.492 |
-| **version** | 1.4.0  |
-| **jar** | slate.entities.jar  |
-| **namespace** | slate.common.entities  |
-| **source core** | slate.common.entities.EntityRepo.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Entities_Repo.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Entities_Repo.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.entities.jar  |
+| **namespace** | slatekit.common.entities  |
+| **source core** | slatekit.common.entities.EntityRepo.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Entities_Repo.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Entities_Repo.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.databases.{DbConString, Db}
-import slate.common.mapper.Mapper
-import slate.common.results.ResultSupportIn
-import slate.entities.core._
-import slate.entities.repos._
-import scala.annotation.meta.field
-import scala.reflect.runtime.universe.{typeOf,Type}
+import slatekit.common.Field
+import slatekit.entities.core.*
+import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.EntityRepoMySql
+import slatekit.common.Mapper
 
 
 // optional 
-import slate.common.{Field, DateTime, Result}
-import slate.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.db.Db
+import slatekit.common.db.DbConString
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.core.cmds.Cmd
+import slatekit.meta.models.ModelMapper
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 
-  // Example entity that the Repo with manage via CRUD operations
-  case class User(
-
-              @(Field@field)("", true, 30)
-              id:Long = 0L,
+    // Example entity that the Repo with manage via CRUD operations
+    data class User(
+            override val id:Long = 0L,
 
 
-              @(Field@field)("", true, 30)
-              email:String = "",
+            @property:Field(required = true, length = 30)
+            val email:String = "",
 
 
-              @(Field@field)("", true, 30)
-              firstName:String = "",
+            @property:Field(required = true, length = 30)
+            val firstName:String = "",
 
 
-              @(Field@field)("", true, 30)
-              lastName:String = "",
+            @property:Field(required = true, length =30)
+            val lastName:String = "",
 
 
-              @(Field@field)("", true, 50)
-              lastLogin:DateTime  = DateTime.now(),
+            @property:Field(required = true)
+            val isMale:Boolean = false,
 
 
-              @(Field@field)("", true, -1)
-              isEmailVerified:Boolean  = false,
+            @property:Field(required = true)
+            val age:Int = 35
+
+    ) : EntityWithId {
 
 
-              @(Field@field)("", true, -1)
-              status:Int  = 0,
+        fun fullname():String = firstName + " " + lastName
 
 
-              @(Field@field)("", true, -1)
-              createdAt:DateTime  = DateTime.now(),
+
+        override fun toString():String  {
+            return "$email, $firstName, $lastName, $isMale, $age"
+        }
+    }
+
+    // CASE 1: In-memory ( non-persisted ) repository has limited functionality
+    // but is very useful for rapid prototyping of a data model when you are trying to
+    // figure out what fields/properties should exist on the model
+    val repo = EntityRepoInMemory<User>(User::class)
+
+    // CASE 2: My-sql ( persisted ) repository can be easily setup
+    // More examples of database setup/entity registration available in Setup/Registration docs.
+    // 1. First setup the database
+    val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
+
+    // 2. Setup the mapper
+    val model = ModelMapper.loadSchema(User::class)
+    val mapper = EntityMapper(model)
 
 
-              @(Field@field)("", true, -1)
-              createdBy:Long  = 0,
+    // 3. Now create the repo with database and mapper
+    val repoMySql = EntityRepoMySql<User>(db, User::class, null, mapper)
+
+    // CASE 3: You can also extend from EntityRepositoryMySql
+    class UserRepository(db:Db, mapper:Mapper) : EntityRepoMySql<User>(db, User::class)
 
 
-              @(Field@field)("", true, -1)
-              updatedAt:DateTime  =  DateTime.now(),
-
-
-              @(Field@field)("", true, -1)
-              updatedBy:Long  = 0,
-
-
-              @(Field@field)("",true, 50)
-              uniqueId: String = ""
-
-              )
-    extends EntityWithId
-      with EntityWithMeta
-      with EntityUpdatable[User]
-  {
-    /**
-      * sets the id on the entity and returns the entity with updated id.
-      * @param id
-      * @return
-      */
-    override def withId(id:Long): User = copy(id = id)
-  }
-
-  // CASE 1: In-memory ( non-persisted ) repository has limited functionality
-  // but is very useful for rapid prototyping of a data model when you are trying to
-  // figure out what fields/properties should exist on the model
-  val repo = new EntityRepoInMemory[User](typeOf[User])
-
-  // CASE 2: My-sql ( persisted ) repository can be easily setup
-  // More examples of database setup/entity registration available in Setup/Registration docs.
-  // 1. First setup the database
-  val db = new Db(new DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
-
-  // 2. Setup the mapper
-  var model = Mapper.loadSchema(typeOf[User])
-  val mapper = new EntityMapper(model)
-
-
-  // 3. Now create the repo with database and mapper
-  val repoMySql = new EntityRepoMySql[User](typeOf[User], None, Some(mapper), Some("user"), db)
-
-  // CASE 3: You can also extend from EntityRepositoryMySql
-  class UserRepository()
-    extends EntityRepoMySql[User](typeOf[User],entityMapper = Some(mapper), db = db)
-  {
-  }
-  val userRepo = new UserRepository()
-  
+    val userRepo = UserRepository(db, mapper)
+    
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
-    // CASE 1: Create 3-4 users for showing use-cases
-    repo.create(new User(firstName ="john", lastName = "doe-01"))
-    repo.create(new User(firstName ="jane", lastName = "doe-02"))
-    repo.create(new User(firstName ="john", lastName = "doe-03"))
-    repo.create(new User(firstName ="jane", lastName = "doe-04"))
+        // CASE 1: Create 3-4 users for showing use-cases
+        repo.create(User(firstName ="john", lastName = "doe-01"))
+        repo.create(User(firstName ="jane", lastName = "doe-02"))
+        repo.create(User(firstName ="john", lastName = "doe-03"))
+        repo.create(User(firstName ="jane", lastName = "doe-04"))
 
-    // CASE 2: Get by id
-    printOne("2", repo.get( 2 ) )
+        // CASE 2: Get by id
+        printOne("2", repo.get(2))
 
-    // CASE 3: Update
-    val item2 = repo.get( 2 )
-    val item2b = item2.get.copy(firstName = "user_two")
-    repo.update(item2b)
+        // CASE 3: Update
+        val item2 = repo.get(2)
+        item2?.let { item ->
+            val updated = item.copy(firstName = "user_two")
+            repo.update(updated)
+        }
 
-    // CASE 4: Get all
-    printAll("all", repo.getAll() )
 
-    // CASE 5: Get recent users ( 03, 04 )
-    printAll("recent", repo.recent(2) )
+        // CASE 4: Get all
+        printAll("all", repo.getAll())
 
-    // CASE 6: Get oldest users ( 01, 02 )
-    printAll("oldest", repo.oldest(2) )
+        // CASE 5: Get recent users ( 03, 04 )
+        printAll("recent", repo.recent(2))
 
-    // CASE 7: Get first one ( oldest - 01 )
-    printOne("first", repo.first() )
+        // CASE 6: Get oldest users ( 01, 02 )
+        printAll("oldest", repo.oldest(2))
 
-    // CASE 8: Get last one ( recent - 04 )
-    printOne("last", repo.last() )
+        // CASE 7: Get first one ( oldest - 01 )
+        printOne("first", repo.first())
 
-    // CASE 9: Delete by id
-    repo.delete( 4 )
+        // CASE 8: Get last one ( recent - 04 )
+        printOne("last", repo.last())
 
-    // CASE 10: Get total ( 4 )
-    println( repo.count() )
+        // CASE 9: Delete by id
+        repo.delete(4)
 
-    
+        // CASE 10: Get total ( 4 )
+        println(repo.count())
+
+        
 
 ```
 
@@ -179,28 +157,27 @@ import slate.core.cmds.Cmd
 ## Output
 
 ```bat
-2
-User: 2, jane, doe-02
+  2
+  User: 2, jane, doe-02
 
-ALL
-User: 1, john, doe-01
-User: 3, john, doe-03
-User: 4, jane, doe-04
-User: 2, user_two, doe-02
+  ALL
+  User: 1, john, doe-01
+  User: 3, john, doe-03
+  User: 4, jane, doe-04
+  User: 2, user_two, doe-02
 
-RECENT
-User: 4, jane, doe-04
-User: 3, john, doe-03
+  RECENT
+  User: 4, jane, doe-04
+  User: 3, john, doe-03
 
-OLDEST
-User: 1, john, doe-01
-User: 2, user_two, doe-02
+  OLDEST
+  User: 1, john, doe-01
+  User: 2, user_two, doe-02
 
-FIRST
-User: 1, john, doe-01
+  FIRST
+  User: 1, john, doe-01
 
-LAST
-User: 4, jane, doe-04
-3
+  LAST
+  User: 4, jane, doe-04
+  3
 ```
-  

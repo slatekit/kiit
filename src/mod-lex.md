@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Lex
-permalink: /mod-lex
+permalink: /kotlin-mod-lex
 ---
 
 # Lex
@@ -9,49 +9,50 @@ permalink: /mod-lex
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Lexer for parsing text into tokens | 
-| **date**| 2017-04-12T22:59:14.730 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.lex  |
-| **source core** | slate.common.lex.Lexer.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/lex](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/lex)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Lexer.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Lexer.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.lex  |
+| **source core** | slatekit.common.lex.Lexer.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Lexer.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-
-import slate.common.Result
-import slate.common.lex.{Token, TokenType, Lexer}
+import slatekit.common.lex.Lexer
+import slatekit.common.lex.Token
+import slatekit.common.lex.TokenType
 
 
 // optional 
-import slate.core.cmds.Cmd
-import slate.common.results.{ResultSupportIn}
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
-    val lexer = new Lexer("-env:dev -text:'hello word' -batch:10 ")
+    val lexer = Lexer("-env:dev -text:'hello word' -batch:10 ")
 
     // CASE 1: Get all the tokens at once
     val result = lexer.parse()
     println("tokens:" + result.total)
 
     // Print all the tokens
-    result.tokens.foreach(printToken)
+    result.tokens.forEach{ printToken(it) }
 
     // Results:
     // pos:1 , line:0, type:NonAlphaNum, text:'-'
@@ -77,7 +78,7 @@ n/a
     // - line #
     // - char #
     // - index
-    val token = new Token("env", "env", TokenType.Ident, 1, 0, 1)
+    val token = Token("env", "env", TokenType.Ident, 1, 0, 1)
     println(token)
 
     // CASE 3: Tokens list

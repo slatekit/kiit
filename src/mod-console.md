@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Console
-permalink: /mod-console
+permalink: /kotlin-mod-console
 ---
 
 # Console
@@ -9,42 +9,44 @@ permalink: /mod-console
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors | 
-| **date**| 2017-04-12T22:59:13.339 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.console  |
-| **source core** | slate.common.console.Console.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/console](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/console)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Console.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Console.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.console  |
+| **source core** | slatekit.common.console.Console.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Console.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Console.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.{Result, DateTime}
-import slate.common.console.ConsoleWriter
+import slatekit.common.console.*
+
 
 
 // optional 
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.DateTime
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-    val writer = new ConsoleWriter()
+    val writer = ConsoleWriter()
 
     // Case 1: Title - prints text in title format ( CAPS + Color Cyan )
     writer.title("title is in CAPS")
@@ -81,15 +83,15 @@ n/a
     writer.lines(2)
 
     // Case 12: List of items ( unordered and ordered )
-    writer.list( List( 1, true , "www.slatekit.com", DateTime.now, 12.34 ), true)
-    writer.list( List( 2, false, "www.codehelix.co", DateTime.now, 56.78 ), true)
+    writer.list( listOf( 1, true , "www.slatekit.com", DateTime.now(), 12.34 ), true)
+    writer.list( listOf( 2, false, "www.codehelix.co", DateTime.now(), 56.78 ), true)
 
     // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
-    writer.writeItemsByText(List[(String,String,Boolean)](
-      ("title"     , "About App"                   , true),
-      ("subtitle"  , "Example of Console component", true),
-      ("url"       , "http://www.slatekit.com"     , true),
-      ("highlight" , "visit us for more info"      , true)
+    writer.writeItemsByText(listOf(
+      ConsoleItem(Title     , "About App"                   , true),
+      ConsoleItem(Subtitle  , "Example of Console component", true),
+      ConsoleItem(Url       , "http://www.slatekit.com"     , true),
+      ConsoleItem(Highlight , "visit us for more info"      , true)
     ))
     
 

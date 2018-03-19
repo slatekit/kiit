@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Validations
-permalink: /mod-validations
+permalink: /kotlin-mod-validations
 ---
 
 # Validations
@@ -9,46 +9,67 @@ permalink: /mod-validations
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A set of validation related components, simple validation checks, RegEx checks, error collection and custom validators | 
-| **date**| 2017-04-12T22:59:15.365 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.validation  |
-| **source core** | slate.common.validation.ValidationFuncs.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/validation](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/validation)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Validation.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Validation.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.validation  |
+| **source core** | slatekit.common.validation.ValidationFuncs.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Validation.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-
-import slate.common.results.ResultSupportIn
-import slate.common.validations.{Validator, ValidationResults}
-import slate.common.validations.Validations._
-import slate.common.{Result, RefField}
+import slatekit.common.RefField
+import slatekit.common.validations.Validator
+import slatekit.common.validations.ValidationFuncsExt
+import slatekit.common.validations.ValidationResults
+import slatekit.common.validations.Validations.collect
 
 
 // optional 
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.validations.ValidationFuncs.isEmpty
+import slatekit.common.validations.ValidationFuncs.isNotEmpty
+import slatekit.common.validations.ValidationFuncs.isLength
+import slatekit.common.validations.ValidationFuncs.isMinLength
+import slatekit.common.validations.ValidationFuncs.isMaxLength
+import slatekit.common.validations.ValidationFuncs.isMinValue
+import slatekit.common.validations.ValidationFuncs.isMaxValue
+import slatekit.common.validations.ValidationFuncs.hasDigits
+import slatekit.common.validations.ValidationFuncs.hasCharsLCase
+import slatekit.common.validations.ValidationFuncs.hasCharsUCase
+import slatekit.common.validations.ValidationFuncs.hasSymbols
+import slatekit.common.validations.ValidationFuncs.isAlpha
+import slatekit.common.validations.ValidationFuncs.isAlphaLowerCase
+import slatekit.common.validations.ValidationFuncs.isAlphaNumeric
+import slatekit.common.validations.ValidationFuncs.isAlphaUpperCase
+import slatekit.common.validations.ValidationFuncs.isEmail
+import slatekit.common.validations.ValidationFuncs.isNumeric
+import slatekit.common.validations.ValidationFuncs.isPhoneUS
+import slatekit.common.validations.ValidationFuncs.isUrl
+import slatekit.common.validations.ValidationFuncs.isZipCodeUS
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
   // CASE 1: Simple true/false checks
-  def showSimple():Unit = {
-
-    import slate.common.validations.ValidationFuncs._
+  fun showSimple():Unit {
 
     println("CASE 1: Simple true/false checks")
     println( isEmpty      ("")              )
@@ -61,14 +82,13 @@ n/a
     println( hasDigits    ("a1b2c3"  , 3)   )
     println( hasCharsLCase("a1b2c3"  , 3)   )
     println( hasCharsUCase("A1B2C3"  , 3)   )
-    println( hasSymbols   ("A$B%C^"  , 3)   )
+    println( hasSymbols   ("A@B%C^"  , 3)   )
     println()
   }
 
-  // CASE 2: Simple RegEx based checks returning true/false
-  def showSimpleRegEx():Unit = {
 
-    import slate.common.validations.ValidationFuncs._
+  // CASE 2: Simple RegEx based checks returning true/false
+  fun showSimpleRegEx():Unit {
 
     println("CASE 2: Simple RegEx based checks returning true/false")
     println( isEmail         ("wonderwoman@amazonian.com"))
@@ -83,67 +103,61 @@ n/a
     println()
   }
 
+
   // CASE 3: Same checks above but these return a ValidationResult
   // which contains success(true/false), message, reference, and status code
   // You can supply a reference to a field/position refer to common\Reference.scala
-  def showValidationResult():Unit = {
-
-    import slate.common.validations.ValidationFuncsExt._
+  fun showValidationResult():Unit {
 
     println("CASE 3: Same checks above but these return a ValidationResult")
-    println( isEmpty       (""      ,    Some(new RefField("Email"   )) , "Email is required"   ))
-    println( isAlphaNumeric("abCD12",    Some(new RefField("Password")) , "Password is invalid" ))
-    println( isZipCodeUS   ("12345" ,    Some(new RefField("ZipCode" )) , "ZipCode is required" ))
-    println( isMinLength   ("12"    , 3, Some(new RefField("Name"    )) , "Min 3 chars required"))
+    println( ValidationFuncsExt.isEmpty       (""      ,    RefField("Email"   ) , "Email is required"   ))
+    println( ValidationFuncsExt.isAlphaNumeric("abCD12",    RefField("Password") , "Password is invalid" ))
+    println( ValidationFuncsExt.isZipCodeUS   ("12345" ,    RefField("ZipCode" ) , "ZipCode is required" ))
+    println( ValidationFuncsExt.isMinLength   ("12"    , 3, RefField("Name"    ) , "Min 3 chars required"))
     println()
   }
 
-  // CASE 4: Collect errors via thunks(0 parameter functions)
-  def showErrorCollection():Unit = {
 
-    import slate.common.validations.ValidationFuncsExt._
+  // CASE 4: Collect errors via thunks(0 parameter functions)
+  fun showErrorCollection():Unit {
 
     val password = "abc123XYZ"
-    val reference = Some(new RefField("Email"))
+    val reference = RefField("Email")
 
     println("CASE 4: Collect errors via thunks(0 parameter functions)")
-    val errors = collect (
-      Seq (
-        () => isLength      ( password, 9 , reference, "Email must be 9 characters")          ,
-        () => hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") ,
-        () => hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") ,
-        () => hasDigits     ( password, 3 , reference, "Email must have 3 digits")
+    val errors = collect ( listOf (
+        { -> ValidationFuncsExt.isLength      ( password, 9 , reference, "Email must be 9 characters")          } ,
+        { -> ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") } ,
+        { -> ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") } ,
+        { -> ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
       )
     )
-    errors.foreach( err => println( err ) )
+    errors.forEach{ err -> println( err ) }
     println()
   }
 
   // Case 5: Custom validator object
-  case class User(email:String, password:String) { }
+  data class User(val email:String, val password:String) { }
 
   // Extend from Validation[T]
-  class UserValidator extends Validator[User] {
+  class UserValidator : Validator<User>() {
 
     // Implement your validation here and collect errors
     // The validation results represents a contain for success, message, code, and errors.
-    override def validate(item:User): ValidationResults = {
-
-      import slate.common.validations.ValidationFuncsExt._
+    override fun validate(item:User): ValidationResults {
 
       val password = "abc123XYZ"
-      val reference = Some(new RefField("Email"))
+      val reference = RefField("Email")
 
       println("Case 5: Custom validator object")
-      val errors = collect (
-        Seq (
-          () => isLength      ( password, 9 , reference, "Email must be 9 characters")          ,
-          () => hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") ,
-          () => hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") ,
-          () => hasDigits     ( password, 3 , reference, "Email must have 3 digits")
+      val errors = collect ( listOf(
+          { -> ValidationFuncsExt.isLength      ( password, 9 , reference, "Email must be 9 characters")          },
+          { -> ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") },
+          { -> ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") },
+          { -> ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
         )
       )
-      ValidationResults(Option(errors))
+      return ValidationResults.build(errors)
     }
   }
   

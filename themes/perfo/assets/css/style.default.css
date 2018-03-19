@@ -389,7 +389,7 @@ nav.navbar .navbar-toggler {
 
 /* Navbar Menu */
 nav.navbar .navbar-nav a.nav-link {
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   color: #fff;
 }
 
