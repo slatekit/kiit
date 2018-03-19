@@ -1,100 +1,98 @@
 ---
 layout: start_page_mods_utils
 title: module Args
-permalink: /mod-args
+permalink: /kotlin-mod-args
 ---
 
 # Args
 
 {: .table .table-striped .table-bordered}
 |:--|:--|
-| **desc** | A lexical command line argument parser with optional support for specifying a schema for the arguments. | 
-| **date**| 2017-04-12T22:59:11.988 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.args  |
-| **source core** | slate.common.args.Args.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/args](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/args)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Args.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Args.scala) |
+| **desc** | A lexical command line argument parser with optional support for allowing a route/method call in the beginning | 
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.args  |
+| **source core** | slatekit.common.args.Args.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.args.{ArgsSchema, Args}
-
+import slatekit.common.args.Args
+import slatekit.common.args.ArgsSchema
 
 
 // optional 
-import slate.common.Result
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
-    import Args.parse
+    // Example:
+    // Given on the the command line:
+    // -log.level=info -env=dev -text='hello world'
+    showResults( Args.parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
 
-    showResults( parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
-
-    // CASE 1: Defaults e..g prefix = "-", sep = ":"
-    showResults( parse( "-env:dev -text:'hello world' -batch:10" ) )
+    // CASE 1: Parse using defaults. E.g. the key/value prefix = "-", separator = ":"
+    showResults( Args.parse( "-env:dev -text:'hello world' -batch:10" ) )
 
 
     // CASE 2: Custom prefix and sep e.g. "!" and separator "="
-    showResults( parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
+    showResults( Args.parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
 
 
-    // CASE 3a: Check for method call in the beginning
-    showResults( parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
+    // CASE 3a: Check for action/method call in the beginning
+    showResults( Args.parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
                  sep = "=", hasAction = true ) )
 
 
     // CASE 3b: Check for method call in the beginning
-    showResults( parse( "service.method -env=dev -text='hello word' -batch=10", prefix = "-",
+    showResults( Args.parse( "service.method -env=dev -text='hello word' -batch=10", prefix = "-",
                  sep = "=", hasAction = true ) )
 
 
-    // CASE 3c: Check for method call in the beginning
-    showResults( parse( "method", prefix = "-", sep = "=", hasAction = true ) )
+    // CASE 3c: Check for only action name in the beginning.
+    showResults( Args.parse( "method", prefix = "-", sep = "=", hasAction = true ) )
 
 
     // CASE 4: No args
-    showResults( parse( "service.method", prefix = "-", sep = "=", hasAction = true ) )
+    showResults( Args.parse( "service.method", prefix = "-", sep = "=", hasAction = true ) )
 
 
     // CASE 5a: Help request ( "?", "help")
-    showResults( parse( "?"         ) )
+    showResults( Args.parse( "?"         ) )
 
 
     // CASE 5b: Help request with method call ( "method.action" ? )
-    showResults( parse( "service.method help"   , hasAction = true ) )
+    showResults( Args.parse( "service.method help"   , hasAction = true ) )
 
 
     // CASE 6: Version request ( "ver", "version" )
-    showResults( parse( "version"  ) )
+    showResults( Args.parse( "version"  ) )
 
 
     // CASE 7: Exit request
-    showResults( parse( "exit"     ) )
+    showResults( Args.parse( "exit"     ) )
 
 
-    // CASE 8: apply args to an object
-    Args.apply( "-env:dev -text:'hello word' -batch:10", new SampleOptions(), "-", ":", true)
-
-    // CASE 9: Build up the schema
-    val schema = new ArgsSchema().text("env").flag("log").number("level")
+    // CASE 8: Build up the schema
+    val schema = ArgsSchema().text("env").flag("log").number("level")
     print(schema)
 
     

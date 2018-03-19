@@ -4,344 +4,454 @@ title: module Utils
 permalink: /kotlin-scratch-orm
 ---
 
-# Apis
-The apis in Slate Kit are built to be **protocol independent**. 
-This means that you can build your APIs 1 time and they can be made to be available on the command line shell or as a Web API, or both. This is done using various techniques outlined below. Before going into the details, first review the terminology.
+# Databases
+```kotlin
 
-# Databases 
-```scala 
-    
-  import slate.common.databases.DbConfig
-  import slate.common.databases.DbLookup._
-  
-    // CASE 1: Load database lookup using a single db connection
-    val dbLookup1 = defaultDb(
-      new DbConString (
-        "com.mysql.jdbc.Driver",
-        "jdbc:mysql://localhost/default",
-        "db1",
-        "abcdefghi"
-      )
-    )
-    showResult( dbLookup1.default )
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup
+import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
+import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
+import slatekit.common.db.DbTypeMySql
 
-    // CASE 2. Load database lookup using a single db connection
-    // from a config file from .slatekit folder 
-    val dbLookup2 = defaultDb( DbUtils.loadFromUserFolder(".slatekit", "db_default.txt"))
-    showResult( dbLookup2.default )
 
-    // CASE 3: Load database lookup using named db connection "users"
-    val dbLookup3 = namedDbs( ("users", DbUtils.loadFromUserFolder(".slate", "db_default.txt") ))
-    showResult( dbs4.named("users") )
+// 1. Create DbLookup using a connection from a file
+// NOTE: This is safer and more secure as it loads
+// the connection string from the user directory in folder ./slate
+val dbLookup1 = defaultDb(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
 
-    // CASE 4: Load database lookup using multiple 
-	// named db connections ( "users", "files" )
-    val dbs4 = namedDbs(
-      (
-        "users", new DbConString (
-          "com.mysql.jdbc.Driver",
-          "jdbc:mysql://localhost/users",
-          "root",
-          "abcdefghi"
-        )
-      ),
-      (
-        "files", new DbConString (
-          "com.mysql.jdbc.Driver",
-          "jdbc:mysql://localhost/files",
-          "root",
-          "abcdefghi"
-        )
-      )
-    )
-    showResult( dbs4.named("users") )
-    showResult( dbs4.named("fiels") )
+// 2. Create a DbLookup using an explicit connection string
+// NOTE: Avoid using explicit connection strings in code.
+val dbLookup2 = defaultDb(
+	DbConString(
+		"com.mysql.jdbc.Driver",
+		"jdbc:mysql://localhost/default",
+		"root",
+		"abcdefghi"
+	)
+)
+
+// 3. Create a DbLookup using multiple named databases.
+val dbLookup3 = namedDbs(listOf(
+	Pair(
+		"movies", DbConString(
+			"com.mysql.jdbc.Driver",
+			"jdbc:mysql://localhost/movies",
+			"root",
+			"abcdefghi"
+		)
+	),
+	Pair(
+		"files", DbConString(
+			"com.mysql.jdbc.Driver",
+			"jdbc:mysql://localhost/files",
+			"root",
+			"abcdefghi"
+		)
+	)
+)) 
 ```
 
 
-# Entitites
-```scala 
+# Entities
+```kotlin
 
-  import slate.entities.core._
-
-  // 1. Extend from IEntity
-  // 2. Add @Field annotations for fields that should be mapped
-  case class User (
-
-      // Primary key
-      @(Field@field)("", true, -1)
-      id : Long,
-  
-      @(Field@field)("", true, 50)
-      userName: String,
-  
-      @(Field@field)("", true, 50)
-      email: String,
-  
-      @(Field@field)("", true, 20)
-      password: String,
-	  
-      @(Field@field)("", true, -1)
-      createdAt: DateTime,
-  
-      @(Field@field)("", true, -1)
-      createdBy:Long,
-  
-      @(Field@field)("", true, -1)
-      updatedAt: DateTime,
-  
-      @(Field@field)("", true, -1)
-      updatedBy:Long,
-
-      @(Field@field)("", true, -1)
-      uniqueId: String	  
-  )
-   extends EntityWithId
-      with EntityWithMeta
-      with EntityUpdatable[User]
-  {
-	/**
-      * support for "copy on write" to set the id on the entity and return a copy.
-      * @param id
-      * @return
-      */
-    override def withId(id:Long): User = copy(id = id)
-  }
-
-```
+import slatekit.common.DateTime
+import slatekit.common.Field
+import slatekit.entities.core.EntityWithId
+ 
+// NOTES: You can entities properties to be persisted
+// in 3 different ways:
+// 1. annotations on the Entity
+// 2. building a Model and manually registering property references
+// 3. building a Model and manually registering via field/names
+//
+// See Example_Mapper.kt and slatekit.common.Model for more info.
+//
+// IMMUTABILITY:
+// The ORM is originally built for immutable Entities ( Data Classes )
+// It also supports Entities with "vars", but has not been tested.
+// In a future release, we will fully support var properties
+data class Movie(
+        override val id :Long = 0L,
 
 
-# Service
-```scala 
+        @property:Field(required = true, length = 50)
+        val title :String = "",
 
-  import slate.entities.core._
-  import slate.common.databases.DbConfig
-  import slate.common.databases.DbLookup._
-  
 
-  
-  // Create database connection lookup
-  // single connection in this example
-  val dbLookup = defaultDb(
-        new DbConString (
-          "com.mysql.jdbc.Driver",
-          "jdbc:mysql://localhost/default",
-          "db1",
-          "abcdefghi"
+        @property:Field(length = 20)
+        val category :String = "",
+
+
+        @property:Field(required = true)
+        val playing :Boolean = false,
+
+
+        @property:Field(required = true)
+        val cost:Int,
+
+
+        @property:Field(required = true)
+        val rating: Double,
+
+
+        @property:Field(required = true)
+        val released: DateTime,
+
+
+        // These are the timestamp and audit fields.
+        @property:Field(required = true)
+        val createdAt : DateTime = DateTime.now(),
+
+
+        @property:Field(required = true)
+        val createdBy :Long  = 0,
+
+
+        @property:Field(required = true)
+        val updatedAt : DateTime =  DateTime.now(),
+
+
+        @property:Field(required = true)
+        val updatedBy :Long  = 0
+)
+    : EntityWithId
+{
+    companion object {
+        fun samples():List<Movie> = listOf(
+                Movie(
+                        title = "Indiana Jones: Raiders of the Lost Ark",
+                        category = "Adventure",
+                        playing = false,
+                        cost = 10,
+                        rating = 4.5,
+                        released = DateTime.of(1985, 8, 10)
+                ),
+                Movie(
+                        title = "WonderWoman",
+                        category = "action",
+                        playing = true,
+                        cost = 100,
+                        rating = 4.2,
+                        released = DateTime.of(2017, 7, 4)
+                )
         )
-      )
-	  
-  // =====================================================
-  // SETUP 1: Use the existing EntityService[T] class
-  val svc1 = new EntityService[User](getUserRepo())
-  
-  
-  // =====================================================
-  // SETUP 2: Create your own service to avoid generics
-  class UserService(repo:EntityRepo[User]) extends EntityService[User](repo)
-  {
-  }  
-  var svc = new UserService(getUserRepo())
-  
-  
-  // =====================================================
-  // SETUP 3: This is the most convenient way to wire up all the components.
-  // Entities is a registration system for your entities.
-  // a) database
-  // b) entity
-  // c) service 
-  val entities = new Entities(Some(dbLookup)) 
-  entities.register[User]( isSqlRepo= true, 
-                           entityType = typeOf[User], 
-                           serviceType= typeOf[UserService], 
-                           dbType = Some(DbTypeMySql))
-    
-  // EXAMPLES: 
-  // 1. Create 
-  svc.create(new User("user", "04"))
-  
-  // 2. Retrieve  
-  val item = svc.get( 2 )
-  svc.getAll()
-  
-  // 3. Update
-  item.get.firstName = "user_two"
-  svc.update(item2.get)
-  
-  // 4. Delete
-  svc.delete( 4 )
-  
-  // 5. Find by date
-  svc.recent(2)
-  svc.oldest(2)
-  svc.first()
-  svc.last()
-  svc.count()
-  
+    }
+}
 ```
 
 
+# Registration
+```kotlin
 
-# Repo
-```scala 
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
+import slatekit.entities.core.Entities
 
-  import slate.entities.repos._  
-  import slate.common.mapper.Mapper
-  import slate.common.databases.DbConfig
-  import slate.common.databases.DbLookup._
-  
-
-  // Create database connection lookup
-  // single connection in this example
-  val dbLookup = defaultDb(
-        new DbConString (
-          "com.mysql.jdbc.Driver",
-          "jdbc:mysql://localhost/default",
-          "db1",
-          "abcdefghi"
+ val dbLookup = defaultDb(
+            DbConString(
+                "com.mysql.jdbc.Driver",
+                "jdbc:mysql://localhost/default",
+                "root",
+                "abcdefghi"
+            )
         )
-      )
-	  
-  // =====================================================
-  // SETUP 1: Use existing implementation of Repo for MySql 
-  val repoMySql = new EntityRepoMySql[User](typeOf[User])
-  
-  // =====================================================
-  // SETUP 2: Create your own repository for customization
-  class UserRepository() extends EntityRepoMySql[User](typeOf[User])
-  {
-  }
-  
-  // =====================================================
-  // SETUP 3: This is the most convenient way to wire up all the components.
-  // Entities is a registration system for your entities.
-  // a) database
-  // b) entity
-  // c) service 
-  val entities = new Entities(Some(dbLookup)) 
-  entities.register[User]( isSqlRepo= true, 
-                           entityType = typeOf[User], 
-                           serviceType= typeOf[UserService], 
-                           repository= new UserRepository(typeOf[User]), 
-                           dbType= Some(DbTypeMySql)
-                         )
-  
-  // =====================================================
-  // SETUP 4: Manual configuration of db, mapper, repo.
-  // Create the database config 
-  val dbConfig = new DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/mydb", "root", "123456789")
-  
-  // Create the mapper to map entity to/from SQL
-  val model =  Mapper.loadSchema(new User(), typeOf[User]) 
-  val mapper = new EntityMapper(model)
+		
+// The entities can be registered and set up in multiple ways.
+// They can be registered to :
+//
+// - use in-memory repository or a sql ( mysql ) repository
+// - use the default EntityService[T] or a custom EntityService
+// - use a singleton instance or new instance
+// - use a certain type of database ( mysql only for now )
+// - use the default EntityRepository ( mysql ) or a custom repository
+// - use a supplied EntityMapper or a custom mapper
+val entities = Entities(dbLookup)
 
-  // Set db and mapper on the repo  
-  repoMySql.setDb(dbConfig)
-  repoMySql.setMapper(mapper)
-  
-```
+// Case 1: In-memory
+showResults("Case 1", entities.register<Movie>(isSqlRepo = false, entityType = Movie::class))
 
-# Setup
-```scala 
+// Case 2: In-memory + with custom service
+showResults("Case 2", entities.register<Movie>(isSqlRepo = false, entityType = Movie::class,
+		serviceType = MovieService::class))
 
-  import slate.common.databases.DbConfig
-  import slate.common.databases.DbLookup._
-  
-// Create database connection lookup
-// single connection in this example
-val dbLookup = defaultDb(
-      new DbConString (
-        "com.mysql.jdbc.Driver",
-        "jdbc:mysql://localhost/default",
-        "db1",
-        "abcdefghi"
-      )
-    )
+// Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
+// Note: this uses the default database connection above
+showResults("Case 3", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		dbType = DbTypeMySql))
 
-// Entities stores all the entity registrations 
-val entities = new Entities(Some(dbLookup))
+// Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
+// Note: this uses the default database connection above
+showResults("Case 4", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, dbType = DbTypeMySql))
 
-// Set up 1: Simple ( using default service, repo, connection ) 
-entities.register[User](isSqlRepo= true, entityType = typeOf[User], dbType = DbConstants.DbMySql)
+// Case 5: Custom repository
+// Note: this uses the default database connection above
+showResults("Case 5", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		repository = MovieRepository(), dbType = DbTypeMySql))
 
-// Set up 2: Custom service, default repo, connection 
-entities.register[User](isSqlRepo= true, entityType = typeOf[User], serviceType= typeOf[UserService], dbType = DbConstants.DbMySql)
+// Case 6: Custom service type, custom repository, database type
+showResults("Case 6", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, repository = MovieRepository (), dbType = DbTypeMySql))
 
-// Set up 3: Custom service, custom repo, default connection 
-entities.register[User](isSqlRepo= true, entityType = typeOf[User], serviceType= typeOf[UserService], repository= new UserRepository(typeOf[User]), dbType = DbConstants.DbMySql)
+// Case 7: Custom service type, custom repository, database specified
+// Note: this uses the named database connection above called "Movie_db"
+showResults("Case 7", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, repository = MovieRepository (),
+		dbType = DbTypeMySql, dbKey = "Movie_db"))
 
-// Set up 4: Custom service, repo and connection
-entities.register[User](isSqlRepo= true, entityType = typeOf[User], serviceType= typeOf[UserService], repository= new UserRepository(typeOf[User]), dbType = DbConstants.DbMySql, dbKey = "user_db")
+// Case 8: Custom service type, custom repository, database specified, mapper specified
+// Each registration will simply overwrite an existing registration for the same entity type
+showResults("Case 8", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, repository = MovieRepository (),
+		dbType = DbTypeMySql))
+
+// Case 9: Provide a database db key ( e.g. for multiple database connections )
+showResults("Case 9", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, repository = MovieRepository (),
+		dbType = DbTypeMySql, dbKey = "Movie_db"))
+
+// Case 9: Provide a database db key ( e.g. for multiple database connections )
+showResults("Case 10", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+		serviceType = MovieService::class, repository = MovieRepository (),
+		dbType = DbTypeMySql, dbKey = "group1", dbShard = "shard1"))
 
 // Use case 1: Get repository
-val repo = entities.getRepo(typeOf[User])
+val repo = entities.getRepo<Movie>(Movie::class)
 
 // Use case 2: Get the service
-val svc = entities.getService(typeOf[User])
+val svc = entities.getSvc<Movie>(Movie::class)
 
 // Use case 3: Get the entity mapper
-val mapper = entities.getMapper(typeOf[User])
+val mapper = entities.getMapper(Movie::class)
 
 // Use case 4: Get the repo for a specific shard
-val repoShard = entities.getRepo(typeOf[User])
-	
+val repoShar = entities.getRepo<Movie>(Movie::class)
+        
 ```
 
 
-# Mapper
-```scala 
+# Service: Declare 
+```kotlin
 
-  
-  import slate.common.mapper.Mapper
-  import slate.entities.core._
-  
-  // STEP 1: Create a new mapper that loads fields/annotations mappings from the entity class
-  val model = Mapper.loadSchema(typeOf[User])
-  val mapper = new EntityMapper(model)
-  
-  // STEP 2: Create instance of entity class
-  val user = new User(firstName ="john", lastName = "doe-01", email = "john@abc.com")
+import slatekit.core.common.AppContext
+import slatekit.core.common.EntityServiceWithSupport
+import slatekit.entities.core.EntityRepo
 
-  // STEP 3: Get the sql for create
-  val sqlCreate = mapper.mapToSql(person, update = false, fullSql = true)
-  println(sqlCreate)
 
-  // STEP 4: Get the sql for update
-  val sqlForUpdate = mapper.mapToSql(person, update = true, fullSql = true)
-  println(sqlForUpdate)
+class MovieService(context: AppContext, repo: EntityRepo<Movie>)
+  : EntityServiceWithSupport<Movie>(context, repo)
+{
+}
+```
 
-  // STEP 5: Generate the table schema for mysql from the model schema
-  println( "table sql : " + new DbBuilder().addTable(model))
+
+# Service: Use 
+```kotlin
+// The Service layer initialized with an repository .
+// Purpose of the service layer is to:
+//
+// 1. Delegate to underlying repository for CRUD operations after applying any business logic.
+// 2. Provide a layer to insert business logic during other operations.
+// 3. Has some( not all ) methods that match the repository CRUD, Find, Delete methods
+// 4. Subclassed to perform more complex business logic that may still involve using the repo.
+//
+val ctx = AppContext.simple("sampleapp1")
+val service = MovieService(ctx, EntityRepoInMemory<Movie>(Movie::class))
+
+// CASE 1: Create 3-4 users for showing use-cases
+service.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))
+service.create(Movie(0L, "Dark Knight"      , "action", false, 100,4.5, DateTime.of(2012,1,1)))
+service.create(Movie(0L, "Dark Knight Rises", "action", false, 120,4.2, DateTime.of(2012,1,1)))
+
+// CASE 2: Get by id
+printOne("2", service.get(2))
+
+// CASE 3: Update
+val item2 = service.get(2)
+item2?.let { item ->
+	val updated = item.copy(title = "Batman: Dark Knight")
+	service.update(updated)
+}
+
+// CASE 4: Get all
+printAll("all", service.getAll())
+
+// CASE 5: Get recent/last 2
+printAll("recent", service.recent(2))
+
+// CASE 6: Get oldest 2
+printAll("oldest", service.oldest(2))
+
+// CASE 7: Get first one ( oldest )
+printOne("first", service.first())
+
+// CASE 8: Get last one ( recent )
+printOne("last", service.last())
+
+// CASE 9: Delete by id
+service.delete(4)
+
+// CASE 10: Get total ( 4 )
+println(service.count())
+
+// CASE 11: Type-Safe queryusing property type reference
+println(service.findBy(Movie::playing, true))
+
+// CASE 12: Query
+println(service.find(Query().where("playing", "=", true)))
+
+```
+
+
+# repo: declare
+```kotlin
+
+import slatekit.common.db.Db
+import slatekit.common.db.DbConString
+import slatekit.common.mapper.Mapper
+import slatekit.entities.core.Entities
+import slatekit.entities.core.EntityMapper
+import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.EntityRepoMySql
+
+// CASE 1: In-memory ( non-persisted ) repository has limited functionality
+// but is very useful for rapid prototyping of a data model when you are trying to
+// figure out what fields/properties should exist on the model
+val repo = EntityRepoInMemory<Movie>(Movie::class)
+
+
+// CASE 2: My-sql ( persisted ) repository can be easily setup
+// More examples of database setup/entity registration available in Setup/Registration docs.
+// 2.1: First setup the database
+val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
+
+// 2.2: Setup the mapper
+// NOTE: This assumes the entity has annotations on the properties.
+// If you do not want to use annotations, looks at the mapper/model
+// examples for alternative approaches.
+val model = Mapper.loadSchema(Movie::class)
+val mapper = EntityMapper(model)
+
+// 2.3: Now create the repo with database and mapper
+val repoMySql = EntityRepoMySql<Movie>(db, Movie::class, null, mapper)
+
 ```
 
 
 
-# Models
-```scala 
+# repo: usage 
+```kotlin
 
-  import slate.common.{Model}
-  
-  val model = new Model("Resource", "slate.ext.resources.Resource")
+// CASE 1: Create 3-4 users for showing use-cases
+repo.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))
+repo.create(Movie(0L, "Dark Knight"      , "action", false, 100,4.5, DateTime.of(2012,1,1)))
+repo.create(Movie(0L, "Dark Knight Rises", "action", false, 120,4.2, DateTime.of(2012,1,1)))
 
-  // CASE 2. add a field for uniqueness / identity
-  model.addId  (name = "id", autoIncrement = true, dataType = typeOf[Long])
+// CASE 2: Get by id
+printOne("2", repo.get(2))
 
-  // CASE 3: add fields for text, bool, int, date etc.
-  model.addText  (name = "key"     , isRequired = true, maxLength = 30)
-       .addText  (name = "name"       , isRequired = true, maxLength = 30)
-       .addText  (name = "category"   , isRequired = true, maxLength = 30)
-       .addText  (name = "country"    , isRequired = true, maxLength = 30)
-       .addText  (name = "region"     , isRequired = true, maxLength = 30)
-       .addText  (name = "aggRegion"  , isRequired = true, maxLength = 30)
-       .addText  (name = "aggCategory", isRequired = true, maxLength = 30)
-       .addText  (name = "links"      , isRequired = true, maxLength = 30)
-       .addText  (name = "owner"      , isRequired = true, maxLength = 30)
-       .addText  (name = "status"     , isRequired = true, maxLength = 30)
-       .addInt   (name = "recordState", isRequired = true)
-       .addObject(name = "hostInfo"   , isRequired = true, dataType = typeOf[Host])
-       .addDate  (name = "created"    , isRequired = true                )
-       .addDate  (name = "updated"    , isRequired = true                )
+// CASE 3: Update
+val item2 = repo.get(2)
+item2?.let { item ->
+	val updated = item.copy(title = "Batman: Dark Knight")
+	repo.update(updated)
+}
+
+// CASE 4: Get all
+printAll("all", repo.getAll())
+
+// CASE 5: Get recent/last 2
+printAll("recent", repo.recent(2))
+
+// CASE 6: Get oldest 2
+printAll("oldest", repo.oldest(2))
+
+// CASE 7: Get first one ( oldest )
+printOne("first", repo.first())
+
+// CASE 8: Get last one ( recent )
+printOne("last", repo.last())
+
+// CASE 9: Delete by id
+repo.delete(4)
+
+// CASE 10: Get total ( 4 )
+println(repo.count())
+
+// CASE 11: Query
+println(repo.find(Query().where("playing", "=", true)))
+
 ```
 
 
+# mapper: setup 
+```kotlin
 
+import slatekit.common.Model
+import slatekit.common.mapper.Mapper
+
+// CASE 1: Load the schema from the annotations on the model
+val schema1 = Mapper.loadSchema(Movie::class)
+
+
+// CASE 2: Load the schema manually using properties for type-safety
+val schema2 = Model(Movie::class)
+		.addId(Movie::id, true)
+		.add(Movie::title     , "Title of movie"         , 5, 30)
+		.add(Movie::category  , "Category (action|drama)", 1, 20)
+		.add(Movie::playing   , "Whether its playing now")
+		.add(Movie::rating    , "Rating from users"      )
+		.add(Movie::released  , "Date of release"        )
+		.add(Movie::createdAt , "Who created record"     )
+		.add(Movie::createdBy , "When record was created")
+		.add(Movie::updatedAt , "Who updated record"     )
+		.add(Movie::updatedBy , "When record was updated")
+
+
+// CASE 3: Load the schema manually using named fields
+val schema3 = Model(Example_Mapper.Movie::class)
+		.addId(Movie::id, true)
+		.addText    ("title"     , "Title of movie"         , true, 1, 30)
+		.addText    ("category"  , "Category (action|drama)", true, 1, 20)
+		.addBool    ("playing"   , "Whether its playing now")
+		.addDouble  ("rating"    , "Rating from users"      )
+		.addDateTime("released"  , "Date of release"        )
+		.addDateTime("createdAt" , "Who created record"     )
+		.addLong    ("createdBy" , "When record was created")
+		.addDateTime("updatedAt" , "Who updated record"     )
+		
+```
+
+# mapper: usage 
+```kotlin 
+
+import slatekit.entities.core.EntityMapper
+
+val schema = Mapper.loadSchema(Movie::class)
+
+// CASE 1: Create mapper with the schema
+val mapper = EntityMapper (schema)
+
+// Create sample instance to demo the mapper
+val movie = Example_Mapper.Movie(
+		title = "Man Of Steel",
+		category = "action",
+		playing = false,
+		cost = 100,
+		rating = 4.0,
+		released = DateTime.of(2015, 7, 4)
+)
+
+// CASE 2: Get the sql for create
+val sqlCreate = mapper.mapToSql(movie, update = false, fullSql = true)
+println(sqlCreate)
+
+// CASE 3: Get the sql for update
+val sqlForUpdate = mapper.mapToSql(movie, update = true, fullSql = true)
+println(sqlForUpdate)
+
+// CASE 4: Generate the table schema for mysql from the model
+println("table sql : " + DbSourceMySql().builAddTable(schema))
+
+```

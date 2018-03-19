@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_infra
 title: module App
-permalink: /mod-app
+permalink: /kotlin-mod-app
 ---
 
 # App
@@ -9,196 +9,283 @@ permalink: /mod-app
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more | 
-| **date**| 2017-03-12T23:12:32.635 |
-| **version** | 1.4.0  |
-| **jar** | slate.core.jar  |
-| **namespace** | slate.core.app  |
-| **source core** | slate.core.app.AppProcess.scala  |
-| **source folder** | [/src/lib/scala/Slate.Core/src/main/scala/slate/core/app](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/app)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_App.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_App.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.core.jar  |
+| **namespace** | slatekit.core.app  |
+| **source core** | slatekit.core.app.AppProcess.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_App.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.args.Args
-import slate.common.encrypt.Encryptor
-import slate.common.info.About
-import slate.common.logging.LoggerConsole
-import slate.core.app.{AppProcess, AppRunner}
-import slate.core.common.{Conf, AppContext}
-import slate.entities.core.Entities
+import slatekit.core.app.AppOptions
+import slatekit.core.app.AppProcess
+import slatekit.core.app.AppRunner
 
 
 
 // optional 
-import slate.common.Result
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.args.Args
+import slatekit.common.args.ArgsSchema
+import slatekit.common.conf.Config
+import slatekit.common.info.About
+import slatekit.common.log.LoggerConsole
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.results.ResultFuncs.success
+import slatekit.core.cmds.Cmd
+import slatekit.core.common.AppContext
+import slatekit.entities.core.Entities
+
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 
-  class SampleApp(cctx:Option[AppContext]) extends AppProcess(cctx)
-  {
+// Step 1: Extend your application from AppProcess which
+// provides life-cycle methods, and much of the boiler-plate code.
+//
+// NOTE: Ensure your environment files are setup:
+// Refer to sample app for more info.
+// - resources/env.conf
+// - resources/env.local.conf
+// - resources/env.dev.conf
+//
+// CONTEXT:
+// The AppProcess must have an AppContext ( see docs online and example below for more info)
+// which is a container to store core dependencies such as
+// - selected environment
+// - config settings
+// - logger
+// - encryptor
+// - info about app
+//
+// There are different ways you can build up the context
+// 1. Manually      ( explictly supply the components - see below )
+// 2. Automatically ( using helper functions to that check command line args )
+class SampleApp(ctx: AppContext) : AppProcess(ctx) {
 
     /**
-     * initialize app and metadata
+     * Options for the application that you can override
+     * E.g. Just shown for example, not needed to override.
+     * By default, the app process prints a summary of your app ( see example at bottom of this file )
+     * at the end of the app process, but you can customize here
+     * if you want the summary to be shown at the beginning of life-cycle.
      */
-    override def onInit(): Unit =
-    {
-    }
+    override val options = AppOptions(
+            printSummaryBeforeExec = false,
+            printSummaryOnShutdown = true
+    )
 
 
     /**
-     * executes the app
-      *
-      * @return
+     * Life-cycle init hook: for your app to perform any initialization
      */
-    override def onExecute():Result[Any] =
-    {
-      // NOTE(s):
-      // The app contains the context which stores multiple services setup above in init method.
-      // The args and conf are available as members in the base class itself.
-
-      // 1. Get the selected environment
-      println( ctx.env.toString )
-
-      // 2. Get the command line args and show the raw inputs supplied
-      println ( ctx.arg.raw )
-
-      // 3. Get the setting from base config ( common config that all other configs inherit from )
-      println ( conf.getString("app.name") )
-
-      // 4. Get value from inherited config ( env.qa.conf ) that inherits
-      // from the common config ( env.conf )
-      println ( conf.getString("app.name") )
-      println ( conf.dbCon() )
-
-      // 5. Get and use logger
-      ctx.log.info("default logger ")
-
-      // 6. Get app info ( showing just 1 property )
-      println( ctx.app.about.name )
-
-      // 7. Get the host computer info
-      println ( ctx.app.host )
-
-      // 8. Get the scala language runtime
-      println ( ctx.app.lang )
-
-      // 9. Get the encryptor to encrypt/decrypt
-      println ( ctx.enc.fold("no encryption")( enc => enc.encrypt("hello world")))
-
-      // 10. Execute your work here.
-      info("app executing now")
-
-      // simulate work
-      Thread.sleep(1000)
-
-      info("app completed")
-
-      ok()
+    override fun onInit(): Unit {
+        println("app initialized")
     }
 
 
     /**
-     * called when app is done
+     * Life-cycle execution hook: for your app to perform the main logic
+     *
+     * @return
      */
-    override def onEnd(): Unit =
-    {
-      info("app shutting down")
+    override fun onExecute(): Result<Any> {
+        // The AppContext ( ctx ) is required for the AppProcess and will be
+        // available for derived classes to access its components.
+
+        // 1. Get the selected environment name/mode ( local.dev )
+        println(ctx.env.name)
+        println(ctx.env.mode)
+        println(ctx.env.toString())
+
+        // 2. Get the command line args and show the raw inputs supplied
+        println(ctx.arg.raw)
+
+        // 3. Get the setting from base config ( common config that all other configs inherit from )
+        println(conf.getString("app.api"))
+
+        // 4. Get value from inherited config ( env.qa.conf ) that inherits
+        // from the common config ( env.conf )
+        println(conf.getString("app.api"))
+        println(conf.dbCon())
+
+        // 5. Get and use logger
+        ctx.log.info("default logger ")
+
+        // 6. Get app info ( showing just 1 property )
+        println(ctx.app.about.name)
+
+        // 7. Get the host computer info
+        println(ctx.app.host)
+
+        // 8. Get the java runtime info
+        println(ctx.app.lang)
+
+        // 9. Get the encryptor to encrypt/decrypt
+        println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
+
+        // 10. Execute your work here.
+        info("app executing now")
+
+        // simulate work
+        Thread.sleep(1000)
+
+        info("app completed")
+
+        return ok()
     }
 
 
-    override def collectSummaryExtra(): Option[List[(String,String)]] =
-    {
-      Some(List[(String,String)](
-        ( ctx.app.about.name, " extra 1  = extra summary data1" ),
-        ( ctx.app.about.name, " extra 2  = extra summary data2")
-      ))
+    /**
+     * Life-cycle end hook: called when app is shutting down
+     */
+    override fun onEnd(): Unit {
+        info("app shutting down")
     }
-  }
-  
+
+
+    /**
+     * template method: allows you to build up info to show in the summary
+     * displayed at the end of the application
+     */
+    override fun collectSummaryExtra(): List<Pair<String, String>>? {
+        return listOf(
+                Pair(ctx.app.about.name, " extra 1  = extra summary data1"),
+                Pair(ctx.app.about.name, " extra 2  = extra summary data2")
+        )
+    }
+}
+
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
-    // 1. Load the config "env.conf" from resources
-    val conf = new Conf(Some("env.conf"))
+        // NOTE: The application uses an AppContext ( see docs for more info )
+        // which contains many core dependencies available in a single container
+        // that can be easily passed around if needed.
+        // There are different ways you can build up the context:
+        // 1. Manually      ( explictly supply the components - see below )
+        // 2. Automatically ( using helper functions to that check command line args )
 
-    // 2. Build the context
-    val ctx = new AppContext (
-      arg  = Args(),
-      env  = conf.env().get,
-      cfg  = conf,
-      log  = new LoggerConsole(),
-      ent  = new Entities(None),
-      dbs  = None,
-      enc  = Some(new Encryptor("wejklhviuxywehjk", "3214maslkdf03292")),
-      inf  = new About(
-        id = "slatekit.examples",
-        name = "Slate Sample App",
-        desc = "Sample to show the base application",
-        company = "slatekit",
-        version = "0.9.1",
-        contact = "kishore@abc.co",
-        region = "",
-        group = "",
-        url = "",
-        tags = "",
-        examples = ""
-      )
-    )
 
-    // 3. Now run the app with context info
-    AppRunner.run(new SampleApp(Some(ctx)))
-    
+        // APPROACH 1: Manually / Explicitly build up the AppContext
+        // Load the config "env.conf" from resources
+        val conf = Config("env.conf")
+        val ctx = AppContext(
+                arg = Args.default(),
+                env = conf.env(),
+                cfg = conf,
+                log = LoggerConsole(),
+                ent = Entities(),
+                dbs = null,
+                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                inf = About(
+                        id = "slatekit.examples",
+                        name = "Slate Sample App",
+                        desc = "Sample to show the base application with manually built context",
+                        company = "slatekit",
+                        version = "0.9.1",
+                        contact = "kishore@abc.co",
+                        region = "",
+                        group = "",
+                        url = "",
+                        tags = "",
+                        examples = ""
+                ),
+                state = success(true, "manually built")
+        )
+        // Now run the app with context info with
+        // the help of the AppRunner which will call the life-cycle events.
+        AppRunner.run( SampleApp( ctx ) )
+
+
+        // APPROACH 2: Automatically build the AppContext using the AppRunner.build function
+        // that will check the command line args for selected environment and other info
+        // 1. args      : command line arguments
+        // 2. enc       : the encryptor to handle encryption and decryption of args/settings etc.
+        // 3. schema    : the schema representing allowed command line arguments
+        // 4. converter : a callback to convert/modify the application 1 last time before it is
+        //                finally supplied to your SampleApp constructor.
+        // NOTES:
+        // - Ensure your config files are available e.g. resources/env.conf
+        // - Env : By default, the first supported environment is used which is local "env.local"
+        // - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
+        // - You can store info about the your app in your config file and that can be loaded.
+        val res = AppRunner.run (
+
+                    SampleApp (
+
+                        AppRunner.build (
+
+                            args      = args,
+                            enc       = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                            schema    =  ArgsSchema()
+                                        .text("env"      , "the environment ", false, "dev"  , "dev"  , "loc|dev|qa1" )
+                                        .text("log.level", "the log level"   , false, "info" , "info" , "debug|info"),
+                            converter = { context -> context.copy( inf = context.inf.copy(
+                                                desc = "Sample app to show the base application using auto-built context",
+                                                url = "http://apps.companyabc.com/wiki")
+                                        )}
+                        )
+                    )
+        )
+        return res
+        
 
 ```
 
 
 ## Output
 
-```java
-  Info : app executing now
-  Info : app completed
-  Info : app shutting down
-  Info : ===============================================================
-  Info : SUMMARY :
-  Info : ===============================================================
-  Info : name          = sampleapp
-  Info : desc          = sample app to show the appprocess base class, template methods, and functionality
-  Info : version       = 1.0.0.3
-  Info : tags          = feature_01
-  Info : args          = Some([Ljava.lang.String;@9304022)
-  Info : env           = qa
-  Info : config        = qa.config
-  Info : log           = sampleapp-qa-2016-4-13-3-1-14.log
-  Info : region        = usa.ny
-  Info : started       = 2016-4-13 3:1:14
-  Info : ended         = 2016-4-13 3:1:15
-  Info : duration      = slate.common.TimeSpan@3ec27ce4
-  Info : status        = ended
-  Info : errors        = 0
-  Info : error         = n/a
-  Info : host.name     = KREDDY
-  Info : host.ip       = Windows 7
-  Info : host.origin   = local
-  Info : host.version  = 6.1
-  Info : lang.name     = scala
-  Info : lang.version  = 2.11.7
-  Info : lang.java     = local
-  Info : lang.home     = C:/Tools/Java/jdk1.7.0_79/jre
-  Info : sampleapp: extra 1  = extra summary data1
-  Info : sampleapp: extra 2  = extra summary data2
-  Info : ===============================================================
+```bat
+ Info  : app executing now
+ Info  : app completed
+ Info  : app shutting down
+ Info  : ===============================================================
+ Info  : SUMMARY :
+ Info  : ===============================================================
+ Info  : name              = Slate Sample App
+ Info  : desc              = Sample to show the base application
+ Info  : version           = 0.9.1
+ Info  : tags              =
+ Info  : group             =
+ Info  : region            =
+ Info  : contact           = kishore@abc.co
+ Info  : url               =
+ Info  : args              =
+ Info  : env               = dev
+ Info  : config            = env.conf
+ Info  : log               = local:dev
+ Info  : started           = 2017-07-11T11:54:13.132-04:00[America/New_York]
+ Info  : ended             = 2017-07-11T11:54:18.408-04:00[America/New_York]
+ Info  : duration          = PT5.276S
+ Info  : status            = ended
+ Info  : errors            = 0
+ Info  : error             = n/a
+ Info  : host.name         = KRPC1
+ Info  : host.ip           =
+ Info  : host.origin       = Windows 10
+ Info  : host.version      = 10.0
+ Info  : lang.name         = kotlin
+ Info  : lang.version      = 1.8.0_91
+ Info  : lang.vendor       = Oracle Corporation
+ Info  : lang.java         = local
+ Info  : lang.home         = C:/Tools/Java/jdk1.8.0_91/jre
+ Info  : Slate Sample App =  extra 1  = extra summary data1
+ Info  : Slate Sample App =  extra 2  = extra summary data2
+ Info  : ===============================================================
+
 ```
-  
+    

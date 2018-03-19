@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Auth
-permalink: /mod-auth
+permalink: /kotlin-mod-auth
 ---
 
 # Auth
@@ -9,32 +9,33 @@ permalink: /mod-auth
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple authentication component to check current user role and permissions | 
-| **date**| 2017-04-12T22:59:15.633 |
-| **version** | 1.4.0  |
-| **jar** | slate.core.jar  |
-| **namespace** | slate.core.auth  |
-| **source core** | slate.core.auth.Auth.scala  |
-| **source folder** | [/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Core/src/main/scala/slate/core/auth)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Auth.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.core.jar  |
+| **namespace** | slatekit.core.auth  |
+| **source core** | slatekit.core.auth.Auth.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Auth.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
+import slatekit.common.auth.AuthConsole
+import slatekit.common.auth.User
 
-import slate.common.Result
-import slate.core.auth._
 
 
 // optional 
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 
     // Setup: Setup the Auth wrapper with the user to inspect info about the user
@@ -47,14 +48,14 @@ import slate.core.cmds.Cmd
     // * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,
     // *    and a roles based authentication, it leaves the login/logout and actual generating
     // *    of tokens to libraries such as OAuth.
-    val user2 = new User( "2", "john doe", "john", "doe", "jdoe@gmail.com", "123-456-7890", false, false, true)
-    val auth = new AuthConsole(isAuthenticated = true, user = user2, roles = "admin")
+    val user2 = User( "2", "john doe", "john", "doe", "jdoe@gmail.com", "123-456-7890", false, false, true)
+    val auth = AuthConsole(isAuthenticated = true, user = user2, roles = "admin")
     
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // CASE 1: Use the auth to check user info

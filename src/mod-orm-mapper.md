@@ -1,7 +1,7 @@
 ---
-layout: start_page
+layout: start_page_mods_utils
 title: module Orm-Mapper
-permalink: /mod-orm-mapper
+permalink: /kotlin-mod-orm-mapper
 ---
 
 # Orm-Mapper
@@ -9,124 +9,179 @@ permalink: /mod-orm-mapper
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A mapper that converts a entity to a sql create/updates | 
-| **date**| 2017-04-12T22:59:15.482 |
-| **version** | 1.4.0  |
-| **jar** | slate.entities.jar  |
-| **namespace** | slate.common.entities  |
-| **source core** | slate.common.entities.EntityMapper.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/entities)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Mapper.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Mapper.scala) |
-| **depends on** |  slate.common.jar  |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.entities.jar  |
+| **namespace** | slatekit.common.entities  |
+| **source core** | slatekit.common.entities.EntityMapper.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Mapper.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Mapper.kt){:.url-ch} |
+| **depends on** |  slatekit.common.jar  |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-import slate.common.mapper.Mapper
-import scala.annotation.meta.field
-import scala.reflect.runtime.universe._
-import slate.entities.core._
-import slate.common.{Result, Field, DateTime, Reflector}
-import slate.common.databases.DbBuilder
+import slatekit.common.DateTime
+import slatekit.common.Field
+import slatekit.common.Result
+import slatekit.common.db.types.DbSourceMySql
+import slatekit.common.Mapper
+import slatekit.meta.models.Model
+import slatekit.common.results.ResultFuncs.ok
+import slatekit.core.cmds.Cmd
+import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.EntityWithId
+import slatekit.meta.buildAddTable
+import slatekit.meta.models.ModelMapper
+
 
 
 // optional 
-import slate.core.cmds.Cmd
-import slate.common.results.ResultSupportIn
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 
-  case class Consultant (
-
-                          @(Field@field)("", true, 30)
-                          id:Long = 0L,
+    data class Movie(
+            override val id :Long = 0L,
 
 
-                          @(Field@field)("", true, 30)
-                          email:String = "",
+            @property:Field(required = true, length = 50)
+            val title :String = "",
 
 
-                          @(Field@field)("", true, 30)
-                          firstName:String = "",
+            @property:Field(length = 20)
+            val category :String = "",
 
 
-                          @(Field@field)("", true, 30)
-                          lastName:String = "",
+            @property:Field(required = true)
+            val playing :Boolean = false,
 
 
-                          @(Field@field)("", true, 50)
-                          lastLogin:DateTime  = DateTime.now(),
+            @property:Field(required = true)
+            val cost:Int,
 
 
-                          @(Field@field)("", true, -1)
-                          isEmailVerified:Boolean  = false,
+            @property:Field(required = true)
+            val rating: Double,
 
 
-                          @(Field@field)("", true, -1)
-                          status:Int  = 0,
+            @property:Field(required = true)
+            val released: DateTime,
 
 
-                          @(Field@field)("", true, -1)
-                          createdAt:DateTime  = DateTime.now(),
+            // These are the timestamp and audit fields.
+            @property:Field(required = true)
+            val createdAt : DateTime = DateTime.now(),
 
 
-                          @(Field@field)("", true, -1)
-                          createdBy:Long  = 0,
+            @property:Field(required = true)
+            val createdBy :Long  = 0,
 
 
-                          @(Field@field)("", true, -1)
-                          updatedAt:DateTime  =  DateTime.now(),
+            @property:Field(required = true)
+            val updatedAt : DateTime =  DateTime.now(),
 
 
-                          @(Field@field)("", true, -1)
-                          updatedBy:Long  = 0,
-
-
-                          @(Field@field)("",true, 50)
-                          uniqueId: String = ""
-
-                        ) extends EntityWithId with EntityUpdatable[Consultant]
-  {
-  }
-  
+            @property:Field(required = true)
+            val updatedBy :Long  = 0
+    )
+        : EntityWithId
+    {
+        companion object {
+            fun samples():List<Movie> = listOf(
+                    Movie(
+                            title = "Indiana Jones: Raiders of the Lost Ark",
+                            category = "Adventure",
+                            playing = false,
+                            cost = 10,
+                            rating = 4.5,
+                            released = DateTime.of(1985, 8, 10)
+                    ),
+                    Movie(
+                            title = "WonderWoman",
+                            category = "action",
+                            playing = true,
+                            cost = 100,
+                            rating = 4.2,
+                            released = DateTime.of(2017, 7, 4)
+                    )
+            )
+        }
+    }
+    
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
-    // CASE 1: Load the mapper with schema from the annotations on the model
-    val model = Mapper.loadSchema(typeOf[Consultant])
-    val mapper = new EntityMapper(model)
+        // NOTE: There are 3 different ways to load the schema of the entity.
+        // 1. automatically using annotations
+        // 2. manually using properties references
+        // 3. manually using methods and string names
 
-    // CASE 2: Create instance for testing
-    val person = new Consultant(
-     firstName = "share",
-     lastName = "job",
-     lastLogin = DateTime.now(),
-     email = "john.doe@gmail.com",
-     isEmailVerified = false,
-     status = 0,
-     createdAt = DateTime.now(),
-     updatedAt = DateTime.now()
-    )
 
-    // CASE 4: Get the sql for create
-    val sqlCreate = mapper.mapToSql(person, update = false, fullSql = true)
-    println(sqlCreate)
+        // CASE 1: Load the schema from the annotations on the model
+        val schema1 = ModelMapper.loadSchema(Movie::class)
 
-    // CASE 5: Get the sql for update
-    val sqlForUpdate = mapper.mapToSql(person, update = true, fullSql = true)
-    println(sqlForUpdate)
 
-    // CASE 6: Generate the table schema for mysql from the model
-    println( "table sql : " + new DbBuilder().addTable(model))
-    
+        // CASE 2: Load the schema manually using properties for type-safety
+        val schema2 = Model(Movie::class)
+                .addId(Movie::id, true)
+                .add(Movie::title     , "Title of movie"         , 5, 30)
+                .add(Movie::category  , "Category (action|drama)", 1, 20)
+                .add(Movie::playing   , "Whether its playing now")
+                .add(Movie::rating    , "Rating from users"      )
+                .add(Movie::released  , "Date of release"        )
+                .add(Movie::createdAt , "Who created record"     )
+                .add(Movie::createdBy , "When record was created")
+                .add(Movie::updatedAt , "Who updated record"     )
+                .add(Movie::updatedBy , "When record was updated")
+
+
+        // CASE 3: Load the schema manually using named fields
+        val schema3 = Model(Movie::class)
+                .addId(Movie::id, true)
+                .addText    ("title"     , "Title of movie"         , true, 1, 30)
+                .addText    ("category"  , "Category (action|drama)", true, 1, 20)
+                .addBool    ("playing"   , "Whether its playing now")
+                .addDouble  ("rating"    , "Rating from users"      )
+                .addDateTime("released"  , "Date of release"        )
+                .addDateTime("createdAt" , "Who created record"     )
+                .addLong    ("createdBy" , "When record was created")
+                .addDateTime("updatedAt" , "Who updated record"     )
+                .addLong    ("updatedBy" , "When record was updated")
+
+
+        // CASE 4: Now with a schema of the entity, you create a mapper
+        val mapper = EntityMapper (schema1)
+
+        // Create sample instance to demo the mapper
+        val movie = Movie(
+                        title = "Man Of Steel",
+                        category = "action",
+                        playing = false,
+                        cost = 100,
+                        rating = 4.0,
+                        released = DateTime.of(2015, 7, 4)
+                )
+
+        // CASE 5: Get the sql for create
+        val sqlCreate = mapper.mapToSql(movie, update = false, fullSql = true)
+        println(sqlCreate)
+
+        // CASE 6: Get the sql for update
+        val sqlForUpdate = mapper.mapToSql(movie, update = true, fullSql = true)
+        println(sqlForUpdate)
+
+        // CASE 7: Generate the table schema for mysql from the model
+        println("table sql : " + buildAddTable(DbSourceMySql(), schema1))
+        
 
 ```
 

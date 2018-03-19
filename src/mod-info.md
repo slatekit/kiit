@@ -1,7 +1,7 @@
 ---
 layout: start_page_mods_utils
 title: module Info
-permalink: /mod-info
+permalink: /kotlin-mod-info
 ---
 
 # Info
@@ -9,62 +9,64 @@ permalink: /mod-info
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Get/Set useful diagnostics about the system, language runtime, application and more | 
-| **date**| 2017-04-12T22:59:14.708 |
-| **version** | 1.4.0  |
-| **jar** | slate.common.jar  |
-| **namespace** | slate.common.info  |
-| **source core** | slate.common.info._.scala  |
-| **source folder** | [/src/lib/scala/Slate.Common/src/main/scala/slate/common/info](https://github.com/code-helix/slatekit/tree/master/src/lib/scala/Slate.Common/src/main/scala/slate/common/info)  |
-| **example** | [/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Info.scala](https://github.com/code-helix/slatekit/tree/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Info.scala) |
+| **date**| 2018-03-18 |
+| **version** | 0.9.9  |
+| **jar** | slatekit.common.jar  |
+| **namespace** | slatekit.common.info  |
+| **source core** | slatekit.common.info._.kt  |
+| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
+| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Info.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Info.kt){:.url-ch} |
 | **depends on** |   |
 
 ## Import
-```scala 
+```kotlin 
 // required 
-
-import slate.common.Result
-import slate.common.info._
+import slatekit.common.envs.Qa
+import slatekit.common.info.About
+import slatekit.common.info.Host
+import slatekit.common.info.Lang
+import slatekit.common.info.StartInfo
 
 
 // optional 
-import slate.common.envs.{Qa, Env}
-import slate.common.results.ResultSupportIn
-import slate.core.cmds.Cmd
+import slatekit.core.cmds.Cmd
+import slatekit.common.Result
+import slatekit.common.results.ResultFuncs.ok
 
 
 ```
 
 ## Setup
-```scala
+```kotlin
 
 n/a
 
 ```
 
 ## Usage
-```scala
+```kotlin
 
 
     // CASE 1: Get the host info
     val host = Host.local()
-    host.log( (name, value) => println( s"${name} : ${value}" ) )
+    host.log( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 
     // CASE 2: Get the Lang runtime info ( java version, scala version etc )
-    val lang = Lang.asScala()
-    lang.log( (name, value) => println( s"${name} : ${value}" ) )
+    val lang = Lang.kotlin()
+    lang.log( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 
     // CASE 3: Set startup info ( env, config, log, args)
-    val startup = new StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", Qa.name)
-    startup.log( (name, value) => println( s"${name} : ${value}" ) )
+    val startup = StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", Qa.name)
+    startup.log( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 
     // CASE 4: Set up info about your application.
-    val app = new About(
+    val app = About(
       id = "slatekit.examples",
       name = "My sample app",
       desc = "Sample app using Slate Kit",
@@ -77,7 +79,7 @@ n/a
       contact = "kishore@codehelix.co",
       examples = "myapp.exe -env=dev -level=info"
     )
-    app.log( (name, value) => println( s"${name} : ${value}" ) )
+    app.log( { name, value -> println( "${name} : ${value}" ) } )
     
 
 ```
@@ -87,7 +89,7 @@ n/a
 
 ```java
   // HOST INFO
-  name : KRPC1
+  api : KRPC1
   ip : Windows 10
   origin : local
   arch : amd64
@@ -95,7 +97,7 @@ n/a
   ext1 : C:/Users/kv/AppData/Local/Temp/
 
   // LANGUAGE INFO
-  name : scala
+  api : scala
   home : C:/Tools/Java/jdk1.8.0_91/jre
   versionNum : 2.11.7
   version : 1.8.0_91
@@ -109,7 +111,7 @@ n/a
   env : qa
 
   // APP INFO
-  name     : My sample app
+  api     : My sample app
   desc     : Sample app using Slate Kit
   group    : product division
   region   : usa.ny
