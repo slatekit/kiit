@@ -93,11 +93,15 @@
                       <h2 class="with-bg-text has-line" data-text="Components">About</h2>
                   </header>
                   <p class="lead limited-width">
-                      Slate Kit Architecture components are a collection of Kotlin 
-                      libraries that help you to quickly build robust, testable, 
-                      and scalable applications on the JVM. 
+                      Slate Kit can be setup fairly easily. Most of the dependencies are on Java.
+                      You can download binaries from any of the sources below. You can find the setup
+                      instructions here for all the dependencies, and for using <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin</a></strong> in Intellij or on the command line via gradle.
+                      <ul>
+                      	<li><a class="url-ch" href="releases.html">Releases</a></li>
+                      	<li><a class="url-ch" href="https://bintray.com/codehelixinc/slatekit">Bintray</a></li>
+                      	<li><a class="url-ch" href="https://github.com/code-helix/slatekit">Github</a></li>
+                      </ul>
                   </p>
-                  <h5>Slate Kit is now available on Bintray: <strong><a class="url-ch" href="https://bintray.com/codehelixinc/slatekit">Slate Kit Binaries</a></strong></h5>
                   <br/>
 			<br/>
 			
@@ -105,7 +109,7 @@
 				<header>
                   <h2 class="with-bg-text has-line" data-text="Overview">1. Overview</h2>
                 </header>
-				<p>Here is an overview of all the software required to run Slate Kit ( which is built in Kotlin ).
+				<p>Here is an overview of all the software required to run Slate Kit.
 				Also listed are suggested tools for convenience</p>
 				<br/>
 				<h2>Required</h2>
@@ -320,7 +324,7 @@ dependencies {
 						<td><strong>Common</strong></td>
 						<td>com.slatekit:slatekit-common:0.9.5</td>
 						<td>Utilities</td>
-						<td><a class="url-ch" href="kotlin-utils.html">Utils</a></td>
+						<td><a class="url-ch" href="utils.html">Utils</a></td>
 					</tr>
 					<tr class="">
 						<td><strong>Meta</strong></td>
@@ -338,7 +342,7 @@ dependencies {
 						<td><strong>Core</strong></td>
 						<td>com.slatekit:slatekit-core:0.9.5</td>
 						<td>Core Architectural Components</td>
-						<td><a class="url-ch" href="kotlin-core.html">Core</a></td>
+						<td><a class="url-ch" href="infra.html">Core</a></td>
 					</tr>
 					<tr class="">
 						<td><strong>Apis</strong></td>
@@ -489,7 +493,7 @@ dependencies {
 						<td>
 							The core library for all the sample apps. <br/><br/>
 							Contains some sample services that can be used in either the CLI or the Server Web API ( using Protocol Independent APIs )<br/><br/>
-							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+							<a class="url-ch" href="kotlin-core-apis.html">See APIs for more info</a>
 						</td>
 						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapp/">source</a></td>
 					</tr>
@@ -514,7 +518,7 @@ dependencies {
 						<td>Command line interface ( Shell )<br/><br/>
 							Provides a CLI interface for services in Sample Core Library.
 							Shows how to easily setup and run Slate Kit <strong>Protocol Independent APIs</strong>. to run in a CLI<br/><br/>
-							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+							<a class="url-ch" href="kotlin-core-apis.html">See APIs for more info</a>
 						</td>
 						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapp/">source</a></td>
 					</tr>
@@ -524,7 +528,7 @@ dependencies {
 						<td>
 							Server Web API for services in Sample Core Library <br/><br/>
 							Shows how to easily setup Slate Kit <strong>Protocol Independent APIs</strong> to run in a web container.<br/><br/>
-							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+							<a class="url-ch" href="kotlin-core-apis.html">See APIs for more info</a>
 						</td>
 						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapp/">source</a></td>
 					</tr>
