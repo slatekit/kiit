@@ -97,8 +97,22 @@
                       This will provide info on the goals, use-cases, technology, philosophy
                       and the components offered.
                   </p>
+                  <table class="table table-bordered">
+                      <tr>
+                        <td><strong><a class="url-ch" href="overview.html#section_uses">Uses</a></strong></td>
+                        <td>Use cases for using Slate Kit</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="overview.html#section_tech">Tech</a></strong></td>
+                        <td>The tech stack/tools used</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="overview.html#section_philosophy">Philosophy</a></strong></td>
+                        <td>The design philosophy</td>
+                      </tr>
+                  </table>
                   <br/>
-                  <a href="kotlin-concepts.html" class="btn btn-template">See Overview</a>
+                  <a href="overview.html" class="btn btn-template">See Overview</a>
                   <br/><br/><br/>
 
 
@@ -108,10 +122,26 @@
 
                   <p class="lead limited-width">
                       Review the setup page for requirements, dependencies, supported versions
-                      of Kotlin, MySql,
+                      of Kotlin, MySql, and optional tools. You can also find how to donwload
+                      Slate Kit binaries using Bintray, Box, Github.
                   </p>
+                  <table class="table table-bordered">
+                      <tr>
+                        <td><strong><a class="url-ch" href="kotlin-setup.html#section_overview">Overview</a></strong></td>
+                        <td>Required, optional, suggested dependencies</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="kotlin-setup.html#section_install">Install</a></strong></td>
+                        <td>How to install the dependencies</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="kotlin-setup.html#section_setup">Setup</a></strong></td>
+                        <td>How to download / reference the Slate Kit binaries</td>
+                      </tr>
+
+                  </table>
                   <br/>
-                  <a href="kotlin-concepts.html" class="btn btn-template">See Setup</a>
+                  <a href="kotlin-setup.html" class="btn btn-template">See Setup</a>
                   <br/><br/><br/>
 
 
@@ -120,11 +150,75 @@
                   </header>
 
                   <p class="lead limited-width">
-                      There are some key concepts in Slate Kit that are used throughout the project in various components. They are fairly straigh-forward, but understanding them will make 
-                      reading the docs even easier.
+                      All the components available are located in various projects for the purpose
+                      of organization and modularity. Take a look
+                      at the projects to get an understanding of where the purpose of each project
+                      and the dependencies between them.
                   </p>
+                  <table class="table table-bordered">
+                      <tr>
+                        <td ><strong>#</strong></td>
+                        <td ><strong>Project</strong></td>
+                        <td ><strong>Category</strong></td>
+                        <td ><strong>About</strong></td>
+                      </tr>
+                      <tr>
+                        <td>1</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-common</a></strong></td>
+                        <td>Utilities</td>
+                        <td>General purpose utility components to extend the standard library</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-meta">slatekit-meta</a></strong></td>
+                        <td>Reflection</td>
+                        <td>Meta / Reflection utilities that rely on kotlin.reflect ( kept separate from common )</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-entities">slatekit-entities</a></strong></td>
+                        <td>ORM</td>
+                        <td>Light-weight ORM with a DDD/Entity Services approach </td>
+                      </tr>
+                      <tr>
+                        <td>4</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core">slatekit-core</a></strong></td>
+                        <td>Core</td>
+                        <td>Contains many of the architecture components</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis">slatekit-apis</a></strong></td>
+                        <td>APIs</td>
+                        <td>Components for building Univeral APIS that can run on the CLI and Web</td>
+                      </tr>
+                      <tr>
+                        <td>6</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud">slatekit-cloud</a></strong></td>
+                        <td>Cloud</td>
+                        <td>Contains all the integrations with AWS, S3 for files, SQS for queues</td>
+                      </tr>
+                      <tr>
+                        <td>7</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-integration">slatekit-integration</a></strong></td>
+                        <td>Integration</td>
+                        <td>Integrates components from different projects to reduce cyclomatic complexity</td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-tools">slatekit-tools</a></strong></td>
+                        <td>Tools</td>
+                        <td>Tools such as docs generator and soon to come code generator for gRPC, swagger </td>
+                      </tr>
+                      <tr>
+                        <td>9</td>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-shel">slatekit-shell</a></strong></td>
+                        <td>Tools</td>
+                        <td>A CLI for creating new projects and other setup/configuration tasks</td>
+                      </tr>
+                  </table>
                   <br/>
-                  <a href="kotlin-concepts.html" class="btn btn-template">See Projects</a>
+                  <a href="overview.html#slatekit-all-projects" class="btn btn-template">See Projects</a>
                   <br/><br/><br/>
 
 
@@ -146,11 +240,24 @@
                   </header>
 
                   <p class="lead limited-width">
-                      There are some key concepts in Slate Kit that are used throughout the project in various components. They are fairly straigh-forward, but understanding them will make 
-                      reading the docs even easier.
+                      There are multiple examples, unit-tests, sample applications, and docs available to fully 
+                      understand how to use the Slate Kit components. 
                   </p>
-                  <br/>
-                  <a href="kotlin-concepts.html" class="btn btn-template">See Samples</a>
+
+                  <table class="table table-bordered">
+                      <tr>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/apps/kotlin/slatekit-sampleapps">Sample Apps</a></strong></td>
+                        <td>Sample apps for CLI, Console, Core project, Server</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples">Examples</a></strong></td>
+                        <td>All the examples for every component available</td>
+                      </tr>
+                      <tr>
+                        <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-tests/src/test/kotlin/test">Unit-Tests</a></strong></td>
+                        <td>All the unit-tests for the components</td>
+                      </tr>
+                  </table>
                   <br/><br/><br/>
 
 
