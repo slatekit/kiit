@@ -9,7 +9,7 @@ permalink: /kotlin-mod-cmd
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A variation to the command pattern to support ad-hoc execution of code, with support for metrics and time-stamps | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.cmds  |

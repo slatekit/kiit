@@ -9,7 +9,7 @@ permalink: /kotlin-mod-utils
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Various utilities available in the Slate library | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.console  |

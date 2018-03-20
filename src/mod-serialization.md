@@ -9,7 +9,7 @@ permalink: /kotlin-mod-serialization
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Serializers for data classes to generate CSV, Props, HOCON, JSON files | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.serialization  |

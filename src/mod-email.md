@@ -9,7 +9,7 @@ permalink: /kotlin-mod-email
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | An Email service to send emails with support for templates using SendGrid as the default implementation | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.sms  |

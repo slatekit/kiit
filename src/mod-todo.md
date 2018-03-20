@@ -9,7 +9,7 @@ permalink: /kotlin-mod-todo
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A programmatic approach to marking and tagging code that is strongly typed and consistent | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common  |

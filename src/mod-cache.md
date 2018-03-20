@@ -9,7 +9,7 @@ permalink: /kotlin-mod-cache
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Light-weight cache to load, store, and refresh data, with support for metrics and time-stamps. Default in-memory implementation available | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.cache  |

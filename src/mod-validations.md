@@ -9,7 +9,7 @@ permalink: /kotlin-mod-validations
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A set of validation related components, simple validation checks, RegEx checks, error collection and custom validators | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.validation  |

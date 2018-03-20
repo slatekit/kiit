@@ -9,7 +9,7 @@ permalink: /kotlin-mod-aws-sqs
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Abstraction layer on message queues using Amazon SQS | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.cloud.jar  |
 | **namespace** | slatekit.cloud.aws  |

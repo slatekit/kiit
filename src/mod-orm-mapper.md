@@ -9,7 +9,7 @@ permalink: /kotlin-mod-orm-mapper
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A mapper that converts a entity to a sql create/updates | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.entities.jar  |
 | **namespace** | slatekit.common.entities  |

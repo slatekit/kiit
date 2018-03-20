@@ -9,7 +9,7 @@ permalink: /kotlin-mod-ctx
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | An application context to contain common dependencies such as configs, logger, encryptor, etc, to be accessible to other components | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.common  |

@@ -9,7 +9,7 @@ permalink: /kotlin-mod-orm-setup
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A registration system for entities and their corresponding repository/service impelementations | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slate.entities.jar  |
 | **namespace** | slatekit.common.entities  |

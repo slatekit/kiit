@@ -9,7 +9,7 @@ permalink: /kotlin-mod-orm-repo
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A repository pattern for entity/model CRUD operations | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.entities.jar  |
 | **namespace** | slatekit.common.entities  |

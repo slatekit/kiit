@@ -9,7 +9,7 @@ permalink: /kotlin-mod-datetime
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | DataTime wrapper around Java 8 LocalDateTime providing a simplified interface, some convenience, extra features. | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common  |

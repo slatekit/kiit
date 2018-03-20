@@ -9,7 +9,7 @@ permalink: /kotlin-mod-aws-s3
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Abstraction layer on cloud file storage to Amazon S3 | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.cloud.jar  |
 | **namespace** | slatekit.cloud.aws  |

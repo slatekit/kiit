@@ -9,7 +9,7 @@ permalink: /kotlin-mod-timer
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A timer to benchmark time/duration of code blocks | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common  |

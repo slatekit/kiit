@@ -9,7 +9,7 @@ permalink: /kotlin-mod-shell
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A CLI ( Command Line Interface ) you can extend / hook into to run handle user. Can also be used to execute your APIs | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.cli  |

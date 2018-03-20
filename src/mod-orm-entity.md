@@ -9,7 +9,7 @@ permalink: /kotlin-mod-orm-entity
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base class for persistent domain entities | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.entities.jar  |
 | **namespace** | slatekit.common.entities  |

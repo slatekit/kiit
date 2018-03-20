@@ -9,7 +9,7 @@ permalink: /kotlin-mod-request
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Models and abstracts a request that can represent either an HTTP request or a request from the CLI ( Command line ). | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common  |

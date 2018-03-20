@@ -9,7 +9,7 @@ permalink: /kotlin-mod-auth
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple authentication component to check current user role and permissions | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.auth  |

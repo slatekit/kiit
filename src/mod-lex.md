@@ -9,7 +9,7 @@ permalink: /kotlin-mod-lex
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Lexer for parsing text into tokens | 
-| **date**| 2018-03-18 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.lex  |
