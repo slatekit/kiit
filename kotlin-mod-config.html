@@ -138,8 +138,9 @@
 </span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> 
+<span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.conf.ConfFuncs</span>
 <span class="k">import</span> <span class="nn">slatekit.common.conf.Config</span>
 <span class="k">import</span> <span class="nn">slatekit.common.db.DbCon</span>
@@ -165,9 +166,9 @@
         <span class="c1">// CASE 1: Load up config from resources directory
 </span>        <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">)</span>
 
-        <span class="c1">// CASE 2: Get typed value: non-nullable
-</span>        <span class="c1">// NOTE: default value for typed returned if unavailable
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
+        <span class="c1">// CASE 2: Get typed value: non-nullable</span>        
+        <span class="c1">// NOTE: default value for typed returned if unavailable</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShort</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">))</span>
@@ -175,8 +176,8 @@
         <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDouble</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">))</span>
 
-        <span class="c1">// CASE 3: Get typed value: nullable e.g. Int?
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOpt</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
+        <span class="c1">// CASE 3: Get typed value: nullable e.g. Int?</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOpt</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getStringOpt</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShortOpt</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">))</span>
@@ -184,8 +185,8 @@
         <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloatOpt</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDoubleOpt</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">))</span>
 
-        <span class="c1">// CASE 4: Get typed value: with default value if unavailable.
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOrElse</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
+        <span class="c1">// CASE 4: Get typed value: with default value if unavailable.</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOrElse</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getStringOrElse</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShortOrElse</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>

@@ -134,16 +134,17 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.auth.AuthConsole</span>
-<span class="k">import</span> <span class="nn">slatekit.common.auth.User</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// required </span>
+  <span class="k">import</span> <span class="nn">slatekit.common.auth.AuthConsole</span>
+  <span class="k">import</span> <span class="nn">slatekit.common.auth.User</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
-<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
-<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+  <span class="c1">// optional</span>
+  <span class="k">import</span> 
+  <span class="nn">slatekit.core.cmds.Cmd</span>
+  <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+  <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
 
 </code></pre>
@@ -152,17 +153,17 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Setup: Setup the Auth wrapper with the user to inspect info about the user
-</span>    <span class="c1">// NOTES:
-</span>    <span class="c1">// * 1. This component does NOT handle any actual login/logout/authorization features.
-</span>    <span class="c1">// * 2. This set of classes are only used to inspect information about a user.
-</span>    <span class="c1">// * 3. Since authorization is a fairly complex feature with implementations such as
-</span>    <span class="c1">// *    OAuth, Social Auth, Slate Kit has purposely left out the Authentication to more reliable
-</span>    <span class="c1">// *    libraries and frameworks.
-</span>    <span class="c1">// * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,
-</span>    <span class="c1">// *    and a roles based authentication, it leaves the login/logout and actual generating
-</span>    <span class="c1">// *    of tokens to libraries such as OAuth.
-</span>    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"john doe"</span><span class="p">,</span> <span class="s">"john"</span><span class="p">,</span> <span class="s">"doe"</span><span class="p">,</span> <span class="s">"jdoe@gmail.com"</span><span class="p">,</span> <span class="s">"123-456-7890"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
+    <span class="c1">// Setup: Setup the Auth wrapper with the user to inspect info about the user</span>    
+    <span class="c1">// NOTES:</span>    
+    <span class="c1">// * 1. This component does NOT handle any actual login/logout/authorization features.</span>    
+    <span class="c1">// * 2. This set of classes are only used to inspect information about a user.</span>    
+    <span class="c1">// * 3. Since authorization is a fairly complex feature with implementations such as</span>    
+    <span class="c1">// *    OAuth, Social Auth, Slate Kit has purposely left out the Authentication to more reliable</span>    
+    <span class="c1">// *    libraries and frameworks.</span>    
+    <span class="c1">// * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,</span>    
+    <span class="c1">// *    and a roles based authentication, it leaves the login/logout and actual generating</span>    
+    <span class="c1">// *    of tokens to libraries such as OAuth.</span>    
+    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span> <span class="s">"2"</span><span class="p">,</span> <span class="s">"john doe"</span><span class="p">,</span> <span class="s">"john"</span><span class="p">,</span> <span class="s">"doe"</span><span class="p">,</span> <span class="s">"jdoe@gmail.com"</span><span class="p">,</span> <span class="s">"123-456-7890"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">auth</span> <span class="p">=</span> <span class="n">AuthConsole</span><span class="p">(</span><span class="n">isAuthenticated</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">user</span> <span class="p">=</span> <span class="n">user2</span><span class="p">,</span> <span class="n">roles</span> <span class="p">=</span> <span class="s">"admin"</span><span class="p">)</span>
     
 
@@ -172,8 +173,8 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Use the auth to check user info
-</span>    <span class="n">println</span> <span class="p">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="p">)</span>
+    <span class="c1">// CASE 1: Use the auth to check user info</span>    
+    <span class="n">println</span> <span class="p">(</span><span class="s">"Checking auth info in desktop/local mode"</span> <span class="p">)</span>
     <span class="n">println</span> <span class="p">(</span> <span class="s">"user info         : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">user</span>                   <span class="p">)</span>
     <span class="n">println</span> <span class="p">(</span> <span class="s">"user id           : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">userId</span>                 <span class="p">)</span>
     <span class="n">println</span> <span class="p">(</span> <span class="s">"is authenticated  : "</span> <span class="p">+</span> <span class="n">auth</span><span class="p">.</span><span class="n">isAuthenticated</span>        <span class="p">)</span>
