@@ -134,15 +134,13 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cache.Cache</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cache.Cache</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cache.CacheSettings</span>
 
 
-
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -164,71 +162,71 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Put a non-expiring item in the cache
-</span>    <span class="c1">// NOTE: This loads the data into the cache using the function ( fetchers param )
-</span>    <span class="c1">// supplied. The loading is done asynchronously in a future.
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">,</span> <span class="s">"recent movies"</span><span class="p">,</span> <span class="m">300</span><span class="p">,</span> <span class="p">{</span> <span class="p">-&gt;</span>
+    <span class="c1">// CASE 1: Put a non-expiring item in the cache</span>
+    <span class="c1">// NOTE: This loads the data into the cache using the function ( fetchers param )</span>
+    <span class="c1">// supplied. The loading is done asynchronously in a future.</span>
+    <span class="n">cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">,</span> <span class="s">"recent movies"</span><span class="p">,</span> <span class="m">300</span><span class="p">,</span> <span class="p">{</span> <span class="p">-&gt;</span>
       <span class="n">listOf</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="s">"Arrival"</span><span class="p">),</span> <span class="n">Movie</span><span class="p">(</span><span class="s">"Lego Batman"</span><span class="p">))</span>
     <span class="p">})</span>
 
-    <span class="c1">// CASE 2: Put an item that expires in 300 seconds ( 5 minutes )
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"top"</span><span class="p">,</span> <span class="s">"top movies"</span><span class="p">,</span> <span class="m">300</span><span class="p">,</span> <span class="p">{</span> <span class="p">-&gt;</span>
+    <span class="c1">// CASE 2: Put an item that expires in 300 seconds ( 5 minutes )</span>    
+    <span class="n">cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"top"</span><span class="p">,</span> <span class="s">"top movies"</span><span class="p">,</span> <span class="m">300</span><span class="p">,</span> <span class="p">{</span> <span class="p">-&gt;</span>
       <span class="n">listOf</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="s">"Indiana Jones"</span><span class="p">),</span> <span class="n">Movie</span><span class="p">(</span><span class="s">"Batman"</span><span class="p">))</span>
     <span class="p">})</span>
     <span class="n">cache</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"trending"</span><span class="p">,</span> <span class="s">"trending movies"</span><span class="p">,</span> <span class="m">300</span><span class="p">,</span> <span class="p">{</span> <span class="p">-&gt;</span>
       <span class="n">listOf</span><span class="p">(</span><span class="n">Movie</span><span class="p">(</span><span class="s">"Dr. Strange"</span><span class="p">))</span>
     <span class="p">})</span>
 
-    <span class="c1">// CASE 3: Get the total number of items in cache
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">cache</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+    <span class="c1">// CASE 3: Get the total number of items in cache</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">cache</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
 
-    <span class="c1">// CASE 4: Get one of the items in cache ( expects to be available and alive(not expired))
-</span>    <span class="kd">val</span> <span class="py">recent</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="k">get</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 4: Get one of the items in cache ( expects to be available and alive(not expired))</span>    
+    <span class="kd">val</span> <span class="py">recent</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="k">get</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">recent</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 5: Get one of the items in cache if it exists and isAlive,
-</span>    <span class="c1">// otherwise, loads/refreshes it again and gives you back a Future
-</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getOrLoad</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 5: Get one of the items in cache if it exists and isAlive,</span>    
+    <span class="c1">// otherwise, loads/refreshes it again and gives you back a Future</span>    
+    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getOrLoad</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-    <span class="c1">// CASE 6: Get one of the items in cache via an explicit refresh
-</span>    <span class="kd">val</span> <span class="py">refresh</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getFresh</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 6: Get one of the items in cache via an explicit refresh</span>    
+    <span class="kd">val</span> <span class="py">refresh</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getFresh</span><span class="p">&lt;</span><span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;&gt;(</span><span class="s">"recent-movies"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">refresh</span><span class="p">)</span>
 
-    <span class="c1">// CASE 7: Explicitly refresh one of the items ( without caring about getting notified )
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">refresh</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 7: Explicitly refresh one of the items ( without caring about getting notified )</span>    
+    <span class="n">cache</span><span class="p">.</span><span class="n">refresh</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
 
-    <span class="c1">// CASE 8: Invalidate a cache item by setting it to expired
-</span>    <span class="c1">// NOTE: This will result in :
-</span>    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item
-</span>    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">invalidate</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 8: Invalidate a cache item by setting it to expired</span>
+    <span class="c1">// NOTE: This will result in :</span>
+    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item</span>
+    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh</span>
+    <span class="n">cache</span><span class="p">.</span><span class="n">invalidate</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
 
-    <span class="c1">// CASE 9: Invalidates all the cache items setting their time to expired.
-</span>    <span class="c1">// NOTE: This will result in :
-</span>    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item
-</span>    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">invalidateAll</span><span class="p">()</span>
+    <span class="c1">// CASE 9: Invalidates all the cache items setting their time to expired.</span>
+    <span class="c1">// NOTE: This will result in :</span>
+    <span class="c1">// 1. get[T](key) calls returning null but triggering a refresh for that item</span>
+    <span class="c1">// 2. getOrLoad[T](key) calls calling refresh</span>
+    <span class="n">cache</span><span class="p">.</span><span class="n">invalidateAll</span><span class="p">()</span>
 
-    <span class="c1">// CASE 10: Removes the cache item completely.
-</span>    <span class="c1">// NOTE: This will not be accessible anymore until you call .put again.
-</span>    <span class="n">cache</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"top-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 10: Removes the cache item completely.</span>
+    <span class="c1">// NOTE: This will not be accessible anymore until you call .put again.</span>
+    <span class="n">cache</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="s">"top-movies"</span><span class="p">)</span>
 
-    <span class="c1">// CASE 11: Get the cache item entry ( contains data + metadata )
-</span>    <span class="kd">val</span> <span class="py">recentEntry</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getCacheItem</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
+    <span class="c1">// CASE 11: Get the cache item entry ( contains data + metadata )</span>
+    <span class="kd">val</span> <span class="py">recentEntry</span> <span class="p">=</span> <span class="n">cache</span><span class="p">.</span><span class="n">getCacheItem</span><span class="p">(</span><span class="s">"recent-movies"</span><span class="p">)</span>
 
-    <span class="c1">// Print info about the cache item
-</span>    <span class="c1">// - key         : the name of the cache key
-</span>    <span class="c1">// - text        : an optional description of the cache item
-</span>    <span class="c1">// - seconds     : number of seconds to cache before it is invalidated
-</span>    <span class="c1">// - expires     : the expiration time
-</span>    <span class="c1">// - updated     : last time the item was refreshed/updated
-</span>    <span class="c1">// - accessCount : number of times accessed
-</span>    <span class="c1">// - accessed    : last time it was accessed
-</span>    <span class="c1">// - error       : last exception when refreshing
-</span>    <span class="c1">// - errorCount  : total number of exceptions
-</span>    <span class="c1">// NOTE: just using ".get" here for example purposes
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">key</span>         <span class="p">)</span>
+    <span class="c1">// Print info about the cache item</span>
+    <span class="c1">// - key         : the name of the cache key</span>
+    <span class="c1">// - text        : an optional description of the cache item</span>
+    <span class="c1">// - seconds     : number of seconds to cache before it is invalidated</span>
+    <span class="c1">// - expires     : the expiration time</span>
+    <span class="c1">// - updated     : last time the item was refreshed/updated</span>
+    <span class="c1">// - accessCount : number of times accessed</span>
+    <span class="c1">// - accessed    : last time it was accessed</span>
+    <span class="c1">// - error       : last exception when refreshing</span>
+    <span class="c1">// - errorCount  : total number of exceptions</span>
+    <span class="c1">// NOTE: just using ".get" here for example purposes</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">key</span>         <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">text</span>        <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">seconds</span>     <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">recentEntry</span><span class="o">?.</span><span class="n">expires</span>     <span class="p">)</span>

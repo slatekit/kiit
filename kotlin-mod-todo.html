@@ -134,8 +134,8 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">TODO.BUG</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">TODO.BUG</span>
 <span class="k">import</span> <span class="nn">TODO.IMPLEMENT</span>
 <span class="k">import</span> <span class="nn">TODO.REFACTOR</span>
 <span class="k">import</span> <span class="nn">TODO.REMOVE</span>
@@ -143,9 +143,8 @@
 <span class="k">import</span> <span class="nn">slatekit.common.console.*</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -163,25 +162,23 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// About: Strongly typed, structured representation of code notes/tasks
-</span>    <span class="c1">// This is in code to enforce consistent usage and to be able
-</span>    <span class="c1">// to track code usages
-</span>
-    <span class="c1">// Use case 1: Implement
-</span>    <span class="n">IMPLEMENT</span><span class="p">(</span><span class="s">"Component 1"</span><span class="p">,</span> <span class="s">"This code needs further error handling"</span> <span class="p">)</span>
+    <span class="c1">// About: Strongly typed, structured representation of code notes/tasks</span>    
+    <span class="c1">// This is in code to enforce consistent usage and to be able</span>    
+    <span class="c1">// to track code usages</span>
+    <span class="c1">// Use case 1: Implement</span>    
+    <span class="n">IMPLEMENT</span><span class="p">(</span><span class="s">"Component 1"</span><span class="p">,</span> <span class="s">"This code needs further error handling"</span> <span class="p">)</span>
 
-    <span class="c1">// Use case 2: Supply a block of code to refactor
-</span>    <span class="n">REFACTOR</span><span class="p">(</span><span class="s">"Feature 2"</span><span class="p">,</span> <span class="s">"Refactor logic to handle empty values"</span><span class="p">,</span> <span class="p">{</span>
-      <span class="c1">// Your code to refactor goes here
-</span>    <span class="p">})</span>
+    <span class="c1">// Use case 2: Supply a block of code to refactor</span>    
+    <span class="n">REFACTOR</span><span class="p">(</span><span class="s">"Feature 2"</span><span class="p">,</span> <span class="s">"Refactor logic to handle empty values"</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// Your code to refactor goes here</span>    <span class="p">})</span>
 
-    <span class="c1">// Use case 3: Mark a bug
-</span>    <span class="n">BUG</span><span class="p">(</span><span class="s">"Component 3"</span><span class="p">,</span> <span class="s">"invalid data, bug fix needed"</span><span class="p">,</span> <span class="s">"JIRA:12434"</span> <span class="p">)</span>
+    <span class="c1">// Use case 3: Mark a bug</span>    
+    <span class="n">BUG</span><span class="p">(</span><span class="s">"Component 3"</span><span class="p">,</span> <span class="s">"invalid data, bug fix needed"</span><span class="p">,</span> <span class="s">"JIRA:12434"</span> <span class="p">)</span>
 
-    <span class="c1">// Use case 4: Code removal tag
-</span>    <span class="n">REMOVE</span><span class="p">(</span><span class="s">"Story 123"</span><span class="p">,</span> <span class="s">"@kishore, this code no longer needed"</span><span class="p">,</span> <span class="p">{</span>
-      <span class="c1">// Your code to remove here.
-</span>    <span class="p">})</span>
+    <span class="c1">// Use case 4: Code removal tag</span>    
+    <span class="n">REMOVE</span><span class="p">(</span><span class="s">"Story 123"</span><span class="p">,</span> <span class="s">"@kishore, this code no longer needed"</span><span class="p">,</span> <span class="p">{</span>
+      <span class="c1">// Your code to remove here.</span>    
+    <span class="p">})</span>
     
 
 </code></pre>

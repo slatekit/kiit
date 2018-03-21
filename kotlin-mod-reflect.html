@@ -134,16 +134,15 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.apis.Api</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.apis.Api</span>
 <span class="k">import</span> <span class="nn">slatekit.apis.ApiAction</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Field</span>
 <span class="k">import</span> <span class="nn">slatekit.meta.Reflector</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.examples.common.User</span>
@@ -170,67 +169,66 @@
     <span class="kd">val</span> <span class="py">ctx</span> <span class="p">=</span> <span class="n">AppEntContext</span><span class="p">.</span><span class="n">sample</span><span class="p">(</span><span class="s">"sample"</span><span class="p">,</span> <span class="s">"sample"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">api</span> <span class="p">=</span> <span class="n">UserApi</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
 
-    <span class="c1">// CASE 1: Create instance of a class ( will pick a 0 parameter constructor )
-</span>    <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">create</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="c1">// CASE 1: Create instance of a class ( will pick a 0 parameter constructor )</span>    
+    <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">create</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"user: "</span> <span class="p">+</span> <span class="n">user</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 2: Get a field value
-</span>    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">email</span> <span class="p">=</span> <span class="s">"johndoe@home.com"</span><span class="p">)</span>
+    <span class="c1">// CASE 2: Get a field value</span>    
+    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">user</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">email</span> <span class="p">=</span> <span class="s">"johndoe@home.com"</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">name</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getFieldValue</span><span class="p">(</span><span class="n">user2</span><span class="p">,</span> <span class="s">"email"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"email : "</span> <span class="p">+</span> <span class="n">name</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 3: Set a field value
-</span>    <span class="n">Reflector</span><span class="p">.</span><span class="n">setFieldValue</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s">"email"</span><span class="p">,</span> <span class="s">"johndoe@work.com"</span><span class="p">)</span>
+    <span class="c1">// CASE 3: Set a field value</span>    
+    <span class="n">Reflector</span><span class="p">.</span><span class="n">setFieldValue</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="s">"email"</span><span class="p">,</span> <span class="s">"johndoe@work.com"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"email : "</span> <span class="p">+</span> <span class="n">user</span><span class="p">.</span><span class="n">email</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 4: Call a method with parameters
-</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">callMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="s">"create"</span><span class="p">,</span> <span class="n">arrayOf</span><span class="p">(</span><span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">))</span>
+    <span class="c1">// CASE 4: Call a method with parameters</span>    
+    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">callMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">api</span><span class="p">,</span> <span class="s">"create"</span><span class="p">,</span> <span class="n">arrayOf</span><span class="p">(</span><span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">))</span>
     <span class="n">println</span><span class="p">((</span><span class="n">result</span> <span class="k">as</span> <span class="n">User</span> <span class="p">).</span><span class="n">toString</span><span class="p">())</span>
 
 
-    <span class="c1">// CASE 5: Get a class level annotation
-</span>    <span class="c1">// NOTE: The annotation must be created with all parameters ( not named parameters )
-</span>    <span class="kd">val</span> <span class="py">annoCls</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotationForClass</span><span class="p">&lt;</span><span class="n">Api</span><span class="p">&gt;(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Api</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="c1">// CASE 5: Get a class level annotation</span>    
+    <span class="c1">// NOTE: The annotation must be created with all parameters ( not named parameters )</span>    
+    <span class="kd">val</span> <span class="py">annoCls</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotationForClass</span><span class="p">&lt;</span><span class="n">Api</span><span class="p">&gt;(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Api</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">annoCls</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 6: Get a method level annotations
-</span>    <span class="c1">// NOTE: The annotation must be created with all parameters
-</span>    <span class="kd">val</span> <span class="py">annoMems</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotatedMembers</span><span class="p">&lt;</span><span class="n">ApiAction</span><span class="p">&gt;(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">ApiAction</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="c1">// CASE 6: Get a method level annotations</span>    
+    <span class="c1">// NOTE: The annotation must be created with all parameters</span>    
+    <span class="kd">val</span> <span class="py">annoMems</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotatedMembers</span><span class="p">&lt;</span><span class="n">ApiAction</span><span class="p">&gt;(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">ApiAction</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">annoMems</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 7: Get a field level annotations
-</span>    <span class="c1">// NOTE: The annotation must be created with all parameters
-</span>    <span class="kd">val</span> <span class="py">annoFlds</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotatedProps</span><span class="p">&lt;</span><span class="n">Field</span><span class="p">&gt;(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Field</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="c1">// CASE 7: Get a field level annotations</span>    
+    <span class="c1">// NOTE: The annotation must be created with all parameters</span>    
+    <span class="kd">val</span> <span class="py">annoFlds</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getAnnotatedProps</span><span class="p">&lt;</span><span class="n">Field</span><span class="p">&gt;(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Field</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">annoFlds</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 8: print parameters
-</span>    <span class="kd">val</span> <span class="py">method</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">)</span>
-    <span class="c1">//Reflector.printParams(method)
-</span>
+    <span class="c1">// CASE 8: print parameters</span>    
+    <span class="kd">val</span> <span class="py">method</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">)</span>
+    <span class="c1">//Reflector.printParams(method)</span>
 
-    <span class="c1">// CASE 10: Get method
-</span>    <span class="kd">val</span> <span class="py">sym</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"info"</span><span class="p">)</span>
+    <span class="c1">// CASE 10: Get method</span>    
+    <span class="kd">val</span> <span class="py">sym</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethod</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"info"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">sym</span><span class="o">?.</span><span class="n">name</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 11: Get method parameters
-</span>    <span class="kd">val</span> <span class="py">symArgs</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethodArgs</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">)</span>
+    <span class="c1">// CASE 11: Get method parameters</span>    
+    <span class="kd">val</span> <span class="py">symArgs</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">getMethodArgs</span><span class="p">(</span><span class="n">UserApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">symArgs</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 12: Is argument a basic type
-</span>    <span class="kd">val</span> <span class="py">argType</span> <span class="p">=</span> <span class="n">symArgs</span><span class="o">!!</span><span class="p">.</span><span class="n">toList</span><span class="p">()[</span><span class="m">0</span><span class="p">]</span>
+    <span class="c1">// CASE 12: Is argument a basic type</span>    
+    <span class="kd">val</span> <span class="py">argType</span> <span class="p">=</span> <span class="n">symArgs</span><span class="o">!!</span><span class="p">.</span><span class="n">toList</span><span class="p">()[</span><span class="m">0</span><span class="p">]</span>
     <span class="n">println</span><span class="p">(</span><span class="n">argType</span><span class="p">.</span><span class="n">type</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 13: Create instance from parameter
-</span>    <span class="kd">val</span> <span class="py">argInstance</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">create</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;(</span><span class="n">symArgs</span><span class="o">!!</span><span class="p">.</span><span class="n">toList</span><span class="p">()[</span><span class="m">0</span><span class="p">].</span><span class="n">javaClass</span><span class="p">.</span><span class="n">kotlin</span><span class="p">)</span>
+    <span class="c1">// CASE 13: Create instance from parameter</span>    
+    <span class="kd">val</span> <span class="py">argInstance</span> <span class="p">=</span> <span class="n">Reflector</span><span class="p">.</span><span class="n">create</span><span class="p">&lt;</span><span class="n">Any</span><span class="p">&gt;(</span><span class="n">symArgs</span><span class="o">!!</span><span class="p">.</span><span class="n">toList</span><span class="p">()[</span><span class="m">0</span><span class="p">].</span><span class="n">javaClass</span><span class="p">.</span><span class="n">kotlin</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">argInstance</span><span class="p">)</span>
     
 

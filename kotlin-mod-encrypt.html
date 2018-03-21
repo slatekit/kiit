@@ -134,12 +134,12 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.encrypt.Encryptor</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.encrypt.Encryptor</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -150,13 +150,13 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-  <span class="c1">// SETUP 1: Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.
-</span>  <span class="c1">// and use it as a singleton.
-</span>  <span class="kd">object</span> <span class="nc">TestEncryptor</span> <span class="p">:</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
+  <span class="c1">// SETUP 1: Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.</span>  
+  <span class="c1">// and use it as a singleton.</span>  
+  <span class="kd">object</span> <span class="nc">TestEncryptor</span> <span class="p">:</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
 
 
-  <span class="c1">// SETUP 2: Create an instance encryptor
-</span>  <span class="kd">val</span> <span class="py">encryptor</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
+  <span class="c1">// SETUP 2: Create an instance encryptor</span>  
+  <span class="kd">val</span> <span class="py">encryptor</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
 
   
 
@@ -166,24 +166,24 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Encrypt using AES ( text is base64 encoded without newlines )
-</span>    <span class="kd">val</span> <span class="py">input</span> <span class="p">=</span> <span class="s">"basMoAKSKDFJrd789"</span>
+    <span class="c1">// CASE 1: Encrypt using AES ( text is base64 encoded without newlines )</span>    
+    <span class="kd">val</span> <span class="py">input</span> <span class="p">=</span> <span class="s">"basMoAKSKDFJrd789"</span>
     <span class="kd">val</span> <span class="py">encrypted</span> <span class="p">=</span> <span class="n">TestEncryptor</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 2: Decrypt using AES
-</span>    <span class="kd">val</span> <span class="py">decrypted</span> <span class="p">=</span> <span class="n">TestEncryptor</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
+    <span class="c1">// CASE 2: Decrypt using AES</span>    
+    <span class="kd">val</span> <span class="py">decrypted</span> <span class="p">=</span> <span class="n">TestEncryptor</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">decrypted</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 3: Ensure decrypted matches original
-</span>    <span class="n">println</span><span class="p">(</span><span class="n">input</span> <span class="p">==</span> <span class="n">decrypted</span><span class="p">)</span>
+    <span class="c1">// CASE 3: Ensure decrypted matches original</span>    
+    <span class="n">println</span><span class="p">(</span><span class="n">input</span> <span class="p">==</span> <span class="n">decrypted</span><span class="p">)</span>
 
 
-    <span class="c1">// CASE 4: Use the EncryptSupportIn trait to have built in encrypt/decrypt methods
-</span>    <span class="c1">// NOTE: You just have to have an _enc member field
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">encryptor</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">input</span><span class="p">))</span>
+    <span class="c1">// CASE 4: Use the EncryptSupportIn trait to have built in encrypt/decrypt methods</span>    
+    <span class="c1">// NOTE: You just have to have an _enc member field</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">encryptor</span><span class="p">.</span><span class="n">encrypt</span><span class="p">(</span><span class="n">input</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">encryptor</span><span class="p">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">)</span> <span class="p">)</span>
     
 

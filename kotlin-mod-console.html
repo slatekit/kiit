@@ -134,13 +134,11 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.console.*</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.console.*</span>
 
-
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
@@ -159,49 +157,50 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-</span>    <span class="kd">val</span> <span class="py">writer</span> <span class="p">=</span> <span class="n">ConsoleWriter</span><span class="p">()</span>
+    <span class="c1">// ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.</span>    
+    <span class="kd">val</span> <span class="py">writer</span> <span class="p">=</span> <span class="n">ConsoleWriter</span><span class="p">()</span>
 
-    <span class="c1">// Case 1: Title - prints text in title format ( CAPS + Color Cyan )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"title is in CAPS"</span><span class="p">)</span>
+    <span class="c1">// Case 1: Title - prints text in title format ( CAPS + Color Cyan )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"title is in CAPS"</span><span class="p">)</span>
 
-    <span class="c1">// Case 2: Subtitle ( Color Cyan )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">subTitle</span><span class="p">(</span><span class="s">"subtitle is in color cyan"</span><span class="p">)</span>
+    <span class="c1">// Case 2: Subtitle ( Color Cyan )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">subTitle</span><span class="p">(</span><span class="s">"subtitle is in color cyan"</span><span class="p">)</span>
 
-    <span class="c1">// Case 3: Url ( Color blue )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">url</span><span class="p">(</span><span class="s">"url is in blue"</span><span class="p">)</span>
+    <span class="c1">// Case 3: Url ( Color blue )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">url</span><span class="p">(</span><span class="s">"url is in blue"</span><span class="p">)</span>
 
-    <span class="c1">// Case 4: Highlight ( Color Yellow )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"highlight is in color"</span><span class="p">)</span>
+    <span class="c1">// Case 4: Highlight ( Color Yellow )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"highlight is in color"</span><span class="p">)</span>
 
-    <span class="c1">// Case 5: Subtitle ( Color Red )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">important</span><span class="p">(</span><span class="s">"important is red"</span><span class="p">)</span>
+    <span class="c1">// Case 5: Subtitle ( Color Red )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">important</span><span class="p">(</span><span class="s">"important is red"</span><span class="p">)</span>
 
-    <span class="c1">// Case 6: Subtitle ( Color Red )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">"error shown in red"</span><span class="p">)</span>
+    <span class="c1">// Case 6: Subtitle ( Color Red )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">"error shown in red"</span><span class="p">)</span>
 
-    <span class="c1">// Case 7: Subtitle ( Color Green )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="s">"success is in green"</span><span class="p">)</span>
+    <span class="c1">// Case 7: Subtitle ( Color Green )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="s">"success is in green"</span><span class="p">)</span>
 
-    <span class="c1">// Case 8: Tab
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">tab</span><span class="p">()</span>
+    <span class="c1">// Case 8: Tab</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">tab</span><span class="p">()</span>
 
-    <span class="c1">// Case 9: New line
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">line</span><span class="p">()</span>
+    <span class="c1">// Case 9: New line</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">line</span><span class="p">()</span>
 
-    <span class="c1">// Case 10: Label "Key :"
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">label</span><span class="p">(</span><span class="s">"Key"</span><span class="p">)</span>
+    <span class="c1">// Case 10: Label "Key :"</span>    
+    <span class="n">writer</span><span class="p">.</span>
+    <span class="n">label</span><span class="p">(</span><span class="s">"Key"</span><span class="p">)</span>
 
-    <span class="c1">// Case 11: Key/Value = "Name : Superman"
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">keyValue</span><span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Superman"</span><span class="p">)</span>
+    <span class="c1">// Case 11: Key/Value = "Name : Superman"</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">keyValue</span><span class="p">(</span><span class="s">"Name"</span><span class="p">,</span> <span class="s">"Superman"</span><span class="p">)</span>
     <span class="n">writer</span><span class="p">.</span><span class="n">lines</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
 
-    <span class="c1">// Case 12: List of items ( unordered and ordered )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">list</span><span class="p">(</span> <span class="n">listOf</span><span class="p">(</span> <span class="m">1</span><span class="p">,</span> <span class="k">true</span> <span class="p">,</span> <span class="s">"www.slatekit.com"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span> <span class="m">12.34</span> <span class="p">),</span> <span class="k">true</span><span class="p">)</span>
+    <span class="c1">// Case 12: List of items ( unordered and ordered )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">list</span><span class="p">(</span> <span class="n">listOf</span><span class="p">(</span> <span class="m">1</span><span class="p">,</span> <span class="k">true</span> <span class="p">,</span> <span class="s">"www.slatekit.com"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span> <span class="m">12.34</span> <span class="p">),</span> <span class="k">true</span><span class="p">)</span>
     <span class="n">writer</span><span class="p">.</span><span class="n">list</span><span class="p">(</span> <span class="n">listOf</span><span class="p">(</span> <span class="m">2</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"www.codehelix.co"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">(),</span> <span class="m">56.78</span> <span class="p">),</span> <span class="k">true</span><span class="p">)</span>
 
-    <span class="c1">// Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
-</span>    <span class="n">writer</span><span class="p">.</span><span class="n">writeItemsByText</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
+    <span class="c1">// Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )</span>    
+    <span class="n">writer</span><span class="p">.</span><span class="n">writeItemsByText</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
       <span class="n">ConsoleItem</span><span class="p">(</span><span class="n">Title</span>     <span class="p">,</span> <span class="s">"About App"</span>                   <span class="p">,</span> <span class="k">true</span><span class="p">),</span>
       <span class="n">ConsoleItem</span><span class="p">(</span><span class="n">Subtitle</span>  <span class="p">,</span> <span class="s">"Example of Console component"</span><span class="p">,</span> <span class="k">true</span><span class="p">),</span>
       <span class="n">ConsoleItem</span><span class="p">(</span><span class="n">Url</span>       <span class="p">,</span> <span class="s">"http://www.slatekit.com"</span>     <span class="p">,</span> <span class="k">true</span><span class="p">),</span>

@@ -134,16 +134,16 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.envs.Qa</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.envs.Qa</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.About</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.Host</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.Lang</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.StartInfo</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -161,26 +161,26 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// CASE 1: Get the host info
-</span>    <span class="kd">val</span> <span class="py">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">()</span>
+    <span class="c1">// CASE 1: Get the host info</span>    
+    <span class="kd">val</span> <span class="py">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">()</span>
     <span class="n">host</span><span class="p">.</span><span class="n">log</span><span class="p">(</span> <span class="p">{</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span> <span class="s">"${name} : ${value}"</span> <span class="p">)</span> <span class="p">}</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">()</span>
 
 
-    <span class="c1">// CASE 2: Get the Lang runtime info ( java version, scala version etc )
-</span>    <span class="kd">val</span> <span class="py">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">()</span>
+    <span class="c1">// CASE 2: Get the Lang runtime info ( java version, scala version etc )</span>    
+    <span class="kd">val</span> <span class="py">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">()</span>
     <span class="n">lang</span><span class="p">.</span><span class="n">log</span><span class="p">(</span> <span class="p">{</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span> <span class="s">"${name} : ${value}"</span> <span class="p">)</span> <span class="p">}</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">()</span>
 
 
-    <span class="c1">// CASE 3: Set startup info ( env, config, log, args)
-</span>    <span class="kd">val</span> <span class="py">startup</span> <span class="p">=</span> <span class="n">StartInfo</span><span class="p">(</span><span class="s">"-level=error"</span><span class="p">,</span> <span class="s">"{@app}-{@env}-{@date}.log"</span><span class="p">,</span> <span class="s">"{@app}.config"</span><span class="p">,</span> <span class="n">Qa</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="c1">// CASE 3: Set startup info ( env, config, log, args)</span>    
+    <span class="kd">val</span> <span class="py">startup</span> <span class="p">=</span> <span class="n">StartInfo</span><span class="p">(</span><span class="s">"-level=error"</span><span class="p">,</span> <span class="s">"{@app}-{@env}-{@date}.log"</span><span class="p">,</span> <span class="s">"{@app}.config"</span><span class="p">,</span> <span class="n">Qa</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
     <span class="n">startup</span><span class="p">.</span><span class="n">log</span><span class="p">(</span> <span class="p">{</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span> <span class="s">"${name} : ${value}"</span> <span class="p">)</span> <span class="p">}</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">()</span>
 
 
-    <span class="c1">// CASE 4: Set up info about your application.
-</span>    <span class="kd">val</span> <span class="py">app</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span>
+    <span class="c1">// CASE 4: Set up info about your application.</span>    
+    <span class="kd">val</span> <span class="py">app</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span>
       <span class="n">id</span> <span class="p">=</span> <span class="s">"slatekit.examples"</span><span class="p">,</span>
       <span class="n">name</span> <span class="p">=</span> <span class="s">"My sample app"</span><span class="p">,</span>
       <span class="n">desc</span> <span class="p">=</span> <span class="s">"Sample app using Slate Kit"</span><span class="p">,</span>

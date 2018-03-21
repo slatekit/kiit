@@ -138,8 +138,8 @@
 </span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.app.LocationUserDir</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.Folders</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
@@ -161,21 +161,21 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
 
-        <span class="c1">// CASE 1: Build a folder structure for an application
-</span>        <span class="c1">// Explicitly indicate user-directory with the following folder structure
-</span>        <span class="c1">// NOTE: Slate Kit based applications are setup this way.
-</span>        <span class="c1">//
-</span>        <span class="c1">// /c/users/{user}/
-</span>        <span class="c1">//  - company-1
-</span>        <span class="c1">//    - department-1
-</span>        <span class="c1">//      - app-1
-</span>        <span class="c1">//        - conf
-</span>        <span class="c1">//        - cache
-</span>        <span class="c1">//        - inputs
-</span>        <span class="c1">//        - logs
-</span>        <span class="c1">//        - outputs
-</span>        <span class="c1">//        - temp
-</span>        <span class="kd">val</span> <span class="py">folders</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">(</span>
+        <span class="c1">// CASE 1: Build a folder structure for an application</span>
+        <span class="c1">// Explicitly indicate user-directory with the following folder structure</span>
+        <span class="c1">// NOTE: Slate Kit based applications are setup this way.</span>
+        <span class="c1">//</span>
+        <span class="c1">// /c/users/{user}/</span>
+        <span class="c1">//  - company-1</span>
+        <span class="c1">//    - department-1</span>
+        <span class="c1">//      - app-1</span>
+        <span class="c1">//        - conf</span>
+        <span class="c1">//        - cache</span>
+        <span class="c1">//        - inputs</span>
+        <span class="c1">//        - logs</span>
+        <span class="c1">//        - outputs</span>
+        <span class="c1">//        - temp</span>
+        <span class="kd">val</span> <span class="py">folders</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">(</span>
                 <span class="n">location</span> <span class="p">=</span> <span class="n">LocationUserDir</span><span class="p">,</span>
                 <span class="n">home</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">getProperty</span><span class="p">(</span><span class="s">"user.dir"</span><span class="p">),</span>
                 <span class="n">root</span> <span class="p">=</span> <span class="s">"company-1"</span><span class="p">,</span>
@@ -189,19 +189,19 @@
                 <span class="n">conf</span> <span class="p">=</span> <span class="s">"conf"</span>
         <span class="p">)</span>
 
-        <span class="c1">// CASE 2: Build a folder structure for an application
-</span>        <span class="c1">// Same as Case 1 above but using a short-hand approach
-</span>        <span class="kd">val</span> <span class="py">folders2</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span>
+        <span class="c1">// CASE 2: Build a folder structure for an application</span>        
+        <span class="c1">// Same as Case 1 above but using a short-hand approach</span>        
+        <span class="kd">val</span> <span class="py">folders2</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span>
                 <span class="n">root</span> <span class="p">=</span> <span class="s">"company-1"</span><span class="p">,</span>
                 <span class="n">group</span> <span class="p">=</span> <span class="s">"department-1"</span><span class="p">,</span>
                 <span class="n">app</span> <span class="p">=</span> <span class="s">"app-1"</span>
         <span class="p">)</span>
 
-        <span class="c1">// CASE 3: Create the folders if they do not exist
-</span>        <span class="n">folders</span><span class="p">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="c1">// CASE 3: Create the folders if they do not exist</span>        
+        <span class="n">folders</span><span class="p">.</span><span class="n">create</span><span class="p">()</span>
 
-        <span class="c1">// CASE 4: Get the individual paths to the folders
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"app    :"</span> <span class="p">+</span> <span class="n">folders</span><span class="p">.</span><span class="n">pathToApp</span><span class="p">)</span>
+        <span class="c1">// CASE 4: Get the individual paths to the folders</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"app    :"</span> <span class="p">+</span> <span class="n">folders</span><span class="p">.</span><span class="n">pathToApp</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"cache  :"</span> <span class="p">+</span> <span class="n">folders</span><span class="p">.</span><span class="n">pathToCache</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"conf   :"</span> <span class="p">+</span> <span class="n">folders</span><span class="p">.</span><span class="n">pathToConf</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"input  :"</span> <span class="p">+</span> <span class="n">folders</span><span class="p">.</span><span class="n">pathToInputs</span><span class="p">)</span>

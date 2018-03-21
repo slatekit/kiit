@@ -134,13 +134,12 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.cloud.aws.AwsCloudQueue</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.cloud.aws.AwsCloudQueue</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -151,18 +150,17 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Not storing any key/secret in source code for security purposes
-</span>    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-</span>    <span class="kd">val</span> <span class="py">queue1</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">)</span>
+    <span class="c1">// Not storing any key/secret in source code for security purposes</span>    
+    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"</span>    
+    <span class="kd">val</span> <span class="py">queue1</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">)</span>
 
-    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
-</span>    <span class="c1">// Reads from the section "sqs" by default
-</span>    <span class="kd">val</span> <span class="py">queue2</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="s">"user://myapp/conf/queue.conf"</span><span class="p">)</span>
+    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"</span>   
+    <span class="c1">// Reads from the section "sqs" by default</span>    
+    <span class="kd">val</span> <span class="py">queue2</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="s">"user://myapp/conf/queue.conf"</span><span class="p">)</span>
 
-    <span class="c1">// Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
-</span>    <span class="c1">// Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )
-</span>    <span class="kd">val</span> <span class="py">queue3</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="s">"user://myapp/conf/queue.conf"</span><span class="p">,</span> <span class="s">"sqs-1"</span><span class="p">)</span>
-
+    <span class="c1">// Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"</span>    
+    <span class="c1">// Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )</span>    
+    <span class="kd">val</span> <span class="py">queue3</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="s">"user://myapp/conf/queue.conf"</span><span class="p">,</span> <span class="s">"sqs-1"</span><span class="p">)</span>
     
 
 </code></pre>
@@ -171,37 +169,37 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: init()
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="c1">// Use case 1: init()</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
 
-    <span class="c1">// Use case 2: send 1 message
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"scala test 1"</span><span class="p">)</span>
+    <span class="c1">// Use case 2: send 1 message</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"scala test 1"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 3: send multiple messages
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"scala test 2"</span><span class="p">)</span>
+    <span class="c1">// Use case 3: send multiple messages</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"scala test 2"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 4: send message with tags
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"user=kishore"</span><span class="p">,</span> <span class="n">tagName</span><span class="p">=</span><span class="s">"type"</span><span class="p">,</span> <span class="n">tagValue</span><span class="p">=</span><span class="s">"reg"</span><span class="p">)</span>
+    <span class="c1">// Use case 4: send message with tags</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"user=kishore"</span><span class="p">,</span> <span class="n">tagName</span><span class="p">=</span><span class="s">"type"</span><span class="p">,</span> <span class="n">tagValue</span><span class="p">=</span><span class="s">"reg"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 5: receive 1 message
-</span>    <span class="kd">val</span> <span class="py">item1</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="c1">// Use case 5: receive 1 message</span>    
+    <span class="kd">val</span> <span class="py">item1</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">getMessageBody</span><span class="p">(</span><span class="n">item1</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">getMessageTag</span><span class="p">(</span><span class="n">item1</span><span class="p">,</span> <span class="s">"type"</span><span class="p">))</span>
 
-    <span class="c1">// Use case 6: recieve 2 messages
-</span>    <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">nextBatch</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+    <span class="c1">// Use case 6: recieve 2 messages</span>    
+    <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">nextBatch</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
 
-    <span class="c1">// Use case 7: delete a message
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">complete</span><span class="p">(</span><span class="n">item1</span><span class="p">)</span>
+    <span class="c1">// Use case 7: delete a message</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">complete</span><span class="p">(</span><span class="n">item1</span><span class="p">)</span>
 
-    <span class="c1">// Use case 8: delete many
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">completeAll</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+    <span class="c1">// Use case 8: delete many</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">completeAll</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
 
-    <span class="c1">// Use case 9: abandon a message
-</span>    <span class="n">queue2</span><span class="p">.</span><span class="n">abandon</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">())</span>
+    <span class="c1">// Use case 9: abandon a message</span>    
+    <span class="n">queue2</span><span class="p">.</span><span class="n">abandon</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">())</span>
 
-    <span class="c1">// Use case 10: get count ( approximation )
-</span>    <span class="kd">val</span> <span class="py">count</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="c1">// Use case 10: get count ( approximation )</span>    
+    <span class="kd">val</span> <span class="py">count</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
     
 
