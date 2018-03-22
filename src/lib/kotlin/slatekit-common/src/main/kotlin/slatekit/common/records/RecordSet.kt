@@ -14,11 +14,14 @@
 package slatekit.common.records
 
 import slatekit.common.DateTime
+import slatekit.common.UniqueId
 import java.sql.ResultSet
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.UUID
+import java.nio.ByteBuffer
 
 
 class RecordSet(val rs: ResultSet) : Record {
@@ -77,4 +80,20 @@ class RecordSet(val rs: ResultSet) : Record {
 
     override fun getDateTimeAsUTC(pos:Int):DateTime = DateTime.of(rs.getTimestamp(pos) as java.sql.Timestamp).atUtcLocal()
     override fun getDateTimeAsUTC(name:String):DateTime = DateTime.of(rs.getTimestamp(name) as java.sql.Timestamp).atUtcLocal()
+
+
+    override fun getUUID(pos:Int): java.util.UUID     = UUID.fromString(rs.getString(pos))
+    override fun getUUID(name:String): java.util.UUID = UUID.fromString(rs.getString(name))
+
+
+    override fun getUniqueId(pos:Int): UniqueId     = UniqueId.fromString(rs.getString(pos))
+    override fun getUniqueId(name:String): UniqueId = UniqueId.fromString(rs.getString(name))
+
+
+    //private fun getUUIDFromBytes(bytes:ByteArray): UUID {
+    //    val buffer = ByteBuffer.wrap(bytes)
+    //    val msb = buffer.long
+    //    val lsb = buffer.long
+    //    return UUID(msb, lsb)
+    //}
 }

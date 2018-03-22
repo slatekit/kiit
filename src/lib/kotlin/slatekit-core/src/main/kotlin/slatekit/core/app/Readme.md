@@ -9,7 +9,7 @@ permalink: /kotlin-mod-app
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more | 
-| **date**| 2018-02-10 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.app  |

@@ -1,6 +1,7 @@
 package slatekit.common
 
 import slatekit.common.records.Record
+import kotlin.reflect.KClass
 
 
 interface Mapper {
@@ -15,7 +16,7 @@ interface Mapper {
      * @param args
      * @return
      */
-    fun createEntityWithArgs(args: List<Any?>?): Any
+    fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any
 
     /**
      * Maps all the parameters to a class that takes in all parameters in the constructor

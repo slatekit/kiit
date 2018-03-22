@@ -15,7 +15,9 @@ package slatekit.common.records
 
 import slatekit.common.DateTime
 import slatekit.common.ListMap
+import slatekit.common.UniqueId
 import java.time.*
+import java.util.*
 
 
 class RecordMap(val rs: ListMap<String, Any>) : Record {
@@ -74,4 +76,12 @@ class RecordMap(val rs: ListMap<String, Any>) : Record {
 
     override fun getDateTimeAsUTC(pos:Int):DateTime = DateTime.of(rs.getAt(pos) as java.sql.Timestamp, DateTime.UTC)
     override fun getDateTimeAsUTC(name:String):DateTime = DateTime.of(rs.get(name) as java.sql.Timestamp, DateTime.UTC)
+
+
+    override fun getUUID(pos:Int): java.util.UUID     = rs.getAt(pos) as UUID
+    override fun getUUID(name:String): java.util.UUID = rs.get(name) as UUID
+
+
+    override fun getUniqueId(pos:Int): UniqueId     = rs.getAt(pos) as UniqueId
+    override fun getUniqueId(name:String): UniqueId = rs.get(name) as UniqueId
 }

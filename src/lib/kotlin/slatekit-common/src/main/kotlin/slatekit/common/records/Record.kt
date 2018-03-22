@@ -15,6 +15,7 @@ package slatekit.common.records
 
 
 import slatekit.common.DateTime
+import slatekit.common.UniqueId
 import java.time.*
 
 
@@ -64,6 +65,12 @@ interface Record {
     // Assumes DateTime as UTC
     fun getDateTimeAsUTC(pos:Int):DateTime
     fun getDateTimeAsUTC(name:String):DateTime
+
+    fun getUUID(pos:Int): java.util.UUID
+    fun getUUID(name:String): java.util.UUID
+
+    fun getUniqueId(pos:Int): UniqueId
+    fun getUniqueId(name:String): UniqueId
 
 
     // ========================================================================
