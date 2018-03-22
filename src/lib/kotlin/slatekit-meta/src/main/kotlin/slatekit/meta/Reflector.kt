@@ -17,6 +17,8 @@ import kotlin.reflect.*
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
 import slatekit.common.Types
+import kotlin.reflect.jvm.javaGetter
+import kotlin.reflect.jvm.javaSetter
 
 /**
  * Created by kishorereddy on 5/23/17.
@@ -127,9 +129,18 @@ object Reflector {
     }
 
 
-    fun setFieldValue(inst: Any, name: String, value: Any) {
-        val item = findField(inst, name)
-        item?.javaField?.set(inst, value)
+    fun setFieldValue(cls:KClass<*>, inst: Any?, name: String, value: Any?) {
+        val prop = cls.declaredMemberProperties.find { it.name == name }
+        val item = prop as KMutableProperty1<Any,*>
+        item.javaSetter?.invoke(inst, value)
+    }
+
+
+    fun setFieldValue(inst: Any?, prop:KProperty<*>, value: Any?) {
+        inst?.let { inst ->
+            val item = prop as KMutableProperty1<Any, *>
+            item.javaSetter?.invoke(inst, value)
+        }
     }
 
 
@@ -179,22 +190,24 @@ object Reflector {
     fun isDataClass(cls: KClass<*>): Boolean = cls.isData
 
 
-    fun getTypeFromProperty(tpe: KProperty<*>): KClass<*> {
-        return when (tpe.returnType.toString()) {
-            "kotlin.String"            -> KTypes.KStringClass
-            "kotlin.Boolean"           -> KTypes.KBoolClass
-            "kotlin.Short"             -> KTypes.KShortClass
-            "kotlin.Int"               -> KTypes.KIntClass
-            "kotlin.Long"              -> KTypes.KLongClass
-            "kotlin.Float"             -> KTypes.KFloatClass
-            "kotlin.Double"            -> KTypes.KDoubleClass
-            "java.time.LocalDate"      -> KTypes.KLocalDateClass
-            "java.time.LocalTime"      -> KTypes.KLocalTimeClass
-            "java.time.LocalDateTime"  -> KTypes.KLocalDateTimeClass
-            "slatekit.common.DateTime" -> KTypes.KDateTimeClass
-            else                       -> Any::class
-        }
-    }
+    //fun getTypeFromProperty(tpe: KProperty<*>): KClass<*> {
+    //    return when (tpe.returnType.toString()) {
+    //        "kotlin.String"            -> KTypes.KStringClass
+    //        "kotlin.Boolean"           -> KTypes.KBoolClass
+    //        "kotlin.Short"             -> KTypes.KShortClass
+    //        "kotlin.Int"               -> KTypes.KIntClass
+    //        "kotlin.Long"              -> KTypes.KLongClass
+    //        "kotlin.Float"             -> KTypes.KFloatClass
+    //        "kotlin.Double"            -> KTypes.KDoubleClass
+    //        "java.time.LocalDate"      -> KTypes.KLocalDateClass
+    //        "java.time.LocalTime"      -> KTypes.KLocalTimeClass
+    //        "java.time.LocalDateTime"  -> KTypes.KLocalDateTimeClass
+    //        "slatekit.common.DateTime" -> KTypes.KDateTimeClass
+    //        "java.util.UUID"           -> KTypes.KUUIDClass
+    //        "slatekit.common.UniqueId" -> KTypes.KUniqueIdClass
+    //        else                       -> Any::class
+    //    }
+    //}
 
 
     //    fun findFieldJ(inst:Any, name:String): Field? {
