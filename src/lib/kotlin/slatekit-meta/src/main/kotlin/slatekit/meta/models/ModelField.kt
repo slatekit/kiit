@@ -14,13 +14,16 @@
 package slatekit.meta.models
 
 import slatekit.common.DateTime
+import slatekit.meta.KTypes
 import kotlin.reflect.*
 
 
 data class ModelField (
                          val name: String            ,
                          val desc:String             = "",
+                         val prop:KProperty<*>?      = null,
                          val dataType:KClass<*>      ,
+                         val dataKType :KType        ,
                          val storedName:String       = "",
                          val pos:Int                 = 0,
                          val isRequired:Boolean      = true,
@@ -32,7 +35,8 @@ data class ModelField (
                          val extra:String            = "",
                          val example:String          = "",
                          val tag:String              = "",
-                         val cat:String              = ""
+                         val cat:String              = "",
+                         val model:Model?            = null
                       )
 {
 
@@ -60,7 +64,7 @@ data class ModelField (
   }
 
 
-  fun dataTypeSimple():String {
+    fun dataTypeSimple():String {
     return if( dataType ==  String::class)          "text:" + maxLength
     else if(dataType == Boolean::class)             "bool"
     else if(dataType == Short::class)               "short"
@@ -69,18 +73,22 @@ data class ModelField (
     else if(dataType == Double::class)              "double"
     else if(dataType == DateTime::class)            "datetime"
     else                                            "object"
-  }
-
-
-  fun isStandard():Boolean {
-    return when (tag) {
-      "standard", "id", "meta" -> true
-      else -> false
     }
-  }
 
 
-  companion object ModelFieldFuncs {
+    fun isBasicType(): Boolean = KTypes.isBasicType(dataKType)
+
+
+
+    fun isStandard():Boolean {
+        return when (tag) {
+          "standard", "id", "meta" -> true
+          else -> false
+        }
+    }
+
+
+  companion object {
 
     /**
      * builds a new model field that is an id
@@ -89,9 +97,9 @@ data class ModelField (
      * @param autoIncrement
      * @return
      */
-    fun id ( name:String, dataType:KClass<*> ) : ModelField
+    fun id ( name:String, dataType:KClass<*>, dataKType: KType ) : ModelField
     {
-      return build(name, "", dataType, true, 0, 0, name, 0, cat = "id")
+      return build(null, name, "", dataType, dataKType,true, 0, 0, name, 0, cat = "id")
     }
 
 
@@ -110,9 +118,11 @@ data class ModelField (
      * @return
      */
     fun build(
+      prop:KProperty<*>?,
       name:String,
       desc:String = "",
       dataType:KClass<*>,
+      dataKType:KType,
       isRequired:Boolean = false,
       minLength:Int = -1,
       maxLength:Int = -1,
@@ -126,8 +136,10 @@ data class ModelField (
       val finalName = destName ?: name
       val field = ModelField (
               name = name,
-              dataType = dataType,
               desc = desc,
+              prop = prop,
+              dataType = dataType,
+              dataKType = dataKType,
               storedName = finalName,
               pos = 0,
               isRequired = isRequired,

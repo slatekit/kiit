@@ -59,11 +59,12 @@ open class ModelMapper(protected val _model: Model,
      * @param args
      * @return
      */
-    override fun createEntityWithArgs(args: List<Any?>?): Any =
-            Reflector.createWithArgs(_model.dataType!!, args?.toTypedArray() ?: arrayOf())
+    override fun createEntityWithArgs(cls:KClass<*>, args: List<Any?>?): Any =
+            Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
 
 
     fun <T> copyWithId(id: Long, entity: T): T = entity
+
 
     /**
      * Maps all the parameters to a class that takes in all parameters in the constructor
@@ -96,35 +97,9 @@ open class ModelMapper(protected val _model: Model,
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
     override fun mapFromToValType(record: Record): Any? {
-        return if (_model.any) {
-            val isUTC = _settings.persisteUTCDate
-            val data = _model.fields.map { mapping ->
-                val colName = mapping.storedName
-
-                val dataValue = when (mapping.dataType) {
-                    KTypes.KStringClass        -> record.getString(colName)
-                    KTypes.KBoolClass          -> record.getBool(colName)
-                    KTypes.KShortClass         -> record.getShort(colName)
-                    KTypes.KIntClass           -> record.getInt(colName)
-                    KTypes.KLongClass          -> record.getLong(colName)
-                    KTypes.KFloatClass         -> record.getFloat(colName)
-                    KTypes.KDoubleClass        -> record.getDouble(colName)
-                    KTypes.KLocalDateClass     -> record.getLocalDate(colName)
-                    KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
-                    KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
-                    KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
-                    KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
-                    KTypes.KInstantClass       -> record.getInstant(colName)
-                    else                       -> record.getString(colName)
-                }
-                dataValue
-            }
-            val entity = createEntityWithArgs(data)
-            entity
-        }
-        else
-            null
+        return mapFromToValType(null, record, _model)
     }
+
 
     /**
      * Maps all the parameters to a class that supports vars as fields.
@@ -135,34 +110,7 @@ open class ModelMapper(protected val _model: Model,
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
     override fun mapFromToVarType(record: Record): Any? {
-        return if (_model.any) {
-
-            val isUTC = _settings.persisteUTCDate
-            val entity: Any? = createEntity()
-            _model.fields.forEach { mapping ->
-                val colName = mapping.storedName
-
-                val dataValue = when (mapping.dataType) {
-                    KTypes.KStringClass        -> record.getString(colName)
-                    KTypes.KBoolClass          -> record.getBool(colName)
-                    KTypes.KShortClass         -> record.getShort(colName)
-                    KTypes.KIntClass           -> record.getInt(colName)
-                    KTypes.KLongClass          -> record.getLong(colName)
-                    KTypes.KFloatClass         -> record.getFloat(colName)
-                    KTypes.KDoubleClass        -> record.getDouble(colName)
-                    KTypes.KLocalDateClass     -> record.getLocalDate(colName)
-                    KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
-                    KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
-                    KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
-                    KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
-                    else                       -> record.getString(colName)
-                }
-                Reflector.setFieldValue(entity!!, mapping.name, dataValue)
-            }
-            entity
-        }
-        else
-            null
+        return mapFromToVarType(null, record, _model)
     }
 
 
@@ -184,28 +132,100 @@ open class ModelMapper(protected val _model: Model,
 
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
-
-            val fields = mutableListOf<ModelField>()
-            //val fieldId = ModelField.id("id", Long::class)
-            //fields.add(fieldId)
+            //val fields = mutableListOf<ModelField>()
 
             // Loop through each field
-            matchedFields.forEach { matchedField ->
-                matchedField.second?.let { anno ->
-                    //if (anno.name != "id") {
-                        val cat = idFieldName?.let { "id" } ?: ""
-                        val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
-                        val required = anno.required
-                        val length = anno.length
-                        val encrypt = anno.encrypt
-                        val fieldType = matchedField.first.returnType.jvmErasure
-                        fields.add(ModelField.build(name = name, dataType = fieldType, isRequired = required, maxLength = length, encrypt = encrypt, cat = cat))
-                    //}
-                }
+            val withAnnos = matchedFields.filter { it.second != null }
+            val fields = withAnnos.map { matchedField ->
+                val anno = matchedField.second!!
+                val cat = idFieldName?.let { "id" } ?: ""
+                val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
+                val required = anno.required
+                val length = anno.length
+                val encrypt = anno.encrypt
+                val prop  = matchedField.first
+                val fieldKType = matchedField.first.returnType
+                val fieldType = fieldKType.jvmErasure
+                val modelField = ModelField.build(prop = prop, name = name,
+                        dataType = fieldType,
+                        dataKType = fieldKType,
+                        isRequired = required, maxLength = length, encrypt = encrypt, cat = cat)
+
+                val finalModelField = if(!modelField.isBasicType()) {
+                    val model = loadSchema(modelField.dataType)
+                    modelField.copy(model = model)
+                } else modelField
+                finalModelField
             }
 
-            val model = Model(modelName, modelNameFull, dataType, _propList = fields.toList())
-            return model
+            return Model(modelName, modelNameFull, dataType, _propList = fields)
         }
+    }
+
+
+    private fun mapFromToValType(prefix:String?, record: Record, model:Model): Any? {
+        return if (model.any) {
+            val isUTC = _settings.persisteUTCDate
+            val data = model.fields.map { mapping ->
+                val dataValue = getDataValue(prefix, mapping, record, isUTC)
+                dataValue
+            }
+            val entity = createEntityWithArgs(model.dataType!!, data)
+            entity
+        }
+        else
+            null
+    }
+
+
+    private fun mapFromToVarType(prefix:String?, record: Record, model:Model ): Any? {
+        return if (model.any) {
+
+            val isUTC = _settings.persisteUTCDate
+            val entity: Any? = createEntity()
+            model.fields.forEach { mapping ->
+                val dataValue = getDataValue(prefix, mapping, record, isUTC)
+                mapping.prop?.let { prop ->
+                     Reflector.setFieldValue(entity, prop, dataValue)
+                } ?: Reflector.setFieldValue(model.dataType!!, entity, mapping.name, dataValue)
+            }
+            entity
+        }
+        else
+            null
+    }
+
+
+    /**
+     * @param prefix : Used as the prefix for column names for mapping embedded objects
+     * @param mapping: ModelField containing all the meta data
+     * @parma record : Record holding the source data available via position/name
+     * @param isUTC  : Whether to handle dates as UTC
+     */
+    @Suppress("IMPLICIT_CAST_TO_ANY")
+    private fun getDataValue(prefix:String?, mapping:ModelField, record:Record, isUTC:Boolean): Any? {
+        val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
+        val dataValue = when (mapping.dataType) {
+            KTypes.KStringClass        -> record.getString(colName)
+            KTypes.KBoolClass          -> record.getBool(colName)
+            KTypes.KShortClass         -> record.getShort(colName)
+            KTypes.KIntClass           -> record.getInt(colName)
+            KTypes.KLongClass          -> record.getLong(colName)
+            KTypes.KFloatClass         -> record.getFloat(colName)
+            KTypes.KDoubleClass        -> record.getDouble(colName)
+            KTypes.KLocalDateClass     -> record.getLocalDate(colName)
+            KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
+            KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
+            KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
+            KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
+            KTypes.KInstantClass       -> record.getInstant(colName)
+            KTypes.KUUIDClass          -> record.getUUID(colName)
+            KTypes.KUniqueIdClass      -> record.getUniqueId(colName)
+            else                       -> {
+                val model = mapFromToValType(mapping.name + "_", record, mapping.model!!)
+                model
+            }
+        }
+        return dataValue
     }
 }
