@@ -11,7 +11,6 @@
 
 package slatekit.meta.db
 
-import slatekit.common.Types
 import slatekit.meta.KTypes
 import kotlin.reflect.KClass
 

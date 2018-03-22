@@ -16,6 +16,7 @@ package slatekit.entities.core
 
 
 import slatekit.common.DateTime
+import slatekit.common.UniqueId
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.nonEmptyOrDefault
 import slatekit.common.query.QueryEncoder
@@ -34,9 +35,9 @@ import java.time.format.DateTimeFormatter
  */
 open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:Encryptor? = null) : ModelMapper(model, _encryptor = encryptor) {
 
-    protected val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    protected val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    protected val dateTimeFormat:DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    private val dateTimeFormat:DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
 
     fun mapToSql(item: Any, update: Boolean, fullSql: Boolean = false): String {
@@ -124,6 +125,16 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
                     val raw = Reflector.getFieldValue(item, mapping.name) as Instant
                     //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
                     "'" + LocalDateTime.ofInstant(raw, ZoneId.systemDefault()).format(dateTimeFormat) + "'"
+                }
+                else if (mapping.dataType == KTypes.KUUIDClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID
+                    //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
+                    "'" + raw.toString() + "'"
+                }
+                else if (mapping.dataType == KTypes.KUniqueIdClass) {
+                    val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId
+                    //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
+                    "'" + raw.toString() + "'"
                 }
                 else // Object
                 {

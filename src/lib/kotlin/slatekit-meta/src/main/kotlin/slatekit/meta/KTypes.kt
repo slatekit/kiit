@@ -25,6 +25,8 @@ object KTypes {
     val KLocalDateTimeClass  = LocalDateTime::class
     val KZonedDateTimeClass  = ZonedDateTime::class
     val KInstantClass        = Instant::class
+    val KUUIDClass           = java.util.UUID::class
+    val KUniqueIdClass       = UniqueId::class
     val KDocClass            = Doc::class
     val KVarsClass           = Vars::class
     val KSmartStringClass    = SmartString::class
@@ -49,6 +51,8 @@ object KTypes {
     val KLocalDateTimeType = LocalDateTime::class.createType()
     val KZonedDateTimeType = ZonedDateTime::class.createType()
     val KInstantType       = Instant::class.createType()
+    val KUUIDType          = java.util.UUID::class.createType()
+    val KUniqueIdType      = UniqueId::class.createType()
     val KDocType           = Doc::class.createType()
     val KVarsType          = Vars::class.createType()
     val KSmartStringType   = SmartString::class.createType()
@@ -76,6 +80,8 @@ object KTypes {
             KLocalDateTimeType -> KLocalDateTimeClass
             KZonedDateTimeType -> KZonedDateTimeClass
             KInstantType       -> KInstantClass
+            KUUIDType          -> KUUIDClass
+            KUniqueIdType      -> KUniqueIdClass
             KDocType           -> KDocClass
             KVarsType          -> KVarsClass
             KSmartStringType   -> KSmartStringClass
@@ -105,6 +111,8 @@ object KTypes {
             KLocalDateTimeType -> DateTime.now().toStringNumeric()
             KZonedDateTimeType -> DateTime.now().toStringNumeric()
             KInstantType       -> DateTime.now().toStringNumeric()
+            KUUIDType          -> "782d1a4a-9223-4c49-96ee-cecb4c368a61"
+            KUniqueIdType      -> "prefix:782d1a4a-9223-4c49-96ee-cecb4c368a61"
             KDocType           -> "user://myapp/conf/abc.conf"
             KVarsType          -> "a=1,b=2,c=3"
             KSmartStringType   -> "123-456-7890"
@@ -118,31 +126,30 @@ object KTypes {
     }
 
 
-    fun getTypeExampleValuePair(name:String, tpe: KType, textSample:String = "'abc'"): Pair<String, Any> {
+    fun isBasicType(tpe: KType): Boolean {
         return when (tpe) {
         // Basic types
-            KStringType        -> Pair(name, textSample)
-            KBoolType          -> Pair(name, true)
-            KShortType         -> Pair(name, 0.toShort())
-            KIntType           -> Pair(name, 10)
-            KLongType          -> Pair(name, 100L)
-            KFloatType         -> Pair(name, 10.0.toFloat())
-            KDoubleType        -> Pair(name, 10.00)
-            KDateTimeType      -> Pair(name, DateTime.now())
-            KLocalDateType     -> Pair(name, DateTime.now().local().toLocalDate())
-            KLocalTimeType     -> Pair(name, DateTime.now().local().toLocalTime())
-            KLocalDateTimeType -> Pair(name, DateTime.now().local())
-            KZonedDateTimeType -> Pair(name, DateTime.now().raw)
-            KInstantType       -> Pair(name, DateTime.now().raw.toInstant())
-            KDocType           -> Pair(name, "user://myapp/conf/abc.conf")
-            KVarsType          -> Pair(name, "a=1,b=2,c=3")
-            KSmartStringType   -> Pair(name, "123-456-7890")
-            KContentType       -> Pair(name, "john@abc.com")
-            KDecStringType     -> Pair(name, "ALK342481SFA")
-            KDecIntType        -> Pair(name, "ALK342481SFA")
-            KDecLongType       -> Pair(name, "ALK342481SFA")
-            KDecDoubleType     -> Pair(name, "ALK342481SFA")
-            else               -> Pair(name, name)
+            KStringType        -> true
+            KBoolType          -> true
+            KShortType         -> true
+            KIntType           -> true
+            KLongType          -> true
+            KFloatType         -> true
+            KDoubleType        -> true
+            KDateTimeType      -> true
+            KLocalDateType     -> true
+            KLocalTimeType     -> true
+            KLocalDateTimeType -> true
+            KZonedDateTimeType -> true
+            KInstantType       -> true
+            KUUIDType          -> true
+            KUniqueIdType      -> true
+            KSmartStringType   -> true
+            KDecStringType     -> true
+            KDecIntType        -> true
+            KDecLongType       -> true
+            KDecDoubleType     -> true
+            else               -> false
         }
     }
 }
