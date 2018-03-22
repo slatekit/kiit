@@ -9,7 +9,7 @@ permalink: /kotlin-mod-config
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys | 
-| **date**| 2018-02-10 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.conf  |

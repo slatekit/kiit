@@ -9,7 +9,7 @@ permalink: /kotlin-mod-dblookup
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Database access utilty to query and manage data using JDBC for MySql. Other database support coming later. | 
-| **date**| 2018-02-10 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.db  |

@@ -58,17 +58,6 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
 
 
     /**
-     * drops the table from the database
-     *
-     * @param name : The name of the table
-     */
-    fun dropTable(name: String) {
-        val sql = source.buildDropTable(name)
-        executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, this::errorHandler)
-    }
-
-
-    /**
      * gets a scalar string value using the sql provided
      *
      * @param sql : The sql text
@@ -300,6 +289,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
         }, this::errorHandler)
         return result
     }
+
 
     /**
      * maps a single item using the sql supplied

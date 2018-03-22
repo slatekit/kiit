@@ -9,7 +9,7 @@ permalink: /kotlin-mod-console
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors | 
-| **date**| 2018-02-10 |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.console  |

@@ -8,8 +8,8 @@ permalink: /kotlin-mod-env
 
 {: .table .table-striped .table-bordered}
 |:--|:--|
-| **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
-| **date**| 2018-02-10 |
+| **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) |
+| **date**| 2018-03-19 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.envs  |
