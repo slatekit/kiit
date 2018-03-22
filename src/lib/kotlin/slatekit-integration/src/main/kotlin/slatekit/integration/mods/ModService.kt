@@ -13,8 +13,9 @@
 
 package slatekit.integration.mods
 
+import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityRepo
 import slatekit.entities.core.EntityService
 
 
-class ModService(repo: EntityRepo<Mod>) : EntityService<Mod>(repo)
+class ModService(entities: Entities, repo: EntityRepo<Mod>) : EntityService<Mod>(entities, repo)

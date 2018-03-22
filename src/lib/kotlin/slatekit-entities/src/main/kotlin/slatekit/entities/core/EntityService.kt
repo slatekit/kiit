@@ -19,11 +19,15 @@ package slatekit.entities.core
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<T>(protected val _repo: EntityRepo<T>)
+open class EntityService<T>(protected val _entities:Entities,
+                            protected val _repo: EntityRepo<T>)
     : EntityServices<T> where T : Entity{
 
 
     override fun entityRepo(): EntityRepo<T> = _repo
+
+
+    override fun entities(): Entities = _entities
 
 
     /**

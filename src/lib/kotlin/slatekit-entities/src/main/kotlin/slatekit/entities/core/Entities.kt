@@ -22,6 +22,7 @@ import slatekit.common.newline
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
+import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
@@ -67,6 +68,7 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
     fun <T> register(
             isSqlRepo: Boolean,
             entityType: KClass<*>,
+            model: Model? = null,
             serviceType: KClass<*>? = null,
             repoType: KClass<*>? = null,
             mapperType: KClass<*>? = null,
@@ -81,17 +83,19 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
         val db = if (!isSqlRepo) DbTypeMemory else dbType ?: DbTypeMySql
 
         // Create mapper
-        val mapr = buildMapper(isSqlRepo, entityType, mapper, tableName)
+        val mapr = buildMapper(isSqlRepo, entityType, model, mapper, tableName)
 
         // Create repo
         val repo = buildRepo<T>(isSqlRepo, db, dbKey ?: "", dbShard ?: "", entityType, mapr, tableName)
 
         // Create the service
         val service = buildService<T>(serviceType, repo, serviceCtx)
+        val entityModel = model ?: mapr.model()
 
         // Now register
         val info = EntityInfo(
                 entityType,
+                entityModel,
                 serviceType,
                 repoType,
                 mapperType,
@@ -154,6 +158,17 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
     }
 
 
+    /**
+     * Builds a new entity service instance.
+     */
+    fun buildSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
+        val info = getInfo(entityType, dbKey, dbShard)
+        val repo = getRepoByType(entityType, dbKey, dbShard) as EntityRepo<*>
+        val svc = buildService(info.entityServiceType, repo, null)
+        return svc
+    }
+
+
     fun getServiceByName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance!!
@@ -167,6 +182,15 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
         val mapper = _mappers[entityKey]
         return mapper!!
+    }
+
+
+    fun getModel(entityType: KClass<*>): Model {
+        val entityKey = getKey(entityType)
+        if(!_info.contains(entityKey))
+            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+
+        return _info.get(entityKey)?.model!!
     }
 
 
@@ -226,13 +250,13 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
             "$entityType:$dbKey:$dbShard"
 
 
-    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, mapper: EntityMapper?, tableName: String?): EntityMapper {
+    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, model:Model?, mapper: EntityMapper?, tableName: String?): EntityMapper {
 
         val entityKey = entityType.qualifiedName
 
         fun createMapper(entityType: KClass<*>): EntityMapper {
-            val model = ModelMapper.loadSchema(entityType)
-            val em = EntityMapper(model, encryptor = _enc)
+            val entityModel = model ?: ModelMapper.loadSchema(entityType)
+            val em = EntityMapper(entityModel, encryptor = _enc)
             return em
         }
 
@@ -275,7 +299,7 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
             } ?: listOf(repo)
 
             Reflector.createWithArgs<EntityService<T>>(stype, params.toTypedArray())
-        } ?: EntityService(repo)
+        } ?: EntityService(this, repo)
         return service
     }
 }

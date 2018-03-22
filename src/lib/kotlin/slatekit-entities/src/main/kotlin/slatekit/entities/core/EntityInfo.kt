@@ -17,6 +17,7 @@ import slatekit.common.newline
 import slatekit.common.db.DbType
 import slatekit.common.db.DbTypeMySql
 import slatekit.meta.kClass
+import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
 
@@ -38,6 +39,7 @@ import kotlin.reflect.KClass
  */
 data class EntityInfo(
         val entityType: KClass<*>,
+        val model: Model,
         val entityServiceType: KClass<*>? = null,
         val entityRepoType: KClass<*>? = null,
         val entityMapperType: KClass<*>? = null,
@@ -54,6 +56,7 @@ data class EntityInfo(
 
     fun toStringDetail(): String {
         val text = "entity type  : " + entityTypeName + newline +
+                "model        : " + model.fullName
                 "svc     type : " + getTypeName(entityServiceType) + newline +
                 "svc     inst : " + getTypeNameFromInst(entityServiceInstance) + newline +
                 "repo    type : " + getTypeName(entityRepoType) + newline +
