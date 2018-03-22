@@ -17,14 +17,15 @@ import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
-import slatekit.tests.common.UserApi
-import test.common.*
+import slatekit.meta.kClass
+import test.setup.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.javaField
+import kotlin.reflect.jvm.javaSetter
 import kotlin.reflect.jvm.javaType
 import kotlin.test.assertEquals
 
@@ -113,7 +114,7 @@ class ReflectorTests {
 
     @Test fun can_create_normal_class() {
       val i2 = Reflector.create<UserNormal1>(UserNormal1::class)
-      assert(i2 is UserNormal1 )
+      assert(i2 is UserNormal1)
     }
 
 
@@ -271,6 +272,17 @@ class ReflectorTests {
         assertEquals(props[1].second?.eg, "clark kent")
     }
 
+    @Test fun can_access_property_values_from_fields() {
+        val author = AuthorW()
+        author.email = "poster1@abc.com"
+        Reflector.setFieldValue(AuthorW::class, author, "email", "poster2@abc.com")
+        //val obj = author as Any
+        // val prop = AuthorW::class.declaredMemberProperties.find { it.name == "email" }
+
+        //AuthorW::email.javaSetter?.invoke(obj, "poster2@abc.com")
+        assert(author.email == "poster2@abc.com")
+    }
+
     /*
 
 
@@ -279,14 +291,14 @@ class ReflectorTests {
     it("can get full api"){
       val re = new ReflectedClassT[User]()
       assert( re.api == "User" )
-      assert( re.fullname == "slate.test.common.User" )
+      assert( re.fullname == "slate.test._setup.User" )
     }
 
 
     it("can get method"){
       val re = new ReflectedClassT[User]()
       assert( re.api == "User" )
-      assert( re.fullname == "slate.test.common.User" )
+      assert( re.fullname == "slate.test._setup.User" )
     }
 
 

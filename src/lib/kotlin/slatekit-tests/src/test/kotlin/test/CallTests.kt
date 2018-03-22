@@ -19,7 +19,7 @@ import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Request
 import slatekit.meta.Reflector
-import slatekit.tests.common.UserApi
+import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.

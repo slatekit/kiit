@@ -101,7 +101,7 @@ class ShellTests  {
 
     // 3. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = CliApi(creds, ctx.toAppContext(), TokenAuth(apiKeys), "sampleapp", apiItems = apis)
+    val shell = CliApi(creds, ctx.toAppContext(), TokenAuth(apiKeys, null), apiItems = apis)
     return shell
   }
 }
