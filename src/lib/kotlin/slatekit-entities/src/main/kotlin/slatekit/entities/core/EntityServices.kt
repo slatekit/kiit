@@ -3,6 +3,8 @@ package slatekit.entities.core
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
 import slatekit.meta.Reflector
+import slatekit.meta.kClass
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 
@@ -15,6 +17,7 @@ import kotlin.reflect.KProperty
 open interface EntityServices<T> : IEntityService where T : Entity {
 
     fun entityRepo(): EntityRepo<T>
+    fun entities(): Entities
 
 
     /**
@@ -49,7 +52,7 @@ open interface EntityServices<T> : IEntityService where T : Entity {
     fun update(id: Long, field: String, value: String): Unit {
         val item = get(id)
         item?.let { entity ->
-            Reflector.setFieldValue(entity, field, value)
+            Reflector.setFieldValue(entity.kClass, entity, field, value)
             update(entity)
         }
     }
@@ -126,6 +129,68 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      */
     fun get(id: Long): T? {
         return entityRepo().get(id)
+    }
+
+
+    /**
+     * Gets a relation model associated w the current model by the property supplied.
+     * E.g. get the membership and user associated with the membership: 1 membership = 1 user
+     * @param id    : id of the current model
+     * @param model : the target ( associated relationship ) model to get
+     * @param prop  : the field to check on current model for the foreign key id
+     * @sample member.getRelation[User](1, Member::userId, User::class)
+     */
+    fun <R> getRelation(id: Long, prop:KProperty<*>, model: KClass<*>): R? where R : Entity{
+
+        TODO.IMPROVE("entities", "This should ideally be in 1 database call")
+        val entity =  entityRepo().get(id)
+        return entity?.let { ent ->
+            val id = prop.getter.call(entity) as Long
+            val relRepo = entities().getRepo<R>(model)
+            val rel = relRepo.get(id)
+            rel
+        }
+    }
+
+
+    /**
+     * Gets a relational model associated w the current model by the property supplied.
+     * E.g. get the membership and user associated with the membership: 1 membership = 1 user
+     * @param id    : id of the current model
+     * @param model : the target ( associated relationship ) model to get
+     * @param prop  : the field to check on current model for the foreign key id
+     * @sample member.getRelation[User](1, Member::userId, User::class)
+     */
+    fun <R> getWithRelation(id: Long, prop:KProperty<*>, model: KClass<*>): Pair<T?,R?> where R : Entity{
+
+        TODO.IMPROVE("entities", "This should ideally be in 1 database call")
+        val entity =  entityRepo().get(id)
+        return entity?.let { ent ->
+            val id = prop.getter.call(entity) as Long
+            val relRepo = entities().getRepo<R>(model)
+            val rel = relRepo.get(id)
+            Pair(entity, rel)
+        } ?: Pair(null, null)
+    }
+
+
+    /**
+     * Gets all the models associated w the current model by the property supplied.
+     * E.g. get all the members in a group: 1 group = many members
+     * @param id    : id of the current model
+     * @param model : the target ( associated relationship ) model to get
+     * @param prop  : the field to check on current model for the foreign key id
+     * @sample group.getWithRelations[Member](1, Member::class, Member::groupId)
+     */
+    fun <R> getWithRelations(id: Long, model: KClass<*>, prop:KProperty<*>): Pair<T?,List<R>> where R : Entity{
+
+        TODO.IMPROVE("entities", "This should ideally be in 1 database call")
+        val entity =  entityRepo().get(id)
+        return entity?.let { ent ->
+            val relRepo = entities().getRepo<R>(model)
+            val relations = relRepo.findBy(prop.name, "=", id)
+            Pair(entity, relations)
+        } ?: Pair(null, listOf())
     }
 
 
@@ -251,7 +316,10 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      * @return
      */
     fun findByField(prop: KProperty<*>, value: Any): List<T> {
-        return entityRepo().findBy(prop.name, "=", value)
+        // The property could have a different column name
+        val field = this.repo().mapper().model().fields.first { it.name == prop.name }
+        val column = field.storedName
+        return entityRepo().findBy(column, "=", value)
     }
 
 
@@ -283,5 +351,10 @@ open interface EntityServices<T> : IEntityService where T : Entity {
     }
 
 
-    open fun where(prop: KProperty<*>, op:String, value:Any): IQuery = Query().where(prop.name, op, value)
+    open fun where(prop: KProperty<*>, op:String, value:Any): IQuery {
+        // The property could have a different column name
+        val field = this.repo().mapper().model().fields.first { it.name == prop.name }
+        val column = field.storedName
+        return Query().where(column, op, value)
+    }
 }
