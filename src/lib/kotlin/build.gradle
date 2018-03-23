@@ -1,19 +1,37 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3"
+    }
+}
+
+
 allprojects {
     apply plugin: 'java'
 	apply plugin: 'maven'
 	
     repositories {
-        mavenCentral()
+        jcenter()
     }
+    //apply plugin: 'idea'
+    //apply plugin: 'com.jfrog.bintray'
+
     group = 'com.slatekit'
     version = '0.9.9'
 	
-	task hello {
+	// Simple task to list project names
+	task showProjects {
         doLast { task ->
             println "Included : $task.project.name"
+            println "Version  : $version"
         }
     }
 
+    // Generates the POM files for maven for distribution
+    // This is here as a backup for a manual process for publishing to bintray
 	task genPom << {
 		pom {
 			project {
@@ -31,9 +49,10 @@ allprojects {
 				}
 			}
 		}.writeTo("../dist/${version}/${project.name}-${project.version}.pom")
-		// .writeTo("$buildDir/dist/${project.name}-${project.version}.pom")
 	}
 
+	// Collects all the project depenenices and puts them into the lib folder
+	// this includes all the netty*.jar files etc.
 	task installDependencies(type: Copy) {
 		dependsOn build
 		from configurations.runtime
@@ -42,9 +61,50 @@ allprojects {
 	}
 }
 
-subprojects {
-   apply plugin: 'java'
+
+subprojects { project -> 
+
+    apply plugin: 'java'
+	apply plugin: 'maven'
+	
+    repositories {
+        jcenter()
+    }
+    apply plugin: 'idea'
+    apply plugin: 'com.jfrog.bintray'
+
+    group = 'com.slatekit'
+    version = '0.9.9'
+
+
+    // gradle -Puser=someuser -Pkey=ASDFASDFASDF bintrayUpload
+	bintray {
+        user = property('user')
+        key = property('key')
+		publish = true
+        configurations = ['archives']
+        pkg {
+            repo            = 'slatekit'
+            name            = project.name
+            userOrg         = 'codehelixinc'
+            desc            = 'Kotlin : Open-source framework'
+            websiteUrl      = 'http://www.slatekit.com/'
+            issueTrackerUrl = 'https://github.com/code-helix/slatekit/issues'
+            vcsUrl          = 'https://github.com/code-helix/slatekit'
+            licenses        = ['Apache-2.0']
+            publicDownloadNumbers = false
+            version {
+        		name = '0.9.9'
+        	}
+        }
+    }
 }
+
+
+task showProject {
+	println 'Kotlin: Slate Kit Root Project'
+}
+
 
 task copyJars(type: Copy, dependsOn: subprojects.jar) {
    from(subprojects.jar)
