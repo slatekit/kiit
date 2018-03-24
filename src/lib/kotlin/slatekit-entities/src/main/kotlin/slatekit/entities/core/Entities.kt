@@ -295,8 +295,8 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
             // Parameters to service is the context and repo
             val params = ctx?.let { args ->
-                listOf(args, repo)
-            } ?: listOf(repo)
+                listOf(args, this, repo)
+            } ?: listOf(this, repo)
 
             Reflector.createWithArgs<EntityService<T>>(stype, params.toTypedArray())
         } ?: EntityService(this, repo)
