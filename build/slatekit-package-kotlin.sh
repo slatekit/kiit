@@ -22,10 +22,10 @@ mkdir $SLATE_DIST/samples
 cp ${SLATE_SRC}/dist/${VERSION}/*.jar ${SLATE_VERSION}/bin/
 
 # Copy the sample apps
-cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/build/libs/slatekit-sampleapp-core.jar      $SLATE_DIST/bin/
-cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch/build/libs/slatekit-sampleapp-batch.jar    $SLATE_DIST/bin/
-cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-cli/build/libs/slatekit-sampleapp-cli.jar        $SLATE_DIST/bin/
-cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-server/build/libs/slatekit-sampleapp-server.jar  $SLATE_DIST/bin/
+cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/build/libs/sampleapp-core-${VERSION}.jar      $SLATE_DIST/bin/
+cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch/build/libs/sampleapp-batch-${VERSION}.jar    $SLATE_DIST/bin/
+cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-cli/build/libs/sampleapp-cli-${VERSION}.jar        $SLATE_DIST/bin/
+cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-server/build/libs/sampleapp-server-${VERSION}.jar  $SLATE_DIST/bin/
 
 # Copy all dependent jars
 cp $SLATE_HOME/lib/ext/json/*.jar       $SLATE_DIST/ext/ 
