@@ -1,12 +1,15 @@
 #!/bin/bash
 
 # Creates a release package for slatekit.
-VERSION=0.9.6
+VERSION=0.9.9
 SLATE_HOME=~/git/slatekit
-SLATE_DIST=${SLATE_HOME}/dist/slatekit/kotlin/releases/${VERSION}
-SLATE_VERSION=${SLATE_HOME}/dist/slatekit/kotlin/releases/${VERSION}
+SLATE_DIST=${SLATE_HOME}/dist/slatekit/releases/${VERSION}
+SLATE_VERSION=${SLATE_HOME}/dist/slatekit/releases/${VERSION}
 SLATE_SRC=${SLATE_HOME}/src/lib/kotlin 
 
+mkdir ${SLATE_HOME}/dist
+mkdir ${SLATE_HOME}/dist/slatekit
+mkdir ${SLATE_HOME}/dist/slatekit/releases
 mkdir $SLATE_DIST
 mkdir $SLATE_DIST/bin
 mkdir $SLATE_DIST/conf
@@ -16,7 +19,7 @@ mkdir $SLATE_DIST/licenses
 mkdir $SLATE_DIST/samples
 
 # Copy jar files to bin
-cp ${SLATE_SRC}/dist/*.jar ${SLATE_VERSION}/bin/
+cp ${SLATE_SRC}/dist/${VERSION}/*.jar ${SLATE_VERSION}/bin/
 
 # Copy the sample apps
 cp $SLATE_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-core/build/libs/slatekit-sampleapp-core.jar      $SLATE_DIST/bin/
