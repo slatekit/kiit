@@ -18,6 +18,7 @@ import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
+import slatekit.entities.core.Entities
 import slatekit.entities.support.EntityServiceWithSupport
 import slatekit.entities.core.EntityRepo
 import slatekit.integration.common.AppEntContext
@@ -26,8 +27,8 @@ import slatekit.sampleapp.core.models.User
 /**
  * The EntityService
  */
-class UserService(context: AppEntContext, repo:EntityRepo<User>)
-                  : EntityServiceWithSupport<User>(context,repo)
+class UserService(context: AppEntContext, entities: Entities, repo:EntityRepo<User>)
+                  : EntityServiceWithSupport<User>(context, entities, repo)
 {
   fun create(email:String, first:String, last:String, isMale:Boolean, age:Int, phone:String, country:String): User
   {

@@ -29,7 +29,7 @@ import java.io.File
  * @param keys        : the list of api keys when using api key based authorization.
  */
 class AppAuth(val mode: String, val appDir: String,
-              val user: String, val selectedKey: ApiKey, keys: List<ApiKey>?)
+              val user: String, val selectedKey: ApiKey, keys: List<ApiKey>)
     : TokenAuth(keys, null) {
 
     /**

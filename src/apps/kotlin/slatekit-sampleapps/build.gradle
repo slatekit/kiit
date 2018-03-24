@@ -4,7 +4,7 @@ allprojects {
         mavenCentral()
     }
     group = 'com.slatekit'
-    version = '0.9.8'
+    version = '0.9.9'
 	task hello {
         doLast { task ->
             println "Included : $task.project.name"

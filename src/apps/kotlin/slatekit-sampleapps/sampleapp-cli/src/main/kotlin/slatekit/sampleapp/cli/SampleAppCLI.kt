@@ -94,8 +94,7 @@ fun main(args: Array<String>): Unit {
     val selectedKey = sampleKeys[5]
     val creds = Credentials("1", "john doe", "jdoe@gmail.com", key = selectedKey.key)
     val auth = AppAuth("test-mode", "slatekit", "johndoe", selectedKey, sampleKeys)
-    val shell = CliApi(creds, ctx, auth, "sampleapp",
-            CliSettings(enableLogging = true, enableOutput = true),
+    val shell = CliApi(creds, ctx, auth, CliSettings(enableLogging = true, enableOutput = true),
             listOf(
                     // Sample APIs for demo purposes
                     // Instances are created per request.
