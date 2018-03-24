@@ -1,4 +1,6 @@
 
+drop table if exists `db_tests`;
+
 CREATE TABLE `db_tests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `test_string` varchar(50) NOT NULL,

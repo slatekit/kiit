@@ -51,7 +51,7 @@ class DbTests {
 
 
     @Test fun can_query_scalar_localdate() {
-        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql) }, LocalDate.of(2017, 7, 6) )
+        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql) }, LocalDate.of(2017, 6, 1) )
     }
 
 
@@ -73,13 +73,13 @@ class DbTests {
     @Test fun can_execute_proc() {
         val db = Db(con!!)
         val result = db.callQuery("dbtests_get_max_id", { rs -> rs.getLong(1) } )
-        assert(result!! > 3L)
+        assert(result!! > 0L)
     }
 
 
     @Test fun can_execute_proc_update() {
         val db = Db(con!!)
-        val result = db.callUpdate("dbtests_update_by_id", listOf(8) )
+        val result = db.callUpdate("dbtests_update_by_id", listOf(6) )
         assert(result!! >= 1)
     }
 
