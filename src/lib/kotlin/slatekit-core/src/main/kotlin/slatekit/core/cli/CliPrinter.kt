@@ -15,6 +15,7 @@ package slatekit.core.cli
 
 
 import slatekit.common.Files
+import slatekit.common.Response
 import slatekit.common.Result
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.serialization.SerializerProps
@@ -29,7 +30,7 @@ class CliPrinter(val _writer: ConsoleWriter) {
     private val serializerCsv  = Serialization.csv()
 
 
-    fun printResult(cmd:CliCommand, result: Result<Any>, outputDir:String): Unit {
+    fun printResult(cmd:CliCommand, result: Response<Any>, outputDir:String): Unit {
         result.value?.let { value ->
             printAny(cmd, value, outputDir)
             printSummary(result)
@@ -51,7 +52,7 @@ class CliPrinter(val _writer: ConsoleWriter) {
      *
      * @param result
      */
-    fun printSummary(result: Result<Any>): Unit {
+    fun printSummary(result: Response<Any>): Unit {
 
         // Stats.
         _writer.text("Success : " + result.success)

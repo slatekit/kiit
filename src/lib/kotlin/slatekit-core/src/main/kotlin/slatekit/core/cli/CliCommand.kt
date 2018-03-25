@@ -13,10 +13,7 @@
 
 package slatekit.core.cli
 
-import slatekit.common.Doc
-import slatekit.common.RequestSupport
-import slatekit.common.Result
-import slatekit.common.Uris
+import slatekit.common.*
 import slatekit.common.args.Args
 
 
@@ -37,7 +34,7 @@ data class CliCommand(  val area: String,
                         val action: String,
                         val line: String,
                         val args: Args,
-                        val result: Result<Any>? = null) : RequestSupport
+                        val result: Response<Any>? = null) : RequestSupport
 {
     /**
      * the area, name and action combined.

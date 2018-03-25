@@ -203,7 +203,17 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun call(req: Request): Result<Any> {
+    fun call(req: Request): Response<Any> {
+        return callAsResult(req).toResponse()
+    }
+
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    fun callAsResult(req: Request): Result<Any> {
         val result: Result<Any> = try {
             execute(req)
         }
@@ -214,7 +224,7 @@ open class ApiContainer(
     }
 
 
-    fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Result<Any> {
+    fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Response<Any> {
         val req = Request.raw(area, api, action, verb, opts, args)
         return call(req)
     }
@@ -345,7 +355,7 @@ open class ApiContainer(
             }
 
             // Finally make the call here.
-            val result = execute(req, apiRef)
+            val result = executeMethod(req, apiRef)
 
             // Hook: After
             if (instance is ApiWithMiddleware && instance.isHookEnabled) {
@@ -363,7 +373,7 @@ open class ApiContainer(
     }
 
 
-    protected open fun execute(req: Request, apiRef:ApiRef): Result<Any> {
+    protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
         val inputs = ApiHelper.fillArgs(apiRef, req, req.data!!, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)

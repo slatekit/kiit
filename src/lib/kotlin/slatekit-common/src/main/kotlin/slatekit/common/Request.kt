@@ -20,13 +20,12 @@ import slatekit.common.args.Args
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path      : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
  * @param parts     : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param source  : protocol e.g. "cli" for command line and "http"
+ * @param source    : protocol e.g. "cli" for command line and "http"
  * @param verb      : get / post ( similar to http verb )
  * @param meta      : options representing settings/configurations ( similar to http-headers )
  * @param data      : arguments to the command
  * @param raw       : Optional raw request ( e.g. either the HttpRequest via Spark or ShellCommmand via CLI )
- * @param output
- * : Optional output format of the result e.g. json by default json | csv | props
+ * @param output    : Optional output format of the result e.g. json by default json | csv | props
  * @param tag       : Optional tag for tracking individual requests and for error logging.
  */
 data class Request (

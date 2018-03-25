@@ -24,6 +24,7 @@ import slatekit.common.Result
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.toResponse
 import slatekit.core.common.AppContext
 import slatekit.server.spark.HttpRequest
 import slatekit.server.spark.HttpResponse
@@ -152,7 +153,7 @@ class Server(
      */
     fun ping(req: Request, res: Response): String {
         val result = DateTime.now()
-        val text = HttpResponse.json(res, success(result))
+        val text = HttpResponse.json(res, success(result).toResponse())
         return text
     }
 

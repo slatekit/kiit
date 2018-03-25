@@ -17,6 +17,7 @@ package slatekit.core.cli
 import slatekit.common.Files
 import slatekit.common.newline
 import slatekit.common.results.ResultFuncs.yes
+import slatekit.common.toResponse
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -52,7 +53,7 @@ class CliBatch(val cmd: CliCommand, val svc: CliService) {
             if (svc.settings.enableOutput) {
                 CliFuncs.log(svc.folders, messages)
             }
-            val batchResult = cmd.copy(result = yes("batch output written to output directory"))
+            val batchResult = cmd.copy(result = yes("batch output written to output directory").toResponse())
             return batchResult
         }
     }

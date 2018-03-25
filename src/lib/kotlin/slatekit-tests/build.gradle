@@ -36,7 +36,6 @@ dependencies {
     compile project(":slatekit-apis")
     compile project(":slatekit-integration")
     compile project(":slatekit-cloud")
-    compile project(":slatekit-ext")
     testCompile 'junit:junit:4.12'
     //testRuntime "org.junit.platform:junit-platform-runner"
     testCompile "org.jetbrains.kotlin:kotlin-test"
