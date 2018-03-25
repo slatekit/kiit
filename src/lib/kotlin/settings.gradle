@@ -1,1 +1,26 @@
-include 'slatekit-common', 'slatekit-meta', 'slatekit-entities', 'slatekit-core', 'slatekit-apis', 'slatekit-integration', 'slatekit-cloud', 'slatekit-server', 'slatekit-tools'
+include 'slatekit-common',
+        'slatekit-meta',
+        'slatekit-entities',
+        'slatekit-core',
+        'slatekit-apis',
+        'slatekit-integration',
+        'slatekit-cloud',
+        'slatekit-server',
+        'slatekit-tools',
+        'slatekit-tests'
+
+
+include ':sampleapp-core'
+project(':sampleapp-core').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-core')
+
+
+include ':sampleapp-batch'
+project(':sampleapp-batch').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-batch')
+
+
+include ':sampleapp-cli'
+project(':sampleapp-cli').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-cli')
+
+
+include ':sampleapp-server'
+project(':sampleapp-server').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-server')
