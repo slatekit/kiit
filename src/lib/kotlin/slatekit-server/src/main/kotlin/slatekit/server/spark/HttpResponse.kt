@@ -23,10 +23,10 @@ object HttpResponse {
     /**
      * Returns the value of the result as an html(string)
      */
-    fun result(res: Response, result: Result<Any>): Any {
+    fun result(res: Response, result: slatekit.common.Response<Any>): Any {
         return when(result.value){
-            is Content -> content(res, result as Result<Content>)
-            is Doc     -> file(res, result as Result<Doc>)
+            is Content -> content(res, result as slatekit.common.Response<Content>)
+            is Doc     -> file(res, result as slatekit.common.Response<Doc>)
             else       -> json( res, result)
         }
     }
@@ -35,7 +35,7 @@ object HttpResponse {
     /**
      * Returns the value of the resulut as JSON.
      */
-    fun json(res: Response, result: Result<Any>): String {
+    fun json(res: Response, result: slatekit.common.Response<Any>): String {
         res.status(result.code)
         res.type("application/json")
         val json = Serialization.json(true).serialize(result)
@@ -47,7 +47,7 @@ object HttpResponse {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    fun content(res: Response, result: Result<Content>): String {
+    fun content(res: Response, result: slatekit.common.Response<Content>): String {
         res.status(result.code)
         res.type(result.value?.tpe?.http ?: "text/plain")
         return result.value?.text ?: ""
@@ -57,7 +57,7 @@ object HttpResponse {
     /**
      * Returns the value of the result as a file document
      */
-    fun file(res: Response, result: Result<Doc>): Any {
+    fun file(res: Response, result: slatekit.common.Response<Doc>): Any {
         res.status(result.code)
         val doc = result.value!!
         val bytes = doc.content.toByteArray()

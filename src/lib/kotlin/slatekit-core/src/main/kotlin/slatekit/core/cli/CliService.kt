@@ -15,6 +15,7 @@ package slatekit.core.cli
 
 import slatekit.common.Loops
 import slatekit.common.Loops.doUntil
+import slatekit.common.Response
 import slatekit.common.Result
 import slatekit.common.Result.Results.attempt
 import slatekit.common.app.AppMeta
@@ -29,6 +30,7 @@ import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.toResponse
 import slatekit.core.cli.CliConstants.ABOUT
 import slatekit.core.cli.CliConstants.EXIT
 import slatekit.core.cli.CliConstants.HELP
@@ -204,7 +206,7 @@ open class CliService(
     open protected fun onCommandExecuteBatch(cmd:CliCommand): CliCommand {
         val blevel = _batchLevel.get()
         return if(blevel > 0 ) {
-            CliCommand("sys", "cli", "batch", cmd.line, cmd.args, failure("already in batch mode"))
+            CliCommand("sys", "cli", "batch", cmd.line, cmd.args, failure<Any>("already in batch mode").toResponse())
         }
         else {
             _batchLevel.set(blevel + 1)
@@ -360,7 +362,7 @@ open class CliService(
     open fun showExtendedHelp(writer:ConsoleWriter) {}
 
 
-    open fun showResult(cmd:CliCommand, result: Result<Any>) {
+    open fun showResult(cmd:CliCommand, result: Response<Any>) {
         _printer.printResult(cmd, result, folders.pathToOutputs)
     }
 

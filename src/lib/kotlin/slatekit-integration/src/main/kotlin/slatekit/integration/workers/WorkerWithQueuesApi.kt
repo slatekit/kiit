@@ -34,7 +34,7 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
 
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.
-        val result = container.call(req)
+        val result = container.callAsResult(req)
 
         return if(result.success) {
             // acknowledge/complete message

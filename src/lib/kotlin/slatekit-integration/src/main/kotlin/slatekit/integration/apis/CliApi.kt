@@ -68,13 +68,13 @@ class CliApi(private val creds: slatekit.common.Credentials,
             val cmdResult = when(metaCmd){
 
                 // Case 1: Generate a sample command to output/file
-                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd))
+                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toResponse())
 
                 // Case 2: Get command from params file and execute
                 CliConstants.SysFile   -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
 
                 // Case 3: Code Generation
-                CliConstants.SysCodeGen -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)))
+                CliConstants.SysCodeGen -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)).toResponse())
 
                 // Case 4: Unknown
                 else     -> cmd
