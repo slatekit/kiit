@@ -16,15 +16,12 @@ import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.okOrFailure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.meta.Reflector
 import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.notImplemented
-import slatekit.meta.Serialization
-import slatekit.meta.SerializerSample
-import slatekit.meta.kClass
+import slatekit.meta.*
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -50,6 +47,8 @@ open class ApiContainer(
         val errors: Errors? = null,
         val namer : Namer? = null,
         val rewrites: List<Rewriter>? = null,
+        val converter: Converter = Converter(ctx.enc),
+        val deserializer: Deserializer = Deserializer(converter),
         val serializer: ((String,Any?) -> String)? = null,
         val docKey:String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
@@ -375,7 +374,7 @@ open class ApiContainer(
 
     protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
-        val inputs = ApiHelper.fillArgs(apiRef, req, req.data!!, allowIO, this.ctx.enc)
+        val inputs = ApiHelper.fillArgs(deserializer, apiRef, req, req.data!!, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
         val result = returnVal?.let { res ->

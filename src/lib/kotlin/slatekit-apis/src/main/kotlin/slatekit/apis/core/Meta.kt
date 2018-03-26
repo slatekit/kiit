@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 
 
 /**
- * Used to represent a request that originatest from a json file.
+ * Used to represent a request that originates from a json file.
  * This is useful for automation purposes and replaying an api action from a file source.
  * @param req        : The raw request
  * @param enc        : The encryptor
