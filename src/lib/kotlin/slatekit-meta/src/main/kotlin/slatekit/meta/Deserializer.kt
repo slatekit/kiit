@@ -28,14 +28,14 @@ import kotlin.reflect.full.createType
  * Deserializes data ( as Inputs ) into the parameter types
  * represented by rawParams
  */
-class Deserializer(private val converter:Converter,
+open class Deserializer(private val converter:Converter,
                    private val enc: Encryptor? = null,
                    private val allowCLI:Boolean = false) {
 
     val TypeRequest = Request::class.createType()
 
 
-    fun deserialize(rawParams: List<KParameter>, data: Inputs, source:Any?): Array<Any?> {
+    open fun deserialize(rawParams: List<KParameter>, data: Inputs, source:Any?): Array<Any?> {
 
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()

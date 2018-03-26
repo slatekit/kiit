@@ -31,7 +31,7 @@ import kotlin.reflect.full.createType
 /**
  * Json converter
  */
-class Converter(val enc: Encryptor? = null,
+open class Converter(val enc: Encryptor? = null,
                 val converters:Map<String,(JSONObject, KType) -> Any> = mapOf(),
                 val smartStrings:Map<String, SmartString> = mapOf()) {
 
@@ -39,7 +39,7 @@ class Converter(val enc: Encryptor? = null,
     val TypeRequest = Request::class.createType()
 
 
-    fun convert(parameters:List<KParameter>, text:String): Array<Any?> {
+    open fun convert(parameters:List<KParameter>, text:String): Array<Any?> {
         val jsonObj = JSONParser().parse(text) as JSONObject
         return convert(parameters, jsonObj)
     }
@@ -50,7 +50,7 @@ class Converter(val enc: Encryptor? = null,
      * @param parameters: The parameter info to convert
      * @param jsonObj   : The json object to containing the data
      */
-    fun convert(parameters:List<KParameter>, jsonObj: JSONObject): Array<Any?> {
+    open fun convert(parameters:List<KParameter>, jsonObj: JSONObject): Array<Any?> {
 
         // Check each parameter to api call
         val params = parameters
