@@ -16,18 +16,14 @@ package slatekit.apis.helpers
 
 import slatekit.apis.*
 import slatekit.apis.core.Auth
-import slatekit.apis.core.Call
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.meta.Reflector
-import kotlin.reflect.KClass
+import slatekit.meta.Deserializer
 
 object ApiHelper {
-    val _call = Call()
-
 
     val _typeDefaults = mapOf(
             "String" to "",
@@ -117,7 +113,7 @@ object ApiHelper {
     }
 
 
-    fun fillArgs(apiRef:ApiRef, cmd: Request, args: Inputs, allowLocalIO: Boolean = false,
+    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request, args: Inputs, allowLocalIO: Boolean = false,
                  enc: Encryptor? = null): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
@@ -130,7 +126,7 @@ object ApiHelper {
             arrayOf<Any?>(defaultVal ?: "")
         }
         else {
-            _call.fillArgsForMethod(action.member, cmd, args, allowLocalIO, enc)
+            deserializer.deserialize(action.member.parameters, args, cmd)
         }
     }
 
