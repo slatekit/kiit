@@ -25,7 +25,7 @@ import java.time.ZonedDateTime
 
 
 data class Headers(val headers: Map<String, String>,
-                   val enc: Encryptor?) : Inputs {
+                   val enc: Encryptor?) : slatekit.common.Meta {
 
     override val raw:Any = headers
     override fun get(key: String): Any? = getInternal(key)

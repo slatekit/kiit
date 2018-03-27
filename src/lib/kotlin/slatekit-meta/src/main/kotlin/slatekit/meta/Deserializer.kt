@@ -13,10 +13,7 @@ mantra: Simplicity above all else
 package slatekit.meta
 
 import org.json.simple.JSONObject
-import slatekit.common.Conversions
-import slatekit.common.InputArgs
-import slatekit.common.Inputs
-import slatekit.common.Request
+import slatekit.common.*
 import slatekit.common.encrypt.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -35,7 +32,7 @@ open class Deserializer(private val converter:Converter,
     val TypeRequest = Request::class.createType()
 
 
-    open fun deserialize(rawParams: List<KParameter>, data: Inputs, source:Any?): Array<Any?> {
+    open fun deserialize(rawParams: List<KParameter>, data: Inputs, meta: Meta?, source:Any?): Array<Any?> {
 
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()
@@ -46,7 +43,7 @@ open class Deserializer(private val converter:Converter,
             val parameter = parameters[ndx]
             val paramName = parameter.name!!
             val paramType = parameter.type
-            val result = when (paramType) {
+            val result:Any?? = when (paramType) {
 
                 // Basic types
                 KTypes.KStringType        -> Conversions.handleString(data.getString(paramName))

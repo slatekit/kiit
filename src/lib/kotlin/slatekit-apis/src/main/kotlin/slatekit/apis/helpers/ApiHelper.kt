@@ -126,7 +126,7 @@ object ApiHelper {
             arrayOf<Any?>(defaultVal ?: "")
         }
         else {
-            deserializer.deserialize(action.member.parameters, args, cmd)
+            deserializer.deserialize(action.member.parameters, args, cmd.meta, cmd)
         }
     }
 

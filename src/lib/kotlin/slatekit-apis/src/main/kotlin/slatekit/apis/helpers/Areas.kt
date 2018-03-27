@@ -17,6 +17,8 @@ import slatekit.apis.*
 import slatekit.common.*
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -28,6 +30,10 @@ import kotlin.reflect.full.primaryConstructor
  * returned from there and used by the ApiContainer.
  */
 class Areas(val apiHost:ApiContainer, val namer:Namer?) {
+
+
+    val TypeRequest = Request::class.createType()
+    val TypeMeta    = Meta::class.createType()
 
     /**
      *  ListMap will eventually contain all the areas by name.
@@ -177,7 +183,8 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
                 val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
 
                 // d) Get the parameters to easily check/validate params later
-                val parameters = member.parameters
+                val rawParameters = member.parameters
+                val parameters = filter(rawParameters)
 
                 // Add the action name and link it to the method + annotation
                 val anyParameters = parameters.isNotEmpty() && parameters.size > 1
@@ -308,5 +315,14 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
         if(item is ApiHostAware) {
             item.setApiHost(apiHost)
         }
+    }
+
+    private fun filter(args:List<KParameter>): List<KParameter> {
+        if(args.isEmpty() ) return args
+        val finalArgs = args.filter { arg ->
+            val type = arg.type
+            type != TypeRequest && arg.type != TypeMeta
+        }.toList()
+        return finalArgs
     }
 }

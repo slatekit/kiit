@@ -223,9 +223,9 @@ open class ApiContainer(
     }
 
 
-    fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Response<Any> {
+    fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Result<Any> {
         val req = Request.raw(area, api, action, verb, opts, args)
-        return call(req)
+        return callAsResult(req)
     }
 
 
