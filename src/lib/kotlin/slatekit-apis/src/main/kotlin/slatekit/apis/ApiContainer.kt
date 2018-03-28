@@ -48,7 +48,7 @@ open class ApiContainer(
         val namer : Namer? = null,
         val rewrites: List<Rewriter>? = null,
         val converter: Converter = Converter(ctx.enc),
-        val deserializer: Deserializer = Deserializer(converter),
+        val deserializer: Deserializer = Deserializer(converter, enc = ctx.enc),
         val serializer: ((String,Any?) -> String)? = null,
         val docKey:String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
@@ -72,20 +72,20 @@ open class ApiContainer(
      *    an ApiBase ( which is what you extend from to create your own api )
      * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
      */
-    protected val _lookup = Areas(this, namer).registerAll(apis)
+    private val _lookup = Areas(this, namer).registerAll(apis)
 
 
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
-    protected val _validator = Validation(this)
+    private val _validator = Validation(this)
 
 
     /**
      * The error handler that responsible for several expected errors/bad-requests
      * and also to handle unexpected errors
      */
-    val errs = errors ?: Errors(null)
+    private val errs = errors ?: Errors(null)
 
 
     /**

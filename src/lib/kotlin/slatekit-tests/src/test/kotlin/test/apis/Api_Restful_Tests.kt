@@ -112,7 +112,10 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("updatedAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(SampleRESTApi::class, "app")), auth = null, allowIO = false, rewrites = listOf(Restify()))
+        val apis = ApiContainer(ctx,
+                apis = listOf(ApiReg(SampleRESTApi::class, "app")),
+                auth = null, allowIO = false,
+                rewrites = listOf(Restify()))
         val r1 = apis.call(
                 "app", "SampleREST", "", "post",
                 mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
