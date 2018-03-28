@@ -133,7 +133,6 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
         val apiAnnoRaw = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
 
         // 2. Create a copy of the final annotation taking into account the overrides.
-        val hasAnnotations = apiAnnoRaw != null
         val apiAnno = apiAnnoRaw?.let { apiAnno ->
             ApiHelper.buildApiInfo(apiAnno, reg)
         } ?: ApiHelper.buildApiInfo(reg)
