@@ -13,9 +13,6 @@
 
 package slatekit.apis.middleware
 
-import slatekit.common.info.About
-import slatekit.common.results.ResultFuncs
-import java.util.concurrent.atomic.AtomicBoolean
 
 
 /**
@@ -24,47 +21,4 @@ import java.util.concurrent.atomic.AtomicBoolean
  * 2. filters : for allowing/denying execution of api action  ( can only allow/deny execution   )
  * 3. controls: for controlling the execution of an api action( can handle the execution itself )
  */
-abstract class Middleware {
-    /**
-     * Info about the middleware including:
-     * id, name, desc, company, version, url, etc.
-     */
-    abstract val about: About
-
-
-    /**
-     * common/basic return values for the filter.
-     * Used as values here to avoid excessive object creation
-     */
-    protected val success = ResultFuncs.ok()
-
-    /**
-     * internal flag to enable/disable this middleware
-     */
-    private val flag = AtomicBoolean(true)
-
-
-    /**
-     * Enables this middleware
-     * @return
-     */
-    fun enable(): Boolean = toggle(true)
-
-
-    /**
-     * Disables this middleware
-     * @return
-     */
-    fun disable(): Boolean = toggle(false)
-
-
-    /**
-     * toggle this middleware
-     * @param newValue
-     * @return
-     */
-    fun toggle(newValue: Boolean): Boolean {
-        flag.set(newValue)
-        return flag.get()
-    }
-}
+interface Middleware

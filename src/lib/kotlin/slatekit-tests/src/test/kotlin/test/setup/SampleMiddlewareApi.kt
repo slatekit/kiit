@@ -9,14 +9,7 @@ import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 
 
-open class SampleMiddlewareApi(
-        enableHooks:Boolean = false,
-        enableFilter :Boolean = false) : ApiWithMiddleware {
-
-    override val isErrorEnabled :Boolean = true
-    override val isHookEnabled = enableHooks
-    override val isFilterEnabled = enableFilter
-
+open class SampleMiddlewareApi() : ApiWithMiddleware {
 
     // Used for demo/testing purposes
     var onBeforeHookCount = mutableListOf<Request>()
@@ -26,28 +19,33 @@ open class SampleMiddlewareApi(
     /**
      * Hook for before this api handles any request
      */
-    override fun onBefore(context:Context, request:Request, source:Any, target:ApiRegAction): Unit {
-        onBeforeHookCount.add(request)
+    override fun onBefore(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?) {
+        onBeforeHookCount.add(req)
     }
 
 
     /**
      * Hook for after this api handles any request
      */
-    override fun onAfter(context:Context, request:Request, source:Any, target:ApiRegAction): Unit {
-        onAfterHookCount.add(request)
+    override fun onAfter(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?) {
+        onAfterHookCount.add(req)
     }
 
 
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override fun onFilter(context: Context, request:Request, source:Any, target:ApiRegAction): Result<Any>  {
-        return if(request.action.startsWith("hi")) {
+    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Result<Any>  {
+        return if(req.action.startsWith("hi")) {
             badRequest<Boolean>("filtered out")
         } else {
             ResultFuncs.ok()
         }
+    }
+
+
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Result<Any> {
+        return ResultFuncs.success("")
     }
 
 

@@ -13,6 +13,7 @@
 
 package slatekit.apis.middleware
 
+import slatekit.apis.ApiRegAction
 import slatekit.common.Context
 import slatekit.common.Request
 import slatekit.common.info.About
@@ -22,14 +23,10 @@ import slatekit.common.info.About
  * A "Hooks" based middle-ware that allows only handling before/after events
  * of an API call, without any modification to the life-cycle/flow.
  *
- * NOTE: The hooks are applied right before and after the call to the action,
- * allowing parameters to the action to be made available.
+ * NOTE: The hooks are applied right before and after the call to the action
  *
- * @param about  : Info about the the filter
- * @param route  : The route pattern to apply this middleware to
  */
-open class Hook(override val about: About, val route: Match) : Middleware() {
-
+interface Hook : Middleware {
 
     /**
      * hook for before the api call is made
@@ -39,7 +36,7 @@ open class Hook(override val about: About, val route: Match) : Middleware() {
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    open fun before(ctx: Context, req: Request, target:Any, source: Any, args: Map<String, Any>): Unit {
+    fun onBefore(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?): Unit {
     }
 
 
@@ -51,6 +48,6 @@ open class Hook(override val about: About, val route: Match) : Middleware() {
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    open fun after(ctx: Context, req: Request, target:Any, source: Any, args: Map<String, Any>): Unit {
+    fun onAfter(ctx: Context, req: Request, target:ApiRegAction, source: Any, args: Map<String, Any>?): Unit {
     }
 }

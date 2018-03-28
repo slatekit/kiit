@@ -9,9 +9,7 @@ import slatekit.common.info.About
 import slatekit.common.validations.ValidationFuncs
 
 
-class Restify : Rewriter(
-        About.simple("slatekit.restify", "SlateKit.Restify", "Restful routes", "codehelix", "1.0"),
-        Match("", "", ""))
+class Restify : Rewriter()
 {
 
     /**

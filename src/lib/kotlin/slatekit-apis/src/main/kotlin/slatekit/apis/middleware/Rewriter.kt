@@ -9,10 +9,8 @@ import slatekit.common.info.About
 /**
  * A "Rewriter" based middle-ware allows allows for rewriting the API path/call
  *
- * @param about  : Info about the the middleware
- * @param route  : The route pattern to apply this middleware to
  */
-open class Rewriter(override val about: About, val route: Match) : Middleware() {
+open class Rewriter : Middleware {
 
 
     /**
