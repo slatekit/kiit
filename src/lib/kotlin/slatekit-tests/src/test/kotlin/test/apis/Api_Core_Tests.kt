@@ -15,7 +15,6 @@ package test.apis
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Auth
-import slatekit.apis.core.Errors
 import slatekit.apis.helpers.ApiHelper
 import slatekit.common.ApiKey
 import slatekit.common.Result
@@ -78,11 +77,10 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth    : Auth? = null,
-                apis    : List<ApiReg>? = null,
-                errors  : Errors? = null): ApiContainer {
+                apis    : List<ApiReg>? = null): ApiContainer {
 
         // 2. apis
-        val container = ApiContainer(ctx, false, auth, errors = errors, apis = apis, protocol = protocol)
+        val container = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
         return container
     }
 
@@ -92,7 +90,6 @@ open class ApiTestsBase {
                     protocol  : String,
                     authMode  : String,
                     user      : Pair<String,String>?,
-                    errors    : Errors?,
                     path      : String,
                     inputs    : List<Pair<String,Any>>?,
                     opts      : List<Pair<String,Any>>?,
@@ -101,11 +98,11 @@ open class ApiTestsBase {
         val apis = if(user != null) {
             val keys = buildKeys()
             val auth = MyAuthProvider(user.first, user.second, keys)
-            val apis = getApis(CliProtocol, auth, apis, errors)
+            val apis = getApis(CliProtocol, auth, apis)
             apis
         }
         else {
-            val apis = getApis(CliProtocol, apis = apis, errors = errors)
+            val apis = getApis(CliProtocol, apis = apis)
             apis
         }
         val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
@@ -142,7 +139,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_execute_public_action() {
         ensureCall( listOf(buildUserApiRegSingleton(ctx)),
                     "*", "*",
-                    ApiConstants.AuthModeAppRole, null, null,
+                    ApiConstants.AuthModeAppRole, null,
                     "app.users.rolesNone",
                     listOf(
                             Pair("code", "1"),
@@ -158,7 +155,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_execute_with_type_raw_request() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                     "*", "*",
-                    ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                    ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                     "app.users.argTypeRequest",
                     listOf(Pair("id", "2")),
                     null,
@@ -170,7 +167,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_get_list() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.argTypeListInt",
                 listOf(
                         Pair("items", listOf<Int>(1,2,3) )
@@ -184,7 +181,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_get_list_via_conversion() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.argTypeListInt",
                 listOf(
                         Pair("items", "1,2,3")),
@@ -197,7 +194,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_get_map() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.argTypeMapInt",
                 listOf(Pair("items", mapOf("a" to 1, "b" to 2))),
                 null,
@@ -209,7 +206,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_get_map_via_conversion() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
                 "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.argTypeMapInt",
                 listOf(Pair("items", "a=1,b=2")),
                 null,

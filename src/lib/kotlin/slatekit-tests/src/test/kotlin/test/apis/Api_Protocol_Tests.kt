@@ -28,7 +28,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     //describe( "API Container Type CLI" ) {
     @Test fun should_work_when_setup_as_protocol_and_request_is_CLI() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.protocolAny",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
                 null,
@@ -39,7 +39,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     @Test fun should_work_when_setup_as_protocol_CLI_and_request_is_CLI() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "cli", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                "*", "cli", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.protocolCLI",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
                 null,
@@ -50,7 +50,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     @Test fun should_work_when_setup_as_parent_protocol_CLI_and_request_is_CLI() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.protocolParent",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
                 null,
@@ -61,7 +61,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     @Test fun should_FAIL_when_setup_as_protocol_WEB_and_request_is_CLI() {
         ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "cli", "web", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"), null,
+                "cli", "web", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
                 "app.users.protocolWeb",
                 listOf(Pair("code", "1"), Pair("tag", "abc")),
                 null,

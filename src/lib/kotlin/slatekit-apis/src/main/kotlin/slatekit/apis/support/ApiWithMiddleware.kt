@@ -13,52 +13,15 @@
 
 package slatekit.apis.support
 
-import slatekit.apis.ApiRegAction
-import slatekit.common.*
-import slatekit.common.results.ResultFuncs.failureWithCode
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.UNEXPECTED_ERROR
-import java.io.File
+import slatekit.apis.middleware.Filter
+import slatekit.apis.middleware.Hook
+
+
+typealias Error = slatekit.apis.middleware.Error
+
 
 
 /**
- * Base class for any Api, provides lookup functionality to check for exposed api actions.
- * @param context   : The context of the application ( logger, config, encryptor, etc )
+ * Base class for an Api with all the middleware ( hooks, filters, errors )
  */
-interface ApiWithMiddleware : Api {
-
-    val isErrorEnabled :Boolean
-    val isHookEnabled  :Boolean
-    val isFilterEnabled:Boolean
-
-
-    @Ignore
-    fun onException(context: Context, request: Request, source:Any, ex: Exception): Result<Any> {
-        return failureWithCode(UNEXPECTED_ERROR, msg = "unexpected error in api", err = ex)
-    }
-
-
-    /**
-     * Hook for before this api handles any request
-     */
-    @Ignore
-    fun onBefore(context:Context, request:Request, source:Any, target: ApiRegAction): Unit {
-    }
-
-
-    /**
-     * Hook for after this api handles any request
-     */
-    @Ignore
-    fun onAfter(context:Context, request:Request,  source:Any, target:ApiRegAction): Unit {
-    }
-
-
-    /**
-     * Hook to first filter a request before it is handled by this api.
-     */
-    @Ignore
-    fun onFilter(context:Context, request:Request, source:Any, target:ApiRegAction): Result<Any>  {
-        return success(true)
-    }
-}
+interface ApiWithMiddleware : Api, Hook, Filter, Error

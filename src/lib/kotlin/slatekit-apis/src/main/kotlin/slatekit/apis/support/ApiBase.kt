@@ -13,8 +13,6 @@
 
 package slatekit.apis.support
 
-import slatekit.apis.support.ApiWithMiddleware
-import slatekit.apis.support.ApiWithSupport
 import slatekit.common.*
 
 /**
@@ -23,7 +21,4 @@ import slatekit.common.*
  */
 open class ApiBase(override val context: Context) : ApiWithSupport, ApiWithMiddleware {
 
-    override val isErrorEnabled = false
-    override val isHookEnabled = false
-    override val isFilterEnabled = false
 }

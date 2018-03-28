@@ -1,14 +1,10 @@
 package slatekit.apis.svcs
 
-import slatekit.apis.middleware.Match
 import slatekit.common.*
-import slatekit.common.info.About
 import slatekit.apis.middleware.Rewriter
 
 
-class Format : Rewriter(
-        About.simple("slatekit.output-format", "SlateKit.OutputFormat", "Serializes to various output Formats json|csv|props", "codehelix", "1.0"),
-        Match("", "", ""))
+class Format : Rewriter()
 {
 
     /**

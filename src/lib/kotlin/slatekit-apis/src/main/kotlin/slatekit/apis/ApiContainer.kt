@@ -8,6 +8,9 @@ import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiLookup
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.Areas
+import slatekit.apis.middleware.Filter
+import slatekit.apis.middleware.Hook
+import slatekit.apis.middleware.Middleware
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
@@ -18,6 +21,7 @@ import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.ApiWithMiddleware
+import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.notImplemented
@@ -44,9 +48,8 @@ open class ApiContainer(
         val auth: Auth? = null,
         val protocol: Protocol = AllProtocols,
         val apis: List<ApiReg>? = null,
-        val errors: Errors? = null,
         val namer : Namer? = null,
-        val rewrites: List<Rewriter>? = null,
+        val middleware: List<Middleware>? = null,
         val converter: Converter = Converter(ctx.enc),
         val deserializer: Deserializer = Deserializer(converter, enc = ctx.enc),
         val serializer: ((String,Any?) -> String)? = null,
@@ -82,10 +85,16 @@ open class ApiContainer(
 
 
     /**
+     * The list of rewriters
+     */
+    val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
+
+
+    /**
      * The error handler that responsible for several expected errors/bad-requests
      * and also to handle unexpected errors
      */
-    private val errs = errors ?: Errors(null)
+    private val errs: slatekit.apis.middleware.Error? = middleware?.filter{ it is Error }?.map { it as Error }?.firstOrNull()
 
 
     /**
@@ -217,7 +226,7 @@ open class ApiContainer(
             execute(req)
         }
         catch(ex: Exception) {
-            errs.error(ctx, req, this, ex)
+            errs?.onError(ctx, req, req.path,this, ex, null) ?: failure(err = ex)
         }
         return result
     }
@@ -341,7 +350,7 @@ open class ApiContainer(
 
         // Filter
         val proceed = when(instance) {
-            is ApiWithMiddleware -> if(instance.isFilterEnabled) instance.onFilter(this.ctx, req, this, action) else proceedOk
+            is Filter -> instance.onFilter(this.ctx, req, this, null)
             else                 -> proceedOk
         }
 
@@ -349,16 +358,16 @@ open class ApiContainer(
         val callResult = if (proceed.success) {
 
             // Hook: Before
-            if (instance is ApiWithMiddleware && instance.isHookEnabled) {
-                instance.onBefore(this.ctx, req, this, action)
+            if (instance is Hook) {
+                instance.onBefore(this.ctx, req, action,this, null)
             }
 
             // Finally make the call here.
             val result = executeMethod(req, apiRef)
 
             // Hook: After
-            if (instance is ApiWithMiddleware && instance.isHookEnabled) {
-                instance.onAfter(this.ctx, req, this, action)
+            if (instance is Hook) {
+                instance.onAfter(this.ctx, req, action,this, null)
             }
 
             // Return the result
@@ -391,18 +400,18 @@ open class ApiContainer(
     }
 
 
-    protected open fun handleError(api: ApiLookup?, apiRef: ApiRef?, cmd: Request, ex: Exception): Result<Any> {
+    protected open fun handleError(api: ApiLookup?, apiRef: ApiRef?, req: Request, ex: Exception): Result<Any> {
         // OPTION 1: Api level
-        return if (apiRef != null && apiRef.instance is ApiWithMiddleware && apiRef.instance.isErrorEnabled) {
-            apiRef.instance.onException(this.ctx, cmd, this, ex)
+        return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
+            apiRef.instance.onError(this.ctx, req, apiRef,this, ex, null)
         }
         // OPTION 2: GLOBAL Level custom handler
-        else if (errors != null) {
-            errs.error(ctx, cmd, this, ex)
+        else if (errs != null) {
+            errs.onError(ctx, req, req.path, this, ex, null)
         }
         // OPTION 3: GLOBAL Level default handler
         else {
-            handleErrorInternally(ctx, cmd, ex)
+            handleErrorInternally(ctx, req, ex)
         }
     }
 
