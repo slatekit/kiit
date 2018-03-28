@@ -149,7 +149,7 @@ open class ApiContainer(
     fun sample(cmd: Request, path: File): Result<String> {
         val action = get(cmd)
         val sample = if(action.success) {
-                val parameters = action.value!!.action.paramList
+                val parameters = action.value!!.action.paramsUser
                 val serializer = Serialization.sampler() as SerializerSample
                 val text = serializer.serializeParams(parameters)
                 text

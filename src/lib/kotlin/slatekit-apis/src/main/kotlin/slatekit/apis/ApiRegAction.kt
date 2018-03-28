@@ -13,32 +13,87 @@
 
 package slatekit.apis
 
+import slatekit.common.Meta
+import slatekit.common.Request
+import slatekit.common.ext.tail
 import kotlin.reflect.KCallable
 import kotlin.reflect.KParameter
+import kotlin.reflect.full.createType
+
 
 data class ApiRegAction(
-        val api     : ApiReg        ,
-        val member  : KCallable<*>  ,
-        val name    : String  = ""  ,
-        val desc    : String  = ""  ,
-        val roles   : String  = ""  ,
-        val verb    : String  = "*" ,
-        val protocol: String  = "*" ,
-        val hasArgs : Boolean
+        val api: ApiReg,
+        val member: KCallable<*>,
+        val name: String = "",
+        val desc: String = "",
+        val roles: String = "",
+        val verb: String = "*",
+        val protocol: String = "*"
 ) {
 
+    /**
+     * All the parameters of the function, this includes:
+     *
+     * 1. 0th instance parameter for kotlin
+     * 2. a possible Request
+     * 3. a possible Meta
+     * 4. actual parameters for the method
+     */
+    private val paramsAll = member.parameters
 
-    val paramList: List<KParameter> = if (member.parameters.size == 1) listOf<KParameter>() else member.parameters.subList(1, member.parameters.size)
+
+    /**
+     * All the function specific parameters WITHOUT references to
+     * the following: These are the parameters that can be
+     * discovered, documented, validated against
+     *
+     * 1. 0th instance parameter for kotlin
+     * 2. a possible
+     */
+    val paramsUser = filter(member.parameters)
+
+
+    /**
+     * All the parameters that can me mapped over for
+     * populating during calls on the CLI / Web
+     */
+    val params =
+            if (paramsAll.size <= 1) listOf()
+            else paramsAll.tail()
+
+
+    /**
+     * Whether the action has any arguments.
+     */
+    val hasArgs = !params.isEmpty()
+
 
     fun isSingleDefaultedArg(): Boolean {
-        return if (!hasArgs || paramList.size > 1) {
+        return if (!hasArgs || params.size > 1) {
             false
-        }
-        else {
-            paramList[0].isOptional
+        } else {
+            paramsUser.isNotEmpty() && paramsUser[0].isOptional
         }
     }
 
 
-    fun isSingleArg(): Boolean = hasArgs && paramList.size == 1
+    fun isSingleArg(): Boolean = hasArgs && params.size == 1
+
+
+    companion object {
+
+
+        val TypeRequest = Request::class.createType()
+        val TypeMeta = Meta::class.createType()
+
+
+        fun filter(args: List<KParameter>): List<KParameter> {
+            if (args.isEmpty()) return args
+            val finalArgs = args.tail().filter { arg ->
+                val type = arg.type
+                type != TypeRequest && arg.type != TypeMeta
+            }.toList()
+            return finalArgs
+        }
+    }
 }
