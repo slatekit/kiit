@@ -13,10 +13,7 @@ mantra: Simplicity above all else
 package slatekit.meta
 
 import org.json.simple.JSONObject
-import slatekit.common.Conversions
-import slatekit.common.InputArgs
-import slatekit.common.Inputs
-import slatekit.common.Request
+import slatekit.common.*
 import slatekit.common.encrypt.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -29,24 +26,22 @@ import kotlin.reflect.full.createType
  * represented by rawParams
  */
 open class Deserializer(private val converter:Converter,
-                   private val enc: Encryptor? = null,
-                   private val allowCLI:Boolean = false) {
+                   private val enc: Encryptor? = null) {
 
     val TypeRequest = Request::class.createType()
 
 
-    open fun deserialize(rawParams: List<KParameter>, data: Inputs, source:Any?): Array<Any?> {
+    open fun deserialize(parameters: List<KParameter>, data: Inputs, meta: Meta?, source:Any?): Array<Any?> {
 
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()
-        val parameters = if (rawParams.size == 1) listOf<KParameter>() else rawParams.subList(1, rawParams.size)
-        val jsonRaw = data?.raw as? JSONObject
-        for (ndx in 0..parameters.size - 1) {
+        val jsonRaw = data.raw as? JSONObject
+        for (ndx in 0 until parameters.size) {
             // Get each parameter to the method
             val parameter = parameters[ndx]
             val paramName = parameter.name!!
             val paramType = parameter.type
-            val result = when (paramType) {
+            val result:Any?? = when (paramType) {
 
                 // Basic types
                 KTypes.KStringType        -> Conversions.handleString(data.getString(paramName))
@@ -95,7 +90,7 @@ open class Deserializer(private val converter:Converter,
      */
     fun handleComplex(data: Inputs, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, raw:Any?): Any? {
         val paramName = parameter.name!!
-        return if(allowCLI){
+        return if(jsonRaw == null){
             val cls = tpe.classifier as KClass<*>
 
             // Case 1: List<*>

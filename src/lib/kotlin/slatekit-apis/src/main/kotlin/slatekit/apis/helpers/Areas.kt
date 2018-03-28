@@ -17,6 +17,8 @@ import slatekit.apis.*
 import slatekit.common.*
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.createType
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -28,6 +30,8 @@ import kotlin.reflect.full.primaryConstructor
  * returned from there and used by the ApiContainer.
  */
 class Areas(val apiHost:ApiContainer, val namer:Namer?) {
+
+
 
     /**
      *  ListMap will eventually contain all the areas by name.
@@ -175,13 +179,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
                 val actionVerb = apiActionAnno?.verb ?: apiAnno.verb
                 val actionProtocol = apiActionAnno?.protocol ?: apiAnno.protocol
                 val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
-
-                // d) Get the parameters to easily check/validate params later
-                val parameters = member.parameters
-
-                // Add the action name and link it to the method + annotation
-                val anyParameters = parameters.isNotEmpty() && parameters.size > 1
-                val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?: "", actionRoles, actionVerb, actionProtocol, anyParameters)
+                val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?: "", actionRoles, actionVerb, actionProtocol)
                 endpointLookup.update(actionName, callReflect)
 
                 // add the api to the class lookup

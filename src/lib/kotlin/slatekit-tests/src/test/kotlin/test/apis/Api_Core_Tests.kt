@@ -76,13 +76,13 @@ open class ApiTestsBase {
     }
 
 
-    fun getApis(protocol: String = "cli",
+    fun getApis(protocol: Protocol,
                 auth    : Auth? = null,
                 apis    : List<ApiReg>? = null,
                 errors  : Errors? = null): ApiContainer {
 
         // 2. apis
-        val container = ApiContainer(ctx, false, auth, errors = errors, apis = apis)
+        val container = ApiContainer(ctx, false, auth, errors = errors, apis = apis, protocol = protocol)
         return container
     }
 
@@ -101,11 +101,11 @@ open class ApiTestsBase {
         val apis = if(user != null) {
             val keys = buildKeys()
             val auth = MyAuthProvider(user.first, user.second, keys)
-            val apis = getApis(protocolCt, auth, apis, errors)
+            val apis = getApis(CliProtocol, auth, apis, errors)
             apis
         }
         else {
-            val apis = getApis(protocolCt, apis = apis, errors = errors)
+            val apis = getApis(CliProtocol, apis = apis, errors = errors)
             apis
         }
         val cmd = ApiHelper.buildCliRequest(path, inputs, opts)

@@ -121,12 +121,12 @@ object ApiHelper {
             arrayOf()
         // Check 2: 1 param with default and no args
         else if (action.isSingleDefaultedArg() && args.size() == 0) {
-            val argType = action.paramList[0].type.toString()
+            val argType = action.paramsUser[0].type.toString()
             val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         }
         else {
-            deserializer.deserialize(action.member.parameters, args, cmd)
+            deserializer.deserialize(action.params, args, cmd.meta, cmd)
         }
     }
 

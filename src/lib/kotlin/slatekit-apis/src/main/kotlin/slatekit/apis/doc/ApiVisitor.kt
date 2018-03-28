@@ -108,7 +108,7 @@ class ApiVisitor {
                     visitApiAction(action, visitor, detailMode = true, options = null)
 
                     if (true) {
-                        visitor.onApiActionExample(api, call.name, call, call.paramList)
+                        visitor.onApiActionExample(api, call.name, call, call.paramsUser)
                     }
                 }
             }
@@ -131,10 +131,10 @@ class ApiVisitor {
     fun visitArgs(info: ApiRegAction, visitor: ApiVisit): Unit {
         visitor.onArgsBegin(info)
         if (info.hasArgs) {
-            val names = info.paramList.map { item -> item.name }.filterNotNull()
+            val names = info.paramsUser.map { item -> item.name }.filterNotNull()
             val maxLength = names.maxBy { it.length }?.length ?: 10
             val options = ApiVisitOptions(maxLength)
-            info.paramList.forEach { argInfo ->
+            info.paramsUser.forEach { argInfo ->
 
                 val clsType = KTypes.getClassFromType(argInfo.type)
                 visitor.onArgBegin(argInfo.name!!, "", !argInfo.isOptional, clsType.simpleName!!, options = options)

@@ -21,7 +21,7 @@ import java.time.ZonedDateTime
 data class Meta(  val rawSource: Any,
                   val json: JSONObject,
                   val enc: Encryptor?
-                ) : Inputs {
+                ) : slatekit.common.Meta {
     override val raw:Any = json
 
     override fun size(): Int = json.size

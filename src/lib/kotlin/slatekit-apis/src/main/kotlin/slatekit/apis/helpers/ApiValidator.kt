@@ -33,7 +33,7 @@ object ApiValidator {
         // Check 1: at least 2 parts
         val totalParts = cmd.parts.size
         return if (totalParts < 2) {
-           badRequest<ApiRef>(cmd.action + ": invalid call")
+           badRequest(cmd.action + ": invalid call")
         }
         else {
             // Check 2: Not found ?
@@ -58,7 +58,7 @@ object ApiValidator {
         val apiRefCheck = check(req, fetcher)
 
         return if (!apiRefCheck.success) {
-            badRequest<ApiRef>(msg = "bad request : $fullName: inputs not supplied")
+            badRequest(msg = "bad request : $fullName: inputs not supplied")
         }
         else {
             val apiRef = apiRefCheck.value!!
@@ -69,12 +69,12 @@ object ApiValidator {
                 success(apiRef)
             }
             // Param: Raw ApiCmd itself!
-            else if (action.isSingleArg() && action.paramList[0].type.toString() == "slatekit.common.Request") {
+            else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
                 success(apiRef)
             }
             // Params - check args needed
             else if (!allowSingleDefaultParam && action.hasArgs && args!!.size() == 0)
-                badRequest<ApiRef>(msg = "bad request : " + fullName + ": inputs not supplied")
+                badRequest(msg = "bad request : $fullName: inputs not supplied")
 
             // Params - ensure matching args
             else if (action.hasArgs) {
@@ -83,7 +83,7 @@ object ApiValidator {
                     success(apiRef)
                 }
                 else
-                    badRequest<ApiRef>(msg = "bad request : " + fullName + ": inputs not supplied")
+                    badRequest(msg = "bad request : $fullName: inputs not supplied")
             }
             else
                 success(apiRef)
@@ -91,28 +91,27 @@ object ApiValidator {
     }
 
 
-    fun validateArgs(action: ApiRegAction, args: Inputs): Result<Boolean> {
+    private fun validateArgs(action: ApiRegAction, args: Inputs): Result<Boolean> {
         var error = ": inputs missing or invalid "
         var totalErrors = 0
 
         // Check each parameter to api call
-        for (index in 0..action.paramList.size - 1) {
-            val input = action.paramList[index]
+        for (index in 0 until action.paramsUser.size) {
+            val input = action.paramsUser[index]
             // parameter not supplied ?
             val paramName = input.name!!
             if (!args.containsKey(paramName)) {
                 val separator = if (totalErrors == 0) "( " else ","
                 error += separator + paramName
-                totalErrors = totalErrors + 1
+                totalErrors += 1
             }
         }
         // Any errors ?
         return if (totalErrors > 0) {
-            error = error + " )"
+            error = "$error )"
             badRequest(msg = "bad request: action " + action.name + error)
         }
         else {
-            // Ok!
             ok()
         }
     }

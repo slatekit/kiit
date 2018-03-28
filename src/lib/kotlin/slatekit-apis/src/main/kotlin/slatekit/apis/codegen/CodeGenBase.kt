@@ -110,7 +110,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                     // Iterate over all the api actions
                     val uniqueTypes = apiLookup.actions().values().map { apiRegAction ->
                         println(apiRegAction.member.name)
-                        val customTypes = apiRegAction.paramList.map { p -> buildTypeName(p.type) }
+                        val customTypes = apiRegAction.paramsUser.map { p -> buildTypeName(p.type) }
                                 .filter {
                                     !it.isBasicType
                                             && !it.isCollection
@@ -301,7 +301,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     fun buildArgs(reg:ApiRegAction): String {
-        return reg.paramList.foldIndexed( "", { ndx:Int, acc:String, param:KParameter ->
+        return reg.paramsUser.foldIndexed( "", { ndx:Int, acc:String, param:KParameter ->
             acc + ( if(ndx > 0 ) "\t\t" else "" ) + buildArg(param) + "," + newline
         })
     }
@@ -313,7 +313,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
      */
     open fun buildQueryParams(reg:ApiRegAction): String {
         return if(buildVerb(reg.name) == "get" ) {
-            reg.paramList.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             })
         }
@@ -329,7 +329,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
      */
     open fun buildDataParams(reg:ApiRegAction): String {
         return if(buildVerb(reg.name) != "get") {
-            reg.paramList.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             })
         }
