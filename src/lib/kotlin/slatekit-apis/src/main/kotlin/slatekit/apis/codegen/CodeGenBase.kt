@@ -4,7 +4,7 @@ import slatekit.apis.ApiContainer
 import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.helpers.ApiLookup
+import slatekit.apis.core.Actions
 import slatekit.common.*
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -136,7 +136,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genClientApi(req: Request, apiReg: ApiReg, apiLookup:ApiLookup, folder: File, methods:String):Unit {
+    fun genClientApi(req: Request, apiReg: ApiReg, apiLookup: Actions, folder: File, methods:String):Unit {
         val rawPackageName = req.data?.getStringOpt("package")
         val packageName = rawPackageName ?: apiReg.cls.qualifiedName ?: ""
         val rawTemplate = this.templateClass()
@@ -153,7 +153,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genMethod(req: Request, apiReg: ApiReg, apiLookup:ApiLookup, apiRegAction:ApiRegAction): String {
+    fun genMethod(req: Request, apiReg: ApiReg, apiLookup: Actions, apiRegAction:ApiRegAction): String {
         val info = buildMethodInfo(apiRegAction)
         val rawTemplate = this.templateMethod()
         val finalTemplate = info.entries.fold( rawTemplate, { acc, entry ->
@@ -163,7 +163,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genModel(req: Request, folder:File, apiReg: ApiReg, apiLookup:ApiLookup, apiRegAction:ApiRegAction, cls: KClass<*>): String {
+    fun genModel(req: Request, folder:File, apiReg: ApiReg, apiLookup: Actions, apiRegAction:ApiRegAction, cls: KClass<*>): String {
         val info = buildModelInfo(cls)
         val rawTemplate = this.templateModel()
         val template = rawTemplate

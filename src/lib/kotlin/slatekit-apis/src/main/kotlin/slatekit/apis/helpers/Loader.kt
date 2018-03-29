@@ -2,73 +2,95 @@ package slatekit.apis.helpers
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Actions
 import slatekit.common.Ignore
+import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.Reflector
+import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
 object Loader {
 
-    fun fromAnnotations(clsType: KClass<*>): ApiLookup {
+    fun fromAnnotations(clsType: KClass<*>, namer: Namer?): Actions {
 
         // 1. get the annotation on the class
-        val apiAnnoRaw = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
+        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)!!
 
-        // 2. Create a copy of the final annotation taking into account the overrides.
-        val apiAnno = apiAnnoRaw?.let { apiAnno ->
-            ApiHelper.buildApiInfo(apiAnno, reg)
-        } ?: ApiHelper.buildApiInfo(reg)
-
-        // 3. get the name of the api and its area ( category of apis )
+        // 2. get the name of the api and its area using the naming convention
         val apiName = namer?.name(apiAnno.name)?.text ?: apiAnno.name
         val apiArea = namer?.name(apiAnno.area.nonEmptyOrDefault(""))?.text ?: apiAnno.area.nonEmptyOrDefault("")
 
-        // 4. get the lookup containing all the apis in a specific area
-        var apiLookup = getLookup(apiArea)
+        // 3. create the api registration component
+        val reg = ApiReg(
+            clsType, apiAnno.area,
+            apiAnno.name,
+            apiAnno.desc,
+            apiAnno.roles,
+            apiAnno.auth,
+            apiAnno.verb,
+            apiAnno.protocol,
+            false,
+            null
+        )
+        val actions = loadActions(reg, namer)
+        return Actions(reg, actions)
+    }
 
-        // 5. add api name to area
-        val endpointLookup = ApiLookup(apiAnno)
-        apiLookup = apiLookup.add(apiName, endpointLookup)
-        _areas[apiArea] = apiLookup
-        _areaApis[apiArea]?.let { it[apiName] = apiAnno }
 
-        // 6. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(clsType, ApiAction::class, reg.declaredOnly)
-        val rawIgnores = Reflector.getAnnotatedMembersOpt<Ignore>(clsType, Ignore::class, reg.declaredOnly)
-        val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map{ it -> Pair(it.first.name, true )}.toMap()
+    fun loadActions(reg:ApiReg, namer:Namer?): List<Pair<String,ApiRegAction>> {
 
+        // 1. get all the methods with the apiAction annotation
+        val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(reg.cls, ApiAction::class, reg.declaredOnly)
+        val rawIgnores = Reflector.getAnnotatedMembersOpt<Ignore>(reg.cls, Ignore::class, reg.declaredOnly)
+        val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map { it -> Pair(it.first.name, true) }.toMap()
+
+        // 2. Filter out builtin methods
         val matches = rawMatches.filter { mem ->
             mem.first.name != "equals" && mem.first.name != "hashCode" && mem.first.name != "toString"
         }
-        matches.forEach { item ->
+
+        // 3. Convert to ApiRegAction
+        val routes:List<Pair<String,ApiRegAction>?> = matches.map { item ->
 
             // a) The member
             val member = item.first
 
             // Ensure it does not have an Ignore annotation
-            if(rawIgnoresLookup.containsKey(member.name)) {
+            if (rawIgnoresLookup.containsKey(member.name)) {
                 val ignored = member.name
-            }
-            else {
-                // b) Get the name of the action or default to method name
-                val methodName = member.name
-
-                // c) Annotation
-                val apiActionAnno = item.second
-                val actionNameRaw = apiActionAnno?.name.nonEmptyOrDefault(methodName)
-                val actionRoles = apiActionAnno?.roles ?: apiAnno.roles
-                val actionVerb = apiActionAnno?.verb ?: apiAnno.verb
-                val actionProtocol = apiActionAnno?.protocol ?: apiAnno.protocol
-                val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
-                val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?: "", actionRoles, actionVerb, actionProtocol)
-                endpointLookup.update(actionName, callReflect)
-
-                // add the api to the class lookup
-                _apisToClasses["$apiArea.$apiName"] = apiAnno
+                null
+            } else {
+                buildAction(item.first, reg, item.second, namer)
             }
         }
-        // if singleton and api host aware, set the host
-        setApiHost(reg.singleton)
+
+        // 4. Filter out ignored ones.
+        val finalRoutes = routes.filterNotNull()
+        return finalRoutes
+    }
+
+
+    fun buildAction(member:KCallable<*>, reg:ApiReg, apiAction:ApiAction?, namer:Namer?): Pair<String,ApiRegAction> {
+
+        val methodName = member.name
+        val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
+        val actionRoles = apiAction?.roles ?: reg.roles
+        val actionVerb = apiAction?.verb ?: reg.verb
+        val actionProtocol = apiAction?.protocol ?: reg.protocol
+        val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
+        val actionDesc = apiAction?.desc ?: ""
+        val action = ApiRegAction(
+            reg,
+            member,
+            actionName,
+            actionDesc,
+            actionRoles,
+            actionVerb,
+            actionProtocol
+        )
+        return Pair(actionName, action)
     }
 }

@@ -13,11 +13,9 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
-import slatekit.apis.helpers.ApiLookup
+import slatekit.apis.core.Actions
 import slatekit.apis.helpers.Areas
-import slatekit.common.ListMap
 import slatekit.meta.KTypes
 
 
@@ -76,7 +74,7 @@ class ApiVisitor {
     }
 
 
-    fun visitApiActions(apiBase: ApiLookup, apiName: String, visitor: ApiVisit): Unit {
+    fun visitApiActions(apiBase: Actions, apiName: String, visitor: ApiVisit): Unit {
         val actions = apiBase.actions()
         val first: ApiRegAction? = actions.all().firstOrNull()
         first?.let{ visitor.onApiBeginDetail(it.api) }
@@ -96,7 +94,7 @@ class ApiVisitor {
     }
 
 
-    fun visitApiAction(apiBase: ApiLookup, apiName: String, actionName: String, visitor: ApiVisit): Unit {
+    fun visitApiAction(apiBase: Actions, apiName: String, actionName: String, visitor: ApiVisit): Unit {
         val actions = apiBase.actions()
         if (actions.size > 0) {
             actions.getAt(0)?.let { apiAnno ->

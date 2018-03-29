@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis.helpers
+package slatekit.apis.core
 
 import slatekit.apis.ApiReg
 import slatekit.apis.ApiRegAction
@@ -19,12 +19,11 @@ import slatekit.common.*
 
 
 /**
- * Provides lookup functionality to check for exposed api actions.
- * @param api: The APIReg that represents the metadata for 1 API/Class
+ * Provides lookup functionality for all the actions in an API
  */
-class ApiLookup(val api: ApiReg) {
+class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
 
-    var _lookup = ListMap<String, ApiRegAction>()
+    var _lookup = ListMap(actions)
 
 
     /**
@@ -65,15 +64,4 @@ class ApiLookup(val api: ApiReg) {
      * @return
      */
     fun getOpt(action: String): ApiRegAction? = _lookup[action]
-
-
-    /**
-     * adds a key/value to this collection
-     *
-     * @param action
-     * @param value
-     */
-    fun update(action: String, value: ApiRegAction): Unit {
-        _lookup = _lookup.add(action, value)
-    }
 }

@@ -5,7 +5,7 @@ import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
 import slatekit.apis.svcs.Format
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.helpers.ApiLookup
+import slatekit.apis.core.Actions
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.Areas
 import slatekit.apis.middleware.Filter
@@ -20,11 +20,9 @@ import slatekit.common.results.ResultFuncs.okOrFailure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.apis.middleware.Rewriter
-import slatekit.apis.support.ApiWithMiddleware
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.meta.*
 import java.io.File
 import kotlin.reflect.KCallable
@@ -400,7 +398,7 @@ open class ApiContainer(
     }
 
 
-    protected open fun handleError(api: ApiLookup?, apiRef: ApiRef?, req: Request, ex: Exception): Result<Any> {
+    protected open fun handleError(api: Actions?, apiRef: ApiRef?, req: Request, ex: Exception): Result<Any> {
         // OPTION 1: Api level
         return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
             apiRef.instance.onError(this.ctx, req, apiRef,this, ex, null)

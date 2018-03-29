@@ -14,11 +14,10 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.*
+import slatekit.apis.core.Actions
 import slatekit.common.*
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
-import kotlin.reflect.full.createType
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -41,7 +40,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
      *      - sys   : Apis
      *      - admin : Apis
      */
-    private var _areas = mutableMapOf<String, ListMap<String, ApiLookup>>()
+    private var _areas = mutableMapOf<String, ListMap<String, Actions>>()
     private val _areaApis = mutableMapOf<String, MutableMap<String, ApiReg>>()
     private var _apisToClasses = mutableMapOf<String, ApiReg>()
 
@@ -75,7 +74,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
     /**
      * Gets the area
      */
-    operator fun get(area: String): ListMap<String, ApiLookup>? = _areas[area]
+    operator fun get(area: String): ListMap<String, Actions>? = _areas[area]
 
 
     fun getApi(area:String, name:String): ApiReg {
@@ -133,58 +132,27 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
         val apiAnnoRaw = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
 
         // 2. Create a copy of the final annotation taking into account the overrides.
-        val apiAnno = apiAnnoRaw?.let { apiAnno ->
+        val apiReg = apiAnnoRaw?.let { apiAnno ->
             ApiHelper.buildApiInfo(apiAnno, reg)
         } ?: ApiHelper.buildApiInfo(reg)
 
         // 3. get the name of the api and its area ( category of apis )
-        val apiName = namer?.name(apiAnno.name)?.text ?: apiAnno.name
-        val apiArea = namer?.name(apiAnno.area.nonEmptyOrDefault(""))?.text ?: apiAnno.area.nonEmptyOrDefault("")
+        val apiName = namer?.name(apiReg.name)?.text ?: apiReg.name
+        val apiArea = namer?.name(apiReg.area.nonEmptyOrDefault(""))?.text ?: apiReg.area.nonEmptyOrDefault("")
 
-        // 4. get the lookup containing all the apis in a specific area
-        var apiLookup = getLookup(apiArea)
+        // 4. Get the actions
+        val actionList = Loader.loadActions(apiReg, namer)
 
         // 5. add api name to area
-        val endpointLookup = ApiLookup(apiAnno)
-        apiLookup = apiLookup.add(apiName, endpointLookup)
+        var apiLookup = getLookup(apiArea)
+        val actions = Actions(apiReg, actionList)
+        apiLookup = apiLookup.add(apiName, actions)
         _areas[apiArea] = apiLookup
-        _areaApis[apiArea]?.let { it[apiName] = apiAnno }
+        _areaApis[apiArea]?.let { it[apiName] = apiReg }
 
-        // 6. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(clsType, ApiAction::class, reg.declaredOnly)
-        val rawIgnores = Reflector.getAnnotatedMembersOpt<Ignore>(clsType, Ignore::class, reg.declaredOnly)
-        val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map{ it -> Pair(it.first.name, true )}.toMap()
+        // add the api to the class lookup
+        _apisToClasses["$apiArea.$apiName"] = apiReg
 
-        val matches = rawMatches.filter { mem ->
-            mem.first.name != "equals" && mem.first.name != "hashCode" && mem.first.name != "toString"
-        }
-        matches.forEach { item ->
-
-            // a) The member
-            val member = item.first
-
-            // Ensure it does not have an Ignore annotation
-            if(rawIgnoresLookup.containsKey(member.name)) {
-                val ignored = member.name
-            }
-            else {
-                // b) Get the name of the action or default to method name
-                val methodName = member.name
-
-                // c) Annotation
-                val apiActionAnno = item.second
-                val actionNameRaw = apiActionAnno?.name.nonEmptyOrDefault(methodName)
-                val actionRoles = apiActionAnno?.roles ?: apiAnno.roles
-                val actionVerb = apiActionAnno?.verb ?: apiAnno.verb
-                val actionProtocol = apiActionAnno?.protocol ?: apiAnno.protocol
-                val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
-                val callReflect = ApiRegAction(apiAnno, member, actionName, apiActionAnno?.desc ?: "", actionRoles, actionVerb, actionProtocol)
-                endpointLookup.update(actionName, callReflect)
-
-                // add the api to the class lookup
-                _apisToClasses["$apiArea.$apiName"] = apiAnno
-            }
-        }
         // if singleton and api host aware, set the host
         setApiHost(reg.singleton)
     }
@@ -207,7 +175,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
     }
 
 
-    fun visitApis(visitor:(ApiReg, ApiLookup) -> Unit):Unit {
+    fun visitApis(visitor:(ApiReg, Actions) -> Unit):Unit {
         val areas = this.keys()
 
         // 1. Each top level area in the system
@@ -287,12 +255,12 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
      * @param area
      * @return
      */
-    private fun getLookup(area: String): ListMap<String, ApiLookup> {
+    private fun getLookup(area: String): ListMap<String, Actions> {
         val result = if (_areas.contains(area)) {
             _areas[area]!!
         }
         else {
-            val lookup = ListMap<String, ApiLookup>()
+            val lookup = ListMap<String, Actions>()
             _areas[area] = lookup
             _areaApis[area] = mutableMapOf<String, ApiReg>()
             lookup
