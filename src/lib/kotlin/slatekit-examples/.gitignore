@@ -18,6 +18,7 @@ lib/
 build/
 dist/
 target/
+out/
 
 
 # tests

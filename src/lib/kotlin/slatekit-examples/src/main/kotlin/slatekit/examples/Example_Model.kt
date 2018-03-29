@@ -24,7 +24,9 @@ import slatekit.common.auth.User
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.info.Host
 import slatekit.common.results.ResultFuncs.ok
+import slatekit.meta.KTypes
 import slatekit.meta.buildAddTable
+import kotlin.reflect.full.createType
 
 //</doc:import_examples>
 
@@ -69,12 +71,12 @@ class Example_Model : Cmd("model") {
 
     // CASE 3: add fields for text, bool, int, date etc.
     model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", _propList = listOf(
-                 ModelField(name = "key"        , isRequired = true, maxLength = 30, dataType = String::class),
-                 ModelField(name = "api"       , isRequired = true, maxLength = 30, dataType = String::class),
-                 ModelField(name = "recordState", isRequired = true, dataType = Int::class),
-                 ModelField(name = "hostInfo"   , isRequired = true, dataType = Host::class),
-                 ModelField(name = "created"    , isRequired = true, dataType = DateTime::class),
-                 ModelField(name = "updated"    , isRequired = true, dataType = DateTime::class)
+                 ModelField(name = "key"        , isRequired = true, maxLength = 30, dataType = String::class, dataKType = KTypes.KStringType),
+                 ModelField(name = "api"       , isRequired = true, maxLength = 30, dataType = String::class, dataKType = KTypes.KStringType),
+                 ModelField(name = "recordState", isRequired = true, dataType = Int::class, dataKType = KTypes.KIntType),
+                 ModelField(name = "hostInfo"   , isRequired = true, dataType = Host::class, dataKType = Host::class.createType()),
+                 ModelField(name = "created"    , isRequired = true, dataType = DateTime::class, dataKType = KTypes.KDateTimeType),
+                 ModelField(name = "updated"    , isRequired = true, dataType = DateTime::class, dataKType = KTypes.KDateTimeType)
       ))
 
     // CASE 4. check for any fields

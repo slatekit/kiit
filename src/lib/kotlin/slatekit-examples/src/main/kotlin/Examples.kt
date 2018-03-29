@@ -21,7 +21,7 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>):Unit  {
-    val cmd = Example_Workers()
+    val cmd = Example_SmartStrings()
     cmd.execute()
     println("hello kotlin examples")
 }
