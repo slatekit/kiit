@@ -16,7 +16,6 @@ package slatekit.server.spark
 import slatekit.common.Conversions
 import slatekit.common.DateTime
 import slatekit.common.InputFuncs
-import slatekit.common.Inputs
 import slatekit.common.encrypt.Encryptor
 import spark.Request
 import java.time.LocalDate
@@ -25,7 +24,7 @@ import java.time.LocalTime
 import java.time.ZonedDateTime
 
 
-data class HttpHeaders(val req: Request, val enc: Encryptor?) : Inputs {
+data class HttpHeaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
 
     override val raw:Any = req.headers()
     override fun get(key: String): Any? = getInternal(key)

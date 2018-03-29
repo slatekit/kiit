@@ -7,7 +7,7 @@ import slatekit.apis.svcs.Format
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.core.Actions
 import slatekit.apis.helpers.ApiValidator
-import slatekit.apis.helpers.Areas
+import slatekit.apis.core.Areas
 import slatekit.apis.middleware.Filter
 import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Middleware

@@ -19,7 +19,7 @@ import slatekit.common.*
 
 
 /**
- * Provides lookup functionality for all the actions in an API
+ * Storage and lookup of all the actions in a single API
  */
 class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
 

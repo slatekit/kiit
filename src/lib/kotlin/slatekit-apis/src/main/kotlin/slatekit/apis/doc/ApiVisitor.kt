@@ -15,7 +15,7 @@ package slatekit.apis.doc
 
 import slatekit.apis.ApiRegAction
 import slatekit.apis.core.Actions
-import slatekit.apis.helpers.Areas
+import slatekit.apis.core.Areas
 import slatekit.meta.KTypes
 
 

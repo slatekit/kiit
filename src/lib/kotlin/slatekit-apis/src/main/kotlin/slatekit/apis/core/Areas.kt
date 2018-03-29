@@ -11,10 +11,11 @@
  * </slate_header>
  */
 
-package slatekit.apis.helpers
+package slatekit.apis.core
 
 import slatekit.apis.*
-import slatekit.apis.core.Actions
+import slatekit.apis.helpers.ApiHelper
+import slatekit.apis.helpers.Loader
 import slatekit.common.*
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
@@ -29,8 +30,6 @@ import kotlin.reflect.full.primaryConstructor
  * returned from there and used by the ApiContainer.
  */
 class Areas(val apiHost:ApiContainer, val namer:Namer?) {
-
-
 
     /**
      *  ListMap will eventually contain all the areas by name.
