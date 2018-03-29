@@ -28,6 +28,7 @@ import slatekit.common.app.AppMeta
 import slatekit.common.info.Folders
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.toResponse
 import slatekit.core.cmds.Cmd
 //</doc:import_examples>
 
@@ -101,7 +102,7 @@ class Example_CLI : Cmd("auth") {
             val res = success("Sample result from CLI for req: " + req.path)
 
             // 4. Now return the command w/ the new result.
-            val cliResult = cmd.copy(result = res)
+            val cliResult = cmd.copy(result = res.toResponse())
             return cliResult
         }
 

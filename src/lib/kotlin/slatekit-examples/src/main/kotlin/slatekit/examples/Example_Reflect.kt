@@ -70,7 +70,7 @@ class Example_Reflect : Cmd("reflect") {
 
 
     // CASE 3: Set a field value
-    Reflector.setFieldValue(user, "email", "johndoe@work.com")
+    Reflector.setFieldValue(user, User::email, "johndoe@work.com")
     println("email : " + user.email)
 
 

@@ -117,7 +117,6 @@ class Example_Database : Cmd("db") {
         // CASE 15: Drop a table
         // Be careful with this, ensure you are using a connection string
         // with limited permissions.
-        db.dropTable("user")
         //</doc:examples>
         return ok()
     }

@@ -160,7 +160,8 @@ class Guide_ORM : Cmd("types") {
         // 4. Subclassed to perform more complex business logic that may still involve using the repo.
         //
         val ctx = AppContext.simple("sampleapp1")
-        val service = MovieService(ctx, EntityRepoInMemory<Movie>(Movie::class))
+        val ent = Entities()
+        val service = MovieService(ctx, ent, EntityRepoInMemory<Movie>(Movie::class))
 
         // CASE 1: Create 3-4 users for showing use-cases
         service.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))
