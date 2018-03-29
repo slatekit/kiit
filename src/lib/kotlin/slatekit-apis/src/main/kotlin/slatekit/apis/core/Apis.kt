@@ -21,7 +21,7 @@ import slatekit.common.*
 /**
  * Storage and lookup of all the actions in a single API
  */
-class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
+class Apis(val api: ApiReg, val actions:List<Pair<String,Actions>>) {
 
     var _lookup = ListMap(actions)
 
@@ -37,7 +37,7 @@ class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
      *
      * @return
      */
-    fun actions(): ListMap<String, ApiRegAction> = _lookup.clone()
+    fun actions(): ListMap<String, Actions> = _lookup.clone()
 
 
     /**
@@ -55,7 +55,7 @@ class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
      * @param action
      * @return
      */
-    operator fun get(action: String): ApiRegAction? {
+    operator fun get(action: String): Actions? {
         return if (!contains(action))
             null
         else
@@ -69,5 +69,5 @@ class Actions(val api: ApiReg, val actions:List<Pair<String,ApiRegAction>>) {
      * @param action
      * @return
      */
-    fun getOpt(action: String): ApiRegAction? = _lookup[action]
+    fun getOpt(action: String): Actions? = _lookup[action]
 }

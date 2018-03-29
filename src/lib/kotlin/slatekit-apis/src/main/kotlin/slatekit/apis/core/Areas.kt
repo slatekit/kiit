@@ -39,7 +39,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
      *      - sys   : Apis
      *      - admin : Apis
      */
-    private var _areas = mutableMapOf<String, ListMap<String, Actions>>()
+    private var _areas = mutableMapOf<String, Apis>()
     private val _areaApis = mutableMapOf<String, MutableMap<String, ApiReg>>()
     private var _apisToClasses = mutableMapOf<String, ApiReg>()
 
@@ -73,7 +73,7 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
     /**
      * Gets the area
      */
-    operator fun get(area: String): ListMap<String, Actions>? = _areas[area]
+    operator fun get(area: String): Apis? = _areas[area]
 
 
     fun getApi(area:String, name:String): ApiReg {
@@ -254,12 +254,12 @@ class Areas(val apiHost:ApiContainer, val namer:Namer?) {
      * @param area
      * @return
      */
-    private fun getLookup(area: String): ListMap<String, Actions> {
+    private fun getLookup(area: String): Apis {
         val result = if (_areas.contains(area)) {
             _areas[area]!!
         }
         else {
-            val lookup = ListMap<String, Actions>()
+            val lookup = Apis()
             _areas[area] = lookup
             _areaApis[area] = mutableMapOf<String, ApiReg>()
             lookup
