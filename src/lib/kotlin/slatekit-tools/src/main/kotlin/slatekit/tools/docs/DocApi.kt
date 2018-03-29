@@ -16,6 +16,7 @@ class DocApi(val context: AppEntContext) {
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
      * sys.docs.generateAll -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
+     * sys.docs.generateAll -root="/Users/kishorereddy/git/slatekit" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
      */
     @ApiAction(name = "", desc= "generates the markdown docs", roles= "", verb = "@parent", protocol = "@parent")
     fun generateAll(root:String, template:String, output:String): Result<String> {
