@@ -464,15 +464,15 @@ open class ApiContainer(
                 }
             // 2: {area} ? = help on area
                 "area ?"     -> {
-                    help.helpForArea(req.parts[0])
+                    help.area(req.parts[0])
                 }
             // 3. {area}.{api} = help on api
                 "area.api ?" -> {
-                    help.helpForApi(req.parts[0], req.parts[1])
+                    help.api(req.parts[0], req.parts[1])
                 }
             // 3. {area}.{api}.{action} = help on api action
                 else         -> {
-                    help.helpForAction(req.parts[0], req.parts[1], req.parts[2])
+                    help.action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }
             success(Content.html(content))

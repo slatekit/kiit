@@ -154,7 +154,7 @@ abstract class Doc : ApiVisit {
         writer.text(" ", endLine = false)
         writer.text(action.desc, endLine = true)
         writer.subTitle("PATH   : ", false)
-        writer.highlight(buildPath(action.api.area, action.api.name, action.name, null), true)
+        writer.highlight(buildPath("", "", action.name, null), true)
     }
 
 
@@ -241,7 +241,7 @@ abstract class Doc : ApiVisit {
 
 
     open fun buildPath(action: Action, sep:String? = null) : String {
-        return buildPath(action.api.area, action.api.name, action.name, sep)
+        return buildPath("", "", action.name, sep)
     }
 
 

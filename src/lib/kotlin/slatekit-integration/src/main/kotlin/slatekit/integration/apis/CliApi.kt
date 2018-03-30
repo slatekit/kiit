@@ -35,7 +35,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
              val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
-             apiItems: List<Api>? = null
+             apiItems: List<Api> = listOf()
 )
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
 
@@ -116,15 +116,15 @@ class CliApi(private val creds: slatekit.common.Credentials,
         when (mode) {
             // 1: {area} ? = help on area
             slatekit.core.cli.CliConstants.VerbPartArea -> {
-                apis.help.helpForArea(cmd.args.getVerb(0))
+                apis.help.area(cmd.args.getVerb(0))
             }
             // 2. {area}.{api} = help on api
             slatekit.core.cli.CliConstants.VerbPartApi  -> {
-                apis.help.helpForApi(cmd.args.getVerb(0), cmd.args.getVerb(1))
+                apis.help.api(cmd.args.getVerb(0), cmd.args.getVerb(1))
             }
             // 3. {area}.{api}.{action} = help on api action
             else                                        -> {
-                apis.help.helpForAction(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
+                apis.help.action(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
             }
         }
     }
