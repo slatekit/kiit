@@ -66,9 +66,11 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_register_after_initial_setup() {
-        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), auth = null, allowIO = false)
-        apis.register(Api(AppApi(ctx)))
-        apis.register(Api(VersionApi(ctx)))
+        val apis = ApiContainer(ctx, apis = listOf(
+                Api(SamplePOKOApi::class),
+                Api(AppApi(ctx)),
+                Api(VersionApi(ctx))
+        ), auth = null, allowIO = false)
 
         assert(apis.getApi(""   , "SamplePOKO", "getTime"  ).success)
         assert(apis.getApi("sys", "app"       , "host"     ).success)
@@ -77,9 +79,11 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_check_action_does_NOT_exist() {
-        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), auth = null, allowIO = false)
-        apis.register(Api(AppApi(ctx)))
-        apis.register(Api(VersionApi(ctx)))
+        val apis = ApiContainer(ctx, apis = listOf(
+                Api(SamplePOKOApi::class),
+                Api(AppApi(ctx)),
+                Api(VersionApi(ctx))
+        ), auth = null, allowIO = false)
 
         assert(!apis.contains("SamplePOKO.fakeMethod"))
         assert(!apis.contains("sys.app.host2"))
@@ -87,9 +91,11 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_check_action_exists() {
-        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), auth = null, allowIO = false)
-        apis.register(Api(AppApi(ctx)))
-        apis.register(Api(VersionApi(ctx)))
+        val apis = ApiContainer(ctx, apis = listOf(
+                Api(SamplePOKOApi::class),
+                Api(AppApi(ctx)),
+                Api(VersionApi(ctx))
+        ), auth = null, allowIO = false)
 
         assert(apis.contains("SamplePOKO.getCounter"))
         assert(apis.contains("sys.app.host"))

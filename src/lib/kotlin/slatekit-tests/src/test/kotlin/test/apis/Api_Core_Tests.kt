@@ -78,7 +78,7 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth    : Auth? = null,
-                apis    : List<Api>? = null): ApiContainer {
+                apis    : List<Api> = listOf()): ApiContainer {
 
         // 2. apis
         val container = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
@@ -86,7 +86,7 @@ open class ApiTestsBase {
     }
 
 
-    fun ensureCall(apis      : List<Api>? = null,
+    fun ensureCall(apis      : List<Api> = listOf(),
                    protocolCt: String,
                    protocol  : String,
                    authMode  : String,

@@ -43,8 +43,6 @@ import test.setup.User
 class Api_Route_Tests : ApiTestsBase() {
 
     @Test fun setup_routes() {
-        val action  = Action()
-        val area = Area("admin")
-        val api = Api( area, )
+
     }
 }
