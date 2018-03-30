@@ -82,6 +82,14 @@ object Reflector {
 
 
     @Suppress("UNCHECKED_CAST")
+    fun getMembers(cls: KClass<*>, declared:Boolean, filterOutBuiltins:Boolean): List<KCallable<*>> {
+
+        val members = if(declared) cls.declaredMembers else cls.members
+        return members.filter { mem -> if(filterOutBuiltins) !isBuiltIn(mem) else true }
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotationForMember(member:KCallable<*>, anoType: KClass<*>): T? {
 
         val anno = member.annotations.filter { it -> it.annotationClass == anoType }.firstOrNull()
@@ -184,6 +192,11 @@ object Reflector {
         else {
             cls.memberProperties.toList()
         }
+    }
+
+
+    fun isBuiltIn(mem:KCallable<*>):Boolean {
+        return mem.name != "equals" && mem.name != "hashCode" && mem.name != "toString"
     }
 
 

@@ -2,10 +2,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiReg
-import slatekit.common.Context
-import slatekit.common.Request
-import slatekit.common.results.ResultFuncs.failure
+import slatekit.apis.core.Api
 import test.setup.SampleErrorsApi
 
 
@@ -14,7 +11,7 @@ class Api_Errors_Tests : ApiTestsBase() {
 
     @Test fun can_use_error_codes() {
         val number = "abc"
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
         val result = apis.call("", "SampleErrors", "parseNumberWithResults", "", mapOf(), mapOf("text" to number))
         assert(!result.success)
         assert(result.isFailure)
@@ -24,7 +21,7 @@ class Api_Errors_Tests : ApiTestsBase() {
 
     @Test fun can_use_error_handling_at_api_level() {
         val number = "abc"
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
         val result = apis.call("", "SampleErrors", "parseNumberWithExceptions", "", mapOf(), mapOf("text" to number))
         assert(!result.success)
         assert(result.isUnexpectedError)

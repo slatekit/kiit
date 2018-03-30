@@ -13,7 +13,7 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Action
 import slatekit.apis.core.Actions
 import slatekit.apis.core.Areas
 import slatekit.meta.KTypes
@@ -43,7 +43,7 @@ class ApiVisitor {
             visitor.onApiError("Area : $area not found")
         }
         else {
-            val all = apis.all()
+            val all = apis.actions()
             if (all.isNotEmpty()) {
                 val keys = apis.keys()
                 val maxLength = keys.maxBy { it.length }?.length ?: 10
@@ -76,7 +76,7 @@ class ApiVisitor {
 
     fun visitApiActions(apiBase: Actions, apiName: String, visitor: ApiVisit): Unit {
         val actions = apiBase.actions()
-        val first: ApiRegAction? = actions.all().firstOrNull()
+        val first: Action? = actions.all().firstOrNull()
         first?.let{ visitor.onApiBeginDetail(it.api) }
         if (actions.size > 0) {
                 visitor.onVisitSeparator()
@@ -114,7 +114,7 @@ class ApiVisitor {
     }
 
 
-    fun visitApiAction(action: ApiRegAction, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
+    fun visitApiAction(action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
         // action
         visitor.onApiActionBeginDetail(action, action.name, options)
 
@@ -126,7 +126,7 @@ class ApiVisitor {
     }
 
 
-    fun visitArgs(info: ApiRegAction, visitor: ApiVisit): Unit {
+    fun visitArgs(info: Action, visitor: ApiVisit): Unit {
         visitor.onArgsBegin(info)
         if (info.hasArgs) {
             val names = info.paramsUser.map { item -> item.name }.filterNotNull()

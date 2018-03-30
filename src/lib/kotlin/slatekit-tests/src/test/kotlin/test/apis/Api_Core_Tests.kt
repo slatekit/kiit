@@ -14,6 +14,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.*
+import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
 import slatekit.common.ApiKey
@@ -77,7 +78,7 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth    : Auth? = null,
-                apis    : List<ApiReg>? = null): ApiContainer {
+                apis    : List<Api>? = null): ApiContainer {
 
         // 2. apis
         val container = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
@@ -85,15 +86,15 @@ open class ApiTestsBase {
     }
 
 
-    fun ensureCall( apis      : List<ApiReg>? = null,
-                    protocolCt: String,
-                    protocol  : String,
-                    authMode  : String,
-                    user      : Pair<String,String>?,
-                    path      : String,
-                    inputs    : List<Pair<String,Any>>?,
-                    opts      : List<Pair<String,Any>>?,
-                    expected  : Result<String>):Unit
+    fun ensureCall(apis      : List<Api>? = null,
+                   protocolCt: String,
+                   protocol  : String,
+                   authMode  : String,
+                   user      : Pair<String,String>?,
+                   path      : String,
+                   inputs    : List<Pair<String,Any>>?,
+                   opts      : List<Pair<String,Any>>?,
+                   expected  : Result<String>):Unit
     {
         val apis = if(user != null) {
             val keys = buildKeys()
@@ -114,8 +115,8 @@ open class ApiTestsBase {
     }
 
 
-    fun buildUserApiRegSingleton(ctx: AppEntContext):ApiReg {
-        return ApiReg(UserApi(ctx))
+    fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
+        return Api(UserApi(ctx))
     }
 }
 

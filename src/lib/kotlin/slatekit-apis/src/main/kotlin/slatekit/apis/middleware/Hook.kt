@@ -13,10 +13,9 @@
 
 package slatekit.apis.middleware
 
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Action
 import slatekit.common.Context
 import slatekit.common.Request
-import slatekit.common.info.About
 
 
 /**
@@ -36,7 +35,7 @@ interface Hook : Middleware {
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    fun onBefore(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?): Unit {
+    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Unit {
     }
 
 
@@ -48,6 +47,6 @@ interface Hook : Middleware {
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
-    fun onAfter(ctx: Context, req: Request, target:ApiRegAction, source: Any, args: Map<String, Any>?): Unit {
+    fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Unit {
     }
 }

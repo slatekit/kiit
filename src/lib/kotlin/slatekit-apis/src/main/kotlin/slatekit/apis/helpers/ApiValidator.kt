@@ -14,7 +14,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.ApiRef
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Action
 import slatekit.common.Inputs
 import slatekit.common.Request
 import slatekit.common.Result
@@ -28,16 +28,16 @@ object ApiValidator {
     /**
      * Checks the "route" ( area.api.action ) is valid.
      */
-    fun check(cmd: Request, fetcher: (Request) -> Result<ApiRef>) : Result<ApiRef> {
+    fun check(req: Request, fetcher: (Request) -> Result<ApiRef>) : Result<ApiRef> {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
-        val totalParts = cmd.parts.size
+        val totalParts = req.parts.size
         return if (totalParts < 2) {
-           badRequest(cmd.action + ": invalid call")
+           badRequest(req.action + ": invalid call")
         }
         else {
             // Check 2: Not found ?
-            val check = fetcher(cmd)
+            val check = fetcher(req)
             check
         }
     }
@@ -91,7 +91,7 @@ object ApiValidator {
     }
 
 
-    private fun validateArgs(action: ApiRegAction, args: Inputs): Result<Boolean> {
+    private fun validateArgs(action: Action, args: Inputs): Result<Boolean> {
         var error = ": inputs missing or invalid "
         var totalErrors = 0
 

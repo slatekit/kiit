@@ -16,10 +16,9 @@ package slatekit.apis.core
 import slatekit.apis.ApiContainer
 import slatekit.apis.doc.ApiVisitor
 import slatekit.apis.doc.Doc
-import slatekit.apis.helpers.Areas
 
 
-class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) {
+class Help(val ctn: ApiContainer, val routes: Routes, val docBuilder: () -> Doc) {
 
 
     /**
@@ -31,7 +30,7 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
 
         val doc = docBuilder()
         val visitor = ApiVisitor()
-        val apis = lookup.keys()
+        val apis = routes.areas
         apis?.let { apis ->
             visitor.visitAreas(apis, doc)
         }
@@ -45,10 +44,10 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param area
      * @return
      */
-    fun helpForArea(area: String): String {
+    fun area(area: String): String {
         val doc = docBuilder()
         val visitor = ApiVisitor()
-        visitor.visitApis(area, lookup, doc)
+        visitor.visitApis(area, routes, doc)
         return doc.toString()
     }
 
@@ -60,16 +59,11 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param apiName
      * @return
      */
-    fun helpForApi(area: String, apiName: String): String {
+    fun api(area: String, apiName: String): String {
         val doc = docBuilder()
-        val apis = lookup[area]
-        apis?.let { apis ->
-            val api = apis[apiName]
-            api?.let { apiBase ->
                 val visitor = ApiVisitor()
                 visitor.visitApiActions(apiBase, apiName, doc)
-            }
-        }
+
         return doc.toString()
     }
 
@@ -82,16 +76,10 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param actionName
      * @return
      */
-    fun helpForAction(area: String, apiName: String, actionName: String): String {
+    fun action(area: String, api: String, action: String): String {
         val doc = docBuilder()
-        val apis = lookup[area]
-        apis?.let { apis ->
-            val api = apis[apiName]
-            api?.let { apiBase ->
-                val visitor = ApiVisitor()
-                visitor.visitApiAction(apiBase, apiName, actionName, doc)
-            }
-        }
+        val visitor = ApiVisitor()
+        visitor.visitApiAction(api, api, action, doc)
         return doc.toString()
     }
 }

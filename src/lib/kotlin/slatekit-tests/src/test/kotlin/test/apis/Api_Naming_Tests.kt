@@ -1,7 +1,7 @@
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.ApiReg
+import slatekit.apis.core.Api
 import slatekit.apis.ApiContainer
 import slatekit.common.Namer
 import slatekit.common.lowerHyphen
@@ -14,7 +14,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerHyphen() {
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(SamplePOKOApi::class)), auth = null, allowIO = false, namer = Namer("lower-hypen", ::lowerHyphen))
+        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), auth = null, allowIO = false, namer = Namer("lower-hypen", ::lowerHyphen))
         assert( apis.getApi(""   , "sample-poko", "get-time"    ).success)
         assert( !apis.getApi(""  , "SamplePOKO" , "getTime"    ).success)
         assert( apis.getApi(""   , "sample-poko", "get-counter" ).success)
@@ -31,7 +31,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(SampleExtendedApi::class, declaredOnly = false)),
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleExtendedApi::class, declaredOnly = false)),
                 auth = null, allowIO = false, namer = Namer("lower-underscore", ::lowerUnderscore))
         assert( apis.getApi(""   , "sample_extended", "get_seconds" ).success)
         assert( apis.getApi(""   , "sample_extended", "get_time"    ).success)

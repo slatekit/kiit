@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis
+package slatekit.apis.core
 
 
 import slatekit.meta.kClass
@@ -20,9 +20,9 @@ import kotlin.reflect.KClass
 
 
 /**
- * Annotation to designate a class as an API
+ * Represents an API in Slate Kit which is a reference to a regular Class
  *
- *  NOTE: Apis in SlateKit are organized into 3 parts in the route.
+ *  NOTE: API routes are considered Universal APIs and are organized into 3 parts in the route.
  *  e.g. area / api  / action
  *       app  / user / invite
  *
@@ -33,18 +33,20 @@ import kotlin.reflect.KClass
  * @param auth   : the authorization mode ( "app-key" | "app-roles", "key-roles" )
  * @param verb   : the verb ( "get", "post", "cli", "*" )
  * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
+ * @param actions  : the collection of actions / methods on this API.
  */
-data class ApiReg(val cls: KClass<*>,
-                  val area : String  = "",
-                  val name : String  = "",
-                  val desc : String  = "",
-                  val roles: String  = "",
-                  val auth : String  = "",
-                  val verb : String  = "*",
-                  val protocol: String = "*",
-                  val declaredOnly: Boolean = true,
-                  val singleton:Any ? = null
-                  )
+data class Api(val cls: KClass<*>,
+               val area : String  = "",
+               val name : String  = "",
+               val desc : String  = "",
+               val roles: String  = "",
+               val auth : String  = "",
+               val verb : String  = "*",
+               val protocol: String = "*",
+               val declaredOnly: Boolean = true,
+               val singleton:Any ? = null,
+               val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name } )
+               )
 {
     constructor(
                 instance: Any,

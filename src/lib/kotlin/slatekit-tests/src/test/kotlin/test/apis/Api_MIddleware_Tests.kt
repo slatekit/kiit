@@ -14,6 +14,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.*
+import slatekit.apis.core.Api
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.SUCCESS
 import test.setup.SampleMiddlewareApi
@@ -30,7 +31,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
     //describe( "API Container with middleware" ) {
     @Test fun middleware_with_hooks() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(api)), allowIO = false)
         val r1 = apis.call("", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
         val r2 = apis.call("", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
@@ -45,7 +46,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun middleware_with_filters_request_filtered_out() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(api)), allowIO = false)
         val r1 = apis.call("", "SampleMiddleware", "hi", "get", mapOf(), mapOf())
 
         assert(!r1.success)
@@ -56,7 +57,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun middleware_with_filters_request_ok() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(ApiReg(api)), allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(api)), allowIO = false)
         val r1 = apis.call("", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
         assert(r1.success)

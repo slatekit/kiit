@@ -1,10 +1,9 @@
 package slatekit.apis.codegen
 
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiReg
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Api
+import slatekit.apis.core.Action
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.core.Actions
 import slatekit.common.*
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -79,28 +78,28 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
-        this.container.lookup().visitApis({ apiReg, apiLookup ->
+        this.container.routes.visitApis({ area, api  ->
 
             try {
-                if(ApiHelper.isWebProtocol(apiReg.protocol, "")) {
-                    println("API: " + apiReg.area + "." + apiReg.name)
+                if(ApiHelper.isWebProtocol(api.protocol, "")) {
+                    println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class
-                    val declaredMembers = apiReg.cls.declaredMemberFunctions
+                    val declaredMembers = api.cls.declaredMemberFunctions
                     val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
 
                     // Get all the actions on the api
                     val buff = StringBuilder()
 
                     // Iterate over all the api actions
-                    apiLookup.actions().values().forEach { apiRegAction ->
+                    api.actions.items.forEach { action ->
 
                         // Ok to generate ?
-                        if (canGenerate(apiReg, apiRegAction, declaredMemberLookup)) {
+                        if (canGenerate(api, action, declaredMemberLookup)) {
 
                             // Generate code here.
-                            val methodInfo = genMethod(req, apiReg, apiLookup, apiRegAction)
-                            this.container.ctx.log.info("generating method for: " + apiReg.area + "/" + apiReg.name + "/" + apiRegAction.name)
+                            val methodInfo = genMethod(req, api, action)
+                            this.container.ctx.log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
                             buff.append(methodInfo)
                             buff.append(newline)
                         }
@@ -108,9 +107,9 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
                     // Get unique types
                     // Iterate over all the api actions
-                    val uniqueTypes = apiLookup.actions().values().map { apiRegAction ->
-                        println(apiRegAction.member.name)
-                        val customTypes = apiRegAction.paramsUser.map { p -> buildTypeName(p.type) }
+                    val uniqueTypes = api.actions.items.map { action ->
+                        println(action.member.name)
+                        val customTypes = action.paramsUser.map { p -> buildTypeName(p.type) }
                                 .filter {
                                     !it.isBasicType
                                             && !it.isCollection
@@ -120,23 +119,23 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                                 }
                         customTypes.forEach { typeInfo ->
                             val cls = typeInfo.dataType
-                            genModel(req, modelFolder, apiReg, apiLookup, apiRegAction, cls)
+                            genModel(req, modelFolder, api, action, cls)
                         }
                     }
 
                     // Generate file.
-                    genClientApi(req, apiReg, apiLookup, apiFolder, buff.toString())
+                    genClientApi(req, api, apiFolder, buff.toString())
                 }
             }
             catch(ex:Exception){
-                log.error("Error inspecting and generating code for: ${apiReg.area}.${apiReg.name}")
+                log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
                 throw ex
             }
         })
     }
 
 
-    fun genClientApi(req: Request, apiReg: ApiReg, apiLookup: Actions, folder: File, methods:String):Unit {
+    fun genClientApi(req: Request, apiReg: Api, folder: File, methods:String):Unit {
         val rawPackageName = req.data?.getStringOpt("package")
         val packageName = rawPackageName ?: apiReg.cls.qualifiedName ?: ""
         val rawTemplate = this.templateClass()
@@ -153,8 +152,8 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genMethod(req: Request, apiReg: ApiReg, apiLookup: Actions, apiRegAction:ApiRegAction): String {
-        val info = buildMethodInfo(apiRegAction)
+    fun genMethod(req: Request, api: Api, action: Action): String {
+        val info = buildMethodInfo(api, action)
         val rawTemplate = this.templateMethod()
         val finalTemplate = info.entries.fold( rawTemplate, { acc, entry ->
             acc.replace("@{${entry.key}}", entry.value)
@@ -163,7 +162,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genModel(req: Request, folder:File, apiReg: ApiReg, apiLookup: Actions, apiRegAction:ApiRegAction, cls: KClass<*>): String {
+    fun genModel(req: Request, folder:File, apiReg: Api, apiRegAction: Action, cls: KClass<*>): String {
         val info = buildModelInfo(cls)
         val rawTemplate = this.templateModel()
         val template = rawTemplate
@@ -175,11 +174,11 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun buildMethodInfo(reg: ApiRegAction):Map<String,String> {
+    fun buildMethodInfo(api:slatekit.apis.core.Api, reg: Action):Map<String,String> {
         val typeInfo = buildTypeName(reg.member.returnType)
         val verb = buildVerb(reg.name)
         return mapOf(
-            "route"                 to  reg.api.area + "/" + reg.api.name + "/" + reg.name,
+            "route"                 to  api.area + "/" + api.name + "/" + reg.name,
             "verb"                  to  verb,
             "methodName"            to  reg.name,
             "methodDesc"            to  reg.desc,
@@ -300,7 +299,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun buildArgs(reg:ApiRegAction): String {
+    fun buildArgs(reg: Action): String {
         return reg.paramsUser.foldIndexed( "", { ndx:Int, acc:String, param:KParameter ->
             acc + ( if(ndx > 0 ) "\t\t" else "" ) + buildArg(param) + "," + newline
         })
@@ -311,7 +310,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
      * builds a string of parameters to put into the query string.
      * e.g. queryParams.put("id", id);
      */
-    open fun buildQueryParams(reg:ApiRegAction): String {
+    open fun buildQueryParams(reg: Action): String {
         return if(buildVerb(reg.name) == "get" ) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
@@ -327,7 +326,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
      * builds a string of the parameters to put into the entity/body of request
      * e..g dataParams.put('id", id);
      */
-    open fun buildDataParams(reg:ApiRegAction): String {
+    open fun buildDataParams(reg: Action): String {
         return if(buildVerb(reg.name) != "get") {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
@@ -356,7 +355,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    open fun canGenerate(apiReg:ApiReg, apiRegAction:ApiRegAction, declaredMemberLookup:Map<String,Boolean>): Boolean {
+    open fun canGenerate(apiReg: Api, apiRegAction: Action, declaredMemberLookup:Map<String,Boolean>): Boolean {
         // Only include declared items
         val isDeclared = declaredMemberLookup.containsKey(apiRegAction.name)
         val isWebProtocol = ApiHelper.isWebProtocol(apiRegAction.protocol, apiReg.protocol)

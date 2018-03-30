@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
+import slatekit.apis.core.Api
 import slatekit.apis.core.Reqs
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
@@ -34,7 +35,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
              val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
-             apiItems: List<slatekit.apis.ApiReg>? = null
+             apiItems: List<Api>? = null
 )
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
 

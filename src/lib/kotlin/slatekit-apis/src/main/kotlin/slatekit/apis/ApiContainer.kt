@@ -5,9 +5,8 @@ import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
 import slatekit.apis.svcs.Format
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.core.Actions
 import slatekit.apis.helpers.ApiValidator
-import slatekit.apis.core.Areas
+import slatekit.apis.helpers.ApiLoader
 import slatekit.apis.middleware.Filter
 import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Middleware
@@ -45,7 +44,7 @@ open class ApiContainer(
         val allowIO: Boolean,
         val auth: Auth? = null,
         val protocol: Protocol = AllProtocols,
-        val apis: List<ApiReg>? = null,
+        val apis: List<slatekit.apis.core.Api> = listOf(),
         val namer : Namer? = null,
         val middleware: List<Middleware>? = null,
         val converter: Converter = Converter(ctx.enc),
@@ -73,7 +72,7 @@ open class ApiContainer(
      *    an ApiBase ( which is what you extend from to create your own api )
      * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
      */
-    private val _lookup = Areas(this, namer).registerAll(apis)
+    val routes = Routes(this, namer, ApiLoader.loadAll(apis, namer))
 
 
     /**
@@ -104,7 +103,7 @@ open class ApiContainer(
     /**
      * The help class to handle help on an area, api, or action
      */
-    val help = Help(this, _lookup, docBuilder)
+    val help = Help(this, routes, docBuilder)
 
 
     /**
@@ -121,14 +120,6 @@ open class ApiContainer(
 
 
     fun rename(text:String):String = namer?.name(text)?.text ?: text
-
-
-    internal fun lookup(): Areas = _lookup
-
-
-    fun register(reg: ApiReg): Unit {
-        _lookup.register(reg)
-    }
 
 
     /**
@@ -176,9 +167,9 @@ open class ApiContainer(
         val parts = area.split('.')
         return when (parts.size) {
             0    -> false
-            1    -> _lookup.contains(parts[0]) || _lookup.contains("", parts[0])
-            2    -> _lookup.contains(parts[0], parts[1]) || _lookup.contains("", parts[0], parts[1])
-            3    -> _lookup.contains(parts[0], parts[1], parts[2])
+            1    -> routes.contains(parts[0]) || routes.contains("", parts[0])
+            2    -> routes.contains(parts[0], parts[1]) || routes.contains("", parts[0], parts[1])
+            3    -> routes.contains(parts[0], parts[1], parts[2])
             else -> false
         }
     }
@@ -244,17 +235,16 @@ open class ApiContainer(
      * @return
      */
     fun getApi(area: String, name: String, action: String): Result<ApiRef> {
-        //if (area.isNullOrEmpty()) return badRequest("api area not supplied")
-        if (name.isNullOrEmpty()) return badRequest("api name not supplied")
-        if (action.isNullOrEmpty()) return badRequest("api action not supplied")
+        if (area.isNullOrEmpty()) return badRequest("area not supplied")
+        if (name.isNullOrEmpty()) return badRequest("api not supplied")
+        if (action.isNullOrEmpty()) return badRequest("action not supplied")
+        if (routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
-        val result = _lookup.get(area)?.get(name)?.let { lookup ->
-            val apiAction = lookup.get(action)
-            apiAction?.let { a ->
-                val reg = _lookup.getApi(area, name)
-                val instance = _lookup.getInstance(area, name, ctx)
-                success(ApiRef(reg, a, instance))
-            } ?: badRequest("api route $area $name $action not found")
+        val api = routes.api(area, name)!!
+        val action =  api.actions[action]!!
+        val instance = routes.instance(area, name, ctx)
+        val result = instance?.let { inst ->
+            success(ApiRef(api, action, instance))
         } ?: badRequest("api route $area $name $action not found")
         return result
     }
@@ -324,7 +314,7 @@ open class ApiContainer(
             }
         }
         catch(ex: Exception) {
-            val api = _lookup.get(req.area)?.get(req.name)
+            val api = routes.api(req.area, req.name)
             handleError(api, apiReference, req, ex)
         }
 
@@ -398,7 +388,7 @@ open class ApiContainer(
     }
 
 
-    protected open fun handleError(api: Actions?, apiRef: ApiRef?, req: Request, ex: Exception): Result<Any> {
+    protected open fun handleError(api: slatekit.apis.core.Api?, apiRef: ApiRef?, req: Request, ex: Exception): Result<Any> {
         // OPTION 1: Api level
         return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
             apiRef.instance.onError(this.ctx, req, apiRef,this, ex, null)
