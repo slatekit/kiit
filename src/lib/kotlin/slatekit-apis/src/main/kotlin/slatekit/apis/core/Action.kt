@@ -56,7 +56,7 @@ data class Action(
      * discovered, documented, validated against
      *
      * 1. 0th instance parameter for kotlin
-     * 2. a possible
+     * 2. a possible request/meta paramter
      */
     val paramsUser = filter(member.parameters)
 

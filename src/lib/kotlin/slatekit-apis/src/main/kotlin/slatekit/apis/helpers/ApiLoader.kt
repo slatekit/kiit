@@ -11,6 +11,7 @@ import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.Reflector
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
+import kotlin.reflect.KVisibility
 
 object ApiLoader {
 
@@ -93,7 +94,7 @@ object ApiLoader {
 
 
     fun loadActions(api: slatekit.apis.core.Api, local:Boolean, namer:Namer?): List<Action> {
-        val members = Reflector.getMembers(api.cls, local, true)
+        val members = Reflector.getMembers(api.cls, local, true, KVisibility.PUBLIC)
         val actions:List<Action> = members.map { member -> buildAction(member, api, null, namer) }
         return actions
     }

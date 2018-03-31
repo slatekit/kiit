@@ -82,9 +82,13 @@ object Reflector {
 
 
     @Suppress("UNCHECKED_CAST")
-    fun getMembers(cls: KClass<*>, declared:Boolean, filterOutBuiltins:Boolean): List<KCallable<*>> {
-
-        val members = if(declared) cls.declaredMembers else cls.members
+    fun getMembers(cls: KClass<*>,
+                   declared:Boolean,
+                   filterOutBuiltins:Boolean,
+                   visibility: KVisibility? = null): List<KCallable<*>> {
+        val members = (if(declared) cls.declaredMembers else cls.members).filter { it ->
+            visibility?.let { v -> v == it.visibility } ?: true
+        }
         return members.filter { mem -> if(filterOutBuiltins) !isBuiltIn(mem) else true }
     }
 
@@ -195,9 +199,7 @@ object Reflector {
     }
 
 
-    fun isBuiltIn(mem:KCallable<*>):Boolean {
-        return mem.name != "equals" && mem.name != "hashCode" && mem.name != "toString"
-    }
+    fun isBuiltIn(mem:KCallable<*>):Boolean = mem.name in arrayOf("equals", "hashCode", "toString")
 
 
     fun isDataClass(cls: KClass<*>): Boolean = cls.isData

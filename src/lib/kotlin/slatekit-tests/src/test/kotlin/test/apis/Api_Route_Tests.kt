@@ -14,7 +14,9 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.*
+import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
+import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiHelper
 import slatekit.common.ApiKey
 import slatekit.common.Result
@@ -30,10 +32,7 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.results.ResultFuncs.success
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
-import test.setup.MyAuthProvider
-import test.setup.UserApi
-import test.setup.MyEncryptor
-import test.setup.User
+import test.setup.*
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -42,7 +41,8 @@ import test.setup.User
 
 class Api_Route_Tests : ApiTestsBase() {
 
-    @Test fun setup_routes() {
+
+    @Test fun can_setup_instance_with_declared_members_only() {
 
     }
 }

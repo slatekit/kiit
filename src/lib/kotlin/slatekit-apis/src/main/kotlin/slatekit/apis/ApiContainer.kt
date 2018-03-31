@@ -72,7 +72,9 @@ open class ApiContainer(
      *    an ApiBase ( which is what you extend from to create your own api )
      * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
      */
-    val routes = Routes(this, namer, ApiLoader.loadAll(apis, namer))
+    val routes = Routes(ApiLoader.loadAll(apis, namer), namer, { api ->
+        ApiContainer.setApiHost(api, this)
+    })
 
 
     /**
@@ -534,5 +536,16 @@ open class ApiContainer(
 
     fun isCliAllowed(cmd: Request, supportedProtocol: String): Boolean =
             supportedProtocol == "*" || supportedProtocol == "cli"
+
+
+
+    companion object {
+
+        fun setApiHost(item: Any?, host: ApiContainer): Unit {
+            if (item is ApiHostAware) {
+                item.setApiHost(host)
+            }
+        }
+    }
 
 }

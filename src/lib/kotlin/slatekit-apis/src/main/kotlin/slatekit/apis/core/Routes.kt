@@ -39,7 +39,9 @@ import kotlin.reflect.full.primaryConstructor
  *                  - { action_c }
  *                  - { action_d }
 */
-data class Routes(val host:ApiContainer, val namer:Namer?, val areas: Lookup<Area>) {
+data class Routes(val areas: Lookup<Area>,
+                  val namer:Namer? = null,
+                  val onInstanceCreated: ((Any?) -> Unit )? = null) {
 
 
     /**
@@ -84,7 +86,7 @@ data class Routes(val host:ApiContainer, val namer:Namer?, val areas: Lookup<Are
                 Reflector.createWithArgs<Any>(info.cls, arrayOf(ctx))
             }
         }
-        setApiHost(instance)
+        onInstanceCreated?.invoke(instance)
         return instance
     }
 
@@ -117,13 +119,6 @@ data class Routes(val host:ApiContainer, val namer:Namer?, val areas: Lookup<Are
                     visitor(area, api, action )
                 }
             }
-        }
-    }
-
-
-    private fun setApiHost(item:Any?):Unit {
-        if(item is ApiHostAware) {
-            item.setApiHost(host)
         }
     }
 }

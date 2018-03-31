@@ -53,5 +53,7 @@ open class SamplePOKOApi {
      * These are not exposed as API actions/endpoints
      */
     protected fun getEmail():String = "jane@abc.com"
+
+
     private fun getSsn(): String = "123-45-6789"
 }
