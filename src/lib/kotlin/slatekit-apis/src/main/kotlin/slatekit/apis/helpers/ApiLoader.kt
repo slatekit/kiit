@@ -15,8 +15,16 @@ import kotlin.reflect.KVisibility
 
 object ApiLoader {
 
-    fun loadAll(apis:List<slatekit.apis.core.Api>, namer:Namer?): Lookup<Area> {
-        return Lookup(listOf(), { a -> a.name } )
+    fun loadAll(rawApis:List<slatekit.apis.core.Api>, namer:Namer? = null): Lookup<Area> {
+        val apis = rawApis.map { it ->  if(it.actions.size == 0) loadWithMeta(it, namer) else it }
+        val areaNames = apis.map { it.area }.distinct()
+        val areas = areaNames.map {
+            val areaName = it
+            val apisForArea = apis.filter { it.area == areaName }
+            val area = Area(areaName, Lookup( apisForArea, { api -> api.name }))
+            area
+        }
+        return Lookup(areas, { area -> area.name })
     }
 
 
@@ -27,7 +35,7 @@ object ApiLoader {
      * @param cls  : The class representing the API
      * @param namer: The naming convention
      */
-    fun load( cls: KClass<*>, namer:Namer?): Api {
+    fun loadAnnotated(cls: KClass<*>, namer:Namer?): Api {
         // get the @Api annotation on the class
         val annotation = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
         val api = slatekit.apis.core.Api(
@@ -61,22 +69,22 @@ object ApiLoader {
      * @param namer: The naming convention
      *
      */
-    fun loadPure(cls  : KClass<*>,
-              area : String,
-              name : String,
-              desc : String?,
-              local: Boolean = true,
-              roles: String  = "",
-              auth : String  = "",
-              verb : String  = "",
-              protocol: String = "*",
-              singleton:Boolean = false,
-              namer: Namer? = null): Api {
+    fun loadPublic(cls  : KClass<*>,
+                   area : String,
+                   name : String,
+                   desc : String?,
+                   local: Boolean = true,
+                   roles: String  = "",
+                   auth : String  = "",
+                   verb : String  = "",
+                   protocol: String = "*",
+                   singleton:Boolean = false,
+                   namer: Namer? = null): Api {
 
         // Create initial temporary api
         // with all settings that can be used for override values
         val api = Api(cls, area, name, desc ?: "", roles, auth, verb, protocol, local, singleton)
-        return loadApi(api, namer)
+        return loadWithMeta(api, namer)
     }
 
 
@@ -86,7 +94,7 @@ object ApiLoader {
      * @param api  : The API setup
      * @param namer: The naming convention
      */
-    fun loadApi(api:slatekit.apis.core.Api, namer:Namer?): Api {
+    fun loadWithMeta(api:slatekit.apis.core.Api, namer:Namer?): Api {
         // Get all the actions using the @ApiAction
         val actions = loadActions(api, api.declaredOnly, namer)
         return api.copy(actions = Lookup(actions, { t -> t.name } ) )
