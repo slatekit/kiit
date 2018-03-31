@@ -15,6 +15,7 @@ package test.apis
 import org.junit.Test
 import slatekit.apis.CliProtocol
 import slatekit.apis.core.Api
+import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiLoader
 import test.setup.*
 
@@ -132,5 +133,42 @@ class Api_Loader_Tests : ApiTestsBase() {
         assert(areas.contains("tests"))
         assert(areas.get("app")?.apis?.size == 2)
         assert(areas.get("tests")?.apis?.size == 1)
+    }
+
+
+
+    @Test fun can_load_routes() {
+        val areas = ApiLoader.loadAll(listOf(
+            Api(SampleRolesByApp::class,
+                "app", "sampleRolesByApp", "sample roles by application auth",
+                "users", "app-roles", "*",
+                CliProtocol.name, true, null),
+
+            Api(SampleRolesByKey::class,
+                "app", "sampleRolesByKey", "sample roles by api-key",
+                "users", "key-roles", "*",
+                CliProtocol.name, true, null),
+
+            Api(SampleExtendedApi::class,
+                "tests", "sampleExtended", "sample using plain kotlin class",
+                "users", "app-roles", "*",
+                CliProtocol.name, false, null)
+        ))
+
+        val routes = Routes(areas, null)
+        assert(routes.areas.size == 2)
+        assert(routes.contains("app"))
+        assert(routes.contains("tests"))
+
+        // Declared locally in class
+        assert(routes.contains("tests", "sampleExtended", "ping"))
+
+        // Inherited from super class
+        assert(routes.contains("tests", "sampleExtended","hello"))
+
+        val api = routes.api("tests", "sampleExtended")
+        assert(api?.area == "tests")
+        assert(api?.name == "sampleExtended")
+        assert(api?.actions?.size == 8)
     }
 }

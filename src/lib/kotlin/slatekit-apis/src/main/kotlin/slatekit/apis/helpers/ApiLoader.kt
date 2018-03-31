@@ -116,7 +116,7 @@ object ApiLoader {
         val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map { it -> Pair(it.first.name, true) }.toMap()
 
         // 2. Filter out builtin methods
-        val matches = rawMatches.filter{ it -> Reflector.isBuiltIn(it.first) }
+        val matches = rawMatches.filter{ it -> !Reflector.isBuiltIn(it.first) }
 
         // 3. Convert to Action
         val actions:List<Action?> = matches.map { item ->
