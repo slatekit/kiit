@@ -28,13 +28,11 @@ import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
+import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.success
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
-import test.setup.MyAuthProvider
-import test.setup.UserApi
-import test.setup.MyEncryptor
-import test.setup.User
+import test.setup.*
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -67,6 +65,20 @@ class Api_Core_Tests : ApiTestsBase() {
                 Pair("id", "2")
             )),
             response = success("ok", msg = "raw request id: 2").toResponse()
+        )
+    }
+
+
+    @Test fun can_run_functional_error() {
+        val number = "abc"
+        ensure(
+                protocol = CliProtocol,
+                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", declaredOnly = false)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.sampleErrors.parseNumberWithResults", "get", mapOf(), mapOf(
+                        "text" to number
+                )),
+                response = ResultFuncs.failure<Any>("$number is not a valid number").toResponse()
         )
     }
 
@@ -121,4 +133,5 @@ class Api_Core_Tests : ApiTestsBase() {
             response = success("ok", msg = ",a=1,b=2").toResponse()
         )
     }
+
 }

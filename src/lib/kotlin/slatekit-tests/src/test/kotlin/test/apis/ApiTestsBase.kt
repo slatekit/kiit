@@ -18,6 +18,7 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
+import slatekit.apis.middleware.Middleware
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -122,17 +123,23 @@ open class ApiTestsBase {
 
 
     fun ensure(
-        protocol : Protocol,
-        apis     : List<Api>,
-        user     : Credentials?,
-        request  : Request,
-        response : Response<*>) {
+        protocol  : Protocol,
+        middleware: List<Middleware> = listOf(),
+        apis      : List<Api>,
+        user      : Credentials?,
+        request   : Request,
+        response  : Response<*>) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
 
         // Host
-        val host = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
+        val host = ApiContainer(ctx,
+                allowIO = false,
+                auth = auth,
+                apis = apis,
+                middleware = middleware,
+                protocol = protocol)
 
         // Get result
         val actual = host.call( request )
