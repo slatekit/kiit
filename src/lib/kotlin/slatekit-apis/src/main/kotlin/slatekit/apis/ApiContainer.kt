@@ -72,7 +72,7 @@ open class ApiContainer(
      *    an ApiBase ( which is what you extend from to create your own api )
      * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
      */
-    val routes = Routes(ApiLoader.loadAll(apis), namer, { api ->
+    val routes = Routes(ApiLoader.loadAll(apis, namer), namer, { api ->
         ApiContainer.setApiHost(api, this)
     })
 
