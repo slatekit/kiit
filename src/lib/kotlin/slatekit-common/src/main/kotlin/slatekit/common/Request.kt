@@ -98,6 +98,30 @@ data class Request (
         }
 
 
+        /**
+         * builds the request
+         */
+        fun cli(path: String,
+                            headers: List<Pair<String, Any>>?,
+                            inputs: List<Pair<String, Any>>?): Request {
+
+            fun buildArgs(inputs: List<Pair<String, Any>>?): InputArgs {
+
+                // fill args
+                val rawArgs = inputs?.let { all -> all.toMap() } ?: mapOf()
+                val args = InputArgs(rawArgs)
+                return args
+            }
+
+            val tokens = path.split('.').toList()
+            val args = buildArgs(inputs)
+            val opts = buildArgs(headers)
+            val req = Request(path, tokens, "cli", "get", args, opts,
+                    null, "", "", "1.0", DateTime.now())
+            return req
+        }
+
+
         fun cli(path: String, args: Args, opts: Meta?, verb: String, raw:Any?): Request =
                 Request(path, args.actionParts, "cli", verb, args, opts, raw, "")
     }
