@@ -11,7 +11,7 @@ class Api_Errors_Tests : ApiTestsBase() {
 
     @Test fun can_use_error_codes() {
         val number = "abc"
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(), declaredOnly = false)), auth = null, allowIO = false)
         val result = apis.call("", "SampleErrors", "parseNumberWithResults", "", mapOf(), mapOf("text" to number))
         assert(!result.success)
         assert(result.isFailure)
@@ -21,7 +21,7 @@ class Api_Errors_Tests : ApiTestsBase() {
 
     @Test fun can_use_error_handling_at_api_level() {
         val number = "abc"
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(true), declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleErrorsApi(), declaredOnly = false)), auth = null, allowIO = false)
         val result = apis.call("", "SampleErrors", "parseNumberWithExceptions", "", mapOf(), mapOf("text" to number))
         assert(!result.success)
         assert(result.isUnexpectedError)

@@ -16,7 +16,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new() {
-        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class)), allowIO = false)
         val result = apis.getApi("", "SamplePOKO", "getTime" )
         assert(result.success && result.value!!.instance is SamplePOKOApi)
         assert((result.value!!.instance as SamplePOKOApi).count == 0)
@@ -24,7 +24,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new_with_context() {
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleEntityApi::class)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleEntityApi::class)), allowIO = false)
         val result = apis.getApi("", "SampleEntity", "patch" )
         assert(result.success && result.value!!.instance is SampleEntityApi)
     }
@@ -33,7 +33,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_setup_instance_as_singleton() {
         val inst = SamplePOKOApi()
         inst.count = 1001
-        val apis = ApiContainer(ctx, apis = listOf(Api(inst)), auth = null, allowIO = false)
+        val apis = ApiContainer(ctx, apis = listOf(Api(inst)), allowIO = false)
         val result = apis.getApi("", "SamplePOKO", "getTime" )
         assert(result.success && result.value!!.instance is SamplePOKOApi)
         assert((result.value!!.instance as SamplePOKOApi).count == 1001)
