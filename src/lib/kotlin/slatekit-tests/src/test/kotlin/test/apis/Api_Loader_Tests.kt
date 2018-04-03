@@ -27,7 +27,7 @@ import test.setup.*
 class Api_Loader_Tests : ApiTestsBase() {
 
 
-    @Test fun can_load_from_annotations() {
+    @Test fun can_load_api_from_annotations() {
         val api = ApiLoader.loadAnnotated(SampleAnnoApi::class, null)
         assert(api.actions.size == 13)
         assert(api.area == "app")
@@ -47,7 +47,7 @@ class Api_Loader_Tests : ApiTestsBase() {
      * POKO : Plain Old Kotlin Object
      * No annotations
      */
-    @Test fun can_load_from_poko() {
+    @Test fun can_load_api_from_public_methods() {
         val api = ApiLoader.loadPublic(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
             true, "users", "app-roles", "*",
@@ -68,7 +68,7 @@ class Api_Loader_Tests : ApiTestsBase() {
      * POKO : Plain Old Kotlin Object
      * No annotations
      */
-    @Test fun can_load_from_poko_inherited() {
+    @Test fun can_load_api_from_public_methods_inherited() {
         val api = ApiLoader.loadPublic(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
             false, "users", "app-roles", "*",
@@ -88,7 +88,7 @@ class Api_Loader_Tests : ApiTestsBase() {
     /**
      * Load using supplied metadata
      */
-    @Test fun can_load_from_supplied_meta() {
+    @Test fun can_load_api_from_supplied_meta() {
         val api = ApiLoader.loadWithMeta(
             Api(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
