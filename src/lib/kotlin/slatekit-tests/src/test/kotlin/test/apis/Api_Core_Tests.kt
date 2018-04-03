@@ -14,11 +14,11 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.*
+import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
-import slatekit.common.ApiKey
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -116,7 +116,31 @@ open class ApiTestsBase {
 
 
     fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx))
+        return Api(UserApi(ctx), setup = Annotated)
+    }
+
+
+
+    fun ensure(
+        protocol : Protocol,
+        apis     : List<Api>,
+        user     : Credentials?,
+        request  : Request,
+        response : Response<*>) {
+
+        // Optional auth
+        val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
+
+        // Host
+        val host = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
+
+        // Get result
+        val actual = host.call( request )
+
+        // Compare here.
+        assert( actual.code == response.code)
+        assert( actual.success == response.success)
+        assert( actual.msg == response.msg)
     }
 }
 
@@ -136,82 +160,82 @@ open class ApiTestsBase {
 class Api_Core_Tests : ApiTestsBase() {
 
 
-
     @Test fun can_execute_public_action() {
-        ensureCall( listOf(buildUserApiRegSingleton(ctx)),
-                    "*", "*",
-                    ApiConstants.AuthModeAppRole, null,
-                    "app.users.rolesNone",
-                    listOf(
-                            Pair("code", "1"),
-                            Pair("tag", "abc")
-                    ),
-                    null,
-                    success("rolesNone", msg = "1 abc")
-                  )
+
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = null,
+            request  = Request.path("app.users.rolesNone", "get", mapOf(), mapOf(
+                    Pair("code", "1"),
+                    Pair("tag", "abc")
+            )),
+            response = success("rolesNone", msg = "1 abc").toResponse()
+        )
     }
 
-    // ===================================================================
-    //describe( "API Data-types" ) {
+
     @Test fun can_execute_with_type_raw_request() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                    "*", "*",
-                    ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                    "app.users.argTypeRequest",
-                    listOf(Pair("id", "2")),
-                    null,
-                    success("ok", msg = "raw request id: 2")
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = Credentials(name = "kishore", roles = "dev"),
+            request  = Request.path("app.users.argTypeRequest", "get", mapOf(), mapOf(
+                Pair("id", "2")
+            )),
+            response = success("ok", msg = "raw request id: 2").toResponse()
         )
     }
 
 
     @Test fun can_get_list() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.argTypeListInt",
-                listOf(
-                        Pair("items", listOf<Int>(1,2,3) )
-                ),
-                null,
-                success("ok", msg = ",1,2,3")
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = Credentials(name = "kishore", roles = "dev"),
+            request  = Request.path("app.users.argTypeListInt", "get", mapOf(), mapOf(
+                Pair("items", listOf(1,2,3) )
+            )),
+            response = success("ok", msg = ",1,2,3").toResponse()
         )
     }
 
 
     @Test fun can_get_list_via_conversion() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.argTypeListInt",
-                listOf(
-                        Pair("items", "1,2,3")),
-                null,
-                success("ok", msg = ",1,2,3")
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = Credentials(name = "kishore", roles = "dev"),
+            request  = Request.path("app.users.argTypeListInt", "get", mapOf(), mapOf(
+                Pair("items", "1,2,3")
+            )),
+            response = success("ok", msg = ",1,2,3").toResponse()
         )
     }
 
 
     @Test fun can_get_map() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.argTypeMapInt",
-                listOf(Pair("items", mapOf("a" to 1, "b" to 2))),
-                null,
-                success("ok", msg = ",a=1,b=2")
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = Credentials(name = "kishore", roles = "dev"),
+            request  = Request.path("app.users.argTypeMapInt", "get", mapOf(), mapOf(
+                Pair("items", mapOf("a" to 1, "b" to 2))
+            )),
+            response = success("ok", msg = ",a=1,b=2").toResponse()
         )
     }
 
 
     @Test fun can_get_map_via_conversion() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*",
-                ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.argTypeMapInt",
-                listOf(Pair("items", "a=1,b=2")),
-                null,
-                success("ok", msg = ",a=1,b=2")
+        ensure(
+            protocol = CliProtocol,
+            apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+            user     = Credentials(name = "kishore", roles = "dev"),
+            request  = Request.path("app.users.argTypeMapInt", "get", mapOf(), mapOf(
+                Pair("items", "a=1,b=2")
+            )),
+            response = success("ok", msg = ",a=1,b=2").toResponse()
         )
     }
 }

@@ -18,7 +18,6 @@ import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
 
-
 /**
  * Represents an API in Slate Kit which is a reference to a regular Class
  *
@@ -35,27 +34,30 @@ import kotlin.reflect.KClass
  * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
  * @param actions  : the collection of actions / methods on this API.
  */
-data class Api(val cls: KClass<*>,
-               val area : String  = "",
-               val name : String  = "",
-               val desc : String  = "",
-               val roles: String  = "",
-               val auth : String  = "",
-               val verb : String  = "*",
-               val protocol: String = "*",
-               val declaredOnly: Boolean = true,
-               val singleton:Any ? = null,
-               val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name } )
-               )
-{
+data class Api(
+    val cls: KClass<*>,
+    val area: String = "",
+    val name: String = "",
+    val desc: String = "",
+    val roles: String = "",
+    val auth: String = "",
+    val verb: String = "*",
+    val protocol: String = "*",
+    val declaredOnly: Boolean = true,
+    val singleton: Any? = null,
+    val setup: Setup = PublicMethods,
+    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+) {
     constructor(
-                instance: Any,
-                area : String  = "",
-                name : String  = "",
-                desc : String  = "",
-                roles: String  = "",
-                auth : String  = "",
-                verb : String  = "*",
-                protocol: String = "",
-                declaredOnly: Boolean = true) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance)
+        instance: Any,
+        area: String = "",
+        name: String = "",
+        desc: String = "",
+        roles: String = "",
+        auth: String = "",
+        verb: String = "*",
+        protocol: String = "",
+        declaredOnly: Boolean = true,
+        setup:Setup = PublicMethods
+    ) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance, setup)
 }

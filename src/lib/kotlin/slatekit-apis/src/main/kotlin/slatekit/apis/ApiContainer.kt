@@ -240,7 +240,7 @@ open class ApiContainer(
         if (area.isNullOrEmpty()) return badRequest("area not supplied")
         if (name.isNullOrEmpty()) return badRequest("api not supplied")
         if (action.isNullOrEmpty()) return badRequest("action not supplied")
-        if (routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
+        if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
         val api = routes.api(area, name)!!
         val action =  api.actions[action]!!

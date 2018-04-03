@@ -1,10 +1,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.ApiAction
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
-import slatekit.apis.core.Area
-import slatekit.apis.core.Lookup
+import slatekit.apis.core.*
 import slatekit.common.Ignore
 import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
@@ -16,14 +13,24 @@ import kotlin.reflect.KVisibility
 object ApiLoader {
 
     fun loadAll(rawApis:List<slatekit.apis.core.Api>, namer:Namer? = null): Lookup<Area> {
-        val apis = rawApis.map { it ->  if(it.actions.size == 0) loadWithMeta(it, namer) else it }
+
+        // Get the apis with actions loaded from either
+        // annotations or from public methods.
+        val apis = rawApis.map { it -> loadApiFromSetup(it, namer) }
+
+        // Routes: area.api.action
+        // Get unique areas
         val areaNames = apis.map { it.area }.distinct()
+
+        // Now get all the areas -> apis
         val areas = areaNames.map {
             val areaName = it
             val apisForArea = apis.filter { it.area == areaName }
             val area = Area(areaName, Lookup( apisForArea, { api -> api.name }))
             area
         }
+
+        // List + Map of areas.
         return Lookup(areas, { area -> area.name })
     }
 
@@ -96,12 +103,12 @@ object ApiLoader {
      */
     fun loadWithMeta(api:slatekit.apis.core.Api, namer:Namer?): Api {
         // Get all the actions using the @ApiAction
-        val actions = loadActions(api, api.declaredOnly, namer)
+        val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)
         return api.copy(actions = Lookup(actions, { t -> t.name } ) )
     }
 
 
-    fun loadActions(api: slatekit.apis.core.Api, local:Boolean, namer:Namer?): List<Action> {
+    fun loadActionsFromPublicMethods(api: slatekit.apis.core.Api, local:Boolean, namer:Namer?): List<Action> {
         val members = Reflector.getMembers(api.cls, local, true, KVisibility.PUBLIC)
         val actions:List<Action> = members.map { member -> buildAction(member, api, null, namer) }
         return actions
@@ -155,5 +162,23 @@ object ApiLoader {
                 actionVerb,
                 actionProtocol
         )
+    }
+
+
+    private fun loadApiFromSetup(api:Api, namer:Namer?): Api {
+        // If not actions, that means it was the raw input
+        // during setup, so we have to load the api methods
+        // from either annotations or from public methods
+        return if(api.actions.size == 0) {
+            if(api.setup == Annotated ) {
+                val apiAnnotated = loadAnnotated(api.cls, namer)
+                apiAnnotated.copy(singleton = api.singleton)
+            }
+            else {
+                val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)
+                api.copy(actions = Lookup(actions, { t -> t.name } ) )
+            }
+        }
+        else api
     }
 }
