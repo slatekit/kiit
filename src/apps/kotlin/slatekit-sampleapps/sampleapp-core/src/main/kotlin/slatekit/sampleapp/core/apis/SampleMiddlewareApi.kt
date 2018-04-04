@@ -1,6 +1,6 @@
 package slatekit.sampleapp.core.apis
 
-import slatekit.apis.ApiRegAction
+
 import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
