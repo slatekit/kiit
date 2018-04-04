@@ -11,7 +11,8 @@ usage: Please refer to license on github for more info.
 
 package slatekit.sampleapp.cli
 
-import slatekit.apis.ApiReg
+import slatekit.apis.core.Annotated
+import slatekit.apis.core.Api
 import slatekit.common.Credentials
 import slatekit.common.DateTime
 import slatekit.core.app.AppRunner.build
@@ -102,42 +103,41 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
-                    ApiReg(SamplePOKOApi::class      , area = "samples", declaredOnly = false),
+                    Api(SamplePOKOApi::class      , area = "samples", name = "SamplePOKO", declaredOnly = false),
 
                     // Example 2: passing in and returning data-types
-                    ApiReg(SampleTypes1Api::class    , area = "samples", declaredOnly = false),
-                    ApiReg(SampleTypes2Api::class    , area = "samples", declaredOnly = false),
+                    Api(SampleTypes1Api::class    , area = "samples", name = "SampleTypes1", declaredOnly = false),
+                    Api(SampleTypes2Api::class    , area = "samples", name = "Sampletypes2", declaredOnly = false),
 
                     // Example 3: annotations
-                    ApiReg(SampleTypes3Api::class    , declaredOnly = false),
-                    ApiReg(SampleAnnoApi::class      , declaredOnly = false),
+                    Api(SampleTypes3Api::class    , setup = Annotated, declaredOnly = false),
+                    Api(SampleAnnoApi::class      , setup = Annotated, declaredOnly = false),
 
                     // Example 4: using REST ( you must register the REST rewrite module
-                    ApiReg(SampleRESTApi::class      , area = "samples", declaredOnly = false),
+                    Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false),
 
                     // Example 5: File download
-                    ApiReg(SampleFiles3Api::class     , declaredOnly = false),
+                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false),
 
                     // Example 6: Inheritance with APIs
-                    ApiReg(SampleExtendedApi::class     , area = "samples", declaredOnly = false),
+                    Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false),
 
                     // Example 7: Singleton APIS - 1 instance for all requests
                     // NOTE: be careful and ensure that your APIs are stateless
                     // This example shows integration with the ORM
-                    ApiReg(SampleEntityApi(ctx)      , area = "samples", declaredOnly = false),
+                    Api(SampleEntityApi(ctx)      , area = "samples", name = "SampleEntity", declaredOnly = false),
 
                     // Example 8: Middleware
-                    ApiReg(SampleErrorsApi(true)           , area = "samples", declaredOnly = false),
-                    ApiReg(SampleMiddlewareApi(true, true) , area = "samples", declaredOnly = false),
+                    Api(SampleErrorsApi(true)                , area = "samples", name = "SampleErrors", declaredOnly = false),
+                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleTypes1", declaredOnly = false),
 
                     // Example 9: Provided by Slate Kit
-                    ApiReg(AppApi(ctx)          , declaredOnly = true ),
-                    ApiReg(VersionApi(ctx)      , declaredOnly = true ),
+                    Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),
+                    Api(VersionApi(ctx)      , setup = Annotated, declaredOnly = true ),
 
                     // Example 10: More examples from the sample app
-                    ApiReg(UserApi(ctx)         , declaredOnly = false),
-                    ApiReg(MovieApi(ctx)        , declaredOnly = false),
-                    ApiReg(EntitiesApi(ctx)     , declaredOnly = false)
+                    Api(UserApi(ctx)         , setup = Annotated, declaredOnly = false),
+                    Api(MovieApi(ctx)        , setup = Annotated, declaredOnly = false)
 
             )
     )

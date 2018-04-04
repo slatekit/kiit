@@ -9,7 +9,7 @@ include 'slatekit-common',
         'slatekit-tools',
         'slatekit-tests'
 
-/*
+
 include ':sampleapp-core'
 project(':sampleapp-core').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-core')
 
@@ -24,4 +24,4 @@ project(':sampleapp-cli').projectDir=new File('../../apps/kotlin/slatekit-sample
 
 include ':sampleapp-server'
 project(':sampleapp-server').projectDir=new File('../../apps/kotlin/slatekit-sampleapps/sampleapp-server')
-*/
+
