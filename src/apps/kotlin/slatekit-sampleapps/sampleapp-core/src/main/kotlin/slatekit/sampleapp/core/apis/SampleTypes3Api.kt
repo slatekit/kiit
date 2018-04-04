@@ -30,9 +30,9 @@ class SampleTypes3Api {
 
 
     @ApiAction(desc = "accepts a smart string of phone")
-    fun getSmartStringPhone(text: PhoneUS): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun getSmartStringPhone(text: PhoneUS): String = "valid:${text.isValid} - empty:${text.isEmpty} - text:${text.text}"
 
 
     @ApiAction(desc = "accepts a smart string of email")
-    fun getSmartStringEmail(text: Email): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun getSmartStringEmail(text: Email): String = "valid:${text.isValid} - empty:${text.isEmpty} - text:${text.text}"
 }
