@@ -1,6 +1,7 @@
 package test.setup
 
 import slatekit.apis.Api
+import slatekit.apis.ApiAction
 import slatekit.apis.ApiContainer
 import slatekit.apis.ApiHostAware
 import slatekit.apis.support.ApiQueueSupport
@@ -22,12 +23,14 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
     override fun queues(): List<QueueSource> = queues
 
 
+    @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
     fun test1(s: String, b: Boolean, i: Int, d: DateTime): String {
         _lastResult = "$s, $b, $i, $d"
         return _lastResult
     }
 
 
+    @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
     fun test1Queued(s: String, b: Boolean, i: Int, d: DateTime): Unit {
         sendToQueue(WorkerSampleApi::class,
                   WorkerSampleApi::test1,
