@@ -14,8 +14,15 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.*
+import slatekit.apis.core.Annotated
+import slatekit.apis.core.Api
+import slatekit.common.Credentials
+import slatekit.common.Request
+import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
+import slatekit.common.toResponse
+import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -27,150 +34,202 @@ class Api_Security_TestsTests : ApiTestsBase() {
     // ===================================================================
     //describe( "Authorization: using App roles on actions" ) {
     @Test fun roles_should_work_when_role_is_any() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.rolesAny",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                success("rolesAny", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesAny", msg="1 abc").toResponse()
         )
 
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "qa"),
-                "app.users.rolesAny",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                success("rolesAny", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "qa"),
+                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesAny", msg="1 abc").toResponse()
         )
 
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", ""),
-                "app.users.rolesAny",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                unAuthorized("unauthorized")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = ""),
+                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<Any>("unauthorized").toResponse()
         )
     }
 
 
     @Test fun roles_should_fail_for_any_role_any_with_no_user() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, null,
-                "app.users.rolesAny",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                unAuthorized<String>(msg = "Unable to authorize, authorization provider not set")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = null,
+                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
         )
     }
 
 
     @Test fun roles_should_work_for_a_specific_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.rolesSpecific",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                success("rolesSpecific", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesSpecific", msg="1 abc").toResponse()
         )
     }
 
 
     @Test fun roles_should_fail_for_a_specific_role_when_user_has_a_different_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "ops"),
-                "app.users.rolesSpecific",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                unAuthorized<String>("unauthorized")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "ops"),
+                request  = Request.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>("unauthorized").toResponse()
         )
     }
 
 
     @Test fun roles_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "admin"),
-                "app.users.rolesParent",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                success("rolesParent", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "admin"),
+                request  = Request.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesParent", msg="1 abc").toResponse()
         )
     }
 
 
     @Test fun roles_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeAppRole, Pair("kishore", "dev"),
-                "app.users.rolesParent",
-                listOf( Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                unAuthorized<String>("unauthorized")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>("unauthorized").toResponse()
         )
     }
 
     // ===================================================================
     //describe( "Authorization: using Key roles on actions" ) {
     @Test fun roles_by_key_should_work_when_role_is_any() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"),
-                "app.users.rolesAny",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                listOf(Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")),
-                success("rolesAny", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesAny", "get", mapOf(
+                        Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
+                ), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesAny", msg="1 abc").toResponse()
         )
     }
 
 
     @Test fun roles_by_key_should_fail_for_any_role_with_no_user() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, null,
-                "app.users.rolesAny",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                null,
-                unAuthorized<String>(msg = "Unable to authorize, authorization provider not set")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = null,
+                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
         )
     }
 
 
     @Test fun roles_by_key_should_work_for_a_specific_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"),
-                "app.users.rolesSpecific",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                listOf(Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")),
-                success("rolesSpecific", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesSpecific", "get", mapOf(
+                        Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
+                ), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesSpecific", msg="1 abc").toResponse()
         )
     }
 
 
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_user_has_a_different_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "qa"),
-                "app.users.rolesSpecific",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                listOf(Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")),
-                unAuthorized<String>("unauthorized")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "qa"),
+                request  = Request.path("app.users.rolesSpecific", "get", mapOf(
+                        Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")
+                ), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>("unauthorized").toResponse()
         )
     }
 
 
     @Test fun roles_by_key_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "admin"),
-                "app.users.rolesParent",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                listOf(Pair("api-key", "54B1817194C1450B886404C6BEA81673")),
-                success("rolesParent", msg="1 abc")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "admin"),
+                request  = Request.path("app.users.rolesParent", "get", mapOf(
+                        Pair("api-key", "54B1817194C1450B886404C6BEA81673")
+                ), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = success("rolesParent", msg="1 abc").toResponse()
         )
     }
 
 
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
-        ensureCall(listOf(buildUserApiRegSingleton(ctx)),
-                "*", "*", ApiConstants.AuthModeKeyRole, Pair("kishore", "dev"),
-                "app.users.rolesParent",
-                listOf(Pair("code", "1"), Pair("tag", "abc")),
-                listOf(Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")),
-                unAuthorized<String>("unauthorized")
+        ensure(
+                protocol = AllProtocols,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.rolesParent", "get", mapOf(
+                        Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
+                ), mapOf(
+                        Pair("code", "1"),
+                        Pair("tag", "abc")
+                )),
+                response = unAuthorized<String>("unauthorized").toResponse()
         )
     }
 }
