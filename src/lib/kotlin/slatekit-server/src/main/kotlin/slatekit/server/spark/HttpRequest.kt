@@ -19,7 +19,9 @@ import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import spark.Request
+import java.io.BufferedInputStream
 import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
 import javax.servlet.MultipartConfigElement
 import java.io.InputStreamReader
 import java.nio.charset.Charset
@@ -37,27 +39,24 @@ class HttpRequest(val req: Request) : RequestSupport {
 
     /**
      * Access to an uploaded file
+     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
+     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name:String): Doc {
-        TODO.IMPLEMENT("spark", "file-upload having issues, need to check and refactor this")
+        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
+        val text = req.raw().getPart(name).getInputStream().use({ stream ->
 
-        val location = System.getProperty("java.io.tmpdir")
-        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement(location))
-        val part = req.raw().getPart("name")
-        val content = part.inputStream.use({ stream ->
-            val textBuilder = StringBuilder()
-            val reader = BufferedReader(InputStreamReader(stream, Charset.forName(StandardCharsets.UTF_8.name())))
-            reader.use { r ->
-                var c = reader.read()
-                while (c != -1) {
-                    textBuilder.append(c)
-                    c = r.read()
-                }
+            val bis = BufferedInputStream(stream)
+            val buf = ByteArrayOutputStream()
+            var ris = bis.read()
+            while (ris != -1) {
+                buf.write(ris.toByte().toInt())
+                ris = bis.read()
             }
-            textBuilder.toString()
+            val text = buf.toString()
+            text
         })
-
-        return Doc(name, content, ContentTypeHtml, content.length.toLong())
+        return Doc(name, text, ContentTypeHtml, text.length.toLong())
     }
 
 
@@ -102,8 +101,11 @@ class HttpRequest(val req: Request) : RequestSupport {
         fun loadJson(req: Request): JSONObject {
             val method = req.requestMethod().toLowerCase()
             val isPosted = isBodyAllowed(method)
-            val json = if (isPosted && !req.body().isNullOrEmpty()) {
+            val tpe = req.contentType()
+            val isMultiPart = tpe.startsWith("multipart/form-data;")
+            val json = if (isPosted && !isMultiPart && !req.body().isNullOrEmpty()) {
                 val parser = JSONParser()
+                val body = req.body()
                 val root = parser.parse(req.body())
                 root as JSONObject
             }

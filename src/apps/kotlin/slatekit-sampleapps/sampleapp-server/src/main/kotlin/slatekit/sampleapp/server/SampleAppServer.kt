@@ -126,7 +126,7 @@ fun main(args: Array<String>): Unit {
                     Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false),
 
                     // Example 5: File download
-                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false),
+                    Api(SampleFiles3Api::class    , setup = Annotated, declaredOnly = false),
 
                     // Example 6: Inheritance with APIs
                     Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false),
