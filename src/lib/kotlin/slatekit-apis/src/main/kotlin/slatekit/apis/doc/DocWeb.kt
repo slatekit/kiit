@@ -1,8 +1,7 @@
 package slatekit.apis.doc
 
-import slatekit.apis.ApiAction
-import slatekit.apis.ApiReg
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Api
+import slatekit.apis.core.Action
 import slatekit.common.console.ConsoleWrites
 import slatekit.common.console.WebWriter
 
@@ -19,7 +18,7 @@ class DocWeb : Doc() {
 
     override fun toString(): String = writer.toString()
 
-    override fun onApiBegin(api: ApiReg, options: ApiVisitOptions?): Unit {
+    override fun onApiBegin(api: Api, options: ApiVisitOptions?): Unit {
         writer.title(getFormattedText(api.area + "/" + api.name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.keyValue("desc" , api.desc, false)
         writer.keyValue("route", "${api.area}/${api.name}", false)
@@ -33,7 +32,7 @@ class DocWeb : Doc() {
     }
 
 
-    override fun onApiActionBegin(action: ApiRegAction, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBegin(action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.keyValue("desc", action.desc, false)

@@ -19,7 +19,8 @@ data class Credentials(
         val email: String = "",
         val key: String = "",
         val env: String = "",
-        val region: String = ""
+        val region: String = "",
+        val roles : String = ""
 ) {
     companion object CredentialsStatic {
         val empty = Credentials()

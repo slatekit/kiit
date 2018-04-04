@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.apis.ApiRegAction
+import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
 import slatekit.common.Request
@@ -19,7 +19,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook for before this api handles any request
      */
-    override fun onBefore(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?) {
+    override fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
         onBeforeHookCount.add(req)
     }
 
@@ -27,7 +27,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook for after this api handles any request
      */
-    override fun onAfter(ctx: Context, req: Request, target: ApiRegAction, source: Any, args: Map<String, Any>?) {
+    override fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
         onAfterHookCount.add(req)
     }
 

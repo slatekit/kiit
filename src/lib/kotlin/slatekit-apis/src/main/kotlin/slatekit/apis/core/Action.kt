@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis
+package slatekit.apis.core
 
 import slatekit.common.Meta
 import slatekit.common.Request
@@ -21,16 +21,24 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.full.createType
 
 
-data class ApiRegAction(
-        val api: ApiReg,
-        val member: KCallable<*>,
-        val name: String = "",
-        val desc: String = "",
-        val roles: String = "",
-        val verb: String = "*",
-        val protocol: String = "*"
-) {
-
+/**
+ * @param api      : Reference to the API associated w/ the action
+ * @param member   : The callable method associated w/ the action
+ * @param name     : Name of action which may have a different name than method due to conventions
+ * @param desc     : Description of the action
+ * @param roles    : Roles allowed to call this action
+ * @param verb     : Get/Post verb for Http enabled protocol
+ * @param protocol : Protocol associated with the action.
+ */
+data class Action(
+                    val member: KCallable<*>,
+                    val name: String = "",
+                    val desc: String = "",
+                    val roles: String = "",
+                    val verb: String = "*",
+                    val protocol: String = "*"
+                 )
+{
     /**
      * All the parameters of the function, this includes:
      *
@@ -48,7 +56,7 @@ data class ApiRegAction(
      * discovered, documented, validated against
      *
      * 1. 0th instance parameter for kotlin
-     * 2. a possible
+     * 2. a possible request/meta paramter
      */
     val paramsUser = filter(member.parameters)
 
@@ -81,7 +89,6 @@ data class ApiRegAction(
 
 
     companion object {
-
 
         val TypeRequest = Request::class.createType()
         val TypeMeta = Meta::class.createType()

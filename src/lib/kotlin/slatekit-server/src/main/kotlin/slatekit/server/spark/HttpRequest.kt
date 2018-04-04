@@ -16,7 +16,6 @@ package slatekit.server.spark
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.apis.core.Headers
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import spark.Request
@@ -68,7 +67,7 @@ class HttpRequest(val req: Request) : RequestSupport {
             val rawUri = req.uri()
             val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
             val parts = uri.split('/')
-            val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
+            // val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
             val method = req.requestMethod().toLowerCase()
             val isBodyOk = isBodyAllowed(method)
             val json = loadJson(req)
@@ -89,7 +88,7 @@ class HttpRequest(val req: Request) : RequestSupport {
                     parts = parts,
                     source = ApiConstants.SourceWeb,
                     verb = req.requestMethod().toLowerCase(),
-                    meta = Headers(headers, ctx.enc),
+                    meta = HttpHeaders(req, ctx.enc),
                     data = HttpParams(req, ctx.enc),
                     raw = HttpRequest(req),
                     tag = Random.stringGuid()

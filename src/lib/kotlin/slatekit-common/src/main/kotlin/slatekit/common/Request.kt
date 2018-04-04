@@ -88,6 +88,40 @@ data class Request (
         }
 
 
+        fun path(path:String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
+            val parts = path.split(".")
+            val area = parts[0]
+            val api = parts[1]
+            val action = parts[2]
+            val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
+            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts))
+        }
+
+
+        /**
+         * builds the request
+         */
+        fun cli(path: String,
+                            headers: List<Pair<String, Any>>?,
+                            inputs: List<Pair<String, Any>>?): Request {
+
+            fun buildArgs(inputs: List<Pair<String, Any>>?): InputArgs {
+
+                // fill args
+                val rawArgs = inputs?.let { all -> all.toMap() } ?: mapOf()
+                val args = InputArgs(rawArgs)
+                return args
+            }
+
+            val tokens = path.split('.').toList()
+            val args = buildArgs(inputs)
+            val opts = buildArgs(headers)
+            val req = Request(path, tokens, "cli", "get", args, opts,
+                    null, "", "", "1.0", DateTime.now())
+            return req
+        }
+
+
         fun cli(path: String, args: Args, opts: Meta?, verb: String, raw:Any?): Request =
                 Request(path, args.actionParts, "cli", verb, args, opts, raw, "")
     }

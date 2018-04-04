@@ -14,12 +14,12 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiContainer
+import slatekit.apis.doc.ApiVisitOptions
 import slatekit.apis.doc.ApiVisitor
 import slatekit.apis.doc.Doc
-import slatekit.apis.helpers.Areas
 
 
-class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) {
+class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc) {
 
 
     /**
@@ -30,11 +30,8 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
     fun help(): String {
 
         val doc = docBuilder()
-        val visitor = ApiVisitor()
-        val apis = lookup.keys()
-        apis?.let { apis ->
-            visitor.visitAreas(apis, doc)
-        }
+        val visitor = ApiVisitor(routes)
+        visitor.visitAreas(doc)
         return doc.toString()
     }
 
@@ -45,10 +42,10 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param area
      * @return
      */
-    fun helpForArea(area: String): String {
+    fun area(area: String): String {
         val doc = docBuilder()
-        val visitor = ApiVisitor()
-        visitor.visitApis(area, lookup, doc)
+        val visitor = ApiVisitor(routes)
+        visitor.visitApis(area, doc)
         return doc.toString()
     }
 
@@ -60,16 +57,11 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param apiName
      * @return
      */
-    fun helpForApi(area: String, apiName: String): String {
+    fun api(area: String, api: String): String {
         val doc = docBuilder()
-        val apis = lookup[area]
-        apis?.let { apis ->
-            val api = apis[apiName]
-            api?.let { apiBase ->
-                val visitor = ApiVisitor()
-                visitor.visitApiActions(apiBase, apiName, doc)
-            }
-        }
+        val visitor = ApiVisitor(routes)
+        visitor.visitActions(area, api, doc)
+
         return doc.toString()
     }
 
@@ -82,15 +74,12 @@ class Help(val ctn: ApiContainer, val lookup: Areas, val docBuilder: () -> Doc) 
      * @param actionName
      * @return
      */
-    fun helpForAction(area: String, apiName: String, actionName: String): String {
+    fun action(area: String, api: String, action: String): String {
         val doc = docBuilder()
-        val apis = lookup[area]
-        apis?.let { apis ->
-            val api = apis[apiName]
-            api?.let { apiBase ->
-                val visitor = ApiVisitor()
-                visitor.visitApiAction(apiBase, apiName, actionName, doc)
-            }
+        val visitor = ApiVisitor(routes)
+        val api = routes.api(area, api)
+        api?.actions?.get(action)?.let { act ->
+            visitor.visitAction(act, doc, true, options = ApiVisitOptions())
         }
         return doc.toString()
     }

@@ -1,16 +1,14 @@
 package slatekit.tools
 
 
-import slatekit.apis.ApiReg
+import slatekit.apis.core.Api
 import slatekit.apis.svcs.TokenAuth
 import slatekit.common.ApiKey
 import slatekit.common.Credentials
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings
-import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.CliApi
-import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
 import slatekit.tools.docs.DocApi
 
@@ -46,7 +44,7 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
-                    ApiReg(DocApi::class, declaredOnly = true)
+                    Api(DocApi::class, declaredOnly = true)
             )
     )
 

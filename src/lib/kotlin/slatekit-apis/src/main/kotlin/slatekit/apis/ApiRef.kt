@@ -1,3 +1,6 @@
 package slatekit.apis
 
-data class ApiRef(val api:ApiReg, val action:ApiRegAction, val instance:Any)
+import slatekit.apis.core.Action
+import slatekit.apis.core.Api
+
+data class ApiRef(val api: Api, val action: Action, val instance:Any)

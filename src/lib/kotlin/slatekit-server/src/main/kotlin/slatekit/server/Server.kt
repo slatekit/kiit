@@ -14,7 +14,7 @@
 package slatekit.server
 
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiReg
+import slatekit.apis.core.Api
 import slatekit.apis.WebProtocol
 import slatekit.apis.core.Auth
 import slatekit.apis.doc.DocWeb
@@ -42,7 +42,7 @@ class Server(
         val config: ServerConfig,
         val ctx   : Context,
         val auth  : Auth?,
-        val apis  : List<ApiReg>
+        val apis  : List<Api>
 ) : AppMetaSupport {
 
 
@@ -50,18 +50,18 @@ class Server(
      * initialize with port, prefix for api routes, and all the dependent items
      */
     constructor(
-                port      :Int          = 5000,
-                prefix    :String       = ""  ,
-                info      :Boolean      = true ,
-                cors      :Boolean      = false,
-                docs      :Boolean      = false,
-                static    :Boolean      = false,
-                staticDir :String       = ""   ,
-                docKey    :String       = ""   ,
-                apis      :List<ApiReg>        ,
-                auth      :Auth?        = null ,
-                setup     :((Any) -> Unit)? = null,
-                ctx       :Context   = AppContext.simple("slatekit-server")
+            port      :Int          = 5000,
+            prefix    :String       = "",
+            info      :Boolean      = true,
+            cors      :Boolean      = false,
+            docs      :Boolean      = false,
+            static    :Boolean      = false,
+            staticDir :String       = "",
+            docKey    :String       = "",
+            apis      :List<Api>,
+            auth      :Auth?        = null,
+            setup     :((Any) -> Unit)? = null,
+            ctx       :Context   = AppContext.simple("slatekit-server")
         ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 

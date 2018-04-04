@@ -15,14 +15,12 @@ package slatekit.apis.doc
 
 
 import slatekit.apis.ApiArg
-import slatekit.apis.ApiReg
-import slatekit.apis.ApiRegAction
-import slatekit.common.Serializer
+import slatekit.apis.core.Api
+import slatekit.apis.core.Action
 import slatekit.common.console.ConsoleSettings
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.ConsoleWrites
 import slatekit.common.nonEmptyOrDefault
-import slatekit.common.serialization.SerializerJson
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
 import java.lang.Math.abs
@@ -92,7 +90,7 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiEnd(api: ApiReg): Unit {
+    override fun onApiEnd(api: Api): Unit {
         writer.line()
     }
 
@@ -102,7 +100,7 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiActionSyntax(action: ApiRegAction?): Unit {
+    override fun onApiActionSyntax(action: Action?): Unit {
         val exampleCli = action?.let{ it -> buildPath(it, null) } ?: "app.movies.last"
         val exampleWeb = action?.let{ it -> buildPath(it, "/") }  ?: "app/movies/last"
         writer.line()
@@ -123,14 +121,14 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiBegin(api: ApiReg, options: ApiVisitOptions?): Unit {
+    override fun onApiBegin(api: Api, options: ApiVisitOptions?): Unit {
         writer.highlight(getFormattedText(api.name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
     }
 
 
-    override fun onApiBeginDetail(api: ApiReg, options: ApiVisitOptions?): Unit {
+    override fun onApiBeginDetail(api: Api, options: ApiVisitOptions?): Unit {
 
         writer.subTitle("AREA   : ", false)
         writer.highlight(api.area, true)
@@ -142,7 +140,7 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiActionBegin(action: ApiRegAction, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBegin(action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
@@ -150,22 +148,22 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiActionBeginDetail(action: ApiRegAction, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBeginDetail(action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.subTitle("ACTION : ", false)
         writer.highlight(name, endLine = false)
         writer.text(" ", endLine = false)
         writer.text(action.desc, endLine = true)
         writer.subTitle("PATH   : ", false)
-        writer.highlight(buildPath(action.api.area, action.api.name, action.name, null), true)
+        writer.highlight(buildPath("", "", action.name, null), true)
     }
 
 
-    override fun onApiActionEnd(action: ApiRegAction, name: String): Unit {
+    override fun onApiActionEnd(action: Action, name: String): Unit {
         writer.line()
     }
 
 
-    override fun onApiActionExample(api: ApiReg, actionName: String, action: ApiRegAction,
+    override fun onApiActionExample(api: Api, actionName: String, action: Action,
                                     args: List<KParameter>): Unit {
         writer.line()
 
@@ -197,7 +195,7 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onArgsBegin(action: ApiRegAction): Unit {
+    override fun onArgsBegin(action: Action): Unit {
         writer.text("Inputs : ", true)
     }
 
@@ -242,8 +240,8 @@ abstract class Doc : ApiVisit {
     }
 
 
-    open fun buildPath(action: ApiRegAction, sep:String? = null) : String {
-        return buildPath(action.api.area, action.api.name, action.name, sep)
+    open fun buildPath(action: Action, sep:String? = null) : String {
+        return buildPath("", "", action.name, sep)
     }
 
 

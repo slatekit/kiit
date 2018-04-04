@@ -15,6 +15,7 @@ package slatekit.apis.helpers
 
 
 import slatekit.apis.*
+import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
@@ -140,7 +141,7 @@ object ApiHelper {
      * @param protocol
      * @return
      */
-    fun buildApiInfo(ano: Api, reg: ApiReg): ApiReg {
+    fun buildApiInfo(ano: Api, reg: Api): Api {
 
         val finalRoles    = reg.roles.nonEmptyOrDefault(ano.roles)
         val finalAuth     = reg.auth.nonEmptyOrDefault(ano.auth)
@@ -166,7 +167,7 @@ object ApiHelper {
      * @param protocol
      * @return
      */
-    fun buildApiInfo(reg: ApiReg): ApiReg {
+    fun buildApiInfo(reg: Api): Api {
 
         val name = reg.cls.simpleName!!.removeSuffix("Controller").removeSuffix("Api").removeSuffix("API")
         val finalArea     = reg.area.nonEmptyOrDefault("")

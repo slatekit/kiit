@@ -19,4 +19,6 @@ import slatekit.common.DateTime
  */
 open class SampleExtendedApi : SamplePOKOApi() {
     fun getSeconds():Int = DateTime.now().seconds
+
+    fun ping(greeting:String):String = "$greeting back"
 }
