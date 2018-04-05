@@ -64,13 +64,12 @@ class Server(
         ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
-    val deserializer = Deserializer(this.ctx.enc)
     val container = ApiContainer(ctx,
         false,
         auth,
         WebProtocol,
         apis,
-        deserializer = deserializer,
+        deserializer = {req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,
         docBuilder = ::DocWeb)
 
