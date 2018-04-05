@@ -32,14 +32,15 @@ import kotlin.reflect.full.createType
  * represented by rawParams
  */
 open class Deserializer(
+        private val req: Request,
         private val enc: Encryptor? = null,
-        private val converter:((JSONObject, KType) -> Any)? = null) {
+        private val converters:(Map<String, (Request, JSONObject, KType) -> Any?>) = mapOf()) {
 
     val TypeRequest = Request::class.createType()
     val TypeMeta    = Meta::class.createType()
 
 
-    open fun deserialize(parameters: List<KParameter>, req:Request): Array<Any?> {
+    open fun deserialize(parameters: List<KParameter>): Array<Any?> {
 
         val data: Inputs = req.data
         val meta: Meta = req.meta
@@ -233,8 +234,8 @@ open class Deserializer(
         else if(cls == Map::class){
             handleMap(raw, tpe)
         }
-        else if(converter != null){
-            converter.invoke(parent as JSONObject, tpe)
+        else if(converters.containsKey(fullName)){
+            converters[fullName]?.invoke(req, parent as JSONObject, tpe)
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types
