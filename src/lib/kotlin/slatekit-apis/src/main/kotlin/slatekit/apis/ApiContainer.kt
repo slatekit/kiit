@@ -47,8 +47,7 @@ open class ApiContainer(
         val apis: List<slatekit.apis.core.Api> = listOf(),
         val namer : Namer? = null,
         val middleware: List<Middleware>? = null,
-        val converter: Converter = Converter(ctx.enc),
-        val deserializer: Deserializer = Deserializer(converter, enc = ctx.enc),
+        val deserializer: Deserializer = Deserializer(enc = ctx.enc),
         val serializer: ((String,Any?) -> String)? = null,
         val docKey:String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole

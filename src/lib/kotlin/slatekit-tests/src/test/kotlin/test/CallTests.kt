@@ -17,7 +17,6 @@ import slatekit.common.Conversions
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Request
-import slatekit.meta.Converter
 import slatekit.meta.Reflector
 import slatekit.meta.Deserializer
 import test.setup.UserApi
@@ -84,7 +83,7 @@ class CallTests {
     @Test fun can_handle_types(){
 
         fun ensureTypes(inputs: InputArgs):Unit {
-            val deserializer = Deserializer(Converter())
+            val deserializer = Deserializer()
             val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = deserializer.deserialize(method!!.parameters, req.data!!, req.meta, req)
@@ -126,7 +125,7 @@ class CallTests {
 
         fun ensureList(inputs:InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
-            val deserializer = Deserializer(Converter())
+            val deserializer = Deserializer()
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters, req.data!!, req.meta, req)
@@ -148,7 +147,7 @@ class CallTests {
 
         fun ensureMap(inputs:InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
-            val deserializer = Deserializer(Converter())
+            val deserializer = Deserializer()
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, null)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters, req.data!!, req.meta, req)
