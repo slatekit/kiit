@@ -125,16 +125,4 @@ class SerializerTests {
     fun sampleParams(str:String, bln:Boolean, numI:Int, numL:Long, date:DateTime, user: User):Unit {
 
     }
-
-
-//    @Test fun can_serialize_props_records() {
-//        val serializer = SerializerProps()
-//        val user1 = User(2, "c@abc.com", "super", "man", true, 35)
-//        val user2 = User(3, "b@abc.com", "bat"  , "man", true, 35)
-//        val users = listOf(user1, user2)
-//        val text = serializer.serialize(users)
-//        val expected = """2, "c@abc.com", "super", "man", true, 35""" + "\n" +
-//                """3, "b@abc.com", "bat", "man", true, 35""" + "\n\n"
-//
-//    }
 }

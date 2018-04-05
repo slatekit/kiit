@@ -148,9 +148,15 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
   }
 
 
-  @ApiAction(desc = "gets the current promo code", roles= "*", verb = "post", protocol = "@parent")
+  @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
   fun argTypeRequest(req: Request): Result<String> {
     return success("ok", "raw request id: " + req.data!!.getInt("id"))
+  }
+
+
+  @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
+  fun argTypeMeta(meta: Meta): Result<String> {
+    return success("ok", "raw meta token: " + meta.get("token"))
   }
 
 

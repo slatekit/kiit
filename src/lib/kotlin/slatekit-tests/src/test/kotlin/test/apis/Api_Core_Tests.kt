@@ -69,6 +69,21 @@ class Api_Core_Tests : ApiTestsBase() {
     }
 
 
+    @Test fun can_execute_with_type_raw_meta() {
+        ensure(
+                protocol = CliProtocol,
+                apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
+                user     = Credentials(name = "kishore", roles = "dev"),
+                request  = Request.path("app.users.argTypeMeta", "get", mapOf(
+                        Pair("token", "abc")
+                ), mapOf(
+                        Pair("id", "2")
+                )),
+                response = success("ok", msg = "raw meta token: abc").toResponse()
+        )
+    }
+
+
     @Test fun can_run_functional_error() {
         val number = "abc"
         ensure(

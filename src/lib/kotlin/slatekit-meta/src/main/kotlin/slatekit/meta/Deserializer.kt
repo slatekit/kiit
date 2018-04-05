@@ -25,10 +25,12 @@ import kotlin.reflect.full.createType
  * Deserializes data ( as Inputs ) into the parameter types
  * represented by rawParams
  */
-open class Deserializer(private val converter:Converter,
-                   private val enc: Encryptor? = null) {
+open class Deserializer(
+        private val converter:Converter,
+        private val enc: Encryptor? = null) {
 
     val TypeRequest = Request::class.createType()
+    val TypeMeta    = Meta::class.createType()
 
 
     open fun deserialize(parameters: List<KParameter>, data: Inputs, meta: Meta?, source:Any?): Array<Any?> {
@@ -59,6 +61,9 @@ open class Deserializer(private val converter:Converter,
 
                 // Raw request
                 TypeRequest             -> source
+
+                // Raw request
+                TypeMeta                -> meta
 
                 // Doc/File reference ( only if allowed )
                 KTypes.KDocType          -> Conversions.toDoc(data.getString(paramName))

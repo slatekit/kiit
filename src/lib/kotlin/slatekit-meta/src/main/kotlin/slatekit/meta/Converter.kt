@@ -32,8 +32,7 @@ import kotlin.reflect.full.createType
  * Json converter
  */
 open class Converter(val enc: Encryptor? = null,
-                val converters:Map<String,(JSONObject, KType) -> Any> = mapOf(),
-                val smartStrings:Map<String, SmartString> = mapOf()) {
+                val converters:Map<String,(JSONObject, KType) -> Any> = mapOf()) {
 
     // This could be a reference to file doc e.g. user://myapp/conf/apikey.conf
     val TypeRequest = Request::class.createType()
@@ -63,7 +62,7 @@ open class Converter(val enc: Encryptor? = null,
 
 
     /**
-     * Gets data from the json object as an instance of the parameter type
+     * converts data from the json object as an instance of the parameter type
      */
     fun convert(parameter: KParameter, jsonObj: JSONObject): Any? {
         val paramName = parameter.name!!
@@ -74,6 +73,9 @@ open class Converter(val enc: Encryptor? = null,
     }
 
 
+    /**
+     * converts
+     */
     fun convert(parent:Any, raw:Any?, paramType: KType): Any? {
         return when (paramType) {
             // Basic types
