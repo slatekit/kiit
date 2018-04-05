@@ -46,7 +46,7 @@ open class ApiContainer(
         val ctx: Context,
         val allowIO: Boolean,
         val auth: Auth? = null,
-        val protocol: Protocol = AllProtocols,
+        val protocol: Protocol = WebProtocol,
         val apis: List<slatekit.apis.core.Api> = listOf(),
         val namer : Namer? = null,
         val middleware: List<Middleware>? = null,

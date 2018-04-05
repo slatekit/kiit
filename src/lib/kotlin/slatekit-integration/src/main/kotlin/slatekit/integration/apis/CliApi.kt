@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
+import slatekit.apis.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Reqs
 import slatekit.common.*
@@ -42,7 +43,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
-    val apis = ApiContainer(ctx, true, auth, apis = apiItems)
+    val apis = ApiContainer(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
 
 
     /**
