@@ -7,10 +7,7 @@ import slatekit.apis.core.Api
 import slatekit.core.common.AppContext
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
-import test.setup.SampleEntityApi
-import test.setup.SampleExtendedApi
-import test.setup.SamplePOKOApi
-import test.setup.WorkerSampleApi
+import test.setup.*
 
 
 class Api_Setup_Tests : ApiTestsBase() {
@@ -63,6 +60,15 @@ class Api_Setup_Tests : ApiTestsBase() {
         assert( apis.getApi("app"   , "SampleExtended", "response"   ).success)
         assert(!apis.getApi("app"   , "SampleExtended", "getEmail"   ).success)
         assert(!apis.getApi("app"   , "SampleExtended", "getSsn"     ).success)
+    }
+
+
+    @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
+        val apis = ApiContainer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = Annotated)),
+                auth = null, allowIO = false)
+        assert( apis.getApi("app"   , "tests", "patch" ).success)
+        assert( apis.getApi("app"   , "tests", "recent" ).success)
+        assert( apis.getApi("app"   , "tests", "deleteById" ).success)
     }
 
 
