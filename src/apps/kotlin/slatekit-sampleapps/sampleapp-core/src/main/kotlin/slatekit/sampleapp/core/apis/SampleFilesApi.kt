@@ -4,9 +4,11 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.common.Content
 import slatekit.common.Doc
+import slatekit.common.Request
+import slatekit.common.RequestSupport
 
 
-@Api(area = "samples", name = "files", desc = "sample api to test other features")
+@Api(area = "samples", name = "files", desc = "sample api to test other features", roles = "*")
 class SampleFiles3Api {
 
     @ApiAction(desc = "test getting content as xml", roles = "@parent", verb = "@parent", protocol = "@parent")
@@ -39,4 +41,14 @@ class SampleFiles3Api {
 
     @ApiAction(desc = "test getting Doc as xml", roles = "", verb = "@parent", protocol = "@parent")
     fun getDocXml(): Doc = Doc.xml("file1.xml", "<user><name>kishore</name></user>")
+
+    @ApiAction(desc = "test uploading a file", roles = "", verb = "post", protocol = "@parent")
+    fun uploadFile(req: Request): Doc {
+        val raw = req.raw as? RequestSupport
+        val doc = raw?.let { r ->
+            val uploaded = r.getDoc("uploaded_file")
+            uploaded
+        } ?: Doc.text("empty.txt","unable to get document")
+        return doc
+    }
 }

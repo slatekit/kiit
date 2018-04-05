@@ -95,9 +95,12 @@ open class Deserializer(
      */
     fun handleComplex(data: Inputs, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, raw:Any?): Any? {
         val paramName = parameter.name!!
-        return if(jsonRaw == null){
-            val cls = tpe.classifier as KClass<*>
+        val cls = tpe.classifier as KClass<*>
 
+        val result = if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
+            converter.handleSmartString(raw, tpe)
+        }
+        else if(jsonRaw == null){
             // Case 1: List<*>
             if(cls == List::class){
                 val listType = tpe.arguments[0]!!.type!!
@@ -136,5 +139,6 @@ open class Deserializer(
         } else {
             converter.convert(parameter, jsonRaw!!)
         }
+        return result
     }
 }

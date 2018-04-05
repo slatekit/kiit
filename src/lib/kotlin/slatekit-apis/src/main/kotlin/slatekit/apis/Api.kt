@@ -34,6 +34,6 @@ annotation class Api (val area     : String = "",
                       val name     : String = "",
                       val desc     : String = "",
                       val roles    : String = "",
-                      val auth     : String = "app",
+                      val auth     : String = "app-key",
                       val verb     : String = "get",
                       val protocol : String = "*" )
