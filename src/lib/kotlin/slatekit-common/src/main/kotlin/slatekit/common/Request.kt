@@ -33,8 +33,8 @@ data class Request (
         val parts      :List<String>,
         val source     :String,
         val verb       :String,
-        val data       :Inputs?,
-        val meta       :Meta?,
+        val data       :Inputs,
+        val meta       :Meta,
         val raw        :Any?          = null,
         val output     :String?       = "",
         val tag        :String        = "",
@@ -123,6 +123,6 @@ data class Request (
 
 
         fun cli(path: String, args: Args, opts: Meta?, verb: String, raw:Any?): Request =
-                Request(path, args.actionParts, "cli", verb, args, opts, raw, "")
+                Request(path, args.actionParts, "cli", verb, args, opts ?: InputArgs(mapOf()), raw, "")
     }
 }

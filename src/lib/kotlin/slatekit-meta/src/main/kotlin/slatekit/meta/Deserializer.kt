@@ -12,9 +12,15 @@ mantra: Simplicity above all else
  */
 package slatekit.meta
 
+import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
+import slatekit.common.types.Email
+import slatekit.common.types.PhoneUS
+import slatekit.common.types.SSN
+import slatekit.common.types.ZipCode
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -25,14 +31,19 @@ import kotlin.reflect.full.createType
  * Deserializes data ( as Inputs ) into the parameter types
  * represented by rawParams
  */
-open class Deserializer(private val converter:Converter,
-                   private val enc: Encryptor? = null) {
+open class Deserializer(
+        private val req: Request,
+        private val enc: Encryptor? = null,
+        private val converters:(Map<String, (Request, JSONObject, KType) -> Any?>) = mapOf()) {
 
     val TypeRequest = Request::class.createType()
+    val TypeMeta    = Meta::class.createType()
 
 
-    open fun deserialize(parameters: List<KParameter>, data: Inputs, meta: Meta?, source:Any?): Array<Any?> {
+    open fun deserialize(parameters: List<KParameter>): Array<Any?> {
 
+        val data: Inputs = req.data
+        val meta: Meta = req.meta
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()
         val jsonRaw = data.raw as? JSONObject
@@ -58,7 +69,10 @@ open class Deserializer(private val converter:Converter,
                 KTypes.KDateTimeType      -> data.getDateTime(paramName)
 
                 // Raw request
-                TypeRequest             -> source
+                TypeRequest             -> req
+
+                // Raw meta
+                TypeMeta                -> meta
 
                 // Doc/File reference ( only if allowed )
                 KTypes.KDocType          -> Conversions.toDoc(data.getString(paramName))
@@ -82,6 +96,71 @@ open class Deserializer(private val converter:Converter,
     }
 
 
+    open fun convert(parameters:List<KParameter>, text:String): Array<Any?> {
+        val jsonObj = JSONParser().parse(text) as JSONObject
+        return convert(parameters, jsonObj)
+    }
+
+
+    /**
+     * converts the JSON object data into the instances of the parameter types
+     * @param parameters: The parameter info to convert
+     * @param jsonObj   : The json object to containing the data
+     */
+    open fun convert(parameters:List<KParameter>, jsonObj: JSONObject): Array<Any?> {
+
+        // Check each parameter to api call
+        val params = parameters
+        val inputs = (0..params.size - 1).map{ index ->
+            val parameter = params[index]
+            convert(parameter, jsonObj)
+        }
+        return inputs.toTypedArray()
+    }
+
+
+    /**
+     * converts data from the json object as an instance of the parameter type
+     */
+    fun convert(parameter: KParameter, jsonObj: JSONObject): Any? {
+        val paramName = parameter.name!!
+        val paramType = parameter.type
+        val data = jsonObj.get(paramName)
+        val result = convert(jsonObj, data, paramType)
+        return result
+    }
+
+
+    /**
+     * converts
+     */
+    fun convert(parent:Any, raw:Any?, paramType: KType): Any? {
+        return when (paramType) {
+        // Basic types
+            KTypes.KStringType        -> Conversions.handleString(raw)
+            KTypes.KBoolType          -> raw.toString().toBoolean()
+            KTypes.KShortType         -> raw.toString().toShort()
+            KTypes.KIntType           -> raw.toString().toInt()
+            KTypes.KLongType          -> raw.toString().toLong()
+            KTypes.KFloatType         -> raw.toString().toFloat()
+            KTypes.KDoubleType        -> raw.toString().toDouble()
+            KTypes.KLocalDateType     -> Conversions.toLocalDate(raw as String)
+            KTypes.KLocalTimeType     -> Conversions.toLocalTime(raw as String)
+            KTypes.KLocalDateTimeType -> Conversions.toLocalDateTime(raw as String)
+            KTypes.KZonedDateTimeType -> Conversions.toZonedDateTime(raw as String)
+            KTypes.KDateTimeType      -> Conversions.toDateTime(raw as String)
+            KTypes.KDecIntType        -> enc?.let { e -> EncInt(raw as String, e.decrypt(raw ).toInt()) } ?: EncInt("", 0)
+            KTypes.KDecLongType       -> enc?.let { e -> EncLong(raw as String, e.decrypt(raw ).toLong()) } ?: EncLong("", 0L)
+            KTypes.KDecDoubleType     -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw ).toDouble()) } ?: EncDouble("", 0.0)
+            KTypes.KDecStringType     -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
+            KTypes.KVarsType          -> Conversions.toVars(raw)
+
+        // Complex type
+            else                    -> handleComplex(parent, raw, paramType)
+        }
+    }
+
+
     /**
      * Handles building of a list from various source types
      * @param args
@@ -93,7 +172,7 @@ open class Deserializer(private val converter:Converter,
         val cls = tpe.classifier as KClass<*>
 
         val result = if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
-            converter.handleSmartString(raw, tpe)
+            handleSmartString(raw, tpe)
         }
         else if(jsonRaw == null){
             // Case 1: List<*>
@@ -114,7 +193,7 @@ open class Deserializer(private val converter:Converter,
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
             else if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
-                converter.handleSmartString(raw, tpe)
+                handleSmartString(raw, tpe)
             }
             // Case 4: Object / Complex type
             else {
@@ -129,11 +208,165 @@ open class Deserializer(private val converter:Converter,
                     obj
                 }
                 else jsonRaw
-                converter.convert(parameter, json)
+                convert(parameter, json)
             }
         } else {
-            converter.convert(parameter, jsonRaw!!)
+            convert(parameter, jsonRaw!!)
         }
         return result
+    }
+
+
+
+
+    /**
+     * Handles building of a list from various source types
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleComplex(parent:Any, raw:Any?, tpe: KType): Any? {
+        val cls = tpe.classifier as KClass<*>
+        val fullName = cls.qualifiedName
+        return if(cls == List::class){
+            handleList(raw, tpe)
+        }
+        else if(cls == Map::class){
+            handleMap(raw, tpe)
+        }
+        else if(converters.containsKey(fullName)){
+            converters[fullName]?.invoke(req, parent as JSONObject, tpe)
+        }
+        // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
+        // Refer to slatekit.common.types
+        else if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
+            handleSmartString(raw, tpe)
+        }
+        else {
+            handleObject(raw, tpe)!!
+        }
+    }
+
+
+    /**
+     * Handles building of a list from various source types
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleList(raw:Any?, tpe: KType): List<*> {
+        val listType = tpe.arguments[0]!!.type!!
+        val items = when (raw) {
+            is JSONArray -> parseList(raw, listType)
+            null         -> listOf<Any>()
+            "null"       -> listOf<Any>()
+            "\"\""       -> listOf<Any>()
+            else         -> listOf<Any>()
+        }
+        return items
+    }
+
+
+    /**
+     * Handle building of a map from various sources
+     * @param parameter
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleMap(raw:Any?, tpe: KType): Map<*, *>? {
+        val tpeKey = tpe.arguments[0].type!!
+        val tpeVal = tpe.arguments[1].type!!
+        val clsKey = KTypes.getClassFromType(tpeKey)
+        val clsVal = KTypes.getClassFromType(tpeVal)
+        val emptyMap = mapOf<Any, Any>()
+        val items = when (raw) {
+            is JSONObject -> parseMap(raw, tpeKey, tpeVal)
+            null          -> emptyMap
+            "null"        -> emptyMap
+            "\"\""        -> emptyMap
+            else          -> emptyMap
+        }
+        return items
+    }
+
+
+    /**
+     * Handles building of a list from various source types
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleSmartString(raw:Any?, paramType: KType): Any? {
+        return when (raw) {
+            null   -> null
+            "null" -> null
+            else   -> parseSmartString(raw?.toString() ?: "", paramType)
+        }
+    }
+
+
+    /**
+     * Handle building of an object from various sources.
+     * @param parameter
+     * @param args
+     * @param paramName
+     * @return
+     */
+    fun handleObject(raw:Any?, paramType: KType): Any? {
+        return when (raw) {
+            is JSONObject -> parseObject(raw, paramType)
+            null          -> null
+            "null"        -> null
+            "\"\""        -> null
+            ""            -> null
+            else          -> null
+        }
+    }
+
+
+    fun parseList(array: JSONArray, tpe: KType):List<*> {
+        val items = array.map { item ->
+            item?.let { jsonItem -> convert(array, jsonItem, tpe) }
+        }.filterNotNull()
+        return items
+    }
+
+
+    fun parseMap(obj: JSONObject, tpeKey: KType, tpeVal: KType):Map<*,*> {
+        val keyConverter = Conversions.converterFor(tpeKey.javaClass)
+        val items = obj.map { entry ->
+            val key = keyConverter(entry.key?.toString()!!)
+            val keyVal = convert(obj, entry.value, tpeVal)
+            Pair(key, keyVal)
+        }.filterNotNull().toMap()
+        return items
+    }
+
+
+    fun parseObject(obj: JSONObject, tpe: KType): Any {
+        val cls = tpe.classifier as KClass<*>
+        val props = Reflector.getProperties(cls)
+        val items = props.map { prop ->
+            val raw = obj.get(prop.name)
+            val converted = convert(obj, raw, prop.returnType)
+            converted
+        }
+        val instance = Reflector.createWithArgs<Any>(cls, items.toTypedArray())
+        return instance
+    }
+
+
+    fun parseSmartString(txt:String, tpe: KType) : SmartString {
+
+        val cls = tpe.classifier as KClass<*>
+        val smartString = when ( cls ) {
+            PhoneUS::class -> PhoneUS(txt)
+            Email::class   -> Email(txt)
+            ZipCode::class -> ZipCode(txt)
+            SSN::class     -> SSN(txt)
+            else           -> Reflector.createWithArgs<Any>(cls, arrayOf(txt)) as SmartString
+        }
+        return smartString
     }
 }

@@ -1,5 +1,6 @@
 package slatekit.apis
 
+import org.json.simple.JSONObject
 import slatekit.apis.codegen.CodeGenJava
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
@@ -21,11 +22,13 @@ import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.Error
 import slatekit.common.*
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -47,8 +50,7 @@ open class ApiContainer(
         val apis: List<slatekit.apis.core.Api> = listOf(),
         val namer : Namer? = null,
         val middleware: List<Middleware>? = null,
-        val converter: Converter = Converter(ctx.enc),
-        val deserializer: Deserializer = Deserializer(converter, enc = ctx.enc),
+        val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
         val serializer: ((String,Any?) -> String)? = null,
         val docKey:String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
@@ -373,7 +375,8 @@ open class ApiContainer(
 
     protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
-        val inputs = ApiHelper.fillArgs(deserializer, apiRef, req, req.data!!, allowIO, this.ctx.enc)
+        val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
+        val inputs = ApiHelper.fillArgs(converter, apiRef, req, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
         val result = returnVal?.let { res ->
@@ -525,7 +528,7 @@ open class ApiContainer(
         val docKeyValue = if(req.meta?.containsKey("doc-key") ?: false){
             req.meta?.get("doc-key") ?: ""
         }
-        else if(req.data?.containsKey("doc-key") ?: false){
+        else if(req.data?.containsKey("doc-key") ?: false) {
             req.data?.get("doc-key") ?: ""
         }
         else

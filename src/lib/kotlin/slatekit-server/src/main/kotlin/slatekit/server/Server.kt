@@ -26,7 +26,6 @@ import slatekit.common.app.AppMetaSupport
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.toResponse
 import slatekit.core.common.AppContext
-import slatekit.meta.Converter
 import slatekit.meta.Deserializer
 import slatekit.server.spark.HttpRequest
 import slatekit.server.spark.HttpResponse
@@ -65,15 +64,12 @@ class Server(
         ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
-    val converter = Converter(this.ctx.enc)
-    val deserializer = Deserializer(converter, this.ctx.enc)
     val container = ApiContainer(ctx,
         false,
         auth,
         WebProtocol,
         apis,
-        converter = converter,
-        deserializer = deserializer,
+        deserializer = {req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,
         docBuilder = ::DocWeb)
 
