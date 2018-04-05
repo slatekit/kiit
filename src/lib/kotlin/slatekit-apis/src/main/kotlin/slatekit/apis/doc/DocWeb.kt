@@ -32,7 +32,7 @@ class DocWeb : Doc() {
     }
 
 
-    override fun onApiActionBegin(action: Action, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBegin(api:Api, action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.keyValue("desc", action.desc, false)
