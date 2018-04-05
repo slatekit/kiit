@@ -13,7 +13,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.sampleapp.core.models.Movie
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "samples", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
 class SampleAnnoApi(val context: AppEntContext) {
 
 
