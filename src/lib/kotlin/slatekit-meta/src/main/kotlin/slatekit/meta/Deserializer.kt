@@ -33,14 +33,16 @@ import kotlin.reflect.full.createType
  */
 open class Deserializer(
         private val enc: Encryptor? = null,
-        val converters:Map<String,(JSONObject, KType) -> Any> = mapOf()) {
+        private val converter:((JSONObject, KType) -> Any)? = null) {
 
     val TypeRequest = Request::class.createType()
     val TypeMeta    = Meta::class.createType()
 
 
-    open fun deserialize(parameters: List<KParameter>, data: Inputs, meta: Meta?, source:Any?): Array<Any?> {
+    open fun deserialize(parameters: List<KParameter>, req:Request): Array<Any?> {
 
+        val data: Inputs = req.data
+        val meta: Meta = req.meta
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()
         val jsonRaw = data.raw as? JSONObject
@@ -66,7 +68,7 @@ open class Deserializer(
                 KTypes.KDateTimeType      -> data.getDateTime(paramName)
 
                 // Raw request
-                TypeRequest             -> source
+                TypeRequest             -> req
 
                 // Raw meta
                 TypeMeta                -> meta
@@ -231,8 +233,8 @@ open class Deserializer(
         else if(cls == Map::class){
             handleMap(raw, tpe)
         }
-        else if(converters.containsKey(fullName)){
-            converters[fullName]?.invoke(parent as JSONObject, tpe)!!
+        else if(converter != null){
+            converter.invoke(parent as JSONObject, tpe)
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types

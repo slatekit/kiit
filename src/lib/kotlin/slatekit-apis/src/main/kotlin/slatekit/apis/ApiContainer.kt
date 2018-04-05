@@ -372,7 +372,7 @@ open class ApiContainer(
 
     protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
-        val inputs = ApiHelper.fillArgs(deserializer, apiRef, req, req.data!!, allowIO, this.ctx.enc)
+        val inputs = ApiHelper.fillArgs(deserializer, apiRef, req, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
         val result = returnVal?.let { res ->

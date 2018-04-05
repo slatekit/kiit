@@ -114,20 +114,20 @@ object ApiHelper {
     }
 
 
-    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request, args: Inputs, allowLocalIO: Boolean = false,
+    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request, allowLocalIO: Boolean = false,
                  enc: Encryptor? = null): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
         return if (!action.hasArgs)
             arrayOf()
         // Check 2: 1 param with default and no args
-        else if (action.isSingleDefaultedArg() && args.size() == 0) {
+        else if (action.isSingleDefaultedArg() && cmd.data.size() == 0) {
             val argType = action.paramsUser[0].type.toString()
             val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         }
         else {
-            deserializer.deserialize(action.params, args, cmd.meta, cmd)
+            deserializer.deserialize(action.params, cmd)
         }
     }
 

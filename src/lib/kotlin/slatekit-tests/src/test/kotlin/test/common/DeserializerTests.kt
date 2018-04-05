@@ -10,6 +10,7 @@ import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 import slatekit.meta.Deserializer
+import test.setup.Movie
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -150,16 +151,19 @@ class ConvertTests {
     }
 
 
-    fun test_custom_converter(tstr:String, tbool:Boolean, req: Request):Unit {}
+    fun test_custom_converter(tstr:String, tbool:Boolean, movie: Movie):Unit {}
     @Test fun can_parse_custom_types(){
         val test = """{ "tstr": "abc", "tbool": false }"""
         val req = Request("a.b.c", listOf("a", "b", "c"), ApiConstants.SourceCLI, "post",
-                InputArgs(mapOf()), InputArgs(mapOf()))
-        val deserializer = Deserializer(null, mapOf("slatekit.common.Request" to { json, tpe -> req }))
+                InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
+        val deserializer = Deserializer(null, { json, tpe ->
+            Movie(0L, req.meta.getString("movie"), cost = 0, rating = 4.0, released = DateTime.now() )
+        })
         val results = deserializer.convert(this::test_custom_converter.parameters, test)
         assert(results[0] == "abc")
         assert(results[1] == false)
-        assert(results[2] == req)
+        assert(results[2] is Movie )
+        assert((results[2] as Movie ).title == "batman")
     }
 
 
