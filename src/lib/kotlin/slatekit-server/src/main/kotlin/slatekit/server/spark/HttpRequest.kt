@@ -19,11 +19,8 @@ import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import spark.Request
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.ByteArrayOutputStream
+import java.io.*
 import javax.servlet.MultipartConfigElement
-import java.io.InputStreamReader
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
@@ -43,8 +40,7 @@ class HttpRequest(val req: Request) : RequestSupport {
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name:String): Doc {
-        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
-        val text = req.raw().getPart(name).getInputStream().use({ stream ->
+        return getFile( name, { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -54,9 +50,35 @@ class HttpRequest(val req: Request) : RequestSupport {
                 ris = bis.read()
             }
             val text = buf.toString()
-            text
+            Doc(name, text, ContentTypeHtml, text.length.toLong())
         })
-        return Doc(name, text, ContentTypeHtml, text.length.toLong())
+    }
+
+
+    /**
+     * Access to an uploaded file
+     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
+     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
+     */
+    override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
+        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
+        val doc = req.raw().getPart(name).getInputStream().use({ stream ->
+            callback(stream)
+        })
+        return doc
+    }
+
+
+    /**
+     * Access to an uploaded file
+     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
+     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
+     */
+    override fun getFileStream(name:String, callback:(InputStream) -> Unit ): Unit {
+        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
+        req.raw().getPart(name).getInputStream().use({ stream ->
+            callback(stream)
+        })
     }
 
 

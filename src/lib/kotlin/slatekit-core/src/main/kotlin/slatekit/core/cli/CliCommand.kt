@@ -15,6 +15,7 @@ package slatekit.core.cli
 
 import slatekit.common.*
 import slatekit.common.args.Args
+import java.io.InputStream
 
 
 /**
@@ -67,6 +68,22 @@ data class CliCommand(  val area: String,
 
     override fun getDoc(name: String): Doc {
         return Uris.readDoc(this.args.getString(name))!!
+    }
+
+
+    /**
+     * Access to an file
+     */
+    override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
+        return Uris.readDoc(this.args.getString(name))!!
+    }
+
+
+    /**
+     * Access to an file stream
+     */
+    override fun getFileStream(name:String, callback:(InputStream) -> Unit ): Unit {
+
     }
 
 
