@@ -140,7 +140,7 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiActionBegin(action: Action, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBegin(api:Api, action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
@@ -148,13 +148,13 @@ abstract class Doc : ApiVisit {
     }
 
 
-    override fun onApiActionBeginDetail(action: Action, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBeginDetail(api:Api, action: Action, name: String, options: ApiVisitOptions?): Unit {
         writer.subTitle("ACTION : ", false)
         writer.highlight(name, endLine = false)
         writer.text(" ", endLine = false)
         writer.text(action.desc, endLine = true)
         writer.subTitle("PATH   : ", false)
-        writer.highlight(buildPath("", "", action.name, null), true)
+        writer.highlight(buildPath(api.area, api.name, action.name, null), true)
     }
 
 

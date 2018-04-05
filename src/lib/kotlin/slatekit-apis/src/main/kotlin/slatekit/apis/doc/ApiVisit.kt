@@ -60,10 +60,10 @@ interface ApiVisit {
     fun onApisEnd(area: String, exampleApi: String?): Unit
 
 
-    fun onApiActionBegin(action: Action, name: String, options: ApiVisitOptions? = null): Unit
+    fun onApiActionBegin(api:Api, action: Action, name: String, options: ApiVisitOptions? = null): Unit
 
 
-    fun onApiActionBeginDetail(action: Action, name: String, options: ApiVisitOptions? = null): Unit
+    fun onApiActionBeginDetail(api:Api, action: Action, name: String, options: ApiVisitOptions? = null): Unit
 
 
     fun onApiActionEnd(action: Action, name: String): Unit

@@ -76,7 +76,7 @@ class ApiVisitor(val routes:Routes) {
                 actionNames.forEach { action ->
                     val action = actions.get(action.name)
                     action?.let { act ->
-                        visitor.onApiActionBegin(action, action.name, options)
+                        visitor.onApiActionBegin(api, action, action.name, options)
                     }
                 }
         }
@@ -84,9 +84,9 @@ class ApiVisitor(val routes:Routes) {
     }
 
 
-    fun visitAction(action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
+    fun visitAction(api:Api, action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
         // action
-        visitor.onApiActionBeginDetail(action, action.name, options)
+        visitor.onApiActionBeginDetail(api, action, action.name, options)
 
         if (detailMode) {
             visitArgs(action, visitor)

@@ -79,7 +79,7 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         val visitor = ApiVisitor(routes)
         val api = routes.api(area, api)
         api?.actions?.get(action)?.let { act ->
-            visitor.visitAction(act, doc, true, options = ApiVisitOptions())
+            visitor.visitAction(api, act, doc, true, options = ApiVisitOptions())
         }
         return doc.toString()
     }
