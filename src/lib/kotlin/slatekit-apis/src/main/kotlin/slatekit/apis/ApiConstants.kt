@@ -29,6 +29,8 @@ object ApiConstants {
     const val SourceFile = "file"
     const val SourceQueue = "queue"
 
+    const val DocKeyName = "doc-key"
+
     const val Any = "*"
     const val None = ""
     const val Unknown = "?"

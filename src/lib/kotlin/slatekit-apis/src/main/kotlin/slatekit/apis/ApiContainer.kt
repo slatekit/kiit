@@ -54,6 +54,7 @@ open class ApiContainer(
         val docKey:String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
 ) {
+
     /**
      * The lookup/map for all the areas in the container
      * e.g. Slate Kit apis are in a 3 part route format :
@@ -508,11 +509,11 @@ open class ApiContainer(
 
     fun isDocKeyAvailable(req:Request):Boolean {
         // Ensure that docs are only available w/ help key
-        val docKeyValue = if(req.meta.containsKey("doc-key")){
-            req.meta.get("doc-key") ?: ""
+        val docKeyValue = if(req.meta.containsKey(ApiConstants.DocKeyName)){
+            req.meta.get(ApiConstants.DocKeyName) ?: ""
         }
-        else if(req.data.containsKey("doc-key")) {
-            req.data.get("doc-key") ?: ""
+        else if(req.data.containsKey(ApiConstants.DocKeyName)) {
+            req.data.get(ApiConstants.DocKeyName) ?: ""
         }
         else
             ""
