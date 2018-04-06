@@ -70,14 +70,11 @@ class ApiVisitor(val routes:Routes) {
         first?.let{ visitor.onApiBeginDetail(api) }
         if (actions.size > 0) {
                 visitor.onVisitSeparator()
-                val actionNames = actions.items.sortedBy { s -> s.name }
-                val maxLength = actionNames.maxBy { it.name.length }?.name?.length ?: 10
+                val sortedActions = actions.items.sortedBy { s -> s.name }
+                val maxLength = sortedActions.maxBy { it.name.length }?.name?.length ?: 10
                 val options = ApiVisitOptions(maxLength)
-                actionNames.forEach { action ->
-                    val action = actions.get(action.name)
-                    action?.let { act ->
-                        visitor.onApiActionBegin(api, action, action.name, options)
-                    }
+                sortedActions.forEach { action ->
+                    visitor.onApiActionBegin(api, action, action.name, options)
                 }
         }
         visitor.onApiActionSyntax(first)

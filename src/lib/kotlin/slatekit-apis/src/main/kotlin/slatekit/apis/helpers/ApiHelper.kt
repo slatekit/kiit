@@ -84,12 +84,12 @@ object ApiHelper {
         val noAuth = auth == null
 
         // CASE 1: No auth for action
-        return if (noAuth && (apiRef.action.roles == ApiConstants.RoleGuest || apiRef.action.roles.isNullOrEmpty())) {
+        return if (noAuth && (apiRef.action.roles == ApiConstants.Unknown || apiRef.action.roles.isNullOrEmpty())) {
             ok()
         }
         // CASE 2: No auth for parent
-        else if (noAuth && apiRef.action.roles == ApiConstants.RoleParent
-                && apiRef.api.roles == ApiConstants.RoleGuest) {
+        else if (noAuth && apiRef.action.roles == ApiConstants.Parent
+                && apiRef.api.roles == ApiConstants.Unknown) {
             ok()
         }
         // CASE 3: No auth and action requires roles!
@@ -114,8 +114,7 @@ object ApiHelper {
     }
 
 
-    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request, allowLocalIO: Boolean = false,
-                 enc: Encryptor? = null): Array<Any?> {
+    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
         return if (!action.hasArgs)

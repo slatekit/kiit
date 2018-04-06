@@ -105,7 +105,7 @@ data class Params(    val rawSource: Any,
         else {
             ""
         }
-        return value ?: ""
+        return value
     }
 
 

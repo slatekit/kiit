@@ -1,7 +1,5 @@
 package slatekit.apis
 
-import slatekit.apis.ApiConstants
-
 
 /**
  * Used to indicate the Role(s) allowed at either the top-level api and/or action
@@ -23,22 +21,22 @@ abstract class Role(val name: String)
 /**
  * Used to setup an ApiContainer to allow any protocol
  */
-object AnyRole : Role(ApiConstants.RoleAny)
+object AnyRole : Role(ApiConstants.Any)
 
 
 /**
  * Used to setup an ApiContainer to allow only the CLI ( command line interface ) protocol
  */
-object GuestRole : Role(ApiConstants.RoleGuest)
+object GuestRole : Role(ApiConstants.Unknown)
 
 
 /**
  * Used to setup an ApiContainer to allow only web/http protocol
  */
-object ParentRole : Role(ApiConstants.RoleParent)
+object ParentRole : Role(ApiConstants.Parent)
 
 
 /**
  * Used to setup an ApiContainer to allow only web/http protocol
  */
-object NoRole : Role(ApiConstants.RoleNone)
+object NoRole : Role(ApiConstants.None)

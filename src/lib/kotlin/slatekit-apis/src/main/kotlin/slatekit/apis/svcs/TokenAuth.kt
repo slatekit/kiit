@@ -94,7 +94,7 @@ open class TokenAuth(
     open fun isTokenRoleValid(req: Request, role: String): Result<Boolean> {
 
         return if (callback != null) {
-            callback?.invoke(ApiConstants.AuthModeAppRole, req, role)
+            callback.invoke(ApiConstants.AuthModeAppRole, req, role)
         }
         else {
 

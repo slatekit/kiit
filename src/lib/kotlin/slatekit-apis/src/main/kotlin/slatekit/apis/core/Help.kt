@@ -61,7 +61,6 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         val doc = docBuilder()
         val visitor = ApiVisitor(routes)
         visitor.visitActions(area, api, doc)
-
         return doc.toString()
     }
 
@@ -74,10 +73,10 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
      * @param actionName
      * @return
      */
-    fun action(area: String, api: String, action: String): String {
+    fun action(area: String, name: String, action: String): String {
         val doc = docBuilder()
         val visitor = ApiVisitor(routes)
-        val api = routes.api(area, api)
+        val api = routes.api(area, name)
         api?.actions?.get(action)?.let { act ->
             visitor.visitAction(api, act, doc, true, options = ApiVisitOptions())
         }

@@ -78,7 +78,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
-        this.container.routes.visitApis({ area, api  ->
+        this.container.routes.visitApis({ _, api  ->
 
             try {
                 if(ApiHelper.isWebProtocol(api.protocol, "")) {
@@ -98,7 +98,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                         if (canGenerate(api, action, declaredMemberLookup)) {
 
                             // Generate code here.
-                            val methodInfo = genMethod(req, api, action)
+                            val methodInfo = genMethod(api, action)
                             this.container.ctx.log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
                             buff.append(methodInfo)
                             buff.append(newline)
@@ -107,7 +107,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
                     // Get unique types
                     // Iterate over all the api actions
-                    val uniqueTypes = api.actions.items.map { action ->
+                    api.actions.items.map { action ->
                         println(action.member.name)
                         val customTypes = action.paramsUser.map { p -> buildTypeName(p.type) }
                                 .filter {
@@ -119,7 +119,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                                 }
                         customTypes.forEach { typeInfo ->
                             val cls = typeInfo.dataType
-                            genModel(req, modelFolder, api, action, cls)
+                            genModel(modelFolder, cls)
                         }
                     }
 
@@ -136,7 +136,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     fun genClientApi(req: Request, apiReg: Api, folder: File, methods:String):Unit {
-        val rawPackageName = req.data?.getStringOpt("package")
+        val rawPackageName = req.data.getStringOpt("package")
         val packageName = rawPackageName ?: apiReg.cls.qualifiedName ?: ""
         val rawTemplate = this.templateClass()
         val template = rawTemplate
@@ -145,14 +145,14 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                 .replace("@{about}"      , "Client side API for " + apiReg.name.pascalCase())
                 .replace("@{description}", apiReg.desc)
                 .replace("@{route}"      , apiReg.area + "/" + apiReg.name)
-                .replace("@{version}"    , req.data?.getStringOrElse("version", "1.0.0") ?: "1.0.0")
+                .replace("@{version}"    , req.data.getStringOrElse("version", "1.0.0"))
                 .replace("@{methods}"    , methods)
 
         File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".java").writeText(template)
     }
 
 
-    fun genMethod(req: Request, api: Api, action: Action): String {
+    fun genMethod(api: Api, action: Action): String {
         val info = buildMethodInfo(api, action)
         val rawTemplate = this.templateMethod()
         val finalTemplate = info.entries.fold( rawTemplate, { acc, entry ->
@@ -162,7 +162,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     }
 
 
-    fun genModel(req: Request, folder:File, apiReg: Api, apiRegAction: Action, cls: KClass<*>): String {
+    fun genModel(folder:File, cls: KClass<*>): String {
         val info = buildModelInfo(cls)
         val rawTemplate = this.templateModel()
         val template = rawTemplate
@@ -258,7 +258,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
             else                      -> {
                 val cls = tpe.classifier as KClass<*>
                 if(cls == Result::class) {
-                    val genType = tpe.arguments[0]!!.type!!
+                    val genType = tpe.arguments[0].type!!
                     val finalType = buildTypeName(genType)
                     finalType
                 }
@@ -266,7 +266,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                     TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass, "String.class")
                 }
                 else if(cls == List::class){
-                    val listType = tpe.arguments[0]!!.type!!
+                    val listType = tpe.arguments[0].type!!
                     val listCls = KTypes.getClassFromType(listType)
                     val listTypeInfo = buildTypeName(listType)
                     val typeSig = "List<" + listTypeInfo.targetReturnType + ">"
@@ -275,7 +275,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                 else if(cls == Map::class){
                     val tpeKey = tpe.arguments[0].type!!
                     val tpeVal = tpe.arguments[1].type!!
-                    val clsKey = KTypes.getClassFromType(tpeKey)
+                    //val clsKey = KTypes.getClassFromType(tpeKey)
                     val clsVal = KTypes.getClassFromType(tpeVal)
                     val keyTypeInfo = buildTypeName(tpeKey)
                     val valTypeInfo = buildTypeName(tpeVal)

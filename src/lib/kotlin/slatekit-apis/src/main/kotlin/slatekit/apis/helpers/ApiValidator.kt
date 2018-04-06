@@ -65,7 +65,7 @@ object ApiValidator {
             val action = apiRef.action
 
             // 1 param with default argument.
-            if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args!!.size() == 0) {
+            if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
                 success(apiRef)
             }
             // Param: Raw ApiCmd itself!
@@ -73,12 +73,12 @@ object ApiValidator {
                 success(apiRef)
             }
             // Params - check args needed
-            else if (!allowSingleDefaultParam && action.hasArgs && args!!.size() == 0)
+            else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
                 badRequest(msg = "bad request : $fullName: inputs not supplied")
 
             // Params - ensure matching args
             else if (action.hasArgs) {
-                val argCheck = validateArgs(action, args!!)
+                val argCheck = validateArgs(action, args)
                 if (argCheck.success) {
                     success(apiRef)
                 }

@@ -1,6 +1,6 @@
 package slatekit.apis
 
-import org.json.simple.JSONObject
+
 import slatekit.apis.codegen.CodeGenJava
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
@@ -28,7 +28,6 @@ import slatekit.meta.*
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
-import kotlin.reflect.KType
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -88,7 +87,7 @@ open class ApiContainer(
     /**
      * The list of rewriters
      */
-    val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
+    private val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
 
 
     /**
@@ -114,13 +113,13 @@ open class ApiContainer(
      * Success flag to indicate to proceeed to call without a filter
      * This is pre-built to avoid rebuilding a static success flag each time
      */
-    val proceedOk = ok()
+    private val proceedOk = ok()
 
 
-    val formatter = Format()
+    private val formatter = Format()
 
 
-    val emptyArgs = mapOf<String, Any>()
+    private val emptyArgs = mapOf<String, Any>()
 
 
     fun rename(text:String):String = namer?.name(text)?.text ?: text
@@ -132,9 +131,9 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun check(req: Request): Result<Boolean> {
-        val result = ApiValidator.validateCall(req, { req -> get(req) })
-        return okOrFailure(result.success, msg = result.msg, tag = req.fullName)
+    fun check(request: Request): Result<Boolean> {
+        val result = ApiValidator.validateCall(request, { req -> get(req) })
+        return okOrFailure(result.success, msg = result.msg, tag = request.fullName)
     }
 
 
@@ -180,20 +179,20 @@ open class ApiContainer(
 
 
     fun codegen(req:Request): Result<Any> {
-        val lang = req.data?.getStringOrElse("lang", "java")
+        val lang = req.data.getStringOrElse("lang", "java")
         when(lang) {
             "java" -> CodeGenJava(this,
-                        req.data?.getString("pathToTemplates") ?: "",
-                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data.getString("pathToTemplates") ,
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
             ).generate(req)
             else   -> CodeGenJava(this,
-                        req.data?.getString("pathToTemplates") ?: "",
-                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
-                        ).generate(req)
+                        req.data.getString("pathToTemplates"),
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
+            ).generate(req)
         }
         return success("code gen WIP")
     }
@@ -239,18 +238,17 @@ open class ApiContainer(
      * @return
      */
     fun getApi(area: String, name: String, action: String): Result<ApiRef> {
-        if (area.isNullOrEmpty()) return badRequest("area not supplied")
-        if (name.isNullOrEmpty()) return badRequest("api not supplied")
-        if (action.isNullOrEmpty()) return badRequest("action not supplied")
+        if (area.isEmpty()) return badRequest("area not supplied")
+        if (name.isEmpty()) return badRequest("api not supplied")
+        if (action.isEmpty()) return badRequest("action not supplied")
         if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
         val api = routes.api(area, name)!!
-        val action =  api.actions[action]!!
+        val act =  api.actions[action]!!
         val instance = routes.instance(area, name, ctx)
-        val result = instance?.let { inst ->
-            success(ApiRef(api, action, instance))
+        return instance?.let { inst ->
+            success(ApiRef(api, act, inst))
         } ?: badRequest("api route $area $name $action not found")
-        return result
     }
 
 
@@ -287,7 +285,7 @@ open class ApiContainer(
     protected fun execute(raw: Request): Result<Any> {
         // Case 1: Check for help / discovery
         val helpCheck = isHelp(raw)
-        if(helpCheck.isHelp) {
+        if (helpCheck.isHelp) {
             return buildHelp(raw, helpCheck)
         }
 
@@ -296,36 +294,24 @@ open class ApiContainer(
 
         // Case 3: Finally check for formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
-        var apiReference:ApiRef? = null
-
         val result = try {
-            val info = _validator.validateApi(req)
-            info.flatMap { apiRef ->
-                apiReference = apiRef
-                val pro = _validator.validateProtocol(req, apiRef)
-                pro.flatMap { a ->
-                    val auth = _validator.validateAuthorization(req, apiRef)
-                    auth.flatMap { au ->
-                        val md = _validator.validateMiddleware(req, apiRef)
-                        md.flatMap { m ->
-                            val pm = _validator.validateParameters(req)
-                            pm.flatMap { m ->
-                                executeWithMiddleware(req, apiRef)
-                            }
-                        }
-                    }
-                }
+            _validator.validateApi(req).flatMap { apiRef ->
+                                    _validator.validateProtocol(req, apiRef)
+                    .flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
+                    .flatMap { _ -> _validator.validateMiddleware(req) }
+                    .flatMap { _ -> _validator.validateParameters(req) }
+                    .flatMap { _ -> executeWithMiddleware(req, apiRef) }
             }
         }
         catch(ex: Exception) {
             val api = routes.api(req.area, req.name)
-            handleError(api, apiReference, req, ex)
+            val apiRef = getApi(req.area, req.name, req.action)
+            handleError(api, apiRef.value, req, ex)
         }
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
-        val finalResult = convertResult(req, result)
-        return finalResult
+        return convertResult(req, result)
     }
 
 
@@ -347,7 +333,7 @@ open class ApiContainer(
         }
 
         // Ok to call.
-        val callResult = if (proceed.success) {
+        return if (proceed.success) {
 
             // Hook: Before
             if (instance is Hook) {
@@ -369,17 +355,17 @@ open class ApiContainer(
         else {
             proceed
         }
-        return callResult
     }
 
 
+    @Suppress("UNCHECKED_CAST")
     protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
-        val inputs = ApiHelper.fillArgs(converter, apiRef, req, allowIO, this.ctx.enc)
+        val inputs = ApiHelper.fillArgs(converter, apiRef, req)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
-        val result = returnVal?.let { res ->
+        return returnVal?.let { res ->
             if (res is Result<*>) {
                 res as Result<Any>
             }
@@ -387,9 +373,6 @@ open class ApiContainer(
                 success(res)
             }
         } ?: failure()
-
-        // Return the result
-        return result
     }
 
 
@@ -404,7 +387,7 @@ open class ApiContainer(
         }
         // OPTION 3: GLOBAL Level default handler
         else {
-            handleErrorInternally(ctx, req, ex)
+            handleErrorInternally(req, ex)
         }
     }
 
@@ -417,7 +400,7 @@ open class ApiContainer(
      * @param ex     : the exception
      * @return
      */
-    fun handleErrorInternally(ctx: Context, req: Request, ex: Exception): Result<Any> {
+    fun handleErrorInternally(req: Request, ex: Exception): Result<Any> {
         println(ex.message)
         return unexpectedError(msg = "error executing : " + req.path + ", check inputs")
     }
@@ -525,11 +508,11 @@ open class ApiContainer(
 
     fun isDocKeyAvailable(req:Request):Boolean {
         // Ensure that docs are only available w/ help key
-        val docKeyValue = if(req.meta?.containsKey("doc-key") ?: false){
-            req.meta?.get("doc-key") ?: ""
+        val docKeyValue = if(req.meta.containsKey("doc-key")){
+            req.meta.get("doc-key") ?: ""
         }
-        else if(req.data?.containsKey("doc-key") ?: false) {
-            req.data?.get("doc-key") ?: ""
+        else if(req.data.containsKey("doc-key")) {
+            req.data.get("doc-key") ?: ""
         }
         else
             ""
@@ -537,14 +520,14 @@ open class ApiContainer(
     }
 
 
-    fun isCliAllowed(cmd: Request, supportedProtocol: String): Boolean =
+    fun isCliAllowed(supportedProtocol: String): Boolean =
             supportedProtocol == "*" || supportedProtocol == "cli"
 
 
 
     companion object {
 
-        fun setApiHost(item: Any?, host: ApiContainer): Unit {
+        fun setApiHost(item: Any?, host: ApiContainer) {
             if (item is ApiHostAware) {
                 item.setApiHost(host)
             }

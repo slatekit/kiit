@@ -35,11 +35,9 @@ object Reqs {
         // Parse json
         val content = File(filePath).readText()
         val req = fromJson(route, rawPath, ApiConstants.SourceFile, content, enc)
-        req.meta?.let { meta ->
-            val jsonObj = meta.raw as JSONObject
-            keys.forEach { pair ->
-                jsonObj.put( pair.key, pair.value )
-            }
+        val jsonObj = req.meta.raw as JSONObject
+        keys.forEach { pair ->
+            jsonObj.put( pair.key, pair.value )
         }
         return req
     }

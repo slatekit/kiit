@@ -55,7 +55,7 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
     @Ignore
     fun writeToFile(msg: Any?, fileNameLocal: String, count: Int,
                               contentFetcher: (Any?) -> String): String? {
-        return msg?.let { item ->
+        return msg?.let { _ ->
             val finalFileName = if (count == 0) fileNameLocal else fileNameLocal + "_" + count
             val path = interpretUri(finalFileName)
             val content = contentFetcher(msg)
