@@ -1,6 +1,5 @@
 package slatekit.apis.codegen
 
-import slatekit.apis.ApiContainer
 import slatekit.apis.core.Action
 import slatekit.common.newline
 import slatekit.meta.KTypes
@@ -8,7 +7,6 @@ import slatekit.meta.Reflector
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
-import kotlin.reflect.KType
 
 
 class CodeGenSwift(settings:CodeGenSettings) : CodeGenBase(settings) {
@@ -44,7 +42,7 @@ class CodeGenSwift(settings:CodeGenSettings) : CodeGenBase(settings) {
         val fields = props.foldIndexed( "", { ndx:Int, acc:String, prop: KProperty<*> ->
             val type = prop.returnType
             val typeInfo = buildTypeName(type)
-            val suffix = if(ndx > 0) "," else ""
+            val suffix = if(ndx < props.size - 1) "," else ""
             val field = "val " + prop.name + " : " + typeInfo.targetParameterType + suffix + newline
             acc + (if (ndx > 0) "\t" else "") + field
         })

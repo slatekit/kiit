@@ -16,11 +16,11 @@ class CodeGenKotlin(settings:CodeGenSettings) : CodeGenBase(settings) {
             // Basic types
             Pair(KTypes.KStringType        , TypeInfo(true, false, "String"  , "String"  , KTypes.KStringClass       , KTypes.KStringClass       , "String"  + ".class")),
             Pair(KTypes.KBoolType          , TypeInfo(true, false, "Boolean" , "Boolean" , KTypes.KBoolClass         , KTypes.KBoolClass         , "Boolean" + ".class")),
-            Pair(KTypes.KShortType         , TypeInfo(true, false, "short"   , "Short"   , KTypes.KShortClass        , KTypes.KShortClass        , "Short"   + ".class")),
-            Pair(KTypes.KIntType           , TypeInfo(true, false, "int"     , "Integer" , KTypes.KIntClass          , KTypes.KIntClass          , "Integer" + ".class")),
-            Pair(KTypes.KLongType          , TypeInfo(true, false, "long"    , "Long"    , KTypes.KLongClass         , KTypes.KLongClass         , "Long"    + ".class")),
-            Pair(KTypes.KFloatType         , TypeInfo(true, false, "float"   , "Float"   , KTypes.KFloatClass        , KTypes.KFloatClass        , "Float"   + ".class")),
-            Pair(KTypes.KDoubleType        , TypeInfo(true, false, "double"  , "Double"  , KTypes.KDoubleClass       , KTypes.KDoubleClass       , "Double"  + ".class")),
+            Pair(KTypes.KShortType         , TypeInfo(true, false, "Short"   , "Short"   , KTypes.KShortClass        , KTypes.KShortClass        , "Short"   + ".class")),
+            Pair(KTypes.KIntType           , TypeInfo(true, false, "Int"     , "Int"     , KTypes.KIntClass          , KTypes.KIntClass          , "Integer" + ".class")),
+            Pair(KTypes.KLongType          , TypeInfo(true, false, "Long"    , "Long"    , KTypes.KLongClass         , KTypes.KLongClass         , "Long"    + ".class")),
+            Pair(KTypes.KFloatType         , TypeInfo(true, false, "Float"   , "Float"   , KTypes.KFloatClass        , KTypes.KFloatClass        , "Float"   + ".class")),
+            Pair(KTypes.KDoubleType        , TypeInfo(true, false, "Double"  , "Double"  , KTypes.KDoubleClass       , KTypes.KDoubleClass       , "Double"  + ".class")),
             Pair(KTypes.KDateTimeType      , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KDateTimeClass     , KTypes.KDateTimeClass     , "Date"    + ".class")),
             Pair(KTypes.KLocalDateType     , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalDateClass    , KTypes.KLocalDateClass    , "Date"    + ".class")),
             Pair(KTypes.KLocalTimeType     , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalTimeClass    , KTypes.KLocalTimeClass    , "Date"    + ".class")),
@@ -43,7 +43,7 @@ class CodeGenKotlin(settings:CodeGenSettings) : CodeGenBase(settings) {
         val fields = props.foldIndexed( "", { ndx:Int, acc:String, prop: KProperty<*> ->
             val type = prop.returnType
             val typeInfo = buildTypeName(type)
-            val suffix = if(ndx > 0) "," else ""
+            val suffix = if(ndx < props.size - 1) "," else ""
             val field = "val " + prop.name + " : " + typeInfo.targetParameterType + suffix + newline
             acc + (if (ndx > 0) "\t" else "") + field
         })
