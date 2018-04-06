@@ -33,7 +33,7 @@ class Validation(val ctn: ApiContainer) {
     }
 
 
-    fun validateProtocol(req: Request, apiRef:ApiRef): Result<Any> {
+    fun validateProtocol(req: Request, apiRef:ApiRef): Result<Request> {
         // Ensure verb is correct get/post
         val action = apiRef.action
         val api = apiRef.api
@@ -76,7 +76,7 @@ class Validation(val ctn: ApiContainer) {
     }
 
 
-    fun validateParameters(req: Request): Result<ApiRef> {
+    fun validateParameters(req: Request, apiRef:ApiRef): Result<ApiRef> {
         val checkResult = ApiValidator.validateCall(req, { req -> ctn.get(req) }, true)
         return if (!checkResult.success) {
             // Don't return the result from internal ( as it contains too much info )

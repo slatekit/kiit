@@ -286,7 +286,7 @@ open class ApiContainer(
     protected fun execute(raw: Request): Result<Any> {
         // Case 1: Check for help / discovery
         val helpCheck = isHelp(raw)
-        if(helpCheck.isHelp) {
+        if (helpCheck.isHelp) {
             return buildHelp(raw, helpCheck)
         }
 
@@ -295,30 +295,18 @@ open class ApiContainer(
 
         // Case 3: Finally check for formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
-        var apiReference:ApiRef? = null
-
         val result = try {
-            val info = _validator.validateApi(req)
-            info.flatMap { apiRef ->
-                apiReference = apiRef
-                val pro = _validator.validateProtocol(req, apiRef)
-                pro.flatMap { a ->
-                    val auth = _validator.validateAuthorization(req, apiRef)
-                    auth.flatMap { au ->
-                        val md = _validator.validateMiddleware(req, apiRef)
-                        md.flatMap { m ->
-                            val pm = _validator.validateParameters(req)
-                            pm.flatMap { m ->
-                                executeWithMiddleware(req, apiRef)
-                            }
-                        }
-                    }
-                }
+            _validator.validateApi(req).flatMap { apiRef ->
+                                    _validator.validateProtocol(req, apiRef)
+                    .flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
+                    .flatMap { _ -> _validator.validateParameters(req, apiRef) }
+                    .flatMap { _ -> executeWithMiddleware(req, apiRef) }
             }
         }
         catch(ex: Exception) {
             val api = routes.api(req.area, req.name)
-            handleError(api, apiReference, req, ex)
+            val apiRef = getApi(req.area, req.name, req.action)
+            handleError(api, apiRef.value, req, ex)
         }
 
         // Finally: If the format of the content specified ( json | csv | props )
