@@ -298,8 +298,8 @@ open class ApiContainer(
             _validator.validateApi(req).flatMap { apiRef ->
                                     _validator.validateProtocol(req, apiRef)
                     .flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
-                    .flatMap { _ -> _validator.validateMiddleware(req        ) }
-                    .flatMap { _ -> _validator.validateParameters(req, apiRef) }
+                    .flatMap { _ -> _validator.validateMiddleware(req) }
+                    .flatMap { _ -> _validator.validateParameters(req) }
                     .flatMap { _ -> executeWithMiddleware(req, apiRef) }
             }
         }
@@ -387,7 +387,7 @@ open class ApiContainer(
         }
         // OPTION 3: GLOBAL Level default handler
         else {
-            handleErrorInternally(ctx, req, ex)
+            handleErrorInternally(req, ex)
         }
     }
 
@@ -400,7 +400,7 @@ open class ApiContainer(
      * @param ex     : the exception
      * @return
      */
-    fun handleErrorInternally(ctx: Context, req: Request, ex: Exception): Result<Any> {
+    fun handleErrorInternally(req: Request, ex: Exception): Result<Any> {
         println(ex.message)
         return unexpectedError(msg = "error executing : " + req.path + ", check inputs")
     }
@@ -508,11 +508,11 @@ open class ApiContainer(
 
     fun isDocKeyAvailable(req:Request):Boolean {
         // Ensure that docs are only available w/ help key
-        val docKeyValue = if(req.meta?.containsKey("doc-key") ?: false){
-            req.meta?.get("doc-key") ?: ""
+        val docKeyValue = if(req.meta.containsKey("doc-key")){
+            req.meta.get("doc-key") ?: ""
         }
-        else if(req.data?.containsKey("doc-key") ?: false) {
-            req.data?.get("doc-key") ?: ""
+        else if(req.data.containsKey("doc-key")) {
+            req.data.get("doc-key") ?: ""
         }
         else
             ""
