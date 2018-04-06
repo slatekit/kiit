@@ -133,7 +133,6 @@ object ApiLoader {
 
             // Ensure it does not have an Ignore annotation
             if (rawIgnoresLookup.containsKey(member.name)) {
-                val ignored = member.name
                 null
             } else {
                 buildAction(item.first, api, item.second, namer)

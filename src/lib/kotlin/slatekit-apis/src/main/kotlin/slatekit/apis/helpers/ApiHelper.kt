@@ -114,8 +114,7 @@ object ApiHelper {
     }
 
 
-    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request, allowLocalIO: Boolean = false,
-                 enc: Encryptor? = null): Array<Any?> {
+    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
         return if (!action.hasArgs)

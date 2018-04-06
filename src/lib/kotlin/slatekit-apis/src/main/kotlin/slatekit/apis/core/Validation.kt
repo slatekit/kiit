@@ -58,7 +58,7 @@ class Validation(val ctn: ApiContainer) {
     }
 
 
-    fun validateMiddleware(req: Request, apiRef:ApiRef): Result<Any> {
+    fun validateMiddleware(req: Request): Result<Any> {
         val filters = ctn.middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
         val failed = filters.fold( success(""), { acc, filter ->
             if(acc.success) {

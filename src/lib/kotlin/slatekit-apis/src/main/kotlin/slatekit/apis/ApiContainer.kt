@@ -131,9 +131,9 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun check(req: Request): Result<Boolean> {
-        val result = ApiValidator.validateCall(req, { req -> get(req) })
-        return okOrFailure(result.success, msg = result.msg, tag = req.fullName)
+    fun check(request: Request): Result<Boolean> {
+        val result = ApiValidator.validateCall(request, { req -> get(req) })
+        return okOrFailure(result.success, msg = result.msg, tag = request.fullName)
     }
 
 
@@ -182,17 +182,17 @@ open class ApiContainer(
         val lang = req.data.getStringOrElse("lang", "java")
         when(lang) {
             "java" -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates") ?: "",
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data.getString("pathToTemplates") ,
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
             ).generate(req)
             else   -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates") ?: "",
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
-                        ).generate(req)
+                        req.data.getString("pathToTemplates"),
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
+            ).generate(req)
         }
         return success("code gen WIP")
     }
@@ -238,18 +238,17 @@ open class ApiContainer(
      * @return
      */
     fun getApi(area: String, name: String, action: String): Result<ApiRef> {
-        if (area.isNullOrEmpty()) return badRequest("area not supplied")
-        if (name.isNullOrEmpty()) return badRequest("api not supplied")
-        if (action.isNullOrEmpty()) return badRequest("action not supplied")
+        if (area.isEmpty()) return badRequest("area not supplied")
+        if (name.isEmpty()) return badRequest("api not supplied")
+        if (action.isEmpty()) return badRequest("action not supplied")
         if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
         val api = routes.api(area, name)!!
         val act =  api.actions[action]!!
         val instance = routes.instance(area, name, ctx)
-        val result = instance?.let { inst ->
+        return instance?.let { inst ->
             success(ApiRef(api, act, inst))
         } ?: badRequest("api route $area $name $action not found")
-        return result
     }
 
 
@@ -299,6 +298,7 @@ open class ApiContainer(
             _validator.validateApi(req).flatMap { apiRef ->
                                     _validator.validateProtocol(req, apiRef)
                     .flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
+                    .flatMap { _ -> _validator.validateMiddleware(req        ) }
                     .flatMap { _ -> _validator.validateParameters(req, apiRef) }
                     .flatMap { _ -> executeWithMiddleware(req, apiRef) }
             }
@@ -358,10 +358,11 @@ open class ApiContainer(
     }
 
 
+    @Suppress("UNCHECKED_CAST")
     protected open fun executeMethod(req: Request, apiRef:ApiRef): Result<Any> {
         // Finally make call.
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
-        val inputs = ApiHelper.fillArgs(converter, apiRef, req, allowIO, this.ctx.enc)
+        val inputs = ApiHelper.fillArgs(converter, apiRef, req)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
         return returnVal?.let { res ->
