@@ -521,8 +521,8 @@ concise, reference style approach. For more in-depth documentation please refer 
 or by explicitly specifying the type name. To indicate a value can be null, use the <strong>?</strong> operator</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>  
-  <span class="c1">// Inferred
-</span>  <span class="kd">val</span> <span class="py">name1</span>     <span class="p">=</span> <span class="s">"john doe"</span>
+  <span class="c1">// Inferred</span>  
+  <span class="kd">val</span> <span class="py">name1</span>     <span class="p">=</span> <span class="s">"john doe"</span>
   <span class="kd">val</span> <span class="py">age1</span>      <span class="p">=</span> <span class="m">35</span>
   <span class="kd">val</span> <span class="py">account1</span>  <span class="p">=</span> <span class="m">12345678901L</span>
   <span class="kd">val</span> <span class="py">isActive1</span> <span class="p">=</span> <span class="k">false</span>
@@ -533,8 +533,8 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   <span class="kd">val</span> <span class="py">list1</span>     <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">)</span>
   <span class="kd">val</span> <span class="py">map1</span>      <span class="p">=</span> <span class="n">mapOf</span><span class="p">(</span><span class="s">"a"</span> <span class="n">to</span> <span class="m">1</span><span class="p">,</span> <span class="s">"b"</span> <span class="n">to</span> <span class="m">2</span><span class="p">)</span>
 
-  <span class="c1">// Explicit
-</span>  <span class="kd">val</span> <span class="py">name2</span>    <span class="p">:</span> <span class="n">String</span>            <span class="p">=</span> <span class="s">"john doe"</span>
+  <span class="c1">// Explicit</span>  
+  <span class="kd">val</span> <span class="py">name2</span>    <span class="p">:</span> <span class="n">String</span>            <span class="p">=</span> <span class="s">"john doe"</span>
   <span class="kd">val</span> <span class="py">age2</span>     <span class="p">:</span> <span class="n">Int</span>               <span class="p">=</span> <span class="m">35</span>
   <span class="kd">val</span> <span class="py">account2</span> <span class="p">:</span> <span class="n">Long</span>              <span class="p">=</span> <span class="m">12345678901L</span>
   <span class="kd">val</span> <span class="py">isActive2</span><span class="p">:</span> <span class="n">Boolean</span>           <span class="p">=</span> <span class="k">false</span>
@@ -545,8 +545,8 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   <span class="kd">val</span> <span class="py">list2</span>    <span class="p">:</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;</span>      <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">)</span>
   <span class="kd">val</span> <span class="py">map2</span>     <span class="p">:</span> <span class="n">Map</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span><span class="n">Int</span><span class="p">&gt;</span>   <span class="p">=</span> <span class="n">mapOf</span><span class="p">(</span><span class="s">"a"</span> <span class="n">to</span> <span class="m">1</span><span class="p">,</span> <span class="s">"b"</span> <span class="n">to</span> <span class="m">2</span><span class="p">)</span>
 
-  <span class="c1">// Nullable via "?"
-</span>  <span class="kd">val</span> <span class="py">name3</span>    <span class="p">:</span> <span class="n">String</span><span class="p">?</span>            <span class="p">=</span> <span class="s">"john doe"</span>
+  <span class="c1">// Nullable via "?"</span>  
+  <span class="kd">val</span> <span class="py">name3</span>    <span class="p">:</span> <span class="n">String</span><span class="p">?</span>            <span class="p">=</span> <span class="s">"john doe"</span>
   <span class="kd">val</span> <span class="py">age3</span>     <span class="p">:</span> <span class="n">Int</span><span class="p">?</span>               <span class="p">=</span> <span class="m">35</span>
   <span class="kd">val</span> <span class="py">account3</span> <span class="p">:</span> <span class="n">Long</span><span class="p">?</span>              <span class="p">=</span> <span class="m">12345678901L</span>
   <span class="kd">val</span> <span class="py">isActive3</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">?</span>           <span class="p">=</span> <span class="k">false</span>
@@ -812,44 +812,44 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 <p>Maps can be immutable ( readonly ) or mutable ( editable ). Examples of using the immutable version are below.</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// 1. Declare empty immutable list
-</span>  <span class="kd">val</span> <span class="py">items1</span> <span class="p">=</span> <span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;()</span>
+  <span class="c1">// 1. Declare empty immutable list</span>  
+  <span class="kd">val</span> <span class="py">items1</span> <span class="p">=</span> <span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;()</span>
   
-  <span class="c1">// 2. Declare immutable list with pairs of items
-</span>  <span class="kd">val</span> <span class="py">items2</span> <span class="p">=</span> <span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;(</span><span class="s">"a"</span> <span class="n">to</span> <span class="m">1</span><span class="p">,</span> <span class="s">"b"</span> <span class="n">to</span> <span class="m">2</span><span class="p">,</span> <span class="s">"c"</span> <span class="n">to</span> <span class="m">3</span><span class="p">)</span>
+  <span class="c1">// 2. Declare immutable list with pairs of items</span>  
+  <span class="kd">val</span> <span class="py">items2</span> <span class="p">=</span> <span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;(</span><span class="s">"a"</span> <span class="n">to</span> <span class="m">1</span><span class="p">,</span> <span class="s">"b"</span> <span class="n">to</span> <span class="m">2</span><span class="p">,</span> <span class="s">"c"</span> <span class="n">to</span> <span class="m">3</span><span class="p">)</span>
   
-  <span class="c1">// 3. Get the size
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+  <span class="c1">// 3. Get the size</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
   
-  <span class="c1">// 4. Get an item by key
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">[</span><span class="s">"a"</span><span class="p">])</span>
+  <span class="c1">// 4. Get an item by key</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">[</span><span class="s">"a"</span><span class="p">])</span>
   
-  <span class="c1">// 5. Get all keys
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">keys</span><span class="p">)</span>
+  <span class="c1">// 5. Get all keys</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">keys</span><span class="p">)</span>
   
-  <span class="c1">// 6. Get all values
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">values</span><span class="p">)</span>
+  <span class="c1">// 6. Get all values</span>  
+  <span class="n">println</span><span class="p">(</span><span class="n">items2</span><span class="p">.</span><span class="n">values</span><span class="p">)</span>
   
-  <span class="c1">// 7. Add another item ( this is immutable so it will return a map )
-</span>  <span class="kd">val</span> <span class="py">items3</span> <span class="p">=</span> <span class="n">items2</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span> <span class="s">"d"</span> <span class="n">to</span> <span class="m">4</span> <span class="p">)</span>
+  <span class="c1">// 7. Add another item ( this is immutable so it will return a map )</span>  
+  <span class="kd">val</span> <span class="py">items3</span> <span class="p">=</span> <span class="n">items2</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span> <span class="s">"d"</span> <span class="n">to</span> <span class="m">4</span> <span class="p">)</span>
   <span class="kd">val</span> <span class="py">items3b</span> <span class="p">=</span> <span class="n">items2</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">Pair</span><span class="p">(</span><span class="s">"d"</span><span class="p">,</span> <span class="m">4</span><span class="p">))</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items3</span><span class="p">)</span>
   
-  <span class="c1">// 8. Add multiple items
-</span>  <span class="kd">val</span> <span class="py">items4</span> <span class="p">=</span> <span class="n">items3</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span> <span class="s">"e"</span> <span class="n">to</span> <span class="m">5</span><span class="p">,</span> <span class="s">"f"</span> <span class="n">to</span> <span class="m">6</span><span class="p">))</span>
+  <span class="c1">// 8. Add multiple items</span>  
+  <span class="kd">val</span> <span class="py">items4</span> <span class="p">=</span> <span class="n">items3</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span> <span class="s">"e"</span> <span class="n">to</span> <span class="m">5</span><span class="p">,</span> <span class="s">"f"</span> <span class="n">to</span> <span class="m">6</span><span class="p">))</span>
   <span class="kd">val</span> <span class="py">items4b</span> <span class="p">=</span> <span class="n">items3</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="n">Pair</span><span class="p">(</span><span class="s">"e"</span><span class="p">,</span> <span class="m">5</span><span class="p">),</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"f"</span><span class="p">,</span> <span class="m">6</span><span class="p">)))</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items4</span><span class="p">)</span>
   
-  <span class="c1">// 9. Update a key
-</span>  <span class="kd">val</span> <span class="py">items5</span> <span class="p">=</span> <span class="n">items4</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">Pair</span><span class="p">(</span><span class="s">"f"</span><span class="p">,</span> <span class="m">300</span><span class="p">))</span>
+  <span class="c1">// 9. Update a key</span>  
+  <span class="kd">val</span> <span class="py">items5</span> <span class="p">=</span> <span class="n">items4</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">Pair</span><span class="p">(</span><span class="s">"f"</span><span class="p">,</span> <span class="m">300</span><span class="p">))</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items5</span><span class="p">)</span>
   
-  <span class="c1">// 10. Remove an item
-</span>  <span class="kd">val</span> <span class="py">items6</span> <span class="p">=</span> <span class="n">items5</span> <span class="p">-</span> <span class="s">"f"</span>
+  <span class="c1">// 10. Remove an item</span>  
+  <span class="kd">val</span> <span class="py">items6</span> <span class="p">=</span> <span class="n">items5</span> <span class="p">-</span> <span class="s">"f"</span>
   <span class="n">println</span><span class="p">(</span><span class="n">items6</span><span class="p">)</span>
   
-  <span class="c1">// 11. Iterate over pairs
-</span>  <span class="n">items6</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">pair</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"key: "</span> <span class="p">+</span> <span class="n">pair</span><span class="p">.</span><span class="n">key</span> <span class="p">+</span> <span class="s">", val: "</span> <span class="p">+</span> <span class="n">pair</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="p">}</span>
+  <span class="c1">// 11. Iterate over pairs</span>  
+  <span class="n">items6</span><span class="p">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="n">pair</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"key: "</span> <span class="p">+</span> <span class="n">pair</span><span class="p">.</span><span class="n">key</span> <span class="p">+</span> <span class="s">", val: "</span> <span class="p">+</span> <span class="n">pair</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="p">}</span>
     
 </code></pre>
 </div>
@@ -861,14 +861,14 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 <h2 id="kotlin-tuples">Tuples</h2>
 <p>Tuples are not supported, but you can use the Pair and Triple classes in the standard library.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// 1. Create a pair of string and int
-</span>  
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// 1. Create a pair of string and int</span>  
   <span class="kd">val</span> <span class="py">pair1</span> <span class="p">=</span> <span class="n">Pair</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">pair1</span><span class="p">.</span><span class="n">first</span> <span class="p">)</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">pair1</span><span class="p">.</span><span class="n">second</span> <span class="p">)</span>
   
-  <span class="c1">// 2. Create a triple of string, bool, int
-</span>  <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"John"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">3</span> <span class="p">)</span>
+  <span class="c1">// 2. Create a triple of string, bool, int</span>  
+  <span class="kd">val</span> <span class="py">user</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"John"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">3</span> <span class="p">)</span>
   
   <span class="c1">// 3. Access the individual items
 </span>  
@@ -892,74 +892,74 @@ The first example is on basic types ( strings ). The second example shows usage 
 <div class="highlighter-rouge"><pre class="highlight"><code>
   <span class="kd">data class</span> <span class="nc">Hero</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">universe</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">identity</span><span class="p">:</span><span class="n">String</span><span class="p">?)</span>
   
-  <span class="c1">// Shows usage of null, safe access "?" and elvis "?:" 
-</span>  <span class="c1">// operator on basic strings
-</span>  <span class="k">fun</span> <span class="nf">testNullsWithBasicType</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Shows usage of null, safe access "?" and elvis "?:" </span>  
+  <span class="c1">// operator on basic strings</span>  
+  <span class="k">fun</span> <span class="nf">testNullsWithBasicType</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// EXAMPLE 1: nullable/non-nullable basic types
-</span>      <span class="c1">// Non-nullable string: can not assign null
-</span>      <span class="kd">val</span> <span class="py">character</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"batman"</span>
+      <span class="c1">// EXAMPLE 1: nullable/non-nullable basic types</span>      
+      <span class="c1">// Non-nullable string: can not assign null</span>      
+      <span class="kd">val</span> <span class="py">character</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"batman"</span>
   
-      <span class="c1">// Nullable string via "?", can assign null
-</span>      <span class="kd">val</span> <span class="py">realName</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+      <span class="c1">// Nullable string via "?", can assign null</span>      
+      <span class="kd">val</span> <span class="py">realName</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
   
-      <span class="c1">// 1. Smart conditions
-</span>      <span class="c1">// The compiler will know that the check for null was
-</span>      <span class="c1">// already done so the else block accessing realName is ok
-</span>      <span class="k">if</span> <span class="p">(</span><span class="n">realName</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// 1. Smart conditions</span>      
+      <span class="c1">// The compiler will know that the check for null was</span>      
+      <span class="c1">// already done so the else block accessing realName is ok</span>      
+      <span class="k">if</span> <span class="p">(</span><span class="n">realName</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"identity: unknown"</span><span class="p">)</span>
       <span class="p">}</span>
       <span class="k">else</span> <span class="p">{</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"identity: "</span> <span class="p">+</span> <span class="n">realName</span><span class="p">.</span><span class="n">toUpperCase</span><span class="p">())</span>
       <span class="p">}</span>
   
-      <span class="c1">// 2. safely accessing members using "?"
-</span>      <span class="n">println</span><span class="p">(</span><span class="s">"We may NOT have the identity."</span><span class="p">)</span>
+      <span class="c1">// 2. safely accessing members using "?"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="s">"We may NOT have the identity."</span><span class="p">)</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"UPPERCASE: "</span> <span class="p">+</span> <span class="n">realName</span><span class="o">?.</span><span class="n">toUpperCase</span><span class="p">())</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"lowercase: "</span> <span class="p">+</span> <span class="n">realName</span><span class="o">?.</span><span class="n">toLowerCase</span><span class="p">())</span>
   
-      <span class="c1">// 3. using let to get non-null value
-</span>      <span class="c1">// to avoid repeated use of "?" when accessing members
-</span>      <span class="n">realName</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">name</span> <span class="p">-&gt;</span>
+      <span class="c1">// 3. using let to get non-null value</span>      
+      <span class="c1">// to avoid repeated use of "?" when accessing members</span>      
+      <span class="n">realName</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">name</span> <span class="p">-&gt;</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"We have the identity! Access properties without constant checks via '?'"</span><span class="p">)</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"IN UPPERCASE: "</span> <span class="p">+</span> <span class="n">name</span><span class="p">.</span><span class="n">toUpperCase</span><span class="p">())</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"in lowercase: "</span> <span class="p">+</span> <span class="n">name</span><span class="p">.</span><span class="n">toLowerCase</span><span class="p">())</span>
       <span class="p">}</span>
   
-      <span class="c1">// 4. get value or default using "?:"
-</span>      <span class="n">println</span><span class="p">(</span><span class="s">"Real name or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">realName</span> <span class="o">?:</span> <span class="s">"unknown"</span><span class="p">))</span>
+      <span class="c1">// 4. get value or default using "?:"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="s">"Real name or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">realName</span> <span class="o">?:</span> <span class="s">"unknown"</span><span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Real name uppercase or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">realName</span><span class="o">?.</span><span class="n">toUpperCase</span><span class="p">()</span> <span class="o">?:</span> <span class="s">"unknown"</span><span class="p">))</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// Shows usage of null, safe access "?" and elvis "?:" 
-</span>  <span class="c1">// operator on class properties
-</span>  <span class="k">fun</span> <span class="nf">testNullsWithObjectType</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Shows usage of null, safe access "?" and elvis "?:" </span>  
+  <span class="c1">// operator on class properties</span>  
+  <span class="k">fun</span> <span class="nf">testNullsWithObjectType</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
       <span class="kd">val</span> <span class="py">char1</span><span class="p">:</span><span class="n">Hero</span><span class="p">?</span> <span class="p">=</span> <span class="n">Hero</span><span class="p">(</span><span class="s">"Captain America"</span><span class="p">,</span> <span class="s">"Marvel"</span><span class="p">,</span> <span class="s">"steve rogers"</span><span class="p">)</span>
   
-      <span class="c1">// 1. Smart conditions
-</span>      <span class="c1">// The compiler will know that the check for null was
-</span>      <span class="c1">// already done so the else block accessing name is ok
-</span>      <span class="k">if</span> <span class="p">(</span> <span class="n">char1</span> <span class="p">==</span> <span class="k">null</span> <span class="p">){</span>
+      <span class="c1">// 1. Smart conditions</span>      
+      <span class="c1">// The compiler will know that the check for null was</span>      
+      <span class="c1">// already done so the else block accessing name is ok</span>      
+      <span class="k">if</span> <span class="p">(</span> <span class="n">char1</span> <span class="p">==</span> <span class="k">null</span> <span class="p">){</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"character: not supplied"</span><span class="p">)</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
           <span class="n">println</span><span class="p">(</span><span class="n">char1</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
       <span class="p">}</span>
   
-      <span class="c1">// 2. safely accessing members using nested "?"
-</span>      <span class="n">println</span><span class="p">(</span><span class="n">char1</span><span class="o">?.</span><span class="n">name</span><span class="o">?.</span><span class="n">toUpperCase</span><span class="p">())</span>
+      <span class="c1">// 2. safely accessing members using nested "?"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="n">char1</span><span class="o">?.</span><span class="n">name</span><span class="o">?.</span><span class="n">toUpperCase</span><span class="p">())</span>
       <span class="n">println</span><span class="p">(</span><span class="n">char1</span><span class="o">?.</span><span class="n">name</span><span class="o">?.</span><span class="n">toLowerCase</span><span class="p">())</span>
   
-      <span class="c1">// 3. using let to get non-null value
-</span>      <span class="c1">// to avoid repeated use of "?" when accessing members
-</span>      <span class="n">char1</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">hero</span> <span class="p">-&gt;</span>
+      <span class="c1">// 3. using let to get non-null value</span>      
+      <span class="c1">// to avoid repeated use of "?" when accessing members</span>      
+      <span class="n">char1</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">hero</span> <span class="p">-&gt;</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"We have the identity! Access properties without constant checks via '?'"</span><span class="p">)</span>
           <span class="n">println</span><span class="p">(</span><span class="n">hero</span><span class="p">.</span><span class="n">name</span><span class="p">.</span><span class="n">toUpperCase</span><span class="p">())</span>
           <span class="n">println</span><span class="p">(</span><span class="n">hero</span><span class="p">.</span><span class="n">universe</span><span class="p">.</span><span class="n">toLowerCase</span><span class="p">())</span>
       <span class="p">}</span>
   
-      <span class="c1">// 4. get value or default using "?:"
-</span>      <span class="n">println</span><span class="p">(</span><span class="s">"Real name or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">char1</span> <span class="o">?:</span> <span class="s">"unknown"</span> <span class="p">))</span>
+      <span class="c1">// 4. get value or default using "?:"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="s">"Real name or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">char1</span> <span class="o">?:</span> <span class="s">"unknown"</span> <span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Real name uppercase or else: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">char1</span><span class="o">?.</span><span class="n">name</span><span class="o">?.</span><span class="n">toUpperCase</span><span class="p">()</span> <span class="o">?:</span> <span class="s">"unknown"</span><span class="p">))</span>
   <span class="p">}</span>
     
@@ -990,13 +990,13 @@ The first example is on basic types ( strings ). The second example shows usage 
     <span class="k">else</span>
       <span class="n">println</span><span class="o">(</span> <span class="s">"unknown"</span> <span class="o">)</span>
 
-    <span class="c1">// 3. If conditions are expressions!
-</span>    <span class="c1">// This means they return a value.
-</span>    <span class="c1">// NOTE: This helps with immutability
-</span>    <span class="c1">// as you can assign the result of the 
-</span>    <span class="c1">// if to a value ( in this case message )
-</span>    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
-      <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 3. If conditions are expressions!</span>
+    <span class="c1">// This means they return a value.</span>
+    <span class="c1">// NOTE: This helps with immutability</span>
+    <span class="c1">// as you can assign the result of the </span>
+    <span class="c1">// if to a value ( in this case message )</span>
+    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
         <span class="s">"ok"</span>
       <span class="o">}</span>
       <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
@@ -1007,9 +1007,9 @@ The first example is on basic types ( strings ). The second example shows usage 
       <span class="o">}</span>
     <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
 
-    <span class="c1">// 4. There is no ternary "? :" operation, but 
-</span>    <span class="c1">// you do not need it as a simple if/else is sufficient
-</span>    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
+    <span class="c1">// 4. There is no ternary "? :" operation, but </span>    
+    <span class="c1">// you do not need it as a simple if/else is sufficient</span>    
+    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
     <span class="n">println</span><span class="o">(</span><span class="n">status</span><span class="o">)</span>
 
 </code></pre>
@@ -1028,8 +1028,8 @@ The first example is on basic types ( strings ). The second example shows usage 
 <h2 id="kotlin-loops">Loops</h2>
 <p>For loops and while loops</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// 1. for loop inclusive ( 5 included )
-</span>  
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// 1. for loop inclusive ( 5 included )</span>  
   <span class="k">for</span> <span class="p">(</span><span class="n">a</span> <span class="k">in</span> <span class="m">1</span><span class="o">..</span><span class="m">5</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="s">"Value of a: "</span> <span class="p">+</span> <span class="n">a</span><span class="p">)</span>
   <span class="p">}</span>
@@ -1134,11 +1134,12 @@ generally be used as an alternative to if/else conditions.</p>
 
 <h2 id="kotlin-trycatch">Try/Catch</h2>
 <p>Error handling using try/catch</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Try/catch is an expression, which means that
-</span>  <span class="c1">// the try/catch will return a value.
-</span>  <span class="c1">// In this example, we return a Pair( boolean, string )
-</span>  <span class="c1">// indicating, success, and a message.
-</span>  <span class="kd">val</span> <span class="py">result</span><span class="p">:</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;</span> <span class="p">=</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+      <span class="c1">// Try/catch is an expression, which means that</span>
+      <span class="c1">// the try/catch will return a value.</span>
+      <span class="c1">// In this example, we return a Pair( boolean, string )</span>
+      <span class="c1">// indicating, success, and a message.</span>
+      <span class="kd">val</span> <span class="py">result</span><span class="p">:</span> <span class="n">Pair</span><span class="p">&lt;</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">String</span><span class="p">&gt;</span> <span class="p">=</span>
       <span class="k">try</span> <span class="p">{</span>
           <span class="n">println</span><span class="p">(</span><span class="s">"try catch example"</span><span class="p">)</span>
           <span class="n">Pair</span><span class="p">(</span><span class="k">true</span><span class="p">,</span> <span class="s">"success"</span><span class="p">)</span>
@@ -1153,8 +1154,8 @@ generally be used as an alternative to if/else conditions.</p>
           <span class="n">println</span><span class="p">(</span><span class="s">"finally!"</span><span class="p">)</span>
       <span class="p">}</span>
       
-  <span class="c1">// Now print the result ( tuple )
-</span>  <span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+      <span class="c1">// Now print the result ( tuple )</span>  
+      <span class="n">println</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
@@ -1245,56 +1246,47 @@ generally be used as an alternative to if/else conditions.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>  
   <span class="kd">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span> <span class="s">"3"</span><span class="p">)</span>
   
-  <span class="c1">// Case 1: apply function to each
-</span>  <span class="c1">// Prints:
-</span>  <span class="c1">// 1
-</span>  <span class="c1">// 2
-</span>  <span class="c1">// 3
-</span>  
+  <span class="c1">// Case 1: apply function to each</span>
+  <span class="c1">// Prints:</span>
+  <span class="c1">// 1</span>
+  <span class="c1">// 2</span>
+  <span class="c1">// 3</span> 
   <span class="n">items</span><span class="p">.</span><span class="n">forEach</span><span class="p">(</span> <span class="o">::</span><span class="n">println</span> <span class="p">)</span>
   
-  <span class="c1">// Case 2: map strings to new list of numbers
-</span>  
-  <span class="c1">// Result: List[Int](1, 2, 3)
-</span>  
+  <span class="c1">// Case 2: map strings to new list of numbers</span>  
+  <span class="c1">// Result: List[Int](1, 2, 3)</span>  
   <span class="kd">val</span> <span class="py">nums</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">map</span><span class="p">{</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
   
-  <span class="c1">// Case 3: filter ( find items &gt; 2 )
-</span>  
+  <span class="c1">// Case 3: filter ( find items &gt; 2 )</span>  
   <span class="kd">val</span> <span class="py">filtered</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">filter</span> <span class="p">{</span> <span class="n">it</span> <span class="p">-&gt;</span> <span class="n">it</span><span class="p">.</span><span class="n">toInt</span><span class="p">()</span> <span class="p">&gt;</span> <span class="m">2</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span> <span class="n">filtered</span> <span class="p">)</span>
   
-  <span class="c1">// Case 4: reduce to 1 value
-</span>  
-  <span class="c1">// Result: "1:2:3"
-</span>  
+  <span class="c1">// Case 4: reduce to 1 value</span>  
+  <span class="c1">// Result: "1:2:3"</span>  
   <span class="kd">val</span> <span class="py">total</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">reduce</span><span class="p">{</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="p">-&gt;</span> <span class="n">a</span> <span class="p">+</span> <span class="s">":"</span> <span class="p">+</span> <span class="n">b</span> <span class="p">}</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"reduce: '$total'"</span><span class="p">)</span>
   
-  <span class="c1">// Case 5a: fold to single value from the Left side
-</span> 
-  <span class="c1">// Result: "LEFT,1,2,3"
-</span>  
+  <span class="c1">// Case 5a: fold to single value from the Left side</span> 
+  <span class="c1">// Result: "LEFT,1,2,3"</span>  
   <span class="kd">val</span> <span class="py">totalLeft</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">fold</span><span class="p">(</span><span class="s">"LEFT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"fold left: "</span> <span class="p">+</span> <span class="n">totalLeft</span><span class="p">)</span>
   
-  <span class="c1">// Case 5b: fold to single value from the Right side
-</span>  
-  <span class="c1">// Result:  "1,2,3,RIGHT"
-</span>  
+  <span class="c1">// Case 5b: fold to single value from the Right side</span>  
+  <span class="c1">// Result:  "1,2,3,RIGHT"</span>  
   <span class="kd">val</span> <span class="py">totalRight</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">foldRight</span><span class="p">(</span><span class="s">"RIGHT"</span><span class="p">,</span> <span class="p">{</span> <span class="n">acc</span><span class="p">,</span> <span class="n">text</span> <span class="p">-&gt;</span> <span class="n">acc</span> <span class="p">+</span> <span class="s">","</span> <span class="p">+</span> <span class="n">text</span> <span class="p">})</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"fold right: "</span> <span class="p">+</span> <span class="n">totalRight</span><span class="p">)</span>
   
-  <span class="c1">// Case 6: max
-</span>  <span class="c1">// Result: 3
-</span>  <span class="kd">val</span> <span class="py">max</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">maxBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
+  <span class="c1">// Case 6: max</span>  
+  <span class="c1">// Result: 3</span>  
+  <span class="kd">val</span> <span class="py">max</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">maxBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"max: "</span> <span class="p">+</span> <span class="n">max</span><span class="p">)</span>
   
-  <span class="c1">// Case 7: min
-</span>  <span class="c1">// Result: 1
-</span>  <span class="kd">val</span> <span class="py">min</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">minBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
+  <span class="c1">// Case 7: min</span>  
+  <span class="c1">// Result: 1</span>  
+  <span class="kd">val</span> <span class="py">min</span> <span class="p">=</span> <span class="n">items</span><span class="p">.</span><span class="n">minBy</span><span class="p">(</span><span class="n">String</span><span class="o">::</span><span class="n">toInt</span><span class="p">)</span>
   <span class="n">println</span><span class="p">(</span><span class="s">"min: "</span> <span class="p">+</span> <span class="n">min</span><span class="p">)</span>
+
 </code></pre>
 </div>
 <div class="alert alert-info" role="alert">
@@ -1310,16 +1302,16 @@ generally be used as an alternative to if/else conditions.</p>
 
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Sample function to calculate a salary.
-</span>  <span class="c1">// NOTE: Single line function body can be written using an "=" sign
-</span>  <span class="k">fun</span> <span class="nf">salary</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span><span class="n">Double</span><span class="p">,</span> <span class="n">hours</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Double</span> <span class="p">=</span> <span class="n">rate</span> <span class="p">*</span> <span class="n">hours</span>
+  <span class="c1">// Sample function to calculate a salary.</span>  
+  <span class="c1">// NOTE: Single line function body can be written using an "=" sign</span>  
+  <span class="k">fun</span> <span class="nf">salary</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span><span class="n">Double</span><span class="p">,</span> <span class="n">hours</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Double</span> <span class="p">=</span> <span class="n">rate</span> <span class="p">*</span> <span class="n">hours</span>
   
   
-  <span class="c1">// Test the functions
-</span>  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Test the functions</span> 
+  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// function with parameters
-</span>      <span class="n">salary</span><span class="p">(</span><span class="m">10.50</span><span class="p">,</span> <span class="m">8</span><span class="p">)</span>
+      <span class="c1">// function with parameters</span>      
+      <span class="n">salary</span><span class="p">(</span><span class="m">10.50</span><span class="p">,</span> <span class="m">8</span><span class="p">)</span>
   <span class="p">}</span>
 
 </code></pre>
@@ -1332,16 +1324,16 @@ generally be used as an alternative to if/else conditions.</p>
 <h2 id="kotlin-functions-named">Named Parameters</h2>
 <p>Function calls with named parameters</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Sample function to calculate a salary.
-</span>  <span class="c1">// NOTE: Single line function body can be written using an "=" sign
-</span>  <span class="k">fun</span> <span class="nf">salary</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span><span class="n">Double</span><span class="p">,</span> <span class="n">hours</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Double</span> <span class="p">=</span> <span class="n">rate</span> <span class="p">*</span> <span class="n">hours</span>
+  <span class="c1">// Sample function to calculate a salary.</span>  
+  <span class="c1">// NOTE: Single line function body can be written using an "=" sign</span>  
+  <span class="k">fun</span> <span class="nf">salary</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span><span class="n">Double</span><span class="p">,</span> <span class="n">hours</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Double</span> <span class="p">=</span> <span class="n">rate</span> <span class="p">*</span> <span class="n">hours</span>
   
 
-  <span class="c1">// Test the functions
-</span>  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Test the functions</span>  
+  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// call with named parameters
-</span>      <span class="n">salary</span><span class="p">(</span><span class="n">rate</span> <span class="p">=</span> <span class="m">10.50</span><span class="p">,</span> <span class="n">hours</span> <span class="p">=</span> <span class="m">8</span> <span class="p">)</span>
+      <span class="c1">// call with named parameters</span>      
+      <span class="n">salary</span><span class="p">(</span><span class="n">rate</span> <span class="p">=</span> <span class="m">10.50</span><span class="p">,</span> <span class="n">hours</span> <span class="p">=</span> <span class="m">8</span> <span class="p">)</span>
   <span class="p">}</span>
 
 </code></pre>
@@ -1353,20 +1345,20 @@ generally be used as an alternative to if/else conditions.</p>
 <h2 id="kotlin-functions-default">Default Parameter Value</h2>
 <p>Supplying default function parameter values</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Sample function to create a user.
-</span>  <span class="c1">// NOTES:
-</span>  <span class="c1">// 1. Parameters can have default values
-</span>  <span class="c1">// 2. Unit is a type that does not represent any value
-</span>  <span class="k">fun</span> <span class="nf">createUser</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">isActive</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">true</span><span class="p">):</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Sample function to create a user.</span>
+  <span class="c1">// NOTES:</span>
+  <span class="c1">// 1. Parameters can have default values</span>
+  <span class="c1">// 2. Unit is a type that does not represent any value</span>
+  <span class="k">fun</span> <span class="nf">createUser</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="n">isActive</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">true</span><span class="p">):</span> <span class="n">Unit</span> <span class="p">{</span>
       <span class="n">println</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// Test the functions
-</span>  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Test the functions</span>  
+  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// function with parameters with default values
-</span>      <span class="n">createUser</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">)</span>
+      <span class="c1">// function with parameters with default values</span>      
+      <span class="n">createUser</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">)</span>
   <span class="p">}</span>
 
 </code></pre>
