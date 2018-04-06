@@ -16,11 +16,13 @@ package slatekit.apis.core
 import slatekit.apis.*
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiValidator
+import slatekit.apis.middleware.Filter
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.results.ResultFuncs.successOrError
 
 
 class Validation(val ctn: ApiContainer) {
@@ -38,7 +40,7 @@ class Validation(val ctn: ApiContainer) {
         val actualVerb = getReferencedValue(action.verb, api.verb)
         val actualProtocol = getReferencedValue(action.protocol, api.protocol)
         val supportedProtocol = actualProtocol
-        val isCliOk = ctn.isCliAllowed(req, supportedProtocol)
+        val isCliOk = ctn.isCliAllowed(supportedProtocol)
         val isWeb = ctn.protocol == WebProtocol
 
         // 1. Ensure verb is correct
@@ -57,7 +59,15 @@ class Validation(val ctn: ApiContainer) {
 
 
     fun validateMiddleware(req: Request, apiRef:ApiRef): Result<Any> {
-        return success(req)
+        val filters = ctn.middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
+        val failed = filters.fold( success(""), { acc, filter ->
+            if(acc.success) {
+                acc
+            } else {
+                filter.onFilter(ctn.ctx, req, ctn, null).map( { _ -> "" })
+            }
+        })
+        return successOrError(failed.success, failed.value, failed.msg)
     }
 
 
@@ -81,7 +91,7 @@ class Validation(val ctn: ApiContainer) {
 
         // Role!
         return if (!primaryValue.isNullOrEmpty()) {
-            if (primaryValue == ApiConstants.RoleParent) {
+            if (primaryValue == ApiConstants.Parent) {
                 parentValue
             }
             else

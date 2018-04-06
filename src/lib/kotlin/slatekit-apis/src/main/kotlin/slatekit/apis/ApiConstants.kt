@@ -23,15 +23,16 @@ package slatekit.apis
 object ApiConstants {
     const val Version = "1.0"
     const val SourceAny = "*"
+
     const val SourceCLI = "cli"
     const val SourceWeb = "web"
     const val SourceFile = "file"
     const val SourceQueue = "queue"
 
-    const val RoleAny = "*"
-    const val RoleGuest = "?"
-    const val RoleParent = "@parent"
-    const val RoleNone = ""
+    const val Any = "*"
+    const val None = ""
+    const val Unknown = "?"
+    const val Parent = "@parent"
 
     const val AuthModeAppKey = "app-key"
     const val AuthModeAppRole = "app-roles"

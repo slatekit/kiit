@@ -61,7 +61,6 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         val doc = docBuilder()
         val visitor = ApiVisitor(routes)
         visitor.visitActions(area, api, doc)
-
         return doc.toString()
     }
 

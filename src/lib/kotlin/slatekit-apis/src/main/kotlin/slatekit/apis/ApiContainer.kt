@@ -1,6 +1,6 @@
 package slatekit.apis
 
-import org.json.simple.JSONObject
+
 import slatekit.apis.codegen.CodeGenJava
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
@@ -28,7 +28,6 @@ import slatekit.meta.*
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
-import kotlin.reflect.KType
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
@@ -88,7 +87,7 @@ open class ApiContainer(
     /**
      * The list of rewriters
      */
-    val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
+    private val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
 
 
     /**
@@ -114,13 +113,13 @@ open class ApiContainer(
      * Success flag to indicate to proceeed to call without a filter
      * This is pre-built to avoid rebuilding a static success flag each time
      */
-    val proceedOk = ok()
+    private val proceedOk = ok()
 
 
-    val formatter = Format()
+    private val formatter = Format()
 
 
-    val emptyArgs = mapOf<String, Any>()
+    private val emptyArgs = mapOf<String, Any>()
 
 
     fun rename(text:String):String = namer?.name(text)?.text ?: text
@@ -180,19 +179,19 @@ open class ApiContainer(
 
 
     fun codegen(req:Request): Result<Any> {
-        val lang = req.data?.getStringOrElse("lang", "java")
+        val lang = req.data.getStringOrElse("lang", "java")
         when(lang) {
             "java" -> CodeGenJava(this,
-                        req.data?.getString("pathToTemplates") ?: "",
-                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data.getString("pathToTemplates") ?: "",
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
             ).generate(req)
             else   -> CodeGenJava(this,
-                        req.data?.getString("pathToTemplates") ?: "",
-                        req.data?.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
-                        req.data?.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
-                        req.data?.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
+                        req.data.getString("pathToTemplates") ?: "",
+                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ?: "java-api.txt",
+                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt") ?: "java-method.txt",
+                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt") ?: "java-model.txt"
                         ).generate(req)
         }
         return success("code gen WIP")
@@ -245,10 +244,10 @@ open class ApiContainer(
         if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
         val api = routes.api(area, name)!!
-        val action =  api.actions[action]!!
+        val act =  api.actions[action]!!
         val instance = routes.instance(area, name, ctx)
         val result = instance?.let { inst ->
-            success(ApiRef(api, action, instance))
+            success(ApiRef(api, act, inst))
         } ?: badRequest("api route $area $name $action not found")
         return result
     }
@@ -324,8 +323,7 @@ open class ApiContainer(
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
-        val finalResult = convertResult(req, result)
-        return finalResult
+        return convertResult(req, result)
     }
 
 
@@ -347,7 +345,7 @@ open class ApiContainer(
         }
 
         // Ok to call.
-        val callResult = if (proceed.success) {
+        return if (proceed.success) {
 
             // Hook: Before
             if (instance is Hook) {
@@ -369,7 +367,6 @@ open class ApiContainer(
         else {
             proceed
         }
-        return callResult
     }
 
 
@@ -379,7 +376,7 @@ open class ApiContainer(
         val inputs = ApiHelper.fillArgs(converter, apiRef, req, allowIO, this.ctx.enc)
         val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
-        val result = returnVal?.let { res ->
+        return returnVal?.let { res ->
             if (res is Result<*>) {
                 res as Result<Any>
             }
@@ -387,9 +384,6 @@ open class ApiContainer(
                 success(res)
             }
         } ?: failure()
-
-        // Return the result
-        return result
     }
 
 
@@ -537,14 +531,14 @@ open class ApiContainer(
     }
 
 
-    fun isCliAllowed(cmd: Request, supportedProtocol: String): Boolean =
+    fun isCliAllowed(supportedProtocol: String): Boolean =
             supportedProtocol == "*" || supportedProtocol == "cli"
 
 
 
     companion object {
 
-        fun setApiHost(item: Any?, host: ApiContainer): Unit {
+        fun setApiHost(item: Any?, host: ApiContainer) {
             if (item is ApiHostAware) {
                 item.setApiHost(host)
             }

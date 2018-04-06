@@ -50,25 +50,25 @@ interface Auth {
     /**
      * Whether the role supplied is a guest role via "?"
      */
-    fun isRoleGuest (role:String): Boolean = role == ApiConstants.RoleGuest
+    fun isRoleGuest (role:String): Boolean = role == ApiConstants.Unknown
 
 
     /**
      * Whether the role supplied is any role via "*"
      */
-    fun isRoleAny   (role:String): Boolean = role == ApiConstants.RoleAny
+    fun isRoleAny   (role:String): Boolean = role == ApiConstants.Any
 
 
     /**
      * Whether the role supplied is a referent to the parent role via "@parent"
      */
-    fun isRoleParent(role:String): Boolean = role == ApiConstants.RoleParent
+    fun isRoleParent(role:String): Boolean = role == ApiConstants.Parent
 
 
     /**
      * Whether the role supplied is an empty role indicating public access.
      */
-    fun isRoleEmpty(role:String): Boolean = role == ApiConstants.RoleNone
+    fun isRoleEmpty(role:String): Boolean = role == ApiConstants.None
 
 
     /**
@@ -84,7 +84,7 @@ interface Auth {
      * @return
      */
     fun determineRole(primary: String?, parent: String): String {
-        return if(primary != null && !primary.isNullOrEmpty() && primary != ApiConstants.RoleParent)
+        return if(primary != null && !primary.isNullOrEmpty() && primary != ApiConstants.Parent)
             primary
         else
             parent
