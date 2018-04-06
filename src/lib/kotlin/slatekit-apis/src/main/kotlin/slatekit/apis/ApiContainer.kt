@@ -194,6 +194,12 @@ open class ApiContainer(
                     req.data.getStringOrElse("nameOfTemplateMethod", "swift-method.txt"),
                     req.data.getStringOrElse("nameOfTemplateModel" , "swift-model.txt")
             ).generate(req)
+            "js", "javascript" -> CodeGenJava(this,
+                    req.data.getString("pathToTemplates"),
+                    req.data.getStringOrElse("nameOfTemplateClass" , "js-api.txt") ,
+                    req.data.getStringOrElse("nameOfTemplateMethod", "js-method.txt"),
+                    req.data.getStringOrElse("nameOfTemplateModel" , "js-model.txt")
+            ).generate(req)
             else   -> CodeGenJava(this,
                     req.data.getString("pathToTemplates"),
                     req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
