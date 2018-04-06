@@ -14,6 +14,7 @@
 package slatekit.apis.middleware
 
 import slatekit.common.Context
+import slatekit.common.Ignore
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.success
@@ -34,6 +35,7 @@ interface Filter : Middleware {
      * @param source: The originating source for this hook ( e.g. ApiContainer )
      * @param args  : Additional arguments supplied by the source
      */
+    @Ignore
     fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Result<Any> {
         return success("")
     }

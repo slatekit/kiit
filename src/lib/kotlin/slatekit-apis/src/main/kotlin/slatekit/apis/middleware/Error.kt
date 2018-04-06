@@ -1,6 +1,7 @@
 package slatekit.apis.middleware
 
 import slatekit.common.Context
+import slatekit.common.Ignore
 import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.success
@@ -23,6 +24,7 @@ interface Error : Middleware {
      * @param ex    : The exception associated with error
      * @param args  : Additional arguments supplied by the source
      */
+    @Ignore
     fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Result<Any> {
         return success("")
     }

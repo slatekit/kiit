@@ -27,10 +27,21 @@ import java.io.File
 /**
  * Layer on top of the core CliService to provide support for handling command line requests
  * to your APIs using the Protocol independent APIs in the api module.
+ *
  * @param creds  : credentials for authentication/authorization purposes.
  * @param ctx    : the app context hosting the selected environment, logger, configs and more
  * @param auth   : the auth provider
  * @param settings : Settings for the shell functionality
+ *
+ *
+ * @sample
+ *
+ *  area.api.action -param1=value -param2=value
+ *
+ * META
+ *  1. sample   : generates a sample file        : $sample="sample-request.json"
+ *  2. file     : loads the request from a file  : $file="create-users.json"
+ *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
 class CliApi(private val creds: slatekit.common.Credentials,
              val ctx: slatekit.common.Context,
@@ -75,10 +86,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
                 // Case 2: Get command from params file and execute
                 CliConstants.SysFile   -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
 
-                // Case 3: Code Generation
-                CliConstants.SysCodeGen -> cmd.copy(result = apis.codegen(slatekit.common.Request.cli(cmd.line, cmd.args, null, ApiConstants.SourceCLI, cmd)).toResponse())
-
-                // Case 4: Unknown
+                // Case 3: Unknown
                 else     -> cmd
             }
             cmdResult
@@ -169,7 +177,6 @@ class CliApi(private val creds: slatekit.common.Credentials,
         return cmd.args.sys.isNotEmpty() &&
                 (    cmd.args.sys.containsKey(CliConstants.SysFile)
                   || cmd.args.sys.containsKey(CliConstants.SysSample)
-                  || cmd.args.sys.containsKey(CliConstants.SysCodeGen)
                 )
     }
 }

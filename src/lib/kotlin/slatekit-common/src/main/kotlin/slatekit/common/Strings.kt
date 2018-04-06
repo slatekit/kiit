@@ -149,6 +149,18 @@ fun String?.nonEmptyOrDefault(defaultVal: String): String {
 
 
 /**
+ * Gets the value if non-null AND non-empty otherwise default value.
+ */
+fun String?.orElse(defaultVal: String): String {
+    return when(this){
+        null -> defaultVal
+        ""   -> defaultVal
+        else -> if(this.isEmpty()) defaultVal else this
+    }
+}
+
+
+/**
  * Gets a substring as a single Pair.
  * @example:
  * "user://appdir/log.txt".subString("://") -> Pair("user", "appdir/log.txt")

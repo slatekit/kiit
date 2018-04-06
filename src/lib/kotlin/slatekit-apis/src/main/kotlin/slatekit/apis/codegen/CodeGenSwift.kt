@@ -9,22 +9,22 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
 
 
-class CodeGenJava(settings:CodeGenSettings) : CodeGenBase(settings) {
+class CodeGenSwift(settings:CodeGenSettings) : CodeGenBase(settings) {
 
     override val basicTypes = listOf(
             // Basic types
             Pair(KTypes.KStringType        , TypeInfo(true, false, "String"  , "String"  , KTypes.KStringClass       , KTypes.KStringClass       , "String"  + ".class")),
-            Pair(KTypes.KBoolType          , TypeInfo(true, false, "boolean" , "Boolean" , KTypes.KBoolClass         , KTypes.KBoolClass         , "Boolean" + ".class")),
-            Pair(KTypes.KShortType         , TypeInfo(true, false, "short"   , "Short"   , KTypes.KShortClass        , KTypes.KShortClass        , "Short"   + ".class")),
-            Pair(KTypes.KIntType           , TypeInfo(true, false, "int"     , "Integer" , KTypes.KIntClass          , KTypes.KIntClass          , "Integer" + ".class")),
-            Pair(KTypes.KLongType          , TypeInfo(true, false, "long"    , "Long"    , KTypes.KLongClass         , KTypes.KLongClass         , "Long"    + ".class")),
-            Pair(KTypes.KFloatType         , TypeInfo(true, false, "float"   , "Float"   , KTypes.KFloatClass        , KTypes.KFloatClass        , "Float"   + ".class")),
-            Pair(KTypes.KDoubleType        , TypeInfo(true, false, "double"  , "Double"  , KTypes.KDoubleClass       , KTypes.KDoubleClass       , "Double"  + ".class")),
-            Pair(KTypes.KDateTimeType      , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KDateTimeClass     , KTypes.KDateTimeClass     , "Date"    + ".class")),
-            Pair(KTypes.KLocalDateType     , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalDateClass    , KTypes.KLocalDateClass    , "Date"    + ".class")),
-            Pair(KTypes.KLocalTimeType     , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalTimeClass    , KTypes.KLocalTimeClass    , "Date"    + ".class")),
-            Pair(KTypes.KLocalDateTimeType , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KLocalDateTimeClass, KTypes.KLocalDateTimeClass, "Date"    + ".class")),
-            Pair(KTypes.KZonedDateTimeType , TypeInfo(true, false, "Date"    , "Date"    , KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "Date"    + ".class")),
+            Pair(KTypes.KBoolType          , TypeInfo(true, false, "Bool"    , "Bool"    , KTypes.KBoolClass         , KTypes.KBoolClass         , "Boolean" + ".class")),
+            Pair(KTypes.KShortType         , TypeInfo(true, false, "Short"   , "Short"   , KTypes.KShortClass        , KTypes.KShortClass        , "Short"   + ".class")),
+            Pair(KTypes.KIntType           , TypeInfo(true, false, "Int"     , "Int"     , KTypes.KIntClass          , KTypes.KIntClass          , "Integer" + ".class")),
+            Pair(KTypes.KLongType          , TypeInfo(true, false, "Long"    , "Long"    , KTypes.KLongClass         , KTypes.KLongClass         , "Long"    + ".class")),
+            Pair(KTypes.KFloatType         , TypeInfo(true, false, "Float"   , "Float"   , KTypes.KFloatClass        , KTypes.KFloatClass        , "Float"   + ".class")),
+            Pair(KTypes.KDoubleType        , TypeInfo(true, false, "Double"  , "Double"  , KTypes.KDoubleClass       , KTypes.KDoubleClass       , "Double"  + ".class")),
+            Pair(KTypes.KDateTimeType      , TypeInfo(true, false, "DateTime", "DateTime", KTypes.KDateTimeClass     , KTypes.KDateTimeClass     , "Date"    + ".class")),
+            Pair(KTypes.KLocalDateType     , TypeInfo(true, false, "DateTime", "DateTime", KTypes.KLocalDateClass    , KTypes.KLocalDateClass    , "Date"    + ".class")),
+            Pair(KTypes.KLocalTimeType     , TypeInfo(true, false, "DateTime", "DateTime", KTypes.KLocalTimeClass    , KTypes.KLocalTimeClass    , "Date"    + ".class")),
+            Pair(KTypes.KLocalDateTimeType , TypeInfo(true, false, "DateTime", "DateTime", KTypes.KLocalDateTimeClass, KTypes.KLocalDateTimeClass, "Date"    + ".class")),
+            Pair(KTypes.KZonedDateTimeType , TypeInfo(true, false, "DateTime", "DateTime", KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "Date"    + ".class")),
             Pair(KTypes.KDocType           , TypeInfo(true, false, "String"  , "String"  , KTypes.KDocClass          , KTypes.KDocClass          , "String"  + ".class")),
             Pair(KTypes.KVarsType          , TypeInfo(true, false, "String"  , "String"  , KTypes.KVarsClass         , KTypes.KVarsClass         , "String"  + ".class")),
             Pair(KTypes.KSmartStringType   , TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass  , "String"  + ".class")),
@@ -37,12 +37,13 @@ class CodeGenJava(settings:CodeGenSettings) : CodeGenBase(settings) {
     ).toMap()
 
 
-    override fun buildModelInfo(cls: KClass<*>): String {
+    override fun buildModelInfo(cls:KClass<*>): String {
         val props = Reflector.getProperties(cls)
         val fields = props.foldIndexed( "", { ndx:Int, acc:String, prop: KProperty<*> ->
             val type = prop.returnType
             val typeInfo = buildTypeName(type)
-            val field = "public " + typeInfo.targetParameterType + " " + prop.name + ";" + newline
+            val suffix = if(ndx < props.size - 1) "," else ""
+            val field = "val " + prop.name + " : " + typeInfo.targetParameterType + suffix + newline
             acc + (if (ndx > 0) "\t" else "") + field
         })
         return fields
@@ -50,7 +51,7 @@ class CodeGenJava(settings:CodeGenSettings) : CodeGenBase(settings) {
 
 
     override fun buildArg(parameter: KParameter): String {
-        return buildTypeName(parameter.type).targetParameterType + " " + parameter.name
+        return parameter.name + " : " + buildTypeName(parameter.type).targetParameterType
     }
 
 

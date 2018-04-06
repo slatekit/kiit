@@ -179,26 +179,6 @@ open class ApiContainer(
     }
 
 
-    fun codegen(req:Request): Result<Any> {
-        val lang = req.data.getStringOrElse("lang", "java")
-        when(lang) {
-            "java" -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates") ,
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
-            ).generate(req)
-            else   -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates"),
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
-            ).generate(req)
-        }
-        return success("code gen WIP")
-    }
-
-
     /**
      * calls the api/action associated with the request
      * @param req

@@ -11,6 +11,7 @@ usage: Please refer to license on github for more info.
 
 package slatekit.sampleapp.cli
 
+import slatekit.apis.codegen.CodeGenApi
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.Credentials
@@ -103,6 +104,8 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
+                    Api(CodeGenApi(), setup = Annotated),
+
                     Api(SamplePOKOApi::class      , area = "samples", name = "SamplePOKO", declaredOnly = false, desc = "Sample to show APIs as pure class methods"),
 
                     // Example 2: passing in and returning data-types
@@ -111,29 +114,29 @@ fun main(args: Array<String>): Unit {
 
                     // Example 3: annotations
                     Api(SampleTypes3Api::class    , setup = Annotated, declaredOnly = false),
-                    Api(SampleAnnoApi::class      , setup = Annotated, declaredOnly = false),
+                    //Api(SampleAnnoApi::class      , setup = Annotated, declaredOnly = false),
 
                     // Example 4: using REST ( you must register the REST rewrite module
-                    Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false, desc = "Sample to show APIs that are REST-like"),
+                    //Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false, desc = "Sample to show APIs that are REST-like"),
 
                     // Example 5: File download
-                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download"),
+                    //Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download"),
 
                     // Example 6: Inheritance with APIs
-                    Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false, desc = "Sample to show APIs with inherited members"),
+                    //Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false, desc = "Sample to show APIs with inherited members"),
 
                     // Example 7: Singleton APIS - 1 instance for all requests
                     // NOTE: be careful and ensure that your APIs are stateless
                     // This example shows integration with the ORM
-                    Api(SampleEntityApi(ctx)      , area = "samples", name = "SampleEntity", declaredOnly = false, desc = "Sample to show APIs with built in support for entities/CRUD"),
+                    //Api(SampleEntityApi(ctx)      , area = "samples", name = "SampleEntity", declaredOnly = false, desc = "Sample to show APIs with built in support for entities/CRUD"),
 
                     // Example 8: Middleware
-                    Api(SampleErrorsApi(true)  , area = "samples", name = "SampleErrors", declaredOnly = false, desc = "Sample to show APIs with error handling"),
-                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
+                    //Api(SampleErrorsApi(true)  , area = "samples", name = "SampleErrors", declaredOnly = false, desc = "Sample to show APIs with error handling"),
+                    //Api(SampleMiddlewareApi() , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
 
                     // Example 9: Provided by Slate Kit
-                    Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),
-                    Api(VersionApi(ctx)      , setup = Annotated, declaredOnly = true ),
+                    //Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),
+                    //Api(VersionApi(ctx)      , setup = Annotated, declaredOnly = true ),
 
                     // Example 10: More examples from the sample app
                     Api(UserApi(ctx)         , setup = Annotated, declaredOnly = false),

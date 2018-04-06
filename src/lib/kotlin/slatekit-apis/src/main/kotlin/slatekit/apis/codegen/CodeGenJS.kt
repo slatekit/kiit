@@ -9,7 +9,7 @@ import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
 
 
-class CodeGenJava(settings:CodeGenSettings) : CodeGenBase(settings) {
+class CodeGenJS(settings:CodeGenSettings) : CodeGenBase(settings) {
 
     override val basicTypes = listOf(
             // Basic types
