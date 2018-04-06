@@ -182,17 +182,23 @@ open class ApiContainer(
     fun codegen(req:Request): Result<Any> {
         val lang = req.data.getStringOrElse("lang", "java")
         when(lang) {
-            "java" -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates") ,
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
+            "koltin" -> CodeGenJava(this,
+                        req.data.getString("pathToTemplates"),
+                        req.data.getStringOrElse("nameOfTemplateClass" , "kotlin-api.txt") ,
+                        req.data.getStringOrElse("nameOfTemplateMethod", "kotlin-method.txt"),
+                        req.data.getStringOrElse("nameOfTemplateModel" , "kotlin-model.txt")
+            ).generate(req)
+            "swift" -> CodeGenJava(this,
+                    req.data.getString("pathToTemplates"),
+                    req.data.getStringOrElse("nameOfTemplateClass" , "swift-api.txt") ,
+                    req.data.getStringOrElse("nameOfTemplateMethod", "swift-method.txt"),
+                    req.data.getStringOrElse("nameOfTemplateModel" , "swift-model.txt")
             ).generate(req)
             else   -> CodeGenJava(this,
-                        req.data.getString("pathToTemplates"),
-                        req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
-                        req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
-                        req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
+                    req.data.getString("pathToTemplates"),
+                    req.data.getStringOrElse("nameOfTemplateClass" , "java-api.txt") ,
+                    req.data.getStringOrElse("nameOfTemplateMethod", "java-method.txt"),
+                    req.data.getStringOrElse("nameOfTemplateModel" , "java-model.txt")
             ).generate(req)
         }
         return success("code gen WIP")
