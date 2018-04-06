@@ -134,13 +134,13 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Context</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Context</span>
 <span class="k">import</span> <span class="nn">slatekit.core.common.AppContext</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.args.Args</span>
 <span class="k">import</span> <span class="nn">slatekit.common.args.ArgsSchema</span>
 <span class="k">import</span> <span class="nn">slatekit.common.conf.Config</span>
@@ -173,42 +173,42 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
 
-        <span class="c1">// OVERVIEW:
-</span>        <span class="c1">// The AppContext is a container for common dependencies
-</span>        <span class="c1">// across different components in an application.
-</span>        <span class="c1">// The main design goal of the context is to contain
-</span>        <span class="c1">// many of the dependencies in 1 object so they can be
-</span>        <span class="c1">// easily passed around where needed and made accessible.
-</span>        <span class="c1">//
-</span>        <span class="c1">// INCLUDED:
-</span>        <span class="c1">// 1.  args: parsed command line arguments
-</span>        <span class="c1">// 2.  env : the selected environment ( dev, qa, uat, prod )
-</span>        <span class="c1">// 3.  conf: the config settings
-</span>        <span class="c1">// 4.  log : the global logger ( you can easily have local loggers )
-</span>        <span class="c1">// 5.  inf : info about the application (name, desc, group, etc)
-</span>        <span class="c1">// 6.  ent : the entities which are mapped ORM entities ( optional )
-</span>        <span class="c1">// 7.  host: the computer host running the app
-</span>        <span class="c1">// 8.  lang: the version info of java/scala running the app
-</span>        <span class="c1">// 9.  dbs : a list of available database connections
-</span>        <span class="c1">// 10. dirs: the standardized runtime folders for the app
-</span>        <span class="c1">// 11. enc : the encryption service to handle encryption/decryption
-</span>        <span class="c1">//
-</span>        <span class="c1">// NOTES:
-</span>        <span class="c1">// 1. Many of these are OPTIONAL
-</span>        <span class="c1">// 2. It is implemented as a data class
-</span>        <span class="c1">// 3. The Context is an interface defined in slatekit.common.Context
-</span>        <span class="c1">// 4. The AppContext is an implementation defined in slatekit.core.common.AppContext
-</span>        <span class="c1">// 5. To customize the context for different components, you
-</span>        <span class="c1">//    either extend the Context, and/or copy the AppContext
-</span>        <span class="c1">//    with modifications
-</span>
-        <span class="c1">// CASE 1: Build a simple context with minimal info that includes:
-</span>        <span class="c1">// - default arguments ( command line )
-</span>        <span class="c1">// - dev environment
-</span>        <span class="c1">// - Config() representing conf settings from "env.conf"
-</span>        <span class="c1">// - default logger ( console )
-</span>        <span class="c1">// - entities ( registrations for orm )
-</span>        <span class="kd">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">(</span>
+        <span class="c1">// OVERVIEW:</span>
+        <span class="c1">// The AppContext is a container for common dependencies</span>
+        <span class="c1">// across different components in an application.</span>
+        <span class="c1">// The main design goal of the context is to contain</span>
+        <span class="c1">// many of the dependencies in 1 object so they can be</span>
+        <span class="c1">// easily passed around where needed and made accessible.</span>
+        <span class="c1">//</span>
+        <span class="c1">// INCLUDED:</span>
+        <span class="c1">// 1.  args: parsed command line arguments</span>
+        <span class="c1">// 2.  env : the selected environment ( dev, qa, uat, prod )</span>
+        <span class="c1">// 3.  conf: the config settings</span>
+        <span class="c1">// 4.  log : the global logger ( you can easily have local loggers )</span>
+        <span class="c1">// 5.  inf : info about the application (name, desc, group, etc)</span>
+        <span class="c1">// 6.  ent : the entities which are mapped ORM entities ( optional )</span>
+        <span class="c1">// 7.  host: the computer host running the app</span>
+        <span class="c1">// 8.  lang: the version info of java/scala running the app</span>
+        <span class="c1">// 9.  dbs : a list of available database connections</span>
+        <span class="c1">// 10. dirs: the standardized runtime folders for the app</span>
+        <span class="c1">// 11. enc : the encryption service to handle encryption/decryption</span>
+        <span class="c1">//</span>
+        <span class="c1">// NOTES:</span>
+        <span class="c1">// 1. Many of these are OPTIONAL</span>
+        <span class="c1">// 2. It is implemented as a data class</span>
+        <span class="c1">// 3. The Context is an interface defined in slatekit.common.Context</span>
+        <span class="c1">// 4. The AppContext is an implementation defined in slatekit.core.common.AppContext</span>
+        <span class="c1">// 5. To customize the context for different components, you</span>
+        <span class="c1">//    either extend the Context, and/or copy the AppContext</span>
+        <span class="c1">//    with modifications</span>
+
+        <span class="c1">// CASE 1: Build a simple context with minimal info that includes:</span>
+        <span class="c1">// - default arguments ( command line )</span>
+        <span class="c1">// - dev environment</span>
+        <span class="c1">// - Config() representing conf settings from "env.conf"</span>
+        <span class="c1">// - default logger ( console )</span>
+        <span class="c1">// - entities ( registrations for orm )</span>
+        <span class="kd">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">(</span>
             <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
             <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">,</span> <span class="s">"ny"</span><span class="p">,</span> <span class="s">"dev environment"</span><span class="p">),</span>
             <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
@@ -231,25 +231,25 @@
             <span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="c1">// CASE 2: Typically your application will want to derive the
-</span>        <span class="c1">// context from either the command line args and or the config
-</span>        <span class="c1">// There is a builder method takes command line arguments and
-</span>        <span class="c1">// other inputs and constructs the context. This example shows
-</span>        <span class="c1">// only providing the arguments to build the context
-</span>        <span class="c1">//
-</span>        <span class="c1">// NOTE: This checks for "-env" arg and loads the corresponding
-</span>        <span class="c1">// inherited config environment (refer to config in utils for more info )
-</span>        <span class="c1">// but basically, this loads the env.dev.conf with fallback to env.conf
-</span>        <span class="c1">// 1. "env.dev.conf" ( environment specific )
-</span>        <span class="c1">// 2. "env.conf"     ( common / base line   )
-</span>        <span class="kd">val</span> <span class="py">ctx2</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">arrayOf</span><span class="p">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="p">))</span>
+        <span class="c1">// CASE 2: Typically your application will want to derive the</span>
+        <span class="c1">// context from either the command line args and or the config</span>
+        <span class="c1">// There is a builder method takes command line arguments and</span>
+        <span class="c1">// other inputs and constructs the context. This example shows</span>
+        <span class="c1">// only providing the arguments to build the context</span>
+        <span class="c1">//</span>
+        <span class="c1">// NOTE: This checks for "-env" arg and loads the corresponding</span>
+        <span class="c1">// inherited config environment (refer to config in utils for more info )</span>
+        <span class="c1">// but basically, this loads the env.dev.conf with fallback to env.conf</span>
+        <span class="c1">// 1. "env.dev.conf" ( environment specific )</span>
+        <span class="c1">// 2. "env.conf"     ( common / base line   )</span>
+        <span class="kd">val</span> <span class="py">ctx2</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="n">arrayOf</span><span class="p">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="p">))</span>
         <span class="n">showContext</span><span class="p">(</span><span class="n">ctx2</span><span class="p">)</span>
 
-        <span class="c1">// CASE 3: This example shows providing the args schema for parsing the args
-</span>        <span class="c1">// refer to Args in utils for more info.
-</span>        <span class="c1">// NOTE: There are additional parameters on the build function ( callbacks )
-</span>        <span class="c1">// to allow you to get the context and modify it before it is returned.
-</span>        <span class="kd">val</span> <span class="py">ctx3</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
+        <span class="c1">// CASE 3: This example shows providing the args schema for parsing the args</span>        
+        <span class="c1">// refer to Args in utils for more info.</span>        
+        <span class="c1">// NOTE: There are additional parameters on the build function ( callbacks )</span>        
+        <span class="c1">// to allow you to get the context and modify it before it is returned.</span>        
+        <span class="kd">val</span> <span class="py">ctx3</span> <span class="p">=</span> <span class="n">AppRunner</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
                     <span class="n">args</span>   <span class="p">=</span> <span class="n">arrayOf</span><span class="p">(</span><span class="s">"-env=dev -log -log.level=debug"</span><span class="p">),</span>
                     <span class="n">enc</span>    <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
                     <span class="n">schema</span> <span class="p">=</span> <span class="n">ArgsSchema</span><span class="p">()</span>
@@ -263,8 +263,8 @@
         <span class="p">)</span>
         <span class="n">showContext</span><span class="p">(</span><span class="n">ctx3</span><span class="p">)</span>
 
-        <span class="c1">// CASE 4: You can also build an error context representing an invalid context
-</span>        <span class="kd">val</span> <span class="py">ctx4</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">.</span><span class="n">err</span><span class="p">(</span><span class="n">BAD_REQUEST</span><span class="p">,</span> <span class="s">"Bad context, invalid inputs supplied"</span><span class="p">)</span>
+        <span class="c1">// CASE 4: You can also build an error context representing an invalid context</span>        
+        <span class="kd">val</span> <span class="py">ctx4</span> <span class="p">=</span> <span class="n">AppContext</span><span class="p">.</span><span class="n">err</span><span class="p">(</span><span class="n">BAD_REQUEST</span><span class="p">,</span> <span class="s">"Bad context, invalid inputs supplied"</span><span class="p">)</span>
         <span class="n">showContext</span><span class="p">(</span><span class="n">ctx4</span><span class="p">)</span>
 
         

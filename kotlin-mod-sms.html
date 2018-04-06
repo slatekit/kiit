@@ -134,15 +134,14 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.*</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.*</span>
 <span class="k">import</span> <span class="nn">slatekit.common.auth.AuthConsole</span>
 <span class="k">import</span> <span class="nn">slatekit.common.auth.User</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.common.templates.Template</span>
 <span class="k">import</span> <span class="nn">slatekit.common.templates.TemplatePart</span>
@@ -159,23 +158,23 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Setup 1: Getting key from config
-</span>    <span class="c1">// Load the config file from slatekit directory in user_home directory
-</span>    <span class="c1">// e.g. {user_home}/slatekit/conf/sms.conf
-</span>    <span class="c1">// NOTE: It is safer/more secure to store config files there.
-</span>    <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span>  <span class="n">Config</span><span class="p">(</span><span class="s">"user://slatekit/conf/sms.conf"</span><span class="p">)</span>
+    <span class="c1">// Setup 1: Getting key from config</span>
+    <span class="c1">// Load the config file from slatekit directory in user_home directory</span>
+    <span class="c1">// e.g. {user_home}/slatekit/conf/sms.conf</span>
+    <span class="c1">// NOTE: It is safer/more secure to store config files there.</span>
+    <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span>  <span class="n">Config</span><span class="p">(</span><span class="s">"user://slatekit/conf/sms.conf"</span><span class="p">)</span>
 
-    <span class="c1">// Setup 2: Get the api key either through conf or explicitly
-</span>    <span class="kd">val</span> <span class="py">apiKey1</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">apiLogin</span><span class="p">(</span><span class="s">"sms"</span><span class="p">)</span>
+    <span class="c1">// Setup 2: Get the api key either through conf or explicitly</span>    
+    <span class="kd">val</span> <span class="py">apiKey1</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">apiLogin</span><span class="p">(</span><span class="s">"sms"</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">apiKey2</span> <span class="p">=</span> <span class="n">ApiLogin</span><span class="p">(</span><span class="s">"17181234567"</span><span class="p">,</span> <span class="s">"ABC1234567"</span><span class="p">,</span> <span class="s">"password"</span><span class="p">,</span> <span class="s">"dev"</span><span class="p">,</span> <span class="s">"twilio-sms"</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">apiKey</span>  <span class="p">=</span> <span class="n">apiKey1</span> <span class="o">?:</span> <span class="n">apiKey2</span>
 
-    <span class="c1">// Setup 3a: Setup the sms service ( basic ) with api key
-</span>    <span class="c1">// Note: The sms service will default to only USA ( you can customize this later )
-</span>    <span class="kd">val</span> <span class="py">sms1</span> <span class="p">=</span>  <span class="n">SmsServiceTwilio</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">)</span>
+    <span class="c1">// Setup 3a: Setup the sms service ( basic ) with api key</span>    
+    <span class="c1">// Note: The sms service will default to only USA ( you can customize this later )</span>    
+    <span class="kd">val</span> <span class="py">sms1</span> <span class="p">=</span>  <span class="n">SmsServiceTwilio</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">)</span>
 
-    <span class="c1">// Setup 3b: Setup the sms service with support for templates
-</span>    <span class="kd">val</span> <span class="py">templates</span> <span class="p">=</span> <span class="n">Templates</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
+    <span class="c1">// Setup 3b: Setup the sms service with support for templates</span>    
+    <span class="kd">val</span> <span class="py">templates</span> <span class="p">=</span> <span class="n">Templates</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
       <span class="n">templates</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
          <span class="n">Template</span><span class="p">(</span><span class="s">"sms_welcome"</span><span class="p">,</span> <span class="n">Uris</span><span class="p">.</span><span class="n">readText</span><span class="p">(</span><span class="s">"user://slatekit/templates/sms_welcome.txt"</span><span class="p">)</span> <span class="o">?:</span> <span class="s">""</span><span class="p">),</span>
          <span class="n">Template</span><span class="p">(</span><span class="s">"email_welcome"</span><span class="p">,</span> <span class="n">Uris</span><span class="p">.</span><span class="n">readText</span><span class="p">(</span><span class="s">"user://slatekit/templates/email_welcome.txt"</span><span class="p">)</span> <span class="o">?:</span> <span class="s">""</span><span class="p">),</span>
@@ -188,8 +187,8 @@
     <span class="p">)</span>
     <span class="kd">val</span> <span class="py">sms2</span> <span class="p">=</span>  <span class="n">SmsServiceTwilio</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">,</span> <span class="n">templates</span><span class="p">)</span>
 
-    <span class="c1">// Setup 3b: Setup the templates with support for different country codes
-</span>    <span class="kd">val</span> <span class="py">countries</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">CountryCode</span><span class="p">(</span><span class="s">"US"</span><span class="p">),</span> <span class="n">CountryCode</span><span class="p">(</span><span class="s">"FR"</span><span class="p">))</span>
+    <span class="c1">// Setup 3b: Setup the templates with support for different country codes</span>    
+    <span class="kd">val</span> <span class="py">countries</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">CountryCode</span><span class="p">(</span><span class="s">"US"</span><span class="p">),</span> <span class="n">CountryCode</span><span class="p">(</span><span class="s">"FR"</span><span class="p">))</span>
     <span class="kd">val</span> <span class="py">sms3</span> <span class="p">=</span>  <span class="n">SmsServiceTwilio</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">,</span> <span class="n">templates</span><span class="p">,</span> <span class="n">countries</span><span class="p">)</span>
     
 
@@ -199,14 +198,14 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Send an invitation message to phone "234567890 in the United States.
-</span>    <span class="n">sms3</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"Invitation to MyApp.com"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">)</span>
+    <span class="c1">// Use case 1: Send an invitation message to phone "234567890 in the United States.</span>    
+    <span class="n">sms3</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">"Invitation to MyApp.com"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 2: Send using a constructed message object
-</span>    <span class="n">sms3</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">SmsMessage</span><span class="p">(</span><span class="s">"Invitation to MyApp.com"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">))</span>
+    <span class="c1">// Use case 2: Send using a constructed message object</span>    
+    <span class="n">sms3</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">SmsMessage</span><span class="p">(</span><span class="s">"Invitation to MyApp.com"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">))</span>
 
-    <span class="c1">// Use case 3: Send message using one of the setup templates
-</span>    <span class="n">sms3</span><span class="p">.</span><span class="n">sendUsingTemplate</span><span class="p">(</span><span class="s">"sms_welcome"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">,</span>
+    <span class="c1">// Use case 3: Send message using one of the setup templates</span>    
+    <span class="n">sms3</span><span class="p">.</span><span class="n">sendUsingTemplate</span><span class="p">(</span><span class="s">"sms_welcome"</span><span class="p">,</span> <span class="s">"us"</span><span class="p">,</span> <span class="s">"234567890"</span><span class="p">,</span>
        <span class="n">Vars</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
         <span class="n">Pair</span><span class="p">(</span><span class="s">"greeting"</span> <span class="p">,</span> <span class="s">"hello"</span><span class="p">),</span>
         <span class="n">Pair</span><span class="p">(</span><span class="s">"user.api"</span><span class="p">,</span> <span class="s">"kishore"</span><span class="p">),</span>

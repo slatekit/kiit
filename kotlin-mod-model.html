@@ -134,12 +134,12 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.meta.models.*</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.meta.models.*</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
 <span class="k">import</span> <span class="nn">slatekit.common.auth.User</span>
@@ -163,22 +163,21 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// ABOUT:
-</span>    <span class="c1">// The Model component allows you to easily build up a model with fields
-</span>    <span class="c1">// This allows you to have a schema / structure representing a data model.
-</span>    <span class="c1">// With the structure in place, it helps facilitate code-generation.
-</span>    <span class="c1">// Also, the ORM / Mapper of Slate Kit internally builds a model for each
-</span>    <span class="c1">// Scala class that is mapped by the ORM.
-</span>
-    <span class="c1">// CASE 1: specify the api of the model e.g. "Resource"
-</span>    <span class="c1">// NOTE: The model is IMMUTABLE ( any additions of fields will result in a new model )
-</span>    <span class="kd">var</span> <span class="py">model</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">,</span> <span class="s">"slate.ext.resources.Resource"</span><span class="p">)</span>
+    <span class="c1">// ABOUT:</span>
+    <span class="c1">// The Model component allows you to easily build up a model with fields</span>
+    <span class="c1">// This allows you to have a schema / structure representing a data model.</span>
+    <span class="c1">// With the structure in place, it helps facilitate code-generation.</span>
+    <span class="c1">// Also, the ORM / Mapper of Slate Kit internally builds a model for each</span>
+    <span class="c1">// Scala class that is mapped by the ORM.</span>
+    <span class="c1">// CASE 1: specify the api of the model e.g. "Resource"</span>    
+    <span class="c1">// NOTE: The model is IMMUTABLE ( any additions of fields will result in a new model )</span>    
+    <span class="kd">var</span> <span class="py">model</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">,</span> <span class="s">"slate.ext.resources.Resource"</span><span class="p">)</span>
 
-    <span class="c1">// CASE 2. add a field for uniqueness / identity
-</span>    <span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">.</span><span class="n">addId</span>  <span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"id"</span><span class="p">,</span> <span class="n">autoIncrement</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">Long</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="c1">// CASE 2. add a field for uniqueness / identity</span>    
+    <span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">.</span><span class="n">addId</span>  <span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"id"</span><span class="p">,</span> <span class="n">autoIncrement</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">Long</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
 
-    <span class="c1">// CASE 3: add fields for text, bool, int, date etc.
-</span>    <span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">.</span><span class="n">addText</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"key"</span>        <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
+    <span class="c1">// CASE 3: add fields for text, bool, int, date etc.</span>    
+    <span class="n">model</span> <span class="p">=</span> <span class="n">model</span><span class="p">.</span><span class="n">addText</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"key"</span>        <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
                  <span class="p">.</span><span class="n">addText</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"api"</span>        <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
                  <span class="p">.</span><span class="n">addText</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"category"</span>   <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
                  <span class="p">.</span><span class="n">addText</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"country"</span>    <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
@@ -195,8 +194,8 @@
                  <span class="p">.</span><span class="n">addLocalDateTime</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"created"</span>  <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span>                <span class="p">)</span>
                  <span class="p">.</span><span class="n">addDateTime</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"updated"</span>  <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span>                <span class="p">)</span>
 
-    <span class="c1">// CASE 3: add fields for text, bool, int, date etc.
-</span>    <span class="n">model</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">tableName</span> <span class="p">=</span> <span class="s">"users"</span><span class="p">,</span> <span class="n">_propList</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+    <span class="c1">// CASE 3: add fields for text, bool, int, date etc.</span>    
+    <span class="n">model</span> <span class="p">=</span> <span class="n">Model</span><span class="p">(</span><span class="s">"Resource"</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">tableName</span> <span class="p">=</span> <span class="s">"users"</span><span class="p">,</span> <span class="n">_propList</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
                  <span class="n">ModelField</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"key"</span>        <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">String</span><span class="o">::</span><span class="k">class</span><span class="p">),</span>
                  <span class="n">ModelField</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"api"</span>       <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">maxLength</span> <span class="p">=</span> <span class="m">30</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">String</span><span class="o">::</span><span class="k">class</span><span class="p">),</span>
                  <span class="n">ModelField</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"recordState"</span><span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">),</span>
@@ -205,29 +204,29 @@
                  <span class="n">ModelField</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">"updated"</span>    <span class="p">,</span> <span class="n">isRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">dataType</span> <span class="p">=</span> <span class="n">DateTime</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
       <span class="p">))</span>
 
-    <span class="c1">// CASE 4. check for any fields
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"any fields: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">any</span> <span class="p">)</span>
+    <span class="c1">// CASE 4. check for any fields</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"any fields: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">any</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 5. total number of fields
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"total fields: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">size</span> <span class="p">)</span>
+    <span class="c1">// CASE 5. total number of fields</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"total fields: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">size</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 6. get the id field
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">hasId</span> <span class="p">)</span>
+    <span class="c1">// CASE 6. get the id field</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">hasId</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 7. get the id field
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">idField</span> <span class="p">)</span>
+    <span class="c1">// CASE 7. get the id field</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">idField</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 8. string representation of field
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field to string: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">idField</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span>
+    <span class="c1">// CASE 8. string representation of field</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"id field to string: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">idField</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span>
 
-    <span class="c1">// CASE 8. access the fields
-</span>    <span class="n">showResult</span> <span class="p">(</span><span class="s">"access to fields : "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">fields</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="c1">// CASE 8. access the fields</span>    
+    <span class="n">showResult</span> <span class="p">(</span><span class="s">"access to fields : "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">fields</span><span class="p">.</span><span class="n">size</span><span class="p">)</span>
 
-    <span class="c1">// CASE 9. get api + full api of model
-</span>    <span class="n">showResult</span> <span class="p">(</span><span class="s">"model api/fullName: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">fullName</span><span class="p">)</span>
+    <span class="c1">// CASE 9. get api + full api of model</span>    
+    <span class="n">showResult</span> <span class="p">(</span><span class="s">"model api/fullName: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">fullName</span><span class="p">)</span>
 
-    <span class="c1">// CASE 10. build up the table sql for this model
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">model</span><span class="p">))</span>
+    <span class="c1">// CASE 10. build up the table sql for this model</span>    
+    <span class="n">showResult</span><span class="p">(</span> <span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">model</span><span class="p">))</span>
     
 
 </code></pre>

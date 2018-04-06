@@ -134,13 +134,12 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.envs.*</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.envs.*</span>
 
 
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -159,8 +158,8 @@
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
 
-    <span class="c1">// CASE 1: Build a list of environments
-</span>    <span class="kd">val</span> <span class="py">envs1</span> <span class="p">=</span> <span class="n">Envs</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
+    <span class="c1">// CASE 1: Build a list of environments</span>    
+    <span class="kd">val</span> <span class="py">envs1</span> <span class="p">=</span> <span class="n">Envs</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
             <span class="n">Env</span><span class="p">(</span><span class="s">"loc"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (local)"</span><span class="p">),</span>
             <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (shared)"</span><span class="p">),</span>
             <span class="n">Env</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (current release)"</span><span class="p">),</span>
@@ -169,25 +168,25 @@
             <span class="n">Env</span><span class="p">(</span><span class="s">"pro"</span><span class="p">,</span> <span class="n">Prod</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"LIVE environment"</span><span class="p">)</span>
     <span class="p">))</span>
 
-    <span class="c1">// CASE 2: Use the default list of environments ( same as above )
-</span>    <span class="kd">val</span> <span class="py">envs</span> <span class="p">=</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">common</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">Env</span><span class="p">.</span><span class="n">defaults</span><span class="p">()</span>
+    <span class="c1">// CASE 2: Use the default list of environments ( same as above )</span>    
+    <span class="kd">val</span> <span class="py">envs</span> <span class="p">=</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">common</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">Env</span><span class="p">.</span><span class="n">defaults</span><span class="p">()</span>
 
-    <span class="c1">// CASE 3: Get one of the environments by api
-</span>    <span class="kd">val</span> <span class="py">qa1</span> <span class="p">=</span> <span class="n">envs</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">)</span>
+    <span class="c1">// CASE 3: Get one of the environments by api</span>    
+    <span class="kd">val</span> <span class="py">qa1</span> <span class="p">=</span> <span class="n">envs</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">qa1</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 4: Validate one of the environments by api
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">envs</span><span class="p">.</span><span class="n">isValid</span><span class="p">(</span><span class="s">"qa2"</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c1">// CASE 4: Validate one of the environments by api</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">envs</span><span class="p">.</span><span class="n">isValid</span><span class="p">(</span><span class="s">"qa2"</span><span class="p">)</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 5: Current environment ( nothing - none selected )
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">envs</span><span class="p">.</span><span class="n">current</span> <span class="p">)</span>
+    <span class="c1">// CASE 5: Current environment ( nothing - none selected )</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">envs</span><span class="p">.</span><span class="n">current</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 6: Select an environment
-</span>    <span class="kd">val</span> <span class="py">envs2</span> <span class="p">=</span> <span class="n">envs</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"dev"</span><span class="p">)</span>
+    <span class="c1">// CASE 6: Select an environment</span>    
+    <span class="kd">val</span> <span class="py">envs2</span> <span class="p">=</span> <span class="n">envs</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">"dev"</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span> <span class="p">)</span>
 
-    <span class="c1">// CASE 7: Get info about currently selected environment
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span><span class="p">.</span><span class="n">name</span>    <span class="p">)</span>
+    <span class="c1">// CASE 7: Get info about currently selected environment</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span><span class="p">.</span><span class="n">name</span>    <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span><span class="p">.</span><span class="n">isDev</span>   <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span><span class="p">.</span><span class="n">isQa</span>    <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">envs2</span><span class="p">.</span><span class="n">isUat</span>   <span class="p">)</span>

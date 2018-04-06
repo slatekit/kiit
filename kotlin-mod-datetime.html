@@ -134,13 +134,11 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
 
-
-
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.ext.days</span>
 <span class="k">import</span> <span class="nn">slatekit.common.ext.minutes</span>
@@ -163,43 +161,43 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">//
-</span>    <span class="c1">// NOTE:
-</span>    <span class="c1">// When working with new Java 8 Date/Time, which is a significant
-</span>    <span class="c1">// improvement over the older mutable Java Date/Time models,
-</span>    <span class="c1">// there is still some "cognitive overhead" ( IMHO ) in mentally
-</span>    <span class="c1">// managing the different LocalDateTime, ZonedDateTime and conversion
-</span>    <span class="c1">// to and from local/zoned functionality
-</span>    <span class="c1">//
-</span>    <span class="c1">// DESIGN:
-</span>    <span class="c1">// This DateTime is a unified DateTime for both LocalDateTime and ZonedDateime
-</span>    <span class="c1">// that wraps uses a ZonedDateTime internally ( defaulted to local timezone )
-</span>    <span class="c1">// and is used for representing a DateTime for either Local and/or other Zones.
-</span>    <span class="c1">// This makes the Java 8 datetime/zones a bit simpler &amp; concise while
-</span>    <span class="c1">// essentially adding syntactic sugar using Kotlin operators and extension methods
-</span>    <span class="c1">//
-</span>    <span class="c1">// IMPORTANT:
-</span>    <span class="c1">// This does NOT change the functionality of the Java 8 classes at all.
-</span>    <span class="c1">// It is simply "syntactic sugar" for using the classes.
-</span>
-    <span class="c1">// Case 1. Get datetime now, either locally, at utc and other zones
-</span>    <span class="c1">// These will return a DateTime that wraps a ZonedDateTime.
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">)</span>
+    <span class="c1">//</span>
+    <span class="c1">// NOTE:</span>
+    <span class="c1">// When working with new Java 8 Date/Time, which is a significant</span>
+    <span class="c1">// improvement over the older mutable Java Date/Time models,</span>
+    <span class="c1">// there is still some "cognitive overhead" ( IMHO ) in mentally</span>
+    <span class="c1">// managing the different LocalDateTime, ZonedDateTime and conversion</span>
+    <span class="c1">// to and from local/zoned functionality</span>
+    <span class="c1">//</span>
+    <span class="c1">// DESIGN:</span>
+    <span class="c1">// This DateTime is a unified DateTime for both LocalDateTime and ZonedDateime</span>
+    <span class="c1">// that wraps uses a ZonedDateTime internally ( defaulted to local timezone )</span>
+    <span class="c1">// and is used for representing a DateTime for either Local and/or other Zones.</span>
+    <span class="c1">// This makes the Java 8 datetime/zones a bit simpler &amp; concise while</span>
+    <span class="c1">// essentially adding syntactic sugar using Kotlin operators and extension methods</span>
+    <span class="c1">//</span>
+    <span class="c1">// IMPORTANT:</span>
+    <span class="c1">// This does NOT change the functionality of the Java 8 classes at all.</span>
+    <span class="c1">// It is simply "syntactic sugar" for using the classes.</span>
+
+    <span class="c1">// Case 1. Get datetime now, either locally, at utc and other zones</span>    
+    <span class="c1">// These will return a DateTime that wraps a ZonedDateTime.</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">nowUtc</span><span class="p">()</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">nowAt</span><span class="p">(</span><span class="s">"America/New_York"</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">nowAt</span><span class="p">(</span><span class="s">"Europe/Athens"</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">nowAt</span><span class="p">(</span><span class="n">ZoneId</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="s">"Europe/Athens"</span><span class="p">)))</span>
 
 
-    <span class="c1">// Case 2: Build datetime explicitly
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
+    <span class="c1">// Case 2: Build datetime explicitly</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">10</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">30</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">30</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="s">"America/New_York"</span><span class="p">))</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="m">2017</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">11</span><span class="p">,</span> <span class="m">30</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">ZoneId</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="s">"America/New_York"</span><span class="p">)))</span>
 
 
-    <span class="c1">// Case 3. Get datetime fields
-</span>    <span class="kd">val</span> <span class="py">dt</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="c1">// Case 3. Get datetime fields</span>    
+    <span class="kd">val</span> <span class="py">dt</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span> <span class="s">"year  : "</span> <span class="p">+</span> <span class="n">dt</span><span class="p">.</span><span class="n">year</span>      <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="s">"month : "</span> <span class="p">+</span> <span class="n">dt</span><span class="p">.</span><span class="n">month</span>     <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="s">"day   : "</span> <span class="p">+</span> <span class="n">dt</span><span class="p">.</span><span class="n">day</span>       <span class="p">)</span>
@@ -210,9 +208,9 @@
     <span class="n">println</span><span class="p">(</span> <span class="s">"zone  : "</span> <span class="p">+</span> <span class="n">dt</span><span class="p">.</span><span class="n">zone</span><span class="p">().</span><span class="n">id</span> <span class="p">)</span>
 
 
-    <span class="c1">// Case 4: Conversion from now( local ) to utc, specific zone,
-</span>    <span class="c1">// LocalDate, LocalTime, and LocalDateTime
-</span>    <span class="kd">val</span> <span class="py">now</span>      <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="c1">// Case 4: Conversion from now( local ) to utc, specific zone,</span>    
+    <span class="c1">// LocalDate, LocalTime, and LocalDateTime</span>    
+    <span class="kd">val</span> <span class="py">now</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">now</span><span class="p">.</span><span class="n">date</span><span class="p">()</span>  <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">now</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>  <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">now</span><span class="p">.</span><span class="n">local</span><span class="p">()</span> <span class="p">)</span>
@@ -221,9 +219,9 @@
     <span class="n">println</span><span class="p">(</span> <span class="n">now</span><span class="p">.</span><span class="n">atZone</span><span class="p">(</span><span class="s">"Europe/Athens"</span><span class="p">)</span> <span class="p">)</span>
 
 
-    <span class="c1">// Case 5: Idiomatic use of Kotlin operators and extension methods
-</span>    <span class="c1">// This uses the extensions from slatekit.common.ext.IntExtensions
-</span>    <span class="kd">val</span> <span class="py">later</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">+</span> <span class="m">3</span><span class="p">.</span><span class="n">minutes</span>
+    <span class="c1">// Case 5: Idiomatic use of Kotlin operators and extension methods</span>    
+    <span class="c1">// This uses the extensions from slatekit.common.ext.IntExtensions</span>    
+    <span class="kd">val</span> <span class="py">later</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">+</span> <span class="m">3</span><span class="p">.</span><span class="n">minutes</span>
     <span class="n">println</span><span class="p">(</span>    <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">+</span> <span class="m">3</span><span class="p">.</span><span class="n">days</span>            <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span>    <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">-</span> <span class="m">3</span><span class="p">.</span><span class="n">minutes</span>         <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span>    <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="p">-</span> <span class="m">3</span><span class="p">.</span><span class="n">months</span>          <span class="p">)</span>
@@ -231,8 +229,8 @@
     <span class="n">println</span><span class="p">(</span>    <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">minutesTo</span><span class="p">(</span> <span class="n">later</span> <span class="p">)</span>  <span class="p">)</span>
 
 
-    <span class="c1">// Case 6. Add time ( just like Java 8 )
-</span>    <span class="kd">val</span> <span class="py">dt1</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="c1">// Case 6. Add time ( just like Java 8 )</span>    
+    <span class="kd">val</span> <span class="py">dt1</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusYears</span>  <span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">toString</span><span class="p">()</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusMonths</span> <span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">toString</span><span class="p">()</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusDays</span>   <span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">toString</span><span class="p">()</span> <span class="p">)</span>
@@ -241,8 +239,8 @@
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">).</span><span class="n">toString</span><span class="p">()</span> <span class="p">)</span>
 
 
-    <span class="c1">// Case 7. Compare
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&gt;</span>   <span class="n">dt1</span><span class="p">.</span><span class="n">plusYears</span>  <span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c1">// Case 7. Compare</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&gt;</span>   <span class="n">dt1</span><span class="p">.</span><span class="n">plusYears</span>  <span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&gt;=</span>  <span class="n">dt1</span><span class="p">.</span><span class="n">plusMonths</span> <span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&gt;=</span>  <span class="n">dt1</span><span class="p">.</span><span class="n">plusDays</span>   <span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&lt;</span>   <span class="n">dt1</span><span class="p">.</span><span class="n">plusHours</span>  <span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
@@ -250,8 +248,8 @@
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">&lt;=</span>  <span class="n">dt1</span><span class="p">.</span><span class="n">plusSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
 
 
-    <span class="c1">// Case 8. Get duration (hours,mins,seconds) or period(days,months,years)
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusSeconds</span><span class="p">(</span><span class="m">2</span><span class="p">).</span><span class="n">durationFrom</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">)</span> <span class="p">)</span>
+    <span class="c1">// Case 8. Get duration (hours,mins,seconds) or period(days,months,years)</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusSeconds</span><span class="p">(</span><span class="m">2</span><span class="p">).</span><span class="n">durationFrom</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusMinutes</span><span class="p">(</span><span class="m">2</span><span class="p">).</span><span class="n">durationFrom</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusHours</span><span class="p">(</span><span class="m">2</span><span class="p">).</span><span class="n">durationFrom</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">)</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">dt1</span><span class="p">.</span><span class="n">plusDays</span><span class="p">(</span><span class="m">2</span><span class="p">).</span><span class="n">periodFrom</span><span class="p">(</span> <span class="n">dt1</span> <span class="p">)</span> <span class="p">)</span>

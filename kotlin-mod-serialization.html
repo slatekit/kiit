@@ -134,13 +134,13 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.serialization.*</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.examples.common.User</span>
 
@@ -152,8 +152,8 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Setup some sample data to serialize
-</span>    <span class="kd">val</span> <span class="py">user1</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+    <span class="c1">// Setup some sample data to serialize</span>   
+    <span class="kd">val</span> <span class="py">user1</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">"batman@gotham.com"</span> <span class="p">,</span> <span class="s">"bat"</span>  <span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
     <span class="kd">val</span> <span class="py">users</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">user1</span><span class="p">,</span> <span class="n">user2</span><span class="p">)</span>
     
@@ -164,31 +164,31 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// The serializers come in very handy during the serialization of
-</span>    <span class="c1">// entities in the ORM and is used in the CLI and HTTP server.
-</span>    <span class="c1">// However, they are general purpose and can be used else where.
-</span>    <span class="c1">// They are :
-</span>    <span class="c1">// 1. Optimized for data classes
-</span>    <span class="c1">// 2. Use reflection to get the properties to serialize
-</span>    <span class="c1">// 3. Support recursion into nested objects
-</span>    <span class="c1">// 4. Handle lists of type List&lt;*&gt; and maps of basic types Map&lt;*,*&gt;
-</span>
-    <span class="c1">// Case 1: Serialize CSV
-</span>    <span class="kd">val</span> <span class="py">csvSerializer</span> <span class="p">=</span> <span class="n">SerializerCsv</span><span class="p">()</span>
+    <span class="c1">// The serializers come in very handy during the serialization of</span>
+    <span class="c1">// entities in the ORM and is used in the CLI and HTTP server.</span>
+    <span class="c1">// However, they are general purpose and can be used else where.</span>
+    <span class="c1">// They are :</span>
+    <span class="c1">// 1. Optimized for data classes</span>
+    <span class="c1">// 2. Use reflection to get the properties to serialize</span>
+    <span class="c1">// 3. Support recursion into nested objects</span>
+    <span class="c1">// 4. Handle lists of type List&lt;*&gt; and maps of basic types Map&lt;*,*&gt;</span>
+
+    <span class="c1">// Case 1: Serialize CSV</span>    
+    <span class="kd">val</span> <span class="py">csvSerializer</span> <span class="p">=</span> <span class="n">SerializerCsv</span><span class="p">()</span>
     <span class="kd">val</span> <span class="py">csvData</span> <span class="p">=</span> <span class="n">csvSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"CSV ===================="</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">csvData</span><span class="p">)</span>
 
 
-    <span class="c1">// Case 2: Serialize Properties files
-</span>    <span class="kd">val</span> <span class="py">propsSerializer</span> <span class="p">=</span> <span class="n">SerializerProps</span><span class="p">()</span>
+    <span class="c1">// Case 2: Serialize Properties files</span>    
+    <span class="kd">val</span> <span class="py">propsSerializer</span> <span class="p">=</span> <span class="n">SerializerProps</span><span class="p">()</span>
     <span class="kd">val</span> <span class="py">propsData</span> <span class="p">=</span> <span class="n">propsSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"HCON ===================="</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">propsData</span><span class="p">)</span>
 
 
-    <span class="c1">// Case 3: Serialize JSON
-</span>    <span class="kd">val</span> <span class="py">jsonSerializer</span> <span class="p">=</span> <span class="n">SerializerJson</span><span class="p">()</span>
+    <span class="c1">// Case 3: Serialize JSON</span>    
+    <span class="kd">val</span> <span class="py">jsonSerializer</span> <span class="p">=</span> <span class="n">SerializerJson</span><span class="p">()</span>
     <span class="kd">val</span> <span class="py">jsonData</span> <span class="p">=</span> <span class="n">jsonSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"JSON ===================="</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">jsonData</span><span class="p">)</span>

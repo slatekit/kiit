@@ -134,12 +134,12 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Request</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Request</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.common.InputArgs</span>
@@ -159,39 +159,39 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-        <span class="c1">// The Request class models and abstracts both an
-</span>        <span class="c1">// HTTP Request and a CLI ( command line interface ) request.
-</span>        <span class="c1">// This Request class along with its complementary Result class
-</span>        <span class="c1">// provide the basis for much of the API support in Slate Kit.
-</span>        <span class="c1">// APIs in Slate are protocol independent which basically means
-</span>        <span class="c1">// that the APIs can be accessed as HTTP Endpoints or on the CLI
-</span>        <span class="c1">//
-</span>        <span class="c1">// ROUTING:
-</span>        <span class="c1">// Requests in Slate Kit follow a 3 part route scheme
-</span>        <span class="c1">// e.g. {area}.{api}.{action}
-</span>        <span class="c1">// where :
-</span>        <span class="c1">// 1. area   = top level category containing 1 or more apis ( e.g. "app"      )
-</span>        <span class="c1">// 2. api    = name of a specific api                       ( e.g. "users"    )
-</span>        <span class="c1">// 3. action = name of the endpoint or api action           ( e.g. "activate" )
-</span>        <span class="c1">//
-</span>        <span class="c1">// The api &amp; action are just simple annotated classes and methods.
-</span>        <span class="c1">//
-</span>        <span class="c1">// NOTES:
-</span>        <span class="c1">// This routing scheme is specifically designed to provide the following benefits:
-</span>        <span class="c1">//
-</span>        <span class="c1">// 1. Support a simplified routing scheme
-</span>        <span class="c1">// 2. Support a unified routing scheme between HTTP and CLI
-</span>        <span class="c1">// 3. Support easy discoverability by simply typing a "?" after each route part
-</span>        <span class="c1">//    e.g. area? | area.api? | area.api.action?
-</span>        <span class="c1">//
-</span>        <span class="c1">// For more information on APIs and CLI refer to the Slate API and CLI documentation.
-</span>
-        <span class="c1">// Here is a simple example of representing a route/request.
-</span>        <span class="c1">// NOTE: This example below is just to show the concept, in the Slate Kit CLI and Server,
-</span>        <span class="c1">// the request is appropriately built from either a CLI Command or the
-</span>        <span class="c1">// SparkJava request ( with a thin abstraction layer ). The requests are
-</span>        <span class="c1">// kept very simple/light for maximum performance and data is NEVER copied.
-</span>        <span class="kd">val</span> <span class="py">request</span> <span class="p">=</span> <span class="n">Request</span><span class="p">(</span>
+        <span class="c1">// The Request class models and abstracts both an</span>
+        <span class="c1">// HTTP Request and a CLI ( command line interface ) request.</span>
+        <span class="c1">// This Request class along with its complementary Result class</span>
+        <span class="c1">// provide the basis for much of the API support in Slate Kit.</span>
+        <span class="c1">// APIs in Slate are protocol independent which basically means</span>
+        <span class="c1">// that the APIs can be accessed as HTTP Endpoints or on the CLI</span>
+        <span class="c1">//</span>
+        <span class="c1">// ROUTING:</span>
+        <span class="c1">// Requests in Slate Kit follow a 3 part route scheme</span>
+        <span class="c1">// e.g. {area}.{api}.{action}</span>
+        <span class="c1">// where :</span>
+        <span class="c1">// 1. area   = top level category containing 1 or more apis ( e.g. "app"      )</span>
+        <span class="c1">// 2. api    = name of a specific api                       ( e.g. "users"    )</span>
+        <span class="c1">// 3. action = name of the endpoint or api action           ( e.g. "activate" )</span>
+        <span class="c1">//</span>
+        <span class="c1">// The api &amp; action are just simple annotated classes and methods.</span>
+        <span class="c1">//</span>
+        <span class="c1">// NOTES:</span>
+        <span class="c1">// This routing scheme is specifically designed to provide the following benefits:</span>
+        <span class="c1">//</span>
+        <span class="c1">// 1. Support a simplified routing scheme</span>
+        <span class="c1">// 2. Support a unified routing scheme between HTTP and CLI</span>
+        <span class="c1">// 3. Support easy discoverability by simply typing a "?" after each route part</span>
+        <span class="c1">//    e.g. area? | area.api? | area.api.action?</span>
+        <span class="c1">//</span>
+        <span class="c1">// For more information on APIs and CLI refer to the Slate API and CLI documentation.</span>
+
+        <span class="c1">// Here is a simple example of representing a route/request.</span>
+        <span class="c1">// NOTE: This example below is just to show the concept, in the Slate Kit CLI and Server,</span>
+        <span class="c1">// the request is appropriately built from either a CLI Command or the</span>
+        <span class="c1">// SparkJava request ( with a thin abstraction layer ). The requests are</span>
+        <span class="c1">// kept very simple/light for maximum performance and data is NEVER copied.</span>
+        <span class="kd">val</span> <span class="py">request</span> <span class="p">=</span> <span class="n">Request</span><span class="p">(</span>
                 <span class="n">path</span>     <span class="p">=</span> <span class="s">"app.users.activate"</span><span class="p">,</span>
                 <span class="n">parts</span>    <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"app"</span><span class="p">,</span> <span class="s">"users"</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">),</span>
                 <span class="n">source</span>   <span class="p">=</span> <span class="s">"cli"</span><span class="p">,</span>
@@ -202,60 +202,59 @@
                 <span class="n">tag</span>      <span class="p">=</span> <span class="n">Random</span><span class="p">.</span><span class="n">stringGuid</span><span class="p">()</span>
         <span class="p">)</span>
 
-        <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
-</span>        <span class="c1">// This allows easy construction of results/status from a server layer
-</span>        <span class="c1">// instead of a controller/api layer
-</span>
-        <span class="c1">// CASE 1: Get the path of the request
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">path</span> <span class="p">)</span>
+        <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes</span>
+        <span class="c1">// This allows easy construction of results/status from a server layer</span>
+        <span class="c1">// instead of a controller/api layer</span>
+        <span class="c1">// CASE 1: Get the path of the request</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">path</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 2: Get the parts of the path
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">parts</span> <span class="p">)</span>
+        <span class="c1">// CASE 2: Get the parts of the path</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">parts</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 3: Get the area/api/action
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">area</span>   <span class="p">)</span>
+        <span class="c1">// CASE 3: Get the area/api/action</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">area</span>   <span class="p">)</span>
         <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span>   <span class="p">)</span>
         <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">action</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4a: Get a header named "api-key"
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getString</span><span class="p">(</span><span class="s">"api-key"</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 4a: Get a header named "api-key"</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getString</span><span class="p">(</span><span class="s">"api-key"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4b: Get a header named "sample-id" as integer
-</span>        <span class="c1">// IF its not there, this will return a 0 as getInt
-</span>        <span class="c1">// returns a non-nullable value
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 4b: Get a header named "sample-id" as integer</span>
+        <span class="c1">// IF its not there, this will return a 0 as getInt</span>
+        <span class="c1">// returns a non-nullable value</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4c: Get a header named "sample-id" as nullable integer
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 4c: Get a header named "sample-id" as nullable integer</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 4d: Get a header named "sample-id" as integer with default
-</span>        <span class="c1">// value if its not there
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 4d: Get a header named "sample-id" as integer with default</span>        
+        <span class="c1">// value if its not there</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"sample-id"</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 5a: Get a parameter named "userId" as integer
-</span>        <span class="c1">// IF its not there, this will return a 0 as getInt
-</span>        <span class="c1">// returns a non-nullable value
-</span>        <span class="c1">// The value is obtained from query string if get,
-</span>        <span class="c1">// otherwise, if the request is a post, the value is
-</span>        <span class="c1">// first checked in the body ( json data ) before checking
-</span>        <span class="c1">// the query params
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"userId"</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 5a: Get a parameter named "userId" as integer</span>
+        <span class="c1">// IF its not there, this will return a 0 as getInt</span>
+        <span class="c1">// returns a non-nullable value</span>
+        <span class="c1">// The value is obtained from query string if get,</span>
+        <span class="c1">// otherwise, if the request is a post, the value is</span>
+        <span class="c1">// first checked in the body ( json data ) before checking</span>
+        <span class="c1">// the query params</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"userId"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 5b: Get a parameter named "userId" as nullable integer
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"userId"</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 5b: Get a parameter named "userId" as nullable integer</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOpt</span><span class="p">(</span><span class="s">"userId"</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 5c: Get a parameter named "userId" as integer with default
-</span>        <span class="c1">// value if its not there
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"userId"</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
+        <span class="c1">// CASE 5c: Get a parameter named "userId" as integer with default</span>        
+        <span class="c1">// value if its not there</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="o">?.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"userId"</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 6: Get the verb ( only applicable to HTTP requests )
-</span>        <span class="c1">// For the CLI - the verb will be "cli"
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">verb</span> <span class="p">)</span>
+        <span class="c1">// CASE 6: Get the verb ( only applicable to HTTP requests )</span>        
+        <span class="c1">// For the CLI - the verb will be "cli"</span>        
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">verb</span> <span class="p">)</span>
 
-        <span class="c1">// CASE 7: Get the tag
-</span>        <span class="c1">// The request is immutable and the tag field is populated with
-</span>        <span class="c1">// a random guid, so if an error occurs this tag links the request to the error.
-</span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">tag</span> <span class="p">)</span>
+        <span class="c1">// CASE 7: Get the tag</span>
+        <span class="c1">// The request is immutable and the tag field is populated with</span>
+        <span class="c1">// a random guid, so if an error occurs this tag links the request to the error.</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">tag</span> <span class="p">)</span>
         
 
 </code></pre>

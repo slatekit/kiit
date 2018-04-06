@@ -134,15 +134,15 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cli.CliCommand</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cli.CliCommand</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cli.CliService</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cli.CliSettings</span>
 
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.apis.ApiConstants</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.apis.ApiConstants</span>
 <span class="k">import</span> <span class="nn">slatekit.common.InputArgs</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Request</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
@@ -161,17 +161,19 @@
 
     <span class="kd">class</span> <span class="nc">AppShell</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">AppMeta</span><span class="p">,</span> <span class="n">folders</span><span class="p">:</span> <span class="n">Folders</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">CliSettings</span><span class="p">)</span> <span class="p">:</span> <span class="n">CliService</span><span class="p">(</span><span class="n">folders</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span> <span class="p">{</span>
         
-        <span class="cm">/**
+        <span class="cm">
+        /**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
          */</span>
         <span class="k">override</span> <span class="k">fun</span> <span class="nf">onShellStart</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
-            <span class="c1">// You don't need to override this as the base method displays help info
-</span>            <span class="n">_view</span><span class="p">.</span><span class="n">showHelp</span><span class="p">()</span>
+            <span class="c1">// You don't need to override this as the base method displays help info</span>            
+            <span class="n">_view</span><span class="p">.</span><span class="n">showHelp</span><span class="p">()</span>
             <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onShellStart - starting myapp command line interface"</span><span class="p">)</span>
         <span class="p">}</span>
 
 
-        <span class="cm">/**
+        <span class="cm">
+        /**
          * Use case 3b : ( OPTIONAL ) do some stuff before ending the shell this is called
          */</span>
         <span class="k">override</span> <span class="k">fun</span> <span class="nf">onShellEnd</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
@@ -179,7 +181,8 @@
         <span class="p">}</span>
 
 
-        <span class="cm">/**
+        <span class="cm">
+        /**
          * Use case 3c : ( OPTIONAL ) do some stuff before executing the command
          *
          * @param cmd
@@ -199,11 +202,11 @@
          */</span>
         <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCommandExecuteInternal</span><span class="p">(</span><span class="n">cmd</span><span class="p">:</span> <span class="n">CliCommand</span><span class="p">):</span> <span class="n">CliCommand</span> <span class="p">{</span>
 
-            <span class="c1">// 1. Here is where you can put in your code to handle the command.
-</span>            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">fullName</span><span class="p">())</span>
+            <span class="c1">// 1. Here is where you can put in your code to handle the command.</span>            
+            <span class="n">_writer</span><span class="p">.</span><span class="n">highlight</span><span class="p">(</span><span class="s">"\thook: onCommandExecuteInternal handling : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">fullName</span><span class="p">())</span>
 
-            <span class="c1">// 2. You have access to all the command fields and arguments.
-</span>            <span class="n">println</span><span class="p">(</span><span class="s">"line   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">)</span>
+            <span class="c1">// 2. You have access to all the command fields and arguments.</span>            
+            <span class="n">println</span><span class="p">(</span><span class="s">"line   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">)</span>
             <span class="n">println</span><span class="p">(</span><span class="s">"call   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">fullName</span><span class="p">())</span>
             <span class="n">println</span><span class="p">(</span><span class="s">"area   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">area</span><span class="p">)</span>
             <span class="n">println</span><span class="p">(</span><span class="s">"api   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
@@ -211,21 +214,20 @@
             <span class="n">println</span><span class="p">(</span><span class="s">"arg #  : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
             <span class="n">println</span><span class="p">(</span><span class="s">"arg 1   : "</span> <span class="p">+</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"email"</span><span class="p">))</span>
 
-            <span class="c1">// 3. You can integrate with the API's feature ( for calling methods dynamically )
-</span>            <span class="c1">// Refer to the APIs module.
-</span>
-            <span class="c1">// 3a. Create global inputs to the API ( e.g. api-keys )
-</span>            <span class="kd">val</span> <span class="py">opts</span> <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Any</span><span class="p">&gt;(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"123456789"</span><span class="p">))</span>
+            <span class="c1">// 3. You can integrate with the API's feature ( for calling methods dynamically )</span>            
+            <span class="c1">// Refer to the APIs module.</span>
+            <span class="c1">// 3a. Create global inputs to the API ( e.g. api-keys )</span>            
+            <span class="kd">val</span> <span class="py">opts</span> <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Any</span><span class="p">&gt;(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"123456789"</span><span class="p">))</span>
 
-            <span class="c1">// 3b. Convert the shell command to an api command
-</span>            <span class="kd">val</span> <span class="py">req</span> <span class="p">=</span> <span class="n">Request</span><span class="p">.</span><span class="n">cli</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">,</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">ApiConstants</span><span class="p">.</span><span class="n">SourceCLI</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+            <span class="c1">// 3b. Convert the shell command to an api command</span>            
+            <span class="kd">val</span> <span class="py">req</span> <span class="p">=</span> <span class="n">Request</span><span class="p">.</span><span class="n">cli</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">line</span><span class="p">,</span> <span class="n">cmd</span><span class="p">.</span><span class="n">args</span><span class="p">,</span> <span class="n">opts</span><span class="p">,</span> <span class="n">ApiConstants</span><span class="p">.</span><span class="n">SourceCLI</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
 
-            <span class="c1">// 3c. Do something with the request
-</span>            <span class="c1">// you logic goes here.
-</span>            <span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="s">"Sample result from CLI for req: "</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="c1">// 3c. Do something with the request</span>            
+            <span class="c1">// you logic goes here.</span>            
+            <span class="kd">val</span> <span class="py">res</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="s">"Sample result from CLI for req: "</span> <span class="p">+</span> <span class="n">req</span><span class="p">.</span><span class="n">path</span><span class="p">)</span>
 
-            <span class="c1">// 4. Now return the command w/ the new result.
-</span>            <span class="kd">val</span> <span class="py">cliResult</span> <span class="p">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">result</span> <span class="p">=</span> <span class="n">res</span><span class="p">)</span>
+            <span class="c1">// 4. Now return the command w/ the new result.</span>            
+            <span class="kd">val</span> <span class="py">cliResult</span> <span class="p">=</span> <span class="n">cmd</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">result</span> <span class="p">=</span> <span class="n">res</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">cliResult</span>
         <span class="p">}</span>
 
@@ -249,48 +251,43 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-        <span class="c1">// CASE 1: Create your own shell by extending the ShellService
-</span>        <span class="kd">val</span> <span class="py">shell</span> <span class="p">=</span> <span class="n">AppShell</span><span class="p">(</span><span class="n">AppMeta</span><span class="p">.</span><span class="n">none</span><span class="p">,</span> <span class="n">Folders</span><span class="p">.</span><span class="n">default</span><span class="p">,</span> <span class="n">CliSettings</span><span class="p">())</span>
+        <span class="c1">// CASE 1: Create your own shell by extending the ShellService</span>        
+        <span class="kd">val</span> <span class="py">shell</span> <span class="p">=</span> <span class="n">AppShell</span><span class="p">(</span><span class="n">AppMeta</span><span class="p">.</span><span class="n">none</span><span class="p">,</span> <span class="n">Folders</span><span class="p">.</span><span class="n">default</span><span class="p">,</span> <span class="n">CliSettings</span><span class="p">())</span>
 
 
-        <span class="c1">// CASE 2: (Optional) configure a startup command
-</span>        <span class="c1">// by setting it explicity through a method or setting
-</span>        <span class="c1">// the "_startupCommand" in your shells constructor
-</span>        <span class="c1">// shell.setStartupCommand("app.users.last -active=true")
-</span>
+        <span class="c1">// CASE 2: (Optional) configure a startup command</span>
+        <span class="c1">// by setting it explicity through a method or setting</span>
+        <span class="c1">// the "_startupCommand" in your shells constructor</span>
+        <span class="c1">// shell.setStartupCommand("app.users.last -active=true")</span>
 
-        <span class="c1">// CASE 3a: HOOK into start shell event
-</span>        <span class="c1">// see: "onShellStart" override in AppShell below
-</span>        <span class="c1">// This allows you to run some code when the shell is starting up but before running commands.
-</span>        <span class="c1">// simulating a "user entered command"
-</span>
-
-        <span class="c1">// CASE 3b: HOOK into end shell event
-</span>        <span class="c1">// see : "onShellEnd" override in AppShell below
-</span>        <span class="c1">// This allows you to run some code when the shell is ending but before it fully stops
-</span>
-
-        <span class="c1">// CASE 4: Example command line ( simulating user entered text )
-</span>        <span class="c1">// NOTE: the action "app.users.invite" is translated to "area.api.action"
-</span>        <span class="n">shell</span><span class="p">.</span><span class="n">onCommandExecute</span><span class="p">(</span><span class="s">"app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'"</span><span class="p">)</span>
+        <span class="c1">// CASE 3a: HOOK into start shell event</span>
+        <span class="c1">// see: "onShellStart" override in AppShell below</span>
+        <span class="c1">// This allows you to run some code when the shell is starting up but before running commands.</span>
+        <span class="c1">// simulating a "user entered command"</span>
 
 
-        <span class="c1">// CASE 5: exit
-</span>        <span class="c1">// you can type "exit" or "quit" to quit the shell
-</span>
+        <span class="c1">// CASE 3b: HOOK into end shell event</span>        
+        <span class="c1">// see : "onShellEnd" override in AppShell below</span>        
+        <span class="c1">// This allows you to run some code when the shell is ending but before it fully stops</span>
 
-        <span class="c1">// CASE 6: help
-</span>        <span class="c1">// you can type "?", "help" to show help info
-</span>
+        <span class="c1">// CASE 4: Example command line ( simulating user entered text )</span>        
+        <span class="c1">// NOTE: the action "app.users.invite" is translated to "area.api.action"</span>        
+        <span class="n">shell</span><span class="p">.</span><span class="n">onCommandExecute</span><span class="p">(</span><span class="s">"app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'"</span><span class="p">)</span>
 
-        <span class="c1">// CASE 7: API integration
-</span>        <span class="c1">// If you want to integrate with the API module ( which allows for calling apis dynamically )
-</span>        <span class="c1">// you can convert the CliCommand to an API command on the handler for commandExecuteInternal.
-</span>        <span class="c1">// Refer to the commandExecuteInternal and api setup code above.
-</span>
 
-        <span class="c1">// CASE 8: supply command line args ( e.g. from main )
-</span>        <span class="n">shell</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="c1">// CASE 5: exit</span>        
+        <span class="c1">// you can type "exit" or "quit" to quit the shell</span>
+
+        <span class="c1">// CASE 6: help</span>        
+        <span class="c1">// you can type "?", "help" to show help info</span>
+
+        <span class="c1">// CASE 7: API integration</span>
+        <span class="c1">// If you want to integrate with the API module ( which allows for calling apis dynamically )</span>
+        <span class="c1">// you can convert the CliCommand to an API command on the handler for commandExecuteInternal.</span>
+        <span class="c1">// Refer to the commandExecuteInternal and api setup code above.</span>
+
+        <span class="c1">// CASE 8: supply command line args ( e.g. from main )</span>        
+        <span class="n">shell</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
         
 
 </code></pre>

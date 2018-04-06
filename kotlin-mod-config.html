@@ -163,8 +163,8 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-        <span class="c1">// CASE 1: Load up config from resources directory
-</span>        <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">)</span>
+        <span class="c1">// CASE 1: Load up config from resources directory</span>        
+        <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">)</span>
 
         <span class="c1">// CASE 2: Get typed value: non-nullable</span>        
         <span class="c1">// NOTE: default value for typed returned if unavailable</span>        
@@ -194,70 +194,67 @@
         <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloatOrElse</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">,</span> <span class="m">0.0f</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDoubleOrElse</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">,</span> <span class="m">0.0</span><span class="p">))</span>
 
-        <span class="c1">// CASE 5: Get lists/maps
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"list  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getList</span><span class="p">(</span><span class="s">"listValInt"</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">))</span>
+        <span class="c1">// CASE 5: Get lists/maps</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">"list  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getList</span><span class="p">(</span><span class="s">"listValInt"</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"map   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getMap</span><span class="p">(</span><span class="s">"mapValInt"</span><span class="p">,</span> <span class="n">String</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">))</span>
         <span class="n">println</span><span class="p">()</span>
 
-        <span class="c1">// More features such as decryption, file refs and more.
-</span>        <span class="c1">// ...
-</span>
-        <span class="c1">// CASE 6: Get the environment selection ( env, dev, qa ) from conf or default
-</span>        <span class="kd">val</span> <span class="py">env</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">env</span><span class="p">()</span>
+        <span class="c1">// More features such as decryption, file refs and more.</span>        
+        <span class="c1">// ...</span>
+        <span class="c1">// CASE 6: Get the environment selection ( env, dev, qa ) from conf or default</span>        
+        <span class="kd">val</span> <span class="py">env</span> <span class="p">=</span> <span class="n">conf</span><span class="p">.</span><span class="n">env</span><span class="p">()</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"${env.name}, ${env.mode.name}, ${env.key}"</span><span class="p">)</span>
         <span class="n">println</span><span class="p">()</span>
 
 
-        <span class="c1">// CASE 7: Inherit config from another config in resources folder
-</span>        <span class="c1">// e.g. env.dev.conf ( dev environment ) can inherit from env.conf ( common )
-</span>        <span class="kd">val</span> <span class="py">confs1</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
+        <span class="c1">// CASE 7: Inherit config from another config in resources folder</span>        
+        <span class="c1">// e.g. env.dev.conf ( dev environment ) can inherit from env.conf ( common )</span>
+        <span class="kd">val</span> <span class="py">confs1</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">dbConInherited</span> <span class="p">=</span> <span class="n">confs1</span><span class="p">.</span><span class="n">dbCon</span><span class="p">()</span>
         <span class="n">printDbCon</span><span class="p">(</span><span class="s">"db con - inherited : "</span><span class="p">,</span> <span class="n">dbConInherited</span><span class="p">)</span>
 
 
-        <span class="c1">// CASE 8: Get overriden inherited config settings
-</span>        <span class="c1">// e.g. env.loc.conf ( local environment ) overrides settings inherited from env.conf
-</span>        <span class="kd">val</span> <span class="py">confs2</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.loc.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
+        <span class="c1">// CASE 8: Get overriden inherited config settings</span>        
+        <span class="c1">// e.g. env.loc.conf ( local environment ) overrides settings inherited from env.conf</span>        
+        <span class="kd">val</span> <span class="py">confs2</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.loc.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">dbConOverride</span> <span class="p">=</span> <span class="n">confs2</span><span class="p">.</span><span class="n">dbCon</span><span class="p">()</span>
         <span class="n">printDbCon</span><span class="p">(</span><span class="s">"db con - override : "</span><span class="p">,</span> <span class="n">dbConOverride</span><span class="p">)</span>
 
 
-        <span class="c1">// CASE 9: Multiple db settings, get 1 using a prefix
-</span>        <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefix.
-</span>        <span class="kd">val</span> <span class="py">confs3</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.qa1.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
+        <span class="c1">// CASE 9: Multiple db settings, get 1 using a prefix</span>        
+        <span class="c1">// e.g. env.qa.conf ( qa environment ) with 2 db settings get one with "qa2" prefi.</span>        
+        <span class="kd">val</span> <span class="py">confs3</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.qa1.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">dbConMulti</span> <span class="p">=</span> <span class="n">confs3</span><span class="p">.</span><span class="n">dbCon</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">)</span>
         <span class="n">printDbCon</span><span class="p">(</span><span class="s">"db con - multiple : "</span><span class="p">,</span> <span class="n">dbConMulti</span><span class="p">)</span>
 
 
-        <span class="c1">// CASE 6: File from user directory:
-</span>        <span class="c1">// You can refer to a file path using a uri syntax:
-</span>        <span class="c1">//
-</span>        <span class="c1">// SYNTAX:
-</span>        <span class="c1">// - "jars://"  refer to resources directory in the jar.
-</span>        <span class="c1">// - "user://"  refer to user.home directory.
-</span>        <span class="c1">// - "file://"  refer to an explicit path to the file
-</span>        <span class="c1">// - "file://"  refer to a relative path to the file from working directory
-</span>
-        <span class="c1">// EXAMPLES:
-</span>        <span class="c1">// - jar://env.qa.conf
-</span>        <span class="c1">// - user://slatekit/conf/env.qa.conf
-</span>        <span class="c1">// - file://c:/slatekit/system/slate.shell/conf/env.qa.conf
-</span>        <span class="c1">// - file://./conf/env.qa.conf
-</span>        <span class="c1">//
-</span>        <span class="c1">// CONFIG
-</span>        <span class="c1">//
-</span>        <span class="c1">// db {
-</span>        <span class="c1">//   location: "user://slatekit/conf/db.conf"
-</span>        <span class="c1">// }
-</span>        <span class="kd">val</span> <span class="py">confs4</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.pro.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
+        <span class="c1">// CASE 6: File from user directory:</span>
+        <span class="c1">// You can refer to a file path using a uri syntax:</span>
+        <span class="c1">//</span><span class="c1">// SYNTAX:</span>
+        <span class="c1">// - "jars://"  refer to resources directory in the jar.</span>
+        <span class="c1">// - "user://"  refer to user.home directory.</span>
+        <span class="c1">// - "file://"  refer to an explicit path to the file</span>
+        <span class="c1">// - "file://"  refer to a relative path to the file from working directory</span>
+        <span class="c1">// EXAMPLES:</span>        
+        <span class="c1">// - jar://env.qa.conf</span>        
+        <span class="c1">// - user://slatekit/conf/env.qa.conf</span>        
+        <span class="c1">// - file://c:/slatekit/system/slate.shell/conf/env.qa.conf</span>        
+        <span class="c1">// - file://./conf/env.qa.conf</span>        
+        <span class="c1">//</span>        
+        <span class="c1">// CONFIG</span>        
+        <span class="c1">//</span>        
+        <span class="c1">// db {</span>        
+        <span class="c1">//   location: "user://slatekit/conf/db.conf"</span>        
+        <span class="c1">// }</span>       
+        <span class="kd">val</span> <span class="py">confs4</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.pro.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">dbConFile</span> <span class="p">=</span> <span class="n">confs4</span><span class="p">.</span><span class="n">dbCon</span><span class="p">(</span><span class="n">prefix</span> <span class="p">=</span> <span class="s">"db"</span><span class="p">)</span>
         <span class="n">printDbCon</span><span class="p">(</span><span class="s">"db con - file ref: "</span><span class="p">,</span> <span class="n">dbConFile</span><span class="p">)</span>
 
 
-        <span class="c1">// CASE 10: Decryp encrypted strings in the config file
-</span>        <span class="c1">// e.g.
-</span>        <span class="c1">// db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
-</span>        <span class="kd">val</span> <span class="py">encryptor</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
+        <span class="c1">// CASE 10: Decryp encrypted strings in the config file</span>        
+        <span class="c1">// e.g.</span>        
+        <span class="c1">// db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"</span>        
+        <span class="kd">val</span> <span class="py">encryptor</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">)</span>
         <span class="kd">val</span> <span class="py">confs5</span> <span class="p">=</span> <span class="n">ConfFuncs</span><span class="p">.</span><span class="n">loadWithFallbackConfig</span><span class="p">(</span><span class="s">"env.qa1.conf"</span><span class="p">,</span> <span class="s">"env.conf"</span><span class="p">,</span> <span class="n">enc</span> <span class="p">=</span> <span class="n">encryptor</span><span class="p">)</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"db user decrypted : "</span> <span class="p">+</span> <span class="n">confs5</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"db.user"</span><span class="p">))</span>
         <span class="n">println</span><span class="p">(</span><span class="s">"db pswd decrypted : "</span> <span class="p">+</span> <span class="n">confs5</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"db.pswd"</span><span class="p">))</span>

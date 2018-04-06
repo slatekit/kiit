@@ -134,14 +134,14 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.common.lex.Lexer</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.lex.Lexer</span>
 <span class="k">import</span> <span class="nn">slatekit.common.lex.Token</span>
 <span class="k">import</span> <span class="nn">slatekit.common.lex.TokenType</span>
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 
@@ -161,42 +161,42 @@
 
     <span class="kd">val</span> <span class="py">lexer</span> <span class="p">=</span> <span class="n">Lexer</span><span class="p">(</span><span class="s">"-env:dev -text:'hello word' -batch:10 "</span><span class="p">)</span>
 
-    <span class="c1">// CASE 1: Get all the tokens at once
-</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">lexer</span><span class="p">.</span><span class="n">parse</span><span class="p">()</span>
+    <span class="c1">// CASE 1: Get all the tokens at once</span>    
+    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">lexer</span><span class="p">.</span><span class="n">parse</span><span class="p">()</span>
     <span class="n">println</span><span class="p">(</span><span class="s">"tokens:"</span> <span class="p">+</span> <span class="n">result</span><span class="p">.</span><span class="n">total</span><span class="p">)</span>
 
-    <span class="c1">// Print all the tokens
-</span>    <span class="n">result</span><span class="p">.</span><span class="n">tokens</span><span class="p">.</span><span class="n">forEach</span><span class="p">{</span> <span class="n">printToken</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
+    <span class="c1">// Print all the tokens</span>    
+    <span class="n">result</span><span class="p">.</span><span class="n">tokens</span><span class="p">.</span><span class="n">forEach</span><span class="p">{</span> <span class="n">printToken</span><span class="p">(</span><span class="n">it</span><span class="p">)</span> <span class="p">}</span>
 
-    <span class="c1">// Results:
-</span>    <span class="c1">// pos:1 , line:0, type:NonAlphaNum, text:'-'
-</span>    <span class="c1">// pos:2 , line:0, type:Ident      , text:'env'
-</span>    <span class="c1">// pos:3 , line:0, type:NonAlphaNum, text:':'
-</span>    <span class="c1">// pos:4 , line:0, type:Ident      , text:'dev'
-</span>    <span class="c1">// pos:6 , line:0, type:NonAlphaNum, text:'-'
-</span>    <span class="c1">// pos:7 , line:0, type:Ident      , text:'text'
-</span>    <span class="c1">// pos:8 , line:0, type:NonAlphaNum, text:':'
-</span>    <span class="c1">// pos:9 , line:0, type:String     , text:'hello word'
-</span>    <span class="c1">// pos:11, line:0, type:NonAlphaNum, text:'-'
-</span>    <span class="c1">// pos:12, line:0, type:Ident      , text:'batch'
-</span>    <span class="c1">// pos:13, line:0, type:NonAlphaNum, text:':'
-</span>    <span class="c1">// pos:14, line:0, type:Number     , text:'10'
-</span>    <span class="c1">// pos:15, line:0, type:End        , text:'&lt;END&gt;'
+    <span class="c1">// Results:</span>
+    <span class="c1">// pos:1 , line:0, type:NonAlphaNum, text:'-'</span>
+    <span class="c1">// pos:2 , line:0, type:Ident      , text:'env'</span>
+    <span class="c1">// pos:3 , line:0, type:NonAlphaNum, text:':'</span>
+    <span class="c1">// pos:4 , line:0, type:Ident      , text:'dev'</span>
+    <span class="c1">// pos:6 , line:0, type:NonAlphaNum, text:'-'</span>
+    <span class="c1">// pos:7 , line:0, type:Ident      , text:'text'</span>
+    <span class="c1">// pos:8 , line:0, type:NonAlphaNum, text:':'</span>
+    <span class="c1">// pos:9 , line:0, type:String     , text:'hello word'</span>
+    <span class="c1">// pos:11, line:0, type:NonAlphaNum, text:'-'</span>
+    <span class="c1">// pos:12, line:0, type:Ident      , text:'batch'</span>
+    <span class="c1">// pos:13, line:0, type:NonAlphaNum, text:':'</span>
+    <span class="c1">// pos:14, line:0, type:Number     , text:'10'</span>
+    <span class="c1">// pos:15, line:0, type:End        , text:'&lt;END&gt;'</span>
 </span>
 
-    <span class="c1">// CASE 2: Token definition
-</span>    <span class="c1">// Tokens are created/parsed with fields:
-</span>    <span class="c1">// - raw text parsed
-</span>    <span class="c1">// - value ( converted from raw text )
-</span>    <span class="c1">// - token type
-</span>    <span class="c1">// - line #
-</span>    <span class="c1">// - char #
-</span>    <span class="c1">// - index
-</span>    <span class="kd">val</span> <span class="py">token</span> <span class="p">=</span> <span class="n">Token</span><span class="p">(</span><span class="s">"env"</span><span class="p">,</span> <span class="s">"env"</span><span class="p">,</span> <span class="n">TokenType</span><span class="p">.</span><span class="n">Ident</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+    <span class="c1">// CASE 2: Token definition</span>
+    <span class="c1">// Tokens are created/parsed with fields:</span>
+    <span class="c1">// - raw text parsed</span>
+    <span class="c1">// - value ( converted from raw text )</span>
+    <span class="c1">// - token type</span>
+    <span class="c1">// - line #</span>
+    <span class="c1">// - char #</span>
+    <span class="c1">// - index</span>
+    <span class="kd">val</span> <span class="py">token</span> <span class="p">=</span> <span class="n">Token</span><span class="p">(</span><span class="s">"env"</span><span class="p">,</span> <span class="s">"env"</span><span class="p">,</span> <span class="n">TokenType</span><span class="p">.</span><span class="n">Ident</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
     <span class="n">println</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
 
-    <span class="c1">// CASE 3: Tokens list
-</span>    <span class="c1">// Coming soon. Tokens can be iterated over with assertions
+    <span class="c1">// CASE 3: Tokens list</span>    
+    <span class="c1">// Coming soon. Tokens can be iterated over with assertions
 </span>    
 
 </code></pre>

@@ -78,7 +78,7 @@
                      
                       <!-- Heading Area -->
                       <div class="text text-right col-md-6 col-sm-12">
-                          <h2 class="h1 has-text-shadow">Components <br/> </h2>
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
                       </div>
                   </div>
 
@@ -90,17 +90,17 @@
           <!--=============== About Section ===============-->
           <section id="about" class="about no-padding-bottom">
               <div class="container">
-          				<h1 id="aws-s3">AWS-S3</h1>
+          				<h1 id="smartstrings">SmartStrings</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Abstraction layer on cloud file storage to Amazon S3</td>
+      <td>A way to store, validate and describe strongly typed and formatted strings</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2018-03-19</td>
+      <td>2018-03-29</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
@@ -108,15 +108,15 @@
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slatekit.cloud.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slatekit.cloud.aws</td>
+      <td>slatekit.common.types</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slatekit.cloud.aws.AwsCloudFiles.kt</td>
+      <td>slatekit.common.types.Email.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -124,88 +124,99 @@
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Aws_S3.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Aws_S3.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_SmartStrings.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_SmartStrings.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td>slatekit.common.jar slatekit.core.jar</td>
+      <td> </td>
     </tr>
   </tbody>
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
-<span class="k">import</span> <span class="nn">slatekit.cloud.aws.AwsCloudFiles</span>
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.common.types.*</span>
 
 
 <span class="c1">// optional </span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
-<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
-<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
-
 
 </code></pre>
 </div>
 
 <h2 id="setup">Setup</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>
-
-    <span class="c1">// Not storing any key/secret in source code for security purposes</span>    
-    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"</span>    
-    <span class="kd">val</span> <span class="py">files1</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-files-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
-
-    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"</span>    
-    <span class="c1">// Specify the api key section as "sqs"</span>    
-    <span class="kd">val</span> <span class="py">files2</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-files-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"user://myapp/conf/files.conf"</span><span class="p">,</span> <span class="s">"s3"</span><span class="p">)</span>
-
-    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"</span>    
-    <span class="c1">// Specify the api key section as "sqs"</span>   
-    <span class="kd">val</span> <span class="py">files3</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"user://myapp/conf/files.conf"</span><span class="p">,</span> <span class="s">"s3-1"</span><span class="p">)</span>
-
-    
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code>
+<span class="n">n</span><span class="p">/</span><span class="n">a</span>
 
 </code></pre>
 </div>
 
 <h2 id="usage">Usage</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Connect using parameters</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="c1">// Smart strings provide a way to store, validate and describe</span>
+        <span class="c1">// a strongly typed/formatted string. This concept is called</span>
+        <span class="c1">// a smart string and is designed to be used specifically at</span>
+        <span class="c1">// application boundaries ( such as API endpoints ).</span>
+        <span class="c1">// There are a few smart strings provided out of the box such as</span>
+        <span class="c1">// 1. Email</span>
+        <span class="c1">// 2. PhoneUS</span>
+        <span class="c1">// 3. SSN</span>
+        <span class="c1">// 4. ZipCode</span>
+        <span class="kd">val</span> <span class="py">email</span> <span class="p">=</span> <span class="n">Email</span><span class="p">(</span><span class="s">"batman@gotham.com"</span><span class="p">,</span> <span class="k">true</span><span class="p">)</span>
 
-    <span class="c1">// Use case 2: create using just name and content</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"version 1"</span><span class="p">)</span>
+        <span class="c1">// Case 1: Get the actual value</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"value: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 
-    <span class="c1">// Use case 3: update using just name and content</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"version 2"</span><span class="p">)</span>
+        <span class="c1">// Case 2: Check if valid</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"valid?: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">isValid</span><span class="p">)</span>
 
-    <span class="c1">// Use case 4: create using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"version 1"</span><span class="p">)</span>
+        <span class="c1">// Case 3: Get the name / type of smart string</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"name: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="c1">// Use case 5: update using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"version 2"</span><span class="p">)</span>
+        <span class="c1">// Case 4: Description</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"desc: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">desc</span><span class="p">)</span>
 
-    <span class="c1">// Use case 6: get file as a text using just name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">)</span>
+        <span class="c1">// Case 4: Examples of valid string</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"examples: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">examples</span><span class="p">)</span>
 
-    <span class="c1">// Use case 7: get file using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">)</span>
+        <span class="c1">// Case 5: Format of the string</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"format(s): "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">formats</span><span class="p">)</span>
 
-    <span class="c1">// Use case 8: download file to local folder</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"c:/dev/temp/"</span><span class="p">)</span>
+        <span class="c1">// Case 6: The regular expression representing string</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"reg ex: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">expressions</span><span class="p">)</span>
 
-    <span class="c1">// Use case 9: download using folder and file name to local folder</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"c:/dev/temp"</span><span class="p">)</span>
+        <span class="c1">// Case 7: Get the first example</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"example: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">example</span><span class="p">())</span>
 
-    <span class="c1">// Use case 10: delete file by just the name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">)</span>
+        <span class="c1">// Case 8: Get the Email specific values ( domain )</span>        
+        <span class="n">println</span><span class="p">(</span><span class="s">"domain?: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">domain</span><span class="p">())</span>
+        <span class="n">println</span><span class="p">(</span><span class="s">"dashed?: "</span> <span class="p">+</span> <span class="n">email</span><span class="p">.</span><span class="n">isDashed</span><span class="p">())</span>
 
-    <span class="c1">// Use case 11: delete using folder and name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">)</span>
-    
+        <span class="c1">// Case 9: Other smart strings</span>        
+        <span class="kd">val</span> <span class="py">phone</span> <span class="p">=</span> <span class="n">PhoneUS</span><span class="p">(</span><span class="s">"212-456-7890"</span><span class="p">)</span>
+        
 
 </code></pre>
 </div>
+
+<h2 id="output">Output</h2>
+
+<pre><code class="language-bat">  value: batman@gotham.com
+  valid?: true
+  name: Email
+  desc: Email Address
+  examples: [user@abc.com]
+  format(s): [xxxx@xxxxxxx]
+  reg ex: [([\w\$\.\-_]+)@([\w\.]+)]
+  example: user@abc.com
+  domain?: gotham.com
+  dashed?: false
+
+</code></pre>
 
 
               </div>

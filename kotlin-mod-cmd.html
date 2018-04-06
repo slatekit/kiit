@@ -134,13 +134,13 @@
 </table>
 
 <h2 id="import">Import</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
-</span><span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 
 
 
-<span class="c1">// optional 
-</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="c1">// optional </span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.success</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmds</span>
@@ -191,42 +191,42 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: get all the commands available
-</span>    <span class="kd">val</span> <span class="py">names</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">names</span>
+    <span class="c1">// Use case 1: get all the commands available</span>    
+    <span class="kd">val</span> <span class="py">names</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">names</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">names</span> <span class="p">)</span>
 
-    <span class="c1">// Use case 2: get the size of the commands
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">commands</span><span class="p">.</span><span class="n">size</span> <span class="p">)</span>
+    <span class="c1">// Use case 2: get the size of the commands</span>    
+    <span class="n">println</span><span class="p">(</span> <span class="n">commands</span><span class="p">.</span><span class="n">size</span> <span class="p">)</span>
 
-    <span class="c1">// Use case 3: run a single command by its api
-</span>    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
+    <span class="c1">// Use case 3: run a single command by its api</span>    
+    <span class="kd">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">run</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span>
 
-    <span class="c1">// Print info about the result and time stamps.
-</span>    <span class="c1">// - api   : api of the command
-</span>    <span class="c1">// - success: whether the command was successful or not
-</span>    <span class="c1">// - message: message from the command
-</span>    <span class="c1">// - started: start time of the command
-</span>    <span class="c1">// - ended  : end time of the command
-</span>    <span class="c1">// - result : the result of the command
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">name</span>    <span class="p">)</span>
+    <span class="c1">// Print info about the result and time stamps.</span>
+    <span class="c1">// - api   : api of the command</span>
+    <span class="c1">// - success: whether the command was successful or not</span>
+    <span class="c1">// - message: message from the command</span>
+    <span class="c1">// - started: start time of the command</span>
+    <span class="c1">// - ended  : end time of the command</span>
+    <span class="c1">// - result : the result of the command</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">name</span>    <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">success</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">message</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">started</span> <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">ended</span>   <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">result</span><span class="p">.</span><span class="n">result</span>  <span class="p">)</span>
 
-    <span class="c1">// Use case 4: get the current state of the command
-</span>    <span class="kd">val</span> <span class="py">state</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">state</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">)</span>
+    <span class="c1">// Use case 4: get the current state of the command</span>    
+    <span class="kd">val</span> <span class="py">state</span> <span class="p">=</span> <span class="n">commands</span><span class="p">.</span><span class="n">state</span><span class="p">(</span><span class="s">"clean_temp_dir"</span><span class="p">)</span>
 
-    <span class="c1">// Print state of the command
-</span>    <span class="c1">// - api        : api of the command
-</span>    <span class="c1">// - msg         : message from the command
-</span>    <span class="c1">// - hasRun      : whether or not the command has run at all
-</span>    <span class="c1">// - runCount    : number of time the command was run
-</span>    <span class="c1">// - lastRunTime : the timestamp of the last run
-</span>    <span class="c1">// - errorCount  : the number or errors
-</span>    <span class="c1">// - lastResult  : the result of the last run ( see above )
-</span>    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">name</span>        <span class="p">)</span>
+    <span class="c1">// Print state of the command</span>
+    <span class="c1">// - api        : api of the command</span>
+    <span class="c1">// - msg         : message from the command</span>
+    <span class="c1">// - hasRun      : whether or not the command has run at all</span>
+    <span class="c1">// - runCount    : number of time the command was run</span>
+    <span class="c1">// - lastRunTime : the timestamp of the last run</span>
+    <span class="c1">// - errorCount  : the number or errors</span>
+    <span class="c1">// - lastResult  : the result of the last run ( see above )</span>
+    <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">name</span>        <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">msg</span>         <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">hasRun</span>      <span class="p">)</span>
     <span class="n">println</span><span class="p">(</span> <span class="n">state</span><span class="p">.</span><span class="n">runCount</span>    <span class="p">)</span>
