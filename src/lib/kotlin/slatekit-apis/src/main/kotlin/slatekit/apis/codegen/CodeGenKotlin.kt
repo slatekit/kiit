@@ -1,12 +1,13 @@
 package slatekit.apis.codegen
 
-import slatekit.common.Result
+
+import slatekit.apis.core.Action
 import slatekit.common.newline
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
-import kotlin.reflect.KType
 
 
 class CodeGenKotlin(settings:CodeGenSettings) : CodeGenBase(settings) {
@@ -34,9 +35,7 @@ class CodeGenKotlin(settings:CodeGenSettings) : CodeGenBase(settings) {
             Pair(KTypes.KDecLongType       , TypeInfo(true, false, "String"  , "String"  , KTypes.KDecLongClass      , KTypes.KDecLongClass      , "String"  + ".class")),
             Pair(KTypes.KDecDoubleType     , TypeInfo(true, false, "String"  , "String"  , KTypes.KDecDoubleClass    , KTypes.KDecDoubleClass    , "String"  + ".class")),
             Pair(KTypes.KAnyType           , TypeInfo(false,false, "Object"  , "Object"  , KTypes.KAnyClass          , KTypes.KAnyClass          , "Object"  + ".class"))
-
-    )
-
+    ).toMap()
 
 
     override fun buildModelInfo(cls:KClass<*>): String {
@@ -51,51 +50,40 @@ class CodeGenKotlin(settings:CodeGenSettings) : CodeGenBase(settings) {
         return fields
     }
 
+
+    override fun buildArg(parameter: KParameter): String {
+        return parameter.name + " : " + buildTypeName(parameter.type).targetParameterType
+    }
+
+
     /**
-     * builds the name of the datatype for the target(Java) language.
+     * builds a string of parameters to put into the query string.
+     * e.g. queryParams.put("id", id);
      */
-    override fun buildTypeName(tpe: KType): TypeInfo {
-        return when (tpe) {
-            else                      -> {
-                val cls = tpe.classifier as KClass<*>
-                if(cls == Result::class) {
-                    val genType = tpe.arguments[0].type!!
-                    val finalType = buildTypeName(genType)
-                    finalType
-                }
-                else if (cls.supertypes.contains(KTypes.KSmartStringType)){
-                    TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass, "String.class")
-                }
-                else if(cls == List::class){
-                    val listType = tpe.arguments[0].type!!
-                    val listCls = KTypes.getClassFromType(listType)
-                    val listTypeInfo = buildTypeName(listType)
-                    val typeSig = "List<" + listTypeInfo.targetReturnType + ">"
-                    TypeInfo(false, true, typeSig, typeSig, List::class, listCls, listTypeInfo.conversionType)
-                }
-                else if(cls == Map::class){
-                    val tpeKey = tpe.arguments[0].type!!
-                    val tpeVal = tpe.arguments[1].type!!
-                    //val clsKey = KTypes.getClassFromType(tpeKey)
-                    val clsVal = KTypes.getClassFromType(tpeVal)
-                    val keyTypeInfo = buildTypeName(tpeKey)
-                    val valTypeInfo = buildTypeName(tpeVal)
-                    val sig = "Map<" + keyTypeInfo.targetReturnType + "," + valTypeInfo.targetReturnType + ">"
-                    TypeInfo(false, true, sig, sig, Map::class, clsVal, "${keyTypeInfo.conversionType},${valTypeInfo.conversionType}")
-                }
-                else if(cls == Pair::class) {
-                    val tpeFirst = tpe.arguments[0].type!!
-                    val tpeSecond = tpe.arguments[1].type!!
-                    val firstTypeInfo = buildTypeName(tpeFirst)
-                    val secondTypeInfo = buildTypeName(tpeSecond)
-                    val sig = "Pair<" + firstTypeInfo.targetReturnType + "," + secondTypeInfo.targetReturnType + ">"
-                    TypeInfo(false, false, sig, sig, cls, cls, "${firstTypeInfo.conversionType},${secondTypeInfo.conversionType}")
-                }
-                else {
-                    val sig = cls.simpleName ?: ""
-                    TypeInfo(false, false, sig, sig, cls, cls, sig + ".class")
-                }
-            }
+    override fun buildQueryParams(reg: Action): String {
+        return if(buildVerb(reg.name) == "get" ) {
+            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+                acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
+            })
+        }
+        else {
+            ""
+        }
+    }
+
+
+    /**
+     * builds a string of the parameters to put into the entity/body of request
+     * e..g dataParams.put('id", id);
+     */
+    override fun buildDataParams(reg: Action): String {
+        return if(buildVerb(reg.name) != "get") {
+            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+                acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
+            })
+        }
+        else {
+            ""
         }
     }
 }
