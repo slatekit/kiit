@@ -521,7 +521,7 @@ open class ApiContainer(
 
 
     fun isCliAllowed(supportedProtocol: String): Boolean =
-            supportedProtocol == "*" || supportedProtocol == "cli"
+            supportedProtocol == ApiConstants.Any || supportedProtocol == ApiConstants.SourceCLI
 
 
 
