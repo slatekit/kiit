@@ -82,14 +82,15 @@ object ApiHelper {
      */
     fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): Result<Boolean> {
         val noAuth = auth == null
+        val isActionNotAuthed = isActionNotAuthed(apiRef.action.roles)
+        val isApiNotAuthed = isApiNotAuthed(apiRef.action.roles, apiRef.api.roles)
 
         // CASE 1: No auth for action
-        return if (noAuth && (apiRef.action.roles == ApiConstants.Unknown || apiRef.action.roles.isNullOrEmpty())) {
+        return if (noAuth && isActionNotAuthed) {
             ok()
         }
         // CASE 2: No auth for parent
-        else if (noAuth && apiRef.action.roles == ApiConstants.Parent
-                && apiRef.api.roles == ApiConstants.Unknown) {
+        else if (noAuth && isApiNotAuthed) {
             ok()
         }
         // CASE 3: No auth and action requires roles!
@@ -104,12 +105,27 @@ object ApiHelper {
     }
 
 
+    fun isActionNotAuthed(actionRoles:String):Boolean {
+        val isUnknown = actionRoles == ApiConstants.Unknown
+        val isEmpty = actionRoles.isNullOrEmpty()
+        return isUnknown || isEmpty
+    }
+
+
+    fun isApiNotAuthed(actionRoles:String, apiRoles:String): Boolean {
+        val isParent = actionRoles == ApiConstants.Parent
+        val isUnknown = apiRoles == ApiConstants.Unknown
+        val isNone = apiRoles == ApiConstants.None
+        return isParent && (isUnknown || isNone)
+    }
+
+
     fun isWebProtocol(primaryValue: String, parentValue: String): Boolean {
         val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
         return when(finalValue) {
             ApiConstants.SourceAny -> true
             ApiConstants.SourceWeb -> true
-            else                     -> false
+            else                   -> false
         }
     }
 

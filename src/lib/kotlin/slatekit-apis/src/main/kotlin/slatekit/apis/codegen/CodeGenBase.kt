@@ -1,6 +1,5 @@
 package slatekit.apis.codegen
 
-import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import slatekit.apis.helpers.ApiHelper
@@ -14,7 +13,7 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberFunctions
 
-open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOnly:Boolean = true) {
+open class CodeGenBase(val settings: CodeGenSettings) {
 
 
     /** Represents type information for the purspose of code generation.
@@ -47,13 +46,16 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
     open val templateClassSuffix = "Api"
 
 
-    open fun templateClass():String = ""
+    open fun templateClass():String {
+        val content = getContent(settings.templatesFolder, settings.classFile)
+        return content
+    }
 
 
-    open fun templateModel():String = ""
+    open fun templateModel():String = getContent(settings.templatesFolder, settings.modelFile)
 
 
-    open fun templateMethod():String = ""
+    open fun templateMethod():String = getContent(settings.templatesFolder, settings.methodFile)
 
 
     /**
@@ -63,22 +65,25 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
      *  -nameOfTemplateModel="codegen-java-model.txt"
      */
     fun generate(req:Request):Unit {
-        val dirs = this.container.ctx.dirs
-        val outputFolder = dirs?.pathToOutputs ?: Props.tmpDir
+        val dirs = this.settings.host.ctx.dirs
+        val outputFolderPathRaw = this.settings.outputFolder.orElse( dirs?.pathToOutputs ?: Props.tmpDir)
+        val outputFolderPath = Uris.interpret(outputFolderPathRaw)
         val dateFolder = Files.folderNameByDate()
 
         // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\2017-11-08
+        val outputFolder = File(outputFolderPath)
         val targetFolder = File(outputFolder, dateFolder)
         val apiFolder = File(targetFolder, "api")
         val modelFolder = File(targetFolder, "dto")
+        outputFolder.mkdir()
         targetFolder.mkdir()
         apiFolder.mkdir()
         modelFolder.mkdir()
-        val log = this.container.ctx.log
+        val log = this.settings.host.ctx.log
         log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
-        this.container.routes.visitApis({ _, api  ->
+        this.settings.host.routes.visitApis({ _, api  ->
 
             try {
                 if(ApiHelper.isWebProtocol(api.protocol, "")) {
@@ -99,7 +104,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
                             // Generate code here.
                             val methodInfo = genMethod(api, action)
-                            this.container.ctx.log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
+                            this.settings.host.ctx.log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
                             buff.append(methodInfo)
                             buff.append(newline)
                         }
@@ -136,8 +141,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
 
 
     fun genClientApi(req: Request, apiReg: Api, folder: File, methods:String):Unit {
-        val rawPackageName = req.data.getStringOpt("package")
-        val packageName = rawPackageName ?: apiReg.cls.qualifiedName ?: ""
+        val packageName = settings.packageName
         val rawTemplate = this.templateClass()
         val template = rawTemplate
                 .replace("@{className}"  , apiReg.name.pascalCase())
@@ -148,7 +152,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
                 .replace("@{version}"    , req.data.getStringOrElse("version", "1.0.0"))
                 .replace("@{methods}"    , methods)
 
-        File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".java").writeText(template)
+        File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".${settings.extension}").writeText(template)
     }
 
 
@@ -166,9 +170,10 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         val info = buildModelInfo(cls)
         val rawTemplate = this.templateModel()
         val template = rawTemplate
+                .replace("@{packageName}", settings.packageName)
                 .replace("@{className}"  , cls.simpleName ?: "")
                 .replace("@{properties}" , info)
-        val file = File(folder, cls.simpleName?.pascalCase() + ".java")
+        val file = File(folder, cls.simpleName?.pascalCase() + ".${settings.extension}")
         file.writeText(template)
         return file.absolutePath
     }
@@ -359,7 +364,7 @@ open class CodeGenBase(val container:ApiContainer, val generateDeclaredMethodsOn
         // Only include declared items
         val isDeclared = declaredMemberLookup.containsKey(apiRegAction.name)
         val isWebProtocol = ApiHelper.isWebProtocol(apiRegAction.protocol, apiReg.protocol)
-        return (!generateDeclaredMethodsOnly || isDeclared ) && isWebProtocol
+        return (!this.settings.declaredMethodsOnly || isDeclared ) && isWebProtocol
     }
 
     companion object {
