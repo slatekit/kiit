@@ -19,6 +19,7 @@ interface Category {
 object Alert   : Category { override val name = "alert"   }
 object Share   : Category { override val name = "share"   }
 object Reg     : Category { override val name = "reg"     }
+object Msg     : Category { override val name = "msg"     }
 
 data class OtherCategory(override val name:String): Category
 

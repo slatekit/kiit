@@ -1,7 +1,7 @@
 package slatekit.examples
 
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiReg
+import slatekit.apis.core.Api
 import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
@@ -28,7 +28,7 @@ class Guide_APIs : Cmd("types") {
                 ctx  = ctx,
                 auth = null,
                 apis = listOf(
-                        ApiReg(MovieApi(ctx), declaredOnly = false)
+                        Api(MovieApi(ctx), declaredOnly = false)
                 ),
                 allowIO = false
         )
