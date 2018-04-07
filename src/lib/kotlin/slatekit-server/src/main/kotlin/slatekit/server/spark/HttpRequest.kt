@@ -123,8 +123,8 @@ class HttpRequest(val req: Request) : RequestSupport {
         fun loadJson(req: Request): JSONObject {
             val method = req.requestMethod().toLowerCase()
             val isPosted = isBodyAllowed(method)
-            val tpe = req.contentType()
-            val isMultiPart = tpe.startsWith("multipart/form-data;")
+            val tpe:String? = req.contentType()
+            val isMultiPart = tpe?.startsWith("multipart/form-data;") ?: false
             val json = if (isPosted && !isMultiPart && !req.body().isNullOrEmpty()) {
                 val parser = JSONParser()
                 val body = req.body()
