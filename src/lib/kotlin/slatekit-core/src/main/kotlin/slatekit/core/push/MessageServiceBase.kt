@@ -37,6 +37,6 @@ abstract class MessageServiceBase {
   fun send(deviceId:String, message:Message): Result<Boolean>
   {
     requireText(deviceId, "device id not provided")
-    return send(message.copy(toDevice = deviceId))
+    return send(message.copy( recipient = message.recipient.copy(device = deviceId)))
   }
 }

@@ -27,8 +27,8 @@ class MessageServiceGoogle(private val _key:String) : MessageServiceBase() {
 
   override fun send(msg: Message): Result<Boolean> {
 
-      val payload = msg.toJsonCompact()
-      val content = "{ \"to\" : \"" + msg.toDevice + "\", \"data\" : " + payload + " }"
+      val payload = msg.toJson()
+      val content = "{ \"to\" : \"" + msg.recipient.device + "\", \"data\" : " + payload + " }"
 
       // Create an immutable http request.
       val req = HttpRequest(
