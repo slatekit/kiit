@@ -1519,27 +1519,27 @@ to the syntax of the calls.</p>
 <h2 id="kotlin-classes-basics">Classes</h2>
 <p>Some basics of classes and constructors. This is a partial list of features</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// 1. You can declare class members in the constructor
-</span>  <span class="c1">// 2. You can declare and set the access modifiers ( none = public, protected, private )
-</span>  <span class="c1">// 3. You can declare whether they are mutable ( var ) or immutable ( val )
-</span>  <span class="k">open</span> <span class="kd">class</span> <span class="nc">User</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
+  <span class="c1">// 1. You can declare class members in the constructor</span>  
+  <span class="c1">// 2. You can declare and set the access modifiers ( none = public, protected, private )</span>  
+  <span class="c1">// 3. You can declare whether they are mutable ( var ) or immutable ( val )</span>  
+  <span class="k">open</span> <span class="kd">class</span> <span class="nc">User</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
                   <span class="kd">var</span> <span class="py">isActive</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">,</span>
                   <span class="k">protected</span> <span class="kd">val</span> <span class="py">email</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
                   <span class="k">private</span> <span class="kd">val</span> <span class="py">account</span><span class="p">:</span> <span class="n">Int</span>
   
   <span class="p">)</span> <span class="p">{</span>
       <span class="n">init</span> <span class="p">{</span>
-          <span class="c1">// initialization after primary constructor.
-</span>          <span class="n">println</span><span class="p">(</span><span class="s">"instantiated with : "</span> <span class="p">+</span> <span class="n">name</span><span class="p">)</span>
+          <span class="c1">// initialization after primary constructor.</span>          
+          <span class="n">println</span><span class="p">(</span><span class="s">"instantiated with : "</span> <span class="p">+</span> <span class="n">name</span><span class="p">)</span>
       <span class="p">}</span>
   
   
-      <span class="c1">// Overloaded constructors must call the primary constructor first
-</span>      <span class="k">constructor</span><span class="p">()</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+      <span class="c1">// Overloaded constructors must call the primary constructor first</span>      
+      <span class="k">constructor</span><span class="p">()</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="s">""</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
   
   
-      <span class="c1">// Overloaded constructors must call the primary constructor first
-</span>      <span class="k">constructor</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
+      <span class="c1">// Overloaded constructors must call the primary constructor first</span>      
+      <span class="k">constructor</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">,</span> <span class="m">0</span><span class="p">)</span>
   
   
       <span class="k">fun</span> <span class="nf">printInfo</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
@@ -1547,6 +1547,7 @@ to the syntax of the calls.</p>
           <span class="n">println</span><span class="p">(</span><span class="s">"$name, $email, $account, $isActive"</span><span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
+
 </code></pre>
 </div>
 
@@ -1558,11 +1559,11 @@ to the syntax of the calls.</p>
 <p>Access modifiers are similar to other languages, with the convenience
 of specifying the access level right at the constructor level.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// 1. kotlin members are public by default
-</span>  <span class="c1">// 2. protected works similar to java 
-</span>  <span class="c1">// 3. private works similar to java 
-</span>  <span class="c1">// 4. By setting field to "val" you make it immutable
-</span>  <span class="k">open</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> 
+  <span class="c1">// 1. kotlin members are public by default</span>  
+  <span class="c1">// 2. protected works similar to java </span>  
+  <span class="c1">// 3. private works similar to java </span>  
+  <span class="c1">// 4. By setting field to "val" you make it immutable</span>  
+  <span class="k">open</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> 
               <span class="k">val</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> 
               <span class="k">protected</span> <span class="k">val</span> <span class="n">account</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> 
               <span class="k">private</span> <span class="k">val</span> <span class="n">ssn</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span>
@@ -1571,14 +1572,13 @@ of specifying the access level right at the constructor level.</p>
   
   <span class="k">val</span> <span class="n">p</span> <span class="k">=</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"kishore"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"123"</span><span class="o">)</span>
 
-  <span class="c1">// Accessible
-</span>  <span class="n">println</span><span class="o">(</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
+  <span class="c1">// Accessible</span>  
+  <span class="n">println</span><span class="o">(</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
   <span class="n">println</span><span class="o">(</span> <span class="n">p</span><span class="o">.</span><span class="n">isActive</span> <span class="o">)</span>
   
-  <span class="c1">// Unaccessible
-</span>  <span class="c1">// println( p.account )
-</span>  <span class="c1">// println( p.ssn )
-</span><span class="o">}</span>
+  <span class="c1">// Unaccessible</span>  
+  <span class="c1">// println( p.account )</span>  
+  <span class="c1">// println( p.ssn )</span><span class="o">}</span>
 
 </code></pre>
 </div>
@@ -1588,17 +1588,17 @@ of specifying the access level right at the constructor level.</p>
 <h2 id="kotlin-classes-subclassing">Inheritance</h2>
 <p>Class inheritance and overriding methods</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// SUB-CLASSING:
-</span>  <span class="c1">// 1. You must declare your class as "open" to sub-class it
-</span>  <span class="c1">// 2. You must declare a method as "open" to override it
-</span>  <span class="k">open</span> <span class="kd">class</span> <span class="nc">UserAccount</span><span class="p">(</span> <span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="kd">val</span> <span class="py">roles</span><span class="p">:</span><span class="n">String</span> <span class="p">)</span>
+  <span class="c1">// SUB-CLASSING:</span>  
+  <span class="c1">// 1. You must declare your class as "open" to sub-class it</span>  
+  <span class="c1">// 2. You must declare a method as "open" to override it</span>  
+  <span class="k">open</span> <span class="kd">class</span> <span class="nc">UserAccount</span><span class="p">(</span> <span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="kd">val</span> <span class="py">roles</span><span class="p">:</span><span class="n">String</span> <span class="p">)</span>
   <span class="p">{</span>
       <span class="k">open</span> <span class="k">fun</span> <span class="nf">info</span><span class="p">():</span><span class="n">String</span> <span class="p">=</span> <span class="s">"USER: $name $isActive $roles"</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// Just a simple example showing how to extend a class.
-</span>  <span class="kd">class</span> <span class="nc">AdminAccount</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">)</span> <span class="p">:</span> <span class="n">UserAccount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="s">"admin"</span><span class="p">)</span>
+  <span class="c1">// Just a simple example showing how to extend a class.</span>  
+  <span class="kd">class</span> <span class="nc">AdminAccount</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">)</span> <span class="p">:</span> <span class="n">UserAccount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="s">"admin"</span><span class="p">)</span>
   <span class="p">{</span>
       <span class="k">override</span> <span class="k">fun</span> <span class="nf">info</span><span class="p">():</span><span class="n">String</span> <span class="p">=</span> <span class="s">"ADMIN: $name $isActive $roles"</span>
   <span class="p">}</span>
@@ -1612,25 +1612,25 @@ of specifying the access level right at the constructor level.</p>
 <p>Case classes provide a convenient way to make all members of the class readonly/vals. Boiler-plate code such as copy methods are automatically created,
 and they are used for pattern-matching.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Mark class with "data".
-</span>  <span class="c1">// USE CASES:
-</span>  <span class="c1">// 1. Data classes are useful when you typically want to just hold data
-</span>  <span class="c1">// 2. They are also useful in pattern-matching.
-</span>  <span class="c1">//
-</span>  <span class="c1">// AUTOMATIC SUPPORT
-</span>  <span class="c1">// Data classes have the "equals()", "toString()" and "copy(...)"
-</span>  <span class="c1">// methods automatically created by the compiler.
-</span>  <span class="kd">data class</span> <span class="nc">Role</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">desc</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">features</span><span class="p">:</span><span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;)</span>
+  <span class="c1">// Mark class with "data".</span>
+  <span class="c1">// USE CASES:</span>
+  <span class="c1">// 1. Data classes are useful when you typically want to just hold data</span>
+  <span class="c1">// 2. They are also useful in pattern-matching.</span>
+  <span class="c1">//</span>
+  <span class="c1">// AUTOMATIC SUPPORT</span>
+  <span class="c1">// Data classes have the "equals()", "toString()" and "copy(...)"</span>
+  <span class="c1">// methods automatically created by the compiler.</span>
+  <span class="kd">data class</span> <span class="nc">Role</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">desc</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">features</span><span class="p">:</span><span class="n">List</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;)</span>
   
   
   <span class="k">fun</span> <span class="nf">testRoles</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// Create role with name, desc, and feature list
-</span>      <span class="kd">val</span> <span class="py">role1</span> <span class="p">=</span> <span class="n">Role</span><span class="p">(</span><span class="s">"editors"</span><span class="p">,</span> <span class="s">"Create / Edit content"</span><span class="p">,</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"blogs"</span><span class="p">,</span> <span class="s">"comments"</span><span class="p">))</span>
+      <span class="c1">// Create role with name, desc, and feature list</span>      
+      <span class="kd">val</span> <span class="py">role1</span> <span class="p">=</span> <span class="n">Role</span><span class="p">(</span><span class="s">"editors"</span><span class="p">,</span> <span class="s">"Create / Edit content"</span><span class="p">,</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"blogs"</span><span class="p">,</span> <span class="s">"comments"</span><span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="n">role1</span><span class="p">)</span>
   
-      <span class="c1">// Copy role1 with existing features but just change name and desc.
-</span>      <span class="kd">val</span> <span class="py">role2</span> <span class="p">=</span> <span class="n">role1</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="s">"moderators"</span><span class="p">,</span> <span class="s">"moderate content"</span><span class="p">)</span>
+      <span class="c1">// Copy role1 with existing features but just change name and desc.</span>      
+      <span class="kd">val</span> <span class="py">role2</span> <span class="p">=</span> <span class="n">role1</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="s">"moderators"</span><span class="p">,</span> <span class="s">"moderate content"</span><span class="p">)</span>
       <span class="n">println</span><span class="p">(</span><span class="n">role2</span><span class="p">)</span>
   <span class="p">}</span>
   
@@ -1642,31 +1642,31 @@ and they are used for pattern-matching.</p>
 <h2 id="kotlin-classes-traits">Interfaces</h2>
 <p>Interfaces/contracts with implementations</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Interfaces can have implementations
-</span>  <span class="kd">interface</span> <span class="nc">AccountSupport</span> <span class="p">{</span>
+  <span class="c1">// Interfaces can have implementations</span>  
+  <span class="kd">interface</span> <span class="nc">AccountSupport</span> <span class="p">{</span>
   
       <span class="k">fun</span> <span class="nf">activate</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
-          <span class="c1">// do some processing and notify
-</span>          <span class="n">notify</span><span class="p">(</span><span class="s">"account activated"</span><span class="p">)</span>
+          <span class="c1">// do some processing and notify</span>          
+          <span class="n">notify</span><span class="p">(</span><span class="s">"account activated"</span><span class="p">)</span>
       <span class="p">}</span>
   
   
       <span class="k">fun</span> <span class="nf">deactivate</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
-          <span class="c1">// do some processing and notify
-</span>          <span class="n">notify</span><span class="p">(</span><span class="s">"account deactivated"</span><span class="p">)</span>
+          <span class="c1">// do some processing and notify</span>          
+          <span class="n">notify</span><span class="p">(</span><span class="s">"account deactivated"</span><span class="p">)</span>
       <span class="p">}</span>
   
   
       <span class="k">fun</span> <span class="nf">notify</span><span class="p">(</span><span class="n">state</span><span class="p">:</span><span class="n">String</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
-          <span class="c1">// e.g. send to phone / log / audit etc.
-</span>          <span class="c1">// just println for sample purposes
-</span>          <span class="n">println</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+          <span class="c1">// e.g. send to phone / log / audit etc.</span>          
+          <span class="c1">// just println for sample purposes</span>          
+          <span class="n">println</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// Just a simple example showing how to extend a class.
-</span>  <span class="kd">class</span> <span class="nc">ModeratorAccount</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">)</span>
+  <span class="c1">// Just a simple example showing how to extend a class.</span>  
+  <span class="kd">class</span> <span class="nc">ModeratorAccount</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">)</span>
       <span class="p">:</span> <span class="n">UserAccount</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="s">"moderators"</span><span class="p">)</span>
       <span class="p">,</span> <span class="n">AccountSupport</span>
   <span class="p">{</span>
@@ -1689,22 +1689,22 @@ and they are used for pattern-matching.</p>
 <p>kotlin does not have static methods. but you can declare the class as an <strong>object</strong> accessing it statically</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// You can put "static" methods on a class inside a companion object    
-</span>  <span class="k">open</span> <span class="kd">class</span> <span class="nc">UserAccount</span><span class="p">(</span> <span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="kd">val</span> <span class="py">roles</span><span class="p">:</span><span class="n">String</span> <span class="p">)</span>
+  <span class="c1">// You can put "static" methods on a class inside a companion object    </span>  
+  <span class="k">open</span> <span class="kd">class</span> <span class="nc">UserAccount</span><span class="p">(</span> <span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="kd">val</span> <span class="py">roles</span><span class="p">:</span><span class="n">String</span> <span class="p">)</span> 
   <span class="p">{</span>
       <span class="k">open</span> <span class="k">fun</span> <span class="nf">info</span><span class="p">():</span><span class="n">String</span> <span class="p">=</span> <span class="s">"USER: $name $isActive $roles"</span>
    
   
-      <span class="k">companion</span> <span class="kd">object</span> <span class="p">{
-          <span class="kd">val</span> <span class="py">guest</span> <span class="p">=</span> <span class="n">UserAccount</span><span class="p">(</span><span class="s">"guest"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+      <span class="k">companion</span> <span class="kd">object</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">guest</span> <span class="p">=</span> <span class="n">UserAccount</span><span class="p">(</span><span class="s">"guest"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// This is essentially a singleton class
-</span>  <span class="kd">object</span> <span class="nc">Accounts</span> <span class="p">{</span>
-      <span class="c1">// This is essentially a static member.
-</span>      <span class="kd">val</span> <span class="py">guest</span> <span class="p">=</span> <span class="n">UserAccount</span><span class="p">(</span><span class="s">"guest"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
+  <span class="c1">// This is essentially a singleton class</span>  
+  <span class="kd">object</span> <span class="nc">Accounts</span> <span class="p">{</span>
+      <span class="c1">// This is essentially a static member.</span>      
+      <span class="kd">val</span> <span class="py">guest</span> <span class="p">=</span> <span class="n">UserAccount</span><span class="p">(</span><span class="s">"guest"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">""</span><span class="p">)</span>
   <span class="p">}</span>
   
   
@@ -1741,11 +1741,11 @@ and they are used for pattern-matching.</p>
   
   
   <span class="k">fun</span> <span class="nf">testExtensions</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
-      <span class="c1">// Prints "abc!"
-</span>      <span class="n">println</span><span class="p">(</span><span class="s">"abcd"</span><span class="p">.</span><span class="n">truncate</span><span class="p">(</span><span class="m">3</span><span class="p">)</span> <span class="p">+</span> <span class="s">"!"</span><span class="p">)</span>
+      <span class="c1">// Prints "abc!"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="s">"abcd"</span><span class="p">.</span><span class="n">truncate</span><span class="p">(</span><span class="m">3</span><span class="p">)</span> <span class="p">+</span> <span class="s">"!"</span><span class="p">)</span>
   
-      <span class="c1">// Prints ["b", "c"]
-</span>      <span class="n">println</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">).</span><span class="n">tail</span><span class="p">())</span>
+      <span class="c1">// Prints ["b", "c"]</span>      
+      <span class="n">println</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span><span class="s">"a"</span><span class="p">,</span> <span class="s">"b"</span><span class="p">,</span> <span class="s">"c"</span><span class="p">).</span><span class="n">tail</span><span class="p">())</span>
   <span class="p">}</span>
   
 </code></pre>
@@ -1761,40 +1761,40 @@ and they are used for pattern-matching.</p>
    */</span>
   <span class="kd">class</span> <span class="nc">MyRange</span><span class="p">(</span><span class="kd">val</span> <span class="py">start</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="kd">val</span> <span class="py">end</span><span class="p">:</span><span class="n">Int</span> <span class="p">){</span>
   
-      <span class="c1">// Override inc ++
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">inc</span><span class="p">():</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span>
+      <span class="c1">// Override inc ++</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">inc</span><span class="p">():</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">+</span> <span class="m">1</span><span class="p">)</span>
   
   
-      <span class="c1">// Override dec --
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">dec</span><span class="p">():</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">-</span> <span class="m">1</span> <span class="p">)</span>
+      <span class="c1">// Override dec --</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">dec</span><span class="p">():</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">-</span> <span class="m">1</span> <span class="p">)</span>
   
   
-      <span class="c1">// Override plus +
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">plus</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">+</span> <span class="n">num</span> <span class="p">)</span>
+      <span class="c1">// Override plus +</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">plus</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">+</span> <span class="n">num</span> <span class="p">)</span>
   
   
-      <span class="c1">// Override minus - ( get the smallest range )
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">minus</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">-</span> <span class="n">num</span> <span class="p">)</span>
+      <span class="c1">// Override minus - ( get the smallest range )</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">minus</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">-</span> <span class="n">num</span> <span class="p">)</span>
   
   
-      <span class="c1">// Override times *
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">times</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">*</span> <span class="n">num</span> <span class="p">)</span>
+      <span class="c1">// Override times *</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">times</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">*</span> <span class="n">num</span> <span class="p">)</span>
   
   
-      <span class="c1">// Override div Point * Point
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">div</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">/</span> <span class="n">num</span> <span class="p">)</span>
+      <span class="c1">// Override div Point * Point</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">div</span><span class="p">(</span><span class="n">num</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">MyRange</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="p">/</span> <span class="n">num</span> <span class="p">)</span>
   
   
-      <span class="c1">// Override "in" 3 in myRange
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">contains</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Boolean</span> <span class="p">=</span> <span class="n">x</span> <span class="k">in</span> <span class="n">start</span><span class="o">..</span><span class="n">end</span>
+      <span class="c1">// Override "in" 3 in myRange</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">contains</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Boolean</span> <span class="p">=</span> <span class="n">x</span> <span class="k">in</span> <span class="n">start</span><span class="o">..</span><span class="n">end</span>
   
   
-      <span class="c1">// Override index access [x] = true | false
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">get</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Boolean</span> <span class="p">=</span> <span class="n">contains</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+      <span class="c1">// Override index access [x] = true | false</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">get</span><span class="p">(</span><span class="n">x</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span><span class="n">Boolean</span> <span class="p">=</span> <span class="n">contains</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
   
   
-      <span class="c1">// Override compare to ( &lt;, &lt;=, &gt;, &gt;=, ==, != )
-</span>      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">compareTo</span><span class="p">(</span><span class="n">other</span><span class="p">:</span><span class="n">MyRange</span><span class="p">):</span><span class="n">Int</span> <span class="p">{</span>
+      <span class="c1">// Override compare to ( &lt;, &lt;=, &gt;, &gt;=, ==, != )</span>      
+      <span class="k">operator</span> <span class="k">fun</span> <span class="nf">compareTo</span><span class="p">(</span><span class="n">other</span><span class="p">:</span><span class="n">MyRange</span><span class="p">):</span><span class="n">Int</span> <span class="p">{</span>
           <span class="kd">val</span> <span class="py">xCompare</span> <span class="p">=</span> <span class="n">start</span><span class="p">.</span><span class="n">compareTo</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">start</span><span class="p">)</span>
           <span class="k">if</span> <span class="p">(</span><span class="n">xCompare</span> <span class="p">!=</span> <span class="m">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">xCompare</span>
           <span class="k">return</span> <span class="n">end</span><span class="p">.</span><span class="n">compareTo</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">end</span><span class="p">)</span>
@@ -1809,27 +1809,27 @@ and they are used for pattern-matching.</p>
   
   <span class="k">fun</span> <span class="nf">testOperator</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
   
-      <span class="c1">// Test ++, --
-</span>      <span class="kd">var</span> <span class="py">r1</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">)</span>
+      <span class="c1">// Test ++, --</span>      
+      <span class="kd">var</span> <span class="py">r1</span> <span class="p">=</span> <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="n">r1</span><span class="p">++</span> <span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="n">r1</span><span class="p">--</span> <span class="p">)</span>
   
-      <span class="c1">// Test +, -, *, /
-</span>      <span class="n">println</span><span class="p">(</span> <span class="n">r1</span> <span class="p">+</span> <span class="m">2</span> <span class="p">)</span>
+      <span class="c1">// Test +, -, *, /</span>      
+      <span class="n">println</span><span class="p">(</span> <span class="n">r1</span> <span class="p">+</span> <span class="m">2</span> <span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="n">r1</span> <span class="p">-</span> <span class="m">2</span> <span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="n">r1</span> <span class="p">*</span> <span class="m">2</span> <span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="n">r1</span> <span class="p">/</span> <span class="m">2</span> <span class="p">)</span>
   
-      <span class="c1">// Test in/contains
-</span>      <span class="n">println</span><span class="p">(</span> <span class="m">3</span> <span class="k">in</span> <span class="n">r1</span> <span class="p">)</span>
+      <span class="c1">// Test in/contains</span>      
+      <span class="n">println</span><span class="p">(</span> <span class="m">3</span> <span class="k">in</span> <span class="n">r1</span> <span class="p">)</span>
       <span class="n">println</span><span class="p">(</span> <span class="m">10</span> <span class="k">in</span> <span class="n">r1</span> <span class="p">)</span>
   
-      <span class="c1">// Test get
-</span>      <span class="n">println</span><span class="p">(</span><span class="n">r1</span><span class="p">[</span><span class="m">3</span><span class="p">])</span>
+      <span class="c1">// Test get</span>      
+      <span class="n">println</span><span class="p">(</span><span class="n">r1</span><span class="p">[</span><span class="m">3</span><span class="p">])</span>
       <span class="n">println</span><span class="p">(</span><span class="n">r1</span><span class="p">[</span><span class="m">10</span><span class="p">])</span>
   
-      <span class="c1">// Test &lt;, &lt;=, &gt;, &gt;=
-</span>      <span class="n">println</span><span class="p">(</span><span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span> <span class="p">&gt;</span>  <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span>
+      <span class="c1">// Test &lt;, &lt;=, &gt;, &gt;=</span>      
+      <span class="n">println</span><span class="p">(</span><span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span> <span class="p">&gt;</span>  <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span> <span class="p">&gt;=</span> <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span> <span class="p">&lt;</span>  <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">))</span>
       <span class="n">println</span><span class="p">(</span><span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">)</span> <span class="p">&lt;=</span> <span class="n">MyRange</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">4</span><span class="p">))</span>
@@ -1843,8 +1843,8 @@ and they are used for pattern-matching.</p>
 <h2 id="kotlin-type-alias">Type Alias</h2>
 <p>Create an alias for types</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// The type alias here becomes the shorthand for the function signature
-</span>  <span class="k">typealias</span> <span class="n">ErrorHandler</span> <span class="p">=</span> <span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span>
+  <span class="c1">// The type alias here becomes the shorthand for the function signature</span>  
+  <span class="k">typealias</span> <span class="n">ErrorHandler</span> <span class="p">=</span> <span class="p">(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span>
   
   
   <span class="k">fun</span> <span class="nf">onError</span><span class="p">(</span><span class="n">code</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">ex</span><span class="p">:</span><span class="n">Exception</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
@@ -1852,31 +1852,32 @@ and they are used for pattern-matching.</p>
   <span class="p">}</span>
   
   
-  <span class="c1">// onError callback explicitly defined with function signature
-</span>  <span class="k">fun</span> <span class="nf">createUser1</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">onError</span><span class="p">:(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// onError callback explicitly defined with function signature</span>  
+  <span class="k">fun</span> <span class="nf">createUser1</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">onError</span><span class="p">:(</span><span class="n">Int</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Exception</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
       <span class="k">try</span> <span class="p">{</span>
-          <span class="c1">// create user here
-</span>      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ex</span><span class="p">:</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// create user here</span>      
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ex</span><span class="p">:</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
           <span class="n">onError</span><span class="p">(</span><span class="m">500</span><span class="p">,</span> <span class="s">"unexpected error creating user"</span><span class="p">,</span> <span class="n">ex</span> <span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
   
   
-  <span class="c1">// onError callback is shorter and cleaner using type alias
-</span>  <span class="k">fun</span> <span class="nf">createUser2</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">onError</span><span class="p">:</span><span class="n">ErrorHandler</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// onError callback is shorter and cleaner using type alias</span>  
+  <span class="k">fun</span> <span class="nf">createUser2</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">onError</span><span class="p">:</span><span class="n">ErrorHandler</span><span class="p">):</span><span class="n">Unit</span> <span class="p">{</span>
       <span class="k">try</span> <span class="p">{</span>
-          <span class="c1">// create user here
-</span>      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ex</span><span class="p">:</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
+          <span class="c1">// create user here</span>      
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">ex</span><span class="p">:</span><span class="n">Exception</span><span class="p">)</span> <span class="p">{</span>
           <span class="n">onError</span><span class="p">(</span><span class="m">500</span><span class="p">,</span> <span class="s">"unexpected error creating user"</span><span class="p">,</span> <span class="n">ex</span> <span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
   
   
   <span class="k">fun</span> <span class="nf">testTypeAlias</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
-      <span class="c1">// Same code at the call site
-</span>      <span class="n">createUser1</span><span class="p">(</span><span class="s">"batman@gotham"</span><span class="p">,</span> <span class="o">::</span><span class="n">onError</span><span class="p">)</span>
+      <span class="c1">// Same code at the call site</span>      
+      <span class="n">createUser1</span><span class="p">(</span><span class="s">"batman@gotham"</span><span class="p">,</span> <span class="o">::</span><span class="n">onError</span><span class="p">)</span>
       <span class="n">createUser2</span><span class="p">(</span><span class="s">"batman@gotham"</span><span class="p">,</span> <span class="o">::</span><span class="n">onError</span><span class="p">)</span>
   <span class="p">}</span>
+
 </code></pre>
 </div>
 <a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
@@ -1885,17 +1886,17 @@ and they are used for pattern-matching.</p>
 <h2 id="kotlin-todo">TODO</h2>
 <p>Create an alias for types</p>
 <div class="highlighter-rouge"><pre class="highlight"><code> 
-  <span class="c1">// Here the TODO function from standard library returns "Nothing"
-</span>  <span class="c1">// which allows the code to compile even though the function returns 
-</span>  <span class="c1">// a type of Pair&lt;Int,String&gt;
-</span>  <span class="k">fun</span> <span class="nf">testTODO</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">String</span> <span class="p">):</span><span class="n">Pair</span><span class="p">&lt;</span><span class="n">Int</span><span class="p">,</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">{</span>
+  <span class="c1">// Here the TODO function from standard library returns "Nothing"</span>  
+  <span class="c1">// which allows the code to compile even though the function returns </span>  
+  <span class="c1">// a type of Pair&lt;Int,String&gt;</span>  
+  <span class="k">fun</span> <span class="nf">testTODO</span><span class="p">(</span><span class="n">email</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">subject</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">content</span><span class="p">:</span><span class="n">String</span> <span class="p">):</span><span class="n">Pair</span><span class="p">&lt;</span><span class="n">Int</span><span class="p">,</span><span class="n">String</span><span class="p">&gt;</span> <span class="p">{</span>
   
       <span class="k">return</span> <span class="k">if</span><span class="p">(</span><span class="n">email</span><span class="p">.</span><span class="n">isNullOrEmpty</span><span class="p">()){</span>
           <span class="n">TODO</span><span class="p">(</span><span class="s">"figure out error handling/logging here"</span><span class="p">)</span>
       <span class="p">}</span>
       <span class="k">else</span> <span class="p">{</span>
-          <span class="c1">// send email
-</span>          <span class="n">Pair</span><span class="p">(</span><span class="m">200</span><span class="p">,</span> <span class="s">"success"</span><span class="p">)</span>
+          <span class="c1">// send email</span>          
+          <span class="n">Pair</span><span class="p">(</span><span class="m">200</span><span class="p">,</span> <span class="s">"success"</span><span class="p">)</span>
       <span class="p">}</span>
   <span class="p">}</span>
 
@@ -1915,11 +1916,11 @@ and they are used for pattern-matching.</p>
   <span class="k">fun</span> <span class="nf">printMember</span><span class="p">(</span><span class="n">prop</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span><span class="n">Unit</span> <span class="p">=</span> <span class="n">println</span><span class="p">(</span><span class="n">prop</span><span class="p">.</span><span class="n">name</span><span class="p">)</span>
   
   
-  <span class="c1">// You can reference the properties of Employee class using "::"
-</span>  <span class="c1">// This facilitates type-safe meta programming. E.g. you can use
-</span>  <span class="c1">// this approach for mapping properties to a table, or building
-</span>  <span class="c1">// queries in an ORM. 
-</span>  <span class="k">fun</span> <span class="nf">testMemberReference</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// You can reference the properties of Employee class using "::"</span>
+  <span class="c1">// This facilitates type-safe meta programming. E.g. you can use</span>
+  <span class="c1">// this approach for mapping properties to a table, or building</span>
+  <span class="c1">// queries in an ORM. </span>
+  <span class="k">fun</span> <span class="nf">testMemberReference</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
       <span class="n">printMember</span><span class="p">(</span> <span class="n">Employee</span><span class="o">::</span><span class="n">id</span>    <span class="p">)</span>
       <span class="n">printMember</span><span class="p">(</span> <span class="n">Employee</span><span class="o">::</span><span class="n">email</span> <span class="p">)</span>
   <span class="p">}</span>
@@ -1951,13 +1952,13 @@ and they are used for pattern-matching.</p>
   <span class="kd">data class</span> <span class="nc">Movie</span><span class="p">(</span><span class="kd">val</span> <span class="py">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">year</span><span class="p">:</span><span class="n">Int</span><span class="p">)</span>
   
   
-  <span class="c1">// Use Api annotation on the class to designate a Web API 
-</span>  <span class="n">@Api</span><span class="p">(</span><span class="s">"/movies"</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"api to get movie info"</span><span class="p">)</span>
+  <span class="c1">// Use Api annotation on the class to designate a Web API </span>  
+  <span class="n">@Api</span><span class="p">(</span><span class="s">"/movies"</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"api to get movie info"</span><span class="p">)</span>
   <span class="kd">class</span> <span class="nc">MovieApi</span> <span class="p">{</span>
   
-      <span class="c1">// Use Get annotation on a method to designate an http get request
-</span>      <span class="c1">// Use the Arg annotation on a parameter to describe parameter
-</span>      <span class="n">@Get</span><span class="p">(</span><span class="s">"blockbusters"</span><span class="p">)</span>
+      <span class="c1">// Use Get annotation on a method to designate an http get request</span>      
+      <span class="c1">// Use the Arg annotation on a parameter to describe parameter</span>      
+      <span class="n">@Get</span><span class="p">(</span><span class="s">"blockbusters"</span><span class="p">)</span>
       <span class="k">fun</span> <span class="nf">blockbusters</span><span class="p">(</span><span class="n">@Arg</span><span class="p">(</span><span class="s">"year released"</span><span class="p">)</span>
                        <span class="n">year</span><span class="p">:</span><span class="n">Int</span><span class="p">):</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;</span> <span class="p">{</span>
         <span class="k">return</span> <span class="n">listOf</span><span class="p">(</span>
@@ -1992,16 +1993,17 @@ varying levels</p>
   
   
   <span class="k">fun</span> <span class="nf">testDeprecation</span><span class="p">():</span><span class="n">Unit</span> <span class="p">{</span>
-      <span class="c1">// deprecations with level warning are shown with strike-through
-</span>      <span class="n">sampleFunc1</span><span class="p">()</span>
+      <span class="c1">// deprecations with level warning are shown with strike-through</span>      
+      <span class="n">sampleFunc1</span><span class="p">()</span>
       
-      <span class="c1">// deprecations with level hidden are not available / resolved
-</span>      <span class="c1">// so the following usage is a compile error 
-</span>      <span class="n">sampleFunc2</span><span class="p">()</span>
+      <span class="c1">// deprecations with level hidden are not available / resolved</span>      
+      <span class="c1">// so the following usage is a compile error </span>      
+      <span class="n">sampleFunc2</span><span class="p">()</span>
       
-      <span class="c1">// deprecation with level error is a compile level deprecation error
-</span>      <span class="n">sampleFunc3</span><span class="p">()</span>
+      <span class="c1">// deprecation with level error is a compile level deprecation error</span>      
+      <span class="n">sampleFunc3</span><span class="p">()</span>
   <span class="p">}</span>
+  
 </code></pre>
 </div>
 <a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
