@@ -621,24 +621,21 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
 <p>Multiline strings are enclosed with triple quotes <strong>"""</strong></p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// 1. Space / indentation is preserved
-</span>  
+  <span class="c1">// 1. Space / indentation is preserved</span>  
   <span class="kd">val</span> <span class="py">example1</span> <span class="p">=</span> <span class="s">""" app.users.activate
           - userid: number ( required )
           - phone : string ( required )
           - email : string ( required )
        """</span>
   
-  <span class="c1">// 2. Indentation is stripped and next line starts after "|"
-</span>  
+  <span class="c1">// 2. Indentation is stripped and next line starts after "|"</span>  
   <span class="kd">val</span> <span class="py">example2</span> <span class="p">=</span> <span class="s">""" app.users.activate
          | - userid: number ( required )
          | - phone : string ( required )
          | - email : string ( required )
          | """</span><span class="p">.</span><span class="n">trimIndent</span><span class="p">()</span>
 
-  <span class="c1">// 3. Indentation is stripped and next line starts after "#"
-</span>  
+  <span class="c1">// 3. Indentation is stripped and next line starts after "#"</span>  
   <span class="kd">val</span> <span class="py">example3</span> <span class="p">=</span> <span class="s">""" app.users.activate
          # - userid: number ( required )
          # - phone : string ( required )
@@ -657,7 +654,7 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
       <span class="n">DEBUG</span><span class="p">,</span> <span class="n">INFO</span><span class="p">,</span> <span class="n">WARN</span><span class="p">,</span> <span class="n">ERROR</span><span class="p">,</span> <span class="n">FATAL</span>
   <span class="p">}</span>
   
-  
+  <span class="c1">// Explicitly supply values for the enums</span> 
   <span class="k">enum</span> <span class="kd">class</span> <span class="nc">LogLevel2</span><span class="p">(</span><span class="kd">val</span> <span class="py">level</span><span class="p">:</span><span class="n">Short</span><span class="p">)</span> <span class="p">{</span>
       <span class="n">DEBUG</span><span class="p">(</span><span class="m">1</span><span class="p">),</span> <span class="n">INFO</span><span class="p">(</span><span class="m">2</span><span class="p">),</span> <span class="n">WARN</span><span class="p">(</span><span class="m">3</span><span class="p">),</span> <span class="n">ERROR</span><span class="p">(</span><span class="m">4</span><span class="p">),</span> <span class="n">FATAL</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>
   <span class="p">}</span>
@@ -881,6 +878,7 @@ or by explicitly specifying the type name. To indicate a value can be null, use 
   <span class="c1">// 3. Declare a tuple explicity
 </span>  
   <span class="kd">val</span> <span class="py">user2</span><span class="p">:</span> <span class="n">Triple</span><span class="p">&lt;</span><span class="n">String</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;</span> <span class="p">=</span> <span class="n">Triple</span><span class="p">(</span> <span class="s">"Jane"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">2</span> <span class="p">)</span>
+
 </code></pre>
 </div>
 <a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/><br/>
@@ -1000,13 +998,13 @@ The first example is on basic types ( strings ). The second example shows usage 
     <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
     <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
         <span class="s">"ok"</span>
-      <span class="o">}</span>
-      <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
         <span class="s">"not found"</span>
-      <span class="o">}</span>
-      <span class="k">else</span> <span class="o">{</span>
+    <span class="o">}</span>
+    <span class="k">else</span> <span class="o">{</span>
         <span class="s">"unknown"</span>
-      <span class="o">}</span>
+    <span class="o">}</span>
     <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
 
     <span class="c1">// 4. There is no ternary "? :" operation, but </span>    
@@ -1372,26 +1370,28 @@ generally be used as an alternative to if/else conditions.</p>
 <h2 id="kotlin-functions-hof-passing">HOF: Passing a function</h2>
 <p>One type of Higher Order Functions ( HOF ) is a function that is passed as a parameter to another function</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-   <span class="c1">// Sample function to simulate creating a new user with a callback
-</span>   <span class="c1">// function supplied. This function takes 1 parameter of type Int
-</span>   <span class="c1">// and returns nothing ( Unit ).
-</span>   <span class="k">fun</span> <span class="nf">createUser</span><span class="p">(</span> <span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">onComplete</span><span class="p">:(</span><span class="n">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span><span class="p">)</span> <span class="p">:</span> <span class="n">Unit</span> <span class="p">{</span>
+   <span class="c1">// Sample function to simulate creating a new user with a callback</span>   
+   <span class="c1">// function supplied. This function takes 1 parameter of type Int</span>   
+   <span class="c1">// and returns nothing ( Unit ).</span>   
+   <span class="k">fun</span> <span class="nf">createUser</span><span class="p">(</span> <span class="n">name</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">isActive</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">onComplete</span><span class="p">:(</span><span class="n">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Unit</span><span class="p">)</span> <span class="p">:</span> <span class="n">Unit</span> <span class="p">{</span>
        
        <span class="n">println</span><span class="p">(</span><span class="n">name</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">isActive</span><span class="p">)</span>
        
-       <span class="c1">// simulate saving to database....
-</span>       <span class="kd">val</span> <span class="py">id</span> <span class="p">=</span> <span class="m">2</span>
+       <span class="c1">// simulate saving to database....</span>       
+       <span class="kd">val</span> <span class="py">id</span> <span class="p">=</span> <span class="m">2</span>
        
-       <span class="c1">// notify caller
-</span>       <span class="n">onComplete</span><span class="p">(</span> <span class="n">id</span> <span class="p">)</span>
+       <span class="c1">// notify caller</span>       
+       <span class="n">onComplete</span><span class="p">(</span> <span class="n">id</span> <span class="p">)</span>
    <span class="p">}</span>
   
   
-  <span class="c1">// Test the functions
-</span>  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Test the functions</span>  
+  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
       
-      <span class="c1">// function with function parameter
-</span>      <span class="n">createUser</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="p">{</span> <span class="n">id</span> <span class="p">-&gt;</span> <span class="n">println</span><span class="p">(</span><span class="s">"created with id : $id"</span><span class="p">)</span> <span class="p">}</span> <span class="p">)</span>
+      <span class="c1">// function with function parameter</span>      
+      <span class="n">createUser</span><span class="p">(</span><span class="s">"john doe"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="p">{</span> <span class="n">id</span> <span class="p">-&gt;</span> 
+         <span class="n">println</span><span class="p">(</span><span class="s">"created with id : $id"</span><span class="p">)</span> 
+      <span class="p">}</span> <span class="p">)</span>
   <span class="p">}</span>
 
 </code></pre>
@@ -1402,14 +1402,15 @@ generally be used as an alternative to if/else conditions.</p>
 
 <h2 id="kotlin-functions-hof-return">HOF: Returning a function</h2>
 <p>Another type of Higher Order Functions ( HOF ) is a function that is returned from another function</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Return a function that uses the rate per hour, and
-</span>  <span class="c1">// overtime rate per hour to determine the salary.
-</span>  <span class="c1">// This function only needs 1 parameter representing the hours worked
-</span>  <span class="k">fun</span> <span class="nf">getSalaryCalculator</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span> <span class="n">Double</span><span class="p">,</span> <span class="n">overtimeRate</span><span class="p">:</span> <span class="n">Double</span><span class="p">):</span> <span class="p">(</span><span class="n">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Double</span> <span class="p">{</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Return a function that uses the rate per hour, and</span>  
+  <span class="c1">// overtime rate per hour to determine the salary.</span>  
+  <span class="c1">// This function only needs 1 parameter representing the hours worked</span>  
+  <span class="k">fun</span> <span class="nf">getSalaryCalculator</span><span class="p">(</span><span class="n">rate</span><span class="p">:</span> <span class="n">Double</span><span class="p">,</span> <span class="n">overtimeRate</span><span class="p">:</span> <span class="n">Double</span><span class="p">):</span> <span class="p">(</span><span class="n">Int</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Double</span> <span class="p">{</span>
       
-      <span class="c1">// NOTE: As an analogy, you have basically "dependency injected"
-</span>      <span class="c1">// the salary and overtimePay into the function you are returning.
-</span>      <span class="kd">val</span> <span class="py">f</span> <span class="p">=</span> <span class="p">{</span> <span class="n">hours</span><span class="p">:</span> <span class="n">Int</span> <span class="p">-&gt;</span>            
+      <span class="c1">// NOTE: As an analogy, you have basically "dependency injected"</span>      
+      <span class="c1">// the salary and overtimePay into the function you are returning.</span>      
+      <span class="kd">val</span> <span class="py">f</span> <span class="p">=</span> <span class="p">{</span> <span class="n">hours</span><span class="p">:</span> <span class="n">Int</span> <span class="p">-&gt;</span>            
           <span class="k">if</span> <span class="p">(</span><span class="n">hours</span> <span class="p">&lt;=</span> <span class="m">8</span><span class="p">)</span>
               <span class="n">rate</span> <span class="p">*</span> <span class="n">hours</span>
           <span class="k">else</span>
@@ -1419,17 +1420,18 @@ generally be used as an alternative to if/else conditions.</p>
   <span class="p">}</span>
   
   
-  <span class="c1">// Test the functions
-</span>  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
+  <span class="c1">// Test the functions</span>  
+  <span class="k">fun</span> <span class="nf">test</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
       
-      <span class="c1">// Supply the initial inputs ( rate per hour, rate overtime per hour )
-</span>      <span class="kd">val</span> <span class="py">calc</span> <span class="p">=</span> <span class="n">getSalaryCalculator</span><span class="p">(</span><span class="m">10.0</span><span class="p">,</span> <span class="m">15.0</span><span class="p">)</span>
+      <span class="c1">// Supply the initial inputs ( rate per hour, rate overtime per hour )</span>      
+      <span class="kd">val</span> <span class="py">calc</span> <span class="p">=</span> <span class="n">getSalaryCalculator</span><span class="p">(</span><span class="m">10.0</span><span class="p">,</span> <span class="m">15.0</span><span class="p">)</span>
 
       <span class="c1">// Now you have a function that only requires the hours worked</span>      
       <span class="c1">// e.g. 140.00 = 8hours * 10.0 + 4hours * 15.0</span>      
       <span class="kd">val</span> <span class="py">pay</span> <span class="p">=</span> <span class="n">calc</span><span class="p">(</span><span class="m">12</span><span class="p">)</span>
       <span class="n">println</span><span class="p">(</span><span class="n">pay</span><span class="p">)</span>
   <span class="p">}</span>
+
 </code></pre>
 </div>
 <a href="#overview" class="more"><span class="btn btn-template">Back to top</span></a> <br/><br/>
@@ -1438,28 +1440,28 @@ generally be used as an alternative to if/else conditions.</p>
 <h2 id="kotlin-functions-hof-compose">HOF: Function composition</h2>
 <p>Functions can be composed, allowing 1 function to be the composite of 2 functions.</p>
 <div class="highlighter-rouge"><pre class="highlight"><code>
-  <span class="c1">// Simple utility function to "compose" 2 functions
-</span>  <span class="c1">// into a new function that calls both.
-</span>  <span class="k">fun</span> <span class="p">&lt;</span><span class="nf">A</span><span class="p">,</span> <span class="n">B</span><span class="p">&gt;</span> <span class="n">compose</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">A</span><span class="p">,</span>
+  <span class="c1">// Simple utility function to "compose" 2 functions</span>  
+  <span class="c1">// into a new function that calls both.</span>  
+  <span class="k">fun</span> <span class="p">&lt;</span><span class="nf">A</span><span class="p">,</span> <span class="n">B</span><span class="p">&gt;</span> <span class="n">compose</span><span class="p">(</span><span class="n">f</span><span class="p">:</span> <span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">A</span><span class="p">,</span>
                      <span class="n">g</span><span class="p">:</span> <span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">B</span><span class="p">):</span> <span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">B</span> <span class="p">=</span> <span class="p">{</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">g</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="p">}</span>
   
   
   <span class="k">fun</span> <span class="nf">composition</span><span class="p">():</span> <span class="n">Unit</span> <span class="p">{</span>
       
-      <span class="c1">// 1st function to generate html for h1
-</span>      <span class="kd">val</span> <span class="py">h1</span> <span class="p">=</span> <span class="p">{</span> <span class="n">text</span><span class="p">:</span> <span class="n">String</span> <span class="p">-&gt;</span> <span class="s">"&lt;h1&gt;"</span> <span class="p">+</span> <span class="n">text</span> <span class="p">+</span> <span class="s">"&lt;/h1&gt;"</span> <span class="p">}</span>
+      <span class="c1">// 1st function to generate html for h1</span>      
+      <span class="kd">val</span> <span class="py">h1</span> <span class="p">=</span> <span class="p">{</span> <span class="n">text</span><span class="p">:</span> <span class="n">String</span> <span class="p">-&gt;</span> <span class="s">"&lt;h1&gt;"</span> <span class="p">+</span> <span class="n">text</span> <span class="p">+</span> <span class="s">"&lt;/h1&gt;"</span> <span class="p">}</span>
       
-      <span class="c1">// 2nd function to generate html section
-</span>      <span class="kd">val</span> <span class="py">section</span> <span class="p">=</span> <span class="p">{</span> <span class="n">content</span><span class="p">:</span> <span class="n">String</span> <span class="p">-&gt;</span> <span class="s">"&lt;div class='section'&gt;"</span> <span class="p">+</span> <span class="n">content</span> <span class="p">+</span> <span class="s">"&lt;/div&gt;"</span> <span class="p">}</span>
+      <span class="c1">// 2nd function to generate html section</span>      
+      <span class="kd">val</span> <span class="py">section</span> <span class="p">=</span> <span class="p">{</span> <span class="n">content</span><span class="p">:</span> <span class="n">String</span> <span class="p">-&gt;</span> <span class="s">"&lt;div class='section'&gt;"</span> <span class="p">+</span> <span class="n">content</span> <span class="p">+</span> <span class="s">"&lt;/div&gt;"</span> <span class="p">}</span>
       
-      <span class="c1">// Now lets combine section and h1
-</span>      <span class="kd">val</span> <span class="py">heading</span> <span class="p">=</span> <span class="n">compose</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="n">section</span> <span class="p">)</span>
+      <span class="c1">// Now lets combine section and h1</span>      
+      <span class="kd">val</span> <span class="py">heading</span> <span class="p">=</span> <span class="n">compose</span><span class="p">(</span> <span class="n">h1</span><span class="p">,</span> <span class="n">section</span> <span class="p">)</span>
       
-      <span class="c1">// Generate the heading html
-</span>      <span class="kd">val</span> <span class="py">html</span> <span class="p">=</span> <span class="n">heading</span><span class="p">(</span><span class="s">"Welcome"</span><span class="p">)</span>
+      <span class="c1">// Generate the heading html</span>      
+      <span class="kd">val</span> <span class="py">html</span> <span class="p">=</span> <span class="n">heading</span><span class="p">(</span><span class="s">"Welcome"</span><span class="p">)</span>
       
-      <span class="c1">// e.g. &lt;div class="section"&gt;&lt;h1&gt;Welcome&lt;/h1&gt;&lt;/div&gt;"
-</span>      <span class="n">println</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+      <span class="c1">// e.g. &lt;div class="section"&gt;&lt;h1&gt;Welcome&lt;/h1&gt;&lt;/div&gt;"</span>      
+      <span class="n">println</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
   <span class="p">}</span>
 
 </code></pre>
@@ -1481,27 +1483,27 @@ to the syntax of the calls.</p>
    * @param callback
    */</span>
   <span class="k">fun</span> <span class="nf">REFACTOR</span><span class="p">(</span><span class="n">tag</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="p">(()</span> <span class="p">-&gt;</span> <span class="n">Unit</span><span class="p">)?</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-      <span class="c1">// log to console or file
-</span>  <span class="p">}</span>
+      <span class="c1">// log to console or file</span>  
+  <span class="p">}</span>
 	
 	
   <span class="n">REFACTOR</span><span class="p">(</span><span class="s">"ACCOUNTS"</span><span class="p">,</span> <span class="s">"Improve error handling"</span><span class="p">,</span> <span class="p">{</span>
-      <span class="c1">// Some code to cleanup here.
-</span>  <span class="p">})</span>
+      <span class="c1">// Some code to cleanup here.</span>  
+  <span class="p">})</span>
   
   
-  <span class="c1">// With parameters inside (...) first, then followed by code block { }
-</span>  <span class="n">REFACTOR</span><span class="p">(</span><span class="s">"ACCOUNTS"</span><span class="p">,</span> <span class="s">"Improve error handling"</span><span class="p">)</span> <span class="p">{</span>
-      <span class="c1">// Some code to cleanup here
-</span>  <span class="p">}</span>
+  <span class="c1">// With parameters inside (...) first, then followed by code block { }</span>  
+  <span class="n">REFACTOR</span><span class="p">(</span><span class="s">"ACCOUNTS"</span><span class="p">,</span> <span class="s">"Improve error handling"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Some code to cleanup here</span>  
+  <span class="p">}</span>
   
-  <span class="c1">// With default params( "" empty strings), then followed by code block { }
-</span>  <span class="n">REFACTOR</span> <span class="p">{</span>
-      <span class="c1">// Some code to cleanup here
-</span>  <span class="p">}</span>
+  <span class="c1">// With default params( "" empty strings), then followed by code block { }</span>  
+  <span class="n">REFACTOR</span> <span class="p">{</span>
+      <span class="c1">// Some code to cleanup here</span>  
+  <span class="p">}</span>
 
-  <span class="c1">// With defaults and no code block
-</span>  <span class="n">REFACTOR</span><span class="p">()</span>
+  <span class="c1">// With defaults and no code block</span>  
+  <span class="n">REFACTOR</span><span class="p">()</span>
 
 </code></pre>
 </div>
