@@ -56,7 +56,7 @@ var codehelixUtils = {
 	
 	
 	updateTemplate: function() {
-	  
+	  $("#copyright").html('&copy; 2017 <span class="text-primary">CodeHelix.co</span> All Rights Reserved.');
 	  // Header 
 	  $("#topbar_title" ).html( codeHelixMeta.product.questions );  
 	  $("#topbar_social_github" ).attr('href', codeHelixMeta.social.github); 
@@ -76,6 +76,7 @@ var codehelixUtils = {
 	  $("#footer_social_gitter"   ).attr('href', codeHelixMeta.social.gitter); 
 	  $("#footer_social_gplus"    ).attr('href', codeHelixMeta.social.gplus   );   
 	  $("#footer_social_twitter"  ).attr('href', codeHelixMeta.social.twitter );   
+
 	}
 };
 
