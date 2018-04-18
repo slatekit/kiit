@@ -27,9 +27,8 @@ object ResultFuncs {
      * @return
      */
     fun help(msg: String? = "success",
-             tag: String? = "",
-             ref: Any? = null): Result<String> {
-        return Failure(HELP, err = null, msg = msg, tag = tag, ref = ref)
+             tag: String? = ""): Result<String> {
+        return Failure(HELP, err = null, msg = msg, tag = tag)
     }
 
 
@@ -40,9 +39,8 @@ object ResultFuncs {
      * @return
      */
     fun <T> helpOn(msg: String? = "success",
-                   tag: String? = "",
-                   ref: Any? = null): Result<T> {
-        return Failure(HELP, err = null, msg = msg, tag = tag, ref = ref)
+                   tag: String? = ""): Result<T> {
+        return Failure(HELP, err = null, msg = msg, tag = tag)
     }
 
 
@@ -53,9 +51,8 @@ object ResultFuncs {
      * @return
      */
     fun exit(msg: String? = "exit",
-             tag: String? = null,
-             ref: Any? = null): Result<String> {
-        return Failure(EXIT, err = null, msg = msg, tag = tag, ref = ref)
+             tag: String? = null): Result<String> {
+        return Failure(EXIT, err = null, msg = msg, tag = tag)
     }
 
 
@@ -66,9 +63,8 @@ object ResultFuncs {
      * @return
      */
     fun ok(msg: String? = null,
-           tag: String? = null,
-           ref: Any? = null): Result<Boolean> {
-        return Success(SUCCESS, true, msg = msg, tag = tag, ref = ref)
+           tag: String? = null): Result<Boolean> {
+        return Success(SUCCESS, true, msg = msg, tag = tag)
     }
 
 
@@ -79,9 +75,8 @@ object ResultFuncs {
      * @return
      */
     fun yes(msg: String? = null,
-            tag: String? = null,
-            ref: Any? = null): Result<Boolean> {
-        return Success(SUCCESS, true, msg = msg, tag = tag, ref = ref)
+            tag: String? = null): Result<Boolean> {
+        return Success(SUCCESS, true, msg = msg, tag = tag)
     }
 
 
@@ -94,9 +89,8 @@ object ResultFuncs {
      */
     fun yesWithCode(code: Int,
                     msg: String? = null,
-                    tag: String? = null,
-                    ref: Any? = null): Result<Boolean> {
-        return Success(code, true, msg = msg, tag = tag, ref = ref)
+                    tag: String? = null): Result<Boolean> {
+        return Success(code, true, msg = msg, tag = tag)
     }
 
 
@@ -110,9 +104,8 @@ object ResultFuncs {
      *              available as part of the Result<T> class.
      */
     fun no(msg: String? = null,
-           tag: String? = null,
-           ref: Any? = null): Result<Boolean> {
-        return Failure(FAILURE, err = null, msg = msg, tag = tag, ref = ref)
+           tag: String? = null): Result<Boolean> {
+        return Failure(FAILURE, err = null, msg = msg, tag = tag)
     }
 
 
@@ -126,9 +119,8 @@ object ResultFuncs {
      *              available as part of the Result<T> class.
      */
     fun err(msg: String,
-            tag: String? = null,
-            ref: Any? = null): Result<Boolean> {
-        return Failure(FAILURE, err = null, msg = msg, tag = tag, ref = ref)
+            tag: String? = null): Result<Boolean> {
+        return Failure(FAILURE, err = null, msg = msg, tag = tag)
     }
 
 
@@ -151,12 +143,11 @@ object ResultFuncs {
      */
     fun okOrFailure(success: Boolean,
                     msg: String? = null,
-                    tag: String? = null,
-                    ref: Any? = null): Result<Boolean> {
+                    tag: String? = null): Result<Boolean> {
         return if (success)
-            Success(SUCCESS, true, msg, tag, ref)
+            Success(SUCCESS, true, msg, tag)
         else
-            Failure(FAILURE, msg = msg, err = null, tag = tag, ref = ref)
+            Failure(FAILURE, msg = msg, err = null, tag = tag)
     }
 
     //
@@ -176,7 +167,7 @@ object ResultFuncs {
     //    return if(success)
     //      Result<T>(value, code, msg, tag)
     //    else
-    //      Result<T>(code, msg = msg, err = null, tag = tag, ref = ref)
+    //      Result<T>(code, msg = msg, err = null, tag = tag)
     //  }
     //
     //
@@ -199,22 +190,21 @@ object ResultFuncs {
     fun <T> successOrError(success: Boolean,
                            value: T?,
                            msg: String? = null,
-                           tag: String? = null,
-                           ref: Any? = null): Result<T> {
+                           tag: String? = null): Result<T> {
         return if (success && value != null)
-            Success(SUCCESS, value, msg = msg, tag = tag, ref = ref)
+            Success(SUCCESS, value, msg = msg, tag = tag)
         else
-            Failure(FAILURE, err = null, msg = msg, tag = tag, ref = ref)
+            Failure(FAILURE, err = null, msg = msg, tag = tag)
     }
 
 
     fun <T> successOrError(callback: () -> T): Result<T> {
         return try {
             val v = callback()
-            Success(SUCCESS, v, null, null, null)
+            Success(SUCCESS, v, null, null)
         }
         catch(ex: Exception) {
-            Failure(FAILURE, ex, ex.message, null, null)
+            Failure(FAILURE, ex, ex.message, null)
         }
     }
 
@@ -227,9 +217,8 @@ object ResultFuncs {
      */
     fun <T> success(data: T,
                     msg: String? = "success",
-                    tag: String? = null,
-                    ref: Any? = null): Result<T> {
-        return Success(SUCCESS, data, msg = msg, tag = tag, ref = ref)
+                    tag: String? = null): Result<T> {
+        return Success(SUCCESS, data, msg = msg, tag = tag)
     }
 
 
@@ -242,9 +231,8 @@ object ResultFuncs {
     fun <T> successWithCode(code: Int,
                             data: T,
                             msg: String? = "success",
-                            tag: String? = null,
-                            ref: Any? = null): Result<T> {
-        return Success(code, data, msg = msg, tag = tag, ref = ref)
+                            tag: String? = null): Result<T> {
+        return Success(code, data, msg = msg, tag = tag)
     }
 
 
@@ -256,9 +244,8 @@ object ResultFuncs {
      */
     fun <T> confirm(data: T,
                     msg: String? = "confirm",
-                    tag: String? = null,
-                    ref: Any? = null): Result<T> {
-        return Success(CONFIRM, data, msg = msg, tag = tag, ref = ref)
+                    tag: String? = null): Result<T> {
+        return Success(CONFIRM, data, msg = msg, tag = tag)
     }
 
 
@@ -270,9 +257,8 @@ object ResultFuncs {
      */
     fun <T> failure(msg: String? = "failure",
                     err: Exception? = null,
-                    tag: String? = null,
-                    ref: Any? = null): Result<T> {
-        return Failure(FAILURE, err, msg = msg, tag = tag, ref = ref)
+                    tag: String? = null): Result<T> {
+        return Failure(FAILURE, err, msg = msg, tag = tag)
     }
 
 
@@ -285,9 +271,8 @@ object ResultFuncs {
     fun <T> failureWithCode(code: Int,
                             msg: String? = "failure",
                             tag: String? = null,
-                            ref: Any? = null,
                             err: Exception? = null): Result<T> {
-        return Failure(code, err, msg = msg, tag = tag, ref = ref)
+        return Failure(code, err, msg = msg, tag = tag)
     }
 
 
@@ -299,9 +284,8 @@ object ResultFuncs {
      */
     fun <T> unAuthorized(msg: String? = "unauthorized",
                          err: Exception? = null,
-                         tag: String? = null,
-                         ref: Any? = null): Result<T> {
-        return Failure(UNAUTHORIZED, err, msg = msg, tag = tag, ref = ref)
+                         tag: String? = null): Result<T> {
+        return Failure(UNAUTHORIZED, err, msg = msg, tag = tag)
     }
 
 
@@ -313,9 +297,8 @@ object ResultFuncs {
      */
     fun <T> notFound(msg: String? = "not found",
                      err: Exception? = null,
-                     tag: String? = null,
-                     ref: Any? = null): Result<T> {
-        return Failure(NOT_FOUND, err, msg = msg, tag = tag, ref = ref)
+                     tag: String? = null): Result<T> {
+        return Failure(NOT_FOUND, err, msg = msg, tag = tag)
     }
 
 
@@ -327,9 +310,8 @@ object ResultFuncs {
      */
     fun <T> badRequest(msg: String? = "bad request",
                        err: Exception? = null,
-                       tag: String? = null,
-                       ref: Any? = null): Result<T> {
-        return Failure(BAD_REQUEST, err, msg = msg, tag = tag, ref = ref)
+                       tag: String? = null): Result<T> {
+        return Failure(BAD_REQUEST, err, msg = msg, tag = tag)
     }
 
 
@@ -341,9 +323,8 @@ object ResultFuncs {
      */
     fun <T> conflict(msg: String? = "conflict",
                      err: Exception? = null,
-                     tag: String? = null,
-                     ref: Any? = null): Result<T> {
-        return Failure(CONFLICT, err, msg = msg, tag = tag, ref = ref)
+                     tag: String? = null): Result<T> {
+        return Failure(CONFLICT, err, msg = msg, tag = tag)
     }
 
 
@@ -355,9 +336,8 @@ object ResultFuncs {
      */
     fun <T> deprecated(msg: String? = "deprecated",
                        err: Exception? = null,
-                       tag: String? = null,
-                       ref: Any? = null): Result<T> {
-        return Failure(DEPRECATED, err, msg = msg, tag = tag, ref = ref)
+                       tag: String? = null): Result<T> {
+        return Failure(DEPRECATED, err, msg = msg, tag = tag)
     }
 
 
@@ -369,9 +349,8 @@ object ResultFuncs {
      */
     fun <T> unexpectedError(msg: String? = "unexpected error",
                             err: Exception? = null,
-                            tag: String? = null,
-                            ref: Any? = null): Result<T> {
-        return Failure(UNEXPECTED_ERROR, err, msg = msg, tag = tag, ref = ref)
+                            tag: String? = null): Result<T> {
+        return Failure(UNEXPECTED_ERROR, err, msg = msg, tag = tag)
     }
 
 
@@ -383,9 +362,8 @@ object ResultFuncs {
      */
     fun <T> notAvailable(msg: String? = "not available",
                          err: Exception? = null,
-                         tag: String? = null,
-                         ref: Any? = null): Result<T> {
-        return Failure(NOT_AVAILABLE, err, msg = msg, tag = tag, ref = ref)
+                         tag: String? = null): Result<T> {
+        return Failure(NOT_AVAILABLE, err, msg = msg, tag = tag)
     }
 
 
@@ -397,8 +375,7 @@ object ResultFuncs {
      */
     fun <T> notImplemented(msg: String? = "not implemented",
                            err: Exception? = null,
-                           tag: String? = null,
-                           ref: Any? = null): Result<T> {
-        return Failure(NOT_IMPLEMENTED, err, msg = msg, tag = tag, ref = ref)
+                           tag: String? = null): Result<T> {
+        return Failure(NOT_IMPLEMENTED, err, msg = msg, tag = tag)
     }
 }

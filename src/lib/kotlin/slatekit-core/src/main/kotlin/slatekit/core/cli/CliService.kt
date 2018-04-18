@@ -392,7 +392,7 @@ open class CliService(
             val help = if (checkHelp) checkForHelp(cmd) else no()
 
             if (help.success) {
-                failureWithCode(help.code, msg = help.msg, tag = help.tag, ref = cmd, err = help.err)
+                failureWithCode(help.code, msg = help.msg, tag = help.tag, err = help.err)
             }
             else {
                 onCommandExecute(cmd)

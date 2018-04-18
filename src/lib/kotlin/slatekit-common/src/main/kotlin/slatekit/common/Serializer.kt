@@ -185,7 +185,6 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             onMapItem(item, depth, 2, "msg", item.msg)
             onMapItem(item, depth, 3, "value", item.value)
             onMapItem(item, depth, 4, "tag", item.tag)
-            onMapItem(item, depth, 5, "ref", item.ref)
 
             // End
             onContainerEnd(item, ParentType.OBJECT_TYPE, depth)

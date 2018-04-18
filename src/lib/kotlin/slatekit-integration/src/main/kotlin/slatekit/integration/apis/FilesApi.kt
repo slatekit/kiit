@@ -101,6 +101,6 @@ class FilesApi(val files: slatekit.core.cloud.CloudFilesBase, override val conte
         }
         else
             "PATH   : " + path
-        return slatekit.common.results.ResultFuncs.successOrError(result.success, output, result.msg, result.tag, result.ref)
+        return slatekit.common.results.ResultFuncs.successOrError(result.success, output, result.msg, result.tag)
     }
 }
