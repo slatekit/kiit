@@ -86,7 +86,7 @@ class CallTests {
             val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
-            val args = deserializer.deserialize(method!!.parameters)
+            val args = deserializer.deserialize(method!!.parameters.drop(1))
 
             assert(args.size == 8)
             assert(args[0] == "123456789")
@@ -128,7 +128,7 @@ class CallTests {
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
-            val args = deserializer.deserialize(method!!.parameters)
+            val args = deserializer.deserialize(method!!.parameters.drop(1))
 
             assert(args.size == 1)
             for(ndx in 0..expected.size -1 ) {
@@ -150,7 +150,7 @@ class CallTests {
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
-            val args = deserializer.deserialize(method!!.parameters)
+            val args = deserializer.deserialize(method!!.parameters.drop(1))
 
             assert(args.size == 1)
             for(key in expected.keys ) {
