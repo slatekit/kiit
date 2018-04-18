@@ -36,14 +36,14 @@ usage: Please refer to license on github for more info.
  * @tparam T      : Type T
  */
 @Suppress("UNCHECKED_CAST")
-interface Result<out T> : ResultChecks {
-    val success: Boolean
-    val code: Int
-    val value: T?
-    val msg: String?
-    val err: Exception?
-    val tag: String?
-    val ref: Any?
+sealed class Result<out T> : ResultChecks {
+    abstract val success: Boolean
+    abstract val code: Int
+    abstract val value: T?
+    abstract val msg: String?
+    abstract val err: Exception?
+    abstract val tag: String?
+    abstract val ref: Any?
 
     override fun statusCode() = code
 
@@ -111,7 +111,7 @@ data class Success<out T>(
         override val msg: String?,
         override val tag: String?,
         override val ref: Any?
-) : Result<T>, ResultChecks {
+) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = true
 
@@ -132,7 +132,7 @@ data class Failure<out T>(
         override val msg: String?,
         override val tag: String?,
         override val ref: Any?
-) : Result<T>, ResultChecks {
+) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = false
 
