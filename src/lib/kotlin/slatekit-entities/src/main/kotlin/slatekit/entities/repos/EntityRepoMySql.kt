@@ -103,7 +103,7 @@ open class EntityRepoMySql<T>(
      */
     override fun deleteByQuery(query: IQuery): Int {
         val filter = query.toFilter()
-        val sql = "delete from " + tableName() + " " + filter
+        val sql = "delete from " + tableName() + " where " + filter
         return _db.update(sql)
     }
 
