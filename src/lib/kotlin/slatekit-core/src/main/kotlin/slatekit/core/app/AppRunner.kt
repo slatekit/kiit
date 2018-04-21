@@ -14,8 +14,8 @@
 package slatekit.core.app
 
 
+import slatekit.common.Failure
 import slatekit.common.Result
-import slatekit.common.Result.Results.attempt
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.Console
@@ -64,7 +64,7 @@ object AppRunner {
             println("code: " + result.code)
             println("msg : " + result.msg)
             println()
-            println("err : " + result.err)
+            if(result is Failure<*>) { println("err : " + result.err) }
             println("==================================")
             println()
         }
@@ -224,7 +224,7 @@ object AppRunner {
 
 
     fun execute(app: AppProcess): Result<Any> =
-            attempt({ ->
+            Result.attempt({ ->
 
                 // 1. Begin app workflow
                 app.init()

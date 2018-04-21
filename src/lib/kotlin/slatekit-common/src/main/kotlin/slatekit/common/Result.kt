@@ -40,22 +40,21 @@ sealed class Result<out T> : ResultChecks {
     abstract val success: Boolean
     abstract val code: Int
     abstract val value: T?
-    abstract val msg: String?
-    abstract val err: Exception?
-    abstract val tag: String?
+    abstract val msg: String
+    abstract val tag: String
 
     override fun statusCode() = code
 
 
-    fun <M> map(f: (T) -> M): Result<M> = value?.let { v -> ResultFuncs.success(f(v), msg, tag) } ?: this as Result<M>
+    inline fun <M> map(f: (T) -> M): Result<M> = value?.let { v -> ResultFuncs.success(f(v), msg, tag) } ?: this as Result<M>
 
 
-    fun <M> flatMap(f: (T) -> Result<M>): Result<M> = value?.let { v -> f(v) } ?: this as Result<M>
+    inline fun <M> flatMap(f: (T) -> Result<M>): Result<M> = value?.let { v -> f(v) } ?: this as Result<M>
 
 
-    companion object Results {
+    companion object {
 
-        val none = Failure<Boolean>(FAILURE, null, null, null)
+        val none = Failure<Boolean>(FAILURE, null, "", "")
 
 
         fun <T> attempt(call: () -> T): Result<T> {
@@ -69,13 +68,13 @@ sealed class Result<out T> : ResultChecks {
                 }
             }
             catch (e: Exception) {
-                ResultFuncs.unexpectedError<T>(e.message, e)
+                ResultFuncs.unexpectedError<T>(e.message ?: "", e)
             }
         }
 
 
 
-        fun <T> tryLog(name:String, desc:String, rethrow:Boolean, call: () -> T): Result<T> {
+        fun <T> attemptAndLog(name:String, desc:String, rethrow:Boolean, call: () -> T): Result<T> {
             return try {
                 val data = call()
                 if (data is Result<*>) {
@@ -94,7 +93,7 @@ sealed class Result<out T> : ResultChecks {
                 if(rethrow) {
                     throw e
                 }
-                ResultFuncs.unexpectedError<T>(e.message, e)
+                ResultFuncs.unexpectedError(e.message ?: "", e)
             }
         }
     }
@@ -107,17 +106,14 @@ sealed class Result<out T> : ResultChecks {
 data class Success<out T>(
         override val code: Int,
         private val data: T,
-        override val msg: String?,
-        override val tag: String?
+        override val msg: String = "",
+        override val tag: String = ""
 ) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = true
 
 
     override val value: T? get() = data
-
-
-    override val err: Exception? get() = null
 }
 
 
@@ -126,9 +122,9 @@ data class Success<out T>(
  */
 data class Failure<out T>(
         override val code: Int,
-        override val err: Exception?,
-        override val msg: String?,
-        override val tag: String?
+                 val err: Exception?,
+        override val msg: String = "",
+        override val tag: String = ""
 ) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = false
@@ -138,6 +134,5 @@ data class Failure<out T>(
 }
 
 
-fun <T> Result<T>.getOrElse(default: () -> T): T = value ?: default()
-
+inline fun <T> Result<T>.getOrElse(default: () -> T): T = value ?: default()
 

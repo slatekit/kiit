@@ -13,11 +13,8 @@
 
 package slatekit.core.cli
 
-import slatekit.common.Loops
+import slatekit.common.*
 import slatekit.common.Loops.doUntil
-import slatekit.common.Response
-import slatekit.common.Result
-import slatekit.common.Result.Results.attempt
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.args.Args
@@ -30,7 +27,6 @@ import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.toResponse
 import slatekit.core.cli.CliConstants.ABOUT
 import slatekit.core.cli.CliConstants.EXIT
 import slatekit.core.cli.CliConstants.HELP
@@ -81,7 +77,7 @@ open class CliService(
      * runs the shell command line with arguments
      */
     fun run(): Unit {
-        val result = attempt({ ->
+        val result = Result.attempt({ ->
             // Allow derived classes to initialize
             onShellInit()
 
@@ -95,7 +91,7 @@ open class CliService(
             onShellEnd()
         })
 
-        if (!result.success) {
+        if (result is Failure<*>) {
             _writer.error(result.err?.message ?: "")
         }
     }
@@ -392,7 +388,7 @@ open class CliService(
             val help = if (checkHelp) checkForHelp(cmd) else no()
 
             if (help.success) {
-                failureWithCode(help.code, msg = help.msg, tag = help.tag, err = help.err)
+                failureWithCode(help.code, msg = help.msg, tag = help.tag)
             }
             else {
                 onCommandExecute(cmd)

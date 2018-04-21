@@ -48,13 +48,8 @@ data class Response<out T>(
  * Converts result to Response.
  */
 fun <T> Result<T>.toResponse(): Response<T> {
-    return Response(
-        success = this.success,
-        code = this.code,
-        meta = null,
-        value = this.value,
-        msg = this.msg,
-        err = this.err,
-        tag = this.tag
-    )
+    return when(this) {
+        is Success<T> -> Response(this.success, this.code, null, this.value, this.msg, null, this.tag)
+        is Failure<T> -> Response(this.success, this.code, null, this.value, this.msg, this.err, this.tag)
+    }
 }

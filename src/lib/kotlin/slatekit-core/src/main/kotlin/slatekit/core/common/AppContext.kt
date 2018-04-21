@@ -90,7 +90,7 @@ data class AppContext(
                 inf = About.Abouts.none,
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),
-                state = failureWithCode(code, msg)
+                state = failureWithCode(code, msg ?: "")
             )
 
 
