@@ -46,7 +46,7 @@ abstract class EntityRepoSql<T>
 
     override fun create(entity: T): Long {
         val sql = mapFields(entity, false)
-        val id = _db.insert("insert into ${tableName()} " + sql + ";")
+        val id = _db.insert("insert into ${repoName()} " + sql + ";")
         return id
     }
 
@@ -54,7 +54,7 @@ abstract class EntityRepoSql<T>
     override fun update(entity: T): T {
         val sql = mapFields(entity, true)
         val id = entity.identity()
-        sqlExecute("update ${tableName()} set " + sql + " where ${idName()} = $id;")
+        sqlExecute("update ${repoName()} set " + sql + " where ${idName()} = $id;")
         return entity
     }
 
@@ -65,31 +65,31 @@ abstract class EntityRepoSql<T>
      * @param id
      */
     override fun delete(id: Long): Boolean {
-        val count = sqlExecute("delete from ${tableName()} where ${idName()} = ${id};")
+        val count = sqlExecute("delete from ${repoName()} where ${idName()} = ${id};")
         return count > 0
     }
 
 
     override fun get(id: Long): T? {
-        return sqlMapOne("select * from ${tableName()} where ${idName()} = $id;")
+        return sqlMapOne("select * from ${repoName()} where ${idName()} = $id;")
     }
 
 
     override fun getAll(): List<T> {
-        val result = sqlMapMany("select * from ${tableName()};")
+        val result = sqlMapMany("select * from ${repoName()};")
         return result ?: listOf<T>()
     }
 
 
     override fun count(): Long {
-        val count = _db.getScalarLong("select count(*) from ${tableName()};")
+        val count = _db.getScalarLong("select count(*) from ${repoName()};")
         return count
     }
 
 
     override fun find(query: IQuery): List<T> {
         val filter = query.toFilter()
-        val sql = "select * from ${tableName()} where " + filter
+        val sql = "select * from ${repoName()} where " + filter
         val results = sqlMapMany(sql)
         return results ?: listOf()
     }

@@ -30,19 +30,43 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 
     @ApiAction(desc = "installs the model to the database shard", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<Boolean> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<String> {
         return service().install(name, version, dbKey, dbShard)
     }
 
 
     @ApiAction(desc = "installs all the models in the default database", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun installAll(): Result<String> {
+    fun installAll(): Result<List<String>> {
         return service().installAll()
     }
 
 
+    @ApiAction(desc = "deletes data in the table supplied", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun delete(name:String): Result<String> {
+        return service().delete(name)
+    }
+
+
+    @ApiAction(desc = "deletes data in all the tables", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun deleteAll(): Result<List<String>> {
+        return service().deleteAll()
+    }
+
+
+    @ApiAction(desc = "drops the table supplied", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun drop(name:String): Result<String> {
+        return service().drop(name)
+    }
+
+
+    @ApiAction(desc = "dropss the table", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun dropAll(): Result<List<String>> {
+        return service().dropAll()
+    }
+
+
     @ApiAction(desc = "installs all the models in the default database", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun names(): List<String> {
+    fun names(): List<Pair<String,String>> {
         return service().names()
     }
 
@@ -54,7 +78,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
 
     @ApiAction(desc = "generates sql install files for all models", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun generateSqlAll(): Result<String> {
+    fun generateSqlAll(): Result<List<String>> {
         return service().generateSqlAll()
     }
 

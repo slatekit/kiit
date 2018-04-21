@@ -18,6 +18,9 @@ package slatekit.entities.core
  */
 interface IEntityRepo {
 
+    fun repoName(): String
+
+
     fun count(): Long
 
 

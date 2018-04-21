@@ -14,7 +14,6 @@
 package slatekit.entities.repos
 
 import slatekit.common.db.Db
-import slatekit.common.db.DbUtils
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
@@ -44,7 +43,7 @@ open class EntityRepoMySql<T>(
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
-        val sql = "select * from " + tableName() + orderBy + " limit " + count
+        val sql = "select * from " + repoName() + orderBy + " limit " + count
         val items = _db.mapMany<T>(sql, _entityMapper) ?: listOf<T>()
         return items
     }
@@ -58,7 +57,7 @@ open class EntityRepoMySql<T>(
     override fun updateByField(field:String, value: Any): Int {
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
-        val sql = "update " + tableName() + updateSql
+        val sql = "update " + repoName() + updateSql
         return _db.update(sql)
     }
 
@@ -77,7 +76,7 @@ open class EntityRepoMySql<T>(
      */
     override fun updateByQuery(query: IQuery): Int {
         val updateSql = query.toUpdatesText()
-        val sql = "update " + tableName() + updateSql
+        val sql = "update " + repoName() + updateSql
         return _db.update(sql)
     }
 
@@ -91,7 +90,7 @@ open class EntityRepoMySql<T>(
     override fun deleteByField(field:String, value: Any): Int {
         val query = Query().where(field, "=", value)
         val filter = query.toFilter()
-        val sql = "delete from " + tableName() + " where " + filter
+        val sql = "delete from " + repoName() + " where " + filter
         return _db.update(sql)
     }
 
@@ -103,7 +102,7 @@ open class EntityRepoMySql<T>(
      */
     override fun deleteByQuery(query: IQuery): Int {
         val filter = query.toFilter()
-        val sql = "delete from " + tableName() + " where " + filter
+        val sql = "delete from " + repoName() + " where " + filter
         return _db.update(sql)
     }
 
@@ -122,6 +121,6 @@ open class EntityRepoMySql<T>(
             "SELECT LAST_INSERT_ID();"
 
 
-    override fun tableName(): String =
-            "`" + super.tableName() + "`"
+    override fun repoName(): String =
+            "`" + super.repoName() + "`"
 }

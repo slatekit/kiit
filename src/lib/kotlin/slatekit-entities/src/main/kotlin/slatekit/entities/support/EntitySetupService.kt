@@ -20,12 +20,14 @@ import slatekit.common.db.DbCon
 import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbLookup
 import slatekit.common.info.Folders
+import slatekit.common.newline
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
+import slatekit.entities.core.EntityRepo
 import slatekit.meta.buildAddTable
 
 /**
@@ -36,55 +38,8 @@ class EntitySetupService(val _entities: Entities,
                          val _settings: EntitySetupSettings,
                          val _folders: Folders?) {
 
-    fun names(): List<String> = _entities.getEntities().map { it.entityTypeName }
-
-
-    /**
-     * generates all the sql install files for all the registered entities
-     *
-     * @return
-     */
-    fun eachEntity(callback: (EntityInfo) -> Unit): Unit {
-        _entities.getEntities().forEach(callback)
-    }
-
-
-    fun <T> consolidate(results: List<Result<*>>): Result<String> {
-
-        val success = results.all { result -> result.success }
-        val msg = if (success) {
-            results.fold("", { acc, r -> acc + (r.value ?: "") })
-        }
-        else {
-            results[0].msg
-        }
-        return successOrError(success, msg)
-    }
-
-
-    /**
-     * installs all the registered entities in the database
-     *
-     * @return
-     */
-    fun installAll(): Result<String> {
-        val results = _entities.getEntities().map { entity ->
-            install(entity.entityTypeName, "1", entity.dbKey, entity.dbShard)
-        }
-        return consolidate<String>(results)
-    }
-
-
-    /**
-     * generates all the sql install files for all the registered entities
-     *
-     * @return
-     */
-    fun generateSqlAll(): Result<String> {
-        val results = _entities.getEntities().map { entity ->
-            generateSql(entity.entityTypeName, "1")
-        }
-        return consolidate<Boolean>(results)
+    fun names(): List<Pair<String, String>> = _entities.getEntities().map {
+        Pair(it.entityTypeName, it.entityRepoInstance?.repoName() ?: it.entityTypeName )
     }
 
 
@@ -97,15 +52,45 @@ class EntitySetupService(val _entities: Entities,
      * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
      * @return
      */
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<Boolean> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<String> {
         val result = generateSql(name, version)
         val err = "Unable to install, can not generate sql for model $name"
 
         return result.value?.let { sql ->
             val db = _entities.getDb(dbKey, dbShard)
             db.update(sql)
-            ok()
+            success("Installed all tables")
         } ?: failure(msg = err)
+    }
+
+
+    fun delete(name:String): Result<String> {
+        return operate("Delete", name, { info, tableName -> _entities.getDbSource().buildDeleteAll(tableName) } )
+    }
+
+
+    fun drop(name:String): Result<String> {
+        return operate("Drop", name, { info, tableName -> _entities.getDbSource().buildDropTable(tableName) } )
+    }
+
+
+    fun installAll(): Result<List<String>> {
+        return each( { entity -> install(entity.entityTypeName) } )
+    }
+
+
+    fun generateSqlAll(): Result<List<String>> {
+        return each( { entity -> generateSql(entity.entityTypeName) } )
+    }
+
+
+    fun deleteAll(): Result<List<String>> {
+        return each( { entity -> delete(entity.entityTypeName) } )
+    }
+
+
+    fun dropAll(): Result<List<String>> {
+        return each( { entity -> drop(entity.entityTypeName) } )
     }
 
 
@@ -158,5 +143,29 @@ class EntitySetupService(val _entities: Entities,
         return _dbs?.let { dbs ->
             success(dbs.named(name) ?: DbConEmpty)
         } ?: failure<DbCon>("no db setup")
+    }
+
+
+    private fun operate(operationName:String, entityName:String, sqlBuilder: (EntityInfo, String) -> String): Result<String> {
+        val ent = _entities.getInfoByName(entityName)
+        val svc = _entities.getServiceByName(entityName)
+        val table = svc.repo().repoName()
+        val sql = sqlBuilder(ent, table)
+        return try {
+            val db = _entities.getDb()
+            db.update(sql)
+            success("Operation $operationName successful on $table")
+        } catch ( ex: Exception ) {
+            failure("Unable to delete :$table. ${ex.message}", ex)
+        }
+    }
+
+
+    private fun each(operation: (EntityInfo) -> Result<String>): Result<List<String>> {
+        val results =  _entities.getEntities().map { operation(it) }
+        val success = results.all { it.success }
+        val messages = results.map { it.msg ?: "" }
+        val error = if(success) "" else messages.joinToString(newline)
+        return successOrError(success, messages, error)
     }
 }

@@ -40,4 +40,9 @@ interface DbSource {
      * Builds a valid column type
      */
     fun buildColType(colType: DbFieldType, maxLen: Int): String
+
+    /**
+     * Builds a delete statement to delete all rows
+     */
+    fun buildDeleteAll(name: String): String
 }
