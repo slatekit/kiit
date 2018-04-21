@@ -43,10 +43,11 @@ abstract class EntityRepo<T>(
     protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType)
     protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, encryptor = encryptor)
 
+
     /**
      * The name of the table in the datastore
      */
-    open fun tableName(): String = _nameOfTable ?: _entityType.simpleName ?: ""
+    override fun repoName(): String = _nameOfTable ?: _entityType.simpleName ?: ""
 
 
     /**

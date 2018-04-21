@@ -34,6 +34,17 @@ open class DbSourceMySql : DbSource {
 
 
   /**
+   * Builds a delete statement to delete all rows
+   */
+  override fun buildDeleteAll(name: String): String {
+
+    val tableName = ensureField(name)
+    val sql = "DELETE * FROM $tableName IF EXISTS $tableName;"
+    return sql
+  }
+
+
+  /**
    * Builds an add column DDL sql statement
    */
   override fun buildAddCol(name:String, dataType: DbFieldType, required:Boolean, maxLen:Int): String
