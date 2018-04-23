@@ -377,8 +377,8 @@ open class CliService(
         val argsResult = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
 
         fun error(argsResult: Result<Args>): Result<CliCommand> {
-            _view.showArgumentsError(argsResult.msg ?: "")
-            return badRequest<CliCommand>(msg = argsResult.msg, tag = line)
+            _view.showArgumentsError(argsResult.msg)
+            return badRequest(msg = argsResult.msg)
         }
         return argsResult.value?.let { result ->
             // Build command from arguments
@@ -388,7 +388,7 @@ open class CliService(
             val help = if (checkHelp) checkForHelp(cmd) else no()
 
             if (help.success) {
-                failureWithCode(help.code, msg = help.msg, tag = help.tag)
+                failureWithCode(help.code, msg = help.msg)
             }
             else {
                 onCommandExecute(cmd)

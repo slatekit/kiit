@@ -28,12 +28,11 @@ import slatekit.common.results.ResultFuncs.yes
 class ResultTests {
 
   @Test fun can_build_result() {
-    val res =  Success(123,"user01",  msg = "created", tag = "code12")
+    val res =  Success(123,"user01",  msg = "created")
     assert( res.success  )
     assert( res.msg == "created" )
     assert( res.code == 123 )
     assert( res.value == "user01")
-    assert( res.tag == "code12")
   }
 
 
@@ -86,42 +85,39 @@ class ResultTests {
 
 
   @Test fun can_map_to_another_value() {
-    val yes = yes(msg = "m1", tag = "t1")
+    val yes = yes(msg = "m1")
     val good  = yes.map( { v -> if(v) 1 else 0 })
 
     assert( good.success )
     assert( good.code == yes.code )
     assert( good.msg == yes.msg )
-    assert( good.tag == yes.tag )
     assert( good.value == 1 )
   }
 
 
   @Test fun can_map_failure() {
-    val fail = no(msg = "m1", tag = "t1")
+    val fail = no(msg = "m1")
     val fail2  = fail.map( { v -> if(v) 1 else 0 } )
 
     assert( !fail2.success )
     assert( fail2.code == fail.code )
     assert( fail2.msg  == "m1")
-    assert( fail2.tag  == "t1")
     assert( fail2.value == null)
   }
 
 
  @Test fun can_flat_map_to_another_value() {
-    val yes = yes(msg = "m1", tag = "t1")
+    val yes = yes(msg = "m1")
     val good  = yes.flatMap( { v ->
       if(v)
-        success(1, msg = "f_msg1", tag = "f_tag1")
+        success(1, msg = "f_msg1")
       else
-        failure<Int>(msg = "f_msg2", tag = "f_tag2")
+        failure<Int>(msg = "f_msg2")
     } )
 
     assert( good.success )
     assert( good.code == yes.code )
     assert( good.msg  == "f_msg1")
-    assert( good.tag  == "f_tag1")
   }
 
 

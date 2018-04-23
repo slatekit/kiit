@@ -49,18 +49,18 @@ interface CloudActions {
         val success = result.first
         val message = result.second
         val resData = result.third
-        return successOrError(success, resData, message, tag)
+        return successOrError(success, resData, message)
     }
 
 
-    fun onAudit(source: String, action: String, tag: String, data: Any?): Unit {
+    fun onAudit(source: String, action: String, tag: String, data: Any?) {
     }
 
 
-    fun onError(source: String, action: String, tag: String, data: Any?, ex: Exception?): Unit {
+    fun onError(source: String, action: String, tag: String, data: Any?, ex: Exception?) {
     }
 
 
-    fun onWarn(source: String, action: String, tag: String, data: Any?, ex: Exception?): Unit {
+    fun onWarn(source: String, action: String, tag: String, data: Any?, ex: Exception?) {
     }
 }

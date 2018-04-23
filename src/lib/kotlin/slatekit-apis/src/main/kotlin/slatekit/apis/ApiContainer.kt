@@ -134,7 +134,7 @@ open class ApiContainer(
      */
     fun check(request: Request): Result<Boolean> {
         val result = ApiValidator.validateCall(request, { req -> get(req) })
-        return okOrFailure(result.success, msg = result.msg, tag = request.fullName)
+        return okOrFailure(result.success, msg = result.msg)
     }
 
 
@@ -391,19 +391,19 @@ open class ApiContainer(
 
         // Case 3a: Help ?
         return if (ArgsFuncs.isHelp(req.parts, 0)) {
-            ResultFuncs.help(msg = "?", tag = req.action)
+            ResultFuncs.help(msg = "?")
         }
         // Case 3b: Help on area ?
         else if (ArgsFuncs.isHelp(req.parts, 1)) {
-            ResultFuncs.help(msg = "area ?", tag = req.action)
+            ResultFuncs.help(msg = "area ?")
         }
         // Case 3c: Help on api ?
         else if (ArgsFuncs.isHelp(req.parts, 2)) {
-            ResultFuncs.help(msg = "area.api ?", tag = req.action)
+            ResultFuncs.help(msg = "area.api ?")
         }
         // Case 3d: Help on action ?
         else if (ArgsFuncs.isHelp(req.parts, 3)) {
-            ResultFuncs.help(msg = "area.api.action ?", tag = req.action)
+            ResultFuncs.help(msg = "area.api.action ?")
         }
         else {
             failure<String>()

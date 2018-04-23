@@ -41,34 +41,34 @@ object CliFuncs {
 
         // Case 1: Exit ?
         return if (ArgsFuncs.isExit(words, 0)) {
-            yesWithCode(EXIT, msg = "exit", tag = cmd.args.action)
+            yesWithCode(EXIT, msg = "exit")
         }
         // Case 2a: version ?
         else if (ArgsFuncs.isVersion(words, 0)) {
-            yesWithCode(HELP, msg = "version", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "version")
         }
         // Case 2b: about ?
         else if (ArgsFuncs.isAbout(words, 0)) {
-            yesWithCode(HELP, msg = "about", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "about")
         }
         // Case 3a: Help ?
         else if (ArgsFuncs.isHelp(words, 0)) {
-            yesWithCode(HELP, msg = "help", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "help")
         }
         // Case 3b: Help on area ?
         else if (ArgsFuncs.isHelp(verbs, 1)) {
-            yesWithCode(HELP, msg = "area ?", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "area ?")
         }
         // Case 3c: Help on api ?
         else if (ArgsFuncs.isHelp(verbs, 2)) {
-            yesWithCode(HELP, msg = "area.api ?", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "area.api ?")
         }
         // Case 3d: Help on action ?
         else if (!cmd.args.action.isNullOrEmpty() &&
                 (ArgsFuncs.isHelp(cmd.args.positional, 0) ||
                         ArgsFuncs.isHelp(verbs, 3))
                      ) {
-            yesWithCode(HELP, msg = "area.api.action ?", tag = cmd.args.action)
+            yesWithCode(HELP, msg = "area.api.action ?")
         }
         else
             no()

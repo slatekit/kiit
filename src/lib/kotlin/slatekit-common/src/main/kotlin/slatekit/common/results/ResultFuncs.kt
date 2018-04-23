@@ -23,60 +23,50 @@ object ResultFuncs {
     /**
      * Help result : return success with string value "help" and status code of HELP
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
-    fun help(msg: String = "success",
-             tag: String = ""): Result<String> {
-        return Failure(HELP, err = null, msg = msg, tag = tag)
+    fun help(msg: String = "success"): Result<String> {
+        return Failure(HELP, err = null, msg = msg)
     }
 
 
     /**
      * Help result : return success with string value "help" and status code of HELP
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
-    fun <T> helpOn(msg: String = "success",
-                   tag: String = ""): Result<T> {
-        return Failure(HELP, err = null, msg = msg, tag = tag)
+    fun <T> helpOn(msg: String = "success"): Result<T> {
+        return Failure(HELP, err = null, msg = msg)
     }
 
 
     /**
      * Exit result : return failure with string value "exit" and status code of EXIT
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
-    fun exit(msg: String = "exit",
-             tag: String = ""): Result<String> {
-        return Failure(EXIT, err = null, msg = msg, tag = tag)
+    fun exit(msg: String = "exit"): Result<String> {
+        return Failure(EXIT, err = null, msg = msg)
     }
 
 
     /**
      * Boolean result : return a SomeResult with bool value of true
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
-    fun ok(msg: String = "",
-           tag: String = ""): Result<Boolean> {
-        return Success(SUCCESS, true, msg = msg, tag = tag)
+    fun ok(msg: String = ""): Result<Boolean> {
+        return Success(SUCCESS, true, msg = msg)
     }
 
 
     /**
      * Boolean result : return a SomeResult with bool value of true
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
-    fun yes(msg: String = "",
-            tag: String = ""): Result<Boolean> {
-        return Success(SUCCESS, true, msg = msg, tag = tag)
+    fun yes(msg: String = ""): Result<Boolean> {
+        return Success(SUCCESS, true, msg = msg)
     }
 
 
@@ -84,13 +74,11 @@ object ResultFuncs {
      * Boolean result : return a SomeResult with bool value of true
      * @param code : Code
      * @param msg  : Optional message
-     * @param tag  : Optional tag
      * @return
      */
     fun yesWithCode(code: Int,
-                    msg: String = "",
-                    tag: String = ""): Result<Boolean> {
-        return Success(code, true, msg = msg, tag = tag)
+                    msg: String = ""): Result<Boolean> {
+        return Success(code, true, msg = msg)
     }
 
 
@@ -103,24 +91,21 @@ object ResultFuncs {
      *              return value of false ( along with the message, tag, etc being
      *              available as part of the Result<T> class.
      */
-    fun no(msg: String = "",
-           tag: String = ""): Result<Boolean> {
-        return Failure(FAILURE, err = null, msg = msg, tag = tag)
+    fun no(msg: String = ""): Result<Boolean> {
+        return Failure(FAILURE, err = null, msg = msg)
     }
 
 
     /**
      * Boolean result : return a SomeResult with bool value of false
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      * @note      : This is not to be confused as an error result, but a legitimate
      *              return value of false ( along with the message, tag, etc being
      *              available as part of the Result<T> class.
      */
-    fun err(msg: String,
-            tag: String = ""): Result<Boolean> {
-        return Failure(FAILURE, err = null, msg = msg, tag = tag)
+    fun err(msg: String): Result<Boolean> {
+        return Failure(FAILURE, err = null, msg = msg)
     }
 
 
@@ -138,36 +123,32 @@ object ResultFuncs {
     /**
      * Builds either a SuccessResult with true value or an FailureResult based on the success flag.
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun okOrFailure(success: Boolean,
-                    msg: String = "",
-                    tag: String = ""): Result<Boolean> {
+                    msg: String = ""): Result<Boolean> {
         return if (success)
-            Success(SUCCESS, true, msg, tag)
+            Success(SUCCESS, true, msg)
         else
-            Failure(FAILURE, msg = msg, err = null, tag = tag)
+            Failure(FAILURE, msg = msg, err = null)
     }
 
     //
     //  /**
     //   * Builds either a SuccessResult or an FailureResult based on the success flag.
     //   * @param msg : Optional message
-    //   * @param tag : Optional tag
     //   * @return
     //   */
     //  fun <T> successOrErrorWithCode<T>(success:Boolean,
     //                                value:T,
     //                                code:Int,
     //                                msg:String? = null,
-    //                                tag:String? = null,
     //                                ref:Any?    = null): Result<T>
     //  {
     //    return if(success)
     //      Result<T>(value, code, msg, tag)
     //    else
-    //      Result<T>(code, msg = msg, err = null, tag = tag)
+    //      Result<T>(code, msg = msg, err = null)
     //  }
     //
     //
@@ -184,17 +165,15 @@ object ResultFuncs {
     /**
     //   * Builds either a SuccessResult or an FailureResult based on the success flag.
     //   * @param msg : Optional message
-    //   * @param tag : Optional tag
     //   * @return
     //   */
     fun <T> successOrError(success: Boolean,
                            value: T?,
-                           msg: String = "",
-                           tag: String = ""): Result<T> {
+                           msg: String = ""): Result<T> {
         return if (success && value != null)
-            Success(SUCCESS, value, msg = msg, tag = tag)
+            Success(SUCCESS, value, msg = msg)
         else
-            Failure(FAILURE, err = null, msg = msg, tag = tag)
+            Failure(FAILURE, err = null, msg = msg)
     }
 
 
@@ -216,9 +195,8 @@ object ResultFuncs {
      * @return
      */
     fun <T> success(data: T,
-                    msg: String = "success",
-                    tag: String = ""): Result<T> {
-        return Success(SUCCESS, data, msg = msg, tag = tag)
+                    msg: String = "success"): Result<T> {
+        return Success(SUCCESS, data, msg = msg)
     }
 
 
@@ -230,9 +208,8 @@ object ResultFuncs {
      */
     fun <T> successWithCode(code: Int,
                             data: T,
-                            msg: String = "success",
-                            tag: String = ""): Result<T> {
-        return Success(code, data, msg = msg, tag = tag)
+                            msg: String = "success"): Result<T> {
+        return Success(code, data, msg = msg)
     }
 
 
@@ -243,9 +220,8 @@ object ResultFuncs {
      * @return
      */
     fun <T> confirm(data: T,
-                    msg: String = "confirm",
-                    tag: String = ""): Result<T> {
-        return Success(CONFIRM, data, msg = msg, tag = tag)
+                    msg: String = "confirm"): Result<T> {
+        return Success(CONFIRM, data, msg = msg)
     }
 
 
@@ -256,9 +232,8 @@ object ResultFuncs {
      * @return
      */
     fun <T> failure(msg: String = "failure",
-                    err: Exception? = null,
-                    tag: String = ""): Result<T> {
-        return Failure(FAILURE, err, msg = msg, tag = tag)
+                    err: Exception? = null): Result<T> {
+        return Failure(FAILURE, err, msg = msg)
     }
 
 
@@ -270,35 +245,30 @@ object ResultFuncs {
      */
     fun <T> failureWithCode(code: Int,
                             msg: String = "failure",
-                            tag: String = "",
                             err: Exception? = null): Result<T> {
-        return Failure(code, err, msg = msg, tag = tag)
+        return Failure(code, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to UNAUTHORIZED
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> unAuthorized(msg: String = "unauthorized",
-                         err: Exception? = null,
-                         tag: String = ""): Result<T> {
-        return Failure(UNAUTHORIZED, err, msg = msg, tag = tag)
+                         err: Exception? = null): Result<T> {
+        return Failure(UNAUTHORIZED, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to NOT_FOUND
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> notFound(msg: String = "not found",
-                     err: Exception? = null,
-                     tag: String = ""): Result<T> {
-        return Failure(NOT_FOUND, err, msg = msg, tag = tag)
+                     err: Exception? = null): Result<T> {
+        return Failure(NOT_FOUND, err, msg = msg)
     }
 
 
@@ -309,73 +279,62 @@ object ResultFuncs {
      * @return
      */
     fun <T> badRequest(msg: String = "bad request",
-                       err: Exception? = null,
-                       tag: String = ""): Result<T> {
-        return Failure(BAD_REQUEST, err, msg = msg, tag = tag)
+                       err: Exception? = null): Result<T> {
+        return Failure(BAD_REQUEST, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to CONFLICT
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> conflict(msg: String = "conflict",
-                     err: Exception? = null,
-                     tag: String = ""): Result<T> {
-        return Failure(CONFLICT, err, msg = msg, tag = tag)
+                     err: Exception? = null): Result<T> {
+        return Failure(CONFLICT, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to DEPRECATED
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> deprecated(msg: String = "deprecated",
-                       err: Exception? = null,
-                       tag: String = ""): Result<T> {
-        return Failure(DEPRECATED, err, msg = msg, tag = tag)
+                       err: Exception? = null): Result<T> {
+        return Failure(DEPRECATED, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to UNEXPECTED_ERROR
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> unexpectedError(msg: String = "unexpected error",
-                            err: Exception? = null,
-                            tag: String = ""): Result<T> {
-        return Failure(UNEXPECTED_ERROR, err, msg = msg, tag = tag)
+                            err: Exception? = null): Result<T> {
+        return Failure(UNEXPECTED_ERROR, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to NOT_AVAILABLE
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> notAvailable(msg: String = "not available",
-                         err: Exception? = null,
-                         tag: String = ""): Result<T> {
-        return Failure(NOT_AVAILABLE, err, msg = msg, tag = tag)
+                         err: Exception? = null): Result<T> {
+        return Failure(NOT_AVAILABLE, err, msg = msg)
     }
 
 
     /**
      * Builds an FailureResult with no value, and with code set to NOT_IMPLEMENTED
      * @param msg : Optional message
-     * @param tag : Optional tag
      * @return
      */
     fun <T> notImplemented(msg: String = "not implemented",
-                           err: Exception? = null,
-                           tag: String = ""): Result<T> {
-        return Failure(NOT_IMPLEMENTED, err, msg = msg, tag = tag)
+                           err: Exception? = null): Result<T> {
+        return Failure(NOT_IMPLEMENTED, err, msg = msg)
     }
 }

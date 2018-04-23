@@ -30,9 +30,9 @@ class MyWorker(var acc:Int = 0,
 
         // Simulate different results for testing purposes
         return if(acc % 2 == 0 )
-            ResultFuncs.success(acc, "even", "even")
+            ResultFuncs.success(acc, "even")
         else
-            ResultFuncs.success(acc, "odd", "odd")
+            ResultFuncs.success(acc, "odd")
     }
 }
 

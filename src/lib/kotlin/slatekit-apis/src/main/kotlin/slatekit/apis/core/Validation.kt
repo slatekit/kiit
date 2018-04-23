@@ -80,7 +80,7 @@ class Validation(val ctn: ApiContainer) {
         val checkResult = ApiValidator.validateCall(request, { req -> ctn.get(req) }, true)
         return if (!checkResult.success) {
             // Don't return the result from internal ( as it contains too much info )
-            badRequest(checkResult.msg, tag = request.action)
+            badRequest(checkResult.msg)
         }
         else
             checkResult

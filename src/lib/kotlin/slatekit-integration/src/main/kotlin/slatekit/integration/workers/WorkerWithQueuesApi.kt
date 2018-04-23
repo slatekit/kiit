@@ -40,7 +40,7 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
             // acknowledge/complete message
             queue.complete(msg)
 
-            success<Any>(result, req.fullName, req.tag)
+            success<Any>(result, req.fullName)
         }
         else {
             queue.abandon(msg)

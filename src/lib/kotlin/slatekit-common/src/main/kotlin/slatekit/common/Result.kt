@@ -41,12 +41,11 @@ sealed class Result<out T> : ResultChecks {
     abstract val code: Int
     abstract val value: T?
     abstract val msg: String
-    abstract val tag: String
 
     override fun statusCode() = code
 
 
-    inline fun <M> map(f: (T) -> M): Result<M> = value?.let { v -> ResultFuncs.success(f(v), msg, tag) } ?: this as Result<M>
+    inline fun <M> map(f: (T) -> M): Result<M> = value?.let { v -> ResultFuncs.success(f(v), msg) } ?: this as Result<M>
 
 
     inline fun <M> flatMap(f: (T) -> Result<M>): Result<M> = value?.let { v -> f(v) } ?: this as Result<M>
@@ -54,7 +53,7 @@ sealed class Result<out T> : ResultChecks {
 
     companion object {
 
-        val none = Failure<Boolean>(FAILURE, null, "", "")
+        val none = Failure<Boolean>(FAILURE, null, "")
 
 
         fun <T> attempt(call: () -> T): Result<T> {
@@ -106,8 +105,7 @@ sealed class Result<out T> : ResultChecks {
 data class Success<out T>(
         override val code: Int,
         private val data: T,
-        override val msg: String = "",
-        override val tag: String = ""
+        override val msg: String = ""
 ) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = true
@@ -123,8 +121,7 @@ data class Success<out T>(
 data class Failure<out T>(
         override val code: Int,
                  val err: Exception?,
-        override val msg: String = "",
-        override val tag: String = ""
+        override val msg: String = ""
 ) : Result<T>(), ResultChecks {
 
     override val success: Boolean get() = false
