@@ -126,8 +126,8 @@ class ResultTests {
     @Test
     fun test_fold(){
         val res = Result.of { Person("peter") }
-        val name = res.fold( { it -> "Error Peter"   },
-                             { it -> "Success Peter" } )
+        val name = res.fold({ it -> "Success Peter" },
+                            { it -> "Error Peter"   })
 
         Assert.assertTrue(res.success)
         Assert.assertEquals("", res.msg)

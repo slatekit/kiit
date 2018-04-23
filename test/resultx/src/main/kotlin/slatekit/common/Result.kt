@@ -34,7 +34,7 @@ usage: Please refer to license on github for more info.
  * @tparam T      : Type T
  */
 @Suppress("UNCHECKED_CAST")
-sealed class Result<out E, out T> {
+sealed class Result<out T, out E> {
     abstract val success: Boolean
     abstract val code: Int
     abstract val msg: String
@@ -43,7 +43,7 @@ sealed class Result<out E, out T> {
     companion object {
 
 
-        inline fun <T> of(f: () -> T): Result<String, T> =
+        inline fun <T> of(f: () -> T): Result<T, String> =
             try {
                 Success(f())
             } catch (e: Exception) {
@@ -52,7 +52,7 @@ sealed class Result<out E, out T> {
             }
 
 
-        inline fun <T> attempt(f: () -> T): Result<Exception, T> =
+        inline fun <T> attempt(f: () -> T): Result<T, Exception> =
             try {
                 Success(f())
             } catch (e: Exception) {
@@ -71,7 +71,7 @@ data class Success<out T>(
         val data: T,
         override val code: Int = SUCCESS,
         override val msg: String = ""
-) : Result<Nothing, T>() {
+) : Result<T, Nothing>() {
 
     override val success = true
 }
@@ -84,38 +84,38 @@ data class Failure<out E>(
         val err: E,
         override val code: Int = FAILURE,
         override val msg: String = ""
-) : Result<E, Nothing>() {
+) : Result<Nothing, E>() {
 
     override val success = false
 }
 
 
-typealias ResultMsg<T> = Result<String   , T>
-typealias ResultEx<T>  = Result<Exception, T>
+typealias ResultMsg<T> = Result<T, String>
+typealias ResultEx<T>  = Result<T, Exception>
 
 
-inline fun <E, T1, T2> Result<E, T1>.map(f: (T1) -> T2): Result<E, T2> =
+inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
     when (this) {
         is Success -> Success(f(this.data), this.code, this.msg)
         is Failure -> this
     }
 
 
-inline fun <E, T1, T2> Result<E, T1>.flatMap(f: (T1) -> Result<E, T2>): Result<E, T2> =
+inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T2, E> =
     when (this) {
         is Success -> f(this.data)
         is Failure -> this
     }
 
 
-inline fun <E, R, T> Result<E, R>.fold(fl: (E) -> T, fr: (R) -> T): T =
+inline fun <T1, T2, E> Result<T1, E>.fold(ft: (T1) -> T2, fe: (E) -> T2): T2 =
     when (this) {
-        is Success -> fr(this.data)
-        is Failure -> fl(this.err)
+        is Success -> ft(this.data)
+        is Failure -> fe(this.err)
     }
 
 
-inline fun <E, T> Result<E, T>.getOrElse(f: () -> T): T =
+inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
     when (this) {
         is Success -> this.data
         is Failure -> f()
