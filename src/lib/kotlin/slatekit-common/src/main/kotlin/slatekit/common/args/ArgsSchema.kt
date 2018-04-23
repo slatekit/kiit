@@ -13,7 +13,7 @@
 
 package slatekit.common.args
 
-import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.Types
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.results.ResultFuncs.failure
@@ -104,7 +104,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
     }
 
 
-    fun validate(args: Args): Result<Boolean> {
+    fun validate(args: Args): ResultMsg<Boolean> {
         val missing = items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
         return if (missing.isNotEmpty()) {
             failure("invalid arguments supplied: Missing : " + missing.first().name)

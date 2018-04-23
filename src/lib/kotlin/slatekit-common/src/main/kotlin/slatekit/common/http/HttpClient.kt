@@ -14,8 +14,7 @@
 package slatekit.common.http
 
 import com.sun.org.apache.xml.internal.security.utils.Base64
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.successWithCode
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.unexpectedError
 import java.io.BufferedReader
 import java.io.DataOutputStream
@@ -65,7 +64,7 @@ object HttpClient {
             // Return build up con
             con
         })
-        return HttpResponse(response.code, mapOf(), response.value)
+        return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
     }
 
 
@@ -112,7 +111,7 @@ object HttpClient {
               // Return build up con
               con
           })
-          return HttpResponse(response.code, mapOf(), response.value)
+          return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
       }
 
 
@@ -194,7 +193,7 @@ object HttpClient {
       */
 
 
-    fun tryExecute(req: HttpRequest, callback: () -> HttpURLConnection): Result<Any> {
+    fun tryExecute(req: HttpRequest, callback: () -> HttpURLConnection): ResultEx<Any> {
         val result = try {
             // Let the caller build up the connection
             val con = callback()
@@ -212,11 +211,11 @@ object HttpClient {
             }
             buff.close()
             val content = response.toString()
-            successWithCode(statusCode, content)
+            Success(content, statusCode)
         }
         catch(ex: Exception) {
             val msg = "Error getting content from ${req.url}." + ex.message
-            unexpectedError<Boolean>(msg)
+            unexpectedError<Any>(msg = msg, err = ex)
         }
         return result
     }

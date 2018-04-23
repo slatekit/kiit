@@ -111,7 +111,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is Instant       -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
             is DateTime      -> _buff.append("\"" + (if(isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
-            is Result<*>     -> serializeResult(s, depth)
+            is Result<*,*>   -> serializeResult(s, depth)
             is List<*>       -> serializeList(s, depth + 1)
             is Map<*, *>     -> serializeMap(s, depth + 1)
             else             -> objectSerializer?.invoke(this, s, depth + 1) ?: "null"
@@ -174,7 +174,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between key/value pairs
      */
-    protected fun serializeResult(item: Result<*>, depth: Int): Unit {
+    protected fun serializeResult(item: Result<*,*>, depth: Int): Unit {
         if (standardizeResult) {
             // Begin
             onContainerStart(item, ParentType.OBJECT_TYPE, depth)
@@ -183,13 +183,13 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             onMapItem(item, depth, 0, "success", item.success)
             onMapItem(item, depth, 1, "code", item.code)
             onMapItem(item, depth, 2, "msg", item.msg)
-            onMapItem(item, depth, 3, "value", item.value)
+            onMapItem(item, depth, 3, "value", item.getOrElse { null })
 
             // End
             onContainerEnd(item, ParentType.OBJECT_TYPE, depth)
         }
         else {
-            serializeValue(item.value, depth)
+            serializeValue(item.getOrElse { null }, depth)
         }
     }
 

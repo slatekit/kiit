@@ -14,7 +14,7 @@
 package slatekit.common.results
 
 import slatekit.common.DateTime
-import slatekit.common.Result
+import slatekit.common.ResultEx
 import slatekit.common.info.Memory
 import java.time.Duration
 
@@ -23,7 +23,7 @@ data class ResultTimed<T>(
         val start: DateTime,
         val end: DateTime,
         val duration: Duration,
-        val result: Result<T>,
+        val result: ResultEx<T>,
         val memory: Memory?,
         val avg: Long?
 ) {
@@ -37,7 +37,7 @@ data class ResultTimed<T>(
      * @param mem
      * @param data
      */
-    constructor(start: DateTime, end: DateTime, duration: Duration, data: Result<T>, mem: Memory?, avg: Long?)
+    constructor(start: DateTime, end: DateTime, duration: Duration, data: ResultEx<T>, mem: Memory?, avg: Long?)
             :
             this("", start, end, duration, data, mem, avg)
 
@@ -62,7 +62,7 @@ data class ResultTimed<T>(
 
     companion object ResultTimedBuilder {
 
-        fun <T> build(started: DateTime, result: Result<T>): ResultTimed<T> {
+        fun <T> build(started: DateTime, result: ResultEx<T>): ResultTimed<T> {
             val ended = DateTime.now()
             val duration = started.durationFrom(ended)
             return ResultTimed<T>("", started, ended, duration, result, null, null)

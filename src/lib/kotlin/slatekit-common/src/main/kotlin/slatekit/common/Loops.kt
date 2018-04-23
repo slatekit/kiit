@@ -89,25 +89,4 @@ object Loops {
         else
             repeatWithIndexAndBool(nextIndex, end, condition)
     }
-
-
-    /**
-     * "do while" loop alternative with index/count using tail recursion
-     *
-     * @param ndx
-     * @param max
-     * @param condition
-     */
-    tailrec fun <T> repeatWithIndexResult(ndx: Int, max: Int, defautValue: Result<T>, condition: (Int) -> Result<T>): Result<T> {
-        return if (ndx >= max) {
-            defautValue
-        }
-        else {
-            val result = condition(ndx)
-            if (!result.success)
-                result
-            else
-                repeatWithIndexResult(ndx + 1, max, defautValue, condition)
-        }
-    }
 }

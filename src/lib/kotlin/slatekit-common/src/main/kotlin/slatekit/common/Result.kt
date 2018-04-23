@@ -13,20 +13,7 @@
 
 package slatekit.common
 
-import slatekit.common.results.FAILURE
-import slatekit.common.results.ResultChecks
-import slatekit.common.results.ResultFuncs
-
-/**
-<slate_header>
-author: Kishore Reddy
-url: https://github.com/kishorereddy/scala-slate
-copyright: 2015 Kishore Reddy
-license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-desc: a scala micro-framework
-usage: Please refer to license on github for more info.
-</slate_header>
- */
+import slatekit.common.results.*
 
 
 /**
@@ -36,65 +23,31 @@ usage: Please refer to license on github for more info.
  * @tparam T      : Type T
  */
 @Suppress("UNCHECKED_CAST")
-sealed class Result<out T> : ResultChecks {
+sealed class Result<out T, out E> {
     abstract val success: Boolean
     abstract val code: Int
-    abstract val value: T?
     abstract val msg: String
-
-    override fun statusCode() = code
-
-
-    inline fun <M> map(f: (T) -> M): Result<M> = value?.let { v -> ResultFuncs.success(f(v), msg) } ?: this as Result<M>
-
-
-    inline fun <M> flatMap(f: (T) -> Result<M>): Result<M> = value?.let { v -> f(v) } ?: this as Result<M>
-
 
     companion object {
 
-        val none = Failure<Boolean>(FAILURE, null, "")
 
-
-        fun <T> attempt(call: () -> T): Result<T> {
-            return try {
-                val data = call()
-                if (data is Result<*>) {
-                    data as Result<T>
+        inline fun <T> of(f: () -> T): Result<T, String> =
+                try {
+                    Success(f())
+                } catch (e: Exception) {
+                    val err = e.message ?: ""
+                    Failure(err, FAILURE,err)
                 }
-                else {
-                    ResultFuncs.success(data)
-                }
-            }
-            catch (e: Exception) {
-                ResultFuncs.unexpectedError<T>(e.message ?: "", e)
-            }
-        }
 
 
+        inline fun <T> attempt(f: () -> T): Result<T, Exception> =
+                try {
+                    Success(f())
+                } catch (e: Exception) {
+                    val err = e.message ?: ""
+                    Failure(e, UNEXPECTED_ERROR,err)
+                }
 
-        fun <T> attemptAndLog(name:String, desc:String, rethrow:Boolean, call: () -> T): Result<T> {
-            return try {
-                val data = call()
-                if (data is Result<*>) {
-                    data as Result<T>
-                }
-                else {
-                    ResultFuncs.success(data)
-                }
-            }
-            catch (e: Exception) {
-                println("Error during: $name")
-                println("$desc")
-                println(e.message)
-                println(e)
-
-                if(rethrow) {
-                    throw e
-                }
-                ResultFuncs.unexpectedError(e.message ?: "", e)
-            }
-        }
     }
 }
 
@@ -103,33 +56,54 @@ sealed class Result<out T> : ResultChecks {
  * Success branch of the Result
  */
 data class Success<out T>(
-        override val code: Int,
-        private val data: T,
+        val data: T,
+        override val code: Int = SUCCESS,
         override val msg: String = ""
-) : Result<T>(), ResultChecks {
+) : Result<T, Nothing>() {
 
-    override val success: Boolean get() = true
-
-
-    override val value: T? get() = data
+    override val success = true
 }
 
 
 /**
  * Failure branch of the result
  */
-data class Failure<out T>(
-        override val code: Int,
-                 val err: Exception?,
+data class Failure<out E>(
+        val err: E,
+        override val code: Int = FAILURE,
         override val msg: String = ""
-) : Result<T>(), ResultChecks {
+) : Result<Nothing, E>() {
 
-    override val success: Boolean get() = false
-
-
-    override val value: T? get() = null
+    override val success = false
 }
 
+typealias ResultMsg<T>  = Result<T, String>
+typealias ResultEx<T>   = Result<T, Exception>
 
-inline fun <T> Result<T>.getOrElse(default: () -> T): T = value ?: default()
 
+inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
+        when (this) {
+            is Success -> Success(f(this.data), this.code, this.msg)
+            is Failure -> this
+        }
+
+
+inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T2, E> =
+        when (this) {
+            is Success -> f(this.data)
+            is Failure -> this
+        }
+
+
+inline fun <T1, T2, E> Result<T1, E>.fold(onSuccess: (T1) -> T2, onError: (E) -> T2): T2 =
+        when (this) {
+            is Success -> onSuccess(this.data)
+            is Failure -> onError(this.err)
+        }
+
+
+inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
+        when (this) {
+            is Success -> this.data
+            is Failure -> f()
+        }

@@ -85,7 +85,7 @@ object Measure {
     }
 
 
-    fun <T> wrap(desc: String, count: Int, callback: () -> Result<T>): ResultTimed<T> {
+    fun <T> wrap(desc: String, count: Int, callback: () -> ResultEx<T>): ResultTimed<T> {
 
         // Start time & memory info
         val started = DateTime.now()

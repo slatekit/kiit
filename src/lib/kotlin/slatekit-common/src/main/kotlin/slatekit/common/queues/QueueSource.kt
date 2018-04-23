@@ -13,7 +13,8 @@
 
 package slatekit.common.queues
 
-import slatekit.common.Result
+
+import slatekit.common.ResultEx
 
 
 interface QueueSource {
@@ -47,13 +48,13 @@ interface QueueSource {
     fun abandon(item: Any?): Unit {}
 
 
-    fun send(msg: Any, tagName: String = "", tagValue: String = ""): Result<String>
+    fun send(msg: Any, tagName: String = "", tagValue: String = ""): ResultEx<String>
 
 
-    fun send(message: String, attributes: Map<String, Any>): Result<String>
+    fun send(message: String, attributes: Map<String, Any>): ResultEx<String>
 
 
-    fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): Result<String>
+    fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): ResultEx<String>
 
 
     fun toString(item: Any?): String {

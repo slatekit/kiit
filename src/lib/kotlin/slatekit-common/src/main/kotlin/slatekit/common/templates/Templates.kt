@@ -13,7 +13,7 @@
 
 package slatekit.common.templates
 
-import slatekit.common.Result
+import slatekit.common.ResultEx
 import slatekit.common.getOrElse
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
@@ -45,7 +45,7 @@ class Templates(val templates: List<Template>? = null,
      * @param text
      * @return
      */
-    fun parse(text: String): Result<List<TemplatePart>> = TemplateParser(text).parse()
+    fun parse(text: String): ResultEx<List<TemplatePart>> = TemplateParser(text).parse()
 
 
     /**
@@ -122,14 +122,14 @@ class Templates(val templates: List<Template>? = null,
 
         // Failed parsing ?
         val finalResult = if (result.success) {
-            // Get the individual substitution parts.
-            result.value?.let { parts ->
-                if (parts.isEmpty()) {
+            val parts = result.getOrElse { listOf() }
+            if (parts.isEmpty()) {
                     text
                 }
-                else
-                    resolveParts(parts, substitutions ?: subs)
-            } ?: result.msg
+                else {
+                resolveParts(parts, substitutions ?: subs)
+            }
+
         }
         else {
             result.msg
@@ -210,7 +210,8 @@ class Templates(val templates: List<Template>? = null,
                 // Build the  template
                 template.copy(parsed = true,
                         valid = result.success,
-                        parts = result.value ?: listOf<TemplatePart>())
+                        parts = result.getOrElse { listOf() }
+                )
             }
             return parsed
         }

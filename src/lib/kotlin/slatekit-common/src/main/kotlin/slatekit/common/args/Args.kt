@@ -282,7 +282,7 @@ class Args(
          */
         fun parse(line: String, prefix: String = "-", sep: String = ":",
                   hasAction: Boolean = false, metaChar:String = "@", sysChar: String = "$")
-                : Result<Args> {
+                : ResultEx<Args> {
             return ArgsService().parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
 
@@ -301,7 +301,7 @@ class Args(
          */
         fun parseArgs(args: Array<String>, prefix: String = "-", sep: String = ":",
                       hasAction: Boolean = false, metaChar: String = "@", sysChar: String = "$")
-                : Result<Args> {
+                : ResultEx<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {
                 args.joinToString(" ")

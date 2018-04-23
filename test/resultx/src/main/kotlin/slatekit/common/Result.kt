@@ -15,17 +15,6 @@ package slatekit.common
 
 import slatekit.common.results.*
 
-/**
-<slate_header>
-author: Kishore Reddy
-url: https://github.com/kishorereddy/scala-slate
-copyright: 2015 Kishore Reddy
-license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-desc: a scala micro-framework
-usage: Please refer to license on github for more info.
-</slate_header>
- */
-
 
 /**
  * Container for a Success/Failure value of type T with additional values to represent
@@ -89,9 +78,10 @@ data class Failure<out E>(
     override val success = false
 }
 
-
-typealias ResultMsg<T> = Result<T, String>
-typealias ResultEx<T>  = Result<T, Exception>
+typealias ResultMsg<T>  = Result<T, String>
+typealias ResultEx<T>   = Result<T, Exception>
+typealias ResultsMsg<T> = Result<List<T>, String>
+typealias ResultsEx<T>  = Result<List<T>, Exception>
 
 
 inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
@@ -108,10 +98,10 @@ inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T
     }
 
 
-inline fun <T1, T2, E> Result<T1, E>.fold(ft: (T1) -> T2, fe: (E) -> T2): T2 =
+inline fun <T1, T2, E> Result<T1, E>.fold(onSuccess: (T1) -> T2, onError: (E) -> T2): T2 =
     when (this) {
-        is Success -> ft(this.data)
-        is Failure -> fe(this.err)
+        is Success -> onSuccess(this.data)
+        is Failure -> onError(this.err)
     }
 
 
