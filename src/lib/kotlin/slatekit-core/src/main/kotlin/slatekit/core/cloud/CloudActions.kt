@@ -13,7 +13,10 @@
 
 package slatekit.core.cloud
 
+import slatekit.common.Failure
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.results.ResultFuncs.successOrError
 
 interface CloudActions {
@@ -36,20 +39,16 @@ interface CloudActions {
                           tag: String = "",
                           audit: Boolean = false,
                           data: Any?,
-                          call: () -> T): Result<T> {
+                          call: () -> T): ResultEx<T> {
         val result = try {
             val resultValue = call()
-            Triple(true, "", resultValue)
+            Success(resultValue)
         }
         catch (ex: Exception) {
             onError(source, action, tag, data, ex)
-            Triple(false, "Error performing action $action on $source with tag $tag. $ex", null)
+            Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
         }
-
-        val success = result.first
-        val message = result.second
-        val resData = result.third
-        return successOrError(success, resData, message)
+        return result
     }
 
 

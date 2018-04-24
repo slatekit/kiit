@@ -18,13 +18,9 @@ import slatekit.apis.core.Api
 import slatekit.apis.WebProtocol
 import slatekit.apis.core.Auth
 import slatekit.apis.doc.DocWeb
-import slatekit.common.Context
-import slatekit.common.DateTime
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.toResponse
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.spark.HttpRequest
@@ -80,7 +76,7 @@ class Server(
      * executes the application
      * @return
      */
-    fun run(): Result<Any> {
+    fun run() {
 
         // Configure
         Spark.port(config.port)
@@ -128,8 +124,6 @@ class Server(
 
         // Setup scrpt
         config.setup?.let { c -> c("") }
-
-        return success(true)
     }
 
 
@@ -160,7 +154,7 @@ class Server(
      */
     fun ping(req: Request, res: Response): String {
         val result = DateTime.now()
-        val text = HttpResponse.json(res, success(result).toResponse())
+        val text = HttpResponse.json(res, Success(result).toResponse())
         return text
     }
 

@@ -17,12 +17,12 @@ package slatekit.cloud.aws
 import TODO
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
-import slatekit.common.Result
+import slatekit.common.Failure
+import slatekit.common.ResultEx
 import slatekit.common.Uris
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.core.cloud.CloudQueueBase
 import java.io.File
+import java.io.IOException
 
 
 /**
@@ -108,7 +108,7 @@ class AwsCloudQueue(queue: String,
      *
      * @param msg: String message, or map containing the fields "message", and "atts"
      */
-    override fun send(msg: Any, tagName: String, tagValue: String): Result<String> {
+    override fun send(msg: Any, tagName: String, tagValue: String): ResultEx<String> {
         val msgResult = when (msg) {
             is String    -> {
                 // Send the message, any message that fails will get caught
@@ -136,7 +136,7 @@ class AwsCloudQueue(queue: String,
                 send(message, atts)
             }
             else         -> {
-                successOrError(false, "", "unknown message type")
+                Failure(Exception("Unknown message type"), msg="unknown message type")
             }
         }
         return msgResult
@@ -148,7 +148,7 @@ class AwsCloudQueue(queue: String,
      * @param message : The message to send
      * @param attributes : Additional attributes to put into the message
      */
-    override fun send(message: String, attributes: Map<String, Any>): Result<String> {
+    override fun send(message: String, attributes: Map<String, Any>): ResultEx<String> {
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
         return executeResult<String>(SOURCE, "send", data = message, call = { ->
@@ -159,12 +159,13 @@ class AwsCloudQueue(queue: String,
     }
 
 
-    override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Result<String> {
+    override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): ResultEx<String> {
         val path = Uris.interpret(fileNameLocal)
         return path?.let { pathLocal ->
             val content = File(pathLocal).readText()
             send(content, tagName, tagValue)
-        } ?: failure(msg = "Invalid file path: " + fileNameLocal)
+        } ?: Failure(IOException("Invalid file path: $fileNameLocal"),
+                msg = "Invalid file path: $fileNameLocal")
     }
 
 

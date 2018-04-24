@@ -17,9 +17,7 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
-import slatekit.common.ApiLogin
-import slatekit.common.Result
-import slatekit.common.Uris
+import slatekit.common.*
 import slatekit.core.cloud.CloudFilesBase
 import java.io.File
 
@@ -83,7 +81,7 @@ class AwsCloudFiles(bucket: String,
      * @param name
      * @param content
      */
-    override fun create(folder: String, name: String, content: String): Result<String> {
+    override fun create(folder: String, name: String, content: String): ResultEx<String> {
         return put("create", folder, name, content)
     }
 
@@ -95,7 +93,7 @@ class AwsCloudFiles(bucket: String,
      * @param name
      * @param content
      */
-    override fun update(folder: String, name: String, content: String): Result<String> {
+    override fun update(folder: String, name: String, content: String): ResultEx<String> {
         return put("update", folder, name, content)
     }
 
@@ -106,7 +104,7 @@ class AwsCloudFiles(bucket: String,
      * @param folder
      * @param name
      */
-    override fun delete(folder: String, name: String): Result<String> {
+    override fun delete(folder: String, name: String): ResultEx<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "delete", data = fullName, call = { ->
             _s3.deleteObject(_defaultFolder, fullName)
@@ -122,7 +120,7 @@ class AwsCloudFiles(bucket: String,
      * @param name
      * @return
      */
-    override fun getAsText(folder: String, name: String): Result<String> {
+    override fun getAsText(folder: String, name: String): ResultEx<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "getAsText", data = fullName, call = { ->
 
@@ -142,14 +140,14 @@ class AwsCloudFiles(bucket: String,
      * @param localFolder
      * @return
      */
-    override fun download(folder: String, name: String, localFolder: String): Result<String> {
+    override fun download(folder: String, name: String, localFolder: String): ResultEx<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
             val content = getAsText(folder, name)
             val finalFolder = Uris.interpret(localFolder)
             val localFile = File(finalFolder, name)
             val localFileName = localFile.absolutePath
-            File(localFileName).writeText(content.value ?: "")
+            File(localFileName).writeText(content.getOrElse{""})
             localFileName
         })
     }
@@ -163,13 +161,13 @@ class AwsCloudFiles(bucket: String,
      * @param filePath
      * @return
      */
-    override fun downloadToFile(folder: String, name: String, filePath: String): Result<String> {
+    override fun downloadToFile(folder: String, name: String, filePath: String): ResultEx<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
             val content = getAsText(folder, name)
             val localFile = Uris.interpret(filePath)
             val localFileName = localFile ?: name
-            File(localFileName).writeText(content.value ?: "")
+            File(localFileName).writeText(content.getOrElse{""})
             localFileName
         })
     }
@@ -183,7 +181,7 @@ class AwsCloudFiles(bucket: String,
      * @param content
      * @return
      */
-    fun put(action: String, folder: String, name: String, content: String): Result<String> {
+    fun put(action: String, folder: String, name: String, content: String): ResultEx<String> {
         // full name of the file is folder + name
         val fullName = getName(folder, name)
 
