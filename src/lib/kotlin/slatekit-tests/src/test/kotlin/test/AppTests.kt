@@ -13,8 +13,11 @@ package slate.test
 
 import org.junit.Test
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.Arg
 import slatekit.common.args.ArgsSchema
+import slatekit.common.getOrElse
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
@@ -99,25 +102,25 @@ class AppTests  {
 
     @Test fun can_select_and_use_env_local() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='loc'")))
-      val res2 = res as Result<ConfigValueTest>
+      val res2 = res as ResultEx<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("loc", "env loc", 1, 20.1), 200, "success")
     }
 
     @Test fun can_select_and_use_env_dev() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='dev'")))
-      val res2 = res as Result<ConfigValueTest>
+      val res2 = res as ResultEx<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("dev", "env dev", 2, 20.2), 200, "success")
     }
 
     @Test fun can_select_and_use_env_qa1() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='qa1'")))
-      val res2 = res as Result<ConfigValueTest>
+      val res2 = res as ResultEx<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("qa1", "env qa1", 3, 20.3), 200, "success")
     }
 
     @Test fun can_select_and_use_env_qa2() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='qa2'")))
-      val res2 = res as Result<ConfigValueTest>
+      val res2 = res as ResultEx<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("qa2", "env qa2", 4, 20.4), 200, "success")
     }
   
@@ -128,11 +131,11 @@ class AppTests  {
     }
 
 
-  fun assertConfigResult(res:Result<ConfigValueTest>,
+  fun assertConfigResult(res:ResultEx<ConfigValueTest>,
                          expected:ConfigValueTest, code:Int, msg:String):Unit {
     assert( res.code == code)
     assert( res.msg == msg)
-    assert( res.value == expected )
+    assert( res.getOrElse{ null } == expected )
   }
 
 
@@ -143,14 +146,14 @@ class AppTests  {
                        args:Array<String>?
                      )  : AppProcess(null, args) {
 
-    override fun onExecute():Result<Any> {
+    override fun onExecute():ResultEx<Any> {
       val data = ConfigValueTest(
         ctx.env.name,
         conf.getString("test_stri"),
         conf.getInt("test_int"),
         conf.getDouble("test_doub")
       )
-      return success(data)
+      return Success(data)
     }
   }
 
@@ -159,17 +162,17 @@ class AppTests  {
                       args:Array<String>?
                     )  : AppProcess(null, args) {
 
-    override fun onExecute():Result<Any> {
+    override fun onExecute():ResultEx<Any> {
       if(conf != null ) {
         throw Exception("error test")
       }
-      return success("ok")
+      return Success("ok")
     }
   }
 
 
 
-  fun runApp( call: (Array<String>?) -> Result<Any>) :Unit  {
+  fun runApp( call: (Array<String>?) -> ResultEx<Any>) :Unit  {
     call(null)
 
     call(arrayOf<String>())
@@ -179,8 +182,8 @@ class AppTests  {
 
 
 
-  fun assertResult(res:Result<Any>, value:String, code:Int, msg:String):Unit {
-    assert( res.value == value)
+  fun assertResult(res:ResultEx<Any>, value:String, code:Int, msg:String):Unit {
+    assert( res.getOrElse { null } == value)
     assert( res.code == code)
     assert( res.msg == msg)
   }
@@ -195,7 +198,7 @@ class AppTests  {
 
 
 
-  fun assertResultBasic(res:Result<Any>, code:Int, msg:String):Unit {
+  fun assertResultBasic(res:ResultEx<Any>, code:Int, msg:String):Unit {
     assert( res.code == code)
     assert( res.msg == msg)
   }
@@ -206,7 +209,7 @@ class AppTests  {
    */
   class AppArgsSchemaNull(args:Array<String>?)  : AppProcess(null, args) {
 
-    override fun onExecute():Result<Any> = success("ok", "schema null")
+    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema null")
   }
 
 
@@ -219,7 +222,7 @@ class AppTests  {
                             schema: ArgsSchema? = ArgsSchema(listOf<Arg>())
                           )  : AppProcess(null, args, schema) {
 
-    override fun onExecute():Result<Any> = success("ok", "schema empty")
+    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema empty")
   }
 
 
@@ -237,7 +240,7 @@ class AppTests  {
   )
     : AppProcess(null, args, schema) {
 
-    override fun onExecute():Result<Any> = success("ok", "schema basic")
+    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema basic")
   }
 
 
@@ -255,7 +258,7 @@ class AppTests  {
   )
     : AppProcess(null, args, schema) {
 
-    override fun onExecute():Result<Any> = success("ok", "schema args 1")
+    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema args 1")
   }
 
 
@@ -269,6 +272,6 @@ class AppTests  {
   )
     : AppProcess(null, args, schema) {
 
-    override fun onExecute():Result<Any> = success("ok")
+    override fun onExecute():ResultEx<Any> = Success("ok")
   }
 }

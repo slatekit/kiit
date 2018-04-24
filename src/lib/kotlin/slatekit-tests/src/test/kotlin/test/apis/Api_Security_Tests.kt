@@ -18,7 +18,6 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.Credentials
 import slatekit.common.Request
-import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.toResponse

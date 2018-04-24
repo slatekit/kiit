@@ -2,6 +2,8 @@ package test.workers
 
 import org.junit.Test
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
@@ -101,13 +103,13 @@ class Worker_Core_Tests {
         assert(worker.lastResult.success)
         assert(worker.lastResult.msg == "odd")
         assert(worker.lastResult.code == slatekit.common.results.SUCCESS)
-        assert(worker.lastResult.value == 1)
+        assert(worker.lastResult.getOrElse { null } == 1)
 
         worker.work()
         assert(worker.lastResult.success)
         assert(worker.lastResult.code == slatekit.common.results.SUCCESS)
         assert(worker.lastResult.msg == "even")
-        assert(worker.lastResult.value == 2)
+        assert(worker.lastResult.getOrElse { null } == 2)
     }
 
 
@@ -156,9 +158,9 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertResult(result:Result<*>, success:Boolean, data:Any, code:Int){
+    fun assertResult(result:ResultEx<*>, success:Boolean, data:Any, code:Int){
         assert(result.success == success)
-        assert(result.value == data)
+        assert(result.getOrElse { null } == data)
         assert(result.code == code)
     }
 }

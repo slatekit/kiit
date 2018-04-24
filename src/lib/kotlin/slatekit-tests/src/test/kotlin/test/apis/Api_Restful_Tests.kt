@@ -45,7 +45,7 @@ class Api_Restful_Tests : ApiTestsBase() {
             assert(r1.success)
             assert(r1.code == SUCCESS)
 
-            val all = r1.value as List<Movie>
+            val all = r1.getOrElse { Movie.samples() } as Movie  as List<Movie>
             assert(all.size == 2 )
         })
     }
@@ -59,7 +59,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         assert(r1.success)
         assert(r1.code == SUCCESS)
 
-        val book = r1.value as Movie
+        val book = r1.getOrElse { Movie.samples()[0] } as Movie
         assert(book.title == Movie.samples().first().title)
     }
 
@@ -72,7 +72,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == "patched 1 with Indiana Jones Original")
+        assert(r1.getOrElse { "" } == "patched 1 with Indiana Jones Original")
     }
 
 
@@ -83,7 +83,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == "deleteById 1")
+        assert(r1.getOrElse { "" } == "deleteById 1")
     }
 
 
@@ -94,7 +94,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == "activateById 1")
+        assert(r1.getOrElse { "" } == "activateById 1")
     }
 
 
@@ -125,7 +125,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == 3L)
+        assert(r1.getOrElse { 0L } == 3L)
     }
 
 
@@ -154,11 +154,11 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == "updated 1")
+        assert(r1.getOrElse { "" } == "updated 1")
     }
 
 
-    fun ensure(action:String, verb:String, args:Map<String,Any>, namer:Namer?, callback:(Result<*>) -> Unit): Unit {
+    fun ensure(action:String, verb:String, args:Map<String,Any>, namer:Namer?, callback:(Result<*,*>) -> Unit): Unit {
 
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)

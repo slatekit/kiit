@@ -47,9 +47,16 @@ data class Response<out T>(
 /**
  * Converts result to Response.
  */
-fun <T> ResultEx<T>.toResponse(): Response<T> {
+fun <T,E> Result<T,E>.toResponse(): Response<T> {
     return when(this) {
         is Success -> Response(this.success, this.code, null, this.data, this.msg, null)
-        is Failure -> Response(this.success, this.code, null, null, this.msg, this.err)
+        is Failure -> {
+            val ex = when(this.err) {
+                is Exception -> this.err
+                else         -> Exception(this.err.toString())
+            }
+            Response(this.success, this.code, null, null, this.msg, ex)
+        }
     }
 }
+

@@ -4,6 +4,7 @@ import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
 import slatekit.common.Request
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
@@ -18,7 +19,7 @@ open class SampleErrorsNoMiddlewareApi  {
      * Error-handling using the Result<T> object to model
      * successes and failures for all scenarios
      */
-    fun parseNumberWithResults(text:String): Result<Int> {
+    fun parseNumberWithResults(text:String): ResultMsg<Int> {
 
         return if(text.isNullOrEmpty()) {
             badRequest("You must supply a non-empty string")
@@ -27,7 +28,7 @@ open class SampleErrorsNoMiddlewareApi  {
             failure("$text is not a valid number")
         }
         else {
-            success(text.toInt(), "You supplied a valid number")
+            success(text.toInt(), msg ="You supplied a valid number")
         }
     }
 

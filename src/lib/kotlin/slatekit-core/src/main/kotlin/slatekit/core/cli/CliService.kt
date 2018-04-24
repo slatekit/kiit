@@ -32,7 +32,6 @@ import slatekit.core.cli.CliConstants.HELP_ACTION
 import slatekit.core.cli.CliConstants.HELP_API
 import slatekit.core.cli.CliConstants.HELP_AREA
 import slatekit.core.cli.CliConstants.VERSION
-import slatekit.core.common.AppContext
 import java.util.concurrent.atomic.AtomicReference
 
 

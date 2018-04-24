@@ -19,6 +19,7 @@ import slatekit.common.*
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.SUCCESS
+import slatekit.common.results.UNEXPECTED_ERROR
 import test.setup.SampleErrorsApi
 import test.setup.SampleErrorsNoMiddlewareApi
 import test.setup.SampleMiddlewareApi
@@ -39,7 +40,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = ResultFuncs.unexpectedError<Any>("unexpected error in api").toResponse()
+                response = ResultFuncs.unexpectedError<Any>(Exception("unexpected error in api")).toResponse()
         )
     }
 
@@ -47,8 +48,9 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_global_middleware_level() {
         val number = "abc"
         val errors = object: slatekit.apis.middleware.Error {
-            override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Result<Any> {
-                return ResultFuncs.unexpectedError("global middleware error handler", err = ex)
+            override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultMsg<Any> {
+                val msg = "global middleware error handler"
+                return Failure(msg, UNEXPECTED_ERROR, msg = msg)
             }
         }
         ensure(
@@ -59,7 +61,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = ResultFuncs.unexpectedError<Any>("global middleware error handler").toResponse()
+                response = ResultFuncs.unexpectedError<Any>(Exception("global middleware error handler")).toResponse()
         )
     }
 
@@ -73,7 +75,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = ResultFuncs.unexpectedError<Any>("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs").toResponse()
+                response = ResultFuncs.unexpectedError<Any>(Exception("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs")).toResponse()
         )
     }
 
@@ -111,6 +113,6 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
         assert(r1.success)
         assert(r1.code == SUCCESS)
-        assert(r1.value == "hello world")
+        assert(r1.getOrElse { ""} == "hello world")
     }
 }

@@ -16,6 +16,7 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.common.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
 
@@ -34,7 +35,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecInt", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
-        assert(r1.value == "decrypted int : 123")
+        assert(r1.getOrElse { "" } == "decrypted int : 123")
     }
 
 
@@ -44,7 +45,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecLong", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
-        assert(r1.value == "decrypted long : 123456")
+        assert(r1.getOrElse { "" } == "decrypted long : 123456")
     }
 
 
@@ -54,7 +55,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecDouble", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
-        assert(r1.value == "decrypted double : 123.456")
+        assert(r1.getOrElse { "" } == "decrypted double : 123.456")
     }
 
 
@@ -64,7 +65,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecString", "get", mapOf(), mapOf("id" to encryptedText))
         assert(r1.success)
-        assert(r1.value == "decrypted string : slate-kit")
+        assert(r1.getOrElse { "" } == "decrypted string : slate-kit")
     }
 
 
@@ -92,6 +93,6 @@ class Api_Type_Tests : ApiTestsBase() {
         val r1 = apis.call("samples", "types3", method, "get", mapOf(), mapOf("text" to text))
 
         assert(r1.success)
-        assert(r1.value == expected)
+        assert(r1.getOrElse { "" } == expected)
     }
 }
