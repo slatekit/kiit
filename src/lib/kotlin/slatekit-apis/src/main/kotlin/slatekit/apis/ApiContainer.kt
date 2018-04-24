@@ -130,7 +130,7 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun check(request: Request): ResultMsg<Boolean> {
+    fun check(request: Request): ResultMsg<ApiRef> {
         return  ApiValidator.validateCall(request, { req -> get(req) })
     }
 

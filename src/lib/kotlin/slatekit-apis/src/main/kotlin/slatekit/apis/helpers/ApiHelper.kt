@@ -19,8 +19,6 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
-import slatekit.common.encrypt.Encryptor
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.meta.Deserializer
 
@@ -80,18 +78,18 @@ object ApiHelper {
      *  Checks the action and api to ensure the current request (cmd) is authorizated to
      *  make the call
      */
-    fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): Result<Boolean> {
+    fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): ResultMsg<Boolean> {
         val noAuth = auth == null
         val isActionNotAuthed = isActionNotAuthed(apiRef.action.roles)
         val isApiNotAuthed = isApiNotAuthed(apiRef.action.roles, apiRef.api.roles)
 
         // CASE 1: No auth for action
         return if (noAuth && isActionNotAuthed) {
-            ok()
+            Success(true)
         }
         // CASE 2: No auth for parent
         else if (noAuth && isApiNotAuthed) {
-            ok()
+            Success(true)
         }
         // CASE 3: No auth and action requires roles!
         else if (noAuth) {

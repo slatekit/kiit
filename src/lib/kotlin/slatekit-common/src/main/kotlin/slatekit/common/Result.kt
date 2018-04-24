@@ -116,7 +116,11 @@ inline fun <T, E> Result<T, E>.exists(f: (T) -> Boolean): Boolean =
     }
 
 
-
+inline fun <T, E> Result<T, E>.onSuccess(f: (T) -> Unit) =
+        when (this) {
+            is Success -> f(this.data)
+            is Failure -> { }
+        }
 
 inline fun <T1, T2, E1, E2> Result<T1, E1>.transform(
         onSuccess: (T1) -> Result<T2, E2>,

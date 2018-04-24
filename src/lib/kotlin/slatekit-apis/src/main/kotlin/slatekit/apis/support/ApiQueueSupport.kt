@@ -4,6 +4,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.common.DateTime
 import slatekit.common.ext.tail
+import slatekit.common.onSuccess
 import slatekit.common.queues.QueueSource
 import slatekit.meta.Serialization
 import kotlin.reflect.KCallable
@@ -33,13 +34,15 @@ interface ApiQueueSupport {
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
      */
-    fun sendToQueue(cls: KClass<*>, mem: KCallable<*>, data:Map<String,Any>):Unit {
+    fun sendToQueue(cls: KClass<*>, mem: KCallable<*>, data:Map<String,Any>) {
         val queues = this.queues()
         val rand = java.util.Random()
         val pos = rand.nextInt(queues.size)
         val queue = queues[pos]
         val apiRef = container().getApi(cls, mem)
-        apiRef.value?.let { api ->
+
+        TODO.BUG("Result", "Handle failure case. log")
+        apiRef.onSuccess { api ->
             val serializer = Serialization.json(true)
             val json = serializer.serialize(data)
             val parts = listOf(api.api.area, api.api.name, api.action.name)
