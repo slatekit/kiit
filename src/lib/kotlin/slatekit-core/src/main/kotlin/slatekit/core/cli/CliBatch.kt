@@ -14,10 +14,8 @@
 package slatekit.core.cli
 
 
-import slatekit.common.Files
-import slatekit.common.newline
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.yes
-import slatekit.common.toResponse
 import java.io.File
 import java.io.FileNotFoundException
 
@@ -39,21 +37,19 @@ class CliBatch(val cmd: CliCommand, val svc: CliService) {
         else {
             val results = svc.onCommandBatchExecute(lines, CliConstants.BatchModeContinueOnError)
             val messages = results.fold("", { s, res ->
-                if (res.success) {
-                    res.value?.let { cmd ->
-                        s + "success: " + cmd.fullName() + " = " + (cmd.result?.value?.toString() ?: "") + newline
-                    } ?: s
-                }
-                else {
-                    res.value?.let { cmd ->
+                when(res) {
+                    is Success -> {
+                        s + "success: " + res.data.fullName() + " = " + (cmd.result?.value?.toString() ?: "") + newline
+                    }
+                    is Failure -> {
                         s + "failed: " + cmd.fullName() + " = " + (cmd.result?.msg ?: "") + newline
-                    } ?: s
+                    }
                 }
             })
             if (svc.settings.enableOutput) {
                 CliFuncs.log(svc.folders, messages)
             }
-            val batchResult = cmd.copy(result = yes("batch output written to output directory").toResponse())
+            val batchResult = cmd.copy(result = Success("batch output written to output directory").toResponse())
             return batchResult
         }
     }

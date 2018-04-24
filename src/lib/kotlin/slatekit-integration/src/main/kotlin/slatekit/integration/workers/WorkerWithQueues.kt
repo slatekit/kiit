@@ -1,6 +1,7 @@
 package slatekit.integration.workers
 
-import slatekit.common.Result
+import slatekit.common.Failure
+import slatekit.common.ResultMsg
 import slatekit.common.log.LoggerBase
 import slatekit.common.queues.QueueSourceMsg
 import slatekit.common.results.ResultFuncs
@@ -23,7 +24,7 @@ open class WorkerWithQueues(val queues: List<QueueSourceMsg>,
     /**
      * Processes a single item from a random queue.
      */
-    override fun process(args:Array<Any>?): Result<Any> {
+    override fun process(args:Array<Any>?): ResultMsg<Any> {
         val ndx = rand.nextInt(queues.size)
         val queue = queues[ndx]
         processItem(queue, queue.next())
@@ -36,7 +37,7 @@ open class WorkerWithQueues(val queues: List<QueueSourceMsg>,
      * This converts the json message body to the Request and delegates the call
      * to the container which will call the corresponding API method.
      */
-    fun processItem(queue: QueueSourceMsg, message:Any?) : Unit {
+    fun processItem(queue: QueueSourceMsg, message:Any?)  {
 
         val result = message?.let { msg ->
             try {
@@ -44,14 +45,14 @@ open class WorkerWithQueues(val queues: List<QueueSourceMsg>,
             } catch (ex: Exception) {
                 queue.abandon(msg)
                 logger.error("Error handling message from queue: " + ex.message, ex)
-                ResultFuncs.failure<Any>("Error handling message from queue: " + ex.message, ex)
+                Failure(ex.message ?: "", msg= "Error handling message from queue: " + ex.message)
             }
-        } ?: ResultFuncs.failure<Any>("Message not supplied")
+        } ?: Failure("Message not supplied")
         _lastResult.set(result)
     }
 
 
-    open fun processMessage(queue:QueueSourceMsg, message:Any): Result<Any> {
+    open fun processMessage(queue:QueueSourceMsg, message:Any): ResultMsg<Any> {
         return success("not implemented")
     }
 }

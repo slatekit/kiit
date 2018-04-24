@@ -23,7 +23,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
 
     @ApiAction(name = "", desc = "sets up the db to support modules", roles = "@parent")
-    fun setupDb(): slatekit.common.Result<Any> {
+    fun setupDb(): slatekit.common.ResultEx<Any> {
         return ctx.setup.install(slatekit.integration.mods.Mod::class.qualifiedName!!, "1", "", "")
     }
 
@@ -41,7 +41,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
 
     @ApiAction(name = "", desc = "installs all modules from initial setup", roles = "@parent")
-    fun install(): slatekit.common.Result<Any> {
+    fun install(): slatekit.common.ResultMsg<Any> {
         val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
@@ -59,13 +59,13 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
 
     @ApiAction(name = "", desc = "installs a specific module", roles = "@parent")
-    fun installByName(name: String): slatekit.common.Result<Any> {
+    fun installByName(name: String): slatekit.common.ResultMsg<Any> {
         return _items[name]?.let { installUpdate(it, false) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
     }
 
 
     @ApiAction(name = "", desc = "forces the install of a specific module or updates it. updates the mod entry and creates table", roles = "@parent")
-    fun forceInstallByName(name: String): slatekit.common.Result<Any> {
+    fun forceInstallByName(name: String): slatekit.common.ResultMsg<Any> {
         return _items[name]?.let { installUpdate(it, true) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
     }
 
@@ -89,7 +89,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
 
-    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent:Boolean = false): slatekit.common.Result<Any> {
+    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent:Boolean = false): slatekit.common.ResultMsg<Any> {
 
         val checkResult = ctx.service.findFirst(slatekit.common.query.Query().where("name", "=", mod.info.name))
         if (checkResult == null) {

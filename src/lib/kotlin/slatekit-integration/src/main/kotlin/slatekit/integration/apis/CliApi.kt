@@ -81,7 +81,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
             val cmdResult = when(metaCmd){
 
                 // Case 1: Generate a sample command to output/file
-                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toResponse())
+                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toResultEx().toResponse())
 
                 // Case 2: Get command from params file and execute
                 CliConstants.SysFile   -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
@@ -148,7 +148,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
     }
 
 
-    private fun buildRequestSample(cmd:CliCommand): Result<String> {
+    private fun buildRequestSample(cmd:CliCommand): ResultMsg<String> {
         val opts = slatekit.common.InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
         val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.SourceCLI, cmd)
 
