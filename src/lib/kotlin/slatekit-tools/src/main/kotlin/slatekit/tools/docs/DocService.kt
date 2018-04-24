@@ -2,7 +2,6 @@ package slatekit.tools.docs
 
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import java.io.File
 
@@ -75,7 +74,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     )
 
 
-    fun process(): Result<String> {
+    fun process(): ResultEx<String> {
 
         val keys = _docs.map { d -> d.name }.toList()
         val maxLength = (keys.maxBy { it.length }?.length ?: 0) + 3
@@ -84,18 +83,18 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
             process(doc, pos, maxLength)
             pos += 1
         }
-        return success(_outputDir, "generated docs to " + _outputDir)
+        return Success(_outputDir,  msg="generated docs to " + _outputDir)
     }
 
 
-    fun process(name:String): Result<String> {
+    fun process(name:String): ResultEx<String> {
         val doc = _docs.first { it.name == name }
         process(doc, 0, doc.name.length)
-        return success(_outputDir, "generated docs to " + _outputDir)
+        return Success(_outputDir, msg ="generated docs to " + _outputDir)
     }
 
 
-    private fun process(doc:Doc, pos:Int, maxLength:Int): Unit {
+    private fun process(doc:Doc, pos:Int, maxLength:Int)  {
         if(doc.available) {
             val data = mutableMapOf<String, String>()
             val number = pos.toString().padEnd(2)
@@ -113,18 +112,17 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun fillComingSoon(doc:Doc, data:MutableMap<String,String>): Result<Boolean>
+    private fun fillComingSoon(doc:Doc, data:MutableMap<String,String>)
     {
         data.put("import_required", newline + "coming soon")
         data.put("import_examples", newline + "coming soon")
         data.put("setup", "-")
         data.put("examples", "coming soon")
         data.put("output", "")
-        return success(true)
     }
 
 
-    private fun fill(doc:Doc, data:Map<String,String>):Result<String>
+    private fun fill(doc:Doc, data:Map<String,String>):ResultMsg<String>
     {
         var template = _template
         template = replace(template, "layout"                    , data, "layout"            )
@@ -158,7 +156,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun init(doc:Doc, data:MutableMap<String,String>): Unit
+    private fun init(doc:Doc, data:MutableMap<String,String>)
     {
         _template = File(_templatePath).readText()
         data.put("output"       , "")
@@ -181,7 +179,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun parse(doc:Doc, data:MutableMap<String,String>): Result<Boolean>
+    private fun parse(doc:Doc, data:MutableMap<String,String>)
     {
         val filePath = _docFiles.buildComponentExamplePath(_rootdir, doc )
         val content = File(filePath).readText()
@@ -206,11 +204,10 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
         extractedData.forEach{ entry ->
             data.put(entry.key, entry.value)
         }
-        return ok()
     }
 
 
-    private fun generate(doc:Doc, data:Any, result:Result<String>): String
+    private fun generate(doc:Doc, data:Any, result:ResultMsg<String>): String
     {
         val fileName = "mod-" + doc.name.toLowerCase() + ".md"
         val outputPath = File(_rootdir, _outputDir)
@@ -222,7 +219,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun generateReadMe(doc:Doc, data:Any, result: Result<String>): Unit
+    private fun generateReadMe(doc:Doc, data:Any, result: ResultMsg<String>): Unit
     {
         val fileName = if (doc.multi) "Readme_" + doc.name + ".md" else "Readme.md"
         val outputPath = _docFiles.buildComponentFolder(_rootdir, doc)
@@ -257,14 +254,14 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
         val replacement = data[key]
         if(replacement.isNullOrEmpty()) return replaceItem(template, name)
 
-        val section = newline + "## $sectionName" + newline + replacement
-        val result = template.replace("@{" + name + "}", section)
+        val section = "$newline## $sectionName$newline$replacement"
+        val result = template.replace("@{$name}", section)
         return result
     }
 
 
 
     private fun replaceItem(template:String, name:String):String {
-        return template.replace("@{" + name + "}", "")
+        return template.replace("@{$name}", "")
     }
 }
