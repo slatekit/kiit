@@ -37,7 +37,7 @@ interface Hook : Middleware {
      * @param args  : Additional arguments supplied by the source
      */
     @Ignore
-    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Unit {
+    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?)  {
     }
 
 
@@ -50,6 +50,6 @@ interface Hook : Middleware {
      * @param args  : Additional arguments supplied by the source
      */
     @Ignore
-    fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Unit {
+    fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
     }
 }

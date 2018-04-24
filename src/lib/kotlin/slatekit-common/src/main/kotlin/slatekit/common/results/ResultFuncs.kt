@@ -222,8 +222,8 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> unexpectedError(msg: String = "unexpected error",
-                            err: Exception): ResultEx<T> {
+    fun <T> unexpectedError(err: Exception,
+                            msg: String = "unexpected error"): ResultEx<T> {
         return Failure(err, UNEXPECTED_ERROR, msg)
     }
 }
