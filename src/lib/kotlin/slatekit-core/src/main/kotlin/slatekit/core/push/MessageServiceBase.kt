@@ -14,6 +14,7 @@ package slatekit.core.push
 
 import slatekit.common.Result
 import slatekit.common.Require.requireText
+import slatekit.common.ResultMsg
 
 abstract class MessageServiceBase {
 
@@ -24,7 +25,7 @@ abstract class MessageServiceBase {
     * @return
     * @note      : implement in derived class that can actually send the message
     */
-  abstract fun send(msg:Message):Result<Boolean>
+  abstract fun send(msg:Message):ResultMsg<Boolean>
 
 
   /**
@@ -34,7 +35,7 @@ abstract class MessageServiceBase {
     * @param platform : platform ( "and", "ios", "win" )
     * @param message  : message to send
     */
-  fun send(deviceId:String, message:Message): Result<Boolean>
+  fun send(deviceId:String, message:Message): ResultMsg<Boolean>
   {
     requireText(deviceId, "device id not provided")
     return send(message.copy( recipient = message.recipient.copy(device = deviceId)))

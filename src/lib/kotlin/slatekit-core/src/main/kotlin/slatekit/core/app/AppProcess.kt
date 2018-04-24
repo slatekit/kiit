@@ -15,6 +15,8 @@ package slatekit.core.app
 
 import slatekit.common.Context
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.args.ArgsSchema
@@ -127,13 +129,13 @@ open class AppProcess(context: AppContext?,
      *
      * @return
      */
-    fun exec(): Result<Any> {
+    fun exec(): ResultEx<Any> {
 
         if (options.printSummaryBeforeExec) {
             logStart()
         }
 
-        val res: Result<Any> =
+        val res: ResultEx<Any> =
                 try {
                     onExecute()
                 }
@@ -153,7 +155,7 @@ open class AppProcess(context: AppContext?,
      *
      * @return
      */
-    open protected fun onExecute(): Result<Any> = success<Any>("default")
+    open protected fun onExecute(): ResultEx<Any> = Success<Any>("default")
 
 
     /**

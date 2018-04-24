@@ -14,7 +14,9 @@
 package slatekit.core.email
 
 import slatekit.common.ApiLogin
+import slatekit.common.Failure
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.http.HttpConstants
 import slatekit.common.http.HttpCredentials
 import slatekit.common.http.HttpMethod
@@ -27,7 +29,7 @@ class EmailServiceSendGrid(user: String,
                            key: String,
                            phone: String,
                            templates: Templates? = null,
-                           sender: ((HttpRequest) -> Result<Boolean>)? = null)
+                           sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null)
     : EmailService(templates) {
     val _sender = sender
 
@@ -43,7 +45,7 @@ class EmailServiceSendGrid(user: String,
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
 
 
-    override fun send(msg: EmailMessage): Result<Boolean> {
+    override fun send(msg: EmailMessage): ResultMsg<Boolean> {
 
         // Parameters
         val bodyArg = if (msg.html) "html" else "text"
@@ -73,8 +75,8 @@ class EmailServiceSendGrid(user: String,
     }
 
 
-    private fun post(req: HttpRequest): Result<Boolean> {
+    private fun post(req: HttpRequest): ResultMsg<Boolean> {
         val res = slatekit.common.http.HttpClient.post(req)
-        return if (res.is2xx) ResultFuncs.success(true, msg = res.result?.toString() ?: "") else ResultFuncs.err("error sending sms to ${req.url}")
+        return if (res.is2xx) ResultFuncs.success(true, msg = res.result?.toString() ?: "") else Failure("error sending sms to ${req.url}")
     }
 }

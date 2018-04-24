@@ -14,20 +14,17 @@
 package slatekit.core.app
 
 
-import slatekit.common.Failure
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.newline
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.EXIT
 import slatekit.common.results.FAILURE
 import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failureWithCode
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
 
@@ -39,7 +36,7 @@ object AppRunner {
      * @param app      : Builds the application
      * @return
      */
-    fun run(app: AppProcess): Result<Any> {
+    fun run(app: AppProcess): ResultEx<Any> {
         // If the context was derived via the build method below, it goes
         // through proper checks/validation. In which case, we check
         // for user supplying the following on the command line:
@@ -48,7 +45,7 @@ object AppRunner {
         // And these are considered failures.
         // Otherwise run the app.
         val result = when (app.ctx.state.success) {
-            false -> failed(app)
+            false -> failed(app).toResultEx()
             else  -> execute(app)
         }
 
@@ -56,7 +53,7 @@ object AppRunner {
         println(Console.RESET)
 
         // Error ?
-        if(!result.success && !result.isHelp){
+        if(!result.success && result.code != HELP){
             println()
             println("==================================")
             println("ERROR !!")
@@ -95,29 +92,22 @@ object AppRunner {
         val context =
 
                 // Bad arguments : Show help and return an empty context
-                if (!result.success) {
-                    help(schema, result)
-                    AppContext.err(result.code, result.msg)
-                }
-                // Good inputs
-                else {
-                    result.value?.let { res ->
-
+                when(result) {
+                    is Failure -> {
+                        help(schema, result)
+                        AppContext.err(result.code, result.msg)
+                    }
+                    is Success -> {
                         // Step 1: From the cli args, get back the INPUTS
                         // - Args ( parsed command line arguments )
                         // - Env  ( selected environment e.g. dev, qa, etc )
                         // - Config( config object for env - common env.conf and env.qa.conf )
-                        val inputs = AppFuncs.buildAppInputs(res, enc)
-
-                        // Step 2: If INPUTS are ok, we can then build a Context from it.
-                        val ctx = inputs.value?.let { appInputs -> AppFuncs.buildContext(appInputs, enc) } ?:
-                                AppContext.err(inputs.code, inputs.msg)
-
-                        // Step 3: Finally allow client app to map the context, this
-                        // allow client/caller to customize the Context before its finally set
-                        // on the application.
-                        converter?.let { c -> c(ctx) } ?: ctx
-                    } ?: AppContext.err(result.code, result.msg)
+                        val inputs = AppFuncs.buildAppInputs(result.data, enc)
+                        val ctx = inputs
+                                .map { inp -> AppFuncs.buildContext(inp, enc) }
+                                .map { ctx -> converter?.let { c -> c(ctx) }  }
+                        ctx.getOrElse { AppContext.err(result.code, result.msg) }!!
+                    }
                 }
         return context
     }
@@ -130,17 +120,16 @@ object AppRunner {
      * @param schema   : the argument schema that defines what arguments are supported.
      * @return
      */
-    fun check(rawArgs: Array<String>, schema: ArgsSchema?): Result<Args> {
+    fun check(rawArgs: Array<String>, schema: ArgsSchema?): ResultMsg<Args> {
 
         // 1. Parse args
         val result = Args.parseArgs(rawArgs, "-", "=", false)
 
         // 2. Bad args?
-        return if (!result.success) {
-            badRequest<Args>(msg = "invalid arguments supplied")
-        }
-        else {
-            result.value?.let { args ->
+        return when(result) {
+            is Failure -> badRequest<Args>(msg = "invalid arguments supplied")
+            is Success -> {
+                val args = result.data
 
                 // 3. Check for "help", "exit"
                 val helpCheck = AppFuncs.isMetaCommand(rawArgs.toList())
@@ -149,11 +138,11 @@ object AppRunner {
                 // Different messages ?
                 when (helpCheck.code) {
                     FAILURE -> validate(args, schema)
-                    EXIT    -> failureWithCode(helpCheck.code, "exit")
-                    HELP    -> failureWithCode(helpCheck.code, "help")
-                    else    -> failureWithCode(helpCheck.code, helpCheck.msg)
+                    EXIT    -> Failure("exit", helpCheck.code, "exit")
+                    HELP    -> Failure("help", helpCheck.code, "help")
+                    else    -> Failure("exit", helpCheck.code, helpCheck.msg)
                 }
-            } ?: badRequest<Args>(msg = "invalid arguments supplied")
+            }
         }
     }
 
@@ -165,7 +154,7 @@ object AppRunner {
      * @param schema
      * @return
      */
-    fun validate(result: Args, schema: ArgsSchema?): Result<Args> {
+    fun validate(result: Args, schema: ArgsSchema?): ResultMsg<Args> {
         // 4. Invalid inputs
         val args = result
 
@@ -195,7 +184,7 @@ object AppRunner {
      * @param schema
      * @param result
      */
-    fun help(schema: ArgsSchema?, result: Result<Args>): Unit {
+    fun help(schema: ArgsSchema?, result: ResultMsg<Args>): Unit {
 
         val writer = ConsoleWriter()
 
@@ -215,15 +204,15 @@ object AppRunner {
     }
 
 
-    fun failed(app: AppProcess): Result<Any> {
-        if(!app.ctx.state.isHelp) {
+    fun failed(app: AppProcess): ResultMsg<Any> {
+        if(app.ctx.state.code != HELP) {
             println("Application context invalid... exiting running of app.")
         }
-        return failureWithCode(code = app.ctx.state.code, msg = app.ctx.state.msg)
+        return Failure(app.ctx.state.msg, code = app.ctx.state.code, msg = app.ctx.state.msg)
     }
 
 
-    fun execute(app: AppProcess): Result<Any> =
+    fun execute(app: AppProcess): ResultEx<Any> =
             Result.attempt({ ->
 
                 // 1. Begin app workflow

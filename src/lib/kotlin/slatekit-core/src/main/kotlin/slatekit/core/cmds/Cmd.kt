@@ -13,11 +13,13 @@
 
 package slatekit.core.cmds
 
+import slatekit.common.*
 import slatekit.common.DateTime.DateTimes.now
-import slatekit.common.Result
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.common.results.ResultFuncs.successOrError
+import slatekit.common.results.ResultFuncs.unexpectedError
+import slatekit.common.results.UNEXPECTED_ERROR
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -77,16 +79,16 @@ open class Cmd(val name: String,
         val start = now()
 
         // Result
-        val result: Result<Any> =
+        val result: ResultEx<Any> =
                 try {
 
                     _call?.let { c ->
                         val res = c(args)
-                        successOrError(res != null, res)
+                        successOrError(res != null, res).toResultEx()
                     } ?: executeInternal(args)
                 }
                 catch(ex: Exception) {
-                    failure<Any>("Error while executing : " + name + ". " + ex.message, ex)
+                    unexpectedError(ex, "Error while executing : " + name + ". " + ex.message)
                 }
 
 
@@ -110,5 +112,6 @@ open class Cmd(val name: String,
      * @param args
      * @return
      */
-    open protected fun executeInternal(args: Array<String>?): Result<Any> = notImplemented()
+    open protected fun executeInternal(args: Array<String>?): ResultEx<Any> =
+            notImplemented<Any>().toResultEx()
 }

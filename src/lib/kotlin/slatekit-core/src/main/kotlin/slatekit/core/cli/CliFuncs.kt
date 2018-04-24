@@ -14,13 +14,13 @@
 package slatekit.core.cli
 
 import slatekit.common.Files
-import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.info.Folders
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.no
-import slatekit.common.results.ResultFuncs.yesWithCode
+import slatekit.common.results.ResultFuncs.yes
 
 
 object CliFuncs {
@@ -35,40 +35,40 @@ object CliFuncs {
     }
 
 
-    fun checkForAssistance(cmd: CliCommand): Result<Boolean> {
+    fun checkForAssistance(cmd: CliCommand): ResultMsg<Boolean> {
         val words = cmd.args.raw
         val verbs = cmd.args.actionParts
 
         // Case 1: Exit ?
         return if (ArgsFuncs.isExit(words, 0)) {
-            yesWithCode(EXIT, msg = "exit")
+            yes("exit", EXIT)
         }
         // Case 2a: version ?
         else if (ArgsFuncs.isVersion(words, 0)) {
-            yesWithCode(HELP, msg = "version")
+            yes("version", HELP)
         }
         // Case 2b: about ?
         else if (ArgsFuncs.isAbout(words, 0)) {
-            yesWithCode(HELP, msg = "about")
+            yes("about", HELP)
         }
         // Case 3a: Help ?
         else if (ArgsFuncs.isHelp(words, 0)) {
-            yesWithCode(HELP, msg = "help")
+            yes("help", HELP)
         }
         // Case 3b: Help on area ?
         else if (ArgsFuncs.isHelp(verbs, 1)) {
-            yesWithCode(HELP, msg = "area ?")
+            yes("area ?", HELP)
         }
         // Case 3c: Help on api ?
         else if (ArgsFuncs.isHelp(verbs, 2)) {
-            yesWithCode(HELP, msg = "area.api ?")
+            yes("area.api ?", HELP)
         }
         // Case 3d: Help on action ?
         else if (!cmd.args.action.isNullOrEmpty() &&
                 (ArgsFuncs.isHelp(cmd.args.positional, 0) ||
                         ArgsFuncs.isHelp(verbs, 3))
                      ) {
-            yesWithCode(HELP, msg = "area.api.action ?")
+            yes("area.api.action ?", HELP)
         }
         else
             no()
