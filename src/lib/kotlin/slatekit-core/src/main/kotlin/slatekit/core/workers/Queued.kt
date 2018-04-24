@@ -1,6 +1,7 @@
 package slatekit.core.workers
 
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
@@ -19,7 +20,7 @@ interface Queued<T> {
     /**
      * Processes the queue
      */
-    fun processQueue(): Result<T> {
+    fun processQueue(): ResultMsg<T> {
 
         // Get items from queue
         val items = queue().nextBatchAs<T>(worker().settings.batchSize)

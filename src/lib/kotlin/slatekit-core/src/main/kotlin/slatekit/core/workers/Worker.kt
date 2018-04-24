@@ -1,7 +1,6 @@
 package slatekit.core.workers
 
-import slatekit.common.DateTime
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultFuncs
@@ -80,7 +79,7 @@ open class Worker<T>(
     protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
     protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
     protected val _runDelay = AtomicReference<Int>(0)
-    protected val _lastResult = AtomicReference<Result<T>>(ResultFuncs.failure("not started"))
+    protected val _lastResult = AtomicReference<ResultMsg<T>>(ResultFuncs.failure("not started"))
 
 
     val name:String = metadata.about.name
@@ -105,7 +104,7 @@ open class Worker<T>(
     /**
      * gets the last result from doing work.
      */
-    val lastResult: Result<T> get() = _lastResult.get()
+    val lastResult: ResultMsg<T> get() = _lastResult.get()
 
 
     /**
@@ -127,7 +126,7 @@ open class Worker<T>(
      * initialize this task and update current status
      * @return
      */
-    fun init(): Result<Boolean> {
+    fun init(): ResultMsg<Boolean> {
         moveToState(RunStateInitializing)
         return onInit()
     }
@@ -147,12 +146,12 @@ open class Worker<T>(
      *
      * @return
      */
-    open fun work(): Result<T> {
+    open fun work(): ResultEx<T> {
         moveToState(RunStateBusy)
         val result = try {
             val attempt = processInternal(null)
             _lastResult.set(attempt)
-            attempt
+            attempt.toResultEx()
         }
         catch(ex:Exception) {
             val last = _runStatus.get()
@@ -168,7 +167,7 @@ open class Worker<T>(
             )
 
             //log.error("Error handling message from queue: " + ex.message, ex)
-            failure<T>("Unexpected error : " + ex.message)
+            Failure(ex, msg="Unexpected error : " + ex.message)
         }
         moveToState(RunStateIdle)
         return result
@@ -178,7 +177,7 @@ open class Worker<T>(
     /**
      * end this task and update current status
      */
-    fun end(): Unit {
+    fun end() {
         onEnd()
         moveToState(RunStateComplete)
     }
@@ -189,8 +188,8 @@ open class Worker<T>(
      * @param args
      * @return
      */
-    protected open fun onInit(): Result<Boolean> {
-        return ResultFuncs.ok()
+    protected open fun onInit(): ResultMsg<Boolean> {
+        return Success(true)
     }
 
 
@@ -201,14 +200,14 @@ open class Worker<T>(
     }
 
 
-    protected open fun process(args:Array<Any>?): Result<T> {
+    protected open fun process(args:Array<Any>?): ResultMsg<T> {
         return ResultFuncs.notImplemented()
     }
 
 
-    private fun processInternal(args:Array<Any>?): Result<T> {
+    private fun processInternal(args:Array<Any>?): ResultMsg<T> {
         return when {
-            this is Queued<*> -> processQueue() as Result<T>
+            this is Queued<*> -> processQueue() as ResultMsg<T>
             callback != null  -> callback.invoke(null)
             else              -> process(null)
         }
