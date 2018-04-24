@@ -187,8 +187,8 @@ class ReflectorTests {
         ctx.ent.register<User>(false, User::class)
         val api = UserApi(ctx)
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTime.of(2017, 5, 27)))
-        val result = res as Result<String>
-        val v = result.value
+        val result = res as ResultMsg<String>
+        val v = result.getOrElse { "" }
         assert(v == "ok")
         assert(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
     }

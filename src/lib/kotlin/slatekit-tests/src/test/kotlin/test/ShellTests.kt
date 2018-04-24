@@ -16,7 +16,10 @@ import slatekit.apis.core.Api
 import slatekit.apis.svcs.TokenAuth
 import slatekit.common.ApiKey
 import slatekit.common.Credentials
+import slatekit.common.args.Args
+import slatekit.common.getOrElse
 import slatekit.common.results.HELP
+import slatekit.core.cli.CliCommand
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
@@ -30,19 +33,20 @@ class ShellTests  {
     @Test fun can_execute_command() {
       val shell = getCli()
       val result = shell.onCommandExecute("sys.app.host")
-      assert( result.value != null )
-      assert( result.value!!.area == "sys" )
-      assert( result.value!!.name == "app" )
-      assert( result.value!!.action == "host" )
-      assert( result.value!!.line == "sys.app.host" )
-      assert( result.value!!.result!!.success)
+
+      val cmd = result.getOrElse { CliCommand.build(Args.default(), "") }
+      assert( cmd.area == "sys" )
+      assert( cmd.name == "app" )
+      assert( cmd.action == "host" )
+      assert( cmd.line == "sys.app.host" )
+      assert( cmd.result!!.success)
     }
   
 
     @Test fun can_handle_help() {
       val shell = getCli()
       val result = shell.onCommandExecute("?")
-      assert( result.value == null )
+      assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "help")
     }
@@ -51,7 +55,7 @@ class ShellTests  {
     @Test fun can_handle_help_for_area() {
       val shell = getCli()
       val result = shell.onCommandExecute("app ?")
-      assert( result.value == null )
+      assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "area ?")
     }
@@ -60,7 +64,7 @@ class ShellTests  {
     @Test fun can_handle_help_for_area_api() {
       val shell = getCli()
       val result = shell.onCommandExecute("app.info ?")
-      assert( result.value == null )
+      assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "area.api ?")
     }
@@ -69,7 +73,7 @@ class ShellTests  {
     @Test fun can_handle_help_for_area_api_action() {
       val shell = getCli()
       val result = shell.onCommandExecute("app.info.host ?")
-      assert( result.value == null )
+      assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "area.api.action ?")
     }

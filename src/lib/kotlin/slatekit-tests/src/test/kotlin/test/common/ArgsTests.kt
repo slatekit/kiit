@@ -19,8 +19,11 @@ package test.common
 
 import org.junit.Test
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.ResultMsg
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
+import slatekit.common.getOrElse
 
 
 class ArgsTests {
@@ -211,7 +214,7 @@ class ArgsTests {
     }
 
 
-    private fun ensure(result: Result<Args>, success:Boolean, size:Int,
+    private fun ensure(result: ResultEx<Args>, success:Boolean, size:Int,
                        expectedNamed:List<Pair<String,String>>,
                        expectedMeta:List<Pair<String,String>>? = null,
                        expectedSys:List<Pair<String,String>>? = null,
@@ -220,7 +223,7 @@ class ArgsTests {
         // success / fail
         assert( result.success == success )
 
-        val args = result.value!!
+        val args = result.getOrElse { Args.default() }
 
         // size
         assert( args.size() == size)
