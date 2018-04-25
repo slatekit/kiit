@@ -13,6 +13,8 @@ package slatekit.sampleapp.batch
 
 
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
 import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.app.AppProcess
@@ -146,7 +148,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
      *
      * @return
      */
-    override fun onExecute(): Result<Any> {
+    override fun onExecute(): ResultEx<Any> {
         info("app executing now")
 
         info("conf source:" + conf.origin())
@@ -186,7 +188,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
 
         info("app completed")
 
-        return ok()
+        return Success(true)
     }
 
 

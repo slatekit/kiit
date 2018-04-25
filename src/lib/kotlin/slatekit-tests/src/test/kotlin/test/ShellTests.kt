@@ -12,6 +12,7 @@
 package slate.test
 
 import org.junit.Test
+import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.TokenAuth
 import slatekit.common.ApiKey
@@ -63,16 +64,16 @@ class ShellTests  {
 
     @Test fun can_handle_help_for_area_api() {
       val shell = getCli()
-      val result = shell.onCommandExecute("app.info ?")
+      val result = shell.onCommandExecute("sys.app ?")
       assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
-      assert( result.msg  == "area.api ?")
+      assert(result.msg == "area.api ?")
     }
 
 
     @Test fun can_handle_help_for_area_api_action() {
       val shell = getCli()
-      val result = shell.onCommandExecute("app.info.host ?")
+      val result = shell.onCommandExecute("sys.app.host ?")
       assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "area.api.action ?")
@@ -94,12 +95,12 @@ class ShellTests  {
       )
 
     // 1. Get the user login info from .slate
-    val creds = Credentials("1", "kishore", "kishore@abc.com", "3E35584A8DE0460BB28D6E0D32FB4CFD", "test", "ny")
+    val creds = Credentials("1", "kishore", "kishore@abc.com", apiKeys.last().key, "test", "ny")
 
     // 2. Register the apis using default mode ( uses permissions in annotations on class )
     val apis = listOf(
-            Api(AppApi(ctx), declaredOnly = true, roles = "qa", protocol = "*"),
-            Api(VersionApi(ctx), declaredOnly = true, roles = "qa", protocol = "*")
+            Api(AppApi(ctx)    , setup = Annotated, declaredOnly = true, roles = "qa", protocol = "*"),
+            Api(VersionApi(ctx), setup = Annotated, declaredOnly = true, roles = "qa", protocol = "*")
     )
 
     // 3. Build up the shell services that handles all the command line features.
