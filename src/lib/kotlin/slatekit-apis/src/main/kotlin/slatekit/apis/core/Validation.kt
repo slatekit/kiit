@@ -43,7 +43,10 @@ class Validation(val ctn: ApiContainer) {
         val isWeb = ctn.protocol == WebProtocol
 
         // 1. Ensure verb is correct
-        return if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
+        return if (isWeb && req.verb == ApiConstants.SourceQueue) {
+            success(req)
+        }
+        else if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
             badRequest(msg = "expected verb ${actualVerb}, but got ${req.verb}")
         }
 

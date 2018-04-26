@@ -45,7 +45,7 @@ class Api_Restful_Tests : ApiTestsBase() {
             assert(r1.success)
             assert(r1.code == SUCCESS)
 
-            val all = r1.getOrElse { Movie.samples() } as Movie  as List<Movie>
+            val all = r1.getOrElse { Movie.samples() } as List<Movie>
             assert(all.size == 2 )
         })
     }

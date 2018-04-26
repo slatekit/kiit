@@ -48,9 +48,9 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_global_middleware_level() {
         val number = "abc"
         val errors = object: slatekit.apis.middleware.Error {
-            override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultMsg<Any> {
+            override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
                 val msg = "global middleware error handler"
-                return Failure(msg, UNEXPECTED_ERROR, msg = msg)
+                return Failure(Exception(msg), UNEXPECTED_ERROR, "unexpected error")
             }
         }
         ensure(

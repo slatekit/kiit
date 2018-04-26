@@ -2,10 +2,7 @@ package test.setup
 
 import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
-import slatekit.common.Context
-import slatekit.common.Request
-import slatekit.common.Result
-import slatekit.common.ResultMsg
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.yes
@@ -46,8 +43,8 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultMsg<Any> {
-        return ResultFuncs.success("")
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+        return Success("")
     }
 
 

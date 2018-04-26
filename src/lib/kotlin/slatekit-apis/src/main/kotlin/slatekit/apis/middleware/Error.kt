@@ -22,7 +22,7 @@ interface Error : Middleware {
      * @param args  : Additional arguments supplied by the source
      */
     @Ignore
-    fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultMsg<Any> {
-        return success("")
+    fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+        return Success("")
     }
 }

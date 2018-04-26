@@ -43,6 +43,9 @@ data class Routes(val areas: Lookup<Area>,
                   val namer:Namer? = null,
                   val onInstanceCreated: ((Any?) -> Unit )? = null) {
 
+    init {
+        visitApis({ area, api -> onInstanceCreated?.invoke( api.singleton ) })
+    }
 
     /**
      * Whether there is an area w/ the supplied name.

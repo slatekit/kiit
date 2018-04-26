@@ -6,6 +6,7 @@ import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.common.results.UNEXPECTED_ERROR
 import slatekit.common.validations.ValidationFuncs
 
@@ -46,8 +47,8 @@ open class SampleErrorsApi : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultMsg<Any>{
-        return failure(code = UNEXPECTED_ERROR, msg = "unexpected error in api")
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any>{
+        return unexpectedError(Exception("unexpected error in api", ex))
     }
 }
 

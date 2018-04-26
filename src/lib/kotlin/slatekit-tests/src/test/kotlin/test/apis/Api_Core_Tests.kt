@@ -78,7 +78,7 @@ class Api_Core_Tests : ApiTestsBase() {
                 request  = Request.path("app.sampleErrors.parseNumberWithResults", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = Failure("$number is not a valid number").toResponse()
+                response = Failure( "failure", msg = "$number is not a valid number").toResponse()
         )
     }
 

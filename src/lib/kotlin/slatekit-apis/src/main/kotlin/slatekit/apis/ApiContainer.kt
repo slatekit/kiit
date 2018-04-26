@@ -349,18 +349,17 @@ open class ApiContainer(
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = ApiHelper.fillArgs(converter, apiRef, req)
 
-        return Result.attempt {
+
             val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
-            returnVal?.let { res ->
+            return returnVal?.let { res ->
                 if (res is Result<*,*>) {
-                    res as Result<Any,Any>
+                    (res as Result<Any,Any>).toResultEx()
                 }
                 else {
                     Success(res)
                 }
-            } ?: Failure(Exception("Recieved null"))
-        }
+            } ?: Failure(Exception("Received null"))
     }
 
 
@@ -390,7 +389,8 @@ open class ApiContainer(
      */
     fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {
         println(ex.message)
-        return unexpectedError(ex, msg = "error executing : " + req.path + ", check inputs")
+        val msg = "error executing : " + req.path + ", check inputs"
+        return unexpectedError(Exception(msg, ex))
     }
 
 

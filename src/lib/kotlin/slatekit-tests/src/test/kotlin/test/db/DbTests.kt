@@ -117,7 +117,7 @@ class DbTests {
     fun <T> ensure_scalar(colName:String, callback: (Db, String) -> T, expected:T ):Unit {
 
         val db = Db(con!!)
-        val sql = "select $colName from db_tests where id = 3"
+        val sql = "select $colName from db_tests where id = 37"
         val actual = callback(db, sql)
         assert(expected == actual)
     }
