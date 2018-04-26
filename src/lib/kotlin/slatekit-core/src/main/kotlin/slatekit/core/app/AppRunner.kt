@@ -105,8 +105,8 @@ object AppRunner {
                         val inputs = AppFuncs.buildAppInputs(result.data, enc)
                         val ctx = inputs
                                 .map { inp -> AppFuncs.buildContext(inp, enc) }
-                                .map { ctx -> converter?.let { c -> c(ctx) }  }
-                        ctx.getOrElse { AppContext.err(result.code, result.msg) }!!
+                                .map { ctx ->converter?.let { c -> c(ctx) } ?: ctx }
+                        ctx.getOrElse { AppContext.err(inputs.code, inputs.msg) }!!
                     }
                 }
         return context

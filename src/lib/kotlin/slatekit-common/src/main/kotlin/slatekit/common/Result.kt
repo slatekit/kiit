@@ -42,7 +42,12 @@ sealed class Result<out T, out E> {
 
         inline fun <T> attempt(f: () -> T): Result<T, Exception> =
                 try {
-                    Success(f())
+                    val data = f()
+                    val result = when(data) {
+                        is Result<*,*> -> (data as Result<T, Any>).toResultEx()
+                        else           -> Success(data)
+                    }
+                    result
                 } catch (e: Exception) {
                     val err = e.message ?: ""
                     Failure(e, UNEXPECTED_ERROR,err)
@@ -58,7 +63,7 @@ sealed class Result<out T, out E> {
 data class Success<out T>(
         val data: T,
         override val code: Int = SUCCESS,
-        override val msg: String = ""
+        override val msg: String = "success"
 ) : Result<T, Nothing>() {
 
     override val success = true
@@ -71,7 +76,7 @@ data class Success<out T>(
 data class Failure<out E>(
         val err: E,
         override val code: Int = FAILURE,
-        override val msg: String = ""
+        override val msg: String = "failure"
 ) : Result<Nothing, E>() {
 
     override val success = false

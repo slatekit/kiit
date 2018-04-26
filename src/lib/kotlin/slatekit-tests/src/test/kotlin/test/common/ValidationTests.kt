@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package test
+package test.common
 
 import org.junit.Test
 import slatekit.common.validations.ValidationFuncs.hasCharsLCase

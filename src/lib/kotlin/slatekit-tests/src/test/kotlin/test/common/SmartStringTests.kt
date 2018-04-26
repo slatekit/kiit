@@ -1,4 +1,4 @@
-package test
+package test.common
 
 import org.junit.Test
 import slatekit.common.SmartString

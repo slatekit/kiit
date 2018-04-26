@@ -1,4 +1,4 @@
-package slate.test
+package test.common
 
 import org.junit.Assert
 import slatekit.common.results.ResultFuncs.no
@@ -153,7 +153,7 @@ class ResultTests {
     val res = Result.of { Person("peter") }
 
     Assert.assertTrue(res.success)
-    Assert.assertEquals("", res.msg)
+    Assert.assertEquals("success", res.msg)
     Assert.assertEquals(SUCCESS, res.code)
   }
 
@@ -185,7 +185,7 @@ class ResultTests {
             { it -> "Error Peter"   })
 
     Assert.assertTrue(res.success)
-    Assert.assertEquals("", res.msg)
+    Assert.assertEquals("success", res.msg)
     Assert.assertEquals(SUCCESS, res.code)
     Assert.assertEquals("Success Peter", name)
   }

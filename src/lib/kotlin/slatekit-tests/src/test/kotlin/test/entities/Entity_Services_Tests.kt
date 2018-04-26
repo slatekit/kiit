@@ -9,7 +9,7 @@ usage: Please refer to license on github for more info.
 </slate_header>
  */
 
-package slate.test
+package test.entities
 
 import org.junit.Before
 import org.junit.Test
