@@ -15,8 +15,8 @@ package slatekit.common.log
 
 object Logger {
 
-    fun parseLogLevel(level: String): LogLevel {
-        return when (level) {
+    fun parseLevel(level: String): LogLevel {
+        return when (level.trim().toLowerCase()) {
             "debug" -> Debug
             "info"  -> Info
             "warn"  -> Warn

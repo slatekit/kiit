@@ -221,7 +221,7 @@ object AppFuncs {
      */
     fun getLogLevel(args: Args, conf: ConfigBase): LogLevel {
         val level = getConfOverride(args, conf, "log.level", "info")
-        return Logger.parseLogLevel(level)
+        return Logger.parseLevel(level)
     }
 
 

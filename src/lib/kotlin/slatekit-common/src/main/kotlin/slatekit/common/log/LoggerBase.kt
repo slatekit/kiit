@@ -52,6 +52,21 @@ abstract class LoggerBase(val level: LogLevel = Warn,
 
     /**
      * Logs an entry
+     *
+     * @param level
+     * @param msg
+     * @param ex
+     */
+    override fun log(level: LogLevel, callback: () -> String, ex: Exception?, tag: String?) {
+        checkLog(level, {
+            val msg = callback()
+            performLog(buildLog(level, msg, ex, tag))
+        })
+    }
+
+
+    /**
+     * Logs an entry
      */
     fun log(entry: LogEntry) {
         checkLog(level, {

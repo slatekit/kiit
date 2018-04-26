@@ -168,6 +168,12 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
         warn("warn  example using trait method from LogSupportIn")
         error("error example using trait method from LogSupportIn")
         fatal("fatal example using trait method from LogSupportIn")
+
+        debug( { "lazy debug example using trait method from LogSupportIn" } )
+        info ( { "lazy info  example using trait method from LogSupportIn" } )
+        warn ( { "lazy warn  example using trait method from LogSupportIn" } )
+        error( { "lazy error example using trait method from LogSupportIn" } )
+        fatal( { "lazy fatal example using trait method from LogSupportIn" } )
         info("")
 
         // Feature 2: Encrypt / Decrypt support using the Encryptor setup in context
