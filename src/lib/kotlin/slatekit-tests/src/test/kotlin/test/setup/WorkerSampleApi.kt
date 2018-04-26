@@ -18,7 +18,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
     var _lastResult = ""
 
 
-    override fun setApiHost(host: ApiContainer):Unit { _container = host }
+    override fun setApiHost(host: ApiContainer) { _container = host }
     override fun container():ApiContainer = _container!!
     override fun queues(): List<QueueSource> = queues
 

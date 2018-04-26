@@ -15,7 +15,7 @@ package slatekit.apis.core
 
 import slatekit.apis.ApiConstants
 import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.ResultMsg
 
 
 /**
@@ -37,7 +37,7 @@ interface Auth {
      * @param rolesOnApi     : The values of the "roles" attribute on the annotation of the Api ( class )
      * @return
      */
-    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean>
+    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): ResultMsg<Boolean>
 
 
     /**

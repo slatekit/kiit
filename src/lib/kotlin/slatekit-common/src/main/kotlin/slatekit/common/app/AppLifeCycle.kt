@@ -13,9 +13,8 @@
 
 package slatekit.common.app
 
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.yes
+import slatekit.common.ResultEx
+import slatekit.common.Success
 
 interface AppLifeCycle {
 
@@ -24,7 +23,7 @@ interface AppLifeCycle {
      * initializes the application
      *
      */
-    fun init(): Result<Boolean> = yes()
+    fun init(): ResultEx<Boolean> = Success(true)
 
 
     /**
@@ -32,7 +31,7 @@ interface AppLifeCycle {
      *
      * @return
      */
-    fun exec(): Result<Any> = success("")
+    fun exec(): ResultEx<Any> = Success("")
 
 
     /**

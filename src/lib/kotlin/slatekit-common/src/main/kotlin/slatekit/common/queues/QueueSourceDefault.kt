@@ -13,13 +13,8 @@
 
 package slatekit.common.queues
 
-import slatekit.common.Random
+import slatekit.common.*
 import slatekit.common.Random.stringGuid
-import slatekit.common.Result
-import slatekit.common.Uris
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.successOrError
 import java.io.File
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -65,27 +60,27 @@ class QueueSourceDefault(override val name:String = "",
             }
 
 
-    override fun send(msg: Any, tagName: String, tagValue: String): Result<String> {
+    override fun send(msg: Any, tagName: String, tagValue: String): ResultEx<String> {
         val id = stringGuid()
-        val result = _list.offer(QueueSourceData(msg, mapOf(tagName to tagValue), id))
-        return successOrError(result, id)
+        val success = _list.offer(QueueSourceData(msg, mapOf(tagName to tagValue), id))
+        return if(success) Success(id) else Failure(Exception("Error sending msg with $tagName"))
     }
 
 
-    override fun send(message: String, attributes: Map<String, Any>): Result<String> {
+    override fun send(message: String, attributes: Map<String, Any>): ResultEx<String> {
         val id = Random.stringGuid()
         _list += QueueSourceData(message, attributes, id)
-        return success(id)
+        return Success(id)
     }
 
 
-    override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Result<String> {
+    override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): ResultEx<String> {
         val path = Uris.interpret(fileNameLocal)
 
         return path?.let { pathLocal ->
             val content = File(pathLocal).readText()
             send(content, tagName, tagValue)
-        } ?: failure(msg = "Invalid file path: " + fileNameLocal)
+        } ?: Failure(Exception("Invalid file path: $fileNameLocal"))
     }
 
 

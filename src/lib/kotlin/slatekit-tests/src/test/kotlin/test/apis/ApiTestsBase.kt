@@ -95,7 +95,7 @@ open class ApiTestsBase {
                    path      : String,
                    inputs    : List<Pair<String,Any>>?,
                    opts      : List<Pair<String,Any>>?,
-                   expected  : Result<String>):Unit
+                   expected  : ResultEx<String>):Unit
     {
         val apis = if(user != null) {
             val keys = buildKeys()

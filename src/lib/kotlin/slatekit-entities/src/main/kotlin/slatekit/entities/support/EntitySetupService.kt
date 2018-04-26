@@ -13,30 +13,24 @@
 
 package slatekit.entities.support
 
-import slatekit.common.Files
-import slatekit.common.Props
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbLookup
 import slatekit.common.info.Folders
-import slatekit.common.newline
 import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.core.EntityRepo
 import slatekit.meta.buildAddTable
 
 /**
  * Created by kreddy on 3/23/2016.
  */
-class EntitySetupService(val _entities: Entities,
-                         val _dbs: DbLookup?,
-                         val _settings: EntitySetupSettings,
-                         val _folders: Folders?) {
+class EntitySetupService(private val _entities: Entities,
+                         private val _dbs: DbLookup?,
+                         private val _settings: EntitySetupSettings,
+                         private val _folders: Folders?) {
 
     fun names(): List<Pair<String, String>> = _entities.getEntities().map {
         Pair(it.entityTypeName, it.entityRepoInstance?.repoName() ?: it.entityTypeName )
@@ -52,44 +46,49 @@ class EntitySetupService(val _entities: Entities,
      * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
      * @return
      */
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<String> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): ResultEx<String> {
         val result = generateSql(name, version)
         val err = "Unable to install, can not generate sql for model $name"
 
-        return result.value?.let { sql ->
-            val db = _entities.getDb(dbKey, dbShard)
-            db.update(sql)
-            success("Installed all tables")
-        } ?: failure(msg = err)
+       return  when(result) {
+            is Success -> {
+                val db = _entities.getDb(dbKey, dbShard)
+                db.update(result.data)
+                Success("Installed all tables")
+            }
+            is Failure ->  {
+                Failure(result.err, msg = err)
+            }
+        }
     }
 
 
-    fun delete(name:String): Result<String> {
+    fun delete(name:String): ResultEx<String> {
         return operate("Delete", name, { info, tableName -> _entities.getDbSource().buildDeleteAll(tableName) } )
     }
 
 
-    fun drop(name:String): Result<String> {
+    fun drop(name:String): ResultEx<String> {
         return operate("Drop", name, { info, tableName -> _entities.getDbSource().buildDropTable(tableName) } )
     }
 
 
-    fun installAll(): Result<List<String>> {
+    fun installAll(): ResultEx<List<String>> {
         return each( { entity -> install(entity.entityTypeName) } )
     }
 
 
-    fun generateSqlAll(): Result<List<String>> {
+    fun generateSqlAll(): ResultEx<List<String>> {
         return each( { entity -> generateSql(entity.entityTypeName) } )
     }
 
 
-    fun deleteAll(): Result<List<String>> {
+    fun deleteAll(): ResultEx<List<String>> {
         return each( { entity -> delete(entity.entityTypeName) } )
     }
 
 
-    fun dropAll(): Result<List<String>> {
+    fun dropAll(): ResultEx<List<String>> {
         return each( { entity -> drop(entity.entityTypeName) } )
     }
 
@@ -101,7 +100,7 @@ class EntitySetupService(val _entities: Entities,
      * @param version : the version of the model
      * @return
      */
-    fun generateSql(name: String, version: String = ""): Result<String> {
+    fun generateSql(name: String, version: String = ""): ResultEx<String> {
         val result = try {
             val fullName = name
             val svc = _entities.getServiceByName(fullName)
@@ -128,25 +127,25 @@ class EntitySetupService(val _entities: Entities,
         val path = result.second
 
         val info = if (success) "generated sql for model: $name $path" else "error generating sql"
-        return successOrError(success, sql, info)
+        return if(success) Success(sql, msg = info) else Failure(Exception(info), msg = info)
     }
 
 
-    fun connectionByDefault(): Result<DbCon> {
+    fun connectionByDefault(): ResultMsg<DbCon> {
         return _dbs?.let { dbs ->
             success(dbs.default() ?: DbConEmpty)
         } ?: failure<DbCon>("no db setup")
     }
 
 
-    fun connectionByName(name: String): Result<DbCon> {
+    fun connectionByName(name: String): ResultMsg<DbCon> {
         return _dbs?.let { dbs ->
             success(dbs.named(name) ?: DbConEmpty)
         } ?: failure<DbCon>("no db setup")
     }
 
 
-    private fun operate(operationName:String, entityName:String, sqlBuilder: (EntityInfo, String) -> String): Result<String> {
+    private fun operate(operationName:String, entityName:String, sqlBuilder: (EntityInfo, String) -> String): ResultEx<String> {
         val ent = _entities.getInfoByName(entityName)
         val svc = _entities.getServiceByName(entityName)
         val table = svc.repo().repoName()
@@ -154,18 +153,18 @@ class EntitySetupService(val _entities: Entities,
         return try {
             val db = _entities.getDb()
             db.update(sql)
-            success("Operation $operationName successful on $table")
+            Success("Operation $operationName successful on $table")
         } catch ( ex: Exception ) {
-            failure("Unable to delete :$table. ${ex.message}", ex)
+            Failure(ex, msg="Unable to delete :$table. ${ex.message}")
         }
     }
 
 
-    private fun each(operation: (EntityInfo) -> Result<String>): Result<List<String>> {
+    private fun each(operation: (EntityInfo) -> ResultEx<String>): ResultEx<List<String>> {
         val results =  _entities.getEntities().map { operation(it) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }
         val error = if(success) "" else messages.joinToString(newline)
-        return successOrError(success, messages, error)
+        return if(success) Success(messages, msg = "") else Failure(Exception(error), msg = error)
     }
 }

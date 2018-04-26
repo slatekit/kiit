@@ -4,6 +4,7 @@ import org.junit.Test
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.common.DateTime
 import slatekit.common.Uris
+import slatekit.common.getOrElse
 import slatekit.core.cloud.CloudFilesBase
 import java.io.File
 
@@ -46,12 +47,12 @@ class AwsS3Tests {
         // Get text
         val result1 = files.getAsText(fileName)
         assert(result1.success)
-        assert(result1.value == expectedContent)
+        assert(result1.getOrElse { null } == expectedContent)
 
         // Download
         val folderPath = Uris.interpret("user://$SLATEKIT_DIR/temp/")
         val downloadResult1 = files.download(fileName, folderPath!!)
-        val downloadFilePath1 = downloadResult1.value!!
+        val downloadFilePath1 = downloadResult1.getOrElse { null }
         val file1 = File(downloadFilePath1)
         assert(file1.exists())
         assert(file1.readText() == expectedContent)
@@ -60,7 +61,7 @@ class AwsS3Tests {
         val newFileName = fileName + "-01"
         val filePath = Uris.interpret("user://$SLATEKIT_DIR/temp/$newFileName")
         val downloadResult2 = files.downloadToFile(fileName, filePath!!)
-        val downloadFilePath2 = downloadResult2.value!!
+        val downloadFilePath2 = downloadResult2.getOrElse { null }
         val file = File(downloadFilePath2)
         assert(file.exists())
         assert(file.readText() == expectedContent)

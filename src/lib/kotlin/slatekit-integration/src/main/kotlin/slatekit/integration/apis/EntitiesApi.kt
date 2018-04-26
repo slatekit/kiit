@@ -17,7 +17,8 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiConstants
 import slatekit.apis.support.ApiBase
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.ResultMsg
 import slatekit.common.db.DbCon
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
@@ -30,37 +31,37 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 
     @ApiAction(desc = "installs the model to the database shard", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Result<String> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): ResultEx<String> {
         return service().install(name, version, dbKey, dbShard)
     }
 
 
     @ApiAction(desc = "installs all the models in the default database", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun installAll(): Result<List<String>> {
+    fun installAll(): ResultEx<List<String>> {
         return service().installAll()
     }
 
 
     @ApiAction(desc = "deletes data in the table supplied", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun delete(name:String): Result<String> {
+    fun delete(name:String): ResultEx<String> {
         return service().delete(name)
     }
 
 
     @ApiAction(desc = "deletes data in all the tables", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun deleteAll(): Result<List<String>> {
+    fun deleteAll(): ResultEx<List<String>> {
         return service().deleteAll()
     }
 
 
     @ApiAction(desc = "drops the table supplied", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun drop(name:String): Result<String> {
+    fun drop(name:String): ResultEx<String> {
         return service().drop(name)
     }
 
 
     @ApiAction(desc = "dropss the table", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun dropAll(): Result<List<String>> {
+    fun dropAll(): ResultEx<List<String>> {
         return service().dropAll()
     }
 
@@ -72,25 +73,25 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
 
     @ApiAction(desc = "generates sql install files for the model", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun generateSql(name: String, version: String = ""): Result<String> {
+    fun generateSql(name: String, version: String = ""): ResultEx<String> {
         return service().generateSql(name, version)
     }
 
 
     @ApiAction(desc = "generates sql install files for all models", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun generateSqlAll(): Result<List<String>> {
+    fun generateSqlAll(): ResultEx<List<String>> {
         return service().generateSqlAll()
     }
 
 
     @ApiAction(desc = "gets the default db connection", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun connectionByDefault(): Result<DbCon> {
+    fun connectionByDefault(): ResultMsg<DbCon> {
         return service().connectionByDefault()
     }
 
 
     @ApiAction(desc = "gets the default db connection", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun connectionByName(name: String): Result<DbCon> {
+    fun connectionByName(name: String): ResultMsg<DbCon> {
         return service().connectionByName(name)
     }
 

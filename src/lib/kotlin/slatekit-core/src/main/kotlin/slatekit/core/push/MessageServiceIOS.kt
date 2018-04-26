@@ -13,11 +13,12 @@
 
 package slatekit.core.push
 
-import slatekit.common.Result
+import slatekit.common.ResultMsg
+
 
 class MessageServiceIOS : MessageServiceBase(){
 
-  override fun send(msg: Message): Result<Boolean> {
+  override fun send(msg: Message): ResultMsg<Boolean> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 }

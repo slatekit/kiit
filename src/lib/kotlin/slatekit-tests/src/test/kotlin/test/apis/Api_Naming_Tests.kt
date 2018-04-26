@@ -4,6 +4,7 @@ import org.junit.Test
 import slatekit.apis.core.Api
 import slatekit.apis.ApiContainer
 import slatekit.common.Namer
+import slatekit.common.getOrElse
 import slatekit.common.lowerHyphen
 import slatekit.common.lowerUnderscore
 import test.setup.SampleExtendedApi
@@ -28,7 +29,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
         val result = apis.call("app", "sample-poko", "get-counter", "", mapOf(), mapOf())
         assert(result.success)
-        assert(result.value == 1)
+        assert(result.getOrElse { 0 } == 1)
     }
 
 
@@ -47,6 +48,6 @@ class Api_Naming_Tests : ApiTestsBase() {
 
         val result = apis.call("app", "sample_extended", "get_seconds", "", mapOf(), mapOf())
         assert(result.success)
-        assert(result.value in 0..59)
+        assert(result.getOrElse { 0 } in 0..59)
     }
 }

@@ -16,9 +16,8 @@ package slatekit.common.auth
 import slatekit.common.ApiKey
 import slatekit.common.Inputs
 import slatekit.common.ListMap
-import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs.no
-import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.yes
 
@@ -47,7 +46,7 @@ object AuthFuncs {
     fun isKeyValid(inputs: Inputs?,
                    keys: ListMap<String, ApiKey>,
                    inputName: String,
-                   expectedRoles: String): Result<Boolean> {
+                   expectedRoles: String): ResultMsg<Boolean> {
 
         val key = inputs?.getStringOpt(inputName) ?: ""
 
@@ -71,7 +70,7 @@ object AuthFuncs {
      * @param actualRoles  : Map of actual roles the user has.
      * @return
      */
-    fun matchRoles(expectedRole: String, actualRoles: Map<String, String>): Result<Boolean> {
+    fun matchRoles(expectedRole: String, actualRoles: Map<String, String>): ResultMsg<Boolean> {
         // 1. No roles ?
         val anyRoles = actualRoles.isNotEmpty()
         return if (!anyRoles) {
@@ -138,7 +137,7 @@ object AuthFuncs {
     }
 
 
-    private fun validateKey(key: String, keys: ListMap<String, ApiKey>, expectedRoles: String): Result<Boolean> {
+    private fun validateKey(key: String, keys: ListMap<String, ApiKey>, expectedRoles: String): ResultMsg<Boolean> {
 
         // Now ensure that key contains roles matching one provided.
         val apiKey = keys[key]

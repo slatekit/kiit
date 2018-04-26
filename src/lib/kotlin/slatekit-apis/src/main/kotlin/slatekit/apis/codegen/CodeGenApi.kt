@@ -1,10 +1,7 @@
 package slatekit.apis.codegen
 
 import slatekit.apis.*
-import slatekit.common.Ignore
-import slatekit.common.Request
-import slatekit.common.Result
-import slatekit.common.orElse
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 
@@ -33,7 +30,7 @@ class CodeGenApi : ApiHostAware {
                  packageName:String,
                  classFile: String = "",
                  methodFile: String = "",
-                 modelFile: String = ""): Result<String> {
+                 modelFile: String = ""): ResultMsg<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "kotlin", "kt")
     }
 
@@ -45,7 +42,7 @@ class CodeGenApi : ApiHostAware {
                 packageName:String,
                 classFile: String = "",
                 methodFile: String = "",
-                modelFile: String = ""): Result<String> {
+                modelFile: String = ""): ResultMsg<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "swift", "swift")
     }
 
@@ -57,7 +54,7 @@ class CodeGenApi : ApiHostAware {
                packageName:String,
                classFile: String = "",
                methodFile: String = "",
-               modelFile: String = ""): Result<String> {
+               modelFile: String = ""): ResultMsg<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "java", "java")
     }
 
@@ -69,7 +66,7 @@ class CodeGenApi : ApiHostAware {
              packageName:String,
              classFile: String = "",
              methodFile: String = "",
-             modelFile: String = ""): Result<String> {
+             modelFile: String = ""): ResultMsg<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "js", "js")
     }
 
@@ -82,7 +79,7 @@ class CodeGenApi : ApiHostAware {
                          methodFile: String = "",
                          modelFile: String = "",
                          lang: String,
-                         extension: String): Result<String> {
+                         extension: String): ResultMsg<String> {
 
         val result = this.host?.let { host ->
             val settings = CodeGenSettings(

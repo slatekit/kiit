@@ -28,9 +28,9 @@ data class Response<out T>(
     val code: Int,
     val meta: Map<String, String>?,
     val value: T?,
-    val msg: String?,
-    val err: Exception?,
-    val tag: String?
+    val msg: String? = null,
+    val err: Exception? = null,
+    val tag: String? = null
 ) {
 
     /**
@@ -47,14 +47,16 @@ data class Response<out T>(
 /**
  * Converts result to Response.
  */
-fun <T> Result<T>.toResponse(): Response<T> {
-    return Response(
-        success = this.success,
-        code = this.code,
-        meta = null,
-        value = this.value,
-        msg = this.msg,
-        err = this.err,
-        tag = this.tag
-    )
+fun <T,E> Result<T,E>.toResponse(): Response<T> {
+    return when(this) {
+        is Success -> Response(this.success, this.code, null, this.data, this.msg, null)
+        is Failure -> {
+            val ex = when(this.err) {
+                is Exception -> this.err
+                else         -> Exception(this.err.toString())
+            }
+            Response(this.success, this.code, null, null, this.msg, ex)
+        }
+    }
 }
+

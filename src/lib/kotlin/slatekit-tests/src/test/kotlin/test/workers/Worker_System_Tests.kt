@@ -1,6 +1,7 @@
 package test.workers
 
 import org.junit.Test
+import slatekit.common.getOrElse
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
 import slatekit.core.workers.*
@@ -64,8 +65,8 @@ class Worker_System_Tests {
         val worker1 = sys.get("group 1", "worker 1")!!
         val worker2 = sys.get("group 1", "worker 2")!!
         assert(group1.state() == RunStateBusy)
-        assert(worker1.lastResult.value == "worktype 1:done")
-        assert(worker2.lastResult.value == "worktype 2:done")
+        assert(worker1.lastResult.getOrElse { "" } == "worktype 1:done")
+        assert(worker2.lastResult.getOrElse { "" } == "worktype 2:done")
         sys.done()
     }
 

@@ -17,8 +17,7 @@ import slatekit.apis.*
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.middleware.Filter
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
@@ -28,12 +27,12 @@ import slatekit.common.results.ResultFuncs.successOrError
 class Validation(val ctn: ApiContainer) {
 
 
-    fun validateApi(req: Request): Result<ApiRef> {
+    fun validateApi(req: Request): ResultMsg<ApiRef> {
         return ctn.getApi(req.area, req.name, req.action)
     }
 
 
-    fun validateProtocol(req: Request, apiRef:ApiRef): Result<Request> {
+    fun validateProtocol(req: Request, apiRef:ApiRef): ResultMsg<Request> {
         // Ensure verb is correct get/post
         val action = apiRef.action
         val api = apiRef.api
@@ -44,7 +43,10 @@ class Validation(val ctn: ApiContainer) {
         val isWeb = ctn.protocol == WebProtocol
 
         // 1. Ensure verb is correct
-        return if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
+        return if (isWeb && req.verb == ApiConstants.SourceQueue) {
+            success(req)
+        }
+        else if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
             badRequest(msg = "expected verb ${actualVerb}, but got ${req.verb}")
         }
 
@@ -58,7 +60,7 @@ class Validation(val ctn: ApiContainer) {
     }
 
 
-    fun validateMiddleware(req: Request): Result<Any> {
+    fun validateMiddleware(req: Request): ResultMsg<Any> {
         val filters = ctn.middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
         val failed = filters.fold( success(""), { acc, filter ->
             if(acc.success) {
@@ -67,20 +69,20 @@ class Validation(val ctn: ApiContainer) {
                 filter.onFilter(ctn.ctx, req, ctn, null).map( { _ -> "" })
             }
         })
-        return successOrError(failed.success, failed.value, failed.msg)
+        return failed
     }
 
 
-    fun validateAuthorization(req: Request, apiRef:ApiRef): Result<Any> {
+    fun validateAuthorization(req: Request, apiRef:ApiRef): ResultMsg<Any> {
         return ApiHelper.isAuthorizedForCall(req, apiRef, ctn.auth)
     }
 
 
-    fun validateParameters(request: Request): Result<ApiRef> {
+    fun validateParameters(request: Request): ResultMsg<ApiRef> {
         val checkResult = ApiValidator.validateCall(request, { req -> ctn.get(req) }, true)
         return if (!checkResult.success) {
             // Don't return the result from internal ( as it contains too much info )
-            badRequest(checkResult.msg, tag = request.action)
+            badRequest(checkResult.msg)
         }
         else
             checkResult

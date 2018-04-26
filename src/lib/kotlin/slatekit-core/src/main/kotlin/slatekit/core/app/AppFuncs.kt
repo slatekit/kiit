@@ -14,8 +14,7 @@
 package slatekit.core.app
 
 
-import slatekit.common.Context
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.args.ArgsFuncs.isExit
@@ -26,7 +25,6 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
-import slatekit.common.toId
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
@@ -184,7 +182,7 @@ object AppFuncs {
      * @param raw
      * @return
      */
-    fun isMetaCommand(raw: List<String>): Result<String> {
+    fun isMetaCommand(raw: List<String>): ResultMsg<String> {
 
         // Case 1: Exit ?
         return if (isExit(raw, 0)) {
@@ -256,7 +254,7 @@ object AppFuncs {
     }
 
 
-    fun buildAppInputs(args: Args, enc: Encryptor?): Result<AppInputs> {
+    fun buildAppInputs(args: Args, enc: Encryptor?): ResultMsg<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
         // or specified in the "conf.dirs" config setting in the env.conf file
         // a) -conf="jars"                  = embedded in jar files
@@ -323,7 +321,7 @@ object AppFuncs {
                 host = Host.local(),
                 lang = Lang.kotlin(),
                 dirs = folders(conf),
-                state = success(true),
+                state = Success(true),
                 build = build
                 //ent = Entities(dbs(conf))
         )

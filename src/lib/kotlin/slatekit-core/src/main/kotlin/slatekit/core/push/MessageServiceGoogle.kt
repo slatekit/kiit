@@ -13,7 +13,8 @@
 
 package slatekit.core.push
 
-import slatekit.common.Result
+import slatekit.common.Failure
+import slatekit.common.ResultMsg
 import slatekit.common.http.*
 import slatekit.common.results.ResultFuncs
 
@@ -25,7 +26,7 @@ class MessageServiceGoogle(private val _key:String) : MessageServiceBase() {
   val _baseUrl = "https://gcm-http.googleapis.com/gcm/send"
 
 
-  override fun send(msg: Message): Result<Boolean> {
+  override fun send(msg: Message): ResultMsg<Boolean> {
 
       val payload = msg.toJson()
       val content = "{ \"to\" : \"" + msg.recipient.device + "\", \"data\" : " + payload + " }"
@@ -46,7 +47,7 @@ class MessageServiceGoogle(private val _key:String) : MessageServiceBase() {
       )
       val res = HttpClient.post(req)
       val result = if (res.is2xx) ResultFuncs.success(true, msg = res.result?.toString() ?: "")
-      else ResultFuncs.err("error sending sms to ${req.url}")
+      else Failure("error sending sms to ${req.url}")
       return result
   }
 }

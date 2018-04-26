@@ -2,8 +2,10 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.ApiContainer
+import slatekit.apis.ApiRef
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.common.getOrElse
 import slatekit.core.common.AppContext
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
@@ -16,15 +18,19 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_setup_instance_as_new() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")), allowIO = false)
         val result = apis.getApi("app", "SamplePOKO", "getTime" )
-        assert(result.success && result.value!!.instance is SamplePOKOApi)
-        assert((result.value!!.instance as SamplePOKOApi).count == 0)
+
+        val apiRef = result.getOrElse { null }
+        assert(result.success && apiRef?.instance is SamplePOKOApi)
+        assert((apiRef?.instance as SamplePOKOApi).count == 0)
     }
 
 
     @Test fun can_setup_instance_as_new_with_context() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")), allowIO = false)
         val result = apis.getApi("app", "SampleEntity", "patch" )
-        assert(result.success && result.value!!.instance is SampleEntityApi)
+
+        val apiRef = result.getOrElse { null }
+        assert(result.success && apiRef?.instance is SampleEntityApi)
     }
 
 
@@ -33,8 +39,9 @@ class Api_Setup_Tests : ApiTestsBase() {
         inst.count = 1001
         val apis = ApiContainer(ctx, apis = listOf(Api(inst, "app", "SamplePOKO")), allowIO = false)
         val result = apis.getApi("app", "SamplePOKO", "getTime" )
-        assert(result.success && result.value!!.instance is SamplePOKOApi)
-        assert((result.value!!.instance as SamplePOKOApi).count == 1001)
+        val apiRef = result.getOrElse { null }
+        assert(result.success && apiRef?.instance is SamplePOKOApi)
+        assert((apiRef?.instance as SamplePOKOApi).count == 1001)
     }
 
 
@@ -100,7 +107,7 @@ class Api_Setup_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")), auth = null, allowIO = false)
         val result = apis.call("app", "SamplePOKO", "getCounter", "", mapOf(), mapOf())
         assert(result.success)
-        assert(result.value == 1)
+        assert(result.getOrElse { 0 } == 1)
     }
 
 
@@ -108,7 +115,7 @@ class Api_Setup_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended")), auth = null, allowIO = false)
         val result = apis.call("app", "SampleExtended", "getSeconds", "", mapOf(), mapOf())
         assert(result.success)
-        assert(result.value in 0..59)
+        assert(result.getOrElse { -1 } in 0..59)
     }
 
 
@@ -116,7 +123,7 @@ class Api_Setup_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)), auth = null, allowIO = false)
         val result = apis.call("app", "SampleExtended", "getCounter", "", mapOf(), mapOf())
         assert(result.success)
-        assert(result.value == 1)
+        assert(result.getOrElse { 0 } == 1)
     }
 
 
@@ -126,8 +133,8 @@ class Api_Setup_Tests : ApiTestsBase() {
         val api = WorkerSampleApi(ctx)
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null , allowIO = false)
         val apiRef = apis.getApi(WorkerSampleApi::class, WorkerSampleApi::test1)
-        assert( apiRef.value?.api?.area == "samples")
-        assert( apiRef.value?.api?.name == "workerqueue")
-        assert( apiRef.value?.action?.name == "test1")
+        assert( apiRef.getOrElse { null }?.api?.area == "samples")
+        assert( apiRef.getOrElse { null }?.api?.name == "workerqueue")
+        assert( apiRef.getOrElse { null }?.action?.name == "test1")
     }
 }

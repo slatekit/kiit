@@ -1,6 +1,7 @@
 package test.setup
 
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultFuncs
 import slatekit.core.workers.*
@@ -13,7 +14,7 @@ class MyWorker(var acc:Int = 0,
     var isInitialized = false
     var isEnded = false
 
-    override fun onInit(): Result<Boolean> {
+    override fun onInit(): ResultMsg<Boolean> {
         isInitialized = true
         return super.onInit()
     }
@@ -25,14 +26,14 @@ class MyWorker(var acc:Int = 0,
     }
 
 
-    override fun process(args:Array<Any>?): Result<Int> {
+    override fun process(args:Array<Any>?): ResultMsg<Int> {
         acc += 1
 
         // Simulate different results for testing purposes
         return if(acc % 2 == 0 )
-            ResultFuncs.success(acc, "even", "even")
+            ResultFuncs.success(acc, msg ="even")
         else
-            ResultFuncs.success(acc, "odd", "odd")
+            ResultFuncs.success(acc, msg = "odd")
     }
 }
 
@@ -46,7 +47,7 @@ class MyWorkerWithQueue(queue: QueueSource, settings: WorkerSettings)
     var lastItem:Int = -1
 
 
-    override fun onInit(): Result<Boolean> {
+    override fun onInit(): ResultMsg<Boolean> {
         isInitialized = true
         return super.onInit()
     }

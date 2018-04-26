@@ -16,7 +16,6 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.support.ApiWithSupport
-import slatekit.common.Result
 import slatekit.common.Vars
 import slatekit.core.common.AppContext
 import slatekit.core.sms.SmsService
@@ -31,7 +30,7 @@ class SmsApi(val svc: slatekit.core.sms.SmsService, override val context: slatek
      * @param phone       : destination phone
      */
     @ApiAction(desc = "send an sms", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun send(message: String, countryCode: String, phone: String): slatekit.common.Result<Boolean> {
+    fun send(message: String, countryCode: String, phone: String): slatekit.common.ResultMsg<Boolean> {
         return this.svc.send(message, countryCode, phone)
     }
 
@@ -45,7 +44,7 @@ class SmsApi(val svc: slatekit.core.sms.SmsService, override val context: slatek
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an sms using a template", roles = "@parent", verb = "@parent", protocol = "cli")
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: slatekit.common.Vars): slatekit.common.Result<Boolean> {
+    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: slatekit.common.Vars): slatekit.common.ResultMsg<Boolean> {
         return this.svc.sendUsingTemplate(name, countryCode, phone, vars)
     }
 }

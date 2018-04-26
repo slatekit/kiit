@@ -12,17 +12,17 @@ import slatekit.common.log.LoggerBase
 
 /**
  *
- * @param arg  : command line arguments
- * @param env  : environment selection ( dev, qa, staging, prod )
- * @param cfg  : config settings
- * @param log  : logger
- * @param inf  : info only about the currently running application
- * @param host : host computer info
- * @param lang : lang runtime info
- * @param dbs  : db connection strings lookup
- * @param enc  : encryption/decryption service
- * @param dirs : directories used for the app
- * @param state: the current valid/invalid state of the context
+ * arg  : command line arguments
+ * env  : environment selection ( dev, qa, staging, prod )
+ * cfg  : config settings
+ * log  : logger
+ * inf  : info only about the currently running application
+ * host : host computer info
+ * lang : lang runtime info
+ * dbs  : db connection strings lookup
+ * enc  : encryption/decryption service
+ * dirs : directories used for the app
+ * state: the current valid/invalid state of the context
  */
 interface Context {
     val arg   : Args
@@ -37,6 +37,6 @@ interface Context {
     val dirs  : Folders?
     val extra : MutableMap<String,Any>
     val app   : AppMeta
-    val state : Result<Boolean>
+    val state : ResultEx<Boolean>
     val build : Build
 }

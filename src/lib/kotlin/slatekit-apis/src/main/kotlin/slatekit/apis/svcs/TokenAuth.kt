@@ -2,13 +2,10 @@ package slatekit.apis.svcs
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Auth
-import slatekit.common.ApiKey
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs
-import slatekit.common.splitToMapWithPairs
 
 
 /**
@@ -25,7 +22,7 @@ import slatekit.common.splitToMapWithPairs
 open class TokenAuth(
         protected val keys: List<ApiKey>,
         protected val enc: Encryptor?,
-        private val callback: ((String, Request, String) -> Result<Boolean>)? = null,
+        private val callback: ((String, Request, String) -> ResultMsg<Boolean>)? = null,
         private val headerKey: String = "api-key") : Auth {
 
     private val _keyLookup = AuthFuncs.convertKeys(keys )
@@ -40,10 +37,10 @@ open class TokenAuth(
      * @param rolesOnApi   : The roles setup for the api itself
      * @return
      */
-    override fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Result<Boolean> {
+    override fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): ResultMsg<Boolean> {
         // 1. No roles or guest ?
         if (isRoleEmptyOrGuest(rolesOnAction))
-            return ResultFuncs.ok()
+            return Success(true)
 
         // 2. Get the actual role if the action references the parent via @parent
         val role = determineRole(rolesOnAction, rolesOnApi)
@@ -71,7 +68,7 @@ open class TokenAuth(
      * 3. The api key "abc123" maps internally to one of key in @see: keys
      * 4. The matched key has associated roles
      */
-    open fun isKeyRoleValid(req: Request, role:String): Result<Boolean> {
+    open fun isKeyRoleValid(req: Request, role:String): ResultMsg<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
@@ -91,7 +88,7 @@ open class TokenAuth(
      * 3. The token "abc123" maps internally to a user
      * 4. We look up the user identified by the token and get their roles
      */
-    open fun isTokenRoleValid(req: Request, role: String): Result<Boolean> {
+    open fun isTokenRoleValid(req: Request, role: String): ResultMsg<Boolean> {
 
         return if (callback != null) {
             callback.invoke(ApiConstants.AuthModeAppRole, req, role)
@@ -111,7 +108,7 @@ open class TokenAuth(
     /**
      * performs both app role validation and key role validation.
      */
-    private fun isKeyTokenRoleValid(req:Request, roles:String): Result<Boolean> {
+    private fun isKeyTokenRoleValid(req:Request, roles:String): ResultMsg<Boolean> {
         val keyResult = isKeyRoleValid(req, roles)
         if(!keyResult.success) return keyResult
         return isTokenRoleValid(req, roles)

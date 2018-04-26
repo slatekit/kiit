@@ -82,19 +82,19 @@ class QueueApi(val queue: slatekit.common.queues.QueueSource, override val conte
 
 
     @ApiAction(desc = "sends a message to the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun send(msg: String, tagName: String = "", tagValue: String = ""): slatekit.common.Result<String> {
+    fun send(msg: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(msg, tagName, tagValue)
     }
 
 
     @ApiAction(desc = "sends a message to queue using content from file", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): slatekit.common.Result<String> {
+    fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.sendFromFile(uri, tagName, tagValue)
     }
 
 
     @ApiAction(desc = "sends a message to queue using content from file", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun sendFromDoc(doc: slatekit.common.Doc, tagName: String = "", tagValue: String = ""): slatekit.common.Result<String> {
+    fun sendFromDoc(doc: slatekit.common.Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(doc.content, tagName, tagValue)
     }
 }

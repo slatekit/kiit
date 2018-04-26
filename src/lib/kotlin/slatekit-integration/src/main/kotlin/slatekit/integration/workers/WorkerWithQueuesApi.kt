@@ -3,11 +3,8 @@ package slatekit.integration.workers
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Reqs
-import slatekit.common.Result
-import slatekit.common.log.Logger
+import slatekit.common.*
 import slatekit.common.queues.QueueSourceMsg
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.core.workers.*
 
 
@@ -24,7 +21,7 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
      * This converts the json message body to the Request and delegates the call
      * to the container which will call the corresponding API method.
      */
-    override fun processMessage(queue: QueueSourceMsg, msg:Any) : Result<Any> {
+    override fun processMessage(queue: QueueSourceMsg, msg:Any) : ResultMsg<Any> {
 
         // content ( json body )
         val rawBody = queue.getMessageBody(msg)
@@ -40,11 +37,11 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
             // acknowledge/complete message
             queue.complete(msg)
 
-            success<Any>(result, req.fullName, req.tag)
+            Success(result, msg = req.fullName)
         }
         else {
             queue.abandon(msg)
-            result
+            result.transform( { it -> Success(it)}, { err -> Failure(err.message ?: "") })
         }
     }
 }

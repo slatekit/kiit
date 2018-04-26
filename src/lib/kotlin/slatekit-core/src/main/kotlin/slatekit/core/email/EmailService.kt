@@ -13,10 +13,7 @@
 
 package slatekit.core.email
 
-import slatekit.common.BoolMessage
-import slatekit.common.Result
-import slatekit.common.Vars
-import slatekit.common.results.ResultFuncs.err
+import slatekit.common.*
 import slatekit.common.templates.Templates
 
 
@@ -27,7 +24,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param msg
      * @return
      */
-    abstract fun send(msg: EmailMessage): Result<Boolean>
+    abstract fun send(msg: EmailMessage): ResultMsg<Boolean>
 
 
     /**
@@ -38,14 +35,14 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html    : Whether or not the email is html formatted
      * @return
      */
-    fun send(to: String, subject: String, body: String, html: Boolean): Result<Boolean> {
+    fun send(to: String, subject: String, body: String, html: Boolean): ResultMsg<Boolean> {
         // NOTE: This guards are more readable that other alternatives
         val result = validate(to, subject)
         return if (result.success) {
             send(EmailMessage(to, subject, body, html))
         }
         else {
-            err(result.message)
+            Failure(result.message)
         }
     }
 
@@ -57,7 +54,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html    : Whether or not the email is html formatted
      * @param variables   : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): Result<Boolean> {
+    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): ResultMsg<Boolean> {
         val result = validate(to, subject)
         return if (result.success) {
             // Send the message
@@ -66,11 +63,11 @@ abstract class EmailService(val templates: Templates? = null) {
                 val result = t.resolveTemplateWithVars(name, variables.toMap())
                 val message = result
                 send(EmailMessage(to, subject, message ?: "", html))
-            } ?: err("templates are not setup")
+            } ?: Failure("templates are not setup")
 
         }
         else {
-            err(result.message)
+            Failure(result.message)
         }
     }
 

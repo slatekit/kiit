@@ -2,8 +2,8 @@ package slatekit.tools.docs
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.common.Result
-import slatekit.core.common.AppContext
+import slatekit.common.ResultEx
+import slatekit.common.ResultMsg
 import slatekit.integration.common.AppEntContext
 
 @Api(area = "sys", name = "docs", desc= "help doc generator",
@@ -19,7 +19,7 @@ class DocApi(val context: AppEntContext) {
      * sys.docs.generateAll -root="/Users/kishorereddy/git/slatekit" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
      */
     @ApiAction(name = "", desc= "generates the markdown docs", roles= "", verb = "@parent", protocol = "@parent")
-    fun generateAll(root:String, template:String, output:String): Result<String> {
+    fun generateAll(root:String, template:String, output:String): ResultEx<String> {
         val doc = DocService(root, output, template)
         val result = doc.process()
         return result
@@ -37,7 +37,7 @@ class DocApi(val context: AppEntContext) {
 
 
     @ApiAction(name = "", desc= "generates the markdown docs", roles= "", verb = "@parent", protocol = "@parent")
-    fun generateComponent(root:String, template:String, output:String, name:String): Result<String> {
+    fun generateComponent(root:String, template:String, output:String, name:String): ResultEx<String> {
         val doc = DocService(root, output, template)
         val result = doc.process(name)
         return result

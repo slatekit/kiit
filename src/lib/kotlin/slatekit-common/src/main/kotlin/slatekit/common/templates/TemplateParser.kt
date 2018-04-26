@@ -14,11 +14,8 @@
 package slatekit.common.templates
 
 
-import slatekit.common.Loops
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.lex.LexState
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
 
@@ -45,7 +42,7 @@ class TemplateParser(val text: String) {
     private val _state = LexState(text)
 
 
-    fun parse(): Result<List<TemplatePart>> {
+    fun parse(): ResultEx<List<TemplatePart>> {
 
         val subs = mutableListOf<TemplatePart>()
         val result =
@@ -87,13 +84,13 @@ class TemplateParser(val text: String) {
                     }
 
                     // Success!
-                    success(subs.toList())
+                    Success(subs.toList())
                 }
                 catch(ex: Exception) {
                     val line = _state.line
                     val text = "Error occurred at : line : $line, char : ${_state.pos}" + ex.message
                     val err = Exception(text, ex)
-                    failure<List<TemplatePart>>(msg = text, err = err)
+                    Failure(err, msg = text)
                 }
         return result
     }

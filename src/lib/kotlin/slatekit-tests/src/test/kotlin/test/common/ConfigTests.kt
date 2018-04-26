@@ -144,7 +144,7 @@ class ConfigTests {
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config("file:///Users/kishorereddy/.slatekit/conf/env.conf")
+        val conf  = Config("file:///Users/kishore.reddy/.slatekit/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }

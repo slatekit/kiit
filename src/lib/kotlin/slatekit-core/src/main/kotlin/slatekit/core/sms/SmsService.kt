@@ -14,7 +14,6 @@
 package slatekit.core.sms
 
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.err
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
@@ -41,7 +40,7 @@ abstract class SmsService(val templates: Templates? = null,
      * @return
      * @note      : implement in derived class that can actually send the message
      */
-    abstract fun send(msg: SmsMessage): Result<Boolean>
+    abstract fun send(msg: SmsMessage): ResultMsg<Boolean>
 
 
     /**
@@ -51,13 +50,13 @@ abstract class SmsService(val templates: Templates? = null,
      * @param countryCode : destination phone country code
      * @param phone       : destination phone
      */
-    fun send(message: String, countryCode: String, phone: String): Result<Boolean> {
+    fun send(message: String, countryCode: String, phone: String): ResultMsg<Boolean> {
         val result = validate(countryCode, phone)
         return if (result.success) {
             send(SmsMessage(message, countryCode, phone))
         }
         else {
-            err(result.message)
+            Failure(result.message)
         }
     }
 
@@ -70,7 +69,7 @@ abstract class SmsService(val templates: Templates? = null,
      * @param phone       : destination phone
      * @param variables   : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): Result<Boolean> {
+    fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): ResultMsg<Boolean> {
         val result = validate(countryCode, phone)
         return if (result.success) {
             // Send the message
@@ -80,10 +79,10 @@ abstract class SmsService(val templates: Templates? = null,
                 tres?.let { message ->
                     send(message, countryCode, phone)
                 }
-            } ?: err("templates are not setup")
+            } ?: Failure("templates are not setup")
         }
         else {
-            err(result.message)
+            Failure(result.message)
         }
     }
 
@@ -94,7 +93,7 @@ abstract class SmsService(val templates: Templates? = null,
      * @param phone
      * @return
      */
-    open fun massagePhone(iso: String, phone: String): Result<String> {
+    open fun massagePhone(iso: String, phone: String): ResultMsg<String> {
         val finalIso = iso.toUpperCase()
 
         val result = validate(finalIso, phone)

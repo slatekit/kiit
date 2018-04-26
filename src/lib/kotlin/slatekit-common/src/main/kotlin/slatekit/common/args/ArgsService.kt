@@ -13,10 +13,8 @@
 
 package slatekit.common.args
 
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.lex.Lexer
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.successOrError
 
 
@@ -42,10 +40,10 @@ class ArgsService {
               hasAction: Boolean = false,
               metaChar: String = "@",
               sysChar : String = "$"
-    ): Result<Args> {
+    ): ResultEx<Args> {
         // Check 1: Empty line ?
         return if (line.isEmpty()) {
-            success(Args("", listOf<String>(), "", listOf<String>(),  prefix, sep,
+            Success(Args("", listOf<String>(), "", listOf<String>(),  prefix, sep,
                     null, null, null, null, null))
         }
         else {
@@ -53,7 +51,7 @@ class ArgsService {
             val lexer = Lexer(line)
             val result = lexer.parse()
             if (!result.success) {
-                failure<Args>(msg = result.message)
+                Failure(Exception(result.message), msg = result.message)
             }
             else {
                 // Get the text from the tokens except for the last token(end token)
@@ -62,7 +60,7 @@ class ArgsService {
 
                 // Any text ?
                 if (args.isEmpty()) {
-                    failure<Args>(msg = err)
+                    Failure(Exception("No data provided"), msg = err)
                 }
                 else {
                     // Now parse the lexically parsed text into arguments
@@ -76,7 +74,7 @@ class ArgsService {
 
     private fun parseInternal(line: String, tokens: List<String>, prefix: String, sep: String,
                               hasAction: Boolean, metaChar: String, sysChar: String)
-            : Result<Args> {
+            : ResultEx<Args> {
         return successOrError(
                 {
                     // if input = "area.api.action -arg1="1" -arg2="2"

@@ -13,9 +13,8 @@
 
 package slatekit.core.cmds
 
-import slatekit.common.DateTime
+import slatekit.common.*
 import slatekit.common.DateTime.DateTimes.now
-import slatekit.common.Result
 
 object CmdFuncs {
 
@@ -86,15 +85,15 @@ object CmdFuncs {
      * @return
      */
     fun fromResult(name: String, start: DateTime, end: DateTime,
-                   result: Result<Any>): CmdResult {
+                   result: ResultEx<Any>): CmdResult {
 
         // The result
         val cmdResult = CmdResult(
                 name = name,
                 success = result.success,
                 message = result.msg,
-                error = result.err,
-                result = result.value,
+                error = if(result is Failure) result.err else null,
+                result = result.getOrElse { null },
                 started = start,
                 ended = end,
                 totalMs = end.durationFrom(start).toMillis()

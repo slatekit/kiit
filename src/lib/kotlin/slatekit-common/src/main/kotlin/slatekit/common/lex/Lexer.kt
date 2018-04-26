@@ -13,9 +13,10 @@
 
 package slatekit.common.lex
 
-import slatekit.common.Result
+import slatekit.common.Failure
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.getOrElse
-import slatekit.common.results.ResultFuncs
 
 
 /**
@@ -34,7 +35,7 @@ open class Lexer(val text: String) {
     }
 
 
-    fun getTokens(batchSize: Int = -1): Result<List<Token>> {
+    fun getTokens(batchSize: Int = -1): ResultEx<List<Token>> {
         val result = try {
             val tokens = mutableListOf<Token>()
             while (_state.pos < _state.END && !isEndOfTokenBatch(batchSize, tokens.size)) {
@@ -95,13 +96,13 @@ open class Lexer(val text: String) {
                 if (batchSize <= -1 || (batchSize > -1 && tokens.size < batchSize))
                     tokens.add(endToken)
             }
-            ResultFuncs.success(tokens.toList())
+            Success(tokens.toList())
         }
         catch(ex: Exception) {
             val line = _state.line
             val cpos = _state.charPos
             val text = "Error occurred at : line : $line, char : $cpos"
-            ResultFuncs.failure<List<Token>>(text, err = ex)
+            Failure(ex, msg = text)
         }
         return result
     }

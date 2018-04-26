@@ -3,6 +3,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Request
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 
@@ -46,7 +47,7 @@ open class SamplePOKOApi {
     fun request(req: Request): String = req.data?.getString("greeting") ?: "hi"
 
 
-    fun response(guess:Int): Result<Int> = if(guess == 1) success(1, "Correct") else failure("Try again")
+    fun response(guess:Int): ResultMsg<Int> = if(guess == 1) success(1, msg = "Correct") else failure("Try again")
 
 
     /**

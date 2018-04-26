@@ -13,11 +13,8 @@
 
 package slatekit.core.sms
 
-import slatekit.common.ApiLogin
-import slatekit.common.CountryCode
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.http.*
-import slatekit.common.results.ResultFuncs.err
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
 
@@ -43,7 +40,7 @@ class SmsServiceTwilio(key: String,
                        phone: String,
                        templates: Templates? = null,
                        ctns: List<CountryCode>? = null,
-                       sender: ((HttpRequest) -> Result<Boolean>)? = null)
+                       sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null)
     : SmsService(templates, ctns) {
 
     val _sender = sender
@@ -66,37 +63,41 @@ class SmsServiceTwilio(key: String,
      * @param msg : message to send
      * @return
      */
-    override fun send(msg: SmsMessage): Result<Boolean> {
+    override fun send(msg: SmsMessage): ResultMsg<Boolean> {
 
         val result = massagePhone(msg.countryCode, msg.phone)
-        return result.value?.let { phone ->
+        return when(result) {
+            is Success -> {
 
-            // Create an immutable http request.
-            val req = HttpRequest(
-                    url = _baseUrl,
-                    method = HttpMethod.POST,
-                    params = listOf(
-                            Pair("To", phone),
-                            Pair("From", _settings.account),
-                            Pair("Body", msg.msg)
-                    ),
-                    headers = null,
-                    credentials = HttpCredentials("Basic", _settings.key, _settings.password),
-                    entity = null,
-                    connectTimeOut = HttpConstants.defaultConnectTimeOut,
-                    readTimeOut = HttpConstants.defaultReadTimeOut
-            )
-            // This optionally uses the IO monad supplied or actually posts ( impure )
-            // This approach allows for testing this without actually sending a http request.
-            return _sender?.let { s -> s(req) } ?: post(req)
-        } ?: err(result.msg ?: "Invalid phone")
+                val phone = result.data
+                // Create an immutable http request.
+                val req = HttpRequest(
+                        url = _baseUrl,
+                        method = HttpMethod.POST,
+                        params = listOf(
+                                Pair("To", phone),
+                                Pair("From", _settings.account),
+                                Pair("Body", msg.msg)
+                        ),
+                        headers = null,
+                        credentials = HttpCredentials("Basic", _settings.key, _settings.password),
+                        entity = null,
+                        connectTimeOut = HttpConstants.defaultConnectTimeOut,
+                        readTimeOut = HttpConstants.defaultReadTimeOut
+                )
+                // This optionally uses the IO monad supplied or actually posts ( impure )
+                // This approach allows for testing this without actually sending a http request.
+                _sender?.let { s -> s(req) } ?: post(req)
+            }
+            is Failure -> Failure(result.msg)
+        }
     }
 
 
-    private fun post(req: HttpRequest): Result<Boolean> {
+    private fun post(req: HttpRequest): ResultMsg<Boolean> {
         val res = HttpClient.post(req)
         return if (res.is2xx) success(true, msg = res.result?.toString() ?: "")
-        else err("error sending sms to ${req.url}")
+        else Failure("error sending sms to ${req.url}")
     }
 
 
@@ -106,12 +107,12 @@ class SmsServiceTwilio(key: String,
      * @param phone
      * @return
      */
-    override fun massagePhone(iso: String, phone: String): Result<String> {
+    override fun massagePhone(iso: String, phone: String): ResultMsg<String> {
         // Remove the "+" and allow base function to ensure the country code is present
         val result = super.massagePhone(iso, phone.replace("+", ""))
-        return if (result.success)
-            success(result.value?.let { r -> "+" + r } ?: phone)
-        else
-            result
+        return when(result) {
+            is Success -> success("+" + result.data)
+            is Failure -> result
+        }
     }
 }

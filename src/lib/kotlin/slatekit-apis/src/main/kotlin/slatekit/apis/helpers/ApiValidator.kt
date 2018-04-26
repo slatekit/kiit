@@ -15,11 +15,8 @@ package slatekit.apis.helpers
 
 import slatekit.apis.ApiRef
 import slatekit.apis.core.Action
-import slatekit.common.Inputs
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 
 
@@ -28,7 +25,7 @@ object ApiValidator {
     /**
      * Checks the "route" ( area.api.action ) is valid.
      */
-    fun check(req: Request, fetcher: (Request) -> Result<ApiRef>) : Result<ApiRef> {
+    fun check(req: Request, fetcher: (Request) -> ResultMsg<ApiRef>) : ResultMsg<ApiRef> {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
         val totalParts = req.parts.size
@@ -51,47 +48,45 @@ object ApiValidator {
      * @return
      */
     fun validateCall(req: Request,
-                     fetcher: (Request) -> Result<ApiRef>,
-                     allowSingleDefaultParam: Boolean = false): Result<ApiRef> {
+                     fetcher: (Request) -> ResultMsg<ApiRef>,
+                     allowSingleDefaultParam: Boolean = false): ResultMsg<ApiRef> {
         val fullName = req.fullName
         val args = req.data
         val apiRefCheck = check(req, fetcher)
 
-        return if (!apiRefCheck.success) {
-            badRequest(msg = "bad request : $fullName: inputs not supplied")
-        }
-        else {
-            val apiRef = apiRefCheck.value!!
-            val action = apiRef.action
+        return when(apiRefCheck) {
+            is Failure -> badRequest(msg = "bad request : $fullName: inputs not supplied")
+            is Success -> {
+                val apiRef = apiRefCheck.data
+                val action = apiRef.action
 
-            // 1 param with default argument.
-            if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
-                success(apiRef)
-            }
-            // Param: Raw ApiCmd itself!
-            else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
-                success(apiRef)
-            }
-            // Params - check args needed
-            else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                badRequest(msg = "bad request : $fullName: inputs not supplied")
-
-            // Params - ensure matching args
-            else if (action.hasArgs) {
-                val argCheck = validateArgs(action, args)
-                if (argCheck.success) {
+                // 1 param with default argument.
+                if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
                     success(apiRef)
                 }
-                else
+                // Param: Raw ApiCmd itself!
+                else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
+                    success(apiRef)
+                }
+                // Params - check args needed
+                else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
                     badRequest(msg = "bad request : $fullName: inputs not supplied")
+
+                // Params - ensure matching args
+                else if (action.hasArgs) {
+                    val argCheck = validateArgs(action, args)
+                    if (argCheck.success) {
+                        success(apiRef)
+                    } else
+                        badRequest(msg = "bad request : $fullName: inputs not supplied")
+                } else
+                    success(apiRef)
             }
-            else
-                success(apiRef)
         }
     }
 
 
-    private fun validateArgs(action: Action, args: Inputs): Result<Boolean> {
+    private fun validateArgs(action: Action, args: Inputs): ResultMsg<Boolean> {
         var error = ": inputs missing or invalid "
         var totalErrors = 0
 
@@ -112,7 +107,7 @@ object ApiValidator {
             badRequest(msg = "bad request: action " + action.name + error)
         }
         else {
-            ok()
+            Success(true)
         }
     }
 }

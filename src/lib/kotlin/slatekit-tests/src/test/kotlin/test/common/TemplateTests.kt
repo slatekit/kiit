@@ -10,11 +10,10 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package test
+package test.common
 
 import org.junit.Test
-import slatekit.common.Random
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.*
 import slatekit.common.templates.TemplateConstants.TypeText
@@ -34,14 +33,14 @@ class TemplateTests {
 
 
     @Test fun can_sub_1_only() {
-        check ( subs().parse("@{user.home}"), listOf(
+        checkResult ( subs().parse("@{user.home}"), listOf(
             Pair(TypeSub , "user.home"  )
         ))
     }
 
 
     @Test fun can_sub_1_at_start() {
-        check ( subs().parse("@{user.home}/slatekit/env.conf"), listOf(
+        checkResult ( subs().parse("@{user.home}/slatekit/env.conf"), listOf(
             Pair(TypeSub , "user.home"  ),
             Pair(TypeText, "/slatekit/env.conf")
         ))
@@ -49,7 +48,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_1_in_middle() {
-        check ( subs().parse("/slatekit/@{user.home}/env.conf/"), listOf(
+        checkResult ( subs().parse("/slatekit/@{user.home}/env.conf/"), listOf(
             Pair(TypeText, "/slatekit/"),
             Pair(TypeSub , "user.home"  ),
             Pair(TypeText, "/env.conf/")
@@ -58,7 +57,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_1_at_end() {
-        check ( subs().parse("/slatekit/env.conf/@{user.home}"), listOf(
+        checkResult ( subs().parse("/slatekit/env.conf/@{user.home}"), listOf(
             Pair(TypeText, "/slatekit/env.conf/"),
             Pair(TypeSub , "user.home"  )
         ))
@@ -66,7 +65,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_2_at_start() {
-        check ( subs().parse("@{user.home}/@{company.id}/env.conf"), listOf(
+        checkResult ( subs().parse("@{user.home}/@{company.id}/env.conf"), listOf(
             Pair(TypeSub  , "user.home"   ),
             Pair(TypeText , "/"           ),
             Pair(TypeSub  , "company.id"  ),
@@ -76,7 +75,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_2_in_middle() {
-        check ( subs().parse("/c/@{user.api}/@{company.id}/env.conf/"), listOf(
+        checkResult ( subs().parse("/c/@{user.api}/@{company.id}/env.conf/"), listOf(
             Pair(TypeText , "/c/"        ),
             Pair(TypeSub  , "user.api"  ),
             Pair(TypeText , "/"          ),
@@ -87,7 +86,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_2_at_end() {
-        check ( subs().parse("/c:/users/@{user.api}/@{company.id}"), listOf(
+        checkResult ( subs().parse("/c:/users/@{user.api}/@{company.id}"), listOf(
             Pair(TypeText, "/c:/users/"),
             Pair(TypeSub  , "user.api"  ),
             Pair(TypeText , "/"  ),
@@ -97,7 +96,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_2_consecutive() {
-        check ( subs().parse("@{user.api}@{company.id}"), listOf(
+        checkResult ( subs().parse("@{user.api}@{company.id}"), listOf(
             Pair(TypeSub  , "user.api"  ),
             Pair(TypeSub  , "company.id" )
         ))
@@ -105,7 +104,7 @@ class TemplateTests {
 
 
     @Test fun can_sub_many_in_template() {
-        check ( subs().parse(
+        checkResult ( subs().parse(
                 "hi @{user.api}, Welcome to @{company.id}, @{company.id} does abc. " +
                         "visit @{company.url} for more info. regards @{company.support}"
         ), listOf(
@@ -134,8 +133,8 @@ class TemplateTests {
     @Test fun can_parse_on_demand_template_as_result() {
         val result = subs().parse(TEST_TEMPLATE)
         assert( result.success )
-        assert( result.value!!.size == 5 )
-        check(result, listOf(
+        assert( result.map { it.size == 5 }.success)
+        checkResult(result, listOf(
             Pair(TypeText  , "Hi "           ),
             Pair(TypeSub   , "user.api"     ),
             Pair(TypeText  , ", Welcome to " ),
@@ -256,14 +255,14 @@ class TemplateTests {
     }
 
 
-    fun check(subsResult: Result<List<TemplatePart>>, expected:List<Pair<Short,String>>): Unit  {
+    fun checkResult(subsResult: ResultEx<List<TemplatePart>>, expected:List<Pair<Short,String>>)  {
         assert(subsResult.success)
-        val subs = subsResult.value!!
+        val subs = (subsResult as Success).data
         check(subs, expected)
     }
 
 
-    fun check(subs:List<TemplatePart>, expected:List<Pair<Short,String>>): Unit  {
+    fun check(subs:List<TemplatePart>, expected:List<Pair<Short,String>>)  {
         assert( subs.size == expected.size)
         for( ndx in 0 .. expected.size -1 ) {
             val actual = subs[ndx]

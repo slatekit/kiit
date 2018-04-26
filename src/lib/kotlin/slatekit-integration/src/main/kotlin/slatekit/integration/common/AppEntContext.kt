@@ -13,8 +13,7 @@
 
 package slatekit.integration.common
 
-import slatekit.common.Context
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -28,8 +27,6 @@ import slatekit.common.log.LoggerBase
 import slatekit.common.log.LoggerConsole
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
-import slatekit.common.results.ResultFuncs.failureWithCode
-import slatekit.common.toIdent
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 
@@ -63,7 +60,7 @@ data class AppEntContext(
         override val enc  : Encryptor?          = null,
         override val dirs : Folders?            = null,
         override val extra:MutableMap<String,Any>      = mutableMapOf(),
-        override val state: Result<Boolean> = Result.none,
+        override val state: ResultEx<Boolean> = Success(true),
         override val build: Build = Build.empty
                      ) : Context
 {
@@ -100,7 +97,7 @@ data class AppEntContext(
                 inf = About.Abouts.none,
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),
-                state = failureWithCode(code, msg)
+                state = Failure(Exception("Error"), code, msg ?: "")
             )
 
 
