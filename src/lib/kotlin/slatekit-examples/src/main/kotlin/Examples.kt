@@ -7,8 +7,10 @@ import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.logging.*
+//import java.util.logging.*
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
 <slate_header>
@@ -31,14 +33,22 @@ fun main(args:Array<String>):Unit  {
 
     println(Paths.get(""))
     val logger = getLogger("main", "/Users/kishorereddy/git/slatekit/test")
+    logger.debug("fine")
     logger.info("info")
-    logger.fine("fine")
-    logger.warning("warn")
-    logger.severe("severe")
+    logger.warn("warn")
+    logger.error("error")
+    logger.fatal("fatal")
     println("hello kotlin examples")
 }
 
 
+fun getLogger(name:String, path:String): Logger {
+    return LogManager.getLogger(name)
+}
+
+
+
+/*
 fun getLogger(name:String, path:String):Logger {
     val logger = java.util.logging.Logger.getLogger("main")
     logger.level = java.util.logging.Level.INFO
@@ -69,7 +79,7 @@ class MyFormatter : Formatter() {
         return builder.toString()
     }
 }
-
+*/
 
 
 fun run() {

@@ -25,8 +25,8 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
+import slatekit.common.log.LogHelper
 import slatekit.common.log.LogLevel
-import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.results.ResultFuncs.exit
 import slatekit.common.results.ResultFuncs.failure
@@ -221,7 +221,7 @@ object AppFuncs {
      */
     fun getLogLevel(args: Args, conf: ConfigBase): LogLevel {
         val level = getConfOverride(args, conf, "log.level", "info")
-        return Logger.parseLevel(level)
+        return LogHelper.parseLevel(level)
     }
 
 
