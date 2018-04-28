@@ -38,8 +38,8 @@ open class Gate(val name: String,
     private val status = AtomicReference<GateState>(Open)
     private val statusTimeStamp = AtomicReference(DateTime.now())
     private val reasonForClose = AtomicReference<Reason>(NotApplicable)
-    private val volumeLimiter = VolumeLimiter()
-    private val errorLimiter = ErrorLimiter()
+    private val volumeLimiter = Tracker()
+    private val errorLimiter = ErrorTracker()
     private val event = AtomicReference<GateEvent>()
     private val timer = Timer()
     private val timerPosition = AtomicInteger(0)
@@ -74,11 +74,13 @@ open class Gate(val name: String,
 
         reasonForClose.set(reason)
 
-        // Re-open later
-        scheduleReopen()
+        if(settings.reOpenAutomatically) {
+            // Re-open later
+            scheduleReopen()
 
-        // Bump up exponential backoff
-        incrementBackOff()
+            // Bump up exponential backoff
+            incrementBackOff()
+        }
 
         if(alert) {
             alert()
@@ -128,7 +130,16 @@ open class Gate(val name: String,
     /**
      * Overall metrics of gate
      */
-    override fun metrics(): GateMetrics = internalMetrics()
+    override fun metrics(): GateStatus = internalMetrics()
+
+
+    /**
+     * Schedule reopening of this task after the seconds supplied
+     */
+    override fun openLater(seconds:Int, alert:Boolean) {
+        val task = ReOpenTask(this, alert)
+        timer.schedule(task, seconds * 1000L)
+    }
 
 
     /**
@@ -168,11 +179,6 @@ open class Gate(val name: String,
         } finally {
             val count = volumeLimiter.inc()
 
-            // Up the run counts
-            if (count > settings.subCountResetLimit) {
-                volumeLimiter.reset()
-            }
-
             // Close: Due to errors!
             if (isHighErrorCount()) {
                 close(ErrorsHigh, alert = true)
@@ -181,6 +187,12 @@ open class Gate(val name: String,
             // Close: Due to volume!
             else if(isHighVolume()) {
                 close(VolumeHigh, alert = true)
+            }
+
+            // Up the run counts
+            if (count >= settings.subCountResetLimit) {
+                volumeLimiter.next()
+                errorLimiter.next()
             }
         }
     }
@@ -206,8 +218,7 @@ open class Gate(val name: String,
         val rawTimePos = timerPosition.get()
         val timePos = Math.min(rawTimePos, settings.reOpenTimesInSeconds.size - 1)
         val seconds = settings.reOpenTimesInSeconds[timePos]
-        val task = ReOpenTask(this)
-        timer.schedule(task, seconds * 1000L)
+        openLater(seconds, true)
     }
 
 
@@ -219,14 +230,17 @@ open class Gate(val name: String,
     }
 
 
-    private fun internalMetrics(): GateMetrics {
-        return GateMetrics(
+    private fun internalMetrics(): GateStatus {
+        return GateStatus(
                 status.get(),
+                reasonForClose.get(),
                 statusTimeStamp.get(),
                 DateTime.now(),
-                volumeLimiter.main.get(),
-                volumeLimiter.get(),
-                errorLimiter.get(),
+                volumeLimiter.batch.get(),
+                volumeLimiter.count.get(),
+                volumeLimiter.total.get(),
+                errorLimiter.count.get(),
+                errorLimiter.total.get(),
                 errorLimiter.err.get()
         )
     }
@@ -234,11 +248,11 @@ open class Gate(val name: String,
 
     private fun isHighVolume():Boolean {
         return if(settings.volumeThresholdPerMinute > 0) {
-            val totalProcessed = volumeLimiter.get().toDouble()
+            val batchProcessed = volumeLimiter.count.get().toDouble()
             val end = DateTime.now()
             val start = statusTimeStamp.get()
             val mins = start.raw.until(end.raw, ChronoUnit.MINUTES)
-            val perMin = mins / totalProcessed
+            val perMin = mins / batchProcessed
             perMin > settings.volumeThresholdPerMinute
         }
         else  {
@@ -250,10 +264,15 @@ open class Gate(val name: String,
     private fun isHighErrorCount():Boolean {
 
         // Check error threshold
-        val totalFailed = errorLimiter.get().toDouble()
-        val totalProcessed = volumeLimiter.get().toDouble()
-        val percentageFailed = totalFailed / totalProcessed
-        return percentageFailed > settings.errorThresholdPercentage
+        val batchProcessed = volumeLimiter.count.get().toDouble()
+        return if(batchProcessed > 0 ) {
+            val totalFailed = errorLimiter.count.get().toDouble()
+            val percentageFailed = totalFailed / batchProcessed
+            percentageFailed > settings.errorThresholdPercentage
+        }
+        else {
+            false
+        }
     }
 
 
@@ -264,9 +283,9 @@ open class Gate(val name: String,
     }
 
 
-    class ReOpenTask(private val gate:Gate) : TimerTask() {
+    class ReOpenTask(private val gate:Gate, private val alert:Boolean) : TimerTask() {
         override fun run() {
-            gate.open(true)
+            gate.open(alert)
         }
     }
 }

@@ -18,5 +18,6 @@ data class GateSettings(
         val volumeThresholdPerMinute: Long = 0,
         val retryCount              : Int = 0,
         val subCountResetLimit      : Long = 1000000,
-        val reOpenTimesInSeconds     :List<Int> = listOf(120, 300, 600, 1800, 3600, 7200, 14000, 28000)
+        val reOpenAutomatically     : Boolean = true,
+        val reOpenTimesInSeconds    :List<Int> = listOf(120, 300, 600, 1800, 3600, 7200, 14000, 28000)
 )
