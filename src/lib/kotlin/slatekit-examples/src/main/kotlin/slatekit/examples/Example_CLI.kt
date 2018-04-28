@@ -21,14 +21,10 @@ import slatekit.core.cli.CliSettings
 
 //<doc:import_examples>
 import slatekit.apis.ApiConstants
-import slatekit.common.InputArgs
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.info.Folders
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.toResponse
 import slatekit.core.cmds.Cmd
 //</doc:import_examples>
 
@@ -121,7 +117,7 @@ class Example_CLI : Cmd("auth") {
     //</doc:setup>
 
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         // About: The shell component allows you to quicly setup an interactive
         // command line shell where you can handle your own commands
 
@@ -169,7 +165,7 @@ class Example_CLI : Cmd("auth") {
         // CASE 8: supply command line args ( e.g. from main )
         shell.run()
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 }
 

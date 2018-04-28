@@ -21,8 +21,9 @@ import slatekit.core.cache.CacheSettings
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 //</doc:import_examples>
 
 
@@ -34,7 +35,7 @@ class Example_Cache  : Cmd("auth") {
   val cache = Cache(CacheSettings(10) )
   //</doc:setup>
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // CASE 1: Put a non-expiring item in the cache
@@ -113,6 +114,6 @@ class Example_Cache  : Cmd("auth") {
     println( recent )
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }

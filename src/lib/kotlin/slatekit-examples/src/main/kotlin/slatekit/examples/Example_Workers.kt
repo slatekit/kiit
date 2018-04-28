@@ -199,7 +199,7 @@ class Example_Workers : Cmd("utils") {
         sys.done()
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 }
 

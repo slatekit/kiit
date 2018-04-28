@@ -17,7 +17,7 @@ class Guide_APIs : Cmd("types") {
 
     override fun executeInternal(args: Array<String>?): Result<Any> {
 
-        return ok()
+        return Success("")
     }
 
 

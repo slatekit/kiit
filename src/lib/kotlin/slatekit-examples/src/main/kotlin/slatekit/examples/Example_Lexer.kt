@@ -20,15 +20,16 @@ import slatekit.common.lex.TokenType
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 //</doc:import_examples>
 
 
 
 class Example_Lexer : Cmd("lexer") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     val lexer = Lexer("-env:dev -text:'hello word' -batch:10 ")
@@ -71,7 +72,7 @@ class Example_Lexer : Cmd("lexer") {
     // Coming soon. Tokens can be iterated over with assertions
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
 

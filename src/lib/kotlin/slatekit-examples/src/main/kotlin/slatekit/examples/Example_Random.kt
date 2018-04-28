@@ -35,7 +35,7 @@ import slatekit.common.results.ResultFuncs.ok
 
 class Example_Random : Cmd("random") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // CASE 1: Create random strings ( characters only ) of different lengths
@@ -78,7 +78,7 @@ class Example_Random : Cmd("random") {
     println( "len n : " + alphaSymN(9) )
 
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 
   /*

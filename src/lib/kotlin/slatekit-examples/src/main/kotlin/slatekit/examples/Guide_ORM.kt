@@ -144,7 +144,7 @@ class Guide_ORM : Cmd("types") {
         // Use case 4: Get the repo for a specific shard
         val repoShar = entities.getRepo<Movie>(Movie::class)
 
-        return ok()
+        return Success("")
     }
 
 

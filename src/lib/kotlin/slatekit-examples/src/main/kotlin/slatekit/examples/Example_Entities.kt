@@ -13,14 +13,11 @@
 package slatekit.examples
 
 //<doc:import_required>
+import slatekit.common.*
 import slatekit.entities.core.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.DateTime
-import slatekit.common.Random
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>
@@ -97,8 +94,8 @@ class Example_Entities : Cmd("entities") {
 
 //</doc:examples>
 
-    override fun executeInternal(args: Array<String>?) : Result<Any>
+    override fun executeInternal(args: Array<String>?) : ResultEx<Any>
     {
-      return ok()
+      return Success("")
     }
 }

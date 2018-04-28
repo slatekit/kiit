@@ -17,11 +17,11 @@ import slatekit.common.DateTime
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.ext.days
 import slatekit.common.ext.minutes
 import slatekit.common.ext.months
-import slatekit.common.results.ResultFuncs.ok
 import java.time.ZoneId
 
 //</doc:import_examples>
@@ -29,7 +29,7 @@ import java.time.ZoneId
 
 class Example_DateTime  : Cmd("datetime") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     //
@@ -128,6 +128,6 @@ class Example_DateTime  : Cmd("datetime") {
     println( dt1.plusYears(2).periodFrom( dt1 ) )
 
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 }

@@ -31,7 +31,7 @@ import slatekit.common.Random
   */
 class Example_Templates : Cmd("templates") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup the templates with list of predefined(named) templates and

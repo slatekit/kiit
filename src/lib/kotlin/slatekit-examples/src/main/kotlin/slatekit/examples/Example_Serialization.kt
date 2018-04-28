@@ -27,7 +27,7 @@ import slatekit.examples.common.User
 
 class Example_Serialization : Cmd("serialization") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
 
     //<doc:setup>
@@ -68,7 +68,7 @@ class Example_Serialization : Cmd("serialization") {
     println(jsonData)
 
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 
 }

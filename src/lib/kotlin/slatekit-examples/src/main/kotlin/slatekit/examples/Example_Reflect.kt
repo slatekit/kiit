@@ -33,7 +33,7 @@ import slatekit.integration.common.AppEntContext
 
 class Example_Reflect : Cmd("reflect") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any> {
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
     // JAVA
     // 1. getFields NOT working
     // 2. getDeclaredFields working
@@ -122,7 +122,7 @@ class Example_Reflect : Cmd("reflect") {
     println(argInstance)
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }
 

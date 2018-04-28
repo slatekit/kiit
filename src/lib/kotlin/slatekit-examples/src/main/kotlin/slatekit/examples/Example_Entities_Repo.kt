@@ -13,18 +13,15 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Field
+import slatekit.common.*
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
-import slatekit.common.Mapper
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.meta.models.ModelMapper
 
@@ -95,7 +92,7 @@ class Example_Entities_Repo : Cmd("entities") {
     //</doc:setup>
 
 
-    override protected fun executeInternal(args: Array<String>?): Result<Any> {
+    override protected fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // CASE 1: Create 3-4 users for showing use-cases
         repo.create(User(firstName ="john", lastName = "doe-01"))
@@ -136,7 +133,7 @@ class Example_Entities_Repo : Cmd("entities") {
         println(repo.count())
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 

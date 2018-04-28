@@ -51,13 +51,13 @@ import slatekit.common.validations.ValidationFuncs.isZipCodeUS
   */
 class Example_Validation : Cmd("validation") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     showSimple()
     showSimpleRegEx()
     showValidationResult()
     showErrorCollection()
-    return ok()
+    return Success("")
   }
 
 

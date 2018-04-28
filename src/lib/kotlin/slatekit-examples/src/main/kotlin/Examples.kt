@@ -1,7 +1,6 @@
+import slatekit.core.cmds.Cmd
 import slatekit.examples.*
-import slatekit.tutorial.Example_Kotlin_Basics
-import slatekit.tutorial.Example_Kotlin_Functions
-import slatekit.tutorial.Example_Kotlin_Misc
+
 
 /**
 <slate_header>
@@ -21,7 +20,18 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>):Unit  {
+
+    val logger = java.util.logging.Logger.getLogger("main")
+    logger.info("info")
+    logger.fine("fine")
+    logger.warning("warn")
+    logger.severe("severe")
+    println("hello kotlin examples")
+}
+
+
+
+fun run() {
     val cmd = Example_SmartStrings()
     cmd.execute()
-    println("hello kotlin examples")
 }

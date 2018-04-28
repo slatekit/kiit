@@ -16,11 +16,12 @@ package slate.examples
 
 //<doc:import_examples>
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>
@@ -28,7 +29,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Config : Cmd("config") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // CASE 1: Load up config from resources directory
         val conf = Config("env.dev.conf")
@@ -130,7 +131,7 @@ class Example_Config : Cmd("config") {
         println("db pswd decrypted : " + confs5.getString("db.pswd"))
         println()
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 

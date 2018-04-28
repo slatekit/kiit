@@ -9,12 +9,13 @@ import slatekit.cloud.aws.AwsCloudFiles
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 //</doc:import_examples>
 
 class Example_Aws_S3  : Cmd("s3") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Not storing any key/secret in source code for security purposes
@@ -66,6 +67,6 @@ class Example_Aws_S3  : Cmd("s3") {
     files1.delete("2016_nba_v3", "chi")
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }

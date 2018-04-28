@@ -18,11 +18,11 @@ import slatekit.entities.core.EntityInfo
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbTypeMySql
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.examples.common.User
 import slatekit.examples.common.UserRepository
@@ -35,7 +35,7 @@ import slatekit.examples.common.UserService
  */
 class Example_Entities_Reg : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.scala for more info
@@ -125,7 +125,7 @@ class Example_Entities_Reg : Cmd("types") {
         val repoShard = entities.getRepo<User>(User::class)
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 
 

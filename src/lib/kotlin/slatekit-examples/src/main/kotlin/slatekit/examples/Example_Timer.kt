@@ -30,7 +30,7 @@ import slatekit.common.Random
   */
 class Example_Timer : Cmd("timer") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // CASE 1: Benchmark an operation 1 time
@@ -55,7 +55,7 @@ class Example_Timer : Cmd("timer") {
     }))
 
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 
 

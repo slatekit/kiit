@@ -34,7 +34,7 @@ import slatekit.core.sms.SmsServiceTwilio
 
 class Example_Sms : Cmd("sms") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config
@@ -87,7 +87,7 @@ class Example_Sms : Cmd("sms") {
       )))
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
   /*

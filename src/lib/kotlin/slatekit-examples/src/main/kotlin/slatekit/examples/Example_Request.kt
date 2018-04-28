@@ -127,6 +127,6 @@ class Example_Request : Cmd("request") {
         println( request.tag )
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 }

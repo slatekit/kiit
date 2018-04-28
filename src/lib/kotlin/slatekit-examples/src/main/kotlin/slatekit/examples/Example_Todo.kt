@@ -31,7 +31,7 @@ import slatekit.common.results.ResultFuncs.ok
 
 class Example_Todo  : Cmd("todo") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // About: Strongly typed, structured representation of code notes/tasks
@@ -54,7 +54,7 @@ class Example_Todo  : Cmd("todo") {
       // Your code to remove here.
     })
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 }
 

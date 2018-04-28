@@ -13,6 +13,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
+import slatekit.common.*
 import slatekit.core.email.EmailMessage
 import slatekit.core.email.EmailServiceSendGrid
 import slatekit.common.templates.Template
@@ -22,16 +23,13 @@ import slatekit.common.templates.Templates
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.conf.Config
-import slatekit.common.Uris
-import slatekit.common.Vars
-import slatekit.common.Result
-import slatekit.common.ApiLogin
+
 //</doc:import_examples>
 
 
 class Example_Email  : Cmd("auth") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config
@@ -78,6 +76,6 @@ class Example_Email  : Cmd("auth") {
       )))
     //</doc:examples>
 
-    return result
+    return result.toResultEx()
   }
 }

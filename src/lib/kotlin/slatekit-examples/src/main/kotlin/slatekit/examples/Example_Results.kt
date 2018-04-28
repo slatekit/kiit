@@ -120,7 +120,7 @@ class Example_Results : Cmd("results") {
         printResult(res7)
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 
 

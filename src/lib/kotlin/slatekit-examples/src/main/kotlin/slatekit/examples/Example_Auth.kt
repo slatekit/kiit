@@ -21,13 +21,14 @@ import slatekit.common.auth.User
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 //</doc:import_examples>
 
 class Example_Auth  : Cmd("auth") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup: Setup the Auth wrapper with the user to inspect info about the user
@@ -56,6 +57,6 @@ class Example_Auth  : Cmd("auth") {
     println ( "is an admin       : " + auth.isInRole( "admin" )    )
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }

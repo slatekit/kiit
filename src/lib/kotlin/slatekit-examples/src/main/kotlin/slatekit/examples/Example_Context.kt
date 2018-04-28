@@ -18,7 +18,8 @@ import slatekit.core.common.AppContext
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
@@ -30,7 +31,6 @@ import slatekit.common.info.Host
 import slatekit.common.info.Lang
 import slatekit.common.log.LoggerConsole
 import slatekit.common.results.BAD_REQUEST
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.app.AppRunner
 import slatekit.entities.core.Entities
 import slatekit.core.cmds.Cmd
@@ -40,7 +40,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Context : Cmd("cmd") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
 
         // OVERVIEW:
@@ -138,7 +138,7 @@ class Example_Context : Cmd("cmd") {
         showContext(ctx4)
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 

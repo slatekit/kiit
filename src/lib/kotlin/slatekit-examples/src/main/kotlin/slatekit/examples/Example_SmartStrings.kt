@@ -70,7 +70,7 @@ class Example_SmartStrings : Cmd("results") {
         val phone = PhoneUS("212-456-7890")
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 
 /*

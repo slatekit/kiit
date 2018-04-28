@@ -29,7 +29,7 @@ import slatekit.common.results.ResultFuncs.ok
 
 class Example_Utils : Cmd("utils") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // Miscellaneous utilities.
@@ -66,7 +66,7 @@ class Example_Utils : Cmd("utils") {
     // combined bool / string instead of a tuple
     val result = BoolMessage(true, "successfuly created")
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 }
 

@@ -17,8 +17,8 @@ import slatekit.common.encrypt.Encryptor
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 //</doc:import_examples>
 
 
@@ -37,7 +37,7 @@ class Example_Encryptor : Cmd("encrypt") {
   //</doc:setup>
 
 
-  override fun executeInternal(args: Array<String>?) : Result<Any> {
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
 
     //<doc:examples>
     // CASE 1: Encrypt using AES ( text is base64 encoded without newlines )
@@ -61,6 +61,6 @@ class Example_Encryptor : Cmd("encrypt") {
     println( encryptor.decrypt(encrypted) )
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }

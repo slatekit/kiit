@@ -20,13 +20,14 @@ import slatekit.core.app.AppRunner
 
 //<doc:import_examples>
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
@@ -84,7 +85,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
      *
      * @return
      */
-    override fun onExecute(): Result<Any> {
+    override fun onExecute(): ResultEx<Any> {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -127,7 +128,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
 
         info("app completed")
 
-        return ok()
+        return Success("")
     }
 
 
