@@ -1,4 +1,4 @@
-package slatekit.common.gate
+package slatekit.core.gate
 
 import slatekit.common.DateTime
 
