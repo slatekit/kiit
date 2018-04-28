@@ -5,7 +5,7 @@ package slatekit.core.gate
  *                             this is just to provide some warmup and have enough requests for proper
  *                             determination of error percentages. e.g. if 1 error out of 2 requests,
  *                             thats already 50%, but it could be 1 error out of 20 if let it run
- * @errorThresholdPrecentage : The error percentage that triggers closing the gate
+ * @errorThresholdPercentage : The error percentage that triggers closing the gate
  * @volumeThresholdPerMinute : The volume threshold of total requests that trigger
  * @retryCount               : The number of tries to retry a single failure
  * @subCountResetLimit       : The limit until the subcount is reset
@@ -14,7 +14,7 @@ package slatekit.core.gate
  */
 data class GateSettings(
         val requestsBeforeTracking  : Int = 21,
-        val errorThresholdPrecentage: Double = .05,
+        val errorThresholdPercentage: Double = .05,
         val volumeThresholdPerMinute: Long = 0,
         val retryCount              : Int = 0,
         val subCountResetLimit      : Long = 1000000,

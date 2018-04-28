@@ -3,10 +3,8 @@ package slatekit.core.gate
 import slatekit.common.*
 import slatekit.common.results.UNEXPECTED_ERROR
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -40,10 +38,8 @@ open class Gate(val name: String,
     private val status = AtomicReference<GateState>(Open)
     private val statusTimeStamp = AtomicReference(DateTime.now())
     private val reasonForClose = AtomicReference<Reason>(NotApplicable)
-    private val runCount = AtomicInteger(0)
-    private val runSubCount = AtomicLong(0L)
-    private val errorCount = AtomicLong(0L)
-    private val error = AtomicReference<Exception>()
+    private val volumeLimiter = VolumeLimiter()
+    private val errorLimiter = ErrorLimiter()
     private val event = AtomicReference<GateEvent>()
     private val timer = Timer()
     private val timerPosition = AtomicInteger(0)
@@ -51,24 +47,29 @@ open class Gate(val name: String,
 
     init {
         setState(Open)
-        event.set(GateEvent(name, status.get(), reasonForClose.get(), initialMetrics()))
+        event.set(GateEvent(name, status.get(), reasonForClose.get(), internalMetrics()))
     }
 
 
     /**
      * Opens the gate
      */
-    override fun open() {
+    override fun open(alert:Boolean) {
         setState(Open)
 
         // Reset counters
+        reset()
+
+        if(alert) {
+            alert()
+        }
     }
 
 
     /**
      * Closes the gate
      */
-    override fun close(reason:Reason) {
+    override fun close(reason:Reason, alert:Boolean) {
         setState(Closed)
 
         reasonForClose.set(reason)
@@ -78,6 +79,10 @@ open class Gate(val name: String,
 
         // Bump up exponential backoff
         incrementBackOff()
+
+        if(alert) {
+            alert()
+        }
     }
 
 
@@ -123,17 +128,7 @@ open class Gate(val name: String,
     /**
      * Overall metrics of gate
      */
-    override fun metrics(): GateMetrics {
-        return GateMetrics(
-                status.get(),
-                statusTimeStamp.get(),
-                DateTime.now(),
-                runCount.get(),
-                runSubCount.get(),
-                errorCount.get(),
-                error.get()
-        )
-    }
+    override fun metrics(): GateMetrics = internalMetrics()
 
 
     /**
@@ -168,32 +163,24 @@ open class Gate(val name: String,
             val result = call()
             Success(result)
         } catch (ex: Exception) {
-            errorCount.incrementAndGet()
-            error.set(ex)
+            errorLimiter.inc(ex)
             Failure(buildGateEvent(), UNEXPECTED_ERROR)
         } finally {
-            val count = runSubCount.incrementAndGet()
+            val count = volumeLimiter.inc()
 
             // Up the run counts
             if (count > settings.subCountResetLimit) {
-                runCount.incrementAndGet()
-                runSubCount.set(0)
+                volumeLimiter.reset()
             }
-
-            // Check error threshold
-            val totalFailed = errorCount.get().toDouble()
-            val totalProcessed = runSubCount.get().toDouble()
-            val percentageFailed = totalFailed / totalProcessed
 
             // Close: Due to errors!
-            if (percentageFailed > settings.errorThresholdPrecentage) {
-                close(ErrorsHigh)
-                alert()
+            if (isHighErrorCount()) {
+                close(ErrorsHigh, alert = true)
             }
+
             // Close: Due to volume!
-            else if(settings.volumeThresholdPerMinute > 0 && isOverLimit()) {
-                close(VolumeHigh)
-                alert()
+            else if(isHighVolume()) {
+                close(VolumeHigh, alert = true)
             }
         }
     }
@@ -210,7 +197,6 @@ open class Gate(val name: String,
             val ts = DateTime.now()
             status.set(state)
             statusTimeStamp.set(ts)
-            alert()
         }
     }
 
@@ -233,42 +219,54 @@ open class Gate(val name: String,
     }
 
 
-    private fun initialMetrics(): GateMetrics {
+    private fun internalMetrics(): GateMetrics {
         return GateMetrics(
                 status.get(),
                 statusTimeStamp.get(),
                 DateTime.now(),
-                runCount.get(),
-                runSubCount.get(),
-                errorCount.get(),
-                error.get()
+                volumeLimiter.main.get(),
+                volumeLimiter.get(),
+                errorLimiter.get(),
+                errorLimiter.err.get()
         )
     }
 
 
-    private fun isOverLimit():Boolean {
+    private fun isHighVolume():Boolean {
+        return if(settings.volumeThresholdPerMinute > 0) {
+            val totalProcessed = volumeLimiter.get().toDouble()
+            val end = DateTime.now()
+            val start = statusTimeStamp.get()
+            val mins = start.raw.until(end.raw, ChronoUnit.MINUTES)
+            val perMin = mins / totalProcessed
+            perMin > settings.volumeThresholdPerMinute
+        }
+        else  {
+            false
+        }
+    }
 
-        val totalProcessed = runSubCount.get().toDouble()
-        val end = DateTime.now()
-        val start = statusTimeStamp.get()
-        val mins = start.raw.until(end.raw, ChronoUnit.MINUTES)
-        val perMin = mins / totalProcessed
-        return perMin > settings.volumeThresholdPerMinute
+
+    private fun isHighErrorCount():Boolean {
+
+        // Check error threshold
+        val totalFailed = errorLimiter.get().toDouble()
+        val totalProcessed = volumeLimiter.get().toDouble()
+        val percentageFailed = totalFailed / totalProcessed
+        return percentageFailed > settings.errorThresholdPercentage
     }
 
 
     private fun reset() {
         reasonForClose.set(NotApplicable)
-        runCount.set(0)
-        runSubCount.set(0L)
-        errorCount.set(0)
-        error.set(null)
+        volumeLimiter.reset()
+        errorLimiter.reset()
     }
 
 
     class ReOpenTask(private val gate:Gate) : TimerTask() {
         override fun run() {
-            gate.open()
+            gate.open(true)
         }
     }
 }

@@ -5,8 +5,8 @@ import slatekit.common.Result
 
 interface Gated {
 
-    fun open()
-    fun close(reason:Reason)
+    fun open(alert:Boolean)
+    fun close(reason:Reason, alert:Boolean)
 
     fun<T> attempt(call: () -> T ): Result<T, GateEvent>
 
