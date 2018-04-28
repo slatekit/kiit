@@ -12,13 +12,13 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.serialization.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.examples.common.User
 
 //</doc:import_examples>

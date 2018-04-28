@@ -13,14 +13,11 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.auth.AuthConsole
-import slatekit.common.auth.User
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates

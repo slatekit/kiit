@@ -23,7 +23,6 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.db.DbConString
-import slatekit.common.results.ResultFuncs.ok
 //</doc:import_examples>
 
 

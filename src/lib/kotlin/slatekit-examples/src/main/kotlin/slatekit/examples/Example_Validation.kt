@@ -22,7 +22,8 @@ import slatekit.common.validations.Validations.collect
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.validations.ValidationFuncs.isEmpty
 import slatekit.common.validations.ValidationFuncs.isNotEmpty
 import slatekit.common.validations.ValidationFuncs.isLength

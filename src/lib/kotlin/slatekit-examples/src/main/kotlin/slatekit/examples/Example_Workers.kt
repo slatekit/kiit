@@ -13,15 +13,13 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.DateTime
+import slatekit.common.*
 import slatekit.core.workers.Manager
 import slatekit.core.workers.Worker
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
 import slatekit.core.workers.WorkerSettings
@@ -32,7 +30,7 @@ import slatekit.core.workers.WorkerWithQueue
 
 class Example_Workers : Cmd("utils") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:setup>
         // The background workers system is designed with a few basic
         // principles and concepts:
@@ -85,9 +83,9 @@ class Example_Workers : Cmd("utils") {
 
         // CASE 4: Extend the worker class instead of providing a lambda
         class MyWorker : Worker<String>("custom_1") {
-            override fun process(args: Array<Any>?): Result<String> {
+            override fun process(args: Array<Any>?): ResultMsg<String> {
                 println("custom worker: " + DateTime.now().toString())
-                return success("customer worker class")
+                return Success("customer worker class")
             }
         }
         sys.register("custom", MyWorker())

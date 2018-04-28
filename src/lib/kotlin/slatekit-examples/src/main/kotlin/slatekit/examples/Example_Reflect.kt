@@ -23,7 +23,8 @@ import slatekit.meta.Reflector
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.examples.common.User
 import slatekit.examples.common.UserApi
 import slatekit.integration.common.AppEntContext

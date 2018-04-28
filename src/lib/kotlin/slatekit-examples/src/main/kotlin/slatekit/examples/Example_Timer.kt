@@ -12,16 +12,13 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Measure
+import slatekit.common.*
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultTimed
-import slatekit.common.Random
 
 //</doc:import_examples>
 

@@ -12,21 +12,18 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Request
+import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
-import slatekit.common.InputArgs
-import slatekit.common.Random
+
 //</doc:import_examples>
 
 
 class Example_Request : Cmd("request") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // The Request class models and abstracts both an
         // HTTP Request and a CLI ( command line interface ) request.

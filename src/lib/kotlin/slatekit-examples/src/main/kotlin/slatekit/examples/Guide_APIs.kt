@@ -3,9 +3,9 @@ package slatekit.examples
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.core.cmds.Cmd
-import slatekit.core.common.AppContext
 import slatekit.examples.common.*
 import slatekit.integration.common.AppEntContext
 
@@ -15,7 +15,7 @@ import slatekit.integration.common.AppEntContext
  */
 class Guide_APIs : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
 
         return Success("")
     }

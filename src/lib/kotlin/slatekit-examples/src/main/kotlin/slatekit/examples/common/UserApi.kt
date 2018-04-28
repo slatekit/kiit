@@ -14,10 +14,9 @@ package slatekit.examples.common
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
+import slatekit.common.*
 import slatekit.integration.common.ApiBaseEntity
-import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.results.ResultFuncs.yes
 import slatekit.core.common.AppContext
 import slatekit.integration.common.AppEntContext
 
@@ -27,8 +26,8 @@ import slatekit.integration.common.AppEntContext
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::class) {
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
-  fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Result<Boolean> {
-    return ok("activated $phone, $code, $isPremiumUser, $date")
+  fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): ResultEx<String> {
+    return Success("activated $phone, $code, $isPremiumUser, $date")
   }
 
   var _user = User()
@@ -41,8 +40,8 @@ class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::
    */
   @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
   @ApiArg("phone", "the phone number", true, "1-234-567-8901")
-  fun info(format:String = "json"): Result<Boolean> {
-    return ok("info")
+  fun info(format:String = "json"): ResultMsg<Boolean> {
+    return yes("info")
   }
 
 
@@ -50,8 +49,8 @@ class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::
   @ApiArg(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
   @ApiArg(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
   @ApiArg(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
-  fun invite(email:String, phone:String, promoCode:String): Result<Boolean> {
-    return ok("sent invitation to $email, $phone, $promoCode")
+  fun invite(email:String, phone:String, promoCode:String): ResultMsg<Boolean> {
+    return yes("sent invitation to $email, $phone, $promoCode")
   }
 
 
@@ -59,8 +58,8 @@ class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::
   @ApiArg(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
   @ApiArg(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
   @ApiArg(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
-  fun register(user:User): Result<Boolean> {
-    return ok("object user")
+  fun register(user:User): ResultMsg<Boolean> {
+    return yes("object user")
   }
 
 

@@ -22,7 +22,6 @@ import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.app.LocationUserDir
 import slatekit.common.info.Folders
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>

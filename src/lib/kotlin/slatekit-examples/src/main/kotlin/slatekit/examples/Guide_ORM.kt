@@ -1,7 +1,6 @@
 package slatekit.examples
 
-import slatekit.common.DateTime
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
@@ -11,10 +10,8 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
 import slatekit.common.db.DbTypeMySql
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.meta.models.*
-import slatekit.common.Mapper
 import slatekit.common.query.Query
 import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
@@ -31,7 +28,7 @@ import slatekit.meta.buildAddTable
  */
 class Guide_ORM : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.scala for more info

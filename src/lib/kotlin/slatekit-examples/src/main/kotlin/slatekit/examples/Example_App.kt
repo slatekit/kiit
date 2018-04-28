@@ -29,6 +29,7 @@ import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.toResultEx
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
@@ -156,7 +157,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
 
 class Example_App : Cmd("app") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // NOTE: The application uses an AppContext ( see docs for more info )
         // which contains many core dependencies available in a single container
@@ -190,7 +191,7 @@ class Example_App : Cmd("app") {
                         tags = "",
                         examples = ""
                 ),
-                state = success(true, "manually built")
+                state = Success(true, msg ="manually built").toResultEx()
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.

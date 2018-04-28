@@ -20,9 +20,9 @@ import slatekit.common.auth.User
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.results.ResultFuncs.ok
 //</doc:import_examples>
 
 
