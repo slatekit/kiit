@@ -43,11 +43,14 @@ open class Gate(val name: String,
     private val event = AtomicReference<GateEvent>()
     private val timer = Timer()
     private val timerPosition = AtomicInteger(0)
+    private val gateStates = mutableListOf<GateStatus>()
 
 
     init {
         setState(Open)
-        event.set(GateEvent(name, status.get(), reasonForClose.get(), internalMetrics()))
+        val initialMetrics = internalMetrics()
+        gateStates.add(initialMetrics)
+        event.set(GateEvent(name, status.get(), reasonForClose.get(), initialMetrics))
     }
 
 
@@ -55,6 +58,11 @@ open class Gate(val name: String,
      * Opens the gate
      */
     override fun open(alert:Boolean) {
+
+        // Keep last state changes
+        // Use queue later
+        gateStates.add(0, metrics())
+
         setState(Open)
 
         // Reset counters
@@ -131,6 +139,9 @@ open class Gate(val name: String,
      * Overall metrics of gate
      */
     override fun metrics(): GateStatus = internalMetrics()
+
+
+    override fun states(): List<GateStatus> = gateStates.toList()
 
 
     /**
@@ -280,6 +291,15 @@ open class Gate(val name: String,
         reasonForClose.set(NotApplicable)
         volumeLimiter.reset()
         errorLimiter.reset()
+
+        // only keep last 10 states
+        if(gateStates.size > 20){
+            (gateStates.size - 1 .. 10).forEach { ndx ->
+                if(ndx <= gateStates.size ) {
+                    gateStates.removeAt(ndx)
+                }
+            }
+        }
     }
 
 

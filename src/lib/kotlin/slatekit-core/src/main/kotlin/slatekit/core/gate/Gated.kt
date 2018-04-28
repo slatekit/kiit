@@ -15,4 +15,5 @@ interface Gated {
     fun isClosed(): Boolean
 
     fun metrics(): GateStatus
+    fun states(): List<GateStatus>
 }
