@@ -9,9 +9,13 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 //import java.util.logging.*
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import slatekit.common.log.LoggerConsole
+//import org.apache.logging.log4j.LogManager
+//import org.apache.logging.log4j.Logger
+//import slatekit.common.log.LoggerConsole
+
+
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
 <slate_header>
@@ -34,20 +38,13 @@ fun main(args:Array<String>):Unit  {
 
     println(Paths.get(""))
 
-    fun testlog(logger:org.apache.logging.log4j.Logger) {
+    fun testlog(logger:org.slf4j.Logger) {
         val name = logger.name
-        logger.trace("test trace1")
-        logger.trace("test trace2")
-        logger.debug("test debug1")
-        logger.debug("test debug2")
-        logger.info ("test info1")
-        logger.info ("test info2")
-        logger.warn ("test warn1")
-        logger.warn ("test warn2")
-        logger.error("test error1")
-        logger.error("test error2")
-        logger.fatal("test fatal1")
-        logger.fatal("test fatal2")
+        logger.trace("test trace")
+        logger.debug("test debug")
+        logger.info ("test info")
+        logger.warn ("test warn")
+        logger.error("test error")
     }
 
     val logger1 = getLogger("main", "/Users/kishorereddy/git/slatekit/test")
@@ -57,13 +54,13 @@ fun main(args:Array<String>):Unit  {
     testlog(logger2)
     testlog(logger3)
 
-    val l = LoggerConsole()
     println("hello kotlin examples")
 }
 
 
 fun getLogger(name:String, path:String): Logger {
-    return LogManager.getLogger(name)
+    return LoggerFactory.getLogger(name)
+    //return LogManager.getLogger(name)
 }
 
 
