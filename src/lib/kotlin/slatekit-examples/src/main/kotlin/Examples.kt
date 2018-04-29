@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import slatekit.common.log.LoggerConsole
 
 /**
 <slate_header>
@@ -32,12 +33,31 @@ mantra: Simplicity above all else
 fun main(args:Array<String>):Unit  {
 
     println(Paths.get(""))
-    val logger = getLogger("main", "/Users/kishorereddy/git/slatekit/test")
-    logger.debug("fine")
-    logger.info("info")
-    logger.warn("warn")
-    logger.error("error")
-    logger.fatal("fatal")
+
+    fun testlog(logger:org.apache.logging.log4j.Logger) {
+        val name = logger.name
+        logger.trace("test trace1")
+        logger.trace("test trace2")
+        logger.debug("test debug1")
+        logger.debug("test debug2")
+        logger.info ("test info1")
+        logger.info ("test info2")
+        logger.warn ("test warn1")
+        logger.warn ("test warn2")
+        logger.error("test error1")
+        logger.error("test error2")
+        logger.fatal("test fatal1")
+        logger.fatal("test fatal2")
+    }
+
+    val logger1 = getLogger("main", "/Users/kishorereddy/git/slatekit/test")
+    val logger2 = getLogger("api", "/Users/kishorereddy/git/slatekit/test")
+    val logger3 = getLogger("db", "/Users/kishorereddy/git/slatekit/test")
+    testlog(logger1)
+    testlog(logger2)
+    testlog(logger3)
+
+    val l = LoggerConsole()
     println("hello kotlin examples")
 }
 
@@ -45,7 +65,6 @@ fun main(args:Array<String>):Unit  {
 fun getLogger(name:String, path:String): Logger {
     return LogManager.getLogger(name)
 }
-
 
 
 /*

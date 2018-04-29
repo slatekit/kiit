@@ -16,6 +16,14 @@ package slatekit.common.log
 import slatekit.common.console.ConsoleWriter
 
 
+/**
+ * Lightweight logger that prints to the console
+ * using the ConsoleWriter in slate kit which has support
+ * for colors and text semantics.
+ * This is just used mostly for defaults.
+ * You should be using the getLogger method to auto load
+ * a more robust logger like log4j2 ( see examples )
+ */
 class LoggerConsole(level: LogLevel = Debug,
                     name: String = "console",
                     logType: Class<Any>? = null) : LoggerBase(level, name, logType) {
