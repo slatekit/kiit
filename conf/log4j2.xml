@@ -4,16 +4,16 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n}{FATAL=magenta, ERROR=red, WARN=yellow, INFO=blue, DEBUG=cyan, TRACE=green}" />
         </Console>
-        <File name="FileLog" fileName="/Users/kishorereddy/git/slatekit/test/app.log" immediateFlush="false" append="false">
+        <File name="FileLog" fileName="/Users/user1/git/slatekit/test/app.log" immediateFlush="false" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
-        <File name="MainLog" fileName="/Users/kishorereddy/git/slatekit/test/main.log" immediateFlush="false" append="false">
+        <File name="MainLog" fileName="/Users/user1/git/slatekit/test/main.log" immediateFlush="false" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
-        <File name="ApiLog" fileName="/Users/kishorereddy/git/slatekit/test/api.log" immediateFlush="false" append="false">
+        <File name="ApiLog" fileName="/Users/user1/git/slatekit/test/api.log" immediateFlush="false" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
-        <File name="DbLog" fileName="/Users/kishorereddy/git/slatekit/test/db.log" immediateFlush="false" append="false">
+        <File name="DbLog" fileName="/Users/user1/git/slatekit/test/db.log" immediateFlush="false" append="false">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
     </Appenders>

@@ -40,11 +40,11 @@ fun main(args:Array<String>):Unit  {
 
     fun testlog(logger:org.slf4j.Logger) {
         val name = logger.name
-        logger.trace("test trace")
-        logger.debug("test debug")
-        logger.info ("test info")
-        logger.warn ("test warn")
-        logger.error("test error")
+        logger.trace("test logging $name with trace")
+        logger.debug("test logging $name with debug")
+        logger.info ("test logging $name with info")
+        logger.warn ("test logging $name with warn")
+        logger.error("test logging $name with error")
     }
 
     val logger1 = getLogger("main", "/Users/kishorereddy/git/slatekit/test")
