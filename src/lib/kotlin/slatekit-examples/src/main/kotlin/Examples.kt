@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import slatekit.providers.logs.logback.LogbackLogs
 
 /**
 <slate_header>
@@ -33,6 +34,33 @@ mantra: Simplicity above all else
  * Created by kishorereddy on 6/4/17.
  */
 
+// https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
+fun main(args:Array<String>):Unit  {
+
+    println(Paths.get(""))
+
+    fun testlog(logger:slatekit.common.log.Logger) {
+        val name = logger.name
+        //logger.trace("test logging $name with trace")
+        logger.debug("test logging $name with debug")
+        logger.info ("test logging $name with info")
+        logger.warn ("test logging $name with warn")
+        logger.error("test logging $name with error")
+    }
+
+    val logs = LogbackLogs()
+
+    val logger1 = logs.getLogger("main")
+    val logger2 = logs.getLogger("api" )
+    val logger3 = logs.getLogger("db"  )
+    testlog(logger1)
+    testlog(logger2)
+    testlog(logger3)
+
+    println("hello kotlin examples")
+}
+
+/*
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>):Unit  {
 
@@ -56,7 +84,7 @@ fun main(args:Array<String>):Unit  {
 
     println("hello kotlin examples")
 }
-
+*/
 
 fun getLogger(name:String, path:String): Logger {
     return LoggerFactory.getLogger(name)
