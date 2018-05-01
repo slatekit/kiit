@@ -30,6 +30,7 @@ import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.BAD_REQUEST
 import slatekit.core.app.AppRunner
 import slatekit.entities.core.Entities
@@ -82,7 +83,7 @@ class Example_Context : Cmd("cmd") {
             arg = Args.default(),
             env = Env("dev", Dev, "ny", "dev environment"),
             cfg = Config(),
-            log = LoggerConsole(),
+            logs = LogsDefault,
             ent = Entities(),
             host = Host.local(),
             lang = Lang.kotlin(),
@@ -146,7 +147,7 @@ class Example_Context : Cmd("cmd") {
         println("args: " + ctx.arg)
         println("env : " + ctx.env)
         println("conf: " + ctx.cfg)
-        println("log : " + ctx.log)
+        println("logs: " + ctx.logs)
         println("inf : " + ctx.inf)
         println("dirs: " + ctx.dirs)
         println("host: " + ctx.host)

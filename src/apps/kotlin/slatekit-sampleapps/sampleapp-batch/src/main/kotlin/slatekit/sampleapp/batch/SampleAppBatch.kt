@@ -16,7 +16,6 @@ import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.app.AppProcess
 import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext

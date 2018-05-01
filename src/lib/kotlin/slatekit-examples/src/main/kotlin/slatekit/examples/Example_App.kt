@@ -28,6 +28,7 @@ import slatekit.common.conf.Config
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.toResultEx
 import slatekit.core.cmds.Cmd
@@ -107,7 +108,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
         println(conf.dbCon())
 
         // 5. Get and use logger
-        ctx.log.info("default logger ")
+        ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
         println(ctx.app.about.name)
@@ -174,7 +175,7 @@ class Example_App : Cmd("app") {
                 arg = Args.default(),
                 env = conf.env(),
                 cfg = conf,
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 ent = Entities(),
                 dbs = null,
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
