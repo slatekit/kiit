@@ -13,6 +13,81 @@
 
 package slatekit.common.log
 
-object Logger {
+import slatekit.common.DateTime
+import slatekit.common.Ignore
 
+abstract class Logger(val level: LogLevel = Warn,
+                      val name: String = "",
+                      val logType: Class<*>? = null) : LogSupport {
+
+
+    fun isEnabled(level:LogLevel):Boolean = level >= this.level
+
+
+    /**
+     * Logs an entry
+     *
+     * @param level
+     * @param msg
+     * @param ex
+     */
+    @Ignore
+    override fun log(level: LogLevel, msg: String, ex: Exception?) {
+        checkLog(level, {
+            performLog(buildLog(level, msg, ex))
+        })
+    }
+
+
+    /**
+     * Logs an entry
+     *
+     * @param level
+     * @param msg
+     * @param ex
+     */
+    @Ignore
+    override fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
+        checkLog(level, {
+            val msg = callback()
+            performLog(buildLog(level, msg, ex))
+        })
+    }
+
+
+    /**
+     * Logs an entry
+     */
+    fun log(entry: LogEntry) {
+        checkLog(level, {
+            performLog(entry)
+        })
+    }
+
+
+    /**
+     * Logs an entry
+     *
+     * @param level
+     * @param msg
+     * @param ex
+     */
+    private fun buildLog(level: LogLevel, msg: String, ex: Exception? = null): LogEntry {
+        return LogEntry(name, level, msg, DateTime.now(), ex)
+    }
+
+
+    private fun checkLog(level: LogLevel, callback: () -> Unit): Unit {
+        if (level >= this.level) {
+            callback()
+        }
+    }
+
+
+    /**
+     * Logs an entry
+     *
+     * @param entry
+     */
+    protected abstract fun performLog(entry: LogEntry)
 }

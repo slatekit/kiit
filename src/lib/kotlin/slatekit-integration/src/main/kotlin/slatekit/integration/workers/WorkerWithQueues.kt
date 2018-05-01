@@ -2,9 +2,8 @@ package slatekit.integration.workers
 
 import slatekit.common.Failure
 import slatekit.common.ResultMsg
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logger
 import slatekit.common.queues.QueueSourceMsg
-import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.workers.WorkFunction
 import slatekit.core.workers.WorkNotification
@@ -12,10 +11,10 @@ import slatekit.core.workers.Worker
 import slatekit.core.workers.WorkerSettings
 
 open class WorkerWithQueues(val queues: List<QueueSourceMsg>,
-                       val logger:LoggerBase,
-                       notifier:WorkNotification? = null,
-                       callback: WorkFunction<Any>? = null,
-                       settings: WorkerSettings)
+                            val logger:Logger,
+                            notifier:WorkNotification? = null,
+                            callback: WorkFunction<Any>? = null,
+                            settings: WorkerSettings)
     : Worker<Any>(notifier = notifier, callback = callback, settings = settings) {
 
     private val rand = java.util.Random()

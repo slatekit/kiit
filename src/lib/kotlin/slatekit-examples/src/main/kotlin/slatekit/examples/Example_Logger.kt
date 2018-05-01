@@ -33,14 +33,14 @@ class Example_Logger  : Cmd("logger"), LogSupport {
   // 1. log4net
   // 2. loggly
   // 3. new relic
-  override val logger:LoggerBase? = LoggerConsole()
+  override val logger:Logger? = LoggerConsole()
 
 
   // Setup a custom logger
-  class MyCustomLogger : LoggerBase(Warn)  {
+  class MyCustomLogger : Logger(Warn)  {
 
 
-    override val logger:LoggerBase? = LoggerConsole()
+    override val logger:Logger? = LoggerConsole()
 
 
     override fun performLog(entry: LogEntry): Unit
@@ -65,8 +65,8 @@ class Example_Logger  : Cmd("logger"), LogSupport {
     val logger = LoggerConsole(Debug)
     logger.debug("debug with message only")
     logger.info("info with message and exception", ex)
-    logger.warn("debug with message, exception, and tag", ex, "APP1")
-    logger.fatal("fatal message", tag = "123")
+    logger.warn("debug with message, exception, and tag", ex)
+    logger.fatal("fatal message")
 
     // CASE: 2 Standard info, warn, error levels available
     // Same overloads ( msg, ex, tag ) are available.
@@ -78,7 +78,7 @@ class Example_Logger  : Cmd("logger"), LogSupport {
 
 
     // CASE 3: Log explicitly using log method.
-    logger.log(Error, "error", ex, "APP1")
+    logger.log(Error, "error", ex)
 
 
     // CASE 4: You can extend a class with the LogSupportIn trait

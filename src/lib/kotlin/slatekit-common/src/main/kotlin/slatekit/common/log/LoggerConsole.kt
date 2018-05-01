@@ -21,16 +21,13 @@ import slatekit.common.console.ConsoleWriter
  * using the ConsoleWriter in slate kit which has support
  * for colors and text semantics.
  * This is just used mostly for defaults.
- * You should be using the getLogger method to auto load
- * a more robust logger like log4j2 ( see examples )
+ * You should be using the slatekit.providers module with support for logback
  */
 class LoggerConsole(level: LogLevel = Debug,
                     name: String = "console",
-                    logType: Class<Any>? = null) : LoggerBase(level, name, logType) {
+                    logType: Class<*>? = null) : Logger(level, name, logType) {
 
     private val _writer = ConsoleWriter()
-
-    override val logger: LoggerBase get() = this
 
 
     /**
@@ -39,13 +36,14 @@ class LoggerConsole(level: LogLevel = Debug,
      * @param entry :
      */
     override fun performLog(entry: LogEntry) {
+        val prefix = "${entry.time} [$name] ${entry.level.name}"
         when (entry.level) {
-            Debug -> _writer.subTitle(entry.level.name + " : " + entry.msg)
-            Info  -> _writer.text(entry.level.name + "  : " + entry.msg)
-            Warn  -> _writer.url(entry.level.name + "  : " + entry.msg)
-            Error -> _writer.error(entry.level.name + " : " + entry.msg)
-            Fatal -> _writer.highlight(entry.level.name + " : " + entry.msg)
-            else  -> _writer.text(entry.level.name + " : " + entry.msg)
+            Debug -> _writer.subTitle (prefix + " : " + entry.msg)
+            Info  -> _writer.text     (prefix + " : " + entry.msg)
+            Warn  -> _writer.url      (prefix + " : " + entry.msg)
+            Error -> _writer.error    (prefix + " : " + entry.msg)
+            Fatal -> _writer.highlight(prefix + " : " + entry.msg)
+            else  -> _writer.text     (prefix + " : " + entry.msg)
         }
     }
 }

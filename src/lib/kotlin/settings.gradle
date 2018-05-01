@@ -6,8 +6,10 @@ include 'slatekit-common',
         'slatekit-integration',
         'slatekit-cloud',
         'slatekit-server',
+        'slatekit-providers',
         'slatekit-tools',
-        'slatekit-tests'
+        'slatekit-tests',
+        'slatekit-examples'
 
 
 include ':sampleapp-core'

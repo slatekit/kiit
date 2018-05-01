@@ -29,6 +29,7 @@ import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
@@ -53,7 +54,7 @@ open class ApiTestsBase {
                 arg  = Args.default(),
                 env  = Env("local", Dev),
                 cfg  = Config(),
-                log  = LoggerConsole(),
+                logs = LogsDefault,
                 ent  = Entities(DbLookup()),
                 inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),

@@ -13,8 +13,6 @@
 
 package slatekit.core.app
 
-import slatekit.common.Context
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.app.AppMeta
@@ -26,7 +24,6 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.core.common.AppContext
 
@@ -43,8 +40,8 @@ open class AppProcess(context: AppContext?,
                       converter: ((AppContext) -> AppContext)? = null
 )
     : AppMetaSupport,
-      EncryptSupport,
-      LogSupport {
+      LogSupport,
+      EncryptSupport {
     val schema = schema
 
     // The final application context
@@ -69,7 +66,7 @@ open class AppProcess(context: AppContext?,
 
 
 
-    override val logger = ctx.log
+    override val logger = ctx.logs.getLogger()
     override val encryptor = ctx.enc
 
     /**

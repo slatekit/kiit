@@ -17,7 +17,7 @@ import slatekit.common.Context
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logger
 import slatekit.entities.core.Entities
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityRepo
@@ -33,7 +33,7 @@ import slatekit.entities.core.EntityService
 open class EntityServiceWithSupport<T>(val context: Context, val entities:Entities, repo: EntityRepo<T>)
     : EntityService<T>(entities, repo), EncryptSupport, LogSupport where T : Entity {
 
-    override val logger: LoggerBase? get() = context.log
+    override val logger: Logger? get() = context.logs.getLogger()
     override val encryptor: Encryptor? get() = context.enc
 }
 

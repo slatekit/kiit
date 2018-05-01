@@ -28,6 +28,7 @@ import slatekit.common.info.*
 import slatekit.common.log.LogHelper
 import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.exit
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.help
@@ -315,7 +316,7 @@ object AppFuncs {
                 env = appInputs.env,
                 cfg = conf,
                 enc = enc,
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 dbs = dbs(conf),
                 inf = about(conf).copy(version = build.version),
                 host = Host.local(),
