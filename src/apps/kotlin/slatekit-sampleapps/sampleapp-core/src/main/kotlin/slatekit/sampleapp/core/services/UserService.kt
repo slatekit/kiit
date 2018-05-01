@@ -15,6 +15,7 @@ package slatekit.sampleapp.core.services
 import slatekit.common.DateTime
 import slatekit.common.Random
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
@@ -49,7 +50,7 @@ class UserService(context: AppEntContext, entities: Entities, repo:EntityRepo<Us
   }
 
 
-  fun updatePhone(id:Long, phone:String): Result<String>
+  fun updatePhone(id:Long, phone:String): ResultMsg<String>
   {
     val user = get(id)
     return user?.let { u ->
@@ -60,7 +61,7 @@ class UserService(context: AppEntContext, entities: Entities, repo:EntityRepo<Us
   }
 
 
-  fun activate(id:Long, phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Result<String>
+  fun activate(id:Long, phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): ResultMsg<String>
   {
     val user = get(id)
     return user?.let { u ->
@@ -71,7 +72,7 @@ class UserService(context: AppEntContext, entities: Entities, repo:EntityRepo<Us
   }
 
 
-  fun promoCode(year:Int, month:Int, region:String): Result<String>
+  fun promoCode(year:Int, month:Int, region:String): ResultMsg<String>
   {
     return success("promo code: ${year}-${month}-${region}")
   }

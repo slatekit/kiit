@@ -11,7 +11,6 @@ import slatekit.common.db.DbLookup
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.LogsDefault
 import slatekit.common.types.PhoneUS
 import slatekit.meta.Reflector

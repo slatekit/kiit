@@ -13,7 +13,7 @@ open class WorkerWithQueuesApi(val container: ApiContainer,
                           notifier:WorkNotification? = null,
                           callback: WorkFunction<Any>? = null,
                           settings: WorkerSettings)
-                    : WorkerWithQueues(queues, container.ctx.log,
+                    : WorkerWithQueues(queues, container.ctx.logs.getLogger(),
         notifier, callback, settings) {
 
     /**

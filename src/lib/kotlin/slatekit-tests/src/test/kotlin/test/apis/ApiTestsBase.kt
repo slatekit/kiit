@@ -12,7 +12,6 @@ mantra: Simplicity above all else
  */
 package test.apis
 
-import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
@@ -28,7 +27,6 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.entities.core.Entities

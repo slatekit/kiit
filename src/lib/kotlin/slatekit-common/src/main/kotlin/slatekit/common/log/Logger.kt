@@ -24,6 +24,8 @@ abstract class Logger(val level: LogLevel = Warn,
     fun isEnabled(level:LogLevel):Boolean = level >= this.level
 
 
+    override val logger: Logger? by lazy { this }
+
     /**
      * Logs an entry
      *

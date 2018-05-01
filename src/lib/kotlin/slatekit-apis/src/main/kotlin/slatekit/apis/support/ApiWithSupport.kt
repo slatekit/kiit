@@ -27,6 +27,7 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
     val context:Context
 
     override val logger: Logger? get() = context.logs.getLogger()
+
     override val encryptor: Encryptor? get() = context.enc
 
 

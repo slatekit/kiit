@@ -82,7 +82,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         targetFolder.mkdir()
         apiFolder.mkdir()
         modelFolder.mkdir()
-        val log = this.settings.host.ctx.log
+        val log = this.settings.host.ctx.logs.getLogger()
         log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
@@ -107,7 +107,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
 
                             // Generate code here.
                             val methodInfo = genMethod(api, action)
-                            this.settings.host.ctx.log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
+                            log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
                             buff.append(methodInfo)
                             buff.append(newline)
                         }
