@@ -18,6 +18,8 @@ import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
 import slatekit.common.newline
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
@@ -59,10 +61,13 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
+class Entities(private val _dbs: DbLookup? = null,
+               val _enc:Encryptor? = null,
+               val logs:Logs = LogsDefault) {
 
     private var _info = ListMap<String, EntityInfo>(listOf())
     private val _mappers = mutableMapOf<String, EntityMapper>()
+    private val logger = logs.getLogger("db")
 
 
     fun <T> register(
@@ -177,8 +182,10 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
     fun getMapper(entityType: KClass<*>): EntityMapper {
         val entityKey = entityType.qualifiedName
-        if (!_mappers.contains(entityKey))
-            throw IllegalArgumentException("mapper not found for :" + entityKey)
+        if (!_mappers.contains(entityKey)) {
+            logger.error("Mapper not found for $entityKey")
+            throw IllegalArgumentException("mapper not found for :$entityKey")
+        }
 
         val mapper = _mappers[entityKey]
         return mapper!!
@@ -187,8 +194,10 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
     fun getModel(entityType: KClass<*>): Model {
         val entityKey = getKey(entityType)
-        if(!_info.contains(entityKey))
+        if(!_info.contains(entityKey)) {
+            logger.error("Model not found for $entityKey")
             throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+        }
 
         return _info.get(entityKey)?.model!!
     }
@@ -200,9 +209,12 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
         val err3 = "Database connection not setup and/or available in config for ${dbKey} & ${dbShard}."
         val err = if(dbKey.isNullOrEmpty()) err2 else err3
         val con = getDbCon()
+        if(con == null) {
+            logger.error("Database connection not available for key/shard $dbKey:$dbShard")
+        }
         require(con != null, { err1 + " "+ err })
         require( con != DbConEmpty, { err1 + " " + err })
-        return Db(con!!).open()
+        return Db(con!!, errorCallback = this::errorHandler).open()
     }
 
 
@@ -236,8 +248,10 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
 
     fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityInfo {
         val key = buildKey(entityType, dbKey, dbShard)
-        if (!_info.contains(key))
+        if (!_info.contains(key)) {
+            logger.error("Mapper not found for $key")
             throw IllegalArgumentException("invalid entity : $key")
+        }
         return _info.get(key)!!
     }
 
@@ -301,5 +315,11 @@ class Entities(private val _dbs: DbLookup? = null, val _enc:Encryptor? = null) {
             Reflector.createWithArgs<EntityService<T>>(stype, params.toTypedArray())
         } ?: EntityService(this, repo)
         return service
+    }
+
+
+
+    fun errorHandler(ex: Exception) {
+        logger.error("Database error", ex)
     }
 }

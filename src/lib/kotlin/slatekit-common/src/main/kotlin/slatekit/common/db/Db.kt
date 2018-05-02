@@ -39,7 +39,11 @@ import java.time.LocalTime
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
+class Db(private val _dbCon: DbCon,
+         val source: DbSource = DbSourceMySql(),
+         val errorCallback: ((Exception) -> Unit )? = null) {
+
+    val onError = errorCallback ?: this::errorHandler
 
     /**
      * registers the jdbc driver
@@ -53,7 +57,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
 
 
     fun execute(sql:String) {
-        executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, this::errorHandler)
+        executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, onError)
     }
 
 
@@ -202,7 +206,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
                             null
                 res
             }
-        }, this::errorHandler)
+        }, onError)
     }
 
 
@@ -235,7 +239,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
                     id
                 }
             }
-        }, this::errorHandler)
+        }, onError)
         return res ?: 0
     }
 
@@ -256,7 +260,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
             // update and get number of affected records
             val count = stmt.executeUpdate()
             count
-        }, { errorHandler(it) })
+        }, onError )
         return result ?: 0
     }
 
@@ -286,7 +290,7 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
                 else
                     null
             }
-        }, this::errorHandler)
+        }, onError)
         return result
     }
 
@@ -390,9 +394,8 @@ class Db(private val _dbCon: DbCon, val source: DbSource = DbSourceMySql()) {
     }
 
 
-    fun errorHandler(ex: Exception): Unit {
-        val msg = ex.message
-        println(msg)
+    fun errorHandler(ex: Exception) {
+        println("Database error : " + ex.message)
     }
 
     /*
