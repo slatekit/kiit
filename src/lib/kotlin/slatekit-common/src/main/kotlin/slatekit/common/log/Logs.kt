@@ -15,7 +15,7 @@ package slatekit.common.log
 
 interface Logs {
 
-    fun getLogger(name:String? = null): Logger
+    fun getLogger(name:String? = ""): Logger
     fun getLogger(cls:Class<*>): Logger
 }
 

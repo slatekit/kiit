@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 class LogbackLogs : Logs
 {
     override fun getLogger(name: String?): Logger {
-        val instance = LoggerFactory.getLogger(name)
+        val instance = LoggerFactory.getLogger(name ?: "")
        return LogbackLogger(instance)
     }
 
