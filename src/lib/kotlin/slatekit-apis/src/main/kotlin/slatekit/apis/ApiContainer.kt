@@ -20,6 +20,7 @@ import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
@@ -121,6 +122,9 @@ open class ApiContainer(
     private val emptyArgs = mapOf<String, Any>()
 
 
+    private val logger:Logger = ctx.logs.getLogger("apis")
+
+
     fun rename(text:String):String = namer?.name(text)?.text ?: text
 
 
@@ -199,6 +203,7 @@ open class ApiContainer(
             execute(req)
         }
         catch(ex: Exception) {
+            logger.error("Unexpected error executing ${req.fullName}", ex)
             errs?.onError(ctx, req, req.path,this, ex, null)?.toResultEx() ?: Failure(ex)
         }
         return result
@@ -291,7 +296,12 @@ open class ApiContainer(
         catch(ex: Exception) {
             val api = routes.api(req.area, req.name)
             val apiRef = getApi(req.area, req.name, req.action)
+            logger.error("Unexpected error with api request ${req.fullName}", ex)
             handleError(api, apiRef.getOrElse { null }, req, ex)
+        }
+
+        result.onFailure {
+            logger.error("Error on api request ${req.fullName} : ${result.msg}", it)
         }
 
         // Finally: If the format of the content specified ( json | csv | props )
@@ -338,6 +348,7 @@ open class ApiContainer(
 
         }
         else {
+            logger.warn("Api request filtered out for ${req.fullName} using filter: ${instance.kClass.qualifiedName}")
             proceed
         }
     }
@@ -366,14 +377,17 @@ open class ApiContainer(
     protected open fun handleError(api: slatekit.apis.core.Api?, apiRef: ApiRef?, req: Request, ex: Exception): ResultEx<Any> {
         // OPTION 1: Api level
         return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
+            logger.debug("Handling error at api level")
             apiRef.instance.onError(this.ctx, req, apiRef,this, ex, null).toResultEx()
         }
         // OPTION 2: GLOBAL Level custom handler
         else if (errs != null) {
+            logger.debug("Handling error at global middleware")
             errs.onError(ctx, req, req.path, this, ex, null).toResultEx()
         }
         // OPTION 3: GLOBAL Level default handler
         else {
+            logger.debug("Handling error at global container")
             handleErrorInternally(req, ex)
         }
     }
@@ -388,7 +402,6 @@ open class ApiContainer(
      * @return
      */
     fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {
-        println(ex.message)
         val msg = "error executing : " + req.path + ", check inputs"
         return unexpectedError(Exception(msg, ex))
     }

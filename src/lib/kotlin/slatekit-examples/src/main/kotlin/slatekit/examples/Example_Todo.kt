@@ -18,20 +18,21 @@ import TODO.IMPLEMENT
 import TODO.REFACTOR
 import TODO.REMOVE
 import slatekit.common.DateTime
-import slatekit.common.console.*
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 //</doc:import_examples>
 
 
 class Example_Todo  : Cmd("todo") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // About: Strongly typed, structured representation of code notes/tasks
@@ -54,7 +55,7 @@ class Example_Todo  : Cmd("todo") {
       // Your code to remove here.
     })
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 }
 

@@ -15,6 +15,7 @@ import slatekit.apis.svcs.TokenAuth
 import slatekit.common.ApiKey
 import slatekit.common.Request
 import slatekit.common.Result
+import slatekit.common.ResultMsg
 import slatekit.common.conf.Config
 import java.io.File
 
@@ -49,7 +50,7 @@ class AppAuth(val mode: String, val appDir: String,
      * @return
      */
     override fun isAuthorized(cmd: Request, mode: String, actionRoles: String, apiRoles: String)
-            : Result<Boolean> {
+            : ResultMsg<Boolean> {
         return super.isAuthorized(cmd, mode, actionRoles, apiRoles)
     }
 

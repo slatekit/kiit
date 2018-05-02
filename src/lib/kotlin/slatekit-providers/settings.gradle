@@ -1,0 +1,13 @@
+rootProject.name = 'slatekit-providers'
+
+include ':slatekit-common'
+//project(':slatekit-common').projectDir=new File('../slatekit-common')
+
+include ':slatekit-entities'
+//project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+
+include ':slatekit-core'
+//project(':slatekit-core').projectDir=new File('../slatekit-core')
+
+include ':slatekit-apis'
+//project(':slatekit-apis').projectDir=new File('../slatekit-apis')

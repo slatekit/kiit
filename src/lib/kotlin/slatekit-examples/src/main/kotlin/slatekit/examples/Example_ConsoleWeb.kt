@@ -18,10 +18,9 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.common.DateTime
-import slatekit.common.Result
+import slatekit.common.ResultEx
 import slatekit.common.Uris
 import slatekit.common.console.*
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import java.io.File
 
@@ -30,7 +29,7 @@ import java.io.File
 
 class Example_ConsoleWeb : Cmd("console-web") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
         val writer = WebWriter()
@@ -85,7 +84,7 @@ class Example_ConsoleWeb : Cmd("console-web") {
         File(path!!).writeText(html)
 
         //</doc:examples>
-        return ok()
+        return slatekit.common.Success("")
     }
 
     /*

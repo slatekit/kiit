@@ -13,14 +13,11 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.auth.AuthConsole
-import slatekit.common.auth.User
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
@@ -34,7 +31,7 @@ import slatekit.core.sms.SmsServiceTwilio
 
 class Example_Sms : Cmd("sms") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config
@@ -87,7 +84,7 @@ class Example_Sms : Cmd("sms") {
       )))
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
   /*

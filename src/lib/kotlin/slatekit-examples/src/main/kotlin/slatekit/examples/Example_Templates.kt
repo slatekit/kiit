@@ -23,6 +23,8 @@ import slatekit.common.templates.Templates
 import slatekit.core.cmds.Cmd
 import slatekit.common.Result
 import slatekit.common.Random
+import slatekit.common.ResultEx
+import slatekit.common.getOrElse
 
 //</doc:import_examples>
 
@@ -31,7 +33,7 @@ import slatekit.common.Random
   */
 class Example_Templates : Cmd("templates") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // Setup the templates with list of predefined(named) templates and
@@ -61,7 +63,7 @@ class Example_Templates : Cmd("templates") {
     // Case 1: Parse text and get the result as individual parts
     val result = templates.parse("Hi @{user.api}, Welcome to @{company.api}.")
     println("Case 1: Parse into individual parts")
-    print(result.value)
+    print(result.getOrElse { listOf() })
 
     // Case 2: Parse text into a template
     val template = templates.parseTemplate("welcome", "Hi @{user.api}, Welcome to @{company.api}.")

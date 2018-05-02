@@ -13,7 +13,8 @@ package slatekit.tutorial
 
 
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 
 /**
@@ -21,17 +22,17 @@ import slatekit.core.cmds.Cmd
  */
 class Example_Kotlin_Functions : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         testFuncs()
         hof_pass_func()
         hof_return_func()
         composition()
-        return ok()
+        return Success("")
     }
 
 
     // Test the functions
-    fun testFuncs(): Result<Any> {
+    fun testFuncs(): ResultEx<Any> {
 
         // function with parameters
         val r1 = salary(10.50, 8)
@@ -47,7 +48,7 @@ class Example_Kotlin_Functions : Cmd("types") {
         // function with function parameter
         createUser("john doe", true, { id -> println("created with id : $id") } )
 
-        return ok()
+        return Success("")
     }
 
 

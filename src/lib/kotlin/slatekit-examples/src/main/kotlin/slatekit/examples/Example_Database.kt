@@ -18,8 +18,8 @@ import slatekit.common.db.DbConString
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.examples.common.User
@@ -30,7 +30,7 @@ import slatekit.meta.models.ModelMapper
 
 class Example_Database : Cmd("db") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // NOTES:
         // 1. The Db.kt simply uses JDBC
@@ -118,6 +118,6 @@ class Example_Database : Cmd("db") {
         // Be careful with this, ensure you are using a connection string
         // with limited permissions.
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 }

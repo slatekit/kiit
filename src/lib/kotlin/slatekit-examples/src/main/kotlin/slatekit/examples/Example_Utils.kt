@@ -23,13 +23,12 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.db.DbConString
-import slatekit.common.results.ResultFuncs.ok
 //</doc:import_examples>
 
 
 class Example_Utils : Cmd("utils") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // Miscellaneous utilities.
@@ -66,7 +65,7 @@ class Example_Utils : Cmd("utils") {
     // combined bool / string instead of a tuple
     val result = BoolMessage(true, "successfuly created")
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 }
 

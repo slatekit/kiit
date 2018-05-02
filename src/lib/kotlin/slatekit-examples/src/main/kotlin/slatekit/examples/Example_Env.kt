@@ -19,14 +19,15 @@ import slatekit.common.envs.*
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 //</doc:import_examples>
 
 
 class Example_Env  : Cmd("env") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
 
@@ -66,7 +67,7 @@ class Example_Env  : Cmd("env") {
     println( envs2.current )
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
 }

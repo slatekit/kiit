@@ -7,7 +7,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.info.*
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logs
 
 
 /**
@@ -28,7 +28,7 @@ interface Context {
     val arg   : Args
     val env   : Env
     val cfg   : ConfigBase
-    val log   : LoggerBase
+    val logs  : Logs
     val inf   : About
     val host  : Host
     val lang  : Lang

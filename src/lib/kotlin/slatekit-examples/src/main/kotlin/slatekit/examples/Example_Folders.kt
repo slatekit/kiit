@@ -18,9 +18,10 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.app.LocationUserDir
 import slatekit.common.info.Folders
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>
@@ -28,7 +29,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Folders : Cmd("folders") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
 
         // CASE 1: Build a folder structure for an application
@@ -80,7 +81,7 @@ class Example_Folders : Cmd("folders") {
         println("output :" + folders.pathToTemp)
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 }

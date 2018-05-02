@@ -18,7 +18,7 @@ import slatekit.common.Ignore
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logger
 import slatekit.common.subStringPair
 import java.io.File
 
@@ -26,7 +26,8 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
 
     val context:Context
 
-    override val logger: LoggerBase? get() = context.log
+    override val logger: Logger? get() = context.logs.getLogger()
+
     override val encryptor: Encryptor? get() = context.enc
 
 

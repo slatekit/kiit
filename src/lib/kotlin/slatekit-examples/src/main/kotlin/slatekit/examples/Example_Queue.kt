@@ -20,15 +20,15 @@ import slatekit.common.auth.User
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.results.ResultFuncs.ok
 //</doc:import_examples>
 
 
 class Example_Queue : Cmd("queue") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:setup>
     // The QueueSourceDefault interface is implemented in 2 ways:
@@ -73,6 +73,6 @@ class Example_Queue : Cmd("queue") {
     println(count)
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }

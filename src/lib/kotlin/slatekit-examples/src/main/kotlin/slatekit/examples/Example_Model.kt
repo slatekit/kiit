@@ -18,12 +18,12 @@ import slatekit.meta.models.*
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
 import slatekit.common.DateTime
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.auth.User
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.info.Host
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.meta.KTypes
 import slatekit.meta.buildAddTable
 import kotlin.reflect.full.createType
@@ -34,7 +34,7 @@ import kotlin.reflect.full.createType
 
 class Example_Model : Cmd("model") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // ABOUT:
@@ -104,7 +104,7 @@ class Example_Model : Cmd("model") {
     showResult( "table sql : " + buildAddTable(DbSourceMySql(), model))
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
 

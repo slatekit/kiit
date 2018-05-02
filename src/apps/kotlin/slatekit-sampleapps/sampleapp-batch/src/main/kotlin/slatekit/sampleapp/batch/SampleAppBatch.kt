@@ -16,13 +16,13 @@ import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.app.AppProcess
 import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.UserService
@@ -65,6 +65,7 @@ fun main(args: Array<String>): Unit {
                             args = args,
                             enc = AppEncryptor,
                             schema = schema,
+                            logs = LogbackLogs(),
                             converter = ::convert
                     )
             )
@@ -168,6 +169,12 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
         warn("warn  example using trait method from LogSupportIn")
         error("error example using trait method from LogSupportIn")
         fatal("fatal example using trait method from LogSupportIn")
+
+        debug( { "lazy debug example using trait method from LogSupportIn" } )
+        info ( { "lazy info  example using trait method from LogSupportIn" } )
+        warn ( { "lazy warn  example using trait method from LogSupportIn" } )
+        error( { "lazy error example using trait method from LogSupportIn" } )
+        fatal( { "lazy fatal example using trait method from LogSupportIn" } )
         info("")
 
         // Feature 2: Encrypt / Decrypt support using the Encryptor setup in context

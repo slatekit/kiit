@@ -18,6 +18,7 @@ import slatekit.core.app.AppRunner
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
+import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.sampleapp.core.apis.*
 import slatekit.sampleapp.core.common.AppApiKeys
 import slatekit.sampleapp.core.common.AppAuth
@@ -44,7 +45,8 @@ fun main(args: Array<String>): Unit {
     // Fore more info on the context, see the utils online.
     val ctxRaw = AppRunner.build(
             args = args,
-            enc = AppEncryptor
+            enc = AppEncryptor,
+            logs = LogbackLogs()
     )
     val ctx = AppEntContext.fromAppContext(ctxRaw)
 

@@ -13,7 +13,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.types.*
 //</doc:import_required>
 
@@ -25,7 +26,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_SmartStrings : Cmd("results") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // Smart strings provide a way to store, validate and describe
         // a strongly typed/formatted string. This concept is called
@@ -70,7 +71,7 @@ class Example_SmartStrings : Cmd("results") {
         val phone = PhoneUS("212-456-7890")
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 
 /*

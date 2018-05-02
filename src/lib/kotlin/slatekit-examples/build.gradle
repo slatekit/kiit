@@ -20,6 +20,15 @@ repositories {
 }
 
 dependencies {
+
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
+
+    compile group: 'org.slf4j'     , name: 'slf4j-api', version: '1.7.7'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
+    compile group: 'ch.qos.logback', name: 'logback-core'   , version: '1.1.2'
+    compile group: 'org.logback-extensions', name: 'logback-ext-loggly'   , version: '0.1.2'
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -31,6 +40,7 @@ dependencies {
     compile project(":slatekit-apis")
     compile project(":slatekit-cloud")
     compile project(":slatekit-integration")
+    compile project(":slatekit-providers")
 }
 
 sourceSets {

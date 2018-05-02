@@ -25,9 +25,7 @@ import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
-import slatekit.common.log.LogLevel
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
+import slatekit.common.log.*
 import slatekit.common.results.ResultFuncs.exit
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.help
@@ -221,7 +219,7 @@ object AppFuncs {
      */
     fun getLogLevel(args: Args, conf: ConfigBase): LogLevel {
         val level = getConfOverride(args, conf, "log.level", "info")
-        return Logger.parseLogLevel(level)
+        return LogHelper.parseLevel(level)
     }
 
 
@@ -291,7 +289,7 @@ object AppFuncs {
     }
 
 
-    fun buildContext(appInputs: AppInputs, enc: Encryptor?): AppContext {
+    fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
 
         val buildInfoExists = resourceExists("build.conf")
         val build = if (buildInfoExists) {
@@ -315,7 +313,7 @@ object AppFuncs {
                 env = appInputs.env,
                 cfg = conf,
                 enc = enc,
-                log = LoggerConsole(),
+                logs = logs ?: LogsDefault,
                 dbs = dbs(conf),
                 inf = about(conf).copy(version = build.version),
                 host = Host.local(),

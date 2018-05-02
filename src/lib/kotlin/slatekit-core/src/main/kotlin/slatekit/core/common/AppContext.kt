@@ -23,8 +23,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.*
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
 
@@ -49,7 +51,7 @@ data class AppContext(
         override val arg  : Args,
         override val env  : Env,
         override val cfg  : ConfigBase,
-        override val log  : LoggerBase,
+        override val logs : Logs,
         override val inf  : About,
         override val host : Host = Host.local(),
         override val lang : Lang = Lang.kotlin(),
@@ -83,7 +85,7 @@ data class AppContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 inf = About.Abouts.none,
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),
@@ -96,7 +98,7 @@ data class AppContext(
                         arg = Args.Companion.default(),
                         env = Env("local", Dev),
                         cfg = Config(),
-                        log = LoggerConsole(),
+                        logs = LogsDefault,
                         inf = About.Abouts.none,
                         host = Host.Hosts.local(),
                         lang = Lang.Langs.kotlin(),
@@ -109,7 +111,7 @@ data class AppContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
                 host = Host.Hosts.local(),
                 lang = Lang.Langs.kotlin(),

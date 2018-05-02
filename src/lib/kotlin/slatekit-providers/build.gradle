@@ -1,0 +1,42 @@
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+
+buildscript {
+    ext.kotlin_version = '1.2.31'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    compile group: 'org.slf4j'     , name: 'slf4j-api', version: '1.7.7'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
+    compile group: 'ch.qos.logback', name: 'logback-core'   , version: '1.1.2'
+    compile group: 'org.logback-extensions', name: 'logback-ext-loggly'   , version: '0.1.2'
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile project(":slatekit-common")
+    compile project(":slatekit-meta")
+    compile project(":slatekit-entities")
+    compile project(":slatekit-core")
+    compile project(":slatekit-apis")
+    compile project(":slatekit-integration")
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+}

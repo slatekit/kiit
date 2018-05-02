@@ -22,8 +22,8 @@ package slatekit.tutorial
 // NOTE: An object is essentially a Singleton class
 // that serves as a "module" containing 1 or more functions
 import slatekit.common.Random.string6
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import java.time.LocalDateTime
 
@@ -38,7 +38,7 @@ fun main(args: Array<String>): Unit {
  */
 class Example_Kotlin_Basics : Cmd("auth") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         showNullUsage()
         showEnums()
         showWhen()
@@ -46,7 +46,7 @@ class Example_Kotlin_Basics : Cmd("auth") {
         showLoops()
         testMaps()
         testLists()
-        return ok()
+        return Success("")
     }
 
 

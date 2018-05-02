@@ -23,8 +23,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.*
-import slatekit.common.log.LoggerBase
+import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
 import slatekit.core.common.AppContext
@@ -51,7 +53,7 @@ data class AppEntContext(
         override val arg  : Args,
         override val env  : Env,
         override val cfg  : ConfigBase,
-        override val log  : LoggerBase,
+        override val logs : Logs,
         val ent  : Entities,
         override val inf  : About,
         override val host : Host = Host.local(),
@@ -73,7 +75,7 @@ data class AppEntContext(
      */
     fun toAppContext():AppContext {
         return AppContext(
-                arg, env, cfg, log, inf, host, lang, dbs, enc, dirs, extra, state
+                arg, env, cfg, logs, inf, host, lang, dbs, enc, dirs, extra, state
         )
     }
 
@@ -92,7 +94,7 @@ data class AppEntContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 ent = Entities(),
                 inf = About.Abouts.none,
                 host = Host.Hosts.local(),
@@ -107,7 +109,7 @@ data class AppEntContext(
          */
         fun fromAppContext(ctx:AppContext):AppEntContext {
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.log, Entities(ctx.dbs, ctx.enc), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state, ctx.build
+                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, Entities(ctx.dbs, ctx.enc), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state, ctx.build
             )
         }
 
@@ -117,7 +119,7 @@ data class AppEntContext(
                         arg = Args.Companion.default(),
                         env = Env("local", Dev),
                         cfg = Config(),
-                        log = LoggerConsole(),
+                        logs = LogsDefault,
                         ent = Entities(),
                         inf = About.Abouts.none,
                         host = Host.Hosts.local(),
@@ -132,7 +134,7 @@ data class AppEntContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 ent = Entities(),
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
                 host = Host.Hosts.local(),

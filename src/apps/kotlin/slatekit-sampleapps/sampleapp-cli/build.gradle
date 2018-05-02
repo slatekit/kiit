@@ -31,6 +31,7 @@ dependencies {
     compile project(":slatekit-core")
     compile project(":slatekit-apis")
     compile project(":slatekit-integration")
+    compile project(":slatekit-providers")
     compile project(":sampleapp-core")
 }
 

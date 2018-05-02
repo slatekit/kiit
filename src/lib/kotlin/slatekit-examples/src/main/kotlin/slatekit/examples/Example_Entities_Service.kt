@@ -22,9 +22,10 @@ import slatekit.entities.repos.EntityRepoMySql
 
 //<doc:import_examples>
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.meta.models.ModelMapper
 
@@ -95,7 +96,7 @@ class Example_Entities_Service : Cmd("service") {
     //</doc:setup>
 
 
-    override protected fun executeInternal(args: Array<String>?): Result<Any> {
+    override protected fun executeInternal(args: Array<String>?): ResultEx<Any> {
 
         //<doc:examples>
         // The Service layer initialized with an repository .
@@ -146,7 +147,7 @@ class Example_Entities_Service : Cmd("service") {
         println(service.count())
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 

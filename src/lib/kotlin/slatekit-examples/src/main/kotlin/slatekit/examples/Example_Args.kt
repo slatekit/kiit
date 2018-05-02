@@ -19,13 +19,15 @@ import slatekit.common.args.ArgsSchema
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+import slatekit.common.getOrElse
+
 //</doc:import_examples>
 
 class Example_Args  : Cmd("args") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // Example:
@@ -81,19 +83,19 @@ class Example_Args  : Cmd("args") {
 
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 
 
   //<doc:examples_support>
-  fun showResults(result:Result<Args>):Unit  {
+  fun showResults(result:ResultEx<Args>):Unit  {
     println("RESULTS:")
 
     if(!result.success) {
       println("Error parsing args : " + result.msg)
       return
     }
-    val args = result.value!!
+    val args = result.getOrElse { Args.default() }
     println("action   : " + args.action)
     if(!args.actionParts.isEmpty()) {
       print("parts    : ")

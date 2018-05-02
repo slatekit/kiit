@@ -12,15 +12,12 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Failure
-import slatekit.common.Result
-import slatekit.common.Success
+import slatekit.common.*
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.ResultFuncs.conflict
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.notAvailable
 import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.unexpectedError
@@ -36,7 +33,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Results : Cmd("results") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
         // CASE 1: The Result class is a container for the following
         // 1. success / failure  - flag
@@ -58,18 +55,14 @@ class Example_Results : Cmd("results") {
         val result1 = Success(
                 data = "userId:1234567890",
                 code = SUCCESS,
-                msg = "user created",
-                tag = "tag001",
-                ref = "XY123"
+                msg = "user created"
         )
 
         // Explicitly build a result using the Failure "branch" of Result
-        val result2 = Failure<String>(
-                code = BAD_REQUEST,
-                msg = "user id not supplied",
-                tag = "tag001",
+        val result2 = Failure<Exception>(
                 err = IllegalArgumentException("user id"),
-                ref = null
+                code = BAD_REQUEST,
+                msg = "user id not supplied"
         )
 
         // NOTES: ResultFuncs object contain methods to easily build up either
@@ -81,17 +74,17 @@ class Example_Results : Cmd("results") {
         // level controller / api layer.
 
         // CASE 1: Success ( 200 )
-        val res1 = success(123456, msg = "user created", tag = "promoCode:ny001")
+        val res1 = success(123456, msg = "user created")
         printResult(res1)
 
 
         // CASE 2: Failure ( 400 ) with message and ref tag
-        val res2a = failure<String>(msg = "invalid email", tag = "23SKASDF23")
+        val res2a = failure<String>(msg = "invalid email")
         printResult(res2a)
 
 
         // CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
-        val res2b = failure<String>(msg = "invalid email", tag = "23SKASDF23")
+        val res2b = failure<String>(msg = "invalid email")
         printResult(res2b)
 
 
@@ -101,7 +94,7 @@ class Example_Results : Cmd("results") {
 
 
         // CASE 5: Unexpected ( 500 )
-        val res4 = unexpectedError<String>(msg = "invalid email")
+        val res4 = unexpectedError<String>(Exception("Invalid email"), msg = "invalid email")
         printResult(res4)
 
 
@@ -120,16 +113,14 @@ class Example_Results : Cmd("results") {
         printResult(res7)
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 
 
-    fun printResult(result: Result<Any>): Unit {
+    fun printResult(result: Result<Any, Any>): Unit {
         println("success: " + result.success)
         println("message: " + result.msg)
         println("code   : " + result.code)
-        println("data   : " + result.value)
-        println("ref    : " + result.tag)
         println()
         println()
     }

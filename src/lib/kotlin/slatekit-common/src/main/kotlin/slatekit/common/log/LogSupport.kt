@@ -15,9 +15,12 @@ package slatekit.common.log
 
 import slatekit.common.Ignore
 
+/**
+ * Log methods with messages that are both eager and lazyily called via functions
+ */
 interface LogSupport {
 
-    val logger: LoggerBase?
+    val logger: Logger?
 
 
     /**
@@ -26,8 +29,8 @@ interface LogSupport {
      * @param ex : The exception to log
      */
     @Ignore
-    fun debug(msg: String, ex: Exception? = null, tag: String? = null) {
-        log(Debug, msg, ex, tag)
+    fun debug(msg: String, ex: Exception? = null) {
+        log(Debug, msg, ex)
     }
 
 
@@ -37,8 +40,8 @@ interface LogSupport {
      * @param ex : The exception to log
      */
     @Ignore
-    fun info(msg: String, ex: Exception? = null, tag: String? = null) {
-        log(Info, msg, ex, tag)
+    fun info(msg: String, ex: Exception? = null) {
+        log(Info, msg, ex)
     }
 
 
@@ -48,8 +51,8 @@ interface LogSupport {
      * @param ex : The exception to log
      */
     @Ignore
-    fun warn(msg: String, ex: Exception? = null, tag: String? = null) {
-        log(Warn, msg, ex, tag)
+    fun warn(msg: String, ex: Exception? = null) {
+        log(Warn, msg, ex)
     }
 
 
@@ -59,8 +62,8 @@ interface LogSupport {
      * @param ex : The exception to log
      */
     @Ignore
-    fun error(msg: String, ex: Exception? = null, tag: String? = null) {
-        log(Error, msg, ex, tag)
+    fun error(msg: String, ex: Exception? = null) {
+        log(Error, msg, ex)
     }
 
 
@@ -71,8 +74,64 @@ interface LogSupport {
      * @param ex : The exception to log
      */
     @Ignore
-    fun fatal(msg: String, ex: Exception? = null, tag: String? = null) {
-        log(Fatal, msg, ex, tag)
+    fun fatal(msg: String, ex: Exception? = null) {
+        log(Fatal, msg, ex)
+    }
+
+
+    /**
+     * Logs an debug message
+     * @param msg : The callback to build the message
+     * @param ex : The exception to log
+     */
+    @Ignore
+    fun debug(callback: () -> String, ex: Exception? = null) {
+        log(Debug, callback, ex)
+    }
+
+
+    /**
+     * Logs an info message
+     * @param msg : The callback to build the message
+     * @param ex : The exception to log
+     */
+    @Ignore
+    fun info(callback: () -> String, ex: Exception? = null) {
+        log(Info, callback, ex)
+    }
+
+
+    /**
+     * Logs an warning
+     * @param msg : The callback to build the message
+     * @param ex : The exception to log
+     */
+    @Ignore
+    fun warn(callback: () -> String, ex: Exception? = null) {
+        log(Warn, callback, ex)
+    }
+
+
+    /**
+     * Logs an error
+     * @param msg : The callback to build the message
+     * @param ex : The exception to log
+     */
+    @Ignore
+    fun error(callback: () -> String, ex: Exception? = null) {
+        log(Error, callback, ex)
+    }
+
+
+    /**
+     * Logs an fatal
+     *
+     * @param msg : The callback to build the message
+     * @param ex : The exception to log
+     */
+    @Ignore
+    fun fatal(callback: () -> String, ex: Exception? = null) {
+        log(Fatal, callback, ex)
     }
 
 
@@ -83,7 +142,13 @@ interface LogSupport {
      * @param ex
      */
     @Ignore
-    fun log(level: LogLevel, msg: String, ex: Exception? = null, tag: String? = null) {
-        logger?.let { l -> l.log(level, msg, ex, tag) }
+    fun log(level: LogLevel, msg: String, ex: Exception? = null) {
+        logger?.let { l -> l.log(level, msg, ex) }
+    }
+
+
+    @Ignore
+    fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
+        logger?.let { l -> l.log(level, callback, ex) }
     }
 }

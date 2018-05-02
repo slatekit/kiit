@@ -12,16 +12,13 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Measure
+import slatekit.common.*
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.common.results.ResultTimed
-import slatekit.common.Random
 
 //</doc:import_examples>
 
@@ -30,7 +27,7 @@ import slatekit.common.Random
   */
 class Example_Timer : Cmd("timer") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // CASE 1: Benchmark an operation 1 time
@@ -55,7 +52,7 @@ class Example_Timer : Cmd("timer") {
     }))
 
     //</doc:examples>
-    return ok()
+    return Success("")
   }
 
 

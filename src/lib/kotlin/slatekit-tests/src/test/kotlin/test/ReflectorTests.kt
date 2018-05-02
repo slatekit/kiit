@@ -11,7 +11,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
-import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.common.types.PhoneUS
 import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
@@ -49,7 +49,7 @@ class ReflectorTests {
             arg  = Args.default(),
             env  = Env("local", Dev),
             cfg  = Config(),
-            log  = LoggerConsole(),
+            logs = LogsDefault,
             ent  = Entities(),
             inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
             dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),

@@ -18,7 +18,8 @@ import slatekit.core.common.AppContext
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
@@ -29,8 +30,8 @@ import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.BAD_REQUEST
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.app.AppRunner
 import slatekit.entities.core.Entities
 import slatekit.core.cmds.Cmd
@@ -40,7 +41,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Context : Cmd("cmd") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
 
         // OVERVIEW:
@@ -82,7 +83,7 @@ class Example_Context : Cmd("cmd") {
             arg = Args.default(),
             env = Env("dev", Dev, "ny", "dev environment"),
             cfg = Config(),
-            log = LoggerConsole(),
+            logs = LogsDefault,
             ent = Entities(),
             host = Host.local(),
             lang = Lang.kotlin(),
@@ -138,7 +139,7 @@ class Example_Context : Cmd("cmd") {
         showContext(ctx4)
 
         //</doc:examples>
-        return ok()
+        return Success("")
     }
 
 
@@ -146,7 +147,7 @@ class Example_Context : Cmd("cmd") {
         println("args: " + ctx.arg)
         println("env : " + ctx.env)
         println("conf: " + ctx.cfg)
-        println("log : " + ctx.log)
+        println("logs: " + ctx.logs)
         println("inf : " + ctx.inf)
         println("dirs: " + ctx.dirs)
         println("host: " + ctx.host)

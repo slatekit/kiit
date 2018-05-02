@@ -21,14 +21,14 @@ import slatekit.common.info.StartInfo
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 //</doc:import_examples>
 
 
 class Example_Info  : Cmd("info") {
 
-  override fun executeInternal(args: Array<String>?) : Result<Any>
+  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
   {
     //<doc:examples>
     // CASE 1: Get the host info
@@ -66,7 +66,7 @@ class Example_Info  : Cmd("info") {
     app.log( { name, value -> println( "${name} : ${value}" ) } )
     //</doc:examples>
 
-    return ok()
+    return Success("")
   }
 }
 /*

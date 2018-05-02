@@ -23,6 +23,7 @@ import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.EntitiesApi
 import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
+import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.sampleapp.core.apis.*
 import slatekit.sampleapp.core.common.AppApiKeys
 import slatekit.sampleapp.core.common.AppAuth
@@ -44,7 +45,8 @@ fun main(args: Array<String>): Unit {
     // conf, command line args database, encryptor, and many other components
     val ctx = AppEntContext.fromAppContext(build(
             args = args,
-            enc = AppEncryptor
+            enc = AppEncryptor,
+            logs = LogbackLogs()
     ))
 
     // =========================================================================

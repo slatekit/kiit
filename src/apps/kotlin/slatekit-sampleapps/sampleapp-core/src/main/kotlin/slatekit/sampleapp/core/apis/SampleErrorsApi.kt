@@ -1,9 +1,7 @@
 package slatekit.sampleapp.core.apis
 
 import slatekit.apis.support.ApiWithMiddleware
-import slatekit.common.Context
-import slatekit.common.Request
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
@@ -20,7 +18,7 @@ open class SampleErrorsApi(enableErrorHandling:Boolean) : ApiWithMiddleware {
      * Error-handling using the Result<T> object to model
      * successes and failures for all scenarios
      */
-    fun parseNumberWithResults(text:String): Result<Int> {
+    fun parseNumberWithResults(text:String): ResultMsg<Int> {
 
         return if(text.isNullOrEmpty()) {
             badRequest("You must supply a non-empty string")
@@ -29,7 +27,7 @@ open class SampleErrorsApi(enableErrorHandling:Boolean) : ApiWithMiddleware {
             failure("$text is not a valid number")
         }
         else {
-            success(text.toInt(), "You supplied a valid number")
+            success(text.toInt(), msg ="You supplied a valid number")
         }
     }
 
@@ -48,8 +46,8 @@ open class SampleErrorsApi(enableErrorHandling:Boolean) : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Result<Any> {
-        return ResultFuncs.failureWithCode(UNEXPECTED_ERROR, msg = "unexpected error in api", err = ex)
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+        return Failure<Exception>(ex ?: Exception("unexpected error in api"), UNEXPECTED_ERROR, msg = "unexpected error in api")
     }
 
 }

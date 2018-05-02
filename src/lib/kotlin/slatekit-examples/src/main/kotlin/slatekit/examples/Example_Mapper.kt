@@ -13,13 +13,9 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.DateTime
-import slatekit.common.Field
-import slatekit.common.Result
+import slatekit.common.*
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.Mapper
 import slatekit.meta.models.Model
-import slatekit.common.results.ResultFuncs.ok
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
@@ -105,7 +101,7 @@ class Example_Mapper : Cmd("mapper") {
     //</doc:setup>
 
 
-    override fun executeInternal(args: Array<String>?) : Result<Any>
+    override fun executeInternal(args: Array<String>?) : ResultEx<Any>
     {
         //<doc:examples>
         // NOTE: There are 3 different ways to load the schema of the entity.
@@ -171,6 +167,6 @@ class Example_Mapper : Cmd("mapper") {
         println("table sql : " + buildAddTable(DbSourceMySql(), schema1))
         //</doc:examples>
 
-        return ok()
+        return Success("")
     }
 }

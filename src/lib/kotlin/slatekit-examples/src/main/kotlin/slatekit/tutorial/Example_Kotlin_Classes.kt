@@ -13,17 +13,17 @@ mantra: Simplicity above all else
 
 package slatekit.tutorial
 
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import java.time.LocalDate
 
 
 class Example_Kotlin_Classes : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Result<Any> {
+    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
 
-        return ok()
+        return Success("")
     }
 
 }
