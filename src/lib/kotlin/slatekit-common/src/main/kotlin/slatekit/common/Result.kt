@@ -127,6 +127,13 @@ inline fun <T, E> Result<T, E>.onSuccess(f: (T) -> Unit) =
             is Failure -> { }
         }
 
+
+inline fun <T, E> Result<T, E>.onFailure(f: (E) -> Unit) =
+    when (this) {
+        is Success -> { }
+        is Failure -> { f(this.err) }
+    }
+
 inline fun <T1, T2, E1, E2> Result<T1, E1>.transform(
         onSuccess: (T1) -> Result<T2, E2>,
         onFailure: (E1) -> Result<T2, E2>): Result<T2, E2> =
