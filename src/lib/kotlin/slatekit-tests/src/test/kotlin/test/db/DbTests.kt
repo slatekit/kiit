@@ -1,5 +1,6 @@
 package test.db
 
+import org.junit.Before
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.conf.ConfFuncs
@@ -10,9 +11,29 @@ import java.time.LocalTime
 
 class DbTests {
 
+    companion object {
+        var id = 0L
+    }
 
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
+    @Before
+    fun can_setup() {
+        val db = Db(con!!)
+        val sqlInsert = """
+            INSERT INTO `slatekit`.`db_tests`
+            (
+                `test_string`, `test_bool`, `test_short`, `test_int`, `test_long`, `test_float`, `test_double`,  `test_localdate`, `test_localtime`, `test_localdatetime`, `test_timestamp`
+            )
+            VALUES
+            (
+                'abcd', 1, 123, 123456, 123456789, 123.45, 123456.789, '2017-06-01', '09:25:00', '2017-07-06 09:25:00', timestamp(curdate(), curtime())
+            );
+        """
 
+        // 1. add
+        val id = db.insert(sqlInsert)
+        DbTests.id = id
+    }
 
 
     @Test fun can_query_scalar_string() {
@@ -117,7 +138,7 @@ class DbTests {
     fun <T> ensure_scalar(colName:String, callback: (Db, String) -> T, expected:T ):Unit {
 
         val db = Db(con!!)
-        val sql = "select $colName from db_tests where id = 37"
+        val sql = "select $colName from db_tests where id = " + DbTests.id
         val actual = callback(db, sql)
         assert(expected == actual)
     }
