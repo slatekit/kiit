@@ -4,6 +4,7 @@ import slatekit.common.log.*
 
 class LogbackLogger(private val instance:org.slf4j.Logger) : Logger(parseLevel(instance), instance.name) {
 
+    override val raw   : Any? = instance
 
     /**
      * Logs to logback.

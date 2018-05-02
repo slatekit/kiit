@@ -20,6 +20,7 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logs
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.EXIT
 import slatekit.common.results.FAILURE
@@ -82,6 +83,7 @@ object AppRunner {
             args: Array<String>? = null,
             enc: Encryptor? = null,
             schema: ArgsSchema? = null,
+            logs: Logs? = null,
             converter: ((AppContext) -> AppContext)? = null
     ): AppContext {
         // 1. Ensure command line args
@@ -104,7 +106,7 @@ object AppRunner {
                         // - Config( config object for env - common env.conf and env.qa.conf )
                         val inputs = AppFuncs.buildAppInputs(result.data, enc)
                         val ctx = inputs
-                                .map { inp -> AppFuncs.buildContext(inp, enc) }
+                                .map { inp -> AppFuncs.buildContext(inp, enc,logs) }
                                 .map { ctx ->converter?.let { c -> c(ctx) } ?: ctx }
                         ctx.getOrElse { AppContext.err(inputs.code, inputs.msg) }!!
                     }

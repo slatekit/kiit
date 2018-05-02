@@ -25,6 +25,7 @@ abstract class Logger(val level: LogLevel = Warn,
 
 
     override val logger: Logger? by lazy { this }
+    open val raw   : Any? = null
 
     /**
      * Logs an entry

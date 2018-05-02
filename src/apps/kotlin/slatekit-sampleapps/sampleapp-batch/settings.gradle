@@ -18,6 +18,9 @@ project(':slatekit-apis').projectDir=new File('../../../../lib/kotlin/slatekit-a
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../../../../lib/kotlin/slatekit-integration')
 
+include ':slatekit-providers'
+project(':slatekit-providers').projectDir=new File('../../../../lib/kotlin/slatekit-providers')
+
 include ':sampleapp-core'
 project(':sampleapp-core').projectDir=new File('../sampleapp-core')
 

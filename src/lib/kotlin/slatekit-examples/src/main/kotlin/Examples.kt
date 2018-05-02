@@ -42,11 +42,16 @@ fun main(args:Array<String>):Unit  {
     fun testlog(logger:slatekit.common.log.Logger) {
         val name = logger.name
         //logger.trace("test logging $name with trace")
-        logger.debug("test logging $name with debug")
-        logger.info ("test logging $name with info")
-        logger.warn ("test logging $name with warn")
-        logger.error("test logging $name with error")
+        logger.debug("Async test 5 logging $name with debug")
+        logger.info ("Async test 5 logging $name with info")
+        logger.warn ("Async test 5 logging $name with warn")
+        logger.error("Async test 5 logging $name with error")
+
     }
+
+    val log = org.slf4j.LoggerFactory.getLogger("api")
+    log.warn("slf4j warn")
+    log.error("slf4j error")
 
     val logs = LogbackLogs()
 
@@ -57,6 +62,7 @@ fun main(args:Array<String>):Unit  {
     testlog(logger2)
     testlog(logger3)
 
+    Thread.sleep(5000)
     println("hello kotlin examples")
 }
 

@@ -22,6 +22,7 @@ import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.UserService
@@ -64,6 +65,7 @@ fun main(args: Array<String>): Unit {
                             args = args,
                             enc = AppEncryptor,
                             schema = schema,
+                            logs = LogbackLogs(),
                             converter = ::convert
                     )
             )
