@@ -14,6 +14,9 @@ import slatekit.integration.mods.Module
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiConstants
+import slatekit.common.*
+import slatekit.common.results.ResultFuncs.failure
+import slatekit.integration.mods.Mod
 
 
 @Api(area = "sys", name = "mods", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = ApiConstants.SourceCLI)
@@ -73,6 +76,17 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     @ApiAction(name = "", desc = "gets the names of the modules", roles = "@parent")
     fun names(): List<String> {
         return _items.all().map { "${it.info.name} ver: ${it.info.version}" }
+    }
+
+
+    @ApiAction(name = "", desc = "gets the names of the modules", roles = "@parent")
+    fun uninstall(name:String): ResultEx<String> {
+        val tablesResult =_items[name]?.let{ it.uninstall() } ?: Failure("Unknown module : $name").toResultEx()
+        val moduleResult = tablesResult.map {  ctx.service.deleteByField(Mod::name, name) }
+        return when (moduleResult) {
+            is Success -> Success("Removed module and tables for : $name")
+            is Failure -> Failure(moduleResult.err)
+        }
     }
 
 

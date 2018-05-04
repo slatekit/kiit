@@ -28,7 +28,7 @@ open class DbSourceMySql : DbSource {
   override fun buildDropTable(name:String): String
   {
     val tableName = ensureField(name)
-    val sql = "DROP TABLE IF EXISTS $tableName;"
+    val sql = "DROP TABLE IF EXISTS `$tableName`;"
     return sql
   }
 
@@ -39,7 +39,7 @@ open class DbSourceMySql : DbSource {
   override fun buildDeleteAll(name: String): String {
 
     val tableName = ensureField(name)
-    val sql = "DELETE * FROM $tableName IF EXISTS $tableName;"
+    val sql = "DELETE FROM `$tableName`;"
     return sql
   }
 

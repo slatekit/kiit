@@ -13,6 +13,11 @@
 
 package slatekit.integration.mods
 
+import slatekit.common.Failure
+import slatekit.common.ResultEx
+import slatekit.common.Success
+import slatekit.common.newline
+import slatekit.common.results.ResultFuncs.failure
 import slatekit.core.common.AppContext
 
 abstract class Module(val appCtx: AppContext,
@@ -22,22 +27,44 @@ abstract class Module(val appCtx: AppContext,
     /**
      * hook to initialize
      */
-    open fun init(): Unit {}
+    open fun init() {}
 
 
-    open fun register(): Unit {}
+    open fun register() {}
 
 
     /**
      * install this module
      */
-    open fun install(): Unit {
-        if (info.isDbDependent) {
+    open fun install() : ResultEx<String> {
+        return if (info.isDbDependent) {
             info.models?.let { models ->
-                models.forEach { modelName ->
-                    modCtx.setup.install(modelName, info.version, "", "")
-                }
-            }
+                val results = models.map { modCtx.setup.install(it, info.version, "", "") }
+                val success = results.all { it.success }
+                val messages = results.map { it.msg  }
+                val message = if(success) "" else messages.joinToString(newline)
+                if(success) Success(message, msg = "") else Failure(Exception(message), msg = message)
+            } ?: Failure(Exception(this.info.name + " has no models") )
+        } else {
+            Failure(Exception(this.info.name + " is not database dependent"))
+        }
+    }
+
+
+    /**
+     * install this module
+     */
+    open fun uninstall() : ResultEx<String> {
+        return if (info.isDbDependent) {
+            info.models?.let { models ->
+                val results = models.map { modCtx.setup.uinstall(it) }
+                val success = results.all { it.success }
+                val messages = results.map { it.msg  }
+                val message = if(success) "" else messages.joinToString(newline)
+                if(success) Success(message, msg = "") else Failure(Exception(message), msg = message)
+            } ?: Failure(Exception(this.info.name + " has no models") )
+        } else {
+            Failure(Exception(this.info.name + " is not database dependent"))
         }
     }
 

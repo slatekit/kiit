@@ -63,6 +63,21 @@ class EntitySetupService(private val _entities: Entities,
     }
 
 
+    /**
+     * installs the model name supplied into the database.
+     *
+     * @param name    : the fully qualified name of the model e..g slate.ext.resources.Resource
+     * @param version : the version of the model
+     * @param dbKey   : the dbKey pointing to the database to install the model to. leave empty to use default db
+     * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
+     * @return
+     */
+    fun uinstall(name: String): ResultEx<String> {
+        delete(name)
+        return drop(name)
+    }
+
+
     fun delete(name:String): ResultEx<String> {
         return operate("Delete", name, { info, tableName -> _entities.getDbSource().buildDeleteAll(tableName) } )
     }
