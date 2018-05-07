@@ -12,14 +12,11 @@ mantra: Simplicity above all else
  */
 package slatekit.core.push
 
-interface Category {
+interface MessageType {
     val name:String
 }
 
-object Alert   : Category { override val name = "alert"   }
-object Share   : Category { override val name = "share"   }
-object Reg     : Category { override val name = "reg"     }
-object Msg     : Category { override val name = "msg"     }
 
-data class OtherCategory(override val name:String): Category
-
+object MessageTypeAlert   : MessageType { override val name:String = "alert" }
+object MessageTypeData    : MessageType { override val name:String = "data"  }
+data class MessageTypeOther(override val name:String): MessageType
