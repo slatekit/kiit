@@ -64,7 +64,7 @@ class Example_Entities : Cmd("entities") {
                          override val updatedAt : DateTime = DateTime.now(),
                          override val updatedBy : Long = 0,
                          override val createdBy : Long = 0,
-                         override val uniqueId  : String = Random.stringGuid(false)
+                         override val uniqueId  : String = Random.guid()
                        )
     : EntityWithId, EntityWithTime, EntityWithUser, EntityWithGuid
   {
@@ -88,7 +88,7 @@ class Example_Entities : Cmd("entities") {
                           override val updatedAt : DateTime = DateTime.now(),
                           override val updatedBy : Long = 0,
                           override val createdBy : Long = 0,
-                          override val uniqueId  : String = Random.stringGuid(false)
+                          override val uniqueId  : String = Random.guid()
                         )
     : EntityWithId, EntityWithMeta
 

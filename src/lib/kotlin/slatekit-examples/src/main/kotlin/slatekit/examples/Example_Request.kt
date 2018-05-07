@@ -65,7 +65,7 @@ class Example_Request : Cmd("request") {
                 meta     = InputArgs(mapOf("api-key" to "ABC-123")),
                 data     = InputArgs(mapOf("userId" to 5001)),
                 raw      = "the raw HTTP SparkJava request or CLI ShellCommand",
-                tag      = Random.stringGuid()
+                tag      = Random.guid()
         )
 
         // NOTES: ResultSupport trait builds results that simulate Http Status codes

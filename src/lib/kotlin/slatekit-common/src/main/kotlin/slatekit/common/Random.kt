@@ -62,11 +62,12 @@ object Random {
     fun alphaSymN(n: Int): String = randomize(n, ALPHASYM)
 
 
-    fun guid():String = stringGuid(false)
+    fun guid():String = stringGuid(true)
 
 
-    fun stringGuid(includeDashes: Boolean = true): String {
-        val result = java.util.UUID.randomUUID().toString().toUpperCase()
+    fun stringGuid(includeDashes: Boolean = true, upperCase: Boolean = false): String {
+        val uuid = java.util.UUID.randomUUID()
+        val result = if(upperCase) uuid.toString().toUpperCase() else uuid.toString()
         return if (!includeDashes)
             result.replace("-", "")
         else

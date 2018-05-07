@@ -20,6 +20,7 @@ import slatekit.common.Random.alphaSymN
 import slatekit.common.Random.digits3
 import slatekit.common.Random.digits6
 import slatekit.common.Random.digitsN
+import slatekit.common.Random.guid
 import slatekit.common.Random.string3
 import slatekit.common.Random.string6
 import slatekit.common.Random.stringGuid
@@ -54,7 +55,7 @@ class Example_Random : Cmd("random") {
 
     // CASE 2: Create Guid
     println("Random GUID")
-    println( "dashes - yes : " + stringGuid() )
+    println( "dashes - yes : " + guid() )
     println( "dashes - no  : " + stringGuid(includeDashes = false) )
     println()
 
