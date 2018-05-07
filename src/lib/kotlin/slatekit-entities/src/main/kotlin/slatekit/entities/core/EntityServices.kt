@@ -324,6 +324,20 @@ open interface EntityServices<T> : IEntityService where T : Entity {
 
 
     /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun findFirstByField(prop: KProperty<*>, value: Any): T? {
+        // The property could have a different column name
+        val field = this.repo().mapper().model().fields.first { it.name == prop.name }
+        val column = field.storedName
+        return entityRepo().findFirstBy(column, "=", value)
+    }
+
+
+    /**
      * finds items by a stored proc
      */
     fun findByProc(name:String, args:List<Any>? = null):List<T>? {

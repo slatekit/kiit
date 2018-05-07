@@ -234,11 +234,23 @@ abstract class EntityRepo<T>(
 
 
     /**
-     * finds items based on the query
-     * @param query
+     * finds items based on the field
+     * @param field: name of field
+     * @param op   : operator e.g. "="
+     * @param value: value of field to search against
      * @return
      */
     open fun findBy(field: String, op: String, value: Any): List<T> = listOf()
+
+
+    /**
+     * finds first item based on the field
+     * @param field: name of field
+     * @param op   : operator e.g. "="
+     * @param value: value of field to search against
+     * @return
+     */
+    open fun findFirstBy(field: String, op: String, value: Any): T? = null
 
 
     /**

@@ -102,6 +102,15 @@ interface EntityWithGuid {
 }
 
 
+
+/**
+ * Entity with support for sorting
+ */
+interface EntityWithSorting {
+    val sortIndex:Short
+}
+
+
 /**
  * Entity with support for both create/update timestamps and create/update user id
  */

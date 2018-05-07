@@ -16,6 +16,7 @@ package slatekit.entities.repos
 import slatekit.common.DateTime
 import slatekit.common.ListMap
 import slatekit.common.query.IQuery
+import slatekit.common.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
@@ -70,7 +71,8 @@ open class EntityRepoInMemory<T>(
      */
     override fun update(entity: T): T {
         // Check 1: already persisted ?
-        if (entity.isPersisted()) {
+        if (entity.isPersisted() && _items.contains(entity.identity())) {
+            _items = _items.minus(entity.identity())
             _items = _items.add(entity.identity(), entity)
         }
         return entity
@@ -120,6 +122,18 @@ open class EntityRepoInMemory<T>(
             }
         } ?: listOf()
         return matched
+    }
+
+
+    /**
+     * finds items based on the query
+     * @param field: name of field
+     * @param op   : operator e.g. "="
+     * @param value: value of field to search against
+     * @return
+     */
+    override fun findFirstBy(field: String, op: String, value: Any): T? {
+        return findBy(field, op, value).firstOrNull()
     }
 
 

@@ -97,11 +97,25 @@ abstract class EntityRepoSql<T>
 
     /**
      * finds items based on the query
-     * @param query
+     * @param field: name of field
+     * @param op   : operator e.g. "="
+     * @param value: value of field to search against
      * @return
      */
     override fun findBy(field: String, op: String, value: Any): List<T> {
         return find(Query().where(field, op, value))
+    }
+
+
+    /**
+     * finds items based on the query
+     * @param field: name of field
+     * @param op   : operator e.g. "="
+     * @param value: value of field to search against
+     * @return
+     */
+    override fun findFirstBy(field: String, op: String, value: Any): T? {
+        return find(Query().where(field, op, value)).firstOrNull()
     }
 
 
