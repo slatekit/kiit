@@ -21,6 +21,7 @@ import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.common.types.SSN
 import slatekit.common.types.ZipCode
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -52,7 +53,7 @@ open class Deserializer(
             val parameter = parameters[ndx]
             val paramName = parameter.name!!
             val paramType = parameter.type
-            val result:Any?? = when (paramType) {
+            val result:Any? = when (paramType) {
 
                 // Basic types
                 KTypes.KStringType        -> Conversions.handleString(data.getString(paramName))
@@ -67,6 +68,7 @@ open class Deserializer(
                 KTypes.KLocalDateTimeType -> data.getLocalDateTime(paramName)
                 KTypes.KZonedDateTimeType -> data.getZonedDateTime(paramName)
                 KTypes.KDateTimeType      -> data.getDateTime(paramName)
+                KTypes.KUUIDType          -> UUID.fromString(data.getString(paramName))
 
                 // Raw request
                 TypeRequest             -> req
@@ -154,6 +156,7 @@ open class Deserializer(
             KTypes.KDecDoubleType     -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw ).toDouble()) } ?: EncDouble("", 0.0)
             KTypes.KDecStringType     -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
             KTypes.KVarsType          -> Conversions.toVars(raw)
+            KTypes.KUUIDType          -> UUID.fromString(raw.toString())
 
         // Complex type
             else                    -> handleComplex(parent, raw, paramType)

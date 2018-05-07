@@ -4,6 +4,7 @@ import org.junit.Test
 import slatekit.apis.ApiConstants
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
+import slatekit.common.Random
 import slatekit.common.Request
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
@@ -15,7 +16,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import test.setup.MyEncryptor
-import java.util.ArrayList
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
@@ -57,6 +58,16 @@ class ConvertTests {
         assert(results[1] == LocalTime.of(10,30,45))
         assert(results[2] == LocalDateTime.of(2017,7,6, 10,30, 45))
         assert(results[3] == DateTime.of(2017,7,6, 10,30))
+    }
+
+
+    fun test_uuid(uid: UUID) {}
+    @Test fun can_parse_guids(){
+        val guid = Random.guid()
+        val test = """{ "uid": "$guid" }"""
+        val deserializer = Deserializer(Request.raw("a", "b", "c", "post", mapOf(), mapOf()))
+        val results = deserializer.convert(this::test_uuid.parameters, test)
+        assert(results[0] == UUID.fromString(guid))
     }
 
 
