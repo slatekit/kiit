@@ -3,6 +3,7 @@ package test.core
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.*
+import slatekit.common.http.HttpMethod
 import slatekit.common.http.HttpRequest
 import slatekit.core.push.MessageServiceGoogle
 
@@ -19,16 +20,24 @@ class MessagingTests {
     @Test fun can_send_notification() {
         val io = IOTest()
         val svc = MessageServiceGoogle("abc", call = io)
-        //val svc.sendNotification(to = "deviceId:1234", "payload:notification")
-        //assert(io.lastRequest != null)
+        val result = svc.sendAlert("deviceId:1234", "payload:notification")
+        assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
+        assert(io.lastRequest?.method ==  HttpMethod.POST)
+        assert(io.lastRequest?.headers?.get(0) ==  Pair("Content-Type", "application/json"))
+        assert(io.lastRequest?.headers?.get(1) == Pair("Authorization", "key=abc"))
+        assert(io.lastRequest?.entity == """{ "to" : "deviceId:1234", "notification" : payload:notification }""")
     }
 
 
     @Test fun can_send_share() {
         val io = IOTest()
         val svc = MessageServiceGoogle("abc", call = io)
-        //val svc.sendData(to = "deviceId:1234", "payload:data")
-        //assert(io.lastRequest != null)
+        val result = svc.sendData("deviceId:1234", "payload:data")
+        assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
+        assert(io.lastRequest?.method ==  HttpMethod.POST)
+        assert(io.lastRequest?.headers?.get(0) ==  Pair("Content-Type", "application/json"))
+        assert(io.lastRequest?.headers?.get(1) == Pair("Authorization", "key=abc"))
+        assert(io.lastRequest?.entity == """{ "to" : "deviceId:1234", "data" : payload:data }""")
     }
 
 

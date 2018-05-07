@@ -12,11 +12,33 @@ mantra: Simplicity above all else
  */
 package slatekit.core.push
 
-import slatekit.common.Require.requireText
 import slatekit.common.ResultMsg
 import java.util.concurrent.Future
 
 abstract class MessageServiceBase {
+    /**
+     * Sends a message as a notification
+     *
+     * @param  to : device/group to send to
+     * @return
+     */
+    fun sendAlert(to:String, payload:String): ResultMsg<Boolean> {
+        val message = Message(to, MessageTypeAlert, payload)
+        return send(message)
+    }
+
+
+    /**
+     * Sends a message as a notification
+     *
+     * @param  to : device/group to send to
+     * @return
+     */
+    fun sendData(to:String, payload:String): ResultMsg<Boolean> {
+        val message = Message(to, MessageTypeData, payload)
+        return send(message)
+    }
+
 
     /**
      * Sends the message
@@ -37,15 +59,4 @@ abstract class MessageServiceBase {
      */
     abstract fun sendAsync(msg: Message): Future<ResultMsg<Boolean>>
 
-
-    /**
-     * sends a message
-     *
-     * @param deviceId : destination device id
-     * @param message  : message to send
-     */
-    fun send(deviceId: String, message: Message): ResultMsg<Boolean> {
-        requireText(deviceId, "device id not provided")
-        return send(message.copy(to = message.to))
-    }
 }
