@@ -16,6 +16,7 @@ import slatekit.common.ResultMsg
 import java.util.concurrent.Future
 
 abstract class MessageServiceBase {
+
     /**
      * Sends a message as a notification
      *
@@ -23,6 +24,17 @@ abstract class MessageServiceBase {
      * @return
      */
     fun sendAlert(to:String, payload:String): ResultMsg<Boolean> {
+        return sendAlert(listOf(to), payload)
+    }
+
+
+    /**
+     * Sends a message as a notification
+     *
+     * @param  to : device/group to send to
+     * @return
+     */
+    fun sendAlert(to:List<String>, payload:String): ResultMsg<Boolean> {
         val message = Message(to, MessageTypeAlert, payload)
         return send(message)
     }
@@ -35,6 +47,17 @@ abstract class MessageServiceBase {
      * @return
      */
     fun sendData(to:String, payload:String): ResultMsg<Boolean> {
+       return sendData(listOf(to), payload)
+    }
+
+
+    /**
+     * Sends a message as a notification
+     *
+     * @param  to : device/group to send to
+     * @return
+     */
+    fun sendData(to:List<String>, payload:String): ResultMsg<Boolean> {
         val message = Message(to, MessageTypeData, payload)
         return send(message)
     }

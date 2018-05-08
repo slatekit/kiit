@@ -25,7 +25,7 @@ import slatekit.common.DateTime
  * @param data      : The actual dynamic payload of the message
  */
 data class Message(
-    val to: String,
+    val to: List<String>,
     val messageType:MessageType = MessageTypeData,
     val payload: String = ""
 ) {

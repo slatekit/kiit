@@ -67,9 +67,16 @@ open class MessageServiceGoogle(_key: String,
      * Builds the Message to send as Push notification as an immutable HTTP Request
      */
     protected fun buildRequest(msg:Message): HttpRequest {
+
+        val recipient = if(msg.to.size == 1) {
+            "\"" + msg.to[0] + "\""
+        } else {
+            val ids = msg.to.joinToString(",")
+            "[$ids]"
+        }
         val content = when(msg.messageType) {
-            is MessageTypeData -> "{ \"to\" : \"" + msg.to + "\", \"data\" : " + msg.payload + " }"
-            else               -> "{ \"to\" : \"" + msg.to + "\", \"notification\" : " + msg.payload + " }"
+            is MessageTypeData -> "{ \"to\" : " + recipient + ", \"data\" : " + msg.payload + " }"
+            else               -> "{ \"to\" : " + recipient + ", \"notification\" : " + msg.payload + " }"
         }
 
         // Build immutable http request.

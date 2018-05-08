@@ -13,6 +13,8 @@
 
 package slatekit.common
 
+import java.util.*
+
 
 /**
  * NOTE: Using object here due to STRANGE compile issues
@@ -61,6 +63,15 @@ fun String.toId(lowerCase: Boolean = true): String {
     val converted = if (lowerCase) formatted.toLowerCase() else formatted
     val finalText = if (converted.isNullOrBlank() ) "_" else converted
     return finalText
+}
+
+
+/**
+ * Converts a string to a "soft" id that has "_" instead of spaces.
+ * e.g: "abc& $[]123" = "abc&_$[]123"
+ */
+fun String.toUUId(): UUID {
+    return UUID.fromString(this)
 }
 
 
