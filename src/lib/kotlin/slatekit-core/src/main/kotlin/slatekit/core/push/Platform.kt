@@ -18,7 +18,7 @@ interface Platform {
 
 
 object PlatformIOS   : Platform { override val name:String = "ios" }
-object PlatformAnd   : Platform { override val name:String = "and" }
+object PlatformAnd   : Platform { override val name:String = "android" }
 object PlatformWeb   : Platform { override val name:String = "web" }
 object PlatformSrv   : Platform { override val name:String = "server" }
 object PlatformNone  : Platform { override val name:String = "none" }
