@@ -12,6 +12,9 @@ data class AuthorR(
         val id: Long             = 0,
 
         @property:Field(required = true)
+        val uuid: String            = Random.stringGuid(),
+
+        @property:Field(required = true)
         val createdAt: DateTime = DateTime.now(),
 
         @property:Field(required = true)
@@ -22,9 +25,6 @@ data class AuthorR(
 
         @property:Field(required = true)
         val updatedBy: Long = 0,
-
-        @property:Field(required = true)
-        val uniqueId: String            = Random.stringGuid(),
 
         @property:Field(required = true)
         val email:String = "",

@@ -39,7 +39,7 @@ class MapperTests {
         val entity = mapper.mapFrom(source)!!as AuthorR
 
         assert( entity.id == 1L )
-        assert( entity.uniqueId == "ABC" )
+        assert( entity.uuid == "ABC" )
         assert( entity.email == "kishore@abc.com" )
         assert( entity.isActive )
         assert( entity.age == 35 )
@@ -58,7 +58,7 @@ class MapperTests {
         val entity = mapper.mapFrom(source)!!as AuthorW
 
         assert( entity.id == 1L )
-        assert( entity.uniqueId == "ABC" )
+        assert( entity.uuid == "ABC" )
         assert( entity.email == "kishore@abc.com" )
         assert( entity.isActive )
         assert( entity.age == 35 )
@@ -91,11 +91,11 @@ class MapperTests {
 
         val data = ListMap(listOf(
                 Pair("id", 1L),
+                Pair("uuid", "ABC"),
                 Pair("createdAt", java.sql.Timestamp(2017, 1, 1, 12,0,0,0)),
                 Pair("createdBy", 100L),
                 Pair("updatedAt", java.sql.Timestamp(2017, 1, 2, 12,0,0,0)),
                 Pair("updatedBy", 101L),
-                Pair("uniqueId", "ABC"),
                 Pair("email", "kishore@abc.com"),
                 Pair("isActive", true),
                 Pair("age", 35),
