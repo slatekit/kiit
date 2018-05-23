@@ -77,7 +77,7 @@ data class Mod(
 
 
         @property:Field(length = 50)
-        override val uniqueId: String = ""
+        override val uuid: String = ""
 )
     : EntityWithId, EntityWithGuid {
 }

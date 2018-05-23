@@ -75,7 +75,7 @@ class Entity_Services_Tests {
         val User5 = userSvc.get(5)!!
         assert(User5 != null)
         assert(User5.email == "jdoe5@abc.com")
-        //assert( User5.get.uniqueId != "")
+        //assert( User5.get.uuid != "")
     }
 
 

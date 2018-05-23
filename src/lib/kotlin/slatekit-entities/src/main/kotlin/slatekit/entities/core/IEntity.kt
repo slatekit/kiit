@@ -98,7 +98,7 @@ interface EntityWithUser {
  * Entity with support for a unique id ( GUID )
  */
 interface EntityWithGuid {
-    val uniqueId: String
+    val uuid: String
 }
 
 
@@ -118,7 +118,6 @@ interface EntityWithShard {
     val shard: String
     val tag  : String
 }
-
 
 
 /**

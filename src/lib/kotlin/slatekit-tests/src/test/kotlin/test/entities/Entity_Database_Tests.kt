@@ -62,7 +62,7 @@ class Entity_Database_Tests {
                 test_localtime = LocalTime.of(12,30,0),
                 test_localdatetime = LocalDateTime.of(2017, 7, 7, 12,30,0),
                 test_timestamp = Instant.now(),
-                 test_uuid = UUID.fromString(sampleUUID1),
+                test_uuid = UUID.fromString(sampleUUID1),
                 test_uniqueId = UniqueId.fromString(sampleUUID2)
         )
         svc.update(update)

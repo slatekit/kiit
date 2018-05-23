@@ -12,6 +12,9 @@ class AuthorW {
     var id: Long = 0
 
     @property:Field(required = true)
+    var uuid: String = Random.stringGuid()
+
+    @property:Field(required = true)
     var createdAt: DateTime = DateTime.now()
 
     @property:Field(required = true)
@@ -22,9 +25,6 @@ class AuthorW {
 
     @property:Field(required = true)
     var updatedBy: Long = 0
-
-    @property:Field(required = true)
-    var uniqueId: String = Random.stringGuid()
 
     @property:Field(required = true)
     var email: String = ""
