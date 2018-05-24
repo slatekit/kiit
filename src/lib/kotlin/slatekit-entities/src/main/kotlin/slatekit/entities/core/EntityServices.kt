@@ -36,9 +36,9 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      * @param entity
      * @return
      */
-    fun update(entity: T): Unit {
+    fun update(entity: T): T {
         val finalEntity = applyFieldData(2, entity)
-        entityRepo().update(finalEntity)
+        return entityRepo().update(finalEntity)
     }
 
 
@@ -90,8 +90,8 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      *
      * @param entity
      */
-    fun delete(entity: T?): Unit {
-        entityRepo().delete(entity)
+    fun delete(entity: T?): Boolean {
+        return entityRepo().delete(entity)
     }
 
 
@@ -129,6 +129,16 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      */
     fun get(id: Long): T? {
         return entityRepo().get(id)
+    }
+
+
+    /**
+     * gets the entity from the datastore using the id
+     * @param id
+     * @return
+     */
+    fun get(ids: List<Long>): List<T> {
+        return entityRepo().get(ids)
     }
 
 

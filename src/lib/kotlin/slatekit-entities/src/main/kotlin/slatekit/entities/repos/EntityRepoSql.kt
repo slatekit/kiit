@@ -70,8 +70,22 @@ abstract class EntityRepoSql<T>
     }
 
 
+    /**
+     * gets the entity associated with the id
+     */
     override fun get(id: Long): T? {
         return sqlMapOne("select * from ${repoName()} where ${idName()} = $id;")
+    }
+
+
+    /**
+     * gets all the entities using the supplied ids
+     * @param ids
+     * @return
+     */
+    override fun get(ids: List<Long>): List<T> {
+        val delimited = ids.joinToString(",")
+        return sqlMapMany("select * from ${repoName()} where ${idName()} in ($delimited);") ?: listOf()
     }
 
 

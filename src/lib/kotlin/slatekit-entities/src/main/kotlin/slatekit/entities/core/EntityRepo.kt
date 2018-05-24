@@ -142,6 +142,14 @@ abstract class EntityRepo<T>(
 
 
     /**
+     * gets the entity from the datastore using the id
+     * @param ids
+     * @return
+     */
+    abstract fun get(ids: List<Long>): List<T>
+
+
+    /**
      * gets all the entities from the datastore.
      * @return
      */

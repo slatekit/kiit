@@ -104,6 +104,16 @@ open class EntityRepoInMemory<T>(
 
 
     /**
+     * gets all the entities using the supplied ids
+     * @param ids
+     * @return
+     */
+    override fun get(ids: List<Long>): List<T> {
+        return ids.mapNotNull { _items[it] }
+    }
+
+
+    /**
      * finds items based on the query
      * @param query
      * @return
