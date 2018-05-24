@@ -64,12 +64,23 @@ object Reflector {
     }
 
 
+    fun getEnumSample(cls:KClass<*>) : Int {
+        val companion = cls.companionObjectInstance
+        return when(companion) {
+            is EnumSupport -> companion.all()[0].value
+            else           -> -1
+        }
+    }
+
+
     fun getEnumValue(cls:KClass<*>, value:Any?) : EnumLike {
         val companion = cls.companionObjectInstance
         return when(companion) {
             is EnumSupport -> {
                 when(value) {
+                    is EnumLike -> value
                     is Int -> companion.convert(value)
+                    is Long -> companion.convert(value.toInt())
                     is String -> companion.parse(value)
                     null -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with null value")
                     else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with value : " + value)
