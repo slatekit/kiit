@@ -15,6 +15,7 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiConstants
 import slatekit.common.*
+import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.integration.mods.Mod
 
@@ -76,6 +77,17 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     @ApiAction(name = "", desc = "gets the names of the modules", roles = "@parent")
     fun names(): List<String> {
         return _items.all().map { "${it.info.name} ver: ${it.info.version}" }
+    }
+
+
+    @ApiAction(name = "", desc = "gets the names of the modules", roles = "@parent")
+    fun uninstallAll(): ResultEx<String> {
+        val all = _items.all().map{ it.info.name }
+        val results = all.map { name -> uninstall(name) }
+        val success = results.foldRight(true, {res, acc -> if(!res.success) false else acc})
+        val message = results.map( { result -> if(result.success) "" else result.msg }).joinToString { newline }
+        val result = if(success) Success("Uninstalled all") else Failure(Exception(message))
+        return result
     }
 
 
