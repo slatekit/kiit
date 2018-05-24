@@ -1,6 +1,7 @@
 package slatekit.meta
 
 import slatekit.common.DateTime
+import slatekit.common.EnumLike
 import slatekit.common.Serializer
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -103,6 +104,13 @@ class SerializerSample(objectSerializer: ((Serializer, Any, Int) -> Unit)? = nul
      * @param delimiter: The delimiter to use between key/value pairs
      */
     fun serializeObject(parent:Any, ktype: KType, depth: Int): Unit {
+        // Handle enum
+        if(Reflector.isSlateKitEnum(ktype.classifier as KClass<*>)){
+            val enumVal = Reflector.getEnumSample(ktype.classifier as KClass<*>)
+            //serializerType(parent, KTypes.KIntType, depth)
+            _buff.append( enumVal)
+            return
+        }
 
         // Begin
         onContainerStart(ktype, ParentType.OBJECT_TYPE, depth)

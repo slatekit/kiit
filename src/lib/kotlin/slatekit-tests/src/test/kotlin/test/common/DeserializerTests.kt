@@ -16,6 +16,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import test.setup.MyEncryptor
+import test.setup.StatusEnum
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -68,6 +69,16 @@ class ConvertTests {
         val deserializer = Deserializer(Request.raw("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_uuid.parameters, test)
         assert(results[0] == UUID.fromString(guid))
+    }
+
+
+    fun test_enum(status: StatusEnum) {}
+    @Test fun can_parse_enum(){
+        val enumVal = StatusEnum.Active
+        val test = """{ "status": ${enumVal.value} }"""
+        val deserializer = Deserializer(Request.raw("a", "b", "c", "post", mapOf(), mapOf()))
+        val results = deserializer.convert(this::test_enum.parameters, test)
+        assert(results[0] == enumVal)
     }
 
 

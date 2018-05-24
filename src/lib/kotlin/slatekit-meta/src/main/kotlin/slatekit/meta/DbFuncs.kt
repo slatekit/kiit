@@ -1,6 +1,7 @@
 package slatekit.meta
 
 import slatekit.common.db.Db
+import slatekit.common.db.DbFieldTypeNumber
 import slatekit.common.db.DbUtils
 import slatekit.common.db.types.DbSource
 import slatekit.common.newline
@@ -40,7 +41,11 @@ fun buildAddTable(dbSrc:DbSource, model: Model): String
 
     // Build sql for the data fields.
     val dataFieldSql = dataFields.fold("", { acc, field ->
-        val sqlType = DbUtils.getTypeFromLang(field.dataType.java)
+        val sqlType = if(field.isEnum) {
+            DbFieldTypeNumber
+        } else {
+            DbUtils.getTypeFromLang(field.dataType.java)
+        }
         acc + ", " + dbSrc.buildAddCol(field.name, sqlType, field.isRequired, field.maxLength)
     })
     buff.append( dataFieldSql )

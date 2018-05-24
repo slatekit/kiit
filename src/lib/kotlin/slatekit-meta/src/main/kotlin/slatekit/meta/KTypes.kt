@@ -30,6 +30,7 @@ object KTypes {
     val KDocClass            = Doc::class
     val KVarsClass           = Vars::class
     val KSmartStringClass    = SmartString::class
+    val KEnumLikeClass       = EnumLike::class
     val KContentClass        = Content::class
     val KDecStringClass      = EncString::class
     val KDecIntClass         = EncInt::class
@@ -56,6 +57,7 @@ object KTypes {
     val KDocType           = Doc::class.createType()
     val KVarsType          = Vars::class.createType()
     val KSmartStringType   = SmartString::class.createType()
+    val KEnumLikeType      = EnumLike::class.createType()
     val KContentType       = Content::class.createType()
     val KDecStringType     = EncString::class.createType()
     val KDecIntType        = EncInt::class.createType()

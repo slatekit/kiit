@@ -36,6 +36,9 @@ data class AuthorR(
         val age:Int = 35,
 
         @property:Field(required = true)
+        val status:StatusEnum = StatusEnum.Pending,
+
+        @property:Field(required = true)
         val salary:Double = 20.5,
 
         @property:Field(required = true)

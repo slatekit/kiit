@@ -245,6 +245,10 @@ open class Deserializer(
         else if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
             handleSmartString(raw, tpe)
         }
+        // Case 4: Slate Kit Enm
+        else if ( cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0 ) {
+            Reflector.getEnumValue(cls, raw)
+        }
         else {
             handleObject(raw, tpe)!!
         }

@@ -17,6 +17,7 @@ import slatekit.common.DateTime
 import slatekit.common.ext.tail
 import slatekit.common.newline
 import slatekit.meta.Serialization
+import test.setup.StatusEnum
 import test.setup.User
 
 /**
@@ -52,6 +53,13 @@ class SerializerTests {
         val serializer = Serialization.json()
         assert( serializer.serialize(false)          == "false" )
         assert( serializer.serialize(true)           == "true"  )
+    }
+
+
+    @Test fun can_serialize_enums() {
+        val serializer = Serialization.json()
+        assert( serializer.serialize(StatusEnum.Pending)          == "0" )
+        assert( serializer.serialize(StatusEnum.Active)           == "1" )
     }
 
 
@@ -117,12 +125,12 @@ class SerializerTests {
         val serializer = Serialization.sampler()
         val parameters = SerializerTests::sampleParams.parameters.tail()
         val text = serializer.serialize(parameters)
-        val expected = """["str" : "abc", "bln" : true, "numI" : 10, "numL" : 100, "date" : "2017-08-20T00:00-04:00[America/New_York]", "user" : {"id" : 100, "email" : "abc", "firstName" : "abc", "lastName" : "abc", "male" : true, "age" : 10}]"""
+        val expected = """["str" : "abc", "bln" : true, "numI" : 10, "numL" : 100, "date" : "2017-08-20T00:00-04:00[America/New_York]", "status" : 0, "user" : {"id" : 100, "email" : "abc", "firstName" : "abc", "lastName" : "abc", "male" : true, "age" : 10}]"""
         assert(text == expected)
     }
 
 
-    fun sampleParams(str:String, bln:Boolean, numI:Int, numL:Long, date:DateTime, user: User):Unit {
+    fun sampleParams(str:String, bln:Boolean, numI:Int, numL:Long, date:DateTime, status:StatusEnum, user: User):Unit {
 
     }
 }

@@ -13,6 +13,8 @@
 
 package slatekit.meta
 
+import slatekit.common.EnumLike
+import slatekit.common.EnumSupport
 import kotlin.reflect.*
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
@@ -51,6 +53,43 @@ object Reflector {
         val res = con.call(*args)
         return res as T
     }
+
+
+    fun isSlateKitEnum(cls:KClass<*>) : Boolean {
+        val companion = cls.companionObjectInstance
+        return when(companion) {
+            is EnumSupport -> true
+            else           -> false
+        }
+    }
+
+
+    fun getEnumSample(cls:KClass<*>) : Int {
+        val companion = cls.companionObjectInstance
+        return when(companion) {
+            is EnumSupport -> companion.all()[0].value
+            else           -> -1
+        }
+    }
+
+
+    fun getEnumValue(cls:KClass<*>, value:Any?) : EnumLike {
+        val companion = cls.companionObjectInstance
+        return when(companion) {
+            is EnumSupport -> {
+                when(value) {
+                    is EnumLike -> value
+                    is Int -> companion.convert(value)
+                    is Long -> companion.convert(value.toInt())
+                    is String -> companion.parse(value)
+                    null -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with null value")
+                    else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with value : " + value)
+                }
+            }
+            else  -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", enum does not extend EnumSupport")
+        }
+    }
+
 
 
     fun getFieldValue(inst: Any, name: String): Any? {

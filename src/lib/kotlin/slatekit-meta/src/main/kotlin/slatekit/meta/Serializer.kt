@@ -1,5 +1,6 @@
 package slatekit.meta
 
+import slatekit.common.EnumLike
 import slatekit.common.Serializer
 import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
@@ -21,6 +22,13 @@ object Serialization {
      * @param delimiter: The delimiter to use between key/value pairs
      */
     fun serializeObject(serializer: Serializer, item: Any, depth: Int): Unit {
+
+        // Handle enum
+        if(Reflector.isSlateKitEnum(item.kClass)){
+            val enumVal = (item as EnumLike).value
+            serializer.serialize(enumVal)
+            return
+        }
 
         // Begin
         serializer.onContainerStart(item, Serializer.ParentType.OBJECT_TYPE, depth)

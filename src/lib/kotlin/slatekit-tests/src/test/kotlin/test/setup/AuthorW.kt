@@ -36,6 +36,9 @@ class AuthorW {
     var age: Int = 35
 
     @property:Field(required = true)
+    var status:StatusEnum = StatusEnum.Pending
+
+    @property:Field(required = true)
     var salary: Double = 20.5
 
     @property:Field(required = true)
