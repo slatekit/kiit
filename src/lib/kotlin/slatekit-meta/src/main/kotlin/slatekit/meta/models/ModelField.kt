@@ -15,6 +15,7 @@ package slatekit.meta.models
 
 import slatekit.common.DateTime
 import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import kotlin.reflect.*
 
 
@@ -29,6 +30,7 @@ data class ModelField (
                          val isRequired:Boolean      = true,
                          val minLength:Int           = -1,
                          val maxLength:Int           = -1,
+                         val isEnum:Boolean          = false,
                          val defaultVal:Any?         = null,
                          val encrypt:Boolean         = false,
                          val key:String              = "",
@@ -76,7 +78,7 @@ data class ModelField (
     }
 
 
-    fun isBasicType(): Boolean = KTypes.isBasicType(dataKType)
+    fun isBasicType(): Boolean = KTypes.isBasicType(dataKType) || isEnum
 
 
 
@@ -134,12 +136,14 @@ data class ModelField (
       ) : ModelField
     {
       val finalName = destName ?: name
+      val isEnum = Reflector.isSlateKitEnum(dataType)
       val field = ModelField (
               name = name,
               desc = desc,
               prop = prop,
               dataType = dataType,
               dataKType = dataKType,
+              isEnum = isEnum,
               storedName = finalName,
               pos = 0,
               isRequired = isRequired,

@@ -338,6 +338,22 @@ class Model(val name: String,
 
 
     /**
+     * builds a new model by adding a new object field to the list of fields.
+     * @param name
+     * @param desc
+     * @param isRequired
+     * @param dataType
+     * @param storedName
+     * @param defaultValue
+     * @return
+     */
+    fun addEnum(name: String, desc: String = "", isRequired: Boolean = false, dataType: KClass<*>,
+                  storedName: String? = null, defaultValue: Any? = null): Model {
+        return addField(null, name, dataType, dataType.createType(), desc, isRequired, 0, 0, storedName, defaultValue, false)
+    }
+
+
+    /**
      * builds a new model by adding a new field to the list of fields using the supplied fields.
      * @param name
      * @param dataType

@@ -1,5 +1,6 @@
 package slate.test
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
@@ -21,9 +22,7 @@ import slatekit.meta.kClass
 import test.setup.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaField
 import kotlin.reflect.jvm.javaSetter
 import kotlin.reflect.jvm.javaType
@@ -131,6 +130,26 @@ class ReflectorTests {
         assert(user is User3)
         assert(user.name == "ki")
         assert(user.email == "k@abc.com")
+    }
+
+
+    @Test fun can_check_for_slatekit_enum(){
+        Assert.assertTrue(Reflector.isSlateKitEnum(StatusEnum::class))
+        Assert.assertFalse(Reflector.isSlateKitEnum(RoleEnum::class))
+    }
+
+
+    @Test fun can_parse_enum_value_using_name(){
+        val expected = StatusEnum.Active
+        val actual = Reflector.getEnumValue(StatusEnum::class, "Active")
+        Assert.assertTrue(expected == actual)
+    }
+
+
+    @Test fun can_parse_enum_value_using_number(){
+        val expected = StatusEnum.Active
+        val actual = Reflector.getEnumValue(StatusEnum::class, 1)
+        Assert.assertTrue(expected == actual)
     }
 
 

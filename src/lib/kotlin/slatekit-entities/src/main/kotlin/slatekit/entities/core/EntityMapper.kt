@@ -16,6 +16,7 @@ package slatekit.entities.core
 
 
 import slatekit.common.DateTime
+import slatekit.common.EnumLike
 import slatekit.common.UniqueId
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.nonEmptyOrDefault
@@ -134,6 +135,10 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
                 else if (mapping.dataType == KTypes.KUniqueIdClass) {
                     val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId
                     //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
+                    "'" + raw.toString() + "'"
+                }
+                else if (mapping.isEnum) {
+                    val raw = (item as EnumLike).value
                     "'" + raw.toString() + "'"
                 }
                 else // Object

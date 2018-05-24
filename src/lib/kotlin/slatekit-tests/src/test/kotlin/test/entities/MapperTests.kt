@@ -17,10 +17,7 @@ import slatekit.common.*
 import slatekit.common.records.RecordMap
 import slatekit.entities.core.EntityMapper
 import slatekit.meta.models.ModelMapper
-import test.setup.Address
-import test.setup.AuthorR
-import test.setup.AuthorW
-import test.setup.UserWithAddress
+import test.setup.*
 import java.util.*
 
 /**
@@ -44,6 +41,7 @@ class MapperTests {
         assert( entity.isActive )
         assert( entity.age == 35 )
         assert( entity.salary == 400.5 )
+        assert( entity.status == StatusEnum.Active )
         assert( entity.uid == UUID.fromString(sampleUUID1) )
         assert( entity.shardId == UniqueId.fromString(sampleUUID2) )
     }
@@ -62,6 +60,7 @@ class MapperTests {
         assert( entity.email == "kishore@abc.com" )
         assert( entity.isActive )
         assert( entity.age == 35 )
+        assert( entity.status == StatusEnum.Active )
         assert( entity.salary == 400.5 )
         assert( entity.uid == UUID.fromString(sampleUUID1) )
         assert( entity.shardId == UniqueId.fromString(sampleUUID2) )
@@ -99,6 +98,7 @@ class MapperTests {
                 Pair("email", "kishore@abc.com"),
                 Pair("isActive", true),
                 Pair("age", 35),
+                Pair("status", StatusEnum.Active.value),
                 Pair("salary", 400.5),
                 Pair("uid", UUID.fromString(sampleUUID1)),
                 Pair("shardId", UniqueId.fromString(sampleUUID2))

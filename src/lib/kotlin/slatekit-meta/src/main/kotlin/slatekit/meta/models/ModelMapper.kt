@@ -222,8 +222,14 @@ open class ModelMapper(protected val _model: Model,
             KTypes.KUUIDClass          -> record.getUUID(colName)
             KTypes.KUniqueIdClass      -> record.getUniqueId(colName)
             else                       -> {
-                val model = mapFromToValType(mapping.name + "_", record, mapping.model!!)
-                model
+                if(mapping.isEnum){
+                    val enumInt = record.getInt(colName)
+                    val enumValue = Reflector.getEnumValue(mapping.dataType, enumInt)
+                    enumValue
+                } else {
+                    val model = mapFromToValType(mapping.name + "_", record, mapping.model!!)
+                    model
+                }
             }
         }
         return dataValue
