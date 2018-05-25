@@ -14,6 +14,9 @@
 package slatekit.entities.core
 
 import slatekit.common.DateTime
+import slatekit.common.Serializer
+import slatekit.meta.Serialization
+import slatekit.meta.models.Model
 
 
 interface Entity {
@@ -127,4 +130,46 @@ interface EntityWithMeta
     : EntityWithTime
       , EntityWithUser
       , EntityWithGuid {
+}
+
+
+interface EntityModel {
+
+    /**
+     * Gets this entity as a generic Model schema, which holds all
+     * the fields defined in the model for persistence.
+     */
+    val model:Model
+
+
+    /**
+     * Serializes this entity to json
+     * {
+     *   "name" : "user1",
+     *   "email": "user1@abc.com"
+     * }
+     */
+    fun toJson(): String = serialize(Serialization.json())
+
+
+    /**
+     * Serializes this entity to a csv record
+     * name   ,  email
+     * "user1",  user1@abc.com
+     */
+    fun toCsv(): String = serialize(Serialization.csv())
+
+
+    /**
+     * Serializes this entity to a props structure
+     * name : user1
+     * email: user1@abc.com
+     */
+    fun toProps(): String = serialize(Serialization.props())
+
+
+    /**
+     * Serializes this entity using the specific serializer supplied.
+     */
+    fun serialize(serializer: Serializer): String = serializer.serialize(this)
 }
