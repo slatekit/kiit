@@ -28,6 +28,8 @@ class CodeGenJS(settings:CodeGenSettings) : CodeGenBase(settings) {
             Pair(KTypes.KDocType           , TypeInfo(true, false, "String"  , "String"  , KTypes.KDocClass          , KTypes.KDocClass          , "String"  + ".class")),
             Pair(KTypes.KVarsType          , TypeInfo(true, false, "String"  , "String"  , KTypes.KVarsClass         , KTypes.KVarsClass         , "String"  + ".class")),
             Pair(KTypes.KSmartStringType   , TypeInfo(true, false, "String"  , "String"  , KTypes.KSmartStringClass  , KTypes.KSmartStringClass  , "String"  + ".class")),
+            Pair(KTypes.KUniqueIdType      , TypeInfo(true, false, "String"  , "String"  , KTypes.KUniqueIdClass     , KTypes.KUniqueIdClass     , "String"  + ".class")),
+            Pair(KTypes.KUUIDType          , TypeInfo(true, false, "String"  , "String"  , KTypes.KUUIDClass         , KTypes.KUUIDClass         , "String"  + ".class")),
             Pair(KTypes.KContentType       , TypeInfo(true, false, "String"  , "String"  , KTypes.KContentClass      , KTypes.KContentClass      , "String"  + ".class")),
             Pair(KTypes.KDecStringType     , TypeInfo(true, false, "String"  , "String"  , KTypes.KDecStringClass    , KTypes.KDecStringClass    , "String"  + ".class")),
             Pair(KTypes.KDecIntType        , TypeInfo(true, false, "String"  , "String"  , KTypes.KDecIntClass       , KTypes.KDecIntClass       , "String"  + ".class")),
