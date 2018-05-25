@@ -13,6 +13,7 @@
 
 package slatekit.entities.core
 
+import slatekit.common.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
 import slatekit.common.query.IQuery
@@ -34,13 +35,14 @@ abstract class EntityRepo<T>(
         entityIdType: KClass<*>? = null,
         entityMapper: EntityMapper? = null,
         nameOfTable: String? = null,
-        encryptor: Encryptor? = null
+        encryptor: Encryptor? = null,
+        namer: Namer? = null
 )
     : IEntityRepo where T : Entity {
     protected val _nameOfTable = nameOfTable
     protected val _entityType: KClass<*> = entityType
     protected val _entityIdType: KClass<*> = entityIdType ?: Long::class
-    protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType)
+    protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType, namer = namer)
     protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, encryptor = encryptor)
 
 

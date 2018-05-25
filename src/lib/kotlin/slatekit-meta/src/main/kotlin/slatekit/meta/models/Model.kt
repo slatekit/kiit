@@ -15,6 +15,7 @@ package slatekit.meta.models
 
 
 import slatekit.common.DateTime
+import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 import java.time.LocalDate
@@ -37,7 +38,8 @@ class Model(val name: String,
             val dataType: KClass<*>? = null,
             val desc: String = "",
             tableName: String = "",
-            private val _propList: List<ModelField>? = null) {
+            private val _propList: List<ModelField>? = null,
+            val namer:Namer? = null) {
 
     constructor(dataType: KClass<*>) : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType)
 
@@ -381,7 +383,8 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
+        val finalDestName = buildDestName(name, destName)
+        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired, minLength, maxLength, finalDestName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 
@@ -415,7 +418,8 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
+        val finalDestName = buildDestName(name, destName)
+        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired, minLength, maxLength, finalDestName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 
@@ -423,5 +427,13 @@ class Model(val name: String,
     fun add(field: ModelField): Model {
         val newPropList = _propList?.plus(field) ?: listOf(field)
         return Model(this.name, fullName, this.dataType, desc, table, newPropList)
+    }
+
+
+    fun buildDestName(name:String, destName:String?): String {
+        return when(destName)  {
+            null -> namer?.rename(name) ?: name
+            else -> destName
+        }
     }
 }

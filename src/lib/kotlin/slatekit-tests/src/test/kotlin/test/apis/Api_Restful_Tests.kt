@@ -40,7 +40,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 */
     @Test fun can_get_all() {
 
-       ensure("", "get", mapOf(), namer = Namer("lower-hyphen", ::lowerHyphen), callback ={ r1 ->
+       ensure("", "get", mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
 
             assert(r1.success)
             assert(r1.code == SUCCESS)
@@ -165,8 +165,8 @@ class Api_Restful_Tests : ApiTestsBase() {
         callback(r1)
 
         val api2 = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()), namer = namer)
-        val name = namer?.name("SampleREST")?.text ?: "SampleREST"
-        val act  = namer?.name(action)?.text ?: action
+        val name = namer?.rename("SampleREST")  ?: "SampleREST"
+        val act  = namer?.rename(action) ?: action
         val r2 = api2.call("app", name, act, verb, mapOf(), args)
         callback(r2)
     }

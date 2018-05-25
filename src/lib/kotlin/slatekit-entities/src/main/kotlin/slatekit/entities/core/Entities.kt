@@ -14,6 +14,7 @@
 package slatekit.entities.core
 
 import slatekit.common.ListMap
+import slatekit.common.Namer
 import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
@@ -63,7 +64,8 @@ import kotlin.reflect.KClass
  */
 class Entities(private val _dbs: DbLookup? = null,
                val _enc:Encryptor? = null,
-               val logs:Logs = LogsDefault) {
+               val logs:Logs = LogsDefault,
+               val namer:Namer? = null) {
 
     private var _info = ListMap<String, EntityInfo>(listOf())
     private val _mappers = mutableMapOf<String, EntityMapper>()
@@ -269,8 +271,8 @@ class Entities(private val _dbs: DbLookup? = null,
         val entityKey = entityType.qualifiedName
 
         fun createMapper(entityType: KClass<*>): EntityMapper {
-            val entityModel = model ?: ModelMapper.loadSchema(entityType)
-            val em = EntityMapper(entityModel, encryptor = _enc)
+            val entityModel = model ?: ModelMapper.loadSchema(entityType, namer = namer)
+            val em = EntityMapper(entityModel, encryptor = _enc, namer = namer)
             return em
         }
 

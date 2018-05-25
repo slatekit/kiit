@@ -1,5 +1,7 @@
 package slatekit.meta
 
+import slatekit.common.LowerCamel
+import slatekit.common.Namer
 import slatekit.common.db.Db
 import slatekit.common.db.DbFieldTypeNumber
 import slatekit.common.db.DbUtils
@@ -25,12 +27,12 @@ fun createTable(db: Db, model: Model): Unit {
 /**
  * Builds the table DDL sql statement using the model supplied.
  */
-fun buildAddTable(dbSrc:DbSource, model: Model): String
+fun buildAddTable(dbSrc:DbSource, model: Model, namer: Namer? = null): String
 {
     val buff = StringBuilder()
 
     // 1. build the "CREATE <tablename>
-    buff.append(buildCreateTable(model.name) )
+    buff.append(buildCreateTable(namer?.rename(model.name) ?: model.name) )
 
     // 2. build the primary key column
     buff.append(buildPrimaryKey("id"))
