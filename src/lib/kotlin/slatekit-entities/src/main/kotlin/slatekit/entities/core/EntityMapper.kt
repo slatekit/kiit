@@ -56,7 +56,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         for (ndx in 0..len - 1) {
             val mapping = _model.fields[ndx]
             val propName = mapping.name
-            val colName = getColumnName(mapping.storedName)
+            val colName = buildName(mapping.storedName)
             val include = propName != "id"
 
             if (include) {
@@ -174,14 +174,14 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         val finalSql = if (!fullSql)
             sql
         else if (update)
-            "update ${_model.name} set " + sql + ";"
+            "update ${buildName(_model.name)} set " + sql + ";"
         else
-            "insert into ${_model.name} " + sql + ";"
+            "insert into ${buildName(_model.name)} " + sql + ";"
         return finalSql
     }
 
 
-    fun getColumnName(name: String): String {
+    fun buildName(name: String): String {
         val finalName = namer?.rename( name ) ?: name
         return "`$finalName`"
     }

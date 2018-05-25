@@ -48,7 +48,7 @@ fun buildAddTable(dbSrc:DbSource, model: Model, namer: Namer? = null): String
         } else {
             DbUtils.getTypeFromLang(field.dataType.java)
         }
-        acc + ", " + dbSrc.buildAddCol(field.name, sqlType, field.isRequired, field.maxLength)
+        acc + ", " + dbSrc.buildAddCol(field.storedName, sqlType, field.isRequired, field.maxLength)
     })
     buff.append( dataFieldSql )
 

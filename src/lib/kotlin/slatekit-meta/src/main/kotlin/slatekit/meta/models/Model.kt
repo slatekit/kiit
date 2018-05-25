@@ -383,8 +383,7 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val finalDestName = buildDestName(name, destName)
-        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired, minLength, maxLength, finalDestName, defaultValue, encrypt, tag, cat)
+        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 
@@ -418,8 +417,7 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val finalDestName = buildDestName(name, destName)
-        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired, minLength, maxLength, finalDestName, defaultValue, encrypt, tag, cat)
+        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 
@@ -427,13 +425,5 @@ class Model(val name: String,
     fun add(field: ModelField): Model {
         val newPropList = _propList?.plus(field) ?: listOf(field)
         return Model(this.name, fullName, this.dataType, desc, table, newPropList)
-    }
-
-
-    fun buildDestName(name:String, destName:String?): String {
-        return when(destName)  {
-            null -> namer?.rename(name) ?: name
-            else -> destName
-        }
     }
 }

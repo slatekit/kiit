@@ -179,7 +179,7 @@ object DbUtils {
             if(text.isNullOrEmpty())
                 ""
             else {
-                text.toLowerCase().trim().filter{ c -> c.isDigit() || c.isLetter() || c == '_'}
+                text.trim().filter{ c -> c.isDigit() || c.isLetter() || c == '_'}
             }
 
 }
