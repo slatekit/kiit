@@ -248,7 +248,10 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         }
         else  {
             val cls = tpe.classifier as KClass<*>
-            if(cls == Result::class) {
+            if(Reflector.isSlateKitEnum(cls)) {
+                buildTypeName(KTypes.KIntType)
+            }
+            else if(cls == Result::class) {
                 val genType = tpe.arguments[0].type!!
                 val finalType = buildTypeName(genType)
                 finalType
