@@ -138,8 +138,8 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
                     "'" + raw.toString() + "'"
                 }
                 else if (mapping.isEnum) {
-                    val raw = (item as EnumLike).value
-                    "'" + raw.toString() + "'"
+                    val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike
+                    "'" + raw.value.toString() + "'"
                 }
                 else // Object
                 {
