@@ -26,7 +26,7 @@ object Serialization {
         // Handle enum
         if(Reflector.isSlateKitEnum(item.kClass)){
             val enumVal = (item as EnumLike).value
-            serializer.serialize(enumVal)
+            serializer.serializeValue(enumVal, depth)
             return
         }
 

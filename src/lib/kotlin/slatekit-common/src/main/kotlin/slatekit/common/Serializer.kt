@@ -93,7 +93,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
      * in various places and components.
      * e.g. the CLI / Shell
      */
-    protected open fun serializeValue(s: Any?, depth: Int): Unit {
+    open fun serializeValue(s: Any?, depth: Int): Unit {
         when (s) {
             null             -> _buff.append("null")
             is Unit          -> _buff.append("null")
