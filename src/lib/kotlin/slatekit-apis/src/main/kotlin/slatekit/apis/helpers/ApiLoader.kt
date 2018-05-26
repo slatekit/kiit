@@ -151,7 +151,7 @@ object ApiLoader {
         val actionRoles = apiAction?.roles ?: api.roles
         val actionVerb = apiAction?.verb ?: api.verb
         val actionProtocol = apiAction?.protocol ?: api.protocol
-        val actionName = namer?.name(actionNameRaw)?.text ?: actionNameRaw
+        val actionName = namer?.rename(actionNameRaw)  ?: actionNameRaw
         val actionDesc = apiAction?.desc ?: ""
         return Action(
                 member,
@@ -189,7 +189,7 @@ object ApiLoader {
 
     private fun name(text:String, namer:Namer?): String {
         // Rename the area if namer is supplied
-        val area = namer?.name(text)?.text ?: text
+        val area = namer?.rename(text) ?: text
         return area
     }
 }

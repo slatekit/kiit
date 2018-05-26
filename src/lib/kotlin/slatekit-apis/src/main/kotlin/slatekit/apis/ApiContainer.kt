@@ -125,7 +125,7 @@ open class ApiContainer(
     private val logger:Logger = ctx.logs.getLogger("apis")
 
 
-    fun rename(text:String):String = namer?.name(text)?.text ?: text
+    fun rename(text:String):String = namer?.rename(text) ?:  text
 
 
     /**

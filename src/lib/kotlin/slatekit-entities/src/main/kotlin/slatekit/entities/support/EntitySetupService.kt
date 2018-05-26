@@ -120,7 +120,7 @@ class EntitySetupService(private val _entities: Entities,
             val fullName = name
             val svc = _entities.getServiceByName(fullName)
             val model = svc.repo().mapper().model()
-            val sql = buildAddTable(_entities.getDbSource(), model)
+            val sql = buildAddTable(_entities.getDbSource(), model, namer = _entities.namer)
             val filePath = if (_settings.enableOutput) {
                 _folders?.let { folders ->
                     val fileName = "model-${model.name}.sql"

@@ -19,7 +19,6 @@ object Cases {
     val underScoreReplacements = setOf(' ', '-')
 }
 
-
 data class LowerCamel     (override val text: String) : Case
 data class UpperCamel     (override val text: String) : Case
 data class LowerHyphen    (override val text: String) : Case
@@ -27,34 +26,48 @@ data class UpperHyphen    (override val text: String) : Case
 data class LowerUnderscore(override val text: String) : Case
 data class UpperUnderscore(override val text: String) : Case
 
-data class Namer(val name:String, val f:(String) -> Case) {
-    fun name(text:String):Case = f(text)
-}
-
-fun lowerHyphen(text: String): LowerHyphen {
-    return LowerHyphen(convertToCase(text, false, Cases.hyphenReplacements, '-'))
-}
 
 
-fun upperHyphen(text: String): UpperHyphen {
-    return UpperHyphen(convertToCase(text, true, Cases.hyphenReplacements, '-'))
+interface Namer {
+    fun rename(text:String):String
+    fun convert(text:String): Case
 }
 
 
-fun lowerUnderscore(text: String): LowerUnderscore {
-    return LowerUnderscore(convertToCase(text, false, Cases.underScoreReplacements, '_'))
+class LowerCamelNamer : Namer {
+    override fun rename(text:String):String = convertToCamel(text, false, Cases.camelReplacements)
+    override fun convert(text:String): Case = LowerCamel(rename(text))
 }
 
 
-fun upperUnderscore(text: String): UpperUnderscore {
-    return UpperUnderscore(convertToCase(text, true, Cases.underScoreReplacements, '_'))
+class UpperCamelNamer : Namer {
+    override fun rename(text:String):String = convertToCamel(text, true, Cases.camelReplacements)
+    override fun convert(text:String): Case = UpperCamel(rename(text))
 }
 
 
-fun lowerCamel(text: String): LowerCamel = LowerCamel(convertToCamel(text, false, Cases.camelReplacements))
+class LowerHyphenNamer : Namer {
+    override fun rename(text: String):String = convertToCase(text, false, Cases.hyphenReplacements, '-')
+    override fun convert(text:String): Case = LowerHyphen(rename(text))
+}
 
 
-fun upperCamel(text: String): UpperCamel = UpperCamel(convertToCamel(text, true, Cases.camelReplacements))
+class UpperHyphenNamer : Namer {
+    override fun rename(text: String): String = convertToCase(text, true, Cases.hyphenReplacements, '-')
+    override fun convert(text:String): Case = UpperHyphen(rename(text))
+}
+
+
+class LowerUnderscoreNamer : Namer {
+    override fun rename(text: String): String = convertToCase(text, false, Cases.underScoreReplacements, '_')
+    override fun convert(text:String): Case = LowerUnderscore(rename(text))
+}
+
+
+class UpperUnderscoreNamer : Namer {
+    override fun rename(text: String): String = convertToCase(text, true, Cases.underScoreReplacements, '_')
+    override fun convert(text:String): Case = UpperUnderscore(rename(text))
+}
 
 
 fun convertToCase(text: String,  upper:Boolean, replacements:Set<Char>, replacement:Char): String {

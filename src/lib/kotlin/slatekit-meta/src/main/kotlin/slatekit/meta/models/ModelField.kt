@@ -14,6 +14,7 @@
 package slatekit.meta.models
 
 import slatekit.common.DateTime
+import slatekit.common.Namer
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.*
@@ -132,10 +133,12 @@ data class ModelField (
       defaultValue:Any? = null,
       encrypt:Boolean = false,
       tag:String = "",
-      cat:String = "data"
+      cat:String = "data",
+      namer: Namer? = null
       ) : ModelField
     {
-      val finalName = destName ?: name
+
+      val finalName = buildDestName(name, destName, namer)
       val isEnum = Reflector.isSlateKitEnum(dataType)
       val field = ModelField (
               name = name,
@@ -157,5 +160,15 @@ data class ModelField (
       )
       return field
     }
+
+
+
+
+      fun buildDestName(name:String, destName:String?, namer: Namer?): String {
+          return when(destName)  {
+              null -> namer?.rename(name) ?: name
+              else -> destName
+          }
+      }
   }
 }

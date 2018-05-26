@@ -14,12 +14,9 @@
 package slatekit.meta.models
 
 
-import slatekit.common.Field
-import slatekit.common.Mapper
-import slatekit.common.Types
+import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
-import slatekit.common.newline
 import slatekit.common.records.Record
 import slatekit.meta.KTypes
 import kotlin.reflect.KClass
@@ -36,7 +33,8 @@ import kotlin.reflect.jvm.jvmErasure
  */
 open class ModelMapper(protected val _model: Model,
                        protected val _settings: ModelMapperSettings = ModelMapperSettings(),
-                       protected val _encryptor:Encryptor? = null) : Mapper {
+                       protected val _encryptor:Encryptor? = null,
+                       protected val namer: Namer? = null) : Mapper {
 
 
     /**
@@ -126,7 +124,7 @@ open class ModelMapper(protected val _model: Model,
          * @param dataType
          * @return
          */
-        fun loadSchema(dataType: KClass<*>, idFieldName:String? = null): Model {
+        fun loadSchema(dataType: KClass<*>, idFieldName:String? = null, namer:Namer? = null): Model {
             val modelName = dataType.simpleName!!
             val modelNameFull = dataType.qualifiedName!!
 
@@ -149,16 +147,16 @@ open class ModelMapper(protected val _model: Model,
                 val modelField = ModelField.build(prop = prop, name = name,
                         dataType = fieldType,
                         dataKType = fieldKType,
-                        isRequired = required, maxLength = length, encrypt = encrypt, cat = cat)
+                        isRequired = required, maxLength = length, encrypt = encrypt, cat = cat, namer = namer)
 
                 val finalModelField = if(!modelField.isBasicType()) {
-                    val model = loadSchema(modelField.dataType)
+                    val model = loadSchema(modelField.dataType, namer = namer)
                     modelField.copy(model = model)
                 } else modelField
                 finalModelField
             }
 
-            return Model(modelName, modelNameFull, dataType, _propList = fields)
+            return Model(modelName, modelNameFull, dataType, _propList = fields, namer = namer)
         }
     }
 

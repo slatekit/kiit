@@ -15,11 +15,8 @@ package slatekit.entities.core
 
 
 
-import slatekit.common.DateTime
-import slatekit.common.EnumLike
-import slatekit.common.UniqueId
+import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.nonEmptyOrDefault
 import slatekit.common.query.QueryEncoder
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -34,7 +31,7 @@ import java.time.format.DateTimeFormatter
  *
  * @param model
  */
-open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:Encryptor? = null) : ModelMapper(model, _encryptor = encryptor) {
+open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:Encryptor? = null, namer:Namer? = null) : ModelMapper(model, _encryptor = encryptor, namer = namer) {
 
     private val dateFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private val timeFormat    :DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -59,7 +56,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         for (ndx in 0..len - 1) {
             val mapping = _model.fields[ndx]
             val propName = mapping.name
-            val colName = getColumnName(mapping.storedName)
+            val colName = buildName(mapping.storedName)
             val include = propName != "id"
 
             if (include) {
@@ -177,12 +174,15 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         val finalSql = if (!fullSql)
             sql
         else if (update)
-            "update ${_model.name} set " + sql + ";"
+            "update ${buildName(_model.name)} set " + sql + ";"
         else
-            "insert into ${_model.name} " + sql + ";"
+            "insert into ${buildName(_model.name)} " + sql + ";"
         return finalSql
     }
 
 
-    fun getColumnName(name: String): String = "`$name`"
+    fun buildName(name: String): String {
+        val finalName = namer?.rename( name ) ?: name
+        return "`$finalName`"
+    }
 }

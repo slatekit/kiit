@@ -15,6 +15,7 @@ package slatekit.meta.models
 
 
 import slatekit.common.DateTime
+import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 import java.time.LocalDate
@@ -37,7 +38,8 @@ class Model(val name: String,
             val dataType: KClass<*>? = null,
             val desc: String = "",
             tableName: String = "",
-            private val _propList: List<ModelField>? = null) {
+            private val _propList: List<ModelField>? = null,
+            val namer:Namer? = null) {
 
     constructor(dataType: KClass<*>) : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType)
 
