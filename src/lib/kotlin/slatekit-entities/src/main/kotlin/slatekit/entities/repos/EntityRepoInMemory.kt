@@ -84,13 +84,24 @@ open class EntityRepoInMemory<T>(
      *
      * @param id
      */
-    override fun delete(id: Long): Boolean =
-            if (!_items.contains(id))
-                false
-            else {
-                _items = _items.remove(id)
-                true
-            }
+    override fun delete(id: Long): Boolean {
+        return if (!_items.contains(id))
+            false
+        else {
+            _items = _items.remove(id)
+            true
+        }
+    }
+
+
+    /**
+     * deletes all entities from the datastore using the ids
+     * @param ids
+     * @return
+     */
+    override fun delete(ids: List<Long>): Int {
+        return ids.map({ delete(it) }).count { it }
+    }
 
 
     /**

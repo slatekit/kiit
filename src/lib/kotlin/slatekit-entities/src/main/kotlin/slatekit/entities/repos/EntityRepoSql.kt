@@ -71,6 +71,18 @@ abstract class EntityRepoSql<T>
 
 
     /**
+     * deletes all entities from the datastore using the ids
+     * @param ids
+     * @return
+     */
+    override fun delete(ids: List<Long>): Int {
+        val delimited = ids.joinToString(",")
+        val count = sqlExecute("delete from ${repoName()} where ${idName()} in ($delimited);")
+        return count
+    }
+
+
+    /**
      * gets the entity associated with the id
      */
     override fun get(id: Long): T? {

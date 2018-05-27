@@ -96,6 +96,16 @@ open interface EntityServices<T> : IEntityService where T : Entity {
 
 
     /**
+     * deletes the entity
+     *
+     * @param entity
+     */
+    fun delete(ids:List<Long>): Int {
+        return entityRepo().delete(ids)
+    }
+
+
+    /**
      * deletes the entity by its id
      * @param id
      * @return

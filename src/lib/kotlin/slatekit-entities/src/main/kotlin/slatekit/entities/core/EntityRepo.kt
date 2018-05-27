@@ -112,6 +112,14 @@ abstract class EntityRepo<T>(
 
 
     /**
+     * deletes all entities from the datastore using the ids
+     * @param ids
+     * @return
+     */
+    abstract fun delete(ids: List<Long>): Int
+
+
+    /**
      * deletes the entity in memory
      *
      * @param entity
