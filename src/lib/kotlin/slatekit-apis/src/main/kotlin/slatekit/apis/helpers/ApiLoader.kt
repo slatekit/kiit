@@ -118,9 +118,9 @@ object ApiLoader {
     private fun loadActionsFromAnnotations(api: slatekit.apis.core.Api, namer:Namer?): List<Action> {
 
         // 1. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembersOpt<ApiAction>(api.cls, ApiAction::class, api.declaredOnly)
-        val rawIgnores = Reflector.getAnnotatedMembersOpt<Ignore>(api.cls, Ignore::class, api.declaredOnly)
-        val rawIgnoresLookup = rawIgnores.filter { it.second != null }.map { it -> Pair(it.first.name, true) }.toMap()
+        val rawMatches = Reflector.getAnnotatedMembers<ApiAction>(api.cls, ApiAction::class, api.declaredOnly)
+        val rawIgnores = Reflector.getAnnotatedMembers<Ignore>(api.cls, Ignore::class, api.declaredOnly)
+        val rawIgnoresLookup = rawIgnores.map { it -> Pair(it.first.name, true) }.toMap()
 
         // 2. Filter out builtin methods
         val matches = rawMatches.filter{ it -> !Reflector.isBuiltIn(it.first) }
@@ -166,7 +166,7 @@ object ApiLoader {
 
     private fun loadApiFromSetup(api:Api, namer:Namer?): Api {
 
-        // If not actions, that means it was the raw input
+        // If no actions, that means it was the raw input
         // during setup, so we have to load the api methods
         // from either annotations or from public methods
         return if(api.actions.size == 0) {
@@ -176,7 +176,7 @@ object ApiLoader {
                 val name = name(apiAnnotated.name, namer)
                 apiAnnotated.copy(area = area, name = name, singleton = api.singleton)
             }
-            else {
+            else { //if(api.setup == PublicMethods){
                 val area = name(api.area, namer)
                 val name = name(api.name, namer)
                 val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)

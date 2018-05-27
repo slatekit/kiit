@@ -141,16 +141,17 @@ object Reflector {
 
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>): List<Pair<KCallable<*>, T>> {
+    fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>, declared:Boolean = true): List<Pair<KCallable<*>, T>> {
 
-        val members = cls.members.map { member ->
+        val members = if(declared) cls.declaredMemberFunctions else cls.memberFunctions
+        val filtered = members.map { member ->
             Pair(member, member.annotations.filter { annotation ->
                 annotation.annotationClass == anoType
             }.firstOrNull())
         }
         // 1. filter out ones with annotation supplied
         // 2. convert them to type T
-        return members.filter { pair -> pair.second != null }
+        return filtered.filter { pair -> pair.second != null }
                 .map { (first, second) -> Pair(first, second as T) }
     }
 
