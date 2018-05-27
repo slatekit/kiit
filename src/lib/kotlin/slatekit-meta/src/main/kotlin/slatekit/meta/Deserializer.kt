@@ -177,6 +177,9 @@ open class Deserializer(
         val result = if ( cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0 ) {
             handleSmartString(raw, tpe)
         }
+        else if( cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0){
+            Reflector.getEnumValue(cls, raw)
+        }
         else if(jsonRaw == null){
             // Case 1: List<*>
             if(cls == List::class){
