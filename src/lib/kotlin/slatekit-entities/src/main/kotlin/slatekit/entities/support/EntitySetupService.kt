@@ -37,6 +37,11 @@ class EntitySetupService(private val _entities: Entities,
     }
 
 
+    fun counts(): List<Pair<String, Long>> = _entities.getEntities().map {
+        Pair(it.entityTypeName, it.entityRepoInstance?.count() ?: 0 )
+    }
+
+
     /**
      * installs the model name supplied into the database.
      *

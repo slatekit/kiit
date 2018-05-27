@@ -72,6 +72,12 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     }
 
 
+    @ApiAction(desc = "installs all the models in the default database", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun counts(): List<Pair<String,Long>> {
+        return service().counts()
+    }
+
+
     @ApiAction(desc = "generates sql install files for the model", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun generateSql(name: String, version: String = ""): ResultEx<String> {
         return service().generateSql(name, version)
