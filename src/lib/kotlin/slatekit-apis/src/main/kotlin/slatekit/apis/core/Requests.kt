@@ -12,7 +12,6 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
-import org.json.simple.JSONObject
 import slatekit.apis.ApiConstants
 import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime

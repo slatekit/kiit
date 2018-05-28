@@ -302,11 +302,13 @@ open class ApiContainer(
             val res1 = _validator.validateApi(req)
             val res = res1.flatMap { apiRef ->
                 apiRefInfo = apiRef
+                val runCtx = Ctx(this, this.ctx, req, apiRef)
+
                 val res2 = _validator.validateProtocol(req, apiRef)
                 val res3 = res2.flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
                 val res4 = res3.flatMap { _ -> _validator.validateMiddleware(req, filters) }
                 val res5 = res4.flatMap { _ -> _validator.validateParameters(req) }
-                val res6 = res5.flatMap { _ -> executeWithMiddleware(req, apiRef) }
+                val res6 = res5.flatMap { _ -> Exec.run(runCtx, ::executeMethod) }
                 res6
             }
             TODO.BUG(tag = "Result", msg = "Need some transformer from T1,E1 -> T2,E2")
@@ -333,85 +335,11 @@ open class ApiContainer(
     }
 
 
-    /**
-     * executes the api request factoring in the middleware filters and hooks.
-     * @param req
-     * @param api
-     * @param action
-     * @return
-     */
-    protected open fun executeWithMiddleware(req: Request, apiRef: ApiRef): Result<Any, Exception> {
-
-        val instance = apiRef.instance
-        val action = apiRef.action
-
-        // Middleware: Tracking
-        if (instance is Tracked) {
-            instance.tracker.trackRequest(req)
-        }
-
-        // Middleware: Filter
-        val proceed = when (instance) {
-            is Filter -> instance.onFilter(this.ctx, req, this, null).toResultEx()
-            else -> proceedOk
-        }
-
-        // Ok to call.
-        val result = if (proceed.success) {
-
-            // Middleware: Hook: Before
-            if (instance is Hook) {
-                instance.onBefore(this.ctx, req, action, this, null)
-            }
-
-            // Has a custom handler ?
-            val isHandler = instance is Handler
-
-            // Finally make the call here.
-            val result = if (isHandler) {
-                // The handler middleware supports 2 options:
-                // 1. Return flag indicated that it handled the request
-                // 2. Return flag indicating to proceed to execute as normal
-                val handlerResult = (instance as Handler).handle(this.ctx, req, action, this, null)
-                when (handlerResult.code) {
-                    Requests.codeHandlerNotProcessed -> executeMethod(req, apiRef)
-                    else -> handlerResult.toResultEx()
-                }
-            } else {
-                executeMethod(req, apiRef)
-            }
-
-            // Middleware: Hook: After
-            if (instance is Hook) {
-                instance.onAfter(this.ctx, req, action, this, null)
-            }
-
-            // Return the result
-            result
-
-        } else {
-            logger.warn("Api request filtered out for ${req.fullName} using filter: ${instance.kClass.qualifiedName}")
-
-            // Middleware: Tracked
-            if (apiRef.instance is Tracked) {
-                apiRef.instance.tracker.trackFiltered(req)
-            }
-            proceed
-        }
-
-        // Middleware: Tracking
-        if (instance is Tracked) {
-            result.onSuccess { instance.tracker.handleResponse(req, result) }
-            result.onFailure { instance.tracker.handleFailure(req, it) }
-        }
-
-        return result
-    }
-
-
     @Suppress("UNCHECKED_CAST")
-    protected open fun executeMethod(req: Request, apiRef: ApiRef): ResultEx<Any> {
+    protected open fun executeMethod(runCtx:Ctx): ResultEx<Any> {
         // Finally make call.
+        val req = runCtx.req
+        val apiRef = runCtx.apiRef
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = ApiHelper.fillArgs(converter, apiRef, req)
 
@@ -586,5 +514,4 @@ open class ApiContainer(
             }
         }
     }
-
 }

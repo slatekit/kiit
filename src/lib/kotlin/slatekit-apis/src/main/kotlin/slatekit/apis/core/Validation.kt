@@ -62,7 +62,7 @@ class Validation(val ctn: ApiContainer) {
 
     fun validateMiddleware(req: Request, filters:List<Filter>): ResultMsg<Any> {
         val failed = filters.fold( success(""), { acc, filter ->
-            if(acc.success) {
+            if(!acc.success) {
                 acc
             } else {
                 filter.onFilter(ctn.ctx, req, ctn, null).map( { _ -> "" })
