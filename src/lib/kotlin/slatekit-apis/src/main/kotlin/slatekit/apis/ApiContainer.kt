@@ -95,7 +95,7 @@ open class ApiContainer(
     private val emptyArgs = mapOf<String, Any>()
 
 
-    private val logger: Logger = ctx.logs.getLogger("apis")
+    private val logger: Logger = ctx.logs.getLogger("api")
 
 
     val errorHandler: Errors = Errors(logger)
