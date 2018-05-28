@@ -22,6 +22,7 @@ import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
 import java.io.File
+import kotlin.math.log
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -124,6 +125,9 @@ open class ApiContainer(
 
 
     private val logger: Logger = ctx.logs.getLogger("apis")
+
+
+    private val errorHandler: Errors = Errors(logger)
 
 
     fun rename(text: String): String = namer?.rename(text) ?: text
@@ -308,7 +312,7 @@ open class ApiContainer(
             val api = routes.api(req.area, req.name)
             val apiRef = getApi(req.area, req.name, req.action)
             logger.error("Unexpected error with api request ${req.fullName}", ex)
-            handleError(api, apiRef.getOrElse { null }, req, ex)
+            errorHandler.handleError(ctx, errs, api, apiRef.getOrElse { null }, req, ex)
         }
 
         // Log failures
@@ -339,44 +343,6 @@ open class ApiContainer(
                 Success(res)
             }
         } ?: Failure(Exception("Received null"))
-    }
-
-
-    protected open fun handleError(
-        api: slatekit.apis.core.Api?,
-        apiRef: ApiRef?,
-        req: Request,
-        ex: Exception
-    ): ResultEx<Any> {
-        // OPTION 1: Api level
-        return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
-            logger.debug("Handling error at api level")
-            apiRef.instance.onError(this.ctx, req, apiRef, this, ex, null).toResultEx()
-        }
-        // OPTION 2: GLOBAL Level custom handler
-        else if (errs != null) {
-            logger.debug("Handling error at global middleware")
-            errs.onError(ctx, req, req.path, this, ex, null).toResultEx()
-        }
-        // OPTION 3: GLOBAL Level default handler
-        else {
-            logger.debug("Handling error at global container")
-            handleErrorInternally(req, ex)
-        }
-    }
-
-
-    /**
-     * global handler for an unexpected error ( for derived classes to override )
-     *
-     * @param ctx    : the application context
-     * @param req    : the request
-     * @param ex     : the exception
-     * @return
-     */
-    fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {
-        val msg = "error executing : " + req.path + ", check inputs"
-        return unexpectedError(Exception(msg, ex))
     }
 
 
