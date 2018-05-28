@@ -14,6 +14,7 @@
 package slatekit.apis.core
 
 import org.json.simple.JSONObject
+import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
@@ -38,11 +39,12 @@ data class Params(    val rawSource: Any,
                       val json: JSONObject,
                       val extraParams:MutableMap<String,Any> = mutableMapOf(),
                       val queryParams:Map<String,String>? = null
-    ) : Inputs, InputsUpdateable {
+    ) : Inputs, InputsUpdateable, JsonSupport {
 
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
+    override fun toJson(): JSONObject = json
 
     override val raw:Any = json
     override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })

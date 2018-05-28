@@ -1,6 +1,7 @@
 package slatekit.apis.core
 
 import org.json.simple.JSONObject
+import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
@@ -21,8 +22,14 @@ import java.time.ZonedDateTime
 data class Meta(  val rawSource: Any,
                   val json: JSONObject,
                   val enc: Encryptor?
-                ) : slatekit.common.Meta {
+                ) : slatekit.common.Meta, JsonSupport {
     override val raw:Any = json
+    override fun toJson(): JSONObject = json
+
+    override fun toMap(): Map<String, Any> {
+        val pairs = json.keys.map { key -> Pair(key?.toString() ?: "", json.get(key) ?: "") }
+        return pairs.toMap()
+    }
 
     override fun size(): Int = json.size
     override fun get(key: String): Any? = getStringRaw(key)
