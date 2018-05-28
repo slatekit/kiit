@@ -36,7 +36,8 @@ data class Action(
                     val desc: String = "",
                     val roles: String = "",
                     val verb: String = "*",
-                    val protocol: String = "*"
+                    val protocol: String = "*",
+                    val tag: String = ""
                  )
 {
     /**

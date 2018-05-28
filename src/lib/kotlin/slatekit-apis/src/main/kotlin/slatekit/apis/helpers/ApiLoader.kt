@@ -153,13 +153,15 @@ object ApiLoader {
         val actionProtocol = apiAction?.protocol ?: api.protocol
         val actionName = namer?.rename(actionNameRaw)  ?: actionNameRaw
         val actionDesc = apiAction?.desc ?: ""
+        val actionTag = apiAction?.tag ?: ""
         return Action(
                 member,
                 actionName,
                 actionDesc,
                 actionRoles,
                 actionVerb,
-                actionProtocol
+                actionProtocol,
+                actionTag
         )
     }
 

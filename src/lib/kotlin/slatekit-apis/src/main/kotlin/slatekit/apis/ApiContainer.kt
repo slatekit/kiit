@@ -7,16 +7,13 @@ import slatekit.apis.svcs.Format
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.ApiLoader
-import slatekit.apis.middleware.Filter
-import slatekit.apis.middleware.Hook
-import slatekit.apis.middleware.Middleware
+import slatekit.apis.middleware.*
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.apis.middleware.Rewriter
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
@@ -264,7 +261,17 @@ open class ApiContainer(
 
 
     /**
-     * executes the api request in a pipe-line of various checks and validations.
+     * Executes the api request in a pipe-line of various checks and validations.
+     * NOTE: This is effectively the core processing method of API Container.
+     * The flow is as follows:
+     *
+     * 1. middleware        : rewrite request
+     * 2. validate api      : validate api actually exists
+     * 3. validate protocol : validate the request came from a valid protocol ( cli | web | etc )
+     * 4. validate auth     : validate the authorization using auth trait
+     * 5. validate params   : validate the request against the api/method parameters ( just that they exist )
+     * 6. execute           : finally execute the api action with middleware ( with filter / hooks )
+     *                        currently the filter/hooks middleware must be implemented in the api itself.
      * @param cmd
      * @return
      */
@@ -318,6 +325,11 @@ open class ApiContainer(
      * @return
      */
     protected open fun executeWithMiddleware(req: Request, apiRef:ApiRef): Result<Any, Exception> {
+        TODO.IMPLEMENT("api",
+            """Implement the use middleware filters/hooks that are globally supplied
+                     in the construtor ( and thus global ) and not just on the instace of the API itself
+                  """)
+
         val instance = apiRef.instance
         val action = apiRef.action
 
@@ -335,8 +347,22 @@ open class ApiContainer(
                 instance.onBefore(this.ctx, req, action,this, null)
             }
 
+            // Has a custom handler ?
+            val isHandler = instance is Handler
+
             // Finally make the call here.
-            val result = executeMethod(req, apiRef)
+            val result = if(isHandler){
+                // The handler middleware supports 2 options:
+                // 1. Return flag indicated that it handled the request
+                // 2. Return flag indicating to proceed to execute as normal
+                val handlerResult = (instance as Handler).handle(this.ctx, req, action, this, null)
+                when(handlerResult.code){
+                    Requests.codeHandlerNotProcessed -> executeMethod(req, apiRef)
+                    else  -> handlerResult.toResultEx()
+                }
+            } else {
+                executeMethod(req, apiRef)
+            }
 
             // Hook: After
             if (instance is Hook) {
@@ -359,7 +385,6 @@ open class ApiContainer(
         // Finally make call.
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = ApiHelper.fillArgs(converter, apiRef, req)
-
 
             val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
@@ -523,7 +548,6 @@ open class ApiContainer(
 
     fun isCliAllowed(supportedProtocol: String): Boolean =
             supportedProtocol == ApiConstants.Any || supportedProtocol == ApiConstants.SourceCLI
-
 
 
     companion object {

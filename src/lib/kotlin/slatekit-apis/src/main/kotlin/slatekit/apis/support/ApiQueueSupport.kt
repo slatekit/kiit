@@ -2,7 +2,9 @@ package slatekit.apis.support
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
+import slatekit.apis.core.Requests
 import slatekit.common.DateTime
+import slatekit.common.Request
 import slatekit.common.ext.tail
 import slatekit.common.onSuccess
 import slatekit.common.queues.QueueSource
@@ -15,6 +17,19 @@ interface ApiQueueSupport {
     fun queues(): List<QueueSource>
 
     fun container(): ApiContainer
+
+
+    /**
+     * Creates a request from the parameters and api info and serializes that as json
+     * and submits it to a random queue.
+     */
+    fun sendToQueue(req: String) {
+        val queues = this.queues()
+        val rand = java.util.Random()
+        val pos = rand.nextInt(queues.size)
+        val queue = queues[pos]
+        queue.send(req)
+    }
 
 
     /**
