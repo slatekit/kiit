@@ -32,7 +32,6 @@ open class Tracker {
     }
 
 
-
     open fun reset() {
         batch.set(0)
         count.set(0)
