@@ -42,12 +42,17 @@ class Worker_Queue_Api_Tests {
         sys.register(WorkerWithQueuesApi(apis, queues, null, null, WorkerSettings()))
 
         // 6. send method call to queue
-        api.test1Queued("user1@abc.com", true, 123, DateTime.parseNumeric("20180127093045"))
+        val result = apis.call("samples", "workerqueue", "test1", "post", mapOf(), mapOf(
+            "s" to "user1@abc.com",
+            "b" to true,
+            "i" to 123,
+            "d" to DateTime.of(2018, 1, 27, 14, 30, 45)
+        ))
 
         // 7. run worker
         assert(api._lastResult == "")
         sys.get(sys.defaultGroup)?.get(0)?.work()
-        assert(api._lastResult == "user1@abc.com, true, 123, 2018-01-27T14:30:45Z")
+        assert(api._lastResult == "user1@abc.com, true, 123")
     }
 
 
