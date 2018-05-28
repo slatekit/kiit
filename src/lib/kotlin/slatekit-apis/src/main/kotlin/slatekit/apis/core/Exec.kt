@@ -17,20 +17,54 @@ import slatekit.apis.middleware.Handler
 import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
 import slatekit.common.*
+import slatekit.common.log.Logger
 
 
-object Exec {
+/**
+ * Executes the API action using a pipeline of steps
+ */
+class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
 
-    fun run(ctx: Ctx, execute: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    /**
+     * Executes the final API action after going through all the middleware first.
+     */
+    fun run(execute: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
 
         // Compose the various middleware components into a "pipeline"
-        // using the convenient Kotlin syntax for last parameter being a lambda
+        // using the convenient Kotlin syntax for single/last parameter being a lambda
         val result =
-            track(ctx) {
-                filter(ctx) {
-                    hook(ctx) {
-                        handle(ctx) {
-                            execute(ctx)
+
+            // Ensure protocol
+            protocol {
+
+                // Ensure auth
+                auth {
+
+                    // Ensure global middleware
+                    middleware {
+
+                        // Ensure params
+                        params {
+
+                            // BEGIN: Instance Middleware
+                            track {
+
+                                // Filter requests
+                                filter {
+
+                                    // Hooks for before/after events
+                                    hook {
+
+                                        // Custom handling
+                                        handle {
+
+                                            // Finally  execute
+                                            execute(ctx)
+                                        }
+                                    }
+                                }
+                            }
+                            // END: Instance Middleware
                         }
                     }
                 }
@@ -42,9 +76,81 @@ object Exec {
 
 
     /**
+     * Ensures valid protocols before processing the call
+     */
+    fun protocol(call: () -> Result<Any, Exception>): Result<Any, Exception> {
+        println("before protocol")
+
+        val check = validator.validateProtocol(ctx.req, ctx.apiRef)
+        val result = if(check.success) {
+            call()
+        } else {
+            check.toResultEx()
+        }
+
+        println("after protocol")
+        return result
+    }
+
+
+    /**
+     * Ensures valid authorization before processing the call
+     */
+    fun auth(call: () -> Result<Any, Exception>): Result<Any, Exception> {
+        println("before auth")
+
+        val check = validator.validateAuthorization(ctx.req, ctx.apiRef)
+        val result = if(check.success) {
+            call()
+        } else {
+            check.toResultEx()
+        }
+
+        println("after auth")
+        return result
+    }
+
+
+    /**
+     * Ensures valid authorization before processing the call
+     */
+    fun middleware(call: () -> Result<Any, Exception>): Result<Any, Exception> {
+        println("before params")
+
+        val check = validator.validateMiddleware(ctx.req, ctx.container.filters)
+        val result = if(check.success) {
+            call()
+        } else {
+            check.toResultEx()
+        }
+
+        println("after params")
+        return result
+    }
+
+
+    /**
+     * Ensures valid authorization before processing the call
+     */
+    fun params(call: () -> Result<Any, Exception>): Result<Any, Exception> {
+        println("before params")
+
+        val check = validator.validateParameters(ctx.req)
+        val result = if(check.success) {
+            call()
+        } else {
+            check.toResultEx()
+        }
+
+        println("after params")
+        return result
+    }
+
+
+    /**
      * Applies the tracking middleware to track requests, successes, failures
      */
-    fun track(ctx: Ctx, call: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    fun track(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         println("before track")
         val instance = ctx.apiRef.instance
 
@@ -53,7 +159,7 @@ object Exec {
             instance.tracker.trackRequest(ctx.req)
         }
 
-        val result = call(ctx)
+        val result = call()
 
         // Hook: After
         if (instance is Tracked) {
@@ -68,19 +174,19 @@ object Exec {
     /**
      * Applies the filter middleware to filter out requests
      */
-    fun filter(ctx: Ctx, call: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    fun filter(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         println("before filter")
         val instance = ctx.apiRef.instance
 
         val result = if (instance is Filter) {
             val filterResult = instance.onFilter(ctx.context, ctx.req, ctx.container, null).toResultEx()
             if (filterResult.success) {
-                call(ctx)
+                call()
             } else {
                 filterResult
             }
         } else {
-            call(ctx)
+            call()
         }
 
         println("after filter")
@@ -91,7 +197,7 @@ object Exec {
     /**
      * Applies the hooks middleware before/after execution of action
      */
-    fun hook(ctx: Ctx, call: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    fun hook(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         println("before hook")
         val instance = ctx.apiRef.instance
 
@@ -100,7 +206,7 @@ object Exec {
             instance.onBefore(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
         }
 
-        val result = call(ctx)
+        val result = call()
 
         // Hook: After
         if (instance is Hook) {
@@ -116,7 +222,7 @@ object Exec {
     /**
      * Applies the handler middleware to either handle the request or proceed to make the call
      */
-    fun handle(ctx: Ctx, call: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    fun handle(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         println("before handle")
 
         val instance = ctx.apiRef.instance
@@ -124,11 +230,11 @@ object Exec {
         val result = if (instance is Handler) {
             val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
             when (handlerResult.code) {
-                Requests.codeHandlerNotProcessed -> call(ctx)
+                Requests.codeHandlerNotProcessed -> call()
                 else -> handlerResult.toResultEx()
             }
         } else {
-            call(ctx)
+            call()
         }
 
         println("after handle")

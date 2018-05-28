@@ -87,7 +87,7 @@ open class ApiContainer(
     private val rewrites: List<Rewriter>? = middleware?.filter { it is Rewriter }?.map { it as Rewriter }
 
 
-    private val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
+    val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
 
 
     /**
@@ -297,21 +297,12 @@ open class ApiContainer(
 
         // Check 3: Finally check for formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
-        var apiRefInfo: ApiRef? = null
         val result: Result<Any, Exception> = try {
             val res1 = _validator.validateApi(req)
             val res = res1.flatMap { apiRef ->
-                apiRefInfo = apiRef
                 val runCtx = Ctx(this, this.ctx, req, apiRef)
-
-                val res2 = _validator.validateProtocol(req, apiRef)
-                val res3 = res2.flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
-                val res4 = res3.flatMap { _ -> _validator.validateMiddleware(req, filters) }
-                val res5 = res4.flatMap { _ -> _validator.validateParameters(req) }
-                val res6 = res5.flatMap { _ -> Exec.run(runCtx, ::executeMethod) }
-                res6
+                Exec(runCtx, _validator, logger).run(::executeMethod)
             }
-            TODO.BUG(tag = "Result", msg = "Need some transformer from T1,E1 -> T2,E2")
             res.toResultEx()
         } catch (ex: Exception) {
             val api = routes.api(req.area, req.name)
@@ -319,10 +310,6 @@ open class ApiContainer(
             logger.error("Unexpected error with api request ${req.fullName}", ex)
             handleError(api, apiRef.getOrElse { null }, req, ex)
         }
-
-        // NOTE: While the Tracked component is technically middleware,
-        // it needs to be handled outside of the "executeWithMiddleware" method.
-        // This is to ensure it has proper totals for requests, failures etc.
 
         // Log failures
         result.onFailure {
