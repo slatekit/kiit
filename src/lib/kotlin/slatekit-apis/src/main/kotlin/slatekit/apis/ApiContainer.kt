@@ -13,7 +13,6 @@ import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
@@ -22,7 +21,6 @@ import slatekit.common.results.HELP
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
 import java.io.File
-import kotlin.math.log
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -53,69 +51,42 @@ open class ApiContainer(
 ) {
 
     /**
-     * The lookup/map for all the areas in the container
-     * e.g. Slate Kit apis are in a 3 part route format :
-     *
-     *    e.g. area/api/action
-     *         app/users/activate
-     *
-     * 1. area  : top level category containing 1 or more apis
-     * 2. api   : an api represents a specific resource and has 1 or more actions
-     * 3. action: the lowest level endpoint that maps to a method/function.
-     *
-     * NOTES:
-     *
-     * 1. The _lookup stores all the top level "areas" in the container
-     *    as a mapping between area -> ApiLookup.
-     * 2. The ApiLookup contains all the Apis as a mapping between "api" names to
-     *    an ApiBase ( which is what you extend from to create your own api )
-     * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
+     * Load all the routes from the APIs supplied.
+     * The API setup can be either annotation based or public methods on the Class
      */
     val routes = Routes(ApiLoader.loadAll(apis, namer), namer, { api ->
+
+        // This allows APIs to be aware of the API container.
+        // Most APIs will not need this but this is here for integration with the container.
         ApiContainer.setApiHost(api, this)
     })
+
+
+    /**
+     * Load all global middleware components: Rewriters, Filters, Trackers, Error handlers
+     */
+    val rewrites = middleware?.filter { it is Rewriter }?.map { it as Rewriter }?: listOf()
+    val filters  = middleware?.filter { it is Filter   }?.map { it as Filter   }?: listOf()
+    val tracker  = middleware?.filter { it is Tracked  }?.map { it as Tracked  }?.firstOrNull()
+    val errs     = middleware?.filter { it is Error    }?.map { it as Error    }?.firstOrNull()
+
+
+    /**
+     * The settings for the api ( limited for now )
+     */
+    val settings:ApiSettings by lazy { ApiSettings() }
+
+
+    /**
+     * The help class to handle help on an area, api, or action
+     */
+    val help:Help by lazy { Help(this, routes, docBuilder) }
 
 
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
     private val _validator = Validation(this)
-
-
-    /**
-     * The list of rewriters
-     */
-    private val rewrites: List<Rewriter>? = middleware?.filter { it is Rewriter }?.map { it as Rewriter }
-
-
-    val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
-
-
-    /**
-     * The error handler that responsible for several expected errors/bad-requests
-     * and also to handle unexpected errors
-     */
-    private val errs: slatekit.apis.middleware.Error? =
-        middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
-
-
-    /**
-     * The settings for the api ( limited for now )
-     */
-    val settings = ApiSettings()
-
-
-    /**
-     * The help class to handle help on an area, api, or action
-     */
-    val help = Help(this, routes, docBuilder)
-
-
-    /**
-     * Success flag to indicate to proceeed to call without a filter
-     * This is pre-built to avoid rebuilding a static success flag each time
-     */
-    private val proceedOk: ResultEx<Any> = Success<Any>("")
 
 
     private val formatter = Format()
@@ -127,7 +98,7 @@ open class ApiContainer(
     private val logger: Logger = ctx.logs.getLogger("apis")
 
 
-    private val errorHandler: Errors = Errors(logger)
+    val errorHandler: Errors = Errors(logger)
 
 
     fun rename(text: String): String = namer?.rename(text) ?: text
@@ -292,33 +263,27 @@ open class ApiContainer(
     protected fun execute(raw: Request): ResultEx<Any> {
         // Check 1: Check for help / discovery
         val helpCheck = isHelp(raw)
-        if (helpCheck.code == HELP) {
-            return buildHelp(raw, helpCheck).toResultEx()
-        }
+        if (helpCheck.code == HELP) return buildHelp(raw, helpCheck).toResultEx()
 
-        // Check 2: Check for a rewrites ( e.g. restify get /movies => get /movies/getAll )
+        // Rewrites ( e.g. restify get /movies => get /movies/getAll )
         val rewrittenReq = convertRequest(raw)
 
-        // Check 3: Finally check for formats ( e.g. recentMovies.csv => recentMovies -format=csv
+        // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
-        val result: Result<Any, Exception> = try {
-            val res1 = _validator.validateApi(req)
-            val res = res1.flatMap { apiRef ->
-                val runCtx = Ctx(this, this.ctx, req, apiRef)
-                Exec(runCtx, _validator, logger).run(::executeMethod)
-            }
-            res.toResultEx()
-        } catch (ex: Exception) {
-            val api = routes.api(req.area, req.name)
-            val apiRef = getApi(req.area, req.name, req.action)
-            logger.error("Unexpected error with api request ${req.fullName}", ex)
-            errorHandler.handleError(ctx, errs, api, apiRef.getOrElse { null }, req, ex)
-        }
 
-        // Log failures
-        result.onFailure {
-            logger.error("Error on api request ${req.fullName} : ${result.msg}", it)
+        // Api exists ?
+        val apiCheck = _validator.validateApi(req)
+
+        // Execute the API using
+        val resultRaw = apiCheck.flatMap { apiRef ->
+
+            // Run context to store all relevant info
+            val runCtx = Ctx(this, this.ctx, req, apiRef)
+
+            // Execute using a pipeline
+            Exec(runCtx, _validator, logger).run(::executeMethod)
         }
+        val result = resultRaw.toResultEx()
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
@@ -384,19 +349,19 @@ open class ApiContainer(
             failure("Unauthorized access to API docs")
         } else {
             val content = when (result.msg) {
-            // 1: {area} ? = help on area
+                // 1: {area} ? = help on area
                 "?" -> {
                     help.help()
                 }
-            // 2: {area} ? = help on area
+                // 2: {area} ? = help on area
                 "area ?" -> {
                     help.area(req.parts[0])
                 }
-            // 3. {area}.{api} = help on api
+                // 3. {area}.{api} = help on api
                 "area.api ?" -> {
                     help.api(req.parts[0], req.parts[1])
                 }
-            // 3. {area}.{api}.{action} = help on api action
+                // 3. {area}.{api}.{action} = help on api action
                 else -> {
                     help.action(req.parts[0], req.parts[1], req.parts[2])
                 }
@@ -407,8 +372,8 @@ open class ApiContainer(
 
 
     protected open fun convertRequest(req: Request): Request {
-        val finalRequest = rewrites?.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
-        return finalRequest ?: req
+        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
+        return finalRequest
     }
 
 

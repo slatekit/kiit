@@ -38,32 +38,40 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         // using the convenient Kotlin syntax for single/last parameter being a lambda
         val result =
 
-            // Middleware: Track requests
-            track {
+            // Top level error handler
+            attempt {
 
-                // Ensure protocol
-                protocol {
+                // Middleware: Track all requests
+                track {
 
-                    // Ensure auth
-                    auth {
+                    // Ensure protocol
+                    protocol {
 
-                        // Ensure global middleware
-                        middleware {
+                        // Ensure auth
+                        auth {
 
-                            // Ensure params
-                            params {
+                            // Ensure global middleware
+                            middleware {
 
-                                // Middleware: Filter requests
-                                filter {
+                                // Ensure params
+                                params {
 
-                                    // Middleware: Hooks for before/after events
-                                    hook {
+                                    // Middleware: Track usage of api
+                                    diagnostics {
 
-                                        // Middleware: Custom handling
-                                        handle {
+                                        // Middleware: Filter requests
+                                        filter {
 
-                                            // Finally  execute
-                                            execute(ctx)
+                                            // Middleware: Hooks for before/after events
+                                            hook {
+
+                                                // Middleware: Custom handling
+                                                handle {
+
+                                                    // Finally  execute
+                                                    execute(ctx)
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -150,6 +158,30 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
      * Applies the tracking middleware to track requests, successes, failures
      */
     fun track(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
+        return log(::track) {
+            val instance = ctx.container.tracker
+
+            // Hook: Before
+            if (instance is Tracked) {
+                instance.tracker.trackRequest(ctx.req)
+            }
+
+            val result = proceed()
+
+            // Hook: After
+            if (instance is Tracked) {
+                result.onSuccess { instance.tracker.handleResponse(ctx.req, result) }
+                result.onFailure { instance.tracker.handleFailure(ctx.req, it) }
+            }
+            result
+        }
+    }
+
+
+    /**
+     * Applies the tracking middleware to track requests, successes, failures
+     */
+    fun diagnostics(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
         return log(::track) {
             val instance = ctx.apiRef.instance
 
@@ -244,7 +276,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             call()
         } catch ( ex:Exception ) {
             logger.error("API pipeline unexpected error on : ${ctx.req.fullName}" + ex.message, ex)
-            Failure(ex, msg = ex.message ?: "")
+            ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
         }
 
         logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $AFTER")
