@@ -120,7 +120,7 @@ class HttpRequest(val req: Request) : RequestSupport {
         /**
          * Load json from the post/put body using json-simple
          */
-        fun loadJson(req: Request): JSONObject {
+        fun loadJson(req: Request, addQueryParams:Boolean = false): JSONObject {
             val method = req.requestMethod().toLowerCase()
             val isPosted = isBodyAllowed(method)
             val tpe:String? = req.contentType()
@@ -130,6 +130,16 @@ class HttpRequest(val req: Request) : RequestSupport {
                 val body = req.body()
                 val root = parser.parse(req.body())
                 root as JSONObject
+
+                // Add query params
+                if(addQueryParams && !req.queryParams().isEmpty()){
+                    req.queryParams().map { key ->
+                        if(key != null) {
+                            root.put(key, req.queryParams(key))
+                        }
+                    }
+                }
+                root
             }
             else {
                 JSONObject()

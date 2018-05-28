@@ -25,6 +25,7 @@ class InputArgs(val _map: Map<String, Any>,
                 private val _decryptor: ((String) -> String)? = null) : Meta, InputsUpdateable {
 
     override val raw:Any =_map
+    override fun toMap(): Map<String, Any> = _map
 
     override fun getString(key: String): String = InputFuncs.decrypt(_map[key].toString(), _decryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(_map[key].toString())

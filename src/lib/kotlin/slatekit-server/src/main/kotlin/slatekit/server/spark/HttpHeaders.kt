@@ -27,6 +27,12 @@ import java.time.ZonedDateTime
 data class HttpHeaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
 
     override val raw:Any = req.headers()
+    override fun toMap(): Map<String, Any> {
+        val pairs = req.headers().map { key -> Pair<String,Any>(key ?: "", req.headers(key) ?: "") }
+        return pairs.toMap()
+    }
+
+
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = req.headers().contains(key)

@@ -13,6 +13,8 @@
 
 package slatekit.server.spark
 
+import org.json.simple.JSONObject
+import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import spark.Request
@@ -31,11 +33,14 @@ import java.time.ZonedDateTime
  */
 data class HttpParams(val req: Request,
                       val enc: Encryptor?,
-                      val extraParams:MutableMap<String,Any> = mutableMapOf()) : Inputs, InputsUpdateable {
+                      val extraParams:MutableMap<String,Any> = mutableMapOf()) : Inputs, InputsUpdateable, JsonSupport {
 
     val method = req.requestMethod().toLowerCase()
     val hasBody = HttpRequest.isBodyAllowed(method)
-    val json = HttpRequest.loadJson(req)
+    val json = HttpRequest.loadJson(req, false)
+
+
+    override fun toJson(): JSONObject = HttpRequest.loadJson(req, true)
 
 
     override fun get(key: String): Any? = getInternal(key)

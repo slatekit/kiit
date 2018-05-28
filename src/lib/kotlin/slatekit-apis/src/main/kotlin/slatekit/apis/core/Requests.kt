@@ -12,20 +12,24 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
+import org.json.simple.JSONObject
 import slatekit.apis.ApiConstants
+import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
+import slatekit.common.Inputs
 import slatekit.common.Request
 import slatekit.meta.Serialization
 
 object Requests {
 
-    val codeHandlerProcessed = 1000
-    val codeHandlerNotProcessed = 1001
+    const val codeHandlerProcessed = 1000
+    const val codeHandlerNotProcessed = 1001
+
 
     fun convertToQueueRequest(original: Request): String {
-        val serializer = Serialization.json(true)
-        val json = serializer.serialize(original.data.raw)
-        val meta = original.meta.raw
+        // Convert the meta data to JSON
+        val meta = convertMetaToJson(original.meta, original.meta.raw)
+        val data = convertDataToJson(original.data, original.data.raw)
         val req = """
             {
                  "version"  : "${original.version}",
@@ -35,9 +39,34 @@ object Requests {
                  "tag"      : "${original.tag}",
                  "timestamp": "${DateTime.now().toStringNumeric()}",
                  "meta"     : ${meta},
-                 "data"      : ${json}
+                 "data"     : ${data}
             }
             """
         return req
+    }
+
+
+    private fun convertMetaToJson(source: Inputs, rawData:Any): String {
+        // Convert the data to JSON
+        // NOTE: It may already be in json
+        val serializer = Serialization.json(true)
+        val json = when(source) {
+            is JsonSupport  -> source.toJson().toString()
+            is Meta         -> serializer.serialize(source.toMap())
+            else            -> serializer.serialize(rawData)
+        }
+        return json
+    }
+
+
+    private fun convertDataToJson(source: Inputs, rawData:Any): String {
+        // Convert the data to JSON
+        // NOTE: It may already be in json
+        val serializer = Serialization.json(true)
+        val json = when(source) {
+            is JsonSupport  -> source.toJson().toString()
+            else            -> serializer.serialize(rawData)
+        }
+        return json
     }
 }
