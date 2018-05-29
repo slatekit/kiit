@@ -25,8 +25,8 @@ object HttpResponse {
      */
     fun result(res: Response, result: slatekit.common.Response<Any>): Any {
         return when(result.value){
-            is Content -> content(res, result as slatekit.common.Response<Content>)
-            is Doc     -> file(res, result as slatekit.common.Response<Doc>)
+            is Content -> content(res, result, result.value as Content)
+            is Doc     -> file(res, result, result.value as Doc)
             else       -> json( res, result)
         }
     }
@@ -47,25 +47,24 @@ object HttpResponse {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    fun content(res: Response, result: slatekit.common.Response<Content>): String {
+    fun content(res: Response, result: slatekit.common.Response<Any>, content:Content?): String {
         res.status(result.code)
-        res.type(result.value?.tpe?.http ?: "text/plain")
-        return result.value?.text ?: ""
+        res.type(content?.tpe?.http ?: "text/plain")
+        return content?.text ?: ""
     }
 
 
     /**
      * Returns the value of the result as a file document
      */
-    fun file(res: Response, result: slatekit.common.Response<Doc>): Any {
+    fun file(res: Response, result: slatekit.common.Response<Any>, doc:Doc): Any {
         res.status(result.code)
-        val doc = result.value!!
         val bytes = doc.content.toByteArray()
         val raw = res.raw()
 
         res.header("Content-Disposition", "attachment; filename=" + doc.name)
         //res.type("application/force-download")
-        res.type(result.value!!.tpe.http)
+        res.type(doc.tpe.http)
         raw.outputStream.write(bytes)
         raw.outputStream.flush()
         raw.outputStream.close()

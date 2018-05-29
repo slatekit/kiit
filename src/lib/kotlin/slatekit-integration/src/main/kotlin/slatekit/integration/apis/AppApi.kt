@@ -15,13 +15,25 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.middleware.Tracked
+import slatekit.common.Random
 import slatekit.common.Request
+import slatekit.common.Tracker
 import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "sys", name = "app", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
-class AppApi(val context: AppEntContext)  {
+class AppApi(val context: AppEntContext) : Tracked {
+
+    override val tracker = Tracker<Request, Request, Any, Exception>(Random.guid(), "api-tracker", context.logs.getLogger("api"))
+
+
+    @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun stats(): List<String> {
+        return tracker.diagnostics().map( { it.first + ":" + it.second } )
+    }
+
 
     @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun about(): About {

@@ -13,7 +13,6 @@ import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
@@ -38,41 +37,50 @@ import kotlin.reflect.KClass
  * @param controls :
  */
 open class ApiContainer(
-        val ctx: Context,
-        val allowIO: Boolean,
-        val auth: Auth? = null,
-        val protocol: Protocol = WebProtocol,
-        val apis: List<slatekit.apis.core.Api> = listOf(),
-        val namer : Namer? = null,
-        val middleware: List<Middleware>? = null,
-        val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
-        val serializer: ((String,Any?) -> String)? = null,
-        val docKey:String? = null,
-        val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
+    val ctx: Context,
+    val allowIO: Boolean,
+    val auth: Auth? = null,
+    val protocol: Protocol = WebProtocol,
+    val apis: List<slatekit.apis.core.Api> = listOf(),
+    val namer: Namer? = null,
+    val middleware: List<Middleware>? = null,
+    val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
+    val serializer: ((String, Any?) -> String)? = null,
+    val docKey: String? = null,
+    val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
 ) {
 
     /**
-     * The lookup/map for all the areas in the container
-     * e.g. Slate Kit apis are in a 3 part route format :
-     *
-     *    e.g. area/api/action
-     *         app/users/activate
-     *
-     * 1. area  : top level category containing 1 or more apis
-     * 2. api   : an api represents a specific resource and has 1 or more actions
-     * 3. action: the lowest level endpoint that maps to a method/function.
-     *
-     * NOTES:
-     *
-     * 1. The _lookup stores all the top level "areas" in the container
-     *    as a mapping between area -> ApiLookup.
-     * 2. The ApiLookup contains all the Apis as a mapping between "api" names to
-     *    an ApiBase ( which is what you extend from to create your own api )
-     * 3. The ApiBase then has a lookup of all "actions" mapped to methods.
+     * Load all the routes from the APIs supplied.
+     * The API setup can be either annotation based or public methods on the Class
      */
     val routes = Routes(ApiLoader.loadAll(apis, namer), namer, { api ->
+
+        // This allows APIs to be aware of the API container.
+        // Most APIs will not need this but this is here for integration with the container.
         ApiContainer.setApiHost(api, this)
     })
+
+
+    /**
+     * Load all global middleware components: Rewriters, Filters, Trackers, Error handlers
+     */
+    val rewrites = middleware?.filter { it is Rewriter }?.map { it as Rewriter }?: listOf()
+    val filters  = middleware?.filter { it is Filter   }?.map { it as Filter   }?: listOf()
+    val tracker  = middleware?.filter { it is Tracked  }?.map { it as Tracked  }?.firstOrNull()
+    val errs     = middleware?.filter { it is Error    }?.map { it as Error    }?.firstOrNull()
+
+
+    /**
+     * The settings for the api ( limited for now )
+     */
+    val settings:ApiSettings by lazy { ApiSettings() }
+
+
+    /**
+     * The help class to handle help on an area, api, or action
+     */
+    val help:Help by lazy { Help(this, routes, docBuilder) }
 
 
     /**
@@ -81,48 +89,19 @@ open class ApiContainer(
     private val _validator = Validation(this)
 
 
-    /**
-     * The list of rewriters
-     */
-    private val rewrites: List<Rewriter>? = middleware?.filter{ it is Rewriter }?.map { it as Rewriter }
-
-
-    /**
-     * The error handler that responsible for several expected errors/bad-requests
-     * and also to handle unexpected errors
-     */
-    private val errs: slatekit.apis.middleware.Error? = middleware?.filter{ it is Error }?.map { it as Error }?.firstOrNull()
-
-
-    /**
-     * The settings for the api ( limited for now )
-     */
-    val settings = ApiSettings()
-
-
-    /**
-     * The help class to handle help on an area, api, or action
-     */
-    val help = Help(this, routes, docBuilder)
-
-
-    /**
-     * Success flag to indicate to proceeed to call without a filter
-     * This is pre-built to avoid rebuilding a static success flag each time
-     */
-    private val proceedOk:ResultEx<Any> = Success<Any>("")
-
-
     private val formatter = Format()
 
 
     private val emptyArgs = mapOf<String, Any>()
 
 
-    private val logger:Logger = ctx.logs.getLogger("apis")
+    private val logger: Logger = ctx.logs.getLogger("api")
 
 
-    fun rename(text:String):String = namer?.rename(text) ?:  text
+    val errorHandler: Errors = Errors(logger)
+
+
+    fun rename(text: String): String = namer?.rename(text) ?: text
 
 
     /**
@@ -132,7 +111,7 @@ open class ApiContainer(
      * @return
      */
     fun check(request: Request): ResultMsg<ApiRef> {
-        return  ApiValidator.validateCall(request, { req -> get(req) })
+        return ApiValidator.validateCall(request, { req -> get(req) })
     }
 
 
@@ -148,14 +127,14 @@ open class ApiContainer(
 
     fun sample(cmd: Request, path: File): ResultMsg<String> {
         val action = get(cmd)
-        val sample = if(action.success) {
-                val parameters = when(action) {
-                    is Success -> action.data.action.paramsUser
-                    is Failure -> listOf()
-                }
-                val serializer = Serialization.sampler() as SerializerSample
-                val text = serializer.serializeParams(parameters)
-                text
+        val sample = if (action.success) {
+            val parameters = when (action) {
+                is Success -> action.data.action.paramsUser
+                is Failure -> listOf()
+            }
+            val serializer = Serialization.sampler() as SerializerSample
+            val text = serializer.serializeParams(parameters)
+            text
         } else "Unable to find command: " + cmd.path
 
         path.writeText(sample)
@@ -171,10 +150,10 @@ open class ApiContainer(
     fun contains(area: String): Boolean {
         val parts = area.split('.')
         return when (parts.size) {
-            0    -> false
-            1    -> routes.contains(parts[0]) || routes.contains("", parts[0])
-            2    -> routes.contains(parts[0], parts[1]) || routes.contains("", parts[0], parts[1])
-            3    -> routes.contains(parts[0], parts[1], parts[2])
+            0 -> false
+            1 -> routes.contains(parts[0]) || routes.contains("", parts[0])
+            2 -> routes.contains(parts[0], parts[1]) || routes.contains("", parts[0], parts[1])
+            3 -> routes.contains(parts[0], parts[1], parts[2])
             else -> false
         }
     }
@@ -198,16 +177,22 @@ open class ApiContainer(
     fun callAsResult(req: Request): ResultEx<Any> {
         val result: ResultEx<Any> = try {
             execute(req)
-        }
-        catch(ex: Exception) {
+        } catch (ex: Exception) {
             logger.error("Unexpected error executing ${req.fullName}", ex)
-            errs?.onError(ctx, req, req.path,this, ex, null)?.toResultEx() ?: Failure(ex)
+            errs?.onError(ctx, req, req.path, this, ex, null)?.toResultEx() ?: Failure(ex)
         }
         return result
     }
 
 
-    fun call(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): ResultEx<Any> {
+    fun call(
+        area: String,
+        api: String,
+        action: String,
+        verb: String,
+        opts: Map<String, Any>,
+        args: Map<String, Any>
+    ): ResultEx<Any> {
         val req = Request.raw(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
@@ -227,7 +212,7 @@ open class ApiContainer(
         if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
 
         val api = routes.api(area, name)!!
-        val act =  api.actions[action]!!
+        val act = api.actions[action]!!
         val instance = routes.instance(area, name, ctx)
         return instance?.let { inst ->
             success(ApiRef(api, act, inst))
@@ -242,7 +227,7 @@ open class ApiContainer(
      * @param action
      * @return
      */
-    fun getApi(clsType: KClass<*>, member:KCallable<*>): ResultMsg<ApiRef> {
+    fun getApi(clsType: KClass<*>, member: KCallable<*>): ResultMsg<ApiRef> {
         val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
         val result = apiAnno?.let { anno ->
 
@@ -250,12 +235,12 @@ open class ApiContainer(
             val api = anno.name
             val actionAnno = Reflector.getAnnotationForMember<ApiAction>(member, ApiAction::class)
             val action = actionAnno?.let { act ->
-                val action = if(act.name.isBlank()) member.name else act.name
+                val action = if (act.name.isBlank()) member.name else act.name
                 action
             } ?: member.name
             val info = getApi(area, api, action)
             info
-        } ?:  notFound("member/annotation not found for : ${member.name}")
+        } ?: notFound("member/annotation not found for : ${member.name}")
         return result
     }
 
@@ -276,40 +261,29 @@ open class ApiContainer(
      * @return
      */
     protected fun execute(raw: Request): ResultEx<Any> {
-        // Case 1: Check for help / discovery
+        // Check 1: Check for help / discovery
         val helpCheck = isHelp(raw)
-        if (helpCheck.code == HELP) {
-            return buildHelp(raw, helpCheck).toResultEx()
-        }
+        if (helpCheck.code == HELP) return buildHelp(raw, helpCheck).toResultEx()
 
-        // Case 2: Check for a rewrites ( e.g. restify get /movies => get /movies/getAll )
+        // Rewrites ( e.g. restify get /movies => get /movies/getAll )
         val rewrittenReq = convertRequest(raw)
 
-        // Case 3: Finally check for formats ( e.g. recentMovies.csv => recentMovies -format=csv
+        // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
-        val result:Result<Any,Exception> = try {
-            val res1 = _validator.validateApi(req)
-            val res = res1.flatMap { apiRef ->
-                val res2 = _validator.validateProtocol(req, apiRef)
-                val res3 = res2.flatMap { _ -> _validator.validateAuthorization(req, apiRef) }
-                val res4 = res3.flatMap { _ -> _validator.validateMiddleware(req) }
-                val res5 = res4.flatMap { _ -> _validator.validateParameters(req) }
-                val res6 = res5.flatMap { _ -> executeWithMiddleware(req, apiRef) }
-                res6
-            }
-            TODO.BUG( tag = "Result", msg = "Need some transformer from T1,E1 -> T2,E2")
-            res.toResultEx()
-        }
-        catch(ex: Exception) {
-            val api = routes.api(req.area, req.name)
-            val apiRef = getApi(req.area, req.name, req.action)
-            logger.error("Unexpected error with api request ${req.fullName}", ex)
-            handleError(api, apiRef.getOrElse { null }, req, ex)
-        }
 
-        result.onFailure {
-            logger.error("Error on api request ${req.fullName} : ${result.msg}", it)
+        // Api exists ?
+        val apiCheck = _validator.validateApi(req)
+
+        // Execute the API using
+        val resultRaw = apiCheck.flatMap { apiRef ->
+
+            // Run context to store all relevant info
+            val runCtx = Ctx(this, this.ctx, req, apiRef)
+
+            // Execute using a pipeline
+            Exec(runCtx, _validator, logger).run(::executeMethod)
         }
+        val result = resultRaw.toResultEx()
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
@@ -317,122 +291,27 @@ open class ApiContainer(
     }
 
 
-    /**
-     * executes the api request factoring in the middleware filters and hooks.
-     * @param req
-     * @param api
-     * @param action
-     * @return
-     */
-    protected open fun executeWithMiddleware(req: Request, apiRef:ApiRef): Result<Any, Exception> {
-        TODO.IMPLEMENT("api",
-            """Implement the use middleware filters/hooks that are globally supplied
-                     in the construtor ( and thus global ) and not just on the instace of the API itself
-                  """)
-
-        val instance = apiRef.instance
-        val action = apiRef.action
-
-        // Filter
-        val proceed = when(instance) {
-            is Filter -> instance.onFilter(this.ctx, req, this, null).toResultEx()
-            else                 -> proceedOk
-        }
-
-        // Ok to call.
-        return if (proceed.success) {
-
-            // Hook: Before
-            if (instance is Hook) {
-                instance.onBefore(this.ctx, req, action,this, null)
-            }
-
-            // Has a custom handler ?
-            val isHandler = instance is Handler
-
-            // Finally make the call here.
-            val result = if(isHandler){
-                // The handler middleware supports 2 options:
-                // 1. Return flag indicated that it handled the request
-                // 2. Return flag indicating to proceed to execute as normal
-                val handlerResult = (instance as Handler).handle(this.ctx, req, action, this, null)
-                when(handlerResult.code){
-                    Requests.codeHandlerNotProcessed -> executeMethod(req, apiRef)
-                    else  -> handlerResult.toResultEx()
-                }
-            } else {
-                executeMethod(req, apiRef)
-            }
-
-            // Hook: After
-            if (instance is Hook) {
-                instance.onAfter(this.ctx, req, action,this, null)
-            }
-
-            // Return the result
-            result
-
-        }
-        else {
-            logger.warn("Api request filtered out for ${req.fullName} using filter: ${instance.kClass.qualifiedName}")
-            proceed
-        }
-    }
-
-
     @Suppress("UNCHECKED_CAST")
-    protected open fun executeMethod(req: Request, apiRef:ApiRef): ResultEx<Any> {
+    protected open fun executeMethod(runCtx:Ctx): ResultEx<Any> {
         // Finally make call.
+        val req = runCtx.req
+        val apiRef = runCtx.apiRef
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = ApiHelper.fillArgs(converter, apiRef, req)
 
-            val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
+        val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
 
-            return returnVal?.let { res ->
-                if (res is Result<*,*>) {
-                    (res as Result<Any,Any>).toResultEx()
-                }
-                else {
-                    Success(res)
-                }
-            } ?: Failure(Exception("Received null"))
+        return returnVal?.let { res ->
+            if (res is Result<*, *>) {
+                (res as Result<Any, Any>).toResultEx()
+            } else {
+                Success(res)
+            }
+        } ?: Failure(Exception("Received null"))
     }
 
 
-    protected open fun handleError(api: slatekit.apis.core.Api?, apiRef: ApiRef?, req: Request, ex: Exception): ResultEx<Any> {
-        // OPTION 1: Api level
-        return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
-            logger.debug("Handling error at api level")
-            apiRef.instance.onError(this.ctx, req, apiRef,this, ex, null).toResultEx()
-        }
-        // OPTION 2: GLOBAL Level custom handler
-        else if (errs != null) {
-            logger.debug("Handling error at global middleware")
-            errs.onError(ctx, req, req.path, this, ex, null).toResultEx()
-        }
-        // OPTION 3: GLOBAL Level default handler
-        else {
-            logger.debug("Handling error at global container")
-            handleErrorInternally(req, ex)
-        }
-    }
-
-
-    /**
-     * global handler for an unexpected error ( for derived classes to override )
-     *
-     * @param ctx    : the application context
-     * @param req    : the request
-     * @param ex     : the exception
-     * @return
-     */
-    fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {
-        val msg = "error executing : " + req.path + ", check inputs"
-        return unexpectedError(Exception(msg, ex))
-    }
-
-
-    open fun isHelp(req:Request):ResultMsg<String> {
+    open fun isHelp(req: Request): ResultMsg<String> {
 
         // Case 3a: Help ?
         return if (ArgsFuncs.isHelp(req.parts, 0)) {
@@ -449,8 +328,7 @@ open class ApiContainer(
         // Case 3d: Help on action ?
         else if (ArgsFuncs.isHelp(req.parts, 3)) {
             ResultFuncs.help(msg = "area.api.action ?")
-        }
-        else {
+        } else {
             failure("Unknown help option")
         }
     }
@@ -466,26 +344,25 @@ open class ApiContainer(
      * @param cmd
      * @param mode
      */
-    open fun buildHelp(req:Request, result:ResultMsg<String>): ResultMsg<Content> {
-        return if ( !isDocKeyAvailable(req) ) {
+    open fun buildHelp(req: Request, result: ResultMsg<String>): ResultMsg<Content> {
+        return if (!isDocKeyAvailable(req)) {
             failure("Unauthorized access to API docs")
-        }
-        else {
+        } else {
             val content = when (result.msg) {
-            // 1: {area} ? = help on area
-                "?"          -> {
+                // 1: {area} ? = help on area
+                "?" -> {
                     help.help()
                 }
-            // 2: {area} ? = help on area
-                "area ?"     -> {
+                // 2: {area} ? = help on area
+                "area ?" -> {
                     help.area(req.parts[0])
                 }
-            // 3. {area}.{api} = help on api
+                // 3. {area}.{api} = help on api
                 "area.api ?" -> {
                     help.api(req.parts[0], req.parts[1])
                 }
-            // 3. {area}.{api}.{action} = help on api action
-                else         -> {
+                // 3. {area}.{api}.{action} = help on api action
+                else -> {
                     help.action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }
@@ -495,8 +372,8 @@ open class ApiContainer(
 
 
     protected open fun convertRequest(req: Request): Request {
-        val finalRequest = rewrites?.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
-        return finalRequest ?: req
+        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
+        return finalRequest
     }
 
 
@@ -504,50 +381,47 @@ open class ApiContainer(
      * Finally: If the format of the content specified ( json | csv | props )
      * Then serialize it here and return the content
      */
-    protected open fun convertResult(req: Request, result:ResultEx<Any>): ResultEx<Any> {
-        return if(result.success && !req.output.isNullOrEmpty()) {
+    protected open fun convertResult(req: Request, result: ResultEx<Any>): ResultEx<Any> {
+        return if (result.success && !req.output.isNullOrEmpty()) {
             val finalSerializer = serializer ?: this::serialize
-            val serialized = finalSerializer(req.output ?: "", result.getOrElse { null } )
-            ( result as Success ).copy(data = serialized!!)
+            val serialized = finalSerializer(req.output ?: "", result.getOrElse { null })
+            (result as Success).copy(data = serialized!!)
         } else {
             result
         }
     }
 
 
-
     /**
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    fun serialize(format:String, data:Any?): Any? {
+    fun serialize(format: String, data: Any?): Any? {
 
         val content = when (format) {
-            ContentTypeCsv .ext  -> Content.csv ( Serialization.csv().serialize(data)  )
-            ContentTypeJson.ext  -> Content.json( Serialization.json().serialize(data) )
-            ContentTypeProp.ext  -> Content.prop( Serialization.props(true).serialize(data))
-            else                 -> data
+            ContentTypeCsv.ext -> Content.csv(Serialization.csv().serialize(data))
+            ContentTypeJson.ext -> Content.json(Serialization.json().serialize(data))
+            ContentTypeProp.ext -> Content.prop(Serialization.props(true).serialize(data))
+            else -> data
         }
         return content
     }
 
 
-    fun isDocKeyAvailable(req:Request):Boolean {
+    fun isDocKeyAvailable(req: Request): Boolean {
         // Ensure that docs are only available w/ help key
-        val docKeyValue = if(req.meta.containsKey(ApiConstants.DocKeyName)){
+        val docKeyValue = if (req.meta.containsKey(ApiConstants.DocKeyName)) {
             req.meta.get(ApiConstants.DocKeyName) ?: ""
-        }
-        else if(req.data.containsKey(ApiConstants.DocKeyName)) {
+        } else if (req.data.containsKey(ApiConstants.DocKeyName)) {
             req.data.get(ApiConstants.DocKeyName) ?: ""
-        }
-        else
+        } else
             ""
         return docKeyValue == docKey
     }
 
 
     fun isCliAllowed(supportedProtocol: String): Boolean =
-            supportedProtocol == ApiConstants.Any || supportedProtocol == ApiConstants.SourceCLI
+        supportedProtocol == ApiConstants.Any || supportedProtocol == ApiConstants.SourceCLI
 
 
     companion object {
@@ -558,5 +432,4 @@ open class ApiContainer(
             }
         }
     }
-
 }

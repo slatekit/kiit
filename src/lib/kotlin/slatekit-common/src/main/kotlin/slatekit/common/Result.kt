@@ -146,7 +146,7 @@ inline fun <T1, T2, E1, E2> Result<T1, E1>.transform(
 @Suppress("UNCHECKED_CAST")
 fun <T, E> Result<T, E>.toResultEx(): Result<T, Exception> =
         when (this) {
-            is Success -> Success(this.data, this.code, this.msg)
+            is Success -> this
             is Failure -> {
                 when(this.err) {
                     is Exception -> this as Result<T,Exception>
