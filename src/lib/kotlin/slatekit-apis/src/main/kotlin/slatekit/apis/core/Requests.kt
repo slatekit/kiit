@@ -17,12 +17,35 @@ import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
 import slatekit.common.Inputs
 import slatekit.common.Request
+import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Serialization
 
 object Requests {
 
     const val codeHandlerProcessed = 1000
     const val codeHandlerNotProcessed = 1001
+
+
+    fun convertToJson(original: Request, enc: Encryptor? = null): String {
+        // Convert the meta data to JSON
+        val meta = convertMetaToJson(original.meta, original.meta.raw)
+        val data = convertDataToJson(original.data, original.data.raw)
+        val metaFinal = enc?.encrypt(meta) ?: meta
+        val dataFinal = enc?.encrypt(data) ?: data
+        val req = """
+            {
+                 "version"  : "${original.version}",
+                 "path"     : "${original.path}",
+                 "source"   : "${original.source}",
+                 "verb"     : "${original.verb}",
+                 "tag"      : "${original.tag}",
+                 "timestamp": "${original.timestamp}",
+                 "meta"     : ${metaFinal},
+                 "data"     : ${dataFinal}
+            }
+            """
+        return req
+    }
 
 
     fun convertToQueueRequest(original: Request): String {
@@ -50,9 +73,9 @@ object Requests {
         // NOTE: It may already be in json
         val serializer = Serialization.json(true)
         val json = when(source) {
-            is JsonSupport  -> source.toJson().toString()
-            is Meta         -> serializer.serialize(source.toMap())
-            else            -> serializer.serialize(rawData)
+            is JsonSupport           -> source.toJson().toString()
+            is slatekit.common.Meta  -> serializer.serialize(source.toMap())
+            else                     -> serializer.serialize(rawData)
         }
         return json
     }

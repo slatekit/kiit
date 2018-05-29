@@ -271,12 +271,10 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
 
     private fun attempt(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         // Build a message
-        logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $BEFORE")
-
         val result = try {
             call()
         } catch ( ex:Exception ) {
-            logger.error("API pipeline unexpected error on : ${ctx.req.fullName}" + ex.message, ex)
+            logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
         }
 
@@ -290,8 +288,17 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         // Build a message
         val result = call()
 
-        logger.debug("API pipeline: ${method.name} : $AFTER : result: success = ${result.success} message = ${result.msg}")
+        logger.debug("""{ "api-pipeline": "${method.name}", "path" : "${ctx.req.fullName}", """ +
+                           """verb" : "${ctx.req.verb}", "success" : ${result.success}, "message" : "${result.msg}"""".trimIndent())
 
+        result.onFailure { logError(method.name, it) }
         return result
+    }
+
+
+    private fun logError(method:String, ex:Exception) {
+        val json = Requests.convertToJson(ctx.req, ctx.context.enc)
+        logger.error("""{ "method": "$method", "path": "${ctx.req.fullName}", "request" : $json }""".trimIndent(), ex)
+
     }
 }
