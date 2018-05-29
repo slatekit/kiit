@@ -214,6 +214,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
                 if (filterResult.success) {
                     proceed()
                 } else {
+                    logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
                     filterResult
                 }
             } else {
@@ -287,11 +288,9 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
 
     private fun log(method:KCallable<*>, call: () -> Result<Any, Exception>): Result<Any, Exception> {
         // Build a message
-        logger.debug("API pipeline: ${method.name} : $BEFORE")
-
         val result = call()
 
-        logger.debug("API pipeline: ${method.name} : $AFTER")
+        logger.debug("API pipeline: ${method.name} : $AFTER : result: success = ${result.success} message = ${result.msg}")
 
         return result
     }
