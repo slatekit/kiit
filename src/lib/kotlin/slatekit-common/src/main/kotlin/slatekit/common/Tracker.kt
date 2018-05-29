@@ -50,9 +50,12 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         val filtered = totalFiltered.get().toDouble()
         val successes = totalSuccesses.get().toDouble()
         val failures = totalFailures.get().toDouble()
-        val percentFiltered = filtered / requests
-        val percentSuccess = successes / requests
-        val percentFailure = failures / requests
+        fun percentage(a:Double, b:Double): Double {
+            return if( b == 0.0 ) 0.0 else a / b
+        }
+        val percentFiltered = percentage(filtered , requests )
+        val percentSuccess  = percentage(successes, requests )
+        val percentFailure  = percentage(failures , requests )
 
         return listOf(
             Pair("id", id),
@@ -107,6 +110,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      */
     open fun trackRequest(request: TRequest) {
         lastRequest.set(request)
+        totalRequests.incrementAndGet()
     }
 
 
@@ -115,6 +119,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      */
     open fun trackFiltered(filteredReason: TFilter) {
         lastFiltered.set(filteredReason)
+        totalFiltered.incrementAndGet()
     }
 
 
@@ -123,6 +128,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      */
     open fun trackSuccess(success: TSuccess) {
         lastSuccess.set(success)
+        totalSuccesses.incrementAndGet()
     }
 
 
@@ -132,5 +138,6 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      */
     open fun trackFailure(req:TRequest, failure: TFailure) {
         lastFailure.set(Pair(req, failure))
+        totalFailures.incrementAndGet()
     }
 }

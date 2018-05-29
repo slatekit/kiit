@@ -216,6 +216,9 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
                     proceed()
                 } else {
                     logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
+                    if(instance is Tracked) {
+                        instance.tracker.trackFiltered(ctx.req)
+                    }
                     filterResult
                 }
             } else {
