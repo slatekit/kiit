@@ -16,11 +16,18 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.info.Host
 import slatekit.integration.common.AppEntContext
 
 
-@Api(area = "sys", name = "version", desc = "api to get version information", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "version", desc = "api to get version information", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
 class VersionApi(override val context: AppEntContext) : ApiWithSupport {
+
+    @ApiAction(desc = "gets info about the host", roles = "@parent", verb = "@parent", protocol = "@parent")
+    fun host(): Host {
+        return context.app.host
+    }
+
 
     @ApiAction(desc = "get the version of the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun app(): String {
@@ -41,7 +48,7 @@ class VersionApi(override val context: AppEntContext) : ApiWithSupport {
 
 
     @ApiAction(desc = "gets the version of the system", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun host(): String {
+    fun version(): String {
         return context.app.host.version
     }
 }

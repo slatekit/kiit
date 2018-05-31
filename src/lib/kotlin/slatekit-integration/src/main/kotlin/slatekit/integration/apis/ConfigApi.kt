@@ -28,7 +28,7 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.DbTypeMySql
 
 
-@Api(area = "sys", name = "config", desc = "api info about the application and host", roles = "*", auth = "key-roles", verb = "post", protocol = ApiConstants.SourceCLI)
+@Api(area = "infra", name = "configs", desc = "api info about the application and host", roles = "*", auth = "key-roles", verb = "post", protocol = ApiConstants.SourceCLI)
 class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
     @ApiAction(desc = "creates an api key in the directory", roles = "*", verb = "@parent", protocol = "@parent")

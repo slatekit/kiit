@@ -15,9 +15,11 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.support.ApiWithSupport
+import slatekit.common.queues.QueueSource
 
-@Api(area = "infra", name = "queues", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
-class QueueApi(val queue: slatekit.common.queues.QueueSource, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
+@Api(area = "cloud", name = "queues", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+class QueueApi(val queue: QueueSource, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
 
     @ApiAction(desc = "close the queue", roles = "@parent", verb = "@parent", protocol = "@parent")

@@ -16,13 +16,14 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.ResultMsg
 import slatekit.common.Vars
 import slatekit.core.common.AppContext
 import slatekit.core.sms.SmsService
 
 
-@slatekit.apis.Api(area = "sys", name = "sms", desc = "api to send sms", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
-class SmsApi(val svc: slatekit.core.sms.SmsService, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
+@Api(area = "cloud", name = "sms", desc = "api to send sms", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
+class SmsApi(val svc: SmsService, override val context: AppContext) : ApiWithSupport {
     /**
      * sends a message
      * @param message     : message to send
@@ -30,7 +31,7 @@ class SmsApi(val svc: slatekit.core.sms.SmsService, override val context: slatek
      * @param phone       : destination phone
      */
     @ApiAction(desc = "send an sms", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun send(message: String, countryCode: String, phone: String): slatekit.common.ResultMsg<Boolean> {
+    fun send(message: String, countryCode: String, phone: String): ResultMsg<Boolean> {
         return this.svc.send(message, countryCode, phone)
     }
 
@@ -44,7 +45,7 @@ class SmsApi(val svc: slatekit.core.sms.SmsService, override val context: slatek
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an sms using a template", roles = "@parent", verb = "@parent", protocol = "cli")
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: slatekit.common.Vars): slatekit.common.ResultMsg<Boolean> {
+    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: Vars): ResultMsg<Boolean> {
         return this.svc.sendUsingTemplate(name, countryCode, phone, vars)
     }
 }
