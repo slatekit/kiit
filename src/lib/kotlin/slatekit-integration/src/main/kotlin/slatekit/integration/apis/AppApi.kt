@@ -23,7 +23,7 @@ import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 
 
-@Api(area = "sys", name = "app", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "app", name = "about", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
 class AppApi(val context: AppEntContext) : Tracked {
 
     override val tracker = Tracker<Request, Request, Any, Exception>(Random.guid(), "api-tracker", context.logs.getLogger("api"))
@@ -49,7 +49,6 @@ class AppApi(val context: AppEntContext) : Tracked {
 
     @ApiAction(desc = "get info about the application", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun cmd(cmd: Request): About {
-        println(cmd.fullName)
         return context.app.about
     }
 
@@ -57,12 +56,6 @@ class AppApi(val context: AppEntContext) : Tracked {
     @ApiAction(desc = "gets info about the language", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun lang(): Lang {
         return context.app.lang
-    }
-
-
-    @ApiAction(desc = "gets info about the host", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun host(): Host {
-        return context.app.host
     }
 
 
@@ -82,10 +75,4 @@ class AppApi(val context: AppEntContext) : Tracked {
     fun status(): Status {
         return context.app.status
     }
-
-
-    //@ApiAction(desc = "gets all info", roles = "@parent", verb = "@parent", protocol = "@parent")
-    //fun all(): String {
-    //    return Serializer().serialize(context.app)
-    //}
 }

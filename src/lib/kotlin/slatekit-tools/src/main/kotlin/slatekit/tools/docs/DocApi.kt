@@ -6,7 +6,7 @@ import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.integration.common.AppEntContext
 
-@Api(area = "sys", name = "docs", desc= "help doc generator",
+@Api(area = "slate", name = "docs", desc= "help doc generator",
         roles= "@admin", auth = "app", verb = "post", protocol = "*")
 class DocApi(val context: AppEntContext) {
 

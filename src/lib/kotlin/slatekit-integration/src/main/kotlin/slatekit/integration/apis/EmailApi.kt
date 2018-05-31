@@ -15,9 +15,12 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.support.ApiWithSupport
+import slatekit.common.ResultMsg
+import slatekit.common.Vars
 
-@slatekit.apis.Api(area = "sys", name = "email", desc = "api to send emails", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
-class EmailApi(val svc: slatekit.core.email.EmailService, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
+@Api(area = "cloud", name = "email", desc = "api to send emails", roles = "ops", auth = "key-roles", verb = "*", protocol = "*")
+class EmailApi(val svc: slatekit.core.email.EmailService, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
     /**
      * Sends the email message
@@ -28,7 +31,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      * @return
      */
     @ApiAction(name = "", desc = "send an email", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun send(to: String, subject: String, body: String, html: Boolean): slatekit.common.ResultMsg<Boolean> {
+    fun send(to: String, subject: String, body: String, html: Boolean): ResultMsg<Boolean> {
         val content = slatekit.common.Uris.readText("user://blendlife-kotlin/templates/template_vacation.html")!!
         return this.svc.send(to, subject, content, html)
     }
@@ -43,7 +46,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      * @return
      */
     @ApiAction(name = "", desc = "send an email", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun sendFile(to: String, subject: String, filePath: String, html: Boolean): slatekit.common.ResultMsg<Boolean> {
+    fun sendFile(to: String, subject: String, filePath: String, html: Boolean): ResultMsg<Boolean> {
         val content = slatekit.common.Uris.readText(filePath)!!
         return this.svc.send(to, subject, content, html)
     }
@@ -59,7 +62,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      *                      will be automatically added into this collection )
      */
     @ApiAction(name = "", desc = "send an email using a template", roles = "@parent", verb = "@parent", protocol = "cli")
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: slatekit.common.Vars): slatekit.common.ResultMsg<Boolean> {
+    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): ResultMsg<Boolean> {
         return this.svc.sendUsingTemplate(name, to, subject, html, vars)
     }
 }

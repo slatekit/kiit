@@ -23,7 +23,7 @@ import slatekit.core.common.AppContext
 /**
  * Created by kreddy on 3/23/2016.
  */
-@Api(area = "sys", name = "encrypt", desc = "api to encryption and decryption",
+@Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
         roles = "?", auth = "app", verb = "*", protocol = ApiConstants.SourceCLI)
 class EncryptApi(context: AppContext) : ApiBase(context){
 

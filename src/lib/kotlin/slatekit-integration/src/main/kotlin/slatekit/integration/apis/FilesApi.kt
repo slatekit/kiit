@@ -19,7 +19,7 @@ import slatekit.common.getOrElse
 import slatekit.common.toResultEx
 
 
-@Api(area = "infra", name = "files", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "cloud", name = "files", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
 class FilesApi(val files: slatekit.core.cloud.CloudFilesBase, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
 
