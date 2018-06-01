@@ -280,6 +280,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         } catch ( ex:Exception ) {
             logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
+            Failure(ex)
         }
 
         logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $AFTER")
@@ -301,7 +302,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
 
 
     private fun logError(method:String, ex:Exception) {
-        val json = Requests.convertToJson(ctx.req, ctx.context.enc)
+        val json = Requests.toJson(ctx.req, ctx.context.enc)
         logger.error("""{ "method": "$method", "path": "${ctx.req.fullName}", "request" : $json }""".trimIndent(), ex)
 
     }

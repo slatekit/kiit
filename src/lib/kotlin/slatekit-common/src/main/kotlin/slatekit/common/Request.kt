@@ -82,28 +82,40 @@ data class Request (
 
     companion object {
 
-        fun raw(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
-            val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
-            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts))
-        }
-
-
-        fun path(path:String, verb: String, opts: Map<String, Any>, args: Map<String, Any>): Request {
-            val parts = path.split(".")
-            val area = parts[0]
-            val api = parts[1]
-            val action = parts[2]
-            val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
-            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts))
+        /**
+         * Builds a request that is designated as a web request with empty data and meta objects.
+         */
+        fun web(path:String, verb:String, tag:String = ""): Request {
+            val sep = if(path.contains("/")) "/" else "."
+            val parts = path.split(sep)
+            val req = Request(path, parts, source = "web", data = InputArgs(mapOf()), meta = InputArgs(mapOf()), verb = verb, tag = tag)
+            return req
         }
 
 
         /**
-         * builds the request
+         * Builds a request that is designated as a cli request using the raw data/meta supplied
+         */
+        fun cli(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw:Any? = null): Request {
+            val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
+            return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts), raw = raw)
+        }
+
+
+        /**
+         * Builds a cli based request using pre-build data/meta
+         */
+        fun cli(path: String, verb: String, meta: Meta?, args: Args, raw:Any?): Request {
+            return Request(path, args.actionParts, "cli", verb, args, meta ?: InputArgs(mapOf()), raw, "")
+        }
+
+        /**
+         * builds the request using the path and raw meta/data supplied.
+         * NOTE: This is used mostly for testing purposes
          */
         fun cli(path: String,
-                            headers: List<Pair<String, Any>>?,
-                            inputs: List<Pair<String, Any>>?): Request {
+                headers: List<Pair<String, Any>>?,
+                inputs: List<Pair<String, Any>>?): Request {
 
             fun buildArgs(inputs: List<Pair<String, Any>>?): InputArgs {
 
@@ -122,7 +134,13 @@ data class Request (
         }
 
 
-        fun cli(path: String, args: Args, opts: Meta?, verb: String, raw:Any?): Request =
-                Request(path, args.actionParts, "cli", verb, args, opts ?: InputArgs(mapOf()), raw, "")
+
+        fun path(path:String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw:Any? = null): Request {
+            val parts = path.split(".")
+            val area = parts[0]
+            val api = parts[1]
+            val action = parts[2]
+            return cli(area, api, action, verb, opts, args, raw)
+        }
     }
 }

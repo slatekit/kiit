@@ -179,7 +179,8 @@ open class ApiContainer(
             execute(req)
         } catch (ex: Exception) {
             logger.error("Unexpected error executing ${req.fullName}", ex)
-            errs?.onError(ctx, req, req.path, this, ex, null)?.toResultEx() ?: Failure(ex)
+            errs?.onError(ctx, req, req.path, this, ex, null)?.toResultEx()
+            Failure(ex)
         }
         return result
     }
@@ -193,7 +194,7 @@ open class ApiContainer(
         opts: Map<String, Any>,
         args: Map<String, Any>
     ): ResultEx<Any> {
-        val req = Request.raw(area, api, action, verb, opts, args)
+        val req = Request.cli(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
 

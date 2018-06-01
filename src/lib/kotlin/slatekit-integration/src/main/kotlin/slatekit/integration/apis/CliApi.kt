@@ -17,7 +17,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.CliProtocol
 import slatekit.apis.core.Api
-import slatekit.apis.core.Reqs
+import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
 import slatekit.core.cli.CliCommand
@@ -95,7 +95,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
             // Supply the api-key into each command.
             val meta = cmd.args.meta.plus(Pair("api-key", creds.key))
             val metaInputs = slatekit.common.InputArgs(meta)
-            val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, metaInputs, ApiConstants.SourceCLI, cmd)
+            val apiCmd = slatekit.common.Request.cli(cmd.line, ApiConstants.SourceCLI, metaInputs, cmd.args, cmd)
             cmd.copy(result = apis.call(apiCmd))
         }
     }
@@ -150,7 +150,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
 
     private fun buildRequestSample(cmd:CliCommand): ResultMsg<String> {
         val opts = slatekit.common.InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
-        val apiCmd = slatekit.common.Request.cli(cmd.line, cmd.args, opts, ApiConstants.SourceCLI, cmd)
+        val apiCmd = slatekit.common.Request.cli(cmd.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
 
         // Generate sample json
         val fileName = cmd.args.getSysString(CliConstants.SysSample)
@@ -164,7 +164,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
         // The file path
         val rawPath = cmd.args.getSysString(CliConstants.SysFile)
         val route = cmd.fullName()
-        val req = Reqs.fromFileWithMeta(
+        val req = Requests.fromFileWithMeta(
                 route,
                 rawPath ?: "",
                 mapOf(metaNameForApiKey to creds.key),

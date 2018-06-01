@@ -99,7 +99,7 @@ class Api_Setup_Tests : ApiTestsBase() {
         ), auth = null, allowIO = false)
 
         assert(apis.contains("app.SamplePOKO.getCounter"))
-        assert(apis.contains("sys.app.host"))
+        assert(apis.contains("app.info.about"))
     }
 
 
@@ -128,7 +128,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test
-    fun can_get_api_info_from_method(){
+    fun can_get_api_info_from_method() {
         val ctx = AppContext.simple("queues")
         val api = WorkerSampleApi(ctx)
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null , allowIO = false)

@@ -34,7 +34,7 @@ interface ApiQueueSupport {
         // Coming in as http request ? and mode is queued ?
         return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
             // Convert from web request to Queued request
-            val queuedReq = Requests.convertToQueueRequest(req)
+            val queuedReq = Requests.toJsonAsQueued(req)
             sendToQueue(queuedReq)
             Success("Request processed as queue", Requests.codeHandlerProcessed)
         }
