@@ -18,6 +18,8 @@ import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
 import slatekit.common.*
 import slatekit.common.log.Logger
+import slatekit.common.results.ResultFuncs
+import slatekit.common.results.ResultFuncs.unexpectedError
 import kotlin.reflect.KCallable
 
 
@@ -280,7 +282,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         } catch ( ex:Exception ) {
             logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
-            Failure(ex)
+            unexpectedError<Any>(Exception("unexpected error in api", ex))
         }
 
         logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $AFTER")
