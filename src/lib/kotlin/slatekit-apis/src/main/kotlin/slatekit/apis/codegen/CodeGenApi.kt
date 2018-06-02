@@ -7,9 +7,9 @@ import slatekit.common.results.ResultFuncs.success
 
 
 /**
- * sys.codegen.toJava -templatesFolder="user://dev/tmp/slatekit/scripts/templates/codegen/java" -outputFolder="user://dev/tmp/codegen/java" -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
- * sys.codegen.toKotlin -templatesFolder="user://dev/tmp/slatekit/scripts/templates/codegen/kotlin" -outputFolder="user://dev/tmp/codegen/kotlin" -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
- * sys.codegen.toJava -templatesFolder="user://git/slatekit/scripts/templates/codegen/java" -outputFolder="user://dev/temp/codegen/java" -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
+ * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
+ * slate.codegen.toKotlin -templatesFolder="user://dev/tmp/slatekit/scripts/templates/codegen/kotlin" -outputFolder="user://dev/tmp/codegen/kotlin" -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
+ * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  */
 @Api(area = "slate", name = "codegen", desc = "client code generator", roles = "*", auth = "key-roles", verb = "*", protocol = "cli")
 class CodeGenApi : ApiHostAware {

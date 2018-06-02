@@ -7,6 +7,7 @@ import slatekit.common.*
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import java.io.File
+import java.nio.file.Path
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
@@ -67,8 +68,18 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
      *  -nameOfTemplateMethod="codegen-java-method.txt"
      *  -nameOfTemplateModel="codegen-java-model.txt"
      */
-    fun generate(req:Request):Unit {
+    fun generate(req:Request) {
+        val log = this.settings.host.ctx.logs.getLogger("slate")
         val dirs = this.settings.host.ctx.dirs
+
+        // Check if templates folder exists
+        val templatesFolderPath = Uris.interpret(settings.templatesFolder)
+        val templatesFolder = File(templatesFolderPath)
+        if(!templatesFolder.exists()){
+            log.error("Templates folder: ${templatesFolder.absolutePath} does not exist")
+            return
+        }
+
         val outputFolderPathRaw = this.settings.outputFolder.orElse( dirs?.pathToOutputs ?: Props.tmpDir)
         val outputFolderPath = Uris.interpret(outputFolderPathRaw)
         val dateFolder = Files.folderNameByDate()
@@ -82,7 +93,6 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         targetFolder.mkdir()
         apiFolder.mkdir()
         modelFolder.mkdir()
-        val log = this.settings.host.ctx.logs.getLogger()
         log.info("Target folder: " + targetFolder.absolutePath)
 
         // Collection of all custom types
@@ -117,17 +127,11 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                     // Iterate over all the api actions
                     api.actions.items.map { action ->
                         println(action.member.name)
-                        val customTypes = action.paramsUser.map { p -> buildTypeName(p.type) }
-                                .filter {
-                                    !it.isBasicType
-                                            && !it.isCollection
-                                            && it.dataType != Request::class
-                                            && it.dataType != Any::class
-                                            && it.dataType != Context::class
-                                }
-                        customTypes.forEach { typeInfo ->
-                            val cls = typeInfo.dataType
-                            genModel(modelFolder, cls)
+                        generateModelFromType(action.paramsUser.map{ it.type }, modelFolder)
+                        try {
+                            generateModelFromType(listOf(action.member.returnType), modelFolder)
+                        }catch(ex:Exception){
+                            log.error("Error tryting to generaate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
                         }
                     }
 
@@ -140,6 +144,22 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 throw ex
             }
         })
+    }
+
+
+    fun generateModelFromType(types:List<KType>, modelFolder:File): Unit {
+        types.map{ buildTypeName(it) }
+            .filter { isTypeApplicableForCodeGen(it) }
+            .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
+    }
+
+
+    fun isTypeApplicableForCodeGen(it:TypeInfo):Boolean {
+        return !it.isBasicType
+                && !it.isCollection
+                && it.dataType != Request::class
+                && it.dataType != Any::class
+                && it.dataType != Context::class
     }
 
 
