@@ -67,7 +67,7 @@ open class AppProcess(context: AppContext?,
 
 
 
-    override val logger = ctx.logs.getLogger()
+    override val logger = ctx.logs.getLogger("app")
     override val encryptor = ctx.enc
 
     /**
