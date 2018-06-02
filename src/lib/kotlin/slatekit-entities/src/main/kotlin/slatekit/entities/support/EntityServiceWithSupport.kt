@@ -14,6 +14,8 @@
 package slatekit.entities.support
 
 import slatekit.common.Context
+import slatekit.common.Failure
+import slatekit.common.ResultMsg
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
@@ -35,5 +37,12 @@ open class EntityServiceWithSupport<T>(val context: Context, val entities:Entiti
 
     override val logger: Logger? get() = context.logs.getLogger()
     override val encryptor: Encryptor? get() = context.enc
+
+
+
+    protected fun <T> handleError(err:String): ResultMsg<T> {
+        logger?.error(err)
+        return Failure(err)
+    }
 }
 
