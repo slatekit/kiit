@@ -20,7 +20,7 @@ import slatekit.common.results.ResultFuncs.failure
 import slatekit.integration.mods.Mod
 
 
-@Api(area = "infra", name = "modules", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = ApiConstants.SourceCLI)
+@Api(area = "setup", name = "modules", desc = "management of system modules", roles = "admin", auth = "key-roles", verb = "post", protocol = ApiConstants.SourceCLI)
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
     private var _items = slatekit.common.ListMap<String, Module>()

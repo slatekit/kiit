@@ -32,12 +32,12 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
     }
 
 
-    fun create(name: String, content: String): Unit {
+    fun create(name: String, content: String) {
         create(_defaultFolder, name, content)
     }
 
 
-    fun createFromPath(name: String, filePath: String): Unit {
+    fun createFromPath(name: String, filePath: String) {
 
         val content = loadFromFile(filePath)
         create(_defaultFolder, name, content)
