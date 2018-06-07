@@ -197,7 +197,7 @@ annotation class Arg(val desc:String)
 data class Movie(val name:String, val year:Int)
 
 
-@Api("/movies", desc = "api to get movie info")
+@Api("movies", desc = "api to get movie info")
 class MovieApi {
 
     @Get("blockbusters")

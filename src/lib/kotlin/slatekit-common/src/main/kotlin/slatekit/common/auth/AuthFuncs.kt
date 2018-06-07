@@ -77,7 +77,7 @@ object AuthFuncs {
             unAuthorized()
         }
         // 2. Any role "*"
-        else if (expectedRole == Roles.any) {
+        else if (expectedRole == Roles.all) {
             if(actualRoles.isNotEmpty()) yes() else unAuthorized()
         }
         else {

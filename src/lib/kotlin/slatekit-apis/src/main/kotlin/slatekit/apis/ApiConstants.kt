@@ -35,6 +35,7 @@ object ApiConstants {
     const val None = ""
     const val Unknown = "?"
     const val Parent = "@parent"
+    const val parent = "@parent"
 
     const val AuthModeAppKey = "app-key"
     const val AuthModeAppRole = "app-roles"

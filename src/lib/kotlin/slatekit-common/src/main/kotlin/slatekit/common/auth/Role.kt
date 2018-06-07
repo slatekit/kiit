@@ -31,7 +31,7 @@ object RoleNone : Role {
  * Represents any authenticated user
  */
 object RoleAny : Role {
-    override val name = Roles.any
+    override val name = Roles.all
 }
 
 

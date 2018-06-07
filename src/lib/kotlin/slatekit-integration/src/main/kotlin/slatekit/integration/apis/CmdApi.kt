@@ -16,31 +16,35 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.core.cmds.CmdResult
 import slatekit.core.cmds.CmdState
 import slatekit.core.cmds.Cmds
 import slatekit.core.common.AppContext
 
 
-@Api(area = "infra", name = "commands", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "infra", name = "commands", desc = "api info about the application and host",
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
 class CmdApi(val cmd: Cmds, context: AppContext) {
 
-    @ApiAction(name = "", desc = "get the number of commands available", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the number of commands available")
     fun names(): List<String> = cmd.names
 
 
-    @ApiAction(name = "", desc = "get the number of commands available", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the number of commands available")
     fun size(): Int = cmd.size
 
 
-    @ApiAction(name = "", desc = "get whether the cmds contain the cmd", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get whether the cmds contain the cmd")
     fun exists(name: String): Boolean = cmd.contains(name)
 
 
-    @ApiAction(name = "", desc = "runs the command by its name", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "runs the command by its name")
     fun run(name: String): CmdResult = cmd.run(name)
 
 
-    @ApiAction(name = "", desc = "get the current state of the command", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the current state of the command")
     fun state(name: String): CmdState = cmd.state(name)
 }

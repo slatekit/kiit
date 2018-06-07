@@ -14,7 +14,7 @@ package slatekit.common.auth
 
 object Roles {
     const val none = ""
-    const val any = "*"
+    const val all = "*"
     const val guest = "?"
     const val parent = "@parent"
 }

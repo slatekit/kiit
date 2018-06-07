@@ -18,11 +18,11 @@ object AuthModes {
     /**
      * To represent a token based authentication where there is a unique token per user
      */
-    const val token = "token"
+    const val token = "app-roles"
 
 
     /**
      * To represent an api-key based authentication where many clients/users can share an api key
      */
-    const val apiKey = "apikey"
+    const val apiKey = "key-roles"
 }

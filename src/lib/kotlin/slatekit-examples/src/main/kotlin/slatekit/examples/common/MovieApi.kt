@@ -12,8 +12,12 @@ package slatekit.examples.common
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.DateTime
 import slatekit.common.Request
+import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
 
@@ -25,7 +29,8 @@ import slatekit.integration.common.AppEntContext
  * You can override various defaults and customize functionality as needed.
  * See docs / guides / examples for more info.
  */
-@Api(area = "app", name = "movies", desc = "api for users", roles= "*", auth = "app-roles", verb = "post", protocol = "*")
+@Api(area = "app", name = "movies", desc = "api for users",
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.post, protocol = Protocols.all)
 class MovieApi( context: AppEntContext) : ApiBaseEntity<Movie, MovieService>(context, Movie::class)
 {
     /**

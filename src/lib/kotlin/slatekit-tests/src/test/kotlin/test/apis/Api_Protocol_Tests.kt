@@ -13,9 +13,10 @@ mantra: Simplicity above all else
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.security.AllProtocols
+import slatekit.apis.security.CliProtocol
 import slatekit.common.Credentials
 import slatekit.common.Request
 import slatekit.common.results.ResultFuncs.notFound

@@ -8,6 +8,8 @@ import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.ApiLoader
 import slatekit.apis.middleware.*
+import slatekit.apis.security.Protocol
+import slatekit.apis.security.WebProtocol
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
@@ -37,17 +39,17 @@ import kotlin.reflect.KClass
  * @param controls :
  */
 open class ApiContainer(
-    val ctx: Context,
-    val allowIO: Boolean,
-    val auth: Auth? = null,
-    val protocol: Protocol = WebProtocol,
-    val apis: List<slatekit.apis.core.Api> = listOf(),
-    val namer: Namer? = null,
-    val middleware: List<Middleware>? = null,
-    val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
-    val serializer: ((String, Any?) -> String)? = null,
-    val docKey: String? = null,
-    val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
+        val ctx: Context,
+        val allowIO: Boolean,
+        val auth: Auth? = null,
+        val protocol: Protocol = WebProtocol,
+        val apis: List<slatekit.apis.core.Api> = listOf(),
+        val namer: Namer? = null,
+        val middleware: List<Middleware>? = null,
+        val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
+        val serializer: ((String, Any?) -> String)? = null,
+        val docKey: String? = null,
+        val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
 ) {
 
     /**

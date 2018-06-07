@@ -15,6 +15,7 @@ package test.apis
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
+import slatekit.apis.security.CliProtocol
 import slatekit.common.*
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.ResultFuncs

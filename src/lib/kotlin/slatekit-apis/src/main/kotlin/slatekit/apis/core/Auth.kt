@@ -56,7 +56,7 @@ interface Auth {
     /**
      * Whether the role supplied is any role via "*"
      */
-    fun isRoleAny   (role:String): Boolean = role == Roles.any
+    fun isRoleAny   (role:String): Boolean = role == Roles.all
 
 
     /**
