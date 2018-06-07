@@ -21,7 +21,6 @@ import slatekit.common.results.ResultFuncs
  */
 open class Authenticator(
     protected val keys: List<ApiKey>,
-    protected val enc: Encryptor?,
     private val headerKey: String = "api-key"
 ) : Auth {
 
