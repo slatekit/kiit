@@ -20,27 +20,26 @@ package slatekit.common
  * @param rolesLookup : "admin" -> true, "dev" -> true
  */
 data class ApiKey(
-                   val name : String,
-                   val key  : String,
-                   val roles: String,
-                   val rolesLookup:Map<String,String>
-                 )
-{
+    val name: String,
+    val key: String,
+    val roles: String,
+    val rolesLookup: Map<String, String>
+) {
 
-    constructor(name:String, key :String, roles:String): this(name, key, roles, build(roles))
+    constructor(name: String, key: String, roles: String) : this(name, key, roles, build(roles))
 
 
-    companion object ApiKeyFuncs {
+    companion object {
 
-        fun build(roles:String?): Map<String,String> {
-            return roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf<String, String>()
+        fun build(roles: String?): Map<String, String> {
+            return roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
         }
 
 
-    fun build(name:String, key:String, roles:String?): ApiKey {
-        val lookup = roles?.splitToSequence(',')?.associateBy( { it }, { it } ) ?: mapOf<String,String>()
-        return ApiKey(name, key, roles.orEmpty(), lookup)
+        fun build(name: String, key: String, roles: String?): ApiKey {
+            val lookup = roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
+            return ApiKey(name, key, roles.orEmpty(), lookup)
+        }
     }
-  }
 
 }
