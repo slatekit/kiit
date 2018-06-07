@@ -13,11 +13,6 @@
 
 package slatekit.apis.middleware
 
-import slatekit.apis.core.Action
-import slatekit.common.Context
-import slatekit.common.Ignore
-import slatekit.common.Request
-
 
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events
@@ -26,30 +21,5 @@ import slatekit.common.Request
  * NOTE: The hooks are applied right before and after the call to the action
  *
  */
-interface Hook : Middleware {
-
-    /**
-     * hook for before the api call is made
-     * @param ctx   : The application context
-     * @param req   : The request
-     * @param target: The target of the request
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
-     * @param args  : Additional arguments supplied by the source
-     */
-    @Ignore
-    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?)  {
-    }
-
-
-    /**
-     * hook for after the api call is made
-     * @param ctx   : The application context
-     * @param req   : The request
-     * @param target: The target of the request
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
-     * @param args  : Additional arguments supplied by the source
-     */
-    @Ignore
-    fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
-    }
+interface Hook : Middleware, Before, After {
 }
