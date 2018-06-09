@@ -15,7 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
-import slatekit.apis.CliProtocol
+import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.common.*

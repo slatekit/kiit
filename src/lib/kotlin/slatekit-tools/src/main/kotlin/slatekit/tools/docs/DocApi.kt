@@ -2,12 +2,15 @@ package slatekit.tools.docs
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.integration.common.AppEntContext
 
 @Api(area = "slate", name = "docs", desc= "help doc generator",
-        roles= "@admin", auth = "app", verb = "post", protocol = "*")
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
 class DocApi(val context: AppEntContext) {
 
     /**
@@ -18,7 +21,7 @@ class DocApi(val context: AppEntContext) {
      * sys.docs.generateAll -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
      * sys.docs.generateAll -root="/Users/kishorereddy/git/slatekit" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
      */
-    @ApiAction(name = "", desc= "generates the markdown docs", roles= "", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc= "generates the markdown docs")
     fun generateAll(root:String, template:String, output:String): ResultEx<String> {
         val doc = DocService(root, output, template)
         val result = doc.process()
@@ -36,7 +39,7 @@ class DocApi(val context: AppEntContext) {
      */
 
 
-    @ApiAction(name = "", desc= "generates the markdown docs", roles= "", verb = "@parent", protocol = "@parent")
+    @ApiAction(name = "", desc= "generates the markdown docs")
     fun generateComponent(root:String, template:String, output:String, name:String): ResultEx<String> {
         val doc = DocService(root, output, template)
         val result = doc.process(name)

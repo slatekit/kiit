@@ -13,9 +13,10 @@ mantra: Simplicity above all else
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.security.AllProtocols
+import slatekit.apis.security.CliProtocol
 import slatekit.common.Credentials
 import slatekit.common.Request
 import slatekit.common.results.ResultFuncs.notFound
@@ -32,11 +33,11 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     // ===================================================================
     //describe( "API Container Type CLI" ) {
-    @Test fun should_work_when_setup_as_protocol_and_request_is_CLI() {
+    @Test fun should_work_when_setup_as_protocol_all_request_is_CLI() {
         ensure(
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.path("app.users.protocolAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -50,7 +51,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolCLI",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -64,7 +65,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolParent",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -78,7 +79,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolWeb",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")

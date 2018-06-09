@@ -13,9 +13,9 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.ApiConstants
 import slatekit.common.Request
 import slatekit.common.ResultMsg
+import slatekit.common.auth.Roles
 
 
 /**
@@ -50,25 +50,25 @@ interface Auth {
     /**
      * Whether the role supplied is a guest role via "?"
      */
-    fun isRoleGuest (role:String): Boolean = role == ApiConstants.Unknown
+    fun isRoleGuest (role:String): Boolean = role == Roles.guest
 
 
     /**
      * Whether the role supplied is any role via "*"
      */
-    fun isRoleAny   (role:String): Boolean = role == ApiConstants.Any
+    fun isRoleAny   (role:String): Boolean = role == Roles.all
 
 
     /**
      * Whether the role supplied is a referent to the parent role via "@parent"
      */
-    fun isRoleParent(role:String): Boolean = role == ApiConstants.Parent
+    fun isRoleParent(role:String): Boolean = role == Roles.parent
 
 
     /**
      * Whether the role supplied is an empty role indicating public access.
      */
-    fun isRoleEmpty(role:String): Boolean = role == ApiConstants.None
+    fun isRoleEmpty(role:String): Boolean = role == Roles.none
 
 
     /**
@@ -84,7 +84,7 @@ interface Auth {
      * @return
      */
     fun determineRole(primary: String?, parent: String): String {
-        return if(primary != null && !primary.isNullOrEmpty() && primary != ApiConstants.Parent)
+        return if(primary != null && !primary.isNullOrEmpty() && primary != Roles.parent)
             primary
         else
             parent

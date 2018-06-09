@@ -18,6 +18,8 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.middleware.Middleware
+import slatekit.apis.security.CliProtocol
+import slatekit.apis.security.Protocol
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -28,7 +30,6 @@ import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.ResultFuncs.success
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import test.setup.MyAuthProvider
@@ -122,12 +123,12 @@ open class ApiTestsBase {
 
 
     fun ensure(
-        protocol  : Protocol,
-        middleware: List<Middleware> = listOf(),
-        apis      : List<Api>,
-        user      : Credentials?,
-        request   : Request,
-        response  : Response<*>) {
+            protocol  : Protocol,
+            middleware: List<Middleware> = listOf(),
+            apis      : List<Api>,
+            user      : Credentials?,
+            request   : Request,
+            response  : Response<*>) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }

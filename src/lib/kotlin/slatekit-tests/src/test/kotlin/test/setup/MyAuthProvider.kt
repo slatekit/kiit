@@ -10,7 +10,7 @@
   */
 package test.setup
 
-import slatekit.apis.svcs.TokenAuth
+import slatekit.apis.svcs.Authenticator
 import slatekit.common.ApiKey
 import slatekit.common.Request
 
@@ -20,7 +20,7 @@ import slatekit.common.Request
 // NOTE: You can also use own pre-built authorization provider which has
 // support for users, roles, permissions
 // =======================================================================================
-class MyAuthProvider(val user:String, val roles:String, keys:List<ApiKey>?) : TokenAuth(keys ?: listOf(), null)
+class MyAuthProvider(val user:String, val roles:String, keys:List<ApiKey>?) : Authenticator(keys ?: listOf())
 {
 
   override fun getUserRoles(cmd: Request):String{

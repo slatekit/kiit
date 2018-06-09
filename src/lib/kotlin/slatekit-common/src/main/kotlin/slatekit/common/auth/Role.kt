@@ -14,49 +14,45 @@
 
 package slatekit.common.auth
 
-interface RoleInfo {
+interface Role {
     val name: String
-    val value: String
+}
+
+
+/**
+ * No roles
+ */
+object RoleNone : Role {
+    override val name = Roles.none
 }
 
 
 /**
  * Represents any authenticated user
  */
-object RoleAny : RoleInfo {
-    override val name = "any";
-    override val value = "*"
+object RoleAny : Role {
+    override val name = Roles.all
 }
 
+
 /**
- * Represents a guest
+ * Represents an guest user
  */
-object RoleGuest : RoleInfo {
-    override val name = "guest";
-    override val value = "?"
+object RoleGuest : Role {
+    override val name = Roles.guest
 }
 
 
 /**
  * Represents a reference to a parent role
  */
-object RoleParent : RoleInfo {
-    override val name = "parent";
-    override val value = "@parent"
+object RoleParent : Role {
+    override val name = Roles.parent
 }
 
 
 /**
  * No roles
  */
-object RoleNone : RoleInfo {
-    override val name = "none";
-    override val value = "@none"
-}
-
-
-/**
- * No roles
- */
-data class Role(override val name: String, override val value: String) : RoleInfo
+data class NamedRole(override val name: String) : Role
 

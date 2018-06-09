@@ -1,7 +1,11 @@
 package slatekit.apis.codegen
 
 import slatekit.apis.*
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.*
+import slatekit.common.auth.Roles
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 
@@ -11,7 +15,8 @@ import slatekit.common.results.ResultFuncs.success
  * slate.codegen.toKotlin -templatesFolder="user://dev/tmp/slatekit/scripts/templates/codegen/kotlin" -outputFolder="user://dev/tmp/codegen/kotlin" -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  */
-@Api(area = "slate", name = "codegen", desc = "client code generator", roles = "*", auth = "key-roles", verb = "*", protocol = "cli")
+@Api(area = "slate", name = "codegen", desc = "client code generator",
+        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.all, protocol = Protocols.all)
 class CodeGenApi : ApiHostAware {
 
     private var host: ApiContainer? = null

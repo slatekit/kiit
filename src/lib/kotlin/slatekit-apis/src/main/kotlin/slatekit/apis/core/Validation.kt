@@ -17,11 +17,11 @@ import slatekit.apis.*
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.middleware.Filter
+import slatekit.apis.security.WebProtocol
 import slatekit.common.*
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.successOrError
 
 
 class Validation(val ctn: ApiContainer) {
@@ -92,7 +92,7 @@ class Validation(val ctn: ApiContainer) {
 
         // Role!
         return if (!primaryValue.isNullOrEmpty()) {
-            if (primaryValue == ApiConstants.Parent) {
+            if (primaryValue == ApiConstants.parent) {
                 parentValue
             }
             else

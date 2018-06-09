@@ -2,7 +2,7 @@ package slatekit.tools
 
 
 import slatekit.apis.core.Api
-import slatekit.apis.svcs.TokenAuth
+import slatekit.apis.svcs.Authenticator
 import slatekit.common.ApiKey
 import slatekit.common.Credentials
 import slatekit.common.encrypt.Encryptor
@@ -34,7 +34,7 @@ fun main(args: Array<String>): Unit {
     // And setup the api container to hold all the apis.
     val keys = listOf(ApiKey("cli", "7031c47c268d41cfb57eb4b87e15d328", "dev,qa,ops,admin"))
     val creds = Credentials("1", "john doe", "jdoe@gmail.com", key = keys.first().key)
-    val auth = TokenAuth(keys, ctx.enc)
+    val auth = Authenticator(keys, ctx.enc)
     val shell = CliApi(creds, ctx, auth,
             CliSettings(enableLogging = true, enableOutput = true),
             listOf(

@@ -2,6 +2,7 @@ package slatekit.apis.svcs
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Auth
+import slatekit.apis.security.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
@@ -19,13 +20,12 @@ import slatekit.common.results.ResultFuncs
  *                      These are used for actions where 1 ore more keys are used by many users
  * @param callback    : Callback used for handing the actual logic for validating an action
  */
-open class TokenAuth(
-        protected val keys: List<ApiKey>,
-        protected val enc: Encryptor?,
-        private val callback: ((String, Request, String) -> ResultMsg<Boolean>)? = null,
-        private val headerKey: String = "api-key") : Auth {
+open class Authenticator(
+    protected val keys: List<ApiKey>,
+    private val headerKey: String = "api-key"
+) : Auth {
 
-    private val _keyLookup = AuthFuncs.convertKeys(keys )
+    private val _keyLookup = AuthFuncs.convertKeys(keys)
 
 
     /**
@@ -37,7 +37,13 @@ open class TokenAuth(
      * @param rolesOnApi   : The roles setup for the api itself
      * @return
      */
-    override fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): ResultMsg<Boolean> {
+    override fun isAuthorized(
+        req: Request,
+        authMode: String,
+        rolesOnAction: String,
+        rolesOnApi: String
+    ): ResultMsg<Boolean> {
+
         // 1. No roles or guest ?
         if (isRoleEmptyOrGuest(rolesOnAction))
             return Success(true)
@@ -46,11 +52,10 @@ open class TokenAuth(
         val role = determineRole(rolesOnAction, rolesOnApi)
 
         // 3. Now determine roles based on api-key or role
-        return when(authMode){
-            ApiConstants.AuthModeKeyRole -> isKeyRoleValid(req, role)
-            ApiConstants.AuthModeAppRole -> isTokenRoleValid(req, role)
-            ApiConstants.AuthModeAppKey  -> isKeyTokenRoleValid(req, role)
-            else                         -> ResultFuncs.unAuthorized()
+        return when (authMode) {
+            AuthModes.apiKey -> isKeyRoleValid(req, role)
+            AuthModes.token  -> isTokenRoleValid(req, role)
+            else -> ResultFuncs.unAuthorized()
         }
     }
 
@@ -68,13 +73,11 @@ open class TokenAuth(
      * 3. The api key "abc123" maps internally to one of key in @see: keys
      * 4. The matched key has associated roles
      */
-    open fun isKeyRoleValid(req: Request, role:String): ResultMsg<Boolean> {
+    open fun isKeyRoleValid(req: Request, role: String): ResultMsg<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
-        return callback?.let { call ->
-            call(ApiConstants.AuthModeAppKey, req, role)
-        } ?: AuthFuncs.isKeyValid(req.meta, _keyLookup, headerKey, role)
+        return AuthFuncs.isKeyValid(req.meta, _keyLookup, headerKey, role)
     }
 
 
@@ -90,27 +93,11 @@ open class TokenAuth(
      */
     open fun isTokenRoleValid(req: Request, role: String): ResultMsg<Boolean> {
 
-        return if (callback != null) {
-            callback.invoke(ApiConstants.AuthModeAppRole, req, role)
-        }
-        else {
+        // Get the user roles
+        val actualRole = getUserRoles(req)
+        val actualRoles = actualRole.splitToMapWithPairs(',')
 
-            // Get the user roles
-            val actualRole = getUserRoles(req)
-            val actualRoles = actualRole.splitToMapWithPairs(',')
-
-            // Now match.
-            AuthFuncs.matchRoles(role, actualRoles)
-        }
-    }
-
-
-    /**
-     * performs both app role validation and key role validation.
-     */
-    private fun isKeyTokenRoleValid(req:Request, roles:String): ResultMsg<Boolean> {
-        val keyResult = isKeyRoleValid(req, roles)
-        if(!keyResult.success) return keyResult
-        return isTokenRoleValid(req, roles)
+        // Now match.
+        return AuthFuncs.matchRoles(role, actualRoles)
     }
 }

@@ -5,6 +5,7 @@ import slatekit.apis.core.*
 import slatekit.common.Ignore
 import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
+import slatekit.common.orElse
 import slatekit.meta.Reflector
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -148,12 +149,14 @@ object ApiLoader {
 
         val methodName = member.name
         val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
-        val actionRoles = apiAction?.roles ?: api.roles
-        val actionVerb = apiAction?.verb ?: api.verb
-        val actionProtocol = apiAction?.protocol ?: api.protocol
         val actionName = namer?.rename(actionNameRaw)  ?: actionNameRaw
         val actionDesc = apiAction?.desc ?: ""
         val actionTag = apiAction?.tag ?: ""
+
+        // Default these from api if empty
+        val actionRoles = apiAction?.roles.orElse(api.roles)
+        val actionVerb = apiAction?.verb.orElse(api.verb)
+        val actionProtocol = apiAction?.protocol.orElse(api.protocol)
         return Action(
                 member,
                 actionName,

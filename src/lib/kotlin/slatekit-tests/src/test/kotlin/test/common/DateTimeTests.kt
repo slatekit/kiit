@@ -16,12 +16,15 @@ package test.common
  * Created by kishorereddy on 5/22/17.
  */
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.ext.*
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.TextStyle
+import java.util.*
 
 
 class DateTimeTests {
@@ -41,7 +44,7 @@ class DateTimeTests {
                 assert(dt.seconds == 45)
                 assert(dt.nano == 10)
             }
-            assert(dt.zone()  == ZoneId.systemDefault())
+            assert(dt.zone  == ZoneId.systemDefault())
         }
 
         ensure(DateTime.of(2017, 7, 10), false)
@@ -54,7 +57,7 @@ class DateTimeTests {
 
     @Test fun can_create_with_now(){
         fun ensure(dt:DateTime, zone:String):Unit {
-            assert(dt.zone().id == zone)
+            assert(dt.zone.id == zone)
             assert(dt.isZone(zone))
             println(dt)
         }
@@ -75,7 +78,7 @@ class DateTimeTests {
         assert(dt.minutes == 30)
         assert(dt.seconds == 45)
         assert(dt.nano == 10)
-        assert(dt.zone()  == ZoneId.of("UTC"))
+        assert(dt.zone  == ZoneId.of("UTC"))
     }
 
 
@@ -90,7 +93,7 @@ class DateTimeTests {
         assert(dt.minutes == 30)
         assert(dt.seconds == 45)
         assert(dt.nano == 10)
-        assert(dt.zone()  == ZoneId.of("UTC"))
+        assert(dt.zone  == ZoneId.of("UTC"))
     }
 
 
@@ -138,6 +141,14 @@ class DateTimeTests {
         ensureTrue(dt1, "<=", dt1.plusHours(0), dt1 <= dt1.plusHours(0))
         ensureTrue(dt1, "==", dt1.plusHours(0), dt1 == dt1.plusHours(0))
         ensureTrue(dt1, "!=", dt1.plusHours(2), dt1 != dt1.plusHours(2))
+    }
+
+
+    @Test fun can_get_timezone() {
+
+        val dt = DateTime.now()
+        val d = ZonedDateTime.now()
+        Assert.assertEquals(dt.zone, d.zone)
     }
 
 
@@ -198,7 +209,7 @@ class DateTimeTests {
         if(checkSeconds) {
             assert(dt.seconds == 45)
         }
-        assert(dt.zone()  == ZoneId.systemDefault())
+        assert(dt.zone  == ZoneId.systemDefault())
     }
 
 
@@ -212,7 +223,7 @@ class DateTimeTests {
         assert(dt.minutes == 30)
         assert(dt.seconds == 45)
 
-        val zone = dt.zone()
+        val zone = dt.zone
         assert(zone == zoneId)
     }
 

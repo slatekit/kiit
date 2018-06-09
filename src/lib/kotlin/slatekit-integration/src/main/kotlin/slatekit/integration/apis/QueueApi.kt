@@ -15,26 +15,30 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.queues.QueueSource
 
-@Api(area = "cloud", name = "queues", desc = "api info about the application and host", roles = "admin", auth = "key-roles", verb = "post", protocol = "*")
+@Api(area = "cloud", name = "queues", desc = "api info about the application and host",
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
 class QueueApi(val queue: QueueSource, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
 
-    @ApiAction(desc = "close the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "close the queue")
     fun close(): Unit {
         return queue.close()
     }
 
 
-    @ApiAction(desc = "get the total items in the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the total items in the queue")
     fun count(): Int {
         return queue.count()
     }
 
 
-    @ApiAction(desc = "get the next item in the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the next item in the queue")
     fun next(complete: Boolean): Any? {
         val item = queue.next()
         if (complete) {
@@ -44,7 +48,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
 
-    @ApiAction(desc = "get the next set of items in the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "get the next set of items in the queue")
     fun nextBatch(size: Int = 10, complete: Boolean): List<Any> {
         val items = queue.nextBatch(size)
         items?.let { all ->
@@ -63,7 +67,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
 
-    @ApiAction(desc = "gets next item and saves it to file", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "gets next item and saves it to file")
     fun nextToFile(complete: Boolean, fileNameLocal: String): Any? {
         val item = queue.next()
         if (complete) {
@@ -73,7 +77,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
 
-    @ApiAction(desc = "gets next set of items and saves them to files", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "gets next set of items and saves them to files")
     fun nextBatchToFiles(size: Int = 10, complete: Boolean, fileNameLocal: String): List<String?> {
         val items = queue.nextBatch(size)
         val result = items?.let { all ->
@@ -83,19 +87,19 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
 
-    @ApiAction(desc = "sends a message to the queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "sends a message to the queue")
     fun send(msg: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(msg, tagName, tagValue)
     }
 
 
-    @ApiAction(desc = "sends a message to queue using content from file", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "sends a message to queue using content from file")
     fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.sendFromFile(uri, tagName, tagValue)
     }
 
 
-    @ApiAction(desc = "sends a message to queue using content from file", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "sends a message to queue using content from file")
     fun sendFromDoc(doc: slatekit.common.Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(doc.content, tagName, tagValue)
     }

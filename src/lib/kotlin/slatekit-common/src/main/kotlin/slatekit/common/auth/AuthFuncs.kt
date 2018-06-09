@@ -77,7 +77,7 @@ object AuthFuncs {
             unAuthorized()
         }
         // 2. Any role "*"
-        else if (expectedRole == AuthConstants.RoleAny) {
+        else if (expectedRole == Roles.all) {
             if(actualRoles.isNotEmpty()) yes() else unAuthorized()
         }
         else {
@@ -102,7 +102,7 @@ object AuthFuncs {
      */
     fun getReferencedValue(primaryValue: String, parentValue: String): String =
             if (!primaryValue.isNullOrEmpty()) {
-                if (primaryValue == AuthConstants.RoleParent) {
+                if (primaryValue == Roles.parent) {
                     parentValue
                 }
                 else

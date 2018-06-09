@@ -76,7 +76,7 @@ class Example_DateTime  : Cmd("datetime") {
     println( "mins  : " + dt.minutes   )
     println( "secs  : " + dt.seconds   )
     println( "nano  : " + dt.nano      )
-    println( "zone  : " + dt.zone().id )
+    println( "zone  : " + dt.zone.id )
 
 
     // Case 4: Conversion from now( local ) to utc, specific zone,

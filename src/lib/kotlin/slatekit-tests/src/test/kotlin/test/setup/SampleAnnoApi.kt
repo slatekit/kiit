@@ -1,6 +1,9 @@
 package test.setup
 
 import slatekit.apis.*
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.*
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
@@ -12,9 +15,8 @@ import slatekit.common.types.PhoneUS
 import slatekit.integration.common.AppEntContext
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.all, protocol = Protocols.all)
 class SampleAnnoApi(val context: AppEntContext) {
-
 
     @ApiAction(desc = "accepts supplied basic data types from request", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {

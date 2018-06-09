@@ -15,7 +15,7 @@ package slatekit.server
 
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
-import slatekit.apis.WebProtocol
+import slatekit.apis.security.WebProtocol
 import slatekit.apis.core.Auth
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
@@ -63,7 +63,7 @@ class Server(
     val container = ApiContainer(ctx,
         false,
         auth,
-        WebProtocol,
+            WebProtocol,
         apis,
         deserializer = {req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,

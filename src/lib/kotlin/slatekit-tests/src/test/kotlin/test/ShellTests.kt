@@ -14,7 +14,7 @@ package slate.test
 import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.apis.svcs.TokenAuth
+import slatekit.apis.svcs.Authenticator
 import slatekit.common.ApiKey
 import slatekit.common.Credentials
 import slatekit.common.args.Args
@@ -105,7 +105,7 @@ class ShellTests  {
 
     // 3. Build up the shell services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val shell = CliApi(creds, ctx.toAppContext(), TokenAuth(apiKeys, null), apiItems = apis)
+    val shell = CliApi(creds, ctx.toAppContext(), Authenticator(apiKeys), apiItems = apis)
     return shell
   }
 }

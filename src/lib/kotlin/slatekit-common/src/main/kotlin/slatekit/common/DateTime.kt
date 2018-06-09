@@ -104,7 +104,7 @@ data class DateTime(val raw: ZonedDateTime) {
     /**
      * Gets the current zone for this date/time.
      */
-    fun zone(): ZoneId = raw.zone
+    val zone: ZoneId = raw.zone
 
 
     /**
