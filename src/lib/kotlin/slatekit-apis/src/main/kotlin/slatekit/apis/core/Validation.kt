@@ -92,7 +92,7 @@ class Validation(val ctn: ApiContainer) {
 
         // Role!
         return if (!primaryValue.isNullOrEmpty()) {
-            if (primaryValue == ApiConstants.Parent) {
+            if (primaryValue == ApiConstants.parent) {
                 parentValue
             }
             else

@@ -16,6 +16,7 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
 import slatekit.common.*
+import slatekit.common.auth.Roles
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncString
 import slatekit.common.encrypt.EncInt
@@ -49,25 +50,25 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
   }
 
   
-  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "cli")
+  @ApiAction(protocol = "cli")
   fun protocolCLI(code:Int, tag:String): ResultMsg<String> {
     return Success("protocolCLI", msg ="${code} ${tag}")
   }
 
 
-  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "web")
+  @ApiAction(protocol = "web")
   fun protocolWeb(code:Int, tag:String): ResultMsg<String> {
     return Success("protocolWeb", msg ="${code} ${tag}")
   }
 
 
-  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "*")
+  @ApiAction(protocol = "*")
   fun protocolAny(code:Int, tag:String): ResultMsg<String> {
     return Success("protocolAny", msg ="${code} ${tag}")
   }
 
 
-  @ApiAction(name = "", desc = "", roles= "", verb = "@parent", protocol = "@parent")
+  @ApiAction()
   fun protocolParent(code:Int, tag:String): ResultMsg<String> {
     return Success("protocolParent", msg ="${code} ${tag}")
   }
@@ -79,7 +80,7 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
   }
 
 
-  @ApiAction(desc = "", roles= "", verb = "@parent", protocol = "@parent")
+  @ApiAction(desc = "", roles= Roles.none, verb = "@parent", protocol = "@parent")
   fun rolesNone(code:Int, tag:String): ResultMsg<String> {
     return Success("rolesNone", msg ="${code} ${tag}")
   }

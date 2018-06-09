@@ -2,6 +2,7 @@ package slatekit.apis.svcs
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Auth
+import slatekit.apis.security.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.encrypt.Encryptor
@@ -52,8 +53,8 @@ open class Authenticator(
 
         // 3. Now determine roles based on api-key or role
         return when (authMode) {
-            ApiConstants.AuthModeKeyRole -> isKeyRoleValid(req, role)
-            ApiConstants.AuthModeAppRole -> isTokenRoleValid(req, role)
+            AuthModes.apiKey -> isKeyRoleValid(req, role)
+            AuthModes.token  -> isTokenRoleValid(req, role)
             else -> ResultFuncs.unAuthorized()
         }
     }

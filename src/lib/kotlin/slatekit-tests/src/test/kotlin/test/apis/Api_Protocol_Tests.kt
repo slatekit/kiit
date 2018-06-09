@@ -33,7 +33,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     // ===================================================================
     //describe( "API Container Type CLI" ) {
-    @Test fun should_work_when_setup_as_protocol_and_request_is_CLI() {
+    @Test fun should_work_when_setup_as_protocol_all_request_is_CLI() {
         ensure(
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),

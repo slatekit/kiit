@@ -13,8 +13,8 @@ mantra: Simplicity above all else
 package slatekit.common.auth
 
 object Roles {
-    const val none = ""
     const val all = "*"
     const val guest = "?"
     const val parent = "@parent"
+    const val none = "@none"
 }

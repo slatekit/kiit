@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
@@ -29,17 +30,38 @@ class Api_Loader_Tests : ApiTestsBase() {
 
     @Test fun can_load_api_from_annotations() {
         val api = ApiLoader.loadAnnotated(SampleAnnoApi::class, null)
-        assert(api.actions.size == 13)
-        assert(api.area == "app")
-        assert(api.name == "tests")
-        assert(api.desc == "sample to test features of Slate Kit APIs")
-        assert(api.roles == "admin")
-        assert(api.auth == "app-roles")
-        assert(api.verb == "*")
-        assert(api.protocol == "*")
-        assert(api.actions.items[0].name == "inputBasicTypes")
-        assert(api.actions.items[0].params.size == 8)
-        assert(api.actions.items[0].paramsUser.size == 8)
+        Assert.assertTrue(api.actions.size == 13)
+        Assert.assertTrue(api.area == "app")
+        Assert.assertTrue(api.name == "tests")
+        Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
+        Assert.assertTrue(api.roles == "admin")
+        Assert.assertTrue(api.auth == "app-roles")
+        Assert.assertTrue(api.verb == "*")
+        Assert.assertTrue(api.protocol == "*")
+        Assert.assertTrue(api.actions.items[0].name == "inputBasicTypes")
+        Assert.assertTrue(api.actions.items[0].params.size == 8)
+        Assert.assertTrue(api.actions.items[0].paramsUser.size == 8)
+    }
+
+
+    @Test fun can_load_api_from_annotations_with_defaults() {
+        val api = ApiLoader.loadAnnotated(SampleApi::class, null)
+        Assert.assertTrue(api.actions.size == 1)
+        Assert.assertTrue(api.area == "app")
+        Assert.assertTrue(api.name == "tests")
+        Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
+        Assert.assertTrue(api.roles == "admin")
+        Assert.assertTrue(api.auth == "app-roles")
+        Assert.assertTrue(api.verb == "*")
+        Assert.assertTrue(api.protocol == "*")
+
+        val action = api.actions.items[0]
+        Assert.assertTrue(action.name == "defaultAnnotationValues")
+        Assert.assertTrue(action.protocol == api.protocol)
+        Assert.assertTrue(action.verb == api.verb)
+        Assert.assertTrue(action.roles == api.roles)
+        Assert.assertTrue(action.params.size == 1)
+        Assert.assertTrue(action.paramsUser.size == 1)
     }
 
 

@@ -17,6 +17,7 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
+import slatekit.common.auth.Roles
 import test.setup.*
 
 /**
@@ -73,8 +74,8 @@ class Api_Core_Tests : ApiTestsBase() {
         val number = "abc"
         ensure(
                 protocol = CliProtocol,
-                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", declaredOnly = false)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", roles = Roles.none, declaredOnly = false)),
+                user     = null,
                 request  = Request.path("app.sampleErrors.parseNumberWithResults", "get", mapOf(), mapOf(
                         "text" to number
                 )),

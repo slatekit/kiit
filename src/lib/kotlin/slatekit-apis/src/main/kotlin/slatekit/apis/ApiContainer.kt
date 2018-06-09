@@ -9,6 +9,7 @@ import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.helpers.ApiLoader
 import slatekit.apis.middleware.*
 import slatekit.apis.security.Protocol
+import slatekit.apis.security.Protocols
 import slatekit.apis.security.WebProtocol
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.results.ResultFuncs
@@ -424,7 +425,7 @@ open class ApiContainer(
 
 
     fun isCliAllowed(supportedProtocol: String): Boolean =
-        supportedProtocol == ApiConstants.Any || supportedProtocol == ApiConstants.SourceCLI
+        supportedProtocol == Protocols.all || supportedProtocol == Protocols.cli
 
 
     companion object {

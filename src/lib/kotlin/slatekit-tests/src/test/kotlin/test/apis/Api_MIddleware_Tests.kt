@@ -15,8 +15,10 @@ package test.apis
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
+import slatekit.apis.security.AuthModes
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
+import slatekit.common.auth.Roles
 import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.SUCCESS
@@ -36,7 +38,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val number = "abc"
         ensure(
                 protocol = CliProtocol,
-                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", declaredOnly = false)),
+                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
@@ -57,7 +59,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         ensure(
                 middleware = listOf(errors),
                 protocol = CliProtocol,
-                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", declaredOnly = false)),
+                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
@@ -71,7 +73,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val number = "abc"
         ensure(
                 protocol = CliProtocol,
-                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", declaredOnly = false)),
+                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = Request.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number

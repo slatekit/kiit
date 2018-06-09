@@ -19,6 +19,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
+import slatekit.common.auth.Roles
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.meta.Deserializer
 
@@ -79,7 +80,7 @@ object ApiHelper {
      *  make the call
      */
     fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): ResultMsg<Boolean> {
-        val noAuth = auth == null
+        val noAuth = auth == null // || apiRef.api.auth.isNullOrEmpty()
         val isActionNotAuthed = isActionNotAuthed(apiRef.action.roles)
         val isApiNotAuthed = isApiNotAuthed(apiRef.action.roles, apiRef.api.roles)
 
@@ -104,16 +105,16 @@ object ApiHelper {
 
 
     fun isActionNotAuthed(actionRoles:String):Boolean {
-        val isUnknown = actionRoles == ApiConstants.Unknown
-        val isEmpty = actionRoles.isNullOrEmpty()
+        val isUnknown = actionRoles == Roles.guest
+        val isEmpty = actionRoles.isNullOrEmpty() || actionRoles == Roles.none
         return isUnknown || isEmpty
     }
 
 
     fun isApiNotAuthed(actionRoles:String, apiRoles:String): Boolean {
-        val isParent = actionRoles == ApiConstants.Parent
-        val isUnknown = apiRoles == ApiConstants.Unknown
-        val isNone = apiRoles == ApiConstants.None
+        val isParent = actionRoles == Roles.parent
+        val isUnknown = apiRoles == Roles.guest
+        val isNone = apiRoles.isNullOrEmpty() || apiRoles == Roles.none
         return isParent && (isUnknown || isNone)
     }
 
