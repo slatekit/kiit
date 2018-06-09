@@ -37,7 +37,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.path("app.users.protocolAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -51,7 +51,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolCLI",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -65,7 +65,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolParent",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -79,7 +79,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
-                user     = Credentials(name = "kishore", roles = "dev"),
+                user     = Credentials(name = "kishore", roles = "admin"),
                 request  = Request.cli("app.users.protocolWeb",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
