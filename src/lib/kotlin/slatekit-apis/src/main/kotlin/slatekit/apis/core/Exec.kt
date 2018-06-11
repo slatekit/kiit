@@ -263,9 +263,10 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             val instance = ctx.apiRef.instance
             val result = if (instance is Handler) {
                 val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
-                when (handlerResult.code) {
-                    Requests.codeHandlerNotProcessed -> proceed()
-                    else -> handlerResult.toResultEx()
+                if (handlerResult.success) {
+                    handlerResult.toResultEx()
+                } else {
+                    proceed()
                 }
             } else {
                 proceed()

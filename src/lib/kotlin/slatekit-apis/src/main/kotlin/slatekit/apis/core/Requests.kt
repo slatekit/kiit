@@ -26,10 +26,6 @@ import java.io.File
 
 object Requests {
 
-    const val codeHandlerProcessed = 1000
-    const val codeHandlerNotProcessed = 1001
-
-
     /**
      * Loads a file from a file with the existing meta data supplied.
      */

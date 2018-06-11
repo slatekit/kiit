@@ -34,10 +34,10 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
             // Convert from web request to Queued request
             val queuedReq = Requests.toJsonAsQueued(req)
             sendToQueue(queuedReq)
-            Success("Request processed as queue", Requests.codeHandlerProcessed)
+            Success("Request processed as queue")
         }
         else {
-            Success("Continue processing" , Requests.codeHandlerNotProcessed)
+            Failure("Continue processing")
         }
     }
 

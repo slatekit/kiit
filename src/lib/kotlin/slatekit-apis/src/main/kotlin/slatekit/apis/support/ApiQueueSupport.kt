@@ -3,10 +3,7 @@ package slatekit.apis.support
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Action
 import slatekit.apis.core.Requests
-import slatekit.common.Context
-import slatekit.common.Request
-import slatekit.common.ResultMsg
-import slatekit.common.Success
+import slatekit.common.*
 import slatekit.common.queues.QueueSource
 
 interface ApiQueueSupport {
@@ -36,10 +33,10 @@ interface ApiQueueSupport {
             // Convert from web request to Queued request
             val queuedReq = Requests.toJsonAsQueued(req)
             sendToQueue(queuedReq)
-            Success("Request processed as queue", Requests.codeHandlerProcessed)
+            Success("Request processed as queue")
         }
         else {
-            Success("Continue processing" , Requests.codeHandlerNotProcessed)
+            Failure("Continue processing")
         }
     }
 }
