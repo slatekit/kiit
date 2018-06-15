@@ -4,6 +4,9 @@ object Verbs {
     const val all = "*"
     const val get = "get"
     const val post = "post"
+    const val put = "put"
+    const val patch = "patch"
+    const val delete = "delete"
 
     /**
      * This allows for automatically determining the verb based on the method name

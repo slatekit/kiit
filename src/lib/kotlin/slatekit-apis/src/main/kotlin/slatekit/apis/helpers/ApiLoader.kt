@@ -2,6 +2,7 @@ package slatekit.apis.helpers
 
 import slatekit.apis.ApiAction
 import slatekit.apis.core.*
+import slatekit.apis.security.Verbs
 import slatekit.common.Ignore
 import slatekit.common.Namer
 import slatekit.common.nonEmptyOrDefault
@@ -155,8 +156,15 @@ object ApiLoader {
 
         // Default these from api if empty
         val actionRoles = apiAction?.roles.orElse(api.roles)
-        val actionVerb = apiAction?.verb.orElse(api.verb)
+        val rawVerb = apiAction?.verb.orElse(api.verb)
         val actionProtocol = apiAction?.protocol.orElse(api.protocol)
+
+        // Determine the actual verb
+        val actionVerb = when(rawVerb) {
+            Verbs.auto -> if(actionNameRaw.startsWith(Verbs.get)) Verbs.get else Verbs.post
+            Verbs.rest -> determineVerb(actionNameRaw)
+            else       -> rawVerb
+        }
         return Action(
                 member,
                 actionName,
@@ -166,6 +174,20 @@ object ApiLoader {
                 actionProtocol,
                 actionTag
         )
+    }
+
+
+    private fun determineVerb(name:String) : String {
+        val nameToCheck = name.toLowerCase()
+        val verb = when {
+            nameToCheck.startsWith(Verbs.get) -> Verbs.get
+            nameToCheck.startsWith(Verbs.delete) -> Verbs.delete
+            nameToCheck.startsWith(Verbs.patch) -> Verbs.patch
+            nameToCheck.startsWith("create") -> Verbs.post
+            nameToCheck.startsWith("update") -> Verbs.put
+            else -> Verbs.post
+        }
+        return verb
     }
 
 
