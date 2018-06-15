@@ -21,7 +21,7 @@ import java.time.ZonedDateTime
 /**
  * Created by kishorereddy on 5/25/17.
  */
-class InputArgs(val _map: Map<String, Any>,
+open class InputArgs(val _map: Map<String, Any>,
                 private val _decryptor: ((String) -> String)? = null) : Meta, InputsUpdateable {
 
     override val raw:Any =_map

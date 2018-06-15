@@ -59,7 +59,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
                                 params {
 
                                     // Middleware: Track usage of api
-                                    // TODO ("api", "Possibly make instance middleware calls 1 method for performance?")
                                     diagnostics {
 
                                         // Middleware: Filter requests
