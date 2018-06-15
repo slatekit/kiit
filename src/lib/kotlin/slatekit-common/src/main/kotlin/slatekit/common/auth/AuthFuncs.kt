@@ -37,10 +37,8 @@ object AuthFuncs {
      *                      2. In fact, since the HttpRequest is abstracted out via ApiCmd
      *                         in the Api feature ( Protocol Independent APIs ), the inputName
      *                         should be "Authorization" if the protocol is Http
-     * @param actionRoles : The role required on the action being performed
-     *                      NOTE: The key if present in inputs and matching one of ApiKeys in lookup
-     *                            must have the role associated or this could be referencing "@parent"
-     * @param parentRoles : The role of some parent ( This could be referenced in actionRoles )
+     * @param expectedRoles : The role required on the action being performed
+     *                        NOTE: The key if present in inputs and matching one of ApiKeys in lookup
      * @return
      */
     fun isKeyValid(inputs: Inputs?,
