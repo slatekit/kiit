@@ -25,7 +25,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class AppApi(val context: AppEntContext) : Tracked {
 
     override val tracker = Tracker<Request, Request, Any, Exception>(Random.guid(), "api-tracker", context.logs.getLogger("api"))

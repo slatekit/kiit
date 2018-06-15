@@ -22,7 +22,7 @@ import slatekit.apis.support.ApiWithSupport
 import slatekit.common.queues.QueueSource
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class QueueApi(val queue: QueueSource, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
 
