@@ -53,8 +53,8 @@ open class Authenticator(
 
         // 3. Now determine roles based on api-key or role
         return when (authMode) {
-            AuthModes.apiKey -> isKeyRoleValid(req, role)
-            AuthModes.token  -> isTokenRoleValid(req, role)
+            AuthModes.apiKey -> validateApiKey(req, role)
+            AuthModes.token  -> validateToken(req, role)
             else -> ResultFuncs.unAuthorized()
         }
     }
@@ -73,7 +73,7 @@ open class Authenticator(
      * 3. The api key "abc123" maps internally to one of key in @see: keys
      * 4. The matched key has associated roles
      */
-    open fun isKeyRoleValid(req: Request, role: String): ResultMsg<Boolean> {
+    open fun validateApiKey(req: Request, role: String): ResultMsg<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
@@ -91,7 +91,7 @@ open class Authenticator(
      * 3. The token "abc123" maps internally to a user
      * 4. We look up the user identified by the token and get their roles
      */
-    open fun isTokenRoleValid(req: Request, role: String): ResultMsg<Boolean> {
+    open fun validateToken(req: Request, role: String): ResultMsg<Boolean> {
 
         // Get the user roles
         val actualRole = getUserRoles(req)

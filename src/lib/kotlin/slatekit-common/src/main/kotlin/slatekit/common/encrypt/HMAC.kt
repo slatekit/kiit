@@ -18,8 +18,14 @@ class HMAC(secret:ByteArray) {
     }
 
 
-    fun sign(content:String): String {
+    fun sign(content:String): ByteArray {
         val hash = hasher.doFinal(content.toByteArray(Charsets.UTF_8))
+        return hash
+    }
+
+
+    fun encode(content:String): String {
+        val hash = sign(content)
         val encoded = base64.encodeToString(hash)
         return encoded
     }
