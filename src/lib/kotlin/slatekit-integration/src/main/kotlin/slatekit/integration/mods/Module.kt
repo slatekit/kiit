@@ -69,6 +69,10 @@ abstract class Module(val appCtx: AppContext,
     }
 
 
+    open fun seed(): Unit {
+    }
+
+
     /**
      * script out all the sql for all the modules.
      */
