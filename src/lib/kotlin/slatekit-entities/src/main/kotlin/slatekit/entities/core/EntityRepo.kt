@@ -36,7 +36,7 @@ abstract class EntityRepo<T>(
         entityMapper: EntityMapper? = null,
         nameOfTable: String? = null,
         encryptor: Encryptor? = null,
-        namer: Namer? = null
+        val namer: Namer? = null
 )
     : IEntityRepo where T : Entity {
     protected val _nameOfTable = nameOfTable
@@ -49,8 +49,11 @@ abstract class EntityRepo<T>(
     /**
      * The name of the table in the datastore
      */
-    override fun repoName(): String = _nameOfTable ?: _entityType.simpleName ?: ""
-
+    override fun repoName(): String {
+        val rawName =_nameOfTable ?: _entityType.simpleName ?: ""
+        val finalName = namer?.rename(rawName) ?: rawName[0].toLowerCase() + rawName.substring(1)
+        return finalName
+    }
 
     /**
      * gets the internal mapper used to convert entities to sql or records to entity
