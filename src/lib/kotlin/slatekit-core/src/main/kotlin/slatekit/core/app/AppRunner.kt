@@ -37,7 +37,7 @@ object AppRunner {
      * @param app      : Builds the application
      * @return
      */
-    fun run(app: AppProcess): ResultEx<Any> {
+    fun run(app: AppProcess, end:Boolean = true): ResultEx<Any> {
         // If the context was derived via the build method below, it goes
         // through proper checks/validation. In which case, we check
         // for user supplying the following on the command line:
@@ -47,7 +47,7 @@ object AppRunner {
         // Otherwise run the app.
         val result = when (app.ctx.state.success) {
             false -> failed(app).toResultEx()
-            else  -> execute(app)
+            else  -> execute(app, end)
         }
 
         // Reset any color changes
@@ -214,7 +214,7 @@ object AppRunner {
     }
 
 
-    fun execute(app: AppProcess): ResultEx<Any> =
+    fun execute(app: AppProcess, end:Boolean = true): ResultEx<Any> =
             Result.attempt({ ->
 
                 // 1. Begin app workflow
@@ -224,7 +224,9 @@ object AppRunner {
                 val res = app.exec()
 
                 // 3 Shutdown the app
-                app.end()
+                if(end) {
+                    app.end()
+                }
 
                 // 4. Result<Any>
                 res

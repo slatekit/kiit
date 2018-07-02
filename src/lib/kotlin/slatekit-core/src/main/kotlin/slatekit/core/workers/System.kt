@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit
 open class System(service:ExecutorService? = null, val settings:SystemSettings = SystemSettings())
     : Runnable
 {
-    protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
-    protected var _thread:Thread? = null
+    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
+    private var _thread:Thread? = null
 
     /**
      * You can extend the work system and

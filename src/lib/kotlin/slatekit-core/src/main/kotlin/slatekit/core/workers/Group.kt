@@ -92,7 +92,7 @@ open class Group(val name:String, val sys: System, manager:Manager? = null) : Ru
      */
     override fun start(): RunStatus {
         all.forEach { it.start() }
-        return moveToState(RunStateBusy)
+        return moveToState(RunStateIdle)
     }
 
 
