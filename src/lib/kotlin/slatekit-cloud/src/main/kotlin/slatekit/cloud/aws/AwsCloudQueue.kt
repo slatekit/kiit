@@ -15,8 +15,10 @@
 package slatekit.cloud.aws
 
 import TODO
+import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
+import slatekit.common.ApiLogin
 import slatekit.common.Failure
 import slatekit.common.ResultEx
 import slatekit.common.Uris
@@ -32,14 +34,22 @@ import java.io.IOException
  * @param section : Name of section in conf file for api key. e.g. Some("sqs")
  */
 class AwsCloudQueue(queue: String,
-                    path: String? = null,
-                    section: String? = null) : CloudQueueBase(), AwsSupport {
+                    creds: AWSCredentials
+) : CloudQueueBase(), AwsSupport {
 
     private val _queue = queue
-    private val _sqs: AmazonSQSClient = AwsFuncs.sqs(path, section)
+    private val _sqs: AmazonSQSClient = AwsFuncs.sqs(creds)
     private val _queueUrl = _sqs.getQueueUrl(_queue).queueUrl
     private val SOURCE = "aws:sqs"
     override val name = queue
+
+
+    constructor(queue:String, apiKey: ApiLogin ) :
+            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass) )
+
+
+    constructor(queue:String, confPath: String? = null, section: String? = null) :
+            this ( queue, AwsFuncs.creds(confPath, section) )
 
 
     /**
