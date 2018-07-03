@@ -57,12 +57,7 @@ open class ApiContainer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(ApiLoader.loadAll(apis, namer), namer, { api ->
-
-        // This allows APIs to be aware of the API container.
-        // Most APIs will not need this but this is here for integration with the container.
-        ApiContainer.setApiHost(api, this)
-    })
+    val routes = Routes(ApiLoader.loadAll(apis, namer), namer)
 
 
     /**
@@ -105,6 +100,11 @@ open class ApiContainer(
 
 
     fun rename(text: String): String = namer?.rename(text) ?: text
+
+
+    fun setApiContainerHost()  {
+        routes.visitApis({ _, api -> ApiContainer.setApiHost(api.singleton, this) })
+    }
 
 
     /**

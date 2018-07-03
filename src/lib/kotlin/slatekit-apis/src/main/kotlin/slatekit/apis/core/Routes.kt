@@ -44,7 +44,9 @@ data class Routes(val areas: Lookup<Area>,
                   val onInstanceCreated: ((Any?) -> Unit )? = null) {
 
     init {
-        visitApis({ area, api -> onInstanceCreated?.invoke( api.singleton ) })
+        onInstanceCreated?.let {
+            visitApis({ area, api -> onInstanceCreated.invoke(api.singleton) })
+        }
     }
 
     /**
