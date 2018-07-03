@@ -27,6 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
+import java.util.*
 import kotlin.reflect.KClass
 
 
@@ -134,10 +135,11 @@ open class EntityRepoInMemory<T>(
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
+            val finalValue = if(value is UUID) value.toString() else value
             property.let { p ->
                 _items.all().filter { it ->
                     val actual = Reflector.getFieldValue(it, p)
-                    val expected = value
+                    val expected = finalValue
                     compare(cls, actual, expected)
                 }
             }
