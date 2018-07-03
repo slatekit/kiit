@@ -89,7 +89,7 @@ class Example_Cache  : Cmd("auth") {
     cache.remove("top-movies")
 
     // CASE 11: Get the cache item entry ( contains data + metadata )
-    val recentEntry = cache.getCacheItem("recent-movies")
+    val recentEntry = cache.getEntry("recent-movies")
 
     // Print info about the cache item
     // - key         : the name of the cache key

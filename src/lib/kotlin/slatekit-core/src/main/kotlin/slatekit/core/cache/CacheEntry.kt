@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicReference
  */
 data class CacheEntry(
         val key: String,
+        val desc: String,
         val text: String?,
         val seconds: Int,
         val fetcher: () -> Any?
@@ -86,7 +87,7 @@ data class CacheEntry(
     /**
      * This can only be called during a failed refresh.
      */
-    fun error(ex: Throwable): Unit {
+    fun error(ex: Throwable) {
         val original = item.get()
 
         // Bump up errors.
@@ -104,7 +105,7 @@ data class CacheEntry(
      * This is called on successful refresh of the cache
      * @param result
      */
-    fun success(result: Any?): Unit {
+    fun success(result: Any?) {
         val original = item.get()
 
         val timestamp = DateTime.now()
@@ -125,7 +126,7 @@ data class CacheEntry(
     /**
      * invalidates the current item by setting its expiry to to current time
      */
-    fun invalidate(): Unit {
+    fun invalidate() {
         val copy = item.get().copy(expires = DateTime.now())
         return item.set(copy)
     }
@@ -134,9 +135,12 @@ data class CacheEntry(
     /**
      * Refreshes this cache item
      */
-    fun refresh(): Unit {
-        TODO.IMPLEMENT("cache") {
-
+    fun refresh() {
+        try {
+            val result = fetcher()
+            success(result)
+        } catch (ex:Exception) {
+            error(ex)
         }
     }
 
