@@ -255,18 +255,26 @@ open class AppProcess(context: AppContext?,
     open fun collectSummaryExtra(): List<Pair<String, String>>? = null
 
 
-    fun showHelp(code: Int): Unit {
+    fun showHelp(code: Int) {
     }
 
 
-    open fun showWelcome(): Unit {
+    open fun showWelcome() {
 
+        // Basic welcome
         writer.text("************************************")
         writer.title("Welcome to ${appMeta().about.name}")
         writer.text("************************************")
         writer.line()
         writer.text("starting in environment: " + this.ctx.env.key +
                 " " + this.ctx.cfg.getStringOrElse("env.desc", ""))
+
+        // Show basic environment info
+        logger.info("starting ${meta.about.name}")
+        logger.info("app:version :${meta.about.version}")
+        logger.info("app:args    :${meta.start.args}")
+        logger.info("app:env     :${meta.start.env}")
+        logger.info("app:config  :${meta.start.config}")
     }
 
 
