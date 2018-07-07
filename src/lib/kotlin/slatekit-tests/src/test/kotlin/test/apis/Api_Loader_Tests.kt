@@ -18,6 +18,10 @@ import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiLoader
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
+import slatekit.common.auth.Roles
 import test.setup.*
 
 /**
@@ -35,9 +39,9 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.name == "tests")
         Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
         Assert.assertTrue(api.roles == "admin")
-        Assert.assertTrue(api.auth == "app-roles")
-        Assert.assertTrue(api.verb == "*")
-        Assert.assertTrue(api.protocol == "*")
+        Assert.assertTrue(api.auth == AuthModes.token)
+        Assert.assertTrue(api.verb == Verbs.auto)
+        Assert.assertTrue(api.protocol == Protocols.all)
         Assert.assertTrue(api.actions.items[0].name == "inputBasicTypes")
         Assert.assertTrue(api.actions.items[0].params.size == 8)
         Assert.assertTrue(api.actions.items[0].paramsUser.size == 8)
@@ -51,17 +55,63 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.name == "tests")
         Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
         Assert.assertTrue(api.roles == "admin")
-        Assert.assertTrue(api.auth == "app-roles")
-        Assert.assertTrue(api.verb == "*")
-        Assert.assertTrue(api.protocol == "*")
+        Assert.assertTrue(api.auth == AuthModes.token)
+        Assert.assertTrue(api.verb == Verbs.auto)
+        Assert.assertTrue(api.protocol == Protocols.all)
 
         val action = api.actions.items[0]
         Assert.assertTrue(action.name == "defaultAnnotationValues")
         Assert.assertTrue(action.protocol == api.protocol)
-        Assert.assertTrue(action.verb == api.verb)
+        Assert.assertTrue(action.verb == Verbs.post)
         Assert.assertTrue(action.roles == api.roles)
         Assert.assertTrue(action.params.size == 1)
         Assert.assertTrue(action.paramsUser.size == 1)
+    }
+
+
+    @Test fun can_load_api_from_annotations_verb_mode_auto() {
+        val api = ApiLoader.loadAnnotated(SampleRESTVerbModeAutoApi::class, null)
+        Assert.assertTrue(api.actions.size == 8)
+        Assert.assertTrue(api.area == "samples")
+        Assert.assertTrue(api.name == "restVerbAuto")
+        Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
+        Assert.assertTrue(api.roles == Roles.all)
+        Assert.assertTrue(api.auth == AuthModes.token)
+        Assert.assertTrue(api.verb == Verbs.auto)
+        Assert.assertTrue(api.protocol == Protocols.all)
+
+        val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
+        Assert.assertEquals(Verbs.get , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
+        Assert.assertEquals(Verbs.get , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
+        Assert.assertEquals(Verbs.post, actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
+    }
+
+
+    @Test fun can_load_api_from_annotations_verb_mode_rest() {
+        val api = ApiLoader.loadAnnotated(SampleRESTVerbModeRestApi::class, null)
+        Assert.assertTrue(api.actions.size == 8)
+        Assert.assertTrue(api.area == "samples")
+        Assert.assertTrue(api.name == "restVerbRest")
+        Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
+        Assert.assertTrue(api.roles == Roles.all)
+        Assert.assertTrue(api.auth == AuthModes.token)
+        Assert.assertTrue(api.verb == Verbs.rest)
+        Assert.assertTrue(api.protocol == Protocols.all)
+
+        val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
+        Assert.assertEquals(Verbs.get    , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
+        Assert.assertEquals(Verbs.get    , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
+        Assert.assertEquals(Verbs.post   , actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
+        Assert.assertEquals(Verbs.put    , actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
+        Assert.assertEquals(Verbs.patch  , actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
+        Assert.assertEquals(Verbs.delete , actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
+        Assert.assertEquals(Verbs.delete , actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
+        Assert.assertEquals(Verbs.post   , actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
     }
 
 

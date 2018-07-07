@@ -24,7 +24,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "app", name = "version", desc = "api to get version information",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class VersionApi(override val context: AppEntContext) : ApiWithSupport {
 
     @ApiAction(desc = "gets info about the host")

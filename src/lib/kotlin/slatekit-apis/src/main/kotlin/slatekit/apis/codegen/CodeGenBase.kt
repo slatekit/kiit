@@ -3,6 +3,7 @@ package slatekit.apis.codegen
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import slatekit.apis.helpers.ApiHelper
+import slatekit.apis.security.Verbs
 import slatekit.common.*
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -202,20 +203,20 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     }
 
 
-    fun buildMethodInfo(api:slatekit.apis.core.Api, reg: Action):Map<String,String> {
-        val typeInfo = buildTypeName(reg.member.returnType)
-        val verb = buildVerb(reg.name)
+    fun buildMethodInfo(api:slatekit.apis.core.Api, action: Action):Map<String,String> {
+        val typeInfo = buildTypeName(action.member.returnType)
+        val verb = action.verb
         return mapOf(
-            "route"                 to  api.area + "/" + api.name + "/" + reg.name,
+            "route"                 to  api.area + "/" + api.name + "/" + action.name,
             "verb"                  to  verb,
-            "methodName"            to  reg.name,
-            "methodDesc"            to  reg.desc,
-            "methodParams"          to  buildArgs(reg),
+            "methodName"            to  action.name,
+            "methodDesc"            to  action.desc,
+            "methodParams"          to  buildArgs(action),
             "methodReturnType"      to  typeInfo.targetReturnType,
-            "queryParams"           to  buildQueryParams(reg),
-            "postDataDecl"          to  if(verb == "get") "" else "HashMap<String, Object> postData = new HashMap<>();",
-            "postDataVars"          to  buildDataParams(reg),
-            "postDataParam"         to  if(verb == "get") "" else "postData,",
+            "queryParams"           to  buildQueryParams(action),
+            "postDataDecl"          to  if(verb == Verbs.get) "" else "HashMap<String, Object> postData = new HashMap<>();",
+            "postDataVars"          to  buildDataParams(action),
+            "postDataParam"         to  if(verb == Verbs.get) "" else "postData,",
             "converterTypes"        to  typeInfo.conversionType,
             "converterClass"        to  getConverterTypeName(typeInfo)
         )
@@ -233,26 +234,6 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 "Pair"
             else
                 "Single"
-    }
-
-
-    fun buildVerb(name:String):String {
-        val lcase = name.toLowerCase()
-        return if(lcase.startsWith("get")) {
-            "get"
-        }
-        else if(lcase.startsWith("create")){
-            "post"
-        }
-        else if(lcase.startsWith("update")){
-            "put"
-        }
-        else if(lcase.startsWith("delete")){
-            "delete"
-        }
-        else {
-            "post"
-        }
     }
 
 

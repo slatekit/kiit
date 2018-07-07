@@ -17,7 +17,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
-    auth = AuthModes.token, roles= "admin", verb = Verbs.all, protocol = Protocols.all)
+    auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
 class SampleApi(context: AppEntContext): ApiBase(context) {
 
     @ApiAction(desc = "accepts supplied basic data types from request")

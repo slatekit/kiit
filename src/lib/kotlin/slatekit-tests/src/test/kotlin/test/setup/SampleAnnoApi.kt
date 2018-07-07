@@ -15,7 +15,7 @@ import slatekit.common.types.PhoneUS
 import slatekit.integration.common.AppEntContext
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.all, protocol = Protocols.all)
+@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
 class SampleAnnoApi(val context: AppEntContext) {
 
     @ApiAction(desc = "accepts supplied basic data types from request", roles = "@parent", verb = "@parent", protocol = "@parent")

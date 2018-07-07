@@ -30,6 +30,12 @@ interface ICache {
 
 
     /**
+     * gets the keys in the cache
+     */
+    fun keys(): List<String>
+
+
+    /**
      * whether the cache contains the key
      * @param key
      * @return
@@ -43,7 +49,7 @@ interface ICache {
      * @param key
      * @return
      */
-    fun getCacheItem(key: String): CacheItem?
+    fun getEntry(key: String): CacheItem?
 
 
     /**
@@ -92,21 +98,27 @@ interface ICache {
 
 
     /**
+     * removes all items from the cache
+     */
+    fun clear(): Boolean
+
+
+    /**
      * manual / explicit refresh of a cache item
      * @param key
      */
-    fun refresh(key: String): Unit
+    fun refresh(key: String)
 
 
     /**
      * invalidates a single cache item by its key
      * @param key
      */
-    fun invalidate(key: String): Unit
+    fun invalidate(key: String)
 
 
     /**
      * invalidates all the cache items
      */
-    fun invalidateAll(): Unit
+    fun invalidateAll()
 }

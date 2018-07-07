@@ -10,7 +10,7 @@ import slatekit.common.ResultMsg
 import slatekit.integration.common.AppEntContext
 
 @Api(area = "slate", name = "docs", desc= "help doc generator",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class DocApi(val context: AppEntContext) {
 
     /**

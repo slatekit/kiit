@@ -14,7 +14,11 @@ package slatekit.examples.common
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.*
+import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.common.results.ResultFuncs.yes
 import slatekit.core.common.AppContext
@@ -22,7 +26,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
-     roles= "admin", auth = "app", verb = "*", protocol = "*")
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::class) {
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")

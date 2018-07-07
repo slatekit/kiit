@@ -85,18 +85,20 @@ interface ConfigSupport {
      *
      * @return
      */
-    fun apiLogin(name: String): ApiLogin =
+    fun apiLogin(name: String, prefix:String? = null): ApiLogin {
 
-            mapTo(name, { conf ->
+        val finalPrefix = prefix ?: name
+        return mapTo(name, { conf ->
 
-                ApiLogin(
-                        conf.getString(name + ".account"),
-                        conf.getString(name + ".key"),
-                        conf.getString(name + ".pass"),
-                        conf.getString(name + ".env"),
-                        conf.getString(name + ".tag")
-                )
-            }) ?: ApiLogin.empty
+            ApiLogin(
+                conf.getString("$finalPrefix.account"),
+                conf.getString("$finalPrefix.key"),
+                conf.getString("$finalPrefix.pass"),
+                conf.getString("$finalPrefix.env"),
+                conf.getString("$finalPrefix .tag")
+            )
+        }) ?: ApiLogin.empty
+    }
 
 
     /**

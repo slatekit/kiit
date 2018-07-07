@@ -26,7 +26,7 @@ import slatekit.core.common.AppContext
 
 
 @Api(area = "infra", name = "commands", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class CmdApi(val cmd: Cmds, context: AppContext) {
 
     @ApiAction(desc = "get the number of commands available")

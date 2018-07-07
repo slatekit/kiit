@@ -46,6 +46,14 @@ class Cache(opts: CacheSettings) : ICache {
 
 
     /**
+     * size of the cache
+     *
+     * @return
+     */
+    override fun keys(): List<String> = _lookup.keys().toList()
+
+
+    /**
      * whether this cache contains the entry with the supplied key
      *
      * @param key
@@ -63,9 +71,17 @@ class Cache(opts: CacheSettings) : ICache {
     /**
      * invalidates a specific cache item with the key
      */
-    override fun invalidate(key: String): Unit {
+    override fun invalidate(key: String) {
         _lookup.get(key)?.let { c -> c.invalidate() }
     }
+
+
+    /**
+     * remove all items from cache
+     *
+     * @param key
+     */
+    override fun clear(): Boolean = _lookup.keys.toList().map { key -> remove(key) }.reduceRight( { r, a -> a })
 
 
     /**
@@ -82,8 +98,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      * @return
      */
-    override fun getCacheItem(key: String): CacheItem? =
-            _lookup.get(key)?.item?.get()
+    override fun getEntry(key: String): CacheItem? = _lookup.get(key)?.item?.get()
 
 
     /**
@@ -115,8 +130,8 @@ class Cache(opts: CacheSettings) : ICache {
      * @return
      */
     override fun <T> getOrLoad(key: String): T? {
-        TODO.IMPLEMENT {
-
+        val item = getEntry(key)
+        item?.let { i ->
         }
         return null
     }
@@ -129,8 +144,9 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      */
     override fun <T> getFresh(key: String): T? {
-        TODO.IMPLEMENT {
-
+        val item = _lookup.get(key)
+        item?.let { it ->
+            it.refresh()
         }
         return null
     }
@@ -142,7 +158,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      * @return
      */
-    override fun refresh(key: String): Unit {
+    override fun refresh(key: String) {
         _lookup.get(key)?.refresh()
     }
 
@@ -155,19 +171,20 @@ class Cache(opts: CacheSettings) : ICache {
      * @param fetcher   : The function to fetch the data ( will be wrapped in a Future )
      * @tparam T
      */
-    override fun <T> put(key: String, desc: String, seconds: Int, fetcher: () -> T?): Unit {
-
-        TODO.IMPLEMENT {
-
-        }
+    override fun <T> put(key: String, desc: String, seconds: Int, fetcher: () -> T?) {
+        val cacheValue = fetcher()
+        val content = cacheValue?.toString() ?: ""
+        val fetcherAny = { fetcher() }
+        insert(key, desc, content, seconds, fetcherAny)
     }
 
 
     private fun insert(key: String,
+                       desc: String,
                        text: String?,
                        seconds: Int,
-                       fetcher: () -> Any): Unit {
-        val entry = CacheEntry(key, text, seconds, fetcher)
+                       fetcher: () -> Any?) {
+        val entry = CacheEntry(key, desc, text, seconds, fetcher)
         _lookup[key] = entry
         entry.refresh()
     }

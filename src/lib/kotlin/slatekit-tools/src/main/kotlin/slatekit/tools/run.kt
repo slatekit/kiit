@@ -34,7 +34,7 @@ fun main(args: Array<String>): Unit {
     // And setup the api container to hold all the apis.
     val keys = listOf(ApiKey("cli", "7031c47c268d41cfb57eb4b87e15d328", "dev,qa,ops,admin"))
     val creds = Credentials("1", "john doe", "jdoe@gmail.com", key = keys.first().key)
-    val auth = Authenticator(keys, ctx.enc)
+    val auth = Authenticator(keys)
     val shell = CliApi(creds, ctx, auth,
             CliSettings(enableLogging = true, enableOutput = true),
             listOf(

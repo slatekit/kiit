@@ -24,7 +24,7 @@ import slatekit.core.workers.*
 
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
-        auth = AuthModes.apiKey, roles = "ops", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithSupport {
 
 

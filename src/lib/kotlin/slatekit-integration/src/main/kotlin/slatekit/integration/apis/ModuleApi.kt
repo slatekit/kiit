@@ -24,7 +24,7 @@ import slatekit.integration.mods.Mod
 
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
     private var _items = slatekit.common.ListMap<String, Module>()
@@ -116,6 +116,33 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         mod.init()
         _items = _items.add(mod.info.name, mod)
         mod.register()
+    }
+
+
+    @ApiAction(desc = "seeds all the modules")
+    fun seed(): slatekit.common.ResultMsg<Any> {
+        val res = _items.all().map { module -> seedModule(module) }
+        val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
+        return finalResult
+    }
+
+
+    /**
+     * register a model for internal ( in-memory storage ). this should be done at startup.
+     *
+     * @param mod
+     * @return
+     */
+    fun seedModule(mod: Module): ResultMsg<Any> {
+        val result = try {
+            mod.seed()
+            Success("Seeded module: " + mod.info.name)
+        }
+        catch (ex:Exception) {
+            this.logger?.error("Error seeding: ${mod.info.name}", ex)
+            Failure("Error seeding module: " + mod.info.name)
+        }
+        return result
     }
 
 

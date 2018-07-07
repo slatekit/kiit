@@ -22,6 +22,7 @@ import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
 import slatekit.core.cli.CliCommand
 import slatekit.core.cli.CliConstants
+import slatekit.core.cli.CliMeta
 import java.io.File
 
 /**
@@ -47,7 +48,8 @@ class CliApi(private val creds: slatekit.common.Credentials,
              val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
-             apiItems: List<Api> = listOf()
+             apiItems: List<Api> = listOf(),
+             val cliMeta: CliMeta? = null
 )
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
 
@@ -93,7 +95,7 @@ class CliApi(private val creds: slatekit.common.Credentials,
         }
         else {
             // Supply the api-key into each command.
-            val meta = cmd.args.meta.plus(Pair("api-key", creds.key))
+            val meta = cliMeta?.let { cliMeta.getMetaData(ctx, cmd, creds) } ?: cmd.args.meta.plus(Pair(metaNameForApiKey, creds.key))
             val metaInputs = slatekit.common.InputArgs(meta)
             val apiCmd = slatekit.common.Request.cli(cmd.line, ApiConstants.SourceCLI, metaInputs, cmd.args, cmd)
             cmd.copy(result = apis.call(apiCmd))

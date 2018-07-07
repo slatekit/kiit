@@ -26,7 +26,7 @@ import slatekit.core.sms.SmsService
 
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
-        auth = AuthModes.apiKey, roles = "ops", verb = Verbs.post, protocol = Protocols.all)
+        auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
 class SmsApi(val svc: SmsService, override val context: AppContext) : ApiWithSupport {
     /**
      * sends a message

@@ -115,10 +115,11 @@ object Requests {
         val finalData = enc?.encrypt(data) ?: data
         val finalSource = source ?: req.source
         val finalVerb = verb ?: req.verb
+        val finalPath = req.parts.joinToString(".")
         val json = """
             {
                  "version"  : "${req.version}",
-                 "path"     : "${req.path}",
+                 "path"     : "$finalPath",
                  "source"   : "$finalSource",
                  "verb"     : "$finalVerb",
                  "tag"      : "${req.tag}",

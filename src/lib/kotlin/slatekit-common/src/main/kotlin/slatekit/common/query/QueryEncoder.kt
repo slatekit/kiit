@@ -14,6 +14,7 @@
 package slatekit.common.query
 
 import slatekit.common.DateTime
+import java.util.*
 
 
 object QueryEncoder {
@@ -26,6 +27,7 @@ object QueryEncoder {
             is Int      -> value.toString()
             is Long     -> value.toString()
             is Double   -> value.toString()
+            is UUID     -> "'" + value.toString() + "'"
             is Boolean  -> if (value) "1" else "0"
             is DateTime -> "'" + value.toStringMySql() + "'"
             is List<*>  -> "(" + value.joinToString(",", transform = Any?::toString) + ")"
