@@ -178,7 +178,8 @@ open class Deserializer(
             handleSmartString(raw, tpe)
         }
         else if( cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0){
-            Reflector.getEnumValue(cls, raw)
+            val enumVal = data.get(paramName)
+            Reflector.getEnumValue(cls, enumVal)
         }
         else if(jsonRaw == null){
             // Case 1: List<*>

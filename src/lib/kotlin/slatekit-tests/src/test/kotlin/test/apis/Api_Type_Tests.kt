@@ -12,13 +12,17 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.common.getOrElse
+import slatekit.apis.security.CliProtocol
+import slatekit.common.*
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
+import test.setup.StatusEnum
+import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -84,6 +88,37 @@ class Api_Type_Tests : ApiTestsBase() {
         ensureSmartString("getSmartStringEmail", "abc", "false - false - abc")
         ensureSmartString("getSmartStringEmail", "123@", "false - false - 123@")
         ensureSmartString("getSmartStringEmail", "123@abc.com", "true - false - 123@abc.com")
+    }
+
+
+    @Test fun can_use_enum_by_name() {
+        val api = SampleTypes3Api()
+        val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
+        val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
+        assert(r1.success)
+        assert(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+    }
+
+
+    @Test fun can_use_enum_by_number() {
+        val api = SampleTypes3Api()
+        val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
+        val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
+        assert(r1.success)
+        assert(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+    }
+
+
+    @Test fun can_use_enum_value() {
+        val api = SampleTypes3Api()
+        val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
+        val r1 = apis.call("samples", "types3", "getEnumValue", "get", mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
+        Assert.assertTrue(r1.success)
+        r1.onSuccess { it ->
+            val actual = it as StatusEnum
+            Assert.assertEquals(actual.value, StatusEnum.Pending.value)
+        }
+        r1.onFailure { throw Exception("unexpected value") }
     }
 
 
