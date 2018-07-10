@@ -20,6 +20,7 @@ object Random {
     val LETTERS_LCASE = "abcdefghijklmnopqrstuvwxyz"
     val LETTERS_ALL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     val ALPHA = "0123456789abcdefghijklmnopqrstuvwxyz"
+    val ALPHANUM = "0123456789abcdefghijklmnopqrstuvwxyz0123456789"
     val ALPHASYM = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,./<>?"
     val rnd = java.util.Random()
 
@@ -42,10 +43,16 @@ object Random {
     fun alpha6(): String = alphaN(6)
 
 
-    fun alphaSym3(): String = alphaN(3)
+    fun alphaNum3(): String = alphaNumN(3)
 
 
-    fun alphaSym6(): String = alphaN(6)
+    fun alphaNum6(): String = alphaNumN(6)
+
+
+    fun alphaSym3(): String = alphaSymN(3)
+
+
+    fun alphaSym6(): String = alphaSymN(6)
 
 
     fun digitsN(n: Int): Int = Integer.parseInt(randomize(n, NUMS))
@@ -60,6 +67,9 @@ object Random {
 
 
     fun alphaSymN(n: Int): String = randomize(n, ALPHASYM)
+
+
+    fun alphaNumN(n: Int): String = randomize(n, ALPHASYM)
 
 
     fun guid():String = stringGuid(true)
