@@ -24,4 +24,18 @@ object PlatformSrv   : Platform { override val name:String = "server" }
 object PlatformNone  : Platform { override val name:String = "none" }
 
 
-data class OtherPlatform(override val name:String): Platform
+data class PlatformOther(override val name:String): Platform
+
+
+object PlatformParser {
+    fun parse(name:String): Platform {
+        return when(name){
+            PlatformIOS.name  -> PlatformIOS
+            PlatformAnd.name  -> PlatformAnd
+            PlatformWeb.name  -> PlatformWeb
+            PlatformSrv.name  -> PlatformSrv
+            PlatformNone.name -> PlatformNone
+            else              -> PlatformOther(name)
+        }
+    }
+}

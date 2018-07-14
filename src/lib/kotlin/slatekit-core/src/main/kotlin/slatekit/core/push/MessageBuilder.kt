@@ -6,12 +6,12 @@ object MessageBuilder {
 
     fun parsePlatform(platform:String?): Platform {
         return when(platform) {
-            null, ""          -> OtherPlatform("")
+            null, ""          -> PlatformOther("")
             PlatformIOS.name  -> PlatformIOS
             PlatformAnd.name  -> PlatformAnd
             PlatformWeb.name  -> PlatformWeb
             PlatformNone.name -> PlatformNone
-            else              -> OtherPlatform(platform)
+            else              -> PlatformOther(platform)
         }
     }
 }
