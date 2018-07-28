@@ -240,6 +240,9 @@ data class DateTime(val raw: ZonedDateTime) {
     fun toStringMySql(): String = format("yyyy-MM-dd HH:mm:ss")
 
 
+    fun toStringUtc(): String = format("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
+
     fun toStringTime(sep:String = "-"): String = format("HH${sep}mm${sep}ss")
 
 
