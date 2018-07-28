@@ -16,12 +16,19 @@ package slatekit.common
 /**
  * Represents a country with iso code, name, and phone codes for sms features
  *
- * @param iso   : 2 char iso code
+ * @param iso2   : 2 char iso code
  * @param iso3  : 3 char iso code
- * @param phone : international dialing code
+ * @param phoneCode : international dialing code
  * @param name  : name of country
  */
-data class Country(val iso: String, val iso3: String, val phone: String, val name: String)
+data class Country(val iso2: String, val iso3: String, val phoneCode: String, val phoneLength:Int, val name: String) {
+
+    fun normalize(phone:String):String {
+        // Matches length without country phone code ( e.g. U.S "1" )
+        return if(phone.length == phoneLength) phoneCode + phone
+        else phone
+    }
+}
 
 
 object Countries {
@@ -32,8 +39,8 @@ object Countries {
          * @return
          */
         fun filter(codes: List<CountryCode>): List<Country> {
-            val countries = all
-            val filtered = codes.map { code -> countries.find { country -> country.iso == code.value } }
+            val countries = supported
+            val filtered = codes.map { code -> countries.find { country -> country.iso2 == code.value } }
             val matched = filtered.filterNotNull()
             return matched
         }
@@ -43,11 +50,40 @@ object Countries {
             return when(code) {
                 null -> null
                 ""   -> usa
-                else -> all.filter { it.iso == code.toUpperCase() }.first()
+                else -> supported.filter { it.iso2 == code.toUpperCase() }.first()
             }
         }
 
 
+        val supported = listOf(
+            Country("AU", "AUS", "61"   , 10,  "Australia"),
+            Country("CA", "CAN", "1"    , 10,  "Canada"),
+            Country("FR", "FRA", "33"   , 10,  "France"),
+            Country("DE", "DEU", "49"   , 10,  "Germany"),
+            Country("GR", "GRC", "30"   , 10,  "Greece"),
+            Country("GL", "GRL", "299"  , 10,  "Greenland"),
+            Country("IS", "ISL", "354"  , 10,  "Iceland"),
+            Country("IN", "IND", "91"   , 10,  "India"),
+            Country("IE", "IRL", "353"  , 10,  "Ireland"),
+            Country("IL", "ISR", "972"  , 10,  "Israel"),
+            Country("IT", "ITA", "39"   , 10,  "Italy"),
+            Country("MX", "MEX", "52"   , 10,  "Mexico"),
+            Country("NL", "NLD", "31"   , 10,  "Netherlands"),
+            Country("NZ", "NZL", "64"   , 10,  "New Zealand"),
+            Country("NO", "NOR", "47"   , 10,  "Norway"),
+            Country("PL", "POL", "48"   , 10,  "Poland"),
+            Country("PT", "PRT", "351"  , 10,  "Portugal"),
+            Country("PR", "PRI", "1-787", 10,  "Puerto Rico"),
+            Country("ZA", "ZAF", "27"   , 10,  "South Africa"),
+            Country("SE", "SWE", "46"   , 10,  "Sweden"),
+            Country("CH", "CHE", "41"   , 10,  "Switzerland"),
+            Country("VI", "VIR", "1-340", 10,  "U.S. Virgin Islands"),
+            Country("GB", "GBR", "44"   , 10,  "United Kingdom"),
+            Country("US", "USA", "1"    , 10,  "United States")
+        )
+
+
+        /*
         val all = listOf(
             Country("AF", "AFG", "93", "Afghanistan"),
             Country("AL", "ALB", "355", "Albania"),
@@ -290,7 +326,7 @@ object Countries {
             Country("ZM", "ZMB", "260", "Zambia"),
             Country("ZW", "ZWE", "263", "Zimbabwe")
         )
-
+        */
 
 
         /**
@@ -298,5 +334,5 @@ object Countries {
          *
          * @return
          */
-        val usa = all.find { it.iso == "US" }!!
+        val usa = supported.find { it.iso2 == "US" }!!
     }
