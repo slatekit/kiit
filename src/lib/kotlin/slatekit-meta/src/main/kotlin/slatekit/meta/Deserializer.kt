@@ -137,29 +137,29 @@ open class Deserializer(
      * converts
      */
     fun convert(parent:Any, raw:Any?, paramType: KType): Any? {
-        return when (paramType) {
+        return when (paramType.classifier) {
         // Basic types
-            KTypes.KStringType        -> Conversions.handleString(raw)
-            KTypes.KBoolType          -> raw.toString().toBoolean()
-            KTypes.KShortType         -> raw.toString().toShort()
-            KTypes.KIntType           -> raw.toString().toInt()
-            KTypes.KLongType          -> raw.toString().toLong()
-            KTypes.KFloatType         -> raw.toString().toFloat()
-            KTypes.KDoubleType        -> raw.toString().toDouble()
-            KTypes.KLocalDateType     -> Conversions.toLocalDate(raw as String)
-            KTypes.KLocalTimeType     -> Conversions.toLocalTime(raw as String)
-            KTypes.KLocalDateTimeType -> Conversions.toLocalDateTime(raw as String)
-            KTypes.KZonedDateTimeType -> Conversions.toZonedDateTime(raw as String)
-            KTypes.KDateTimeType      -> Conversions.toDateTime(raw as String)
-            KTypes.KDecIntType        -> enc?.let { e -> EncInt(raw as String, e.decrypt(raw ).toInt()) } ?: EncInt("", 0)
-            KTypes.KDecLongType       -> enc?.let { e -> EncLong(raw as String, e.decrypt(raw ).toLong()) } ?: EncLong("", 0L)
-            KTypes.KDecDoubleType     -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw ).toDouble()) } ?: EncDouble("", 0.0)
-            KTypes.KDecStringType     -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
-            KTypes.KVarsType          -> Conversions.toVars(raw)
-            KTypes.KUUIDType          -> UUID.fromString(raw.toString())
+            KTypes.KStringType.classifier        -> Conversions.handleString(raw)
+            KTypes.KBoolType.classifier          -> raw.toString().toBoolean()
+            KTypes.KShortType.classifier         -> raw.toString().toShort()
+            KTypes.KIntType.classifier           -> raw.toString().toInt()
+            KTypes.KLongType.classifier          -> raw.toString().toLong()
+            KTypes.KFloatType.classifier         -> raw.toString().toFloat()
+            KTypes.KDoubleType.classifier        -> raw.toString().toDouble()
+            KTypes.KLocalDateType.classifier     -> Conversions.toLocalDate(raw as String)
+            KTypes.KLocalTimeType.classifier     -> Conversions.toLocalTime(raw as String)
+            KTypes.KLocalDateTimeType.classifier -> Conversions.toLocalDateTime(raw as String)
+            KTypes.KZonedDateTimeType.classifier -> Conversions.toZonedDateTime(raw as String)
+            KTypes.KDateTimeType.classifier      -> Conversions.toDateTime(raw as String)
+            KTypes.KDecIntType.classifier        -> enc?.let { e -> EncInt(raw as String, e.decrypt(raw ).toInt()) } ?: EncInt("", 0)
+            KTypes.KDecLongType.classifier       -> enc?.let { e -> EncLong(raw as String, e.decrypt(raw ).toLong()) } ?: EncLong("", 0L)
+            KTypes.KDecDoubleType.classifier     -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw ).toDouble()) } ?: EncDouble("", 0.0)
+            KTypes.KDecStringType.classifier     -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
+            KTypes.KVarsType.classifier          -> Conversions.toVars(raw)
+            KTypes.KUUIDType.classifier          -> UUID.fromString(raw.toString())
 
         // Complex type
-            else                    -> handleComplex(parent, raw, paramType)
+            else                                 -> handleComplex(parent, raw, paramType)
         }
     }
 
