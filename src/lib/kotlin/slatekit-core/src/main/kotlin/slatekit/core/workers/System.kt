@@ -7,7 +7,16 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.TimeUnit
 
 
-
+/**
+ * This is the top-level class in the worker system and supports the following use cases:
+ *
+ * 1. register a new worker into a group
+ * 2. get a specific group in the system
+ * 3. get a specific group.worker in the system
+ * 4. run the life-cycle methods on groups/workers ( e..g init, end )
+ * 5. control a specific group  life-cycle methods ( start, stop, pause, resume )
+ * 6. control a specific worker life-cycle methods ( start, stop, pause, resume )
+ */
 open class System(service:ExecutorService? = null, val settings:SystemSettings = SystemSettings())
     : Runnable
 {
@@ -35,7 +44,7 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     /**
      * register a worker into the default group
      */
-    fun <T> register(worker:Worker<T>, manager:Manager? = null):Unit {
+    fun <T> register(worker:Worker<T>, manager:Manager? = null) {
         register(defaultGroup, worker, manager)
     }
 
@@ -43,7 +52,7 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     /**
      * register a worker into the default group
      */
-    fun <T> register(groupName:String, worker:Worker<T>, manager:Manager? = null):Unit {
+    fun <T> register(groupName:String, worker:Worker<T>, manager:Manager? = null) {
         val group = getOrCreate(groupName, manager)
         group.add(worker.name, worker)
     }

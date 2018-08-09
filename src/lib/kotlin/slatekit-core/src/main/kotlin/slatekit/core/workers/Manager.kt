@@ -23,7 +23,6 @@ open class Manager (val groupName: String, val sys: System) {
         group?.let{ grp ->
             grp.all.forEach{ worker ->
                 if ( worker.isIdle()) {
-                    worker.moveToState(RunStatePending)
                     sys.sendToWork( worker )
                 }
             }

@@ -6,15 +6,16 @@ import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceMsg
 import slatekit.core.workers.*
+import slatekit.core.workers.core.WorkEvents
+import slatekit.core.workers.core.WorkFunction
 
 
 open class WorkerWithQueuesApi(val container: ApiContainer,
-                          queues: List<QueueSourceMsg>,
-                          notifier:WorkNotification? = null,
-                          callback: WorkFunction<Any>? = null,
-                          settings: WorkerSettings)
-                    : WorkerWithQueues(queues, container.ctx.logs.getLogger(),
-        notifier, callback, settings) {
+                               queues: List<QueueSourceMsg>,
+                               events: WorkEvents? = null,
+                               callback: WorkFunction<Any>? = null,
+                               settings: WorkerSettings)
+                    : WorkerWithQueues(queues, container.ctx.logs.getLogger(), events, callback, settings) {
 
     /**
      * Process an message from the queue represented as an API request.

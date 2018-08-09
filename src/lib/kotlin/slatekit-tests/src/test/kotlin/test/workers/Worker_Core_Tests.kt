@@ -8,6 +8,7 @@ import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
 import slatekit.core.workers.WorkerSettings
+import slatekit.core.workers.core.WorkEvents
 import test.setup.MyWorker
 import test.setup.MyWorkerWithQueue
 
@@ -33,13 +34,7 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_ensure_not_started():Unit {
-        assertState( {  }, RunStateNotStarted, false)
-    }
-
-
-    @Test
-    fun can_use_lambda():Unit {
+    fun can_use_lambda() {
         var lambdaUsed = false
         val worker = MyWorker(callback = { lambdaUsed = true; success(1) })
         worker.work()
@@ -49,7 +44,7 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_use_Queue():Unit {
+    fun can_use_Queue() {
         val queue = QueueSourceDefault( converter = { item -> item.toString().toInt() })
         queue.send("101")
         queue.send("201")
@@ -61,43 +56,49 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_change_state_to_started():Unit {
+    fun can_ensure_not_started() {
+        assertState( {  }, RunStateNotStarted, false)
+    }
+
+
+    @Test
+    fun can_change_state_to_started() {
         assertState( { it.start() }, RunStateIdle )
     }
 
 
     @Test
-    fun can_change_state_to_working():Unit {
+    fun can_change_state_to_working() {
         assertState( { it.moveToState(RunStateBusy) }, RunStateBusy )
     }
 
 
     @Test
-    fun can_change_state_to_paused():Unit {
+    fun can_change_state_to_paused() {
         assertState( { it.pause() }, RunStatePaused )
     }
 
 
     @Test
-    fun can_change_state_to_stopped():Unit {
+    fun can_change_state_to_stopped() {
         assertState( { it.stop() }, RunStateStopped )
     }
 
 
     @Test
-    fun can_change_state_to_completed():Unit {
+    fun can_change_state_to_completed() {
         assertState( { it.complete() }, RunStateComplete )
     }
 
 
     @Test
-    fun can_send_status_notifications():Unit {
+    fun can_send_status_notifications() {
         assertNotifications( { it.complete() }, RunStateComplete )
     }
 
 
     @Test
-    fun can_save_last_result():Unit {
+    fun can_save_last_result() {
         val worker = MyWorker(0)
         worker.work()
         assert(worker.lastResult.success)
@@ -114,7 +115,7 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_work_once():Unit {
+    fun can_work_once() {
         val worker = MyWorker(0)
         val result = worker.work()
         assertResult(result, true, 1, slatekit.common.results.SUCCESS)
@@ -122,7 +123,7 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_work_multiple_times():Unit {
+    fun can_work_multiple_times() {
         val worker = MyWorker(0)
         worker.work()
         worker.work()
@@ -131,7 +132,7 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertState(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true):Unit {
+    fun assertState(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true) {
         // Test
         val worker = MyWorker()
         callback(worker)
@@ -140,7 +141,7 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertNotifications(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true):Unit {
+    fun assertNotifications(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true) {
         // Test
         val worker = MyWorker()
         callback(worker)
@@ -149,7 +150,7 @@ class Worker_Core_Tests {
 
         // Same test with notification
         var status: RunStatus? = null
-        val worker2 = MyWorker(notifier = { s, r -> status = s })
+        val worker2 = MyWorker(events = WorkEvents({ event -> status = event.worker.status() }))
         callback(worker2)
         val ac = worker2.state()
         assert(ac == state)

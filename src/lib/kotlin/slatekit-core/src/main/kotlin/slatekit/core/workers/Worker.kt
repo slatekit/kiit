@@ -1,13 +1,10 @@
 package slatekit.core.workers
 
 import slatekit.common.*
-import slatekit.common.Random
 import slatekit.common.info.About
-import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.status.*
-import java.util.*
+import slatekit.core.workers.core.*
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -64,19 +61,20 @@ import java.util.concurrent.atomic.AtomicReference
  *
  */
 open class Worker<T>(
-        val metadata: WorkerMetadata    = WorkerMetadata(),
+        val metadata: WorkerMetadata = WorkerMetadata(),
         val settings: WorkerSettings    = WorkerSettings(),
-        val metrics : WorkerMetrics     = WorkerMetrics(DateTime.now()),
-        val notifier: WorkNotification? = null,
-        val callback: WorkFunction<T> ? = null
+        val metrics : WorkerMetrics = WorkerMetrics(DateTime.now()),
+        val events  : WorkEvents? = null,
+        val callback: WorkFunction<T>? = null
 
 ) : RunStatusSupport, Runnable {
 
-    constructor(name:String     ,
+    constructor(group:String,
+                name:String,
                 desc:String = "",
-                notifier: WorkNotification? = null,
-                callback: WorkFunction<T> ? = null):
-            this(WorkerMetadata(About.simple(name, name, desc, "", "1.0")), notifier = notifier, callback = callback)
+                events  : WorkEvents? = null,
+                callback: WorkFunction<T>? = null):
+            this(WorkerMetadata(About.simple("$group.$name", name, desc, "", "1.0")), events = events, callback = callback)
 
     protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
     protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
@@ -119,7 +117,7 @@ open class Worker<T>(
         val last = _runStatus.get()
         _runState.set(state)
         _runStatus.set(RunStatus(metadata.about.name, DateTime.now(), state.mode, last.runCount + 1, last.errorCount, ""))
-        notifier?.let { it(_runStatus.get(), _lastResult.get()) }
+        events?.let { it.onEvent(WorkEvent(null, this, _runStatus.get().name))}
         return _runStatus.get()
     }
 
@@ -148,7 +146,15 @@ open class Worker<T>(
      *
      * @return
      */
-    open fun work(): ResultEx<T> {
+    @Synchronized
+    fun work(): ResultEx<T> {
+
+        // Check current status
+        if(isBusy() || isStopped() || isPaused() ) {
+            return _lastResult.get().toResultEx()
+        }
+
+        // Good to work
         moveToState(RunStateBusy)
         val result = try {
             val attempt = processInternal(null)

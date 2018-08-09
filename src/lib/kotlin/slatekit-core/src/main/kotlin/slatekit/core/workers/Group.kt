@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * A group is a simple collection of workers.
- * This allows for organization and management of workers
- * at a group level.
+ * This allows for organization, pooling and management of workers at a group level.
  */
 open class Group(val name:String, val sys: System, manager:Manager? = null) : RunStatusSupport {
 

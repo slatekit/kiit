@@ -18,8 +18,8 @@ class Worker_System_Tests {
 
     fun build():System {
         val sys = System()
-        sys.register("group 1", Worker("worker 1",  callback = { success("worktype 1:done") } ))
-        sys.register("group 1", Worker("worker 2",  callback = { success("worktype 2:done") } ))
+        sys.register("group 1", Worker("group1", "worker 1",  callback = { success("worktype 1:done") } ))
+        sys.register("group 1", Worker("group1", "worker 2",  callback = { success("worktype 2:done") } ))
         return sys
     }
 

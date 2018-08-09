@@ -1,18 +1,20 @@
 package test.setup
 
-import slatekit.common.Result
 import slatekit.common.ResultMsg
 import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultFuncs
 import slatekit.core.workers.*
+import slatekit.core.workers.core.WorkEvents
+import slatekit.core.workers.core.WorkFunction
 
 
 class MyWorker(var acc:Int = 0,
-               notifier:WorkNotification? = null,
-               callback: WorkFunction<Int>? = null) : Worker<Int>(notifier = notifier, callback = callback)
+               events: WorkEvents? = null,
+               callback: WorkFunction<Int>? = null) : Worker<Int>(events = events, callback = callback)
 {
     var isInitialized = false
     var isEnded = false
+
 
     override fun onInit(): ResultMsg<Boolean> {
         isInitialized = true

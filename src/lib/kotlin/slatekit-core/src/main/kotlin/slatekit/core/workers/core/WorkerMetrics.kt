@@ -1,4 +1,4 @@
-package slatekit.core.workers
+package slatekit.core.workers.core
 
 import slatekit.common.DateTime
 import slatekit.common.ResultMsg

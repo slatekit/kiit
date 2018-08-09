@@ -16,8 +16,8 @@ class Worker_Group_Tests {
 
     fun buildSampleGroup():Group {
         val group = Group("default", System())
-        group.add("emailer", Worker<String>( "account emailer", "sends registration email", callback = { success("sent email") } ))
-        group.add("inviter", Worker<String>( "invite sender", "sends invitations to app", callback = { success("stored invite request") } ))
+        group.add("emailer", Worker<String>( "group1","account emailer", "sends registration email", callback = { success("sent email") } ))
+        group.add("inviter", Worker<String>( "group1","invite sender", "sends invitations to app", callback = { success("stored invite request") } ))
         return group
     }
 
