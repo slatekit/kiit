@@ -83,19 +83,11 @@ interface RunStatusSupport {
 
 
     /**
-     * whether this is started which could be any phase after not-started
-     *
-     * @return
-     */
-    fun isStarted(): Boolean = state().value > RunStateNotStarted.value
-
-
-    /**
      * whether this is executing
      *
      * @return
      */
-    fun isBusy(): Boolean = isState(RunStateBusy)
+    fun isRunning(): Boolean = isState(RunStateRunning)
 
 
     /**

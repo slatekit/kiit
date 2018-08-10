@@ -27,11 +27,6 @@ interface RunState {
 // 6. complete    : completed
 // 7. failed      : failed ( opposite of completed )
 
-object RunStateHelpRequest : RunState {
-    override val value: Int = 0
-    override val mode: String = "help-request"
-}
-
 object RunStateNotStarted : RunState {
     override val value: Int = 1
     override val mode: String = "not-started"
@@ -42,38 +37,33 @@ object RunStateInitializing : RunState {
     override val mode: String = "initializing"
 }
 
-object RunStatePending : RunState {
+object RunStateRunning : RunState {
     override val value: Int = 3
-    override val mode: String = "pending"
-}
-
-object RunStateBusy : RunState {
-    override val value: Int = 4
-    override val mode: String = "busy"
+    override val mode: String = "running"
 }
 
 object RunStateIdle : RunState {
-    override val value: Int = 5
+    override val value: Int = 4
     override val mode: String = "idle"
 }
 
 object RunStatePaused : RunState {
-    override val value: Int = 6
+    override val value: Int = 5
     override val mode: String = "paused"
 }
 
 object RunStateStopped : RunState {
-    override val value: Int = 7
+    override val value: Int = 6
     override val mode: String = "stopped"
 }
 
 object RunStateComplete : RunState {
-    override val value: Int = 8
+    override val value: Int = 7
     override val mode: String = "complete"
 }
 
 object RunStateFailed : RunState {
-    override val value: Int = 9
+    override val value: Int = 8
     override val mode: String = "failed"
 }
 

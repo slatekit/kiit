@@ -16,7 +16,11 @@ package slatekit.core.push
 import slatekit.common.Failure
 import slatekit.common.IO
 import slatekit.common.ResultMsg
+import slatekit.common.Success
+import slatekit.common.conf.ConfigBase
 import slatekit.common.http.*
+import slatekit.common.log.Logger
+import slatekit.common.log.Logs
 import slatekit.common.results.ResultFuncs
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
@@ -25,21 +29,30 @@ import java.util.concurrent.Future
 
 
 open class MessageServiceGoogle(_key: String,
-                                executor: ExecutorService ? = null,
+                                val config:ConfigBase,
+                                val logs:Logs,
+                                val executor: ExecutorService ? = null,
                                 private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null) :
     MessageServiceBase() {
 
     private val _settings = MessageSettings("", _key, "")
-    private val _baseUrl = "https://gcm-http.googleapis.com/gcm/send"
+    private val _baseUrl = config.getStringOrElse("android.sendUrl", "https://gcm-http.googleapis.com/gcm/send")
+    private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
+    private val _logger = logs.getLogger(this.javaClass)
 
 
     override fun send(msg: Message): ResultMsg<Boolean> {
 
         val req = buildRequest(msg)
 
-        // Supplied an IO ? use that ( e.g. for custom sending )
-        // Or use the default
-        return call?.let { call.run(req) } ?: sendSync(req)
+        return if(_sendNotifications) {
+            // Supplied an IO ? use that ( e.g. for custom sending )
+            // Or use the default
+            call?.let { call.run(req) } ?: sendSync(req)
+        } else {
+            _logger.warn("Push notification disabled for: ${req.url}: ${req.entity}")
+            Success(true, msg = "Disabled")
+        }
     }
 
 

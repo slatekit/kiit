@@ -57,57 +57,29 @@ class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithS
 
 
     /**
-     * starts the group
-     */
-    @ApiAction(desc = "starts the group")
-    fun startGroup(group:String) = sys.start(group)
-
-
-    /**
-     * pauses the group
-     */
-    @ApiAction(desc = "pauses the group")
-    fun pauseGroup(group:String) = sys.pause(group)
-
-
-    /**
-     * resumes the group
-     */
-    @ApiAction(desc = "resumes the group")
-    fun resumeGroup(group:String) =  sys.resume(group)
-
-
-    /**
-     * stops the group
-     */
-    @ApiAction(desc = "stops the group")
-    fun stopGroup(group:String) =  sys.stop(group)
-
-
-    /**
      * starts the worker in the group supplied
      */
     @ApiAction(desc = "starts the worker in the group")
-    fun startWorker(group:String, worker:String) = sys.start(group, worker)
+    fun startWorker(worker:String) = sys.startWorker(worker)
 
 
     /**
      * pauses the worker in the group supplied
      */
     @ApiAction(desc = "pauses the worker in the group")
-    fun pauseWorker(group:String, worker:String) = sys.pause(group, worker)
+    fun pauseWorker(worker:String) = sys.pauseWorker(worker)
 
 
     /**
      * resumes the worker in the group supplied
      */
     @ApiAction(desc = "resumes the worker in the group")
-    fun resumeWorker(group:String, worker:String) = sys.resume(group, worker)
+    fun resumeWorker(worker:String) = sys.resumeWorker(worker)
 
 
     /**
      * stops the worker in the group supplied
      */
     @ApiAction(desc = "stops the worker in the group")
-    fun stopWorker(group:String, worker:String) = sys.stop(group, worker)
+    fun stopWorker(worker:String) = sys.stopWorker(worker)
 }
