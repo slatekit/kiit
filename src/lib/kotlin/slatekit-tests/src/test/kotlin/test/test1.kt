@@ -1,6 +1,14 @@
 
 package test
 
+import slatekit.common.Random
+import slatekit.common.queues.QueueSourceDefault
+import slatekit.core.common.AppContext
+import slatekit.core.workers.System
+import test.workers.WorkerSample
+import slatekit.core.workers.core.Priority
+import slatekit.core.workers.core.QueueInfo
+
 /*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -17,7 +25,46 @@ import slate.common.Random
 
 fun main(args: Array<String>) {
     println("slatekit.tests 1.1")
+    testWorkers()
+}
 
+
+fun testWorkers():Unit {
+
+    // 1. Queues
+    val queues = (1..4).mapIndexed{ index, ndx -> QueueSourceDefault("q" + index.toString()) }
+
+    // Populate each queue
+    queues.forEachIndexed { index, queue ->
+
+        val task = if(index > 0 ) "task2" else "task1"
+        // Add 100 messages to each queue
+        (1..100).forEach { count ->
+
+            // Add with tags needed to convert to a Job
+            queue.send(count.toString(), mapOf(
+                "id" to Random.guid().toString(),
+                "refId" to Random.guid().toString(),
+                "task" to task)
+            )
+        }
+    }
+
+    // 2. Work system.
+    val queueInfos = queues.map { QueueInfo(it.name, Priority.Low, it) }
+    val sys = System(
+        AppContext.simple("test"),
+        queueInfos
+    )
+
+    // 3. Register workers
+    sys.register(WorkerSample("w1", "g1", ""))
+    sys.register(WorkerSample("w2", "g1", ""))
+    sys.register(WorkerSample("w3", "g1", ""))
+
+    // 4. Test
+    sys.exec()
+    Thread.sleep(60000)
 }
 
 /*

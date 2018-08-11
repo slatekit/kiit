@@ -3,8 +3,11 @@ package test.core
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.*
+import slatekit.common.conf.Config
 import slatekit.common.http.HttpMethod
 import slatekit.common.http.HttpRequest
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
 import slatekit.core.push.MessageServiceGoogle
 
 
@@ -19,7 +22,9 @@ class MessagingTests {
 
     @Test fun can_send_notification() {
         val io = IOTest()
-        val svc = MessageServiceGoogle("abc", call = io)
+        val cfg = Config()
+        val logs = LogsDefault
+        val svc = MessageServiceGoogle("abc", cfg, logs, call = io)
         val result = svc.sendAlert("deviceId:1234", "payload:notification")
         assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
         assert(io.lastRequest?.method ==  HttpMethod.POST)
@@ -31,7 +36,9 @@ class MessagingTests {
 
     @Test fun can_send_share() {
         val io = IOTest()
-        val svc = MessageServiceGoogle("abc", call = io)
+        val cfg = Config()
+        val logs = LogsDefault
+        val svc = MessageServiceGoogle("abc", cfg, logs, call = io)
         val result = svc.sendData("deviceId:1234", "payload:data")
         assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
         assert(io.lastRequest?.method ==  HttpMethod.POST)

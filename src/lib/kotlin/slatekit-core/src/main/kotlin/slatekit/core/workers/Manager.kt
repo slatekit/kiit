@@ -1,30 +1,43 @@
 package slatekit.core.workers
 
-import slatekit.common.status.RunStatePending
 
 
 /**
- * A manager manages a work group by
- * 1. calling the work method on idle workers
- * 2. providing workers with a work items from a queue ( if applicable )
- * 3. ensure the workers work method is done on a background thread ( ExecuteService )
+ * This is the default implementation of the Manager class for now
+ * The manager class is responsible for getting jobs off a queue
+ * and delegating the jobs to the appropriate worker.
+ * You can customize this as needed to build your own manager
+ * and supply it to the system class.
  */
-open class Manager (val groupName: String, val sys: System) {
+open class Manager (val sys: System, val registry: Registry) {
+
+    val logger = sys.ctx.logs.getLogger(this.javaClass)
+
 
     /**
-     * Starts the group and continuously manages
-     * the workers by calling their work method if
-     * the workers are idle. This manage method is called by the System.
-     * NOTE: This is open to allow derived classes to customize
-     * the management ( e.g. based on priority, queues, etc )
+     * Manages the jobs by:
+     * 1. getting the next queue
+     * 2. getting jobs from the queue
+     * 3. passing the job to a worker that can handle items from that queue
      */
-    open fun manage():Unit {
-        val group = sys.get(groupName)
-        group?.let{ grp ->
-            grp.all.forEach{ worker ->
-                if ( worker.isIdle()) {
-                    worker.moveToState(RunStatePending)
-                    sys.sendToWork( worker )
+    open fun manage() {
+        val queue = registry.getQueue()
+        val jobs = registry.getBatch(queue, 10)
+
+        if (jobs == null || jobs.isEmpty()) {
+            logger.info("No jobs for queue: ${queue.name}")
+        } else {
+            val worker = registry.getWorker(queue.name)
+            val size = queue.queue.count()
+            logger.info("Processing: ${queue.name}: $size, ${worker?.about?.name}")
+            jobs.forEach { job ->
+                worker?.let {
+                    val result = worker.work(job)
+                    if (result.success) {
+                        queue.queue.complete(job.source)
+                    } else {
+                        queue.queue.abandon(job.source)
+                    }
                 }
             }
         }

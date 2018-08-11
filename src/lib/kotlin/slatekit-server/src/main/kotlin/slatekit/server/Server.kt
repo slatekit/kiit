@@ -63,7 +63,7 @@ class Server(
     val container = ApiContainer(ctx,
         false,
         auth,
-            WebProtocol,
+        WebProtocol,
         apis,
         deserializer = {req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,

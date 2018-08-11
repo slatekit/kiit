@@ -31,17 +31,17 @@ import slatekit.common.nonEmptyOrDefault
  * @param tags    : tags describing the app
  */
 data class About(
-        val id: String,
-        val name: String,
-        val desc: String,
-        val company: String,
-        val group: String,
-        val region: String,
-        val url: String,
-        val contact: String,
-        val version: String,
-        val tags: String,
-        val examples: String
+        val id      : String,
+        val name    : String,
+        val desc    : String,
+        val company : String = "",
+        val group   : String = "",
+        val region  : String = "",
+        val url     : String = "",
+        val contact : String = "",
+        val version : String = "",
+        val tags    : String = "",
+        val examples: String = ""
                 ) {
 
     fun log(callback: (String, String) -> Unit): Unit {

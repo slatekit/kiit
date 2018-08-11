@@ -1,16 +1,40 @@
 package slatekit.core.workers
 
+import slatekit.common.info.About
 import slatekit.common.status.*
+import slatekit.core.common.AppContext
+import slatekit.core.workers.core.QueueInfo
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 import java.util.concurrent.TimeUnit
 
 
-
-open class System(service:ExecutorService? = null, val settings:SystemSettings = SystemSettings())
+/**
+ * This is the top-level class in the worker system and supports the following use cases:
+ * TODO: Document design goal for this class
+ * 1. register a new worker into a group
+ * 2. get a specific group in the system
+ * 3. get a specific group.worker in the system
+ * 4. run the life-cycle methods on groups/workers ( e..g init, end )
+ * 5. control a specific group  life-cycle methods ( start, stop, pause, resume )
+ * 6. control a specific worker life-cycle methods ( start, stop, pause, resume )
+ */
+open class System(val ctx:AppContext,
+                  val queueInfos:List<QueueInfo>,
+                  service:ExecutorService? = null,
+                  val runnerCreator: ((System) -> Runner)? = null,
+                  val settings:SystemSettings = SystemSettings())
     : Runnable
 {
+
+    /**
+     * Queues built from queue infos with priorities, creating "weighted" queues.
+     */
+    val queues = Queues(queueInfos)
+    private var manager:Manager? = null
+    private var registry:Registry? = null
+
     private val _runState = AtomicReference<RunState>(RunStateNotStarted)
     private var _thread:Thread? = null
 
@@ -23,74 +47,37 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     /**
      * organizes all the workers into groups
      */
-    private val groups = mutableMapOf<String, Group>()
-
-
-    /**
-     *
-     */
-    val defaultGroup = "default"
+    private val workers = mutableMapOf<String, Worker<*>>()
 
 
     /**
      * register a worker into the default group
      */
-    fun <T> register(worker:Worker<T>, manager:Manager? = null):Unit {
-        register(defaultGroup, worker, manager)
+    fun <T> register(worker:Worker<T>) {
+        workers[worker.about.name] = worker
     }
 
 
     /**
-     * register a worker into the default group
+     * Gets the worker with the supplied name
      */
-    fun <T> register(groupName:String, worker:Worker<T>, manager:Manager? = null):Unit {
-        val group = getOrCreate(groupName, manager)
-        group.add(worker.name, worker)
-    }
+    fun get(name:String):Worker<*>? = workers[name]
+
+
+    fun getWorkers():List<Worker<*>> = workers.values.toList()
+
+
+    fun getWorkerNames():List<About> = workers.values.map { it.about }
+
+
+    fun getWorkerStats():List<WorkerStats> = workers.values.map { it.stats() }
 
 
     /**
-     * Gets the group with the supplied name
+     * Start up and run all the background workers
      */
-    fun get(group:String):Group? = groups[group]
-
-
-    /**
-     * Gets the worker in the group supplied
-     */
-    fun get(group:String, worker:String):Worker<*>? = get(group)?.get(worker)
-
-
-    /**
-     * runs all the workers in the groups within the work-flow of
-     * init, exec, end
-     */
-    override fun run():Unit {
-
-        // Initialize
-        moveToState(RunStateInitializing)
-        init()
-
-        // Work
-        moveToState(RunStateBusy)
-        var state = _runState.get()
-        while(state != RunStateComplete) {
-
-            // Prevent paused/stopped status from executing logic
-            if(state == RunStateBusy) {
-                exec()
-            }
-
-            // Enable pause ?
-            if(settings.pauseBetweenCycles) {
-                Thread.sleep(settings.pauseTimeInSeconds * 1000L)
-            }
-            state = _runState.get()
-        }
-
-        // Ending/Complete
-        moveToState(RunStateComplete)
-        end()
+    override fun run() {
+        exec()
     }
 
 
@@ -99,13 +86,8 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
      * NOTE: This is open to allow derived classes to self register
      * all workers and groups and have them ready to be run later
      */
-    open fun init():Unit {
-        println("initializing")
-        if(settings.enableAutoStart) {
-            groups.forEach{ _, group ->
-                group.start()
-            }
-        }
+    open fun init() {
+        workers.forEach( { _, worker -> worker.init() })
     }
 
 
@@ -114,11 +96,24 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
      * NOTE: This is open to allow derived classes more fine grained
      * control and to handle custom execution of all the groups/workers
      */
-    open fun exec():Unit {
-        TODO.IMPROVE("workers", "Move manager.manage to thread pool as well")
-        groups.forEach { _, group ->
-            group.manager.manage()
-        }
+    open fun exec() {
+        // Initialize
+        moveToState(RunStateInitializing)
+        init()
+
+        // Work
+        moveToState(RunStateRunning)
+
+        // Move workers to running state
+        workers.forEach { it.value.moveToState(RunStateRunning)}
+
+        // Get the instance of the runner
+        val runner = runnerCreator?.invoke(this) ?: DefaultRunner(this)
+        runner.execute(this)
+
+        // Ending/Complete
+        moveToState(RunStateComplete)
+        end()
     }
 
 
@@ -127,15 +122,12 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
      * NOTE: This is open to allow derived classes to handle
      * any shutdown / end steps
      */
-    open fun end():Unit {
-        println("ending")
-        groups.forEach{ _, group ->
-            group.stop()
-        }
+    open fun end() {
+        workers.forEach( { _, worker -> worker.end() })
     }
 
 
-    fun start():Unit {
+    fun start() {
         _thread = Thread(this)
         _thread?.isDaemon = true
         _thread?.start()
@@ -154,7 +146,7 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
      * resumes the system
      */
     fun resume() = {
-        moveToState(RunStateBusy)
+        moveToState(RunStateRunning)
     }
 
 
@@ -185,59 +177,30 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
 
 
     /**
-     * starts the group
+     * starts the worker
      */
-    fun start(group:String) = get(group)?.start()
+    fun startWorker(worker:String) = get(worker)?.start()
 
 
     /**
-     * pauses the group
+     * pauses the worker
      */
-    fun pause(group:String) = get(group)?.pause()
+    fun pauseWorker(worker:String) = get(worker)?.pause()
 
 
     /**
-     * resumes the group
+     * resumes the worker
      */
-    fun resume(group:String) =  get(group)?.resume()
+    fun resumeWorker(worker:String) =  get(worker)?.resume()
 
 
     /**
-     * stops the group
+     * stops the worker
      */
-    fun stop(group:String) =  get(group)?.stop()
+    fun stopWorker(worker:String) =  get(worker)?.stop()
 
 
-    /**
-     * starts the worker in the group supplied
-     */
-    fun start(group:String, worker:String) = get(group)?.get(worker)?.start()
-
-
-    /**
-     * pauses the worker in the group supplied
-     */
-    fun pause(group:String, worker:String) = get(group)?.get(worker)?.pause()
-
-
-    /**
-     * resumes the worker in the group supplied
-     */
-    fun resume(group:String, worker:String) = get(group)?.get(worker)?.resume()
-
-
-    /**
-     * stops the worker in the group supplied
-     */
-    fun stop(group:String, worker:String) = get(group)?.get(worker)?.stop()
-
-
-    /**
-     * Sends the worker to work by using the ThreadPool
-     */
-    fun sendToWork(worker:Worker<*>) {
-        svc.execute(worker)
-    }
+    fun getState():RunState = _runState.get()
 
 
     /**
@@ -249,17 +212,5 @@ open class System(service:ExecutorService? = null, val settings:SystemSettings =
     fun moveToState(state: RunState): RunState {
         _runState.set(state)
         return state
-    }
-
-
-    private fun getOrCreate(name:String, manager:Manager? = null):Group {
-        return if(groups.containsKey(name)) {
-            groups[name]!!
-        }
-        else {
-            val group = Group(name, this, manager)
-            groups[name] = group
-            group
-        }
     }
 }

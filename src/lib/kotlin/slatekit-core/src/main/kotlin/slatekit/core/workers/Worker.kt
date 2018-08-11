@@ -1,13 +1,13 @@
 package slatekit.core.workers
 
 import slatekit.common.*
-import slatekit.common.Random
 import slatekit.common.info.About
+import slatekit.common.info.Host
+import slatekit.common.info.Lang
 import slatekit.common.queues.QueueSource
-import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.failure
+import slatekit.common.results.NOT_IMPLEMENTED
 import slatekit.common.status.*
-import java.util.*
+import slatekit.core.workers.core.*
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -37,19 +37,6 @@ import java.util.concurrent.atomic.AtomicReference
  *     12. Queues      : support for queue
  *
  *
- *
- * GROUP:
- * A group is a collection of workers.
- * There is always at least 1 group in the system ( the default group )
- *
- * Features:
- *     1. Workers    : multiple workers can be part of a group
- *     2. Pause      : pause the entire group of workers
- *     3. Distribute : distribution of work to workers that are idle
- *     4. Status     : get a summary of the work status of each worker
- *
- *
- *
  * MANAGER:
  * A manager manages the workers in a group. There is 1 manager per group.
  * This essentially boils down to periodically checking which workers are idle and either:
@@ -62,29 +49,46 @@ import java.util.concurrent.atomic.AtomicReference
  * 2. idle      : idle workers are made to work via calling the "work" method
  * 3. skip      : any workers that are paused | stopped | completed | failed are skipped
  *
+ * @sample : Worker<String>("user.notifications", "notifications", "send notifications to users", "1.0"))
  */
 open class Worker<T>(
-        val metadata: WorkerMetadata    = WorkerMetadata(),
-        val settings: WorkerSettings    = WorkerSettings(),
-        val metrics : WorkerMetrics     = WorkerMetrics(DateTime.now()),
-        val notifier: WorkNotification? = null,
-        val callback: WorkFunction<T> ? = null
+    name    : String,
+    group   : String,
+    desc    : String,
+    version : String,
+    val settings   : WorkerSettings = WorkerSettings(),
+    val metrics    : Metrics = Metrics(DateTime.now()),
+    val handler    : Handler = Handler(DateTime.now()),
+    val middleware : Middleware = Middleware(),
+    val events     : Events  = Events(),
+    val callback   : WorkFunction<T>? = null
 
-) : RunStatusSupport, Runnable {
+) : RunStatusSupport {
 
-    constructor(name:String     ,
-                desc:String = "",
-                notifier: WorkNotification? = null,
-                callback: WorkFunction<T> ? = null):
-            this(WorkerMetadata(About.simple(name, name, desc, "", "1.0")), notifier = notifier, callback = callback)
 
     protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
     protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
     protected val _runDelay = AtomicReference<Int>(0)
-    protected val _lastResult = AtomicReference<ResultMsg<T>>(ResultFuncs.failure("not started"))
+    protected val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
+    protected val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
 
 
-    val name:String = metadata.about.name
+    /**
+     * Unique id for this worker
+     */
+    val id = name + "." + Random.guid()
+
+
+    /**
+     * Information about this worker
+     */
+    val about:About = About(id, name, desc, group = group, version = version)
+
+
+    /**
+     * List of queues that this worker can handle jobs from
+     */
+    val queues:List<String> = listOf("*")
 
 
     /**
@@ -104,23 +108,11 @@ open class Worker<T>(
 
 
     /**
-     * gets the last result from doing work.
+     * Whether or not this worker is available for handling jobs
      */
-    val lastResult: ResultMsg<T> get() = _lastResult.get()
-
-
-    /**
-     * moves the current state to the name supplied and performs a status update
-     *
-     * @param state
-     * @return
-     */
-    override fun moveToState(state: RunState): RunStatus {
-        val last = _runStatus.get()
-        _runState.set(state)
-        _runStatus.set(RunStatus(metadata.about.name, DateTime.now(), state.mode, last.runCount + 1, last.errorCount, ""))
-        notifier?.let { it(_runStatus.get(), _lastResult.get()) }
-        return _runStatus.get()
+    fun isAvailable():Boolean {
+        // Running indicates it is ready to handle jobs
+        return isRunning() || isIdle()
     }
 
 
@@ -135,11 +127,46 @@ open class Worker<T>(
 
 
     /**
-     * This is to make this compatible with java runnable so that
-     * the worker can be supplied to an ExectureService
+     * For batching purposes
      */
-    override fun run() {
-        work()
+    open fun work(batch:Batch) {
+        val jobs = batch.jobs
+        val queue = batch.queue.queue
+
+        if(!jobs.isEmpty()) {
+            jobs.forEach{ job ->
+                val result = work(job)
+                if (result.success) {
+                    queue.complete(job.source)
+                } else {
+                    queue.abandon(job.source)
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Works on the job while also handling metrics, middleware, events
+     * @return
+     */
+    fun work(job:Job): ResultEx<T> {
+
+        // Check current status
+        if(isFailed() || isStopped() || isPaused() ) {
+            return _lastResult.get().toResultEx()
+        }
+
+        // Update state
+        moveToState(RunStateRunning)
+        _lastRunTime.set(DateTime.now())
+
+        val result = middleware.run(this, job) {
+            callback?.invoke(job) ?: perform(job)
+        }
+        _lastResult.set(result)
+        moveToState(RunStateIdle)
+        return result
     }
 
 
@@ -148,31 +175,8 @@ open class Worker<T>(
      *
      * @return
      */
-    open fun work(): ResultEx<T> {
-        moveToState(RunStateBusy)
-        val result = try {
-            val attempt = processInternal(null)
-            _lastResult.set(attempt)
-            attempt.toResultEx()
-        }
-        catch(ex:Exception) {
-            val last = _runStatus.get()
-            _runStatus.set(
-                RunStatus(
-                    name        = metadata.about.name,
-                    lastRunTime = DateTime.now(),
-                    status      = RunStateBusy.mode,
-                    runCount    = last.runCount + 1,
-                    errorCount  = last.errorCount + 1,
-                    lastResult  = ""
-                )
-            )
-
-            //log.error("Error handling message from queue: " + ex.message, ex)
-            Failure(ex, msg="Unexpected error : " + ex.message)
-        }
-        moveToState(RunStateIdle)
-        return result
+    open fun perform(job:Job): ResultEx<T> {
+        return Failure(Exception("Not implemented"), NOT_IMPLEMENTED, "not implemented")
     }
 
 
@@ -182,6 +186,45 @@ open class Worker<T>(
     fun end() {
         onEnd()
         moveToState(RunStateComplete)
+    }
+
+
+    fun stats():WorkerStats {
+        val lastRequest = metrics.lastRequest.get()
+        val lastFiltered = metrics.lastFiltered.get()
+        val lastSuccess = metrics.lastSuccess.get()
+        val lastErrored = metrics.lastErrored.get()
+
+        return WorkerStats(
+            about.id,
+            about.name,
+            status = _runState.get(),
+            lastRunTime = _lastRunTime.get(),
+            lastResult = _lastResult.get(),
+            totalRequests = metrics.totalRequests.get(),
+            totalSuccesses = metrics.totalSucccess.get(),
+            totalErrored   = metrics.totalErrored.get(),
+            totalFiltered  = metrics.totalFiltered.get(),
+            lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
+            lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
+            lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
+            lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+        )
+    }
+
+
+    /**
+     * moves the current state to the name supplied and performs a status update
+     *
+     * @param state
+     * @return
+     */
+    override fun moveToState(state: RunState): RunStatus {
+        val last = _runStatus.get()
+        _runState.set(state)
+        _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state.mode))
+        events?.let { it.onEvent(Event(this.about.name, this, _runStatus.get().name))}
+        return _runStatus.get()
     }
 
 
@@ -199,20 +242,6 @@ open class Worker<T>(
      * provided for subclass task and implementing end code in the derived class
      */
     protected open fun onEnd() {
-    }
-
-
-    protected open fun process(args:Array<Any>?): ResultMsg<T> {
-        return ResultFuncs.notImplemented()
-    }
-
-
-    private fun processInternal(args:Array<Any>?): ResultMsg<T> {
-        return when {
-            this is Queued<*> -> processQueue() as ResultMsg<T>
-            callback != null  -> callback.invoke(null)
-            else              -> process(null)
-        }
     }
 }
 

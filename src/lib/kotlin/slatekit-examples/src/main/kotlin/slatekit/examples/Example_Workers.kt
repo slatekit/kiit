@@ -14,16 +14,14 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.core.workers.Manager
-import slatekit.core.workers.Worker
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
-import slatekit.core.workers.WorkerSettings
-import slatekit.core.workers.WorkerWithQueue
+import slatekit.core.common.AppContext
+import slatekit.core.workers.*
 
 //</doc:import_examples>
 
@@ -41,29 +39,39 @@ class Example_Workers : Cmd("utils") {
         // 3. Manager : Manages a group and ensures each idle worker perform work
         // 4. System  : Top level system that runs workers in a java executor service
         // 5. Queued  : Interface for handling work from a queue
-        val sys = slatekit.core.workers.System()
+        val sys = slatekit.core.workers.System(AppContext.sample("test", "", "", ""), listOf())
 
         // CASE 1: Register a named worker in the default group "default"
-        sys.register(Worker<String>("emailer", callback = {
+        sys.register(Worker<String>(
+            "emailer", group = "notifications", version = "1.0",
+            desc = "Sends out email notifications",
+            callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
             println("email worker: " + DateTime.now().toString())
-            success("sent registration confirmation to email")
+            Success("sent registration confirmation to email")
         }))
 
 
         // CASE 2: Register named workers in the group "notifications"
-        sys.register("notifications", Worker<String>("message_worker", callback = {
+        sys.register(Worker<String>(
+            "message_worker", group = "notifications" , version = "1.0",
+            desc = "Sends out push notifications for message feeds",
+            callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
-            Thread.sleep(500)
-            println("message worker: " + DateTime.now().toString())
-            success("sent message to user")
-        }))
-        sys.register("notifications", Worker<String>("reminder_worker", callback = {
+                Thread.sleep(500)
+                println("message worker: " + DateTime.now().toString())
+                Success("sent message to user")
+            }
+        ))
+        sys.register(Worker<String>(
+            "reminder_worker", group = "notifications" , version = "1.0",
+            desc = "Sends out push notifications of reminders",
+            callback = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
             println("reminder worker: " + DateTime.now().toString())
-            success("sent reminder to user")
+            Success("sent reminder to user")
         }))
 
 
@@ -73,22 +81,29 @@ class Example_Workers : Cmd("utils") {
         // through the workers and if they are idle simply dispatches
         // to the system to perform work.
         // NOTE: There is always 1 manager per group.
-        sys.register("reports",Worker<String>( "Active users", callback = {
-            // NOTE: Simulating work, do not use thread.sleep in a real environment
-            Thread.sleep(500)
-            println("report worker: " + DateTime.now().toString())
-            success("generated a report of active users")
-        }), manager = Manager("reports", sys))
+        sys.register(Worker<String>(
+            "Active users", group = "reports", version = "1.0",
+            desc = "Generates a report that determines active users",
+            callback = {
+                // NOTE: Simulating work, do not use thread.sleep in a real environment
+                Thread.sleep(500)
+                println("report worker: " + DateTime.now().toString())
+                Success("generated a report of active users")
+            }
+        ))
 
 
         // CASE 4: Extend the worker class instead of providing a lambda
-        class MyWorker : Worker<String>("custom_1") {
-            override fun process(args: Array<Any>?): ResultMsg<String> {
+        class MyWorker : Worker<String>(
+            name ="custom_1", group = "reports", version = "1.0",
+            desc = "Generates a report that determines active users") {
+
+            override fun perform(job: Job): ResultEx<String> {
                 println("custom worker: " + DateTime.now().toString())
                 return Success("customer worker class")
             }
         }
-        sys.register("custom", MyWorker())
+        sys.register(MyWorker())
 
 
         // CASE 5: Setup a worker to use a queue
@@ -104,10 +119,14 @@ class Example_Workers : Cmd("utils") {
         // Register the worker as a WorkerWithQueue and supply a lamda to process
         // each item from the queue. NOTE: The converter supplied to the queue
         // will convert the messageBody to the type T supplied.
-        sys.register("queued", WorkerWithQueue<Int>("example", "", queue, null, WorkerSettings(batchSize = 2),
+        sys.register( Worker<Int>(
+            "queued", "", "", version = "1.0",
+            settings = WorkerSettings(batchSize = 2),
             callback = { value ->
-            println("queue worker: " + DateTime.now().toString() + " : " + value )
-        }))
+                println("queue worker: " + DateTime.now().toString() + " : " + value )
+                Success(1)
+            }
+        ))
 
         // CASE 6: Start the worker system
         // This calls the start() on each group and continuously
@@ -128,17 +147,14 @@ class Example_Workers : Cmd("utils") {
         // ===================================================
         // GROUP: Examples of group lookup and properties
         // CASE 1: Get a group by name
-        val group1 = sys.get("notifications")
-        println( group1?.name )
+        val group1 = sys.get("message_worker")
+        println( group1?.about )
 
-        // CASE 2: Get the status of the group
-        println( sys.get("notifications")?.state() )
+        // CASE 2: Get the status of the worker
+        println( sys.get("message_worker")?.state() )
 
-        // CASE 3: Get the size of the group
-        println( sys.get("notifications")?.size )
-
-        // CASE 4: Get the manager of the group
-        println( sys.get("notifications")?.manager )
+        // CASE 3: Get the stats of the worker
+        println( sys.get("message_worker")?.stats() )
 
         // CASE 5: You can pause, resume, stop, start the group
         // NOTE: The status of the group will be changed immediately
@@ -153,24 +169,25 @@ class Example_Workers : Cmd("utils") {
         // ===================================================
         // WORKER: Examples of worker lookup and properties
         // CASE 1: Get a named worker in a group
-        val worker1 = sys.get("notifications")?.get("message_worker")
-        println(worker1?.name)
+        val worker1 = sys.get("message_worker")
+        println(worker1?.about?.name)
 
-        // CASE 2: Get a named worker by index
-        val worker2 = sys.get("notifications")?.get(1)
-        println(worker2?.name)
+        // CASE 2: Get the run state of the worker
+        println( sys.get("message_worker")?.state() )
 
-        // CASE 3: Get the run state of the worker
-        println( sys.get("notifications")?.get("message_worker")?.state() )
-
-        // CASE 4: Get the status of a worker which provides more info
-        val status = sys.get("notifications")?.get("message_worker")?.status()
-        println( status?.name       )
-        println( status?.errorCount )
-        println( status?.lastResult )
-        println( status?.lastRunTime)
-        println( status?.runCount   )
-        println( status?.status     )
+        // CASE 3: Get the status of a worker which provides more info
+        val status = sys.get("message_worker")?.stats()
+        println( status?.name             )
+        println( status?.lastRunTime      )
+        println( status?.lastResult       )
+        println( status?.totalRequests    )
+        println( status?.totalSuccesses   )
+        println( status?.totalFiltered    )
+        println( status?.totalErrored     )
+        println( status?.lastRequest      )
+        println( status?.lastSuccess      )
+        println( status?.lastFiltered     )
+        println( status?.lastErrored      )
 
         // CASE 5: You can pause, resume, stop, start the worker
         // NOTE: The status of the worker will be changed immediately
