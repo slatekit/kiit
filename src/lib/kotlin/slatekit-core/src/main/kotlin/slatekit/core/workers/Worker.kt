@@ -2,9 +2,6 @@ package slatekit.core.workers
 
 import slatekit.common.*
 import slatekit.common.info.About
-import slatekit.common.info.Host
-import slatekit.common.info.Lang
-import slatekit.common.queues.QueueSource
 import slatekit.common.results.NOT_IMPLEMENTED
 import slatekit.common.status.*
 import slatekit.core.workers.core.*
@@ -189,13 +186,13 @@ open class Worker<T>(
     }
 
 
-    fun stats():WorkerStats {
+    fun stats(): Stats {
         val lastRequest = metrics.lastRequest.get()
         val lastFiltered = metrics.lastFiltered.get()
         val lastSuccess = metrics.lastSuccess.get()
         val lastErrored = metrics.lastErrored.get()
 
-        return WorkerStats(
+        return Stats(
             about.id,
             about.name,
             status = _runState.get(),
@@ -203,12 +200,12 @@ open class Worker<T>(
             lastResult = _lastResult.get(),
             totalRequests = metrics.totalRequests.get(),
             totalSuccesses = metrics.totalSucccess.get(),
-            totalErrored   = metrics.totalErrored.get(),
-            totalFiltered  = metrics.totalFiltered.get(),
-            lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
-            lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
-            lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
-            lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+            totalErrored = metrics.totalErrored.get(),
+            totalFiltered = metrics.totalFiltered.get(),
+            lastRequest = lastRequest.copy(source = lastRequest.source.javaClass.name),
+            lastFiltered = lastFiltered.copy(source = lastRequest.source.javaClass.name),
+            lastSuccess = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
+            lastErrored = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
         )
     }
 

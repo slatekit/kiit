@@ -4,6 +4,7 @@ import slatekit.common.info.About
 import slatekit.common.status.*
 import slatekit.core.common.AppContext
 import slatekit.core.workers.core.QueueInfo
+import slatekit.core.workers.core.Stats
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
@@ -70,7 +71,7 @@ open class System(val ctx:AppContext,
     fun getWorkerNames():List<About> = workers.values.map { it.about }
 
 
-    fun getWorkerStats():List<WorkerStats> = workers.values.map { it.stats() }
+    fun getWorkerStats():List<Stats> = workers.values.map { it.stats() }
 
 
     /**
