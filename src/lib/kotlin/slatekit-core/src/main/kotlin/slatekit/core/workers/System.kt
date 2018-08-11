@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit
 open class System(val ctx:AppContext,
                   val queueInfos:List<QueueInfo>,
                   service:ExecutorService? = null,
+                  val runnerCreator: ((System) -> Runner)? = null,
                   val settings:SystemSettings = SystemSettings())
     : Runnable
 {
@@ -31,6 +32,7 @@ open class System(val ctx:AppContext,
      */
     val queues = Queues(queueInfos)
     private var manager:Manager? = null
+    private var registry:Registry? = null
 
     private val _runState = AtomicReference<RunState>(RunStateNotStarted)
     private var _thread:Thread? = null
@@ -65,35 +67,10 @@ open class System(val ctx:AppContext,
 
 
     /**
-     * runs all the workers in the groups within the work-flow of
-     * init, exec, end
+     * Start up and run all the background workers
      */
-    override fun run():Unit {
-
-        // Initialize
-        moveToState(RunStateInitializing)
-        init()
-
-        // Work
-        moveToState(RunStateRunning)
-        var state = _runState.get()
-        while(state != RunStateComplete) {
-
-            // Prevent paused/stopped status from executing logic
-            if(state == RunStateRunning) {
-                exec()
-            }
-
-            // Enable pause ?
-            //if(settings.pauseBetweenCycles) {
-            //    Thread.sleep(settings.pauseTimeInSeconds * 1000L)
-            //}
-            state = _runState.get()
-        }
-
-        // Ending/Complete
-        moveToState(RunStateComplete)
-        end()
+    override fun run() {
+        exec()
     }
 
 
@@ -117,18 +94,24 @@ open class System(val ctx:AppContext,
      * NOTE: This is open to allow derived classes more fine grained
      * control and to handle custom execution of all the groups/workers
      */
-    open fun exec():Unit {
+    open fun exec() {
+        // Initialize
+        moveToState(RunStateInitializing)
         init()
+
+        // Work
+        moveToState(RunStateRunning)
+
+        // Move workers to running state
         workers.forEach { it.value.moveToState(RunStateRunning)}
-        (1..200).forEach( {
-            if(manager == null) {
-                manager = Manager(this)
-            }
-            manager?.manage()
-        })
+
+        // Get the instance of the runner
+        val runner = runnerCreator?.invoke(this) ?: DefaultRunner(this)
+        runner.execute(this)
+
+        // Ending/Complete
+        moveToState(RunStateComplete)
         end()
-        val s = stats()
-        println(s)
     }
 
 
@@ -215,12 +198,7 @@ open class System(val ctx:AppContext,
     fun stopWorker(worker:String) =  get(worker)?.stop()
 
 
-    /**
-     * Sends the worker to work by using the ThreadPool
-     */
-    fun sendToWork(worker:Worker<*>) {
-        //svc.execute(worker)
-    }
+    fun getState():RunState = _runState.get()
 
 
     /**

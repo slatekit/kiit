@@ -10,12 +10,13 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers
+package test.workers
 
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.Success
-import slatekit.common.info.About
+import slatekit.core.workers.Job
+import slatekit.core.workers.Worker
 
 class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)
     : Worker<String>(name, desc, group, "1.0") {
@@ -29,7 +30,7 @@ class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)
     }
 
 
-    override fun perform(job:Job):ResultEx<String> {
+    override fun perform(job: Job):ResultEx<String> {
         counter++
         if(counter % batch == 0) {
             println("${about.name}: : handled: $counter")

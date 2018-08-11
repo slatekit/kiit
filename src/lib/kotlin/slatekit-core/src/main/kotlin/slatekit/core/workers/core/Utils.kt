@@ -23,9 +23,10 @@ object Utils {
      */
     fun toJob(item:Any, queueInfo: QueueInfo, queue:QueueSourceMsg): Job {
         val id = queue.getMessageTag(item, "id")
+        val refId = queue.getMessageTag(item, "refId")
         val task = queue.getMessageTag(item, "task")
         val body = queue.getMessageBody(item)
-        val job = Job(id, queueInfo.name, task, body, item)
+        val job = Job(id, queueInfo.name, task, body, refId, item)
         return job
     }
 

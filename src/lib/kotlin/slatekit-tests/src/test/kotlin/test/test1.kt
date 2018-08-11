@@ -5,7 +5,7 @@ import slatekit.common.Random
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.common.AppContext
 import slatekit.core.workers.System
-import slatekit.core.workers.WorkerSample
+import test.workers.WorkerSample
 import slatekit.core.workers.core.Priority
 import slatekit.core.workers.core.QueueInfo
 
@@ -44,6 +44,7 @@ fun testWorkers():Unit {
             // Add with tags needed to convert to a Job
             queue.send(count.toString(), mapOf(
                 "id" to Random.guid().toString(),
+                "refId" to Random.guid().toString(),
                 "task" to task)
             )
         }
@@ -57,9 +58,9 @@ fun testWorkers():Unit {
     )
 
     // 3. Register workers
-    sys.register(WorkerSample("w1","g1",  ""))
-    sys.register(WorkerSample("w2","g1",  ""))
-    sys.register(WorkerSample("w3","g1",  ""))
+    sys.register(WorkerSample("w1", "g1", ""))
+    sys.register(WorkerSample("w2", "g1", ""))
+    sys.register(WorkerSample("w3", "g1", ""))
 
     // 4. Test
     sys.exec()

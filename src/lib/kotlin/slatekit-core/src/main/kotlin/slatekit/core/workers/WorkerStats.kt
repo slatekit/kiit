@@ -16,6 +16,10 @@ import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.status.RunState
 
+/**
+ * Worker level status that can be supplied to a front-end
+ * and / or for logging/diagnostics purposes.
+ */
 data class WorkerStats(val id:String,
                        val name:String,
                        val status:RunState,

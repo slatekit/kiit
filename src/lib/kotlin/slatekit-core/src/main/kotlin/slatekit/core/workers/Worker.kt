@@ -4,6 +4,7 @@ import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
+import slatekit.common.queues.QueueSource
 import slatekit.common.results.NOT_IMPLEMENTED
 import slatekit.common.status.*
 import slatekit.core.workers.core.*
@@ -126,6 +127,26 @@ open class Worker<T>(
 
 
     /**
+     * For batching purposes
+     */
+    open fun work(batch:Batch) {
+        val jobs = batch.jobs
+        val queue = batch.queue.queue
+
+        if(!jobs.isEmpty()) {
+            jobs.forEach{ job ->
+                val result = work(job)
+                if (result.success) {
+                    queue.complete(job.source)
+                } else {
+                    queue.abandon(job.source)
+                }
+            }
+        }
+    }
+
+
+    /**
      * Works on the job while also handling metrics, middleware, events
      * @return
      */
@@ -141,7 +162,7 @@ open class Worker<T>(
         _lastRunTime.set(DateTime.now())
 
         val result = middleware.run(this, job) {
-            perform(job)
+            callback?.invoke(job) ?: perform(job)
         }
         _lastResult.set(result)
         moveToState(RunStateIdle)
