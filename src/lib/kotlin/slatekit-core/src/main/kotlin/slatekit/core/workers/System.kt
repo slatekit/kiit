@@ -1,5 +1,6 @@
 package slatekit.core.workers
 
+import slatekit.common.info.About
 import slatekit.common.status.*
 import slatekit.core.common.AppContext
 import slatekit.core.workers.core.QueueInfo
@@ -66,16 +67,17 @@ open class System(val ctx:AppContext,
     fun getWorkers():List<Worker<*>> = workers.values.toList()
 
 
+    fun getWorkerNames():List<About> = workers.values.map { it.about }
+
+
+    fun getWorkerStats():List<WorkerStats> = workers.values.map { it.stats() }
+
+
     /**
      * Start up and run all the background workers
      */
     override fun run() {
         exec()
-    }
-
-
-    fun stats():List<WorkerStats> {
-        return workers.values.map { it.stats() }
     }
 
 

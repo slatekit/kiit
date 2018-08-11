@@ -19,13 +19,24 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.Ioc
 import slatekit.integration.common.AppEntContext
 import slatekit.core.workers.*
 
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithSupport {
+class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
+
+    val sys:System by lazy {
+        Ioc.get<System>(System::class.qualifiedName ?: "")
+    }
+
+    /**
+     * starts the system
+     */
+    @ApiAction(desc = "start the workers system")
+    fun start() = sys.start()
 
 
     /**
@@ -33,13 +44,6 @@ class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithS
      */
     @ApiAction(desc = "pauses the workers system")
     fun pause() = sys.pause()
-
-
-    /**
-     * pauses the system
-     */
-    @ApiAction(desc = "shuts down the workers system")
-    fun complete() = sys.done()
 
 
     /**
@@ -57,29 +61,51 @@ class WorkersApi(val sys:System, override val context: AppEntContext) : ApiWithS
 
 
     /**
+     * pauses the system
+     */
+    @ApiAction(desc = "shuts down the workers system")
+    fun complete() = sys.done()
+
+
+    /**
      * starts the worker in the group supplied
      */
-    @ApiAction(desc = "starts the worker in the group")
+    @ApiAction(desc = "starts the worker")
     fun startWorker(worker:String) = sys.startWorker(worker)
 
 
     /**
      * pauses the worker in the group supplied
      */
-    @ApiAction(desc = "pauses the worker in the group")
+    @ApiAction(desc = "pauses the worker")
     fun pauseWorker(worker:String) = sys.pauseWorker(worker)
 
 
     /**
      * resumes the worker in the group supplied
      */
-    @ApiAction(desc = "resumes the worker in the group")
+    @ApiAction(desc = "resumes the worker")
     fun resumeWorker(worker:String) = sys.resumeWorker(worker)
 
 
     /**
      * stops the worker in the group supplied
      */
-    @ApiAction(desc = "stops the worker in the group")
+    @ApiAction(desc = "stops the worker")
     fun stopWorker(worker:String) = sys.stopWorker(worker)
+
+
+    /**
+     * Get the worker names
+     */
+    @ApiAction(desc = "gets the names of all the workers")
+    fun getWorkerNames() = sys.getWorkerNames()
+
+
+    /**
+     * Get the worker names
+     */
+    @ApiAction(desc = "gets the worker stats")
+    fun getWorkerStats() = sys.getWorkerStats()
+
 }
