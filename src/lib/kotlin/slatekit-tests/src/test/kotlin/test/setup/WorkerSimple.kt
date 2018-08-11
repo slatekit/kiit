@@ -14,7 +14,7 @@ import slatekit.core.workers.WorkFunction
 class MyWorker(var acc:Int = 0,
                events: Events? = null,
                callback: WorkFunction<Int>? = null) : Worker<Int>(
-    About.simple("", "", "", "", ""),
+    "", "", "", "",
     events = events ?: Events(),
     callback = callback)
 {

@@ -57,9 +57,9 @@ fun testWorkers():Unit {
     )
 
     // 3. Register workers
-    sys.register(WorkerSample("g1", "w1", ""))
-    sys.register(WorkerSample("g1", "w2", ""))
-    sys.register(WorkerSample("g1", "w3", ""))
+    sys.register(WorkerSample("w1","g1",  ""))
+    sys.register(WorkerSample("w2","g1",  ""))
+    sys.register(WorkerSample("w3","g1",  ""))
 
     // 4. Test
     sys.exec()

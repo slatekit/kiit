@@ -16,11 +16,8 @@ package slatekit.common.status
 import slatekit.common.DateTime
 
 data class RunStatus(
+        val id: String = "",
         val name: String = "",
         val lastRunTime: DateTime = DateTime.now(),
-        val status: String = "",
-        val runCount: Int = 0,
-        val errorCount: Int = 0,
-        val lastResult: String = ""
-) {
-}
+        val status: String = ""
+)

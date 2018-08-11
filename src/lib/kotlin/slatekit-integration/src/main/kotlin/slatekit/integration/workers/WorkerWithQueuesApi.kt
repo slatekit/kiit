@@ -13,7 +13,7 @@ import slatekit.core.workers.WorkFunction
 
 open class WorkerWithQueuesApi(val container: ApiContainer,
                                settings: WorkerSettings)
-    : Worker<Any>(About("api.queues", "apiqueues", "", "apis")) {
+    : Worker<Any>("api.queues", "apis","apiqueues", "1.0") {
 
     /**
      * Process an message from the queue represented as an API request.

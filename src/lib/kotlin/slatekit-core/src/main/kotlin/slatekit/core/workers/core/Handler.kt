@@ -1,6 +1,7 @@
 package slatekit.core.workers.core
 
 import slatekit.common.DateTime
+import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.log.Logger
 import slatekit.common.log.Logs
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference
     }
 
 
-    open fun onSuccess(job: Job, worker: Worker<*>, result:ResultMsg<Any>) {
+    open fun onSuccess(job: Job, worker: Worker<*>, result:ResultEx<*>) {
     }
 
 
@@ -31,6 +32,6 @@ import java.util.concurrent.atomic.AtomicReference
     }
 
 
-    open fun onErrored(job: Job, worker: Worker<*>, result:ResultMsg<Any>) {
+    open fun onErrored(job: Job, worker: Worker<*>, result:ResultEx<*>) {
     }
 }

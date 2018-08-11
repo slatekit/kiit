@@ -97,6 +97,11 @@ open class System(val ctx:AppContext,
     }
 
 
+    fun stats():List<WorkerStats> {
+        return workers.values.map { it.stats() }
+    }
+
+
     /**
      * initialize the system.
      * NOTE: This is open to allow derived classes to self register
@@ -122,6 +127,8 @@ open class System(val ctx:AppContext,
             manager?.manage()
         })
         end()
+        val s = stats()
+        println(s)
     }
 
 

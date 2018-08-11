@@ -11,6 +11,10 @@ import java.util.*
  */
 open class Manager (val sys: System) {
 
+
+    val logger = sys.ctx.logs.getLogger(this.javaClass)
+
+
     /**
      * Lookup of queues to workers that can handle the queue
      */
@@ -27,15 +31,20 @@ open class Manager (val sys: System) {
         val queue = getQueue()
         val jobs = getBatch(queue, 10)
 
-        // TODO: Smarter logic could be placed here to indicate that activity of a queue
-        jobs?.forEach { job ->
+        if (jobs == null || jobs.isEmpty()) {
+            logger.info("No jobs for queue: ${queue.name}")
+        } else {
             val worker = getWorker(queue.name)
-            worker?.let {
-                val result = worker.work(job)
-                if(result.success){
-                    queue.queue.complete(job.source)
-                } else {
-                    queue.queue.abandon(job.source)
+            val size = queue.queue.count()
+            logger.info("Processing: ${queue.name}: $size, ${worker?.about?.name}")
+            jobs.forEach { job ->
+                worker?.let {
+                    val result = worker.work(job)
+                    if (result.success) {
+                        queue.queue.complete(job.source)
+                    } else {
+                        queue.queue.abandon(job.source)
+                    }
                 }
             }
         }

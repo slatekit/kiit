@@ -17,8 +17,8 @@ import slatekit.common.ResultMsg
 import slatekit.common.Success
 import slatekit.common.info.About
 
-class WorkerSample(group:String, name:String, desc:String, val batch:Int = 10)
-    : Worker<String>(About(name, name, desc, group = group)) {
+class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)
+    : Worker<String>(name, desc, group, "1.0") {
 
     private var counter = 0
 
@@ -41,5 +41,4 @@ class WorkerSample(group:String, name:String, desc:String, val batch:Int = 10)
     override fun onEnd() {
         println("${about.name}: ending")
     }
-
 }

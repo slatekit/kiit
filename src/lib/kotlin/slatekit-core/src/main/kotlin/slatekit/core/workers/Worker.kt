@@ -48,15 +48,19 @@ import java.util.concurrent.atomic.AtomicReference
  * 2. idle      : idle workers are made to work via calling the "work" method
  * 3. skip      : any workers that are paused | stopped | completed | failed are skipped
  *
- * @sample : Worker<String>(About("user.notifications", "notifications", "send notifications to users", group = "user"))
+ * @sample : Worker<String>("user.notifications", "notifications", "send notifications to users", "1.0"))
  */
 open class Worker<T>(
-    val about   : About,
-    val settings: WorkerSettings = WorkerSettings(),
-    val metrics : Metrics = Metrics(DateTime.now()),
-    val handler : Handler = Handler(DateTime.now()),
-    val events  : Events  = Events(),
-    val callback: WorkFunction<T>? = null
+    name    : String,
+    group   : String,
+    desc    : String,
+    version : String,
+    val settings   : WorkerSettings = WorkerSettings(),
+    val metrics    : Metrics = Metrics(DateTime.now()),
+    val handler    : Handler = Handler(DateTime.now()),
+    val middleware : Middleware = Middleware(),
+    val events     : Events  = Events(),
+    val callback   : WorkFunction<T>? = null
 
 ) : RunStatusSupport {
 
@@ -65,6 +69,19 @@ open class Worker<T>(
     protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
     protected val _runDelay = AtomicReference<Int>(0)
     protected val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
+    protected val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
+
+
+    /**
+     * Unique id for this worker
+     */
+    val id = name + "." + Random.guid()
+
+
+    /**
+     * Information about this worker
+     */
+    val about:About = About(id, name, desc, group = group, version = version)
 
 
     /**
@@ -119,30 +136,14 @@ open class Worker<T>(
             return _lastResult.get().toResultEx()
         }
 
-        // Good to work
+        // Update state
         moveToState(RunStateRunning)
+        _lastRunTime.set(DateTime.now())
 
-        val result = try {
-            val attempt = perform(job)
-            _lastResult.set(attempt)
-            attempt.toResultEx()
+        val result = middleware.run(this, job) {
+            perform(job)
         }
-        catch(ex:Exception) {
-            val last = _runStatus.get()
-            _runStatus.set(
-                RunStatus(
-                    name        = about.name,
-                    lastRunTime = DateTime.now(),
-                    status      = RunStateRunning.mode,
-                    runCount    = last.runCount + 1,
-                    errorCount  = last.errorCount + 1,
-                    lastResult  = ""
-                )
-            )
-
-            //log.error("Error handling message from queue: " + ex.message, ex)
-            Failure(ex, msg="Unexpected error : " + ex.message)
-        }
+        _lastResult.set(result)
         moveToState(RunStateIdle)
         return result
     }
@@ -167,6 +168,30 @@ open class Worker<T>(
     }
 
 
+    fun stats():WorkerStats {
+        val lastRequest = metrics.lastRequest.get()
+        val lastFiltered = metrics.lastFiltered.get()
+        val lastSuccess = metrics.lastSuccess.get()
+        val lastErrored = metrics.lastErrored.get()
+
+        return WorkerStats(
+            about.id,
+            about.name,
+            status = _runState.get(),
+            lastRunTime = _lastRunTime.get(),
+            lastResult = _lastResult.get(),
+            totalRequests = metrics.totalRequests.get(),
+            totalSuccesses = metrics.totalSucccess.get(),
+            totalErrored   = metrics.totalErrored.get(),
+            totalFiltered  = metrics.totalFiltered.get(),
+            lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
+            lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
+            lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
+            lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+        )
+    }
+
+
     /**
      * moves the current state to the name supplied and performs a status update
      *
@@ -176,7 +201,7 @@ open class Worker<T>(
     override fun moveToState(state: RunState): RunStatus {
         val last = _runStatus.get()
         _runState.set(state)
-        _runStatus.set(RunStatus(about.name, DateTime.now(), state.mode, last.runCount + 1, last.errorCount, ""))
+        _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state.mode))
         events?.let { it.onEvent(Event(this.about.name, this, _runStatus.get().name))}
         return _runStatus.get()
     }

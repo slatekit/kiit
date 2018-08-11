@@ -1,6 +1,8 @@
 package slatekit.core.workers.core
 
 import slatekit.common.DateTime
+import slatekit.common.Failure
+import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs
 import slatekit.core.workers.Job
@@ -19,8 +21,8 @@ open class Metrics(val started: DateTime) {
     val totalSucccess  = AtomicLong(0L)
     val lastRequest    = AtomicReference<Job>(Job.empty)
     val lastFiltered   = AtomicReference<Job>(Job.empty)
-    val lastErrored    = AtomicReference<Pair<Job, ResultMsg<Any>>>(Pair(Job.empty, ResultFuncs.failure("not started")))
-    val lastSuccess    = AtomicReference<Pair<Job, ResultMsg<Any>>>(Pair(Job.empty, ResultFuncs.failure("not started")))
+    val lastErrored    = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
+    val lastSuccess    = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
 
 
     open fun request(job: Job) {
@@ -29,7 +31,7 @@ open class Metrics(val started: DateTime) {
     }
 
 
-    open fun success(job: Job, result:ResultMsg<Any>) {
+    open fun success(job: Job, result:ResultEx<*>) {
         totalSucccess.incrementAndGet()
         lastSuccess.set(Pair(job, result))
     }
@@ -41,7 +43,7 @@ open class Metrics(val started: DateTime) {
     }
 
 
-    open fun errored(job: Job, result:ResultMsg<Any>) {
+    open fun errored(job: Job, result:ResultEx<*>) {
         totalErrored.incrementAndGet()
         lastErrored.set(Pair(job, result))
     }
