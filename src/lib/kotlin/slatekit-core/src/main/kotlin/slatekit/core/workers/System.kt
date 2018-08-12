@@ -33,8 +33,6 @@ open class System(val ctx:AppContext,
      * Queues built from queue infos with priorities, creating "weighted" queues.
      */
     val queues = Queues(queueInfos)
-    private var manager:Manager? = null
-    private var registry:Registry? = null
 
     private val _runState = AtomicReference<RunState>(RunStateNotStarted)
     private var _thread:Thread? = null

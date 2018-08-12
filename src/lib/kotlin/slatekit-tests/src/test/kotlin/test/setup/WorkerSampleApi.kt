@@ -33,7 +33,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
         return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
             // Convert from web request to Queued request
             val queuedReq = Requests.toJsonAsQueued(req)
-            sendToQueue(queuedReq)
+            sendToQueue(queuedReq, Random.guid().toString(), req.tag, "api-queue")
             Success("Request processed as queue")
         }
         else {

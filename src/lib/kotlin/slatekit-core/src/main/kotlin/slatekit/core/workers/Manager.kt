@@ -19,6 +19,14 @@ open class Manager (val sys: System, val registry: Registry) {
      * 1. getting the next queue
      * 2. getting jobs from the queue
      * 3. passing the job to a worker that can handle items from that queue
+     *
+     * NOTE: This code is run in a parallel by the runner by submitting
+     * the manage method to an executor service.
+     * This requires worker/queues to also be thread-safe.
+     * Workers only hold metrics as state ( the metrics being Atomic counters )
+     * However, more importantly, the queue ( currently AWS SQS queue ) prevents
+     * other clients from obtaining the same messages ( for some x amount of time )
+     * once they have been claimed, so there is some level "thread-safety" with SQS.
      */
     open fun manage() {
         val queue = registry.getQueue()

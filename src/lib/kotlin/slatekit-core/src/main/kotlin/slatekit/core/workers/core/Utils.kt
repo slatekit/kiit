@@ -15,8 +15,27 @@ package slatekit.core.workers.core
 import slatekit.common.queues.QueueSourceMsg
 import slatekit.core.workers.Job
 import slatekit.core.workers.Worker
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.ExecutorService
+
+
 
 object Utils {
+
+    /**
+     * @see https://stackoverflow.com/questions/2265869/elegantly-implementing-queue-length-indicators-to-executorservices
+     * @see https://stackoverflow.com/questions/2247734/executorservice-standard-way-to-avoid-to-task-queue-getting-too-full
+     */
+    fun newFixedThreadPoolWithQueueSize(nThreads: Int, queueSize: Int): ExecutorService {
+        return ThreadPoolExecutor(
+            nThreads, nThreads,
+            5000L, TimeUnit.MILLISECONDS,
+            ArrayBlockingQueue(queueSize, true), ThreadPoolExecutor.CallerRunsPolicy()
+        )
+    }
+
 
     /**
      * Converts a message from any queue into a Job
