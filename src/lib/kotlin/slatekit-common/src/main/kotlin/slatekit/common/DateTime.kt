@@ -382,6 +382,11 @@ data class DateTime(val raw: ZonedDateTime) {
         }
 
 
+        fun parseISO(value:String): DateTime {
+            return DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        }
+
+
         fun parse(text:String, formatter:DateTimeFormatter): DateTime {
             val zonedDt = ZonedDateTime.parse(text, formatter)
             return DateTime(zonedDt)
