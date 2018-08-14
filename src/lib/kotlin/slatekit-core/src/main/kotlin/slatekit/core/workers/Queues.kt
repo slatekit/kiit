@@ -35,9 +35,18 @@ class Queues(val queues:List<QueueInfo>) {
      * gets the next queue based on weighted priority of the queues
      */
     fun next(): QueueInfo {
-        val ndx = random.nextInt(prioritizedQueues.size)
+        val ndx = nextRandomQueuePos()
         val queue = prioritizedQueues[ndx]
         return queue
+    }
+
+
+    /**
+     * gets the next queue based on weighted priority of the queues
+     */
+    fun nextRandomQueuePos(): Int {
+        val ndx = random.nextInt(prioritizedQueues.size)
+        return ndx
     }
 
 

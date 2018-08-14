@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 open class System(val ctx:AppContext,
                   val queueInfos:List<QueueInfo>,
                   service:ExecutorService? = null,
-                  val runnerCreator: ((System) -> Runner)? = null,
+                  val managerCreator: ((System) -> Manager)? = null,
                   val settings:SystemSettings = SystemSettings())
     : Runnable
 {
@@ -107,8 +107,8 @@ open class System(val ctx:AppContext,
         workers.forEach { it.value.moveToState(RunStateRunning)}
 
         // Get the instance of the runner
-        val runner = runnerCreator?.invoke(this) ?: DefaultRunner(this)
-        runner.execute(this)
+        val manager = managerCreator?.invoke(this) ?: DefaultManager(this)
+        manager.manage(this)
 
         // Ending/Complete
         moveToState(RunStateComplete)
@@ -128,7 +128,6 @@ open class System(val ctx:AppContext,
 
     fun start() {
         _thread = Thread(this)
-        _thread?.isDaemon = true
         _thread?.start()
     }
 

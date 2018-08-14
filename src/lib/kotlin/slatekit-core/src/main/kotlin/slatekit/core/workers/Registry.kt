@@ -36,12 +36,23 @@ class Registry(val sys:System) {
 
 
     /**
+     * Gets a random queue from the list of queues, factoring in the queue priority
+     */
+    fun getQueueAt(pos:Int): QueueInfo? {
+        val queue = sys.queues.prioritizedQueues[pos]
+        return queue
+    }
+
+
+    /**
      * Gets a batch of jobs from the next queue
      */
     fun getBatch(queueInfo: QueueInfo, size:Int):List<Job>? {
         val queue = queueInfo.queue as QueueSourceMsg
         val items = queue.nextBatch(size)
-        return items?.map { item ->  Utils.toJob(item, queueInfo, queue) }
+        return items?.map { item ->
+            Utils.toJob(item, queueInfo, queue)
+        }
     }
 
 

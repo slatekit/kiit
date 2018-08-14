@@ -1,6 +1,19 @@
 package slatekit.core.workers
 
+import slatekit.common.DateTime
+import slatekit.common.status.RunStateComplete
+import slatekit.common.status.RunStateRunning
+import slatekit.core.workers.core.QueueInfo
+import slatekit.core.workers.core.Utils
+import java.util.concurrent.ThreadPoolExecutor
 
+/**
+ * Interface to handle execution of the background workers.
+ * You can implement your own runner.
+ */
+interface Manager {
+    fun manage(sys: System)
+}
 
 /**
  * This is the default implementation of the Manager class for now
@@ -9,45 +22,105 @@ package slatekit.core.workers
  * You can customize this as needed to build your own manager
  * and supply it to the system class.
  */
-open class Manager (val sys: System, val registry: Registry) {
+open class DefaultManager (val sys:System, val jobBatchSize:Int = 10) : Manager {
 
-    val logger = sys.ctx.logs.getLogger(this.javaClass)
+    private val registry = Registry(sys)
+    private val logger = sys.ctx.logs.getLogger("workers")
 
 
-    /**
-     * Manages the jobs by:
-     * 1. getting the next queue
-     * 2. getting jobs from the queue
-     * 3. passing the job to a worker that can handle items from that queue
-     *
-     * NOTE: This code is run in a parallel by the runner by submitting
-     * the manage method to an executor service.
-     * This requires worker/queues to also be thread-safe.
-     * Workers only hold metrics as state ( the metrics being Atomic counters )
-     * However, more importantly, the queue ( currently AWS SQS queue ) prevents
-     * other clients from obtaining the same messages ( for some x amount of time )
-     * once they have been claimed, so there is some level "thread-safety" with SQS.
-     */
-    open fun manage() {
-        val queue = registry.getQueue()
-        val jobs = registry.getBatch(queue, 10)
+    // # threads = # cores
+    private val threads = Runtime.getRuntime().availableProcessors()
+    // TODO: What should be a preferred queue size ?
+    private val queueSize = threads * 3
+    private val executor = Utils.newFixedThreadPoolWithQueueSize(threads, queueSize)
+    private val threadPool = executor as ThreadPoolExecutor
+    private var queuePos = 0
 
-        if (jobs == null || jobs.isEmpty()) {
-            logger.info("No jobs for queue: ${queue.name}")
-        } else {
-            val worker = registry.getWorker(queue.name)
-            val size = queue.queue.count()
-            logger.info("Processing: ${queue.name}: $size, ${worker?.about?.name}")
-            jobs.forEach { job ->
-                worker?.let {
-                    val result = worker.work(job)
-                    if (result.success) {
-                        queue.queue.complete(job.source)
-                    } else {
-                        queue.queue.abandon(job.source)
+
+    override fun manage(sys: System) {
+
+        var state = sys.getState()
+
+        // This could have been paused/stopped
+        // and therefore could be resumed/started later.
+        // RunStateComplete is the only state that allows
+        // this code to keep going
+        while(state != RunStateComplete) {
+
+            // Same as not paused / stopped, so proceed to
+            // run the workers.
+            if(state == RunStateRunning ) {
+
+                if(threadPool.queue.size < queueSize) {
+
+                    val queuePosition = getQueueIndex()
+                    val queue = sys.queues.prioritizedQueues[queuePosition]
+                    val batch = getJobBatch(queuePosition)
+                    val worker = getWorker(queue)
+                    batch?.let {
+                        worker?.let {
+                            if(!batch.isEmpty) {
+                                executor.submit({
+                                    process(batch, worker)
+                                })
+                            }
+                        }
                     }
                 }
             }
+
+            // Enable pause ?
+            if(sys.settings.pauseBetweenCycles) {
+                Thread.sleep(sys.settings.pauseTimeInSeconds * 1000L)
+            }
+            state = sys.getState()
         }
+    }
+
+
+    /**
+     * Current approach just cycles through all the weighted queues in order.
+     * This ensure all queues are processed factoring in prioritization
+     */
+    private fun getQueueIndex():Int {
+
+        queuePos++
+        if(queuePos >= sys.queues.prioritizedQueues.size) {
+            queuePos = 0
+        }
+        return queuePos
+    }
+
+
+    /**
+     * Gets the next batch of jobs from the next queue.
+     *
+     */
+    private fun getJobBatch(queuePosition:Int): Batch? {
+        val queueOpt = registry.getQueueAt(queuePosition)
+        return queueOpt?.let { queue ->
+            val jobs = registry.getBatch(queue, jobBatchSize)
+
+            if (jobs != null && !jobs.isEmpty()) {
+                logger.info("No jobs for queue: ${queue.name}")
+                Batch(queue, jobs, DateTime.now())
+            } else {
+                Batch(queue, listOf(), DateTime.now())
+            }
+        }
+    }
+
+
+    /**
+     * Gets the next worker that can handle jobs from the supplied queue
+     */
+    private fun getWorker(queue: QueueInfo): Worker<*>? {
+        val worker = registry.getWorker(queue.name)
+        return worker
+    }
+
+
+    private fun process(batch:Batch, worker:Worker<*>) {
+        worker.work(batch)
     }
 }
