@@ -30,11 +30,15 @@ import java.io.IOException
 /**
  *
  * @param queue   : Name of the SQS Queue
- * @param path    : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
- * @param section : Name of section in conf file for api key. e.g. Some("sqs")
+ * @param creds   : The aws credentials
+ * @param waitTimeInSeconds: Set value between 1-20 to enable long polling
+ * @see           :
+ * 1. https://github.com/ex-aws/ex_aws/issues/486
+ * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
 class AwsCloudQueue(queue: String,
-                    creds: AWSCredentials
+                    creds: AWSCredentials,
+                    val waitTimeInSeconds:Int = 0
 ) : CloudQueueBase(), AwsSupport {
 
     private val _queue = queue
@@ -44,12 +48,12 @@ class AwsCloudQueue(queue: String,
     override val name = queue
 
 
-    constructor(queue:String, apiKey: ApiLogin ) :
-            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass) )
+    constructor(queue:String, apiKey: ApiLogin, waitTimeInSeconds: Int = 0 ) :
+            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), waitTimeInSeconds )
 
 
-    constructor(queue:String, confPath: String? = null, section: String? = null) :
-            this ( queue, AwsFuncs.creds(confPath, section) )
+    constructor(queue:String, confPath: String? = null, section: String? = null, waitTimeInSeconds: Int = 0) :
+            this ( queue, AwsFuncs.creds(confPath, section), waitTimeInSeconds )
 
 
     /**
@@ -96,7 +100,9 @@ class AwsCloudQueue(queue: String,
      */
     override fun nextBatch(size: Int): List<Any> {
         val results = execute<List<Any>>(SOURCE, "nextbatch", data = size, call = { ->
-            val req = ReceiveMessageRequest(_queueUrl).withMaxNumberOfMessages(size)
+            val reqRaw = ReceiveMessageRequest(_queueUrl)
+                .withMaxNumberOfMessages(size)
+            val req = if(waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
             val msgs = _sqs.receiveMessage(req).messages
             if (msgs.isNotEmpty() && msgs.size > 0) {
                 val results = mutableListOf<Any>()
@@ -163,6 +169,12 @@ class AwsCloudQueue(queue: String,
         // and the onError method is called for that message
         return executeResult<String>(SOURCE, "send", data = message, call = { ->
             val req = SendMessageRequest(_queueUrl, message)
+
+            // Add the attributes
+            req.withMessageAttributes(attributes.map { it ->
+                Pair(it.key, MessageAttributeValue().withDataType("String").withStringValue(it.value.toString()))
+            }.toMap())
+
             val result = _sqs.sendMessage(req)
             result.messageId
         })
