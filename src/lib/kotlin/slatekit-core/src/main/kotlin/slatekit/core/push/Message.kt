@@ -28,6 +28,7 @@ data class Message(
     val alert: Notification? = null
 ) {
 
+    val isMultiDelivery:Boolean = to.size > 1
     fun isAlert(): Boolean = messageType == MessageTypeAlert
     fun isData(): Boolean = messageType == MessageTypeData
     fun isBoth(): Boolean = messageType == MessageTypeBoth

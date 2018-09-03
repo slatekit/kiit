@@ -28,6 +28,62 @@ import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 
+/**
+ * Google FCM ( Fire base Cloud Messaging ) Service.
+ * Provides a simple interface to call FCM for push notifications.
+ *
+ * SEE: https://firebase.google.com/docs/cloud-messaging/android/receive
+ *
+ *
+ * URLS:
+ * 1. https://fcm.googleapis.com/fcm/send      ( for modern FCM http requests )
+ * 2. https://gcm-http.googleapis.com/gcm/send ( for older  GCM http requests )
+ *    GCM will be deprecated on April, 2019
+
+ *
+ * MESSAGE TYPES:
+ *
+ *  1. Notification message
+ *   {
+ *       "to": "{{REG_ID_HERE}}",
+ *       "notification": {
+ *           "click_action" : ".MainActivity",
+ *           "title" : "title v1",
+ *           "text": "data v1!",
+ *           "icon": "ic_launcher"
+ *       }
+ *   }
+ *
+ *   2. Data Message
+ *   {
+ *       "to": "{{REG_ID_HERE}}",
+ *       "data": {
+ *           "title" : "title v1",
+ *           "text": "data v1!",
+ *           "icon": "ic_launcher"
+ *       }
+ *   }
+ *
+ *   3. Notification And Data message
+ *   {
+ *       "to": "{{REG_ID_HERE}}",
+ *       "notification": {
+ *           "click_action" : ".MainActivity",
+ *           "title" : "title v1",
+ *           "text": "data v1!",
+ *           "icon": "ic_launcher"
+ *       },
+ *       "data": {
+ *           "title" : "title v1",
+ *           "text": "data v1!",
+ *           "icon": "ic_launcher"
+ *       }
+ *   }
+ *
+ *  NOTES:
+ *  1. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
+ *  2. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
+ */
 open class MessageServiceGoogle(_key: String,
                                 val config:ConfigBase,
                                 val logs:Logs,
@@ -35,15 +91,15 @@ open class MessageServiceGoogle(_key: String,
                                 private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null) :
     MessageServiceBase() {
 
-    // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
-    // https://gcm-http.googleapis.com/gcm/send
-    // https://fcm.googleapis.com/fcm/send
     private val _settings = MessageSettings("", _key, "")
     private val _baseUrl = config.getStringOrElse("android.sendUrl", "https://fcm.googleapis.com/fcm/send")
     private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val _logger = logs.getLogger(this.javaClass)
 
 
+    /**
+     * Sends a push notification to Android using the data from the Message supplied.
+     */
     override fun send(msg: Message): ResultMsg<Boolean> {
         val req = buildRequest(msg)
 
@@ -80,36 +136,43 @@ open class MessageServiceGoogle(_key: String,
 
     /**
      * Builds the Message to send as Push notification as an immutable HTTP Request
+     * when the app is either in the background/killed, it must
+     * have a notification object along w/ the data object.
+     *
+     * See links:
+     * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
+     * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
+     * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
     protected fun buildRequest(msg:Message): HttpRequest {
 
-        // when the app is either in the background/killed, it must
-        // have a notification object along w/ the data object.
-        // See links:
-        // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
-        // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
-        // https://firebase.google.com/docs/cloud-messaging/android/receive
-        //"notification": {
-        //    "click_action" : ".MainActivity",
-        //    "title" : "title v1",
-        //    "text": "data v1!",
-        //    "icon": "ic_launcher"
-        //},
-        val recipient = if(msg.to.size == 1) {
-            "\"" + msg.to[0] + "\""
-        } else {
-            val ids = msg.to.joinToString(",") { "\"" + it + "\"" }
-            "[$ids]"
-        }
-        val to = if(msg.to.size == 1) "\"to\"" else "\"registration_ids\""
+        // 1. Build "to" field
+        // This correctly based on if sending to multiple devices
+        // 1  = "to" : "regid1"
+        // 2+ = "registration_ids" : ["regid1", "regid2" ]
+        val ids = msg.to.joinToString(",") { "\"" + it + "\"" }
+        val to = if(msg.isMultiDelivery) "\"registration_ids\"" else "\"to\""
+        val recipient = if(msg.isMultiDelivery) "[$ids]" else ids
+        val alert = msg.alert?.let { buildAlert(it) } ?: ""
+
+        // 2. Build the content
+        // This depends on if your sending a "notification" | "data" message or both.
+        // Notifications only showup in the notification area on android.
+        // Data messages will be handled in the app.
+        // Use both for when an app is closed/backgrounded.
         val content = when(msg.messageType) {
-            is MessageTypeData  -> "{ " + to + " : " + recipient + ", \"data\" : " + msg.payload + " }"
-            is MessageTypeAlert -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + " }"
-            is MessageTypeBoth  -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + ", \"data\" : " + msg.payload +" }"
-            else               -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + " }"
+            is MessageTypeData  -> "{$to:$recipient, \"data\":${msg.payload}}"
+            is MessageTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
+            is MessageTypeBoth  -> "{$to:$recipient, \"notification\":$alert, \"data\":${msg.payload}}"
+            else                -> "{$to:$recipient, \"notification\":$alert}"
         }
 
-        // Build immutable http request.
+        // 3. Build immutable http request.
+        // Note: For now this is using the simple slatekit httprequest and
+        // synchronous http call. Later on this will be converted to one of
+        // a. the java async http libraries
+        // b. apache commons http async
+        // c. kotlin http async libraries
         val req = HttpRequest(
             url = _baseUrl,
             method = HttpMethod.POST,
@@ -131,11 +194,21 @@ open class MessageServiceGoogle(_key: String,
      * Simple default for sending the request synchronously.
      * Clients should use the sendAsync method
      */
-    protected fun sendSync(req: HttpRequest): ResultMsg<Boolean> {
+    private fun sendSync(req: HttpRequest): ResultMsg<Boolean> {
         val res = HttpClient.post(req)
         val result = if (res.is2xx) ResultFuncs.success(true, msg = res.result?.toString() ?: "")
         else Failure("error sending sms to ${req.url}")
         return result
+    }
+
+
+    private fun buildAlert(alert:Notification):String {
+        return """{
+            "click_action" : "${alert.click_action}",
+            "title" : "${alert.title.replace("\"", "\\\"")}",
+            "text": "${alert.text.replace("\"", "\\\"")}",
+            "icon": "${alert.icon.replace("\"", "\\\"")}"
+        }"""
     }
 }
 /*
