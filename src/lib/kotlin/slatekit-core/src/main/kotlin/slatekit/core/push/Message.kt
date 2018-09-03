@@ -13,25 +13,24 @@ mantra: Simplicity above all else
 
 package slatekit.core.push
 
-import org.json.simple.JSONObject
-import slatekit.common.DateTime
 
 
 /**
- * @param meta      : Metadata about the message
- * @param sender    : Information about the sender
- * @param recipient : Information about the recipient
- * @param content   : Metadata about the content / hints
- * @param data      : The actual dynamic payload of the message
+ * @param to          : Metadata about the message
+ * @param messageType : Information about the sender
+ * @param data        : The "data" part of the message. in android the "data" section
+ * @param alert       : The "alert" part of the message. in android the "notification" section
  */
 data class Message(
     val to: List<String>,
     val messageType:MessageType = MessageTypeData,
-    val payload: String = ""
+    val payload: String = "",
+    val alert: Notification? = null
 ) {
 
     fun isAlert(): Boolean = messageType == MessageTypeAlert
     fun isData(): Boolean = messageType == MessageTypeData
+    fun isBoth(): Boolean = messageType == MessageTypeBoth
 
 }
 

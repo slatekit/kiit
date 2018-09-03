@@ -18,47 +18,65 @@ import java.util.concurrent.Future
 abstract class MessageServiceBase {
 
     /**
-     * Sends a message as a notification
+     * Sends a message as a notification message
      *
      * @param  to : device/group to send to
+     * @param  alert : the json data to put into the "notification" portion of the notification
      * @return
      */
-    fun sendAlert(to:String, payload:String): ResultMsg<Boolean> {
-        return sendAlert(listOf(to), payload)
+    fun sendAlert(to:String, alert:Notification): ResultMsg<Boolean> {
+        return sendAlert(listOf(to), alert)
     }
 
 
     /**
-     * Sends a message as a notification
+     * Sends a message as a notification message
      *
      * @param  to : device/group to send to
+     * @param  alert : the json data to put into the "notification" portion of the notification
      * @return
      */
-    fun sendAlert(to:List<String>, payload:String): ResultMsg<Boolean> {
-        val message = Message(to, MessageTypeAlert, payload)
+    fun sendAlert(to:List<String>, alert:Notification): ResultMsg<Boolean> {
+        val message = Message(to, MessageTypeAlert, "", alert)
         return send(message)
     }
 
 
     /**
-     * Sends a message as a notification
+     * Sends a message as a message
      *
      * @param  to : device/group to send to
+     * @param  data : the json data to put into the "data" portion of the notification
      * @return
      */
-    fun sendData(to:String, payload:String): ResultMsg<Boolean> {
-       return sendData(listOf(to), payload)
+    fun sendData(to:String, data:String): ResultMsg<Boolean> {
+       return sendData(listOf(to), data)
     }
 
 
     /**
-     * Sends a message as a notification
+     * Sends a message as a data message
      *
      * @param  to : device/group to send to
+     * @param  data : the json data to put into the "data" portion of the notification
      * @return
      */
-    fun sendData(to:List<String>, payload:String): ResultMsg<Boolean> {
-        val message = Message(to, MessageTypeData, payload)
+    fun sendData(to:List<String>, data:String): ResultMsg<Boolean> {
+        val message = Message(to, MessageTypeData, data)
+        return send(message)
+    }
+
+
+    /**
+     * Sends a message with both data and notification sections
+     *
+     * @param  to : device/group to send to
+     * @param  data : the json data to put into the "data" portion of the notification
+     * @param  alert : the json data to put into the "notification" portion of the notification
+     * @return
+     */
+    fun sendAlertAndData(to:List<String>, data:String, alert:Notification): ResultMsg<Boolean> {
+        val message = Message(to, MessageTypeBoth, data, alert)
         return send(message)
     }
 

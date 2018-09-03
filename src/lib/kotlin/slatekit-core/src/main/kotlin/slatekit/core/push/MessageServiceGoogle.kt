@@ -35,14 +35,16 @@ open class MessageServiceGoogle(_key: String,
                                 private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null) :
     MessageServiceBase() {
 
+    // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
+    // https://gcm-http.googleapis.com/gcm/send
+    // https://fcm.googleapis.com/fcm/send
     private val _settings = MessageSettings("", _key, "")
-    private val _baseUrl = config.getStringOrElse("android.sendUrl", "https://gcm-http.googleapis.com/gcm/send")
+    private val _baseUrl = config.getStringOrElse("android.sendUrl", "https://fcm.googleapis.com/fcm/send")
     private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val _logger = logs.getLogger(this.javaClass)
 
 
     override fun send(msg: Message): ResultMsg<Boolean> {
-
         val req = buildRequest(msg)
 
         return if(_sendNotifications) {
@@ -81,6 +83,18 @@ open class MessageServiceGoogle(_key: String,
      */
     protected fun buildRequest(msg:Message): HttpRequest {
 
+        // when the app is either in the background/killed, it must
+        // have a notification object along w/ the data object.
+        // See links:
+        // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
+        // https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
+        // https://firebase.google.com/docs/cloud-messaging/android/receive
+        //"notification": {
+        //    "click_action" : ".MainActivity",
+        //    "title" : "title v1",
+        //    "text": "data v1!",
+        //    "icon": "ic_launcher"
+        //},
         val recipient = if(msg.to.size == 1) {
             "\"" + msg.to[0] + "\""
         } else {
@@ -89,8 +103,10 @@ open class MessageServiceGoogle(_key: String,
         }
         val to = if(msg.to.size == 1) "\"to\"" else "\"registration_ids\""
         val content = when(msg.messageType) {
-            is MessageTypeData -> "{ " + to + " : " + recipient + ", \"data\" : " + msg.payload + " }"
-            else               -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.payload + " }"
+            is MessageTypeData  -> "{ " + to + " : " + recipient + ", \"data\" : " + msg.payload + " }"
+            is MessageTypeAlert -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + " }"
+            is MessageTypeBoth  -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + ", \"data\" : " + msg.payload +" }"
+            else               -> "{ " + to + " : " + recipient + ", \"notification\" : " + msg.alert + " }"
         }
 
         // Build immutable http request.
