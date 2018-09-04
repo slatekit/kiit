@@ -24,8 +24,9 @@ import slate.common.Random
 
 
 fun main(args: Array<String>) {
+
     println("slatekit.tests 1.1")
-    testWorkers()
+    //testWorkers()
 }
 
 
