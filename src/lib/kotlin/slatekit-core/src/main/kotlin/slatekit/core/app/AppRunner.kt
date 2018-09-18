@@ -62,7 +62,17 @@ object AppRunner {
             println("code: " + result.code)
             println("msg : " + result.msg)
             println()
-            if(result is Failure<*>) { println("err : " + result.err) }
+            if(result is Failure<*>) {
+                when(result.err){
+                    is Exception -> {
+                        val ex = result.err as Exception
+                        println("err.source : " + ex)
+                        println("err.message : " + ex.message)
+                        println("err.stacktrace[0] : " + ex.stackTrace[0])
+                    }
+                    else         -> println("err : " + result.err)
+                }
+            }
             println("==================================")
             println()
         }
