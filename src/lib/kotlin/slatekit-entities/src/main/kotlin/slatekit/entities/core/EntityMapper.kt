@@ -78,6 +78,12 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
     }
 
 
+    fun buildName(prefix:String, name: String): String {
+        val finalName = namer?.rename( name ) ?: name
+        return "`${prefix}_$finalName`"
+    }
+
+
     /**
      * This is intentionally a long method that:
      *
@@ -97,7 +103,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         for (ndx in 0 until len) {
             val mapping = model.fields[ndx]
             val propName = mapping.name
-            val colName = prefix?.let { it + "_" + buildName(mapping.storedName) } ?: buildName(mapping.storedName)
+            val colName = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
             var isSubObject = false
             var subObjectSql:MappedSql? = null
 
@@ -178,7 +184,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
             }
             // Setup the inserts/updates
 
-            val isLastField = ndx == _model.fields.size - 1
+            val isLastField = ndx == model.fields.size - 1
             if (!update) {
 
                 // Build up the columns as "col1,col2,col3"
