@@ -44,19 +44,45 @@ interface EnumLike {
  * 2. Serialization / Deserialization
  */
 abstract class EnumSupport  {
+
     open fun parse(t: String): EnumLike {
         val member = all().find { it.name == t }
-        val first = member ?: throw Exception("Unexpected value for Enum : $t")
+        val first = member ?: if(isUnknownSupported()) {
+            throw Exception("Unexpected value for Enum : $t")
+        } else {
+            unknown(t)
+        }
         return first
     }
 
 
     open fun convert(i:Int): EnumLike {
         val member = all().find { it.value == i }
-        val first = member ?: throw Exception("Unexpected value for Enum : $i")
+        val first = member ?: if(isUnknownSupported()) {
+            throw Exception("Unexpected value for Enum : $i")
+        } else {
+            unknown(i)
+        }
         return first
     }
 
 
+    open fun isUnknownSupported(): Boolean {
+        return false
+    }
+
+
+    open fun unknown(name:String): EnumLike {
+        throw Exception("Unexpected value for Enum : $name")
+    }
+
+
+    open fun unknown(value:Int): EnumLike {
+        throw Exception("Unexpected value for Enum : $value")
+    }
+
+
     abstract fun all(): Array<EnumLike>
+
+
 }
