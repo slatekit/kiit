@@ -2,7 +2,6 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.*
 import slatekit.meta.Reflector
 import test.setup.StatusEnum
 import test.setup.StatusEnum2
