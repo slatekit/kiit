@@ -154,4 +154,32 @@ object KTypes {
             else               -> false
         }
     }
+
+
+    fun isBasicType(cls: KClass<*>): Boolean {
+        return when (cls) {
+        // Basic types
+            KStringClass        -> true
+            KBoolClass          -> true
+            KShortClass         -> true
+            KIntClass           -> true
+            KLongClass          -> true
+            KFloatClass         -> true
+            KDoubleClass        -> true
+            KDateTimeClass      -> true
+            KLocalDateClass     -> true
+            KLocalTimeClass     -> true
+            KLocalDateTimeClass -> true
+            KZonedDateTimeClass -> true
+            KInstantClass       -> true
+            KUUIDClass          -> true
+            KUniqueIdClass      -> true
+            KSmartStringClass   -> true
+            KDecStringClass     -> true
+            KDecIntClass        -> true
+            KDecLongClass       -> true
+            KDecDoubleClass     -> true
+            else               -> false
+        }
+    }
 }
