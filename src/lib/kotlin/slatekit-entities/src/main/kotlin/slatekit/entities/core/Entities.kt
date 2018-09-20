@@ -22,6 +22,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.newline
+import slatekit.entities.databases.MySqlEntityDDL
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
@@ -95,6 +96,9 @@ class Entities(private val _dbs: DbLookup? = null,
         // Create repo
         val repo = buildRepo<T>(isSqlRepo, db, dbKey ?: "", dbShard ?: "", entityType, mapr, tableName)
 
+        // Create the DDL ( for table creation schema, ddl management )
+        val ddl = buildDDL(isSqlRepo, db)
+
         // Create the service
         val service = buildService<T>(serviceType, repo, serviceCtx)
         val entityModel = model ?: mapr.model()
@@ -109,6 +113,7 @@ class Entities(private val _dbs: DbLookup? = null,
                 service,
                 repo,
                 mapr,
+                ddl,
                 isSqlRepo,
                 db,
                 dbKey ?: "",
@@ -300,6 +305,17 @@ class Entities(private val _dbs: DbLookup? = null,
             }
         }
         return repo
+    }
+
+
+    private fun buildDDL(isSqlRepo: Boolean, dbType: DbType): EntityDDL? {
+        // Currently only long supported
+        val repoType = if (!isSqlRepo) DbTypeMemory else dbType
+        val ddl = when (repoType) {
+            DbTypeMySql  -> MySqlEntityDDL()
+            else         -> null
+        }
+        return ddl
     }
 
 

@@ -46,6 +46,7 @@ data class EntityInfo(
         val entityServiceInstance: IEntityService? = null,
         val entityRepoInstance: IEntityRepo? = null,
         val entityMapperInstance: EntityMapper? = null,
+        val entityDDL:EntityDDL? = null,
         val isSqlRepo: Boolean = true,
         val dbType: DbType = DbTypeMySql,
         val dbKey: String = "",

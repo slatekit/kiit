@@ -20,6 +20,41 @@ enum class StatusEnum(override val value:Int) : EnumLike {
 
 
 
+data class StatusEnum2(
+        override val name:String,
+        override val value:Int
+) : EnumLike {
+
+    companion object : EnumSupport()  {
+
+        val Pending     = StatusEnum2( "Pending", 0 )
+        val Active      = StatusEnum2( "Active" , 1 )
+        val Blocked     = StatusEnum2( "Blocked", 2 )
+
+
+        override fun all(): Array<EnumLike> {
+            return arrayOf(Pending, Active, Blocked)
+        }
+
+
+        override fun isUnknownSupported(): Boolean {
+            return true
+        }
+
+
+        override fun unknown(name:String): EnumLike {
+            return StatusEnum2(name, 7)
+        }
+
+
+        override fun unknown(value:Int): EnumLike {
+            return StatusEnum2("unknown", 7)
+        }
+    }
+}
+
+
+
 enum class RoleEnum(val value:Int) {
     Member(0),
     Admin(1);
