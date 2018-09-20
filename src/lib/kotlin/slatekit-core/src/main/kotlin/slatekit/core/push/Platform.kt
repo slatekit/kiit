@@ -12,30 +12,41 @@ mantra: Simplicity above all else
  */
 package slatekit.core.push
 
-interface Platform {
-    val name:String
-}
+import slatekit.common.EnumLike
+import slatekit.common.EnumSupport
+
+data class Platform (
+        override val name:String,
+        override val value:Int
+) : EnumLike {
+
+    companion object : EnumSupport() {
 
 
-object PlatformIOS   : Platform { override val name:String = "ios" }
-object PlatformAnd   : Platform { override val name:String = "android" }
-object PlatformWeb   : Platform { override val name:String = "web" }
-object PlatformSrv   : Platform { override val name:String = "server" }
-object PlatformNone  : Platform { override val name:String = "none" }
+        val PlatformIOS = Platform("ios", 0)
+        val PlatformAnd = Platform("android", 1)
+        val PlatformWeb = Platform("web", 2)
+        val PlatformSrv = Platform("server", 3)
+        val PlatformNone = Platform("none", 4)
 
 
-data class PlatformOther(override val name:String): Platform
+        override fun all(): Array<EnumLike> {
+            return arrayOf(PlatformIOS, PlatformAnd, PlatformWeb, PlatformWeb, PlatformSrv, PlatformNone)
+        }
 
 
-object PlatformParser {
-    fun parse(name:String): Platform {
-        return when(name){
-            PlatformIOS.name  -> PlatformIOS
-            PlatformAnd.name  -> PlatformAnd
-            PlatformWeb.name  -> PlatformWeb
-            PlatformSrv.name  -> PlatformSrv
-            PlatformNone.name -> PlatformNone
-            else              -> PlatformOther(name)
+        override fun isUnknownSupported(): Boolean {
+            return true
+        }
+
+
+        override fun unknown(name: String): EnumLike {
+            return Platform(name, 6)
+        }
+
+
+        override fun unknown(value: Int): EnumLike {
+            return Platform("unknown", 6)
         }
     }
 }
