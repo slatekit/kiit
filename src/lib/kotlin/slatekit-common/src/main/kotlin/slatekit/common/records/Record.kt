@@ -22,55 +22,55 @@ import java.time.*
 interface Record {
     fun init(rec: List<String>)
 
-    fun getString(pos: Int): String
-    fun getString(name: String): String
+    fun getString(pos: Int): String?
+    fun getString(name: String): String?
 
-    fun getBool(pos: Int): Boolean
-    fun getBool(name: String): Boolean
+    fun getBool(pos: Int): Boolean?
+    fun getBool(name: String): Boolean?
 
-    fun getShort(pos: Int): Short
-    fun getShort(name: String): Short
+    fun getShort(pos: Int): Short?
+    fun getShort(name: String): Short?
 
-    fun getInt(pos: Int): Int
-    fun getInt(name: String): Int
+    fun getInt(pos: Int): Int?
+    fun getInt(name: String): Int?
 
-    fun getLong(pos: Int): Long
-    fun getLong(name: String): Long
+    fun getLong(pos: Int): Long?
+    fun getLong(name: String): Long?
 
-    fun getFloat(pos: Int): Float
-    fun getFloat(name: String): Float
+    fun getFloat(pos: Int): Float?
+    fun getFloat(name: String): Float?
 
-    fun getDouble(pos: Int): Double
-    fun getDouble(name: String): Double
+    fun getDouble(pos: Int): Double?
+    fun getDouble(name: String): Double?
 
-    fun getLocalDate(pos: Int): LocalDate
-    fun getLocalDate(name: String): LocalDate
+    fun getLocalDate(pos: Int): LocalDate?
+    fun getLocalDate(name: String): LocalDate?
 
-    fun getLocalTime(pos: Int): LocalTime
-    fun getLocalTime(name: String): LocalTime
+    fun getLocalTime(pos: Int): LocalTime?
+    fun getLocalTime(name: String): LocalTime?
 
-    fun getLocalDateTime(pos: Int): LocalDateTime
-    fun getLocalDateTime(name: String): LocalDateTime
+    fun getLocalDateTime(pos: Int): LocalDateTime?
+    fun getLocalDateTime(name: String): LocalDateTime?
 
-    fun getZonedDateTime(pos: Int): ZonedDateTime = getDateTime(pos).raw
-    fun getZonedDateTime(name: String): ZonedDateTime = getDateTime(name).raw
+    fun getZonedDateTime(pos: Int): ZonedDateTime? = getDateTime(pos)?.raw
+    fun getZonedDateTime(name: String): ZonedDateTime? = getDateTime(name)?.raw
 
-    fun getInstant(pos: Int): Instant
-    fun getInstant(name: String): Instant
+    fun getInstant(pos: Int): Instant?
+    fun getInstant(name: String): Instant?
 
     // Assumes DateTime at local zone
-    fun getDateTime(pos: Int): DateTime
-    fun getDateTime(name: String): DateTime
+    fun getDateTime(pos: Int): DateTime?
+    fun getDateTime(name: String): DateTime?
 
     // Assumes DateTime as UTC
     fun getDateTimeAsUTC(pos:Int):DateTime?
     fun getDateTimeAsUTC(name:String):DateTime?
 
-    fun getUUID(pos:Int): java.util.UUID
-    fun getUUID(name:String): java.util.UUID
+    fun getUUID(pos:Int): java.util.UUID?
+    fun getUUID(name:String): java.util.UUID?
 
-    fun getUniqueId(pos:Int): UniqueId
-    fun getUniqueId(name:String): UniqueId
+    fun getUniqueId(pos:Int): UniqueId?
+    fun getUniqueId(name:String): UniqueId?
 
 
     // ========================================================================

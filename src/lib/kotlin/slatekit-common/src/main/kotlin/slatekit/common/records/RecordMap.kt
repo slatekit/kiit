@@ -26,62 +26,62 @@ class RecordMap(val rs: ListMap<String, Any>) : Record {
     }
 
 
-    override fun getString(pos: Int): String = rs.getAt(pos) as String
-    override fun getString(name: String): String = rs.get(name) as String
+    override fun getString(pos: Int): String? = rs.getAt(pos) as String?
+    override fun getString(name: String): String? = rs.get(name) as String?
 
 
-    override fun getBool(pos: Int): Boolean = rs.getAt(pos) as Boolean
-    override fun getBool(name: String): Boolean = rs.get(name) as Boolean
+    override fun getBool(pos: Int): Boolean? = rs.getAt(pos) as Boolean?
+    override fun getBool(name: String): Boolean? = rs.get(name) as Boolean?
 
 
-    override fun getShort(pos: Int): Short = rs.getAt(pos) as Short
-    override fun getShort(name: String): Short = rs.get(name) as Short
+    override fun getShort(pos: Int): Short? = rs.getAt(pos) as Short?
+    override fun getShort(name: String): Short? = rs.get(name) as Short?
 
 
-    override fun getInt(pos: Int): Int = rs.getAt(pos) as Int
-    override fun getInt(name: String): Int = rs.get(name) as Int
+    override fun getInt(pos: Int): Int? = rs.getAt(pos) as Int?
+    override fun getInt(name: String): Int? = rs.get(name) as Int?
 
 
-    override fun getLong(pos: Int): Long = rs.getAt(pos) as Long
-    override fun getLong(name: String): Long = rs.get(name) as Long
+    override fun getLong(pos: Int): Long? = rs.getAt(pos) as Long?
+    override fun getLong(name: String): Long? = rs.get(name) as Long?
 
 
-    override fun getFloat(pos: Int): Float = rs.getAt(pos) as Float
-    override fun getFloat(name: String): Float = rs.get(name) as Float
+    override fun getFloat(pos: Int): Float? = rs.getAt(pos) as Float?
+    override fun getFloat(name: String): Float? = rs.get(name) as Float?
 
 
-    override fun getDouble(pos: Int): Double = rs.getAt(pos) as Double
-    override fun getDouble(name: String): Double = rs.get(name) as Double
+    override fun getDouble(pos: Int): Double? = rs.getAt(pos) as Double?
+    override fun getDouble(name: String): Double? = rs.get(name) as Double?
 
 
-    override fun getLocalDate(pos: Int): LocalDate = ( rs.getAt(pos) as java.sql.Date ).toLocalDate()
-    override fun getLocalDate(name: String): LocalDate = ( rs.get(name) as java.sql.Date ).toLocalDate()
+    override fun getUUID(pos:Int): java.util.UUID?     = rs.getAt(pos) as UUID?
+    override fun getUUID(name:String): java.util.UUID? = rs.get(name) as UUID?
 
 
-    override fun getLocalTime(pos: Int): LocalTime = ( rs.getAt(pos) as java.sql.Time ).toLocalTime()
-    override fun getLocalTime(name: String): LocalTime = ( rs.get(name) as java.sql.Time).toLocalTime()
+    override fun getUniqueId(pos:Int): UniqueId?     = rs.getAt(pos) as UniqueId?
+    override fun getUniqueId(name:String): UniqueId? = rs.get(name) as UniqueId?
 
 
-    override fun getLocalDateTime(pos: Int): LocalDateTime = ( rs.getAt(pos) as java.sql.Timestamp ).toLocalDateTime()
-    override fun getLocalDateTime(name: String): LocalDateTime = ( rs.get(name) as java.sql.Timestamp ).toLocalDateTime()
+    override fun getLocalDate(pos: Int): LocalDate? = ( rs.getAt(pos) as java.sql.Date? )?.toLocalDate()
+    override fun getLocalDate(name: String): LocalDate? = ( rs.get(name) as java.sql.Date? )?.toLocalDate()
 
 
-    override fun getInstant(pos: Int): Instant = ( rs.getAt(pos) as java.sql.Timestamp ).toInstant()
-    override fun getInstant(name: String): Instant = ( rs.get(name) as java.sql.Timestamp ).toInstant()
+    override fun getLocalTime(pos: Int): LocalTime? = ( rs.getAt(pos) as java.sql.Time? )?.toLocalTime()
+    override fun getLocalTime(name: String): LocalTime? = ( rs.get(name) as java.sql.Time? )?.toLocalTime()
 
 
-    override fun getDateTime(pos: Int): DateTime = DateTime.of(rs.getAt(pos) as java.sql.Timestamp)
-    override fun getDateTime(name: String): DateTime = DateTime.of(rs.get(name) as java.sql.Timestamp)
+    override fun getLocalDateTime(pos: Int): LocalDateTime? = ( rs.getAt(pos) as java.sql.Timestamp? )?.toLocalDateTime()
+    override fun getLocalDateTime(name: String): LocalDateTime? = ( rs.get(name) as java.sql.Timestamp? )?.toLocalDateTime()
 
 
-    override fun getDateTimeAsUTC(pos:Int):DateTime = DateTime.of(rs.getAt(pos) as java.sql.Timestamp, DateTime.UTC)
-    override fun getDateTimeAsUTC(name:String):DateTime = DateTime.of(rs.get(name) as java.sql.Timestamp, DateTime.UTC)
+    override fun getInstant(pos: Int): Instant? = ( rs.getAt(pos) as java.sql.Timestamp? )?.toInstant()
+    override fun getInstant(name: String): Instant? = ( rs.get(name) as java.sql.Timestamp? )?.toInstant()
 
 
-    override fun getUUID(pos:Int): java.util.UUID     = rs.getAt(pos) as UUID
-    override fun getUUID(name:String): java.util.UUID = rs.get(name) as UUID
+    override fun getDateTime(pos: Int): DateTime? = (rs.getAt(pos) as java.sql.Timestamp?)?.let{ DateTime.of(it) }
+    override fun getDateTime(name: String): DateTime? = (rs.get(name) as java.sql.Timestamp?)?.let{ DateTime.of(it) }
 
 
-    override fun getUniqueId(pos:Int): UniqueId     = rs.getAt(pos) as UniqueId
-    override fun getUniqueId(name:String): UniqueId = rs.get(name) as UniqueId
+    override fun getDateTimeAsUTC(pos:Int):DateTime? = (rs.getAt(pos) as java.sql.Timestamp?)?.let{ DateTime.of(it, DateTime.UTC) }
+    override fun getDateTimeAsUTC(name:String):DateTime? = (rs.get(name) as java.sql.Timestamp?)?.let { DateTime.of(it, DateTime.UTC) }
 }
