@@ -1,5 +1,6 @@
 package test.core
 
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.*
@@ -27,11 +28,16 @@ class MessagingTests {
         val logs = LogsDefault
         val svc = MessageServiceGoogle("abc", cfg, logs, call = io)
         val result = svc.sendAlert("deviceId:1234", Notification("title1", "desc1", "icon1", "LAUNCH"))
-        assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
-        assert(io.lastRequest?.method ==  HttpMethod.POST)
-        assert(io.lastRequest?.headers?.get(0) ==  Pair("Content-Type", "application/json"))
-        assert(io.lastRequest?.headers?.get(1) == Pair("Authorization", "key=abc"))
-        assert(io.lastRequest?.entity == """{ "to" : "deviceId:1234", "notification" : { "title" : "title1", "text" : "desc1", "icon" : "icon1", "click_action" : "LAUNCH" }""")
+        Assert.assertEquals(io.lastRequest?.url,  MessageServiceGoogle.fcmUrl)
+        Assert.assertEquals(io.lastRequest?.method,  HttpMethod.POST)
+        Assert.assertEquals(io.lastRequest?.headers?.get(0),  Pair("Content-Type", "application/json"))
+        Assert.assertEquals(io.lastRequest?.headers?.get(1), Pair("Authorization", "key=abc"))
+        Assert.assertEquals(io.lastRequest?.entity, """{"to":"deviceId:1234", "notification":{
+            "click_action" : "LAUNCH",
+            "title" : "title1",
+            "text": "desc1",
+            "icon": "icon1"
+        }}""")
     }
 
 
@@ -41,11 +47,11 @@ class MessagingTests {
         val logs = LogsDefault
         val svc = MessageServiceGoogle("abc", cfg, logs, call = io)
         val result = svc.sendData("deviceId:1234", "payload:data")
-        assert(io.lastRequest?.url ==  "https://gcm-http.googleapis.com/gcm/send")
-        assert(io.lastRequest?.method ==  HttpMethod.POST)
-        assert(io.lastRequest?.headers?.get(0) ==  Pair("Content-Type", "application/json"))
-        assert(io.lastRequest?.headers?.get(1) == Pair("Authorization", "key=abc"))
-        assert(io.lastRequest?.entity == """{ "to" : "deviceId:1234", "data" : payload:data }""")
+        Assert.assertEquals(io.lastRequest?.url,  MessageServiceGoogle.fcmUrl)
+        Assert.assertEquals(io.lastRequest?.method,  HttpMethod.POST)
+        Assert.assertEquals(io.lastRequest?.headers?.get(0),  Pair("Content-Type", "application/json"))
+        Assert.assertEquals(io.lastRequest?.headers?.get(1),  Pair("Authorization", "key=abc"))
+        Assert.assertEquals(io.lastRequest?.entity, """{"to":"deviceId:1234", "data":payload:data}""")
     }
 
 
