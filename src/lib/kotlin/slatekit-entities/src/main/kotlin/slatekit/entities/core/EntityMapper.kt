@@ -72,18 +72,6 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
     }
 
 
-    fun buildName(name: String): String {
-        val finalName = namer?.rename( name ) ?: name
-        return "`$finalName`"
-    }
-
-
-    fun buildName(prefix:String, name: String): String {
-        val finalName = namer?.rename( name ) ?: name
-        return "`${prefix}_$finalName`"
-    }
-
-
     /**
      * This is intentionally a long method that:
      *
@@ -98,6 +86,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
         var dat = ""
         var updates = ""
         var cols = ""
+        val NULL = "NULL"
 
         val len = model.fields.size
         for (ndx in 0 until len) {
@@ -111,60 +100,72 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
             // NOTE: Refactor this to use pattern matching ?
             // Similar to the Mapper class but reversed
             val data = if (mapping.dataCls == KTypes.KStringClass) {
-                val sVal = Reflector.getFieldValue(item, mapping.name) as String
-                // Only encrypt on create
-                val sValEnc = if (!update && mapping.encrypt) _encryptor?.encrypt(sVal) ?: sVal else sVal
-                val sValFinal = sValEnc.nonEmptyOrDefault("")
+                val sVal = Reflector.getFieldValue(item, mapping.name) as String?
+                sVal?.let {
+                    // Only encrypt on create
+                    val sValEnc = if (!update && mapping.encrypt) _encryptor?.encrypt(sVal) ?: sVal else sVal
+                    val sValFinal = sValEnc.nonEmptyOrDefault("")
                 "'" + QueryEncoder.ensureValue(sValFinal) + "'"
+                } ?: NULL
             } else if (mapping.dataCls == KTypes.KBoolClass) {
-                val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean
-                if (bVal) "1" else "0"
+                val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
+                bVal?.let{ if (bVal) "1" else "0" } ?: NULL
             } else if (mapping.dataCls == KTypes.KShortClass) {
-                val iVal = Reflector.getFieldValue(item, mapping.name) as Short
-                iVal.toString()
+                val iVal = Reflector.getFieldValue(item, mapping.name) as Short?
+                iVal?.toString() ?: NULL
             } else if (mapping.dataCls == KTypes.KIntClass) {
-                val iVal = Reflector.getFieldValue(item, mapping.name) as Int
-                iVal.toString()
+                val iVal = Reflector.getFieldValue(item, mapping.name) as Int?
+                iVal?.toString() ?: NULL
             } else if (mapping.dataCls == KTypes.KLongClass) {
-                val lVal = Reflector.getFieldValue(item, mapping.name) as Long
-                lVal.toString()
+                val lVal = Reflector.getFieldValue(item, mapping.name) as Long?
+                lVal?.toString() ?: NULL
             } else if (mapping.dataCls == KTypes.KFloatClass) {
-                val dVal = Reflector.getFieldValue(item, mapping.name) as Float
-                dVal.toString()
+                val dVal = Reflector.getFieldValue(item, mapping.name) as Float?
+                dVal?.toString() ?: NULL
             } else if (mapping.dataCls == KTypes.KDoubleClass) {
-                val dVal = Reflector.getFieldValue(item, mapping.name) as Double
-                dVal.toString()
+                val dVal = Reflector.getFieldValue(item, mapping.name) as Double?
+                dVal?.toString() ?: NULL
             } else if (mapping.dataCls == KTypes.KDateTimeClass) {
-                val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime
-                "'" + dtVal.toStringMySql() + "'"
+                val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime?
+                dtVal?.let{ "'" + dtVal.toStringMySql() + "'" } ?: NULL
             } else if (mapping.dataCls == KTypes.KLocalDateClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate
+                val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
                 //val dtVal = java.sql.Date.valueOf(raw)
-                "'" + raw.format(dateFormat) + "'"
+                raw?.let{ "'" + raw.format(dateFormat) + "'" } ?: NULL
             } else if (mapping.dataCls == KTypes.KLocalTimeClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime
+                val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime?
                 //val dtVal = java.sql.Time.valueOf(raw)
-                "'" + raw.format(timeFormat) + "'"
+                raw?.let{ "'" + raw.format(timeFormat) + "'" } ?: NULL
             } else if (mapping.dataCls == KTypes.KLocalDateTimeClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime
-                val converted = if (_settings.persisteUTCDate) DateTime.of(raw).atUtc().local() else raw
-                "'" + converted.format(dateTimeFormat) + "'"
+                val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
+                raw?.let {
+                    val converted = if (_settings.persisteUTCDate) DateTime.of(raw).atUtc().local() else raw
+                    "'" + converted.format(dateTimeFormat) + "'"
+                } ?: NULL
             } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime
-                val converted = if (_settings.persisteUTCDate) DateTime.of(raw).atUtc().raw else raw
-                "'" + converted.format(dateTimeFormat) + "'"
+                val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
+                raw?.let {
+                    val converted = if (_settings.persisteUTCDate) DateTime.of(raw).atUtc().raw else raw
+                    "'" + converted.format(dateTimeFormat) + "'"
+                } ?: NULL
             } else if (mapping.dataCls == KTypes.KInstantClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as Instant
+                val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
                 //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
-                "'" + LocalDateTime.ofInstant(raw, ZoneId.systemDefault()).format(dateTimeFormat) + "'"
+                raw?.let {
+                    "'" + LocalDateTime.ofInstant(raw, ZoneId.systemDefault()).format(dateTimeFormat) + "'"
+                } ?: NULL
             } else if (mapping.dataCls == KTypes.KUUIDClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID
+                val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
                 //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
-                "'" + raw.toString() + "'"
+                raw?.let {
+                    "'" + raw.toString() + "'"
+                } ?: NULL
             } else if (mapping.dataCls == KTypes.KUniqueIdClass) {
-                val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId
+                val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId?
                 //val dtVal = java.sql.Timestamp.valueOf(raw.toLocalDateTime())
-                "'" + raw.toString() + "'"
+                raw?.let {
+                    "'" + raw.toString() + "'"
+                } ?: NULL
             } else if (mapping.isEnum) {
                 val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike
                 "'" + raw.value.toString() + "'"
@@ -183,7 +184,6 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
                 "'" + QueryEncoder.ensureValue(data) + "'"
             }
             // Setup the inserts/updates
-
             val isLastField = ndx == model.fields.size - 1
             if (!update) {
 
@@ -221,5 +221,17 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
             }
         }
         return MappedSql(cols, dat, updates)
+    }
+
+
+    private fun buildName(name: String): String {
+        val finalName = namer?.rename( name ) ?: name
+        return "`$finalName`"
+    }
+
+
+    private fun buildName(prefix:String, name: String): String {
+        val finalName = namer?.rename( name ) ?: name
+        return "`${prefix}_$finalName`"
     }
 }

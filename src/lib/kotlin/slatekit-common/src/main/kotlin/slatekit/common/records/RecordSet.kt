@@ -78,8 +78,16 @@ class RecordSet(val rs: ResultSet) : Record {
     override fun getDateTime(name: String): DateTime = DateTime.of(rs.getTimestamp(name))
 
 
-    override fun getDateTimeAsUTC(pos:Int):DateTime = DateTime.of(rs.getTimestamp(pos) as java.sql.Timestamp).atUtcLocal()
-    override fun getDateTimeAsUTC(name:String):DateTime = DateTime.of(rs.getTimestamp(name) as java.sql.Timestamp).atUtcLocal()
+    override fun getDateTimeAsUTC(pos:Int):DateTime? {
+        val ts = rs.getTimestamp(pos)
+        return ts?.let { DateTime.of(ts).atUtcLocal() }
+    }
+
+
+    override fun getDateTimeAsUTC(name:String):DateTime? {
+        val ts = rs.getTimestamp(name)
+        return ts?.let { DateTime.of(ts).atUtcLocal() }
+    }
 
 
     override fun getUUID(pos:Int): java.util.UUID     = UUID.fromString(rs.getString(pos))
