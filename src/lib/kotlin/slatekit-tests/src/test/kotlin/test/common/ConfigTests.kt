@@ -167,11 +167,11 @@ class ConfigTests {
     }
 
 
-    fun matchkey(key1: ApiLogin, key2:ApiLogin):Unit {
-        assert(key1.account == key2.account)
-        assert(key1.key == key2.key)
-        assert(key1.env == key2.env)
-        assert(key1.pass == key2.pass)
-        assert(key1.tag == key2.tag)
+    fun matchkey(actual: ApiLogin, expected:ApiLogin):Unit {
+        assert(expected.account == actual.account)
+        assert(expected.key == actual.key)
+        assert(expected.env == actual.env)
+        assert(expected.pass == actual.pass)
+        assert(expected.tag == actual.tag)
     }
 }

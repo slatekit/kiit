@@ -95,7 +95,7 @@ interface ConfigSupport {
                 conf.getString("$finalPrefix.key"),
                 conf.getString("$finalPrefix.pass"),
                 conf.getString("$finalPrefix.env"),
-                conf.getString("$finalPrefix .tag")
+                conf.getString("$finalPrefix.tag")
             )
         }) ?: ApiLogin.empty
     }

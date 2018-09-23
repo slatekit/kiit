@@ -31,6 +31,24 @@ class Entity_Database_Tests {
     val sampleUUID3 = "67bdb72a-1d74-11e8-b467-0ed5f89f7183"
     val sampleUUID4 = "67bdb72a-1d74-11e8-b467-0ed5f89f7184"
 
+    /*
+    create table `sample_entity` (
+        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `test_string` VARCHAR(30) NOT NULL,
+        `test_bool` BIT NOT NULL,
+        `test_short` TINYINT NOT NULL,
+        `test_int` INTEGER NOT NULL,
+        `test_long` BIGINT NOT NULL,
+        `test_float` FLOAT NOT NULL,
+        `test_double` DOUBLE NOT NULL,
+        `test_enum` INTEGER NOT NULL,
+        `test_localdate` DATE NOT NULL,
+        `test_localtime` TIME NOT NULL,
+        `test_localdatetime` DATETIME NOT NULL,
+        `test_uuid` VARCHAR(50) NOT NULL,
+        `test_uniqueId` VARCHAR(50) NOT NULL
+    );
+    */
 
     @Test fun can_use_all_types(): Unit {
         val entities = realDb()
@@ -93,7 +111,7 @@ class Entity_Database_Tests {
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
         val entities = Entities(dbs)
-        entities.register<SampleEntity>(true, SampleEntity::class, dbType = DbTypeMySql, tableName = "db_tests")
+        entities.register<SampleEntity>(true, SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
         return entities
     }
 
