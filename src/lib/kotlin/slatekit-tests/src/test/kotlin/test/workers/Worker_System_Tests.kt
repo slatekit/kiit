@@ -27,7 +27,7 @@ class Worker_System_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_setup() {
         val sys = build()
         val group1 = sys.get("group 1")!!
@@ -40,7 +40,7 @@ class Worker_System_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_initialize() {
         val sys = build()
         sys.init()
@@ -57,7 +57,7 @@ class Worker_System_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_run() {
         val sys = build()
 

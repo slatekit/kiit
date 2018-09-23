@@ -14,6 +14,6 @@ package slatekit.common.db
 abstract class DbType(val name:String, val driver:String)
 
 object DbTypeMySql     : DbType("mysql"    , "com.mysql.jdbc.Driver")
-object DbTypeSqlServer : DbType("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
+object DbTypePGres     : DbType("pgres"    , "com.pgres.jdbc.Driver")
 object DbTypeMemory    : DbType("memory"   , "com.slatekit.entities.repository-in-memory")
 

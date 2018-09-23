@@ -92,7 +92,7 @@ open class MessageServiceGoogle(_key: String,
     MessageServiceBase() {
 
     private val _settings = MessageSettings("", _key, "")
-    private val _baseUrl = config.getStringOrElse("android.sendUrl", "https://fcm.googleapis.com/fcm/send")
+    private val _baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
     private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val _logger = logs.getLogger(this.javaClass)
 
@@ -210,7 +210,15 @@ open class MessageServiceGoogle(_key: String,
             "icon": "${alert.icon.replace("\"", "\\\"")}"
         }"""
     }
+
+
+    companion object {
+
+        @JvmStatic
+        val fcmUrl = "https://fcm.googleapis.com/fcm/send"
+    }
 }
+
 /*
 byte[] bytes = body.getBytes(UTF8);
 HttpURLConnection conn = getConnection(url);

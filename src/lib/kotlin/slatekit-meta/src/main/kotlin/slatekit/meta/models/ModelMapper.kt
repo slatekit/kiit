@@ -143,14 +143,14 @@ open class ModelMapper(protected val _model: Model,
                 val encrypt = anno.encrypt
                 val prop  = matchedField.first
                 val fieldKType = matchedField.first.returnType
-                val fieldType = fieldKType.jvmErasure
+                val fieldCls = fieldKType.jvmErasure
                 val modelField = ModelField.build(prop = prop, name = name,
-                        dataType = fieldType,
+                        dataType = fieldCls,
                         dataKType = fieldKType,
                         isRequired = required, maxLength = length, encrypt = encrypt, cat = cat, namer = namer)
 
                 val finalModelField = if(!modelField.isBasicType()) {
-                    val model = loadSchema(modelField.dataType, namer = namer)
+                    val model = loadSchema(modelField.dataCls, namer = namer)
                     modelField.copy(model = model)
                 } else modelField
                 finalModelField
@@ -203,7 +203,7 @@ open class ModelMapper(protected val _model: Model,
     @Suppress("IMPLICIT_CAST_TO_ANY")
     private fun getDataValue(prefix:String?, mapping:ModelField, record:Record, isUTC:Boolean): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
-        val dataValue = when (mapping.dataType) {
+        val dataValue = when (mapping.dataCls) {
             KTypes.KStringClass        -> record.getString(colName)
             KTypes.KBoolClass          -> record.getBool(colName)
             KTypes.KShortClass         -> record.getShort(colName)
@@ -222,7 +222,7 @@ open class ModelMapper(protected val _model: Model,
             else                       -> {
                 if(mapping.isEnum){
                     val enumInt = record.getInt(colName)
-                    val enumValue = Reflector.getEnumValue(mapping.dataType, enumInt)
+                    val enumValue = Reflector.getEnumValue(mapping.dataCls, enumInt)
                     enumValue
                 } else {
                     val model = mapFromToValType(mapping.name + "_", record, mapping.model!!)

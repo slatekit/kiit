@@ -14,6 +14,7 @@ package slatekit.common.db
 
 import slatekit.common.DateTime
 import slatekit.common.Types
+import java.math.BigDecimal
 import java.sql.*
 import java.time.*
 
@@ -127,6 +128,7 @@ object DbUtils {
                 Types.JLongAnyClass          -> stmt.setLong(pos, arg as Long)
                 Types.JFloatAnyClass         -> stmt.setFloat(pos, arg as Float)
                 Types.JDoubleAnyClass        -> stmt.setDouble(pos, arg as Double)
+                Types.JDecimalClass        -> stmt.setBigDecimal(pos, arg as BigDecimal)
                 Types.JLocalDateAnyClass     -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
                 Types.JLocalTimeAnyClass     -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
                 Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
@@ -149,6 +151,7 @@ object DbUtils {
         else if   (typ == Types.JLongClass) rs.getLong(pos) as T
         else if   (typ == Types.JFloatClass) rs.getFloat(pos) as T
         else if   (typ == Types.JDoubleClass) rs.getDouble(pos) as T
+        else if   (typ == Types.JDecimalClass) rs.getBigDecimal(pos) as T
         else if   (typ == Types.JLocalDateClass) rs.getDate(pos).toLocalDate() as T
         else if   (typ == Types.JLocalTimeClass) rs.getTime(pos).toLocalTime() as T
         else if   (typ == Types.JLocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
@@ -165,7 +168,9 @@ object DbUtils {
             else if (dataType == Types.JShortClass   ) DbFieldTypeShort
             else if (dataType == Types.JIntClass     ) DbFieldTypeNumber
             else if (dataType == Types.JLongClass    ) DbFieldTypeLong
-            else if (dataType == Types.JDoubleClass  ) DbFieldTypeReal
+            else if (dataType == Types.JFloatClass   ) DbFieldTypeFloat
+            else if (dataType == Types.JDoubleClass  ) DbFieldTypeDouble
+            else if (dataType == Types.JDecimalClass ) DbFieldTypeReal
             else if (dataType == Types.JLocalDateClass) DbFieldTypeLocalDate
             else if (dataType == Types.JLocalTimeClass) DbFieldTypeLocalTime
             else if (dataType == Types.JLocalDateTimeClass) DbFieldTypeLocalDateTime

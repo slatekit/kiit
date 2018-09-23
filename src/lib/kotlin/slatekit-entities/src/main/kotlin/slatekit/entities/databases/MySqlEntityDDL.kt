@@ -80,7 +80,7 @@ class MySqlEntityDDL : EntityDDL {
                 acc + sql
             }
             else {
-                val sqlType = DbUtils.getTypeFromLang(field.dataType.java)
+                val sqlType = DbUtils.getTypeFromLang(field.dataCls.java)
                 acc + ", " + dbSrc.buildAddCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
         })

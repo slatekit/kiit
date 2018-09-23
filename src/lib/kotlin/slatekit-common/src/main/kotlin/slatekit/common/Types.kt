@@ -28,6 +28,7 @@ object Types {
     val JLongClass           = 0L.javaClass
     val JFloatClass          = 0.toFloat().javaClass
     val JDoubleClass         = 0.0.javaClass
+    val JDecimalClass        = 0.0.toBigDecimal().javaClass
     val JDateTimeClass       = DateTime.MIN.javaClass
     val JLocalDateClass      = LocalDate.MIN.javaClass
     val JLocalTimeClass      = LocalTime.MIN.javaClass
@@ -50,6 +51,7 @@ object Types {
     val JLongAnyClass           = (0L as Any).javaClass
     val JFloatAnyClass          = (0.toFloat() as Any).javaClass
     val JDoubleAnyClass         = (0.0 as Any).javaClass
+    val JDecimalAnyClass        = (0.0.toBigDecimal() as Any).javaClass
     val JDateTimeAnyClass       = (DateTime.MIN as Any).javaClass
     val JLocalDateAnyClass      = (LocalDate.MIN as Any).javaClass
     val JLocalTimeAnyClass      = (LocalTime.MIN as Any).javaClass

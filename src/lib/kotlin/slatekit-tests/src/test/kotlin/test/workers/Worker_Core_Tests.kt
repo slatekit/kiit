@@ -1,11 +1,14 @@
 package test.workers
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
+import slatekit.core.workers.Job
 import slatekit.core.workers.WorkerSettings
 import slatekit.core.workers.core.Events
 import test.setup.MyWorker
@@ -22,24 +25,25 @@ class Worker_Core_Tests {
     @Test
     fun can_ensure_life_cycle(){
         val worker = MyWorker()
-        TODO.IMPLEMENT("tests", "Workers")
-//        worker.init()
-//        worker.perform()
-//        worker.end()
-        assert(worker.isInitialized)
-        assert(worker.acc == 1)
-        assert(worker.isEnded)
+        worker.init()
+        worker.perform(Job("1", "queue1", "task1", "data1", "ref-1", "unit-tests"))
+        worker.end()
+        Assert.assertTrue(worker.isInitialized)
+        Assert.assertTrue(worker.acc == 1)
+        Assert.assertTrue(worker.isEnded)
     }
 
 
     @Test
     fun can_use_lambda() {
         var lambdaUsed = false
-        TODO.IMPLEMENT("tests", "Workers")
-//        val worker = MyWorker(callback = { lambdaUsed = true; success(1) })
-//        worker.perform()
-//        assert(worker.acc == 0)
-        assert(lambdaUsed)
+        val worker = MyWorker(callback = {job ->
+            lambdaUsed = true
+            Success(1)
+        })
+        worker.work(Job("1", "queue1", "task1", "data1", "ref-1", "unit-tests"))
+        Assert.assertTrue(worker.acc == 0)
+        Assert.assertTrue(lambdaUsed)
     }
 
 
