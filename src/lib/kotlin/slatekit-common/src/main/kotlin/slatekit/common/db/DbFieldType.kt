@@ -28,6 +28,8 @@ object DbFieldTypeShort         : DbFieldType
 object DbFieldTypeLong          : DbFieldType
 object DbFieldTypeString        : DbFieldType
 object DbFieldTypeBool          : DbFieldType
+object DbFieldTypeFloat         : DbFieldType
+object DbFieldTypeDouble        : DbFieldType
 object DbFieldTypeReal          : DbFieldType
 object DbFieldTypeLocalDate     : DbFieldType
 object DbFieldTypeLocalTime     : DbFieldType

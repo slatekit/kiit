@@ -19,6 +19,7 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbTypeMySql
 import slatekit.entities.core.*
+import test.setup.StatusEnum
 import java.util.*
 
 
@@ -34,6 +35,10 @@ class Entity_Database_Tests {
     @Test fun can_use_all_types(): Unit {
         val entities = realDb()
         val svc = entities.getSvc<SampleEntity>(SampleEntity::class)
+        val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
+        val ddl = inf.entityDDL
+        val sql = ddl?.buildAddTable(entities.getDbSource(), inf.model, namer = entities.namer) ?: ""
+
         val id = svc.create(SampleEntity(
                 test_string = "create",
                 test_bool   = false,
@@ -42,10 +47,11 @@ class Entity_Database_Tests {
                 test_long   = 12345,
                 test_float  = 123456.7f,
                 test_double = 1234567.89,
+                test_enum = StatusEnum.Pending,
                 test_localdate = LocalDate.of(2017, 7, 6),
                 test_localtime = LocalTime.of(10,30,0),
                 test_localdatetime = LocalDateTime.of(2017, 7, 6, 10,30,0),
-                test_timestamp = Instant.now(),
+                //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
                 test_uniqueId = UniqueId.fromString(sampleUUID2)
         ))
@@ -58,12 +64,13 @@ class Entity_Database_Tests {
                 test_long   = 212345,
                 test_float  = 2123456.7f,
                 test_double = 21234567.89,
+                test_enum = StatusEnum.Active,
                 test_localdate = LocalDate.of(2017, 7, 7),
                 test_localtime = LocalTime.of(12,30,0),
                 test_localdatetime = LocalDateTime.of(2017, 7, 7, 12,30,0),
-                test_timestamp = Instant.now(),
+                //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
-                test_uniqueId = UniqueId.fromString(sampleUUID2)
+                test_uniqueId = UniqueId.fromString("abc:" + sampleUUID2)
         )
         svc.update(update)
         val updated = svc.get(id)!!
@@ -119,46 +126,49 @@ class Entity_Database_Tests {
      *
      */
     data class SampleEntity(
-            @property:Field(required = true)
-            override val id: Long = 0,
+            @property:Field()
+            override val id: Long = 0L,
 
-            @property:Field(required = true)
+            @property:Field(length = 30, required = true)
             val test_string:String = "",
 
-            @property:Field(required = true)
+            @property:Field()
             val test_bool:Boolean = false,
 
-            @property:Field(required = true)
+            @property:Field()
             val test_short:Short = 35,
 
-            @property:Field(required = true)
+            @property:Field()
             val test_int:Int = 35,
 
-            @property:Field(required = true)
+            @property:Field()
             val test_long:Long = 35,
 
-            @property:Field(required = true)
+            @property:Field()
             val test_float:Float = 20.5f,
 
-            @property:Field(required = true)
+            @property:Field()
             val test_double:Double = 20.5,
 
-            @property:Field(required = true)
+            @property:Field()
+            val test_enum:StatusEnum = StatusEnum.Pending,
+
+            @property:Field()
             val test_localdate: LocalDate = LocalDate.now(),
 
-            @property:Field(required = true)
+            @property:Field()
             val test_localtime: LocalTime = LocalTime.now(),
 
-            @property:Field(required = true)
+            @property:Field()
             val test_localdatetime: LocalDateTime = LocalDateTime.now(),
 
-            @property:Field(required = true)
-            val test_timestamp: Instant = Instant.now(),
+            //@property:Field(required = true)
+            //val test_timestamp: Instant = Instant.now(),
 
-            @property:Field(required = true)
+            @property:Field(length = 50)
             val test_uuid: UUID = UUID.randomUUID(),
 
-            @property:Field(required = true)
+            @property:Field(length = 50)
             val test_uniqueId: UniqueId = UniqueId.newId("usa")
 
     ) : EntityWithId, EntityUpdatable<SampleEntity> {
