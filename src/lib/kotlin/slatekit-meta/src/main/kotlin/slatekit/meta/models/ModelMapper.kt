@@ -204,7 +204,7 @@ open class ModelMapper(protected val _model: Model,
     private fun getDataValue(prefix:String?, mapping:ModelField, record:Record, isUTC:Boolean): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> record.getString(colName)
+            KTypes.KStringClass        -> getString(record, mapping, colName, _encryptor)
             KTypes.KBoolClass          -> record.getBool(colName)
             KTypes.KShortClass         -> record.getShort(colName)
             KTypes.KIntClass           -> record.getInt(colName)
@@ -231,5 +231,16 @@ open class ModelMapper(protected val _model: Model,
             }
         }
         return dataValue
+    }
+
+
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun getString(record:Record, mapping:ModelField, colName:String, encryptor:Encryptor?): String? {
+        return if(mapping.encrypt) {
+            val text = record.getString(colName)
+            text?.let { raw -> encryptor?.let{ it.decrypt( raw ) } ?: raw }
+        } else {
+            record.getString(colName)
+        }
     }
 }

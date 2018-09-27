@@ -103,7 +103,7 @@ open class EntityMapper(model: Model, persistAsUtc:Boolean = false, encryptor:En
                 val sVal = Reflector.getFieldValue(item, mapping.name) as String?
                 sVal?.let {
                     // Only encrypt on create
-                    val sValEnc = if (!update && mapping.encrypt) _encryptor?.encrypt(sVal) ?: sVal else sVal
+                    val sValEnc = if (mapping.encrypt) _encryptor?.encrypt(sVal) ?: sVal else sVal
                     val sValFinal = sValEnc.nonEmptyOrDefault("")
                 "'" + QueryEncoder.ensureValue(sValFinal) + "'"
                 } ?: NULL

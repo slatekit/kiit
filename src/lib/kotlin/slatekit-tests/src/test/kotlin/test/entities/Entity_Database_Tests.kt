@@ -19,6 +19,7 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbTypeMySql
 import slatekit.entities.core.*
+import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
 
@@ -35,6 +36,7 @@ class Entity_Database_Tests {
     create table `sample_entity` (
         `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `test_string` VARCHAR(30) NOT NULL,
+        `test_string_enc` VARCHAR(100) NOT NULL,
         `test_bool` BIT NOT NULL,
         `test_short` TINYINT NOT NULL,
         `test_int` INTEGER NOT NULL,
@@ -46,8 +48,7 @@ class Entity_Database_Tests {
         `test_localtime` TIME NOT NULL,
         `test_localdatetime` DATETIME NOT NULL,
         `test_uuid` VARCHAR(50) NOT NULL,
-        `test_uniqueId` VARCHAR(50) NOT NULL
-    );
+        `test_uniqueId` VARCHAR(50) NOT NULL );
     */
 
     @Test fun can_use_all_types(): Unit {
@@ -59,6 +60,7 @@ class Entity_Database_Tests {
 
         val id = svc.create(SampleEntity(
                 test_string = "create",
+                test_string_enc = "original 123 v1",
                 test_bool   = false,
                 test_short  = 123,
                 test_int    = 1234,
@@ -76,6 +78,7 @@ class Entity_Database_Tests {
         val created = svc.get(id)
         val update = created!!.copy(
                 test_string = "update",
+                test_string_enc = "original 123 v2",
                 test_bool   = true,
                 test_short  = 124,
                 test_int    = 21234,
@@ -94,6 +97,7 @@ class Entity_Database_Tests {
         val updated = svc.get(id)!!
         assert(updated.id == update.id)
         assert(updated.test_string == update.test_string)
+        assert(updated.test_string_enc == update.test_string_enc)
         assert(updated.test_bool == update.test_bool)
         assert(updated.test_short == update.test_short)
         assert(updated.test_int == update.test_int)
@@ -110,7 +114,7 @@ class Entity_Database_Tests {
 
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
-        val entities = Entities(dbs)
+        val entities = Entities(dbs, MyEncryptor)
         entities.register<SampleEntity>(true, SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
         return entities
     }
@@ -149,6 +153,9 @@ class Entity_Database_Tests {
 
             @property:Field(length = 30, required = true)
             val test_string:String = "",
+
+            @property:Field(length = 100, encrypt = true)
+            val test_string_enc:String = "",
 
             @property:Field()
             val test_bool:Boolean = false,
