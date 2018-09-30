@@ -13,7 +13,11 @@ package slatekit.sampleapp.server
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.DateTime
+import slatekit.common.auth.Roles
 import slatekit.core.app.AppRunner
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
@@ -129,7 +133,8 @@ fun main(args: Array<String>): Unit {
                     Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false, desc = "Sample to show APIs that are REST-like"),
 
                     // Example 5: File download
-                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download"),
+                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 6: Inheritance with APIs
                     Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false, desc = "Sample to show APIs with inherited members"),
