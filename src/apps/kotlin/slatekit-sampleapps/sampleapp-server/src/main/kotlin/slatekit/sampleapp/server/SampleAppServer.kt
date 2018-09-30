@@ -27,6 +27,7 @@ import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
 import slatekit.server.Server
+import slatekit.server.ktor.KtorServer
 import test.common.SampleAnnoApi
 import test.common.SampleApi
 
@@ -98,7 +99,7 @@ fun main(args: Array<String>): Unit {
     val selectedKey = sampleKeys[5]
     val auth = AppAuth("header", "slatekit", "johndoe", selectedKey, sampleKeys)
     val enc = AppEncryptor
-    val server = Server(
+    val server = KtorServer(
             port      = 5000,
             prefix    = "/api/",
             static    = true,

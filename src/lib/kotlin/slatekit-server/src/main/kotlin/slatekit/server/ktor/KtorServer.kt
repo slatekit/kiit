@@ -16,14 +16,11 @@ package slatekit.server.ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.features.CORS
-import io.ktor.features.ContentNegotiation
-import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.request.httpMethod
-import io.ktor.request.receive
 import io.ktor.request.receiveText
-import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -93,16 +90,19 @@ class KtorServer(
                 get(config.prefix + "/ping"){
                     ping(call)
                 }
-                post(config.prefix + "/*"){
+                get(config.prefix + "/*/*/*"){
                     exec(call)
                 }
-                put(config.prefix + "/*"){
+                post(config.prefix + "/*/*/*"){
                     exec(call)
                 }
-                patch(config.prefix + "/*"){
+                put(config.prefix + "/*/*/*"){
                     exec(call)
                 }
-                delete(config.prefix + "/*"){
+                patch(config.prefix + "/*/*/*"){
+                    exec(call)
+                }
+                delete(config.prefix + "/*/*/*"){
                     exec(call)
                 }
             }
@@ -155,7 +155,16 @@ class KtorServer(
             else              -> ""
         }
         val request = KtorRequest.build(ctx, body, call, config)
+
+        // The SlateKit ApiContainer will handle the heavy work of
+        // 1. Checking routes to area/api/actions ( methods )
+        // 2. Validating parameters to methods
+        // 3. Decoding request to method parameters
+        // 4. Executing the method
+        // 5. Handling errors
         val result = container.call(request)
+
+        // Convert the result back to a HttpResult
         KtorResponse.result(call, result)
     }
 
