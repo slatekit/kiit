@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.server
+package slatekit.server.spark
 
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
@@ -23,6 +23,7 @@ import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
+import slatekit.server.ServerConfig
 import slatekit.server.spark.SparkRequest
 import slatekit.server.spark.SparkResponse
 import spark.Request
@@ -33,7 +34,7 @@ import java.io.File
 import javax.servlet.MultipartConfigElement
 
 
-class Server(
+class SparkServer(
         val config: ServerConfig,
         val ctx   : Context,
         val auth  : Auth?,

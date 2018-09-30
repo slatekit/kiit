@@ -24,7 +24,7 @@ import java.time.LocalTime
 import java.time.ZonedDateTime
 
 
-data class HttpHeaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
+data class SparkHeaaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
 
     override val raw:Any = req.headers()
     override fun toMap(): Map<String, Any> {

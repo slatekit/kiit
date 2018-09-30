@@ -11,8 +11,22 @@
  * </slate_header>
  */
 
-package slatekit.server
+package slatekit.server.ktor
 
+import io.ktor.application.ApplicationCall
+import io.ktor.application.call
+import io.ktor.application.install
+import io.ktor.features.CORS
+import io.ktor.features.ContentNegotiation
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.request.httpMethod
+import io.ktor.request.receive
+import io.ktor.request.receiveText
+import io.ktor.response.respondText
+import io.ktor.routing.*
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.apis.security.WebProtocol
@@ -23,17 +37,10 @@ import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
-import slatekit.server.spark.SparkRequest
-import slatekit.server.spark.SparkResponse
-import spark.Request
-import spark.Response
-import spark.Spark
-import spark.Spark.staticFiles
-import java.io.File
-import javax.servlet.MultipartConfigElement
+import slatekit.server.ServerConfig
 
 
-class Server(
+class KtorServer(
         val config: ServerConfig,
         val ctx   : Context,
         val auth  : Auth?,
@@ -78,73 +85,48 @@ class Server(
      */
     fun run() {
 
-        // Configure
-        Spark.port(config.port)
+        val server = embeddedServer(Netty, config.port) {
+            routing {
+                get("/") {
+                    ping(call)
+                }
+                get(config.prefix + "/ping"){
+                    ping(call)
+                }
+                post(config.prefix + "/*"){
+                    exec(call)
+                }
+                put(config.prefix + "/*"){
+                    exec(call)
+                }
+                patch(config.prefix + "/*"){
+                    exec(call)
+                }
+                delete(config.prefix + "/*"){
+                    exec(call)
+                }
+            }
+        }
 
         // Display startup
         if (config.info) {
             this.info()
         }
 
-        // Static files
-        if(config.static) {
-            if(config.staticDir.isNullOrEmpty()){
-                staticFiles.location("/public")
-            }
-            else {
-                staticFiles.externalLocation(File(config.staticDir).absolutePath)
-            }
+        // CORS
+        if(config.cors){
+            server.application.install(CORS)
         }
 
-        // Ping/Check
-        Spark.get(config.prefix + "/ping", { req, res -> ping(req, res) })
-
-        // CORS
-        if(config.cors) Spark.options("/*") { req, res  -> cors(req, res) }
-
-        // Before
-        Spark.before("*", { req, res ->
-            req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement((System.getProperty("java.io.tmpdir"))))
-            //req.attribute("org.eclipse.multipartConfig", MultipartConfigElement((System.getProperty("java.io.tmpdir"))))
-            if (config.cors) {
-                res.header("Access-Control-Allow-Origin", "*")
-                res.header("Access-Control-Request-Method", "*")
-                res.header("Access-Control-Allow-Headers", "*")
-            }
-        })
-
-        // Allow all the verbs/routes to hit exec method
-        // The exec method will dispatch the request to
-        // the corresponding SlateKit API.
-        Spark.get(config.prefix    + "/*", { req, res -> exec(req, res) })
-        Spark.post(config.prefix   + "/*", { req, res -> exec(req, res) })
-        Spark.put(config.prefix    + "/*", { req, res -> exec(req, res) })
-        Spark.patch(config.prefix  + "/*", { req, res -> exec(req, res) })
-        Spark.delete(config.prefix + "/*", { req, res -> exec(req, res) })
-
-        // Setup scrpt
-        config.setup?.let { c -> c("") }
+        server.start(wait = true)
     }
 
 
     /**
      * stops the server ( this is not currently accessible on the command line )
      */
-    fun stop(): Unit {
+    fun stop() {
         spark.Spark.stop()
-    }
-
-
-    fun cors(req: Request, res: Response) {
-        val accessControlRequestHeaders = req.headers("Access-Control-Request-Headers")
-        if (accessControlRequestHeaders != null) {
-            res.header("Access-Control-Allow-Headers", accessControlRequestHeaders)
-        }
-
-        val accessControlRequestMethod = req.headers("Access-Control-Request-Method")
-        if (accessControlRequestMethod != null) {
-            res.header("Access-Control-Allow-Methods", accessControlRequestMethod)
-        }
     }
 
 
@@ -152,10 +134,9 @@ class Server(
      * pings the server to only get back the datetime.
      * Used for quickly checking a deployment.
      */
-    fun ping(req: Request, res: Response): String {
+    suspend fun ping(call:ApplicationCall) {
         val result = DateTime.now()
-        val text = SparkResponse.json(res, Success(result).toResponse())
-        return text
+        KtorResponse.json(call, Success(result).toResponse())
     }
 
 
@@ -165,11 +146,17 @@ class Server(
      * which handles abstracted Requests and dispatches them to
      * Slate Kit "Protocol Independent APIs".
      */
-    fun exec(req: Request, res: Response): Any {
-        val request = SparkRequest.build(ctx, req, config)
+    suspend fun exec(call:ApplicationCall) {
+        val body = when(call.request.httpMethod){
+            HttpMethod.Post   -> call.receiveText()
+            HttpMethod.Put    -> call.receiveText()
+            HttpMethod.Patch  -> call.receiveText()
+            HttpMethod.Delete -> call.receiveText()
+            else              -> ""
+        }
+        val request = KtorRequest.build(ctx, body, call, config)
         val result = container.call(request)
-        val text = SparkResponse.result(res, result)
-        return text
+        KtorResponse.result(call, result)
     }
 
 

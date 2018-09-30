@@ -11,13 +11,15 @@
  * </slate_header>
  */
 
-package slatekit.server.spark
+package slatekit.server.ktor
 
+import io.ktor.request.ApplicationRequest
+import io.ktor.request.httpMethod
 import org.json.simple.JSONObject
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
-import spark.Request
+
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -31,21 +33,22 @@ import java.time.ZonedDateTime
  *                     These are useful for the middleware rewrite module
  *                     which can rewrite routes add parameters
  */
-data class HttpParams(val req: Request,
+data class KtorParams(val body:String,
+                      val req: ApplicationRequest,
                       val enc: Encryptor?,
                       val extraParams:MutableMap<String,Any> = mutableMapOf()) : Inputs, InputsUpdateable, JsonSupport {
 
-    val method = req.requestMethod().toLowerCase()
-    val hasBody = HttpRequest.isBodyAllowed(method)
-    val json = HttpRequest.loadJson(req, false)
+    val method = req.httpMethod.value.toLowerCase()
+    val hasBody = KtorRequest.isBodyAllowed(method)
+    val json = KtorRequest.loadJson(body, req, false)
 
 
-    override fun toJson(): JSONObject = HttpRequest.loadJson(req, true)
+    override fun toJson(): JSONObject = KtorRequest.loadJson(body, req, true)
 
 
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
-    override fun size(): Int = req.headers().size
+    override fun size(): Int = req.headers.names().size
 
     override val raw:Any = json
     override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
@@ -70,7 +73,7 @@ data class HttpParams(val req: Request,
             true
         }
         else if (!hasBody) {
-            req.queryParams().contains(key)
+            req.queryParameters.contains(key)
         }
         else {
             false
@@ -86,7 +89,7 @@ data class HttpParams(val req: Request,
             json.get(key)
         }
         else if (!hasBody) {
-            req.queryParams(key)
+            req.queryParameters.get(key)
         }
         else {
             ""
@@ -103,12 +106,12 @@ data class HttpParams(val req: Request,
             json.get(key).toString()
         }
         else if (!hasBody) {
-            req.queryParams(key)
+            req.queryParameters.get(key)
         }
         else {
             ""
         }
-        return value
+        return value ?: ""
     }
 
 
@@ -128,43 +131,3 @@ data class HttpParams(val req: Request,
 
     fun getStringRaw(key: String): String = getInternalString(key).trim()
 }
-
-
-/* FILE HANDLING
-* post("/upload", "multipart/form-data", (request, response) -> {
-
-String location = "image";          // the directory location where files will be stored
-long maxFileSize = 100000000;       // the maximum size allowed for uploaded files
-long maxRequestSize = 100000000;    // the maximum size allowed for multipart/form-data requests
-int fileSizeThreshold = 1024;       // the size threshold after which files will be written to disk
-
-MultipartConfigElement multipartConfigElement = new MultipartConfigElement(
-     location, maxFileSize, maxRequestSize, fileSizeThreshold);
- request.raw().setAttribute("org.eclipse.jetty.multipartConfig",
-     multipartConfigElement);
-
-Collection<Part> parts = request.raw().getParts();
-for (Part part : parts) {
-   System.out.println("Name: " + part.getName());
-   System.out.println("Size: " + part.getSize());
-   System.out.println("Filename: " + part.getSubmittedFileName());
-}
-
-String fName = request.raw().getPart("file").getSubmittedFileName();
-System.out.println("Title: " + request.raw().getParameter("title"));
-System.out.println("File: " + fName);
-
-Part uploadedFile = request.raw().getPart("file");
-Path out = Paths.get("image/" + fName);
-try (final InputStream in = uploadedFile.getInputStream()) {
-   Files.copy(in, out);
-   uploadedFile.delete();
-}
-// cleanup
-multipartConfigElement = null;
-parts = null;
-uploadedFile = null;
-
-return "OK";
-});
-* */

@@ -21,11 +21,9 @@ import slatekit.server.ServerConfig
 import spark.Request
 import java.io.*
 import javax.servlet.MultipartConfigElement
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 
-class HttpRequest(val req: Request) : RequestSupport {
+class SparkRequest(val req: Request) : RequestSupport {
 
 
     /**
@@ -109,9 +107,9 @@ class HttpRequest(val req: Request) : RequestSupport {
                     parts = parts,
                     source = ApiConstants.SourceWeb,
                     verb = req.requestMethod().toLowerCase(),
-                    meta = HttpHeaders(req, ctx.enc),
-                    data = HttpParams(req, ctx.enc),
-                    raw = HttpRequest(req),
+                    meta = SparkHeaaders(req, ctx.enc),
+                    data = SparkParams(req, ctx.enc),
+                    raw = SparkRequest(req),
                     tag = Random.stringGuid()
             )
         }
