@@ -119,11 +119,15 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
-                    Api(SamplePOKOApi::class      , area = "samples", name = "SamplePOKO", declaredOnly = false, desc = "Sample to show APIs as pure class methods"),
+                    Api(SamplePOKOApi::class, area = "samples", name = "SamplePOKO", declaredOnly = false, desc = "Sample to show APIs as pure class methods",
+                            auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 2: passing in and returning data-types
-                    Api(SampleTypes1Api::class    , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with basic datatypes"),
-                    Api(SampleTypes2Api::class    , area = "samples", name = "Sampletypes2", declaredOnly = false, desc = "Sample to show APIs with objects, lists, maps"),
+                    Api(SampleTypes1Api::class    , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with basic datatypes",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
+
+                    Api(SampleTypes2Api::class    , area = "samples", name = "Sampletypes2", declaredOnly = false, desc = "Sample to show APIs with objects, lists, maps",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 3: annotations
                     Api(SampleTypes3Api::class    , setup = Annotated, declaredOnly = false),
@@ -146,7 +150,7 @@ fun main(args: Array<String>): Unit {
 
                     // Example 8: Middleware
                     Api(SampleErrorsApi(true)  , area = "samples", name = "SampleErrors", declaredOnly = false, desc = "Sample to show APIs with error handling"),
-                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
+                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleMiddleware", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
 
                     // Example 9: Provided by Slate Kit
                     Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),

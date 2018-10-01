@@ -54,7 +54,7 @@ object KtorResponse {
      */
     suspend fun content(call: ApplicationCall, result: slatekit.common.Response<Any>, content:Content?) {
         val text = content?.text ?: ""
-        val contentType = io.ktor.http.ContentType.Text.Plain //"text/plain"
+        val contentType = content?.let{ ContentType.parse(it.tpe.http) }?: io.ktor.http.ContentType.Text.Plain
         val statusCode = HttpStatusCode(result.code, "")
         call.respondText(text, contentType, statusCode)
     }

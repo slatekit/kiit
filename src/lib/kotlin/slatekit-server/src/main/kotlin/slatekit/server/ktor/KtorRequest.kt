@@ -14,19 +14,23 @@
 package slatekit.server.ktor
 
 import io.ktor.application.ApplicationCall
+import io.ktor.http.content.PartData
+import io.ktor.http.content.readAllParts
+import io.ktor.http.content.streamProvider
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import io.ktor.request.*
+import kotlinx.coroutines.experimental.async
 import java.io.*
 import javax.servlet.MultipartConfigElement
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 
 
-class KtorRequest(val req: ApplicationRequest) : RequestSupport {
+class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : RequestSupport {
 
 
     /**
@@ -62,12 +66,20 @@ class KtorRequest(val req: ApplicationRequest) : RequestSupport {
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
-//        req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
-//        val doc = req.raw().getPart(name).getInputStream().use({ stream ->
-//            callback(stream)
-//        })
-//        return doc
+        //getFileStream(name, callback)
         return Doc("", "", ContentTypeText, 0)
+    }
+
+
+    suspend fun getFileAsync(name:String, callback:(InputStream) -> Doc):Doc {
+        val multiPart = call.receiveMultipart()
+        val part = multiPart.readAllParts().find { (it.name ?: "" ) == name }
+        val doc = part?.let {
+            val file = it as PartData.FileItem
+            val doc = file.streamProvider().use(callback)
+            doc
+        } ?: Doc.empty
+        return doc
     }
 
 
@@ -76,11 +88,15 @@ class KtorRequest(val req: ApplicationRequest) : RequestSupport {
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getFileStream(name:String, callback:(InputStream) -> Unit ): Unit {
-        //req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
-        //req.raw().getPart(name).getInputStream().use({ stream ->
-        //    callback(stream)
-        //})
+    override fun getFileStream(name:String, callback:(InputStream) -> Unit ) {
+        async {
+            val multiPart = call.receiveMultipart()
+            val part = multiPart.readAllParts().find { (it.name ?: "" ) == name }
+            part?.let {
+                val file = it as PartData.FileItem
+                file.streamProvider().use(callback)
+            }
+        }
     }
 
 
@@ -88,8 +104,16 @@ class KtorRequest(val req: ApplicationRequest) : RequestSupport {
 
         fun build(ctx: Context, body:String, call: ApplicationCall, conf: ServerConfig): slatekit.common.Request {
             val req = call.request
-            val rawUri = req.uri
-            val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
+            val httpUri = req.uri
+            val rawUri = if (httpUri.startsWith(conf.prefix)) httpUri.substring(conf.prefix.length) else httpUri
+
+            // app/users/recent?count=20
+            // Only get up until "?"
+            val uri = if(rawUri.contains("?")) {
+                rawUri.substring(0, rawUri.indexOf("?"))
+            } else {
+                rawUri
+            }
             val parts = uri.split('/')
             // val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
             val method = req.httpMethod.value.toLowerCase()
@@ -107,13 +131,13 @@ class KtorRequest(val req: ApplicationRequest) : RequestSupport {
 
             // Reverting change to args.
             return slatekit.common.Request(
-                    path = req.uri,
+                    path = uri,
                     parts = parts,
                     source = ApiConstants.SourceWeb,
                     verb = method,
                     meta = KtorHeaders(req, ctx.enc),
                     data = KtorParams(body, req, ctx.enc),
-                    raw  = KtorRequest(req),
+                    raw  = KtorRequest(call, req),
                     tag = Random.stringGuid()
             )
         }
