@@ -31,6 +31,8 @@ data class ModelField(
         val minLength: Int = -1,
         val maxLength: Int = -1,
         val isEnum: Boolean = false,
+        val isUnique:Boolean = false,
+        val isUpdatable:Boolean = true,
         val defaultVal: Any? = null,
         val encrypt: Boolean = false,
         val key: String = "",
