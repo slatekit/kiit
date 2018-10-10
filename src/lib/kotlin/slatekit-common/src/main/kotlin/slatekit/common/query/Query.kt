@@ -115,12 +115,12 @@ open class Query : IQuery {
      * builds up a where clause with the supplied arguments
      *
      * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
+     * @param op: The comparison operator ( =, >, >=, <, <=, !=, in )
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun where(field: String, compare: String, fieldValue: Any): IQuery {
-        val condition = buildCondition(field, compare, fieldValue)
+    override fun where(field: String, op: String, fieldValue: Any): IQuery {
+        val condition = buildCondition(field, op, fieldValue)
         _data.conditions.add(condition)
         return this
     }
@@ -135,7 +135,7 @@ open class Query : IQuery {
      * @return this instance
      */
     override fun where(field: String, compare: Op, fieldValue: Any): IQuery =
-            where(field, compare.value, fieldValue)
+            where(field, compare.text, fieldValue)
 
 
     /**
@@ -154,7 +154,7 @@ open class Query : IQuery {
 
 
     override fun and(field: String, compare: Op, fieldValue: Any): IQuery =
-            and(field, compare.value, fieldValue)
+            and(field, compare.text, fieldValue)
 
 
     /**
@@ -173,7 +173,7 @@ open class Query : IQuery {
 
 
     override fun or(field: String, compare: Op, fieldValue: Any): IQuery =
-            or(field, compare.value, fieldValue)
+            or(field, compare.text, fieldValue)
 
 
     override fun limit(max: Int): IQuery {
@@ -194,20 +194,21 @@ open class Query : IQuery {
     }
 
 
-    protected fun buildCondition(field: String, compare: String, fieldValue: Any): Condition {
+    protected fun buildCondition(field: String, op: String, fieldValue: Any): Condition {
         val col = QueryEncoder.ensureField(field)
         val comparison = if(fieldValue == Query.Null) {
-            val comp = when (compare ){
+            val comp = when (op ){
                 "="  -> "is"
                 "is" -> "is"
                 "!=" -> "is not"
                 "<>" -> "is not"
+                "in" -> "in"
                 else -> "is"
             }
             Pair(comp, "null")
         }
         else {
-            val comp = QueryEncoder.ensureCompare(compare)
+            val comp = QueryEncoder.ensureCompare(op)
             Pair(comp, fieldValue)
         }
         val con = Condition(col, comparison.first, comparison.second)
