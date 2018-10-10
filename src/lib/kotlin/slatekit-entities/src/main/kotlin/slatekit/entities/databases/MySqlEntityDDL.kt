@@ -9,6 +9,12 @@ import slatekit.common.newline
 import slatekit.entities.core.EntityDDL
 import slatekit.meta.models.Model
 
+/**
+ *
+ * 1. CREATE INDEX idx_lastname ON message (status);
+ * 2. ALTER TABLE message DROP INDEX idx_status;
+ * 3. ALTER TABLE message ADD UNIQUE (uuid);
+ */
 class MySqlEntityDDL : EntityDDL {
 
     /**
@@ -20,6 +26,22 @@ class MySqlEntityDDL : EntityDDL {
         val dbSrc = db.source
         val sql = buildAddTable(dbSrc, model)
         db.execute(sql)
+    }
+
+
+    override fun createIndexes(db:Db, model:Model) {
+        val dbSrc = db.source
+        val indexes = model.fields.filter { it.isIndexed }
+        val indexSql = indexes.joinToString( transform = { field ->
+            "CREATE INDEX idx_${field.storedName} ON ${model.table} (${field.storedName});"
+        })
+        db.execute(indexSql)
+
+        val uniques = model.fields.filter { it.isUnique }
+        val uniqueSql = uniques.joinToString( transform = { field ->
+            "ALTER TABLE ${model.table} ADD UNIQUE (${field.storedName});"
+        })
+        db.execute(uniqueSql)
     }
 
 

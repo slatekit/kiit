@@ -32,6 +32,7 @@ data class ModelField(
         val maxLength: Int = -1,
         val isEnum: Boolean = false,
         val isUnique:Boolean = false,
+        val isIndexed:Boolean = false,
         val isUpdatable:Boolean = true,
         val defaultVal: Any? = null,
         val encrypt: Boolean = false,
@@ -87,7 +88,7 @@ data class ModelField(
          * @return
          */
         fun id(name: String, dataType: KClass<*>, dataKType: KType): ModelField {
-            return build(null, name, "", dataType, dataKType, true, 0, 0, name, 0, cat = "id")
+            return build(null, name, "", dataType, dataKType, true, true, true, false,0, 0, name, 0, cat = "id")
         }
 
 
@@ -112,6 +113,9 @@ data class ModelField(
                 dataType: KClass<*>,
                 dataKType: KType,
                 isRequired: Boolean = false,
+                isUnique: Boolean = false,
+                isIndexed: Boolean = false,
+                isUpdatable: Boolean = true,
                 minLength: Int = -1,
                 maxLength: Int = -1,
                 destName: String? = null,
