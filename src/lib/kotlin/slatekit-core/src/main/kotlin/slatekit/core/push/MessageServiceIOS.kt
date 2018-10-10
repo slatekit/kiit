@@ -13,6 +13,7 @@
 
 package slatekit.core.push
 
+import slatekit.common.Failure
 import slatekit.common.ResultMsg
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
@@ -27,7 +28,8 @@ class MessageServiceIOS(executor: ExecutorService? = null) : MessageServiceBase(
 
 
   override fun send(msg: Message): ResultMsg<Boolean> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    return Failure("Not implemented")
   }
 
 

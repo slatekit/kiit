@@ -16,7 +16,9 @@ package slatekit.entities.repos
 import slatekit.common.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.query.IQuery
+import slatekit.common.query.Op
 import slatekit.common.query.Query
+import slatekit.common.query.QueryEncoder
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
@@ -130,6 +132,17 @@ abstract class EntityRepoSql<T>
      */
     override fun findBy(field: String, op: String, value: Any): List<T> {
         return find(Query().where(field, op, value))
+    }
+
+
+    /**
+     * finds items based on the field in the values provided
+     * @param field: name of field
+     * @param value: values of field to search against
+     * @return
+     */
+    override fun findIn(field: String, value: List<Any>): List<T> {
+        return find(Query().where(field, Op.In.text, value.joinToString( transform = { QueryEncoder.ensureValue(it.toString())})))
     }
 
 

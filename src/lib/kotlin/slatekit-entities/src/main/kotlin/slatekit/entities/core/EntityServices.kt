@@ -349,6 +349,20 @@ open interface EntityServices<T> : IEntityService where T : Entity {
      * @param value: The value to check for
      * @return
      */
+    fun findByFieldIn(prop: KProperty<*>, value: List<Any>): List<T> {
+        // The property could have a different column name
+        val field = this.repo().mapper().model().fields.first { it.name == prop.name }
+        val column = field.storedName
+        return entityRepo().findIn(column, value)
+    }
+
+
+    /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
     fun findFirstByField(prop: KProperty<*>, value: Any): T? {
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }

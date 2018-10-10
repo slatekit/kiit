@@ -265,6 +265,15 @@ abstract class EntityRepo<T>(
 
 
     /**
+     * finds items based on the field in the values provided
+     * @param field: name of field
+     * @param value: values of field to search against
+     * @return
+     */
+    open fun findIn(field: String, value: List<Any>): List<T> = listOf()
+
+
+    /**
      * finds first item based on the field
      * @param field: name of field
      * @param op   : operator e.g. "="
