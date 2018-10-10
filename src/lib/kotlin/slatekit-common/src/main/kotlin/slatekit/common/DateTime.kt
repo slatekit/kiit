@@ -228,6 +228,9 @@ data class DateTime(val raw: ZonedDateTime) {
     }
 
 
+    fun toNumeric():Long = format("yyyyMMddHHmmss").toLong()
+
+
     fun toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
 
 
