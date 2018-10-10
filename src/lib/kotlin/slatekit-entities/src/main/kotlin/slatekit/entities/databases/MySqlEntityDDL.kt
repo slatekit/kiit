@@ -29,19 +29,21 @@ class MySqlEntityDDL : EntityDDL {
     }
 
 
-    override fun createIndexes(db:Db, model:Model) {
+    override fun buildIndexes(db:Db, model:Model, namer:Namer?):List<String> {
         val dbSrc = db.source
+        val tableName = namer?.rename(model.name) ?: model.name
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.joinToString( transform = { field ->
-            "CREATE INDEX idx_${field.storedName} ON ${model.table} (${field.storedName});"
+            "CREATE INDEX idx_${field.storedName} ON ${tableName} (${field.storedName});"
         })
-        db.execute(indexSql)
+        //db.execute(indexSql)
 
         val uniques = model.fields.filter { it.isUnique }
         val uniqueSql = uniques.joinToString( transform = { field ->
-            "ALTER TABLE ${model.table} ADD UNIQUE (${field.storedName});"
+            "ALTER TABLE ${tableName} ADD UNIQUE (${field.storedName});"
         })
-        db.execute(uniqueSql)
+        return listOf(indexSql, uniqueSql)
+        //db.execute(uniqueSql)
     }
 
 

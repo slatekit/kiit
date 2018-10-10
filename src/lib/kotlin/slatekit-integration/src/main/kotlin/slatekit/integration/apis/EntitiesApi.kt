@@ -23,6 +23,8 @@ import slatekit.apis.support.ApiBase
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.db.DbCon
+import slatekit.common.map
+import slatekit.common.newline
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
 import slatekit.integration.common.AppEntContext
@@ -83,7 +85,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     @ApiAction(desc = "generates sql install files for the model")
     fun generateSql(name: String, version: String = ""): ResultEx<String> {
-        return service().generateSql(name, version)
+        return service().generateSql(name, version).map { it.joinToString(newline) }
     }
 
 
