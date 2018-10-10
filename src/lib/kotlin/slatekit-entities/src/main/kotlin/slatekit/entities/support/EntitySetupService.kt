@@ -58,7 +58,7 @@ class EntitySetupService(private val _entities: Entities,
             is Success -> {
                 val db = _entities.getDb(dbKey, dbShard)
                 result.data.forEach {
-                    if(it.isNullOrEmpty()) { db.update(it) }
+                    if(!it.isNullOrEmpty()) { db.update(it) }
                 }
                 Success("Installed all tables")
             }
