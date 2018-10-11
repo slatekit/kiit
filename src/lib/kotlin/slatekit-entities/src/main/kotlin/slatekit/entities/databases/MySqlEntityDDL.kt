@@ -33,16 +33,16 @@ class MySqlEntityDDL : EntityDDL {
         val dbSrc = db.source
         val tableName = namer?.rename(model.name) ?: model.name
         val indexes = model.fields.filter { it.isIndexed }
-        val indexSql = indexes.joinToString( transform = { field ->
+        val indexSql = indexes.map { field ->
             "CREATE INDEX idx_${field.storedName} ON ${tableName} (${field.storedName});"
-        })
+        }
         //db.execute(indexSql)
 
         val uniques = model.fields.filter { it.isUnique }
-        val uniqueSql = uniques.joinToString( transform = { field ->
+        val uniqueSql = uniques.map { field ->
             "ALTER TABLE ${tableName} ADD UNIQUE (${field.storedName});"
-        })
-        return listOf(indexSql, uniqueSql)
+        }
+        return indexSql.plus(uniqueSql)
         //db.execute(uniqueSql)
     }
 
