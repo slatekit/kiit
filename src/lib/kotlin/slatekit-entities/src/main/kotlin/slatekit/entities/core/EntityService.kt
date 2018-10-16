@@ -13,6 +13,8 @@
 
 package slatekit.entities.core
 
+import slatekit.entities.services.EntityServices
+
 /**
  * Base entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
