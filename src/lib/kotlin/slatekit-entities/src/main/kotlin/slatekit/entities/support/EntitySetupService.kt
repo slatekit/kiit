@@ -99,11 +99,52 @@ class EntitySetupService(private val _entities: Entities,
     }
 
 
-    fun generateSqlAll(): ResultEx<List<String>> {
+
+
+    fun generateSqlFiles(): ResultEx<List<String>> {
         return each( { entity ->
             val result = generateSql(entity.entityTypeName)
             result.map { it.joinToString(newline) }
         } )
+    }
+
+
+    fun generateSqlAllInstall(): ResultEx<String> {
+        val fileName = "sql-all-install-" + DateTime.now().toStringNumeric()
+        val results = _entities.getEntities().map { entity ->
+            val result = generateSql(entity.entityTypeName)
+            result.map {
+                val allSqlForModel = it.joinToString(newline)
+                allSqlForModel
+            }
+        }
+        val succeeded = results.filter { it.success }
+        val allSql = succeeded.fold("", { acc, result ->
+            acc + newline  +  "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+        })
+        val finalFileName = "$fileName.sql"
+        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        return Success(filePath)
+    }
+
+
+    fun generateSqlAllUninstall(): ResultEx<String> {
+        val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
+        val results = _entities.getEntities().map { entity ->
+
+            val dropTable = _entities.getDbSource().buildDropTable(entity.model.table)
+
+            Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
+        }
+        val succeeded = results.filter { it.success }
+        val allSql = succeeded.fold("", { acc, result ->
+            acc + newline  +  "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+        })
+        val finalFileName = "$fileName.sql"
+        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        return Success(filePath)
     }
 
 
@@ -120,13 +161,13 @@ class EntitySetupService(private val _entities: Entities,
     /**
      * generates the sql for installing the model, file is created in the .{appname}/apps/ directory.
      *
-     * @param name    : the fully qualified name of the model e..g slate.ext.resources.Resource
+     * @param moduleName    : the fully qualified moduleName of the model e..g slate.ext.resources.Resource
      * @param version : the version of the model
      * @return
      */
-    fun generateSql(name: String, version: String = ""): ResultEx<List<String>> {
+    fun generateSql(moduleName: String, version: String = ""): ResultEx<List<String>> {
         val result = try {
-            val fullName = name
+            val fullName = moduleName
             val svc = _entities.getServiceByName(fullName)
             val model = svc.repo().mapper().model()
             val ddl = _entities.getInfoByName(fullName).entityDDL
@@ -152,7 +193,7 @@ class EntitySetupService(private val _entities: Entities,
         val success = result.first
         val sql = result.third
         val path = result.second
-        val info = if (success) "generated sql for model: $name $path" else "error generating sql"
+        val info = if (success) "generated sql for model: $moduleName $path" else "error generating sql"
         return if(success) Success(sql, msg = info) else Failure(Exception(info), msg = info)
     }
 

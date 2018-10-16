@@ -90,8 +90,20 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
 
     @ApiAction(desc = "generates sql install files for all models")
-    fun generateSqlAll(): ResultEx<List<String>> {
-        return service().generateSqlAll()
+    fun generateSqlFiles(): ResultEx<List<String>> {
+        return service().generateSqlFiles()
+    }
+
+
+    @ApiAction(desc = "generates a single sql install file for all models")
+    fun generateSqlAllInstall(): ResultEx<String> {
+        return service().generateSqlAllInstall()
+    }
+
+
+    @ApiAction(desc = "generates a single sql install file for all models")
+    fun generateSqlAllUninstall(): ResultEx<String> {
+        return service().generateSqlAllUninstall()
     }
 
 
