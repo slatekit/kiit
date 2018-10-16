@@ -142,7 +142,7 @@ abstract class EntityRepoSql<T>
      * @return
      */
     override fun findIn(field: String, value: List<Any>): List<T> {
-        return find(Query().where(field, Op.In.text, value.joinToString( transform = { QueryEncoder.ensureValue(it.toString())})))
+        return find(Query().where(field, Op.In.text, value))
     }
 
 

@@ -147,7 +147,14 @@ open class ModelMapper(protected val _model: Model,
                 val modelField = ModelField.build(prop = prop, name = name,
                         dataType = fieldCls,
                         dataKType = fieldKType,
-                        isRequired = required, maxLength = length, encrypt = encrypt, cat = cat, namer = namer)
+                        isRequired = required,
+                        isIndexed = anno.indexed,
+                        isUnique = anno.unique,
+                        isUpdatable = anno.updatable,
+                        maxLength = length,
+                        encrypt = encrypt,
+                        cat = cat,
+                        namer = namer)
 
                 val finalModelField = if(!modelField.isBasicType()) {
                     val model = loadSchema(modelField.dataCls, namer = namer)

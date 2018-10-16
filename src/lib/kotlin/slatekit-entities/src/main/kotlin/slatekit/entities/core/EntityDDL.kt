@@ -16,6 +16,9 @@ interface EntityDDL {
     fun createTable(db: Db, model: Model)
 
 
+    fun buildIndexes(db:Db, model:Model, namer:Namer?):List<String>
+
+
     /**
      * Builds the table DDL sql statement using the model supplied.
      */
