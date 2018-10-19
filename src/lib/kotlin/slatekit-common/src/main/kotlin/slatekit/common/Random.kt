@@ -31,10 +31,10 @@ object Random {
     fun string6(): String = stringN(6)
 
 
-    fun digits3(): Int = digitsN(3)
+    fun digits3(): Int = digitsN(3).toInt()
 
 
-    fun digits6(): Int = digitsN(6)
+    fun digits6(): Int = digitsN(6).toInt()
 
 
     fun alpha3(): String = alphaN(3)
@@ -55,7 +55,7 @@ object Random {
     fun alphaSym6(): String = alphaSymN(6)
 
 
-    fun digitsN(n: Int): Int = Integer.parseInt(randomize(n, NUMS))
+    fun digitsN(n: Int): Long = randomize(n, NUMS).toLong()
 
 
     fun stringN(n: Int, allowUpper: Boolean = true): String {
