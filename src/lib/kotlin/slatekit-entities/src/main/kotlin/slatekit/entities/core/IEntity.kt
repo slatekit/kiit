@@ -90,17 +90,18 @@ interface EntityWithTime {
 
 /**
  * Entity with support for create/update user id
+ * NOTE: This ids can be either long/UUID, so making this type a string to support either
  */
 interface EntityWithUser {
-    val createdBy: Long
-    val updatedBy: Long
+    val createdBy: String
+    val updatedBy: String
 }
 
 
 /**
  * Entity with support for a unique id ( GUID )
  */
-interface EntityWithGuid {
+interface EntityWithUUID {
     val uuid: String
 }
 
@@ -129,7 +130,7 @@ interface EntityWithShard {
 interface EntityWithMeta
     : EntityWithTime
       , EntityWithUser
-      , EntityWithGuid {
+      , EntityWithUUID {
 }
 
 

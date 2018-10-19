@@ -15,7 +15,7 @@ package slatekit.integration.mods
 
 import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.entities.core.EntityWithGuid
+import slatekit.entities.core.EntityWithUUID
 import slatekit.entities.core.EntityWithId
 
 
@@ -79,5 +79,5 @@ data class Mod(
         @property:Field(length = 50)
         override val uuid: String = ""
 )
-    : EntityWithId, EntityWithGuid {
+    : EntityWithId, EntityWithUUID {
 }

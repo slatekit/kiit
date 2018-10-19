@@ -80,16 +80,16 @@ data class ErrorItem(
         override val createdAt: DateTime = DateTime.now(),
 
 
-        @property:Field()
-        override val createdBy: Long = 0,
+        @property:Field(length = 50)
+        override val createdBy: String = "",
 
 
         @property:Field()
         override val updatedAt: DateTime = DateTime.now(),
 
 
-        @property:Field()
-        override val updatedBy: Long = 0
+        @property:Field(length = 50)
+        override val updatedBy: String = ""
 )
 
     : slatekit.entities.core.EntityWithId, slatekit.entities.core.EntityWithMeta,
