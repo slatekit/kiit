@@ -32,15 +32,23 @@ interface ApiQueueSupport {
      * Converts a request for an action that is queued, to an actual queue
      */
     fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : ResultMsg<String>  {
-        // Coming in as http request ? and mode is queued ?
+        // Coming in as http request and mode is queued ?
         return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
-            // Convert from web request to Queued request
-            val queuedReq = Requests.toJsonAsQueued(req)
-            sendToQueue(queuedReq, Random.guid().toString(), req.tag, "api.action.queued")
-            Success("Request processed as queue")
+            sendToQueue(ctx, req, target, source, args)
         }
         else {
             Failure("Continue processing")
         }
+    }
+
+
+    /**
+     * This can be overridden to support custom call-modes
+     */
+    fun sendToQueue(ctx:Context, req:Request, target:Action, source:Any, args:Map<String,Any>?): ResultMsg<String> {
+        // Convert from web request to Queued request
+        val queuedReq = Requests.toJsonAsQueued(req)
+        sendToQueue(queuedReq, Random.guid(), req.tag, "api.action.queued")
+        return Success("Request processed as queue")
     }
 }
