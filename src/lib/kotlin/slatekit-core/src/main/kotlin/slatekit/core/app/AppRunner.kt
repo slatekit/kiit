@@ -21,10 +21,10 @@ import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
-import slatekit.common.results.BAD_REQUEST
 import slatekit.common.results.FAILURE
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext

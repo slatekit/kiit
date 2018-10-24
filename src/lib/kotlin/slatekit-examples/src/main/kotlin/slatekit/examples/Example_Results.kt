@@ -13,7 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.results.BAD_REQUEST
+import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultFuncs.conflict
 import slatekit.common.results.ResultFuncs.failure

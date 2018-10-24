@@ -27,8 +27,8 @@ import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.HELP
 import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 
 /**
   *

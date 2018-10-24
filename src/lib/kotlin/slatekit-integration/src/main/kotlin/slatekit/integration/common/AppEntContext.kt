@@ -25,8 +25,8 @@ import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.HELP
 import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 

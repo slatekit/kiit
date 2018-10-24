@@ -31,7 +31,7 @@ import slatekit.common.info.Host
 import slatekit.common.info.Lang
 import slatekit.common.log.LoggerConsole
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.BAD_REQUEST
+import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.core.app.AppRunner
 import slatekit.entities.core.Entities
 import slatekit.core.cmds.Cmd

@@ -20,7 +20,7 @@ import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
 import java.io.File

@@ -42,7 +42,5 @@ object ResultCode {
 }
 
 const val FAILURE = 400
-const val BAD_REQUEST = 400
 const val UNAUTHORIZED = 401
 const val UNEXPECTED_ERROR = 500
-const val HELP = 1000
