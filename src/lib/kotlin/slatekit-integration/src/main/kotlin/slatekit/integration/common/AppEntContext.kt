@@ -23,12 +23,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.*
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.EXIT
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 

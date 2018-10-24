@@ -19,19 +19,30 @@ package slatekit.common.results
 
 object ResultCode {
     const val SUCCESS = 200
+    const val CONFIRM = 230
+
+
+    const val CONFLICT = 409
+    const val DEPRECATED = 426
+
+    const val FAILURE = 400
+    const val BAD_REQUEST = 400
+    const val UNAUTHORIZED = 401
+    const val NOT_FOUND = 404
+
+
+    const val UNEXPECTED_ERROR = 500
+    const val NOT_IMPLEMENTED = 501
+    const val NOT_AVAILABLE = 503
+    const val HELP = 1000
+
+    const val MISSING = 1404
+    const val EXIT = 1001
+    const val VERSION = 1002
 }
 
-const val CONFIRM = 230
 const val FAILURE = 400
 const val BAD_REQUEST = 400
 const val UNAUTHORIZED = 401
-const val NOT_FOUND = 404
-const val CONFLICT = 409
-const val DEPRECATED = 426
 const val UNEXPECTED_ERROR = 500
-const val NOT_IMPLEMENTED = 501
-const val NOT_AVAILABLE = 503
 const val HELP = 1000
-const val EXIT = 1001
-const val VERSION = 1002
-const val MISSING = 1404

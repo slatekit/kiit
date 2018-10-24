@@ -19,8 +19,8 @@ import slatekit.common.args.Arg
 import slatekit.common.args.ArgsSchema
 import slatekit.common.getOrElse
 import slatekit.common.results.BAD_REQUEST
-import slatekit.common.results.EXIT
 import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.app.AppProcess
 import slatekit.core.app.AppRunner

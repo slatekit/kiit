@@ -13,6 +13,13 @@
 
 package slatekit.common.results
 
+import slatekit.common.results.ResultCode.CONFLICT
+import slatekit.common.results.ResultCode.DEPRECATED
+import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.NOT_AVAILABLE
+import slatekit.common.results.ResultCode.NOT_FOUND
+import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
+
 interface ResultChecks {
 
     fun statusCode(): Int

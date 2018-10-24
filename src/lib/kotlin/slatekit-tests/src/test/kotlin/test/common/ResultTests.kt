@@ -11,6 +11,9 @@ import slatekit.common.results.ResultFuncs.notFound
 import org.junit.Test
 import slatekit.common.*
 import slatekit.common.results.*
+import slatekit.common.results.ResultCode.CONFLICT
+import slatekit.common.results.ResultCode.NOT_FOUND
+import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultFuncs.yes
 
 /**
