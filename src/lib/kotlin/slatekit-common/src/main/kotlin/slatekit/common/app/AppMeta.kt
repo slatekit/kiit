@@ -27,6 +27,7 @@ data class AppMeta(
 
 
     companion object {
+        @JvmStatic
         val none = AppMeta(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none, Build.empty)
     }
 

@@ -85,6 +85,7 @@ data class Request (
         /**
          * Builds a request that is designated as a web request with empty data and meta objects.
          */
+        @JvmStatic
         fun web(path:String, verb:String, tag:String = ""): Request {
             val sep = if(path.contains("/")) "/" else "."
             val parts = path.split(sep)
@@ -96,6 +97,7 @@ data class Request (
         /**
          * Builds a request that is designated as a cli request using the raw data/meta supplied
          */
+        @JvmStatic
         fun cli(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw:Any? = null): Request {
             val path = if(area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
             return Request(path, listOf(area, api, action), "cli", verb, InputArgs(args), meta = InputArgs(opts), raw = raw)
@@ -105,14 +107,17 @@ data class Request (
         /**
          * Builds a cli based request using pre-build data/meta
          */
+        @JvmStatic
         fun cli(path: String, verb: String, meta: Meta?, args: Args, raw:Any?): Request {
             return Request(path, args.actionParts, "cli", verb, args, meta ?: InputArgs(mapOf()), raw, "")
         }
+
 
         /**
          * builds the request using the path and raw meta/data supplied.
          * NOTE: This is used mostly for testing purposes
          */
+        @JvmStatic
         fun cli(path: String,
                 headers: List<Pair<String, Any>>?,
                 inputs: List<Pair<String, Any>>?): Request {
@@ -134,7 +139,7 @@ data class Request (
         }
 
 
-
+        @JvmStatic
         fun path(path:String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw:Any? = null): Request {
             val parts = path.split(".")
             val area = parts[0]

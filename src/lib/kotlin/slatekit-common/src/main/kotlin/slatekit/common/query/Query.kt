@@ -236,8 +236,8 @@ open class Query : IQuery {
 
 
     companion object {
-        val Null = "null"
-        val Asc  = "asc"
-        val Desc = "desc"
+        @JvmStatic val Null = "null"
+        @JvmStatic val Asc  = "asc"
+        @JvmStatic val Desc = "desc"
     }
 }

@@ -14,6 +14,7 @@
 package slatekit.common.results
 
 import slatekit.common.*
+import slatekit.common.results.ResultCode.SUCCESS
 
 
 object ResultFuncs {

@@ -123,6 +123,7 @@ abstract class SmartString (
         /**
          * Validates the text, used for construction of the smart string.
          */
+        @JvmStatic
         fun validate(text:String, required:Boolean, expressions:List<String>): Pair<Boolean, Int> {
             val isEmpty = text.isNullOrEmpty()
             return if(isEmpty) {

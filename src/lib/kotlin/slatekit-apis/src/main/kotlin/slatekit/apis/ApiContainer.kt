@@ -430,6 +430,7 @@ open class ApiContainer(
 
     companion object {
 
+        @JvmStatic
         fun setApiHost(item: Any?, host: ApiContainer) {
             if (item is ApiHostAware) {
                 item.setApiHost(host)

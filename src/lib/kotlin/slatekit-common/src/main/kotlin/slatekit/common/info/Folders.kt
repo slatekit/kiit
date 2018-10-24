@@ -124,6 +124,7 @@ data class Folders(
 
     companion object Folders {
 
+        @JvmStatic
         val none = Folders(
                 location = LocationUserDir,
                 home = System.getProperty("user.dir"),
@@ -139,6 +140,7 @@ data class Folders(
         )
 
 
+        @JvmStatic
         val default = Folders(
                 location = LocationUserDir,
                 home = System.getProperty("user.dir"),
@@ -154,6 +156,7 @@ data class Folders(
         )
 
 
+        @JvmStatic
         fun userDir(root: String, group: String, app: String) =
                 Folders(
                         LocationUserDir,

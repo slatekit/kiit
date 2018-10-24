@@ -252,32 +252,40 @@ data class DateTime(val raw: ZonedDateTime) {
     override fun toString(): String = raw.toString()
 
 
-    companion object DateTimes {
+    companion object {
 
+        @JvmStatic
         val UTC: ZoneId = ZoneId.of("UTC")
 
 
+        @JvmStatic
         val MIN: DateTime = DateTime(LocalDateTime.MIN.atZone(ZoneId.systemDefault()))
 
 
+        @JvmStatic
         fun of(d:ZonedDateTime):DateTime = DateTime(d)
 
 
+        @JvmStatic
         fun of(d:LocalDateTime):DateTime = DateTime(build(d))
 
 
+        @JvmStatic
         fun of(d: Date): DateTime = DateTime(build(d, ZoneId.systemDefault()))
 
 
+        @JvmStatic
         fun of(d: Date, zoneId:ZoneId): DateTime = DateTime(build(d, zoneId))
 
 
+        @JvmStatic
         fun of(d: LocalDate): DateTime = DateTime(build(d.year, d.month.value, d.dayOfMonth, zoneId = ZoneId.systemDefault()))
 
 
         /**
          * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
          */
+        @JvmStatic
         fun of(year   : Int    ,
                month  : Int    ,
                day    : Int    ,
@@ -294,6 +302,7 @@ data class DateTime(val raw: ZonedDateTime) {
         /**
          * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
          */
+        @JvmStatic
         fun of(year   : Int    ,
                month  : Int    ,
                day    : Int    ,
@@ -306,9 +315,11 @@ data class DateTime(val raw: ZonedDateTime) {
         }
 
 
+        @JvmStatic
         fun build(d:LocalDateTime):ZonedDateTime = d.atZone(ZoneId.systemDefault())
 
 
+        @JvmStatic
         fun build(date: Date, zone:ZoneId): ZonedDateTime {
             val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
             return dateTime
@@ -318,6 +329,7 @@ data class DateTime(val raw: ZonedDateTime) {
         /**
          * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
          */
+        @JvmStatic
         fun build( year   : Int    ,
                    month  : Int    ,
                    day    : Int    ,
@@ -333,45 +345,55 @@ data class DateTime(val raw: ZonedDateTime) {
         /**
          * Builds a DateTime ( ZonedDateTime of system zone ) with current date/time.
          */
+        @JvmStatic
         fun now(): DateTime = DateTime(ZonedDateTime.now())
 
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
+        @JvmStatic
         fun nowUtc(): DateTime = DateTime(ZonedDateTime.now(ZoneId.of("UTC")))
 
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
+        @JvmStatic
         fun nowAt(zone:String): DateTime = DateTime(ZonedDateTime.now(ZoneId.of(zone)))
 
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
+        @JvmStatic
         fun nowAt(zone:ZoneId): DateTime = DateTime(ZonedDateTime.now(zone))
 
 
+        @JvmStatic
         fun today(): DateTime {
             val now = ZonedDateTime.now()
             return of(now.year, now.month.value, now.dayOfMonth)
         }
 
 
+        @JvmStatic
         fun tomorrow(): DateTime = DateTime.today().plusDays(1)
 
 
+        @JvmStatic
         fun yesterday(): DateTime = today().plusDays(-1)
 
 
+        @JvmStatic
         fun daysAgo(days: Long): DateTime = DateTime.today().plusDays(-1 * days)
 
 
+        @JvmStatic
         fun daysFromNow(days: Long): DateTime = DateTime.today().plusDays(days)
 
 
+        @JvmStatic
         fun parse(value:String): DateTime {
             return if(value.contains("Z")){
                 DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
@@ -385,16 +407,20 @@ data class DateTime(val raw: ZonedDateTime) {
         }
 
 
+        @JvmStatic
         fun parseISO(value:String): DateTime {
             return DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         }
 
 
+        @JvmStatic
         fun parse(text:String, formatter:DateTimeFormatter): DateTime {
             val zonedDt = ZonedDateTime.parse(text, formatter)
             return DateTime(zonedDt)
         }
 
+
+        @JvmStatic
         fun parseNumeric(value: String): DateTime {
             val text = value.trim()
 

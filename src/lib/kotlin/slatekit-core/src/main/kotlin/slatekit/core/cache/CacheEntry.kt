@@ -15,7 +15,7 @@ package slatekit.core.cache
 
 import TODO
 import slatekit.common.DateTime
-import slatekit.common.DateTime.DateTimes.now
+import slatekit.common.DateTime.Companion.now
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 

@@ -44,8 +44,9 @@ data class Host(
         callback("ext1", ext1)
     }
 
-    companion object Hosts {
+    companion object {
 
+        @JvmStatic
         val none = Host(
             name = "none",
             ip = "-",
@@ -56,9 +57,10 @@ data class Host(
         )
 
 
+        @JvmStatic
         fun local(): Host =
             Host(
-                name = getComputerName(),
+                name = computerName(),
                 ip = "",
                 origin = Props.osName,
                 arch = Props.osArch,
@@ -67,7 +69,8 @@ data class Host(
             )
 
 
-        fun getComputerName(): String {
+        @JvmStatic
+        fun computerName(): String {
             val env = System.getenv()
 
             val name = if (env.containsKey("COMPUTERNAME"))

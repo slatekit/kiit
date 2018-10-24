@@ -44,7 +44,8 @@ data class Lang(
     }
 
 
-    companion object Langs {
+    companion object {
+        @JvmStatic
         val none = Lang(
             name = "none",
             home = "-",
@@ -55,6 +56,7 @@ data class Lang(
         )
 
 
+        @JvmStatic
         fun kotlin(): Lang =
             Lang(
                 name = "kotlin",

@@ -178,7 +178,7 @@ class Templates(val templates: List<Template>? = null,
         return result
     }
 
-    companion object TemplatesCompanion {
+    companion object {
 
         /**
          * Builds the templates object after parsing the given individual templates
@@ -187,6 +187,7 @@ class Templates(val templates: List<Template>? = null,
          * @param subs
          * @return
          */
+        @JvmStatic
         fun build(templates: List<Template>,
                   subs: List<Pair<String, (TemplatePart) -> String>>? = null): Templates {
 
@@ -196,9 +197,11 @@ class Templates(val templates: List<Template>? = null,
         }
 
 
+        @JvmStatic
         fun subs(items: List<Pair<String, (TemplatePart) -> String>>): Subs = Subs(items)
 
 
+        @JvmStatic
         fun parse(templates: List<Template>): List<Template> {
 
             // Each template

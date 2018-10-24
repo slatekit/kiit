@@ -16,8 +16,8 @@ import org.junit.Test
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
-import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
+import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbLookup.Companion.namedDbs
 
 /**
  * Created by kishorereddy on 6/4/17.

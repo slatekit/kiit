@@ -60,8 +60,9 @@ data class ResultTimed<T>(
     }
 
 
-    companion object ResultTimedBuilder {
+    companion object {
 
+        @JvmStatic
         fun <T> build(started: DateTime, result: ResultEx<T>): ResultTimed<T> {
             val ended = DateTime.now()
             val duration = started.durationFrom(ended)

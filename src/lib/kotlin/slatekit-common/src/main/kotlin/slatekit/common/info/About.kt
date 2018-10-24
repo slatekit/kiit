@@ -76,7 +76,8 @@ data class About(
     fun dir(): String = company.nonEmptyOrDefault(name).replace(" ", "-")
 
 
-    companion object Abouts {
+    companion object {
+        @JvmStatic
         val none = About(
                 id = "",
                 name = "",
@@ -101,6 +102,7 @@ data class About(
          * @param version
          * @return
          */
+        @JvmStatic
         fun simple(id: String, name: String, desc: String, company: String, version: String): About =
                 About(id, name, desc, company, "", "", "", "", version, "", "")
 

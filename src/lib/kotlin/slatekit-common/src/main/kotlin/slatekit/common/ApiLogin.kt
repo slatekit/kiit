@@ -30,7 +30,8 @@ data class ApiLogin(
         val tag: String = ""
 ) {
 
-    companion object ApiLoginStatic {
+    companion object {
+        @JvmStatic
         val empty = ApiLogin()
     }
 }

@@ -18,7 +18,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Restify
 import slatekit.common.*
-import slatekit.common.results.SUCCESS
+import slatekit.common.results.ResultCode.SUCCESS
 import test.setup.SampleRESTApi
 import test.setup.Movie
 

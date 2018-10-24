@@ -10,6 +10,7 @@ data class Build(
         val date: String
 ) {
     companion object  {
+        @JvmStatic
         val empty = Build("0.0.0", "n/a", "master", "n/a")
     }
 }

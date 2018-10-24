@@ -25,7 +25,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
+import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About

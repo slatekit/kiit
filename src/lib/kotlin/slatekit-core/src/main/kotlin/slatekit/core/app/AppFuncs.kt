@@ -21,7 +21,7 @@ import slatekit.common.args.ArgsFuncs.isExit
 import slatekit.common.args.ArgsFuncs.isVersion
 import slatekit.common.conf.*
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
+import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*

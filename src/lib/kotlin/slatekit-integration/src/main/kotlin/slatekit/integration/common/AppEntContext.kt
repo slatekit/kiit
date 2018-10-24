@@ -66,7 +66,7 @@ data class AppEntContext(
         override val build: Build = Build.empty
                      ) : Context
 {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()), build)
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
 
     /**
@@ -96,9 +96,9 @@ data class AppEntContext(
                 cfg = Config(),
                 logs = LogsDefault,
                 ent = Entities(),
-                inf = About.Abouts.none,
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                inf = About.none,
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 state = Failure(Exception("Error"), code, msg ?: "")
             )
 
@@ -121,9 +121,9 @@ data class AppEntContext(
                         cfg = Config(),
                         logs = LogsDefault,
                         ent = Entities(),
-                        inf = About.Abouts.none,
-                        host = Host.Hosts.local(),
-                        lang = Lang.Langs.kotlin(),
+                        inf = About.none,
+                        host = Host.local(),
+                        lang = Lang.kotlin(),
                         dirs = Folders.Folders.userDir("slatekit", name.toIdent(), name.toIdent())
                 )
 
@@ -137,8 +137,8 @@ data class AppEntContext(
                 logs = LogsDefault,
                 ent = Entities(),
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
                 dirs = Folders.Folders.userDir("slatekit", "samples", "sample1")
             )

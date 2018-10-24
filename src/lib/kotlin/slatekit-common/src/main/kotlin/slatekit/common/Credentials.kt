@@ -22,7 +22,8 @@ data class Credentials(
         val region: String = "",
         val roles : String = ""
 ) {
-    companion object CredentialsStatic {
+    companion object {
+        @JvmStatic
         val empty = Credentials()
     }
 }
