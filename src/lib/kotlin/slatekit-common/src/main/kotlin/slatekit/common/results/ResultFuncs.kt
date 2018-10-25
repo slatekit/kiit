@@ -19,12 +19,14 @@ import slatekit.common.results.ResultCode.CONFIRM
 import slatekit.common.results.ResultCode.CONFLICT
 import slatekit.common.results.ResultCode.DEPRECATED
 import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.FAILURE
 import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultCode.MISSING
 import slatekit.common.results.ResultCode.NOT_AVAILABLE
 import slatekit.common.results.ResultCode.NOT_FOUND
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.common.results.ResultCode.SUCCESS
+import slatekit.common.results.ResultCode.UNAUTHORIZED
 
 
 object ResultFuncs {
