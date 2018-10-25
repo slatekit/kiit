@@ -91,10 +91,15 @@ data class Action(
 
     companion object {
 
+        @JvmStatic
         val TypeRequest = Request::class.createType()
+
+
+        @JvmStatic
         val TypeMeta = Meta::class.createType()
 
 
+        @JvmStatic
         fun filter(args: List<KParameter>): List<KParameter> {
             if (args.isEmpty()) return args
             val finalArgs = args.tail().filter { arg ->

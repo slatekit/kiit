@@ -333,6 +333,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         return (!this.settings.declaredMethodsOnly || isDeclared ) && isWebProtocol
     }
 
+
     companion object {
 
         fun getContent(folderPath:String, path:String): String {

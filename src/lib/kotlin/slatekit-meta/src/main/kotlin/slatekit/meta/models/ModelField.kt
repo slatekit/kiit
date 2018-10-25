@@ -87,6 +87,7 @@ data class ModelField(
          * @param autoIncrement
          * @return
          */
+        @JvmStatic
         fun id(name: String, dataType: KClass<*>, dataKType: KType): ModelField {
             return build(null, name, "", dataType, dataKType, true, true, true, false,0, 0, name, 0, cat = "id")
         }
@@ -106,6 +107,7 @@ data class ModelField(
          * @param cat
          * @return
          */
+        @JvmStatic
         fun build(
                 prop: KProperty<*>?,
                 name: String,
@@ -153,6 +155,7 @@ data class ModelField(
         }
 
 
+        @JvmStatic
         fun buildDestName(name: String, destName: String?, namer: Namer?): String {
             return when (destName) {
                 null -> namer?.rename(name) ?: name

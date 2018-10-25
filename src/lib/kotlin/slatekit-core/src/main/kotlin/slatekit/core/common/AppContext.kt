@@ -74,12 +74,15 @@ data class AppContext(
     companion object {
 
 
+        @JvmStatic
         fun help(): AppContext = err(HELP)
 
 
+        @JvmStatic
         fun exit(): AppContext = err(EXIT)
 
 
+        @JvmStatic
         fun err(code: Int, msg: String? = null): AppContext =
             AppContext(
                 arg = Args.Companion.default(),
@@ -93,6 +96,7 @@ data class AppContext(
             )
 
 
+        @JvmStatic
         fun simple(name:String): AppContext =
                 AppContext(
                         arg = Args.Companion.default(),
@@ -106,6 +110,7 @@ data class AppContext(
                 )
 
 
+        @JvmStatic
         fun sample(id: String, name: String, about: String, company: String): AppContext =
             AppContext(
                 arg = Args.Companion.default(),

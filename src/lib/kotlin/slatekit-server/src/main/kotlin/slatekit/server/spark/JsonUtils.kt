@@ -21,7 +21,8 @@ class JsonTransformer : ResponseTransformer {
     }
 
 
-    companion object JsonTransformerCompanion {
+    companion object {
+        @JvmStatic
         fun json(): ResponseTransformer {
             return JsonTransformer()
         }

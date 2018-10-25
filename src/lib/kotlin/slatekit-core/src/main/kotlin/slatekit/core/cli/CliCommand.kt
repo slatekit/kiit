@@ -89,6 +89,7 @@ data class CliCommand(  val area: String,
 
     companion object {
 
+        @JvmStatic
         fun build(args: Args, line: String): CliCommand {
             val area = args.getVerb(0)
             val name = args.getVerb(1)

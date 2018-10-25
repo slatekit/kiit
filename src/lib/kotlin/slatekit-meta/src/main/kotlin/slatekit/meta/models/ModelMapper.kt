@@ -116,7 +116,7 @@ open class ModelMapper(protected val _model: Model,
             _model.fields.fold("", { s, field -> s + field.toString() + newline })
 
 
-    companion object MapperCompanion {
+    companion object {
 
         /**
          * Builds a schema ( Model ) from the Class/Type supplied.
@@ -124,6 +124,7 @@ open class ModelMapper(protected val _model: Model,
          * @param dataType
          * @return
          */
+        @JvmStatic
         fun loadSchema(dataType: KClass<*>, idFieldName:String? = null, namer:Namer? = null): Model {
             val modelName = dataType.simpleName!!
             val modelNameFull = dataType.qualifiedName!!
