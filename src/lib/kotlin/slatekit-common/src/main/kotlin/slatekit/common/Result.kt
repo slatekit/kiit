@@ -16,6 +16,7 @@ package slatekit.common
 import slatekit.common.results.*
 import slatekit.common.results.ResultCode.FAILURE
 import slatekit.common.results.ResultCode.SUCCESS
+import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 
 
 /**

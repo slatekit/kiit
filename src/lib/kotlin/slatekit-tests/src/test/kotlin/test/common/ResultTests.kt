@@ -16,6 +16,7 @@ import slatekit.common.results.ResultCode.FAILURE
 import slatekit.common.results.ResultCode.NOT_FOUND
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultCode.UNAUTHORIZED
+import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 import slatekit.common.results.ResultFuncs.yes
 
 /**
