@@ -10,9 +10,13 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.common
+package slatekit.common.utils
 
+import slatekit.common.DateTime
+import slatekit.common.Result
 import slatekit.common.log.Logger
+import slatekit.common.onFailure
+import slatekit.common.onSuccess
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
