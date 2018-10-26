@@ -14,9 +14,8 @@
 package slatekit.entities.repos
 
 import slatekit.common.DateTime
-import slatekit.common.ListMap
+import slatekit.common.utils.ListMap
 import slatekit.common.query.IQuery
-import slatekit.common.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo

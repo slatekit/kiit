@@ -13,13 +13,11 @@ package slatekit.integration.apis
 import slatekit.integration.mods.Module
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.ApiConstants
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.failure
+import slatekit.common.utils.ListMap
 import slatekit.integration.mods.Mod
 
 
@@ -27,7 +25,7 @@ import slatekit.integration.mods.Mod
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
 
-    private var _items = slatekit.common.ListMap<String, Module>()
+    private var _items = ListMap<String, Module>()
 
 
     @ApiAction(desc = "sets up the db to support modules")

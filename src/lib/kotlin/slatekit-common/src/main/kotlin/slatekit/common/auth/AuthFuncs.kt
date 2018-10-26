@@ -15,7 +15,7 @@ package slatekit.common.auth
 
 import slatekit.common.security.ApiKey
 import slatekit.common.Inputs
-import slatekit.common.ListMap
+import slatekit.common.utils.ListMap
 import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.unAuthorized

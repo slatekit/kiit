@@ -13,7 +13,7 @@
 
 package slatekit.entities.core
 
-import slatekit.common.ListMap
+import slatekit.common.utils.ListMap
 import slatekit.common.naming.Namer
 import slatekit.common.db.*
 import slatekit.common.db.types.DbSource
