@@ -14,7 +14,7 @@
 package slatekit.meta.models
 
 import slatekit.common.DateTime
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 import java.time.LocalDate

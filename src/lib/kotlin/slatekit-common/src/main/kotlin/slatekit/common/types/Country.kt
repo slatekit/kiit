@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.types
 
 /**
  * Represents a country with iso code, name, and phone codes for sms features
@@ -56,30 +56,30 @@ object Countries {
 
 
         val supported = listOf(
-            Country("AU", "AUS", "61"   , 10,  "Australia"),
-            Country("CA", "CAN", "1"    , 10,  "Canada"),
-            Country("FR", "FRA", "33"   , 10,  "France"),
-            Country("DE", "DEU", "49"   , 10,  "Germany"),
-            Country("GR", "GRC", "30"   , 10,  "Greece"),
-            Country("GL", "GRL", "299"  , 10,  "Greenland"),
-            Country("IS", "ISL", "354"  , 10,  "Iceland"),
-            Country("IN", "IND", "91"   , 10,  "India"),
-            Country("IE", "IRL", "353"  , 10,  "Ireland"),
-            Country("IL", "ISR", "972"  , 10,  "Israel"),
-            Country("IT", "ITA", "39"   , 10,  "Italy"),
-            Country("MX", "MEX", "52"   , 10,  "Mexico"),
-            Country("NL", "NLD", "31"   , 10,  "Netherlands"),
-            Country("NZ", "NZL", "64"   , 10,  "New Zealand"),
-            Country("NO", "NOR", "47"   , 10,  "Norway"),
-            Country("PL", "POL", "48"   , 10,  "Poland"),
-            Country("PT", "PRT", "351"  , 10,  "Portugal"),
-            Country("PR", "PRI", "1-787", 10,  "Puerto Rico"),
-            Country("ZA", "ZAF", "27"   , 10,  "South Africa"),
-            Country("SE", "SWE", "46"   , 10,  "Sweden"),
-            Country("CH", "CHE", "41"   , 10,  "Switzerland"),
-            Country("VI", "VIR", "1-340", 10,  "U.S. Virgin Islands"),
-            Country("GB", "GBR", "44"   , 10,  "United Kingdom"),
-            Country("US", "USA", "1"    , 10,  "United States")
+            Country("AU", "AUS", "61", 10, "Australia"),
+            Country("CA", "CAN", "1", 10, "Canada"),
+            Country("FR", "FRA", "33", 10, "France"),
+            Country("DE", "DEU", "49", 10, "Germany"),
+            Country("GR", "GRC", "30", 10, "Greece"),
+            Country("GL", "GRL", "299", 10, "Greenland"),
+            Country("IS", "ISL", "354", 10, "Iceland"),
+            Country("IN", "IND", "91", 10, "India"),
+            Country("IE", "IRL", "353", 10, "Ireland"),
+            Country("IL", "ISR", "972", 10, "Israel"),
+            Country("IT", "ITA", "39", 10, "Italy"),
+            Country("MX", "MEX", "52", 10, "Mexico"),
+            Country("NL", "NLD", "31", 10, "Netherlands"),
+            Country("NZ", "NZL", "64", 10, "New Zealand"),
+            Country("NO", "NOR", "47", 10, "Norway"),
+            Country("PL", "POL", "48", 10, "Poland"),
+            Country("PT", "PRT", "351", 10, "Portugal"),
+            Country("PR", "PRI", "1-787", 10, "Puerto Rico"),
+            Country("ZA", "ZAF", "27", 10, "South Africa"),
+            Country("SE", "SWE", "46", 10, "Sweden"),
+            Country("CH", "CHE", "41", 10, "Switzerland"),
+            Country("VI", "VIR", "1-340", 10, "U.S. Virgin Islands"),
+            Country("GB", "GBR", "44", 10, "United Kingdom"),
+            Country("US", "USA", "1", 10, "United States")
         )
 
 

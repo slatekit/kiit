@@ -17,6 +17,8 @@ import slatekit.common.*
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
+import slatekit.common.types.Countries
+import slatekit.common.types.CountryCode
 
 
 /**
@@ -56,7 +58,7 @@ abstract class SmsService(val templates: Templates? = null,
             send(SmsMessage(message, countryCode, phone))
         }
         else {
-            Failure(result.message)
+            Failure(result.msg)
         }
     }
 
@@ -82,7 +84,7 @@ abstract class SmsService(val templates: Templates? = null,
             } ?: Failure("templates are not setup")
         }
         else {
-            Failure(result.message)
+            Failure(result.msg)
         }
     }
 
@@ -100,7 +102,7 @@ abstract class SmsService(val templates: Templates? = null,
 
         // Case 1: Invalid params
         return if (!result.success) {
-            failure(result.message)
+            failure(result.msg)
         }
         // Case 2: Invalid iso or unsupported
         else if (!countries.contains(finalIso)) {
@@ -123,8 +125,8 @@ abstract class SmsService(val templates: Templates? = null,
     }
 
 
-    private fun validate(countryCode: String, phone: String): BoolMessage =
-            if (countryCode.isNullOrEmpty()) BoolMessage(false, "country code not provided")
-            else if (phone.isNullOrEmpty()) BoolMessage(false, "phone not provided")
-            else BoolMessage.True
+    private fun validate(countryCode: String, phone: String): ResultMsg<String> =
+            if (countryCode.isNullOrEmpty()) failure(msg ="country code not provided")
+            else if (phone.isNullOrEmpty()) failure(msg ="phone not provided")
+            else success("")
 }

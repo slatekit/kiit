@@ -1,9 +1,7 @@
 package slatekit.apis.core
 
-import slatekit.apis.ApiContainer
-import slatekit.apis.ApiHostAware
 import slatekit.common.Context
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import kotlin.reflect.full.primaryConstructor
 
@@ -40,7 +38,7 @@ import kotlin.reflect.full.primaryConstructor
  *                  - { action_d }
 */
 data class Routes(val areas: Lookup<Area>,
-                  val namer:Namer? = null,
+                  val namer: Namer? = null,
                   val onInstanceCreated: ((Any?) -> Unit )? = null) {
 
     init {

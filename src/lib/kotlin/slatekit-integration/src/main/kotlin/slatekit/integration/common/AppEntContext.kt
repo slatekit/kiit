@@ -25,6 +25,7 @@ import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
+import slatekit.common.naming.Namer
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.HELP
 import slatekit.core.common.AppContext
@@ -105,7 +106,7 @@ data class AppEntContext(
          * converts this to an app context which is basically
          * the same context without the Entities
          */
-        fun fromAppContext(ctx:AppContext, namer:Namer? = null):AppEntContext {
+        fun fromAppContext(ctx:AppContext, namer: Namer? = null):AppEntContext {
             return AppEntContext(
                     ctx.arg, ctx.env, ctx.cfg, ctx.logs, Entities(ctx.dbs, ctx.enc, namer = namer), ctx.inf, ctx.host, ctx.lang, ctx.dbs, ctx.enc, ctx.dirs, ctx.extra, ctx.state, ctx.build
             )

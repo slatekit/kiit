@@ -1,6 +1,6 @@
 package slatekit.entities.databases
 
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.common.db.Db
 import slatekit.common.db.DbFieldTypeNumber
 import slatekit.common.db.DbUtils
@@ -29,7 +29,7 @@ class MySqlEntityDDL : EntityDDL {
     }
 
 
-    override fun buildIndexes(db:Db, model:Model, namer:Namer?):List<String> {
+    override fun buildIndexes(db:Db, model:Model, namer: Namer?):List<String> {
         val dbSrc = db.source
         val tableName = namer?.rename(model.name) ?: model.name
         val indexes = model.fields.filter { it.isIndexed }

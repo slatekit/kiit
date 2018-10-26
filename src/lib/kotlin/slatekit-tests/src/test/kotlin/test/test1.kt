@@ -9,14 +9,6 @@ import test.workers.WorkerSample
 import slatekit.core.workers.core.Priority
 import slatekit.core.workers.core.QueueInfo
 
-/*
-import kotlin.reflect.KClass
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.javaType
-import slatekit.utility.*
-import slate.common.Random
-*/
 
 /**
  * Created by kishorereddy on 5/18/17.

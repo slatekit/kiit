@@ -20,6 +20,7 @@ import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
+import slatekit.common.naming.Namer
 import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
@@ -40,17 +41,17 @@ import kotlin.reflect.KClass
  * @param controls :
  */
 open class ApiContainer(
-        val ctx: Context,
-        val allowIO: Boolean,
-        val auth: Auth? = null,
-        val protocol: Protocol = WebProtocol,
-        val apis: List<slatekit.apis.core.Api> = listOf(),
-        val namer: Namer? = null,
-        val middleware: List<Middleware>? = null,
-        val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
-        val serializer: ((String, Any?) -> String)? = null,
-        val docKey: String? = null,
-        val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
+    val ctx: Context,
+    val allowIO: Boolean,
+    val auth: Auth? = null,
+    val protocol: Protocol = WebProtocol,
+    val apis: List<slatekit.apis.core.Api> = listOf(),
+    val namer: Namer? = null,
+    val middleware: List<Middleware>? = null,
+    val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
+    val serializer: ((String, Any?) -> String)? = null,
+    val docKey: String? = null,
+    val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
 ) {
 
     /**
