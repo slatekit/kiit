@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.validations
 
 interface Reference {
     val value: String
@@ -35,7 +35,8 @@ data class RefField(val name: String, val original: String = "") : Reference {
  * @param name
  * @param original
  */
-data class RefItem(val id: String, val name: String, val original: String = "") : Reference {
+data class RefItem(val id: String, val name: String, val original: String = "") :
+    Reference {
     override val value = original
 }
 
@@ -47,7 +48,8 @@ data class RefItem(val id: String, val name: String, val original: String = "") 
  * @param name
  * @param original
  */
-data class RefCell(val row: Int, val col: Int, val name: String, val original: String = "") : Reference {
+data class RefCell(val row: Int, val col: Int, val name: String, val original: String = "") :
+    Reference {
     override val value = original
 }
 

@@ -13,8 +13,6 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Reference
-
 data class ValidationResults(val success: Boolean,
                              val msg: String = "",
                              val ref: Reference? = null,
