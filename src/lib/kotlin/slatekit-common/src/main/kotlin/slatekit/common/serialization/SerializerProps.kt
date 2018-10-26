@@ -21,7 +21,7 @@ import slatekit.common.newline
  */
 
 class SerializerProps(standardizeFieldWidth: Boolean = false,
-                      objectSerializer: ((Serializer,Any,Int) -> Unit)? = null,
+                      objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
                       isoDates:Boolean = false)
     : Serializer(objectSerializer, isoDates) {
 
