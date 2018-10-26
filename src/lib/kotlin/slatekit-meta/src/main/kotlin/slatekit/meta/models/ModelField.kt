@@ -18,30 +18,29 @@ import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.*
 
-
 data class ModelField(
-        val name: String,
-        val desc: String = "",
-        val prop: KProperty<*>? = null,
-        val dataCls: KClass<*>,
-        val dataTpe: KType,
-        val storedName: String = "",
-        val pos: Int = 0,
-        val isRequired: Boolean = true,
-        val minLength: Int = -1,
-        val maxLength: Int = -1,
-        val isEnum: Boolean = false,
-        val isUnique:Boolean = false,
-        val isIndexed:Boolean = false,
-        val isUpdatable:Boolean = true,
-        val defaultVal: Any? = null,
-        val encrypt: Boolean = false,
-        val key: String = "",
-        val extra: String = "",
-        val example: String = "",
-        val tag: String = "",
-        val cat: String = "",
-        val model: Model? = null
+    val name: String,
+    val desc: String = "",
+    val prop: KProperty<*>? = null,
+    val dataCls: KClass<*>,
+    val dataTpe: KType,
+    val storedName: String = "",
+    val pos: Int = 0,
+    val isRequired: Boolean = true,
+    val minLength: Int = -1,
+    val maxLength: Int = -1,
+    val isEnum: Boolean = false,
+    val isUnique: Boolean = false,
+    val isIndexed: Boolean = false,
+    val isUpdatable: Boolean = true,
+    val defaultVal: Any? = null,
+    val encrypt: Boolean = false,
+    val key: String = "",
+    val extra: String = "",
+    val example: String = "",
+    val tag: String = "",
+    val cat: String = "",
+    val model: Model? = null
 ) {
 
     override fun toString(): String {
@@ -66,9 +65,7 @@ data class ModelField(
         return text.toString()
     }
 
-
     fun isBasicType(): Boolean = KTypes.isBasicType(dataCls) || isEnum
-
 
     fun isStandard(): Boolean {
         return when (tag) {
@@ -76,7 +73,6 @@ data class ModelField(
             else -> false
         }
     }
-
 
     companion object {
 
@@ -89,9 +85,8 @@ data class ModelField(
          */
         @JvmStatic
         fun id(name: String, dataType: KClass<*>, dataKType: KType): ModelField {
-            return build(null, name, "", dataType, dataKType, true, true, true, false,0, 0, name, 0, cat = "id")
+            return build(null, name, "", dataType, dataKType, true, true, true, false, 0, 0, name, 0, cat = "id")
         }
-
 
         /**
          * builds an model field using all the fields supplied.
@@ -109,23 +104,23 @@ data class ModelField(
          */
         @JvmStatic
         fun build(
-                prop: KProperty<*>?,
-                name: String,
-                desc: String = "",
-                dataType: KClass<*>,
-                dataKType: KType,
-                isRequired: Boolean = false,
-                isUnique: Boolean = false,
-                isIndexed: Boolean = false,
-                isUpdatable: Boolean = true,
-                minLength: Int = -1,
-                maxLength: Int = -1,
-                destName: String? = null,
-                defaultValue: Any? = null,
-                encrypt: Boolean = false,
-                tag: String = "",
-                cat: String = "data",
-                namer: Namer? = null
+            prop: KProperty<*>?,
+            name: String,
+            desc: String = "",
+            dataType: KClass<*>,
+            dataKType: KType,
+            isRequired: Boolean = false,
+            isUnique: Boolean = false,
+            isIndexed: Boolean = false,
+            isUpdatable: Boolean = true,
+            minLength: Int = -1,
+            maxLength: Int = -1,
+            destName: String? = null,
+            defaultValue: Any? = null,
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data",
+            namer: Namer? = null
         ): ModelField {
 
             val finalName = buildDestName(name, destName, namer)
@@ -153,7 +148,6 @@ data class ModelField(
             )
             return field
         }
-
 
         @JvmStatic
         fun buildDestName(name: String, destName: String?, namer: Namer?): String {

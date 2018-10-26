@@ -17,9 +17,6 @@ import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
 import kotlin.reflect.*
 import kotlin.reflect.full.*
-import kotlin.reflect.jvm.javaField
-import slatekit.common.Types
-import kotlin.reflect.jvm.javaGetter
 import kotlin.reflect.jvm.javaSetter
 
 /**
@@ -54,30 +51,27 @@ object Reflector {
         return res as T
     }
 
-
-    fun isSlateKitEnum(cls:KClass<*>) : Boolean {
+    fun isSlateKitEnum(cls: KClass<*>): Boolean {
         val companion = cls.companionObjectInstance
-        return when(companion) {
+        return when (companion) {
             is EnumSupport -> true
-            else           -> false
+            else -> false
         }
     }
 
-
-    fun getEnumSample(cls:KClass<*>) : Int {
+    fun getEnumSample(cls: KClass<*>): Int {
         val companion = cls.companionObjectInstance
-        return when(companion) {
+        return when (companion) {
             is EnumSupport -> companion.all()[0].value
-            else           -> -1
+            else -> -1
         }
     }
 
-
-    fun getEnumValue(cls:KClass<*>, value:Any?) : EnumLike {
+    fun getEnumValue(cls: KClass<*>, value: Any?): EnumLike {
         val companion = cls.companionObjectInstance
-        return when(companion) {
+        return when (companion) {
             is EnumSupport -> {
-                when(value) {
+                when (value) {
                     is EnumLike -> value
                     is Int -> companion.convert(value)
                     is Long -> companion.convert(value.toInt())
@@ -86,23 +80,19 @@ object Reflector {
                     else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with value : " + value)
                 }
             }
-            else  -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", enum does not extend EnumSupport")
+            else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", enum does not extend EnumSupport")
         }
     }
-
-
 
     fun getFieldValue(inst: Any, name: String): Any? {
         val item = findField(inst, name)
         return item?.getter?.call(inst)
     }
 
-
     fun getFieldValue(inst: Any, prop: KProperty<*>): Any? {
 
         return prop.getter.call(inst)
     }
-
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotationForClass(cls: KClass<*>, anoType: KClass<*>): T {
@@ -111,7 +101,6 @@ object Reflector {
         return ano as T
     }
 
-
     @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotationForClassOpt(cls: KClass<*>, anoType: KClass<*>): T? {
 
@@ -119,31 +108,30 @@ object Reflector {
         return ano as? T
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    fun getMembers(cls: KClass<*>,
-                   declared:Boolean,
-                   filterOutBuiltins:Boolean,
-                   visibility: KVisibility? = null): List<KCallable<*>> {
-        val members = (if(declared) cls.declaredMembers else cls.members).filter { it ->
+    fun getMembers(
+        cls: KClass<*>,
+        declared: Boolean,
+        filterOutBuiltins: Boolean,
+        visibility: KVisibility? = null
+    ): List<KCallable<*>> {
+        val members = (if (declared) cls.declaredMembers else cls.members).filter { it ->
             visibility?.let { v -> v == it.visibility } ?: true
         }
-        return members.filter { mem -> if(filterOutBuiltins) !isBuiltIn(mem) else true }
+        return members.filter { mem -> if (filterOutBuiltins) !isBuiltIn(mem) else true }
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAnnotationForMember(member:KCallable<*>, anoType: KClass<*>): T? {
+    fun <T> getAnnotationForMember(member: KCallable<*>, anoType: KClass<*>): T? {
 
         val anno = member.annotations.filter { it -> it.annotationClass == anoType }.firstOrNull()
         return anno as? T
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>, declared:Boolean = true): List<Pair<KCallable<*>, T>> {
+    fun <T> getAnnotatedMembers(cls: KClass<*>, anoType: KClass<*>, declared: Boolean = true): List<Pair<KCallable<*>, T>> {
 
-        val members = if(declared) cls.declaredMemberFunctions else cls.memberFunctions
+        val members = if (declared) cls.declaredMemberFunctions else cls.memberFunctions
         val filtered = members.map { member ->
             Pair(member, member.annotations.filter { annotation ->
                 annotation.annotationClass == anoType
@@ -155,16 +143,14 @@ object Reflector {
                 .map { (first, second) -> Pair(first, second as T) }
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    fun <T> getAnnotatedMembersOpt(cls: KClass<*>, anoType: KClass<*>, declared:Boolean = true): List<Pair<KCallable<*>, T?>> {
+    fun <T> getAnnotatedMembersOpt(cls: KClass<*>, anoType: KClass<*>, declared: Boolean = true): List<Pair<KCallable<*>, T?>> {
 
-        val members = if(declared) cls.declaredMemberFunctions else cls.memberFunctions
-        val filtered = members.filter{ it.visibility == KVisibility.PUBLIC }
-                              .map   { Pair( it, it.annotations.filter { anno -> anno.annotationClass == anoType }.firstOrNull() as? T )}
+        val members = if (declared) cls.declaredMemberFunctions else cls.memberFunctions
+        val filtered = members.filter { it.visibility == KVisibility.PUBLIC }
+                              .map { Pair(it, it.annotations.filter { anno -> anno.annotationClass == anoType }.firstOrNull() as? T) }
         return filtered
     }
-
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getAnnotatedProps(cls: KClass<*>, anoType: KClass<*>): List<Pair<KProperty<*>, T?>> {
@@ -180,45 +166,38 @@ object Reflector {
                 .map { (first, second) -> Pair(first, second as T) }
     }
 
-
-    fun setFieldValue(cls:KClass<*>, inst: Any?, name: String, value: Any?) {
+    fun setFieldValue(cls: KClass<*>, inst: Any?, name: String, value: Any?) {
         val prop = cls.declaredMemberProperties.find { it.name == name }
-        val item = prop as KMutableProperty1<Any,*>
+        val item = prop as KMutableProperty1<Any, *>
         item.javaSetter?.invoke(inst, value)
     }
 
-
-    fun setFieldValue(inst: Any?, prop:KProperty<*>, value: Any?) {
+    fun setFieldValue(inst: Any?, prop: KProperty<*>, value: Any?) {
         inst?.let { inst ->
             val item = prop as KMutableProperty1<Any, *>
             item.javaSetter?.invoke(inst, value)
         }
     }
 
-
     fun findField(inst: Any, name: String): KProperty1<Any, *>? {
         val item = inst.kClass.declaredMemberProperties.find { it.name == name }
         return item
     }
-
 
     fun findProperty(cls: KClass<*>, name: String): KProperty<*>? {
         val item = cls.declaredMemberProperties.find { it.name == name }
         return item
     }
 
-
     fun getMethod(cls: KClass<*>, name: String): KCallable<*>? {
         val mem = cls.members.find { m -> m.name == name }
         return mem
     }
 
-
     fun getMethodArgs(cls: KClass<*>, name: String): Collection<KParameter>? {
         val mem = cls.members.find { m -> m.name == name }
         return mem?.parameters
     }
-
 
     fun callMethod(cls: KClass<*>, inst: Any, name: String, args: Array<Any?>): Any? {
         val mem = cls.members.find { m -> m.name == name }
@@ -226,26 +205,21 @@ object Reflector {
         return mem?.call(*params)
     }
 
-
     fun getProperties(cls: KClass<*>): List<KProperty<*>> {
         return if (cls.isData) {
             val propsMap = cls.memberProperties.map { it.name to it }.toMap()
             val items = cls.primaryConstructor!!.parameters.map { it -> propsMap[it.name]!! }
             items
-        }
-        else {
+        } else {
             cls.memberProperties.toList()
         }
     }
 
-
-    fun isBuiltIn(mem:KCallable<*>):Boolean = mem.name in arrayOf("equals", "hashCode", "toString")
-
+    fun isBuiltIn(mem: KCallable<*>): Boolean = mem.name in arrayOf("equals", "hashCode", "toString")
 
     fun isDataClass(cls: KClass<*>): Boolean = cls.isData
 
-
-    //fun getTypeFromProperty(tpe: KProperty<*>): KClass<*> {
+    // fun getTypeFromProperty(tpe: KProperty<*>): KClass<*> {
     //    return when (tpe.returnType.toString()) {
     //        "kotlin.String"            -> KTypes.KStringClass
     //        "kotlin.Boolean"           -> KTypes.KBoolClass
@@ -262,8 +236,7 @@ object Reflector {
     //        "slatekit.common.UniqueId" -> KTypes.KUniqueIdClass
     //        else                       -> Any::class
     //    }
-    //}
-
+    // }
 
     //    fun findFieldJ(inst:Any, name:String): Field? {
     //        val item = inst.kClass.java.declaredFields.find { it.name == name }
@@ -275,6 +248,5 @@ object Reflector {
     //        return item
     //    }
 }
-
 
 val <T : Any> T.kClass: KClass<T> get() = javaClass.kotlin

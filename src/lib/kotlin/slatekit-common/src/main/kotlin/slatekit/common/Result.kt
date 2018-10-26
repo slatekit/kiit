@@ -35,26 +35,26 @@ sealed class Result<out T, out E> {
 
 
         inline fun <T> of(f: () -> T): Result<T, String> =
-                try {
-                    Success(f())
-                } catch (e: Exception) {
-                    val err = e.message ?: ""
-                    Failure(err, FAILURE,err)
-                }
+            try {
+                Success(f())
+            } catch (e: Exception) {
+                val err = e.message ?: ""
+                Failure(err, FAILURE, err)
+            }
 
 
         inline fun <T> attempt(f: () -> T): Result<T, Exception> =
-                try {
-                    val data = f()
-                    val result = when(data) {
-                        is Result<*,*> -> (data as Result<T, Any>).toResultEx()
-                        else           -> Success(data)
-                    }
-                    result
-                } catch (e: Exception) {
-                    val err = e.message ?: ""
-                    Failure(e, UNEXPECTED_ERROR,err)
+            try {
+                val data = f()
+                val result = when (data) {
+                    is Result<*, *> -> (data as Result<T, Any>).toResultEx()
+                    else -> Success(data)
                 }
+                result
+            } catch (e: Exception) {
+                val err = e.message ?: ""
+                Failure(e, UNEXPECTED_ERROR, err)
+            }
 
     }
 }
@@ -64,9 +64,9 @@ sealed class Result<out T, out E> {
  * Success branch of the Result
  */
 data class Success<out T>(
-        val data: T,
-        override val code: Int = SUCCESS,
-        override val msg: String = "success"
+    val data: T,
+    override val code: Int = SUCCESS,
+    override val msg: String = "success"
 ) : Result<T, Nothing>() {
 
     override val success = true
@@ -77,84 +77,89 @@ data class Success<out T>(
  * Failure branch of the result
  */
 data class Failure<out E>(
-        val err: E,
-        override val code: Int = FAILURE,
-        override val msg: String = "failure"
+    val err: E,
+    override val code: Int = FAILURE,
+    override val msg: String = "failure"
 ) : Result<Nothing, E>() {
 
     override val success = false
 }
 
-typealias ResultMsg<T>  = Result<T, String>
-typealias ResultEx<T>   = Result<T, Exception>
+typealias ResultMsg<T> = Result<T, String>
+typealias ResultEx<T> = Result<T, Exception>
 
 
 inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
-        when (this) {
-            is Success -> Success(f(this.data), this.code, this.msg)
-            is Failure -> this
-        }
+    when (this) {
+        is Success -> Success(f(this.data), this.code, this.msg)
+        is Failure -> this
+    }
 
 
 inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T2, E> =
-        when (this) {
-            is Success -> f(this.data)
-            is Failure -> this
-        }
+    when (this) {
+        is Success -> f(this.data)
+        is Failure -> this
+    }
 
 
 inline fun <T1, T2, E> Result<T1, E>.fold(onSuccess: (T1) -> T2, onError: (E) -> T2): T2 =
-        when (this) {
-            is Success -> onSuccess(this.data)
-            is Failure -> onError(this.err)
-        }
+    when (this) {
+        is Success -> onSuccess(this.data)
+        is Failure -> onError(this.err)
+    }
 
 
 inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
-        when (this) {
-            is Success -> this.data
-            is Failure -> f()
-        }
+    when (this) {
+        is Success -> this.data
+        is Failure -> f()
+    }
 
 
 inline fun <T, E> Result<T, E>.exists(f: (T) -> Boolean): Boolean =
-    when(this) {
+    when (this) {
         is Success -> f(this.data)
         is Failure -> false
     }
 
 
 inline fun <T, E> Result<T, E>.onSuccess(f: (T) -> Unit) =
-        when (this) {
-            is Success -> f(this.data)
-            is Failure -> { }
+    when (this) {
+        is Success -> f(this.data)
+        is Failure -> {
         }
+    }
 
 
 inline fun <T, E> Result<T, E>.onFailure(f: (E) -> Unit) =
     when (this) {
-        is Success -> { }
-        is Failure -> { f(this.err) }
+        is Success -> {
+        }
+        is Failure -> {
+            f(this.err)
+        }
     }
 
 inline fun <T1, T2, E1, E2> Result<T1, E1>.transform(
-        onSuccess: (T1) -> Result<T2, E2>,
-        onFailure: (E1) -> Result<T2, E2>): Result<T2, E2> =
-        when (this) {
-            is Success -> onSuccess(this.data)
-            is Failure -> onFailure(this.err)
-        }
+    onSuccess: (T1) -> Result<T2, E2>,
+    onFailure: (E1) -> Result<T2, E2>
+): Result<T2, E2> =
+    when (this) {
+        is Success -> onSuccess(this.data)
+        is Failure -> onFailure(this.err)
+    }
 
 
 @Suppress("UNCHECKED_CAST")
 fun <T, E> Result<T, E>.toResultEx(): Result<T, Exception> =
-        when (this) {
-            is Success -> this
-            is Failure -> {
-                when(this.err) {
-                    is Exception -> this as Result<T,Exception>
-                    else         -> Failure(Exception(this.msg), this.code, this.msg)
-                }
+    when (this) {
+        is Success -> this
+        is Failure -> {
+            when (this.err) {
+                is Exception -> this as Result<T, Exception>
+                else -> Failure(Exception(this.msg), this.code, this.msg)
             }
         }
+    }
 

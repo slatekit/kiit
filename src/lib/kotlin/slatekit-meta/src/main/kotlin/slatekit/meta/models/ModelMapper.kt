@@ -13,7 +13,6 @@
 
 package slatekit.meta.models
 
-
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
@@ -22,8 +21,6 @@ import slatekit.meta.KTypes
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure
 
-
-
 /**
  * A mapper that can create a model from a source reader ( which can be a JDBC record set )
  * NOTES:
@@ -31,11 +28,12 @@ import kotlin.reflect.jvm.jvmErasure
  * 2. can create a model that is a regular class
  * @param _model
  */
-open class ModelMapper(protected val _model: Model,
-                       protected val _settings: ModelMapperSettings = ModelMapperSettings(),
-                       protected val _encryptor:Encryptor? = null,
-                       protected val namer: Namer? = null) : Mapper {
-
+open class ModelMapper(
+    protected val _model: Model,
+    protected val _settings: ModelMapperSettings = ModelMapperSettings(),
+    protected val _encryptor: Encryptor? = null,
+    protected val namer: Namer? = null
+) : Mapper {
 
     /**
      * The model associated with this mapper.
@@ -43,26 +41,22 @@ open class ModelMapper(protected val _model: Model,
      */
     fun model(): Model = _model
 
-
     /**
      * Creates the entity/model expecting a 0 parameter constructor
      * @return
      */
     override fun createEntity(): Any? =
-            _model.dataType?.let { type -> Reflector.create<Any>(type) }
-
+        _model.dataType?.let { type -> Reflector.create<Any>(type) }
 
     /**
      * Creates the entity/model with all the supplied constructor parameters (ideal for case classes)
      * @param args
      * @return
      */
-    override fun createEntityWithArgs(cls:KClass<*>, args: List<Any?>?): Any =
-            Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
-
+    override fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any =
+        Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
 
     fun <T> copyWithId(id: Long, entity: T): T = entity
-
 
     /**
      * Maps all the parameters to a class that takes in all parameters in the constructor
@@ -76,15 +70,12 @@ open class ModelMapper(protected val _model: Model,
             _model.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
                     mapFromToValType(record)
-                }
-                else
+                } else
                     mapFromToVarType(record)
             }
-        }
-        else
+        } else
             null
     }
-
 
     /**
      * Maps all the parameters to a class that takes in all parameters in the constructor
@@ -98,7 +89,6 @@ open class ModelMapper(protected val _model: Model,
         return mapFromToValType(null, record, _model)
     }
 
-
     /**
      * Maps all the parameters to a class that supports vars as fields.
      * While this is NOT recommended, it is still supported.
@@ -111,10 +101,8 @@ open class ModelMapper(protected val _model: Model,
         return mapFromToVarType(null, record, _model)
     }
 
-
     override fun toString(): String =
-            _model.fields.fold("", { s, field -> s + field.toString() + newline })
-
+        _model.fields.fold("", { s, field -> s + field.toString() + newline })
 
     companion object {
 
@@ -125,13 +113,13 @@ open class ModelMapper(protected val _model: Model,
          * @return
          */
         @JvmStatic
-        fun loadSchema(dataType: KClass<*>, idFieldName:String? = null, namer:Namer? = null): Model {
+        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null): Model {
             val modelName = dataType.simpleName!!
             val modelNameFull = dataType.qualifiedName!!
 
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
-            //val fields = mutableListOf<ModelField>()
+            // val fields = mutableListOf<ModelField>()
 
             // Loop through each field
             val withAnnos = matchedFields.filter { it.second != null }
@@ -142,22 +130,24 @@ open class ModelMapper(protected val _model: Model,
                 val required = anno.required
                 val length = anno.length
                 val encrypt = anno.encrypt
-                val prop  = matchedField.first
+                val prop = matchedField.first
                 val fieldKType = matchedField.first.returnType
                 val fieldCls = fieldKType.jvmErasure
-                val modelField = ModelField.build(prop = prop, name = name,
-                        dataType = fieldCls,
-                        dataKType = fieldKType,
-                        isRequired = required,
-                        isIndexed = anno.indexed,
-                        isUnique = anno.unique,
-                        isUpdatable = anno.updatable,
-                        maxLength = length,
-                        encrypt = encrypt,
-                        cat = cat,
-                        namer = namer)
+                val modelField = ModelField.build(
+                    prop = prop, name = name,
+                    dataType = fieldCls,
+                    dataKType = fieldKType,
+                    isRequired = required,
+                    isIndexed = anno.indexed,
+                    isUnique = anno.unique,
+                    isUpdatable = anno.updatable,
+                    maxLength = length,
+                    encrypt = encrypt,
+                    cat = cat,
+                    namer = namer
+                )
 
-                val finalModelField = if(!modelField.isBasicType()) {
+                val finalModelField = if (!modelField.isBasicType()) {
                     val model = loadSchema(modelField.dataCls, namer = namer)
                     modelField.copy(model = model)
                 } else modelField
@@ -168,8 +158,7 @@ open class ModelMapper(protected val _model: Model,
         }
     }
 
-
-    private fun mapFromToValType(prefix:String?, record: Record, model:Model): Any? {
+    private fun mapFromToValType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
             val isUTC = _settings.persisteUTCDate
             val data = model.fields.map { mapping ->
@@ -178,13 +167,11 @@ open class ModelMapper(protected val _model: Model,
             }
             val entity = createEntityWithArgs(model.dataType!!, data)
             entity
-        }
-        else
+        } else
             null
     }
 
-
-    private fun mapFromToVarType(prefix:String?, record: Record, model:Model ): Any? {
+    private fun mapFromToVarType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
 
             val isUTC = _settings.persisteUTCDate
@@ -192,43 +179,45 @@ open class ModelMapper(protected val _model: Model,
             model.fields.forEach { mapping ->
                 val dataValue = getDataValue(prefix, mapping, record, isUTC)
                 mapping.prop?.let { prop ->
-                     Reflector.setFieldValue(entity, prop, dataValue)
+                    Reflector.setFieldValue(entity, prop, dataValue)
                 } ?: Reflector.setFieldValue(model.dataType!!, entity, mapping.name, dataValue)
             }
             entity
-        }
-        else
+        } else
             null
     }
-
 
     /**
      * @param prefix : Used as the prefix for column names for mapping embedded objects
      * @param mapping: ModelField containing all the meta data
      * @parma record : Record holding the source data available via position/name
-     * @param isUTC  : Whether to handle dates as UTC
+     * @param isUTC : Whether to handle dates as UTC
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
-    private fun getDataValue(prefix:String?, mapping:ModelField, record:Record, isUTC:Boolean): Any? {
+    private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> getString(record, mapping, colName, _encryptor)
-            KTypes.KBoolClass          -> record.getBool(colName)
-            KTypes.KShortClass         -> record.getShort(colName)
-            KTypes.KIntClass           -> record.getInt(colName)
-            KTypes.KLongClass          -> record.getLong(colName)
-            KTypes.KFloatClass         -> record.getFloat(colName)
-            KTypes.KDoubleClass        -> record.getDouble(colName)
-            KTypes.KLocalDateClass     -> record.getLocalDate(colName)
-            KTypes.KLocalTimeClass     -> record.getLocalTime(colName)
-            KTypes.KLocalDateTimeClass -> if(isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(colName)
-            KTypes.KZonedDateTimeClass -> if(isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(colName)
-            KTypes.KDateTimeClass      -> if(isUTC) record.getDateTimeLocalFromUTC(colName)      else record.getDateTime(colName)
-            KTypes.KInstantClass       -> record.getInstant(colName)
-            KTypes.KUUIDClass          -> record.getUUID(colName)
-            KTypes.KUniqueIdClass      -> record.getUniqueId(colName)
-            else                       -> {
-                if(mapping.isEnum){
+            KTypes.KStringClass -> getString(record, mapping, colName, _encryptor)
+            KTypes.KBoolClass -> record.getBool(colName)
+            KTypes.KShortClass -> record.getShort(colName)
+            KTypes.KIntClass -> record.getInt(colName)
+            KTypes.KLongClass -> record.getLong(colName)
+            KTypes.KFloatClass -> record.getFloat(colName)
+            KTypes.KDoubleClass -> record.getDouble(colName)
+            KTypes.KLocalDateClass -> record.getLocalDate(colName)
+            KTypes.KLocalTimeClass -> record.getLocalTime(colName)
+            KTypes.KLocalDateTimeClass -> if (isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(
+                colName
+            )
+            KTypes.KZonedDateTimeClass -> if (isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(
+                colName
+            )
+            KTypes.KDateTimeClass -> if (isUTC) record.getDateTimeLocalFromUTC(colName) else record.getDateTime(colName)
+            KTypes.KInstantClass -> record.getInstant(colName)
+            KTypes.KUUIDClass -> record.getUUID(colName)
+            KTypes.KUniqueIdClass -> record.getUniqueId(colName)
+            else -> {
+                if (mapping.isEnum) {
                     val enumInt = record.getInt(colName)
                     val enumValue = Reflector.getEnumValue(mapping.dataCls, enumInt)
                     enumValue
@@ -241,12 +230,11 @@ open class ModelMapper(protected val _model: Model,
         return dataValue
     }
 
-
     @Suppress("NOTHING_TO_INLINE")
-    inline fun getString(record:Record, mapping:ModelField, colName:String, encryptor:Encryptor?): String? {
-        return if(mapping.encrypt) {
+    inline fun getString(record: Record, mapping: ModelField, colName: String, encryptor: Encryptor?): String? {
+        return if (mapping.encrypt) {
             val text = record.getString(colName)
-            text?.let { raw -> encryptor?.let{ it.decrypt( raw ) } ?: raw }
+            text?.let { raw -> encryptor?.let { it.decrypt(raw) } ?: raw }
         } else {
             record.getString(colName)
         }
