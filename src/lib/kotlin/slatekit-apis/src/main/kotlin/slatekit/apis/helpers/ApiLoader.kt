@@ -4,7 +4,7 @@ import slatekit.apis.ApiAction
 import slatekit.apis.core.*
 import slatekit.apis.security.Verbs
 import slatekit.common.Ignore
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.common.orElse
 import slatekit.meta.Reflector
@@ -14,7 +14,7 @@ import kotlin.reflect.KVisibility
 
 object ApiLoader {
 
-    fun loadAll(rawApis:List<slatekit.apis.core.Api>, namer:Namer? = null): Lookup<Area> {
+    fun loadAll(rawApis:List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
 
         // Get the apis with actions loaded from either
         // annotations or from public methods.
@@ -44,7 +44,7 @@ object ApiLoader {
      * @param cls  : The class representing the API
      * @param namer: The naming convention
      */
-    fun loadAnnotated(cls: KClass<*>, namer:Namer?): Api {
+    fun loadAnnotated(cls: KClass<*>, namer: Namer?): Api {
         // get the @Api annotation on the class
         val annotation = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
         val api = slatekit.apis.core.Api(
@@ -103,21 +103,21 @@ object ApiLoader {
      * @param api  : The API setup
      * @param namer: The naming convention
      */
-    fun loadWithMeta(api:slatekit.apis.core.Api, namer:Namer?): Api {
+    fun loadWithMeta(api:slatekit.apis.core.Api, namer: Namer?): Api {
         // Get all the actions using the @ApiAction
         val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)
         return api.copy(actions = Lookup(actions, { t -> t.name } ) )
     }
 
 
-    fun loadActionsFromPublicMethods(api: slatekit.apis.core.Api, local:Boolean, namer:Namer?): List<Action> {
+    fun loadActionsFromPublicMethods(api: slatekit.apis.core.Api, local:Boolean, namer: Namer?): List<Action> {
         val members = Reflector.getMembers(api.cls, local, true, KVisibility.PUBLIC)
         val actions:List<Action> = members.map { member -> buildAction(member, api, null, namer) }
         return actions
     }
 
 
-    private fun loadActionsFromAnnotations(api: slatekit.apis.core.Api, namer:Namer?): List<Action> {
+    private fun loadActionsFromAnnotations(api: slatekit.apis.core.Api, namer: Namer?): List<Action> {
 
         // 1. get all the methods with the apiAction annotation
         val rawMatches = Reflector.getAnnotatedMembers<ApiAction>(api.cls, ApiAction::class, api.declaredOnly)
@@ -146,7 +146,7 @@ object ApiLoader {
     }
 
 
-    private fun buildAction(member:KCallable<*>, api: slatekit.apis.core.Api, apiAction:ApiAction?, namer:Namer?): Action {
+    private fun buildAction(member:KCallable<*>, api: slatekit.apis.core.Api, apiAction:ApiAction?, namer: Namer?): Action {
 
         val methodName = member.name
         val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
@@ -191,7 +191,7 @@ object ApiLoader {
     }
 
 
-    private fun loadApiFromSetup(api:Api, namer:Namer?): Api {
+    private fun loadApiFromSetup(api:Api, namer: Namer?): Api {
 
         // If no actions, that means it was the raw input
         // during setup, so we have to load the api methods
@@ -214,7 +214,7 @@ object ApiLoader {
     }
 
 
-    private fun name(text:String, namer:Namer?): String {
+    private fun name(text:String, namer: Namer?): String {
         // Rename the area if namer is supplied
         val area = namer?.rename(text) ?: text
         return area

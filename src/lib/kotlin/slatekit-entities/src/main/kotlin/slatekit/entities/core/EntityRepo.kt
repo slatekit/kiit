@@ -13,7 +13,7 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
 import slatekit.common.query.IQuery

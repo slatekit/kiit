@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.types
 
 /**
  * Value class to represent an iso country code

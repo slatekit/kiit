@@ -1,12 +1,12 @@
 package test.common
 
 import org.junit.Test
-import slatekit.common.*
+import slatekit.common.naming.*
 
 
 class CaseTests {
 
-    fun ensure(namer:Namer, input:String, expected:String){
+    fun ensure(namer: Namer, input:String, expected:String){
         assert(namer.rename(input) == expected)
     }
 

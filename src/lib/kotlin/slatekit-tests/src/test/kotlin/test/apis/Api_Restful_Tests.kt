@@ -18,6 +18,8 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Restify
 import slatekit.common.*
+import slatekit.common.naming.LowerHyphenNamer
+import slatekit.common.naming.Namer
 import slatekit.common.results.ResultCode.SUCCESS
 import test.setup.SampleRESTApi
 import test.setup.Movie
@@ -158,7 +160,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    fun ensure(action:String, verb:String, args:Map<String,Any>, namer:Namer?, callback:(Result<*,*>) -> Unit): Unit {
+    fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*,*>) -> Unit): Unit {
 
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)

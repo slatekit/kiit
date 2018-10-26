@@ -13,7 +13,7 @@
 
 package slatekit.meta.models
 
-import slatekit.common.Namer
+import slatekit.common.naming.Namer
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.*

@@ -14,6 +14,8 @@
 package slatekit.core.email
 
 import slatekit.common.*
+import slatekit.common.results.ResultFuncs.failure
+import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
 
 
@@ -42,7 +44,7 @@ abstract class EmailService(val templates: Templates? = null) {
             send(EmailMessage(to, subject, body, html))
         }
         else {
-            Failure(result.message)
+            Failure(result.msg)
         }
     }
 
@@ -67,14 +69,14 @@ abstract class EmailService(val templates: Templates? = null) {
 
         }
         else {
-            Failure(result.message)
+            Failure(result.msg)
         }
     }
 
 
-    private fun validate(to: String, subject: String): BoolMessage =
-            if (to.isNullOrEmpty()) BoolMessage(false, "to not provided")
-            else if (subject.isNullOrEmpty()) BoolMessage(false, "subject not provided")
-            else BoolMessage.True
+    private fun validate(to: String, subject: String): ResultMsg<String> =
+            if (to.isNullOrEmpty()) failure(msg = "to not provided")
+            else if (subject.isNullOrEmpty()) failure(msg = "subject not provided")
+            else success("")
 
 }
