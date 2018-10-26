@@ -11,7 +11,7 @@
 
 package slatekit.sampleapp.core.common
 
-import slatekit.apis.svcs.TokenAuth
+import slatekit.apis.svcs.Authenticator
 import slatekit.common.ApiKey
 import slatekit.common.Request
 import slatekit.common.Result
@@ -31,7 +31,7 @@ import java.io.File
  */
 class AppAuth(val mode: String, val appDir: String,
               val user: String, val selectedKey: ApiKey, keys: List<ApiKey>)
-    : TokenAuth(keys, null) {
+    : Authenticator(keys) {
 
     /**
      * Override and implement this method if you want to completely handle authorization your self.

@@ -48,6 +48,7 @@ fun main(args: Array<String>) {
 data class TestTypes(val typeStr: String, val typeInt:Int, val typeLong:Long, val typeBool:Boolean)
 
 suspend fun respond(call:ApplicationCall) {
+
     val headers = call.request.headers.names().joinToString(",")
     val req = call.request
     val path = req.path()
@@ -55,6 +56,7 @@ suspend fun respond(call:ApplicationCall) {
     val uri = req.uri
     val host = req.host()
     val version = req.httpVersion
+    val queryParams = req.queryParameters.names().joinToString(",")
     val contentType = req.contentType()
     val isMultipart = req.isMultipart()
     val text = if(req.httpMethod == HttpMethod.Post) call.receiveText() else "null"
@@ -67,6 +69,7 @@ suspend fun respond(call:ApplicationCall) {
                     "version"    : "$version",
                     "contentType": "$contentType",
                     "headers"    : "$headers",
+                    "queryParams": "$queryParams",
                     "isMultiPart": "$isMultipart",
                     "body"       : $text
                   }

@@ -18,7 +18,7 @@ import slatekit.common.*
 import slatekit.meta.Serialization
 
 
-object HttpResponse {
+object SparkResponse {
 
     /**
      * Returns the value of the result as an html(string)

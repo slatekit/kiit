@@ -26,6 +26,8 @@ package slatekit.common
 data class Doc(val name: String, val content: String, val tpe:ContentType, val size:Long) {
 
     companion object {
+        @JvmStatic val empty = Doc("", "", ContentTypeText, 0)
+
         @JvmStatic fun  csv (name:String, content:String):Doc =  Doc(name, content, ContentTypeCsv , content.length.toLong())
         @JvmStatic fun  html(name:String, content:String):Doc =  Doc(name, content, ContentTypeHtml, content.length.toLong())
         @JvmStatic fun  json(name:String, content:String):Doc =  Doc(name, content, ContentTypeJson, content.length.toLong())

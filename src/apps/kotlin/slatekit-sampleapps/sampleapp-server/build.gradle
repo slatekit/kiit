@@ -16,7 +16,8 @@ buildscript {
 
 
 repositories {
-    mavenCentral()
+    jcenter()
+    maven { url "https://dl.bintray.com/kotlin/ktor" }
 }
 
 dependencies {
@@ -25,7 +26,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 	compile fileTree(dir: 'lib', include: '*.jar')	
     compile "com.googlecode.json-simple:json-simple:1.1"
-    compile "com.sparkjava:spark-core:2.1"
+    //compile "com.sparkjava:spark-core:2.1"
+    compile "io.ktor:ktor-server-netty:0.9.5"
     compile project(":slatekit-common")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")

@@ -13,7 +13,11 @@ package slatekit.sampleapp.server
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.security.AuthModes
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Verbs
 import slatekit.common.DateTime
+import slatekit.common.auth.Roles
 import slatekit.core.app.AppRunner
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
@@ -27,6 +31,7 @@ import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
 import slatekit.server.Server
+import slatekit.server.ktor.KtorServer
 import test.common.SampleAnnoApi
 import test.common.SampleApi
 
@@ -98,7 +103,7 @@ fun main(args: Array<String>): Unit {
     val selectedKey = sampleKeys[5]
     val auth = AppAuth("header", "slatekit", "johndoe", selectedKey, sampleKeys)
     val enc = AppEncryptor
-    val server = Server(
+    val server = KtorServer(
             port      = 5000,
             prefix    = "/api/",
             static    = true,
@@ -114,11 +119,15 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
-                    Api(SamplePOKOApi::class      , area = "samples", name = "SamplePOKO", declaredOnly = false, desc = "Sample to show APIs as pure class methods"),
+                    Api(SamplePOKOApi::class, area = "samples", name = "SamplePOKO", declaredOnly = false, desc = "Sample to show APIs as pure class methods",
+                            auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 2: passing in and returning data-types
-                    Api(SampleTypes1Api::class    , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with basic datatypes"),
-                    Api(SampleTypes2Api::class    , area = "samples", name = "Sampletypes2", declaredOnly = false, desc = "Sample to show APIs with objects, lists, maps"),
+                    Api(SampleTypes1Api::class    , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with basic datatypes",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
+
+                    Api(SampleTypes2Api::class    , area = "samples", name = "Sampletypes2", declaredOnly = false, desc = "Sample to show APIs with objects, lists, maps",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 3: annotations
                     Api(SampleTypes3Api::class    , setup = Annotated, declaredOnly = false),
@@ -128,7 +137,8 @@ fun main(args: Array<String>): Unit {
                     Api(SampleRESTApi::class      , area = "samples", name = "SampleREST", declaredOnly = false, desc = "Sample to show APIs that are REST-like"),
 
                     // Example 5: File download
-                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download"),
+                    Api(SampleFiles3Api::class    , area = "samples", name = "SampleFiles",declaredOnly = false, desc = "Sample to show APIs with file upload/download",
+                        auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all),
 
                     // Example 6: Inheritance with APIs
                     Api(SampleExtendedApi::class     , area = "samples", name = "SampleExtended", declaredOnly = false, desc = "Sample to show APIs with inherited members"),
@@ -140,7 +150,7 @@ fun main(args: Array<String>): Unit {
 
                     // Example 8: Middleware
                     Api(SampleErrorsApi(true)  , area = "samples", name = "SampleErrors", declaredOnly = false, desc = "Sample to show APIs with error handling"),
-                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleTypes1", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
+                    Api(SampleMiddlewareApi() , area = "samples", name = "SampleMiddleware", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
 
                     // Example 9: Provided by Slate Kit
                     Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),
