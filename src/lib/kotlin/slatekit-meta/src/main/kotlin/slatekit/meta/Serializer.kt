@@ -6,13 +6,11 @@ import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
 import slatekit.common.serialization.SerializerProps
 
-
 object Serialization {
-    fun csv(isoDates:Boolean = false): SerializerCsv     = SerializerCsv(this::serializeObject, isoDates)
-    fun json(isoDates:Boolean = false): SerializerJson   = SerializerJson(this::serializeObject, isoDates)
-    fun sampler(isoDates:Boolean = false): Serializer   = SerializerSample(this::serializeObject, isoDates)
-    fun props(prettyPrint:Boolean = false, isoDates:Boolean = false): SerializerProps = SerializerProps(prettyPrint, this::serializeObject, isoDates)
-
+    fun csv(isoDates: Boolean = false): SerializerCsv = SerializerCsv(this::serializeObject, isoDates)
+    fun json(isoDates: Boolean = false): SerializerJson = SerializerJson(this::serializeObject, isoDates)
+    fun sampler(isoDates: Boolean = false): Serializer = SerializerSample(this::serializeObject, isoDates)
+    fun props(prettyPrint: Boolean = false, isoDates: Boolean = false): SerializerProps = SerializerProps(prettyPrint, this::serializeObject, isoDates)
 
     /**
      * recursive serialization for a object.
@@ -21,10 +19,10 @@ object Serialization {
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between key/value pairs
      */
-    fun serializeObject(serializer: Serializer, item: Any, depth: Int): Unit {
+    fun serializeObject(serializer: Serializer, item: Any, depth: Int) {
 
         // Handle enum
-        if(Reflector.isSlateKitEnum(item.kClass)){
+        if (Reflector.isSlateKitEnum(item.kClass)) {
             val enumVal = (item as EnumLike).value
             serializer.serializeValue(enumVal, depth)
             return
@@ -39,8 +37,7 @@ object Serialization {
         // Standardize the display of the props
         val maxLen = if (serializer.standardizeWidth) {
             fields.maxBy { it.name.length }?.name?.length ?: 0
-        }
-        else {
+        } else {
             0
         }
 
@@ -51,8 +48,7 @@ object Serialization {
             // Standardized width
             val finalPropName = if (serializer.standardizeWidth) {
                 propName.padEnd(maxLen)
-            }
-            else {
+            } else {
                 propName
             }
             val value = Reflector.getFieldValue(item, propName)
