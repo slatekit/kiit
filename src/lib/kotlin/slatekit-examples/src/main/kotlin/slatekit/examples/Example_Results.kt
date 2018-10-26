@@ -13,7 +13,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.results.BAD_REQUEST
+import slatekit.common.results.ResultCode.BAD_REQUEST
+import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultFuncs.conflict
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.notAvailable
@@ -21,7 +22,6 @@ import slatekit.common.results.ResultFuncs.notFound
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.common.results.SUCCESS
 
 //</doc:import_required>
 

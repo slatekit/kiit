@@ -31,11 +31,13 @@ data class ApiKey(
 
     companion object {
 
+        @JvmStatic
         fun build(roles: String?): Map<String, String> {
             return roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
         }
 
 
+        @JvmStatic
         fun build(name: String, key: String, roles: String?): ApiKey {
             val lookup = roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
             return ApiKey(name, key, roles.orEmpty(), lookup)

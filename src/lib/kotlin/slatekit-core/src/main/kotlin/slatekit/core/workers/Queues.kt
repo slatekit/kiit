@@ -95,6 +95,7 @@ class Queues(val queues:List<QueueInfo>) {
          * This allows us to randomize the next queue for selection and have higher
          * priority queues have a higher probability of being selected.
          */
+        @JvmStatic
         fun prioritize(queues:List<QueueInfo>): List<QueueInfo> {
             val buffer = mutableListOf<QueueInfo>()
             queues.forEach { queueInfo ->

@@ -19,10 +19,10 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.results.BAD_REQUEST
+import slatekit.common.results.ResultCode.BAD_REQUEST
+import slatekit.common.results.ResultCode.SUCCESS
+import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 import slatekit.common.results.ResultFuncs
-import slatekit.common.results.SUCCESS
-import slatekit.common.results.UNEXPECTED_ERROR
 import test.setup.SampleErrorsApi
 import test.setup.SampleErrorsNoMiddlewareApi
 import test.setup.SampleMiddlewareApi

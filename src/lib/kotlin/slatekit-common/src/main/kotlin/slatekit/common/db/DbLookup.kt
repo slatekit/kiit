@@ -52,7 +52,7 @@ class DbLookup(private val defaultCon:DbCon? = null,
     }
 
 
-  companion object DbLookupCompanion {
+  companion object {
 
     /**
      * Creates a database lookup with just the default connection
@@ -60,6 +60,7 @@ class DbLookup(private val defaultCon:DbCon? = null,
      * @param con
      * @return
      */
+    @JvmStatic
     fun defaultDb( con:DbCon ): DbLookup {
       val db =  DbLookup(defaultCon = con)
       return db
@@ -72,6 +73,7 @@ class DbLookup(private val defaultCon:DbCon? = null,
      * @param items
      * @return
      */
+    @JvmStatic
     fun namedDbs( items:List<Pair<String,DbCon>>): DbLookup {
       val named = items.map{ item -> item.first to item.second }.toMap()
       val db =  DbLookup(names = named)

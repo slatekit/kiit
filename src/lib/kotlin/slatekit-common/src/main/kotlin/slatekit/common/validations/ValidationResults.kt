@@ -24,8 +24,9 @@ data class ValidationResults(val success: Boolean,
     val hasErrors = results?.isEmpty() ?: false
 
 
-    companion object ValidationResultsFuncs {
+    companion object {
 
+        @JvmStatic
         fun build(errors: List<ValidationResult>?): ValidationResults {
             val success = errors?.isEmpty() ?: true
             val message = errors?.first()?.msg ?: ""

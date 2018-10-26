@@ -13,6 +13,18 @@
 
 package slatekit.common.results
 
+import slatekit.common.results.ResultCode.BAD_REQUEST
+import slatekit.common.results.ResultCode.CONFLICT
+import slatekit.common.results.ResultCode.DEPRECATED
+import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.FAILURE
+import slatekit.common.results.ResultCode.HELP
+import slatekit.common.results.ResultCode.NOT_AVAILABLE
+import slatekit.common.results.ResultCode.NOT_FOUND
+import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
+import slatekit.common.results.ResultCode.UNAUTHORIZED
+import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
+
 interface ResultChecks {
 
     fun statusCode(): Int

@@ -383,7 +383,9 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
+        val field = ModelField.build(null, name, desc, dataType, dataKType, isRequired,
+                false, false, true,
+                minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 
@@ -402,7 +404,7 @@ class Model(val name: String,
      * @param cat
      * @return
      */
-    fun addField(
+    private fun addField(
         prop:KProperty<*>?,
         name:String,
         dataType: KClass<*>,
@@ -417,7 +419,9 @@ class Model(val name: String,
         tag: String = "",
         cat: String = "data"
     ): Model {
-        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired, minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
+        val field = ModelField.build(prop, name, desc, dataType, dataKType, isRequired,
+                false, false, true,
+                minLength, maxLength, destName, defaultValue, encrypt, tag, cat)
         return add(field)
     }
 

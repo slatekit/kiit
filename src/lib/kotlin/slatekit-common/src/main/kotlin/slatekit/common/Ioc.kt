@@ -10,6 +10,9 @@ object Ioc {
 
 
     fun <T> get(name:String): T {
+        if(!lookup.containsKey(name)) {
+            throw IllegalArgumentException("Component $name not in Ioc")
+        }
         val creator = lookup.get(name)!!
         val instance = creator.invoke(name) as T
         return instance

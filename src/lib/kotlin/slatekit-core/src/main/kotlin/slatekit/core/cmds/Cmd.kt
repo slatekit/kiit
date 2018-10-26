@@ -14,12 +14,10 @@
 package slatekit.core.cmds
 
 import slatekit.common.*
-import slatekit.common.DateTime.DateTimes.now
-import slatekit.common.results.ResultFuncs.failure
+import slatekit.common.DateTime.Companion.now
 import slatekit.common.results.ResultFuncs.notImplemented
 import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.common.results.UNEXPECTED_ERROR
 import java.util.concurrent.atomic.AtomicReference
 
 

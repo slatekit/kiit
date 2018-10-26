@@ -23,12 +23,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.*
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.EXIT
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 
@@ -66,7 +64,7 @@ data class AppEntContext(
         override val build: Build = Build.empty
                      ) : Context
 {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()), build)
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
 
     /**
@@ -96,9 +94,9 @@ data class AppEntContext(
                 cfg = Config(),
                 logs = LogsDefault,
                 ent = Entities(),
-                inf = About.Abouts.none,
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                inf = About.none,
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 state = Failure(Exception("Error"), code, msg ?: "")
             )
 
@@ -121,9 +119,9 @@ data class AppEntContext(
                         cfg = Config(),
                         logs = LogsDefault,
                         ent = Entities(),
-                        inf = About.Abouts.none,
-                        host = Host.Hosts.local(),
-                        lang = Lang.Langs.kotlin(),
+                        inf = About.none,
+                        host = Host.local(),
+                        lang = Lang.kotlin(),
                         dirs = Folders.Folders.userDir("slatekit", name.toIdent(), name.toIdent())
                 )
 
@@ -137,8 +135,8 @@ data class AppEntContext(
                 logs = LogsDefault,
                 ent = Entities(),
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
                 dirs = Folders.Folders.userDir("slatekit", "samples", "sample1")
             )

@@ -23,6 +23,8 @@ import slatekit.apis.support.ApiBase
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.db.DbCon
+import slatekit.common.map
+import slatekit.common.newline
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
 import slatekit.integration.common.AppEntContext
@@ -83,13 +85,25 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     @ApiAction(desc = "generates sql install files for the model")
     fun generateSql(name: String, version: String = ""): ResultEx<String> {
-        return service().generateSql(name, version)
+        return service().generateSql(name, version).map { it.joinToString(newline) }
     }
 
 
     @ApiAction(desc = "generates sql install files for all models")
-    fun generateSqlAll(): ResultEx<List<String>> {
-        return service().generateSqlAll()
+    fun generateSqlFiles(): ResultEx<List<String>> {
+        return service().generateSqlFiles()
+    }
+
+
+    @ApiAction(desc = "generates a single sql install file for all models")
+    fun generateSqlAllInstall(): ResultEx<String> {
+        return service().generateSqlAllInstall()
+    }
+
+
+    @ApiAction(desc = "generates a single sql install file for all models")
+    fun generateSqlAllUninstall(): ResultEx<String> {
+        return service().generateSqlAllUninstall()
     }
 
 

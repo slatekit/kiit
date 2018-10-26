@@ -57,7 +57,9 @@ class EntitySetupService(private val _entities: Entities,
        return  when(result) {
             is Success -> {
                 val db = _entities.getDb(dbKey, dbShard)
-                db.update(result.data)
+                result.data.forEach {
+                    if(!it.isNullOrEmpty()) { db.update(it) }
+                }
                 Success("Installed all tables")
             }
             is Failure ->  {
@@ -97,8 +99,52 @@ class EntitySetupService(private val _entities: Entities,
     }
 
 
-    fun generateSqlAll(): ResultEx<List<String>> {
-        return each( { entity -> generateSql(entity.entityTypeName) } )
+
+
+    fun generateSqlFiles(): ResultEx<List<String>> {
+        return each( { entity ->
+            val result = generateSql(entity.entityTypeName)
+            result.map { it.joinToString(newline) }
+        } )
+    }
+
+
+    fun generateSqlAllInstall(): ResultEx<String> {
+        val fileName = "sql-all-install-" + DateTime.now().toStringNumeric()
+        val results = _entities.getEntities().map { entity ->
+            val result = generateSql(entity.entityTypeName)
+            result.map {
+                val allSqlForModel = it.joinToString(newline)
+                allSqlForModel
+            }
+        }
+        val succeeded = results.filter { it.success }
+        val allSql = succeeded.fold("", { acc, result ->
+            acc + newline  +  "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+        })
+        val finalFileName = "$fileName.sql"
+        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        return Success(filePath)
+    }
+
+
+    fun generateSqlAllUninstall(): ResultEx<String> {
+        val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
+        val results = _entities.getEntities().map { entity ->
+
+            val dropTable = _entities.getDbSource().buildDropTable(entity.model.table)
+
+            Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
+        }
+        val succeeded = results.filter { it.success }
+        val allSql = succeeded.fold("", { acc, result ->
+            acc + newline  +  "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+        })
+        val finalFileName = "$fileName.sql"
+        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        return Success(filePath)
     }
 
 
@@ -115,21 +161,23 @@ class EntitySetupService(private val _entities: Entities,
     /**
      * generates the sql for installing the model, file is created in the .{appname}/apps/ directory.
      *
-     * @param name    : the fully qualified name of the model e..g slate.ext.resources.Resource
+     * @param moduleName    : the fully qualified moduleName of the model e..g slate.ext.resources.Resource
      * @param version : the version of the model
      * @return
      */
-    fun generateSql(name: String, version: String = ""): ResultEx<String> {
+    fun generateSql(moduleName: String, version: String = ""): ResultEx<List<String>> {
         val result = try {
-            val fullName = name
+            val fullName = moduleName
             val svc = _entities.getServiceByName(fullName)
             val model = svc.repo().mapper().model()
             val ddl = _entities.getInfoByName(fullName).entityDDL
-            val sql = ddl?.buildAddTable(_entities.getDbSource(), model, namer = _entities.namer) ?: ""
+            val sqlTable = ddl?.buildAddTable(_entities.getDbSource(), model, namer = _entities.namer) ?: ""
+            val sqlIndexes = ddl?.buildIndexes(_entities.getDb(), model, namer = _entities.namer) ?: listOf()
+            val sql:List<String> = listOf(sqlTable).plus(sqlIndexes)
             val filePath = if (_settings.enableOutput) {
                 _folders?.let { folders ->
                     val fileName = "model-${model.name}.sql"
-                    Files.writeDatedFile(folders.pathToOutputs, fileName, sql)
+                    Files.writeDatedFile(folders.pathToOutputs, fileName, sql.joinToString(newline))
                     folders.pathToOutputs + Props.pathSeparator + fileName
                 }
             }
@@ -139,14 +187,13 @@ class EntitySetupService(private val _entities: Entities,
             Triple(true, filePath, sql)
         }
         catch(ex: Exception) {
-            Triple(false, ex.message, "")
+            Triple(false, ex.message, listOf(""))
         }
 
         val success = result.first
         val sql = result.third
         val path = result.second
-
-        val info = if (success) "generated sql for model: $name $path" else "error generating sql"
+        val info = if (success) "generated sql for model: $moduleName $path" else "error generating sql"
         return if(success) Success(sql, msg = info) else Failure(Exception(info), msg = info)
     }
 

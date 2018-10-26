@@ -17,22 +17,23 @@ package slatekit.common.results
  * minimal subset of http status codes that are general purpose enough for anything
  */
 
+object ResultCode {
+    const val SUCCESS = 200
+    const val CONFIRM = 230
 
-val SUCCESS = 200
-val CONFIRM = 230
+    const val FAILURE = 400
+    const val BAD_REQUEST = 400
+    const val UNAUTHORIZED = 401
+    const val NOT_FOUND = 404
+    const val CONFLICT = 409
+    const val DEPRECATED = 426
 
-val FAILURE = 400
-val BAD_REQUEST = 400
-val UNAUTHORIZED = 401
-val NOT_FOUND = 404
-val CONFLICT = 409
-val DEPRECATED = 426
+    const val UNEXPECTED_ERROR = 500
+    const val NOT_IMPLEMENTED = 501
+    const val NOT_AVAILABLE = 503
 
-val UNEXPECTED_ERROR = 500
-val NOT_IMPLEMENTED = 501
-val NOT_AVAILABLE = 503
-
-val HELP = 1000
-val EXIT = 1001
-val VERSION = 1002
-val MISSING = 1404
+    const val HELP = 1000
+    const val MISSING = 1404
+    const val EXIT = 1001
+    const val VERSION = 1002
+}

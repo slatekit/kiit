@@ -33,8 +33,9 @@ data class Token(
     fun toStringDetail(): String = "$tType, line=$line, charPos=$charPos, index=$index $text"
 
 
-    companion object Token {
+    companion object {
 
+        @JvmStatic
         val none = Token("", "", TokenType.None, -1, -1, -1)
     }
 }

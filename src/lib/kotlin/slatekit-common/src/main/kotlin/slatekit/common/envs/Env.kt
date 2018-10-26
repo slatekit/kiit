@@ -41,6 +41,7 @@ data class Env(val name: String,
 
     companion object {
 
+        @JvmStatic
         val empty = Env("", Dev, "", "")
 
 
@@ -65,6 +66,7 @@ data class Env(val name: String,
          *
          * @return
          */
+        @JvmStatic
         fun defaults(): Envs =
             Envs(listOf(
                 Env("loc", Dev , desc = "Dev environment (local)"),
@@ -82,6 +84,7 @@ data class Env(val name: String,
          * @param env
          * @return
          */
+        @JvmStatic
         fun parse(text: String): Env {
             if (text == "''" || text == "\"\"") {
                 return Env("", Dev, desc = "Default environment")
@@ -103,6 +106,7 @@ data class Env(val name: String,
          * @param mode
          * @return
          */
+        @JvmStatic
         fun interpret(mode: String): EnvMode =
                 when (mode) {
                     Dev.name  -> Dev

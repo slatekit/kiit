@@ -27,8 +27,8 @@ import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.EXIT
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 
 /**
   *
@@ -68,44 +68,49 @@ data class AppContext(
         val ent  : Any? = null
                      ) : Context
 {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.StatusFuncs.none, StartInfo(arg.line, env.key, cfg.origin()), build)
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.Companion.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
 
     companion object {
 
 
+        @JvmStatic
         fun help(): AppContext = err(HELP)
 
 
+        @JvmStatic
         fun exit(): AppContext = err(EXIT)
 
 
+        @JvmStatic
         fun err(code: Int, msg: String? = null): AppContext =
             AppContext(
                 arg = Args.Companion.default(),
                 env = Env("local", Dev),
                 cfg = Config(),
                 logs = LogsDefault,
-                inf = About.Abouts.none,
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                inf = About.none,
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 state = Failure(Exception(msg), code, msg ?: "")
             )
 
 
+        @JvmStatic
         fun simple(name:String): AppContext =
                 AppContext(
                         arg = Args.Companion.default(),
                         env = Env("local", Dev),
                         cfg = Config(),
                         logs = LogsDefault,
-                        inf = About.Abouts.none,
-                        host = Host.Hosts.local(),
-                        lang = Lang.Langs.kotlin(),
+                        inf = About.none,
+                        host = Host.local(),
+                        lang = Lang.kotlin(),
                         dirs = Folders.Folders.userDir("slatekit", name.toIdent(), name.toIdent())
                 )
 
 
+        @JvmStatic
         fun sample(id: String, name: String, about: String, company: String): AppContext =
             AppContext(
                 arg = Args.Companion.default(),
@@ -113,8 +118,8 @@ data class AppContext(
                 cfg = Config(),
                 logs = LogsDefault,
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
-                host = Host.Hosts.local(),
-                lang = Lang.Langs.kotlin(),
+                host = Host.local(),
+                lang = Lang.kotlin(),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
                 dirs = Folders.Folders.userDir("slatekit", "samples", "sample1")
             )

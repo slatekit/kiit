@@ -265,6 +265,8 @@ class Args(
     fun hasMetaArgs():Boolean = _metaArgs?.isNotEmpty() ?: false
 
     companion object {
+
+        @JvmStatic
         fun default(): Args = Args("", listOf(), "", listOf(), _decryptor = null)
 
 
@@ -280,6 +282,7 @@ class Args(
          * @param sysChar  : the prefix to designate arguments as sys arguments which are saved in the sys collection
          * @return
          */
+        @JvmStatic
         fun parse(line: String, prefix: String = "-", sep: String = ":",
                   hasAction: Boolean = false, metaChar:String = "@", sysChar: String = "$")
                 : ResultEx<Args> {
@@ -299,6 +302,7 @@ class Args(
          * @param sysChar  : the prefix to designate arguments as sys arguments which are saved in the sys collection
          * @return
          */
+        @JvmStatic
         fun parseArgs(args: Array<String>, prefix: String = "-", sep: String = ":",
                       hasAction: Boolean = false, metaChar: String = "@", sysChar: String = "$")
                 : ResultEx<Args> {

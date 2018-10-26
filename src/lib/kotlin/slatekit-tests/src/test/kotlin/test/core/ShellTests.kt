@@ -19,7 +19,7 @@ import slatekit.common.ApiKey
 import slatekit.common.Credentials
 import slatekit.common.args.Args
 import slatekit.common.getOrElse
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.HELP
 import slatekit.core.cli.CliCommand
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.CliApi

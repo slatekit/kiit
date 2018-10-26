@@ -39,7 +39,8 @@ data class Status(
     }
 
 
-    companion object StatusFuncs {
+    companion object {
+        @JvmStatic
         val none = Status()
     }
 }

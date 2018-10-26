@@ -22,6 +22,7 @@ data class Job(val id:String, val queue:String, val task:String, val payload:Str
 
     companion object {
 
+        @JvmStatic
         val empty:Job = Job("empty", "empty", "empty", "empty", "empty", "empty")
     }
 }

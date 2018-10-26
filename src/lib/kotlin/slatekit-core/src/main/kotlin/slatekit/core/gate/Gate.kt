@@ -1,7 +1,7 @@
 package slatekit.core.gate
 
 import slatekit.common.*
-import slatekit.common.results.UNEXPECTED_ERROR
+import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger

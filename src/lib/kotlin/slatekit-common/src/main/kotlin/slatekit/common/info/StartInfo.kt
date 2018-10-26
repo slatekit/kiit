@@ -34,9 +34,11 @@ data class StartInfo(
 
 
     companion object {
+        @JvmStatic
         val none = StartInfo()
 
 
+        @JvmStatic
         fun apply(args: String, env: String, conf: String): StartInfo =
             StartInfo(
                 args = args,

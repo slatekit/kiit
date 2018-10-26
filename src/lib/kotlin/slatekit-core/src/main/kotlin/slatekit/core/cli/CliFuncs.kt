@@ -17,8 +17,8 @@ import slatekit.common.Files
 import slatekit.common.ResultMsg
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.info.Folders
-import slatekit.common.results.EXIT
-import slatekit.common.results.HELP
+import slatekit.common.results.ResultCode.EXIT
+import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.yes
 

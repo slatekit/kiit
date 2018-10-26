@@ -152,7 +152,7 @@ open class CliService(
     fun tryLine(line: String): Boolean =
             try {
                 val result = onCommandExecute(line)
-                val isExit = result.code == slatekit.common.results.EXIT
+                val isExit = result.code == slatekit.common.results.ResultCode.EXIT
                 result.success || !isExit
             }
             catch(ex: Exception) {

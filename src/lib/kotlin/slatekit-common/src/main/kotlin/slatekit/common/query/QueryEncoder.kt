@@ -20,9 +20,10 @@ import java.util.*
 object QueryEncoder {
 
 
-    fun convertVal(value: Any): String {
+    fun convertVal(value: Any?): String {
         return when (value) {
             Query.Null  -> "null"
+            null        -> "null"
             is String   -> toString(value)
             is Int      -> value.toString()
             is Long     -> value.toString()
@@ -30,8 +31,8 @@ object QueryEncoder {
             is UUID     -> "'" + value.toString() + "'"
             is Boolean  -> if (value) "1" else "0"
             is DateTime -> "'" + value.toStringMySql() + "'"
-            is List<*>  -> "(" + value.joinToString(",", transform = Any?::toString) + ")"
-            is Array<*> -> "(" + value.joinToString(",", transform = Any?::toString) + ")"
+            is List<*>  -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
+            is Array<*> -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
             else        -> value.toString()
         }
     }

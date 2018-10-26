@@ -9,7 +9,6 @@ import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.UNEXPECTED_ERROR
 import slatekit.common.validations.ValidationFuncs
 
 

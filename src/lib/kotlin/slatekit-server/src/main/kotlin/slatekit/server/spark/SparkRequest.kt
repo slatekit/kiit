@@ -82,6 +82,7 @@ class SparkRequest(val req: Request) : RequestSupport {
 
     companion object {
 
+        @JvmStatic
         fun build(ctx: Context, req: Request, conf: ServerConfig): slatekit.common.Request {
             val rawUri = req.uri()
             val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
@@ -118,6 +119,7 @@ class SparkRequest(val req: Request) : RequestSupport {
         /**
          * Load json from the post/put body using json-simple
          */
+        @JvmStatic
         fun loadJson(req: Request, addQueryParams:Boolean = false): JSONObject {
             val method = req.requestMethod().toLowerCase()
             val isPosted = isBodyAllowed(method)
@@ -146,6 +148,7 @@ class SparkRequest(val req: Request) : RequestSupport {
         }
 
 
+        @JvmStatic
         fun isBodyAllowed(method:String):Boolean = method == "put" || method == "post" || method == "delete"
     }
 

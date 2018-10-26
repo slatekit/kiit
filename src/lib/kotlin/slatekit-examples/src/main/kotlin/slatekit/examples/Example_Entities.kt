@@ -66,7 +66,7 @@ class Example_Entities : Cmd("entities") {
                          override val createdBy : Long = 0,
                          override val uuid  : String = Random.guid()
                        )
-    : EntityWithId, EntityWithTime, EntityWithUser, EntityWithGuid
+    : EntityWithId, EntityWithTime, EntityWithUser, EntityWithUUID
   {
     // The unique id is a guid and unique regardless of environment ( dev, qa, staging, prod )
     // It serves as a easy way to check for existing items across different environments and
