@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.security
 
 /**
  * Represents a key for accessing an API securely.
@@ -26,7 +26,9 @@ data class ApiKey(
     val rolesLookup: Map<String, String>
 ) {
 
-    constructor(name: String, key: String, roles: String) : this(name, key, roles, build(roles))
+    constructor(name: String, key: String, roles: String) : this(name, key, roles,
+        build(roles)
+    )
 
 
     companion object {

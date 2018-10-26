@@ -13,8 +13,8 @@
 
 package slatekit.common.conf
 
-import slatekit.common.ApiLogin
-import slatekit.common.Credentials
+import slatekit.common.security.ApiLogin
+import slatekit.common.security.Credentials
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbConString
@@ -52,12 +52,12 @@ interface ConfigSupport {
             mapTo(name, { conf ->
 
                 Credentials(
-                        conf.getString(name + ".id"),
-                        conf.getString(name + ".name"),
-                        conf.getString(name + ".email"),
-                        conf.getString(name + ".key"),
-                        conf.getString(name + ".env"),
-                        conf.getString(name + ".region")
+                    conf.getString(name + ".id"),
+                    conf.getString(name + ".name"),
+                    conf.getString(name + ".email"),
+                    conf.getString(name + ".key"),
+                    conf.getString(name + ".env"),
+                    conf.getString(name + ".region")
                 )
             }) ?: Credentials.empty
 

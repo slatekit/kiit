@@ -18,7 +18,7 @@ import TODO
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
-import slatekit.common.ApiLogin
+import slatekit.common.security.ApiLogin
 import slatekit.common.Failure
 import slatekit.common.ResultEx
 import slatekit.common.Uris

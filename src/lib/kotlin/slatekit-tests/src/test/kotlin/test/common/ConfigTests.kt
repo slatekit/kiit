@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Test
-import slatekit.common.ApiLogin
+import slatekit.common.security.ApiLogin
 import slatekit.common.DateTime
 import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs
@@ -167,7 +167,7 @@ class ConfigTests {
     }
 
 
-    fun matchkey(actual: ApiLogin, expected:ApiLogin):Unit {
+    fun matchkey(actual: ApiLogin, expected: ApiLogin):Unit {
         assert(expected.account == actual.account)
         assert(expected.key == actual.key)
         assert(expected.env == actual.env)

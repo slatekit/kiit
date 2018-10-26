@@ -1,12 +1,11 @@
 package slatekit.apis.svcs
 
-import slatekit.apis.ApiConstants
 import slatekit.apis.core.Auth
 import slatekit.apis.security.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.results.ResultFuncs
+import slatekit.common.security.ApiKey
 
 
 /**

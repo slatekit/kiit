@@ -13,7 +13,7 @@
 
 package slatekit.common.auth
 
-import slatekit.common.ApiKey
+import slatekit.common.security.ApiKey
 import slatekit.common.Inputs
 import slatekit.common.ListMap
 import slatekit.common.ResultMsg

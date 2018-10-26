@@ -3,8 +3,8 @@ package slatekit.tools
 
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
-import slatekit.common.ApiKey
-import slatekit.common.Credentials
+import slatekit.common.security.ApiKey
+import slatekit.common.security.Credentials
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings

@@ -13,10 +13,11 @@ mantra: Simplicity above all else
 package slatekit.core.cli
 
 import slatekit.common.Context
+import slatekit.common.security.Credentials
 
 open class CliMeta {
 
-    open fun getMetaData(context: Context, cmd:CliCommand, creds: slatekit.common.Credentials):Map<String, Any> {
+    open fun getMetaData(context: Context, cmd:CliCommand, creds: Credentials):Map<String, Any> {
         val keys = listOf( Pair("api-key", creds.key) )
         val meta = cmd.args.meta.plus(keys)
         return meta

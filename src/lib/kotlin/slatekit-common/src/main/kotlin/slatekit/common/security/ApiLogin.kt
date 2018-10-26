@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.security
 
 /**
  * Represents credentials for accessing an API. This is useful for representing credentials
