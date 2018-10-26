@@ -15,9 +15,11 @@ package test.entities
 import org.junit.Test
 import slatekit.common.*
 import slatekit.common.records.RecordMap
+import slatekit.common.utils.ListMap
 import slatekit.entities.core.EntityMapper
 import slatekit.meta.models.ModelMapper
 import test.setup.*
+import java.sql.Timestamp
 import java.util.*
 
 /**
@@ -86,14 +88,15 @@ class MapperTests {
     }
 
 
-    fun buildSampleDataForAuthor(): ListMap<String,Any> {
+    fun buildSampleDataForAuthor(): ListMap<String, Any> {
 
-        val data = ListMap(listOf(
+        val data = ListMap(
+            listOf(
                 Pair("id", 1L),
                 Pair("uuid", "ABC"),
-                Pair("createdAt", java.sql.Timestamp(2017, 1, 1, 12,0,0,0)),
+                Pair("createdAt", Timestamp(2017, 1, 1, 12, 0, 0, 0)),
                 Pair("createdBy", 100L),
-                Pair("updatedAt", java.sql.Timestamp(2017, 1, 2, 12,0,0,0)),
+                Pair("updatedAt", Timestamp(2017, 1, 2, 12, 0, 0, 0)),
                 Pair("updatedBy", 101L),
                 Pair("email", "kishore@abc.com"),
                 Pair("isActive", true),
@@ -102,28 +105,31 @@ class MapperTests {
                 Pair("salary", 400.5),
                 Pair("uid", UUID.fromString(sampleUUID1)),
                 Pair("shardId", UniqueId.fromString(sampleUUID2))
-        ))
+            )
+        )
         return data
     }
 
 
-    fun buildSampleDataForEmbeddedObject(): ListMap<String,Any> {
+    fun buildSampleDataForEmbeddedObject(): ListMap<String, Any> {
 
-        val data = ListMap(listOf(
+        val data = ListMap(
+            listOf(
                 Pair("id", 1L),
                 Pair("email", "kishore@abc.com"),
                 Pair("isActive", true),
                 Pair("age", 35),
                 Pair("salary", 400.5),
-                Pair("addr_addr"    , "street 1"),
-                Pair("addr_city"    , "city 1"),
-                Pair("addr_state"   , "state 1"),
-                Pair("addr_country" , 1),
-                Pair("addr_zip"     , "12345"),
-                Pair("addr_isPOBox" , true),
+                Pair("addr_addr", "street 1"),
+                Pair("addr_city", "city 1"),
+                Pair("addr_state", "state 1"),
+                Pair("addr_country", 1),
+                Pair("addr_zip", "12345"),
+                Pair("addr_isPOBox", true),
                 Pair("uid", UUID.fromString(sampleUUID1)),
                 Pair("shardId", UniqueId.fromString(sampleUUID2))
-        ))
+            )
+        )
         return data
     }
 

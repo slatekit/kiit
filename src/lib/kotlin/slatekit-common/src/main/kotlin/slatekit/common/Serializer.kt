@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter
  * Refer to slatekit.meta.serialization.serializeObject for a sample implementation.
  *
  */
-open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = null,
+open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
                       val isoDates:Boolean = false){
 
     open val standardizeWidth = false
@@ -110,8 +110,8 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
             is LocalDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is Instant       -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
-            is DateTime      -> _buff.append("\"" + (if(isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
-            is Result<*,*>   -> serializeResult(s, depth)
+            is DateTime -> _buff.append("\"" + (if(isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
+            is Result<*, *> -> serializeResult(s, depth)
             is List<*>       -> serializeList(s, depth + 1)
             is Map<*, *>     -> serializeMap(s, depth + 1)
             is Exception     -> _buff.append(serializeString(s.message ?: ""))
@@ -175,7 +175,7 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between key/value pairs
      */
-    protected fun serializeResult(item: Result<*,*>, depth: Int): Unit {
+    protected fun serializeResult(item: Result<*, *>, depth: Int): Unit {
         if (standardizeResult) {
             // Begin
             onContainerStart(item, ParentType.OBJECT_TYPE, depth)
@@ -212,10 +212,10 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
      */
     open fun onContainerStart(item: Any, type: ParentType, depth: Int): Unit {
         when (type) {
-            ParentType.LIST_TYPE   -> _buff.append("[")
-            ParentType.MAP_TYPE    -> _buff.append("{")
+            ParentType.LIST_TYPE -> _buff.append("[")
+            ParentType.MAP_TYPE -> _buff.append("{")
             ParentType.OBJECT_TYPE -> _buff.append("{")
-            ParentType.ROOT_TYPE   -> _buff.append("{")
+            ParentType.ROOT_TYPE -> _buff.append("{")
         }
     }
 
@@ -225,10 +225,10 @@ open class Serializer(val objectSerializer: ((Serializer,Any,Int) -> Unit)? = nu
      */
     open fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
         when (type) {
-            ParentType.LIST_TYPE   -> _buff.append("]")
-            ParentType.MAP_TYPE    -> _buff.append("}")
+            ParentType.LIST_TYPE -> _buff.append("]")
+            ParentType.MAP_TYPE -> _buff.append("}")
             ParentType.OBJECT_TYPE -> _buff.append("}")
-            ParentType.ROOT_TYPE   -> _buff.append("}")
+            ParentType.ROOT_TYPE -> _buff.append("}")
         }
     }
 

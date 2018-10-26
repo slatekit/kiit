@@ -16,14 +16,13 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.ApiConstants
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
-import slatekit.common.ApiKey
-import slatekit.common.ApiLogin
-import slatekit.common.Credentials
+import slatekit.common.security.ApiKey
+import slatekit.common.security.ApiLogin
+import slatekit.common.security.Credentials
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
@@ -36,7 +35,7 @@ import slatekit.common.db.DbTypeMySql
 class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
     @ApiAction(desc = "creates an api key in the directory")
-    fun createApiKey(rootDir: String, name: String, key: String, roles: String): slatekit.common.ApiKey {
+    fun createApiKey(rootDir: String, name: String, key: String, roles: String): ApiKey {
         val apiKey = ApiKey(name, key, roles)
         slatekit.common.conf.ConfFuncs.createApiKey(rootDir, name, apiKey, context.enc)
         return apiKey
@@ -44,7 +43,7 @@ class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWith
 
 
     @ApiAction(desc = "creates an api login in the directory")
-    fun createApiLogin(rootDir: String, name: String, account: String, key: String, pass: String, env: String, tag: String): slatekit.common.ApiLogin {
+    fun createApiLogin(rootDir: String, name: String, account: String, key: String, pass: String, env: String, tag: String): ApiLogin {
         val login = ApiLogin(account, key, pass, env, tag)
         ConfFuncs.createApiLogin(rootDir, name, login, context.enc)
         return login

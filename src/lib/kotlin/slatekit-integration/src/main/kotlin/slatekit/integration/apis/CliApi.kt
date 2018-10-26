@@ -20,6 +20,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
+import slatekit.common.security.Credentials
 import slatekit.core.cli.CliCommand
 import slatekit.core.cli.CliConstants
 import slatekit.core.cli.CliMeta
@@ -44,7 +45,7 @@ import java.io.File
  *  2. file     : loads the request from a file  : $file="create-users.json"
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
-class CliApi(private val creds: slatekit.common.Credentials,
+class CliApi(private val creds: Credentials,
              val ctx: slatekit.common.Context,
              val auth: slatekit.apis.core.Auth,
              settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),

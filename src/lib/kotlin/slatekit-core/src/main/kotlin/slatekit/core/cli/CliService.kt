@@ -14,7 +14,7 @@
 package slatekit.core.cli
 
 import slatekit.common.*
-import slatekit.common.Loops.doUntil
+import slatekit.common.utils.Loops.doUntil
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.args.Args
@@ -25,6 +25,7 @@ import slatekit.common.info.Status
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.utils.Loops
 import slatekit.core.cli.CliConstants.ABOUT
 import slatekit.core.cli.CliConstants.EXIT
 import slatekit.core.cli.CliConstants.HELP

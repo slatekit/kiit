@@ -18,6 +18,7 @@ import slatekit.common.*
 import slatekit.common.lex.LexState
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
+import slatekit.common.utils.Loops
 
 /**
  * Parses a text template that can contain variables/substitutions.

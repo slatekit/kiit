@@ -18,6 +18,7 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.*
+import slatekit.common.security.ApiLogin
 import slatekit.core.cloud.CloudFilesBase
 import java.io.File
 
@@ -39,7 +40,8 @@ class AwsCloudFiles(bucket: String,
 
     constructor(bucket:String,
                 createBucket: Boolean,
-                apiKey: ApiLogin) : this(
+                apiKey: ApiLogin
+    ) : this(
                 bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
     )
 

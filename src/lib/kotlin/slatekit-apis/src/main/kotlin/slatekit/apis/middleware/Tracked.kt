@@ -13,8 +13,9 @@ mantra: Simplicity above all else
 package slatekit.apis.middleware
 
 import slatekit.common.*
+import slatekit.common.utils.Tracker
 
 interface Tracked : Middleware {
 
-    val tracker:Tracker<Request, Request, Any, Exception>
+    val tracker: Tracker<Request, Request, Any, Exception>
 }

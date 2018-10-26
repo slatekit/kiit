@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.utils
 
 /**
  * Created by kishorereddy on 5/24/17.

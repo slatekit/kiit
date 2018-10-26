@@ -14,7 +14,6 @@
 package slatekit.common.info
 
 import slatekit.common.DateTime
-import slatekit.common.TimeSpan
 import java.time.Duration
 
 data class Status(
