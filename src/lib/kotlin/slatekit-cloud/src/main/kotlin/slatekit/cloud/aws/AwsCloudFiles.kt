@@ -24,57 +24,57 @@ import java.io.File
 
 /**
  *
- * @param bucket       : Name of the bucket to store files in
+ * @param bucket : Name of the bucket to store files in
  * @param createBucket : Whether or not to create the bucket
- * @param path         : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
- * @param section      : Name of section in conf file for api key. e.g. Some("sqs")
+ * @param path : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
+ * @param section : Name of section in conf file for api key. e.g. Some("sqs")
  */
-class AwsCloudFiles(bucket: String,
-                    createBucket: Boolean,
-                    creds:AWSCredentials)
+class AwsCloudFiles(
+    bucket: String,
+    createBucket: Boolean,
+    creds: AWSCredentials
+)
     : CloudFilesBase(bucket, createBucket), AwsSupport {
 
     private val SOURCE = "aws:s3"
     private val _s3: AmazonS3Client = AwsFuncs.s3(creds)
 
-
-    constructor(bucket:String,
-                createBucket: Boolean,
-                apiKey: ApiLogin
+    constructor(
+        bucket: String,
+        createBucket: Boolean,
+        apiKey: ApiLogin
     ) : this(
                 bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
     )
 
-
-    constructor(bucket:String,
-                createBucket: Boolean,
-                confPath: String? = null,
-                section: String? = null) : this (
+    constructor(
+        bucket: String,
+        createBucket: Boolean,
+        confPath: String? = null,
+        section: String? = null
+    ) : this (
             bucket, createBucket, AwsFuncs.creds(confPath, section)
     )
-
 
     /**
      * hook for any initialization
      */
-    override fun init(): Unit {
+    override fun init() {
         if (_createDefaultFolder) {
             _s3.createBucket(_defaultFolder)
         }
     }
-
 
     /**
      * creates a root folder/bucket with the supplied name.
      *
      * @param rootFolder
      */
-    override fun createRootFolder(rootFolder: String): Unit {
+    override fun createRootFolder(rootFolder: String) {
         if (!rootFolder.isNullOrEmpty() && rootFolder != _defaultFolder) {
             _s3.createBucket(rootFolder)
         }
     }
-
 
     /**
      * creates a file with the supplied folder name, file name, and content
@@ -87,7 +87,6 @@ class AwsCloudFiles(bucket: String,
         return put("create", folder, name, content)
     }
 
-
     /**
      * updates a file with the supplied folder name, file name, and content
      *
@@ -98,7 +97,6 @@ class AwsCloudFiles(bucket: String,
     override fun update(folder: String, name: String, content: String): ResultEx<String> {
         return put("update", folder, name, content)
     }
-
 
     /**
      * deletes a file with the supplied folder name, file name
@@ -114,7 +112,6 @@ class AwsCloudFiles(bucket: String,
         })
     }
 
-
     /**
      * gets the file specified by folder and name, as text content
      *
@@ -128,11 +125,10 @@ class AwsCloudFiles(bucket: String,
 
             val obj = _s3.getObject(GetObjectRequest(_defaultFolder, fullName))
             val content = toString(obj.getObjectContent())
-            //val content = "simulating download of " + fullName
+            // val content = "simulating download of " + fullName
             content
         })
     }
-
 
     /**
      * downloads the file specified by folder and name to the local folder specified.
@@ -149,11 +145,10 @@ class AwsCloudFiles(bucket: String,
             val finalFolder = Uris.interpret(localFolder)
             val localFile = File(finalFolder, name)
             val localFileName = localFile.absolutePath
-            File(localFileName).writeText(content.getOrElse{""})
+            File(localFileName).writeText(content.getOrElse { "" })
             localFileName
         })
     }
-
 
     /**
      * downloads the file specified by folder and name to the local folder specified.
@@ -169,11 +164,10 @@ class AwsCloudFiles(bucket: String,
             val content = getAsText(folder, name)
             val localFile = Uris.interpret(filePath)
             val localFileName = localFile ?: name
-            File(localFileName).writeText(content.getOrElse{""})
+            File(localFileName).writeText(content.getOrElse { "" })
             localFileName
         })
     }
-
 
     /**
      * uploads the file to the datasource using the supplied folder, filename, and content
@@ -193,7 +187,6 @@ class AwsCloudFiles(bucket: String,
             fullName
         })
     }
-
 
     private fun getName(folder: String, name: String): String {
         // Case 1: no folder supplied, assume in root bucket
