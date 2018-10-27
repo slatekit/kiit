@@ -148,6 +148,16 @@ object ResultFuncs {
     }
 
     /**
+     * Builds an Failure from an Err component
+     * @param msg : Optional message
+     * @param code : Optional code indicating
+     * @return
+     */
+    fun <T> failure(err:Err): ResultErr<T> {
+        return Failure(err, err.code, err.message)
+    }
+
+    /**
      * Builds an FailureResult with no value, and with code set to BAD_REQUEST
      * @param msg : Optional message
      * @return

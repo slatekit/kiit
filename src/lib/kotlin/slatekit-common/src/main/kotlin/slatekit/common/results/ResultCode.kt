@@ -14,7 +14,25 @@
 package slatekit.common.results
 
 /**
- * minimal subset of http status codes that are general purpose enough for anything
+ * Minimal subset of http status codes to be used as general purpose codes.
+ *
+ * DESIGN: One may think that http status code should have no connection
+ * outside of an Http context. And therefore, the codes used could be
+ * considered an implementation leak. However, consider the following:
+ *
+ * 1. Many of the status code are actual quite general purpose.
+ *    Such as Ok, BadRequest, Unexpected Error, Unauthorized, etc.
+ *
+ * 2. They are purposely designed to be extendable
+ *    So you can for example create custom codes in the 1000+ range
+ *
+ * 3. There is a similarity of existing Java / Kotlin exceptions that
+ *    map quite nicely to status codes. These include:
+ *    Java                     Http
+ *    ArgumentException        Bad_Request
+ *    SecurityException        Unauthorized
+ *    NotImplementedError      NotImplemented
+ *
  */
 
 object ResultCode {
@@ -24,6 +42,7 @@ object ResultCode {
     const val FAILURE = 400
     const val BAD_REQUEST = 400
     const val UNAUTHORIZED = 401
+    const val FORBIDDEN = 403
     const val NOT_FOUND = 404
     const val CONFLICT = 409
     const val DEPRECATED = 426
