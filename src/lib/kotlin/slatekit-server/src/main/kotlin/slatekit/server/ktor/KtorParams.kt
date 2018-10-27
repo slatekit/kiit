@@ -25,32 +25,31 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-
 /**
- * @param req        : The raw request
- * @param enc        : The encryptor
+ * @param req : The raw request
+ * @param enc : The encryptor
  * @param extraParams: Additional parameters from SlateKit.
  *                     These are useful for the middleware rewrite module
  *                     which can rewrite routes add parameters
  */
-data class KtorParams(val body:String,
-                      val req: ApplicationRequest,
-                      val enc: Encryptor?,
-                      val extraParams:MutableMap<String,Any> = mutableMapOf()) : Inputs, InputsUpdateable, JsonSupport {
+data class KtorParams(
+    val body: String,
+    val req: ApplicationRequest,
+    val enc: Encryptor?,
+    val extraParams: MutableMap<String, Any> = mutableMapOf()
+) : Inputs, InputsUpdateable, JsonSupport {
 
     val method = req.httpMethod.value.toLowerCase()
     val hasBody = KtorRequest.isBodyAllowed(method)
     val json = KtorRequest.loadJson(body, req, false)
 
-
     override fun toJson(): JSONObject = KtorRequest.loadJson(body, req, true)
-
 
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = req.headers.names().size
 
-    override val raw:Any = json
+    override val raw: Any = json
     override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
@@ -64,70 +63,56 @@ data class KtorParams(val body:String,
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     override fun containsKey(key: String): Boolean {
         return if (extraParams.containsKey(key)) {
             true
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             true
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             req.queryParameters.contains(key)
-        }
-        else {
+        } else {
             false
         }
     }
 
-
     fun getInternal(key: String): Any? {
-        val value = if (extraParams.containsKey(key)){
+        val value = if (extraParams.containsKey(key)) {
             extraParams[key]
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             json.get(key)
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             req.queryParameters.get(key)
-        }
-        else {
+        } else {
             ""
         }
         return value
     }
 
-
     fun getInternalString(key: String): String {
-        val value =  if (extraParams.containsKey(key)){
+        val value = if (extraParams.containsKey(key)) {
             extraParams[key].toString()
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             json.get(key).toString()
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             req.queryParameters.get(key)
-        }
-        else {
+        } else {
             ""
         }
         return value ?: ""
     }
 
-
     /**
      * This is to support the rewrite middleware which can rewrite
      * requests to other requests ( e.g. routes and parameters )
      */
-    override fun add(key:String, value:Any):Inputs {
-        if(hasBody){
+    override fun add(key: String, value: Any): Inputs {
+        if (hasBody) {
             json.put(key, value)
         } else {
             extraParams.put(key, value)
         }
         return this
     }
-
 
     fun getStringRaw(key: String): String = getInternalString(key).trim()
 }

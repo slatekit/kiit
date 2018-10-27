@@ -16,7 +16,6 @@ package slatekit.server.ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
-import io.ktor.application.log
 import io.ktor.features.CORS
 import io.ktor.http.HttpMethod
 import io.ktor.request.httpMethod
@@ -36,32 +35,30 @@ import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
 
-
 class KtorServer(
-        val config: ServerConfig,
-        val ctx   : Context,
-        val auth  : Auth?,
-        val apis  : List<Api>
+    val config: ServerConfig,
+    val ctx: Context,
+    val auth: Auth?,
+    val apis: List<Api>
 ) : AppMetaSupport {
-
 
     /**
      * initialize with port, prefix for api routes, and all the dependent items
      */
     constructor(
-            port      :Int          = 5000,
-            prefix    :String       = "",
-            info      :Boolean      = true,
-            cors      :Boolean      = false,
-            docs      :Boolean      = false,
-            static    :Boolean      = false,
-            staticDir :String       = "",
-            docKey    :String       = "",
-            apis      :List<Api>,
-            auth      :Auth?        = null,
-            setup     :((Any) -> Unit)? = null,
-            ctx       :Context   = AppContext.simple("slatekit-server")
-        ) :
+        port: Int = 5000,
+        prefix: String = "",
+        info: Boolean = true,
+        cors: Boolean = false,
+        docs: Boolean = false,
+        static: Boolean = false,
+        staticDir: String = "",
+        docKey: String = "",
+        apis: List<Api>,
+        auth: Auth? = null,
+        setup: ((Any) -> Unit)? = null,
+        ctx: Context = AppContext.simple("slatekit-server")
+    ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
     val container = ApiContainer(ctx,
@@ -69,12 +66,11 @@ class KtorServer(
         auth,
         WebProtocol,
         apis,
-        deserializer = {req, enc -> Deserializer(req, enc) },
+        deserializer = { req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,
         docBuilder = ::DocWeb)
 
     override fun appMeta(): AppMeta = ctx.app
-
 
     /**
      * executes the application
@@ -87,22 +83,22 @@ class KtorServer(
                 get("/") {
                     ping(call)
                 }
-                get(config.prefix + "/ping"){
+                get(config.prefix + "/ping") {
                     ping(call)
                 }
-                get(config.prefix + "/*/*/*"){
+                get(config.prefix + "/*/*/*") {
                     exec(call)
                 }
-                post(config.prefix + "/*/*/*"){
+                post(config.prefix + "/*/*/*") {
                     exec(call)
                 }
-                put(config.prefix + "/*/*/*"){
+                put(config.prefix + "/*/*/*") {
                     exec(call)
                 }
-                patch(config.prefix + "/*/*/*"){
+                patch(config.prefix + "/*/*/*") {
                     exec(call)
                 }
-                delete(config.prefix + "/*/*/*"){
+                delete(config.prefix + "/*/*/*") {
                     exec(call)
                 }
             }
@@ -114,13 +110,12 @@ class KtorServer(
         }
 
         // CORS
-        if(config.cors){
+        if (config.cors) {
             server.application.install(CORS)
         }
 
         server.start(wait = true)
     }
-
 
     /**
      * stops the server ( this is not currently accessible on the command line )
@@ -129,16 +124,14 @@ class KtorServer(
         spark.Spark.stop()
     }
 
-
     /**
      * pings the server to only get back the datetime.
      * Used for quickly checking a deployment.
      */
-    suspend fun ping(call:ApplicationCall) {
+    suspend fun ping(call: ApplicationCall) {
         val result = DateTime.now()
         KtorResponse.json(call, Success(result).toResponse())
     }
-
 
     /**
      * handles the core logic of execute the http request.
@@ -146,13 +139,13 @@ class KtorServer(
      * which handles abstracted Requests and dispatches them to
      * Slate Kit "Protocol Independent APIs".
      */
-    suspend fun exec(call:ApplicationCall) {
-        val body = when(call.request.httpMethod){
-            HttpMethod.Post   -> call.receiveText()
-            HttpMethod.Put    -> call.receiveText()
-            HttpMethod.Patch  -> call.receiveText()
+    suspend fun exec(call: ApplicationCall) {
+        val body = when (call.request.httpMethod) {
+            HttpMethod.Post -> call.receiveText()
+            HttpMethod.Put -> call.receiveText()
+            HttpMethod.Patch -> call.receiveText()
             HttpMethod.Delete -> call.receiveText()
-            else              -> ""
+            else -> ""
         }
         val request = KtorRequest.build(ctx, body, call, config)
 
@@ -168,11 +161,10 @@ class KtorServer(
         KtorResponse.result(call, result)
     }
 
-
     /**
      * prints the summary of the arguments
      */
-    fun info(): Unit {
+    fun info() {
         println("===============================================================")
         println("STARTING : ")
         this.appLogStart({ name: String, value: String -> println(name + " = " + value) })

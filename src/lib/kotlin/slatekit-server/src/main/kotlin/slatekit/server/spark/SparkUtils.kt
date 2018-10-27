@@ -20,7 +20,6 @@ class JsonTransformer : ResponseTransformer {
         return ""
     }
 
-
     companion object {
         @JvmStatic
         fun json(): ResponseTransformer {

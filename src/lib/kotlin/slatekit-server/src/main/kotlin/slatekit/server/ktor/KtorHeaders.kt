@@ -24,21 +24,18 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-
 data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : slatekit.common.Meta {
 
-    override val raw:Any = req.headers
+    override val raw: Any = req.headers
     override fun toMap(): Map<String, Any> {
-        val pairs = req.headers.names().map { name -> Pair<String,Any>(name, req.headers.get(name) ?: "") }.toMap()
+        val pairs = req.headers.names().map { name -> Pair<String, Any>(name, req.headers.get(name) ?: "") }.toMap()
         return pairs.toMap()
     }
-
 
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = req.headers.contains(key)
     override fun size(): Int = req.headers.names().size
-
 
     override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
@@ -53,28 +50,23 @@ data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : slate
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     fun getInternal(key: String): Any? {
         return if (containsKey(key)) {
             val value = req.headers[key]
             value?.trim() ?: value
-        }
-        else {
+        } else {
             null
         }
     }
-
 
     fun getInternalString(key: String): String {
         return if (containsKey(key)) {
             val value = req.headers[key]
             value?.trim() ?: ""
-        }
-        else {
+        } else {
             ""
         }
     }
-
 
     fun getStringRaw(key: String): String = getInternalString(key).trim()
 }

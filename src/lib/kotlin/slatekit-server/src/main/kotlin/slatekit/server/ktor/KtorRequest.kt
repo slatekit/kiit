@@ -25,27 +25,21 @@ import slatekit.server.ServerConfig
 import io.ktor.request.*
 import kotlinx.coroutines.experimental.async
 import java.io.*
-import javax.servlet.MultipartConfigElement
-import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
-
-class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : RequestSupport {
-
+class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : RequestSupport {
 
     /**
      * Access to the raw spark request
      */
-    override fun raw():Any? = req
-
+    override fun raw(): Any? = req
 
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getDoc(name:String): Doc {
-        return getFile( name, { stream ->
+    override fun getDoc(name: String): Doc {
+        return getFile(name, { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -59,21 +53,19 @@ class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : Reque
         })
     }
 
-
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
-        //getFileStream(name, callback)
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
+        // getFileStream(name, callback)
         return Doc("", "", ContentTypeText, 0)
     }
 
-
-    suspend fun getFileAsync(name:String, callback:(InputStream) -> Doc):Doc {
+    suspend fun getFileAsync(name: String, callback: (InputStream) -> Doc): Doc {
         val multiPart = call.receiveMultipart()
-        val part = multiPart.readAllParts().find { (it.name ?: "" ) == name }
+        val part = multiPart.readAllParts().find { (it.name ?: "") == name }
         val doc = part?.let {
             val file = it as PartData.FileItem
             val doc = file.streamProvider().use(callback)
@@ -82,16 +74,15 @@ class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : Reque
         return doc
     }
 
-
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getFileStream(name:String, callback:(InputStream) -> Unit ) {
+    override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
         async {
             val multiPart = call.receiveMultipart()
-            val part = multiPart.readAllParts().find { (it.name ?: "" ) == name }
+            val part = multiPart.readAllParts().find { (it.name ?: "") == name }
             part?.let {
                 val file = it as PartData.FileItem
                 file.streamProvider().use(callback)
@@ -99,17 +90,16 @@ class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : Reque
         }
     }
 
-
     companion object {
 
-        fun build(ctx: Context, body:String, call: ApplicationCall, conf: ServerConfig): slatekit.common.Request {
+        fun build(ctx: Context, body: String, call: ApplicationCall, conf: ServerConfig): slatekit.common.Request {
             val req = call.request
             val httpUri = req.uri
             val rawUri = if (httpUri.startsWith(conf.prefix)) httpUri.substring(conf.prefix.length) else httpUri
 
             // app/users/recent?count=20
             // Only get up until "?"
-            val uri = if(rawUri.contains("?")) {
+            val uri = if (rawUri.contains("?")) {
                 rawUri.substring(0, rawUri.indexOf("?"))
             } else {
                 rawUri
@@ -137,16 +127,15 @@ class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : Reque
                     verb = method,
                     meta = KtorHeaders(req, ctx.enc),
                     data = KtorParams(body, req, ctx.enc),
-                    raw  = KtorRequest(call, req),
+                    raw = KtorRequest(call, req),
                     tag = Random.stringGuid()
             )
         }
 
-
         /**
          * Load json from the post/put body using json-simple
          */
-        fun loadJson(body:String, req: ApplicationRequest, addQueryParams:Boolean = false): JSONObject {
+        fun loadJson(body: String, req: ApplicationRequest, addQueryParams: Boolean = false): JSONObject {
             val method = req.httpMethod.value.toLowerCase()
             val isMultiPart = req.isMultipart()
             val isBodyAllowed = isBodyAllowed(method)
@@ -156,21 +145,18 @@ class KtorRequest(val call:ApplicationCall, val req: ApplicationRequest) : Reque
                 root as JSONObject
 
                 // Add query params
-                if(addQueryParams && !req.queryParameters.isEmpty()){
+                if (addQueryParams && !req.queryParameters.isEmpty()) {
                     req.queryParameters.names().forEach { key ->
                         root.put(key, req.queryParameters.get(key))
                     }
                 }
                 root
-            }
-            else {
+            } else {
                 JSONObject()
             }
             return json
         }
 
-
-        fun isBodyAllowed(method:String):Boolean = method == "put" || method == "post" || method == "delete"
+        fun isBodyAllowed(method: String): Boolean = method == "put" || method == "post" || method == "delete"
     }
-
 }
