@@ -17,7 +17,6 @@ import slatekit.common.Context
 import slatekit.common.Ignore
 import slatekit.common.Request
 
-
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events
  * of an API call, without any modification to the life-cycle/flow.
@@ -29,13 +28,13 @@ interface Before : Middleware {
 
     /**
      * hook for before the api call is made
-     * @param ctx   : The application context
-     * @param req   : The request
+     * @param ctx : The application context
+     * @param req : The request
      * @param target: The target of the request
      * @param source: The originating source for this hook ( e.g. ApiContainer )
-     * @param args  : Additional arguments supplied by the source
+     * @param args : Additional arguments supplied by the source
      */
     @Ignore
-    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?)  {
+    fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
     }
 }

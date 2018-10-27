@@ -10,12 +10,11 @@ interface ApiQueueSupport {
 
     fun queues(): List<QueueSource>
 
-
     /**
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
      */
-    fun sendToQueue(req: String, id:String, refId:String, task:String) {
+    fun sendToQueue(req: String, id: String, refId: String, task: String) {
         val queues = this.queues()
         val rand = java.util.Random()
         val pos = rand.nextInt(queues.size)
@@ -27,25 +26,22 @@ interface ApiQueueSupport {
         ))
     }
 
-
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
-    fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : ResultMsg<String>  {
+    fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
         // Coming in as http request and mode is queued ?
-        return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
+        return if (req.source != ApiConstants.SourceQueue && target.tag == "queued") {
             sendToQueue(ctx, req, target, source, args)
-        }
-        else {
+        } else {
             Failure("Continue processing")
         }
     }
 
-
     /**
      * This can be overridden to support custom call-modes
      */
-    fun sendToQueue(ctx:Context, req:Request, target:Action, source:Any, args:Map<String,Any>?): ResultMsg<String> {
+    fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
         // Convert from web request to Queued request
         val queuedReq = Requests.toJsonAsQueued(req)
         sendToQueue(queuedReq, Random.guid(), req.tag, "api.action.queued")

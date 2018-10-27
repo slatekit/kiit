@@ -9,21 +9,21 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-
 /**
  * Used to represent a request that originates from a json file.
  * This is useful for automation purposes and replaying an api action from a file source.
- * @param req        : The raw request
- * @param enc        : The encryptor
+ * @param req : The raw request
+ * @param enc : The encryptor
  * @param extraParams: Additional parameters from SlateKit.
  *                     These are useful for the middleware rewrite module
  *                     which can rewrite routes add parameters
  */
-data class Meta(  val rawSource: Any,
-                  val json: JSONObject,
-                  val enc: Encryptor?
-                ) : slatekit.common.Meta, JsonSupport {
-    override val raw:Any = json
+data class Meta(
+    val rawSource: Any,
+    val json: JSONObject,
+    val enc: Encryptor?
+) : slatekit.common.Meta, JsonSupport {
+    override val raw: Any = json
     override fun toJson(): JSONObject = json
 
     override fun toMap(): Map<String, Any> {
@@ -49,17 +49,13 @@ data class Meta(  val rawSource: Any,
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     fun getInternalString(key: String): String {
-        return if(containsKey(key)) {
+        return if (containsKey(key)) {
             json.get(key) as String
-        }
-        else {
+        } else {
             ""
         }
     }
 
-
     fun getStringRaw(key: String): String = getInternalString(key).trim()
-
 }

@@ -20,7 +20,7 @@ import slatekit.common.log.Logger
 import slatekit.common.results.ResultFuncs
 import slatekit.common.toResultEx
 
-class Errors(val logger:Logger) {
+class Errors(val logger: Logger) {
 
     open fun handleError(
         ctx: Context,
@@ -47,13 +47,12 @@ class Errors(val logger:Logger) {
         }
     }
 
-
     /**
      * global handler for an unexpected error ( for derived classes to override )
      *
-     * @param ctx    : the application context
-     * @param req    : the request
-     * @param ex     : the exception
+     * @param ctx : the application context
+     * @param req : the request
+     * @param ex : the exception
      * @return
      */
     fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {

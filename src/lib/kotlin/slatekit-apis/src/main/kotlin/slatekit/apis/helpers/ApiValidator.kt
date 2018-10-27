@@ -19,42 +19,41 @@ import slatekit.common.*
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.success
 
-
 object ApiValidator {
 
     /**
      * Checks the "route" ( area.api.action ) is valid.
      */
-    fun check(req: Request, fetcher: (Request) -> ResultMsg<ApiRef>) : ResultMsg<ApiRef> {
+    fun check(req: Request, fetcher: (Request) -> ResultMsg<ApiRef>): ResultMsg<ApiRef> {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
         val totalParts = req.parts.size
         return if (totalParts < 2) {
            badRequest(req.action + ": invalid call")
-        }
-        else {
+        } else {
             // Check 2: Not found ?
             val check = fetcher(req)
             check
         }
     }
 
-
     /**
      * whether or not the api call represented by the area.api.action exists. e.g. "app.users.invite"
      * and the parameters are valid.
      *
-     * @param req       : the command input
+     * @param req : the command input
      * @return
      */
-    fun validateCall(req: Request,
-                     fetcher: (Request) -> ResultMsg<ApiRef>,
-                     allowSingleDefaultParam: Boolean = false): ResultMsg<ApiRef> {
+    fun validateCall(
+        req: Request,
+        fetcher: (Request) -> ResultMsg<ApiRef>,
+        allowSingleDefaultParam: Boolean = false
+    ): ResultMsg<ApiRef> {
         val fullName = req.fullName
         val args = req.data
         val apiRefCheck = check(req, fetcher)
 
-        return when(apiRefCheck) {
+        return when (apiRefCheck) {
             is Failure -> badRequest(msg = "bad request : $fullName: inputs not supplied")
             is Success -> {
                 val apiRef = apiRefCheck.data
@@ -85,7 +84,6 @@ object ApiValidator {
         }
     }
 
-
     private fun validateArgs(action: Action, args: Inputs): ResultMsg<Boolean> {
         var error = ": inputs missing or invalid "
         var totalErrors = 0
@@ -105,8 +103,7 @@ object ApiValidator {
         return if (totalErrors > 0) {
             error = "$error )"
             badRequest(msg = "bad request: action " + action.name + error)
-        }
-        else {
+        } else {
             Success(true)
         }
     }

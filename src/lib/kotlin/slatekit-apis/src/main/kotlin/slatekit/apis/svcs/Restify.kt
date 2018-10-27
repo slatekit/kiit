@@ -6,14 +6,12 @@ import slatekit.common.Context
 import slatekit.common.Request
 import slatekit.common.validations.ValidationFuncs
 
-
-class Restify : Rewriter()
-{
-    private val verbGet    = "get"
-    private val verbPost   = "post"
-    private val verbPut    = "put"
+class Restify : Rewriter() {
+    private val verbGet = "get"
+    private val verbPost = "post"
+    private val verbPut = "put"
     private val verbDelete = "delete"
-    private val verbPatch  = "patch"
+    private val verbPatch = "patch"
 
     /**
      * Rewrites restful routes and maps them to SlateKit API routes
@@ -23,28 +21,21 @@ class Restify : Rewriter()
         // Get the first and second part
         val verb = req.verb.toLowerCase()
         val container = source as ApiContainer
-        return if(verb == verbGet && req.parts[2] == "") {
+        return if (verb == verbGet && req.parts[2] == "") {
             rewriteAction(req, container.rename("getAll"))
-        }
-        else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])){
+        } else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])) {
             rewriteActionWithParam(req, container.rename("getById"), "id", req.parts[2])
-        }
-        else if(verb == verbPost && req.parts[2] == "") {
+        } else if (verb == verbPost && req.parts[2] == "") {
             rewriteAction(req, container.rename("create"))
-        }
-        else if(verb == verbPut && req.parts[2] == "") {
+        } else if (verb == verbPut && req.parts[2] == "") {
             rewriteAction(req, container.rename("update"))
-        }
-        else if(verb == verbPatch && ValidationFuncs.isNumeric(req.parts[2])) {
+        } else if (verb == verbPatch && ValidationFuncs.isNumeric(req.parts[2])) {
             rewriteActionWithParam(req, container.rename("patch"), "id", req.parts[2])
-        }
-        else if(verb == verbDelete && req.parts[2] == "") {
+        } else if (verb == verbDelete && req.parts[2] == "") {
             rewriteAction(req, container.rename(verbDelete))
-        }
-        else if(verb == verbDelete && ValidationFuncs.isNumeric(req.parts[2])) {
+        } else if (verb == verbDelete && ValidationFuncs.isNumeric(req.parts[2])) {
             rewriteActionWithParam(req, container.rename("deleteById"), "id", req.parts[2])
-        }
-        else {
+        } else {
             req
         }
     }

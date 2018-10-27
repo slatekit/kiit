@@ -12,14 +12,12 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.security
 
-
 object AuthModes {
 
     /**
      * To represent a token based authentication where there is a unique token per user
      */
     const val token = "app-roles"
-
 
     /**
      * To represent an api-key based authentication where many clients/users can share an api key

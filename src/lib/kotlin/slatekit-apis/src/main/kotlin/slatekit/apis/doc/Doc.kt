@@ -13,7 +13,6 @@
 
 package slatekit.apis.doc
 
-
 import slatekit.apis.ApiArg
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
@@ -26,62 +25,52 @@ import slatekit.meta.Serialization
 import java.lang.Math.abs
 import kotlin.reflect.KParameter
 
-
 abstract class Doc : ApiVisit {
 
-    open protected val writer: ConsoleWrites = ConsoleWriter(ConsoleSettings())
-    override val docSettings= DocSettings()
+    protected open val writer: ConsoleWrites = ConsoleWriter(ConsoleSettings())
+    override val docSettings = DocSettings()
     open val pathSeparator = "."
     open val helpSuffix = "?"
     open val helpSeparator = " "
 
-
-    fun lineBreak(): Unit {
+    fun lineBreak() {
         writer.text("---------------------------------------------------------------", endLine = true)
     }
 
-
-    override fun onApiError(msg: String): Unit {
+    override fun onApiError(msg: String) {
         writer.error(msg)
     }
 
-
-    override fun onVisitSeparator(): Unit {
+    override fun onVisitSeparator() {
         writer.line()
     }
 
-
-    override fun onAreasBegin(): Unit {
+    override fun onAreasBegin() {
         lineBreak()
         writer.title("supported areas: ", endLine = true)
         writer.line()
     }
 
-
-    override fun onAreasEnd(): Unit {
+    override fun onAreasEnd() {
         writer.text("use {area}$helpSeparator$helpSuffix to list all apis in the area. ")
         writer.url("e.g. sys ?", endLine = true)
         lineBreak()
     }
 
-
-    override fun onAreaBegin(area: String): Unit {
+    override fun onAreaBegin(area: String) {
         writer.highlight(area, endLine = true)
     }
 
-
-    override fun onAreaEnd(area: String): Unit {
+    override fun onAreaEnd(area: String) {
     }
 
-
-    override fun onApisBegin(area: String): Unit {
+    override fun onApisBegin(area: String) {
         lineBreak()
         writer.title("supported apis: ", endLine = true)
         writer.line()
     }
 
-
-    override fun onApisEnd(area: String, exampleApi: String?): Unit {
+    override fun onApisEnd(area: String, exampleApi: String?) {
         val eg = exampleApi ?: "sys.models"
         writer.line()
         writer.text("use {area}$pathSeparator{api}$helpSeparator$helpSuffix to list all actions on an api. ")
@@ -89,27 +78,23 @@ abstract class Doc : ApiVisit {
         lineBreak()
     }
 
-
-    override fun onApiEnd(api: Api): Unit {
+    override fun onApiEnd(api: Api) {
         writer.line()
     }
 
-
-    override fun onArgEnd(arg: ApiArg): Unit {
+    override fun onArgEnd(arg: ApiArg) {
         writer.line()
     }
 
-
-    override fun onApiActionSyntax(action: Action?): Unit {
-        val exampleCli = action?.let{ it -> buildPath(it, null) } ?: "app.movies.last"
-        val exampleWeb = action?.let{ it -> buildPath(it, "/") }  ?: "app/movies/last"
+    override fun onApiActionSyntax(action: Action?) {
+        val exampleCli = action?.let { it -> buildPath(it, null) } ?: "app.movies.last"
+        val exampleWeb = action?.let { it -> buildPath(it, "/") } ?: "app/movies/last"
         writer.line()
         writer.text("use {area}$pathSeparator{api}$pathSeparator{action}$helpSeparator$helpSuffix to list inputs for an action. ")
         writer.url("cli: $exampleCli ?", endLine = true)
         writer.url("web: $exampleWeb ?", endLine = true)
         lineBreak()
     }
-
 
     protected fun getFormattedText(text: String, max: Int): String {
         return if (text.length == max)
@@ -120,15 +105,13 @@ abstract class Doc : ApiVisit {
         }
     }
 
-
-    override fun onApiBegin(api: Api, options: ApiVisitOptions?): Unit {
+    override fun onApiBegin(api: Api, options: ApiVisitOptions?) {
         writer.highlight(getFormattedText(api.name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
     }
 
-
-    override fun onApiBeginDetail(api: Api, options: ApiVisitOptions?): Unit {
+    override fun onApiBeginDetail(api: Api, options: ApiVisitOptions?) {
 
         writer.subTitle("AREA   : ", false)
         writer.highlight(api.area, true)
@@ -139,16 +122,14 @@ abstract class Doc : ApiVisit {
         writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
     }
 
-
-    override fun onApiActionBegin(api:Api, action: Action, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBegin(api: Api, action: Action, name: String, options: ApiVisitOptions?) {
         writer.tab(1)
         writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
     }
 
-
-    override fun onApiActionBeginDetail(api:Api, action: Action, name: String, options: ApiVisitOptions?): Unit {
+    override fun onApiActionBeginDetail(api: Api, action: Action, name: String, options: ApiVisitOptions?) {
         writer.subTitle("ACTION : ", false)
         writer.highlight(name, endLine = false)
         writer.text(" ", endLine = false)
@@ -157,22 +138,24 @@ abstract class Doc : ApiVisit {
         writer.highlight(buildPath(api.area, api.name, action.name, null), true)
     }
 
-
-    override fun onApiActionEnd(action: Action, name: String): Unit {
+    override fun onApiActionEnd(action: Action, name: String) {
         writer.line()
     }
 
-
-    override fun onApiActionExample(api: Api, actionName: String, action: Action,
-                                    args: List<KParameter>): Unit {
+    override fun onApiActionExample(
+        api: Api,
+        actionName: String,
+        action: Action,
+        args: List<KParameter>
+    ) {
         writer.line()
 
         val exampleCli = buildPath(api.area, api.name, actionName, null)
-        val exampleWeb = buildPath(api.area, api.name, actionName, "/" )
-        val paramsCli  = args.fold("", { s, arg ->
+        val exampleWeb = buildPath(api.area, api.name, actionName, "/")
+        val paramsCli = args.fold("", { s, arg ->
             s + "-" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "'a bc'") + " "
         })
-        val paramsQuery  = args.fold("", { s, arg ->
+        val paramsQuery = args.fold("", { s, arg ->
             s + "&" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "a%20bc")
         })
         val serializer = Serialization.sampler()
@@ -185,7 +168,7 @@ abstract class Doc : ApiVisit {
         writer.url("2. web/url  : $exampleWeb ", endLine = false)
         writer.text(paramsQuery, true)
 
-        if(!actionName.startsWith("get")) {
+        if (!actionName.startsWith("get")) {
             writer.tab(1)
             writer.url("3. web/json : $exampleWeb ", endLine = false)
             writer.text(json, true)
@@ -194,26 +177,23 @@ abstract class Doc : ApiVisit {
         writer.line()
     }
 
-
-    override fun onArgsBegin(action: Action): Unit {
+    override fun onArgsBegin(action: Action) {
         writer.text("Inputs : ", true)
     }
 
-
-    override fun onArgBegin(arg: ApiArg, options: ApiVisitOptions?): Unit {
+    override fun onArgBegin(arg: ApiArg, options: ApiVisitOptions?) {
         onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaultVal, arg.eg, options)
     }
 
-
     override fun onArgBegin(
-            name: String,
-            desc: String,
-            required: Boolean,
-            type: String,
-            defaultVal: String,
-            eg: String,
-            options: ApiVisitOptions?
-    ): Unit {
+        name: String,
+        desc: String,
+        required: Boolean,
+        type: String,
+        defaultVal: String,
+        eg: String,
+        options: ApiVisitOptions?
+    ) {
         writer.line()
         writer.tab(2)
 
@@ -232,20 +212,17 @@ abstract class Doc : ApiVisit {
         if (required) {
             writer.important(txt, endLine = false)
             writer.text("required : " + type, endLine = false)
-        }
-        else {
+        } else {
             writer.text(txt, endLine = false)
             writer.text("optional : " + type, endLine = false)
         }
     }
 
-
-    open fun buildPath(action: Action, sep:String? = null) : String {
+    open fun buildPath(action: Action, sep: String? = null): String {
         return buildPath("", "", action.name, sep)
     }
 
-
-    open fun buildPath(area:String, api:String, action:String, sep:String? = null) : String {
+    open fun buildPath(area: String, api: String, action: String, sep: String? = null): String {
         val separator = sep ?: pathSeparator
         return area + separator + api + separator + action
     }

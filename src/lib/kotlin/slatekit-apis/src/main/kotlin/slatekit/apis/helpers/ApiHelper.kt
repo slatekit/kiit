@@ -13,7 +13,6 @@
 
 package slatekit.apis.helpers
 
-
 import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
@@ -34,7 +33,6 @@ object ApiHelper {
             "DateTime" to DateTime.now()
     )
 
-
     /**
      * String match factoring in the wildcard "*"
      */
@@ -44,7 +42,6 @@ object ApiHelper {
         else
             actual == expected
     }
-
 
     /**
      * Builds arguments supplied into the Inputs class which
@@ -58,13 +55,14 @@ object ApiHelper {
         return args
     }
 
-
     /**
      * builds the request
      */
-    fun buildCliRequest(path: String,
-                        inputs: List<Pair<String, Any>>?,
-                        headers: List<Pair<String, Any>>?): Request {
+    fun buildCliRequest(
+        path: String,
+        inputs: List<Pair<String, Any>>?,
+        headers: List<Pair<String, Any>>?
+    ): Request {
 
         val tokens = path.split('.').toList()
         val args = buildArgs(inputs)
@@ -73,7 +71,6 @@ object ApiHelper {
                 null, "", "", ApiConstants.Version, DateTime.now())
         return apiCmd
     }
-
 
     /**
      *  Checks the action and api to ensure the current request (cmd) is authorizated to
@@ -95,41 +92,36 @@ object ApiHelper {
         // CASE 3: No auth and action requires roles!
         else if (noAuth) {
             unAuthorized(msg = "Unable to authorize, authorization provider not set")
-        }
-        else {
+        } else {
             // auth-mode, action roles, api roles
             auth?.isAuthorized(cmd, apiRef.api.auth, apiRef.action.roles, apiRef.api.roles)
                     ?: unAuthorized(msg = "Unable to authorize, authorization provider not set")
         }
     }
 
-
-    fun isActionNotAuthed(actionRoles:String):Boolean {
+    fun isActionNotAuthed(actionRoles: String): Boolean {
         val isUnknown = actionRoles == Roles.guest
         val isEmpty = actionRoles.isNullOrEmpty() || actionRoles == Roles.none
         return isUnknown || isEmpty
     }
 
-
-    fun isApiNotAuthed(actionRoles:String, apiRoles:String): Boolean {
+    fun isApiNotAuthed(actionRoles: String, apiRoles: String): Boolean {
         val isParent = actionRoles == Roles.parent
         val isUnknown = apiRoles == Roles.guest
         val isNone = apiRoles.isNullOrEmpty() || apiRoles == Roles.none
         return isParent && (isUnknown || isNone)
     }
 
-
     fun isWebProtocol(primaryValue: String, parentValue: String): Boolean {
         val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
-        return when(finalValue) {
+        return when (finalValue) {
             ApiConstants.SourceAny -> true
             ApiConstants.SourceWeb -> true
-            else                   -> false
+            else -> false
         }
     }
 
-
-    fun fillArgs(deserializer: Deserializer, apiRef:ApiRef, cmd: Request): Array<Any?> {
+    fun fillArgs(deserializer: Deserializer, apiRef: ApiRef, cmd: Request): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
         return if (!action.hasArgs)
@@ -139,12 +131,10 @@ object ApiHelper {
             val argType = action.paramsUser[0].type.toString()
             val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
-        }
-        else {
+        } else {
             deserializer.deserialize(action.params)
         }
     }
-
 
     /**
      * copies the annotation taking into account the overrides
@@ -157,20 +147,19 @@ object ApiHelper {
      */
     fun buildApiInfo(ano: Api, reg: Api): Api {
 
-        val finalRoles    = reg.roles.nonEmptyOrDefault(ano.roles)
-        val finalAuth     = reg.auth.nonEmptyOrDefault(ano.auth)
+        val finalRoles = reg.roles.nonEmptyOrDefault(ano.roles)
+        val finalAuth = reg.auth.nonEmptyOrDefault(ano.auth)
         val finalProtocol = reg.protocol.nonEmptyOrDefault(ano.protocol)
         return reg.copy(
-                area     = ano.area,
-                name     = ano.name,
-                desc     = ano.desc,
-                roles    = finalRoles,
-                auth     = finalAuth,
-                verb     = ano.verb,
+                area = ano.area,
+                name = ano.name,
+                desc = ano.desc,
+                roles = finalRoles,
+                auth = finalAuth,
+                verb = ano.verb,
                 protocol = finalProtocol
         )
     }
-
 
     /**
      * copies the annotation taking into account the overrides
@@ -184,18 +173,18 @@ object ApiHelper {
     fun buildApiInfo(reg: Api): Api {
 
         val name = reg.cls.simpleName!!.removeSuffix("Controller").removeSuffix("Api").removeSuffix("API")
-        val finalArea     = reg.area.nonEmptyOrDefault("")
-        val finalName     = reg.name.nonEmptyOrDefault(name)
-        val finalRoles    = reg.roles.nonEmptyOrDefault("?")
-        val finalAuth     = reg.auth.nonEmptyOrDefault(ApiConstants.AuthModeAppKey)
+        val finalArea = reg.area.nonEmptyOrDefault("")
+        val finalName = reg.name.nonEmptyOrDefault(name)
+        val finalRoles = reg.roles.nonEmptyOrDefault("?")
+        val finalAuth = reg.auth.nonEmptyOrDefault(ApiConstants.AuthModeAppKey)
         val finalProtocol = reg.protocol.nonEmptyOrDefault("*")
-        val finalVerb     = reg.verb.nonEmptyOrDefault("*")
+        val finalVerb = reg.verb.nonEmptyOrDefault("*")
         return reg.copy(
-                area     = finalArea,
-                name     = finalName,
-                roles    = finalRoles,
-                auth     = finalAuth,
-                verb     = finalVerb,
+                area = finalArea,
+                name = finalName,
+                roles = finalRoles,
+                auth = finalAuth,
+                verb = finalVerb,
                 protocol = finalProtocol
         )
     }

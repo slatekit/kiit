@@ -16,10 +16,7 @@ package slatekit.apis.support
 import slatekit.apis.middleware.Filter
 import slatekit.apis.middleware.Hook
 
-
 typealias Error = slatekit.apis.middleware.Error
-
-
 
 /**
  * Base class for an Api with all the middleware ( hooks, filters, errors )

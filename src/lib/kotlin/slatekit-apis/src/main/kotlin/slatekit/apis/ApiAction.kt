@@ -21,18 +21,18 @@ package slatekit.apis
  *  e.g. area/api/action
  *       app/user/invite
  *
- * @param name     : the name of the action, leave empty to use the method name this is applied to
- * @param desc     : the description of the action
- * @param roles    : the roles allowed ( use @parent to refer to parent Api anntoation roles )
- * @param verb     : the verb ( "get", "post", "cli", "*" ) allowed.
+ * @param name : the name of the action, leave empty to use the method name this is applied to
+ * @param desc : the description of the action
+ * @param roles : the roles allowed ( use @parent to refer to parent Api anntoation roles )
+ * @param verb : the verb ( "get", "post", "cli", "*" ) allowed.
  * @param protocol : the protocol ( "web, "cli", "*" ) required to access this action
  */
 @Target(AnnotationTarget.FUNCTION)
 annotation class ApiAction(
-                            val name     : String = "" ,
-                            val desc     : String = "" ,
-                            val roles    : String = "" ,
-                            val verb     : String = "" ,
-                            val protocol : String = "*",
-                            val tag      : String = ""
-                          )
+    val name: String = "",
+    val desc: String = "",
+    val roles: String = "",
+    val verb: String = "",
+    val protocol: String = "*",
+    val tag: String = ""
+)

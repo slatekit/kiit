@@ -13,8 +13,6 @@
 
 package slatekit.apis.middleware
 
-
-
 /**
  * Base trait for the 3 different types of middle ware ( hooks, filters, controls )
  * 1. hooks   : for pre/post execution of api actions         ( can not modify the execution    )

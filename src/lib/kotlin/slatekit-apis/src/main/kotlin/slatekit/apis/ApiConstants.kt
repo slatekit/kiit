@@ -37,4 +37,3 @@ object ApiConstants {
     const val AuthModeAppRole = "app-roles"
     const val AuthModeKeyRole = "key-roles"
 }
-

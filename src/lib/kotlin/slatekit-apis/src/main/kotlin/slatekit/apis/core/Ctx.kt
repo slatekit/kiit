@@ -17,4 +17,4 @@ import slatekit.apis.ApiRef
 import slatekit.common.Context
 import slatekit.common.Request
 
-data class Ctx(val container:ApiContainer, val context: Context, val req: Request, val apiRef:ApiRef)
+data class Ctx(val container: ApiContainer, val context: Context, val req: Request, val apiRef: ApiRef)

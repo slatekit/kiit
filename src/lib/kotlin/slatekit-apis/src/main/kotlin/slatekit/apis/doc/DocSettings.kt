@@ -14,8 +14,8 @@
 package slatekit.apis.doc
 
 data class DocSettings(
-                          val maxLengthApi     :Int     = 0    ,
-                          val maxLengthAction  :Int     = 0    ,
-                          val maxLengthArg     :Int     = 0    ,
-                          val enableDetailMode :Boolean = false
-                        )
+    val maxLengthApi: Int = 0,
+    val maxLengthAction: Int = 0,
+    val maxLengthArg: Int = 0,
+    val enableDetailMode: Boolean = false
+)

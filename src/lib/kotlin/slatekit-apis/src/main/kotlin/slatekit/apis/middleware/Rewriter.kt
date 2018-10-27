@@ -3,8 +3,6 @@ package slatekit.apis.middleware
 import slatekit.common.Context
 import slatekit.common.InputsUpdateable
 import slatekit.common.Request
-import slatekit.common.info.About
-
 
 /**
  * A "Rewriter" based middle-ware allows allows for rewriting the API path/call
@@ -12,20 +10,18 @@ import slatekit.common.info.About
  */
 open class Rewriter : Middleware {
 
-
     /**
      * Rewrites the calls and returns a new request
-     * @param ctx   : The application context
-     * @param req   : The request
+     * @param ctx : The application context
+     * @param req : The request
      * @param source: The originating source for this hook ( e.g. ApiContainer )
-     * @param args  : Additional arguments supplied by the source
+     * @param args : Additional arguments supplied by the source
      */
     open fun rewrite(ctx: Context, req: Request, source: Any, args: Map<String, Any>): Request {
         return req
     }
 
-
-    fun rewriteAction(req: Request, newAction:String, format:String? = null): Request {
+    fun rewriteAction(req: Request, newAction: String, format: String? = null): Request {
         // Get the first and second part
         val first = req.parts[0]
         val second = req.parts[1]
@@ -36,8 +32,7 @@ open class Rewriter : Middleware {
         )
     }
 
-
-    fun rewriteActionWithParam(req: Request, newAction:String, key:String, value:String): Request {
+    fun rewriteActionWithParam(req: Request, newAction: String, key: String, value: String): Request {
         // Get the first and second part
         val first = req.parts[0]
         val second = req.parts[1]

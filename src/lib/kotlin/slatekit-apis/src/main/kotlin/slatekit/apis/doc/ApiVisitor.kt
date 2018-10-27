@@ -16,13 +16,12 @@ package slatekit.apis.doc
 import slatekit.apis.core.*
 import slatekit.meta.KTypes
 
-
-class ApiVisitor(val routes:Routes) {
+class ApiVisitor(val routes: Routes) {
 
     /**
      * Displays all the areas in the API container.
      */
-    fun visitAreas(visitor: ApiVisit): Unit {
+    fun visitAreas(visitor: ApiVisit) {
         visitor.onAreasBegin()
         routes.areas.items.forEach { area ->
             visitor.onAreaBegin(area.name)
@@ -31,15 +30,13 @@ class ApiVisitor(val routes:Routes) {
         visitor.onAreasEnd()
     }
 
-
     /**
      * Displays all the APIs in the areas supplied.
      */
-    fun visitApis(area: String, visitor: ApiVisit): Unit {
+    fun visitApis(area: String, visitor: ApiVisit) {
         if (!routes.contains(area)) {
             visitor.onApiError("Area : $area not found")
-        }
-        else {
+        } else {
             val apis = routes.areas.get(area)?.apis ?: Lookup<Api>(listOf(), { api -> api.name })
             if (apis.size > 0) {
                 val maxLength = apis.items.maxBy { it.name.length }?.name?.length ?: 10
@@ -59,15 +56,14 @@ class ApiVisitor(val routes:Routes) {
         }
     }
 
-
-    fun visitActions(area:String, name:String, visitor: ApiVisit) {
-        if(!routes.contains(area, name)) {
+    fun visitActions(area: String, name: String, visitor: ApiVisit) {
+        if (!routes.contains(area, name)) {
             visitor.onApiError("API not found for $area.$name")
         }
         val api = routes.api(area, name)!!
         val actions = api.actions
         val first: Action? = actions.items.firstOrNull()
-        first?.let{ visitor.onApiBeginDetail(api) }
+        first?.let { visitor.onApiBeginDetail(api) }
         if (actions.size > 0) {
                 visitor.onVisitSeparator()
                 val sortedActions = actions.items.sortedBy { s -> s.name }
@@ -80,8 +76,7 @@ class ApiVisitor(val routes:Routes) {
         visitor.onApiActionSyntax(first)
     }
 
-
-    fun visitAction(api:Api, action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?): Unit {
+    fun visitAction(api: Api, action: Action, visitor: ApiVisit, detailMode: Boolean = true, options: ApiVisitOptions?) {
         // action
         visitor.onApiActionBeginDetail(api, action, action.name, options)
 
@@ -92,8 +87,7 @@ class ApiVisitor(val routes:Routes) {
         visitor.onApiActionEnd(action, action.name)
     }
 
-
-    fun visitArgs(info: Action, visitor: ApiVisit): Unit {
+    fun visitArgs(info: Action, visitor: ApiVisit) {
         visitor.onArgsBegin(info)
         if (info.hasArgs) {
             val names = info.paramsUser.map { item -> item.name }.filterNotNull()

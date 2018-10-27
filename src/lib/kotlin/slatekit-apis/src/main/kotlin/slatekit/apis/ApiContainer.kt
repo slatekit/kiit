@@ -1,6 +1,5 @@
 package slatekit.apis
 
-
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
 import slatekit.apis.svcs.Format
@@ -30,15 +29,15 @@ import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
- * @param ctx      :
- * @param allowIO  :
- * @param auth     :
- * @param protocol :
- * @param apis     :
- * @param errors   :
- * @param hooks    :
- * @param filters  :
- * @param controls :
+ * @param ctx: 
+ * @param allowIO: 
+ * @param auth: 
+ * @param protocol: 
+ * @param apis: 
+ * @param errors: 
+ * @param hooks: 
+ * @param filters: 
+ * @param controls: 
  */
 open class ApiContainer(
     val ctx: Context,
@@ -60,53 +59,42 @@ open class ApiContainer(
      */
     val routes = Routes(ApiLoader.loadAll(apis, namer), namer)
 
-
     /**
      * Load all global middleware components: Rewriters, Filters, Trackers, Error handlers
      */
-    val rewrites = middleware?.filter { it is Rewriter }?.map { it as Rewriter }?: listOf()
-    val filters  = middleware?.filter { it is Filter   }?.map { it as Filter   }?: listOf()
-    val tracker  = middleware?.filter { it is Tracked  }?.map { it as Tracked  }?.firstOrNull()
-    val errs     = middleware?.filter { it is Error    }?.map { it as Error    }?.firstOrNull()
-
+    val rewrites = middleware?.filter { it is Rewriter }?.map { it as Rewriter } ?: listOf()
+    val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
+    val tracker = middleware?.filter { it is Tracked }?.map { it as Tracked }?.firstOrNull()
+    val errs = middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
 
     /**
      * The settings for the api ( limited for now )
      */
-    val settings:ApiSettings by lazy { ApiSettings() }
-
+    val settings: ApiSettings by lazy { ApiSettings() }
 
     /**
      * The help class to handle help on an area, api, or action
      */
-    val help:Help by lazy { Help(this, routes, docBuilder) }
-
+    val help: Help by lazy { Help(this, routes, docBuilder) }
 
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
     private val _validator = Validation(this)
 
-
     private val formatter = Format()
-
 
     private val emptyArgs = mapOf<String, Any>()
 
-
     private val logger: Logger = ctx.logs.getLogger("api")
-
 
     val errorHandler: Errors = Errors(logger)
 
-
     fun rename(text: String): String = namer?.rename(text) ?: text
 
-
-    fun setApiContainerHost()  {
+    fun setApiContainerHost() {
         routes.visitApis({ _, api -> ApiContainer.setApiHost(api.singleton, this) })
     }
-
 
     /**
      * validates the request by checking for the api/action, and ensuring inputs are valid.
@@ -118,7 +106,6 @@ open class ApiContainer(
         return ApiValidator.validateCall(request, { req -> get(req) })
     }
 
-
     /**
      * gets the api info associated with the request
      * @param cmd
@@ -127,7 +114,6 @@ open class ApiContainer(
     fun get(cmd: Request): ResultMsg<ApiRef> {
         return getApi(cmd.area, cmd.name, cmd.action)
     }
-
 
     fun sample(cmd: Request, path: File): ResultMsg<String> {
         val action = get(cmd)
@@ -145,7 +131,6 @@ open class ApiContainer(
         return success("sample call written to : ${path.absolutePath}")
     }
 
-
     /**
      * gets the api info associated with the request
      * @param cmd
@@ -162,7 +147,6 @@ open class ApiContainer(
         }
     }
 
-
     /**
      * calls the api/action associated with the request
      * @param req
@@ -171,7 +155,6 @@ open class ApiContainer(
     fun call(req: Request): Response<Any> {
         return callAsResult(req).toResponse()
     }
-
 
     /**
      * calls the api/action associated with the request
@@ -189,7 +172,6 @@ open class ApiContainer(
         return result
     }
 
-
     fun call(
         area: String,
         api: String,
@@ -201,7 +183,6 @@ open class ApiContainer(
         val req = Request.cli(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
-
 
     /**
      * gets the mapped method associated with the api action.
@@ -223,7 +204,6 @@ open class ApiContainer(
             success(ApiRef(api, act, inst))
         } ?: badRequest("api route $area $name $action not found")
     }
-
 
     /**
      * gets the mapped method associated with the api action.
@@ -248,7 +228,6 @@ open class ApiContainer(
         } ?: notFound("member/annotation not found for : ${member.name}")
         return result
     }
-
 
     /**
      * Executes the api request in a pipe-line of various checks and validations.
@@ -295,9 +274,8 @@ open class ApiContainer(
         return convertResult(req, result)
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    protected open fun executeMethod(runCtx:Ctx): ResultEx<Any> {
+    protected open fun executeMethod(runCtx: Ctx): ResultEx<Any> {
         // Finally make call.
         val req = runCtx.req
         val apiRef = runCtx.apiRef
@@ -314,7 +292,6 @@ open class ApiContainer(
             }
         } ?: Failure(Exception("Received null"))
     }
-
 
     open fun isHelp(req: Request): ResultMsg<String> {
 
@@ -337,7 +314,6 @@ open class ApiContainer(
             failure("Unknown help option")
         }
     }
-
 
     /**
      * Handles help request on any part of the api request. Api requests are typically in
@@ -375,12 +351,10 @@ open class ApiContainer(
         }
     }
 
-
     protected open fun convertRequest(req: Request): Request {
         val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
         return finalRequest
     }
-
 
     /**
      * Finally: If the format of the content specified ( json | csv | props )
@@ -395,7 +369,6 @@ open class ApiContainer(
             result
         }
     }
-
 
     /**
      * Explicitly supplied content
@@ -412,7 +385,6 @@ open class ApiContainer(
         return content
     }
 
-
     fun isDocKeyAvailable(req: Request): Boolean {
         // Ensure that docs are only available w/ help key
         val docKeyValue = if (req.meta.containsKey(ApiConstants.DocKeyName)) {
@@ -424,10 +396,8 @@ open class ApiContainer(
         return docKeyValue == docKey
     }
 
-
     fun isCliAllowed(supportedProtocol: String): Boolean =
         supportedProtocol == Protocols.all || supportedProtocol == Protocols.cli
-
 
     companion object {
 
