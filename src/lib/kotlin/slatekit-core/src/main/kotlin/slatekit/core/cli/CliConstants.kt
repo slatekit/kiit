@@ -13,7 +13,6 @@
 
 package slatekit.core.cli
 
-
 object CliConstants {
     val BatchModeFailOnError = 0
     val BatchModeContinueOnError = 1
@@ -29,9 +28,9 @@ object CliConstants {
     val HELP_API = "area.api ?"
     val HELP_ACTION = "area.api.action ?"
 
-    val SysSample  = "sample"
-    val SysFile    = "file"
-    val SysFormat  = "format"
-    val SysLog     = "log"
+    val SysSample = "sample"
+    val SysFile = "file"
+    val SysFormat = "format"
+    val SysLog = "log"
     val SysCodeGen = "codegen"
 }

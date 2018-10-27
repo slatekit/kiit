@@ -16,11 +16,11 @@ package slatekit.core.cli
 import slatekit.common.app.AppMeta
 import slatekit.common.console.ConsoleWriter
 
-
-class CliView(val _writer: ConsoleWriter,
-              val _infoCallback: ((Boolean, (Int, Pair<String, Any>) -> Unit) -> Unit)?,
-              val _extendedInfo: ((ConsoleWriter) -> Unit)?
-                ) {
+class CliView(
+    val _writer: ConsoleWriter,
+    val _infoCallback: ((Boolean, (Int, Pair<String, Any>) -> Unit) -> Unit)?,
+    val _extendedInfo: ((ConsoleWriter) -> Unit)?
+) {
 
     /**
      * Shows general help info
@@ -77,29 +77,26 @@ class CliView(val _writer: ConsoleWriter,
         _writer.url("type 'info' for detailed information")
     }
 
-
-    fun showHelpInfo(section:String, lines:List<String>):Unit {
+    fun showHelpInfo(section: String, lines: List<String>) {
 
         _writer.highlight(section)
         lines.forEach { line ->
-            //_writer.tab(1)
+            // _writer.tab(1)
             _writer.text(line)
         }
         _writer.line()
     }
 
-
     /**
      * Shows help command for sys parameters
      */
     fun showHelpCommandOptions() {
-        fun logSysOption(name:String, desc:String, required:Boolean, options:String):Unit {
-            val reqChar = if(required) "! required" else "? optional"
-            //_writer.tab(1)
+        fun logSysOption(name: String, desc: String, required: Boolean, options: String) {
+            val reqChar = if (required) "! required" else "? optional"
+            // _writer.tab(1)
             _writer.text("\$$name  = $desc")
-            //_writer.tab(1)
+            // _writer.tab(1)
             _writer.text("           $reqChar $options")
-
         }
         // -env       = the environment to run in
         //              ? optional  [String]  e.g. dev
@@ -131,7 +128,6 @@ class CliView(val _writer: ConsoleWriter,
         _writer.line()
     }
 
-
     /**
      * Shows extra help - useful for derived classes to show more help info
      */
@@ -139,15 +135,13 @@ class CliView(val _writer: ConsoleWriter,
         _extendedInfo?.invoke(_writer)
     }
 
-
-    fun showVersion(meta: AppMeta): Unit {
+    fun showVersion(meta: AppMeta) {
         _writer.line()
         _writer.subTitle(meta.about.name)
         _writer.highlight(meta.about.version)
     }
 
-
-    fun showAbout(): Unit {
+    fun showAbout() {
         _writer.line()
 
         _infoCallback?.let { callback ->
@@ -159,24 +153,22 @@ class CliView(val _writer: ConsoleWriter,
         _writer.line()
     }
 
-
     /**
      * Shows help for the command
      *
      * @param cmd
      * @param mode
      */
-    fun showHelpFor(cmd: CliCommand, mode: Int): Unit {
+    fun showHelpFor(cmd: CliCommand, mode: Int) {
         _writer.text("help for : " + cmd.fullName())
     }
-
 
     /**
      * shows error related to arguments
      *
      * @param message
      */
-    fun showArgumentsError(message: String): Unit {
+    fun showArgumentsError(message: String) {
         _writer.important("Unable to parse arguments")
         _writer.important("Error : " + message ?: "")
     }

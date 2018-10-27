@@ -17,26 +17,26 @@ import slatekit.common.*
 import slatekit.common.args.Args
 import java.io.InputStream
 
-
 /**
  * Represents a user command typed on the command line. Contains both the method and parameters.
  * Supported format is "area.name.action" -key=value * e.g.
  * app.users.activate -email=john@gmail.com -status="active"
  * NOTE: The "area.name.action" format makes the shell command compatible with the Api Routing
  * format of the API module ( to support protocol independent APIs )
- * @param area   : The area in the method
- * @param name   : The name in the method
+ * @param area : The area in the method
+ * @param name : The name in the method
  * @param action : The action in the method
- * @param line   : The raw line of text supplied by user.
- * @param args   : The arguments supplied.
+ * @param line : The raw line of text supplied by user.
+ * @param args : The arguments supplied.
  */
-data class CliCommand(  val area: String,
-                        val name: String,
-                        val action: String,
-                        val line: String,
-                        val args: Args,
-                        val result: Response<Any>? = null) : RequestSupport
-{
+data class CliCommand(
+    val area: String,
+    val name: String,
+    val action: String,
+    val line: String,
+    val args: Args,
+    val result: Response<Any>? = null
+) : RequestSupport {
     /**
      * the area, name and action combined.
      * @return
@@ -50,7 +50,6 @@ data class CliCommand(  val area: String,
             area + "." + name + "." + action
     }
 
-
     /**
      * whether or not this matches the area, naem, action supplied.
      * @param area
@@ -61,31 +60,24 @@ data class CliCommand(  val area: String,
     fun isAction(area: String, name: String, action: String): Boolean =
             this.area == area && this.name == name && this.action == action
 
-
-
-    override fun raw():Any? = this
-
+    override fun raw(): Any? = this
 
     override fun getDoc(name: String): Doc {
         return Uris.readDoc(this.args.getString(name))!!
     }
 
-
     /**
      * Access to an file
      */
-    override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
         return Uris.readDoc(this.args.getString(name))!!
     }
-
 
     /**
      * Access to an file stream
      */
-    override fun getFileStream(name:String, callback:(InputStream) -> Unit ): Unit {
-
+    override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
     }
-
 
     companion object {
 

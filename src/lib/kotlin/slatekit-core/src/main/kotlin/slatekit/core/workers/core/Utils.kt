@@ -20,8 +20,6 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.ExecutorService
 
-
-
 object Utils {
 
     /**
@@ -36,11 +34,10 @@ object Utils {
         )
     }
 
-
     /**
      * Converts a message from any queue into a Job
      */
-    fun toJob(item:Any, queueInfo: QueueInfo, queue:QueueSourceMsg): Job {
+    fun toJob(item: Any, queueInfo: QueueInfo, queue: QueueSourceMsg): Job {
         val id = queue.getMessageTag(item, "id")
         val refId = queue.getMessageTag(item, "refId")
         val task = queue.getMessageTag(item, "task")
@@ -49,8 +46,7 @@ object Utils {
         return job
     }
 
-
-    fun toWorkerLookup(queues:List<QueueInfo>, workers:List<Worker<*>>): Map<String, List<Worker<*>>> {
+    fun toWorkerLookup(queues: List<QueueInfo>, workers: List<Worker<*>>): Map<String, List<Worker<*>>> {
 
         // Get a mapping between 1 queue to all workers that can handle the queue
         // NOTE: "*" is designated as a wildcard to indicate that a worker can handle
@@ -61,11 +57,10 @@ object Utils {
         }.toMap()
     }
 
-
     /**
      * Gets all the workers that can handle the queue of items
      */
-    fun getWorkers(queue: QueueInfo, workers:List<Worker<*>>):List<Worker<*>> {
+    fun getWorkers(queue: QueueInfo, workers: List<Worker<*>>): List<Worker<*>> {
         return workers.filter { worker ->
             worker.queues.contains(queue.name) || worker.queues.contains("*")
         }

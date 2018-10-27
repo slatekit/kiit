@@ -13,7 +13,6 @@
 
 package slatekit.core.cmds
 
-
 /**
  * Command manager to run commands and get back the status of each command
  * and their last results.
@@ -26,18 +25,15 @@ class Cmds(cmds: List<Cmd>) {
      */
     val cmdLookup = cmds.map { cmd -> cmd.name to cmd }.toMap()
 
-
     /**
      * names of commands
      */
     val names: List<String> = cmds.map { cmd -> cmd.name }
 
-
     /**
      * number of commands
      */
     val size: Int = cmdLookup.size
-
 
     /**
      * whether or not there is a command with the supplied name.
@@ -45,7 +41,6 @@ class Cmds(cmds: List<Cmd>) {
      * @return
      */
     fun contains(name: String): Boolean = cmdLookup.contains(name)
-
 
     /**
      * Runs the command with the supplied name
@@ -56,14 +51,12 @@ class Cmds(cmds: List<Cmd>) {
         val result =
                 if (!contains(name)) {
                     CmdFuncs.errorResult(name, "Not found")
-                }
-                else {
+                } else {
                     // Get result
                     cmdLookup[name]?.execute(args) ?: CmdFuncs.errorResult(name, "Not found")
                 }
         return result
     }
-
 
     /**
      * Gets the state of the command with the supplied name
@@ -74,8 +67,7 @@ class Cmds(cmds: List<Cmd>) {
         val result =
                 if (!contains(name)) {
                     CmdFuncs.errorState(name, "Not found")
-                }
-                else {
+                } else {
                     cmdLookup[name]?.lastStatus() ?: CmdFuncs.errorState(name, "Not found")
                 }
         return result

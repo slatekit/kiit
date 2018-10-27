@@ -13,11 +13,10 @@ mantra: Simplicity above all else
 package slatekit.core.push
 
 interface MessageType {
-    val name:String
+    val name: String
 }
 
-
-object MessageTypeAlert   : MessageType { override val name:String = "alert" }
-object MessageTypeData    : MessageType { override val name:String = "data"  }
-object MessageTypeBoth    : MessageType { override val name:String = "both"  }
-data class MessageTypeOther(override val name:String): MessageType
+object MessageTypeAlert : MessageType { override val name: String = "alert" }
+object MessageTypeData : MessageType { override val name: String = "data" }
+object MessageTypeBoth : MessageType { override val name: String = "both" }
+data class MessageTypeOther(override val name: String) : MessageType

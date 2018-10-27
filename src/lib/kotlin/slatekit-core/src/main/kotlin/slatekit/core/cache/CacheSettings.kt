@@ -13,6 +13,4 @@
 
 package slatekit.core.cache
 
-data class CacheSettings(val size: Int) {
-
-}
+data class CacheSettings(val size: Int)

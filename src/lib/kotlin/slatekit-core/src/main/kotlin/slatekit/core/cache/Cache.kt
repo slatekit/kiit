@@ -13,9 +13,7 @@
 
 package slatekit.core.cache
 
-import TODO
 import java.util.concurrent.ConcurrentHashMap
-
 
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )
@@ -36,7 +34,6 @@ class Cache(opts: CacheSettings) : ICache {
     override val settings = opts
     private val _lookup = ConcurrentHashMap<String, CacheEntry>()
 
-
     /**
      * size of the cache
      *
@@ -44,14 +41,12 @@ class Cache(opts: CacheSettings) : ICache {
      */
     override fun size(): Int = _lookup.size
 
-
     /**
      * size of the cache
      *
      * @return
      */
     override fun keys(): List<String> = _lookup.keys().toList()
-
 
     /**
      * whether this cache contains the entry with the supplied key
@@ -61,12 +56,10 @@ class Cache(opts: CacheSettings) : ICache {
      */
     override fun contains(key: String): Boolean = _lookup.contains(key)
 
-
     /**
      * invalidates all the entries in this cache by maxing out their expiration times
      */
     override fun invalidateAll(): Unit = _lookup.keys.toList().forEach { key -> invalidate(key) }
-
 
     /**
      * invalidates a specific cache item with the key
@@ -75,14 +68,12 @@ class Cache(opts: CacheSettings) : ICache {
         _lookup.get(key)?.let { c -> c.invalidate() }
     }
 
-
     /**
      * remove all items from cache
      *
      * @param key
      */
-    override fun clear(): Boolean = _lookup.keys.toList().map { key -> remove(key) }.reduceRight( { r, a -> a })
-
+    override fun clear(): Boolean = _lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
 
     /**
      * remove a single cache item with the key
@@ -91,7 +82,6 @@ class Cache(opts: CacheSettings) : ICache {
      */
     override fun remove(key: String): Boolean = _lookup.remove(key)?.let { k -> true } ?: false
 
-
     /**
      * gets a cache item associated with the key
      *
@@ -99,7 +89,6 @@ class Cache(opts: CacheSettings) : ICache {
      * @return
      */
     override fun getEntry(key: String): CacheItem? = _lookup.get(key)?.item?.get()
-
 
     /**
      * gets a cache item associated with the key
@@ -112,15 +101,13 @@ class Cache(opts: CacheSettings) : ICache {
         val result = _lookup.get(key)?.let { c ->
             if (c.isAlive()) {
                 c.item.get().value
-            }
-            else {
+            } else {
                 // Expired so kick off a refresh
                 c.refresh()
             }
         }
         return result?.let { r -> r as T }
     }
-
 
     /**
      * gets a cache item or loads it if not available, via a future
@@ -136,7 +123,6 @@ class Cache(opts: CacheSettings) : ICache {
         return null
     }
 
-
     /**
      * manual / explicit refresh of a cache item with a future result
      * in order to get the item
@@ -151,7 +137,6 @@ class Cache(opts: CacheSettings) : ICache {
         return null
     }
 
-
     /**
      * gets a cache item associated with the key
      *
@@ -162,13 +147,12 @@ class Cache(opts: CacheSettings) : ICache {
         _lookup.get(key)?.refresh()
     }
 
-
     /**
      * creates a cache item
      *
-     * @param key       : The name of the cache key
-     * @param seconds   : The expiration time in seconds
-     * @param fetcher   : The function to fetch the data ( will be wrapped in a Future )
+     * @param key : The name of the cache key
+     * @param seconds : The expiration time in seconds
+     * @param fetcher : The function to fetch the data ( will be wrapped in a Future )
      * @tparam T
      */
     override fun <T> put(key: String, desc: String, seconds: Int, fetcher: () -> T?) {
@@ -178,12 +162,13 @@ class Cache(opts: CacheSettings) : ICache {
         insert(key, desc, content, seconds, fetcherAny)
     }
 
-
-    private fun insert(key: String,
-                       desc: String,
-                       text: String?,
-                       seconds: Int,
-                       fetcher: () -> Any?) {
+    private fun insert(
+        key: String,
+        desc: String,
+        text: String?,
+        seconds: Int,
+        fetcher: () -> Any?
+    ) {
         val entry = CacheEntry(key, desc, text, seconds, fetcher)
         _lookup[key] = entry
         entry.refresh()

@@ -35,7 +35,6 @@ import slatekit.core.cli.CliConstants.HELP_AREA
 import slatekit.core.cli.CliConstants.VERSION
 import java.util.concurrent.atomic.AtomicReference
 
-
 /**
  * Core CLI( Command line interface ) shell provider with life-cycle events,
  * functionality to handle user input commands, printing of data, checks for help requests,
@@ -43,15 +42,15 @@ import java.util.concurrent.atomic.AtomicReference
  * to handle the user input command converted to CliCommand.
  *
  * @param _appMeta : Metadata about the app used for displaying help about app
- * @param folders  : Used to write output to app directories
+ * @param folders : Used to write output to app directories
  * @param settings : Settings for the shell functionality
  */
 open class CliService(
-        val folders: Folders,
-        val settings: CliSettings,
-        protected val _appMeta: AppMeta,
-        protected val _startupCommand: String = "",
-        protected val _writer: ConsoleWriter = ConsoleWriter()
+    val folders: Folders,
+    val settings: CliSettings,
+    protected val _appMeta: AppMeta,
+    protected val _startupCommand: String = "",
+    protected val _writer: ConsoleWriter = ConsoleWriter()
 )
     : AppMetaSupport {
 
@@ -59,8 +58,7 @@ open class CliService(
     val _printer = CliPrinter(_writer)
     val _view = CliView(_writer,
             { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) },
-            { writer:ConsoleWriter -> showExtendedHelp(writer) })
-
+            { writer: ConsoleWriter -> showExtendedHelp(writer) })
 
     /**
      * gets the application metadata containing information about this shell application,
@@ -70,11 +68,10 @@ open class CliService(
      */
     override fun appMeta(): AppMeta = _appMeta
 
-
     /**
      * runs the shell command line with arguments
      */
-    fun run(): Unit {
+    fun run() {
         val result = Result.attempt({ ->
             // Allow derived classes to initialize
             onShellInit()
@@ -94,23 +91,20 @@ open class CliService(
         }
     }
 
-
     /**
      * Hook for initialization for derived classes
      */
     open fun onShellInit() {}
-
 
     /**
      * Hook for startup for derived classes
      */
     open fun onShellStart(): Unit = showHelp()
 
-
     /**
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
-    fun onShellRun(): Unit {
+    fun onShellRun() {
         // Startup ( e.g. quick login, set environment etc )
         handleStartup()
 
@@ -143,24 +137,20 @@ open class CliService(
         })
     }
 
-
     /**
      * Hook for shutdown for derived classes
      */
     open fun onShellEnd() {}
-
 
     fun tryLine(line: String): Boolean =
             try {
                 val result = onCommandExecute(line)
                 val isExit = result.code == slatekit.common.results.ResultCode.EXIT
                 result.success || !isExit
-            }
-            catch(ex: Exception) {
+            } catch (ex: Exception) {
                 display(null, ex)
                 true
             }
-
 
     /**
      * hook for command before it is executed
@@ -169,7 +159,6 @@ open class CliService(
      * @return
      */
     open fun onCommandBeforeExecute(cmd: CliCommand): CliCommand = cmd
-
 
     /**
      * executes the command workflow.
@@ -185,8 +174,7 @@ open class CliService(
         // Execute
         val resultCmd = if (cmd.isAction("sys", "cli", "batch")) {
             onCommandExecuteBatch(cmd)
-        }
-        else {
+        } else {
             onCommandExecuteInternal(cmd)
         }
 
@@ -196,13 +184,11 @@ open class CliService(
         return success(resultCmd)
     }
 
-
-    open protected fun onCommandExecuteBatch(cmd:CliCommand): CliCommand {
+    protected open fun onCommandExecuteBatch(cmd: CliCommand): CliCommand {
         val blevel = _batchLevel.get()
-        return if(blevel > 0 ) {
+        return if (blevel > 0) {
             CliCommand("sys", "cli", "batch", cmd.line, cmd.args, Failure("already in batch mode").toResultEx().toResponse())
-        }
-        else {
+        } else {
             _batchLevel.set(blevel + 1)
             val batch = CliBatch(cmd, this)
             val result = batch.run()
@@ -211,15 +197,13 @@ open class CliService(
         }
     }
 
-
     /**
      * hook for derived classes to execute the command
      *
      * @param cmd
      * @return
      */
-    open protected fun onCommandExecuteInternal(cmd: CliCommand): CliCommand = cmd
-
+    protected open fun onCommandExecuteInternal(cmd: CliCommand): CliCommand = cmd
 
     /**
      * hook for command after execution ( e.g. currently only does printing )
@@ -239,15 +223,12 @@ open class CliService(
                 else {
                     _printer.printSummary(cmd.result)
                 }
-
-            }
-            else {
+            } else {
                 _writer.error(result.msg ?: "")
             }
         }
         return cmd
     }
-
 
     /**
      * Executes the command represented by the line
@@ -256,7 +237,6 @@ open class CliService(
      * @return
      */
     fun onCommandExecute(line: String): ResultMsg<CliCommand> = executeLine(line, true)
-
 
     /**
      * Executes a batch of commands ( 1 per line )
@@ -284,16 +264,14 @@ open class CliService(
         return results.toList()
     }
 
-
-    protected fun handleStartup(): Unit {
+    protected fun handleStartup() {
         if (!_startupCommand.isNullOrEmpty()) {
             // Execute the startup command just like a command typed in by user
             onCommandExecute(_startupCommand)
         }
     }
 
-
-    protected fun handleOutput(cmd: CliCommand): Unit {
+    protected fun handleOutput(cmd: CliCommand) {
         cmd.result?.let { result ->
             if (result.success && settings.enableOutput) {
                 val formatted = (result.value ?: "").toString()
@@ -301,7 +279,6 @@ open class CliService(
             }
         }
     }
-
 
     /**
      * Checks the arguments for a help / meta command
@@ -328,46 +305,38 @@ open class CliService(
         val msg = result.msg ?: ""
 
         when (msg) {
-            EXIT        -> "exiting"
-            VERSION     -> showVersion()
-            ABOUT       -> showHelp()
-            HELP        -> showHelp()
-            HELP_AREA   -> showHelpFor(cmd, CliConstants.VerbPartArea)
-            HELP_API    -> showHelpFor(cmd, CliConstants.VerbPartApi)
+            EXIT -> "exiting"
+            VERSION -> showVersion()
+            ABOUT -> showHelp()
+            HELP -> showHelp()
+            HELP_AREA -> showHelpFor(cmd, CliConstants.VerbPartArea)
+            HELP_API -> showHelpFor(cmd, CliConstants.VerbPartApi)
             HELP_ACTION -> showHelpFor(cmd, CliConstants.VerbPartAction)
-            else        -> ""
+            else -> ""
         }
         return result
     }
 
-
     open fun showAbout(): Unit = _view.showAbout()
-
 
     open fun showVersion(): Unit = _view.showVersion(appMeta())
 
-
     open fun showHelp(): Unit = _view.showHelp()
-
 
     open fun showHelpFor(cmd: CliCommand, mode: Int): Unit = _view.showHelpFor(cmd, mode)
 
+    open fun showExtendedHelp(writer: ConsoleWriter) {}
 
-    open fun showExtendedHelp(writer:ConsoleWriter) {}
-
-
-    open fun showResult(cmd:CliCommand, result: Response<Any>) {
+    open fun showResult(cmd: CliCommand, result: Response<Any>) {
         _printer.printResult(cmd, result, folders.pathToOutputs)
     }
 
-
-    private fun display(msg: String?, err: Exception? = null): Unit {
+    private fun display(msg: String?, err: Exception? = null) {
         _writer.line()
         msg?.let { message -> _writer.text(message); Unit }
         err?.let { error -> _writer.text(error.message ?: ""); Unit }
         _writer.line()
     }
-
 
     private fun executeLine(line: String, checkHelp: Boolean): ResultMsg<CliCommand> {
 
@@ -378,7 +347,7 @@ open class CliService(
             _view.showArgumentsError(argsResult.msg)
             return badRequest(msg = argsResult.msg)
         }
-        return when(argsResult) {
+        return when (argsResult) {
             is Success -> {
                 // Build command from arguments
                 val cmd = CliCommand.build(argsResult.data!!, line)
@@ -395,7 +364,6 @@ open class CliService(
             is Failure -> error(argsResult)
         }
     }
-
 
     /**
      * prints the summary of the arguments
@@ -414,7 +382,6 @@ open class CliService(
         _writer.text("===============================================================")
     }
 
-
     protected open fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
 
@@ -429,7 +396,5 @@ open class CliService(
         return buf.toList()
     }
 
-
     open fun collectSummaryExtra(): List<Pair<String, String>>? = listOf()
-
 }

@@ -15,21 +15,18 @@ package slatekit.core.workers
 import slatekit.core.workers.core.QueueInfo
 import java.util.*
 
-
 /**
  * Contains the collection of all the available queues and provides
  * functionality to lookup, and get the next queue while factoring in queue priority
  */
-class Queues(val queues:List<QueueInfo>) {
+class Queues(val queues: List<QueueInfo>) {
 
-    val prioritizedQueues:List<QueueInfo> =
+    val prioritizedQueues: List<QueueInfo> =
         prioritize(queues)
-    val lookup:Map<String, QueueInfo> = prioritizedQueues.map { it -> it.name to it }.toMap()
+    val lookup: Map<String, QueueInfo> = prioritizedQueues.map { it -> it.name to it }.toMap()
     val random = Random()
 
-
-    fun size():Int = queues.size
-
+    fun size(): Int = queues.size
 
     /**
      * gets the next queue based on weighted priority of the queues
@@ -40,7 +37,6 @@ class Queues(val queues:List<QueueInfo>) {
         return queue
     }
 
-
     /**
      * gets the next queue based on weighted priority of the queues
      */
@@ -49,23 +45,20 @@ class Queues(val queues:List<QueueInfo>) {
         return ndx
     }
 
-
     /**
      * Gets the queue at the supplied position if the position is a valid range
      */
-    operator fun get(pos:Int): QueueInfo? {
-        if(pos < 0 || pos >= prioritizedQueues.size ) return null
+    operator fun get(pos: Int): QueueInfo? {
+        if (pos < 0 || pos >= prioritizedQueues.size) return null
         return prioritizedQueues[pos]
     }
-
 
     /**
      * Gets the queue by name if it exists
      */
-    operator fun get(name:String): QueueInfo? {
+    operator fun get(name: String): QueueInfo? {
         return lookup[name]
     }
-
 
     companion object {
 
@@ -96,10 +89,10 @@ class Queues(val queues:List<QueueInfo>) {
          * priority queues have a higher probability of being selected.
          */
         @JvmStatic
-        fun prioritize(queues:List<QueueInfo>): List<QueueInfo> {
+        fun prioritize(queues: List<QueueInfo>): List<QueueInfo> {
             val buffer = mutableListOf<QueueInfo>()
             queues.forEach { queueInfo ->
-                for( ndx in 1 .. queueInfo.priority.value) {
+                for (ndx in 1..queueInfo.priority.value) {
                     buffer.add(queueInfo)
                 }
             }

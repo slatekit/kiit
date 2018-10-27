@@ -13,12 +13,10 @@
 
 package slatekit.core.cli
 
-
 data class CliSettings(
-        val argPrefix: String = "-",
-        val argSeparator: String = "=",
-        val enableLogging: Boolean = false,
-        val enableOutput: Boolean = false,
-        val enableStartLog: Boolean = false
-) {
-}
+    val argPrefix: String = "-",
+    val argSeparator: String = "=",
+    val enableLogging: Boolean = false,
+    val enableOutput: Boolean = false,
+    val enableStartLog: Boolean = false
+)

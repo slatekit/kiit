@@ -2,14 +2,9 @@ package slatekit.core.workers.core
 
 import slatekit.common.DateTime
 import slatekit.common.ResultEx
-import slatekit.common.ResultMsg
 import slatekit.common.log.Logger
-import slatekit.common.log.Logs
-import slatekit.common.results.ResultFuncs
 import slatekit.core.workers.Job
 import slatekit.core.workers.Worker
-import java.util.concurrent.atomic.AtomicLong
-import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Handler class to support the result of a job having been worked on by a worker
@@ -23,15 +18,12 @@ import java.util.concurrent.atomic.AtomicReference
     open fun onRequest(job: Job, worker: Worker<*>) {
     }
 
-
-    open fun onSuccess(job: Job, worker: Worker<*>, result:ResultEx<*>) {
+    open fun onSuccess(job: Job, worker: Worker<*>, result: ResultEx<*>) {
     }
-
 
     open fun onFiltered(job: Job, worker: Worker<*>) {
     }
 
-
-    open fun onErrored(job: Job, worker: Worker<*>, result:ResultEx<*>) {
+    open fun onErrored(job: Job, worker: Worker<*>, result: ResultEx<*>) {
     }
 }

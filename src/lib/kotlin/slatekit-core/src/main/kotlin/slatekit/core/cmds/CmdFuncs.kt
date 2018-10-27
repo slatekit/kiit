@@ -18,7 +18,6 @@ import slatekit.common.DateTime.Companion.now
 
 object CmdFuncs {
 
-
     /**
      * builds a default Command State
      * @param name
@@ -35,10 +34,9 @@ object CmdFuncs {
                     lastResult = null
             )
 
-
     /**
      * Builds a default Command Result
-     * @param name   : The name of the command
+     * @param name : The name of the command
      * @return
      */
     fun defaultResult(name: String): CmdResult =
@@ -55,7 +53,6 @@ object CmdFuncs {
                     totalMs = 0
             )
 
-
     /**
      * builds an error CommandState
      * @param name
@@ -64,7 +61,6 @@ object CmdFuncs {
      */
     fun errorState(name: String, message: String): CmdState =
             CmdState(name, message, DateTime.MIN, false, 0, 0, null)
-
 
     /**
      * builds an error Command Result
@@ -75,24 +71,27 @@ object CmdFuncs {
     fun errorResult(name: String, message: String): CmdResult =
             CmdResult(name, false, message, null, null, now(), now(), 0)
 
-
     /**
      * Converts an Tuple to the CmdResult
-     * @param name   : The name of the command
-     * @param start  : The start time of the command execution
-     * @param end    : The end time of the command execution
+     * @param name : The name of the command
+     * @param start : The start time of the command execution
+     * @param end : The end time of the command execution
      * @param result : The result of the command in tuple form
      * @return
      */
-    fun fromResult(name: String, start: DateTime, end: DateTime,
-                   result: ResultEx<Any>): CmdResult {
+    fun fromResult(
+        name: String,
+        start: DateTime,
+        end: DateTime,
+        result: ResultEx<Any>
+    ): CmdResult {
 
         // The result
         val cmdResult = CmdResult(
                 name = name,
                 success = result.success,
                 message = result.msg,
-                error = if(result is Failure) result.err else null,
+                error = if (result is Failure) result.err else null,
                 result = result.getOrElse { null },
                 started = start,
                 ended = end,

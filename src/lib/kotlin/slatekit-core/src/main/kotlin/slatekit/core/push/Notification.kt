@@ -12,4 +12,4 @@ mantra: Simplicity above all else
  */
 package slatekit.core.push
 
-data class Notification(val title:String, val text:String, val icon:String, val click_action:String?)
+data class Notification(val title: String, val text: String, val icon: String, val click_action: String?)

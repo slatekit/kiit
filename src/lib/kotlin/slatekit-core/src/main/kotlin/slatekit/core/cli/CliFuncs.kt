@@ -22,18 +22,15 @@ import slatekit.common.results.ResultCode.HELP
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.yes
 
-
 object CliFuncs {
 
-    fun log(folders: Folders, cmd: CliCommand, content: String): Unit {
+    fun log(folders: Folders, cmd: CliCommand, content: String) {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
 
-
-    fun log(folders: Folders, content: String): Unit {
+    fun log(folders: Folders, content: String) {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
-
 
     fun checkForAssistance(cmd: CliCommand): ResultMsg<Boolean> {
         val words = cmd.args.raw
@@ -69,8 +66,7 @@ object CliFuncs {
                         ArgsFuncs.isHelp(verbs, 3))
                      ) {
             yes("area.api.action ?", HELP)
-        }
-        else
+        } else
             no()
     }
 }

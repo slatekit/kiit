@@ -13,8 +13,8 @@
 
 package slatekit.core.email
 
-class EmailSettings(val user: String,
-                    val key: String,
-                    val account: String) {
-
-}
+class EmailSettings(
+    val user: String,
+    val key: String,
+    val account: String
+)

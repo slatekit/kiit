@@ -17,9 +17,9 @@ import slatekit.common.args.Args
 import slatekit.common.conf.ConfigBase
 import slatekit.common.envs.Env
 
-
-data class AppInputs(val args: Args,
-                     val env: Env,
-                     val confBase: ConfigBase,
-                     val confEnv: ConfigBase) {
-}
+data class AppInputs(
+    val args: Args,
+    val env: Env,
+    val confBase: ConfigBase,
+    val confEnv: ConfigBase
+)

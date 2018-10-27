@@ -13,7 +13,4 @@
 
 package slatekit.core.push
 
-data class MessageSettings(val user:String, val key:String, val account:String) {
-
-}
-
+data class MessageSettings(val user: String, val key: String, val account: String)

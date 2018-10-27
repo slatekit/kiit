@@ -7,7 +7,6 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
-
 /**
  * Simple, specialized "circuit breaker" like component.
  *
@@ -31,9 +30,11 @@ import java.util.concurrent.atomic.AtomicReference
  * 5. Alerts listener of gate events ( open -> close -> open )
  *
  */
-open class Gate(val name: String,
-           val settings: GateSettings,
-           private val listener: GateListener?) : Gated {
+open class Gate(
+    val name: String,
+    val settings: GateSettings,
+    private val listener: GateListener?
+) : Gated {
 
     private val status = AtomicReference<GateState>(Open)
     private val statusTimeStamp = AtomicReference(DateTime.now())
@@ -45,7 +46,6 @@ open class Gate(val name: String,
     private val timerPosition = AtomicInteger(0)
     private val gateStates = mutableListOf<GateStatus>()
 
-
     init {
         setState(Open)
         val initialMetrics = internalMetrics()
@@ -53,11 +53,10 @@ open class Gate(val name: String,
         event.set(GateEvent(name, status.get(), reasonForClose.get(), initialMetrics))
     }
 
-
     /**
      * Opens the gate
      */
-    override fun open(alert:Boolean) {
+    override fun open(alert: Boolean) {
 
         // Keep last state changes
         // Use queue later
@@ -68,21 +67,20 @@ open class Gate(val name: String,
         // Reset counters
         reset()
 
-        if(alert) {
+        if (alert) {
             alert()
         }
     }
 
-
     /**
      * Closes the gate
      */
-    override fun close(reason:Reason, alert:Boolean) {
+    override fun close(reason: Reason, alert: Boolean) {
         setState(Closed)
 
         reasonForClose.set(reason)
 
-        if(settings.reOpenAutomatically) {
+        if (settings.reOpenAutomatically) {
             // Re-open later
             scheduleReopen()
 
@@ -90,11 +88,10 @@ open class Gate(val name: String,
             incrementBackOff()
         }
 
-        if(alert) {
+        if (alert) {
             alert()
         }
     }
-
 
     /**
      * Attempts to enter the gate
@@ -106,60 +103,53 @@ open class Gate(val name: String,
             val r1 = attemptInternal(call)
 
             // Failed ? Retry ?
-            val finalResult = if(!r1.success && settings.retryCount > 0 ) {
+            val finalResult = if (!r1.success && settings.retryCount > 0) {
                 IntRange(1, settings.retryCount).fold(r1, { r, _ ->
-                    if( r.success ) {
+                    if (r.success) {
                         r
                     } else {
                         attemptInternal(call)
                     }
                 })
-            }
-            else r1
+            } else r1
             finalResult
         } else {
             Failure(buildGateEvent())
         }
     }
 
-
     /**
      * Whether or not the gate is open
      */
     override fun isOpen(): Boolean = status.get() == Open
-
 
     /**
      * Whether or not the gate is closed
      */
     override fun isClosed(): Boolean = status.get() == Closed
 
-
     /**
      * Overall metrics of gate
      */
     override fun metrics(): GateStatus = internalMetrics()
 
-
     override fun states(): List<GateStatus> = gateStates.toList()
-
 
     /**
      * Schedule reopening of this task after the seconds supplied
      */
-    override fun openLater(seconds:Int, alert:Boolean) {
+    override fun openLater(seconds: Int, alert: Boolean) {
         val task = ReOpenTask(this, alert)
         timer.schedule(task, seconds * 1000L)
     }
-
 
     /**
      * Derived classes/clients should customize the alerting for their needs
      */
     protected open fun alert() {
         val state = status.get()
-        when(state) {
-            is Open   -> {
+        when (state) {
+            is Open -> {
                 println("Gate $name is Open")
             }
             is Closed -> {
@@ -168,17 +158,16 @@ open class Gate(val name: String,
                 // Same logic for all for now ?
                 // Keep as a when expression as an example
                 // to show the various reasons
-                when(event.reason) {
-                    is ErrorsHigh   -> listener?.invoke(this, event)
-                    is VolumeHigh   -> listener?.invoke(this, event)
+                when (event.reason) {
+                    is ErrorsHigh -> listener?.invoke(this, event)
+                    is VolumeHigh -> listener?.invoke(this, event)
                     is Maintainance -> listener?.invoke(this, event)
-                    is ManualClose  -> listener?.invoke(this, event)
-                    else            -> listener?.invoke(this, event)
+                    is ManualClose -> listener?.invoke(this, event)
+                    else -> listener?.invoke(this, event)
                 }
             }
         }
     }
-
 
     private fun <T> attemptInternal(call: () -> T): Result<T, GateEvent> {
         return try {
@@ -196,7 +185,7 @@ open class Gate(val name: String,
             }
 
             // Close: Due to volume!
-            else if(isHighVolume()) {
+            else if (isHighVolume()) {
                 close(VolumeHigh, alert = true)
             }
 
@@ -208,21 +197,18 @@ open class Gate(val name: String,
         }
     }
 
-
     private fun buildGateEvent(): GateEvent {
         return GateEvent(name, status.get(), reasonForClose.get(), metrics())
     }
 
-
     private fun setState(state: GateState) {
         val currentState = status.get()
-        if(currentState != state) {
+        if (currentState != state) {
             val ts = DateTime.now()
             status.set(state)
             statusTimeStamp.set(ts)
         }
     }
-
 
     private fun scheduleReopen() {
         // Schedule re-opening.
@@ -232,14 +218,12 @@ open class Gate(val name: String,
         openLater(seconds, true)
     }
 
-
-    private fun incrementBackOff(){
+    private fun incrementBackOff() {
         val rawTimePos = timerPosition.get()
-        if(rawTimePos < settings.reOpenTimesInSeconds.size - 1) {
+        if (rawTimePos < settings.reOpenTimesInSeconds.size - 1) {
             timerPosition.set(rawTimePos + 1)
         }
     }
-
 
     private fun internalMetrics(): GateStatus {
         return GateStatus(
@@ -256,36 +240,31 @@ open class Gate(val name: String,
         )
     }
 
-
-    private fun isHighVolume():Boolean {
-        return if(settings.volumeThresholdPerMinute > 0) {
+    private fun isHighVolume(): Boolean {
+        return if (settings.volumeThresholdPerMinute > 0) {
             val batchProcessed = volumeLimiter.count.get().toDouble()
             val end = DateTime.now()
             val start = statusTimeStamp.get()
             val mins = start.raw.until(end.raw, ChronoUnit.MINUTES)
             val perMin = mins / batchProcessed
             perMin > settings.volumeThresholdPerMinute
-        }
-        else  {
+        } else {
             false
         }
     }
 
-
-    private fun isHighErrorCount():Boolean {
+    private fun isHighErrorCount(): Boolean {
 
         // Check error threshold
         val batchProcessed = volumeLimiter.count.get().toDouble()
-        return if(batchProcessed > 0 ) {
+        return if (batchProcessed > 0) {
             val totalFailed = errorLimiter.count.get().toDouble()
             val percentageFailed = totalFailed / batchProcessed
             percentageFailed > settings.errorThresholdPercentage
-        }
-        else {
+        } else {
             false
         }
     }
-
 
     private fun reset() {
         reasonForClose.set(NotApplicable)
@@ -293,17 +272,16 @@ open class Gate(val name: String,
         errorLimiter.reset()
 
         // only keep last 10 states
-        if(gateStates.size > 20){
-            (gateStates.size - 1 .. 10).forEach { ndx ->
-                if(ndx <= gateStates.size ) {
+        if (gateStates.size > 20) {
+            (gateStates.size - 1..10).forEach { ndx ->
+                if (ndx <= gateStates.size) {
                     gateStates.removeAt(ndx)
                 }
             }
         }
     }
 
-
-    class ReOpenTask(private val gate:Gate, private val alert:Boolean) : TimerTask() {
+    class ReOpenTask(private val gate: Gate, private val alert: Boolean) : TimerTask() {
         override fun run() {
             gate.open(alert)
         }
