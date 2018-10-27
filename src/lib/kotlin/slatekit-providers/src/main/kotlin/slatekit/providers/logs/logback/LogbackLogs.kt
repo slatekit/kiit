@@ -3,21 +3,16 @@ package slatekit.providers.logs.logback
 import slatekit.common.log.Logger
 import slatekit.common.log.Logs
 
-
-
 import org.slf4j.LoggerFactory
 
-class LogbackLogs : Logs
-{
+class LogbackLogs : Logs {
     override fun getLogger(name: String?): Logger {
         val instance = LoggerFactory.getLogger(name ?: "")
        return LogbackLogger(instance)
     }
 
-
     override fun getLogger(cls: Class<*>): Logger {
         val instance = LoggerFactory.getLogger(cls)
         return LogbackLogger(instance)
     }
-
 }

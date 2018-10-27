@@ -4,23 +4,20 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Requests
 import slatekit.common.*
-import slatekit.common.info.About
-import slatekit.common.queues.QueueSourceMsg
 import slatekit.core.workers.*
-import slatekit.core.workers.core.Events
-import slatekit.core.workers.WorkFunction
 
-
-open class WorkerWithQueuesApi(val container: ApiContainer,
-                               settings: WorkerSettings)
-    : Worker<Any>("api.queues", "apis","apiqueues", "1.0") {
+open class WorkerWithQueuesApi(
+    val container: ApiContainer,
+    settings: WorkerSettings
+)
+    : Worker<Any>("api.queues", "apis", "apiqueues", "1.0") {
 
     /**
      * Process an message from the queue represented as an API request.
      * This converts the json message body to the Request and delegates the call
      * to the container which will call the corresponding API method.
      */
-    override fun perform(job:Job) : ResultEx<Any> {
+    override fun perform(job: Job): ResultEx<Any> {
 
         // content ( json body )
         val rawBody = job.payload

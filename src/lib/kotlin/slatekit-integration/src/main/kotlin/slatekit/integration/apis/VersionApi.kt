@@ -22,7 +22,6 @@ import slatekit.apis.support.ApiWithSupport
 import slatekit.common.info.Host
 import slatekit.integration.common.AppEntContext
 
-
 @Api(area = "app", name = "version", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class VersionApi(override val context: AppEntContext) : ApiWithSupport {
@@ -32,24 +31,20 @@ class VersionApi(override val context: AppEntContext) : ApiWithSupport {
         return context.app.host
     }
 
-
     @ApiAction(desc = "get the version of the application")
     fun app(): String {
         return context.app.about.version
     }
-
 
     @ApiAction(desc = "gets the version of java")
     fun java(): String {
         return context.app.lang.version
     }
 
-
     @ApiAction(desc = "gets the version of scala")
     fun kotlin(): String {
         return context.app.lang.vendor
     }
-
 
     @ApiAction(desc = "gets the version of the system")
     fun version(): String {

@@ -23,12 +23,11 @@ import slatekit.common.Ioc
 import slatekit.integration.common.AppEntContext
 import slatekit.core.workers.*
 
-
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
 
-    val sys:System by lazy {
+    val sys: System by lazy {
         Ioc.get<System>(System::class.qualifiedName ?: "")
     }
 
@@ -38,13 +37,11 @@ class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
     @ApiAction(desc = "start the workers system")
     fun start() = sys.start()
 
-
     /**
      * pauses the system
      */
     @ApiAction(desc = "pauses the workers system")
     fun pause() = sys.pause()
-
 
     /**
      * resumes the system
@@ -52,13 +49,11 @@ class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
     @ApiAction(desc = "resumes the workers system")
     fun resume() = sys.resume()
 
-
     /**
      * stops the system
      */
     @ApiAction(desc = "stops the workers system")
     fun stop() = sys.stop()
-
 
     /**
      * pauses the system
@@ -66,34 +61,29 @@ class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
     @ApiAction(desc = "shuts down the workers system")
     fun complete() = sys.done()
 
-
     /**
      * starts the worker in the group supplied
      */
     @ApiAction(desc = "starts the worker")
-    fun startWorker(worker:String) = sys.startWorker(worker)
-
+    fun startWorker(worker: String) = sys.startWorker(worker)
 
     /**
      * pauses the worker in the group supplied
      */
     @ApiAction(desc = "pauses the worker")
-    fun pauseWorker(worker:String) = sys.pauseWorker(worker)
-
+    fun pauseWorker(worker: String) = sys.pauseWorker(worker)
 
     /**
      * resumes the worker in the group supplied
      */
     @ApiAction(desc = "resumes the worker")
-    fun resumeWorker(worker:String) = sys.resumeWorker(worker)
-
+    fun resumeWorker(worker: String) = sys.resumeWorker(worker)
 
     /**
      * stops the worker in the group supplied
      */
     @ApiAction(desc = "stops the worker")
-    fun stopWorker(worker:String) = sys.stopWorker(worker)
-
+    fun stopWorker(worker: String) = sys.stopWorker(worker)
 
     /**
      * Get the worker names
@@ -101,11 +91,9 @@ class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
     @ApiAction(desc = "gets the names of all the workers")
     fun getWorkerNames() = sys.getWorkerNames()
 
-
     /**
      * Get the worker names
      */
     @ApiAction(desc = "gets the worker stats")
     fun getWorkerStats() = sys.getWorkerStats()
-
 }

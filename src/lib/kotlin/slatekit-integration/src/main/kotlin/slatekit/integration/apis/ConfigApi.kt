@@ -13,7 +13,6 @@
 
 package slatekit.integration.apis
 
-
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.AuthModes
@@ -29,7 +28,6 @@ import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbTypeMySql
 
-
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.cli)
 class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWithSupport {
@@ -41,14 +39,12 @@ class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWith
         return apiKey
     }
 
-
     @ApiAction(desc = "creates an api login in the directory")
     fun createApiLogin(rootDir: String, name: String, account: String, key: String, pass: String, env: String, tag: String): ApiLogin {
         val login = ApiLogin(account, key, pass, env, tag)
         ConfFuncs.createApiLogin(rootDir, name, login, context.enc)
         return login
     }
-
 
     @ApiAction(desc = "creates db login in the directory")
     fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): slatekit.common.db.DbConString {
@@ -57,58 +53,58 @@ class ConfigApi(override val context: slatekit.core.common.AppContext) : ApiWith
         return dbCon
     }
 
-
     @ApiAction(desc = "creates a credentials file in the directory")
-    fun createCredentials(rootDir: String, name: String, id: String, username: String, email: String,
-                          key: String, env: String, region: String): Credentials {
+    fun createCredentials(
+        rootDir: String,
+        name: String,
+        id: String,
+        username: String,
+        email: String,
+        key: String,
+        env: String,
+        region: String
+    ): Credentials {
         val credentials = Credentials(id, name, email, key, env, region)
         ConfFuncs.createLogin(rootDir, name, credentials, context.enc)
         return credentials
     }
-
 
     @ApiAction(desc = "loads and shows the database info from config")
     fun showDbDefault(): DbCon? {
         return context.cfg.dbCon()
     }
 
-
     @ApiAction(desc = "loads and shows the database info from config with supplied name")
-    fun showDbNamed(name:String): DbCon? {
+    fun showDbNamed(name: String): DbCon? {
         return context.cfg.dbCon(name)
     }
 
-
     @ApiAction(desc = "loads and shows the database info from config with supplied name")
-    fun showDbFromUri(path:String, name:String): DbCon? {
+    fun showDbFromUri(path: String, name: String): DbCon? {
         val conf = Config(path)
         val dbCon = conf.dbCon(name)
         return dbCon
     }
 
-
     @ApiAction(desc = "loads and shows an api login info from config")
-    fun showApiLogin(name:String): ApiLogin {
+    fun showApiLogin(name: String): ApiLogin {
         return context.cfg.apiLogin(name)
     }
 
-
     @ApiAction(desc = "loads and shows an api key from config")
-    fun showApiLoginFromUri(path:String, name:String): ApiLogin {
+    fun showApiLoginFromUri(path: String, name: String): ApiLogin {
         val conf = Config(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }
 
-
     @ApiAction(desc = "loads and shows an api key from config")
-    fun showApiKey(name:String): ApiLogin {
+    fun showApiKey(name: String): ApiLogin {
         return context.cfg.apiLogin(name)
     }
 
-
     @ApiAction(desc = "loads and shows an api key from config")
-    fun showApiKeyFromUri(path:String, name:String): ApiLogin {
+    fun showApiKeyFromUri(path: String, name: String): ApiLogin {
         val conf = Config(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
