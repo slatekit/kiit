@@ -27,7 +27,7 @@ object AwsFuncs {
 
     /**
      * build sqs client from optional conf paths
-     * @param path    : Path to config ( None => default aws {user_dir}/.aws/credentials file}
+     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
@@ -38,14 +38,13 @@ object AwsFuncs {
         return sqs(credentials)
     }
 
-
     /**
      * build sqs client from optional conf paths
-     * @param path    : Path to config ( None => default aws {user_dir}/.aws/credentials file}
+     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun sqs(credentials:AWSCredentials): AmazonSQSClient {
+    fun sqs(credentials: AWSCredentials): AmazonSQSClient {
 
         IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
@@ -54,10 +53,9 @@ object AwsFuncs {
         return sqs
     }
 
-
     /**
      * build s3 client from optional config paths
-     * @param path    : Path to config ( None => default aws {user_dir}/.aws/credentials file}
+     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
     fun s3(path: String? = null, section: String? = null): AmazonS3Client {
@@ -66,13 +64,12 @@ object AwsFuncs {
         return s3(credentials)
     }
 
-
     /**
      * build s3 client from optional config paths
-     * @param path    : Path to config ( None => default aws {user_dir}/.aws/credentials file}
+     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
-    fun s3(credentials:AWSCredentials): AmazonS3Client {
+    fun s3(credentials: AWSCredentials): AmazonS3Client {
         IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
         val s3 = AmazonS3Client(credentials)
@@ -80,10 +77,9 @@ object AwsFuncs {
         return s3
     }
 
-
     /**
      * Builds the aws credentials from optional conf paths
-     * @param path    : Path to config ( None => default aws {user_dir}/.aws/credentials file}
+     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
@@ -99,14 +95,12 @@ object AwsFuncs {
         return credentials
     }
 
-
     /**
      * Loads aws credentials from the default {user_dir}/.aws/credentials file
      *
      * @return
      */
     fun creds(): AWSCredentials = ProfileCredentialsProvider().credentials
-
 
     /**
      * Loads aws credentials using the key/secret supplied.

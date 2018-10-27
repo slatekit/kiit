@@ -17,7 +17,6 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 
-
 interface AwsSupport {
 
     fun credentials(key: String, secret: String): AWSCredentials = BasicAWSCredentials(key, secret)

@@ -11,7 +11,6 @@
  * </slate_header>
  */
 
-
 package slatekit.cloud.aws
 
 import TODO
@@ -26,19 +25,19 @@ import slatekit.core.cloud.CloudQueueBase
 import java.io.File
 import java.io.IOException
 
-
 /**
  *
- * @param queue   : Name of the SQS Queue
- * @param creds   : The aws credentials
+ * @param queue : Name of the SQS Queue
+ * @param creds : The aws credentials
  * @param waitTimeInSeconds: Set value between 1-20 to enable long polling
- * @see           :
+ * @see:
  * 1. https://github.com/ex-aws/ex_aws/issues/486
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
-class AwsCloudQueue(queue: String,
-                    creds: AWSCredentials,
-                    val waitTimeInSeconds:Int = 0
+class AwsCloudQueue(
+    queue: String,
+    creds: AWSCredentials,
+    val waitTimeInSeconds: Int = 0
 ) : CloudQueueBase(), AwsSupport {
 
     private val _queue = queue
@@ -47,21 +46,17 @@ class AwsCloudQueue(queue: String,
     private val SOURCE = "aws:sqs"
     override val name = queue
 
+    constructor(queue: String, apiKey: ApiLogin, waitTimeInSeconds: Int = 0) :
+            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), waitTimeInSeconds)
 
-    constructor(queue:String, apiKey: ApiLogin, waitTimeInSeconds: Int = 0 ) :
-            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), waitTimeInSeconds )
-
-
-    constructor(queue:String, confPath: String? = null, section: String? = null, waitTimeInSeconds: Int = 0) :
-            this ( queue, AwsFuncs.creds(confPath, section), waitTimeInSeconds )
-
+    constructor(queue: String, confPath: String? = null, section: String? = null, waitTimeInSeconds: Int = 0) :
+            this (queue, AwsFuncs.creds(confPath, section), waitTimeInSeconds)
 
     /**
      * hook for any initialization
      */
-    override fun init(): Unit {
+    override fun init() {
     }
-
 
     /**Gets the total number of items in the queue
      *
@@ -82,7 +77,6 @@ class AwsCloudQueue(queue: String,
         return count ?: 0
     }
 
-
     /**Gets the next item in the queue
      *
      * @return : An message object from the underlying queue provider
@@ -91,7 +85,6 @@ class AwsCloudQueue(queue: String,
         val result = nextBatch(1)
         return result.firstOrNull()
     }
-
 
     /**Gets the next batch of items in the queue
      *
@@ -102,7 +95,7 @@ class AwsCloudQueue(queue: String,
         val results = execute<List<Any>>(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(_queueUrl)
                 .withMaxNumberOfMessages(size)
-            val req = if(waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
+            val req = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
             val msgs = _sqs.receiveMessage(req).messages
             if (msgs.isNotEmpty() && msgs.size > 0) {
                 val results = mutableListOf<Any>()
@@ -111,13 +104,11 @@ class AwsCloudQueue(queue: String,
                     results += msg
                 }
                 results.toList()
-            }
-            else
+            } else
                 listOf()
         })
         return results ?: listOf()
     }
-
 
     /** Send a message using either a simple string or a map
      * contains the message data and attributes
@@ -126,7 +117,7 @@ class AwsCloudQueue(queue: String,
      */
     override fun send(msg: Any, tagName: String, tagValue: String): ResultEx<String> {
         val msgResult = when (msg) {
-            is String    -> {
+            is String -> {
                 // Send the message, any message that fails will get caught
                 // and the onError method is called for that message
                 executeResult<String>(SOURCE, "send", data = "", call = { ->
@@ -137,8 +128,7 @@ class AwsCloudQueue(queue: String,
                                 .addMessageAttributesEntry(tagName, MessageAttributeValue()
                                         .withDataType("String").withStringValue(finalTagValue))
                         req
-                    }
-                    else {
+                    } else {
                         SendMessageRequest(_queueUrl, message)
                     }
                     val result = _sqs.sendMessage(req)
@@ -151,13 +141,12 @@ class AwsCloudQueue(queue: String,
                 val atts = getOrDefault(map, "attributes", mapOf<String, Any>()) as Map<String, Any>
                 send(message, atts)
             }
-            else         -> {
-                Failure(Exception("Unknown message type"), msg="unknown message type")
+            else -> {
+                Failure(Exception("Unknown message type"), msg = "unknown message type")
             }
         }
         return msgResult
     }
-
 
     /**Sends the message with the attributes supplied to the queue
      *
@@ -180,7 +169,6 @@ class AwsCloudQueue(queue: String,
         })
     }
 
-
     override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): ResultEx<String> {
         val path = Uris.interpret(fileNameLocal)
         return path?.let { pathLocal ->
@@ -190,44 +178,39 @@ class AwsCloudQueue(queue: String,
                 msg = "Invalid file path: $fileNameLocal")
     }
 
-
     /** Abandons the message supplied    *
      *
      * @param item : The message to abandon/delete
      */
-    override fun abandon(item: Any?): Unit {
+    override fun abandon(item: Any?) {
         item?.let { i ->
             discard(i, "abandon")
         }
     }
 
-
     /** Completes the message by deleting it from the queue
      *
      * @param item : The message to complete
      */
-    override fun complete(item: Any?): Unit {
+    override fun complete(item: Any?) {
         item?.let { i ->
             discard(i, "complete")
         }
     }
 
-
     /** Completes the message by deleting it from the queue
      *
      * @param items : The messages to complete
      */
-    override fun completeAll(items: List<Any>?): Unit {
+    override fun completeAll(items: List<Any>?) {
         items?.let { all ->
             all.forEach { item -> discard(item, "complete") }
         }
     }
 
-
     override fun getMessageBody(msgItem: Any?): String {
         return getMessageItemProperty(msgItem, { item -> item.body })
     }
-
 
     override fun getMessageTag(msgItem: Any?, tagName: String): String {
         return getMessageItemProperty(msgItem, { sqsMsg ->
@@ -241,13 +224,11 @@ class AwsCloudQueue(queue: String,
         })
     }
 
-
     private fun getOrDefault(map: Map<String, Any>, key: String, defaultVal: Any): Any {
         return map.getOrDefault(key, defaultVal)
     }
 
-
-    private fun discard(item: Any, action: String): Unit {
+    private fun discard(item: Any, action: String) {
         when (item) {
             is Message -> {
                 execute(SOURCE, action, data = item, call = { ->
@@ -257,27 +238,25 @@ class AwsCloudQueue(queue: String,
                     _sqs.deleteMessage(DeleteMessageRequest(_queueUrl, msgHandle))
                 })
             }
-            else       -> {
+            else -> {
                 TODO.IMPLEMENT("AWS", "Provide some callback/notification mechanism")
             }
         }
     }
 
-
     fun getMessageItemProperty(msgItem: Any?, callback: (Message) -> String): String {
         return msgItem?.let { item ->
             when (item) {
                 is Message -> callback(item)
-                else       -> ""
+                else -> ""
             }
         } ?: ""
     }
 
-
     override fun toString(item: Any?): String {
-        return when(item){
+        return when (item) {
             is Message -> getMessageBody(item)
-            else       -> item?.toString() ?: ""
+            else -> item?.toString() ?: ""
         }
     }
 }
