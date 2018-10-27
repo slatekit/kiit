@@ -22,23 +22,20 @@ import spark.Request
 import java.io.*
 import javax.servlet.MultipartConfigElement
 
-
 class SparkRequest(val req: Request) : RequestSupport {
-
 
     /**
      * Access to the raw spark request
      */
-    override fun raw():Any? = req
-
+    override fun raw(): Any? = req
 
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getDoc(name:String): Doc {
-        return getFile( name, { stream ->
+    override fun getDoc(name: String): Doc {
+        return getFile(name, { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -52,13 +49,12 @@ class SparkRequest(val req: Request) : RequestSupport {
         })
     }
 
-
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getFile(name:String, callback:(InputStream) -> Doc ): Doc {
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
         req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
         val doc = req.raw().getPart(name).getInputStream().use({ stream ->
             callback(stream)
@@ -66,19 +62,17 @@ class SparkRequest(val req: Request) : RequestSupport {
         return doc
     }
 
-
     /**
      * Access to an uploaded file
      * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
-    override fun getFileStream(name:String, callback:(InputStream) -> Unit ): Unit {
+    override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
         req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement("/temp"))
         req.raw().getPart(name).getInputStream().use({ stream ->
             callback(stream)
         })
     }
-
 
     companion object {
 
@@ -115,15 +109,14 @@ class SparkRequest(val req: Request) : RequestSupport {
             )
         }
 
-
         /**
          * Load json from the post/put body using json-simple
          */
         @JvmStatic
-        fun loadJson(req: Request, addQueryParams:Boolean = false): JSONObject {
+        fun loadJson(req: Request, addQueryParams: Boolean = false): JSONObject {
             val method = req.requestMethod().toLowerCase()
             val isPosted = isBodyAllowed(method)
-            val tpe:String? = req.contentType()
+            val tpe: String? = req.contentType()
             val isMultiPart = tpe?.startsWith("multipart/form-data;") ?: false
             val json = if (isPosted && !isMultiPart && !req.body().isNullOrEmpty()) {
                 val parser = JSONParser()
@@ -132,24 +125,21 @@ class SparkRequest(val req: Request) : RequestSupport {
                 root as JSONObject
 
                 // Add query params
-                if(addQueryParams && !req.queryParams().isEmpty()){
+                if (addQueryParams && !req.queryParams().isEmpty()) {
                     req.queryParams().map { key ->
-                        if(key != null) {
+                        if (key != null) {
                             root.put(key, req.queryParams(key))
                         }
                     }
                 }
                 root
-            }
-            else {
+            } else {
                 JSONObject()
             }
             return json
         }
 
-
         @JvmStatic
-        fun isBodyAllowed(method:String):Boolean = method == "put" || method == "post" || method == "delete"
+        fun isBodyAllowed(method: String): Boolean = method == "put" || method == "post" || method == "delete"
     }
-
 }

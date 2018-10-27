@@ -22,6 +22,9 @@ import slatekit.common.Uris.URI_PREFIX_USER
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.security.ApiKey
+import slatekit.common.security.ApiLogin
+import slatekit.common.security.Credentials
 import java.io.File
 import java.io.FileInputStream
 import java.util.*

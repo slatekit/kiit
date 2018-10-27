@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Test
-import slatekit.common.ListMap
+import slatekit.common.utils.ListMap
 import slatekit.common.Vars
 
 /**

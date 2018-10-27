@@ -32,32 +32,30 @@ import spark.Spark.staticFiles
 import java.io.File
 import javax.servlet.MultipartConfigElement
 
-
 class Server(
-        val config: ServerConfig,
-        val ctx   : Context,
-        val auth  : Auth?,
-        val apis  : List<Api>
+    val config: ServerConfig,
+    val ctx: Context,
+    val auth: Auth?,
+    val apis: List<Api>
 ) : AppMetaSupport {
-
 
     /**
      * initialize with port, prefix for api routes, and all the dependent items
      */
     constructor(
-            port      :Int          = 5000,
-            prefix    :String       = "",
-            info      :Boolean      = true,
-            cors      :Boolean      = false,
-            docs      :Boolean      = false,
-            static    :Boolean      = false,
-            staticDir :String       = "",
-            docKey    :String       = "",
-            apis      :List<Api>,
-            auth      :Auth?        = null,
-            setup     :((Any) -> Unit)? = null,
-            ctx       :Context   = AppContext.simple("slatekit-server")
-        ) :
+        port: Int = 5000,
+        prefix: String = "",
+        info: Boolean = true,
+        cors: Boolean = false,
+        docs: Boolean = false,
+        static: Boolean = false,
+        staticDir: String = "",
+        docKey: String = "",
+        apis: List<Api>,
+        auth: Auth? = null,
+        setup: ((Any) -> Unit)? = null,
+        ctx: Context = AppContext.simple("slatekit-server")
+    ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
     val container = ApiContainer(ctx,
@@ -65,12 +63,11 @@ class Server(
         auth,
         WebProtocol,
         apis,
-        deserializer = {req, enc -> Deserializer(req, enc) },
+        deserializer = { req, enc -> Deserializer(req, enc) },
         docKey = config.docKey,
         docBuilder = ::DocWeb)
 
     override fun appMeta(): AppMeta = ctx.app
-
 
     /**
      * executes the application
@@ -87,11 +84,10 @@ class Server(
         }
 
         // Static files
-        if(config.static) {
-            if(config.staticDir.isNullOrEmpty()){
+        if (config.static) {
+            if (config.staticDir.isNullOrEmpty()) {
                 staticFiles.location("/public")
-            }
-            else {
+            } else {
                 staticFiles.externalLocation(File(config.staticDir).absolutePath)
             }
         }
@@ -100,12 +96,12 @@ class Server(
         Spark.get(config.prefix + "/ping", { req, res -> ping(req, res) })
 
         // CORS
-        if(config.cors) Spark.options("/*") { req, res  -> cors(req, res) }
+        if (config.cors) Spark.options("/*") { req, res -> cors(req, res) }
 
         // Before
         Spark.before("*", { req, res ->
             req.attribute("org.eclipse.jetty.multipartConfig", MultipartConfigElement((System.getProperty("java.io.tmpdir"))))
-            //req.attribute("org.eclipse.multipartConfig", MultipartConfigElement((System.getProperty("java.io.tmpdir"))))
+            // req.attribute("org.eclipse.multipartConfig", MultipartConfigElement((System.getProperty("java.io.tmpdir"))))
             if (config.cors) {
                 res.header("Access-Control-Allow-Origin", "*")
                 res.header("Access-Control-Request-Method", "*")
@@ -116,24 +112,22 @@ class Server(
         // Allow all the verbs/routes to hit exec method
         // The exec method will dispatch the request to
         // the corresponding SlateKit API.
-        Spark.get(config.prefix    + "/*", { req, res -> exec(req, res) })
-        Spark.post(config.prefix   + "/*", { req, res -> exec(req, res) })
-        Spark.put(config.prefix    + "/*", { req, res -> exec(req, res) })
-        Spark.patch(config.prefix  + "/*", { req, res -> exec(req, res) })
+        Spark.get(config.prefix + "/*", { req, res -> exec(req, res) })
+        Spark.post(config.prefix + "/*", { req, res -> exec(req, res) })
+        Spark.put(config.prefix + "/*", { req, res -> exec(req, res) })
+        Spark.patch(config.prefix + "/*", { req, res -> exec(req, res) })
         Spark.delete(config.prefix + "/*", { req, res -> exec(req, res) })
 
         // Setup scrpt
         config.setup?.let { c -> c("") }
     }
 
-
     /**
      * stops the server ( this is not currently accessible on the command line )
      */
-    fun stop(): Unit {
+    fun stop() {
         spark.Spark.stop()
     }
-
 
     fun cors(req: Request, res: Response) {
         val accessControlRequestHeaders = req.headers("Access-Control-Request-Headers")
@@ -147,7 +141,6 @@ class Server(
         }
     }
 
-
     /**
      * pings the server to only get back the datetime.
      * Used for quickly checking a deployment.
@@ -157,7 +150,6 @@ class Server(
         val text = SparkResponse.json(res, Success(result).toResponse())
         return text
     }
-
 
     /**
      * handles the core logic of execute the http request.
@@ -172,11 +164,10 @@ class Server(
         return text
     }
 
-
     /**
      * prints the summary of the arguments
      */
-    fun info(): Unit {
+    fun info() {
         println("===============================================================")
         println("STARTING : ")
         this.appLogStart({ name: String, value: String -> println(name + " = " + value) })

@@ -14,7 +14,7 @@
 package slatekit.common.templates
 
 import slatekit.common.DateTime
-import slatekit.common.ListMap
+import slatekit.common.utils.ListMap
 
 
 /**

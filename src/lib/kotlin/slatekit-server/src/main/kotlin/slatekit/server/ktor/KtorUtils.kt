@@ -13,6 +13,4 @@
 
 package slatekit.server.ktor
 
-
-class KtorUtils {
-}
+class KtorUtils

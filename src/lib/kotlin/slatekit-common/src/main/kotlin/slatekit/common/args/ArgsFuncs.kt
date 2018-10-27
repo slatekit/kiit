@@ -13,8 +13,8 @@
 
 package slatekit.common.args
 
-import slatekit.common.Loops.repeatWithIndex
-import slatekit.common.Loops.repeatWithIndexAndBool
+import slatekit.common.utils.Loops.repeatWithIndex
+import slatekit.common.utils.Loops.repeatWithIndexAndBool
 
 
 object ArgsFuncs {

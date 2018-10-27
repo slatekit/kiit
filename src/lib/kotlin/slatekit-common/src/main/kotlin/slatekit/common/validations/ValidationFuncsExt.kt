@@ -13,7 +13,6 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Reference
 import slatekit.common.validations.ValidationConsts.Error_Contains
 import slatekit.common.validations.ValidationConsts.Error_EndsWith
 import slatekit.common.validations.ValidationConsts.Error_Has_CharsLCase
