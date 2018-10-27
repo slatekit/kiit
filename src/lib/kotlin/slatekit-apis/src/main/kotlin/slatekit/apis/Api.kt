@@ -20,20 +20,22 @@ package slatekit.apis
   *  e.g. area / api  / action
   *       app  / user / invite
   *
-  * @param area   : the top level area/category of the api "sys", "app", "ops"
-  * @param name   : the name of the api "users"
-  * @param desc   : description of the api
-  * @param roles  : the roles allowed to access this api ( "@admin", "@ops" )
+  * @param area : the top level area/category of the api "sys", "app", "ops"
+  * @param name : the name of the api "users"
+  * @param desc : description of the api
+  * @param roles : the roles allowed to access this api ( "@admin", "@ops" )
   *                 in the event, the auth mode is "api-key", this is the name of the api-key
-  * @param auth   : the authorization mode ( "app-key" | "app-roles", "key-roles" )
-  * @param verb   : the verb ( "get", "post", "cli", "*" )
+  * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
+  * @param verb : the verb ( "get", "post", "cli", "*" )
   * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
   */
 @Target(AnnotationTarget.CLASS)
-annotation class Api (val area     : String = "",
-                      val name     : String = "",
-                      val desc     : String = "",
-                      val roles    : String = "",
-                      val auth     : String = "app-key",
-                      val verb     : String = "get",
-                      val protocol : String = "*" )
+annotation class Api(
+    val area: String = "",
+    val name: String = "",
+    val desc: String = "",
+    val roles: String = "",
+    val auth: String = "app-key",
+    val verb: String = "get",
+    val protocol: String = "*"
+)

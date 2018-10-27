@@ -29,7 +29,7 @@ object Requests {
     /**
      * Loads a file from a file with the existing meta data supplied.
      */
-    fun fromFileWithMeta(route:String, rawPath:String, keys: Map<String,String>? = null, enc: Encryptor? = null): Request {
+    fun fromFileWithMeta(route: String, rawPath: String, keys: Map<String, String>? = null, enc: Encryptor? = null): Request {
 
         // Interpret the path as it could have slatekit supported URIS:
         // e.g. user:// | file:// | temp://
@@ -40,11 +40,10 @@ object Requests {
         val req = fromJson(content, ApiConstants.SourceFile, ApiConstants.SourceFile, route, rawPath, enc)
         val jsonObj = req.meta.raw as JSONObject
         keys?.forEach { pair ->
-            jsonObj.put( pair.key, pair.value )
+            jsonObj.put(pair.key, pair.value)
         }
         return req
     }
-
 
     /**
      * Loads The json structure for the request will match 1 to 1.
@@ -70,7 +69,7 @@ object Requests {
      *      }
      * }
      */
-    fun fromJson(jsonContent:String, sourceOverride:String? = null, verbOverride:String? = null, route:String? = null, rawSource:Any? = null, enc: Encryptor? = null): Request {
+    fun fromJson(jsonContent: String, sourceOverride: String? = null, verbOverride: String? = null, route: String? = null, rawSource: Any? = null, enc: Encryptor? = null): Request {
 
         val parser = JSONParser()
         val doc = parser.parse(jsonContent)
@@ -78,36 +77,35 @@ object Requests {
 
         // Core fields
         val hasVersion = jsonRoot.containsKey("version")
-        val version = if(hasVersion)jsonRoot.get("version") as String else ApiConstants.Version
+        val version = if (hasVersion)jsonRoot.get("version") as String else ApiConstants.Version
         val path = route ?: jsonRoot.get("path") as String
         val tag = jsonRoot.get("tag") as String
         val source = jsonRoot.get("source") as String
-        val verb  = jsonRoot.get("verb") as String
+        val verb = jsonRoot.get("verb") as String
 
         // Meta / Data
         val jsonData = jsonRoot.get("data") as JSONObject
         val jsonMeta = jsonRoot.get("meta") as JSONObject
-        val sep = if(path.contains("/" )) "/" else "."
+        val sep = if (path.contains("/")) "/" else "."
 
         return Request(
                 version = version,
-                path    = path,
-                parts   = path.split(sep),
-                source  = sourceOverride ?: source ,
-                verb    = verbOverride ?: verb,
-                meta    = Meta(rawSource ?: "json", jsonMeta, enc),
-                data    = Params(rawSource ?: "json", ApiConstants.SourceFile, true, enc, jsonData),
-                raw     = rawSource,
-                tag     = tag,
+                path = path,
+                parts = path.split(sep),
+                source = sourceOverride ?: source,
+                verb = verbOverride ?: verb,
+                meta = Meta(rawSource ?: "json", jsonMeta, enc),
+                data = Params(rawSource ?: "json", ApiConstants.SourceFile, true, enc, jsonData),
+                raw = rawSource,
+                tag = tag,
                 timestamp = DateTime.now()
         )
     }
 
-
     /**
      * Converts the request to JSON and encrypts the content if the encryptor is supplied
      */
-    fun toJson(req: Request, enc: Encryptor? = null, source:String? = null, verb:String? = null): String {
+    fun toJson(req: Request, enc: Encryptor? = null, source: String? = null, verb: String? = null): String {
         // Convert the meta data to JSON
         val meta = convertMetaToJson(req.meta, req.meta.raw)
         val data = convertDataToJson(req.data, req.data.raw)
@@ -124,13 +122,12 @@ object Requests {
                  "verb"     : "$finalVerb",
                  "tag"      : "${req.tag}",
                  "timestamp": "${req.timestamp}",
-                 "meta"     : ${finalMeta},
-                 "data"     : ${finalData}
+                 "meta"     : $finalMeta,
+                 "data"     : $finalData
             }
             """
         return json
     }
-
 
     /**
      * Converts the request to JSON designated as a request from a Queue ( source = queue )
@@ -139,27 +136,25 @@ object Requests {
         return toJson(req, null, ApiConstants.SourceQueue, ApiConstants.SourceQueue)
     }
 
-
-    private fun convertMetaToJson(source: Inputs, rawData:Any): String {
+    private fun convertMetaToJson(source: Inputs, rawData: Any): String {
         // Convert the data to JSON
         // NOTE: It may already be in json
         val serializer = Serialization.json(true)
-        val json = when(source) {
-            is JsonSupport           -> source.toJson().toString()
-            is slatekit.common.Meta  -> serializer.serialize(source.toMap())
-            else                     -> serializer.serialize(rawData)
+        val json = when (source) {
+            is JsonSupport -> source.toJson().toString()
+            is slatekit.common.Meta -> serializer.serialize(source.toMap())
+            else -> serializer.serialize(rawData)
         }
         return json
     }
 
-
-    private fun convertDataToJson(source: Inputs, rawData:Any): String {
+    private fun convertDataToJson(source: Inputs, rawData: Any): String {
         // Convert the data to JSON
         // NOTE: It may already be in json
         val serializer = Serialization.json(true)
-        val json = when(source) {
-            is JsonSupport  -> source.toJson().toString()
-            else            -> serializer.serialize(rawData)
+        val json = when (source) {
+            is JsonSupport -> source.toJson().toString()
+            else -> serializer.serialize(rawData)
         }
         return json
     }

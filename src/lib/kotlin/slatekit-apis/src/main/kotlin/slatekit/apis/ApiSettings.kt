@@ -17,7 +17,7 @@ package slatekit.apis
  * Created by kreddy on 3/25/2016.
  */
 data class ApiSettings(
-        val enableFileInputs: Boolean = false,
-        val enableLogging: Boolean = false,
-        val enableOutput: Boolean = false
+    val enableFileInputs: Boolean = false,
+    val enableLogging: Boolean = false,
+    val enableOutput: Boolean = false
 )

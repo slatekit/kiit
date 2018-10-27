@@ -13,10 +13,8 @@
 
 package slatekit.apis.core
 
-
 import slatekit.meta.kClass
 import kotlin.reflect.KClass
-
 
 /**
  * Represents an API in Slate Kit which is a reference to a regular Class
@@ -25,14 +23,14 @@ import kotlin.reflect.KClass
  *  e.g. area / api  / action
  *       app  / user / invite
  *
- * @param area   : the top level area/category of the api "sys", "app", "ops"
- * @param name   : the name of the api "users"
- * @param desc   : description of the api
- * @param roles  : the roles allowed to access this api ( "admin", "ops" )
- * @param auth   : the authorization mode ( "app-key" | "app-roles", "key-roles" )
- * @param verb   : the verb ( "get", "post", "cli", "*" )
+ * @param area : the top level area/category of the api "sys", "app", "ops"
+ * @param name : the name of the api "users"
+ * @param desc : description of the api
+ * @param roles : the roles allowed to access this api ( "admin", "ops" )
+ * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
+ * @param verb : the verb ( "get", "post", "cli", "*" )
  * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
- * @param actions  : the collection of actions / methods on this API.
+ * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
     val cls: KClass<*>,
@@ -58,6 +56,6 @@ data class Api(
         verb: String = "*",
         protocol: String = "",
         declaredOnly: Boolean = true,
-        setup:Setup = PublicMethods
+        setup: Setup = PublicMethods
     ) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance, setup)
 }

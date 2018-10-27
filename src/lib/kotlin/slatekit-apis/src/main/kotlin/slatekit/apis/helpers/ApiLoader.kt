@@ -14,7 +14,7 @@ import kotlin.reflect.KVisibility
 
 object ApiLoader {
 
-    fun loadAll(rawApis:List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
+    fun loadAll(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
 
         // Get the apis with actions loaded from either
         // annotations or from public methods.
@@ -28,7 +28,7 @@ object ApiLoader {
         val areas = areaNames.map {
             val areaName = it
             val apisForArea = apis.filter { it.area == areaName }
-            val area = Area(areaName, Lookup( apisForArea, { api -> api.name }))
+            val area = Area(areaName, Lookup(apisForArea, { api -> api.name }))
             area
         }
 
@@ -36,12 +36,11 @@ object ApiLoader {
         return Lookup(areas, { area -> area.name })
     }
 
-
     /**
      * Loads an api using class and method annotations e.g. @Api on class and @ApiAction on members.
      * NOTE: This allows all the API setup to be in 1 place ( in the class/memebers )
      *
-     * @param cls  : The class representing the API
+     * @param cls : The class representing the API
      * @param namer: The naming convention
      */
     fun loadAnnotated(cls: KClass<*>, namer: Namer?): Api {
@@ -62,9 +61,8 @@ object ApiLoader {
 
         // Get all the actions using the @ApiAction
         val actions = loadActionsFromAnnotations(api, namer)
-        return api.copy(actions = Lookup(actions, { t -> t.name } ) )
+        return api.copy(actions = Lookup(actions, { t -> t.name }))
     }
-
 
     /**
      * Loads an api using purely just the class with explicitly supplied metadata
@@ -74,21 +72,23 @@ object ApiLoader {
      * NOTE: Use this member for obtaining very low to 0 vendor lock-in with Slate Kit as
      * you basically use plain Kotlin Objects
      *
-     * @param cls  : The class representing the API
+     * @param cls : The class representing the API
      * @param namer: The naming convention
      *
      */
-    fun loadPublic(cls  : KClass<*>,
-                   area : String,
-                   name : String,
-                   desc : String?,
-                   local: Boolean = true,
-                   roles: String  = "",
-                   auth : String  = "",
-                   verb : String  = "",
-                   protocol: String = "*",
-                   singleton:Boolean = false,
-                   namer: Namer? = null): Api {
+    fun loadPublic(
+        cls: KClass<*>,
+        area: String,
+        name: String,
+        desc: String?,
+        local: Boolean = true,
+        roles: String = "",
+        auth: String = "",
+        verb: String = "",
+        protocol: String = "*",
+        singleton: Boolean = false,
+        namer: Namer? = null
+    ): Api {
 
         // Create initial temporary api
         // with all settings that can be used for override values
@@ -96,26 +96,23 @@ object ApiLoader {
         return loadWithMeta(api, namer)
     }
 
-
     /**
      * Loads an api using the explicitly supplied API setup
      *
-     * @param api  : The API setup
+     * @param api : The API setup
      * @param namer: The naming convention
      */
-    fun loadWithMeta(api:slatekit.apis.core.Api, namer: Namer?): Api {
+    fun loadWithMeta(api: slatekit.apis.core.Api, namer: Namer?): Api {
         // Get all the actions using the @ApiAction
         val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)
-        return api.copy(actions = Lookup(actions, { t -> t.name } ) )
+        return api.copy(actions = Lookup(actions, { t -> t.name }))
     }
 
-
-    fun loadActionsFromPublicMethods(api: slatekit.apis.core.Api, local:Boolean, namer: Namer?): List<Action> {
+    fun loadActionsFromPublicMethods(api: slatekit.apis.core.Api, local: Boolean, namer: Namer?): List<Action> {
         val members = Reflector.getMembers(api.cls, local, true, KVisibility.PUBLIC)
-        val actions:List<Action> = members.map { member -> buildAction(member, api, null, namer) }
+        val actions: List<Action> = members.map { member -> buildAction(member, api, null, namer) }
         return actions
     }
-
 
     private fun loadActionsFromAnnotations(api: slatekit.apis.core.Api, namer: Namer?): List<Action> {
 
@@ -125,10 +122,10 @@ object ApiLoader {
         val rawIgnoresLookup = rawIgnores.map { it -> Pair(it.first.name, true) }.toMap()
 
         // 2. Filter out builtin methods
-        val matches = rawMatches.filter{ it -> !Reflector.isBuiltIn(it.first) }
+        val matches = rawMatches.filter { it -> !Reflector.isBuiltIn(it.first) }
 
         // 3. Convert to Action
-        val actions:List<Action?> = matches.map { item ->
+        val actions: List<Action?> = matches.map { item ->
 
             // a) The member
             val member = item.first
@@ -145,12 +142,11 @@ object ApiLoader {
         return actions.filterNotNull()
     }
 
-
-    private fun buildAction(member:KCallable<*>, api: slatekit.apis.core.Api, apiAction:ApiAction?, namer: Namer?): Action {
+    private fun buildAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: ApiAction?, namer: Namer?): Action {
 
         val methodName = member.name
         val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
-        val actionName = namer?.rename(actionNameRaw)  ?: actionNameRaw
+        val actionName = namer?.rename(actionNameRaw) ?: actionNameRaw
         val actionDesc = apiAction?.desc ?: ""
         val actionTag = apiAction?.tag ?: ""
 
@@ -160,10 +156,10 @@ object ApiLoader {
         val actionProtocol = apiAction?.protocol.orElse(api.protocol)
 
         // Determine the actual verb
-        val actionVerb = when(rawVerb) {
-            Verbs.auto -> if(actionNameRaw.startsWith(Verbs.get)) Verbs.get else Verbs.post
+        val actionVerb = when (rawVerb) {
+            Verbs.auto -> if (actionNameRaw.startsWith(Verbs.get)) Verbs.get else Verbs.post
             Verbs.rest -> determineVerb(actionNameRaw)
-            else       -> rawVerb
+            else -> rawVerb
         }
         return Action(
                 member,
@@ -176,8 +172,7 @@ object ApiLoader {
         )
     }
 
-
-    private fun determineVerb(name:String) : String {
+    private fun determineVerb(name: String): String {
         val nameToCheck = name.toLowerCase()
         val verb = when {
             nameToCheck.startsWith(Verbs.get) -> Verbs.get
@@ -190,31 +185,27 @@ object ApiLoader {
         return verb
     }
 
-
-    private fun loadApiFromSetup(api:Api, namer: Namer?): Api {
+    private fun loadApiFromSetup(api: Api, namer: Namer?): Api {
 
         // If no actions, that means it was the raw input
         // during setup, so we have to load the api methods
         // from either annotations or from public methods
-        return if(api.actions.size == 0) {
-            if(api.setup == Annotated ) {
+        return if (api.actions.size == 0) {
+            if (api.setup == Annotated) {
                 val apiAnnotated = loadAnnotated(api.cls, namer)
                 val area = name(apiAnnotated.area, namer)
                 val name = name(apiAnnotated.name, namer)
                 apiAnnotated.copy(area = area, name = name, singleton = api.singleton)
-            }
-            else { //if(api.setup == PublicMethods){
+            } else { // if(api.setup == PublicMethods){
                 val area = name(api.area, namer)
                 val name = name(api.name, namer)
                 val actions = loadActionsFromPublicMethods(api, api.declaredOnly, namer)
-                api.copy(area = area, name = name, actions = Lookup(actions, { t -> t.name } ) )
+                api.copy(area = area, name = name, actions = Lookup(actions, { t -> t.name }))
             }
-        }
-        else api
+        } else api
     }
 
-
-    private fun name(text:String, namer: Namer?): String {
+    private fun name(text: String, namer: Namer?): String {
         // Rename the area if namer is supplied
         val area = namer?.rename(text) ?: text
         return area

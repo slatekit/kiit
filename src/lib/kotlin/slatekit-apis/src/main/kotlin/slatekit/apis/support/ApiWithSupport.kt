@@ -22,14 +22,13 @@ import slatekit.common.log.Logger
 import slatekit.common.subStringPair
 import java.io.File
 
-interface ApiWithSupport: Api, EncryptSupport, LogSupport {
+interface ApiWithSupport : Api, EncryptSupport, LogSupport {
 
-    val context:Context
+    val context: Context
 
     override val logger: Logger? get() = context.logs.getLogger()
 
     override val encryptor: Encryptor? get() = context.enc
-
 
     @Ignore
     fun interpretUri(path: String): String? {
@@ -39,23 +38,26 @@ interface ApiWithSupport: Api, EncryptSupport, LogSupport {
             val loc = parts.second
             this.context.dirs?.let { dirs ->
                 when (uri) {
-                    "user://"    -> File(System.getProperty("user.home"), loc).toString()
-                    "temp://"    -> File(System.getProperty("java.io.tmpdir"), loc).toString()
-                    "file://"    -> File(loc).toString()
-                    "inputs://"  -> File(dirs.pathToInputs, loc).toString()
+                    "user://" -> File(System.getProperty("user.home"), loc).toString()
+                    "temp://" -> File(System.getProperty("java.io.tmpdir"), loc).toString()
+                    "file://" -> File(loc).toString()
+                    "inputs://" -> File(dirs.pathToInputs, loc).toString()
                     "outputs://" -> File(dirs.pathToOutputs, loc).toString()
-                    "logs://"    -> File(dirs.pathToLogs, loc).toString()
-                    "cache://"   -> File(dirs.pathToCache, loc).toString()
-                    else         -> path
+                    "logs://" -> File(dirs.pathToLogs, loc).toString()
+                    "cache://" -> File(dirs.pathToCache, loc).toString()
+                    else -> path
                 }
             }
         }
     }
 
-
     @Ignore
-    fun writeToFile(msg: Any?, fileNameLocal: String, count: Int,
-                              contentFetcher: (Any?) -> String): String? {
+    fun writeToFile(
+        msg: Any?,
+        fileNameLocal: String,
+        count: Int,
+        contentFetcher: (Any?) -> String
+    ): String? {
         return msg?.let { _ ->
             val finalFileName = if (count == 0) fileNameLocal else fileNameLocal + "_" + count
             val path = interpretUri(finalFileName)

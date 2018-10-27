@@ -5,7 +5,6 @@ import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import kotlin.reflect.full.primaryConstructor
 
-
 /**
  * The top most level qualifier in the Universal Routing Structure
  * Essentially the root of the Routing tree
@@ -37,9 +36,11 @@ import kotlin.reflect.full.primaryConstructor
  *                  - { action_c }
  *                  - { action_d }
 */
-data class Routes(val areas: Lookup<Area>,
-                  val namer: Namer? = null,
-                  val onInstanceCreated: ((Any?) -> Unit )? = null) {
+data class Routes(
+    val areas: Lookup<Area>,
+    val namer: Namer? = null,
+    val onInstanceCreated: ((Any?) -> Unit)? = null
+) {
 
     init {
         onInstanceCreated?.let {
@@ -52,22 +53,19 @@ data class Routes(val areas: Lookup<Area>,
      */
     fun contains(area: String): Boolean = areas.contains(area)
 
-
     /**
      * Whether there is an api in the area supplied
      */
-    fun contains(area: String, api:String): Boolean {
+    fun contains(area: String, api: String): Boolean {
         return areas[area]?.apis?.contains(api) ?: false
     }
 
-
     /**
      * Whether there is an api in the area supplied
      */
-    fun contains(area: String, api:String, action:String): Boolean {
+    fun contains(area: String, api: String, action: String): Boolean {
         return areas[area]?.apis?.get(api)?.actions?.contains(action) ?: false
     }
-
 
     /**
      * Gets the API model associated with the area.name
@@ -76,11 +74,10 @@ data class Routes(val areas: Lookup<Area>,
         return areas[area]?.apis?.get(name)
     }
 
-
     /**
      * gets an instance of the API for the corresponding area.name
      */
-    fun instance(area:String, name:String, ctx: Context): Any? {
+    fun instance(area: String, name: String, ctx: Context): Any? {
         val api = api(area, name)
         val instance = api?.let { info ->
             info.singleton ?: if (info.cls.primaryConstructor!!.parameters.isEmpty()) {
@@ -93,24 +90,21 @@ data class Routes(val areas: Lookup<Area>,
         return instance
     }
 
-
-    fun visitApis(visitor:(Area, Api) -> Unit) {
+    fun visitApis(visitor: (Area, Api) -> Unit) {
 
         // 1. Each top level area in the system
         // e.g. {area}/{api}/{action}
         this.areas.items.forEach { area ->
 
             area.apis.items.forEach { api ->
-                visitor( area, api )
+                visitor(area, api)
             }
         }
     }
 
+    fun buildApiKey(area: String, name: String): String = "$area.$name"
 
-    fun buildApiKey(area:String, name:String):String = "$area.$name"
-
-
-    fun visitActions(visitor:(Area, Api, Action) -> Unit) {
+    fun visitActions(visitor: (Area, Api, Action) -> Unit) {
 
         // 1. Each top level area in the system
         // e.g. {area}/{api}/{action}
@@ -119,7 +113,7 @@ data class Routes(val areas: Lookup<Area>,
             area.apis.items.forEach { api ->
 
                 api.actions.items.forEach { action ->
-                    visitor(area, api, action )
+                    visitor(area, api, action)
                 }
             }
         }

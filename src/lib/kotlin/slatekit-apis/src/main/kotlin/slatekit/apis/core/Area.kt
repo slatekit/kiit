@@ -1,6 +1,5 @@
 package slatekit.apis.core
 
-
 /**
  * The top most level qualifier in the Universal Routing Structure
  * Essentially the root of the Routing tree
@@ -25,4 +24,4 @@ package slatekit.apis.core
  *                  - { action_d }
  *                  - { action_e }
  */
-class Area(val name:String, val apis:Lookup<Api>)
+class Area(val name: String, val apis: Lookup<Api>)

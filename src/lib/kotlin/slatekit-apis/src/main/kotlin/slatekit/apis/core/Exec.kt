@@ -18,18 +18,15 @@ import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
 import slatekit.common.*
 import slatekit.common.log.Logger
-import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.unexpectedError
 import kotlin.reflect.KCallable
-
 
 /**
  * Executes the API action using a pipeline of steps
  */
-class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
+class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     private val BEFORE = "Before"
-    private val AFTER  = "After "
-
+    private val AFTER = "After "
 
     /**
      * Executes the final API action after going through all the middleware first.
@@ -87,7 +84,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         return result
     }
 
-
     /**
      * Ensures valid protocols before processing
      */
@@ -103,7 +99,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             result
         }
     }
-
 
     /**
      * Ensures valid authorization before processing
@@ -121,7 +116,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         }
     }
 
-
     /**
      * Ensures valid authorization before processing
      */
@@ -129,7 +123,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         return log(::middleware) {
 
             val check = validator.validateMiddleware(ctx.req, ctx.container.filters)
-            val result = if(check.success) {
+            val result = if (check.success) {
                 proceed()
             } else {
                 check.toResultEx()
@@ -137,7 +131,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             result
         }
     }
-
 
     /**
      * Ensures valid authorization before processing
@@ -154,7 +147,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             result
         }
     }
-
 
     /**
      * Applies the tracking middleware to track requests, successes, failures
@@ -179,7 +171,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         }
     }
 
-
     /**
      * Applies the tracking middleware to track requests, successes, failures
      */
@@ -203,7 +194,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         }
     }
 
-
     /**
      * Applies the filter middleware to filter out requests
      */
@@ -217,7 +207,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
                     proceed()
                 } else {
                     logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
-                    if(instance is Tracked) {
+                    if (instance is Tracked) {
                         instance.tracker.trackFiltered(ctx.req)
                     }
                     filterResult
@@ -228,7 +218,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
             result
         }
     }
-
 
     /**
      * Applies the hooks middleware before/after execution of action
@@ -253,7 +242,6 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         }
     }
 
-
     /**
      * Applies the handler middleware to either handle the request or proceed
      */
@@ -274,12 +262,11 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         }
     }
 
-
     private fun attempt(call: () -> Result<Any, Exception>): Result<Any, Exception> {
         // Build a message
         val result = try {
             call()
-        } catch ( ex:Exception ) {
+        } catch (ex: Exception) {
             logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
             unexpectedError<Any>(Exception("unexpected error in api", ex))
@@ -290,8 +277,7 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         return result
     }
 
-
-    private fun log(method:KCallable<*>, call: () -> Result<Any, Exception>): Result<Any, Exception> {
+    private fun log(method: KCallable<*>, call: () -> Result<Any, Exception>): Result<Any, Exception> {
         // Build a message
         val result = call()
 
@@ -302,10 +288,8 @@ class Exec(val ctx:Ctx, val validator:Validation, val logger:Logger) {
         return result
     }
 
-
-    private fun logError(method:String, ex:Exception) {
+    private fun logError(method: String, ex: Exception) {
         val json = Requests.toJson(ctx.req, ctx.context.enc)
         logger.error("""{ "method": "$method", "path": "${ctx.req.fullName}", "request" : $json }""".trimIndent(), ex)
-
     }
 }

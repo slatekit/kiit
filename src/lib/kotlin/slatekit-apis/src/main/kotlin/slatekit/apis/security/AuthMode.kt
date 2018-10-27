@@ -12,10 +12,8 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.security
 
-
-
 interface AuthMode {
-    val name:String
+    val name: String
 }
 
 /**
@@ -23,9 +21,7 @@ interface AuthMode {
  */
 object AuthModeToken : AuthMode { override val name = AuthModes.token }
 
-
-
 /**
  * To represent an api-key based authentication where many clients/users can share an api key
  */
-object AuthModeApiKey: AuthMode { override val name = AuthModes.apiKey }
+object AuthModeApiKey : AuthMode { override val name = AuthModes.apiKey }

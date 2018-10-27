@@ -18,7 +18,6 @@ object Verbs {
      */
     const val auto = "auto"
 
-
     /**
      * This allows for automatically determining the verb based on the method name
      * e.g.

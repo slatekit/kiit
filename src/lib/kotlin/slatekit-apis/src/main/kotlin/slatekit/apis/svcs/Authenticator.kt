@@ -7,7 +7,6 @@ import slatekit.common.auth.AuthFuncs
 import slatekit.common.results.ResultFuncs
 import slatekit.common.security.ApiKey
 
-
 /**
  * Class used to authenticate an api with support for 3 modes:
  *
@@ -15,9 +14,9 @@ import slatekit.common.security.ApiKey
  * 2. token   : user needs to login to get an Authorization token ( the token is unique to a user )
  * 3. hybrid  : dual authentication mode that will validate key + token.
  *
- * @param keys        : The list of api keys supported ( which contain roles ).
+ * @param keys : The list of api keys supported ( which contain roles ).
  *                      These are used for actions where 1 ore more keys are used by many users
- * @param callback    : Callback used for handing the actual logic for validating an action
+ * @param callback : Callback used for handing the actual logic for validating an action
  */
 open class Authenticator(
     protected val keys: List<ApiKey>,
@@ -26,14 +25,13 @@ open class Authenticator(
 
     private val _keyLookup = AuthFuncs.convertKeys(keys)
 
-
     /**
      * whether or not the authorization is valid for the mode, roles supplied.
      *
-     * @param req          : The api request object
-     * @param authMode     : The auth mode for the api
+     * @param req : The api request object
+     * @param authMode : The auth mode for the api
      * @param rolesOnAction: The roles setup for the action on the api
-     * @param rolesOnApi   : The roles setup for the api itself
+     * @param rolesOnApi : The roles setup for the api itself
      * @return
      */
     override fun isAuthorized(
@@ -53,11 +51,10 @@ open class Authenticator(
         // 3. Now determine roles based on api-key or role
         return when (authMode) {
             AuthModes.apiKey -> validateApiKey(req, role)
-            AuthModes.token  -> validateToken(req, role)
+            AuthModes.token -> validateToken(req, role)
             else -> ResultFuncs.unAuthorized()
         }
     }
-
 
     /**
      * Determines whether the request is authorized based on an api-key based role.
@@ -78,7 +75,6 @@ open class Authenticator(
         // otherwise use built-in key check
         return AuthFuncs.isKeyValid(req.meta, _keyLookup, headerKey, role)
     }
-
 
     /**
      * Determines whether the request is authorized based on a token.

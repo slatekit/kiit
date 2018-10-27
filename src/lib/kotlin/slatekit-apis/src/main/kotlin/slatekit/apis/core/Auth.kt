@@ -17,7 +17,6 @@ import slatekit.common.Request
 import slatekit.common.ResultMsg
 import slatekit.common.auth.Roles
 
-
 /**
  * Class used to authenticate an api with support for 3 modes:
  * 1. app-key : user needs to supply an api-key to authenticate
@@ -32,13 +31,12 @@ interface Auth {
      * whether or not the authorization is valid for the auth mode and roles supplied.
      * NOTE: This can be implemented any way, e.g.g Auth tokens/OAuth etc.
      *
-     * @param authMode       : The mode of the authoriation as specified by annotation Api and attribute: auth
-     * @param rolesOnAction  : The values of the "roles" attribute on the annotation of the ApiAction ( method )
-     * @param rolesOnApi     : The values of the "roles" attribute on the annotation of the Api ( class )
+     * @param authMode : The mode of the authoriation as specified by annotation Api and attribute: auth
+     * @param rolesOnAction : The values of the "roles" attribute on the annotation of the ApiAction ( method )
+     * @param rolesOnApi : The values of the "roles" attribute on the annotation of the Api ( class )
      * @return
      */
     fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): ResultMsg<Boolean>
-
 
     /**
      * Gets the user roles that are applicable for the supplied request.
@@ -46,36 +44,30 @@ interface Auth {
      */
     fun getUserRoles(req: Request): String = ""
 
-
     /**
      * Whether the role supplied is a guest role via "?"
      */
-    fun isRoleGuest (role:String): Boolean = role == Roles.guest
-
+    fun isRoleGuest(role: String): Boolean = role == Roles.guest
 
     /**
      * Whether the role supplied is any role via "*"
      */
-    fun isRoleAny   (role:String): Boolean = role == Roles.all
-
+    fun isRoleAny(role: String): Boolean = role == Roles.all
 
     /**
      * Whether the role supplied is a referent to the parent role via "@parent"
      */
-    fun isRoleParent(role:String): Boolean = role == Roles.parent
-
+    fun isRoleParent(role: String): Boolean = role == Roles.parent
 
     /**
      * Whether the role supplied is an empty role indicating public access.
      */
-    fun isRoleEmpty(role:String): Boolean = role == Roles.none
-
+    fun isRoleEmpty(role: String): Boolean = role == Roles.none
 
     /**
      * Whether the role is empty "" or a guest role "?"
      */
-    fun isRoleEmptyOrGuest(role:String):Boolean = isRoleEmpty(role) || isRoleGuest(role)
-
+    fun isRoleEmptyOrGuest(role: String): Boolean = isRoleEmpty(role) || isRoleGuest(role)
 
     /**
      * gets the primary value supplied unless it references the parent value via "@parent"
@@ -84,7 +76,7 @@ interface Auth {
      * @return
      */
     fun determineRole(primary: String?, parent: String): String {
-        return if(primary != null && !primary.isNullOrEmpty() && primary != Roles.parent)
+        return if (primary != null && !primary.isNullOrEmpty() && primary != Roles.parent)
             primary
         else
             parent

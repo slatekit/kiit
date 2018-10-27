@@ -22,31 +22,31 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-
 /**
  * Used to represent a request that originate from a json file.
  * This is useful for automation purposes and replaying an api action from a file source.
- * @param req        : The raw request
- * @param enc        : The encryptor
+ * @param req : The raw request
+ * @param enc : The encryptor
  * @param extraParams: Additional parameters from SlateKit.
  *                     These are useful for the middleware rewrite module
  *                     which can rewrite routes add parameters
  */
-data class Params(    val rawSource: Any,
-                      val method: String,
-                      val hasBody: Boolean,
-                      val enc: Encryptor?,
-                      val json: JSONObject,
-                      val extraParams:MutableMap<String,Any> = mutableMapOf(),
-                      val queryParams:Map<String,String>? = null
-    ) : Inputs, InputsUpdateable, JsonSupport {
+data class Params(
+    val rawSource: Any,
+    val method: String,
+    val hasBody: Boolean,
+    val enc: Encryptor?,
+    val json: JSONObject,
+    val extraParams: MutableMap<String, Any> = mutableMapOf(),
+    val queryParams: Map<String, String>? = null
+) : Inputs, InputsUpdateable, JsonSupport {
 
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
     override fun toJson(): JSONObject = json
 
-    override val raw:Any = json
+    override val raw: Any = json
     override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
@@ -60,63 +60,50 @@ data class Params(    val rawSource: Any,
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     override fun containsKey(key: String): Boolean {
         return if (extraParams.containsKey(key)) {
             true
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             true
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             queryParams?.contains(key) ?: false
-        }
-        else {
+        } else {
             false
         }
     }
 
-
     fun getInternal(key: String): Any? {
-        val value = if (extraParams.containsKey(key)){
+        val value = if (extraParams.containsKey(key)) {
             extraParams[key]
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             json.get(key)
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             queryParams?.let { qp -> qp[key] } ?: ""
-        }
-        else {
+        } else {
             ""
         }
         return value
     }
-
 
     fun getInternalString(key: String): String {
-        val value =  if (extraParams.containsKey(key)){
+        val value = if (extraParams.containsKey(key)) {
             extraParams[key].toString()
-        }
-        else if (hasBody && json.containsKey(key)) {
+        } else if (hasBody && json.containsKey(key)) {
             json.get(key).toString()
-        }
-        else if (!hasBody) {
+        } else if (!hasBody) {
             queryParams?.let { qp -> qp[key] } ?: ""
-        }
-        else {
+        } else {
             ""
         }
         return value
     }
-
 
     /**
      * This is to support the rewrite middleware which can rewrite
      * requests to other requests ( e.g. routes and parameters )
      */
-    override fun add(key:String, value:Any):Inputs {
-        if(hasBody){
+    override fun add(key: String, value: Any): Inputs {
+        if (hasBody) {
             json.put(key, value)
         } else {
             extraParams.put(key, value)
@@ -124,10 +111,8 @@ data class Params(    val rawSource: Any,
         return this
     }
 
-
     fun getStringRaw(key: String): String = getInternalString(key).trim()
 }
-
 
 /* FILE HANDLING
 * post("/upload", "multipart/form-data", (request, response) -> {

@@ -18,9 +18,7 @@ import slatekit.apis.doc.ApiVisitOptions
 import slatekit.apis.doc.ApiVisitor
 import slatekit.apis.doc.Doc
 
-
 class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc) {
-
 
     /**
      * handles help request for all the areas supported
@@ -35,7 +33,6 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         return doc.toString()
     }
 
-
     /**
      * handles help request for a specific area
      *
@@ -48,7 +45,6 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         visitor.visitApis(area, doc)
         return doc.toString()
     }
-
 
     /**
      * handles help request for a specific api
@@ -63,7 +59,6 @@ class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc
         visitor.visitActions(area, api, doc)
         return doc.toString()
     }
-
 
     /**
      * handles help request for a specific api action

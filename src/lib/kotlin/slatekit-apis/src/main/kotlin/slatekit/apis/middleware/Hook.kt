@@ -13,7 +13,6 @@
 
 package slatekit.apis.middleware
 
-
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events
  * of an API call, without any modification to the life-cycle/flow.
@@ -21,5 +20,4 @@ package slatekit.apis.middleware
  * NOTE: The hooks are applied right before and after the call to the action
  *
  */
-interface Hook : Middleware, Before, After {
-}
+interface Hook : Middleware, Before, After
