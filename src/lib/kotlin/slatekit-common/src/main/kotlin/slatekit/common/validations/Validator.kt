@@ -13,8 +13,6 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Reference
-
 open class Validator<T> {
 
     open fun validate(item: T): ValidationResults = ValidationResults.build(null)

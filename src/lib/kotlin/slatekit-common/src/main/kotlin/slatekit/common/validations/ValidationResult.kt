@@ -13,7 +13,6 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Reference
 
 data class ValidationResult(
         val success: Boolean,
