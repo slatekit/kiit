@@ -79,8 +79,21 @@ data class Failure<out E>(
     override val success = false
 }
 
+/**
+ * Used for representing results with that are simple strings
+ */
 typealias ResultMsg<T> = Result<T, String>
+
+/**
+ * Used for representing results from code that can throw exceptions
+ */
 typealias ResultEx<T> = Result<T, Exception>
+
+/**
+ * Used for representing results from code that can model complex errors using the Err interface
+ * NOTE: This should be used in cases to avoid exception handling in place of functional error handling.
+ */
+typealias ResultErr<T> = Result<T, Err>
 
 inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
     when (this) {
