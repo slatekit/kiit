@@ -20,7 +20,6 @@ import slatekit.common.results.ResultFuncs.successOrError
 import slatekit.common.results.ResultFuncs.unexpectedError
 import java.util.concurrent.atomic.AtomicReference
 
-
 /**
  * Light-weight implementation of a command-like pattern that can execute some code
  * and track the last result of that code.
@@ -43,14 +42,15 @@ import java.util.concurrent.atomic.AtomicReference
  * a command was run.
  * @param name
  */
-open class Cmd(val name: String,
-               val desc: String? = null,
-               call: ((Array<String>?) -> Any?)? = null) {
+open class Cmd(
+    val name: String,
+    val desc: String? = null,
+    call: ((Array<String>?) -> Any?)? = null
+) {
 
     private val _call = call
     private val _lastResult = AtomicReference<CmdResult>(CmdFuncs.defaultResult(name))
     private val _lastStatus = AtomicReference<CmdState>(CmdFuncs.defaultState(name))
-
 
     /**
      * Expose the immutable last execution result of this command
@@ -58,13 +58,11 @@ open class Cmd(val name: String,
      */
     fun lastResult(): CmdResult = _lastResult.get()
 
-
     /**
      * Expose the last known status of this command
      * @return
      */
     fun lastStatus(): CmdState = _lastStatus.get()
-
 
     /**
      * execute this command with optional arguments
@@ -84,11 +82,9 @@ open class Cmd(val name: String,
                         val res = c(args)
                         successOrError(res != null, res).toResultEx()
                     } ?: executeInternal(args)
-                }
-                catch(ex: Exception) {
+                } catch (ex: Exception) {
                     unexpectedError(ex, "Error while executing : " + name + ". " + ex.message)
                 }
-
 
         // Stop tracking time (inclusive of possible error )
         val end = now()
@@ -103,13 +99,12 @@ open class Cmd(val name: String,
         return cmdResult
     }
 
-
     /**
      * executes the command, this should be overridden in sub-classes
      *
      * @param args
      * @return
      */
-    open protected fun executeInternal(args: Array<String>?): ResultEx<Any> =
+    protected open fun executeInternal(args: Array<String>?): ResultEx<Any> =
             notImplemented<Any>().toResultEx()
 }

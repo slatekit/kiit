@@ -13,25 +13,21 @@ mantra: Simplicity above all else
 
 package slatekit.core.push
 
-
-
 /**
- * @param to          : Metadata about the message
+ * @param to : Metadata about the message
  * @param messageType : Information about the sender
- * @param data        : The "data" part of the message. in android the "data" section
- * @param alert       : The "alert" part of the message. in android the "notification" section
+ * @param data : The "data" part of the message. in android the "data" section
+ * @param alert : The "alert" part of the message. in android the "notification" section
  */
 data class Message(
     val to: List<String>,
-    val messageType:MessageType = MessageTypeData,
+    val messageType: MessageType = MessageTypeData,
     val payload: String = "",
     val alert: Notification? = null
 ) {
 
-    val isMultiDelivery:Boolean = to.size > 1
+    val isMultiDelivery: Boolean = to.size > 1
     fun isAlert(): Boolean = messageType == MessageTypeAlert
     fun isData(): Boolean = messageType == MessageTypeData
     fun isBoth(): Boolean = messageType == MessageTypeBoth
-
 }
-

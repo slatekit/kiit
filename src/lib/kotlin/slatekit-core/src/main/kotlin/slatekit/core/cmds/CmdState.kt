@@ -15,24 +15,23 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 
-
 /**
  *
- * @param name        : Name of the command
+ * @param name : Name of the command
  * @param lastRuntime : Last time the command was run
- * @param hasRun      : Whether command has run at least once
- * @param runCount    : The total times the command was run
- * @param errorCount  : The total errors
- * @param lastResult  : The last result
+ * @param hasRun : Whether command has run at least once
+ * @param runCount : The total times the command was run
+ * @param errorCount : The total errors
+ * @param lastResult : The last result
  */
 data class CmdState(
-        val name: String,
-        val msg: String,
-        val lastRuntime: DateTime,
-        val hasRun: Boolean,
-        val runCount: Int,
-        val errorCount: Int,
-        val lastResult: CmdResult?
+    val name: String,
+    val msg: String,
+    val lastRuntime: DateTime,
+    val hasRun: Boolean,
+    val runCount: Int,
+    val errorCount: Int,
+    val lastResult: CmdResult?
 ) {
     /**
      * Builds a copy of the this state with bumped up numbers ( run count, error count, etc )

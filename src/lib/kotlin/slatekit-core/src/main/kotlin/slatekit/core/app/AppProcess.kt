@@ -28,17 +28,17 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.core.common.AppContext
 
-
 /**
  * Application base class providing most of the scaffolding to support command line argument
  * checking, app metadata, life-cycle template methods and more. This allows derived classes
  * to be very thin and focus on simply executing main logic of the app.
  */
-open class AppProcess(context: AppContext?,
-                      args: Array<String>? = null,
-                      schema: ArgsSchema? = null,
-                      enc: Encryptor? = null,
-                      converter: ((AppContext) -> AppContext)? = null
+open class AppProcess(
+    context: AppContext?,
+    args: Array<String>? = null,
+    schema: ArgsSchema? = null,
+    enc: Encryptor? = null,
+    converter: ((AppContext) -> AppContext)? = null
 )
     : AppMetaSupport,
       LogSupport,
@@ -61,11 +61,8 @@ open class AppProcess(context: AppContext?,
     // Config from context
     val conf = ctx.cfg
 
-
     val meta: AppMeta = AppMeta(ctx.inf, ctx.host, ctx.lang, Status.none,
             StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()), ctx.build)
-
-
 
     override val logger = ctx.logs.getLogger("app")
     override val encryptor = ctx.enc
@@ -78,49 +75,43 @@ open class AppProcess(context: AppContext?,
      */
     override fun appMeta(): AppMeta = meta
 
-
     /**
      * initializes this app before applying the arguments
      * this is good place to set app metadata.
      */
-    fun init(): Unit {
+    fun init() {
         // 5. Let derived app build initialize itself. it may also build the context using the
         // env, conf base, conf objects.
         onInit()
 
         try {
             ctx.dirs?.create()
-        }
-        catch(e: Exception) {
+        } catch (e: Exception) {
             println("Error while creating directories for application in user.home directory")
         }
     }
-
 
     /**
      * used for derived class to handle command line args
      *
      */
-    open fun onInit(): Unit {
+    open fun onInit() {
     }
-
 
     /**
      * accepts command line args
      *
      */
-    fun accept(): Unit {
+    fun accept() {
         onAccept()
     }
-
 
     /**
      * used for derived class to handle command line args
      *
      */
-    open fun onAccept(): Unit {
+    open fun onAccept() {
     }
-
 
     /**
      * executes this application
@@ -136,8 +127,7 @@ open class AppProcess(context: AppContext?,
         val res: ResultEx<Any> =
                 try {
                     onExecute()
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     error("error while executing app : " + e.message)
 
                     unexpectedError(msg = "Unexpected error : " + e.message, err = e)
@@ -146,24 +136,21 @@ open class AppProcess(context: AppContext?,
         return res
     }
 
-
     /**
      * the method that does all the work of this application.
      * should be overriden in base class
      *
      * @return
      */
-    open protected fun onExecute(): ResultEx<Any> = Success<Any>("default")
-
+    protected open fun onExecute(): ResultEx<Any> = Success<Any>("default")
 
     /**
      * runs shutdown logic
      */
-    fun end(): Unit {
+    fun end() {
         try {
             onEnd()
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             error("error while shutting down app : " + e.message)
         }
         if (options.printSummaryOnShutdown) {
@@ -174,13 +161,11 @@ open class AppProcess(context: AppContext?,
         }
     }
 
-
     /**
      * derived classes can implement this
      */
-    open fun onEnd(): Unit {
+    open fun onEnd() {
     }
-
 
     /**
      * builds a list of properties fully describing this app by adding
@@ -189,22 +174,20 @@ open class AppProcess(context: AppContext?,
      * @return
      */
 
-
     /**
      * prints the summary of the arguments
      */
-    fun logStart(): Unit {
+    fun logStart() {
         info("===============================================================")
         this.appLogStart({ name: String, value: String -> info(name + " = " + value) })
         info("STARTING : ")
         info("===============================================================")
     }
 
-
     /**
      * prints the summary of the arguments
      */
-    fun logStartCustom(callback:() -> List<Pair<String,String>>): Unit {
+    fun logStartCustom(callback: () -> List<Pair<String, String>>) {
         info("===============================================================")
 
         // extra key/value diagnostics
@@ -224,11 +207,10 @@ open class AppProcess(context: AppContext?,
         info("===============================================================")
     }
 
-
     /**
      * prints the summary of the arguments
      */
-    fun logSummary(status: Status = appMeta().status): Unit {
+    fun logSummary(status: Status = appMeta().status) {
         info("===============================================================")
         info("SUMMARY : ")
         info("===============================================================")
@@ -246,18 +228,15 @@ open class AppProcess(context: AppContext?,
         finalSummary.forEach { arg ->
 
             info(arg.first + " = " + arg.second)
-            //writer.keyValue(arg._1, arg._2)
+            // writer.keyValue(arg._1, arg._2)
         }
         info("===============================================================")
     }
 
-
     open fun collectSummaryExtra(): List<Pair<String, String>>? = null
-
 
     fun showHelp(code: Int) {
     }
-
 
     open fun showWelcome() {
 
@@ -277,11 +256,9 @@ open class AppProcess(context: AppContext?,
         logger.info("app:config  :${meta.start.config}")
     }
 
-
     private fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
         this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) }, status)
         return buf.toList()
     }
 }
-

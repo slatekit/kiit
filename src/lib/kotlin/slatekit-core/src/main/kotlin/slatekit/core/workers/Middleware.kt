@@ -17,7 +17,7 @@ import slatekit.common.Result
 
 open class Middleware {
 
-    open fun <T> run(worker:Worker<T>, job:Job, call: () -> Result<T, Exception>): Result<T, Exception> {
+    open fun <T> run(worker: Worker<T>, job: Job, call: () -> Result<T, Exception>): Result<T, Exception> {
 
         // Track all requests
         worker.metrics.request(job)
@@ -28,13 +28,12 @@ open class Middleware {
         // Attempt
         val result = try {
             call()
-        }
-        catch (ex:Exception) {
-            Failure(ex, msg="Unexpected error : " + ex.message)
+        } catch (ex: Exception) {
+            Failure(ex, msg = "Unexpected error : " + ex.message)
         }
 
         // Track successes/failures
-        if(result.success) {
+        if (result.success) {
             worker.metrics.success(job, result)
             worker.handler.onSuccess(job, worker, result)
         } else {

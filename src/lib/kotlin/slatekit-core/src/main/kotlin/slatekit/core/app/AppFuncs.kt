@@ -13,7 +13,6 @@
 
 package slatekit.core.app
 
-
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
@@ -57,14 +56,13 @@ object AppFuncs {
      */
     fun envs(): List<Env> =
         listOf(
-            Env("loc", Dev , desc = "Dev environment (local)"),
-            Env("dev", Dev , desc = "Dev environment (shared)"),
-            Env("qa1", Qa  , desc = "QA environment  (current release)"),
-            Env("qa2", Qa  , desc = "QA environment  (last release)"),
-            Env("stg", Uat , desc = "STG environment (demo)"),
+            Env("loc", Dev, desc = "Dev environment (local)"),
+            Env("dev", Dev, desc = "Dev environment (shared)"),
+            Env("qa1", Qa, desc = "QA environment  (current release)"),
+            Env("qa2", Qa, desc = "QA environment  (last release)"),
+            Env("stg", Uat, desc = "STG environment (demo)"),
             Env("pro", Prod, desc = "LIVE environment")
         )
-
 
     /**
      * Builds the DbLookup containing the database connections :
@@ -75,7 +73,6 @@ object AppFuncs {
      * @return
      */
     fun dbs(conf: ConfigBase): DbLookup = defaultDb(conf.dbCon("db"))
-
 
     /**
      * builds all the info for this application including its
@@ -100,7 +97,6 @@ object AppFuncs {
                     tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
                     examples = conf.getStringOrElse("app.examples", "")
             )
-
 
     /**
      * builds a list of directories used by the application for logs/output ( NOT BINARIES ).
@@ -131,7 +127,6 @@ object AppFuncs {
         )
     }
 
-
     /**
      * builds a list of substitutions ( variables ) that can be used dynamically
      * throughout the application to refer to various parts/settings of the app.
@@ -143,20 +138,19 @@ object AppFuncs {
     fun vars(conf: ConfigBase): Subs {
         val abt = about(conf)
         return Subs(listOf<Pair<String, (TemplatePart) -> String>>(
-                Pair("user.home"   , { _ -> System.getProperty("user.home") }),
-                Pair("company.id"  , { _ -> abt.company.toId() }),
+                Pair("user.home", { _ -> System.getProperty("user.home") }),
+                Pair("company.id", { _ -> abt.company.toId() }),
                 Pair("company.name", { _ -> abt.company }),
-                Pair("company.dir" , { _ -> "@{user.home}/@{company.id}" }),
-                Pair("root.dir"    , { _ -> "@{company.dir}" }),
-                Pair("group.id"    , { _ -> abt.group.toId() }),
-                Pair("group.name"  , { _ -> abt.group }),
-                Pair("group.dir"   , { _ -> "@{root.dir}/@{group.id}" }),
-                Pair("app.id"      , { _ -> abt.id }),
-                Pair("app.name"    , { _ -> abt.name }),
-                Pair("app.dir"     , { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
+                Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
+                Pair("root.dir", { _ -> "@{company.dir}" }),
+                Pair("group.id", { _ -> abt.group.toId() }),
+                Pair("group.name", { _ -> abt.group }),
+                Pair("group.dir", { _ -> "@{root.dir}/@{group.id}" }),
+                Pair("app.id", { _ -> abt.id }),
+                Pair("app.name", { _ -> abt.name }),
+                Pair("app.dir", { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
         ))
     }
-
 
     fun getConfPath(args: Args, file: String, conf: ConfigBase?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
@@ -164,12 +158,11 @@ object AppFuncs {
         val prefix = when (location) {
             "jars" -> ""
             "conf" -> "file://./conf/"
-            ""     -> ""
-            else   -> location
+            "" -> ""
+            else -> location
         }
         return prefix + file
     }
-
 
     /**
      * Checks the command for either an instructions about app or for exiting:
@@ -194,12 +187,10 @@ object AppFuncs {
         // Case 3a: Help ?
         else if (ArgsFuncs.isAbout(raw, 0) || ArgsFuncs.isHelp(raw, 0)) {
             help()
-        }
-        else {
+        } else {
             failure()
         }
     }
-
 
     /**
      * gets the selected environment by key "env" from command line args first or env.conf second
@@ -211,7 +202,6 @@ object AppFuncs {
         return Env.parse(env)
     }
 
-
     /**
      * gets log level by key "log.level" from command line args first or environment config 2nd
      *
@@ -222,7 +212,6 @@ object AppFuncs {
         return LogHelper.parseLevel(level)
     }
 
-
     /**
      * gets log name by key "log.name" from command line args first or environment config 2nd
      *
@@ -232,7 +221,6 @@ object AppFuncs {
         val log = getConfOverride(args, conf, "log.name", "@{app}-@{env}-@{date}.log")
         return log
     }
-
 
     fun getConfOverride(args: Args, conf: ConfigBase, key: String, defaultValue: String?): String {
 
@@ -250,7 +238,6 @@ object AppFuncs {
         else
             cfg ?: finalDefaultValue
     }
-
 
     fun buildAppInputs(args: Args, enc: Encryptor?): ResultMsg<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
@@ -288,7 +275,6 @@ object AppFuncs {
         } ?: failure<AppInputs>(msg = "Unknown environment name : $envName supplied")
     }
 
-
     fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
 
         val buildInfoExists = resourceExists("build.conf")
@@ -296,8 +282,7 @@ object AppFuncs {
             val stamp = Config(getConfPath(appInputs.args, "build.conf", null), enc)
             val info = stamp.buildStamp("build")
             info
-        }
-        else {
+        } else {
             Build.empty
         }
 
@@ -321,12 +306,11 @@ object AppFuncs {
                 dirs = folders(conf),
                 state = Success(true),
                 build = build
-                //ent = Entities(dbs(conf))
+                // ent = Entities(dbs(conf))
         )
     }
 
-
-    fun resourceExists(path:String):Boolean {
+    fun resourceExists(path: String): Boolean {
         val res = this.javaClass.getResource("/$path")
         return res != null
     }

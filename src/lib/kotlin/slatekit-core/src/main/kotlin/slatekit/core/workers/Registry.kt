@@ -17,14 +17,12 @@ import slatekit.core.workers.core.QueueInfo
 import slatekit.core.workers.core.Utils
 import java.util.*
 
-class Registry(val sys:System) {
-
+class Registry(val sys: System) {
 
     /**
      * Lookup of queues to workers that can handle the queue
      */
-    val queueToWorkers:Map<String, List<Worker<*>>> = Utils.toWorkerLookup(sys.queues.queues, sys.getWorkers())
-
+    val queueToWorkers: Map<String, List<Worker<*>>> = Utils.toWorkerLookup(sys.queues.queues, sys.getWorkers())
 
     /**
      * Gets a random queue from the list of queues, factoring in the queue priority
@@ -34,20 +32,18 @@ class Registry(val sys:System) {
         return queue
     }
 
-
     /**
      * Gets a random queue from the list of queues, factoring in the queue priority
      */
-    fun getQueueAt(pos:Int): QueueInfo? {
+    fun getQueueAt(pos: Int): QueueInfo? {
         val queue = sys.queues.prioritizedQueues[pos]
         return queue
     }
 
-
     /**
      * Gets a batch of jobs from the next queue
      */
-    fun getBatch(queueInfo: QueueInfo, size:Int):List<Job>? {
+    fun getBatch(queueInfo: QueueInfo, size: Int): List<Job>? {
         val queue = queueInfo.queue as QueueSourceMsg
         val items = queue.nextBatch(size)
         return items?.map { item ->
@@ -55,19 +51,18 @@ class Registry(val sys:System) {
         }
     }
 
-
     /**
      * Gets a random worker that can handle the given queue
      */
-    fun getWorker(queue:String):Worker<*>? {
+    fun getWorker(queue: String): Worker<*>? {
         val workers = queueToWorkers[queue]
         val worker = workers?.let { all ->
-            if(all.isEmpty()) null
-            else if(all.size == 1) all.first()
+            if (all.isEmpty()) null
+            else if (all.size == 1) all.first()
             else {
                 val available = all.filter { it.isAvailable() }
-                if(available.isEmpty()) null
-                else if(available.size == 1) available.first()
+                if (available.isEmpty()) null
+                else if (available.size == 1) available.first()
                 else available.get(Random().nextInt(available.size))
             }
         }

@@ -13,46 +13,39 @@
 
 package slatekit.core.cli
 
-
 import slatekit.common.Files
 import slatekit.common.Response
-import slatekit.common.Result
 import slatekit.common.console.ConsoleWriter
-import slatekit.common.serialization.SerializerProps
 import slatekit.meta.Serialization
 import java.io.File
-
 
 class CliPrinter(val _writer: ConsoleWriter) {
 
     private val serializerProp = Serialization.props(true)
     private val serializerJson = Serialization.json()
-    private val serializerCsv  = Serialization.csv()
+    private val serializerCsv = Serialization.csv()
 
-
-    fun printResult(cmd:CliCommand, result: Response<Any>, outputDir:String): Unit {
+    fun printResult(cmd: CliCommand, result: Response<Any>, outputDir: String) {
         result.value?.let { value ->
             printAny(cmd, value, outputDir)
             printSummary(result)
         } ?: printEmpty()
     }
 
-
     /**
      * prints empty result
      */
-    fun printEmpty(): Unit {
+    fun printEmpty() {
         _writer.important("no results/data")
         _writer.line()
     }
-
 
     /**
      * prints summary of the result.
      *
      * @param result
      */
-    fun printSummary(result: Response<Any>): Unit {
+    fun printSummary(result: Response<Any>) {
 
         // Stats.
         _writer.text("Success : " + result.success)
@@ -61,27 +54,26 @@ class CliPrinter(val _writer: ConsoleWriter) {
         _writer.text("Tag     : " + result.tag)
     }
 
-
     /**
      * prints an item ( non-recursive )
      *
      * @param obj
      */
-    fun printAny(cmd:CliCommand, obj: Any?, outputDir:String): Unit {
+    fun printAny(cmd: CliCommand, obj: Any?, outputDir: String) {
         val format = cmd.args.getSysStringOrElse(CliConstants.SysFormat, "props")
         _writer.text("===============================")
-        val text = when(format) {
-            "csv"   -> serializerCsv.serialize(obj)
-            "json"  -> serializerJson.serialize(obj)
-            "prop"  -> serializerProp.serialize(obj)
-            else    -> serializerProp.serialize(obj)
+        val text = when (format) {
+            "csv" -> serializerCsv.serialize(obj)
+            "json" -> serializerJson.serialize(obj)
+            "prop" -> serializerProp.serialize(obj)
+            else -> serializerProp.serialize(obj)
         }
         _writer.text(text)
         _writer.text("===============================")
 
         // Writer to log
         val log = cmd.args.getSysStringOrElse(CliConstants.SysLog, "false")
-        if(log.trim() == "true") {
+        if (log.trim() == "true") {
             val fileName = Files.fileNameAsAsTimeStamp()
             val filePath = File(outputDir, fileName)
             filePath.writeText(text)

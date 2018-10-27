@@ -14,9 +14,8 @@
 package slatekit.core.app
 
 data class AppOptions(
-        val printSummaryBeforeExec: Boolean = false,
-        val printSummaryOnShutdown: Boolean = true,
-        val getConfNameFromEnv: Boolean = true,
-        val getLogNameFromEnv: Boolean = true
-) {
-}
+    val printSummaryBeforeExec: Boolean = false,
+    val printSummaryOnShutdown: Boolean = true,
+    val getConfNameFromEnv: Boolean = true,
+    val getLogNameFromEnv: Boolean = true
+)

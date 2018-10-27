@@ -17,33 +17,31 @@ import slatekit.common.DateTime
 
 /**
  * Represents a single cache item
- * @param key        : The name of the cache key
- * @param value      : The last known value of the cache
- * @param text       : The last known text value
- * @param updated    : The last time it was updated
- * @param seconds    : The time in seconds of its expiry
- * @param expires    : The time it will expire
- * @param error      : The last error when fetching
+ * @param key : The name of the cache key
+ * @param value : The last known value of the cache
+ * @param text : The last known text value
+ * @param updated : The last time it was updated
+ * @param seconds : The time in seconds of its expiry
+ * @param expires : The time it will expire
+ * @param error : The last error when fetching
  * @param errorCount : The total number of errors when fetching
- * @param accessed   : The last time it was accessed
+ * @param accessed : The last time it was accessed
  * @param accessCount: The amount of times it was accessed
  */
 data class CacheItem(
-                        val key         : String,
-                        val value       : Any?,
-                        val text        : String?,
-                        val updated     : DateTime?,
-                        val seconds     : Int,
-                        val expires     : DateTime,
-                        val error       : Throwable?,
-                        val errorCount  : Int,
-                        val accessed    : DateTime?,
-                        val accessCount : Long?
-                     )
-{
+    val key: String,
+    val value: Any?,
+    val text: String?,
+    val updated: DateTime?,
+    val seconds: Int,
+    val expires: DateTime,
+    val error: Throwable?,
+    val errorCount: Int,
+    val accessed: DateTime?,
+    val accessCount: Long?
+) {
 
   fun isExpired(): Boolean = if (seconds <= 0) false else expires < DateTime.now()
-
 
   /**
    * whether or not this entry is still alive in terms of its expiration date

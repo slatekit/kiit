@@ -19,14 +19,12 @@ import slatekit.common.ResultMsg
 import slatekit.common.Success
 import slatekit.common.conf.ConfigBase
 import slatekit.common.http.*
-import slatekit.common.log.Logger
 import slatekit.common.log.Logs
 import slatekit.common.results.ResultFuncs
 import java.util.concurrent.Callable
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
-
 
 /**
  * Google FCM ( Fire base Cloud Messaging ) Service.
@@ -84,11 +82,13 @@ import java.util.concurrent.Future
  *  1. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
  *  2. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
  */
-open class MessageServiceGoogle(_key: String,
-                                val config:ConfigBase,
-                                val logs:Logs,
-                                val executor: ExecutorService ? = null,
-                                private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null) :
+open class MessageServiceGoogle(
+    _key: String,
+    val config: ConfigBase,
+    val logs: Logs,
+    val executor: ExecutorService ? = null,
+    private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null
+) :
     MessageServiceBase() {
 
     private val _settings = MessageSettings("", _key, "")
@@ -96,14 +96,13 @@ open class MessageServiceGoogle(_key: String,
     private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val _logger = logs.getLogger(this.javaClass)
 
-
     /**
      * Sends a push notification to Android using the data from the Message supplied.
      */
     override fun send(msg: Message): ResultMsg<Boolean> {
         val req = buildRequest(msg)
 
-        return if(_sendNotifications) {
+        return if (_sendNotifications) {
             // Supplied an IO ? use that ( e.g. for custom sending )
             // Or use the default
             call?.let { call.run(req) } ?: sendSync(req)
@@ -113,17 +112,15 @@ open class MessageServiceGoogle(_key: String,
         }
     }
 
-
     // TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
     private val exec = executor ?: Executors.newSingleThreadExecutor()
-
 
     /**
      * Sends the message asynchronously
      *
      * @param msg : message to send
      * @return
-     * @note      : implement in derived class that can actually send the message
+     * @note : implement in derived class that can actually send the message
      */
     override fun sendAsync(msg: Message): Future<ResultMsg<Boolean>> {
 
@@ -132,7 +129,6 @@ open class MessageServiceGoogle(_key: String,
             send(msg)
         })
     }
-
 
     /**
      * Builds the Message to send as Push notification as an immutable HTTP Request
@@ -144,15 +140,15 @@ open class MessageServiceGoogle(_key: String,
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    protected fun buildRequest(msg:Message): HttpRequest {
+    protected fun buildRequest(msg: Message): HttpRequest {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices
         // 1  = "to" : "regid1"
         // 2+ = "registration_ids" : ["regid1", "regid2" ]
         val ids = msg.to.joinToString(",") { "\"" + it + "\"" }
-        val to = if(msg.isMultiDelivery) "\"registration_ids\"" else "\"to\""
-        val recipient = if(msg.isMultiDelivery) "[$ids]" else ids
+        val to = if (msg.isMultiDelivery) "\"registration_ids\"" else "\"to\""
+        val recipient = if (msg.isMultiDelivery) "[$ids]" else ids
         val alert = msg.alert?.let { buildAlert(it) } ?: ""
 
         // 2. Build the content
@@ -160,11 +156,11 @@ open class MessageServiceGoogle(_key: String,
         // Notifications only showup in the notification area on android.
         // Data messages will be handled in the app.
         // Use both for when an app is closed/backgrounded.
-        val content = when(msg.messageType) {
-            is MessageTypeData  -> "{$to:$recipient, \"data\":${msg.payload}}"
+        val content = when (msg.messageType) {
+            is MessageTypeData -> "{$to:$recipient, \"data\":${msg.payload}}"
             is MessageTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
-            is MessageTypeBoth  -> "{$to:$recipient, \"notification\":$alert, \"data\":${msg.payload}}"
-            else                -> "{$to:$recipient, \"notification\":$alert}"
+            is MessageTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${msg.payload}}"
+            else -> "{$to:$recipient, \"notification\":$alert}"
         }
 
         // 3. Build immutable http request.
@@ -189,7 +185,6 @@ open class MessageServiceGoogle(_key: String,
         return req
     }
 
-
     /**
      * Simple default for sending the request synchronously.
      * Clients should use the sendAsync method
@@ -201,8 +196,7 @@ open class MessageServiceGoogle(_key: String,
         return result
     }
 
-
-    private fun buildAlert(alert:Notification):String {
+    private fun buildAlert(alert: Notification): String {
         return """{
             "click_action" : "${alert.click_action}",
             "title" : "${alert.title.replace("\"", "\\\"")}",
@@ -210,7 +204,6 @@ open class MessageServiceGoogle(_key: String,
             "icon": "${alert.icon.replace("\"", "\\\"")}"
         }"""
     }
-
 
     companion object {
 

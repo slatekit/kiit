@@ -21,18 +21,19 @@ import slatekit.core.workers.Job
  * Worker level status that can be supplied to a front-end
  * and / or for logging/diagnostics purposes.
  */
-data class Stats(val id:String,
-                 val name:String,
-                 val status:RunState,
-                 val lastRunTime: DateTime,
-                 val lastResult:ResultEx<*>,
-                 val totalRequests : Long,
-                 val totalSuccesses: Long,
-                 val totalErrored  : Long,
-                 val totalFiltered : Long,
-                 val lastRequest   : Job,
-                 val lastFiltered  : Job,
-                 val lastSuccess   : Pair<Job, ResultEx<*>>,
-                 val lastErrored   : Pair<Job, ResultEx<*>>
+data class Stats(
+    val id: String,
+    val name: String,
+    val status: RunState,
+    val lastRunTime: DateTime,
+    val lastResult: ResultEx<*>,
+    val totalRequests: Long,
+    val totalSuccesses: Long,
+    val totalErrored: Long,
+    val totalFiltered: Long,
+    val lastRequest: Job,
+    val lastFiltered: Job,
+    val lastSuccess: Pair<Job, ResultEx<*>>,
+    val lastErrored: Pair<Job, ResultEx<*>>
 
 )

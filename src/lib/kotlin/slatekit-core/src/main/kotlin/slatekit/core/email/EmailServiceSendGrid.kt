@@ -23,18 +23,18 @@ import slatekit.common.http.HttpRequest
 import slatekit.common.results.ResultFuncs
 import slatekit.common.templates.Templates
 
-
-class EmailServiceSendGrid(user: String,
-                           key: String,
-                           phone: String,
-                           templates: Templates? = null,
-                           sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null)
+class EmailServiceSendGrid(
+    user: String,
+    key: String,
+    phone: String,
+    templates: Templates? = null,
+    sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null
+)
     : EmailService(templates) {
     val _sender = sender
 
     val _settings = EmailSettings(user, key, phone)
     private val _baseUrl = "https://api.sendgrid.com/api/mail.send.json"
-
 
     /**
      * Initialize with api credentials
@@ -42,7 +42,6 @@ class EmailServiceSendGrid(user: String,
      */
     constructor(apiKey: ApiLogin, templates: Templates? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
-
 
     override fun send(msg: EmailMessage): ResultMsg<Boolean> {
 
@@ -72,7 +71,6 @@ class EmailServiceSendGrid(user: String,
         // This approach allows for testing this without actually sending a http request.
         return _sender?.let { s -> s(req) } ?: post(req)
     }
-
 
     private fun post(req: HttpRequest): ResultMsg<Boolean> {
         val res = slatekit.common.http.HttpClient.post(req)

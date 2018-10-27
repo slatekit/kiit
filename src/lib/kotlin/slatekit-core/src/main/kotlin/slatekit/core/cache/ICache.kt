@@ -13,7 +13,6 @@
 
 package slatekit.core.cache
 
-
 interface ICache {
 
     /**
@@ -21,19 +20,16 @@ interface ICache {
      */
     val settings: CacheSettings
 
-
     /**
      * number of items in the cache
      * @return
      */
     fun size(): Int
 
-
     /**
      * gets the keys in the cache
      */
     fun keys(): List<String>
-
 
     /**
      * whether the cache contains the key
@@ -41,7 +37,6 @@ interface ICache {
      * @return
      */
     fun contains(key: String): Boolean
-
 
     /**
      * gets the cache entry itself.
@@ -51,7 +46,6 @@ interface ICache {
      */
     fun getEntry(key: String): CacheItem?
 
-
     /**
      * gets an item from the cache if it exists and is alive
      * @param key
@@ -59,7 +53,6 @@ interface ICache {
      * @return
      */
     fun <T> get(key: String): T?
-
 
     /**
      * gets an item from the cache as a future
@@ -69,14 +62,12 @@ interface ICache {
      */
     fun <T> getOrLoad(key: String): T?
 
-
     /**
      * manual / explicit refresh of a cache item with a future result
      * in order to get the item
      * @param key
      */
     fun <T> getFresh(key: String): T?
-
 
     /**
      * puts an item in the cache and loads it immediately
@@ -88,7 +79,6 @@ interface ICache {
      */
     fun <T> put(key: String, desc: String, seconds: Int, fetcher: () -> T?): Unit
 
-
     /**
      * removes a item from the cache
      * @param key
@@ -96,12 +86,10 @@ interface ICache {
      */
     fun remove(key: String): Boolean
 
-
     /**
      * removes all items from the cache
      */
     fun clear(): Boolean
-
 
     /**
      * manual / explicit refresh of a cache item
@@ -109,13 +97,11 @@ interface ICache {
      */
     fun refresh(key: String)
 
-
     /**
      * invalidates a single cache item by its key
      * @param key
      */
     fun invalidate(key: String)
-
 
     /**
      * invalidates all the cache items

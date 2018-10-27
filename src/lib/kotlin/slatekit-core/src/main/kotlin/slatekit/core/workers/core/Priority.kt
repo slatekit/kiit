@@ -15,17 +15,15 @@ package slatekit.core.workers.core
 import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
 
-
 /**
  * Allows for setting a priority on the queues
  */
-enum class Priority(override val value:Int) : EnumLike {
+enum class Priority(override val value: Int) : EnumLike {
     Low(1),
-    Medium (2),
+    Medium(2),
     High(3);
 
-
-    companion object : EnumSupport()  {
+    companion object : EnumSupport() {
 
         override fun all(): Array<EnumLike> {
             return arrayOf(Low, Medium, High)
