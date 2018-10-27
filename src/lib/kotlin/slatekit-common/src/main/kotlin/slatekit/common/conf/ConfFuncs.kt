@@ -34,96 +34,97 @@ import java.util.*
  */
 object ConfFuncs {
 
-
     /**
      * loads the db info from the location specified
      *
-     * @param fileName    : the name of the file e.g "db-local.conf"
-     * @param enc         : the encryptor for decrypting info from the settings
+     * @param fileName : the name of the file e.g "db-local.conf"
+     * @param enc : the encryptor for decrypting info from the settings
      * @param sectionName : the name of the section in the file representing the settings
      * @return
      */
-    fun readDbCon(fileName: String? = null, enc: Encryptor? = null,
-                  sectionName: String? = CONFIG_DEFAULT_SECTION_DB): DbCon? =
+    fun readDbCon(
+        fileName: String? = null,
+        enc: Encryptor? = null,
+        sectionName: String? = CONFIG_DEFAULT_SECTION_DB
+    ): DbCon? =
             load(fileName, enc).dbCon(sectionName ?: CONFIG_DEFAULT_SECTION_DB)
-
 
     /**
      * loads the login info from the location specified
      *
-     * @param fileName    : the name of the file e.g "login.conf"
-     * @param enc         : the encryptor for decrypting info from the settings
+     * @param fileName : the name of the file e.g "login.conf"
+     * @param enc : the encryptor for decrypting info from the settings
      * @param sectionName : the name of the section in the file representing the settings
      * @return
      */
-    fun readLogin(fileName: String? = null, enc: Encryptor? = null,
-                  sectionName: String? = CONFIG_DEFAULT_SECTION_LOGIN): Credentials? =
+    fun readLogin(
+        fileName: String? = null,
+        enc: Encryptor? = null,
+        sectionName: String? = CONFIG_DEFAULT_SECTION_LOGIN
+    ): Credentials? =
             load(fileName, enc).login(sectionName ?: CONFIG_DEFAULT_SECTION_LOGIN)
-
 
     /**
      * loads the api key info from the location specified
      *
-     * @param fileName    : the name of the file e.g "aws.conf"
+     * @param fileName : the name of the file e.g "aws.conf"
      * @param sectionName : the name of the section in the file representing the settings
-     * @param enc         : the encryptor for decrypting info from the settings
+     * @param enc : the encryptor for decrypting info from the settings
      * @return
      */
-    fun readApiKey(fileName: String? = null, enc: Encryptor? = null,
-                   sectionName: String? = CONFIG_DEFAULT_SECTION_API): ApiLogin? =
+    fun readApiKey(
+        fileName: String? = null,
+        enc: Encryptor? = null,
+        sectionName: String? = CONFIG_DEFAULT_SECTION_API
+    ): ApiLogin? =
             load(fileName, enc).apiLogin(sectionName ?: CONFIG_DEFAULT_SECTION_API)
-
 
     /**
      * Loads a config file using the source/location supplied.
      *
-     * @param fileName    : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc         : the encryptor for decrypting config settings.
+     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
+     * @param enc : the encryptor for decrypting config settings.
      * @return
      */
     fun load(fileName: String? = null, enc: Encryptor? = null): ConfigBase =
             Config(fileName, enc)
 
-
     /**
      * Loads a config file from the resources directory
      *
-     * @param fileName    : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc         : the encryptor for decrypting config settings.
+     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
+     * @param enc : the encryptor for decrypting config settings.
      * @return
      */
     fun loadFromJars(fileName: String, enc: Encryptor? = null): ConfigBase =
             Config(URI_PREFIX_JARS + fileName, enc)
 
-
     /**
      * Loads a config file from the app config directory in the user directory
      * e.g. user/company/apps/app/conf
      *
-     * @param fileName    : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc         : the encryptor for decrypting config settings.
+     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
+     * @param enc : the encryptor for decrypting config settings.
      * @return
      */
     fun loadFromUserHome(fileName: String, enc: Encryptor? = null): ConfigBase =
             Config(URI_PREFIX_USER + fileName, enc)
 
-
     /**
      * Loads a config file using the source/location supplied.
      *
-     * @param fileName    : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc         : the encryptor for decrypting config settings.
+     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
+     * @param enc : the encryptor for decrypting config settings.
      * @return
      */
     fun loadFromFile(fileName: String, enc: Encryptor? = null): ConfigBase =
             Config(URI_PREFIX_FILE + fileName, enc)
 
-
     /**
      * creates a api credentials file in the app directory of the user home path
      * e.g. {rootDir}/{name}.conf
      *
-     * @param appName   : The name of the app directory
+     * @param appName : The name of the app directory
      * @return
      */
     fun createApiKey(rootDir: String, name: String, creds: ApiKey, enc: Encryptor?): String =
@@ -137,12 +138,11 @@ object ConfFuncs {
                 })
             })
 
-
     /**
      * creates a api credentials file in the app directory of the user home path
      * e.g. {rootDir}/{name}.conf
      *
-     * @param appName   : The name of the app directory
+     * @param appName : The name of the app directory
      * @return
      */
     fun createApiLogin(rootDir: String, name: String, creds: ApiLogin, enc: Encryptor?): String =
@@ -158,12 +158,11 @@ object ConfFuncs {
                 })
             })
 
-
     /**
      * creates a login file in the app directory of the user home path
      * e.g. {rootDir}/{name}.conf
      *
-     * @param appName   : The name of the app directory
+     * @param appName : The name of the app directory
      * @return
      */
     fun createLogin(rootDir: String, name: String, creds: Credentials, enc: Encryptor?): String =
@@ -180,7 +179,6 @@ object ConfFuncs {
                 })
             })
 
-
     fun createDbCon(rootDir: String, name: String, con: DbConString, enc: Encryptor?): String =
 
             createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX, {
@@ -194,15 +192,16 @@ object ConfFuncs {
                 })
             })
 
-
     /**
      * loads the config with primary and the parent
      *
      * @return
      */
-    fun loadWithFallbackConfig(fileName: String,
-                               parentFilePath: String,
-                               enc: Encryptor? = null): ConfigBase {
+    fun loadWithFallbackConfig(
+        fileName: String,
+        parentFilePath: String,
+        enc: Encryptor? = null
+    ): ConfigBase {
 
         val conf = ConfigMulti(fileName, parentFilePath, enc)
         return conf
@@ -221,7 +220,7 @@ object ConfFuncs {
      *  - file://c:/slatekit/${company.dir}/${group.dir}/${app.id}/conf/env.qa.conf
      *  - file://./conf/env.qa.conf
      *
-     * @param fileName    : name of file e.g. email.conf
+     * @param fileName : name of file e.g. email.conf
      * @return
      */
     fun loadPropertiesFrom(fileName: String?): Properties {
@@ -238,13 +237,12 @@ object ConfFuncs {
                     Uris.URI_PREFIX_USER -> loadProperties(File(System.getProperty("user.home"), path).absolutePath)
                     Uris.URI_PREFIX_CONF -> loadProperties(File("conf", path).absolutePath)
                     Uris.URI_PREFIX_FILE -> loadProperties(File(path).absolutePath)
-                    else                 -> loadPropertiesFromResources(name)
+                    else -> loadPropertiesFromResources(name)
                 }
             } ?: loadPropertiesFromResources(name)
         } ?: loadPropertiesFromResources(CONFIG_DEFAULT_PROPERTIES)
         return config
     }
-
 
     fun loadPropertiesFromResources(path: String): Properties {
         // This is here to debug loading app conf
@@ -255,7 +253,6 @@ object ConfFuncs {
         return conf
     }
 
-
     fun loadProperties(path: String): Properties {
         // This is here to debug loading app conf
         val input = FileInputStream(path)
@@ -264,13 +261,12 @@ object ConfFuncs {
         return conf
     }
 
-
     /**
      * creates a folder inside the app directory of the user home path
      * e.g. {user.home}/{appName}
      *      c:/users/kreddy/myapp/logs
      *
-     * @param appName   : The name of the app directory
+     * @param appName : The name of the app directory
      * @return
      */
     fun createFile(appName: String, name: String, callback: () -> String): String {
@@ -287,12 +283,10 @@ object ConfFuncs {
         return file.absolutePath
     }
 
-
     fun createSection(name: String, keys: () -> List<Pair<String, String>>): String {
         val content = keys().fold("", { acc, c -> acc + name + "." + c.first + " = " + c.second + newline }) + newline
         return content
     }
-
 
     fun key(name: String, value: String, enc: Encryptor?): Pair<String, String> {
         return Pair(name, enc?.encrypt(value) ?: value)

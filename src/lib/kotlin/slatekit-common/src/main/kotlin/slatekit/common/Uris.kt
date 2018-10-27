@@ -15,7 +15,6 @@ package slatekit.common
 
 import java.io.File
 
-
 object Uris {
 
     val URI_PREFIX_USER = "user://"
@@ -24,7 +23,6 @@ object Uris {
     val URI_PREFIX_JARS = "jars://"
     val URI_PREFIX_CONF = "conf://"
     val CONF_DIR = "conf"
-
 
     /**
      * Interprets the path URI to support references to various locations:
@@ -44,12 +42,11 @@ object Uris {
                 URI_PREFIX_TEMP -> File(System.getProperty("java.io.tmpdir"), path).toString()
                 URI_PREFIX_CONF -> File(CONF_DIR, path).toString()
                 URI_PREFIX_FILE -> File(path).toString()
-                else            -> uri
+                else -> uri
             }
         } ?: uri
         return finalPath
     }
-
 
     /**
      * Reads the text file represented by uri after first interpreting the path.
@@ -72,12 +69,11 @@ object Uris {
                 URI_PREFIX_CONF -> File(CONF_DIR, path).readText()
                 URI_PREFIX_FILE -> File(path).readText()
                 URI_PREFIX_JARS -> File(this.javaClass.getResource("/" + path).file).readText()
-                else            -> File(path).readText()
+                else -> File(path).readText()
             }
         } ?: File(uri).readText()
         return content
     }
-
 
     /**
      * Reads the text file represented by uri after first interpreting the path.
@@ -100,12 +96,11 @@ object Uris {
                 URI_PREFIX_CONF -> buildDoc(File(CONF_DIR, path))
                 URI_PREFIX_FILE -> buildDoc(File(path))
                 URI_PREFIX_JARS -> buildDoc(File(this.javaClass.getResource("/" + path).file))
-                else            -> buildDoc(File(path))
+                else -> buildDoc(File(path))
             }
         } ?: buildDoc(File(uri))
         return doc
     }
-
 
     fun buildDoc(file: File): Doc {
         val content = file.readText()

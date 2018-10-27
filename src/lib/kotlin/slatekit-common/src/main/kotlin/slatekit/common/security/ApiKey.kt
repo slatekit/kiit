@@ -16,7 +16,7 @@ package slatekit.common.security
 /**
  * Represents a key for accessing an API securely.
  * @param name : "admin"
- * @param key  : "123456789123456789"
+ * @param key : "123456789123456789"
  * @param rolesLookup : "admin" -> true, "dev" -> true
  */
 data class ApiKey(
@@ -30,7 +30,6 @@ data class ApiKey(
         build(roles)
     )
 
-
     companion object {
 
         @JvmStatic
@@ -38,12 +37,10 @@ data class ApiKey(
             return roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
         }
 
-
         @JvmStatic
         fun build(name: String, key: String, roles: String?): ApiKey {
             val lookup = roles?.splitToSequence(',')?.associateBy({ it }, { it }) ?: mapOf()
             return ApiKey(name, key, roles.orEmpty(), lookup)
         }
     }
-
 }

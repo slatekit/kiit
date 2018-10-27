@@ -17,11 +17,11 @@ object LogHelper {
     fun parseLevel(level: String): LogLevel {
         return when (level.trim().toLowerCase()) {
             "debug" -> Debug
-            "info"  -> Info
-            "warn"  -> Warn
+            "info" -> Info
+            "warn" -> Warn
             "error" -> Error
             "fatal" -> Fatal
-            else    -> Debug
+            else -> Debug
         }
     }
 }

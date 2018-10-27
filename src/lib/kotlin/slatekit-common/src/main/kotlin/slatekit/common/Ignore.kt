@@ -17,4 +17,4 @@ package slatekit.common
  * Created by kishorereddy on 5/27/17.
  */
 
-annotation class Ignore( val desc: String = "" )
+annotation class Ignore(val desc: String = "")

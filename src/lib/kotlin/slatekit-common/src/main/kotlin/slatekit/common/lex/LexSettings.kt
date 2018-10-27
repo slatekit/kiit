@@ -14,8 +14,7 @@
 package slatekit.common.lex
 
 data class LexSettings(
-        val enableBoolIdentifiers: Boolean = false,
-        val enableBoolYesNoIdentifiers: Boolean = false,
-        val enableDashInIdentifiers: Boolean = false
-) {
-}
+    val enableBoolIdentifiers: Boolean = false,
+    val enableBoolYesNoIdentifiers: Boolean = false,
+    val enableDashInIdentifiers: Boolean = false
+)

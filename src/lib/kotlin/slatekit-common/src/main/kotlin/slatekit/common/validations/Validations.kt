@@ -24,7 +24,6 @@ object Validations {
      */
     fun <T> allTrue(rules: List<(T) -> Boolean>, input: T): Boolean = rules.all { rule -> rule(input) }
 
-
     /**
      * checks if all the rules are false against the input
      * @param rules : The rules to check
@@ -33,7 +32,6 @@ object Validations {
      * @return
      */
     fun <T> allFalse(rules: List<(T) -> Boolean>, input: T): Boolean = rules.all { rule -> !rule(input) }
-
 
     /**
      * checks if any of the rules are true against the input
@@ -44,7 +42,6 @@ object Validations {
      */
     fun <T> anyTrue(rules: List<(T) -> Boolean>, input: T): Boolean = rules.any { rule -> rule(input) }
 
-
     /**
      * checks if any of the rules are false against the input
      * @param rules : The rules to check
@@ -54,16 +51,13 @@ object Validations {
      */
     fun <T> anyFalse(rules: List<(T) -> Boolean>, input: T): Boolean = rules.any { rule -> !rule(input) }
 
-
     fun <T> collect(rules: List<(String) -> ValidationResult>, text: String): List<ValidationResult> =
             rules.map { rule -> rule(text) }
                     .filter { result -> !result.success }
                     .toList()
 
-
     fun collect(rules: List<() -> ValidationResult>): List<ValidationResult> =
             rules.map { rule -> rule() }
                     .filter { result -> !result.success }
                     .toList()
-
 }

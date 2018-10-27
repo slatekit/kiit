@@ -3,7 +3,6 @@ package slatekit.common
 import slatekit.common.records.Record
 import kotlin.reflect.KClass
 
-
 interface Mapper {
     /**
      * Creates the entity/model expecting a 0 parameter constructor

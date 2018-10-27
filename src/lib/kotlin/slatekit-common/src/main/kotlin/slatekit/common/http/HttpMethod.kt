@@ -13,7 +13,6 @@
 
 package slatekit.common.http
 
-
 enum class HttpMethod {
     GET,
     POST,
@@ -21,5 +20,4 @@ enum class HttpMethod {
     DELETE,
     HEAD
 }
-
 

@@ -15,36 +15,35 @@ package slatekit.common.args
 
 import slatekit.common.console.*
 
-
 /**
  *
- * @param alias         : alias for the argument     ( -e   )
- * @param name          : name of the argument       ( -env )
- * @param desc          : description of argument
- * @param isRequired    : whether arg is required
- * @param isCased       : case sensitive
- * @param isDevOnly     : used for development only
+ * @param alias : alias for the argument     ( -e   )
+ * @param name : name of the argument       ( -env )
+ * @param desc : description of argument
+ * @param isRequired : whether arg is required
+ * @param isCased : case sensitive
+ * @param isDevOnly : used for development only
  * @param isInterpreted : if arg can be interpreted ( @date.today )
- * @param group         : used to group args
- * @param tag           : used to tag an arg
- * @param defaultVal    : default value for the arg
- * @param example       : example of an arg value
- * @param exampleMany   : multiple examples of arg values
+ * @param group : used to group args
+ * @param tag : used to tag an arg
+ * @param defaultVal : default value for the arg
+ * @param example : example of an arg value
+ * @param exampleMany : multiple examples of arg values
  */
 data class Arg(
-        val alias: String = "",
-        val name: String = "",
-        val desc: String = "",
-        val dataType: String = "",
-        val isRequired: Boolean = true,
-        val isCased: Boolean = true,
-        val isDevOnly: Boolean = false,
-        val isInterpreted: Boolean = false,
-        val group: String = "",
-        val tag: String = "",
-        val defaultVal: String = "",
-        val example: String = "",
-        val exampleMany: String = ""
+    val alias: String = "",
+    val name: String = "",
+    val desc: String = "",
+    val dataType: String = "",
+    val isRequired: Boolean = true,
+    val isCased: Boolean = true,
+    val isDevOnly: Boolean = false,
+    val isInterpreted: Boolean = false,
+    val group: String = "",
+    val tag: String = "",
+    val defaultVal: String = "",
+    val example: String = "",
+    val exampleMany: String = ""
 ) {
 
     /**
@@ -65,13 +64,14 @@ data class Arg(
      * @param maxWidth
      */
     fun semantic(
-            prefix: String? = "-",
-            separator: String? = "=",
-            maxWidth: Int? = null): List<ConsoleItem> {
+        prefix: String? = "-",
+        separator: String? = "=",
+        maxWidth: Int? = null
+    ): List<ConsoleItem> {
 
         val nameLen = maxWidth ?: name.length
         val nameFill = name.padEnd(nameLen)
-        val namePart = (prefix ?: "-" ) + nameFill
+        val namePart = (prefix ?: "-") + nameFill
 
         val logs = mutableListOf(
                 ConsoleItem(Highlight, namePart, false),
@@ -82,8 +82,7 @@ data class Arg(
         if (isRequired) {
             logs.add(ConsoleItem(Important, "!", false))
             logs.add(ConsoleItem(Text, "required ", false))
-        }
-        else {
+        } else {
             logs.add(ConsoleItem(Success, "?", false))
             logs.add(ConsoleItem(Text, "optional ", false))
         }

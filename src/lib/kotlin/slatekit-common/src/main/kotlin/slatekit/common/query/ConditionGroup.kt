@@ -13,15 +13,12 @@
 
 package slatekit.common.query
 
-
 data class ConditionGroup(val left: Any, val operator: String, val right: Any) : ICondition {
 
     override fun toStringQuery(): String = getString(left) + " " + operator + " " + getString(right)
 
-
     private fun getString(item: Any?): String =
             if (item == null) {
                 ""
-            }
-            else (item as? ICondition)?.toStringQuery() ?: item.toString()
+            } else (item as? ICondition)?.toStringQuery() ?: item.toString()
 }

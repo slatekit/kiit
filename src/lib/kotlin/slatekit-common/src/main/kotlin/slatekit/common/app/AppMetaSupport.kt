@@ -15,11 +15,9 @@ package slatekit.common.app
 
 import slatekit.common.info.Status
 
-
 interface AppMetaSupport {
 
     fun appMeta(): AppMeta
-
 
     /**
      * builds a list of properties fully describing this app by adding
@@ -32,8 +30,7 @@ interface AppMetaSupport {
         return listOf<Pair<String, Any>>()
     }
 
-
-    fun appLogStart(callback: (String, String) -> Unit, maxLenField:Int = 0): Unit {
+    fun appLogStart(callback: (String, String) -> Unit, maxLenField: Int = 0) {
         val meta = appMeta()
         val maxLen = Math.max(maxLenField, "lang.versionNum  ".length)
         callback("name             ".padEnd(maxLen), meta.about.name)
@@ -60,9 +57,10 @@ interface AppMetaSupport {
         callback("lang.home        ".padEnd(maxLen), meta.lang.home)
     }
 
-
-    fun appLogEnd(callback: (String, String) -> Unit,
-                  status: Status = appMeta().status) {
+    fun appLogEnd(
+        callback: (String, String) -> Unit,
+        status: Status = appMeta().status
+    ) {
         val meta = appMeta()
         callback("name             ", meta.about.name)
         callback("desc             ", meta.about.desc)
@@ -102,7 +100,6 @@ interface AppMetaSupport {
         callback("lang.home        ", meta.lang.home)
     }
 
-
     /**
      * iterates over all the items in the metainfo
      *
@@ -119,4 +116,3 @@ interface AppMetaSupport {
         items.forEach { item -> callBack(maxPropLength, item) }
     }
 }
-

@@ -15,7 +15,6 @@ package slatekit.common
 
 import slatekit.common.utils.ListMap
 
-
 /**
  * Short hand representation of a list of "variables" backed
  * by the ListMap<String,Any> which represents both a List and Map
@@ -38,8 +37,7 @@ class Vars(items: List<Pair<String, Any>>) : ListMap<String, Any>(items) {
         fun apply(text: String): Vars {
             return if (text.isNullOrEmpty()) {
                 Vars(listOf())
-            }
-            else {
+            } else {
                 val data = text.splitToMapWithPairs()
                 val buf = mutableListOf<Pair<String, Any>>()
                 data.forEach { p -> buf.add(Pair(p.key, p.value as Any)) }

@@ -19,13 +19,12 @@ import slatekit.common.ResultEx
 import slatekit.common.info.Memory
 import slatekit.common.results.ResultTimed
 
-
 object Measure {
 
     /**
      * benchmarks an operation once
      *
-     * @param desc     : description of the operation
+     * @param desc : description of the operation
      * @param callback : the callback to execute
      * @return
      */
@@ -36,13 +35,12 @@ object Measure {
         return res
     }
 
-
     /**
      * benchmarks an operation several times and returns a list of benchmarked results
      *
-     * @param  desc     : description of the operation
-     * @param  callback : the callback to execute
-     * @param  count    : the number of times to run
+     * @param desc : description of the operation
+     * @param callback : the callback to execute
+     * @param count : the number of times to run
      * @return
      */
     fun <T> many(desc: String, callback: (Int) -> T, count: Int): List<ResultTimed<T>> {
@@ -56,13 +54,12 @@ object Measure {
         return results.toList()
     }
 
-
     /**
      * benchmarks an operation several times and returns an average duration for each run
      *
-     * @param desc     : description of the operation
+     * @param desc : description of the operation
      * @param callback : the callback to execute
-     * @param count    : the number of times to run
+     * @param count : the number of times to run
      * @return
      */
     fun <T> avg(desc: String, count: Int, callback: (Int) -> T): ResultTimed<T> {
@@ -92,7 +89,6 @@ object Measure {
         // Finally the result
         return ResultTimed(desc, start.start, end.end, duration, end.result, end.memory, avgMs)
     }
-
 
     fun <T> wrap(desc: String, count: Int, callback: () -> ResultEx<T>): ResultTimed<T> {
 

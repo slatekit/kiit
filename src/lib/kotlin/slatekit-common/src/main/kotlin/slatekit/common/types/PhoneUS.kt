@@ -15,7 +15,6 @@ package slatekit.common.types
 
 import slatekit.common.SmartString
 
-
 /**
  * Smart String for United States Phone Number.
  *
@@ -39,17 +38,16 @@ import slatekit.common.SmartString
  * Do not use as a replacement for strings in general and
  * especially as a property for small objects
  */
-class PhoneUS(text:String, required:Boolean = true): SmartString(text, required, 10, 14,
-        listOf( """\d{10}""",
+class PhoneUS(text: String, required: Boolean = true) : SmartString(text, required, 10, 14,
+        listOf("""\d{10}""",
                 """\d{11}""",
                 """\d{3}[-]?\d{3}[-]?\d{4}""",
                 """\d{1}[-]?\d{3}[-]?\d{3}[-]?\d{4}"""
-        ))
-{
+        )) {
     override val name = "PhoneUS"
     override val desc = "United States Phone Format"
     override val examples = listOf("1234567890", "11234567890", "123-456-7890", "1-234-567-8901")
-    override val formats  = listOf("xxxxxxxxxx", "xxxxxxxxxxx", "xxx-xxx-xxxx", "x-xxx-xxx-xxxx")
+    override val formats = listOf("xxxxxxxxxx", "xxxxxxxxxxx", "xxx-xxx-xxxx", "x-xxx-xxx-xxxx")
 
-    fun isDashed():Boolean = !text.isNullOrEmpty() && text.contains("-")
+    fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 }

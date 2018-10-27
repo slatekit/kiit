@@ -17,12 +17,10 @@ open class Validator<T> {
 
     open fun validate(item: T): ValidationResults = ValidationResults.build(null)
 
-
     fun result(isValid: Boolean, ref: Reference?, error: String): ValidationResult =
             if (isValid) {
                 ValidationResult(true, error, ref, 1)
-            }
-            else {
+            } else {
                 ValidationResult(false, error, ref, 0)
             }
 }

@@ -11,13 +11,11 @@
  * </slate_header>
  */
 
-
 package slatekit.common.auth
 
 interface Role {
     val name: String
 }
-
 
 /**
  * No roles
@@ -26,14 +24,12 @@ object RoleNone : Role {
     override val name = Roles.none
 }
 
-
 /**
  * Represents any authenticated user
  */
 object RoleAny : Role {
     override val name = Roles.all
 }
-
 
 /**
  * Represents an guest user
@@ -42,7 +38,6 @@ object RoleGuest : Role {
     override val name = Roles.guest
 }
 
-
 /**
  * Represents a reference to a parent role
  */
@@ -50,9 +45,7 @@ object RoleParent : Role {
     override val name = Roles.parent
 }
 
-
 /**
  * No roles
  */
 data class NamedRole(override val name: String) : Role
-

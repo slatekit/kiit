@@ -21,9 +21,9 @@ package slatekit.common.templates
  * In the above, "Hi" is a part of type plain text
  * In the above, "user.name" is a part of type substitution
  *
- * @param text    : The text represented. e.g. Plain text "Hi" or Variable "user.name"
+ * @param text : The text represented. e.g. Plain text "Hi" or Variable "user.name"
  * @param subType : Whether this is plain text or represents a substitution variable
- * @param pos     : The position of the text
- * @param length  : The length of the text
+ * @param pos : The position of the text
+ * @param length : The length of the text
  */
 data class TemplatePart(val text: String, val subType: Short, val pos: Int, val length: Int)

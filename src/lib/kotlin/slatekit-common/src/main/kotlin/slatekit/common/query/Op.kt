@@ -13,7 +13,7 @@
 
 package slatekit.common.query
 
-enum class Op(val text:String) {
+enum class Op(val text: String) {
     Eq("="),
     Neq("<>"),
     Gt("="),

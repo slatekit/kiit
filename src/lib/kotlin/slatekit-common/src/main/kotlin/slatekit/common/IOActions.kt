@@ -20,7 +20,6 @@ object Print : IO<Any, Unit> {
     }
 }
 
-
 object Println : IO<Any, Unit> {
 
     override fun run(i: Any) {
@@ -28,16 +27,14 @@ object Println : IO<Any, Unit> {
     }
 }
 
-
 object Readln : IO<Any, String> {
 
     override fun run(i: Any) = readLine() ?: ""
 }
 
+class StringWriter(val buffer: StringBuilder) : IO<Any, Unit> {
 
-class StringWriter(val buffer:StringBuilder) : IO<Any, Unit> {
-
-    override fun run(i: Any):Unit {
+    override fun run(i: Any) {
         buffer.append(i)
     }
 }

@@ -13,14 +13,15 @@
 
 package slatekit.common.validations
 
-data class ValidationResults(val success: Boolean,
-                             val msg: String = "",
-                             val ref: Reference? = null,
-                             val code: Int = 0,
-                             val results: List<ValidationResult>?) {
+data class ValidationResults(
+    val success: Boolean,
+    val msg: String = "",
+    val ref: Reference? = null,
+    val code: Int = 0,
+    val results: List<ValidationResult>?
+) {
     // Any errors ?
     val hasErrors = results?.isEmpty() ?: false
-
 
     companion object {
 
@@ -33,4 +34,3 @@ data class ValidationResults(val success: Boolean,
         }
     }
 }
-

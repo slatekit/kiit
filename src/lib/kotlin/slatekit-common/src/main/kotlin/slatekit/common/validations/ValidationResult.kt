@@ -13,10 +13,9 @@
 
 package slatekit.common.validations
 
-
 data class ValidationResult(
-        val success: Boolean,
-        val msg: String? = null,
-        val ref: Reference? = null,
-        val code: Int = 0
+    val success: Boolean,
+    val msg: String? = null,
+    val ref: Reference? = null,
+    val code: Int = 0
 )

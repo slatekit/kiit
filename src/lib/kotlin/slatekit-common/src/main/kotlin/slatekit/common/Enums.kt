@@ -6,10 +6,9 @@ package slatekit.common
  * 2. a numeric value
  */
 interface EnumLike {
-    val value:Int
-    val name :String
+    val value: Int
+    val name: String
 }
-
 
 /**
  * Provides Dynamic/Reflection based support for checking/parsing Enums at Runtime
@@ -43,11 +42,11 @@ interface EnumLike {
  * 1. Mapping of database records to models
  * 2. Serialization / Deserialization
  */
-abstract class EnumSupport  {
+abstract class EnumSupport {
 
     open fun parse(t: String): EnumLike {
         val member = all().find { it.name == t }
-        val first = member ?: if(isUnknownSupported()) {
+        val first = member ?: if (isUnknownSupported()) {
             throw Exception("Unexpected value for Enum : $t")
         } else {
             unknown(t)
@@ -55,10 +54,9 @@ abstract class EnumSupport  {
         return first
     }
 
-
-    open fun convert(i:Int): EnumLike {
+    open fun convert(i: Int): EnumLike {
         val member = all().find { it.value == i }
-        val first = member ?: if(isUnknownSupported()) {
+        val first = member ?: if (isUnknownSupported()) {
             throw Exception("Unexpected value for Enum : $i")
         } else {
             unknown(i)
@@ -66,23 +64,17 @@ abstract class EnumSupport  {
         return first
     }
 
-
     open fun isUnknownSupported(): Boolean {
         return false
     }
 
-
-    open fun unknown(name:String): EnumLike {
+    open fun unknown(name: String): EnumLike {
         throw Exception("Unexpected value for Enum : $name")
     }
 
-
-    open fun unknown(value:Int): EnumLike {
+    open fun unknown(value: Int): EnumLike {
         throw Exception("Unexpected value for Enum : $value")
     }
 
-
     abstract fun all(): Array<EnumLike>
-
-
 }

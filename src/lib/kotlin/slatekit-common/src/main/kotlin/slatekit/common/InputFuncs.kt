@@ -13,9 +13,6 @@
 
 package slatekit.common
 
-import java.time.format.DateTimeFormatter
-
-
 object InputFuncs {
 
     fun interpret(value: String, functionName: String, handler: ((String) -> String)?): String {
@@ -23,21 +20,18 @@ object InputFuncs {
             val end = value.indexOf("')}")
             val paramVal = value.substring(4 + functionName.length, end)
             handler?.invoke(paramVal) ?: paramVal
-        }
-        else
+        } else
             value
     }
 
-
     /**
      * Decrypts the text inside the value if value is "@{decrypt('abc')}"
-     * @param value     : The value containing an optin @{decrypt function
+     * @param value : The value containing an optin @{decrypt function
      * @param decryptor : The callback to handle the decryption
      * @return
      */
     fun decrypt(value: String, decryptor: ((String) -> String)? = null): String =
             interpret(value, "decrypt", decryptor)
-
 
     /**
      * converts a date string to a Date with support for aliases such as "today"
@@ -46,13 +40,11 @@ object InputFuncs {
      */
     fun convertDate(value: String): DateTime =
         when (value) {
-            ""             -> DateTime.now()
-            "@{today}"     -> DateTime.today()
-            "@{tomorrow}"  -> DateTime.today().plusDays(1)
+            "" -> DateTime.now()
+            "@{today}" -> DateTime.today()
+            "@{tomorrow}" -> DateTime.today().plusDays(1)
             "@{yesterday}" -> DateTime.today().plusDays(-1)
-            "@{now}"       -> DateTime.now()
-            else           -> DateTime.parse(value)
+            "@{now}" -> DateTime.now()
+            else -> DateTime.parse(value)
         }
-
-
 }

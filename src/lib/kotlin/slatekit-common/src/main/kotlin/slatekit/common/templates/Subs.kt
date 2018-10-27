@@ -16,7 +16,6 @@ package slatekit.common.templates
 import slatekit.common.DateTime
 import slatekit.common.utils.ListMap
 
-
 /**
  * Performs dynamic substitutions of variables in text.
  * Similar to interpolated strings, but at runtime. This allows for creating
@@ -26,7 +25,6 @@ import slatekit.common.utils.ListMap
 class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefaults: Boolean = true) {
 
     private val _groups = ListMap(items ?: listOf())
-
 
     init {
 
@@ -49,13 +47,11 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
      */
     fun contains(key: String): Boolean = _groups.contains(key)
 
-
     /**
      * Size of the substitutions
      * @return
      */
     val size: Int get() = _groups.size
-
 
     /**
      * gets the value with the supplied key
@@ -64,7 +60,6 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
      * @return
      */
     operator fun get(key: String): String = lookup(key)
-
 
     /**
      * gets the value with the supplied key
@@ -75,14 +70,12 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
     fun lookup(key: String): String =
             if (!_groups.contains(key)) {
                 ""
-            }
-            else {
+            } else {
                 val sub = _groups[key]
                 sub?.invoke(TemplatePart(key, TemplateConstants.TypeText, -1, -1)) ?: ""
             }
 
-
-    private fun defaults(): Unit {
+    private fun defaults() {
 
         // Default functions.
         _groups.add("today", { _ -> DateTime.today().toStringYYYYMMDD() })

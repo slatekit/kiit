@@ -18,7 +18,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 
-
 /**
  * Conversions from text to types
  * NOTE: While the standard library has extension methods
@@ -51,22 +50,20 @@ object Conversions {
 
     fun toDateTime(text: String): DateTime = InputFuncs.convertDate(text)
 
-
     /**
      * Builds a Vars object which is essentially a lookup of items by both index and key
      * @param args
      * @param paramName
      * @return
      */
-    fun toVars(data:Any?): Vars {
-        return when(data) {
-            null      -> Vars.apply("")
-            "null"    -> Vars.apply("")
-            is String -> if(data.isNullOrEmpty()) Vars.apply("") else Vars.apply(data)
-            else      -> Vars.apply("")
+    fun toVars(data: Any?): Vars {
+        return when (data) {
+            null -> Vars.apply("")
+            "null" -> Vars.apply("")
+            is String -> if (data.isNullOrEmpty()) Vars.apply("") else Vars.apply(data)
+            else -> Vars.apply("")
         }
     }
-
 
     /**
      * Builds a Doc object by reading the file content from the referenced uri
@@ -77,33 +74,31 @@ object Conversions {
      * @param paramName
      * @return
      */
-    fun toDoc(uri:String): Doc {
+    fun toDoc(uri: String): Doc {
         val doc = Uris.readDoc(uri)
         return doc ?: Doc.text("", "")
     }
 
-
     fun converterFor(tpe: Class<*>): (String) -> Any {
         val converter = when (tpe) {
         // Basic types
-            Types.JBoolClass          -> this::toBool
-            Types.JShortClass         -> this::toShort
-            Types.JIntClass           -> this::toInt
-            Types.JLongClass          -> this::toLong
-            Types.JFloatClass         -> this::toFloat
-            Types.JDoubleClass        -> this::toDouble
-            Types.JLocalDateClass     -> this::toLocalDate
-            Types.JLocalTimeClass     -> this::toLocalTime
+            Types.JBoolClass -> this::toBool
+            Types.JShortClass -> this::toShort
+            Types.JIntClass -> this::toInt
+            Types.JLongClass -> this::toLong
+            Types.JFloatClass -> this::toFloat
+            Types.JDoubleClass -> this::toDouble
+            Types.JLocalDateClass -> this::toLocalDate
+            Types.JLocalTimeClass -> this::toLocalTime
             Types.JLocalDateTimeClass -> this::toLocalDateTime
             Types.JZonedDateTimeClass -> this::toZonedDateTime
-            Types.JDateTimeClass      -> this::toDateTime
-            Types.JDocClass           -> this::toDoc
-            Types.JVarsClass          -> this::toVars
-            else                     -> this::toString
+            Types.JDateTimeClass -> this::toDateTime
+            Types.JDocClass -> this::toDoc
+            Types.JVarsClass -> this::toVars
+            else -> this::toString
         }
         return converter
     }
-
 
     /**
      * Builds a string parameter ensuring that nulls are avoided.
@@ -111,17 +106,16 @@ object Conversions {
      * @param paramName
      * @return
      */
-    fun handleString(data:Any?): String {
+    fun handleString(data: Any?): String {
         // As a design choice, this marshaller will only pass empty string to
         // API methods instead of null
-        return when(data) {
-            null      -> ""
-            "null"    -> ""
-            is String -> if(data.isNullOrEmpty()) "" else data
-            else      -> data.toString()
+        return when (data) {
+            null -> ""
+            "null" -> ""
+            is String -> if (data.isNullOrEmpty()) "" else data
+            else -> data.toString()
         }
     }
-
 
     /*
     fun converterFor(tpe: KType): (String) -> Any {

@@ -14,8 +14,8 @@
 package slatekit.common.info
 
 data class Memory(
-        val used: Long,
-        val free: Long,
-        val total: Long,
-        val max: Long
+    val used: Long,
+    val free: Long,
+    val total: Long,
+    val max: Long
 )

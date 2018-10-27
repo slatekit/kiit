@@ -16,18 +16,17 @@ package slatekit.common.types
 /**
  * Represents a country with iso code, name, and phone codes for sms features
  *
- * @param iso2   : 2 char iso code
- * @param iso3  : 3 char iso code
+ * @param iso2 : 2 char iso code
+ * @param iso3 : 3 char iso code
  * @param phoneCode : international dialing code
- * @param name  : name of country
+ * @param name : name of country
  */
-data class Country(val iso2: String, val iso3: String, val phoneCode: String, val phoneLength:Int, val name: String) {
+data class Country(val iso2: String, val iso3: String, val phoneCode: String, val phoneLength: Int, val name: String) {
 
-    fun normalize(phone:String):String {
+    fun normalize(phone: String): String {
         // Matches length without country phone code ( e.g. U.S "1" )
-        return if(phone.length == phoneLength) phoneCode + phone
+        return if (phone.length == phoneLength) phoneCode + phone
         else phone
     }
 }
-
 

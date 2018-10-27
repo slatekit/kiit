@@ -25,7 +25,6 @@ interface ConfigSupport {
 
     fun config(): ConfigBase
 
-
     /**
      * gets the environment specified in the config via "env.name,env.mode"
      *
@@ -39,7 +38,6 @@ interface ConfigSupport {
                 val mode = conf.getString("env.mode")
                 Env(name, Env.interpret(mode), "$mode : $name")
             }) ?: Env.empty
-
 
     /**
      * Gets user credentials from the config.
@@ -60,7 +58,6 @@ interface ConfigSupport {
                     conf.getString(name + ".region")
                 )
             }) ?: Credentials.empty
-
 
     /**
      * Gets build stamp info
@@ -85,7 +82,7 @@ interface ConfigSupport {
      *
      * @return
      */
-    fun apiLogin(name: String, prefix:String? = null): ApiLogin {
+    fun apiLogin(name: String, prefix: String? = null): ApiLogin {
 
         val finalPrefix = prefix ?: name
         return mapTo(name, { conf ->
@@ -99,7 +96,6 @@ interface ConfigSupport {
             )
         }) ?: ApiLogin.empty
     }
-
 
     /**
      * connection string from the config
@@ -119,7 +115,6 @@ interface ConfigSupport {
             }) ?: DbConEmpty
 }
 
-
 fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
 
         // Section not present!
@@ -135,11 +130,8 @@ fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
                 val location = config().getString(locationKey)
                 val conf: ConfigBase? = config().loadFrom(location)
                 conf?.let { c -> mapper(c) }
-            }
-            else
+            } else
                 mapper(config())
-        }
-        else
+        } else
             null
-
 

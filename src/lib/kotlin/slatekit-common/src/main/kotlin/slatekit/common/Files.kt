@@ -13,9 +13,7 @@
 
 package slatekit.common
 
-
 import java.io.File
-
 
 object Files {
 
@@ -25,7 +23,6 @@ object Files {
      */
     fun folderNameByDate(): String = DateTime.now().toStringYYYYMMDD()
 
-
     /**
      * creates a directory in the users directory
      */
@@ -33,7 +30,6 @@ object Files {
         val userHome = System.getProperty("user.home")
         return mkDir(userHome, dir)
     }
-
 
     /**
      * creates the directory using the parent directory and child directory
@@ -47,12 +43,10 @@ object Files {
         return dir.absolutePath
     }
 
-
     /**
      * reads lines in the file path supplied
      */
     fun readLines(path: String): List<String> = File(path).readLines()
-
 
     /**
      * writes a file to a date based directory inside an app directory inside the users home directory
@@ -61,7 +55,7 @@ object Files {
      *      c:/users/kreddy/myapp/logs/2016-03-20/2016-03-20-09-30-45.txt
      *
      * @param directory : The name of the sub directory in the app
-     * @param content   : The content to write
+     * @param content : The content to write
      * @return
      */
     fun writeFileForDateAsTimeStamp(directory: String, content: String): String {
@@ -71,7 +65,6 @@ object Files {
         return writeDatedFile(directory, fileName, content)
     }
 
-
     /**
      * writes a file to a date based directory inside an app directory inside the users home directory
      *
@@ -79,7 +72,7 @@ object Files {
      *      c:/users/kreddy/myapp/logs/2016-03-20/2016-03-20-09-30-45.txt
      *
      * @param directory : The name of the sub directory in the app
-     * @param content   : The content to write
+     * @param content : The content to write
      * @return
      */
     fun fileNameAsAsTimeStamp(): String {
@@ -88,7 +81,6 @@ object Files {
                 .replace(" ", "-") + ".txt"
     }
 
-
     /**
      * writes a file to a date based directory inside an app directory inside the users home directory
      *
@@ -96,7 +88,7 @@ object Files {
      *      c:/users/kreddy/myapp/logs/2016-03-20/2016-03-20-09-30-45.txt
      *
      * @param directory : The name of the sub directory in the app
-     * @param content   : The content to write
+     * @param content : The content to write
      * @return
      */
     fun writeDatedFile(directory: String, fileName: String, content: String): String {
@@ -107,7 +99,6 @@ object Files {
         file.writeText(content)
         return filePath
     }
-
 
     /**
      * creates a folder inside the app directory of the user home path

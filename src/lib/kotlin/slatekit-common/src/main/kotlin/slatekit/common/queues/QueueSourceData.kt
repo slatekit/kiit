@@ -13,6 +13,4 @@
 
 package slatekit.common.queues
 
-data class QueueSourceData(val message: Any, val tags: Map<String, Any>? = null, val id: String? = null) {
-
-}
+data class QueueSourceData(val message: Any, val tags: Map<String, Any>? = null, val id: String? = null)

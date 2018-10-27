@@ -16,35 +16,34 @@ package slatekit.common.info
 import slatekit.common.newline
 import slatekit.common.nonEmptyOrDefault
 
-
 /**
  * represent meta-data about an application
- * @param id      : id of app
- * @param name    : name of app
- * @param desc    : desc of app
+ * @param id : id of app
+ * @param name : name of app
+ * @param desc : desc of app
  * @param company : company the app is associated with
- * @param group   : group owning the app
- * @param region  : region associated with app
- * @param url     : url for more information
+ * @param group : group owning the app
+ * @param region : region associated with app
+ * @param url : url for more information
  * @param contact : contact person(s) for app
  * @param version : version of the app
- * @param tags    : tags describing the app
+ * @param tags : tags describing the app
  */
 data class About(
-        val id      : String,
-        val name    : String,
-        val desc    : String,
-        val company : String = "",
-        val group   : String = "",
-        val region  : String = "",
-        val url     : String = "",
-        val contact : String = "",
-        val version : String = "",
-        val tags    : String = "",
-        val examples: String = ""
-                ) {
+    val id: String,
+    val name: String,
+    val desc: String,
+    val company: String = "",
+    val group: String = "",
+    val region: String = "",
+    val url: String = "",
+    val contact: String = "",
+    val version: String = "",
+    val tags: String = "",
+    val examples: String = ""
+) {
 
-    fun log(callback: (String, String) -> Unit): Unit {
+    fun log(callback: (String, String) -> Unit) {
 
         callback("name    ", name)
         callback("desc    ", desc)
@@ -56,7 +55,6 @@ data class About(
         callback("tags    ", tags)
         callback("examples", examples)
     }
-
 
     fun toStringProps(): String {
         val text = "" +
@@ -72,9 +70,7 @@ data class About(
         return text
     }
 
-
     fun dir(): String = company.nonEmptyOrDefault(name).replace(" ", "-")
-
 
     companion object {
         @JvmStatic
@@ -92,7 +88,6 @@ data class About(
                 examples = ""
                         )
 
-
         /**
          * builds the about object using just the parameters supplied.
          * @param id
@@ -105,6 +100,5 @@ data class About(
         @JvmStatic
         fun simple(id: String, name: String, desc: String, company: String, version: String): About =
                 About(id, name, desc, company, "", "", "", "", version, "", "")
-
     }
 }

@@ -13,14 +13,11 @@
 
 package slatekit.common.http
 
-
-class HttpStatusCode(val code: Int, val message: String) {
-}
-
+class HttpStatusCode(val code: Int, val message: String)
 
 object HttpStatusCodes {
 
-    val sOk  = HttpStatusCode(200, "OK")
+    val sOk = HttpStatusCode(200, "OK")
     val sErr = HttpStatusCode(400, "Bad Request")
     val s200 = HttpStatusCode(200, "OK")
     val s201 = HttpStatusCode(201, "Created")
@@ -83,4 +80,3 @@ object HttpStatusCodes {
     val s510 = HttpStatusCode(510, "Not Extended (RFC 2774)")
     val s511 = HttpStatusCode(511, "Network Authentication Required (RFC 6585)")
 }
-

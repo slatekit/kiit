@@ -18,7 +18,6 @@ import slatekit.common.results.ResultCode.FAILURE
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 
-
 /**
  * Container for a Success/Failure value of type T with additional values to represent
  * a string message, code, tag, error and more.
@@ -33,7 +32,6 @@ sealed class Result<out T, out E> {
 
     companion object {
 
-
         inline fun <T> of(f: () -> T): Result<T, String> =
             try {
                 Success(f())
@@ -41,7 +39,6 @@ sealed class Result<out T, out E> {
                 val err = e.message ?: ""
                 Failure(err, FAILURE, err)
             }
-
 
         inline fun <T> attempt(f: () -> T): Result<T, Exception> =
             try {
@@ -55,10 +52,8 @@ sealed class Result<out T, out E> {
                 val err = e.message ?: ""
                 Failure(e, UNEXPECTED_ERROR, err)
             }
-
     }
 }
-
 
 /**
  * Success branch of the Result
@@ -71,7 +66,6 @@ data class Success<out T>(
 
     override val success = true
 }
-
 
 /**
  * Failure branch of the result
@@ -88,13 +82,11 @@ data class Failure<out E>(
 typealias ResultMsg<T> = Result<T, String>
 typealias ResultEx<T> = Result<T, Exception>
 
-
 inline fun <T1, T2, E> Result<T1, E>.map(f: (T1) -> T2): Result<T2, E> =
     when (this) {
         is Success -> Success(f(this.data), this.code, this.msg)
         is Failure -> this
     }
-
 
 inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T2, E> =
     when (this) {
@@ -102,13 +94,11 @@ inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T
         is Failure -> this
     }
 
-
 inline fun <T1, T2, E> Result<T1, E>.fold(onSuccess: (T1) -> T2, onError: (E) -> T2): T2 =
     when (this) {
         is Success -> onSuccess(this.data)
         is Failure -> onError(this.err)
     }
-
 
 inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
     when (this) {
@@ -116,13 +106,11 @@ inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
         is Failure -> f()
     }
 
-
 inline fun <T, E> Result<T, E>.exists(f: (T) -> Boolean): Boolean =
     when (this) {
         is Success -> f(this.data)
         is Failure -> false
     }
-
 
 inline fun <T, E> Result<T, E>.onSuccess(f: (T) -> Unit) =
     when (this) {
@@ -130,7 +118,6 @@ inline fun <T, E> Result<T, E>.onSuccess(f: (T) -> Unit) =
         is Failure -> {
         }
     }
-
 
 inline fun <T, E> Result<T, E>.onFailure(f: (E) -> Unit) =
     when (this) {
@@ -150,7 +137,6 @@ inline fun <T1, T2, E1, E2> Result<T1, E1>.transform(
         is Failure -> onFailure(this.err)
     }
 
-
 @Suppress("UNCHECKED_CAST")
 fun <T, E> Result<T, E>.toResultEx(): Result<T, Exception> =
     when (this) {
@@ -162,4 +148,3 @@ fun <T, E> Result<T, E>.toResultEx(): Result<T, Exception> =
             }
         }
     }
-

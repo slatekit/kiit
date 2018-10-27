@@ -37,28 +37,27 @@ import java.io.File
  *         - outputs
  *
  * @param location: location of where the folders reside ( local (to app) | programs | user.home )
- * @param root    : optional name of root folder or company name
- * @param group   : optional name of group folder that holds all apps
- * @param app     : name of the application folder for this app
- * @param cache   : name of cache folder for the application
- * @param inputs  : name of input folder for the application
- * @param logs    : name of logs folder for the application
+ * @param root : optional name of root folder or company name
+ * @param group : optional name of group folder that holds all apps
+ * @param app : name of the application folder for this app
+ * @param cache : name of cache folder for the application
+ * @param inputs : name of input folder for the application
+ * @param logs : name of logs folder for the application
  * @param outputs : name of output folder for the application
  */
 
-
 data class Folders(
-        val location: AppLocation,
-        val home: String,
-        val root: String?,
-        val group: String?,
-        val app: String,
-        val cache: String,
-        val inputs: String,
-        val logs: String,
-        val outputs: String,
-        val temp: String,
-        val conf: String
+    val location: AppLocation,
+    val home: String,
+    val root: String?,
+    val group: String?,
+    val app: String,
+    val cache: String,
+    val inputs: String,
+    val logs: String,
+    val outputs: String,
+    val temp: String,
+    val conf: String
 ) {
 
     fun log(callback: (String, String) -> Unit) {
@@ -72,14 +71,12 @@ data class Folders(
         callback("temp", temp)
     }
 
-
     val pathToConf: String get() = this.pathToApp + File.separator + conf
     val pathToCache: String get() = this.pathToApp + File.separator + cache
     val pathToInputs: String get() = this.pathToApp + File.separator + inputs
     val pathToLogs: String get() = this.pathToApp + File.separator + logs
     val pathToOutputs: String get() = this.pathToApp + File.separator + outputs
     val pathToTemp: String get() = this.pathToApp + File.separator + temp
-
 
     fun buildPath(part: String): String {
         val userHome = System.getProperty("user.home")
@@ -90,14 +87,12 @@ data class Folders(
         return path
     }
 
-
     fun getConfFilePath(fileName: String): String = pathToConf + File.separator + fileName
     fun getCacheFilePath(fileName: String): String = pathToCache + File.separator + fileName
     fun getInputsFilePath(fileName: String): String = pathToInputs + File.separator + fileName
     fun getOutputsFilePath(fileName: String): String = pathToOutputs + File.separator + fileName
     fun getLogsFilePath(fileName: String): String = pathToLogs + File.separator + fileName
     fun getTempFilePath(fileName: String): String = pathToTemp + File.separator + fileName
-
 
     val pathToApp: String get() {
         val sep = File.separator
@@ -107,7 +102,6 @@ data class Folders(
         val finalPath = groupPath + sep + app
         return finalPath
     }
-
 
     fun create() {
         val rootPath = Files.mkDir(home, root ?: "")
@@ -120,7 +114,6 @@ data class Folders(
         Files.mkDir(appPath, outputs)
         Files.mkDir(appPath, temp)
     }
-
 
     companion object Folders {
 
@@ -139,7 +132,6 @@ data class Folders(
                 conf = "conf"
         )
 
-
         @JvmStatic
         val default = Folders(
                 location = LocationUserDir,
@@ -154,7 +146,6 @@ data class Folders(
                 temp = "temp",
                 conf = "conf"
         )
-
 
         @JvmStatic
         fun userDir(root: String, group: String, app: String) =

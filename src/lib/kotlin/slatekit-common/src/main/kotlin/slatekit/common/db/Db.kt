@@ -11,7 +11,6 @@ usage: Please refer to license on github for more info.
 
 package slatekit.common.db
 
-
 import slatekit.common.DateTime
 import slatekit.common.db.DbUtils.executeCon
 import slatekit.common.db.DbUtils.executePrepAs
@@ -30,7 +29,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-
 /**
  * Light-weight database wrapper.
  * @param _dbCon: DbConfig.loadFromUserFolder(".slate", "db.txt")
@@ -39,9 +37,11 @@ import java.time.LocalTime
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(private val _dbCon: DbCon,
-         val source: DbSource = DbSourceMySql(),
-         val errorCallback: ((Exception) -> Unit )? = null) {
+class Db(
+    private val _dbCon: DbCon,
+    val source: DbSource = DbSourceMySql(),
+    val errorCallback: ((Exception) -> Unit)? = null
+) {
 
     val onError = errorCallback ?: this::errorHandler
 
@@ -55,11 +55,9 @@ class Db(private val _dbCon: DbCon,
         return this
     }
 
-
-    fun execute(sql:String) {
+    fun execute(sql: String) {
         executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, onError)
     }
-
 
     /**
      * gets a scalar string value using the sql provided
@@ -70,7 +68,6 @@ class Db(private val _dbCon: DbCon,
     fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any>?): T? =
             getScalarOpt<T>(sql, typ, inputs)
 
-
     /**
      * gets a scalar string value using the sql provided
      *
@@ -79,7 +76,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarString(sql: String, inputs: List<Any>? = null): String =
             getScalar<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
-
 
     /**
      * gets a scalar int value using the sql provided
@@ -90,7 +86,6 @@ class Db(private val _dbCon: DbCon,
     fun getScalarShort(sql: String, inputs: List<Any>? = null): Short =
             getScalar(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
 
-
     /**
      * gets a scalar int value using the sql provided
      *
@@ -99,7 +94,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarInt(sql: String, inputs: List<Any>? = null): Int =
             getScalar(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
-
 
     /**
      * gets a scalar long value using the sql provided
@@ -110,7 +104,6 @@ class Db(private val _dbCon: DbCon,
     fun getScalarLong(sql: String, inputs: List<Any>? = null): Long =
             getScalar(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
 
-
     /**
      * gets a scalar double value using the sql provided
      *
@@ -119,7 +112,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarFloat(sql: String, inputs: List<Any>? = null): Float =
             getScalar(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
-
 
     /**
      * gets a scalar double value using the sql provided
@@ -130,7 +122,6 @@ class Db(private val _dbCon: DbCon,
     fun getScalarDouble(sql: String, inputs: List<Any>? = null): Double =
             getScalar(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
 
-
     /**
      * gets a scalar bool value using the sql provided
      *
@@ -139,7 +130,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarBool(sql: String, inputs: List<Any>? = null): Boolean =
             getScalar(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
-
 
     /**
      * gets a scalar local date value using the sql provided
@@ -150,7 +140,6 @@ class Db(private val _dbCon: DbCon,
     fun getScalarLocalDate(sql: String, inputs: List<Any>? = null): LocalDate =
             getScalar(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
 
-
     /**
      * gets a scalar local time value using the sql provided
      *
@@ -159,7 +148,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarLocalTime(sql: String, inputs: List<Any>? = null): LocalTime =
             getScalar(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
-
 
     /**
      * gets a scalar local datetime value using the sql provided
@@ -170,7 +158,6 @@ class Db(private val _dbCon: DbCon,
     fun getScalarLocalDateTime(sql: String, inputs: List<Any>? = null): LocalDateTime =
             getScalar(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
 
-
     /**
      * gets a scalar local datetime value using the sql provided
      *
@@ -179,7 +166,6 @@ class Db(private val _dbCon: DbCon,
      */
     fun getScalarDate(sql: String, inputs: List<Any>? = null): DateTime =
             getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTime.MIN
-
 
     /**
      * gets a scalar string value using the sql provided
@@ -201,21 +187,19 @@ class Db(private val _dbCon: DbCon,
                 val res: T? =
                         if (any) {
                             DbUtils.getScalar<T>(r, typ)
-                        }
-                        else
+                        } else
                             null
                 res
             }
         }, onError)
     }
 
-
     /**
      * executes an insert using the sql or stored proc and gets the id
      *
      * @param sql : The sql or stored proc
-     * @param inputs  : The inputs for the sql or stored proc
-     * @return    : The id ( primary key )
+     * @param inputs : The inputs for the sql or stored proc
+     * @return : The id ( primary key )
      */
     fun insert(sql: String, inputs: List<Any>? = null): Long {
         val res = executeCon(_dbCon, { con: Connection ->
@@ -233,8 +217,7 @@ class Db(private val _dbCon: DbCon,
                 rs.use { r ->
                     val id = if (r.next()) {
                         r.getLong(1)
-                    }
-                    else
+                    } else
                         0L
                     id
                 }
@@ -243,13 +226,12 @@ class Db(private val _dbCon: DbCon,
         return res ?: 0
     }
 
-
     /**
      * executes the update sql or stored proc
      *
-     * @param sql     : The sql or stored proc
-     * @param inputs  : The inputs for the sql or stored proc
-     * @return        : The number of affected records
+     * @param sql : The sql or stored proc
+     * @param inputs : The inputs for the sql or stored proc
+     * @return : The number of affected records
      */
     fun update(sql: String, inputs: List<Any>? = null): Int {
         val result = executePrepAs<Int>(_dbCon, sql, { con, stmt ->
@@ -260,22 +242,23 @@ class Db(private val _dbCon: DbCon,
             // update and get number of affected records
             val count = stmt.executeUpdate()
             count
-        }, onError )
+        }, onError)
         return result ?: 0
     }
 
-
     /**
      * Executes a sql query
-     * @param sql      : The sql to query
+     * @param sql : The sql to query
      * @param callback : The callback to handle the resultset
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
-     * @param inputs   : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> query(sql: String,
-                  callback: (ResultSet) -> T?,
-                  moveNext: Boolean = true,
-                  inputs: List<Any>? = null): T? {
+    fun <T> query(
+        sql: String,
+        callback: (ResultSet) -> T?,
+        moveNext: Boolean = true,
+        inputs: List<Any>? = null
+    ): T? {
         val result = executePrepAs<T>(_dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
@@ -294,11 +277,10 @@ class Db(private val _dbCon: DbCon,
         return result
     }
 
-
     /**
      * maps a single item using the sql supplied
      *
-     * @param sql    : The sql
+     * @param sql : The sql
      * @param mapper : THe mapper to map the item of type T
      * @tparam T     : The type of the item
      * @return
@@ -316,11 +298,10 @@ class Db(private val _dbCon: DbCon,
         return res
     }
 
-
     /**
      * maps multiple items using the sql supplied
      *
-     * @param sql    : The sql
+     * @param sql : The sql
      * @param mapper : THe mapper to map the item of type T
      * @tparam T     : The type of the item
      * @return
@@ -340,59 +321,59 @@ class Db(private val _dbCon: DbCon,
         return res
     }
 
-
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param callback : The callback to handle the resultset
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
-     * @param inputs   : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> callQuery(procName: String,
-                 callback: (ResultSet) -> T?,
-                 moveNext: Boolean = true,
-                 inputs  : List<Any>? = null): T? {
+    fun <T> callQuery(
+        procName: String,
+        callback: (ResultSet) -> T?,
+        moveNext: Boolean = true,
+        inputs: List<Any>? = null
+    ): T? {
 
         // {call create_author(?, ?)}
-        val holders = inputs?.let{ all -> "?".repeatWith(",", all.size) } ?: ""
+        val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
         return query(sql, callback, moveNext, inputs)
     }
 
-
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param callback : The callback to handle the resultset
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
-     * @param inputs   : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> callQueryMapped(procName: String,
-                            mapper  : Mapper,
-                            inputs  : List<Any>? = null): List<T>? {
+    fun <T> callQueryMapped(
+        procName: String,
+        mapper: Mapper,
+        inputs: List<Any>? = null
+    ): List<T>? {
 
         // {call create_author(?, ?)}
-        val holders = inputs?.let{ all -> "?".repeatWith(",", all.size) } ?: ""
+        val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
         return mapMany(sql, mapper, inputs)
     }
 
-
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param callback : The callback to handle the resultset
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
-     * @param inputs   : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     fun callUpdate(procName: String, inputs: List<Any>? = null): Int {
 
         // {call create_author(?, ?)}
-        val holders = inputs?.let{ all -> "?".repeatWith(",", all.size) } ?: ""
+        val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
         return update(sql, inputs)
     }
-
 
     fun errorHandler(ex: Exception) {
         println("Database error : " + ex.message)

@@ -15,20 +15,17 @@ package slatekit.common.app
 
 import slatekit.common.info.*
 
-
 data class AppMeta(
-        val about: About,
-        val host: Host,
-        val lang: Lang,
-        val status: Status,
-        val start: StartInfo,
-        val build: Build
+    val about: About,
+    val host: Host,
+    val lang: Lang,
+    val status: Status,
+    val start: StartInfo,
+    val build: Build
 ) {
-
 
     companion object {
         @JvmStatic
         val none = AppMeta(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none, Build.empty)
     }
-
 }

@@ -13,7 +13,6 @@
 
 package slatekit.common.templates
 
-
 import slatekit.common.*
 import slatekit.common.lex.LexState
 import slatekit.common.templates.TemplateConstants.TypeSub
@@ -39,9 +38,7 @@ import slatekit.common.utils.Loops
  */
 class TemplateParser(val text: String) {
 
-
     private val _state = LexState(text)
-
 
     fun parse(): ResultEx<List<TemplatePart>> {
 
@@ -86,8 +83,7 @@ class TemplateParser(val text: String) {
 
                     // Success!
                     Success(subs.toList())
-                }
-                catch(ex: Exception) {
+                } catch (ex: Exception) {
                     val line = _state.line
                     val text = "Error occurred at : line : $line, char : ${_state.pos}" + ex.message
                     val err = Exception(text, ex)
@@ -95,7 +91,6 @@ class TemplateParser(val text: String) {
                 }
         return result
     }
-
 
     /**
      * reads a substitution inside of @{}
@@ -113,24 +108,20 @@ class TemplateParser(val text: String) {
         return if (c == '}') {
             advance()
             TemplatePart("", 0, start, end)
-        }
-        else {
+        } else {
             // 2. read sub
             Loops.doUntil({
                 if (_state.pos < _state.END) {
                     val curr = _state.text[_state.pos]
                     if (curr == '}') {
                         false
-                    }
-                    else if ((_state.pos + 1 < _state.END)) {
+                    } else if ((_state.pos + 1 < _state.END)) {
                         _state.pos += 1
                         true
-                    }
-                    else {
+                    } else {
                         false
                     }
-                }
-                else {
+                } else {
                     false
                 }
             })
@@ -142,13 +133,11 @@ class TemplateParser(val text: String) {
         }
     }
 
-
     fun advanceAndExpect(expected: Char): Char {
         val ch = advance()
         require(ch == expected, { "Expected $expected but found $ch" })
         return ch
     }
-
 
     fun advance(): Char {
         _state.pos += 1

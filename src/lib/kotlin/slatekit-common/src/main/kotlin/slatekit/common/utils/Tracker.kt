@@ -37,14 +37,12 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     // Status
     val currentStatus = AtomicReference<String>("n/a")
 
-
     /**
      * Logs basic diagnostics
      */
     fun log() {
-        diagnostics().forEach({ metric -> logger?.info ("$name ${metric.first} : ${metric.second}", null)})
+        diagnostics().forEach({ metric -> logger?.info("$name ${metric.first} : ${metric.second}", null) })
     }
-
 
     /**
      * Gets basic diagnostics about this consumer
@@ -54,32 +52,31 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         val filtered = totalFiltered.get().toDouble()
         val successes = totalSuccesses.get().toDouble()
         val failures = totalFailures.get().toDouble()
-        fun percentage(a:Double, b:Double): Double {
-            return if( b == 0.0 ) 0.0 else a / b
+        fun percentage(a: Double, b: Double): Double {
+            return if (b == 0.0) 0.0 else a / b
         }
-        val percentFiltered = percentage(filtered , requests )
-        val percentSuccess  = percentage(successes, requests )
-        val percentFailure  = percentage(failures , requests )
+        val percentFiltered = percentage(filtered, requests)
+        val percentSuccess = percentage(successes, requests)
+        val percentFailure = percentage(failures, requests)
 
         return listOf(
             Pair("id", id),
             Pair("name", name),
             Pair("status", currentStatus.get()),
             Pair("date", DateTime.now().toString()),
-            Pair("total requests"   , requests.toString()),
-            Pair("total filtered"   , filtered.toString()),
-            Pair("total successes"  , successes.toString()),
-            Pair("total failures"   , failures.toString()),
-            Pair("percent filtered" , percentFiltered.toString()),
+            Pair("total requests", requests.toString()),
+            Pair("total filtered", filtered.toString()),
+            Pair("total successes", successes.toString()),
+            Pair("total failures", failures.toString()),
+            Pair("percent filtered", percentFiltered.toString()),
             Pair("percent successes", percentSuccess.toString()),
-            Pair("percent failures" , percentFailure.toString()),
-            Pair("last  request"    , lastRequest.get()?.toString() ?: ""),
-            Pair("last  filtered"   , lastFiltered.get()?.toString() ?: ""),
-            Pair("last  success"    , lastSuccess.get()?.toString() ?: ""),
-            Pair("last  failure"    , lastFailure.get()?.toString() ?: "")
+            Pair("percent failures", percentFailure.toString()),
+            Pair("last  request", lastRequest.get()?.toString() ?: ""),
+            Pair("last  filtered", lastFiltered.get()?.toString() ?: ""),
+            Pair("last  success", lastSuccess.get()?.toString() ?: ""),
+            Pair("last  failure", lastFailure.get()?.toString() ?: "")
         )
     }
-
 
     /**
      * Handle response from crediting
@@ -96,7 +93,6 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         }
     }
 
-
     /**
      * Handle failure ( e.g. unexpected failure ) vs an expected failured which
      * will be handled in the handleResponse method above
@@ -108,7 +104,6 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         }
     }
 
-
     /**
      * Keep track of total requests ( regardless of success/error )
      */
@@ -116,7 +111,6 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         lastRequest.set(request)
         totalRequests.incrementAndGet()
     }
-
 
     /**
      * Keep track of total filtered requests ( regardless of success/error )
@@ -126,7 +120,6 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         totalFiltered.incrementAndGet()
     }
 
-
     /**
      * Keep track of total successfully processed engagements
      */
@@ -135,12 +128,11 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
         totalSuccesses.incrementAndGet()
     }
 
-
     /**
      * Keep track of total errors
      * @param err
      */
-    open fun trackFailure(req:TRequest, failure: TFailure) {
+    open fun trackFailure(req: TRequest, failure: TFailure) {
         lastFailure.set(Pair(req, failure))
         totalFailures.incrementAndGet()
     }

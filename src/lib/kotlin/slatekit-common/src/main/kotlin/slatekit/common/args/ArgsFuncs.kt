@@ -16,7 +16,6 @@ package slatekit.common.args
 import slatekit.common.utils.Loops.repeatWithIndex
 import slatekit.common.utils.Loops.repeatWithIndexAndBool
 
-
 object ArgsFuncs {
 
     /**
@@ -26,14 +25,12 @@ object ArgsFuncs {
      */
     fun isHelp(items: List<String>, pos: Int) = isMetaArg(items, pos, "help", "?")
 
-
     /**
      * returns true if there is only 1 argument with value: version | ver
      *
      * @return
      */
     fun isVersion(items: List<String>, pos: Int) = isMetaArg(items, pos, "version", "ver")
-
 
     /**
      * returns true if there is only 1 argument with value: version | ver
@@ -42,7 +39,6 @@ object ArgsFuncs {
      */
     fun isAbout(items: List<String>, pos: Int) = isMetaArg(items, pos, "about", "info")
 
-
     /**
      * returns true if there is only 1 argument with value: pause
      *
@@ -50,14 +46,12 @@ object ArgsFuncs {
      */
     fun isPause(items: List<String>, pos: Int) = isMetaArg(items, pos, "pause", "ver")
 
-
     /**
      * returns true if there is only 1 argument with value: --exit -quit /? -? ?
      *
      * @return
      */
     fun isExit(items: List<String>, pos: Int) = isMetaArg(items, pos, "exit", "quit")
-
 
     /**
      * checks for meta args ( e.g. request for help, version etc )
@@ -77,29 +71,23 @@ object ArgsFuncs {
 
         return if (!any || !posOk) {
             false
-        }
-        else {
+        } else {
             val arg = positional[pos]
             possibleMatches.toList().fold(false, { isMatch, text ->
                 val res = if (text == arg) {
                     true
-                }
-                else if ("-" + text == arg) {
+                } else if ("-" + text == arg) {
                     true
-                }
-                else if ("--" + text == arg) {
+                } else if ("--" + text == arg) {
                     true
-                }
-                else if ("/" + text == arg) {
+                } else if ("/" + text == arg) {
                     true
-                }
-                else
+                } else
                     isMatch
                 res
             })
         }
     }
-
 
     /**
      * parses the action from the command line args
@@ -111,9 +99,9 @@ object ArgsFuncs {
      * @return ( action, actions, actionCount, end index )
      *         ( "app.users.activate", ["app", 'users", "activate" ], 3, 5 )
      */
-    fun parseAction(args: List<String>, prefix: String, prefixMeta:String, prefixSys:String): ParsedItem {
+    fun parseAction(args: List<String>, prefix: String, prefixMeta: String, prefixSys: String): ParsedItem {
         // Get the first index of arg prefix ( e.g. "-" or "/"
-        val indexPrefix = args.indexOfFirst { it == prefix || it == prefixMeta || it == prefixSys}
+        val indexPrefix = args.indexOfFirst { it == prefix || it == prefixMeta || it == prefixSys }
 
         // Get index after action "app.users.activate"
         val indexLast = if (indexPrefix < 0) args.size else indexPrefix
@@ -121,14 +109,13 @@ object ArgsFuncs {
         // Get all the words until last index
         val actions = args.subList(0, indexLast)
                 .filter { text ->
-                    !text.isNullOrEmpty()
-                            && (text.trim() == "?" || text.matches(Regex("^[a-zA-Z0-9]*$")))
+                    !text.isNullOrEmpty() &&
+                            (text.trim() == "?" || text.matches(Regex("^[a-zA-Z0-9]*$")))
                 }
 
         val action = actions.joinToString(".")
         return ParsedItem(action, actions, actions.size, indexLast)
     }
-
 
     /**
      * parses all the named args using prefix and separator e.g. -env=dev
@@ -139,12 +126,11 @@ object ArgsFuncs {
      * @param sep
      * @return
      */
-    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String, metaChar: String, sysChar:String)
-            : ParsedArgs {
+    fun parseNamedArgs(args: List<String>, startIndex: Int, prefix: String, sep: String, metaChar: String, sysChar: String): ParsedArgs {
 
         val namedArgs = mutableMapOf<String, String>()
-        val metaArgs   = mutableMapOf<String, String>()
-        val sysArgs   = mutableMapOf<String, String>()
+        val metaArgs = mutableMapOf<String, String>()
+        val sysArgs = mutableMapOf<String, String>()
 
         // Parses all named args e..g -a=1 -b=2
         // Keep looping until the index where the named args ends
@@ -162,13 +148,11 @@ object ArgsFuncs {
 
                 val advance: Int = keyValuePair?.let { kvp ->
 
-                    if(text == prefix) {
+                    if (text == prefix) {
                         namedArgs[kvp.first] = kvp.second
-                    }
-                    else if(text == metaChar) {
+                    } else if (text == metaChar) {
                         metaArgs[kvp.first] = kvp.second
-                    }
-                    else {
+                    } else {
                         sysArgs[kvp.first] = kvp.second
                     }
                     kvp.third
@@ -176,8 +160,7 @@ object ArgsFuncs {
 
                 // The index position after the named arg
                 advance
-            }
-            else
+            } else
                 ndx + 1
 
             nextIndex
@@ -185,7 +168,6 @@ object ArgsFuncs {
 
         return ParsedArgs(namedArgs.toMap(), metaArgs, sysArgs, endIndex)
     }
-
 
     fun parseKeyValuePair(ndx: Int, args: List<String>): Triple<String, String, Int>? {
 
@@ -208,8 +190,7 @@ object ArgsFuncs {
                 if (args[posNext] == ".") {
                     keyBuff.append("." + args[posNext + 1])
                     Pair(true, posNext + 2)
-                }
-                else {
+                } else {
                     Pair(false, posNext)
                 }
             })
@@ -227,8 +208,7 @@ object ArgsFuncs {
             val end = posVal + 1
 
             Triple(key, value, end)
-        }
-        else
+        } else
             null
     }
 }

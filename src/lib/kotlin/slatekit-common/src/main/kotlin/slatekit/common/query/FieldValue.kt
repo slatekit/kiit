@@ -16,6 +16,4 @@ package slatekit.common.query
 /**
  * Created by kreddy on 12/24/2015.
  */
-data class FieldValue(val field: String, val fieldValue: Any) {
-
-}
+data class FieldValue(val field: String, val fieldValue: Any)

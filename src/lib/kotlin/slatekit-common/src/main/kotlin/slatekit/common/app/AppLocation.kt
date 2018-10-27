@@ -11,9 +11,7 @@
  * </slate_header>
  */
 
-
 package slatekit.common.app
-
 
 interface AppLocation
 

@@ -18,32 +18,29 @@ import slatekit.common.Random.stringGuid
 import java.io.File
 import java.util.concurrent.LinkedBlockingQueue
 
-
 /**
  * For internal-use only for proto-typing/unit-tests
  * Refer to the AWS SQS Cloud Queue for  implementation.
  */
-class QueueSourceDefault(override val name:String = "",
-                         val converter:((Any) -> Any)? = null,
-                         val size:Int = -1 ) : QueueSource, QueueSourceMsg {
+class QueueSourceDefault(
+    override val name: String = "",
+    val converter: ((Any) -> Any)? = null,
+    val size: Int = -1
+) : QueueSource, QueueSourceMsg {
 
-    private val _list = if(size <= 0 ) LinkedBlockingQueue<Any>() else LinkedBlockingQueue(size)
+    private val _list = if (size <= 0) LinkedBlockingQueue<Any>() else LinkedBlockingQueue(size)
     private val _object = Object()
 
-    override fun init(): Unit {
+    override fun init() {
     }
-
 
     override fun count(): Int = _list.size
 
-
     override fun next(): Any? = _list.poll()
-
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> nextBatchAs(size: Int): List<T>? =
             nextBatch(size)?.let { all -> all.map { item -> item as T } }
-
 
     override fun nextBatch(size: Int): List<Any>? =
             if (_list.isEmpty()) null
@@ -52,27 +49,24 @@ class QueueSourceDefault(override val name:String = "",
                 val actualSize = Math.min(size, _list.size)
                 for (ndx in 0..actualSize - 1) {
                     val msg = _list.poll()
-                    if(msg != null) {
+                    if (msg != null) {
                         results += msg
                     }
                 }
                 results.toList()
             }
 
-
     override fun send(msg: Any, tagName: String, tagValue: String): ResultEx<String> {
         val id = stringGuid()
         val success = _list.offer(QueueSourceData(msg, mapOf(tagName to tagValue), id))
-        return if(success) Success(id) else Failure(Exception("Error sending msg with $tagName"))
+        return if (success) Success(id) else Failure(Exception("Error sending msg with $tagName"))
     }
-
 
     override fun send(message: String, attributes: Map<String, Any>): ResultEx<String> {
         val id = Random.stringGuid()
         _list += QueueSourceData(message, attributes, id)
         return Success(id)
     }
-
 
     override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): ResultEx<String> {
         val path = Uris.interpret(fileNameLocal)
@@ -83,26 +77,21 @@ class QueueSourceDefault(override val name:String = "",
         } ?: Failure(Exception("Invalid file path: $fileNameLocal"))
     }
 
-
-    override fun complete(item: Any?): Unit {
+    override fun complete(item: Any?) {
         // Not implemented / needed for this type
     }
 
-
-    override fun completeAll(items: List<Any>?): Unit {
+    override fun completeAll(items: List<Any>?) {
         // Not implemented / needed for this type
     }
 
-
-    override fun abandon(item: Any?): Unit {
+    override fun abandon(item: Any?) {
         // Not implemented / needed for this type
     }
-
 
     override fun getMessageBody(msgItem: Any?): String {
         return getMessageItemProperty(msgItem, { data -> data.message.toString() })
     }
-
 
     override fun getMessageTag(msgItem: Any?, tagName: String): String {
         return getMessageItemProperty(msgItem, { data ->
@@ -112,20 +101,17 @@ class QueueSourceDefault(override val name:String = "",
         })
     }
 
-
     fun getMessageItemProperty(msgItem: Any?, callback: (QueueSourceData) -> String): String {
         val item = msgItem?.let { item ->
             if (item is QueueSourceData) {
                 callback(item)
-            }
-            else
+            } else
                 ""
         } ?: ""
         return item
     }
 
-
-    fun discard(item: Any): Unit {
+    fun discard(item: Any) {
         synchronized(_object, {
             val data = item as QueueSourceData
             val pos = _list.indexOf(data)

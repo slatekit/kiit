@@ -15,12 +15,13 @@ package slatekit.common.serialization
 
 import slatekit.common.Serializer
 
-
 /**
  * Created by kishorereddy on 6/3/17.
  */
-class SerializerJson(objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
-                     isoDates:Boolean = false)
+class SerializerJson(
+    objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+    isoDates: Boolean = false
+)
     : Serializer(objectSerializer, isoDates) {
 
     override val standardizeResult = true

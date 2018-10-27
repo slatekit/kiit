@@ -13,8 +13,8 @@
 
 package slatekit.common.conf
 
-val CONFIG_DEFAULT_SUFFIX         = ".conf"
-val CONFIG_DEFAULT_PROPERTIES     = "env.conf"
-val CONFIG_DEFAULT_SECTION_DB     = "db"
-val CONFIG_DEFAULT_SECTION_LOGIN  = "login"
-val CONFIG_DEFAULT_SECTION_API    = "api"
+val CONFIG_DEFAULT_SUFFIX = ".conf"
+val CONFIG_DEFAULT_PROPERTIES = "env.conf"
+val CONFIG_DEFAULT_SECTION_DB = "db"
+val CONFIG_DEFAULT_SECTION_LOGIN = "login"
+val CONFIG_DEFAULT_SECTION_API = "api"

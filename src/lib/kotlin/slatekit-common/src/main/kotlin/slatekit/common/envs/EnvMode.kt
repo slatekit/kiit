@@ -20,30 +20,25 @@ abstract class EnvMode(val name: String)
  */
 object Prod : EnvMode("pro")
 
-
 /**
  * Development
  */
 object Dev : EnvMode("dev")
-
 
 /**
  * Quality assurance
  */
 object Qa : EnvMode("qa")
 
-
 /**
  * User Acceptance / Beta
  */
 object Uat : EnvMode("uat")
 
-
 /**
  * Disaster recovery
  */
 object Dis : EnvMode("dr")
-
 
 /**
  * Other environment mode
