@@ -9,7 +9,6 @@ import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 
-
 /**
  *
  * arg  : command line arguments
@@ -25,18 +24,18 @@ import slatekit.common.log.Logs
  * state: the current valid/invalid state of the context
  */
 interface Context {
-    val arg   : Args
-    val env   : Env
-    val cfg   : ConfigBase
-    val logs  : Logs
-    val inf   : About
-    val host  : Host
-    val lang  : Lang
-    val dbs   : DbLookup?
-    val enc   : Encryptor?
-    val dirs  : Folders?
-    val extra : MutableMap<String,Any>
-    val app   : AppMeta
-    val state : ResultEx<Boolean>
-    val build : Build
+    val arg: Args
+    val env: Env
+    val cfg: ConfigBase
+    val logs: Logs
+    val inf: About
+    val host: Host
+    val lang: Lang
+    val dbs: DbLookup?
+    val enc: Encryptor?
+    val dirs: Folders?
+    val extra: MutableMap<String, Any>
+    val app: AppMeta
+    val state: ResultEx<Boolean>
+    val build: Build
 }

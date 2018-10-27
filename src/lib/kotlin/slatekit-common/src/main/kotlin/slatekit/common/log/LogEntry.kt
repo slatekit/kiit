@@ -13,15 +13,13 @@
 
 package slatekit.common.log
 
-
 import slatekit.common.DateTime
 
-
 data class LogEntry(
-                      val name  : String         = "",
-                      val level : LogLevel       = Info,
-                      val msg   : String         = "",
-                      val time  : DateTime       = DateTime.now(),
-                      val ex    : Exception?     = null,
-                      val tag   : String?        = null
-                   )
+    val name: String = "",
+    val level: LogLevel = Info,
+    val msg: String = "",
+    val time: DateTime = DateTime.now(),
+    val ex: Exception? = null,
+    val tag: String? = null
+)

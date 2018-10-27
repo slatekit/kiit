@@ -13,9 +13,7 @@
 
 package slatekit.common.status
 
-
 interface RunStatusSupport {
-
 
     /**
      * gets the current state of execution
@@ -24,7 +22,6 @@ interface RunStatusSupport {
      */
     fun state(): RunState
 
-
     /**
      * gets the current status of the application
      *
@@ -32,14 +29,12 @@ interface RunStatusSupport {
      */
     fun status(): RunStatus
 
-
     /**
      * moves the current state to idle.
      *
      * @return
      */
     fun start(): RunStatus = moveToState(RunStateIdle)
-
 
     /**
      * moves the current state to paused with a default time
@@ -49,14 +44,12 @@ interface RunStatusSupport {
      */
     fun pause(seconds: Int = 60): RunStatus = moveToState(RunStatePaused)
 
-
     /**
      * moves the current state to stopped.
      *
      * @return
      */
     fun stop(): RunStatus = moveToState(RunStateStopped)
-
 
     /**
      * moves the current state to resumed
@@ -65,14 +58,12 @@ interface RunStatusSupport {
      */
     fun resume(): RunStatus = moveToState(RunStateIdle)
 
-
     /**
      * moves the current state to complete
      *
      * @return
      */
     fun complete(): RunStatus = moveToState(RunStateComplete)
-
 
     /**
      * moves the current state to failed
@@ -81,14 +72,12 @@ interface RunStatusSupport {
      */
     fun fail(): RunStatus = moveToState(RunStateFailed)
 
-
     /**
      * whether this is executing
      *
      * @return
      */
     fun isRunning(): Boolean = isState(RunStateRunning)
-
 
     /**
      * whether this is waiting
@@ -97,14 +86,12 @@ interface RunStatusSupport {
      */
     fun isIdle(): Boolean = isState(RunStateIdle)
 
-
     /**
      * whether this is paused
      *
      * @return
      */
     fun isPaused(): Boolean = isState(RunStatePaused)
-
 
     /**
      * whether this is stopped
@@ -113,14 +100,12 @@ interface RunStatusSupport {
      */
     fun isStopped(): Boolean = isState(RunStateStopped)
 
-
     /**
      * whether this is complete
      *
      * @return
      */
     fun isComplete(): Boolean = isState(RunStateComplete)
-
 
     /**
      * whether this has failed
@@ -129,14 +114,12 @@ interface RunStatusSupport {
      */
     fun isFailed(): Boolean = isState(RunStateFailed)
 
-
     /**
      * whether this is not running ( stopped or paused )
      *
      * @return
      */
     fun isStoppedOrPaused(): Boolean = isState(RunStateStopped) || isState(RunStatePaused)
-
 
     /**
      * whether the current state is at the one supplied.
@@ -146,7 +129,6 @@ interface RunStatusSupport {
      */
     fun isState(runState: RunState): Boolean = state() == runState
 
-
     /**
      * moves this state to the one supplied
      * @param state
@@ -154,4 +136,3 @@ interface RunStatusSupport {
      */
     fun moveToState(state: RunState): RunStatus
 }
-

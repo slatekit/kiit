@@ -20,9 +20,11 @@ import slatekit.common.newline
  * Created by kishorereddy on 6/3/17.
  */
 
-class SerializerProps(standardizeFieldWidth: Boolean = false,
-                      objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
-                      isoDates:Boolean = false)
+class SerializerProps(
+    standardizeFieldWidth: Boolean = false,
+    objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+    isoDates: Boolean = false
+)
     : Serializer(objectSerializer, isoDates) {
 
     override val standardizeWidth = standardizeFieldWidth
@@ -30,19 +32,17 @@ class SerializerProps(standardizeFieldWidth: Boolean = false,
     /**
      * handler for when a container item has started
      */
-    override fun onContainerStart(item: Any, type: ParentType, depth: Int): Unit {
+    override fun onContainerStart(item: Any, type: ParentType, depth: Int) {
     }
-
 
     /**
      * handle for when a container item has ended
      */
-    override fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
+    override fun onContainerEnd(item: Any, type: ParentType, depth: Int) {
         if (depth <= 2) {
             _buff.append(newline)
         }
     }
-
 
     /**
      * serializes a string value handling escape values
@@ -51,15 +51,13 @@ class SerializerProps(standardizeFieldWidth: Boolean = false,
         return text
     }
 
-
-    override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?): Unit {
+    override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
         _buff.append(newline)
         _buff.append("$key = ")
         serializeValue(value, depth)
     }
 
-
-    override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?): Unit {
+    override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
         _buff.append(newline)
         serializeValue(value, depth)
     }

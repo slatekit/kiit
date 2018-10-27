@@ -33,22 +33,22 @@ import java.time.format.DateTimeFormatter
  * Refer to slatekit.meta.serialization.serializeObject for a sample implementation.
  *
  */
-open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
-                      val isoDates:Boolean = false){
+open class Serializer(
+    val objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+    val isoDates: Boolean = false
+) {
 
     open val standardizeWidth = false
     open val standardizeResult = false
     protected val _indenter = Indenter()
     protected var _buff = StringBuilder()
-    protected val dateFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    protected val timeFormat    : DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME //DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
+    protected val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    protected val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     enum class ParentType {
         ROOT_TYPE, LIST_TYPE, MAP_TYPE, OBJECT_TYPE
     }
-
 
     /**
      * serializes an object, factoring in a root item.
@@ -62,7 +62,6 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         val text = _buff.toString()
         return text
     }
-
 
     /**
      * serializes an object, factoring in a root item.
@@ -86,39 +85,37 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         return text
     }
 
-
     /**
      * Recursive serializer for a value of basic types.
      * Used for printing items to the console
      * in various places and components.
      * e.g. the CLI / Shell
      */
-    open fun serializeValue(s: Any?, depth: Int): Unit {
+    open fun serializeValue(s: Any?, depth: Int) {
         when (s) {
-            null             -> _buff.append("null")
-            is Unit          -> _buff.append("null")
-            is Char          -> _buff.append(serializeString(s.toString()))
-            is String        -> _buff.append(serializeString(s))
-            is Boolean       -> _buff.append(s.toString().toLowerCase())
-            is Short         -> _buff.append(s.toString())
-            is Int           -> _buff.append(s.toString())
-            is Long          -> _buff.append(s.toString())
-            is Float         -> _buff.append(s.toString())
-            is Double        -> _buff.append(s.toString())
-            is LocalDate     -> _buff.append("\"" + s.format(dateFormat) + "\"")
-            is LocalTime     -> _buff.append("\"" + s.format(timeFormat) + "\"")
+            null -> _buff.append("null")
+            is Unit -> _buff.append("null")
+            is Char -> _buff.append(serializeString(s.toString()))
+            is String -> _buff.append(serializeString(s))
+            is Boolean -> _buff.append(s.toString().toLowerCase())
+            is Short -> _buff.append(s.toString())
+            is Int -> _buff.append(s.toString())
+            is Long -> _buff.append(s.toString())
+            is Float -> _buff.append(s.toString())
+            is Double -> _buff.append(s.toString())
+            is LocalDate -> _buff.append("\"" + s.format(dateFormat) + "\"")
+            is LocalTime -> _buff.append("\"" + s.format(timeFormat) + "\"")
             is LocalDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
-            is Instant       -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
-            is DateTime -> _buff.append("\"" + (if(isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
+            is Instant -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
+            is DateTime -> _buff.append("\"" + (if (isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
             is Result<*, *> -> serializeResult(s, depth)
-            is List<*>       -> serializeList(s, depth + 1)
-            is Map<*, *>     -> serializeMap(s, depth + 1)
-            is Exception     -> _buff.append(serializeString(s.message ?: ""))
-            else             -> objectSerializer?.invoke(this, s, depth + 1) ?: "null"
+            is List<*> -> serializeList(s, depth + 1)
+            is Map<*, *> -> serializeMap(s, depth + 1)
+            is Exception -> _buff.append(serializeString(s.message ?: ""))
+            else -> objectSerializer?.invoke(this, s, depth + 1) ?: "null"
         }
     }
-
 
     /**
      * recursive serialization for a list
@@ -127,7 +124,7 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between values
      */
-    protected fun serializeList(item: List<*>, depth: Int): Unit {
+    protected fun serializeList(item: List<*>, depth: Int) {
         // Begin
         onContainerStart(item, ParentType.LIST_TYPE, depth)
 
@@ -142,7 +139,6 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         onContainerEnd(item, ParentType.LIST_TYPE, depth)
     }
 
-
     /**
      * recursive serialization for a map.
      *
@@ -150,7 +146,7 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between key/value pairs
      */
-    protected fun serializeMap(item: Map<*, *>, depth: Int): Unit {
+    protected fun serializeMap(item: Map<*, *>, depth: Int) {
         // Begin
         onContainerStart(item, ParentType.MAP_TYPE, depth)
 
@@ -167,7 +163,6 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         onContainerEnd(item, ParentType.MAP_TYPE, depth)
     }
 
-
     /**
      * recursive serialization for a object.
      *
@@ -175,7 +170,7 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
      * @param serializer: The serializer to serialize a value to a string
      * @param delimiter: The delimiter to use between key/value pairs
      */
-    protected fun serializeResult(item: Result<*, *>, depth: Int): Unit {
+    protected fun serializeResult(item: Result<*, *>, depth: Int) {
         if (standardizeResult) {
             // Begin
             onContainerStart(item, ParentType.OBJECT_TYPE, depth)
@@ -188,29 +183,26 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
 
             // End
             onContainerEnd(item, ParentType.OBJECT_TYPE, depth)
-        }
-        else {
+        } else {
             serializeValue(item.getOrElse { null }, depth)
         }
     }
-
 
     /**
      * serializes a string value handling escape values
      */
     protected open fun serializeString(text: String): String {
         val result = when (text) {
-            ""   -> "\"\""
+            "" -> "\"\""
             else -> "\"" + text.replace("\\", "\\\\").replace("\"", "\\\"") + "\""
         }
         return result
     }
 
-
     /**
      * handler for when a container item has started
      */
-    open fun onContainerStart(item: Any, type: ParentType, depth: Int): Unit {
+    open fun onContainerStart(item: Any, type: ParentType, depth: Int) {
         when (type) {
             ParentType.LIST_TYPE -> _buff.append("[")
             ParentType.MAP_TYPE -> _buff.append("{")
@@ -219,11 +211,10 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         }
     }
 
-
     /**
      * handle for when a container item has ended
      */
-    open fun onContainerEnd(item: Any, type: ParentType, depth: Int): Unit {
+    open fun onContainerEnd(item: Any, type: ParentType, depth: Int) {
         when (type) {
             ParentType.LIST_TYPE -> _buff.append("]")
             ParentType.MAP_TYPE -> _buff.append("}")
@@ -232,8 +223,7 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         }
     }
 
-
-    open fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?): Unit {
+    open fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
         if (pos > 0) {
             _buff.append(", ")
         }
@@ -241,8 +231,7 @@ open class Serializer(val objectSerializer: ((Serializer, Any, Int) -> Unit)? = 
         serializeValue(value, depth)
     }
 
-
-    protected open fun onListItem(item: Any, depth: Int, pos: Int, value: Any?): Unit {
+    protected open fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
         if (pos > 0) {
             _buff.append(", ")
         }

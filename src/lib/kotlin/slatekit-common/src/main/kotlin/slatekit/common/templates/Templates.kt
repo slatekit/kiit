@@ -18,7 +18,6 @@ import slatekit.common.getOrElse
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
 
-
 /**
  * Handles processing of text templates with variables/substitutions inside.
  *
@@ -26,18 +25,18 @@ import slatekit.common.templates.TemplateConstants.TypeText
  * @param variables
  * @param setDefaults
  */
-class Templates(val templates: List<Template>? = null,
-                val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
-                setDefaults: Boolean = true) {
+class Templates(
+    val templates: List<Template>? = null,
+    val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
+    setDefaults: Boolean = true
+) {
 
     /**
      * The actual variables/substitutions that map to functions to substite the values
      */
     val subs = Subs(variables, setDefaults)
 
-
     val emptyParts = listOf<TemplatePart>()
-
 
     /**
      * parses the text template
@@ -46,7 +45,6 @@ class Templates(val templates: List<Template>? = null,
      * @return
      */
     fun parse(text: String): ResultEx<List<TemplatePart>> = TemplateParser(text).parse()
-
 
     /**
      * parses the text and returns a parsed template with individual parts.
@@ -68,7 +66,6 @@ class Templates(val templates: List<Template>? = null,
         )
     }
 
-
     /**
      * Processes the template with the variables supplied during creation
      *
@@ -76,7 +73,6 @@ class Templates(val templates: List<Template>? = null,
      * @return
      */
     fun resolve(text: String): String? = resolve(text, subs)
-
 
     /**
      * Processes the stored template associated with the name, with the variables supplied
@@ -97,7 +93,6 @@ class Templates(val templates: List<Template>? = null,
         return result
     }
 
-
     fun resolveTemplateWithVars(name: String, vars: Map<String, Any>): String? {
         val template = templates?.filter { it.name == name }?.firstOrNull()
 
@@ -109,7 +104,6 @@ class Templates(val templates: List<Template>? = null,
         }
         return result
     }
-
 
     /**
      * Processes the template with the variables supplied
@@ -125,53 +119,45 @@ class Templates(val templates: List<Template>? = null,
             val parts = result.getOrElse { listOf() }
             if (parts.isEmpty()) {
                     text
-                }
-                else {
+                } else {
                 resolveParts(parts, substitutions ?: subs)
             }
-
-        }
-        else {
+        } else {
             result.msg
         }
         return finalResult
     }
 
-
     private fun resolveParts(tokens: List<TemplatePart>, substitutions: Subs): String? {
         val finalText = tokens.fold("", { s, t ->
             when (t.subType) {
                 TypeText -> s + t.text
-                TypeSub  -> s + substitutions.lookup(t.text)
-                else     -> s + ""
+                TypeSub -> s + substitutions.lookup(t.text)
+                else -> s + ""
             }
         })
         return finalText
     }
-
 
     private fun resolvePartsWithVars(tokens: List<TemplatePart>, vars: Map<String, Any>?): String? {
         val finalText = tokens.fold("", { s, t ->
             when (t.subType) {
                 TypeText -> s + t.text
-                TypeSub  -> s + resolveToken(t, vars)
-                else     -> s + ""
+                TypeSub -> s + resolveToken(t, vars)
+                else -> s + ""
             }
         })
         return finalText
     }
-
 
     private fun resolveToken(token: TemplatePart, vars: Map<String, Any>?): Any {
         val result = vars?.let { v ->
             if (v.containsKey(token.text)) {
                 val vr = v[token.text]
                 vr ?: ""
-            }
-            else if (subs.contains(token.text)) {
+            } else if (subs.contains(token.text)) {
                 subs[token.text]
-            }
-            else {
+            } else {
                 ""
             }
         } ?: ""
@@ -188,18 +174,18 @@ class Templates(val templates: List<Template>? = null,
          * @return
          */
         @JvmStatic
-        fun build(templates: List<Template>,
-                  subs: List<Pair<String, (TemplatePart) -> String>>? = null): Templates {
+        fun build(
+            templates: List<Template>,
+            subs: List<Pair<String, (TemplatePart) -> String>>? = null
+        ): Templates {
 
             // Each template
             val parsed = parse(templates)
             return Templates(parsed, subs)
         }
 
-
         @JvmStatic
         fun subs(items: List<Pair<String, (TemplatePart) -> String>>): Subs = Subs(items)
-
 
         @JvmStatic
         fun parse(templates: List<Template>): List<Template> {

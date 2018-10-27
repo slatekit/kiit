@@ -18,13 +18,11 @@ import slatekit.common.Success
 
 interface AppLifeCycle {
 
-
     /**
      * initializes the application
      *
      */
     fun init(): ResultEx<Boolean> = Success(true)
-
 
     /**
      * executes the application
@@ -33,9 +31,8 @@ interface AppLifeCycle {
      */
     fun exec(): ResultEx<Any> = Success("")
 
-
     /**
      * shutdown hook to stop any services
      */
-    fun end(): Unit {}
+    fun end() {}
 }

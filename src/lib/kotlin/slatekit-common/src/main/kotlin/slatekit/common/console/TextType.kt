@@ -22,12 +22,11 @@ sealed class TextType(val color: String, val upperCase: Boolean) {
     }
 }
 
-
-object Title     : TextType( Console.BLUE  , true  )
-object Subtitle  : TextType( Console.CYAN  , false )
-object Url       : TextType( Console.BLUE  , false )
-object Important : TextType( Console.RED   , false )
-object Highlight : TextType( Console.YELLOW, false )
-object Success   : TextType( Console.GREEN , false )
-object Error     : TextType( Console.RED   , false )
-object Text      : TextType( Console.WHITE , false )
+object Title : TextType(Console.BLUE, true)
+object Subtitle : TextType(Console.CYAN, false)
+object Url : TextType(Console.BLUE, false)
+object Important : TextType(Console.RED, false)
+object Highlight : TextType(Console.YELLOW, false)
+object Success : TextType(Console.GREEN, false)
+object Error : TextType(Console.RED, false)
+object Text : TextType(Console.WHITE, false)

@@ -13,11 +13,9 @@
 
 package slatekit.common.records
 
-
 import slatekit.common.DateTime
 import slatekit.common.UniqueId
 import java.time.*
-
 
 interface Record {
     fun init(rec: List<String>)
@@ -63,38 +61,34 @@ interface Record {
     fun getDateTime(name: String): DateTime?
 
     // Assumes DateTime as UTC
-    fun getDateTimeAsUTC(pos:Int):DateTime?
-    fun getDateTimeAsUTC(name:String):DateTime?
+    fun getDateTimeAsUTC(pos: Int): DateTime?
+    fun getDateTimeAsUTC(name: String): DateTime?
 
-    fun getUUID(pos:Int): java.util.UUID?
-    fun getUUID(name:String): java.util.UUID?
+    fun getUUID(pos: Int): java.util.UUID?
+    fun getUUID(name: String): java.util.UUID?
 
-    fun getUniqueId(pos:Int): UniqueId?
-    fun getUniqueId(name:String): UniqueId?
-
+    fun getUniqueId(pos: Int): UniqueId?
+    fun getUniqueId(name: String): UniqueId?
 
     // ========================================================================
     // All the methods below get the datetime from the underlying value
     // which is assumed to be UTC. So we load underlying as UTC and
     // convert it to accordingly to the local zone
-    fun getLocalDateTimeFromUTC(pos:Int):LocalDateTime? {
+    fun getLocalDateTimeFromUTC(pos: Int): LocalDateTime? {
         val atUtc = getDateTimeAsUTC(pos)
         val local = atUtc?.atZone(ZoneId.systemDefault())
         return local?.local()
     }
 
-    fun getLocalDateTimeFromUTC(name:String):LocalDateTime? {
+    fun getLocalDateTimeFromUTC(name: String): LocalDateTime? {
         val atUtc = getDateTimeAsUTC(name)
         val local = atUtc?.atZone(ZoneId.systemDefault())
         return local?.local()
     }
 
+    fun getZonedDateTimeLocalFromUTC(pos: Int): ZonedDateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())?.raw
+    fun getZonedDateTimeLocalFromUTC(name: String): ZonedDateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())?.raw
 
-    fun getZonedDateTimeLocalFromUTC(pos:Int):ZonedDateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())?.raw
-    fun getZonedDateTimeLocalFromUTC(name:String):ZonedDateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())?.raw
-
-
-    fun getDateTimeLocalFromUTC(pos:Int):DateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())
-    fun getDateTimeLocalFromUTC(name:String):DateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())
-
+    fun getDateTimeLocalFromUTC(pos: Int): DateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())
+    fun getDateTimeLocalFromUTC(name: String): DateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())
 }

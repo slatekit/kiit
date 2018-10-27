@@ -27,39 +27,34 @@ import java.util.*
  * Created by kishorereddy on 6/15/17.
  */
 class ConfigMulti(
-        private val _config: Properties,
-        private val _configParent: Properties,
-        path: String,
-        enc: Encryptor? = null
+    private val _config: Properties,
+    private val _configParent: Properties,
+    path: String,
+    enc: Encryptor? = null
 )
     : ConfigBase({ raw -> enc?.decrypt(raw) ?: raw }) {
-
 
     constructor(configPath: String, configParentPath: String, enc: Encryptor?) :
             this(ConfFuncs.loadPropertiesFrom(configPath),
                     ConfFuncs.loadPropertiesFrom(configParentPath),
                     configPath, enc)
 
-
     constructor(config: ConfigBase, configParent: ConfigBase, enc: Encryptor?) :
             this(config.rawConfig as Properties,
                     configParent.rawConfig as Properties, config.origin(), enc)
-
 
     constructor(configPath: String, configParent: ConfigBase, enc: Encryptor?) :
             this(ConfFuncs.loadPropertiesFrom(configPath),
                     configParent.rawConfig as Properties, configPath, enc)
 
-
     private val _fileName = path
     private val _enc = enc
 
-    override val raw:Any = _config
+    override val raw: Any = _config
     override fun get(key: String): Any? = getInternalString(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = containsKeyInternal(key)
     override fun size(): Int = _config.values.size
-
 
     override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key), _encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
@@ -74,7 +69,6 @@ class ConfigMulti(
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     /**
      * The reference to the raw underlying config
      *
@@ -82,13 +76,11 @@ class ConfigMulti(
      */
     override val rawConfig: Any = _config
 
-
     /**
      * The origin file path of the config
      * @return
      */
     override fun origin(): String = _fileName
-
 
     /**
      * Loads config from the file path supplied
@@ -98,49 +90,39 @@ class ConfigMulti(
      */
     override fun loadFrom(file: String?): ConfigBase? = ConfFuncs.load(file, _enc)
 
-
     fun containsKeyInternal(key: String): Boolean {
         return _config.containsKey(key) || _configParent.containsKey(key)
     }
 
-
     fun getInternal(key: String): Any? {
         val value = if (_config.containsKey(key)) {
             _config.getProperty(key)
-        }
-        else if (_configParent.containsKey(key)) {
+        } else if (_configParent.containsKey(key)) {
             _configParent.getProperty(key)
-        }
-        else {
+        } else {
             null
         }
         return if (value != null && value is String) {
             value.trim()
-        }
-        else {
+        } else {
             value
         }
     }
-
 
     fun getInternalString(key: String): String? {
         val value = if (_config.containsKey(key)) {
             _config.getProperty(key)
-        }
-        else if (_configParent.containsKey(key)) {
+        } else if (_configParent.containsKey(key)) {
             _configParent.getProperty(key)
-        }
-        else {
+        } else {
             null
         }
         return if (value != null && value is String) {
             value.trim()
-        }
-        else {
+        } else {
             value
         }
     }
 
-
-    fun getStringRaw(key:String):String = getInternalString(key)?.trim() ?: ""
+    fun getStringRaw(key: String): String = getInternalString(key)?.trim() ?: ""
 }

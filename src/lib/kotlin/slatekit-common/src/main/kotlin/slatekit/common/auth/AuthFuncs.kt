@@ -21,7 +21,6 @@ import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.common.results.ResultFuncs.yes
 
-
 object AuthFuncs {
 
     val guest = User(id = "guest")
@@ -29,9 +28,9 @@ object AuthFuncs {
 
     /**
      * determines whether or not there is a valid api key in the inputs (Map like collection) supplied
-     * @param inputs      : The inputs ( abstracted Map-like collection )
-     * @param keys        : The list of ApiKey available
-     * @param inputName   : The name of the key in the inputs containing the ApiKey.key
+     * @param inputs : The inputs ( abstracted Map-like collection )
+     * @param keys : The list of ApiKey available
+     * @param inputName : The name of the key in the inputs containing the ApiKey.key
      *                      NOTES:
      *                      1. This is like the "Authorization" header in http.
      *                      2. In fact, since the HttpRequest is abstracted out via ApiCmd
@@ -41,18 +40,19 @@ object AuthFuncs {
      *                        NOTE: The key if present in inputs and matching one of ApiKeys in lookup
      * @return
      */
-    fun isKeyValid(inputs: Inputs?,
-                   keys: ListMap<String, ApiKey>,
-                   inputName: String,
-                   expectedRoles: String): ResultMsg<Boolean> {
+    fun isKeyValid(
+        inputs: Inputs?,
+        keys: ListMap<String, ApiKey>,
+        inputName: String,
+        expectedRoles: String
+    ): ResultMsg<Boolean> {
 
         val key = inputs?.getStringOpt(inputName) ?: ""
 
         // Check 3: Key is non-empty ?
         return if (key.isNullOrEmpty()) {
             no("Api Key not provided or invalid")
-        }
-        else {
+        } else {
             // Check 4: CHeck if valid key
             if (keys.contains(key))
                 validateKey(key, keys, expectedRoles)
@@ -61,11 +61,10 @@ object AuthFuncs {
         }
     }
 
-
     /**
      * matches the expected roles with the actual roles
      * @param expectedRole : "dev,ops,admin"
-     * @param actualRoles  : Map of actual roles the user has.
+     * @param actualRoles : Map of actual roles the user has.
      * @return
      */
     fun matchRoles(expectedRole: String, actualRoles: Map<String, String>): ResultMsg<Boolean> {
@@ -76,9 +75,8 @@ object AuthFuncs {
         }
         // 2. Any role "*"
         else if (expectedRole == Roles.all) {
-            if(actualRoles.isNotEmpty()) yes() else unAuthorized()
-        }
-        else {
+            if (actualRoles.isNotEmpty()) yes() else unAuthorized()
+        } else {
             // 3. Get all roles "dev,moderator,admin"
             val expectedRoles = expectedRole.split(',')
 
@@ -91,7 +89,6 @@ object AuthFuncs {
         }
     }
 
-
     /**
      * gets the primary value supplied unless it references the parent value via "@parent"
      * @param primaryValue
@@ -102,17 +99,14 @@ object AuthFuncs {
             if (!primaryValue.isNullOrEmpty()) {
                 if (primaryValue == Roles.parent) {
                     parentValue
-                }
-                else
+                } else
                     primaryValue
             }
             // Parent!
             else if (!parentValue.isNullOrEmpty()) {
                 parentValue
-            }
-            else
+            } else
                 ""
-
 
     /**
      * Converts api keys supplied into a listmap ( list + map ) of Api Keys using the api.key as key
@@ -124,7 +118,6 @@ object AuthFuncs {
         return ListMap(items)
     }
 
-
     /**
      * converts a comma delimited string of roles to an immutable map of role:String -> boolean:true
      * @param roles
@@ -133,7 +126,6 @@ object AuthFuncs {
     fun convertRoles(roles: String): Map<String, Boolean> {
         return roles.split(',').map { it to true }.toMap()
     }
-
 
     private fun validateKey(key: String, keys: ListMap<String, ApiKey>, expectedRoles: String): ResultMsg<Boolean> {
 

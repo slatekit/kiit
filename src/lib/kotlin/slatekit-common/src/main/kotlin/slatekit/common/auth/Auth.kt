@@ -13,8 +13,6 @@
 
 package slatekit.common.auth
 
-
-
 /**
  * Provides a reasonable mechanism for ONLY inspecting an authenticated or non-authenticated user
  *
@@ -38,14 +36,12 @@ open class Auth(val isAuthenticated: Boolean, userInfo: User?, roles: String) {
     private val _user = userInfo
     private val _roles = AuthFuncs.convertRoles(roles)
 
-
     /**
      * matches the user to the one supplied.
      * @param user
      * @return
      */
     fun isUser(user: User?): Boolean = user?.isMatch(_user ?: AuthFuncs.guest) ?: false
-
 
     /**
      * whether or not the user in the role supplied.
@@ -54,13 +50,11 @@ open class Auth(val isAuthenticated: Boolean, userInfo: User?, roles: String) {
      */
     fun isInRole(role: String): Boolean = _roles.containsKey(role)
 
-
     /**
      * whether or not the users phone is verified
      * @return
      */
     val isPhoneVerified: Boolean get() = _user?.isPhoneVerified ?: false
-
 
     /**
      * whether or not the users email is verified
@@ -68,13 +62,11 @@ open class Auth(val isAuthenticated: Boolean, userInfo: User?, roles: String) {
      */
     val isEmailVerified: Boolean get() = _user?.isEmailVerified ?: false
 
-
     /**
      * The user id
      * @return
      */
     val userId: String get() = _user?.id ?: ""
-
 
     /**
      * The user info

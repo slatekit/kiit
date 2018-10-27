@@ -22,7 +22,6 @@ interface LogSupport {
 
     val logger: Logger?
 
-
     /**
      * Logs an debug message
      * @param msg : The message
@@ -32,7 +31,6 @@ interface LogSupport {
     fun debug(msg: String, ex: Exception? = null) {
         log(Debug, msg, ex)
     }
-
 
     /**
      * Logs an info message
@@ -44,7 +42,6 @@ interface LogSupport {
         log(Info, msg, ex)
     }
 
-
     /**
      * Logs an warning
      * @param msg : The message
@@ -55,7 +52,6 @@ interface LogSupport {
         log(Warn, msg, ex)
     }
 
-
     /**
      * Logs an error
      * @param msg : The message
@@ -65,7 +61,6 @@ interface LogSupport {
     fun error(msg: String, ex: Exception? = null) {
         log(Error, msg, ex)
     }
-
 
     /**
      * Logs an fatal
@@ -78,7 +73,6 @@ interface LogSupport {
         log(Fatal, msg, ex)
     }
 
-
     /**
      * Logs an debug message
      * @param msg : The callback to build the message
@@ -88,7 +82,6 @@ interface LogSupport {
     fun debug(callback: () -> String, ex: Exception? = null) {
         log(Debug, callback, ex)
     }
-
 
     /**
      * Logs an info message
@@ -100,7 +93,6 @@ interface LogSupport {
         log(Info, callback, ex)
     }
 
-
     /**
      * Logs an warning
      * @param msg : The callback to build the message
@@ -111,7 +103,6 @@ interface LogSupport {
         log(Warn, callback, ex)
     }
 
-
     /**
      * Logs an error
      * @param msg : The callback to build the message
@@ -121,7 +112,6 @@ interface LogSupport {
     fun error(callback: () -> String, ex: Exception? = null) {
         log(Error, callback, ex)
     }
-
 
     /**
      * Logs an fatal
@@ -134,7 +124,6 @@ interface LogSupport {
         log(Fatal, callback, ex)
     }
 
-
     /**
      * Logs an entry
      * @param level
@@ -145,7 +134,6 @@ interface LogSupport {
     fun log(level: LogLevel, msg: String, ex: Exception? = null) {
         logger?.let { l -> l.log(level, msg, ex) }
     }
-
 
     @Ignore
     fun log(level: LogLevel, callback: () -> String, ex: Exception?) {

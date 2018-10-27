@@ -15,14 +15,12 @@ package slatekit.common.console
 
 import slatekit.common.IO
 
-
 /**
  * Semantic console writer to print text in different colors and in Uppercase/lowercase for
  * things like title, subtitle, url etc.
  */
 class ConsoleWriter(private val _settings: ConsoleSettings = Console.defaults()) : ConsoleWrites {
     override val settings: ConsoleSettings get() = _settings
-
 
     /**
      * IO abstraction for system.println.

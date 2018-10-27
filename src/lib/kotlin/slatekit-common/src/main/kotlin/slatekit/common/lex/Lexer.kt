@@ -18,7 +18,6 @@ import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.getOrElse
 
-
 /**
  * Created by kreddy on 3/2/2016.
  */
@@ -27,13 +26,11 @@ open class Lexer(val text: String) {
     private val _state = LexState(text)
     private val _settings = LexSettings()
 
-
     fun parse(): LexResult {
         val res = getTokens()
         val tokens = res.getOrElse({ listOf<Token>() })
         return LexResult(res.success, res.msg.orEmpty(), tokens, tokens.size, false, null)
     }
-
 
     fun getTokens(batchSize: Int = -1): ResultEx<List<Token>> {
         val result = try {
@@ -97,8 +94,7 @@ open class Lexer(val text: String) {
                     tokens.add(endToken)
             }
             Success(tokens.toList())
-        }
-        catch(ex: Exception) {
+        } catch (ex: Exception) {
             val line = _state.line
             val cpos = _state.charPos
             val text = "Error occurred at : line : $line, char : $cpos"
@@ -107,11 +103,9 @@ open class Lexer(val text: String) {
         return result
     }
 
-
     fun isEndOfTokenBatch(batchCount: Int, tokenCount: Int): Boolean {
         return batchCount > -1 && tokenCount >= batchCount
     }
-
 
     fun readWord(): String {
         val start = _state.pos
@@ -129,7 +123,6 @@ open class Lexer(val text: String) {
         return readUntil(_state.pos, _state.pos, false, false, { _, curr, _ -> !isValidWordChar(curr) })
     }
 
-
     /**
      * Reads a number token of only digits
      * @return
@@ -141,21 +134,17 @@ open class Lexer(val text: String) {
             // Case 1: integer ( no "." yet )
             val isValid = if (!hasHitPeriod && isDigit) {
                 true
-            }
-            else if (!hasHitPeriod && curr == '.' && next.isDigit()) {
+            } else if (!hasHitPeriod && curr == '.' && next.isDigit()) {
                 hasHitPeriod = true
                 true
-            }
-            else if (hasHitPeriod && isDigit) {
+            } else if (hasHitPeriod && isDigit) {
                 true
-            }
-            else {
+            } else {
                 isDigit
             }
             !isValid
         })
     }
-
 
     /**
      * Reads a string token beginning with either single or double quotes ' ""
@@ -167,7 +156,6 @@ open class Lexer(val text: String) {
         return readUntil(_state.pos, _state.pos, false, true, { prev, curr, _ -> prev != '\\' && curr == quote })
     }
 
-
     /**
      * Reads a  line or new \n or \r\n
      * @return
@@ -177,8 +165,7 @@ open class Lexer(val text: String) {
         return if (ch == '\n') {
             _state.incrementPos()
             "\n"
-        }
-        else {
+        } else {
             require(ch == '\r')
             _state.incrementPos()
             val n1 = _state.text[_state.pos]
@@ -187,7 +174,6 @@ open class Lexer(val text: String) {
             "\r\n"
         }
     }
-
 
     /**
      * Reads a comment
@@ -198,18 +184,18 @@ open class Lexer(val text: String) {
         return readUntil(_state.pos, _state.pos, false, false, { prev, curr, _ -> prev != '\\' && (curr == '\n' || curr == '\r') })
     }
 
-
-    tailrec fun readUntil(startPos: Int,
-                          currentPos: Int,
-                          includeLastChar: Boolean,
-                          incrementAfterExtract: Boolean,
-                          untilPredicate: (Char, Char, Char) -> Boolean): String {
+    tailrec fun readUntil(
+        startPos: Int,
+        currentPos: Int,
+        includeLastChar: Boolean,
+        incrementAfterExtract: Boolean,
+        untilPredicate: (Char, Char, Char) -> Boolean
+    ): String {
         return if (_state.pos >= _state.END) {
             val text = _state.substring(startPos)
             _state.incrementPos()
             text
-        }
-        else {
+        } else {
             val prevPos = if (currentPos > 0) currentPos - 1 else 0
             val prev = _state.text[prevPos]
             val curr = _state.text[currentPos]
@@ -220,22 +206,19 @@ open class Lexer(val text: String) {
                 val text = if (includeLastChar) {
                     _state.incrementPos()
                     _state.substring(startPos)
-                }
-                else {
+                } else {
                     _state.substring(startPos)
                 }
                 if (incrementAfterExtract) {
                     _state.incrementPos()
                 }
                 text
-            }
-            else {
+            } else {
                 _state.incrementPos()
                 readUntil(startPos, _state.pos, includeLastChar, incrementAfterExtract, untilPredicate)
             }
         }
     }
-
 
     protected fun peekChar(): Char {
         val nextPos = _state.pos + 1
@@ -245,13 +228,11 @@ open class Lexer(val text: String) {
             Character.MIN_VALUE
     }
 
-
     protected fun buildToken(text: String, value: Any, tokenType: Int): Token {
         _state.count = _state.count + 1
         val token = Token(text, value, tokenType, _state.line, _state.charPos, _state.count)
         return token
     }
-
 
     protected fun buildWordToken(word: String, charPos: Int, ndx: Int): Token {
         val t: Token =
@@ -265,8 +246,7 @@ open class Lexer(val text: String) {
                 // Case 2: false
                 else if (word == "false" || (_settings.enableBoolYesNoIdentifiers && word == "no")) {
                     Token(word, false, TokenType.Boolean, _state.line, charPos, ndx)
-                }
-                else {
+                } else {
                     Token(word, word, TokenType.Ident, _state.line, charPos, ndx)
                 }
         return t

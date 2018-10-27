@@ -11,9 +11,4 @@
 
 package slatekit.common.db
 
-
-
-object DbConstants {
-
-
-}
+object DbConstants

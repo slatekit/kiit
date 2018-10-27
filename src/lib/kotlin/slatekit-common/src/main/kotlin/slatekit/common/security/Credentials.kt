@@ -14,13 +14,13 @@
 package slatekit.common.security
 
 data class Credentials(
-        val id: String = "",
-        val name: String = "",
-        val email: String = "",
-        val key: String = "",
-        val env: String = "",
-        val region: String = "",
-        val roles : String = ""
+    val id: String = "",
+    val name: String = "",
+    val email: String = "",
+    val key: String = "",
+    val env: String = "",
+    val region: String = "",
+    val roles: String = ""
 ) {
     companion object {
         @JvmStatic

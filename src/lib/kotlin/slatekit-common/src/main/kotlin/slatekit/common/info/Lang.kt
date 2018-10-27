@@ -15,26 +15,25 @@ package slatekit.common.info
 
 import slatekit.common.Props
 
-
 /**
  * Represents a host such as a cloud server. e.g. ec2
- * @param name       : name of the language
- * @param home       : home directory of the language
- * @param origin     : origin of the language, e.g. for scala -reference to jre
+ * @param name : name of the language
+ * @param home : home directory of the language
+ * @param origin : origin of the language, e.g. for scala -reference to jre
  * @param versionNum : version of the language
- * @param version    : addition info about architechture for lang ( e.g. 64 bit )
- * @param ext1       : additional information about the language
+ * @param version : addition info about architechture for lang ( e.g. 64 bit )
+ * @param ext1 : additional information about the language
  */
 data class Lang(
-        val name: String,
-        val home: String,
-        val version: String,
-        val vendor: String,
-        val origin: String,
-        val ext1: String
+    val name: String,
+    val home: String,
+    val version: String,
+    val vendor: String,
+    val origin: String,
+    val ext1: String
 ) {
 
-    fun log(callback: (String, String) -> Unit): Unit {
+    fun log(callback: (String, String) -> Unit) {
         callback("name", name)
         callback("home", home)
         callback("vendor", vendor)
@@ -42,7 +41,6 @@ data class Lang(
         callback("origin", origin)
         callback("ext1", ext1)
     }
-
 
     companion object {
         @JvmStatic
@@ -54,7 +52,6 @@ data class Lang(
             origin = "local",
             ext1 = "-"
         )
-
 
         @JvmStatic
         fun kotlin(): Lang =

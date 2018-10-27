@@ -13,24 +13,22 @@
 
 package slatekit.common.http
 
-
 /**
  * Represents an http request with all the parameters/options
- * @param url            : Url of the request
- * @param method         : Method ( GET/POST/etc)
- * @param params         : parameters ( url parameters for get, form parameters for post )
- * @param headers        : http headers
+ * @param url : Url of the request
+ * @param method : Method ( GET/POST/etc)
+ * @param params : parameters ( url parameters for get, form parameters for post )
+ * @param headers : http headers
  * @param connectTimeOut : timeout of operation
- * @param readTimeOut    : timeout for read operation
+ * @param readTimeOut : timeout for read operation
  */
 data class HttpRequest(
-        val url: String,
-        val method: HttpMethod,
-        val params: List<Pair<String, String>>?,
-        val headers: List<Pair<String, String>>?,
-        val credentials: HttpCredentials? = null,
-        val entity: String? = null,
-        val connectTimeOut: Int = 5000,
-        val readTimeOut: Int = 5000
-) {
-}
+    val url: String,
+    val method: HttpMethod,
+    val params: List<Pair<String, String>>?,
+    val headers: List<Pair<String, String>>?,
+    val credentials: HttpCredentials? = null,
+    val entity: String? = null,
+    val connectTimeOut: Int = 5000,
+    val readTimeOut: Int = 5000
+)

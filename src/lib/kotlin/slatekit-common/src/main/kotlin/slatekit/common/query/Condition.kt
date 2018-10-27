@@ -13,7 +13,6 @@
 
 package slatekit.common.query
 
-
 class Condition(val field: Any, val comparison: String, val fieldValue: Any) : ICondition {
 
     /**
@@ -22,12 +21,11 @@ class Condition(val field: Any, val comparison: String, val fieldValue: Any) : I
      */
     override fun toStringQuery(): String = toStringQueryWithOptions(false, "[", "]")
 
-
     /**
      * Returns a String representation of this instance.
      * @param surround : True to surround alias with text.
-     * @param left     : Left surrounding text
-     * @param right    : Right surrounding text
+     * @param left : Left surrounding text
+     * @param right : Right surrounding text
      * @return
      */
     fun toStringQueryWithOptions(surround: Boolean = false, left: String = "", right: String = ""): String {

@@ -23,7 +23,6 @@ import javax.crypto.spec.SecretKeySpec
  */
 object EncryptorAES {
 
-
     fun encrypt(key: String, iv: String, text: String): String {
         val ivSpec = IvParameterSpec(iv.toByteArray())
         val keySpec = SecretKeySpec(key.toByteArray(), "AES")
@@ -32,7 +31,6 @@ object EncryptorAES {
         val encrypted = cipher.doFinal(text.toByteArray())
         return base64Encode(encrypted.toTypedArray())
     }
-
 
     fun decrypt(key: String, iv: String, text: String): String {
         val ivSpec = IvParameterSpec(iv.toByteArray())
@@ -45,13 +43,9 @@ object EncryptorAES {
         return decrypted
     }
 
-
     private fun base64Encode(bytes: Array<Byte>): String =
             Base64.getEncoder().withoutPadding().encodeToString(bytes.toByteArray())
 
-
     private fun base64Decode(text: String): Array<Byte> =
             Base64.getDecoder().decode(text.toByteArray()).toTypedArray()
-
-
 }

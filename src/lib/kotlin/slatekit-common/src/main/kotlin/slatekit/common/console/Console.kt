@@ -29,16 +29,15 @@ package slatekit.common.console
 
 object Console {
 
-    val BLACK  : String = "\u001B[30m";
-    val RED    : String = "\u001B[31m";
-    val GREEN  : String = "\u001B[32m";
-    val YELLOW : String = "\u001B[33m";
-    val BLUE   : String = "\u001B[34m";
-    val PURPLE : String = "\u001B[35m";
-    val CYAN   : String = "\u001B[36m";
-    val WHITE  : String = "\u001B[37m";
-    val RESET  : String = "\u001B[0m";
-
+    val BLACK: String = "\u001B[30m"
+    val RED: String = "\u001B[31m"
+    val GREEN: String = "\u001B[32m"
+    val YELLOW: String = "\u001B[33m"
+    val BLUE: String = "\u001B[34m"
+    val PURPLE: String = "\u001B[35m"
+    val CYAN: String = "\u001B[36m"
+    val WHITE: String = "\u001B[37m"
+    val RESET: String = "\u001B[0m"
 
     fun defaults(): ConsoleSettings = ConsoleSettings(darkMode = true)
 }

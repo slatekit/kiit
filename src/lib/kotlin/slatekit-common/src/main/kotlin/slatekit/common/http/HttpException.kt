@@ -15,13 +15,13 @@ package slatekit.common.http
 
 /**
  * Http exception for status
- * @param code   : status code
- * @param msg    : error message
- * @param tag    : optional tag for client reference
+ * @param code : status code
+ * @param msg : error message
+ * @param tag : optional tag for client reference
  */
 data class HttpException(
-        val code: Int,
-        val msg: String,
-        val tag: String = ""
+    val code: Int,
+    val msg: String,
+    val tag: String = ""
 )
     : RuntimeException(code.toString() + " Error: " + msg)

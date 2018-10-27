@@ -21,10 +21,12 @@ import java.time.ZonedDateTime
 /**
  * Created by kishorereddy on 5/25/17.
  */
-open class InputArgs(val _map: Map<String, Any>,
-                private val _decryptor: ((String) -> String)? = null) : Meta, InputsUpdateable {
+open class InputArgs(
+    val _map: Map<String, Any>,
+    private val _decryptor: ((String) -> String)? = null
+) : Meta, InputsUpdateable {
 
-    override val raw:Any =_map
+    override val raw: Any = _map
     override fun toMap(): Map<String, Any> = _map
 
     override fun getString(key: String): String = InputFuncs.decrypt(_map[key].toString(), _decryptor)
@@ -40,13 +42,12 @@ open class InputArgs(val _map: Map<String, Any>,
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(_map[key].toString())
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(_map[key].toString())
 
-
     override fun get(key: String): Any? = if (_map.contains(key)) _map[key] else null
     override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null
     override fun containsKey(key: String): Boolean = _map.contains(key)
     override fun size(): Int = _map.size
 
-    override fun add(key:String, value:Any):Inputs {
+    override fun add(key: String, value: Any): Inputs {
         val newMap = _map.plus(key to value)
         return InputArgs(newMap, _decryptor)
     }

@@ -15,27 +15,26 @@ package slatekit.common.info
 
 import slatekit.common.Props
 
-
 /**
  * Represents a host such as a cloud server. e.g. ec2
  *
- * @param name    : name of host e.g. srv-001
- * @param ip      : ip address
- * @param origin  : origin of the server e.g. aws | azure
- * @param arch    : architecture of the server e.g. linux | windows
+ * @param name : name of host e.g. srv-001
+ * @param ip : ip address
+ * @param origin : origin of the server e.g. aws | azure
+ * @param arch : architecture of the server e.g. linux | windows
  * @param version : version of the server e.g. linux version or windows version
- * @param ext1    : additional information about the server
+ * @param ext1 : additional information about the server
  */
 data class Host(
-        val name: String,
-        val ip: String,
-        val origin: String,
-        val arch: String,
-        val version: String,
-        val ext1: String
+    val name: String,
+    val ip: String,
+    val origin: String,
+    val arch: String,
+    val version: String,
+    val ext1: String
 ) {
 
-    fun log(callback: (String, String) -> Unit): Unit {
+    fun log(callback: (String, String) -> Unit) {
         callback("name", name)
         callback("ip", ip)
         callback("origin", origin)
@@ -56,7 +55,6 @@ data class Host(
             ext1 = "-"
         )
 
-
         @JvmStatic
         fun local(): Host =
             Host(
@@ -67,7 +65,6 @@ data class Host(
                 version = Props.osVersion,
                 ext1 = Props.tmpDir
             )
-
 
         @JvmStatic
         fun computerName(): String {
@@ -83,6 +80,4 @@ data class Host(
             return name.orEmpty()
         }
     }
-
 }
-

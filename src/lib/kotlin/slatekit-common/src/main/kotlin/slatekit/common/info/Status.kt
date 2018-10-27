@@ -17,26 +17,23 @@ import slatekit.common.DateTime
 import java.time.Duration
 
 data class Status(
-        val started: DateTime = DateTime.now(),
-        val ended: DateTime = DateTime.now(),
-        val duration: Duration = started.durationFrom(ended),
-        val status: String = "not-started",
-        val errors: Int = 0,
-        val error: String = "n/a"
+    val started: DateTime = DateTime.now(),
+    val ended: DateTime = DateTime.now(),
+    val duration: Duration = started.durationFrom(ended),
+    val status: String = "not-started",
+    val errors: Int = 0,
+    val error: String = "n/a"
 ) {
     fun start(statusName: String? = null): Status =
             copy(started = DateTime.now(), status = statusName ?: "started")
 
-
     fun error(msg: String): Status = copy(error = msg, errors = errors + 1)
-
 
     fun end(statusName: String? = null): Status {
         val now = DateTime.now()
         val duration = started.durationFrom(now)
         return copy(ended = DateTime.now(), status = statusName ?: "ended", duration = duration)
     }
-
 
     companion object {
         @JvmStatic

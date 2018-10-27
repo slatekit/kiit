@@ -15,10 +15,9 @@ package slatekit.common.log
 
 interface Logs {
 
-    fun getLogger(name:String? = ""): Logger
-    fun getLogger(cls:Class<*>): Logger
+    fun getLogger(name: String? = ""): Logger
+    fun getLogger(cls: Class<*>): Logger
 }
-
 
 /**
  * Simple console logger as a default.
@@ -28,11 +27,9 @@ interface Logs {
  */
 object LogsDefault : Logs {
 
-
     override fun getLogger(cls: Class<*>): Logger {
         return LoggerConsole(name = cls.simpleName, logType = cls)
     }
-
 
     override fun getLogger(name: String?): Logger {
         return LoggerConsole(name = name ?: "console")

@@ -17,13 +17,15 @@ package slatekit.common
  * Created by kishorereddy on 5/27/17.
  */
 
-annotation class Field(val name: String = "",
-                       val desc: String = "",
-                       val required: Boolean = true,
-                       val unique:Boolean = false,
-                       val updatable:Boolean = true,
-                       val indexed:Boolean = false,
-                       val length: Int = 0,
-                       val defaultVal: String = "",
-                       val encrypt: Boolean = false,
-                       val eg: String = "")
+annotation class Field(
+    val name: String = "",
+    val desc: String = "",
+    val required: Boolean = true,
+    val unique: Boolean = false,
+    val updatable: Boolean = true,
+    val indexed: Boolean = false,
+    val length: Int = 0,
+    val defaultVal: String = "",
+    val encrypt: Boolean = false,
+    val eg: String = ""
+)

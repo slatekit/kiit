@@ -12,9 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.common.db.types
 
-
 import slatekit.common.db.DbFieldType
-import slatekit.common.db.DbUtils
 
 /**
  * Created by kishorereddy on 6/14/17.

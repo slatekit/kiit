@@ -15,7 +15,6 @@ package slatekit.common.types
 
 import slatekit.common.SmartString
 
-
 /**
  * Smart String for Email address.
  *
@@ -39,15 +38,14 @@ import slatekit.common.SmartString
  * Do not use as a replacement for strings in general and
  * especially as a property for small objects
  */
-class Email(text:String, required:Boolean = true): SmartString(text, required, 6, 30,
-        listOf( """([\w\$\.\-_]+)@([\w\.]+)""" ))
-{
+class Email(text: String, required: Boolean = true) : SmartString(text, required, 6, 30,
+        listOf("""([\w\$\.\-_]+)@([\w\.]+)""")) {
     override val name = "Email"
     override val desc = "Email Address"
     override val examples = listOf("user@abc.com")
-    override val formats  = listOf("xxxx@xxxxxxx")
+    override val formats = listOf("xxxx@xxxxxxx")
 
-    fun isDashed():Boolean = !text.isNullOrEmpty() && text.contains("-")
+    fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 
-    fun domain():String = if(isValid) text.substring(text.indexOf("@") + 1) else ""
+    fun domain(): String = if (isValid) text.substring(text.indexOf("@") + 1) else ""
 }

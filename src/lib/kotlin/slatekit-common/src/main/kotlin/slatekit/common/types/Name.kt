@@ -15,7 +15,6 @@ package slatekit.common.types
 
 import slatekit.common.SmartString
 
-
 /**
  * Smart String for First/Last/Middle name
  *
@@ -39,16 +38,15 @@ import slatekit.common.SmartString
  * Do not use as a replacement for strings in general and
  * especially as a property for small objects
  */
-class Name(text:String, required:Boolean = true): SmartString(text.trim(), required, 1, 20,
+class Name(text: String, required: Boolean = true) : SmartString(text.trim(), required, 1, 20,
         listOf(
                 """[a-zA-Z]{1,20}""",
                 """[a-zA-Z\\-]{1,20}"""
-        ))
-{
+        )) {
     override val name = "Name"
     override val desc = "First, Last or Middle name with only chars and dashes"
     override val examples = listOf("Diana", "Spider-man")
-    override val formats  = listOf("xxxxx", "xxxxxx-xxx")
+    override val formats = listOf("xxxxx", "xxxxxx-xxx")
 
-    fun isDashed():Boolean = !text.isNullOrEmpty() && text.contains("-")
+    fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 }

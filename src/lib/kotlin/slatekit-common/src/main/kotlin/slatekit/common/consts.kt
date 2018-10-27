@@ -16,7 +16,6 @@ mantra: Simplicity above all else
 
 package slatekit.common
 
-
 object Consts {
     val version = "0.9.0"
 }

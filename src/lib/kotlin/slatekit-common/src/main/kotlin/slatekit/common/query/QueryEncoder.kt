@@ -16,27 +16,24 @@ package slatekit.common.query
 import slatekit.common.DateTime
 import java.util.*
 
-
 object QueryEncoder {
-
 
     fun convertVal(value: Any?): String {
         return when (value) {
-            Query.Null  -> "null"
-            null        -> "null"
-            is String   -> toString(value)
-            is Int      -> value.toString()
-            is Long     -> value.toString()
-            is Double   -> value.toString()
-            is UUID     -> "'" + value.toString() + "'"
-            is Boolean  -> if (value) "1" else "0"
+            Query.Null -> "null"
+            null -> "null"
+            is String -> toString(value)
+            is Int -> value.toString()
+            is Long -> value.toString()
+            is Double -> value.toString()
+            is UUID -> "'" + value.toString() + "'"
+            is Boolean -> if (value) "1" else "0"
             is DateTime -> "'" + value.toStringMySql() + "'"
-            is List<*>  -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
+            is List<*> -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
             is Array<*> -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
-            else        -> value.toString()
+            else -> value.toString()
         }
     }
-
 
     /**
      * ensures the text value supplied be escaping single quotes for sql.
@@ -47,20 +44,16 @@ object QueryEncoder {
     fun ensureValue(text: String): String =
             if (text.isNullOrEmpty()) {
                 ""
-            }
-            else {
+            } else {
                 text.replace("'", "''")
             }
-
 
     fun ensureField(text: String): String =
             if (text.isNullOrEmpty()) {
                 ""
-            }
-            else {
+            } else {
                 text.toLowerCase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
             }
-
 
     /**
      * ensures the comparison operator to be any of ( = > >= < <= != is), other wise
@@ -71,18 +64,17 @@ object QueryEncoder {
      */
     fun ensureCompare(compare: String): String =
             when (compare) {
-                "="      -> "="
-                ">"      -> ">"
-                ">="     -> ">="
-                "<"      -> "<"
-                "<="     -> "<="
-                "!="     -> "<>"
-                "is"     -> "is"
+                "=" -> "="
+                ">" -> ">"
+                ">=" -> ">="
+                "<" -> "<"
+                "<=" -> "<="
+                "!=" -> "<>"
+                "is" -> "is"
                 "is not" -> "is not"
-                "in"     -> "in"
-                else     -> ensureField(compare)
+                "in" -> "in"
+                else -> ensureField(compare)
             }
-
 
     fun toString(value: String): String {
         val s = QueryEncoder.ensureValue(value)

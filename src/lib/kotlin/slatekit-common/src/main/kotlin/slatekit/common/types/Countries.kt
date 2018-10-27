@@ -14,15 +14,13 @@ object Countries {
             return matched
         }
 
-
-        fun find(code:String?): Country? {
-            return when(code) {
+        fun find(code: String?): Country? {
+            return when (code) {
                 null -> null
-                ""   -> usa
+                "" -> usa
                 else -> supported.filter { it.iso2 == code.toUpperCase() }.first()
             }
         }
-
 
         val supported = listOf(
             Country("AU", "AUS", "61", 10, "Australia"),
@@ -50,7 +48,6 @@ object Countries {
             Country("GB", "GBR", "44", 10, "United Kingdom"),
             Country("US", "USA", "1", 10, "United States")
         )
-
 
         /*
         val all = listOf(
@@ -296,7 +293,6 @@ object Countries {
             Country("ZW", "ZWE", "263", "Zimbabwe")
         )
         */
-
 
         /**
          * country usa - used for defaults

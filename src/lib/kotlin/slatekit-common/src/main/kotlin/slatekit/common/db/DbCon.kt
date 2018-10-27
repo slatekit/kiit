@@ -12,32 +12,32 @@
 package slatekit.common.db
 
 interface DbCon {
-  val driver:String
-  val url:String
-  val user:String
-  val password:String
+  val driver: String
+  val url: String
+  val user: String
+  val password: String
 }
-
 
 /**
   * Connection string for a database
-  * @param driver   : jdbc driver
-  * @param url      : url
-  * @param user     : username
+  * @param driver : jdbc driver
+  * @param url : url
+  * @param user : username
   * @param password : password
   */
-data class DbConString( override val driver:String,
-                        override val url:String,
-                        override val user:String,
-                        override val password:String) : DbCon
-
+data class DbConString(
+    override val driver: String,
+    override val url: String,
+    override val user: String,
+    override val password: String
+) : DbCon
 
 /**
   * Empty connection string
   */
 object DbConEmpty : DbCon {
-  override val driver:String   = ""
-  override val url:String      = ""
-  override val user:String     = ""
-  override val password:String = ""
+  override val driver: String = ""
+  override val url: String = ""
+  override val user: String = ""
+  override val password: String = ""
 }

@@ -17,17 +17,17 @@ package slatekit.common.security
  * Represents credentials for accessing an API. This is useful for representing credentials
  * for other systems such as AWS keys, Twilio, SendGrid, etc.
  * @param account : The account for the API
- * @param key     : The key for the API
- * @param pass    : The password for the API  ( optional )
- * @param env     : Optional environment of the API ( e.g. dev, qa )
- * @param tag     : Optional tag
+ * @param key : The key for the API
+ * @param pass : The password for the API  ( optional )
+ * @param env : Optional environment of the API ( e.g. dev, qa )
+ * @param tag : Optional tag
  */
 data class ApiLogin(
-        val account: String = "",
-        val key: String = "",
-        val pass: String = "",
-        val env: String = "",
-        val tag: String = ""
+    val account: String = "",
+    val key: String = "",
+    val pass: String = "",
+    val env: String = "",
+    val tag: String = ""
 ) {
 
     companion object {

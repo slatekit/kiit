@@ -15,7 +15,6 @@ package slatekit.common.types
 
 import slatekit.common.SmartString
 
-
 /**
  * Smart String for Social security number
  *
@@ -39,15 +38,14 @@ import slatekit.common.SmartString
  * Do not use as a replacement for strings in general and
  * especially as a property for small objects
  */
-class SSN(text:String, required:Boolean = true): SmartString(text, required, 9, 11,
-        listOf( """\d{9}""",
+class SSN(text: String, required: Boolean = true) : SmartString(text, required, 9, 11,
+        listOf("""\d{9}""",
                 """\d{3}[-]?\d{2}[-]?\d{4}"""
-        ))
-{
+        )) {
     override val name = "SSN"
     override val desc = "Social Security Number"
     override val examples = listOf("123456789", "123-45-6789")
-    override val formats  = listOf("xxxxxxxxx", "xxx-xx-xxxx")
+    override val formats = listOf("xxxxxxxxx", "xxx-xx-xxxx")
 
-    fun isDashed():Boolean = !text.isNullOrEmpty() && text.contains("-")
+    fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 }

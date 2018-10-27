@@ -13,7 +13,6 @@
 
 package slatekit.common.lex
 
-
 object TokenType {
 
     val None = 0

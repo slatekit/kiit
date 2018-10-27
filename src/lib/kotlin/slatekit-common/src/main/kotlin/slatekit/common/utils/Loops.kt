@@ -13,7 +13,6 @@
 
 package slatekit.common.utils
 
-
 /**
  * alternatives to using do while loops and iterations where you want to stop
  */
@@ -24,12 +23,11 @@ object Loops {
      *
      * @param condition
      */
-    tailrec fun doUntil(condition: () -> Boolean): Unit {
+    tailrec fun doUntil(condition: () -> Boolean) {
         // simulate do while with call by name ( evaluate first )
         if (condition())
             doUntil(condition)
     }
-
 
     /**
      * "do while" loop alternative with index/count using tail recursion
@@ -37,9 +35,9 @@ object Loops {
      * @param max
      * @param condition
      */
-    fun doUntilIndex(max: Int, condition: (Int) -> Boolean): Unit {
+    fun doUntilIndex(max: Int, condition: (Int) -> Boolean) {
 
-        tailrec fun rep(ndx: Int, max: Int, condition: (Int) -> Boolean): Unit {
+        tailrec fun rep(ndx: Int, max: Int, condition: (Int) -> Boolean) {
             if (ndx < max && condition(ndx)) {
                 rep(ndx + 1, max, condition)
             }
@@ -53,7 +51,6 @@ object Loops {
             }
         }
     }
-
 
     /**
      * "takeWhile" iteration alternative.
@@ -70,7 +67,6 @@ object Loops {
         else
             repeatWithIndex(nextIndex, end, condition)
     }
-
 
     /**
      * "takeWhile" iteration alternative.

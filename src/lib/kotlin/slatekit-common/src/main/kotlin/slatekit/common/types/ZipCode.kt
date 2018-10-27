@@ -15,7 +15,6 @@ package slatekit.common.types
 
 import slatekit.common.SmartString
 
-
 /**
  * Smart String for ZipCode
  *
@@ -39,15 +38,14 @@ import slatekit.common.SmartString
  * Do not use as a replacement for strings in general and
  * especially as a property for small objects
  */
-class ZipCode(text:String, required:Boolean = true): SmartString(text, required, 5, 10,
-        listOf( """\d{5}""",
+class ZipCode(text: String, required: Boolean = true) : SmartString(text, required, 5, 10,
+        listOf("""\d{5}""",
                 """\d{5}[-]?\d{4}"""
-        ))
-{
+        )) {
     override val name = "US ZipCode"
     override val desc = "US ZipCode"
     override val examples = listOf("12345", "12345-6789")
-    override val formats  = listOf("xxxxx", "xxxxx-xxxx")
+    override val formats = listOf("xxxxx", "xxxxx-xxxx")
 
-    fun isDashed():Boolean = !text.isNullOrEmpty() && text.contains("-")
+    fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 }

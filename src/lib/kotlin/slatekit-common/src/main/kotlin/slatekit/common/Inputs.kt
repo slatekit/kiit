@@ -20,9 +20,8 @@ import java.time.ZonedDateTime
 
 interface InputsUpdateable {
     // Immutable add
-    fun add(key:String, value:Any):Inputs
+    fun add(key: String, value: Any): Inputs
 }
-
 
 /**
  * Base class to support retrieving inputs form multiple sources:
@@ -37,7 +36,7 @@ interface InputsUpdateable {
 interface Inputs {
 
     // Get values for core value types, must be implemented in derived classes
-    val raw:Any
+    val raw: Any
 
     fun getString(key: String): String
     fun getBool(key: String): Boolean
@@ -56,7 +55,6 @@ interface Inputs {
     fun getObject(key: String): Any?
     fun containsKey(key: String): Boolean
     fun size(): Int
-
 
     // Get values as Option[T]
     fun getStringOpt(key: String): String? = getOpt(key, { k: String -> getString(k) })
@@ -85,7 +83,6 @@ interface Inputs {
     fun getLocalDateTimeOrElse(key: String, default: LocalDateTime): LocalDateTime = getOrElse<LocalDateTime>(key, { k: String -> getLocalDateTime(k) }, default)
     fun getDateTimeOrElse(key: String, default: DateTime): DateTime = getOrElse<DateTime>(key, { k: String -> getDateTime(k) }, default)
 
-
     // Get list and maps
     /**
      * gets a list of items of the type supplied.
@@ -100,11 +97,11 @@ interface Inputs {
         val result = input?.let { inputVal ->
 
             val result = when (inputVal) {
-                "null"     -> listOf()
-                "\"\""     -> listOf()
-                is String  -> inputVal.toString().split(',').toList().map(converter)
+                "null" -> listOf()
+                "\"\"" -> listOf()
+                is String -> inputVal.toString().split(',').toList().map(converter)
                 is List<*> -> (input as List<*>).map { it as Any }
-                else       -> listOf()
+                else -> listOf()
             }
             result
         } ?: listOf<Any>()
@@ -125,17 +122,16 @@ interface Inputs {
         val result = input?.let { inputVal ->
 
             val result = when (inputVal) {
-                "null"       -> emptyMap
-                "\"\""       -> emptyMap
-                is String    -> inputVal.toString().splitToMapOfType(',', true, '=', keyConverter, valConverter)
+                "null" -> emptyMap
+                "\"\"" -> emptyMap
+                is String -> inputVal.toString().splitToMapOfType(',', true, '=', keyConverter, valConverter)
                 is Map<*, *> -> inputVal
-                else         -> emptyMap
+                else -> emptyMap
             }
             result
         } ?: mapOf<Any, Any>()
         return result
     }
-
 
     // Helpers
     fun <T> getOpt(key: String, fetcher: (String) -> T): T? = if (containsKey(key)) fetcher(key) else null

@@ -18,10 +18,9 @@ package slatekit.common.args
  */
 data class ParsedItem(val action: String, val actions: List<String>, val pos: Int, val posLast: Int)
 
-
 data class ParsedArgs(
-        val named: Map<String, String>,
-        val meta: Map<String,String>,
-        val sys: Map<String, String>,
-        val ndx: Int
+    val named: Map<String, String>,
+    val meta: Map<String, String>,
+    val sys: Map<String, String>,
+    val ndx: Int
 )

@@ -19,13 +19,13 @@ import slatekit.common.info.Memory
 import java.time.Duration
 
 data class ResultTimed<T>(
-        val desc: String,
-        val start: DateTime,
-        val end: DateTime,
-        val duration: Duration,
-        val result: ResultEx<T>,
-        val memory: Memory?,
-        val avg: Long?
+    val desc: String,
+    val start: DateTime,
+    val end: DateTime,
+    val duration: Duration,
+    val result: ResultEx<T>,
+    val memory: Memory?,
+    val avg: Long?
 ) {
     val dur = start.durationFrom(end)
 
@@ -41,8 +41,7 @@ data class ResultTimed<T>(
             :
             this("", start, end, duration, data, mem, avg)
 
-
-    fun print(): Unit {
+    fun print() {
         println("desc           : " + desc)
         println("start          : " + start)
         println("end            : " + end)
@@ -59,7 +58,6 @@ data class ResultTimed<T>(
         println()
     }
 
-
     companion object {
 
         @JvmStatic
@@ -69,5 +67,4 @@ data class ResultTimed<T>(
             return ResultTimed<T>("", started, ended, duration, result, null, null)
         }
     }
-
 }

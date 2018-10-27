@@ -13,18 +13,19 @@
 
 package slatekit.common.envs
 
-
 /**
  * Represents a system environment
- * @param name   : e.g. Quality Assurance
- * @param mode   : e.g. Qa
+ * @param name : e.g. Quality Assurance
+ * @param mode : e.g. Qa
  * @param region : new york
- * @param desc   : Qa environment 1 in new york
+ * @param desc : Qa environment 1 in new york
  */
-data class Env(val name: String,
-               val mode: EnvMode,
-               val region: String = "",
-               val desc: String = "") : EnvSupport {
+data class Env(
+    val name: String,
+    val mode: EnvMode,
+    val region: String = "",
+    val desc: String = ""
+) : EnvSupport {
 
     /**
      * "qa1:qa"
@@ -32,18 +33,14 @@ data class Env(val name: String,
      */
     val key: String get() = name + ":" + mode.name
 
-
     override fun isEnvName(envMode: String): Boolean = mode.name == envMode
 
-
     override fun isEnv(envMode: EnvMode): Boolean = mode == envMode
-
 
     companion object {
 
         @JvmStatic
         val empty = Env("", Dev, "", "")
-
 
         /**
          * The list of defaults environments to choose from.
@@ -69,15 +66,13 @@ data class Env(val name: String,
         @JvmStatic
         fun defaults(): Envs =
             Envs(listOf(
-                Env("loc", Dev , desc = "Dev environment (local)"),
-                Env("dev", Dev , desc = "Dev environment (shared)"),
-                Env("qa1", Qa  , desc = "QA environment  (current release)"),
-                Env("qa2", Qa  , desc = "QA environment  (last release)"),
-                Env("stg", Uat , desc = "STG environment (demo)"),
+                Env("loc", Dev, desc = "Dev environment (local)"),
+                Env("dev", Dev, desc = "Dev environment (shared)"),
+                Env("qa1", Qa, desc = "QA environment  (current release)"),
+                Env("qa2", Qa, desc = "QA environment  (last release)"),
+                Env("stg", Uat, desc = "STG environment (demo)"),
                 Env("pro", Prod, desc = "LIVE environment")
             ))
-
-
 
         /**
          * parses the environment name e.g. "qa1:qa" = name:mode
@@ -100,7 +95,6 @@ data class Env(val name: String,
             return env
         }
 
-
         /**
          * interprets the string representation of an environment into the type object
          * @param mode
@@ -109,13 +103,12 @@ data class Env(val name: String,
         @JvmStatic
         fun interpret(mode: String): EnvMode =
                 when (mode) {
-                    Dev.name  -> Dev
-                    Qa.name   -> Qa
-                    Uat.name  -> Uat
+                    Dev.name -> Dev
+                    Qa.name -> Qa
+                    Uat.name -> Uat
                     Prod.name -> Prod
-                    Dis.name  -> Dis
-                    else      -> Other(mode)
+                    Dis.name -> Dis
+                    else -> Other(mode)
                 }
     }
 }
-

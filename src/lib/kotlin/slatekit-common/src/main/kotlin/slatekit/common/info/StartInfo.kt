@@ -13,14 +13,13 @@
 
 package slatekit.common.info
 
-
 data class StartInfo(
-        val args: String = "",
-        val logFile: String = "{@app}-{@env}-{@date}.log",
-        val config: String = "{@app}.config",
-        val env: String = "dev",
-        val rootDir: String = "",
-        val confDir: String = ""
+    val args: String = "",
+    val logFile: String = "{@app}-{@env}-{@date}.log",
+    val config: String = "{@app}.config",
+    val env: String = "dev",
+    val rootDir: String = "",
+    val confDir: String = ""
 ) {
 
     fun log(callback: (String, Any) -> Unit) {
@@ -32,11 +31,9 @@ data class StartInfo(
         callback("confDir", confDir)
     }
 
-
     companion object {
         @JvmStatic
         val none = StartInfo()
-
 
         @JvmStatic
         fun apply(args: String, env: String, conf: String): StartInfo =

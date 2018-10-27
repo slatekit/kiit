@@ -16,16 +16,16 @@ package slatekit.common.log
 import slatekit.common.DateTime
 import slatekit.common.Ignore
 
-abstract class Logger(val level: LogLevel = Warn,
-                      val name: String = "",
-                      val logType: Class<*>? = null) : LogSupport {
+abstract class Logger(
+    val level: LogLevel = Warn,
+    val name: String = "",
+    val logType: Class<*>? = null
+) : LogSupport {
 
-
-    fun isEnabled(level:LogLevel):Boolean = level >= this.level
-
+    fun isEnabled(level: LogLevel): Boolean = level >= this.level
 
     override val logger: Logger? by lazy { this }
-    open val raw   : Any? = null
+    open val raw: Any? = null
 
     /**
      * Logs an entry
@@ -40,7 +40,6 @@ abstract class Logger(val level: LogLevel = Warn,
             performLog(buildLog(level, msg, ex))
         })
     }
-
 
     /**
      * Logs an entry
@@ -57,7 +56,6 @@ abstract class Logger(val level: LogLevel = Warn,
         })
     }
 
-
     /**
      * Logs an entry
      */
@@ -66,7 +64,6 @@ abstract class Logger(val level: LogLevel = Warn,
             performLog(entry)
         })
     }
-
 
     /**
      * Logs an entry
@@ -79,13 +76,11 @@ abstract class Logger(val level: LogLevel = Warn,
         return LogEntry(name, level, msg, DateTime.now(), ex)
     }
 
-
-    private fun checkLog(level: LogLevel, callback: () -> Unit): Unit {
+    private fun checkLog(level: LogLevel, callback: () -> Unit) {
         if (level >= this.level) {
             callback()
         }
     }
-
 
     /**
      * Logs an entry

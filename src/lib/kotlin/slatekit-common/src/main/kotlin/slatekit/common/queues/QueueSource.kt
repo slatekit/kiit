@@ -13,54 +13,40 @@
 
 package slatekit.common.queues
 
-
 import slatekit.common.ResultEx
-
 
 interface QueueSource {
 
-    val name:String
+    val name: String
 
-    fun init(): Unit {}
+    fun init() {}
 
-
-    fun close(): Unit {}
-
+    fun close() {}
 
     fun count(): Int
 
-
     fun next(): Any?
-
 
     fun nextBatch(size: Int = 10): List<Any>? = null
 
-
     fun <T> nextBatchAs(size: Int = 10): List<T>? = null
 
+    fun complete(item: Any?) {}
 
-    fun complete(item: Any?): Unit {}
+    fun completeAll(items: List<Any>?) {}
 
-
-    fun completeAll(items: List<Any>?): Unit {}
-
-
-    fun abandon(item: Any?): Unit {}
-
+    fun abandon(item: Any?) {}
 
     fun send(msg: Any, tagName: String = "", tagValue: String = ""): ResultEx<String>
 
-
     fun send(message: String, attributes: Map<String, Any>): ResultEx<String>
-
 
     fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): ResultEx<String>
 
-
     fun toString(item: Any?): String {
-        return when(item){
+        return when (item) {
             is QueueSourceData -> item.message.toString()
-            else       -> item?.toString() ?: ""
+            else -> item?.toString() ?: ""
         }
     }
 }

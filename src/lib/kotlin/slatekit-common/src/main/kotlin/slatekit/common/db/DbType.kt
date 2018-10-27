@@ -10,10 +10,8 @@
   */
 package slatekit.common.db
 
+abstract class DbType(val name: String, val driver: String)
 
-abstract class DbType(val name:String, val driver:String)
-
-object DbTypeMySql     : DbType("mysql"    , "com.mysql.jdbc.Driver")
-object DbTypePGres     : DbType("pgres"    , "com.pgres.jdbc.Driver")
-object DbTypeMemory    : DbType("memory"   , "com.slatekit.entities.repository-in-memory")
-
+object DbTypeMySql : DbType("mysql", "com.mysql.jdbc.Driver")
+object DbTypePGres : DbType("pgres", "com.pgres.jdbc.Driver")
+object DbTypeMemory : DbType("memory", "com.slatekit.entities.repository-in-memory")

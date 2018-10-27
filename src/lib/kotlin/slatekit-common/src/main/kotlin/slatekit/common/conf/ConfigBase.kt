@@ -26,20 +26,17 @@ import slatekit.common.Inputs
  */
 abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
 
-
     /**
      * access to raw config object. e.g. could be a type-safe config.
      * @return
      */
     abstract val rawConfig: Any
 
-
     /**
      * The origin of the config ( e.g. file name for now )
      * @return
      */
     open fun origin(): String = ""
-
 
     /**
      * Extends the config by supporting decryption via marker tags.
@@ -54,7 +51,6 @@ abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, Confi
         return InputFuncs.decrypt(value.toString(), _encryptor)
     }
 
-
     /**
      * Loads a new config file from the file path supplied.
      * Derived classes can override this to load configs of their own type.
@@ -68,7 +64,6 @@ abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, Confi
      * @return
      */
     open fun loadFrom(file: String?): ConfigBase? = null
-
 
     /**
      * To support convenience methods

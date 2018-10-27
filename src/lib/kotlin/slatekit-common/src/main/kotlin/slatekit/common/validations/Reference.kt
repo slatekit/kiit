@@ -17,7 +17,6 @@ interface Reference {
     val value: String
 }
 
-
 /**
  * Represents a reference to a specific field
  *
@@ -27,7 +26,6 @@ interface Reference {
 data class RefField(val name: String, val original: String = "") : Reference {
     override val value = original
 }
-
 
 /**
  * Represents a reference to a specific field
@@ -40,7 +38,6 @@ data class RefItem(val id: String, val name: String, val original: String = "") 
     override val value = original
 }
 
-
 /**
  * Represents a reference to a specific row/column field.
  * @param row
@@ -52,5 +49,4 @@ data class RefCell(val row: Int, val col: Int, val name: String, val original: S
     Reference {
     override val value = original
 }
-
 

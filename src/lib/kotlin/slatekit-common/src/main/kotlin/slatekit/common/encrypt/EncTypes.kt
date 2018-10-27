@@ -25,10 +25,9 @@ package slatekit.common.encrypt
  */
 
 abstract class EncType {
-    abstract val enc:String
-    val empty:Boolean = enc.isNullOrEmpty()
+    abstract val enc: String
+    val empty: Boolean = enc.isNullOrEmpty()
 }
-
 
 /**
  * Value class to represent a decrypted integer.
@@ -36,10 +35,9 @@ abstract class EncType {
  * used in the universal APIs
  * @param value
  */
-data class EncInt(override val enc:String, val value: Int) : EncType() {
+data class EncInt(override val enc: String, val value: Int) : EncType() {
     companion object
 }
-
 
 /**
  * Value class to represent a decrypted long.
@@ -47,10 +45,9 @@ data class EncInt(override val enc:String, val value: Int) : EncType() {
  * used in the universal APIs
  * @param value
  */
-data class EncLong(override val enc:String, val value: Long)  : EncType() {
+data class EncLong(override val enc: String, val value: Long) : EncType() {
     companion object
 }
-
 
 /**
  * Value class to represent a decrypted Double.
@@ -58,10 +55,9 @@ data class EncLong(override val enc:String, val value: Long)  : EncType() {
  * used in the universal APIs
  * @param value
  */
-data class EncDouble(override val enc:String, val value: Double)  : EncType() {
+data class EncDouble(override val enc: String, val value: Double) : EncType() {
     companion object
 }
-
 
 /**
  * Value class to represent a decrypted string.
@@ -69,7 +65,6 @@ data class EncDouble(override val enc:String, val value: Double)  : EncType() {
  * used in the universal APIs
  * @param value
  */
-data class EncString(override val enc:String, val value: String)  : EncType() {
+data class EncString(override val enc: String, val value: String) : EncType() {
     companion object
 }
-

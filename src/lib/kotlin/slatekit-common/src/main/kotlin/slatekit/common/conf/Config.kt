@@ -13,7 +13,6 @@
 
 package slatekit.common.conf
 
-
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
@@ -38,7 +37,6 @@ Examples:
 - file://c:/slatekit/${company.dir}/${group.dir}/${app.id}/conf/env.qa.conf
 - file://./conf/env.qa.conf
 
-
 2. LOADING
 Use a short-hand syntax for specifying the files to merge and fallback with
 Examples:
@@ -46,14 +44,12 @@ Examples:
 - primary, fallback1
 - primary, fallback1, fallback2
 
-
 3. FUNCTIONS:
 Use functions in the config to resolve values dynamically.
 You can use the resolveString method to resolve the value dynamically.
 Note: This uses the slatekit.common.subs component.
 Examples: ( props inside your .conf file )
 - tag      : "@{today.yyyymmdd-hhmmss}"
-
 
 4. DEFAULTS:
 Use optional default values for getting strings, int, doubles, bools.
@@ -63,7 +59,6 @@ Examples:
 - getBoolOrElse
 - getDoubleOrElse
 - getDateOrElse
-
 
 5. MAPPING
 Map slatekit objects automatically from the conf settings. Built in mappers for the
@@ -78,9 +73,10 @@ Examples:
  * @param enc
  * @param config
  */
-class Config(fileName: String? = null,
-             enc: Encryptor? = null,
-             config: Properties? = null
+class Config(
+    fileName: String? = null,
+    enc: Encryptor? = null,
+    config: Properties? = null
 )
     : ConfigBase({ raw -> enc?.decrypt(raw) ?: raw }) {
 
@@ -91,12 +87,11 @@ class Config(fileName: String? = null,
      * Get or load the config object
      */
     private val _config: Properties = config ?: ConfFuncs.loadPropertiesFrom(fileName)
-    override val raw:Any = _config
+    override val raw: Any = _config
     override fun get(key: String): Any? = getInternal(key)
     override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = _config.containsKey(key)
     override fun size(): Int = _config.values.size
-
 
     override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key), _encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
@@ -111,7 +106,6 @@ class Config(fileName: String? = null,
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
 
-
     /**
      * The reference to the raw underlying config
      *
@@ -119,13 +113,11 @@ class Config(fileName: String? = null,
      */
     override val rawConfig: Any = _config
 
-
     /**
      * The origin file path of the config
      * @return
      */
     override fun origin(): String = _fileName ?: ""
-
 
     /**
      * Loads config from the file path supplied
@@ -135,24 +127,19 @@ class Config(fileName: String? = null,
      */
     override fun loadFrom(file: String?): ConfigBase? = ConfFuncs.load(file, _enc)
 
-
     fun getInternal(key: String): Any? {
         return if (containsKey(key)) {
             val value = _config.getProperty(key)
             if (value != null && value is String) {
                 value.trim()
-            }
-            else {
+            } else {
                 value
             }
-        }
-        else {
+        } else {
             null
         }
     }
 
-
-    fun getStringRaw(key:String):String = _config.getProperty(key)?.trim() ?: ""
+    fun getStringRaw(key: String): String = _config.getProperty(key)?.trim() ?: ""
 }
-
 

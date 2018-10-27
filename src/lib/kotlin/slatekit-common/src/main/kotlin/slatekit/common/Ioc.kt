@@ -1,16 +1,14 @@
 package slatekit.common
 
-
 object Ioc {
     val lookup = mutableMapOf<String, (String) -> Any>()
 
-    fun register(name:String, creator:(String) -> Any) : Unit {
+    fun register(name: String, creator: (String) -> Any) {
         lookup.put(name, creator)
     }
 
-
-    fun <T> get(name:String): T {
-        if(!lookup.containsKey(name)) {
+    fun <T> get(name: String): T {
+        if (!lookup.containsKey(name)) {
             throw IllegalArgumentException("Component $name not in Ioc")
         }
         val creator = lookup.get(name)!!
@@ -18,8 +16,7 @@ object Ioc {
         return instance
     }
 
-
-    fun  contains(name:String): Boolean {
+    fun contains(name: String): Boolean {
        return lookup.containsKey(name)
     }
 }

@@ -15,23 +15,22 @@ package slatekit.common.lex
 
 import slatekit.common.newline
 
-
 /**
  * Result of lexical parsing. This could represent all the tokens or just a subset
- * @param success  : whether or not the lex parse was valid
- * @param message  : a message if there were errors
- * @param tokens   : the tokens parsed
- * @param total    : the total number of tokens parsed
+ * @param success : whether or not the lex parse was valid
+ * @param message : a message if there were errors
+ * @param tokens : the tokens parsed
+ * @param total : the total number of tokens parsed
  * @param isSubset : whether this represents a subset of tokens or all tokens
- * @param ex       : exception if failure
+ * @param ex : exception if failure
  */
 data class LexResult(
-        val success: Boolean,
-        val message: String,
-        val tokens: List<Token>,
-        val total: Int,
-        val isSubset: Boolean,
-        val ex: Exception?
+    val success: Boolean,
+    val message: String,
+    val tokens: List<Token>,
+    val total: Int,
+    val isSubset: Boolean,
+    val ex: Exception?
 ) {
     fun toStringDetail(): String {
         val text = "$success, $message, total=$total, isSubset=$isSubset"

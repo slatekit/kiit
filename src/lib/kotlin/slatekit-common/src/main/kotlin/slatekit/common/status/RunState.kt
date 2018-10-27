@@ -66,4 +66,3 @@ object RunStateFailed : RunState {
     override val value: Int = 8
     override val mode: String = "failed"
 }
-

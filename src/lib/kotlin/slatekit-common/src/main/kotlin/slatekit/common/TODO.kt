@@ -11,17 +11,14 @@
  * </slate_header>
  */
 
-
 object TODO {
 
-    private var logger:((String) -> Unit)? = null
-
+    private var logger: ((String) -> Unit)? = null
 
     /**
      * sets the logger for messages
      */
-    fun CONFIGURE(logger:((String) -> Unit)?) { this.logger = logger }
-
+    fun CONFIGURE(logger: ((String) -> Unit)?) { this.logger = logger }
 
     /**
      * Indicates that code is not implemented
@@ -33,7 +30,6 @@ object TODO {
         exec("TODO(remove): " + msg, tag, callback)
     }
 
-
     /**
      * Indicates that code is not implemented
      * @param tag
@@ -43,7 +39,6 @@ object TODO {
     fun NOT_IMPLEMENTED(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(not_implement): " + msg, tag, callback)
     }
-
 
     /**
      * Indicates that an implementation is required
@@ -55,7 +50,6 @@ object TODO {
         exec("TODO(implement): " + msg, tag, callback)
     }
 
-
     /**
      * Indicates that an improvement is required
      * @param tag
@@ -65,7 +59,6 @@ object TODO {
     fun IMPROVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(improve): " + msg, tag, callback)
     }
-
 
     /**
      * Indicates that a refactoring is required
@@ -77,7 +70,6 @@ object TODO {
         exec("TODO(refactor): " + msg, tag, callback)
     }
 
-
     /**
      * Indicates a bug
      * @param tag
@@ -88,7 +80,6 @@ object TODO {
     fun BUG(tag: String = "", msg: String = "", bugId: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(bug) $bugId: $msg", tag, callback)
     }
-
 
     private fun exec(msg: String, tag: String, callback: (() -> Unit)? = null) {
         logger?.let { log ->

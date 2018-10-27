@@ -24,14 +24,13 @@ import java.net.URL
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-
 /**
  * Temporarily here. This Http Client Wrapper around Java.net will be replaced
  * soon with a better alternative.
  */
 object HttpClient {
 
-    //fun post(req:HttpRequest): HttpResponse = HttpResponse(HttpStatusCodes.s200, mapOf(), null)
+    // fun post(req:HttpRequest): HttpResponse = HttpResponse(HttpStatusCodes.s200, mapOf(), null)
     fun post(req: HttpRequest): HttpResponse {
         val response = tryExecute(req, {
 
@@ -67,7 +66,6 @@ object HttpClient {
         return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
     }
 
-
     fun encodeParams(req: HttpRequest): String? {
         return req.params?.let { params ->
             val encoded = params.fold("", { acc, p ->
@@ -82,7 +80,7 @@ object HttpClient {
        * @param req
        * @return
        */
-      fun get(req:HttpRequest): HttpResponse
+      fun get(req: HttpRequest): HttpResponse
       {
           val response = tryExecute(req, {
 
@@ -113,7 +111,6 @@ object HttpClient {
           })
           return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
       }
-
 
     /*
       /**
@@ -192,7 +189,6 @@ object HttpClient {
       }
       */
 
-
     fun tryExecute(req: HttpRequest, callback: () -> HttpURLConnection): ResultEx<Any> {
         val result = try {
             // Let the caller build up the connection
@@ -212,16 +208,14 @@ object HttpClient {
             buff.close()
             val content = response.toString()
             Success(content, statusCode)
-        }
-        catch(ex: Exception) {
+        } catch (ex: Exception) {
             val msg = "Error getting content from ${req.url}." + ex.message
             unexpectedError<Any>(msg = msg, err = ex)
         }
         return result
     }
 
-
-    fun setCredentials(con: HttpURLConnection, req: HttpRequest): Unit {
+    fun setCredentials(con: HttpURLConnection, req: HttpRequest) {
         // Set credentials
         if (req.credentials != null) {
             val credentials = req.credentials

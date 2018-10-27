@@ -18,12 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger
 class Indenter {
     val count = AtomicInteger()
 
-
     fun value(): String = "\t".repeat(count.get())
 
-
     fun inc(): Int = count.incrementAndGet()
-
 
     fun dec(): Int = count.decrementAndGet()
 }
