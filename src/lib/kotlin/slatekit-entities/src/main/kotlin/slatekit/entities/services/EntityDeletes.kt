@@ -16,16 +16,14 @@ interface EntityDeletes<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().delete(entity)
     }
 
-
     /**
      * deletes the entity
      *
      * @param entity
      */
-    fun delete(ids:List<Long>): Int {
+    fun delete(ids: List<Long>): Int {
         return entityRepo().delete(ids)
     }
-
 
     /**
      * deletes the entity by its id
@@ -36,7 +34,6 @@ interface EntityDeletes<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().delete(id)
     }
 
-
     /**
      * deletes items based on the field value
      * @param prop: The property reference
@@ -46,7 +43,6 @@ interface EntityDeletes<T> : ServiceSupport<T> where T : Entity {
     fun deleteByField(prop: KProperty<*>, value: Any): Int {
         return entityRepo().deleteByField(prop.name, value)
     }
-
 
     /**
      * updates items using the query

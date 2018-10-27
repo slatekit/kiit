@@ -12,5 +12,4 @@ interface EntityFeatureAll<T> : ServiceSupport<T>,
         EntitySaves<T>,
         EntityUpdates<T>
 
-        where T : Entity {
-}
+        where T : Entity

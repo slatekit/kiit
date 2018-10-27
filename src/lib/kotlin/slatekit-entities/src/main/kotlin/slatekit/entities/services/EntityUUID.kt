@@ -5,7 +5,6 @@ import slatekit.entities.core.EntityWithUUID
 import slatekit.entities.core.ServiceSupport
 import java.util.*
 
-
 /**
  * NOTE: There is only 1 type constraint on the type parameter T to be Entity
  * ( Which is needed for all the supporting scaffolding ), so we can NOT at the moment
@@ -23,7 +22,6 @@ interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id)
     }
 
-
     /**
      * gets the entity from the datastore using the uuid
      * @param id
@@ -32,7 +30,6 @@ interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
     fun getByUUID(id: UUID): T? {
         return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
     }
-
 
     /**
      * gets the entity from the datastore using the uuids

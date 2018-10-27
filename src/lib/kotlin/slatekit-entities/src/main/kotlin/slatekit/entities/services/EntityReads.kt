@@ -5,7 +5,6 @@ import slatekit.entities.core.ServiceSupport
 
 interface EntityReads<T> : ServiceSupport<T> where T : Entity {
 
-
     /**
      * gets the entity from the datastore using the id
      * @param id
@@ -14,7 +13,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
     fun get(id: Long): T? {
         return entityRepo().get(id)
     }
-
 
     /**
      * gets the entity from the datastore using the id
@@ -25,7 +23,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().get(ids)
     }
 
-
     /**
      * gets all the entities from the datastore.
      * @return
@@ -33,7 +30,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
     fun getAll(): List<T> {
         return entityRepo().getAll()
     }
-
 
     /**
      * gets the top count entities in the datastore sorted by asc order
@@ -45,7 +41,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().top(count, desc)
     }
 
-
     /**
      * Gets the first/oldest item
      * @return
@@ -53,7 +48,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
     fun first(): T? {
         return entityRepo().first()
     }
-
 
     /**
      * Gets the last/recent item
@@ -63,7 +57,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().last()
     }
 
-
     /**
      * Gets the most recent n items represented by count
      * @param count
@@ -72,7 +65,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
     fun recent(count: Int): List<T> {
         return entityRepo().recent(count)
     }
-
 
     /**
      * Gets the most oldest n items represented by count

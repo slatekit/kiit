@@ -14,7 +14,6 @@
 package slatekit.entities.support
 
 data class EntitySetupSettings(
-        val enableLogging: Boolean = true,
-        val enableOutput: Boolean = true
-) {
-}
+    val enableLogging: Boolean = true,
+    val enableOutput: Boolean = true
+)

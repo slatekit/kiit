@@ -28,24 +28,22 @@ class MySqlEntityDDL : EntityDDL {
         db.execute(sql)
     }
 
-
-    override fun buildIndexes(db:Db, model:Model, namer: Namer?):List<String> {
+    override fun buildIndexes(db: Db, model: Model, namer: Namer?): List<String> {
         val dbSrc = db.source
         val tableName = namer?.rename(model.name) ?: model.name
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.map { field ->
-            "CREATE INDEX idx_${field.storedName} ON ${tableName} (${field.storedName});"
+            "CREATE INDEX idx_${field.storedName} ON $tableName (${field.storedName});"
         }
-        //db.execute(indexSql)
+        // db.execute(indexSql)
 
         val uniques = model.fields.filter { it.isUnique }
         val uniqueSql = uniques.map { field ->
-            "ALTER TABLE ${tableName} ADD UNIQUE (${field.storedName});"
+            "ALTER TABLE $tableName ADD UNIQUE (${field.storedName});"
         }
         return indexSql.plus(uniqueSql)
-        //db.execute(uniqueSql)
+        // db.execute(uniqueSql)
     }
-
 
     /**
      * Builds the table DDL sql statement using the model supplied.
@@ -55,7 +53,7 @@ class MySqlEntityDDL : EntityDDL {
         val buff = StringBuilder()
 
         // 1. build the "CREATE <tablename>
-        buff.append(buildCreateTable(namer?.rename(model.name) ?: model.name) )
+        buff.append(buildCreateTable(namer?.rename(model.name) ?: model.name))
 
         // 2. build the primary key column
         buff.append(buildPrimaryKey("id"))
@@ -64,7 +62,7 @@ class MySqlEntityDDL : EntityDDL {
         // Get only fields ( excluding primary key )
         // Build sql for the data fields.
         val dataFieldSql = buildColumns(null, dbSrc, model, true, namer)
-        buff.append( dataFieldSql )
+        buff.append(dataFieldSql)
 
         // 4. finish the construction and get the sql.
         buff.append(" );")
@@ -72,43 +70,39 @@ class MySqlEntityDDL : EntityDDL {
         return sql
     }
 
-
-    override fun buildPrimaryKey(name:String): String
+    override fun buildPrimaryKey(name: String): String
     {
         val finalName = DbUtils.ensureField(name)
         return "`$finalName` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"
     }
 
-
-    override fun buildCreateTable(name:String): String = "create table `" + name + "` ( " + newline
-
+    override fun buildCreateTable(name: String): String = "create table `" + name + "` ( " + newline
 
     /**
      * Builds the table DDL sql statement using the model supplied.
      */
-    fun buildColumns(prefix:String?, dbSrc: DbSource, model: Model, filterId:Boolean, namer: Namer?): String
+    fun buildColumns(prefix: String?, dbSrc: DbSource, model: Model, filterId: Boolean, namer: Namer?): String
     {
         val buff = StringBuilder()
 
         // 3. Now build all the columns
         // Get only fields ( excluding primary key )
-        val dataFields = if(filterId) model.fields.filter{ "id".compareTo(it.name) != 0 } else model.fields
+        val dataFields = if (filterId) model.fields.filter { "id".compareTo(it.name) != 0 } else model.fields
 
         // Build sql for the data fields.
         val dataFieldSql = dataFields.fold("", { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
-            if(field.isEnum) {
+            if (field.isEnum) {
                 acc + ", " + dbSrc.buildAddCol(finalStoredName, DbFieldTypeNumber, field.isRequired, field.maxLength)
-            } else if(field.model != null) {
+            } else if (field.model != null) {
                 val sql = buildColumns(field.storedName, dbSrc, field.model!!, false, namer)
                 acc + sql
-            }
-            else {
+            } else {
                 val sqlType = DbUtils.getTypeFromLang(field.dataCls.java)
                 acc + ", " + dbSrc.buildAddCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
         })
-        buff.append( dataFieldSql )
+        buff.append(dataFieldSql)
 
         val sql = buff.toString()
         return sql

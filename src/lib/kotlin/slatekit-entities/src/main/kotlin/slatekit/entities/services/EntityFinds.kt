@@ -17,7 +17,6 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().find(query)
     }
 
-
     /**
      * finds items based on the field value
      * @param prop: The property reference
@@ -30,7 +29,6 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         val column = field.storedName
         return entityRepo().findBy(column, "=", value)
     }
-
 
     /**
      * finds items based on the field value
@@ -45,7 +43,6 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().findIn(column, value)
     }
 
-
     /**
      * finds items based on the field value
      * @param prop: The property reference
@@ -59,14 +56,12 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().findFirstBy(column, "=", value)
     }
 
-
     /**
      * finds items by a stored proc
      */
-    fun findByProc(name:String, args:List<Any>? = null):List<T>? {
+    fun findByProc(name: String, args: List<Any>? = null): List<T>? {
         return entityRepo().findByProc(name, args)
     }
-
 
     /**
      * finds the first item by the query
@@ -76,8 +71,7 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         return results.firstOrNull()
     }
 
-
-    fun where(prop: KProperty<*>, op:String, value:Any): IQuery {
+    fun where(prop: KProperty<*>, op: String, value: Any): IQuery {
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName

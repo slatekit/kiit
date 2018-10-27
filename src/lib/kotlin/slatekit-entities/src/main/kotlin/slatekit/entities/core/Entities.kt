@@ -29,19 +29,18 @@ import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
-
 /**
  *  A registry for all the entities and their corresponding services, repositories, database
  *  types, and connection keys.
  *
  *   // Case 1: In-memory
- *   Entities.Register[Invitation](sqlRepo: false);
+ *   Entities.Register[Invitation](sqlRepo: false)
  *
  *   // Case 2: In-memory, with custom service
  *   Entities.register[Invitation](sqlRepo: false, serviceType: typeof(InvitationService));
  *
  *   // Case 3: Sql-repo
- *   Entities.register[Invitation](sqlRepo: true);
+ *   Entities.register[Invitation](sqlRepo: true)
  *
  *   // Case 4: Sql-repo, with custom service
  *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService));
@@ -62,30 +61,31 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-class Entities(private val _dbs: DbLookup? = null,
-               val _enc:Encryptor? = null,
-               val logs:Logs = LogsDefault,
-               val namer: Namer? = null) {
+class Entities(
+    private val _dbs: DbLookup? = null,
+    val _enc: Encryptor? = null,
+    val logs: Logs = LogsDefault,
+    val namer: Namer? = null
+) {
 
     private var _info = ListMap<String, EntityInfo>(listOf())
     private val _mappers = mutableMapOf<String, EntityMapper>()
     private val logger = logs.getLogger("db")
 
-
     fun <T> register(
-            isSqlRepo: Boolean,
-            entityType: KClass<*>,
-            model: Model? = null,
-            serviceType: KClass<*>? = null,
-            repoType: KClass<*>? = null,
-            mapperType: KClass<*>? = null,
-            repository: EntityRepo<T>? = null,
-            mapper: EntityMapper? = null,
-            dbType: DbType? = DbTypeMySql,
-            dbKey: String? = null,
-            dbShard: String? = null,
-            tableName: String? = null,
-            serviceCtx: Any? = null
+        isSqlRepo: Boolean,
+        entityType: KClass<*>,
+        model: Model? = null,
+        serviceType: KClass<*>? = null,
+        repoType: KClass<*>? = null,
+        mapperType: KClass<*>? = null,
+        repository: EntityRepo<T>? = null,
+        mapper: EntityMapper? = null,
+        dbType: DbType? = DbTypeMySql,
+        dbKey: String? = null,
+        dbShard: String? = null,
+        tableName: String? = null,
+        serviceCtx: Any? = null
     ): EntityInfo where T : Entity {
         val db = if (!isSqlRepo) DbTypeMemory else dbType ?: DbTypeMySql
 
@@ -123,7 +123,6 @@ class Entities(private val _dbs: DbLookup? = null,
         return info
     }
 
-
     fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
         val dbType = getDbCon(dbKey, dbShard)
 
@@ -131,12 +130,11 @@ class Entities(private val _dbs: DbLookup? = null,
         val source = dbType?.let { type ->
             when (type.driver) {
                 DbTypeMySql.driver -> DbSourceMySql()
-                else               -> DbSourceMySql()
+                else -> DbSourceMySql()
             }
         } ?: DbSourceMySql()
         return source
     }
-
 
     /**
      * get the repository by class
@@ -144,7 +142,6 @@ class Entities(private val _dbs: DbLookup? = null,
     @Suppress("UNCHECKED_CAST")
     fun <T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<T> where T : Entity =
             getRepoByType(tpe, dbKey, dbShard) as EntityRepo<T>
-
 
     /**
      * get the repository by class
@@ -154,20 +151,17 @@ class Entities(private val _dbs: DbLookup? = null,
         return info.entityRepoInstance!!
     }
 
-
     /**
      * get service by class
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> getSvc(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityService<T>  where T : Entity =
+    fun <T> getSvc(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityService<T> where T : Entity =
             getSvcByType(tpe, dbKey, dbShard) as EntityService<T>
-
 
     fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
         val info = getInfo(entityType, dbKey, dbShard)
         return info.entityServiceInstance!!
     }
-
 
     /**
      * Builds a new entity service instance.
@@ -179,12 +173,10 @@ class Entities(private val _dbs: DbLookup? = null,
         return svc
     }
 
-
     fun getServiceByName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance!!
     }
-
 
     fun getMapper(entityType: KClass<*>): EntityMapper {
         val entityKey = entityType.qualifiedName
@@ -197,10 +189,9 @@ class Entities(private val _dbs: DbLookup? = null,
         return mapper!!
     }
 
-
     fun getModel(entityType: KClass<*>): Model {
         val entityKey = getKey(entityType)
-        if(!_info.contains(entityKey)) {
+        if (!_info.contains(entityKey)) {
             logger.error("Model not found for $entityKey")
             throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
         }
@@ -208,21 +199,19 @@ class Entities(private val _dbs: DbLookup? = null,
         return _info.get(entityKey)?.model!!
     }
 
-
     fun getDb(dbKey: String = "", dbShard: String = ""): Db {
         val err1 = "Error getting database for registration in Entities."
         val err2 = "Database connection not setup and/or available in config."
-        val err3 = "Database connection not setup and/or available in config for ${dbKey} & ${dbShard}."
-        val err = if(dbKey.isNullOrEmpty()) err2 else err3
+        val err3 = "Database connection not setup and/or available in config for $dbKey & $dbShard."
+        val err = if (dbKey.isNullOrEmpty()) err2 else err3
         val con = getDbCon()
-        if(con == null) {
+        if (con == null) {
             logger.error("Database connection not available for key/shard $dbKey:$dbShard")
         }
-        require(con != null, { err1 + " "+ err })
-        require( con != DbConEmpty, { err1 + " " + err })
+        require(con != null, { err1 + " " + err })
+        require(con != DbConEmpty, { err1 + " " + err })
         return Db(con!!, errorCallback = this::errorHandler).open()
     }
-
 
     fun getDbCon(dbKey: String = "", dbShard: String = ""): DbCon? {
         return _dbs?.let { dbs ->
@@ -241,16 +230,13 @@ class Entities(private val _dbs: DbLookup? = null,
         }
     }
 
-
     fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityInfo {
         val key = getKey(entityType, dbKey, dbShard)
         require(_info.contains(key), { "Entity invalid or not registered with key : " + key })
         return _info.get(key)!!
     }
 
-
     fun getEntities(): List<EntityInfo> = _info.all()
-
 
     fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityInfo {
         val key = buildKey(entityType, dbKey, dbShard)
@@ -261,16 +247,13 @@ class Entities(private val _dbs: DbLookup? = null,
         return _info.get(key)!!
     }
 
-
     private fun getKey(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): String =
             buildKey(entityType.qualifiedName!!, dbKey, dbShard)
-
 
     private fun buildKey(entityType: String, dbKey: String = "", dbShard: String = ""): String =
             "$entityType:$dbKey:$dbShard"
 
-
-    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, model:Model?, mapper: EntityMapper?, tableName: String?): EntityMapper {
+    private fun buildMapper(isSqlRepo: Boolean, entityType: KClass<*>, model: Model?, mapper: EntityMapper?, tableName: String?): EntityMapper {
 
         val entityKey = entityType.qualifiedName
 
@@ -285,9 +268,15 @@ class Entities(private val _dbs: DbLookup? = null,
         return entityMapper
     }
 
-
-    private fun <T> buildRepo(isSqlRepo: Boolean, dbType: DbType, dbKey: String, dbShard: String,
-                              entityType: KClass<*>, mapper: EntityMapper, tableName:String?): EntityRepo<T> where T : Entity {
+    private fun <T> buildRepo(
+        isSqlRepo: Boolean,
+        dbType: DbType,
+        dbKey: String,
+        dbShard: String,
+        entityType: KClass<*>,
+        mapper: EntityMapper,
+        tableName: String?
+    ): EntityRepo<T> where T : Entity {
         // Currently only long supported
         val entityIdType = Long::class
         val repoType = if (!isSqlRepo) DbTypeMemory else dbType
@@ -296,31 +285,31 @@ class Entities(private val _dbs: DbLookup? = null,
             DbTypeMemory -> {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
             }
-            DbTypeMySql  -> {
+            DbTypeMySql -> {
                 EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName, _enc)
             }
-            else         -> {
+            else -> {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
             }
         }
         return repo
     }
 
-
     private fun buildDDL(isSqlRepo: Boolean, dbType: DbType): EntityDDL? {
         // Currently only long supported
         val repoType = if (!isSqlRepo) DbTypeMemory else dbType
         val ddl = when (repoType) {
-            DbTypeMySql  -> MySqlEntityDDL()
-            else         -> null
+            DbTypeMySql -> MySqlEntityDDL()
+            else -> null
         }
         return ddl
     }
 
-
-    private fun <T> buildService(serviceType: KClass<*>?,
-                                 repo: EntityRepo<T>,
-                                 ctx: Any?): EntityService<T> where T : Entity {
+    private fun <T> buildService(
+        serviceType: KClass<*>?,
+        repo: EntityRepo<T>,
+        ctx: Any?
+    ): EntityService<T> where T : Entity {
 
         val service = serviceType?.let { stype ->
 
@@ -333,8 +322,6 @@ class Entities(private val _dbs: DbLookup? = null,
         } ?: EntityService(this, repo)
         return service
     }
-
-
 
     fun errorHandler(ex: Exception) {
         logger.error("Database error", ex)

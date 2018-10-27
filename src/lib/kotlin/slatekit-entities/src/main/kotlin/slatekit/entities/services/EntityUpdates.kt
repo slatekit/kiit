@@ -9,7 +9,6 @@ import kotlin.reflect.KProperty
 
 interface EntityUpdates<T> : ServiceSupport<T> where T : Entity {
 
-
     /**
      * updates the entity in the datastore
      * @param entity
@@ -20,7 +19,6 @@ interface EntityUpdates<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().update(finalEntity)
     }
 
-
     /**
      * updates the entity field in the datastore
      * @param id: id of the entity
@@ -28,14 +26,13 @@ interface EntityUpdates<T> : ServiceSupport<T> where T : Entity {
      * @param value: the value to set on the field
      * @return
      */
-    fun update(id: Long, field: String, value: String): Unit {
+    fun update(id: Long, field: String, value: String) {
         val item = entityRepo().get(id)
         item?.let { entity ->
             Reflector.setFieldValue(entity.kClass, entity, field, value)
             update(entity)
         }
     }
-
 
     /**
      * updates items based on the field name
@@ -47,14 +44,12 @@ interface EntityUpdates<T> : ServiceSupport<T> where T : Entity {
         return entityRepo().updateByField(prop.name, value)
     }
 
-
     /**
      * updates items by a stored proc
      */
-    fun updateByProc(name:String, args:List<Any>? = null): Int {
+    fun updateByProc(name: String, args: List<Any>? = null): Int {
         return entityRepo().updateByProc(name, args)
     }
-
 
     /**
      * updates items using the query

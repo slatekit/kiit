@@ -29,16 +29,14 @@ import java.time.ZonedDateTime
 import java.util.*
 import kotlin.reflect.KClass
 
-
 open class EntityRepoInMemory<T>(
-        entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null
+    entityType: KClass<*>,
+    entityIdType: KClass<*>? = null,
+    entityMapper: EntityMapper? = null
 )
     : EntityRepo<T>(entityType, entityIdType, entityMapper, null) where T : Entity {
 
     private var _items = ListMap<Long, T>(listOf())
-
 
     /**
      * create the entity in memory
@@ -52,17 +50,15 @@ open class EntityRepoInMemory<T>(
             val id = getNextId()
             val en = when (entity) {
                 is EntityUpdatable<*> -> entity.withId(id)
-                else                  -> _entityMapper.copyWithId(id, entity)
+                else -> _entityMapper.copyWithId(id, entity)
             }
 
             // store
             _items = _items.add(id, en as T)
             id
-        }
-        else
+        } else
             entity.identity()
     }
-
 
     /**
      * updates the entity in memory
@@ -78,7 +74,6 @@ open class EntityRepoInMemory<T>(
         return entity
     }
 
-
     /**
      * deletes the entity in memory
      *
@@ -93,7 +88,6 @@ open class EntityRepoInMemory<T>(
         }
     }
 
-
     /**
      * deletes all entities from the datastore using the ids
      * @param ids
@@ -102,7 +96,6 @@ open class EntityRepoInMemory<T>(
     override fun delete(ids: List<Long>): Int {
         return ids.map({ delete(it) }).count { it }
     }
-
 
     /**
      * gets the entity from memory with the specified id.
@@ -113,7 +106,6 @@ open class EntityRepoInMemory<T>(
         return _items[id]
     }
 
-
     /**
      * gets all the entities using the supplied ids
      * @param ids
@@ -122,7 +114,6 @@ open class EntityRepoInMemory<T>(
     override fun get(ids: List<Long>): List<T> {
         return ids.mapNotNull { _items[it] }
     }
-
 
     /**
      * finds items based on the query
@@ -134,7 +125,7 @@ open class EntityRepoInMemory<T>(
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
-            val finalValue = if(value is UUID) value.toString() else value
+            val finalValue = if (value is UUID) value.toString() else value
             property.let { p ->
                 _items.all().filter { it ->
                     val actual = Reflector.getFieldValue(it, p)
@@ -146,18 +137,16 @@ open class EntityRepoInMemory<T>(
         return matched
     }
 
-
     /**
      * finds items based on the query
      * @param field: name of field
-     * @param op   : operator e.g. "="
+     * @param op : operator e.g. "="
      * @param value: value of field to search against
      * @return
      */
     override fun findFirstBy(field: String, op: String, value: Any): T? {
         return findBy(field, op, value).firstOrNull()
     }
-
 
     /**
      * gets all the items from memory
@@ -166,45 +155,39 @@ open class EntityRepoInMemory<T>(
      */
     override fun getAll(): List<T> = _items.all()
 
-
     override fun count(): Long = _items.size.toLong()
-
 
     override fun top(count: Int, desc: Boolean): List<T> {
         return if (_items.size == 0) {
             listOf()
-        }
-        else {
+        } else {
             val items = _items.all().sortedBy { item -> item.identity() }
             val sorted = if (desc) items.reversed() else items
             sorted.take(count)
         }
     }
 
-
     override fun updateByField(field: String, value: Any): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun updateByProc(name: String, args: List<Any>?): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun updateByQuery(query: IQuery): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun deleteByField(field: String, value: Any): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun deleteByQuery(query: IQuery): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-
     fun getNextId(): Long = _items.size.toLong() + 1
-
 
     /**
      * Simple equality comparison fields ( used mostly in
@@ -213,19 +196,19 @@ open class EntityRepoInMemory<T>(
     fun compare(cls: KClass<*>, a: Any?, b: Any): Boolean {
         return a?.let { actual ->
             when (cls) {
-                KTypes.KStringClass          -> (actual as String) == (b as String)
-                KTypes.KBoolClass            -> (actual as Boolean) == (b as Boolean)
-                KTypes.KShortClass           -> (actual as Short) == (b as Short)
-                KTypes.KIntClass             -> (actual as Int) == (b as Int)
-                KTypes.KLongClass            -> (actual as Long) == (b as Long)
-                KTypes.KFloatClass           -> (actual as Float) == (b as Float)
-                KTypes.KDoubleClass          -> (actual as Double) == (b as Double)
-                KTypes.KLocalDateClass       -> (actual as LocalDate) == (b as LocalDate)
-                KTypes.KLocalTimeClass       -> (actual as LocalTime) == (b as LocalTime)
-                KTypes.KLocalDateTimeClass   -> (actual as LocalDateTime) == (b as LocalDateTime)
-                KTypes.KZonedDateTimeClass   -> (actual as ZonedDateTime) == (b as ZonedDateTime)
-                KTypes.KDateTimeClass        -> (actual as DateTime) == (b as DateTime)
-                else                       -> false
+                KTypes.KStringClass -> (actual as String) == (b as String)
+                KTypes.KBoolClass -> (actual as Boolean) == (b as Boolean)
+                KTypes.KShortClass -> (actual as Short) == (b as Short)
+                KTypes.KIntClass -> (actual as Int) == (b as Int)
+                KTypes.KLongClass -> (actual as Long) == (b as Long)
+                KTypes.KFloatClass -> (actual as Float) == (b as Float)
+                KTypes.KDoubleClass -> (actual as Double) == (b as Double)
+                KTypes.KLocalDateClass -> (actual as LocalDate) == (b as LocalDate)
+                KTypes.KLocalTimeClass -> (actual as LocalTime) == (b as LocalTime)
+                KTypes.KLocalDateTimeClass -> (actual as LocalDateTime) == (b as LocalDateTime)
+                KTypes.KZonedDateTimeClass -> (actual as ZonedDateTime) == (b as ZonedDateTime)
+                KTypes.KDateTimeClass -> (actual as DateTime) == (b as DateTime)
+                else -> false
             }
         } ?: false
     }

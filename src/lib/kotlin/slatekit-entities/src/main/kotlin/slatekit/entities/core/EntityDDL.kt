@@ -5,7 +5,6 @@ import slatekit.common.db.Db
 import slatekit.common.db.types.DbSource
 import slatekit.meta.models.Model
 
-
 interface EntityDDL {
 
     /**
@@ -15,18 +14,14 @@ interface EntityDDL {
      */
     fun createTable(db: Db, model: Model)
 
-
-    fun buildIndexes(db:Db, model:Model, namer: Namer?):List<String>
-
+    fun buildIndexes(db: Db, model: Model, namer: Namer?): List<String>
 
     /**
      * Builds the table DDL sql statement using the model supplied.
      */
     fun buildAddTable(dbSrc: DbSource, model: Model, namer: Namer? = null): String
 
-
     fun buildPrimaryKey(name: String): String
-
 
     fun buildCreateTable(name: String): String
  }

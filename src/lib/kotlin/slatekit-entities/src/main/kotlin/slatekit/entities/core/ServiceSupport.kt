@@ -6,7 +6,6 @@ interface ServiceSupport<T> where T : Entity {
     fun entityRepo(): EntityRepo<T>
     fun entities(): Entities
 
-
     /**
      * Hook for derived to apply any other logic/field changes before create/update
      * @param mode
