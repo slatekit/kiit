@@ -20,9 +20,7 @@ interface IEntityRepo {
 
     fun repoName(): String
 
-
     fun count(): Long
-
 
     fun mapper(): EntityMapper
 }

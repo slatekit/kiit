@@ -18,7 +18,6 @@ import slatekit.common.Serializer
 import slatekit.meta.Serialization
 import slatekit.meta.models.Model
 
-
 interface Entity {
 
     /**
@@ -33,14 +32,12 @@ interface Entity {
      */
     fun identity(): Long
 
-
     /**
      * whether or not this entity is persisted.
      * @return
      */
     fun isPersisted(): Boolean = identity() > 0
 }
-
 
 /**
  * Base entity interface that must define if it is persisted or not
@@ -53,7 +50,6 @@ interface EntityWithId : Entity {
      */
     val id: Long
 
-
     /**
      * provide a consistent approach to getting the identity for different
      * implementations of domain entities ( via either case class or non-case class )
@@ -61,7 +57,6 @@ interface EntityWithId : Entity {
      */
     override fun identity(): Long = id
 }
-
 
 /**
  * interface for entities that can be updatable
@@ -78,7 +73,6 @@ interface EntityUpdatable<T> {
     fun withId(id: Long): T
 }
 
-
 /**
  * Entity with support for create/update timestamps
  */
@@ -86,7 +80,6 @@ interface EntityWithTime {
     val createdAt: DateTime
     val updatedAt: DateTime
 }
-
 
 /**
  * Entity with support for create/update user id
@@ -97,7 +90,6 @@ interface EntityWithUser {
     val updatedBy: String
 }
 
-
 /**
  * Entity with support for a unique id ( GUID )
  */
@@ -105,34 +97,26 @@ interface EntityWithUUID {
     val uuid: String
 }
 
-
-
 /**
  * Entity with support for sorting
  */
 interface EntityWithSorting {
-    val sortIndex:Short
+    val sortIndex: Short
 }
-
 
 /**
  * Entity with support for both create/update timestamps and create/update user id
  */
 interface EntityWithShard {
     val shard: String
-    val tag  : String
+    val tag: String
 }
-
 
 /**
  * Entity with support for both create/update timestamps and create/update user id
  */
 interface EntityWithMeta
-    : EntityWithTime
-      , EntityWithUser
-      , EntityWithUUID {
-}
-
+    : EntityWithTime, EntityWithUser, EntityWithUUID
 
 interface EntityModel {
 
@@ -140,8 +124,7 @@ interface EntityModel {
      * Gets this entity as a generic Model schema, which holds all
      * the fields defined in the model for persistence.
      */
-    val model:Model
-
+    val model: Model
 
     /**
      * Serializes this entity to json
@@ -152,7 +135,6 @@ interface EntityModel {
      */
     fun toJson(): String = serialize(Serialization.json())
 
-
     /**
      * Serializes this entity to a csv record
      * name   ,  email
@@ -160,14 +142,12 @@ interface EntityModel {
      */
     fun toCsv(): String = serialize(Serialization.csv())
 
-
     /**
      * Serializes this entity to a props structure
      * name : user1
      * email: user1@abc.com
      */
     fun toProps(): String = serialize(Serialization.props())
-
 
     /**
      * Serializes this entity using the specific serializer supplied.

@@ -22,11 +22,9 @@ class EntitySerializer {
         return toString(Serialization.props(), item, mapper)
     }
 
-
     fun toStringJson(item: Entity, mapper: EntityMapper): String {
         return toString(Serialization.json(), item, mapper)
     }
-
 
     fun toString(serializer: Serializer, item: Entity, mapper: EntityMapper): String {
         val content = serializer.serialize(item)

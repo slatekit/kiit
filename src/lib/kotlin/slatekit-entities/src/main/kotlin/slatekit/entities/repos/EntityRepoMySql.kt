@@ -21,23 +21,22 @@ import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import kotlin.reflect.KClass
 
-
 /**
  * Repository class specifically for MySql
- * @param entityType   : The data type of the entity/model
+ * @param entityType : The data type of the entity/model
  * @param entityIdType : The data type of the primary key/identity field
  * @param entityMapper : The entity mapper that maps to/from entities / records
- * @param nameOfTable  : The name of the table ( defaults to entity name )
+ * @param nameOfTable : The name of the table ( defaults to entity name )
  * @param db
  * @tparam T
  */
 open class EntityRepoMySql<T>(
-        db: Db,
-        entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null,
-        nameOfTable: String? = null,
-        encryptor: Encryptor? = null
+    db: Db,
+    entityType: KClass<*>,
+    entityIdType: KClass<*>? = null,
+    entityMapper: EntityMapper? = null,
+    nameOfTable: String? = null,
+    encryptor: Encryptor? = null
 )
     : EntityRepoSql<T>(db, entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
 
@@ -48,27 +47,24 @@ open class EntityRepoMySql<T>(
         return items
     }
 
-
     /**
      * updates the table field using the value supplied
      * @param field: The field name
      * @param value: The value to set
      */
-    override fun updateByField(field:String, value: Any): Int {
+    override fun updateByField(field: String, value: Any): Int {
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
         val sql = "update " + repoName() + updateSql
         return _db.update(sql)
     }
 
-
     /**
      * updates items using the proc and args
      */
-    override fun updateByProc(name:String, args:List<Any>?): Int {
+    override fun updateByProc(name: String, args: List<Any>?): Int {
         return _db.callUpdate(name, args)
     }
-
 
     /**
      * updates items using the query
@@ -80,20 +76,18 @@ open class EntityRepoMySql<T>(
         return _db.update(sql)
     }
 
-
     /**
      * deletes items based on the field name and value
      * @param field: The field name
      * @param value: The value to check for
      * @return
      */
-    override fun deleteByField(field:String, value: Any): Int {
+    override fun deleteByField(field: String, value: Any): Int {
         val query = Query().where(field, "=", value)
         val filter = query.toFilter()
         val sql = "delete from " + repoName() + " where " + filter
         return _db.update(sql)
     }
-
 
     /**
      * deletes items using the query
@@ -106,20 +100,17 @@ open class EntityRepoMySql<T>(
         return _db.update(sql)
     }
 
-
     /**
      * finds items by using the sql
      * @param query
      * @return
      */
-    override fun findByProc(name:String, args:List<Any>?): List<T>? {
+    override fun findByProc(name: String, args: List<Any>?): List<T>? {
         return _db.callQueryMapped(name, _entityMapper, args)
     }
 
-
     override fun scriptLastId(): String =
             "SELECT LAST_INSERT_ID();"
-
 
     override fun repoName(): String =
             "`" + super.repoName() + "`"

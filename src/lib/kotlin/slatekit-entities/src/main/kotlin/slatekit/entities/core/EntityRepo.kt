@@ -20,23 +20,22 @@ import slatekit.common.query.IQuery
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
-
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
  * NOTE: This is basically a GenericRepository implementation
- * @param entityType   : The data type of the entity/model
+ * @param entityType : The data type of the entity/model
  * @param entityIdType : The data type of the primary key/identity field
  * @param entityMapper : The entity mapper that maps to/from entities / records
- * @param nameOfTable  : The name of the table ( defaults to entity name )
+ * @param nameOfTable : The name of the table ( defaults to entity name )
  * @tparam T
  */
 abstract class EntityRepo<T>(
-        entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null,
-        nameOfTable: String? = null,
-        encryptor: Encryptor? = null,
-        val namer: Namer? = null
+    entityType: KClass<*>,
+    entityIdType: KClass<*>? = null,
+    entityMapper: EntityMapper? = null,
+    nameOfTable: String? = null,
+    encryptor: Encryptor? = null,
+    val namer: Namer? = null
 )
     : IEntityRepo where T : Entity {
     protected val _nameOfTable = nameOfTable
@@ -45,12 +44,11 @@ abstract class EntityRepo<T>(
     protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType, namer = namer)
     protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, encryptor = encryptor)
 
-
     /**
      * The name of the table in the datastore
      */
     override fun repoName(): String {
-        val rawName =_nameOfTable ?: _entityType.simpleName ?: ""
+        val rawName = _nameOfTable ?: _entityType.simpleName ?: ""
         val finalName = namer?.rename(rawName) ?: rawName[0].toLowerCase() + rawName.substring(1)
         return finalName
     }
@@ -61,13 +59,11 @@ abstract class EntityRepo<T>(
      */
     override fun mapper(): EntityMapper = _entityMapper
 
-
     /**
      * the name of the id field.
      * @return
      */
     fun idName(): String = _entityModel.idField?.name ?: "id"
-
 
     /**
      * creates the entity in the datastore
@@ -76,7 +72,6 @@ abstract class EntityRepo<T>(
      */
     abstract fun create(entity: T): Long
 
-
     /**
      * updates the entity in the datastore
      * @param entity
@@ -84,27 +79,23 @@ abstract class EntityRepo<T>(
      */
     abstract fun update(entity: T): T
 
-
     /**
      * updates items based on the field name
      * @param prop: The property reference
      * @param value: The value to set
      * @return
      */
-    abstract fun updateByField(field:String, value: Any): Int
-
+    abstract fun updateByField(field: String, value: Any): Int
 
     /**
      * updates items using the proc and args
      */
-    abstract fun updateByProc(name:String, args:List<Any>? = null): Int
-
+    abstract fun updateByProc(name: String, args: List<Any>? = null): Int
 
     /**
      * updates items using the query
      */
-    abstract fun updateByQuery(query:IQuery): Int
-
+    abstract fun updateByQuery(query: IQuery): Int
 
     /**
      * deletes the entity by id
@@ -113,14 +104,12 @@ abstract class EntityRepo<T>(
      */
     abstract fun delete(id: Long): Boolean
 
-
     /**
      * deletes all entities from the datastore using the ids
      * @param ids
      * @return
      */
     abstract fun delete(ids: List<Long>): Int
-
 
     /**
      * deletes the entity in memory
@@ -130,21 +119,18 @@ abstract class EntityRepo<T>(
     fun delete(entity: T?): Boolean =
             entity?.let { item -> delete(item.identity()) } ?: false
 
-
     /**
      * deletes items based on the field name and value
      * @param prop: The property reference
      * @param value: The value to check for
      * @return
      */
-    abstract fun deleteByField(field:String, value: Any): Int
-
+    abstract fun deleteByField(field: String, value: Any): Int
 
     /**
      * deletes items using the query
      */
-    abstract fun deleteByQuery(query:IQuery): Int
-
+    abstract fun deleteByQuery(query: IQuery): Int
 
     /**
      * gets the entity from the datastore using the id
@@ -153,7 +139,6 @@ abstract class EntityRepo<T>(
      */
     abstract fun get(id: Long): T?
 
-
     /**
      * gets the entity from the datastore using the id
      * @param ids
@@ -161,13 +146,11 @@ abstract class EntityRepo<T>(
      */
     abstract fun get(ids: List<Long>): List<T>
 
-
     /**
      * gets all the entities from the datastore.
      * @return
      */
     abstract fun getAll(): List<T>
-
 
     /**
      * gets the top count entities in the datastore sorted by asc order
@@ -177,20 +160,18 @@ abstract class EntityRepo<T>(
      */
     abstract fun top(count: Int, desc: Boolean): List<T>
 
-
     /**
      * determines if there are any entities in the datastore
      * @return
      */
     fun any(): Boolean = count() > 0
 
-
     /**
      * saves an entity by either creating it or updating it based on
      * checking its persisted flag.
      * @param entity
      */
-    fun save(entity: T?): Unit {
+    fun save(entity: T?) {
         entity?.let { item ->
             if (item.isPersisted())
                 update(item)
@@ -199,7 +180,6 @@ abstract class EntityRepo<T>(
         }
     }
 
-
     /**
      * saves all the entities
      *
@@ -207,20 +187,17 @@ abstract class EntityRepo<T>(
      */
     fun saveAll(items: List<T>) = items.forEach { item -> save(item) }
 
-
     /**
      * Gets the first/oldest item
      * @return
      */
     fun first(): T? = takeFirst({ -> oldest(1) })
 
-
     /**
      * Gets the last/recent item
      * @return
      */
     fun last(): T? = takeFirst({ -> recent(1) })
-
 
     /**
      * Gets the most recent n items represented by count
@@ -229,14 +206,12 @@ abstract class EntityRepo<T>(
      */
     fun recent(count: Int): List<T> = top(count, true)
 
-
     /**
      * Gets the most oldest n items represented by count
      * @param count
      * @return
      */
     fun oldest(count: Int): List<T> = top(count, false)
-
 
     /**
      * takes the
@@ -245,7 +220,6 @@ abstract class EntityRepo<T>(
      */
     fun takeFirst(call: () -> List<T>): T? = call().firstOrNull()
 
-
     /**
      * finds items based on the query
      * @param query
@@ -253,16 +227,14 @@ abstract class EntityRepo<T>(
      */
     open fun find(query: IQuery): List<T> = listOf()
 
-
     /**
      * finds items based on the field
      * @param field: name of field
-     * @param op   : operator e.g. "="
+     * @param op : operator e.g. "="
      * @param value: value of field to search against
      * @return
      */
     open fun findBy(field: String, op: String, value: Any): List<T> = listOf()
-
 
     /**
      * finds items based on the field in the values provided
@@ -272,24 +244,21 @@ abstract class EntityRepo<T>(
      */
     open fun findIn(field: String, value: List<Any>): List<T> = listOf()
 
-
     /**
      * finds first item based on the field
      * @param field: name of field
-     * @param op   : operator e.g. "="
+     * @param op : operator e.g. "="
      * @param value: value of field to search against
      * @return
      */
     open fun findFirstBy(field: String, op: String, value: Any): T? = null
-
 
     /**
      * finds items by using the sql
      * @param query
      * @return
      */
-    open fun findByProc(name:String, args:List<Any>?): List<T>? = listOf()
-
+    open fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
 
     /**
      * Hook for derived classes to handle additional logic before saving

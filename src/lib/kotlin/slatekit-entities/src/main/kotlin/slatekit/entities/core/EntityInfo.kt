@@ -20,40 +20,38 @@ import slatekit.meta.kClass
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
-
 /**
  *
- * @param entityType            : the type of the entity
- * @param entityServiceType     : the type of the service    ( EntityService[T] or derivative )
- * @param entityRepoType        : the type of the repository ( EntityRepository[T] or derivative )
- * @param entityMapperType      : the type of the mapper     ( EntityMapper[T] or derivative )
+ * @param entityType : the type of the entity
+ * @param entityServiceType : the type of the service    ( EntityService[T] or derivative )
+ * @param entityRepoType : the type of the repository ( EntityRepository[T] or derivative )
+ * @param entityMapperType : the type of the mapper     ( EntityMapper[T] or derivative )
  * @param entityServiceInstance : an instance of the service ( singleton usage )
- * @param entityRepoInstance    : an instance of the repo    ( singleton usage )
- * @param entityMapperInstance  : an instance of the mapper  ( singleton usage )
- * @param isSqlRepo             : whether or not the repo is sql based or memory based
- * @param dbType                : the database provider type
- * @param dbKey                 : a key identifying the database connection
+ * @param entityRepoInstance : an instance of the repo    ( singleton usage )
+ * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
+ * @param isSqlRepo : whether or not the repo is sql based or memory based
+ * @param dbType : the database provider type
+ * @param dbKey : a key identifying the database connection
  *                               ( see DbLookup / Example_Database.scala )
- * @param dbShard               : a key identifying the database shard
+ * @param dbShard : a key identifying the database shard
  *                               ( see DbLookup / Example_Database.scala )
  */
 data class EntityInfo(
-        val entityType: KClass<*>,
-        val model: Model,
-        val entityServiceType: KClass<*>? = null,
-        val entityRepoType: KClass<*>? = null,
-        val entityMapperType: KClass<*>? = null,
-        val entityServiceInstance: IEntityService? = null,
-        val entityRepoInstance: IEntityRepo? = null,
-        val entityMapperInstance: EntityMapper? = null,
-        val entityDDL:EntityDDL? = null,
-        val isSqlRepo: Boolean = true,
-        val dbType: DbType = DbTypeMySql,
-        val dbKey: String = "",
-        val dbShard: String = ""
+    val entityType: KClass<*>,
+    val model: Model,
+    val entityServiceType: KClass<*>? = null,
+    val entityRepoType: KClass<*>? = null,
+    val entityMapperType: KClass<*>? = null,
+    val entityServiceInstance: IEntityService? = null,
+    val entityRepoInstance: IEntityRepo? = null,
+    val entityMapperInstance: EntityMapper? = null,
+    val entityDDL: EntityDDL? = null,
+    val isSqlRepo: Boolean = true,
+    val dbType: DbType = DbTypeMySql,
+    val dbKey: String = "",
+    val dbShard: String = ""
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""
-
 
     fun toStringDetail(): String {
         val text = "entity type  : " + entityTypeName + newline +
@@ -71,9 +69,7 @@ data class EntityInfo(
         return text
     }
 
-
     fun getTypeName(tpe: KClass<*>?): String = tpe?.qualifiedName ?: ""
-
 
     fun getTypeNameFromInst(tpe: Any?): String = tpe?.kClass?.qualifiedName ?: ""
 }

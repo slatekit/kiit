@@ -3,7 +3,6 @@ package slatekit.entities.services
 import slatekit.entities.core.Entity
 import slatekit.entities.core.IEntityService
 
-
 /**
  * Base entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
@@ -21,7 +20,6 @@ open interface EntityServices<T> : IEntityService,
         return entityRepo().count()
     }
 
-
     /**
      * determines if there are any entities in the datastore
      * @return
@@ -30,9 +28,8 @@ open interface EntityServices<T> : IEntityService,
         return entityRepo().any()
     }
 
-
     /**
      * whether this is an empty dataset
      */
-    fun isEmpty():Boolean = !any()
+    fun isEmpty(): Boolean = !any()
 }
