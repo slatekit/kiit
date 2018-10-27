@@ -13,7 +13,6 @@
 
 package slatekit.integration.tenants
 
-
 interface ITenantable {
     val tenantId: Int
 }

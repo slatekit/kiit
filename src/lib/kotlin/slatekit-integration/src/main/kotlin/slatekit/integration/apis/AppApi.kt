@@ -23,7 +23,6 @@ import slatekit.common.utils.Tracker
 import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 
-
 @Api(area = "app", name = "info", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class AppApi(val context: AppEntContext) : Tracked {
@@ -34,48 +33,40 @@ class AppApi(val context: AppEntContext) : Tracked {
         context.logs.getLogger("api")
     )
 
-
     @ApiAction(desc = "gets info about this build", roles = "*", verb = "get", protocol = "@parent")
     fun build(): Build {
         return context.app.build
     }
 
-
     @ApiAction(desc = "get info about the application")
     fun stats(): List<String> {
-        return tracker.diagnostics().map( { it.first + ":" + it.second } )
+        return tracker.diagnostics().map({ it.first + ":" + it.second })
     }
-
 
     @ApiAction(desc = "get info about the application")
     fun about(): About {
         return context.app.about
     }
 
-
     @ApiAction(desc = "get info about the application")
     fun cmd(cmd: Request): About {
         return context.app.about
     }
-
 
     @ApiAction(desc = "gets info about the language")
     fun lang(): Lang {
         return context.app.lang
     }
 
-
     @ApiAction(desc = "gets info about the folders")
     fun dirs(): Folders {
         return context.dirs ?: Folders.Folders.none
     }
 
-
     @ApiAction(desc = "gets info about the start up time")
     fun start(): StartInfo {
         return context.app.start
     }
-
 
     @ApiAction(desc = "gets info about the status")
     fun status(): Status {

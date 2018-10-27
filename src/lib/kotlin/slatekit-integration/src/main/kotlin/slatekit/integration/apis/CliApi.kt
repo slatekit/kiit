@@ -30,9 +30,9 @@ import java.io.File
  * Layer on top of the core CliService to provide support for handling command line requests
  * to your APIs using the Protocol independent APIs in the api module.
  *
- * @param creds  : credentials for authentication/authorization purposes.
- * @param ctx    : the app context hosting the selected environment, logger, configs and more
- * @param auth   : the auth provider
+ * @param creds : credentials for authentication/authorization purposes.
+ * @param ctx : the app context hosting the selected environment, logger, configs and more
+ * @param auth : the auth provider
  * @param settings : Settings for the shell functionality
  *
  *
@@ -45,12 +45,13 @@ import java.io.File
  *  2. file     : loads the request from a file  : $file="create-users.json"
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
-class CliApi(private val creds: Credentials,
-             val ctx: slatekit.common.Context,
-             val auth: slatekit.apis.core.Auth,
-             settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
-             apiItems: List<Api> = listOf(),
-             val cliMeta: CliMeta? = null
+class CliApi(
+    private val creds: Credentials,
+    val ctx: slatekit.common.Context,
+    val auth: slatekit.apis.core.Auth,
+    settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
+    apiItems: List<Api> = listOf(),
+    val cliMeta: CliMeta? = null
 )
     : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
 
@@ -59,14 +60,12 @@ class CliApi(private val creds: Credentials,
     // api container holding all the apis.
     val apis = ApiContainer(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
 
-
     /**
      * Exposed life-cycle hook for when the shell is ending/shutting down.
      */
     override fun onShellEnd() {
         _writer.highlight("Shutting down ${_appMeta.about.name} command line")
     }
-
 
     /**
      * Converts the raw CliCommand the ApiCmd for passing along the API container
@@ -81,20 +80,19 @@ class CliApi(private val creds: Credentials,
         // Supplying params from file ?
         return if (containsRequestLevelSystemCommand(cmd)) {
             val metaCmd = cmd.args.sys.keys.first()
-            val cmdResult = when(metaCmd){
+            val cmdResult = when (metaCmd) {
 
                 // Case 1: Generate a sample command to output/file
                 CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toResultEx().toResponse())
 
                 // Case 2: Get command from params file and execute
-                CliConstants.SysFile   -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
+                CliConstants.SysFile -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
 
                 // Case 3: Unknown
-                else     -> cmd
+                else -> cmd
             }
             cmdResult
-        }
-        else {
+        } else {
             // Supply the api-key into each command.
             val meta = cliMeta?.let { cliMeta.getMetaData(ctx, cmd, creds) } ?: cmd.args.meta.plus(Pair(metaNameForApiKey, creds.key))
             val metaInputs = slatekit.common.InputArgs(meta)
@@ -103,16 +101,13 @@ class CliApi(private val creds: Credentials,
         }
     }
 
-
     override fun showExtendedHelp(writer: ConsoleWriter) {
         apis.help.help()
     }
 
-
     override fun showHelp() {
         _view.showHelp()
     }
-
 
     /**
      * Handles help request on any part of the api request. Api requests are typically in
@@ -131,27 +126,25 @@ class CliApi(private val creds: Credentials,
                 apis.help.area(cmd.args.getVerb(0))
             }
             // 2. {area}.{api} = help on api
-            slatekit.core.cli.CliConstants.VerbPartApi  -> {
+            slatekit.core.cli.CliConstants.VerbPartApi -> {
                 apis.help.api(cmd.args.getVerb(0), cmd.args.getVerb(1))
             }
             // 3. {area}.{api}.{action} = help on api action
-            else                                        -> {
+            else -> {
                 apis.help.action(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
             }
         }
     }
 
-
     override fun collectSummaryExtra(): List<Pair<String, String>>? {
         return listOf(
                 Pair("db.conn", ctx.dbs?.default()?.url ?: ""),
                 Pair("db.user", ctx.dbs?.default()?.user ?: ""),
-                Pair("dirs.app", ctx.dirs?.pathToApp ?: "" )
+                Pair("dirs.app", ctx.dirs?.pathToApp ?: "")
         )
     }
 
-
-    private fun buildRequestSample(cmd:CliCommand): ResultMsg<String> {
+    private fun buildRequestSample(cmd: CliCommand): ResultMsg<String> {
         val opts = slatekit.common.InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
         val apiCmd = slatekit.common.Request.cli(cmd.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
 
@@ -162,8 +155,7 @@ class CliApi(private val creds: Credentials,
         return apis.sample(apiCmd, file)
     }
 
-
-    private fun buildRequestFromFile(cmd:CliCommand): Request {
+    private fun buildRequestFromFile(cmd: CliCommand): Request {
         // The file path
         val rawPath = cmd.args.getSysString(CliConstants.SysFile)
         val route = cmd.fullName()
@@ -175,11 +167,10 @@ class CliApi(private val creds: Credentials,
         return req
     }
 
-
-    private fun containsRequestLevelSystemCommand(cmd:CliCommand):Boolean {
+    private fun containsRequestLevelSystemCommand(cmd: CliCommand): Boolean {
         return cmd.args.sys.isNotEmpty() &&
-                (    cmd.args.sys.containsKey(CliConstants.SysFile)
-                  || cmd.args.sys.containsKey(CliConstants.SysSample)
+                (cmd.args.sys.containsKey(CliConstants.SysFile) ||
+                  cmd.args.sys.containsKey(CliConstants.SysSample)
                 )
     }
 }

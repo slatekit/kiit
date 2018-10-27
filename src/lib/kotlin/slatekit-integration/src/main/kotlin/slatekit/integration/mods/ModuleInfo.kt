@@ -13,16 +13,15 @@
 
 package slatekit.integration.mods
 
-
 data class ModuleInfo(
-        val name         : String,
-        val desc         : String,
-        val version      : String,
-        val isInstalled  : Boolean,
-        val isEnabled    : Boolean,
-        val isDbDependent: Boolean,
-        val totalModels  : Int,
-        val source       : String,
-        val dependencies : String,
-        val models       : List<String>? = null
+    val name: String,
+    val desc: String,
+    val version: String,
+    val isInstalled: Boolean,
+    val isEnabled: Boolean,
+    val isDbDependent: Boolean,
+    val totalModels: Int,
+    val source: String,
+    val dependencies: String,
+    val models: List<String>? = null
 )

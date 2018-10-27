@@ -13,13 +13,11 @@
 
 package slatekit.integration.common
 
-
 import slatekit.apis.support.ApiBase
 import slatekit.entities.core.Entities
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityService
 import kotlin.reflect.KClass
-
 
 /**
  * Base class for an Api that is used to access/manage database models / entities using the

@@ -15,17 +15,15 @@ package slatekit.integration.mods
 
 import slatekit.entities.support.EntitySetupService
 
-
 data class ModuleContext(
 
-        /**
-         * referece to service for performing checks/operations on module and status.
-         */
-        val service: ModService,
+    /**
+     * referece to service for performing checks/operations on module and status.
+     */
+    val service: ModService,
 
-
-        /**
-         * service to add / manage entities models.
-         */
-        val setup: EntitySetupService
+    /**
+     * service to add / manage entities models.
+     */
+    val setup: EntitySetupService
 )

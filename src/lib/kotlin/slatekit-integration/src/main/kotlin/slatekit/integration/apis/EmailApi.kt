@@ -28,10 +28,10 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
 
     /**
      * Sends the email message
-     * @param to      : The destination email address
+     * @param to : The destination email address
      * @param subject : The subject of email
-     * @param body    : The body of the email
-     * @param html    : Whether or not the email is html formatted
+     * @param body : The body of the email
+     * @param html : Whether or not the email is html formatted
      * @return
      */
     @ApiAction(desc = "send an email")
@@ -40,13 +40,12 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
         return this.svc.send(to, subject, content, html)
     }
 
-
     /**
      * Sends the email message
-     * @param to      : The destination email address
+     * @param to : The destination email address
      * @param subject : The subject of email
-     * @param body    : The body of the email
-     * @param html    : Whether or not the email is html formatted
+     * @param body : The body of the email
+     * @param html : Whether or not the email is html formatted
      * @return
      */
     @ApiAction(desc = "send an email")
@@ -55,14 +54,13 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
         return this.svc.send(to, subject, content, html)
     }
 
-
     /**
      * sends a message using the template and variables supplied
-     * @param name    : name of the template
-     * @param to      : The destination email address
+     * @param name : name of the template
+     * @param to : The destination email address
      * @param subject : The subject of email
-     * @param html    : Whether or not the email is html formatted
-     * @param vars    : values to replace the variables in template ( extra args on command line
+     * @param html : Whether or not the email is html formatted
+     * @param vars : values to replace the variables in template ( extra args on command line
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an email using a template")

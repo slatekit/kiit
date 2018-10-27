@@ -17,11 +17,12 @@ import slatekit.common.Failure
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.newline
-import slatekit.common.results.ResultFuncs.failure
 import slatekit.core.common.AppContext
 
-abstract class Module(val appCtx: AppContext,
-                      val modCtx: ModuleContext) {
+abstract class Module(
+    val appCtx: AppContext,
+    val modCtx: ModuleContext
+) {
     abstract val info: ModuleInfo
 
     /**
@@ -29,49 +30,44 @@ abstract class Module(val appCtx: AppContext,
      */
     open fun init() {}
 
-
     open fun register() {}
-
 
     /**
      * install this module
      */
-    open fun install() : ResultEx<String> {
+    open fun install(): ResultEx<String> {
         return if (info.isDbDependent) {
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.install(it, info.version, "", "") }
                 val success = results.all { it.success }
-                val messages = results.map { it.msg  }
-                val message = if(success) "" else messages.joinToString(newline)
-                if(success) Success(message, msg = "") else Failure(Exception(message), msg = message)
-            } ?: Failure(Exception(this.info.name + " has no models") )
+                val messages = results.map { it.msg }
+                val message = if (success) "" else messages.joinToString(newline)
+                if (success) Success(message, msg = "") else Failure(Exception(message), msg = message)
+            } ?: Failure(Exception(this.info.name + " has no models"))
         } else {
             Failure(Exception(this.info.name + " is not database dependent"))
         }
     }
-
 
     /**
      * install this module
      */
-    open fun uninstall() : ResultEx<String> {
+    open fun uninstall(): ResultEx<String> {
         return if (info.isDbDependent) {
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.uinstall(it) }
                 val success = results.all { it.success }
-                val messages = results.map { it.msg  }
-                val message = if(success) "" else messages.joinToString(newline)
-                if(success) Success(message, msg = "") else Failure(Exception(message), msg = message)
-            } ?: Failure(Exception(this.info.name + " has no models") )
+                val messages = results.map { it.msg }
+                val message = if (success) "" else messages.joinToString(newline)
+                if (success) Success(message, msg = "") else Failure(Exception(message), msg = message)
+            } ?: Failure(Exception(this.info.name + " has no models"))
         } else {
             Failure(Exception(this.info.name + " is not database dependent"))
         }
     }
 
-
-    open fun seed(): Unit {
+    open fun seed() {
     }
-
 
     /**
      * script out all the sql for all the modules.
@@ -84,13 +80,11 @@ abstract class Module(val appCtx: AppContext,
                     result.msg ?: modelName
                 }
             } ?: listOf<String>()
-        }
-        else
+        } else
             listOf<String>()
 
         return result
     }
-
 
     fun toItem(): Mod {
         val item = Mod(

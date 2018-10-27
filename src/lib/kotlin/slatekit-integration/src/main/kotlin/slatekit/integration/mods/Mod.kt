@@ -18,66 +18,50 @@ import slatekit.common.Field
 import slatekit.entities.core.EntityWithUUID
 import slatekit.entities.core.EntityWithId
 
-
 data class Mod(
-        @property:Field()
-        override val id: Long = 0L,
+    @property:Field()
+    override val id: Long = 0L,
 
+    @property:Field(length = 50)
+    val name: String = "",
 
-        @property:Field(length = 50)
-        val name: String = "",
+    @property:Field(length = 200)
+    val desc: String = "",
 
+    @property:Field(length = 30)
+    val version: String = "",
 
-        @property:Field(length = 200)
-        val desc: String = "",
+    @property:Field()
+    val isInstalled: Boolean = false,
 
+    @property:Field()
+    val isEnabled: Boolean = false,
 
-        @property:Field(length = 30)
-        val version: String = "",
+    @property:Field()
+    val isDbDependent: Boolean = false,
 
+    @property:Field()
+    val totalModels: Int = 0,
 
-        @property:Field()
-        val isInstalled: Boolean = false,
+    @property:Field(length = 50)
+    val source: String = "",
 
+    @property:Field(length = 100)
+    val dependencies: String = "",
 
-        @property:Field()
-        val isEnabled: Boolean = false,
+    @property:Field()
+    val createdAt: DateTime = DateTime.now(),
 
+    @property:Field()
+    val createdBy: Int = 0,
 
-        @property:Field()
-        val isDbDependent: Boolean = false,
+    @property:Field()
+    val updatedAt: DateTime = DateTime.now(),
 
+    @property:Field()
+    val updatedBy: Int = 0,
 
-        @property:Field()
-        val totalModels: Int = 0,
-
-
-        @property:Field(length = 50)
-        val source: String = "",
-
-
-        @property:Field(length = 100)
-        val dependencies: String = "",
-
-
-        @property:Field()
-        val createdAt: DateTime = DateTime.now(),
-
-
-        @property:Field()
-        val createdBy: Int = 0,
-
-
-        @property:Field()
-        val updatedAt: DateTime = DateTime.now(),
-
-
-        @property:Field()
-        val updatedBy: Int = 0,
-
-
-        @property:Field(length = 50)
-        override val uuid: String = ""
+    @property:Field(length = 50)
+    override val uuid: String = ""
 )
-    : EntityWithId, EntityWithUUID {
-}
+    : EntityWithId, EntityWithUUID

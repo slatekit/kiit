@@ -25,18 +25,15 @@ import slatekit.common.queues.QueueSource
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class QueueApi(val queue: QueueSource, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
-
     @ApiAction(desc = "close the queue")
-    fun close(): Unit {
+    fun close() {
         return queue.close()
     }
-
 
     @ApiAction(desc = "get the total items in the queue")
     fun count(): Int {
         return queue.count()
     }
-
 
     @ApiAction(desc = "get the next item in the queue")
     fun next(complete: Boolean): Any? {
@@ -46,7 +43,6 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
         }
         return item
     }
-
 
     @ApiAction(desc = "get the next set of items in the queue")
     fun nextBatch(size: Int = 10, complete: Boolean): List<Any> {
@@ -61,11 +57,9 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
         return items ?: listOf()
     }
 
-
     fun getContent(msg: Any?): String {
         return (queue as slatekit.common.queues.QueueSourceMsg).getMessageBody(msg)
     }
-
 
     @ApiAction(desc = "gets next item and saves it to file")
     fun nextToFile(complete: Boolean, fileNameLocal: String): Any? {
@@ -76,7 +70,6 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
         return writeToFile(item, fileNameLocal, 0, { m -> getContent(m) })
     }
 
-
     @ApiAction(desc = "gets next set of items and saves them to files")
     fun nextBatchToFiles(size: Int = 10, complete: Boolean, fileNameLocal: String): List<String?> {
         val items = queue.nextBatch(size)
@@ -86,18 +79,15 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
         return result
     }
 
-
     @ApiAction(desc = "sends a message to the queue")
     fun send(msg: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(msg, tagName, tagValue)
     }
 
-
     @ApiAction(desc = "sends a message to queue using content from file")
     fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.sendFromFile(uri, tagName, tagValue)
     }
-
 
     @ApiAction(desc = "sends a message to queue using content from file")
     fun sendFromDoc(doc: slatekit.common.Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {

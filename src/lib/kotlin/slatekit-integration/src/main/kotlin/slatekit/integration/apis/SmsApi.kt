@@ -24,28 +24,26 @@ import slatekit.common.Vars
 import slatekit.core.common.AppContext
 import slatekit.core.sms.SmsService
 
-
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
         auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
 class SmsApi(val svc: SmsService, override val context: AppContext) : ApiWithSupport {
     /**
      * sends a message
-     * @param message     : message to send
+     * @param message : message to send
      * @param countryCode : destination phone country code
-     * @param phone       : destination phone
+     * @param phone : destination phone
      */
     @ApiAction(desc = "send an sms")
     fun send(message: String, countryCode: String, phone: String): ResultMsg<Boolean> {
         return this.svc.send(message, countryCode, phone)
     }
 
-
     /**
      * sends a message using the template and variables supplied
-     * @param name        : name of the template
+     * @param name : name of the template
      * @param countryCode : destination phone country code
-     * @param phone       : destination phone
-     * @param vars        : values to replace the variables in template ( extra args on command line
+     * @param phone : destination phone
+     * @param vars : values to replace the variables in template ( extra args on command line
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an sms using a template")
