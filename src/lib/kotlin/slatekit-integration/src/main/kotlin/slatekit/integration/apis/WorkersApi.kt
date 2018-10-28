@@ -21,7 +21,7 @@ import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Ioc
 import slatekit.integration.common.AppEntContext
-import slatekit.core.workers.*
+import slatekit.workers.*
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
