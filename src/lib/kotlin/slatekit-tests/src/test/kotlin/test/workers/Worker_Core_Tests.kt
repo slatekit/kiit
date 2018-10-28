@@ -7,7 +7,7 @@ import slatekit.common.Success
 import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.status.*
-import slatekit.workers.core.Job
+import slatekit.workers.Job
 import slatekit.workers.core.Events
 import test.setup.MyWorker
 

@@ -15,7 +15,7 @@ package test.workers
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.Success
-import slatekit.workers.core.Job
+import slatekit.workers.Job
 import slatekit.workers.Worker
 
 class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)

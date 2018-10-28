@@ -13,6 +13,7 @@ mantra: Simplicity above all else
 package slatekit.workers.core
 
 import slatekit.common.queues.QueueSourceMsg
+import slatekit.workers.Job
 import slatekit.workers.Worker
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.ArrayBlockingQueue

@@ -3,6 +3,7 @@ package slatekit.workers.core
 import slatekit.common.DateTime
 import slatekit.common.Failure
 import slatekit.common.ResultEx
+import slatekit.workers.Job
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 

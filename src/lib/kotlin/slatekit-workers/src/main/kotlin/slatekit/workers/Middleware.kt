@@ -14,7 +14,6 @@ package slatekit.workers
 
 import slatekit.common.Failure
 import slatekit.common.Result
-import slatekit.workers.core.Job
 
 open class Middleware {
 

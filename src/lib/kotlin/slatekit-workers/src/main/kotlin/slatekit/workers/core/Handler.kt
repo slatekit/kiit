@@ -3,6 +3,7 @@ package slatekit.workers.core
 import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.log.Logger
+import slatekit.workers.Job
 import slatekit.workers.Worker
 
 /**

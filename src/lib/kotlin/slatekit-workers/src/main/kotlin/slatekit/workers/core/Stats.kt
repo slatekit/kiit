@@ -15,6 +15,7 @@ package slatekit.workers.core
 import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.status.RunState
+import slatekit.workers.Job
 
 /**
  * Worker level status that can be supplied to a front-end

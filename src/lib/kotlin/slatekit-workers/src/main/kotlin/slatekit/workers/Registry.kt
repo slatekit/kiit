@@ -13,7 +13,6 @@ mantra: Simplicity above all else
 package slatekit.workers
 
 import slatekit.common.queues.QueueSourceMsg
-import slatekit.workers.core.Job
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Utils
 import java.util.*

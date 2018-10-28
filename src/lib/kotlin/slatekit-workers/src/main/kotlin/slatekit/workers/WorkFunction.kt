@@ -1,7 +1,6 @@
 package slatekit.workers
 
 import slatekit.common.ResultEx
-import slatekit.workers.core.Job
 
 /**
  * Type Alias for the function inputs/outputs representing a work method.
