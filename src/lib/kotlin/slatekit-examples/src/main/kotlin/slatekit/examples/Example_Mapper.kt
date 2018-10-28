@@ -19,7 +19,7 @@ import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
-import slatekit.meta.buildAddTable
+import slatekit.entities.databases.MySqlEntityDDL
 import slatekit.meta.models.ModelMapper
 
 //</doc:import_required>
@@ -164,7 +164,7 @@ class Example_Mapper : Cmd("mapper") {
         println(sqlForUpdate)
 
         // CASE 7: Generate the table schema for mysql from the model
-        println("table sql : " + buildAddTable(DbSourceMySql(), schema1))
+        println("table sql : " + MySqlEntityDDL().buildAddTable(DbSourceMySql(), schema1))
         //</doc:examples>
 
         return Success("")

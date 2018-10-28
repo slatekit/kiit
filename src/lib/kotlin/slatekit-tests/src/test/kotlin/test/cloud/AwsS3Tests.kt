@@ -1,5 +1,6 @@
 package test.cloud
 
+import org.junit.Ignore
 import org.junit.Test
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.common.DateTime
@@ -9,6 +10,7 @@ import slatekit.core.cloud.CloudFilesBase
 import java.io.File
 
 
+@Ignore
 class AwsS3Tests {
 
     val SLATEKIT_DIR = ".slatekit"

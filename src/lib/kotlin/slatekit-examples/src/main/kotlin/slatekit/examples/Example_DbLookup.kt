@@ -23,8 +23,8 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
-import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
+import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbLookup.Companion.namedDbs
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>

@@ -23,6 +23,9 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.db.DbConString
+import slatekit.common.security.ApiKey
+import slatekit.common.security.ApiLogin
+
 //</doc:import_examples>
 
 
@@ -60,10 +63,8 @@ class Example_Utils : Cmd("utils") {
     // - file dir: file://{path}   ( absolution file location    )
     // This yeilds c:/users/{user1}/myapp1
     val path1 = Uris.interpret("user://myapp1")
+    println(path1)
 
-    // CASE 6: BoolMessage
-    // combined bool / string instead of a tuple
-    val result = BoolMessage(true, "successfuly created")
     //</doc:examples>
     return Success("")
   }

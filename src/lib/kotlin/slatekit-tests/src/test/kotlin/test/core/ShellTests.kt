@@ -33,13 +33,13 @@ class ShellTests  {
 
     @Test fun can_execute_command() {
       val shell = getCli()
-      val result = shell.onCommandExecute("sys.app.host")
+      val result = shell.onCommandExecute("app.version.host")
 
       val cmd = result.getOrElse { CliCommand.build(Args.default(), "") }
-      assert( cmd.area == "sys" )
-      assert( cmd.name == "app" )
+      assert( cmd.area == "app" )
+      assert( cmd.name == "version" )
       assert( cmd.action == "host" )
-      assert( cmd.line == "sys.app.host" )
+      assert( cmd.line == "app.version.host" )
       assert( cmd.result!!.success)
     }
   
@@ -64,7 +64,7 @@ class ShellTests  {
 
     @Test fun can_handle_help_for_area_api() {
       val shell = getCli()
-      val result = shell.onCommandExecute("sys.app ?")
+      val result = shell.onCommandExecute("app.info ?")
       assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert(result.msg == "area.api ?")
@@ -73,7 +73,7 @@ class ShellTests  {
 
     @Test fun can_handle_help_for_area_api_action() {
       val shell = getCli()
-      val result = shell.onCommandExecute("sys.app.host ?")
+      val result = shell.onCommandExecute("app.version.host ?")
       assert( result.getOrElse { null } == null )
       assert( result.code == HELP )
       assert( result.msg  == "area.api.action ?")

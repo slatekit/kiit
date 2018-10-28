@@ -266,8 +266,16 @@ class ReflectorTests {
     }
 
 
-    @Test fun can_get_annotation_for_method() {
-        val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class)
+    @Test fun can_get_annotation_for_method_declared() {
+        val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, true)
+        assertEquals(25, members.size )
+        assertEquals("activate", members[0].second.name)
+        assertEquals("", members[1].second.name)
+    }
+
+
+    @Test fun can_get_annotation_for_method_with_inherited() {
+        val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, false)
         assertEquals(41, members.size )
         assertEquals("activate", members[0].second.name)
         assertEquals("", members[1].second.name)

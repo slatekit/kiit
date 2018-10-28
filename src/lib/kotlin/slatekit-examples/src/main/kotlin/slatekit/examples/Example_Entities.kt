@@ -44,8 +44,8 @@ class Example_Entities : Cmd("entities") {
                             val lastName  : String = "Doe",
                             override val createdAt : DateTime = DateTime.now(),
                             override val updatedAt : DateTime = DateTime.now(),
-                            override val updatedBy : Long = 0,
-                            override val createdBy : Long = 0
+                            override val updatedBy : String = "",
+                            override val createdBy : String = ""
                         )
     : EntityWithId, EntityWithTime, EntityWithUser
 
@@ -62,8 +62,8 @@ class Example_Entities : Cmd("entities") {
                          val lastName  : String = "Doe",
                          override val createdAt : DateTime = DateTime.now(),
                          override val updatedAt : DateTime = DateTime.now(),
-                         override val updatedBy : Long = 0,
-                         override val createdBy : Long = 0,
+                         override val updatedBy : String = "",
+                         override val createdBy : String = "",
                          override val uuid  : String = Random.guid()
                        )
     : EntityWithId, EntityWithTime, EntityWithUser, EntityWithUUID
@@ -86,8 +86,8 @@ class Example_Entities : Cmd("entities") {
                           val lastName  : String = "Doe",
                           override val createdAt : DateTime = DateTime.now(),
                           override val updatedAt : DateTime = DateTime.now(),
-                          override val updatedBy : Long = 0,
-                          override val createdBy : Long = 0,
+                          override val updatedBy : String = "",
+                          override val createdBy : String = "",
                           override val uuid  : String = Random.guid()
                         )
     : EntityWithId, EntityWithMeta

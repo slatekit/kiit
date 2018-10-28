@@ -12,7 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.RefField
+import slatekit.common.validations.RefField
 import slatekit.common.validations.Validator
 import slatekit.common.validations.ValidationFuncsExt
 import slatekit.common.validations.ValidationResults
@@ -21,7 +21,6 @@ import slatekit.common.validations.Validations.collect
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.validations.ValidationFuncs.isEmpty

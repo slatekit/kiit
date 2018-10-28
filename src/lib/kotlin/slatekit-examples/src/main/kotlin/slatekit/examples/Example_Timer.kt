@@ -19,6 +19,7 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.results.ResultTimed
+import slatekit.common.utils.Measure
 
 //</doc:import_examples>
 

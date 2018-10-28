@@ -18,10 +18,9 @@ import slatekit.common.*
 
 //<doc:import_examples>
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
-import slatekit.core.workers.*
+import slatekit.workers.*
 
 //</doc:import_examples>
 
@@ -39,7 +38,7 @@ class Example_Workers : Cmd("utils") {
         // 3. Manager : Manages a group and ensures each idle worker perform work
         // 4. System  : Top level system that runs workers in a java executor service
         // 5. Queued  : Interface for handling work from a queue
-        val sys = slatekit.core.workers.System(AppContext.sample("test", "", "", ""), listOf())
+        val sys = slatekit.workers.System(AppContext.sample("test", "", "", ""), listOf())
 
         // CASE 1: Register a named worker in the default group "default"
         sys.register(Worker<String>(
