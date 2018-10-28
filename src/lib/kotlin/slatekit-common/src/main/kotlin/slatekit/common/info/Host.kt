@@ -13,7 +13,7 @@
 
 package slatekit.common.info
 
-import slatekit.common.Props
+import slatekit.common.utils.Props
 
 /**
  * Represents a host such as a cloud server. e.g. ec2

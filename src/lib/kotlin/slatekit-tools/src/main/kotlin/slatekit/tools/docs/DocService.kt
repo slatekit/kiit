@@ -3,6 +3,7 @@ package slatekit.tools.docs
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.utils.StringParser
 import java.io.File
 
 class DocService(val _rootdir:String, val _outputDir:String, val templatePath:String) {
