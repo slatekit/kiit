@@ -4,7 +4,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Requests
 import slatekit.common.*
-import slatekit.core.workers.*
+import slatekit.workers.*
 
 open class WorkerWithQueuesApi(
     val container: ApiContainer,
