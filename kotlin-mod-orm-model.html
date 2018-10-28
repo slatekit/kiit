@@ -146,7 +146,7 @@
 <span class="k">import</span> <span class="nn">slatekit.common.db.types.DbSourceMySql</span>
 <span class="k">import</span> <span class="nn">slatekit.common.info.Host</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
-<span class="k">import</span> <span class="nn">slatekit.meta.buildAddTable</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.databases.MySqlEntityDDL</span>
 
 
 
@@ -227,7 +227,7 @@
 </span>    <span class="n">showResult</span> <span class="p">(</span><span class="s">"model api/fullName: "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">name</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">model</span><span class="p">.</span><span class="n">fullName</span><span class="p">)</span>
 
     <span class="c1">// CASE 10. build up the table sql for this model
-</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">model</span><span class="p">))</span>
+</span>    <span class="n">showResult</span><span class="p">(</span> <span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">MySqlEntityDDL().buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">model</span><span class="p">))</span>
     
 
 </code></pre>

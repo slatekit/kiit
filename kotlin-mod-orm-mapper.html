@@ -145,7 +145,7 @@
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
 <span class="k">import</span> <span class="nn">slatekit.entities.core.EntityMapper</span>
 <span class="k">import</span> <span class="nn">slatekit.entities.core.EntityWithId</span>
-<span class="k">import</span> <span class="nn">slatekit.meta.buildAddTable</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.databases.MySqlEntityDDL</span>
 <span class="k">import</span> <span class="nn">slatekit.meta.models.ModelMapper</span>
 
 
@@ -294,7 +294,7 @@
         <span class="n">println</span><span class="p">(</span><span class="n">sqlForUpdate</span><span class="p">)</span>
 
         <span class="c1">// CASE 7: Generate the table schema for mysql from the model
-</span>        <span class="n">println</span><span class="p">(</span><span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">schema1</span><span class="p">))</span>
+</span>        <span class="n">println</span><span class="p">(</span><span class="s">"table sql : "</span> <span class="p">+</span> <span class="n">MySqlEntityDDL().buildAddTable</span><span class="p">(</span><span class="n">DbSourceMySql</span><span class="p">(),</span> <span class="n">schema1</span><span class="p">))</span>
         
 
 </code></pre>

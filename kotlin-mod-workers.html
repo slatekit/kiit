@@ -146,8 +146,7 @@
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.success</span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
-<span class="k">import</span> <span class="nn">slatekit.core.workers.WorkerSettings</span>
-<span class="k">import</span> <span class="nn">slatekit.core.workers.WorkerWithQueue</span>
+<span class="k">import</span> <span class="nn">slatekit.core.workers.*</span>
 
 
 
@@ -166,7 +165,7 @@
         <span class="c1">// 3. Manager : Manages a group and ensures each idle worker perform work</span>
         <span class="c1">// 4. System  : Top level system that runs workers in a java executor service</span>
         <span class="c1">// 5. Queued  : Interface for handling work from a queue</span>
-        <span class="kd">val</span> <span class="py">sys</span> <span class="p">=</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">workers</span><span class="p">.</span><span class="n">System</span><span class="p">()</span>
+        <span class="kd">val</span> <span class="py">sys</span> <span class="p">=</span> <span class="n">slatekit</span><span class="p">.</span><span class="n">workers</span><span class="p">.</span><span class="n">System</span><span class="p">()</span>
 
         <span class="c1">// CASE 1: Register a named worker in the default group "default"</span>        
         <span class="n">sys</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Worker</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"emailer"</span><span class="p">,</span> <span class="n">callback</span> <span class="p">=</span> <span class="p">{</span>
