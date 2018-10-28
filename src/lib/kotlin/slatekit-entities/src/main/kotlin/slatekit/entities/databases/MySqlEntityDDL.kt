@@ -2,7 +2,7 @@ package slatekit.entities.databases
 
 import slatekit.common.naming.Namer
 import slatekit.common.db.Db
-import slatekit.common.db.DbFieldTypeNumber
+import slatekit.common.db.DbFieldType
 import slatekit.common.db.DbUtils
 import slatekit.common.db.types.DbSource
 import slatekit.common.newline
@@ -93,7 +93,7 @@ class MySqlEntityDDL : EntityDDL {
         val dataFieldSql = dataFields.fold("", { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
-                acc + ", " + dbSrc.buildAddCol(finalStoredName, DbFieldTypeNumber, field.isRequired, field.maxLength)
+                acc + ", " + dbSrc.buildAddCol(finalStoredName, DbFieldType.DbNumber, field.isRequired, field.maxLength)
             } else if (field.model != null) {
                 val sql = buildColumns(field.storedName, dbSrc, field.model!!, false, namer)
                 acc + sql

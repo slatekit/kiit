@@ -26,38 +26,38 @@ open class DbSourceMySql : DbSource {
      * Mapping of normalized types ot postgres type names
      */
     val dataToColumnTypes = mapOf(
-        DbFieldTypeString to  "NVARCHAR",
-        DbFieldTypeBool to  "BIT",
-        DbFieldTypeShort to  "TINYINT",
-        DbFieldTypeNumber to  "INTEGER",
-        DbFieldTypeLong to  "BIGINT",
-        DbFieldTypeFloat to  "FLOAT",
-        DbFieldTypeDouble to  "DOUBLE",
-        DbFieldTypeReal to  "DECIMAL",
-        DbFieldTypeLocalDate to  "DATE",
-        DbFieldTypeLocalTime to  "TIME",
-        DbFieldTypeLocalDateTime to  "DATETIME",
-        DbFieldTypeZonedDateTime to  "DATETIME",
-        DbFieldTypeInstant to  "INSTANT",
-        DbFieldTypeDateTime to  "DATETIME"
+        DbFieldType.DbString to  "NVARCHAR",
+        DbFieldType.DbBool to  "BIT",
+        DbFieldType.DbShort to  "TINYINT",
+        DbFieldType.DbNumber to  "INTEGER",
+        DbFieldType.DbLong to  "BIGINT",
+        DbFieldType.DbFloat to  "FLOAT",
+        DbFieldType.DbDouble to  "DOUBLE",
+        DbFieldType.DbReal to  "DECIMAL",
+        DbFieldType.DbLocalDate to  "DATE",
+        DbFieldType.DbLocalTime to  "TIME",
+        DbFieldType.DbLocalDateTime to  "DATETIME",
+        DbFieldType.DbZonedDateTime to  "DATETIME",
+        DbFieldType.DbInstant to  "INSTANT",
+        DbFieldType.DbDateTime to  "DATETIME"
     )
 
 
     val langToDataTypes = mapOf(
-        Types.JBoolClass to  DbFieldTypeBool,
-        Types.JStringClass to  DbFieldTypeString,
-        Types.JShortClass to  DbFieldTypeShort,
-        Types.JIntClass to  DbFieldTypeNumber,
-        Types.JLongClass to  DbFieldTypeLong,
-        Types.JFloatClass to  DbFieldTypeFloat,
-        Types.JDoubleClass to  DbFieldTypeDouble,
-        Types.JDecimalClass to  DbFieldTypeReal,
-        Types.JLocalDateClass to  DbFieldTypeLocalDate,
-        Types.JLocalTimeClass to  DbFieldTypeLocalTime,
-        Types.JLocalDateTimeClass to  DbFieldTypeLocalDateTime,
-        Types.JZonedDateTimeClass to  DbFieldTypeZonedDateTime,
-        Types.JInstantClass to  DbFieldTypeInstant,
-        Types.JDateTimeClass to  DbFieldTypeDateTime
+        Types.JBoolClass to  DbFieldType.DbBool,
+        Types.JStringClass to  DbFieldType.DbString,
+        Types.JShortClass to  DbFieldType.DbShort,
+        Types.JIntClass to  DbFieldType.DbNumber,
+        Types.JLongClass to  DbFieldType.DbLong,
+        Types.JFloatClass to  DbFieldType.DbFloat,
+        Types.JDoubleClass to  DbFieldType.DbDouble,
+        Types.JDecimalClass to  DbFieldType.DbReal,
+        Types.JLocalDateClass to  DbFieldType.DbLocalDate,
+        Types.JLocalTimeClass to  DbFieldType.DbLocalTime,
+        Types.JLocalDateTimeClass to  DbFieldType.DbLocalDateTime,
+        Types.JZonedDateTimeClass to  DbFieldType.DbZonedDateTime,
+        Types.JInstantClass to  DbFieldType.DbInstant,
+        Types.JDateTimeClass to  DbFieldType.DbDateTime
     )
 
     /**
@@ -91,9 +91,9 @@ open class DbSourceMySql : DbSource {
      * Builds a valid column type
      */
     override fun buildColType(colType: DbFieldType, maxLen: Int): String {
-        return if (colType == DbFieldTypeString && maxLen == -1)
+        return if (colType == DbFieldType.DbString && maxLen == -1)
             "longtext"
-        else if (colType == DbFieldTypeString)
+        else if (colType == DbFieldType.DbString)
             "VARCHAR($maxLen)"
         else
             getColTypeName(colType)

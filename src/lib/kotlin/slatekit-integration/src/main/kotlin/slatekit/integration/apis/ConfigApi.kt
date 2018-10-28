@@ -26,7 +26,7 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbTypeMySql
+import slatekit.common.db.DbType.DbTypeMySql
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.cli)
