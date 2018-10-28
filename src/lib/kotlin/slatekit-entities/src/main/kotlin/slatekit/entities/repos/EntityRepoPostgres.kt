@@ -39,7 +39,7 @@ open class EntityRepoPostgres<T>(
     encryptor: Encryptor? = null
 )
     : EntityRepoMySql<T>(db, entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
-    
+
 
     override fun repoName(): String =
             "\"" + super.repoName() + "\""
