@@ -1,23 +1,6 @@
 DEPENDENCIES:
 
 
-# AKKA HTTP 
-- akka-actor_2.11-2.4.10.jar
-- akka-http-core_2.11-2.4.10.jar
-- akka-http-experimental_2.11-2.4.10.jar
-- akka-http-spray-json-experimental_2.11-2.4.10.jar
-- akka-parsing_2.11-2.4.10.jar
-- akka-stream_2.11-2.4.10.jar
-- reactive-streams-1.0.0.jar
-- scala-java8-compat_2.11-0.7.0.jar
-- scala-library.jar
-- scala-parser-combinators_2.11-1.0.4.jar
-- scala-reflect.jar
-- spray-json_2.11-1.3.2.jar
-- ssl-config-akka_2.11-0.2.1.jar
-- ssl-config-core_2.11-0.2.1.jar
-
-
 # AWS
 - aws-java-sdk-1.10.55.jar
 
