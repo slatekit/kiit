@@ -23,7 +23,6 @@ import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.examples.common.User
-import slatekit.meta.createTable
 import slatekit.meta.models.ModelMapper
 
 //</doc:import_examples>

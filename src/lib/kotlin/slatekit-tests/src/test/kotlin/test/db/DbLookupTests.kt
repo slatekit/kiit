@@ -24,36 +24,43 @@ import slatekit.common.db.DbLookup.Companion.namedDbs
  */
 class DbLookupTests {
 
-    fun buildDefaultConnection(name:String = "db1"):DbConString  =
-        DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/" + name,
-        "root", "abcdefghi")
+    fun buildDefaultConnection(name: String = "db1"): DbConString =
+        DbConString(
+            "com.mysql.jdbc.Driver", "jdbc:mysql://localhost/" + name,
+            "root", "abcdefghi"
+        )
 
 
-    @Test fun can_create_dblookup_with_no_connections() {
+    @Test
+    fun can_create_dblookup_with_no_connections() {
         val dbs = DbLookup()
-        assert( dbs.default() == null )
-        assert( dbs.named("") == null )
-        assert( dbs.group("", "") == null )
+        assert(dbs.default() == null)
+        assert(dbs.named("") == null)
+        assert(dbs.group("", "") == null)
     }
 
 
-    @Test fun can_create_dblookup_with_default_db() {
+    @Test
+    fun can_create_dblookup_with_default_db() {
         val dbs = defaultDb(buildDefaultConnection())
-        ensureDb( dbs, buildDefaultConnection())
-        assert( dbs.named("") == null )
-        assert( dbs.group("", "") == null  )
+        ensureDb(dbs, buildDefaultConnection())
+        assert(dbs.named("") == null)
+        assert(dbs.group("", "") == null)
     }
 
 
-    @Test fun can_create_dblookup_with_named_connections() {
-        val dbs = namedDbs(listOf(
+    @Test
+    fun can_create_dblookup_with_named_connections() {
+        val dbs = namedDbs(
+            listOf(
                 Pair("users", buildDefaultConnection("u1")),
                 Pair("files", buildDefaultConnection("f1"))
-        ))
+            )
+        )
 
-        ensureNamedDb( dbs, "users", buildDefaultConnection("u1"))
-        ensureNamedDb( dbs, "files", buildDefaultConnection("f1"))
-        assert( dbs.group("", "") === null )
+        ensureNamedDb(dbs, "users", buildDefaultConnection("u1"))
+        ensureNamedDb(dbs, "files", buildDefaultConnection("f1"))
+        assert(dbs.group("", "") === null)
     }
 
 
@@ -77,27 +84,26 @@ class DbLookupTests {
 //    }
 
 
-
-    fun ensureDb(dbs:DbLookup, con: DbConString):Unit {
-        assert( dbs.default() != null )
+    fun ensureDb(dbs: DbLookup, con: DbConString): Unit {
+        assert(dbs.default() != null)
         ensureDb(dbs.default()!!, con)
     }
 
 
-    fun ensureDb(expected: DbCon, actual:DbConString):Unit{
-        assert( expected.driver   == actual.driver )
-        assert( expected.password == actual.password )
-        assert( expected.url      == actual.url )
-        assert( expected.user     == actual.user )
+    fun ensureDb(expected: DbCon, actual: DbConString): Unit {
+        assert(expected.driver == actual.driver)
+        assert(expected.password == actual.password)
+        assert(expected.url == actual.url)
+        assert(expected.user == actual.user)
     }
 
 
-    fun ensureNamedDb(dbs:DbLookup, name:String, con:DbConString):Unit {
-        ensureDb( dbs.named(name)!!, con)
+    fun ensureNamedDb(dbs: DbLookup, name: String, con: DbConString): Unit {
+        ensureDb(dbs.named(name)!!, con)
     }
 
 
-    fun ensureGroupedDb(dbs:DbLookup, group:String, name:String, con:DbConString):Unit {
-        ensureDb( dbs.group(group, name)!!, con)
+    fun ensureGroupedDb(dbs: DbLookup, group: String, name: String, con: DbConString): Unit {
+        ensureDb(dbs.group(group, name)!!, con)
     }
 }
