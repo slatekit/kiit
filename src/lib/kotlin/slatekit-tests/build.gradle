@@ -36,6 +36,7 @@ dependencies {
     compile project(":slatekit-entities")
     compile project(":slatekit-core")
     compile project(":slatekit-apis")
+    compile project(":slatekit-workers")
     compile project(":slatekit-integration")
     compile project(":slatekit-cloud")
     testCompile 'junit:junit:4.12'

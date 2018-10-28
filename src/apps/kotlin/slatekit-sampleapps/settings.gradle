@@ -27,6 +27,9 @@ project(':slatekit-ext').projectDir=new File('../../../lib/kotlin/slatekit-ext')
 include ':slatekit-server'
 project(':slatekit-server').projectDir=new File('../../../lib/kotlin/slatekit-server')
 
+include ':slatekit-workers'
+project(':slatekit-workers').projectDir=new File('../../../lib/kotlin/slatekit-workers')
+
 include ':slatekit-providers'
 project(':slatekit-providers').projectDir=new File('../../../lib/kotlin/slatekit-providers')
 

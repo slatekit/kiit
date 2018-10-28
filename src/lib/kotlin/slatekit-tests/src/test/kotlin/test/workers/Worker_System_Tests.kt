@@ -1,11 +1,8 @@
 package test.workers
 
-import org.junit.Test
-import slatekit.common.getOrElse
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
 import slatekit.core.common.AppContext
-import slatekit.core.workers.*
+import slatekit.workers.*
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
 // http://www.vogella.com/tutorials/JavaConcurrency/article.html
