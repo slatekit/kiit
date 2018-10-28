@@ -7,7 +7,7 @@ import slatekit.common.*
 import slatekit.common.conf.Config
 import slatekit.common.http.HttpMethod
 import slatekit.common.http.HttpRequest
-import slatekit.common.log.Logs
+import slatekit.common.io.IO
 import slatekit.common.log.LogsDefault
 import slatekit.core.push.MessageServiceGoogle
 import slatekit.core.push.Notification

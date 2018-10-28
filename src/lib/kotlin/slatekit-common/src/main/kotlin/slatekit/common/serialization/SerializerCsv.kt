@@ -13,7 +13,6 @@
 
 package slatekit.common.serialization
 
-import slatekit.common.Serializer
 import slatekit.common.newline
 
 /**

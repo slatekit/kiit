@@ -13,7 +13,7 @@
 
 package slatekit.common.console
 
-import slatekit.common.IO
+import slatekit.common.io.IO
 import slatekit.common.newline
 
 interface ConsoleWrites {

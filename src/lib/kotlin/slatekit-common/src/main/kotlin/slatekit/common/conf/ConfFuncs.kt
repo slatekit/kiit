@@ -13,7 +13,7 @@
 
 package slatekit.common.conf
 
-import slatekit.common.Files
+import slatekit.common.io.Files
 import slatekit.common.Require
 import slatekit.common.*
 import slatekit.common.Uris.URI_PREFIX_FILE

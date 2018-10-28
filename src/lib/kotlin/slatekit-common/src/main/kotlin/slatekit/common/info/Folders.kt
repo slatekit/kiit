@@ -13,7 +13,7 @@
 
 package slatekit.common.info
 
-import slatekit.common.Files
+import slatekit.common.io.Files
 import slatekit.common.app.AppLocation
 import slatekit.common.app.LocationUserDir
 import java.io.File

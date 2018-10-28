@@ -13,8 +13,6 @@
 
 package slatekit.common.serialization
 
-import slatekit.common.Serializer
-
 /**
  * Created by kishorereddy on 6/3/17.
  */
