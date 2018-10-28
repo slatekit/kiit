@@ -17,10 +17,10 @@ package slatekit.common.results
  * Minimal subset of http status codes to be used as general purpose codes.
  *
  * DESIGN: One may think that http status code should have no connection
- * outside of an Http context. And therefore, the codes used could be
- * considered an implementation leak. However, consider the following:
+ * outside of an Http context. The http codes in a services/logic layer
+ * could be considered an implementation leak. However, consider the following:
  *
- * 1. Many of the status code are actual quite general purpose.
+ * 1. Many of the http status code are actual quite general purpose.
  *    Such as Ok, BadRequest, Unexpected Error, Unauthorized, etc.
  *
  * 2. They are purposely designed to be extendable
@@ -32,7 +32,17 @@ package slatekit.common.results
  *    ArgumentException        Bad_Request
  *    SecurityException        Unauthorized
  *    NotImplementedError      NotImplemented
+ *    Exception                Server_Error
  *
+ * NOTES:
+ * You can also use any codes in the Result<S, F> component which models
+ * successes and failures. Then just before you return an response at your
+ * application boundary ( such as an Http Endpoint ), you can then convert
+ * your application code to a Http Status code.
+ *
+ * The point is you can use any codes you want and some of the http status
+ * code are ( on a philosophical level ) considered general purpose in slatekit.
+ * 
  */
 
 object ResultCode {
