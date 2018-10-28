@@ -1,4 +1,4 @@
-package slatekit.core.workers
+package slatekit.workers
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
@@ -23,6 +23,7 @@ data class Job(val id: String, val queue: String, val task: String, val payload:
     companion object {
 
         @JvmStatic
-        val empty: Job = Job("empty", "empty", "empty", "empty", "empty", "empty")
+        val empty: Job =
+            Job("empty", "empty", "empty", "empty", "empty", "empty")
     }
 }

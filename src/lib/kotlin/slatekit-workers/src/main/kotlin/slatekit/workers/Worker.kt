@@ -1,10 +1,10 @@
-package slatekit.core.workers
+package slatekit.workers
 
 import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.common.status.*
-import slatekit.core.workers.core.*
+import slatekit.workers.core.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**

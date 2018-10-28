@@ -8,8 +8,6 @@ import slatekit.apis.core.Api
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.common.AppContext
-import slatekit.core.workers.*
-import slatekit.integration.workers.WorkerWithQueuesApi
 import test.setup.SampleTypes2Api
 import test.setup.WorkerSampleApi
 

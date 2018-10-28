@@ -6,11 +6,9 @@ import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.status.*
-import slatekit.core.workers.Job
-import slatekit.core.workers.WorkerSettings
-import slatekit.core.workers.core.Events
+import slatekit.workers.Job
+import slatekit.workers.core.Events
 import test.setup.MyWorker
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues

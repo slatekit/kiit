@@ -10,9 +10,9 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers
+package slatekit.workers
 
-import slatekit.core.workers.core.QueueInfo
+import slatekit.workers.core.QueueInfo
 import java.util.*
 
 /**

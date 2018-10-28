@@ -12,7 +12,7 @@ usage: Please refer to license on github for more info.
 package test.entities
 
 import org.junit.Test
-import slatekit.common.db.DbTypeMemory
+import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.entities.core.*
 import test.setup.Phone
 import test.setup.User5

@@ -1,7 +1,7 @@
-package slatekit.core.workers.core
+package slatekit.workers.core
 
 import slatekit.common.log.Logger
-import slatekit.core.workers.Worker
+import slatekit.workers.Worker
 
 /**
  * Handles various events from the Manager/Worker such as status changes

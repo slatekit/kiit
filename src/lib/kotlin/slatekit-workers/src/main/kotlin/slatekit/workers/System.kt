@@ -1,10 +1,10 @@
-package slatekit.core.workers
+package slatekit.workers
 
+import slatekit.common.Context
 import slatekit.common.info.About
 import slatekit.common.status.*
-import slatekit.core.common.AppContext
-import slatekit.core.workers.core.QueueInfo
-import slatekit.core.workers.core.Stats
+import slatekit.workers.core.QueueInfo
+import slatekit.workers.core.Stats
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
  * 6. control a specific worker life-cycle methods ( start, stop, pause, resume )
  */
 open class System(
-    val ctx: AppContext,
+    val ctx: Context,
     val queueInfos: List<QueueInfo>,
     service: ExecutorService? = null,
     val managerCreator: ((System) -> Manager)? = null,

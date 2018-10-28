@@ -15,6 +15,9 @@ project(':slatekit-core').projectDir=new File('../slatekit-core')
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 
+include ':slatekit-workers'
+project(':slatekit-workers').projectDir=new File('../slatekit-workers')
+
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../slatekit-integration')
 

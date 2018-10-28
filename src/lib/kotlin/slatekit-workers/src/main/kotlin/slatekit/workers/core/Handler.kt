@@ -1,10 +1,10 @@
-package slatekit.core.workers.core
+package slatekit.workers.core
 
 import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.log.Logger
-import slatekit.core.workers.Job
-import slatekit.core.workers.Worker
+import slatekit.workers.Job
+import slatekit.workers.Worker
 
 /**
  * Handler class to support the result of a job having been worked on by a worker

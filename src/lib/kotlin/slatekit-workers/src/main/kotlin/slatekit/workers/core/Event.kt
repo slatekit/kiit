@@ -1,6 +1,6 @@
-package slatekit.core.workers.core
+package slatekit.workers.core
 
-import slatekit.core.workers.Worker
+import slatekit.workers.Worker
 
 /**
  * A general purpose class to represent an event in the system, such as

@@ -10,14 +10,13 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers
-
-import slatekit.common.DateTime
-import slatekit.core.workers.core.QueueInfo
-
 /**
- * Represents a batch of jobs from a specific queue
+ * Created by kishorereddy on 5/19/17.
  */
-data class Batch(val queue: QueueInfo, val jobs: List<Job>, val timestamp: DateTime) {
-    val isEmpty = jobs.isEmpty()
+
+package slatekit.tools
+
+
+object Consts {
+    val version = "0.9.0"
 }

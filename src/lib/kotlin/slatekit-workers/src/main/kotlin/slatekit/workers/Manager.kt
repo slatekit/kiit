@@ -1,10 +1,10 @@
-package slatekit.core.workers
+package slatekit.workers
 
 import slatekit.common.DateTime
 import slatekit.common.status.RunStateComplete
 import slatekit.common.status.RunStateRunning
-import slatekit.core.workers.core.QueueInfo
-import slatekit.core.workers.core.Utils
+import slatekit.workers.core.QueueInfo
+import slatekit.workers.core.Utils
 import java.util.concurrent.ThreadPoolExecutor
 
 /**

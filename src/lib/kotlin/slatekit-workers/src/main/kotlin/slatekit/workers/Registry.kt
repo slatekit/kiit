@@ -10,11 +10,11 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers
+package slatekit.workers
 
 import slatekit.common.queues.QueueSourceMsg
-import slatekit.core.workers.core.QueueInfo
-import slatekit.core.workers.core.Utils
+import slatekit.workers.core.QueueInfo
+import slatekit.workers.core.Utils
 import java.util.*
 
 class Registry(val sys: System) {

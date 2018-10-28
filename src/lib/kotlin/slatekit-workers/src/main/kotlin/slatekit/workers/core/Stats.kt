@@ -10,12 +10,12 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers.core
+package slatekit.workers.core
 
 import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.status.RunState
-import slatekit.core.workers.Job
+import slatekit.workers.Job
 
 /**
  * Worker level status that can be supplied to a front-end

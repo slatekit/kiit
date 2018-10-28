@@ -10,11 +10,11 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.core.workers.core
+package slatekit.workers.core
 
 import slatekit.common.queues.QueueSourceMsg
-import slatekit.core.workers.Job
-import slatekit.core.workers.Worker
+import slatekit.workers.Job
+import slatekit.workers.Worker
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit

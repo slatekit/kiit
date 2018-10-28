@@ -1,4 +1,4 @@
-package slatekit.core.workers
+package slatekit.workers
 
 import slatekit.common.ResultEx
 
