@@ -112,7 +112,7 @@ class Example_Database : Cmd("db") {
         // CASE 14: Create the table using the model
         // Be careful with this, ensure you are using a connection string
         // with limited permissions
-        createTable(db, userModelSchema)
+        //createTable(db, userModelSchema)
 
         // CASE 15: Drop a table
         // Be careful with this, ensure you are using a connection string

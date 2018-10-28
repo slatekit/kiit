@@ -33,6 +33,7 @@ class Entity_Database_Tests {
     val sampleUUID4 = "67bdb72a-1d74-11e8-b467-0ed5f89f7184"
 
     /*
+    MYSQL
     create table `sample_entity` (
         `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         `test_string` VARCHAR(30) NOT NULL,
@@ -49,6 +50,25 @@ class Entity_Database_Tests {
         `test_localdatetime` DATETIME NOT NULL,
         `test_uuid` VARCHAR(50) NOT NULL,
         `test_uniqueId` VARCHAR(50) NOT NULL );
+
+
+    PostGres
+    create table sample_entity (
+        "id" SERIAL PRIMARY KEY,
+        "test_string" VARCHAR(30) NOT NULL,
+        "test_string_enc" VARCHAR(100) NOT NULL,
+        "test_bool" BOOLEAN NOT NULL,
+        "test_short" SMALLINT NOT NULL,
+        "test_int" INTEGER NOT NULL,
+        "test_long" BIGINT NOT NULL,
+        "test_float" FLOAT NOT NULL,
+        "test_double" DECIMAL NOT NULL,
+        "test_enum" INTEGER NOT NULL,
+        "test_localdate" DATE NOT NULL,
+        "test_localtime" TIME NOT NULL,
+        "test_localdatetime" TIMESTAMP NOT NULL,
+        "test_uuid" VARCHAR(50) NOT NULL,
+        "test_uniqueId" VARCHAR(50) NOT NULL );
     */
 
     @Test fun can_use_all_types(): Unit {
