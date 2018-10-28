@@ -1,5 +1,6 @@
 package slatekit.common
 
+import slatekit.common.content.Doc
 import java.io.InputStream
 
 /**

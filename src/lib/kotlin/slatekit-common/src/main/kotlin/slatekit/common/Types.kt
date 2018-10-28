@@ -13,6 +13,7 @@
 
 package slatekit.common
 
+import slatekit.common.content.Doc
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong

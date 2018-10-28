@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.content
 
 /**
  * Represents string content with type/format information.
@@ -45,12 +45,19 @@ data class Content(val text: String, val tpe: ContentType) {
             }
         }
 
-        @JvmStatic fun csv(text: String): Content = Content(text, ContentTypeCsv)
-        @JvmStatic fun html(text: String): Content = Content(text, ContentTypeHtml)
-        @JvmStatic fun json(text: String): Content = Content(text, ContentTypeJson)
-        @JvmStatic fun text(text: String): Content = Content(text, ContentTypeText)
-        @JvmStatic fun prop(text: String): Content = Content(text, ContentTypeProp)
-        @JvmStatic fun xml(text: String): Content = Content(text, ContentTypeXml)
-        @JvmStatic fun other(text: String, tpe: ContentType): Content = Content(text, tpe)
+        @JvmStatic fun csv(text: String): Content =
+            Content(text, ContentTypeCsv)
+        @JvmStatic fun html(text: String): Content =
+            Content(text, ContentTypeHtml)
+        @JvmStatic fun json(text: String): Content =
+            Content(text, ContentTypeJson)
+        @JvmStatic fun text(text: String): Content =
+            Content(text, ContentTypeText)
+        @JvmStatic fun prop(text: String): Content =
+            Content(text, ContentTypeProp)
+        @JvmStatic fun xml(text: String): Content =
+            Content(text, ContentTypeXml)
+        @JvmStatic fun other(text: String, tpe: ContentType): Content =
+            Content(text, tpe)
     }
 }

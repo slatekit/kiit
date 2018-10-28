@@ -13,6 +13,7 @@
 
 package slatekit.common
 
+import slatekit.common.content.Doc
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

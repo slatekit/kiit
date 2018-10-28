@@ -19,6 +19,7 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.content.Doc
 import slatekit.common.queues.QueueSource
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
@@ -90,7 +91,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
     @ApiAction(desc = "sends a message to queue using content from file")
-    fun sendFromDoc(doc: slatekit.common.Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
+    fun sendFromDoc(doc: Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
         return queue.send(doc.content, tagName, tagValue)
     }
 }

@@ -6,6 +6,7 @@ public class JavaInteropTests {
 
     @Test
     public void can_call_kotlin() {
+
         Assert.assertTrue(ResultCode.BAD_REQUEST == 400);
     }
 }

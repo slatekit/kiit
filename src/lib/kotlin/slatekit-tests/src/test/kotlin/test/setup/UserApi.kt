@@ -11,12 +11,12 @@
 
 package test.setup
 
-import slatekit.common.results.ResultFuncs.success
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.ApiArg
 import slatekit.common.*
 import slatekit.common.auth.Roles
+import slatekit.common.content.Doc
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncString
 import slatekit.common.encrypt.EncInt

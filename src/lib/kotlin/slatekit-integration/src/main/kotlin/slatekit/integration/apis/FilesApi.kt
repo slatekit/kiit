@@ -18,6 +18,7 @@ import slatekit.apis.ApiAction
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
+import slatekit.common.content.Doc
 import slatekit.common.getOrElse
 import slatekit.common.toResultEx
 
@@ -41,7 +42,7 @@ class FilesApi(val files: slatekit.core.cloud.CloudFilesBase, override val conte
     }
 
     @ApiAction(desc = "creates a file with the supplied folder name, file name, and content from doc")
-    fun createFromDoc(folder: String, name: String, doc: slatekit.common.Doc): slatekit.common.ResultEx<String> {
+    fun createFromDoc(folder: String, name: String, doc: Doc): slatekit.common.ResultEx<String> {
         return files.create(folder, name, doc.content)
     }
 
@@ -56,7 +57,7 @@ class FilesApi(val files: slatekit.core.cloud.CloudFilesBase, override val conte
     }
 
     @ApiAction(desc = "updates a file with the supplied folder name, file name, and content from doc")
-    fun updateFromDoc(folder: String, name: String, doc: slatekit.common.Doc): slatekit.common.ResultEx<String> {
+    fun updateFromDoc(folder: String, name: String, doc: Doc): slatekit.common.ResultEx<String> {
         return files.updateFromPath(folder, name, doc.content)
     }
 

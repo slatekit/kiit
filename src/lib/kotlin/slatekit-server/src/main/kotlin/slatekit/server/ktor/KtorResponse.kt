@@ -19,7 +19,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
-import slatekit.common.*
+import slatekit.common.content.Content
+import slatekit.common.content.Doc
 import slatekit.meta.Serialization
 
 object KtorResponse {
