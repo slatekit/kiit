@@ -160,21 +160,21 @@ object DbUtils {
     }
 
     fun getTypeFromLang(dataType: Class<*>): DbFieldType =
-            if (dataType == Types.JBoolClass) DbFieldTypeBool
-            else if (dataType == Types.JStringClass) DbFieldTypeString
-            else if (dataType == Types.JShortClass) DbFieldTypeShort
-            else if (dataType == Types.JIntClass) DbFieldTypeNumber
-            else if (dataType == Types.JLongClass) DbFieldTypeLong
-            else if (dataType == Types.JFloatClass) DbFieldTypeFloat
-            else if (dataType == Types.JDoubleClass) DbFieldTypeDouble
-            else if (dataType == Types.JDecimalClass) DbFieldTypeReal
-            else if (dataType == Types.JLocalDateClass) DbFieldTypeLocalDate
-            else if (dataType == Types.JLocalTimeClass) DbFieldTypeLocalTime
-            else if (dataType == Types.JLocalDateTimeClass) DbFieldTypeLocalDateTime
-            else if (dataType == Types.JZonedDateTimeClass) DbFieldTypeZonedDateTime
-            else if (dataType == Types.JInstantClass) DbFieldTypeInstant
-            else if (dataType == Types.JDateTimeClass) DbFieldTypeDateTime
-            else DbFieldTypeString
+            if (dataType == Types.JBoolClass) DbFieldType.DbBool
+            else if (dataType == Types.JStringClass) DbFieldType.DbString
+            else if (dataType == Types.JShortClass) DbFieldType.DbShort
+            else if (dataType == Types.JIntClass) DbFieldType.DbNumber
+            else if (dataType == Types.JLongClass) DbFieldType.DbLong
+            else if (dataType == Types.JFloatClass) DbFieldType.DbFloat
+            else if (dataType == Types.JDoubleClass) DbFieldType.DbDouble
+            else if (dataType == Types.JDecimalClass) DbFieldType.DbReal
+            else if (dataType == Types.JLocalDateClass) DbFieldType.DbLocalDate
+            else if (dataType == Types.JLocalTimeClass) DbFieldType.DbLocalTime
+            else if (dataType == Types.JLocalDateTimeClass) DbFieldType.DbLocalDateTime
+            else if (dataType == Types.JZonedDateTimeClass) DbFieldType.DbZonedDateTime
+            else if (dataType == Types.JInstantClass) DbFieldType.DbInstant
+            else if (dataType == Types.JDateTimeClass) DbFieldType.DbDateTime
+            else DbFieldType.DbString
 
     fun ensureField(text: String): String =
             if (text.isNullOrEmpty())

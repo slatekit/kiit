@@ -178,7 +178,7 @@ class Db(
         return executePrepAs<T>(_dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
-            fillArgs(stmt, inputs)
+            inputs?.let { fillArgs(stmt, inputs) }
 
             // execute
             val rs = stmt.executeQuery()
@@ -207,7 +207,7 @@ class Db(
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
                 // fill all the arguments into the prepared stmt
-                fillArgs(s, inputs)
+                inputs?.let { fillArgs(s, inputs) }
 
                 // execute the update
                 s.executeUpdate()
@@ -237,7 +237,7 @@ class Db(
         val result = executePrepAs<Int>(_dbCon, sql, { con, stmt ->
 
             // fill all the arguments into the prepared stmt
-            fillArgs(stmt, inputs)
+            inputs?.let { fillArgs(stmt, inputs) }
 
             // update and get number of affected records
             val count = stmt.executeUpdate()
@@ -262,7 +262,7 @@ class Db(
         val result = executePrepAs<T>(_dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
-            fillArgs(stmt, inputs)
+            inputs?.let { fillArgs(stmt, inputs) }
 
             // execute
             val rs = stmt.executeQuery()

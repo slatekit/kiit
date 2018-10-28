@@ -5,10 +5,9 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
-import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
-import slatekit.common.db.DbTypeMySql
-import slatekit.common.db.types.DbSourceMySql
+import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbLookup.Companion.namedDbs
+import slatekit.common.db.DbType.DbTypeMySql
 import slatekit.meta.models.*
 import slatekit.common.query.Query
 import slatekit.common.results.ResultFuncs
@@ -20,7 +19,6 @@ import slatekit.entities.core.EntityMapper
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql
 import slatekit.examples.common.*
-import slatekit.meta.buildAddTable
 
 
 /**
@@ -337,7 +335,7 @@ class Guide_ORM : Cmd("types") {
         println(sqlForUpdate)
 
         // CASE 4: Generate the table schema for mysql from the model
-        println("table sql : " + buildAddTable(DbSourceMySql(), schema))
+        //println("table sql : " + buildAddTable(DbSourceMySql(), schema))
     }
 
 

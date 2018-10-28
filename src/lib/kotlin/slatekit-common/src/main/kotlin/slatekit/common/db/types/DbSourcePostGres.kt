@@ -20,7 +20,7 @@ import java.rmi.UnexpectedException
 /**
  * Builds up database tables, indexes and other database components
  */
-open class DbSourceMySql : DbSource {
+open class DbSourcePostGres : DbSource {
 
     /**
      * Mapping of normalized types ot postgres type names

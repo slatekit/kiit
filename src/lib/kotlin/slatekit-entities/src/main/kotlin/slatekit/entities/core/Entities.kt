@@ -16,8 +16,12 @@ package slatekit.entities.core
 import slatekit.common.utils.ListMap
 import slatekit.common.naming.Namer
 import slatekit.common.db.*
+import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.common.db.DbType.DbTypePGres
+import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
+import slatekit.common.db.types.DbSourcePostGres
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -130,6 +134,7 @@ class Entities(
         val source = dbType?.let { type ->
             when (type.driver) {
                 DbTypeMySql.driver -> DbSourceMySql()
+                DbTypePGres.driver -> DbSourcePostGres()
                 else -> DbSourceMySql()
             }
         } ?: DbSourceMySql()

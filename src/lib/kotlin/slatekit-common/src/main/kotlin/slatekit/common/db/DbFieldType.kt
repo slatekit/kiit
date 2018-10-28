@@ -10,31 +10,20 @@
   */
 package slatekit.common.db
 
-/*
-* val TypeNumber      = 0
-  val TypeNumberShort = 1
-  val TypeNumberLong  = 2
-  val TypeString      = 10
-  val TypeBool        = 11
-  val TypeReal        = 12
-  val TypeDate        = 20
-  val TypeTime        = 21
-  val TypeEnum        = 22
-* */
-interface DbFieldType
-
-object DbFieldTypeNumber : DbFieldType
-object DbFieldTypeShort : DbFieldType
-object DbFieldTypeLong : DbFieldType
-object DbFieldTypeString : DbFieldType
-object DbFieldTypeBool : DbFieldType
-object DbFieldTypeFloat : DbFieldType
-object DbFieldTypeDouble : DbFieldType
-object DbFieldTypeReal : DbFieldType
-object DbFieldTypeLocalDate : DbFieldType
-object DbFieldTypeLocalTime : DbFieldType
-object DbFieldTypeLocalDateTime : DbFieldType
-object DbFieldTypeZonedDateTime : DbFieldType
-object DbFieldTypeInstant : DbFieldType
-object DbFieldTypeDateTime : DbFieldType
-object DbFieldTypeEnum : DbFieldType
+sealed class DbFieldType {
+    object DbNumber : DbFieldType()
+    object DbShort : DbFieldType()
+    object DbLong : DbFieldType()
+    object DbString : DbFieldType()
+    object DbBool : DbFieldType()
+    object DbFloat : DbFieldType()
+    object DbDouble : DbFieldType()
+    object DbReal : DbFieldType()
+    object DbLocalDate : DbFieldType()
+    object DbLocalTime : DbFieldType()
+    object DbLocalDateTime : DbFieldType()
+    object DbZonedDateTime : DbFieldType()
+    object DbInstant : DbFieldType()
+    object DbDateTime : DbFieldType()
+    object DbEnum : DbFieldType()
+}
