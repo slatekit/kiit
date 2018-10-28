@@ -17,6 +17,7 @@ import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.query.QueryEncoder
+import slatekit.common.UniqueId
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model

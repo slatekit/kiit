@@ -5,6 +5,7 @@ import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
+import slatekit.common.UniqueId
 import java.time.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
