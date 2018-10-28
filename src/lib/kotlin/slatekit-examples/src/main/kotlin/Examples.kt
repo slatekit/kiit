@@ -1,12 +1,5 @@
-import slatekit.common.Files
-import slatekit.common.newline
-import slatekit.core.cmds.Cmd
 import slatekit.examples.*
-import java.io.File
-import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 //import java.util.logging.*
 
 //import org.apache.logging.log4j.LogManager

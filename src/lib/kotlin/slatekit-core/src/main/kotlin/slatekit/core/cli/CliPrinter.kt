@@ -13,7 +13,7 @@
 
 package slatekit.core.cli
 
-import slatekit.common.Files
+import slatekit.common.io.Files
 import slatekit.common.Response
 import slatekit.common.console.ConsoleWriter
 import slatekit.meta.Serialization

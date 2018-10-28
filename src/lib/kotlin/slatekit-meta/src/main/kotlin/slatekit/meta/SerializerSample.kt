@@ -1,7 +1,7 @@
 package slatekit.meta
 
 import slatekit.common.DateTime
-import slatekit.common.Serializer
+import slatekit.common.serialization.Serializer
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty

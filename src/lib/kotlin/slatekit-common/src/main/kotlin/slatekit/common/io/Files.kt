@@ -11,8 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.io
 
+import slatekit.common.DateTime
 import java.io.File
 
 object Files {

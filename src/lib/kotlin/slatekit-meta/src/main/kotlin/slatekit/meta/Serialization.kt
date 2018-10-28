@@ -1,7 +1,7 @@
 package slatekit.meta
 
 import slatekit.common.EnumLike
-import slatekit.common.Serializer
+import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
 import slatekit.common.serialization.SerializerProps

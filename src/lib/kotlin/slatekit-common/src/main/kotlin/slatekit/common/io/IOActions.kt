@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.io
 
 object Print : IO<Any, Unit> {
 

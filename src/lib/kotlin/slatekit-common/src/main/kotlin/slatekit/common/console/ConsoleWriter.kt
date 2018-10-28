@@ -13,7 +13,8 @@
 
 package slatekit.common.console
 
-import slatekit.common.IO
+import slatekit.common.io.IO
+import slatekit.common.io.Print
 
 /**
  * Semantic console writer to print text in different colors and in Uppercase/lowercase for
@@ -28,5 +29,5 @@ class ConsoleWriter(private val _settings: ConsoleSettings = Console.defaults())
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.scala for details.
      */
-    override val _io: IO<Any, Unit> = slatekit.common.Print
+    override val _io: IO<Any, Unit> = Print
 }

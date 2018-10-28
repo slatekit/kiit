@@ -13,7 +13,7 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Serializer
+import slatekit.common.serialization.Serializer
 import slatekit.meta.Serialization
 
 class EntitySerializer {

@@ -14,7 +14,7 @@
 package slatekit.entities.core
 
 import slatekit.common.DateTime
-import slatekit.common.Serializer
+import slatekit.common.serialization.Serializer
 import slatekit.meta.Serialization
 import slatekit.meta.models.Model
 
