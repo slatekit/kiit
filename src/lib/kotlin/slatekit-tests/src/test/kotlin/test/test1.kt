@@ -4,10 +4,10 @@ package test
 import slatekit.common.Random
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.common.AppContext
-import slatekit.core.workers.System
+import slatekit.workers.System
 import test.workers.WorkerSample
-import slatekit.core.workers.core.Priority
-import slatekit.core.workers.core.QueueInfo
+import slatekit.workers.core.Priority
+import slatekit.workers.core.QueueInfo
 
 
 /**
