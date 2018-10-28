@@ -10,9 +10,10 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.workers.core
+package slatekit.workers
 
 import slatekit.common.DateTime
+import slatekit.workers.core.QueueInfo
 
 /**
  * Represents a batch of jobs from a specific queue

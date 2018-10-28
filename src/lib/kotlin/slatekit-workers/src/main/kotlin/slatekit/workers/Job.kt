@@ -1,4 +1,4 @@
-package slatekit.workers.core
+package slatekit.workers
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
