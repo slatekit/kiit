@@ -1,17 +1,21 @@
 # Slate Kit
-A full-stack collection of architecture components for in Kotlin.
-Slate Kit is comprised of 3 core parts.
-
-1. Common utilities ( for both server / client )
-2. Server API Framework ( called Universal APIs )
-3. Architecture Components ( micro-orm, cli, workers, and more)
-
+A collection of architecture components and libraries for full-stack Kotlin development.
 
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+
+# Features
+Slate Kit is comprised of 3 core feature categories.
+
+1. Common utilities ( for both server / client )
+2. Server API Framework ( called Universal APIs )
+3. Architecture Components ( micro-orm, cli, workers, and more)
+
+
+# About
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
 - **company**: www.codehelix.co
