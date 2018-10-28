@@ -17,6 +17,8 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
 import slatekit.common.*
+import slatekit.common.content.ContentTypeHtml
+import slatekit.common.content.Doc
 import slatekit.server.ServerConfig
 import spark.Request
 import java.io.*

@@ -24,6 +24,9 @@ import slatekit.common.*
 import slatekit.server.ServerConfig
 import io.ktor.request.*
 import kotlinx.coroutines.experimental.async
+import slatekit.common.content.ContentTypeHtml
+import slatekit.common.content.ContentTypeText
+import slatekit.common.content.Doc
 import java.io.*
 
 class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : RequestSupport {

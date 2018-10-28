@@ -2,6 +2,9 @@ package slatekit.apis.svcs
 
 import slatekit.common.*
 import slatekit.apis.middleware.Rewriter
+import slatekit.common.content.ContentTypeCsv
+import slatekit.common.content.ContentTypeJson
+import slatekit.common.content.ContentTypeProp
 
 class Format : Rewriter() {
 

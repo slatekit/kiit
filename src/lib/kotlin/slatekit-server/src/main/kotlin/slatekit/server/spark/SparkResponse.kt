@@ -14,7 +14,8 @@
 package slatekit.server.spark
 
 import spark.Response
-import slatekit.common.*
+import slatekit.common.content.Content
+import slatekit.common.content.Doc
 import slatekit.meta.Serialization
 
 object SparkResponse {
