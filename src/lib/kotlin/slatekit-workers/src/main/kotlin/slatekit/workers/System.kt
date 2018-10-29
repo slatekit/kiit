@@ -2,9 +2,9 @@ package slatekit.workers
 
 import slatekit.common.Context
 import slatekit.common.info.About
-import slatekit.common.status.*
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Stats
+import slatekit.workers.status.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference

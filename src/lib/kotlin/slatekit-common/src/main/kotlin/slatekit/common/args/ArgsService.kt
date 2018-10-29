@@ -43,7 +43,7 @@ class ArgsService {
     ): ResultEx<Args> {
         // Check 1: Empty line ?
         return if (line.isEmpty()) {
-            Success(Args("", listOf<String>(), "", listOf<String>(), prefix, sep,
+            Success(Args("", listOf(), "", listOf(), prefix, sep,
                     null, null, null, null, null))
         } else {
             // Check 2: Parse the line into words/args
@@ -87,7 +87,7 @@ class ArgsService {
                         val startOfNamedArgs = if (actionResult.pos == 0) 0 else actionResult.posLast
                         Triple(actionResult.action, actionResult.actions, startOfNamedArgs)
                     } else
-                        Triple("", listOf<String>(), 0)
+                        Triple("", listOf(), 0)
 
                     // action= "area.api.action" e.g. "app.users.activate"
                     val action = result.first
@@ -100,7 +100,7 @@ class ArgsService {
 
                     // Check for args
                     val argsResult = if (startOfNamedArgs >= tokens.size - 1)
-                        ParsedArgs(mapOf<String, String>(), mapOf<String, String>(), mapOf<String, String>(), startOfNamedArgs)
+                        ParsedArgs(mapOf(), mapOf(), mapOf(), startOfNamedArgs)
                     else
                         ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep, metaChar, sysChar)
 
@@ -113,7 +113,7 @@ class ArgsService {
                             if (tokens.isNotEmpty() && startOfIndexArgs >= 0 && startOfIndexArgs <= (tokens.size - 1)) {
                                 tokens.subList(argsResult.ndx, tokens.size)
                             } else
-                                listOf<String>()
+                                listOf()
 
                     val args = Args(line, tokens, action, verbs.toList(), prefix, sep,
                             argsResult.named, argsResult.meta, argsResult.sys, indexResult, null)
