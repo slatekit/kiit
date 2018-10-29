@@ -8,7 +8,8 @@ branches:
 jdk:
   - oraclejdk8
 
-before_install:
+before_script:
+  - cd src/lib/kotlin
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
 
