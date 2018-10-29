@@ -4,8 +4,6 @@
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-
-# About
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
 It is comprised of 3 core feature categories.
 
