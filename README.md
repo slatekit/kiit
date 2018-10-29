@@ -1,8 +1,10 @@
 # Slate Kit
+![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
 ![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
 ![macOS](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Follow us on twitter](https://img.shields.io/badge/twitter-kishore__reddy-green.svg)](https://twitter.com/kishore_reddy)
 
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
 It is comprised of 3 core feature categories.
