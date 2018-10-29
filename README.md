@@ -49,3 +49,9 @@ docs | source | desc | download
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com
 - **company**: www.codehelix.co
+
+
+# Found Slate Kit useful :heart:
+- Support by clicking the :star: button on the upper right of this page. :v:
+- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee work on nights/weekends!
+- Contribute to keep things up and running https://opencollective.com/kishorepreddy-placeholder 
