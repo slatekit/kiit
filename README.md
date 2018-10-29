@@ -28,6 +28,8 @@ overview | http://www.slatekit.com/overview.html | goals / uses / philosophy
 setup    | www.slatekit.com/setup.html | setup kotlin / slatekit
 starting | http://www.slatekit.com/components.html | key concepts / steps
 releases | http://www.slatekit.com/releases.html | relase history / notes
+utilities| http://www.slatekit.com/utils.html    | utilities for client/server
+modules  | http://www.slatekit.com/infra.html    | architecture components
 learn    | http://www.slatekit.com/kotlin101.html | kotlin 101
 standards| http://www.slatekit.com/kotlin-standards.html | coding standards
 
@@ -90,6 +92,6 @@ dependencies {
 
 
 # Like Slate Kit ? :heart:
-- Support by clicking the :star: button on the upper right of this page. :v:
-- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work on nights/weekends!
-- Contribute to keep things up and running https://opencollective.com/kishorepreddy-placeholder 
+- Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
+- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work nights/weekends! ( coming soon )
+- Contribute to continued development https://opencollective.com/kishorepreddy-placeholder ( coming soon )
