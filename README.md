@@ -12,12 +12,6 @@ It is comprised of 3 core feature categories.
 3. Architecture Components ( micro-orm, cli, workers, and more)
 
 
-# About
-- **author**: Kishore Reddy
-- **website**: www.slatekit.com 
-- **company**: www.codehelix.co
-
-
 # Links
 Some important links / pages for more info.
 
@@ -48,3 +42,8 @@ docs | source | desc | download
 [slatekit-cloud](http://www.slatekit.com/infra.html)                   | [src](src/lib/kotlin/slatekit-cloud)       | clouder services ( AWS ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cloud/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-cloud/_latestVersion)
 [slatekit-server](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-server)      | Http Server ( using Spark ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
 
+
+# Company / Author
+- **author**: Kishore Reddy
+- **website**: www.slatekit.com
+- **company**: www.codehelix.co
