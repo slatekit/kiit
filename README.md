@@ -1,6 +1,13 @@
-# Slate Kit
-A collection of architecture components and libraries for full-stack Kotlin development.
+# About
+**Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
+It is comprised of 3 core feature categories.
 
+1. Common utilities ( for both server / client )
+2. Server API Framework ( called Universal APIs )
+3. Architecture Components ( micro-orm, cli, workers, and more)
+
+
+# Status
 
 type | link | status
 ------------ | ------------ | -------------
@@ -10,26 +17,25 @@ license | apache 2            | ![Apache 2](https://img.shields.io/badge/license
 chat    | gitter              | [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
-# Features
-Slate Kit is comprised of 3 core feature categories.
-
-1. Common utilities ( for both server / client )
-2. Server API Framework ( called Universal APIs )
-3. Architecture Components ( micro-orm, cli, workers, and more)
-
-
 # About
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com 
 - **company**: www.codehelix.co
 
 
-# Overview
-Visit www.slatekit.com/overview.html
+# Links
+Some important links / pages for more info.
 
+type | link | note
+------------ | ------------ | -------------
+home | www.slatekit.com | landing page
+overview | http://www.slatekit.com/overview.html | goals / uses / philosophy
+setup    | www.slatekit.com/setup.html | setup kotlin / slatekit
+starting | http://www.slatekit.com/components.html | key concepts / steps
+releases | http://www.slatekit.com/releases.html | relase history / notes
+learn    | http://www.slatekit.com/kotlin101.html | kotlin 101
+standards| http://www.slatekit.com/kotlin-standards.html | coding standards
 
-# Setup
-Visit www.slatekit.com/setup.html for setup guide and dependencies.
 
 
 # Components
