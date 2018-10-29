@@ -8,7 +8,7 @@
 
 ![image](media/slatekit-banner.png)
 
-# Slate Kit
+# About
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
 
 It is comprised of 3 core feature categories.
