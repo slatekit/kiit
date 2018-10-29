@@ -9,6 +9,7 @@ jdk:
   - oraclejdk8
 
 before_script:
+  - echo "$TRAVIS_BUILD_DIR"
   - cd src/lib/kotlin
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
