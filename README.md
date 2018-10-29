@@ -1,6 +1,7 @@
 # Slate Kit
 A collection of architecture components and libraries for full-stack Kotlin development.
 
+![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
 ![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
 ![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
