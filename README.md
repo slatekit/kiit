@@ -1,11 +1,13 @@
 # Slate Kit
 A collection of architecture components and libraries for full-stack Kotlin development.
 
-![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
-![macOS](https://img.shields.io/badge/os-macOS-green.svg?style=flat)
-![Linux](https://img.shields.io/badge/os-linux-green.svg?style=flat)
-![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
-[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+type | link | status
+------------ | ------------ | -------------
+build   | travis | ![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
+os      | linux/windows       | ![macOS](https://img.shields.io/badge/os-linux-green.svg?style=flat)
+license | apache 2            | ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
+chat    | gitter              | [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 # Features
