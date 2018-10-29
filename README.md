@@ -32,8 +32,7 @@ learn    | http://www.slatekit.com/kotlin101.html | kotlin 101
 standards| http://www.slatekit.com/kotlin-standards.html | coding standards
 
 
-
-# Components
+# Modules
 Slate Kit contains many useful architecture components, utilities and applications features. The slatekit-common has 0 dependencies adn contains most of the common utilities and components used throughout all the other projects. 
 
 docs | source | desc | download
@@ -49,13 +48,48 @@ docs | source | desc | download
 [slatekit-server](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-server)      | Http Server ( using Spark ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
 
 
-# Company / Author
+# Setup
+You can use maven/gradle to reference Slate Kit libraries. Refer to [Setup](http://www.slatekit.com/kotlin-setup.html) for more info. Make sure you add the maven url **http://dl.bintray.com/codehelixinc/slatekit**.
+
+```groovy
+buildscript {
+    ext.kotlin_version = '1.3.0'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+    maven {
+        url  "http://dl.bintray.com/codehelixinc/slatekit"
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+	
+    // Reference the slate kit binaries here
+    compile 'com.slatekit:slatekit-common:0.9.9'
+    compile 'com.slatekit:slatekit-meta:0.9.9'
+}
+```
+
+# Author
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com
 - **company**: www.codehelix.co
 
 
-# Found Slate Kit useful :heart:
+# Like Slate Kit ? :heart:
 - Support by clicking the :star: button on the upper right of this page. :v:
 - Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work on nights/weekends!
 - Contribute to keep things up and running https://opencollective.com/kishorepreddy-placeholder 
