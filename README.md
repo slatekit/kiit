@@ -53,5 +53,5 @@ docs | source | desc | download
 
 # Found Slate Kit useful :heart:
 - Support by clicking the :star: button on the upper right of this page. :v:
-- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee work on nights/weekends!
+- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work on nights/weekends!
 - Contribute to keep things up and running https://opencollective.com/kishorepreddy-placeholder 
