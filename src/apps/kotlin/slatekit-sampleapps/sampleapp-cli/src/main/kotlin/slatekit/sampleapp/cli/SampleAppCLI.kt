@@ -14,8 +14,8 @@ package slatekit.sampleapp.cli
 import slatekit.apis.codegen.CodeGenApi
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.common.Credentials
 import slatekit.common.DateTime
+import slatekit.common.security.Credentials
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings
 import slatekit.integration.apis.AppApi

@@ -3,6 +3,8 @@ package test.common
 import slatekit.apis.*
 import slatekit.apis.support.ApiBase
 import slatekit.common.*
+import slatekit.common.content.Content
+import slatekit.common.content.Doc
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong

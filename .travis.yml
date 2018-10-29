@@ -1,0 +1,16 @@
+language: java
+
+branches:
+  only:
+    - master
+    - /^release.*$/ 
+
+jdk:
+  - oraclejdk8
+
+before_install:
+  - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
+
+script:
+  - ./gradlew test build

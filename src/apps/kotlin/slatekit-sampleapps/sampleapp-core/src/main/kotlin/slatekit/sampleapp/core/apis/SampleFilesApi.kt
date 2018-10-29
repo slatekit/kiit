@@ -4,8 +4,8 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Verbs
-import slatekit.common.Content
-import slatekit.common.Doc
+import slatekit.common.content.Content
+import slatekit.common.content.Doc
 import slatekit.common.Request
 import slatekit.common.RequestSupport
 import slatekit.common.auth.Roles
