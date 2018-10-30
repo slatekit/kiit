@@ -16,7 +16,7 @@ package slatekit.examples
 import slatekit.common.*
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.EntityRepoMySql
+import slatekit.entities.databases.mysql.MySqlEntityRepo
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -82,10 +82,10 @@ class Example_Entities_Repo : Cmd("entities") {
 
 
     // 3. Now create the repo with database and mapper
-    val repoMySql = EntityRepoMySql<User>(db, User::class, null, mapper)
+    val repoMySql = MySqlEntityRepo<User>(db, User::class, null, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserRepository(db:Db, mapper:Mapper) : EntityRepoMySql<User>(db, User::class)
+    class UserRepository(db:Db, mapper:Mapper) : MySqlEntityRepo<User>(db, User::class)
 
 
     val userRepo = UserRepository(db, mapper)

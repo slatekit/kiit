@@ -26,9 +26,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.entities.databases.mysql.MySqlEntityDDL
+import slatekit.entities.databases.mysql.MySqlEntityRepo
+import slatekit.entities.databases.postgres.PostgresEntityRepo
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.EntityRepoMySql
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -291,7 +292,10 @@ class Entities(
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)
             }
             DbTypeMySql -> {
-                EntityRepoMySql<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName, _enc)
+                MySqlEntityRepo<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName, _enc)
+            }
+            DbTypePGres -> {
+                PostgresEntityRepo<T>(getDb(dbKey, dbShard), entityType, entityIdType, mapper, tableName, _enc)
             }
             else -> {
                 EntityRepoInMemory<T>(entityType, entityIdType, mapper)

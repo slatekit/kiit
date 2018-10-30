@@ -19,6 +19,7 @@ import slatekit.common.query.IQuery
 import slatekit.common.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
+import slatekit.entities.databases.mysql.MySqlEntityRepo
 import kotlin.reflect.KClass
 
 /**
@@ -38,7 +39,7 @@ open class PostgresEntityRepo<T>(
     nameOfTable: String? = null,
     encryptor: Encryptor? = null
 )
-    : EntityRepoMySql<T>(db, entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
+    : MySqlEntityRepo<T>(db, entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
 
 
     override fun repoName(): String =

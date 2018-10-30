@@ -16,8 +16,8 @@ import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityMapper
+import slatekit.entities.databases.mysql.MySqlEntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.EntityRepoMySql
 import slatekit.examples.common.*
 
 
@@ -226,7 +226,7 @@ class Guide_ORM : Cmd("types") {
         val mapper = EntityMapper(model)
 
         // 2.3: Now create the repo with database and mapper
-        val repoMySql = EntityRepoMySql<Movie>(db, Movie::class, null, mapper)
+        val repoMySql = MySqlEntityRepo<Movie>(db, Movie::class, null, mapper)
     }
 
 
