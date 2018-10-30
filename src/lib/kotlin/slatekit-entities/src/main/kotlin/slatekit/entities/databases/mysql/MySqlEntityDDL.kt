@@ -1,4 +1,4 @@
-package slatekit.entities.databases
+package slatekit.entities.databases.mysql
 
 import slatekit.common.naming.Namer
 import slatekit.common.db.Db

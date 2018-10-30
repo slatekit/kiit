@@ -24,7 +24,7 @@ import slatekit.common.Success
 import slatekit.common.auth.User
 import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.info.Host
-import slatekit.entities.databases.MySqlEntityDDL
+import slatekit.entities.databases.mysql.MySqlEntityDDL
 import slatekit.meta.KTypes
 import kotlin.reflect.full.createType
 

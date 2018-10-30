@@ -25,7 +25,7 @@ import slatekit.common.db.types.DbSourcePostGres
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.entities.databases.MySqlEntityDDL
+import slatekit.entities.databases.mysql.MySqlEntityDDL
 import slatekit.meta.Reflector
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.EntityRepoMySql

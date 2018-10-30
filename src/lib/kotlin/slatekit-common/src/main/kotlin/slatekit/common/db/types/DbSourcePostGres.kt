@@ -22,43 +22,28 @@ import java.rmi.UnexpectedException
  */
 open class DbSourcePostGres : DbSource {
 
+    val types = listOf(
+            DbTypeInfo(DbFieldType.DbString, "NVARCHAR", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbBool, "BIT" , Types.JBoolClass),
+            DbTypeInfo(DbFieldType.DbShort, "TINYINT", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbNumber, "INTEGER", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbFloat, "FLOAT", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbDouble, "DOUBLE", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbReal, "DECIMAL", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbLocalDate, "DATE", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbLocalTime, "TIME", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbLocalDateTime, "DATETIME", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbZonedDateTime, "DATETIME", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbInstant, "INSTANT", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbDateTime, "DATETIME", Types.JStringClass)
+    )
+
     /**
      * Mapping of normalized types ot postgres type names
      */
-    val dataToColumnTypes = mapOf(
-        DbFieldType.DbString to  "NVARCHAR",
-        DbFieldType.DbBool to  "BIT",
-        DbFieldType.DbShort to  "TINYINT",
-        DbFieldType.DbNumber to  "INTEGER",
-        DbFieldType.DbLong to  "BIGINT",
-        DbFieldType.DbFloat to  "FLOAT",
-        DbFieldType.DbDouble to  "DOUBLE",
-        DbFieldType.DbReal to  "DECIMAL",
-        DbFieldType.DbLocalDate to  "DATE",
-        DbFieldType.DbLocalTime to  "TIME",
-        DbFieldType.DbLocalDateTime to  "DATETIME",
-        DbFieldType.DbZonedDateTime to  "DATETIME",
-        DbFieldType.DbInstant to  "INSTANT",
-        DbFieldType.DbDateTime to  "DATETIME"
-    )
-
-
-    val langToDataTypes = mapOf(
-        Types.JBoolClass to  DbFieldType.DbBool,
-        Types.JStringClass to  DbFieldType.DbString,
-        Types.JShortClass to  DbFieldType.DbShort,
-        Types.JIntClass to  DbFieldType.DbNumber,
-        Types.JLongClass to  DbFieldType.DbLong,
-        Types.JFloatClass to  DbFieldType.DbFloat,
-        Types.JDoubleClass to  DbFieldType.DbDouble,
-        Types.JDecimalClass to  DbFieldType.DbReal,
-        Types.JLocalDateClass to  DbFieldType.DbLocalDate,
-        Types.JLocalTimeClass to  DbFieldType.DbLocalTime,
-        Types.JLocalDateTimeClass to  DbFieldType.DbLocalDateTime,
-        Types.JZonedDateTimeClass to  DbFieldType.DbZonedDateTime,
-        Types.JInstantClass to  DbFieldType.DbInstant,
-        Types.JDateTimeClass to  DbFieldType.DbDateTime
-    )
+    val dataToColumnTypes = types.map { Pair(it.metaType, it.dbType) }.toMap()
+    val langToDataTypes = types.map { Pair(it.langType, it.metaType) }.toMap()
 
     /**
      * Builds the drop table DDL for the name supplied.

@@ -18,4 +18,5 @@ package slatekit.entities
 
 object Consts {
     val version = "0.9.0"
+    val NULL = "NULL"
 }

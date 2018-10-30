@@ -19,7 +19,7 @@ import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
-import slatekit.entities.databases.MySqlEntityDDL
+import slatekit.entities.databases.mysql.MySqlEntityDDL
 import slatekit.meta.models.ModelMapper
 
 //</doc:import_required>
