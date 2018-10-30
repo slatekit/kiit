@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.status
+package slatekit.workers.status
 
 import slatekit.common.DateTime
 

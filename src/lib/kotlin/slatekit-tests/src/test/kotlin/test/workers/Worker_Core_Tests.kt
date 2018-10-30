@@ -6,9 +6,9 @@ import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.status.*
 import slatekit.workers.Job
 import slatekit.workers.core.Events
+import slatekit.workers.status.*
 import test.setup.MyWorker
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
@@ -66,37 +66,37 @@ class Worker_Core_Tests {
 
     @Test
     fun can_change_state_to_started() {
-        assertState( { it.start() }, RunStateIdle )
+        assertState( { it.start() }, RunStateIdle)
     }
 
 
     @Test
     fun can_change_state_to_working() {
-        assertState( { it.moveToState(RunStateRunning) }, RunStateRunning )
+        assertState( { it.moveToState(RunStateRunning) }, RunStateRunning)
     }
 
 
     @Test
     fun can_change_state_to_paused() {
-        assertState( { it.pause() }, RunStatePaused )
+        assertState( { it.pause() }, RunStatePaused)
     }
 
 
     @Test
     fun can_change_state_to_stopped() {
-        assertState( { it.stop() }, RunStateStopped )
+        assertState( { it.stop() }, RunStateStopped)
     }
 
 
     @Test
     fun can_change_state_to_completed() {
-        assertState( { it.complete() }, RunStateComplete )
+        assertState( { it.complete() }, RunStateComplete)
     }
 
 
     @Test
     fun can_send_status_notifications() {
-        assertNotifications( { it.complete() }, RunStateComplete )
+        assertNotifications( { it.complete() }, RunStateComplete)
     }
 
 
@@ -139,7 +139,7 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertState(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true) {
+    fun assertState(callback:(MyWorker) -> Unit, state: RunState, enableNotification:Boolean = true) {
         // Test
         val worker = MyWorker()
         callback(worker)
@@ -148,7 +148,7 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertNotifications(callback:(MyWorker) -> Unit, state:RunState, enableNotification:Boolean = true) {
+    fun assertNotifications(callback:(MyWorker) -> Unit, state: RunState, enableNotification:Boolean = true) {
         // Test
         val worker = MyWorker()
         callback(worker)

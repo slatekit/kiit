@@ -1,8 +1,10 @@
 package test.workers
 
-import slatekit.common.status.*
 import slatekit.core.common.AppContext
 import slatekit.workers.*
+import slatekit.workers.status.RunStateIdle
+import slatekit.workers.status.RunStateNotStarted
+import slatekit.workers.status.RunStateRunning
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
 // http://www.vogella.com/tutorials/JavaConcurrency/article.html

@@ -3,8 +3,8 @@ package slatekit.workers
 import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
-import slatekit.common.status.*
 import slatekit.workers.core.*
+import slatekit.workers.status.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
