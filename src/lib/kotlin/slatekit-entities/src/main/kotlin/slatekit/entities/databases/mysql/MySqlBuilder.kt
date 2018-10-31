@@ -6,7 +6,6 @@ import slatekit.common.db.DbFieldType
 import slatekit.common.db.DbUtils
 import slatekit.common.newline
 import slatekit.meta.models.Model
-import java.rmi.UnexpectedException
 
 /**
  *
@@ -123,19 +122,12 @@ class MySqlBuilder(val model:Model, val namer: Namer?) {
      * Builds a valid column type
      */
     fun colType(colType: DbFieldType, maxLen: Int): String {
-        return if (colType == DbFieldType.DbString && maxLen == -1)
-            "longtext"
+        return if (colType == DbFieldType.DbText && maxLen == -1)
+            MySqlTypes.textType.dbType
         else if (colType == DbFieldType.DbString)
-            "VARCHAR($maxLen)"
+            MySqlTypes.stringType.dbType + "($maxLen)"
         else
-            colTypeName(colType)
-    }
+            MySqlTypes.lookup[colType]?.dbType ?: ""
 
-
-    fun colTypeName(sqlType: DbFieldType): String {
-        return if(MySqlTypes.lookup.containsKey(sqlType))
-            MySqlTypes.lookup[sqlType]?.dbType ?: ""
-        else
-            throw UnexpectedException("Unexpected db type : $sqlType")
     }
 }

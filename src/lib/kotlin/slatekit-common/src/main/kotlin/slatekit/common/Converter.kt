@@ -4,7 +4,7 @@ import slatekit.common.records.Record
 
 
 interface SqlConverter<T> {
-    fun toSql(item: Any, name: String): Any?
+    fun toSql(value: T?): Any?
     fun toItem(record: Record, name: String): T?
 }
 

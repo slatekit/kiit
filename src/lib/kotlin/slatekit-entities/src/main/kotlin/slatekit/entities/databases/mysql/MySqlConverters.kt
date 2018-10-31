@@ -7,20 +7,23 @@ import slatekit.common.records.Record
 import slatekit.meta.Reflector
 import slatekit.entities.Consts.NULL
 import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.KClass
 
 object StringConverter : SqlConverter<String> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as String?)?.toString() ?: NULL
+    override fun toSql(value:String?): Any? {
+        return value?.let {
+            val sValFinal = value.nonEmptyOrDefault("")
+            "'" + QueryEncoder.ensureValue(sValFinal) + "'"
+        } ?: NULL
     }
 
-    fun toSql(item: Any, name: String, encrypt:Boolean, encryptor:Encryptor?): Any? {
-        val sVal = Reflector.getFieldValue(item, name) as String?
-        return sVal?.let {
+    fun toSql(value:String?, encrypt:Boolean, encryptor:Encryptor?): Any? {
+        return value?.let {
             // Only encrypt on create
-            val sValEnc = if (encrypt) encryptor?.encrypt(sVal) ?: sVal else sVal
+            val sValEnc = if (encrypt) encryptor?.encrypt(value) ?: value else value
             val sValFinal = sValEnc.nonEmptyOrDefault("")
             "'" + QueryEncoder.ensureValue(sValFinal) + "'"
         } ?: NULL
@@ -33,9 +36,8 @@ object StringConverter : SqlConverter<String> {
 
 object BoolConverter : SqlConverter<Boolean> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        val bVal = Reflector.getFieldValue(item, name) as Boolean?
-        return bVal?.let { if (bVal) "1" else "0" } ?: NULL
+    override fun toSql(value:Boolean?): Any? {
+        return value?.let { if (value) "1" else "0" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Boolean? {
@@ -45,9 +47,8 @@ object BoolConverter : SqlConverter<Boolean> {
 
 object ShortConverter : SqlConverter<Short> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        val iVal = Reflector.getFieldValue(item, name) as Short?
-        return iVal?.toString() ?: NULL
+    override fun toSql(value:Short?): Any? {
+        return value?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Short? {
@@ -57,8 +58,8 @@ object ShortConverter : SqlConverter<Short> {
 
 object IntConverter : SqlConverter<Int> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Int?)?.toString() ?: NULL
+    override fun toSql(value: Int?): Any? {
+        return value?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Int? {
@@ -68,8 +69,8 @@ object IntConverter : SqlConverter<Int> {
 
 object LongConverter : SqlConverter<Long> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Long?)?.toString() ?: NULL
+    override fun toSql(value:Long?): Any? {
+        return value?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Long? {
@@ -79,8 +80,8 @@ object LongConverter : SqlConverter<Long> {
 
 object FloatConverter : SqlConverter<Float> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Float?)?.toString() ?: NULL
+    override fun toSql(value:Float?): Any? {
+        return value?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Float? {
@@ -90,8 +91,8 @@ object FloatConverter : SqlConverter<Float> {
 
 object DoubleConverter : SqlConverter<Double> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Double?)?.toString() ?: NULL
+    override fun toSql(value:Double?): Any? {
+        return value?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Double? {
@@ -101,8 +102,10 @@ object DoubleConverter : SqlConverter<Double> {
 
 object LocalDateConverter : SqlConverter<LocalDate> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as LocalDate?)?.toString() ?: NULL
+    private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+    override fun toSql(value:LocalDate?): Any? {
+        return value?.let { "'" + value.format(dateFormat) + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): LocalDate? {
@@ -112,8 +115,10 @@ object LocalDateConverter : SqlConverter<LocalDate> {
 
 object LocalTimeConverter : SqlConverter<LocalTime> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as LocalTime?)?.toString() ?: NULL
+    private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+    override fun toSql(value:LocalTime?): Any? {
+        return value?.let { "'" + value.format(timeFormat) + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): LocalTime? {
@@ -122,9 +127,12 @@ object LocalTimeConverter : SqlConverter<LocalTime> {
 }
 
 object InstantConverter : SqlConverter<Instant> {
+    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Instant?)?.toString() ?: NULL
+    override fun toSql(value:Instant?): Any? {
+        return value?.let {
+            "'" + LocalDateTime.ofInstant(value, ZoneId.systemDefault()).format(dateTimeFormat) + "'"
+        } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Instant? {
@@ -133,9 +141,13 @@ object InstantConverter : SqlConverter<Instant> {
 }
 
 class LocalDateTimeConverter(val isUTC:Boolean) : SqlConverter<LocalDateTime> {
+    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as LocalDateTime?)?.toString() ?: NULL
+    override fun toSql(value:LocalDateTime?): Any? {
+        return value?.let {
+            val converted = if (isUTC) DateTime.of(value).atUtc().local() else value
+            "'" + converted.format(dateTimeFormat) + "'"
+        } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): LocalDateTime? {
@@ -147,9 +159,13 @@ class LocalDateTimeConverter(val isUTC:Boolean) : SqlConverter<LocalDateTime> {
 }
 
 class ZonedDateTimeConverter(val isUTC:Boolean) : SqlConverter<ZonedDateTime> {
+    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as ZonedDateTime?)?.toString() ?: NULL
+    override fun toSql(value:ZonedDateTime?): Any? {
+        return value?.let {
+            val converted = if (isUTC) DateTime.of(value).atUtc().raw else value
+            "'" + converted.format(dateTimeFormat) + "'"
+        } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): ZonedDateTime? {
@@ -161,9 +177,10 @@ class ZonedDateTimeConverter(val isUTC:Boolean) : SqlConverter<ZonedDateTime> {
 }
 
 class DateTimeConverter(val isUTC:Boolean) : SqlConverter<DateTime> {
+    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as DateTime?)?.toString() ?: NULL
+    override fun toSql(value:DateTime?): Any? {
+        return value?.let { "'" + value.format(dateTimeFormat) + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): DateTime? {
@@ -176,8 +193,8 @@ class DateTimeConverter(val isUTC:Boolean) : SqlConverter<DateTime> {
 
 object UUIDConverter : SqlConverter<UUID> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as UUID?)?.toString() ?: NULL
+    override fun toSql(value:UUID?): Any? {
+        return value?.let { "'" + value.toString() + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): UUID? {
@@ -187,8 +204,8 @@ object UUIDConverter : SqlConverter<UUID> {
 
 object UniqueIdConverter : SqlConverter<UniqueId> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as UniqueId?)?.toString() ?: NULL
+    override fun toSql(value:UniqueId?): Any? {
+        return value?.let { "'" + value.toString() + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): UniqueId? {
@@ -198,9 +215,8 @@ object UniqueIdConverter : SqlConverter<UniqueId> {
 
 class EnumConverter(val dataCls: KClass<*>) : SqlConverter<EnumLike> {
 
-    override fun toSql(item: Any, name: String): Any? {
-        val raw = Reflector.getFieldValue(item, name) as EnumLike
-        return "'" + raw.value.toString() + "'"
+    override fun toSql(value:EnumLike?): Any? {
+        return value?.let { "'" + value.toString() + "'" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): EnumLike? {
