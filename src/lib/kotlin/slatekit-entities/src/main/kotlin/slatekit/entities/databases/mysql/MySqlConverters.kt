@@ -1,9 +1,8 @@
 package slatekit.entities.databases.mysql
 
-import slatekit.common.DateTime
-import slatekit.common.EnumLike
-import slatekit.common.SqlConverter
-import slatekit.common.UniqueId
+import slatekit.common.*
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.query.QueryEncoder
 import slatekit.common.records.Record
 import slatekit.meta.Reflector
 import slatekit.entities.Consts.NULL
@@ -17,6 +16,16 @@ object StringConverter : SqlConverter<String> {
         return (Reflector.getFieldValue(item, name) as String?)?.toString() ?: NULL
     }
 
+    fun toSql(item: Any, name: String, encrypt:Boolean, encryptor:Encryptor?): Any? {
+        val sVal = Reflector.getFieldValue(item, name) as String?
+        return sVal?.let {
+            // Only encrypt on create
+            val sValEnc = if (encrypt) encryptor?.encrypt(sVal) ?: sVal else sVal
+            val sValFinal = sValEnc.nonEmptyOrDefault("")
+            "'" + QueryEncoder.ensureValue(sValFinal) + "'"
+        } ?: NULL
+    }
+
     override fun toItem(record: Record, name: String): String? {
         return record.getString(name)
     }
@@ -25,7 +34,8 @@ object StringConverter : SqlConverter<String> {
 object BoolConverter : SqlConverter<Boolean> {
 
     override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Boolean?)?.toString() ?: NULL
+        val bVal = Reflector.getFieldValue(item, name) as Boolean?
+        return bVal?.let { if (bVal) "1" else "0" } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Boolean? {
@@ -36,7 +46,8 @@ object BoolConverter : SqlConverter<Boolean> {
 object ShortConverter : SqlConverter<Short> {
 
     override fun toSql(item: Any, name: String): Any? {
-        return (Reflector.getFieldValue(item, name) as Short?)?.toString() ?: NULL
+        val iVal = Reflector.getFieldValue(item, name) as Short?
+        return iVal?.toString() ?: NULL
     }
 
     override fun toItem(record: Record, name: String): Short? {

@@ -22,6 +22,7 @@ import java.time.*
 
 object Types {
 
+    val JCharClass = Char.javaClass
     val JStringClass = "".javaClass
     val JBoolClass = true.javaClass
     val JShortClass = 0.toShort().javaClass

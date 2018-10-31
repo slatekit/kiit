@@ -13,7 +13,7 @@ object PostgresTypes {
      val longType = DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JStringClass)
      val floatType = DbTypeInfo(DbFieldType.DbFloat, "FLOAT", Types.JStringClass)
      val doubleType = DbTypeInfo(DbFieldType.DbDouble, "DOUBLE", Types.JStringClass)
-     val decimalType = DbTypeInfo(DbFieldType.DbReal, "DECIMAL", Types.JStringClass)
+     val decimalType = DbTypeInfo(DbFieldType.DbDecimal, "DECIMAL", Types.JStringClass)
      val localdateType = DbTypeInfo(DbFieldType.DbLocalDate, "DATE", Types.JStringClass)
      val localtimeType = DbTypeInfo(DbFieldType.DbLocalTime, "TIME", Types.JStringClass)
      val localDateTimeType = DbTypeInfo(DbFieldType.DbLocalDateTime, "DATETIME", Types.JStringClass)

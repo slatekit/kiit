@@ -17,6 +17,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
 import slatekit.common.query.IQuery
+import slatekit.common.query.Query
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
@@ -219,6 +220,12 @@ abstract class EntityRepo<T>(
      * @return
      */
     fun takeFirst(call: () -> List<T>): T? = call().firstOrNull()
+
+    /**
+     * Return a query builder for more complex searches
+     */
+    open fun query():Query = Query()
+
 
     /**
      * finds items based on the query

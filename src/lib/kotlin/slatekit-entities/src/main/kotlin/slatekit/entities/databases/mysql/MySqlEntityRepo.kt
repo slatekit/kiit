@@ -102,6 +102,11 @@ open class MySqlEntityRepo<T>(
     }
 
     /**
+     * Return a query builder for more complex searches
+     */
+    override fun query():Query = MySqlQuery()
+
+    /**
      * finds items by using the sql
      * @param query
      * @return

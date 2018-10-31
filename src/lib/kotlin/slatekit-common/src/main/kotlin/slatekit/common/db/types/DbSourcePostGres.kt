@@ -30,7 +30,7 @@ open class DbSourcePostGres : DbSource {
             DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbFloat, "FLOAT", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbDouble, "DOUBLE", Types.JStringClass),
-            DbTypeInfo(DbFieldType.DbReal, "DECIMAL", Types.JStringClass),
+            DbTypeInfo(DbFieldType.DbDecimal, "DECIMAL", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbLocalDate, "DATE", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbLocalTime, "TIME", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbLocalDateTime, "DATETIME", Types.JStringClass),

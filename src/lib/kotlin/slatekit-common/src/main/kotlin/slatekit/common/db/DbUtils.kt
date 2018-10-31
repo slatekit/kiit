@@ -167,7 +167,7 @@ object DbUtils {
             else if (dataType == Types.JLongClass) DbFieldType.DbLong
             else if (dataType == Types.JFloatClass) DbFieldType.DbFloat
             else if (dataType == Types.JDoubleClass) DbFieldType.DbDouble
-            else if (dataType == Types.JDecimalClass) DbFieldType.DbReal
+            else if (dataType == Types.JDecimalClass) DbFieldType.DbDecimal
             else if (dataType == Types.JLocalDateClass) DbFieldType.DbLocalDate
             else if (dataType == Types.JLocalTimeClass) DbFieldType.DbLocalTime
             else if (dataType == Types.JLocalDateTimeClass) DbFieldType.DbLocalDateTime
