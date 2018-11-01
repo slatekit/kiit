@@ -11,13 +11,14 @@
  * </slate_header>
  */
 
-package slatekit.entities.core
+package slatekit.entities.databases
 
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.query.QueryEncoder
 import slatekit.common.UniqueId
+import slatekit.entities.core.EntityMapper
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
@@ -30,21 +31,17 @@ import java.time.format.DateTimeFormatter
  *
  * @param model
  */
-open class EntityMapper(model: Model,
-                        table:String? = null,
-                        val persistAsUtc: Boolean = false,
-                        encryptor: Encryptor? = null,
-                        namer: Namer? = null,
-                        private val encodedChar:Char = '`')
-    : ModelMapper(model, _encryptor = encryptor, namer = namer) {
+open class MetaMapper(model: Model,
+                      converter:Converter,
+                      table:String? = null,
+                      persistAsUtc: Boolean = false,
+                      encryptor: Encryptor? = null,
+                      namer: Namer? = null,
+                      private val encodedChar:Char = '`')
+    : EntityMapper(model, table, persistAsUtc, encryptor, namer) {
 
-    private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    data class MappedSql(val cols: String, val data: String, val updates: String)
-
-    open fun mapToSql(item: Any, update: Boolean, fullSql: Boolean = false): String {
+    override fun mapToSql(item: Any, update: Boolean, fullSql: Boolean): String {
 
         return if (!_model.any)
             ""
@@ -53,7 +50,7 @@ open class EntityMapper(model: Model,
     }
 
 
-    open fun mapFields(item: Any, update: Boolean, fullSql: Boolean = false): String {
+    override fun mapFields(item: Any, update: Boolean, fullSql: Boolean): String {
         var rawSql = ""
         val result = mapFields(null, item, update, _model)
 
@@ -82,7 +79,7 @@ open class EntityMapper(model: Model,
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    open fun mapFields(prefix: String?, item: Any, update: Boolean, model: Model): MappedSql {
+    override fun mapFields(prefix: String?, item: Any, update: Boolean, model: Model): MappedSql {
         var dat = ""
         var updates = ""
         var cols = ""
@@ -217,16 +214,5 @@ open class EntityMapper(model: Model,
             }
         }
         return MappedSql(cols, dat, updates)
-    }
-
-
-    open fun buildName(name: String): String {
-        val finalName = namer?.rename(name) ?: name
-        return "$encodedChar$finalName$encodedChar"
-    }
-
-    open fun buildName(prefix: String, name: String): String {
-        val finalName = namer?.rename(name) ?: name
-        return "$encodedChar${prefix}_$finalName$encodedChar"
     }
 }
