@@ -30,7 +30,12 @@ import java.time.format.DateTimeFormatter
  *
  * @param model
  */
-open class EntityMapper(model: Model, persistAsUtc: Boolean = false, encryptor: Encryptor? = null, namer: Namer? = null)
+open class EntityMapper(model: Model,
+                        table:String? = null,
+                        val persistAsUtc: Boolean = false,
+                        encryptor: Encryptor? = null,
+                        namer: Namer? = null,
+                        private val encodedChar:Char = '`')
     : ModelMapper(model, _encryptor = encryptor, namer = namer) {
 
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -47,7 +52,8 @@ open class EntityMapper(model: Model, persistAsUtc: Boolean = false, encryptor: 
             mapFields(item, update, fullSql)
     }
 
-    private fun mapFields(item: Any, update: Boolean, fullSql: Boolean = false): String {
+
+    open fun mapFields(item: Any, update: Boolean, fullSql: Boolean = false): String {
         var rawSql = ""
         val result = mapFields(null, item, update, _model)
 
@@ -76,7 +82,7 @@ open class EntityMapper(model: Model, persistAsUtc: Boolean = false, encryptor: 
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    private fun mapFields(prefix: String?, item: Any, update: Boolean, model: Model): MappedSql {
+    open fun mapFields(prefix: String?, item: Any, update: Boolean, model: Model): MappedSql {
         var dat = ""
         var updates = ""
         var cols = ""
@@ -213,13 +219,14 @@ open class EntityMapper(model: Model, persistAsUtc: Boolean = false, encryptor: 
         return MappedSql(cols, dat, updates)
     }
 
-    private fun buildName(name: String): String {
+
+    open fun buildName(name: String): String {
         val finalName = namer?.rename(name) ?: name
-        return "`$finalName`"
+        return "$encodedChar$finalName$encodedChar"
     }
 
-    private fun buildName(prefix: String, name: String): String {
+    open fun buildName(prefix: String, name: String): String {
         val finalName = namer?.rename(name) ?: name
-        return "`${prefix}_$finalName`"
+        return "$encodedChar${prefix}_$finalName$encodedChar"
     }
 }

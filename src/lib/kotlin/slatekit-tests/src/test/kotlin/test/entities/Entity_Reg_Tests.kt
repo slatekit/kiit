@@ -53,7 +53,7 @@ class Entity_Reg_Tests {
         ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
 
         val inst1 = ent.getSvc<User5>(User5::class)
-        val inst2 = ent.buildSvcByType(User5::class)
+        val inst2 = ent.getSvc<User5>(User5::class)
         assert( inst1 != inst2)
     }
 

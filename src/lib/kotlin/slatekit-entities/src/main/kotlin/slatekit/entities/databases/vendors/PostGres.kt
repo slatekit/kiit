@@ -17,20 +17,22 @@ import kotlin.reflect.KClass
  * MySql to Java types
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
-object MySqlTypeMap : TypeMap()
+object PostGreseMap : TypeMap()
 
 
 /**
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-object MySqlConverter : Converter()
+object PostGresConverter : Converter()
 
 
-class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
+class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGreseMap, namer)
 
 
-class MySqlQuery : Query()
+class PostGresQuery : Query()
+
+
 
 
 /**
@@ -42,7 +44,7 @@ class MySqlQuery : Query()
  * @param db
  * @tparam T
  */
-open class MySqlEntityRepo<T>(
+open class PostGresEntityRepo<T>(
         db: Db,
         entityType: KClass<*>,
         entityIdType: KClass<*>? = null,
@@ -58,11 +60,10 @@ open class MySqlEntityRepo<T>(
         nameOfTable = nameOfTable,
         encryptor = encryptor,
         namer = namer,
-        encodedChar = '`',
-        query = { MySqlQuery() },
-        lastId = "SELECT LAST_INSERT_ID();"
+        encodedChar = '"',
+        query = { PostGresQuery() },
+        lastId = null
 ) where T : Entity
-
 
 
 /**
@@ -70,9 +71,9 @@ open class MySqlEntityRepo<T>(
  *
  * @param model
  */
-open class MySqlEntityMapper(model: Model,
-                             table:String? = null,
-                             utc: Boolean = false,
-                             enc: Encryptor? = null,
-                             namer: Namer? = null)
-    : EntityMapper(model, table, utc, enc, namer, '`')
+open class PostGresEntityMapper(model: Model,
+                                table:String? = null,
+                                utc: Boolean = false,
+                                enc: Encryptor? = null,
+                                namer: Namer? = null)
+    : EntityMapper(model, table, utc, enc, namer, '"')

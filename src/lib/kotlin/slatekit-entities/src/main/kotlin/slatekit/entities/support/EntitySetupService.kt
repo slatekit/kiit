@@ -158,7 +158,7 @@ class EntitySetupService(
     fun generateSql(moduleName: String, version: String = ""): ResultEx<List<String>> {
         val result = try {
             val fullName = moduleName
-            val svc = _entities.getServiceByName(fullName)
+            val svc = _entities.getSvcByTypeName(fullName)
             val model = svc.repo().mapper().model()
             val ddl = _entities.getInfoByName(fullName).entityDDL
             val sqlTable = ddl?.buildAddTable(_entities.getDbSource(), model, namer = _entities.namer) ?: ""
@@ -199,7 +199,7 @@ class EntitySetupService(
 
     private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityInfo, String) -> String): ResultEx<String> {
         val ent = _entities.getInfoByName(entityName)
-        val svc = _entities.getServiceByName(entityName)
+        val svc = _entities.getSvcByTypeName(entityName)
         val table = svc.repo().repoName()
         val sql = sqlBuilder(ent, table)
         return try {

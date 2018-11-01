@@ -15,6 +15,7 @@ package slatekit.entities.repos
 
 import slatekit.common.db.Db
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.naming.Namer
 import slatekit.common.query.IQuery
 import slatekit.common.query.Op
 import slatekit.common.query.Query
@@ -38,10 +39,19 @@ abstract class EntityRepoSql<T>(
         entityIdType: KClass<*>? = null,
         entityMapper: EntityMapper? = null,
         nameOfTable: String? = null,
-        encryptor: Encryptor? = null
-) : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
+        encryptor: Encryptor? = null,
+        namer:Namer? = null,
+        encodedChar: Char = '`',
+        query:(() -> Query)? = null,
+        val lastId:String? = null
+) : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor, namer, encodedChar, query) where T : Entity {
 
     protected val _db = db
+
+
+    override fun repoName(): String =
+            "`" + super.repoName() + "`"
+
 
     override fun create(entity: T): Long {
         val sql = mapFields(entity, false)
@@ -212,7 +222,7 @@ abstract class EntityRepoSql<T>(
         return _db.callQueryMapped(name, _entityMapper, args)
     }
 
-    protected open fun scriptLastId(): String = ""
+    protected open fun scriptLastId(): String = lastId ?: ""
 
     private fun sqlExecute(sql: String): Int {
         return _db.update(sql)

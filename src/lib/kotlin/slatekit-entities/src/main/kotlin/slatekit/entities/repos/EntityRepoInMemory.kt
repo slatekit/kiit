@@ -14,6 +14,8 @@
 package slatekit.entities.repos
 
 import slatekit.common.DateTime
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.common.query.IQuery
 import slatekit.entities.core.Entity
@@ -32,9 +34,11 @@ import kotlin.reflect.KClass
 open class EntityRepoInMemory<T>(
     entityType: KClass<*>,
     entityIdType: KClass<*>? = null,
-    entityMapper: EntityMapper? = null
+    entityMapper: EntityMapper? = null,
+    encryptor: Encryptor? = null,
+    namer: Namer? = null
 )
-    : EntityRepo<T>(entityType, entityIdType, entityMapper, null) where T : Entity {
+    : EntityRepo<T>(entityType, entityIdType, entityMapper, null, encryptor = encryptor, namer = namer) where T : Entity {
 
     private var _items = ListMap<Long, T>(listOf())
 

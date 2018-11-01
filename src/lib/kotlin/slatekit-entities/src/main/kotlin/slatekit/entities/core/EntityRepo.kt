@@ -18,6 +18,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
 import slatekit.common.query.IQuery
 import slatekit.common.query.Query
+import slatekit.entities.databases.vendors.MySqlQuery
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
@@ -36,7 +37,9 @@ abstract class EntityRepo<T>(
     entityMapper: EntityMapper? = null,
     nameOfTable: String? = null,
     encryptor: Encryptor? = null,
-    val namer: Namer? = null
+    val namer: Namer? = null,
+    val encodedChar: Char = '`',
+    val queryBuilder:(() -> Query)? = null
 )
     : IEntityRepo where T : Entity {
     protected val _nameOfTable = nameOfTable
@@ -224,7 +227,7 @@ abstract class EntityRepo<T>(
     /**
      * Return a query builder for more complex searches
      */
-    open fun query():Query = Query()
+    open fun query():Query = queryBuilder?.invoke() ?: Query()
 
 
     /**
