@@ -20,7 +20,6 @@ import slatekit.entities.repos.EntityRepoInMemory
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.db.Db

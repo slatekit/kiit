@@ -1,4 +1,4 @@
-package slatekit.entities.databases.mysql
+package slatekit.entities.databases
 
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor

@@ -1,4 +1,4 @@
-package slatekit.entities.databases.mysql
+package slatekit.entities.databases
 
 import slatekit.common.naming.Namer
 import slatekit.common.db.Db
@@ -13,17 +13,17 @@ import slatekit.meta.models.Model
  * 2. ALTER TABLE message DROP INDEX idx_status;
  * 3. ALTER TABLE message ADD UNIQUE (uuid);
  */
-class MySqlBuilder(val model:Model, val namer: Namer?) {
+open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
 
     /**
      * Builds the table DDL sql statement using the model supplied.
      */
-    fun createTable(): String
+    fun createTable(model:Model): String
     {
         val buff = StringBuilder()
 
         // 1. build the "CREATE <tablename>
-        buff.append(createTableName())
+        buff.append(createTableName(model))
 
         // 2. build the primary key column
         buff.append(createKey("id"))
@@ -41,7 +41,7 @@ class MySqlBuilder(val model:Model, val namer: Namer?) {
     }
 
 
-    fun createTableName(): String {
+    fun createTableName(model:Model): String {
         val name = namer?.rename(model.name) ?: model.name
         return "create table `$name` ( $newline"
     }
@@ -123,11 +123,11 @@ class MySqlBuilder(val model:Model, val namer: Namer?) {
      */
     fun colType(colType: DbFieldType, maxLen: Int): String {
         return if (colType == DbFieldType.DbText && maxLen == -1)
-            MySqlTypes.textType.dbType
+            types.textType.dbType
         else if (colType == DbFieldType.DbString)
-            MySqlTypes.stringType.dbType + "($maxLen)"
+            types.stringType.dbType + "($maxLen)"
         else
-            MySqlTypes.lookup[colType]?.dbType ?: ""
+            types.lookup[colType]?.dbType ?: ""
 
     }
 }

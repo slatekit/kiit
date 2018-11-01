@@ -33,14 +33,13 @@ import kotlin.reflect.KClass
  * @tparam T
  */
 abstract class EntityRepoSql<T>(
-    db: Db,
-    entityType: KClass<*>,
-    entityIdType: KClass<*>? = null,
-    entityMapper: EntityMapper? = null,
-    nameOfTable: String? = null,
-    encryptor: Encryptor? = null
-)
-    : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
+        db: Db,
+        entityType: KClass<*>,
+        entityIdType: KClass<*>? = null,
+        entityMapper: EntityMapper? = null,
+        nameOfTable: String? = null,
+        encryptor: Encryptor? = null
+) : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor) where T : Entity {
 
     protected val _db = db
 
@@ -55,6 +54,35 @@ abstract class EntityRepoSql<T>(
         val id = entity.identity()
         sqlExecute("update ${repoName()} set " + sql + " where ${idName()} = $id;")
         return entity
+    }
+
+    /**
+     * updates the table field using the value supplied
+     * @param field: The field name
+     * @param value: The value to set
+     */
+    override fun updateByField(field: String, value: Any): Int {
+        val query = Query().set(field, value)
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + repoName() + updateSql
+        return _db.update(sql)
+    }
+
+    /**
+     * updates items using the proc and args
+     */
+    override fun updateByProc(name: String, args: List<Any>?): Int {
+        return _db.callUpdate(name, args)
+    }
+
+    /**
+     * updates items using the query
+     * @param query: The query builder
+     */
+    override fun updateByQuery(query: IQuery): Int {
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + repoName() + updateSql
+        return _db.update(sql)
     }
 
     /**
@@ -76,6 +104,30 @@ abstract class EntityRepoSql<T>(
         val delimited = ids.joinToString(",")
         val count = sqlExecute("delete from ${repoName()} where ${idName()} in ($delimited);")
         return count
+    }
+
+    /**
+     * deletes items based on the field name and value
+     * @param field: The field name
+     * @param value: The value to check for
+     * @return
+     */
+    override fun deleteByField(field: String, value: Any): Int {
+        val query = Query().where(field, "=", value)
+        val filter = query.toFilter()
+        val sql = "delete from " + repoName() + " where " + filter
+        return _db.update(sql)
+    }
+
+    /**
+     * deletes items using the query
+     * @param query: The query builder
+     * @return
+     */
+    override fun deleteByQuery(query: IQuery): Int {
+        val filter = query.toFilter()
+        val sql = "delete from " + repoName() + " where " + filter
+        return _db.update(sql)
     }
 
     /**
@@ -103,6 +155,13 @@ abstract class EntityRepoSql<T>(
     override fun count(): Long {
         val count = _db.getScalarLong("select count(*) from ${repoName()};")
         return count
+    }
+
+    override fun top(count: Int, desc: Boolean): List<T> {
+        val orderBy = if (desc) " order by id desc" else " order by id asc"
+        val sql = "select * from " + repoName() + orderBy + " limit " + count
+        val items = _db.mapMany<T>(sql, _entityMapper) ?: listOf<T>()
+        return items
     }
 
     override fun find(query: IQuery): List<T> {
@@ -142,6 +201,15 @@ abstract class EntityRepoSql<T>(
      */
     override fun findFirstBy(field: String, op: String, value: Any): T? {
         return find(Query().where(field, op, value)).firstOrNull()
+    }
+
+    /**
+     * finds items by using the sql
+     * @param query
+     * @return
+     */
+    override fun findByProc(name: String, args: List<Any>?): List<T>? {
+        return _db.callQueryMapped(name, _entityMapper, args)
     }
 
     protected open fun scriptLastId(): String = ""
