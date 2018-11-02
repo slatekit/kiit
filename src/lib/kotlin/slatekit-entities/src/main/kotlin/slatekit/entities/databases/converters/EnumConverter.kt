@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 object EnumConverter : SqlConverter<EnumLike> {
 
     override fun toSql(value: EnumLike?): String {
-        return value?.let { "'" + value.toString() + "'" } ?: NULL
+        return value?.let { value.value.toString() } ?: NULL
     }
 
     override fun toItem(record: Record, name: String): EnumLike? {

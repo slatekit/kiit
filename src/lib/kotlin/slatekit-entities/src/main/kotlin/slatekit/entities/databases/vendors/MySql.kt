@@ -71,8 +71,7 @@ open class MySqlEntityRepo<T>(
  * @param model
  */
 open class MySqlEntityMapper(model: Model,
-                             table:String? = null,
                              utc: Boolean = false,
                              enc: Encryptor? = null,
                              namer: Namer? = null)
-    : EntityMapper(model, MySqlConverter, table, utc, '`', enc, namer)
+    : EntityMapper(model, MySqlConverter, utc, '`', enc, namer)

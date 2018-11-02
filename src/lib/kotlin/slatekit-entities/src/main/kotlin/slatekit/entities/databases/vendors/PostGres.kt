@@ -72,8 +72,7 @@ open class PostGresEntityRepo<T>(
  * @param model
  */
 open class PostGresEntityMapper(model: Model,
-                                table:String? = null,
                                 utc: Boolean = false,
                                 enc: Encryptor? = null,
                                 namer: Namer? = null)
-    : EntityMapper(model, PostGresConverter, table, utc, '"', enc, namer)
+    : EntityMapper(model, PostGresConverter, utc, '"', enc, namer)

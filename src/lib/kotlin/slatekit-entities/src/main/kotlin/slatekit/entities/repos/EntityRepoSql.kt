@@ -57,7 +57,7 @@ abstract class EntityRepoSql<T>(
         val mapper = _entityMapper
         val inserts = _entityMapper.converter.inserts
         val sql = inserts.sql(entity, mapper.model(), mapper)
-        val id = _db.insert("insert into ${repoName()} " + sql + ";")
+        val id = _db.insert(sql)
         return id
     }
 
@@ -65,8 +65,7 @@ abstract class EntityRepoSql<T>(
         val mapper = _entityMapper
         val updates = _entityMapper.converter.updates
         val sql = updates.sql(entity, mapper.model(), mapper)
-        val id = entity.identity()
-        sqlExecute("update ${repoName()} set " + sql + " where ${idName()} = $id;")
+        sqlExecute(sql)
         return entity
     }
 

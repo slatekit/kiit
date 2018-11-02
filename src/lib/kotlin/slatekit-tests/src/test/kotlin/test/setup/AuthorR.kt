@@ -4,6 +4,7 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.UniqueId
+import slatekit.entities.core.Entity
 import test.entities.Entity_Mapper_ResultSet_Tests
 import java.util.*
 

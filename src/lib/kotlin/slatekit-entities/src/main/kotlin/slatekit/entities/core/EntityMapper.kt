@@ -36,7 +36,6 @@ import java.time.*
  */
 open class EntityMapper(model: Model,
                         val converter: Converter,
-                        val table: String? = null,
                         val isUtc: Boolean = false,
                         val quoteChar: Char = '`',
                         encryptor: Encryptor? = null,
@@ -94,6 +93,9 @@ open class EntityMapper(model: Model,
         }
         return converted
     }
+
+
+    open fun tableName():String = buildName(_model.table)
 
 
     open fun buildName(name: String): String {
@@ -157,7 +159,7 @@ open class EntityMapper(model: Model,
             converter.localTimes.toSql(raw)
         } else if (mapping.dataCls == KTypes.KLocalDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
-            converter.localDateTimes.toSql(raw, isUtc)
+            converter.localDateTimes.toSql(raw)
         } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
             converter.zonedDateTimes.toSql(raw, isUtc)

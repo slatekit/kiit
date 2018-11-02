@@ -88,7 +88,9 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
      * NOTE: Currently the system enforces an primary key be named as "id"
      * This may be removed later
      */
-    fun model(entityType: KClass<*>, namer: Namer?): Model = ModelMapper.loadSchema(entityType, EntityWithId::id.name, namer)
+    fun model(entityType: KClass<*>, namer: Namer?, table:String?): Model {
+        return ModelMapper.loadSchema(entityType, EntityWithId::id.name, namer, table)
+    }
 
 
     /**
@@ -114,11 +116,11 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
      * @param enc: Optional encrptor to support encryption of selected columns
      * @param namer: Optional namer to create naming conventions
      */
-    fun mapper(dbType: DbType, model: Model, tableName: String? = null, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null): EntityMapper {
+    fun mapper(dbType: DbType, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null): EntityMapper {
         return when (dbType) {
-            DbTypeMySql -> MySqlEntityMapper(model, tableName, utc, enc, namer)
-            DbTypePGres -> PostGresEntityMapper(model, tableName, utc, enc, namer)
-            else -> EntityMapper(model, MySqlConverter, tableName, utc, '`', enc, namer)
+            DbTypeMySql -> MySqlEntityMapper(model, utc, enc, namer)
+            DbTypePGres -> PostGresEntityMapper(model, utc, enc, namer)
+            else -> EntityMapper(model, MySqlConverter, utc, '`', enc, namer)
         }
     }
 
@@ -192,9 +194,9 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
         val db = db(dbKey, dbShard)
 
         // 2. Mapper: Dynamically maps item to/from sql
-        val mapper = mapper(dbType, model, tableName, utc, enc, namer)
+        val mapper = mapper(dbType, model, utc, enc, namer)
 
-        // 3. Repo: Handles all the CRUD / lookup fuctionality
+        // 3. Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
             DbTypeMySql -> MySqlEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
             DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)

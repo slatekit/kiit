@@ -89,13 +89,13 @@ class Entities(
     ): EntityInfo where T : Entity {
 
         // 1. Model ( schema of the entity )
-        val entityModel = model ?: builder.model(entityType, namer)
+        val entityModel = model ?: builder.model(entityType, namer, tableName)
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val entityMapper = builder.mapper(dbType, entityModel, tableName, persistUTC, enc, namer)
+        val entityMapper = mapper ?: builder.mapper(dbType, entityModel, persistUTC, enc, namer)
 
         // 3. Repo ( provides CRUD using the Mapper)
-        val entityRepo = builder.repo<T>(dbType, dbKey ?: "", dbShard ?: "", entityType, entityMapper, tableName)
+        val entityRepo = repository ?: builder.repo<T>(dbType, dbKey ?: "", dbShard ?: "", entityType, entityMapper, tableName)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val entityService = builder.service<T>(this, serviceType, entityRepo, serviceCtx)
