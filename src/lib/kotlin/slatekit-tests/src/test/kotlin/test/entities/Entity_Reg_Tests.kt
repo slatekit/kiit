@@ -12,6 +12,9 @@ usage: Please refer to license on github for more info.
 package test.entities
 
 import org.junit.Test
+import slatekit.common.db.DbConEmpty
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.entities.core.*
 import test.setup.Phone
@@ -21,9 +24,12 @@ import kotlin.reflect.KClass
 
 class Entity_Reg_Tests {
 
+    val entities:Entities by lazy {
+        Entities(DbLookup(DbConString("", "", "", "")))
+    }
 
     @Test fun can_register() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 
@@ -37,7 +43,7 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_service() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 
@@ -47,7 +53,7 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_service_instance() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 
@@ -58,7 +64,7 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_repo() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 
@@ -68,7 +74,7 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_mapper() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 
@@ -82,7 +88,7 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_model() {
-        val ent = Entities()
+        val ent = entities
         ent.register<User5>(entityType = User5::class)
         ent.register<Phone>(entityType = Phone::class)
 

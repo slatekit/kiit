@@ -150,7 +150,7 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
         val entityIdType = Long::class
 
         // 1. DB: JDBC wrapper
-        val db = db(dbKey, dbShard)
+        val db = if(dbType == DbTypeMemory) Db(DbConEmpty) else  db(dbKey, dbShard)
 
         // 2. Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
