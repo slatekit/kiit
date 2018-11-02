@@ -30,10 +30,10 @@ import kotlin.reflect.jvm.jvmErasure
  * @param _model
  */
 open class ModelMapper(
-    protected val _model: Model,
-    protected val _settings: ModelMapperSettings = ModelMapperSettings(),
-    protected val _encryptor: Encryptor? = null,
-    protected val namer: Namer? = null
+        protected val _model: Model,
+        protected val _settings: ModelMapperSettings = ModelMapperSettings(),
+        protected val _encryptor: Encryptor? = null,
+        protected val namer: Namer? = null
 ) : Mapper {
 
     /**
@@ -47,7 +47,7 @@ open class ModelMapper(
      * @return
      */
     override fun createEntity(): Any? =
-        _model.dataType?.let { type -> Reflector.create<Any>(type) }
+            _model.dataType?.let { type -> Reflector.create<Any>(type) }
 
     /**
      * Creates the entity/model with all the supplied constructor parameters (ideal for case classes)
@@ -55,7 +55,7 @@ open class ModelMapper(
      * @return
      */
     override fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any =
-        Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
+            Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
 
     fun <T> copyWithId(id: Long, entity: T): T = entity
 
@@ -103,7 +103,7 @@ open class ModelMapper(
     }
 
     override fun toString(): String =
-        _model.fields.fold("", { s, field -> s + field.toString() + newline })
+            _model.fields.fold("", { s, field -> s + field.toString() + newline })
 
     companion object {
 
@@ -114,7 +114,7 @@ open class ModelMapper(
          * @return
          */
         @JvmStatic
-        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null): Model {
+        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
             val modelName = dataType.simpleName!!
             val modelNameFull = dataType.qualifiedName!!
 
@@ -135,17 +135,17 @@ open class ModelMapper(
                 val fieldKType = matchedField.first.returnType
                 val fieldCls = fieldKType.jvmErasure
                 val modelField = ModelField.build(
-                    prop = prop, name = name,
-                    dataType = fieldCls,
-                    dataKType = fieldKType,
-                    isRequired = required,
-                    isIndexed = anno.indexed,
-                    isUnique = anno.unique,
-                    isUpdatable = anno.updatable,
-                    maxLength = length,
-                    encrypt = encrypt,
-                    cat = cat,
-                    namer = namer
+                        prop = prop, name = name,
+                        dataType = fieldCls,
+                        dataKType = fieldKType,
+                        isRequired = required,
+                        isIndexed = anno.indexed,
+                        isUnique = anno.unique,
+                        isUpdatable = anno.updatable,
+                        maxLength = length,
+                        encrypt = encrypt,
+                        cat = cat,
+                        namer = namer
                 )
 
                 val finalModelField = if (!modelField.isBasicType()) {
@@ -155,7 +155,7 @@ open class ModelMapper(
                 finalModelField
             }
 
-            return Model(modelName, modelNameFull, dataType, _propList = fields, namer = namer)
+            return Model(modelName, modelNameFull, dataType, _propList = fields, namer = namer, tableName = table ?: "")
         }
     }
 
@@ -207,11 +207,9 @@ open class ModelMapper(
             KTypes.KDoubleClass -> record.getDouble(colName)
             KTypes.KLocalDateClass -> record.getLocalDate(colName)
             KTypes.KLocalTimeClass -> record.getLocalTime(colName)
-            KTypes.KLocalDateTimeClass -> if (isUTC) record.getLocalDateTimeFromUTC(colName) else record.getLocalDateTime(
-                colName
-            )
+            KTypes.KLocalDateTimeClass -> record.getLocalDateTime(colName)
             KTypes.KZonedDateTimeClass -> if (isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(
-                colName
+                    colName
             )
             KTypes.KDateTimeClass -> if (isUTC) record.getDateTimeLocalFromUTC(colName) else record.getDateTime(colName)
             KTypes.KInstantClass -> record.getInstant(colName)

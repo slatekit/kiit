@@ -19,7 +19,8 @@ import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
-import slatekit.entities.databases.MySqlEntityDDL
+import slatekit.entities.databases.vendors.MySqlBuilder
+import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
 
 //</doc:import_required>
@@ -143,7 +144,7 @@ class Example_Mapper : Cmd("mapper") {
 
 
         // CASE 4: Now with a schema of the entity, you create a mapper
-        val mapper = EntityMapper (schema1)
+        val mapper = EntityMapper (schema1, MySqlConverter)
 
         // Create sample instance to demo the mapper
         val movie = Movie(
@@ -156,15 +157,15 @@ class Example_Mapper : Cmd("mapper") {
                 )
 
         // CASE 5: Get the sql for create
-        val sqlCreate = mapper.mapToSql(movie, update = false, fullSql = true)
+        val sqlCreate = mapper.mapFields(null, movie, schema1, false)
         println(sqlCreate)
 
         // CASE 6: Get the sql for update
-        val sqlForUpdate = mapper.mapToSql(movie, update = true, fullSql = true)
+        val sqlForUpdate = mapper.mapFields(null, movie, schema1, true)
         println(sqlForUpdate)
 
         // CASE 7: Generate the table schema for mysql from the model
-        println("table sql : " + MySqlEntityDDL().buildAddTable(DbSourceMySql(), schema1))
+        println("table sql : " + MySqlBuilder(null).createTable(schema1))
         //</doc:examples>
 
         return Success("")

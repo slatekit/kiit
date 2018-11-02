@@ -17,6 +17,9 @@ import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
 import slatekit.common.query.IQuery
+import slatekit.common.query.Query
+import slatekit.entities.Consts.idCol
+import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
@@ -35,14 +38,16 @@ abstract class EntityRepo<T>(
     entityMapper: EntityMapper? = null,
     nameOfTable: String? = null,
     encryptor: Encryptor? = null,
-    val namer: Namer? = null
+    val namer: Namer? = null,
+    val encodedChar: Char = '`',
+    val queryBuilder:(() -> Query)? = null
 )
     : IEntityRepo where T : Entity {
     protected val _nameOfTable = nameOfTable
     protected val _entityType: KClass<*> = entityType
     protected val _entityIdType: KClass<*> = entityIdType ?: Long::class
     protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType, namer = namer)
-    protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, encryptor = encryptor)
+    protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, MySqlConverter, encryptor = encryptor)
 
     /**
      * The name of the table in the datastore
@@ -63,7 +68,7 @@ abstract class EntityRepo<T>(
      * the name of the id field.
      * @return
      */
-    fun idName(): String = _entityModel.idField?.name ?: "id"
+    fun idName(): String = _entityModel.idField?.name ?: idCol
 
     /**
      * creates the entity in the datastore
@@ -219,6 +224,12 @@ abstract class EntityRepo<T>(
      * @return
      */
     fun takeFirst(call: () -> List<T>): T? = call().firstOrNull()
+
+    /**
+     * Return a query builder for more complex searches
+     */
+    open fun query():Query = queryBuilder?.invoke() ?: Query()
+
 
     /**
      * finds items based on the query

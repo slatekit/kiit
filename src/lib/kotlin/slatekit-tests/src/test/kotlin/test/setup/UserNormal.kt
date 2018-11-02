@@ -126,6 +126,7 @@ data class User4(
 
 
 data class User5(
+        @property:Field()
         override val id: Long = 0,
 
         @property:Field(required = true)

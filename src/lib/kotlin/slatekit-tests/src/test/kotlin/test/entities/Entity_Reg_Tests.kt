@@ -11,7 +11,11 @@ usage: Please refer to license on github for more info.
 
 package test.entities
 
+import org.junit.Assert
 import org.junit.Test
+import slatekit.common.db.DbConEmpty
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.entities.core.*
 import test.setup.Phone
@@ -21,61 +25,63 @@ import kotlin.reflect.KClass
 
 class Entity_Reg_Tests {
 
+    val entities:Entities by lazy {
+        Entities(DbLookup(DbConString("", "", "", "")))
+    }
 
     @Test fun can_register() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
         val ents = ent.getEntities()
 
-        assert(ents.size == 2)
-        assert(ent.getEntities()[0].dbType == DbTypeMemory)
-        assert(!ent.getEntities()[0].isSqlRepo)
-        assert(ent.getEntities()[0].entityType == User5::class)
-        assert(ent.getEntities()[0].entityTypeName == User5::class.qualifiedName)
+        Assert.assertTrue(ents.size == 2)
+        Assert.assertTrue(ent.getEntities()[0].dbType == DbTypeMemory)
+        Assert.assertTrue(ent.getEntities()[0].entityType == User5::class)
+        Assert.assertTrue(ent.getEntities()[0].entityTypeName == User5::class.qualifiedName)
     }
 
 
     @Test fun can_get_service() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
-        assert(ent.getSvc<User5>(User5::class) is EntityService<User5>)
-        assert(ent.getSvc<Phone>(Phone::class) is EntityService<Phone>)
+        Assert.assertTrue(ent.getSvc<User5>(User5::class) is EntityService<User5>)
+        Assert.assertTrue(ent.getSvc<Phone>(Phone::class) is EntityService<Phone>)
     }
 
 
     @Test fun can_get_service_instance() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
         val inst1 = ent.getSvc<User5>(User5::class)
-        val inst2 = ent.buildSvcByType(User5::class)
-        assert( inst1 != inst2)
+        val inst2 = ent.getSvc<User5>(User5::class)
+        Assert.assertEquals( inst1, inst2)
     }
 
 
     @Test fun can_get_repo() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
-        assert(ent.getRepo<User5>(User5::class) is EntityRepo<User5>)
-        assert(ent.getRepo<Phone>(Phone::class) is EntityRepo<Phone>)
+        Assert.assertTrue(ent.getRepo<User5>(User5::class) is EntityRepo<User5>)
+        Assert.assertTrue(ent.getRepo<Phone>(Phone::class) is EntityRepo<Phone>)
     }
 
 
     @Test fun can_get_mapper() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
         fun check(mapper:EntityMapper?, cls: KClass<*>):Unit {
-            assert(mapper != null)
-            assert(mapper?.model()?.dataType == cls)
+            Assert.assertTrue(mapper != null)
+            Assert.assertTrue(mapper?.model()?.dataType == cls)
         }
         check(ent.getMapper(User5::class), User5::class)
         check(ent.getMapper(Phone::class), Phone::class)
@@ -83,11 +89,11 @@ class Entity_Reg_Tests {
 
 
     @Test fun can_get_model() {
-        val ent = Entities()
-        ent.register<User5>(isSqlRepo = false, entityType = User5::class)
-        ent.register<Phone>(isSqlRepo = false, entityType = Phone::class)
+        val ent = entities
+        ent.register<User5>(entityType = User5::class)
+        ent.register<Phone>(entityType = Phone::class)
 
-        assert(ent.getModel(User5::class).dataType == User5::class)
-        assert(ent.getModel(Phone::class).dataType == Phone::class)
+        Assert.assertTrue(ent.getModel(User5::class).dataType == User5::class)
+        Assert.assertTrue(ent.getModel(Phone::class).dataType == Phone::class)
     }
 }

@@ -1,10 +1,7 @@
 package test.setup
 
-import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.common.Random
 import slatekit.common.UniqueId
-import test.entities.MapperTests
 import java.util.*
 
 data class Address(
@@ -54,10 +51,10 @@ data class UserWithAddress(
         val addr:Address? = null,
 
         @property:Field(required = true)
-        val uid: UUID = UUID.fromString(MapperTests.sampleUUID1),
+        val uid: UUID = UUID.fromString(UUIDs.sampleUUID1),
 
         @property:Field(required = true)
-        val shardId: UniqueId = UniqueId.fromString(MapperTests.sampleUUID2)
+        val shardId: UniqueId = UniqueId.fromString(UUIDs.sampleUUID2)
 )
 
 

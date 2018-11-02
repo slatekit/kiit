@@ -26,6 +26,7 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbType
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
@@ -56,12 +57,12 @@ open class ApiTestsBase {
                 env  = Env("local", Dev),
                 cfg  = Config(),
                 logs = LogsDefault,
-                ent  = Entities(DbLookup()),
+                ent  = Entities(DbLookup(DbConString("", "", "", ""))),
                 inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor
         )
-        ctx.ent.register<User>(false, User::class, serviceCtx = ctx)
+        ctx.ent.register<User>(User::class, serviceCtx = ctx)
         return ctx
     }
 

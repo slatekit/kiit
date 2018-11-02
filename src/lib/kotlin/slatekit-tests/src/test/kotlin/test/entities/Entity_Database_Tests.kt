@@ -11,6 +11,7 @@ usage: Please refer to license on github for more info.
 
 package test.entities
 
+import org.junit.Assert
 import org.junit.Test
 import java.time.*
 import slatekit.common.Field
@@ -76,7 +77,7 @@ class Entity_Database_Tests {
         val svc = entities.getSvc<SampleEntity>(SampleEntity::class)
         val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
         val ddl = inf.entityDDL
-        val sql = ddl?.buildAddTable(entities.getDbSource(), inf.model, namer = entities.namer) ?: ""
+        val sql = ddl?.createTable(inf.model) ?: ""
 
         val id = svc.create(SampleEntity(
                 test_string = "create",
@@ -115,19 +116,19 @@ class Entity_Database_Tests {
         )
         svc.update(update)
         val updated = svc.get(id)!!
-        assert(updated.id == update.id)
-        assert(updated.test_string == update.test_string)
-        assert(updated.test_string_enc == update.test_string_enc)
-        assert(updated.test_bool == update.test_bool)
-        assert(updated.test_short == update.test_short)
-        assert(updated.test_int == update.test_int)
-        assert(updated.test_long == update.test_long)
-        assert(updated.test_double == update.test_double)
-        assert(updated.test_localdate == update.test_localdate)
-        assert(updated.test_localtime == update.test_localtime)
-        assert(updated.test_localdatetime == update.test_localdatetime)
-        assert(updated.test_uuid  == update.test_uuid)
-        assert(updated.test_uniqueId == update.test_uniqueId)
+        Assert.assertTrue(updated.id == update.id)
+        Assert.assertTrue(updated.test_string == update.test_string)
+        Assert.assertTrue(updated.test_string_enc == update.test_string_enc)
+        Assert.assertTrue(updated.test_bool == update.test_bool)
+        Assert.assertTrue(updated.test_short == update.test_short)
+        Assert.assertTrue(updated.test_int == update.test_int)
+        Assert.assertTrue(updated.test_long == update.test_long)
+        Assert.assertTrue(updated.test_double == update.test_double)
+        Assert.assertTrue(updated.test_localdate == update.test_localdate)
+        Assert.assertTrue(updated.test_localtime == update.test_localtime)
+        Assert.assertTrue(updated.test_localdatetime == update.test_localdatetime)
+        Assert.assertTrue(updated.test_uuid  == update.test_uuid)
+        Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
     }
 
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
@@ -135,7 +136,7 @@ class Entity_Database_Tests {
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
         val entities = Entities(dbs, MyEncryptor)
-        entities.register<SampleEntity>(true, SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
+        entities.register<SampleEntity>(SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
         return entities
     }
 

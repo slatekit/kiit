@@ -21,4 +21,3 @@ target/
 # gradle/
 
 # tests
-./src/tests/kotlin/*

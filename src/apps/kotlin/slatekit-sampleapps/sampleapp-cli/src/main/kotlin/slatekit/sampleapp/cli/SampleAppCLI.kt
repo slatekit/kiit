@@ -18,10 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.security.Credentials
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings
-import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.CliApi
-import slatekit.integration.apis.EntitiesApi
-import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.sampleapp.core.apis.*
@@ -31,7 +28,6 @@ import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
-import test.common.SampleAnnoApi
 
 
 /**
@@ -62,8 +58,8 @@ fun main(args: Array<String>): Unit {
     //    entityType = typeOf[Movie],
     //    serviceType= typeOf[MovieService],
     //    repository= EntityRepoMySql[Movie](typeOf[Movie]))
-    ctx.ent.register<User>(isSqlRepo = false, entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
-    ctx.ent.register<Movie>(isSqlRepo = false, entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
+    ctx.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
+    ctx.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
     val svc = ctx.ent.getSvc<Movie>(Movie::class)
 
     // =========================================================================

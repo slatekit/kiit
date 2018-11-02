@@ -30,10 +30,8 @@ import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.Movie
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.*
-import slatekit.server.Server
 import slatekit.server.ktor.KtorServer
 import test.common.SampleAnnoApi
-import test.common.SampleApi
 
 
 /**
@@ -69,8 +67,8 @@ fun main(args: Array<String>): Unit {
     //    serviceType = MovieService::class,
     //    repository  = EntityRepoMySql<Movie>(Movie::class)
     // )
-    ctx.ent.register<User>(isSqlRepo = false, entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
-    ctx.ent.register<Movie>(isSqlRepo = false, entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
+    ctx.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
+    ctx.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
     val svc = ctx.ent.getSvc<Movie>(Movie::class)
 
     // =========================================================================

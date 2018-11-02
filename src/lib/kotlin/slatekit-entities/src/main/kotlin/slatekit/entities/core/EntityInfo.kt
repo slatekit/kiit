@@ -16,6 +16,7 @@ package slatekit.entities.core
 import slatekit.common.newline
 import slatekit.common.db.DbType
 import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.entities.databases.SqlBuilder
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
@@ -29,7 +30,6 @@ import kotlin.reflect.KClass
  * @param entityServiceInstance : an instance of the service ( singleton usage )
  * @param entityRepoInstance : an instance of the repo    ( singleton usage )
  * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
- * @param isSqlRepo : whether or not the repo is sql based or memory based
  * @param dbType : the database provider type
  * @param dbKey : a key identifying the database connection
  *                               ( see DbLookup / Example_Database.scala )
@@ -45,8 +45,7 @@ data class EntityInfo(
     val entityServiceInstance: IEntityService? = null,
     val entityRepoInstance: IEntityRepo? = null,
     val entityMapperInstance: EntityMapper? = null,
-    val entityDDL: EntityDDL? = null,
-    val isSqlRepo: Boolean = true,
+    val entityDDL: SqlBuilder? = null,
     val dbType: DbType = DbTypeMySql,
     val dbKey: String = "",
     val dbShard: String = ""
@@ -62,7 +61,6 @@ data class EntityInfo(
                 "repo    inst : " + getTypeNameFromInst(entityRepoInstance) + newline +
                 "mapper  type : " + getTypeName(entityMapperType) + newline +
                 "mapper  inst : " + getTypeNameFromInst(entityMapperInstance) + newline +
-                "is sql repo  : " + isSqlRepo + newline +
                 "db type      : " + dbType + newline +
                 "db key       : " + dbKey + newline +
                 "db shard     : " + dbShard + newline

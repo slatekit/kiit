@@ -16,6 +16,13 @@ mantra: Simplicity above all else
 
 package slatekit.entities
 
+import java.time.format.DateTimeFormatter
+
 object Consts {
     val version = "0.9.0"
+    val NULL = "NULL"
+    val idCol = "id"
+    val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 }

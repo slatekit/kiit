@@ -13,6 +13,8 @@ package test.entities
 
 import org.junit.Before
 import org.junit.Test
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.models.ModelMapper
@@ -26,11 +28,11 @@ class Entity_Services_Tests {
     private var entities = Entities()
 
 
-    @Before fun setup(): Unit {
-        entities = Entities()
-        entities.register<User5>(false, User5::class)
-        entities.register<Member>(false, Member::class)
-        entities.register<Group>(false, Group::class)
+    @Before fun setup(){
+        entities = Entities(DbLookup(DbConString("", "", "", "")))
+        entities.register<User5>(User5::class)
+        entities.register<Member>(Member::class)
+        entities.register<Group>(Group::class)
     }
 
 

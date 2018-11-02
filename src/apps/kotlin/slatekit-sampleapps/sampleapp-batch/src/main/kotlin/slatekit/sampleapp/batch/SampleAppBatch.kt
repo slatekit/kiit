@@ -12,14 +12,12 @@ usage: Please refer to license on github for more info.
 package slatekit.sampleapp.batch
 
 
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
 import slatekit.core.app.AppProcess
 import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.providers.logs.logback.LogbackLogs
@@ -136,7 +134,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
         // 2. The entity services uses a Generic Service/Repository pattern for ORM functionality.
         // 3. The services support CRUD operations out of the box for single-table mapped entities.
         // 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
-        ctxEnt.ent.register<User>(isSqlRepo = false,
+        ctxEnt.ent.register<User>(
                 entityType = User::class,
                 serviceType = UserService::class,
                 repository = EntityRepoInMemory<User>(User::class),

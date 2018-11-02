@@ -4,7 +4,6 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.UniqueId
-import test.entities.MapperTests
 import java.util.*
 
 class AuthorW {
@@ -42,8 +41,8 @@ class AuthorW {
     var salary: Double = 20.5
 
     @property:Field(required = true)
-    var uid: UUID = UUID.fromString(MapperTests.sampleUUID1)
+    var uid: UUID = UUID.fromString(UUIDs.sampleUUID1)
 
     @property:Field(required = true)
-    var shardId: UniqueId = UniqueId.fromString(MapperTests.sampleUUID2)
+    var shardId: UniqueId = UniqueId.fromString(UUIDs.sampleUUID2)
 }
