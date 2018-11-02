@@ -25,7 +25,8 @@ import slatekit.common.Success
 import slatekit.common.db.Db
 import slatekit.common.db.DbConString
 import slatekit.core.cmds.Cmd
-import slatekit.entities.databases.mysql.MySqlEntityRepo
+import slatekit.entities.databases.vendors.MySqlConverter
+import slatekit.entities.databases.vendors.MySqlEntityRepo
 import slatekit.meta.models.ModelMapper
 
 //</doc:import_examples>
@@ -72,7 +73,7 @@ class Example_Entities_Service : Cmd("service") {
 
     // 1. Setup the mapper
     val model = ModelMapper.loadSchema(User::class)
-    val mapper = EntityMapper(model)
+    val mapper = EntityMapper(model, MySqlConverter)
 
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality
     // but is very useful for rapid prototyping of a data model when you are trying to

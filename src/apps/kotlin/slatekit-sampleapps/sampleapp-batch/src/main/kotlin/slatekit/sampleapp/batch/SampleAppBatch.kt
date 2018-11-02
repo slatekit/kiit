@@ -12,14 +12,12 @@ usage: Please refer to license on github for more info.
 package slatekit.sampleapp.batch
 
 
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
 import slatekit.core.app.AppProcess
 import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.providers.logs.logback.LogbackLogs

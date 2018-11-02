@@ -22,9 +22,8 @@ import slatekit.common.DateTime
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.auth.User
-import slatekit.common.db.types.DbSourceMySql
 import slatekit.common.info.Host
-import slatekit.entities.databases.mysql.MySqlEntityDDL
+import slatekit.entities.databases.vendors.MySqlBuilder
 import slatekit.meta.KTypes
 import kotlin.reflect.full.createType
 
@@ -101,7 +100,7 @@ class Example_Model : Cmd("model") {
     showResult ("model api/fullName: " + model.name + ", " + model.fullName)
 
     // CASE 10. build up the table sql for this model
-    showResult( "table sql : " + MySqlEntityDDL().buildAddTable(DbSourceMySql(), model))
+    showResult( "table sql : " + MySqlBuilder(null).createTable(model))
     //</doc:examples>
 
     return Success("")
