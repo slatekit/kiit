@@ -14,7 +14,8 @@ import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityMapper
-import slatekit.entities.databases.mysql.MySqlEntityRepo
+import slatekit.entities.databases.vendors.MySqlConverter
+import slatekit.entities.databases.vendors.MySqlEntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.examples.common.*
 
@@ -78,50 +79,50 @@ class Guide_ORM : Cmd("types") {
         val entities = Entities(dbLookup1)
 
         // Case 1: In-memory
-        showResults("Case 1", entities.register<Movie>(isSqlRepo = false, entityType = Movie::class))
+        showResults("Case 1", entities.register<Movie>(entityType = Movie::class))
 
         // Case 2: In-memory + with custom service
-        showResults("Case 2", entities.register<Movie>(isSqlRepo = false, entityType = Movie::class,
+        showResults("Case 2", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class))
 
         // Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
         // Note: this uses the default database connection above
-        showResults("Case 3", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 3", entities.register<Movie>(entityType = Movie::class,
                 dbType = DbTypeMySql))
 
         // Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
         // Note: this uses the default database connection above
-        showResults("Case 4", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 4", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, dbType = DbTypeMySql))
 
         // Case 5: Custom repository
         // Note: this uses the default database connection above
-        showResults("Case 5", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 5", entities.register<Movie>(entityType = Movie::class,
                 repository = MovieRepository(), dbType = DbTypeMySql))
 
         // Case 6: Custom service type, custom repository, database type
-        showResults("Case 6", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 6", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, repository = MovieRepository(), dbType = DbTypeMySql))
 
         // Case 7: Custom service type, custom repository, database specified
         // Note: this uses the named database connection above called "Movie_db"
-        showResults("Case 7", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 7", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, repository = MovieRepository(),
                 dbType = DbTypeMySql, dbKey = "Movie_db"))
 
         // Case 8: Custom service type, custom repository, database specified, mapper specified
         // Each registration will simply overwrite an existing registration for the same entity type
-        showResults("Case 8", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 8", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, repository = MovieRepository(),
                 dbType = DbTypeMySql))
 
         // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 9", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 9", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, repository = MovieRepository(),
                 dbType = DbTypeMySql, dbKey = "Movie_db"))
 
         // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 10", entities.register<Movie>(isSqlRepo = true, entityType = Movie::class,
+        showResults("Case 10", entities.register<Movie>(entityType = Movie::class,
                 serviceType = MovieService::class, repository = MovieRepository(),
                 dbType = DbTypeMySql, dbKey = "group1", dbShard = "shard1"))
 
@@ -221,7 +222,7 @@ class Guide_ORM : Cmd("types") {
         // If you do not want to use annotations, looks at the mapper/model
         // examples for alternative approaches.
         val model = ModelMapper.loadSchema(Movie::class)
-        val mapper = EntityMapper(model)
+        val mapper = EntityMapper(model, MySqlConverter)
 
         // 2.3: Now create the repo with database and mapper
         val repoMySql = MySqlEntityRepo<Movie>(db, Movie::class, null, mapper)
@@ -312,7 +313,7 @@ class Guide_ORM : Cmd("types") {
         val schema = ModelMapper.loadSchema(Movie::class)
 
         // CASE 1: Create mapper with the schema
-        val mapper = EntityMapper (schema)
+        val mapper = EntityMapper (schema, MySqlConverter)
 
         // Create sample instance to demo the mapper
         val movie = Example_Mapper.Movie(
@@ -325,11 +326,11 @@ class Guide_ORM : Cmd("types") {
         )
 
         // CASE 2: Get the sql for create
-        val sqlCreate = mapper.mapToSql(movie, update = false, fullSql = true)
+        val sqlCreate = mapper.mapFields(null, movie, schema, false)
         println(sqlCreate)
 
         // CASE 3: Get the sql for update
-        val sqlForUpdate = mapper.mapToSql(movie, update = true, fullSql = true)
+        val sqlForUpdate = mapper.mapFields(null, movie, schema, true)
         println(sqlForUpdate)
 
         // CASE 4: Generate the table schema for mysql from the model
