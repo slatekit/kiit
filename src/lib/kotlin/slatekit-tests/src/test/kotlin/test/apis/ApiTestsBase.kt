@@ -62,7 +62,7 @@ open class ApiTestsBase {
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor
         )
-        ctx.ent.register<User>(User::class, dbType = DbType.DbTypeMemory, serviceCtx = ctx)
+        ctx.ent.register<User>(User::class, serviceCtx = ctx)
         return ctx
     }
 

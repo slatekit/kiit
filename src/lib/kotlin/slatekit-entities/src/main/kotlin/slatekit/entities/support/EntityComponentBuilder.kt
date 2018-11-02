@@ -220,7 +220,7 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
     ): EntityService<T> where T : Entity {
         return serviceType?.let {
             // Parameters to service is the context and repo
-            val params = args?.let { args -> listOf(args, this, repo) } ?: listOf(this, repo)
+            val params = args?.let { args -> listOf(args, entities, repo) } ?: listOf(this, repo)
             Reflector.createWithArgs<EntityService<T>>(it, params.toTypedArray())
         } ?: EntityService(entities, repo)
     }
