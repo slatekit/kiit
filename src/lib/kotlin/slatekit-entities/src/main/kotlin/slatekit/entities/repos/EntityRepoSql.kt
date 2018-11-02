@@ -22,6 +22,7 @@ import slatekit.common.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
+import sun.util.resources.cldr.ne.CurrencyNames_ne
 import kotlin.reflect.KClass
 
 /**
@@ -40,27 +41,30 @@ abstract class EntityRepoSql<T>(
         entityMapper: EntityMapper? = null,
         nameOfTable: String? = null,
         encryptor: Encryptor? = null,
-        namer:Namer? = null,
+        namer: Namer? = null,
         encodedChar: Char = '`',
-        query:(() -> Query)? = null,
-        val lastId:String? = null
+        query: (() -> Query)? = null,
+        val lastId: String? = null
 ) : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor, namer, encodedChar, query) where T : Entity {
 
     protected val _db = db
 
 
-    override fun repoName(): String =
-            "`" + super.repoName() + "`"
+    override fun repoName(): String = "$encodedChar" + super.repoName() + "$encodedChar"
 
 
     override fun create(entity: T): Long {
-        val sql = mapFields(entity, false)
+        val mapper = _entityMapper
+        val inserts = _entityMapper.converter.inserts
+        val sql = inserts.sql(entity, mapper.model(), mapper)
         val id = _db.insert("insert into ${repoName()} " + sql + ";")
         return id
     }
 
     override fun update(entity: T): T {
-        val sql = mapFields(entity, true)
+        val mapper = _entityMapper
+        val updates = _entityMapper.converter.updates
+        val sql = updates.sql(entity, mapper.model(), mapper)
         val id = entity.identity()
         sqlExecute("update ${repoName()} set " + sql + " where ${idName()} = $id;")
         return entity
@@ -234,9 +238,5 @@ abstract class EntityRepoSql<T>(
 
     private fun sqlMapOne(sql: String): T? {
         return _db.mapOne<T>(sql, _entityMapper)
-    }
-
-    private fun mapFields(item: Entity, isUpdate: Boolean): String {
-        return _entityMapper.mapToSql(item, isUpdate, false)
     }
 }

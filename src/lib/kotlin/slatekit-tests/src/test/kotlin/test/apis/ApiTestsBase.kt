@@ -26,6 +26,7 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbType
 import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
 import slatekit.common.info.About
@@ -61,7 +62,7 @@ open class ApiTestsBase {
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor
         )
-        ctx.ent.register<User>(false, User::class, serviceCtx = ctx)
+        ctx.ent.register<User>(User::class, dbType = DbType.DbTypeMemory, serviceCtx = ctx)
         return ctx
     }
 

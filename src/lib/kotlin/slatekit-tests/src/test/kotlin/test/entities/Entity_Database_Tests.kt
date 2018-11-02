@@ -76,7 +76,7 @@ class Entity_Database_Tests {
         val svc = entities.getSvc<SampleEntity>(SampleEntity::class)
         val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
         val ddl = inf.entityDDL
-        val sql = ddl?.buildAddTable(entities.getDbSource(), inf.model, namer = entities.namer) ?: ""
+        val sql = ddl?.createTable(inf.model) ?: ""
 
         val id = svc.create(SampleEntity(
                 test_string = "create",
@@ -135,7 +135,7 @@ class Entity_Database_Tests {
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
         val entities = Entities(dbs, MyEncryptor)
-        entities.register<SampleEntity>(true, SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
+        entities.register<SampleEntity>(SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
         return entities
     }
 

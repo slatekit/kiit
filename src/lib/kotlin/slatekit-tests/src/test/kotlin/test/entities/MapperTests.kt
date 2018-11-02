@@ -17,6 +17,7 @@ import slatekit.common.records.RecordMap
 import slatekit.common.UniqueId
 import slatekit.common.utils.ListMap
 import slatekit.entities.core.EntityMapper
+import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
 import test.setup.*
 import java.sql.Timestamp
@@ -32,7 +33,7 @@ class MapperTests {
     @Test fun can_map_to_immutable_class(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
 
-        val mapper = EntityMapper(model)
+        val mapper = EntityMapper(model, MySqlConverter)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom(source)!!as AuthorR
@@ -52,7 +53,7 @@ class MapperTests {
     @Test fun can_map_to_writable_class(){
         val model = ModelMapper.loadSchema(AuthorW::class, AuthorW::id.name)
 
-        val mapper = EntityMapper(model)
+        val mapper = EntityMapper(model, MySqlConverter)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom(source)!!as AuthorW
@@ -72,7 +73,7 @@ class MapperTests {
     @Test fun can_map_to_immutable_class_with_embedded_object(){
         val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
 
-        val mapper = EntityMapper(model)
+        val mapper = EntityMapper(model, MySqlConverter)
         val data = buildSampleDataForEmbeddedObject()
         val source = RecordMap(data)
         val entity = mapper.mapFrom(source)!!as UserWithAddress

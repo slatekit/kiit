@@ -76,4 +76,4 @@ open class PostGresEntityMapper(model: Model,
                                 utc: Boolean = false,
                                 enc: Encryptor? = null,
                                 namer: Namer? = null)
-    : EntityMapper(model, table, utc, enc, namer, '"')
+    : EntityMapper(model, PostGresConverter, table, utc, '"', enc, namer)

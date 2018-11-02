@@ -203,7 +203,7 @@ class ReflectorTests {
 
 
     @Test fun can_call_method() {
-        ctx.ent.register<User>(false, User::class)
+        ctx.ent.register<User>( User::class)
         val api = UserApi(ctx)
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTime.of(2017, 5, 27)))
         val result = res as ResultMsg<String>

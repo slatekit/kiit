@@ -28,9 +28,9 @@ class Entity_Services_Tests {
 
     @Before fun setup(): Unit {
         entities = Entities()
-        entities.register<User5>(false, User5::class)
-        entities.register<Member>(false, Member::class)
-        entities.register<Group>(false, Group::class)
+        entities.register<User5>(User5::class)
+        entities.register<Member>(Member::class)
+        entities.register<Group>(Group::class)
     }
 
 

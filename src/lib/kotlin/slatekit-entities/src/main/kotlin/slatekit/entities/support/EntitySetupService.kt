@@ -58,7 +58,7 @@ class EntitySetupService(
 
        return when (result) {
             is Success -> {
-                val db = _entities.getDb(dbKey, dbShard)
+                val db = _entities.builder.db(dbKey, dbShard)
                 result.data.forEach {
                     if (!it.isNullOrEmpty()) { db.update(it) }
                 }
@@ -161,8 +161,8 @@ class EntitySetupService(
             val svc = _entities.getSvcByTypeName(fullName)
             val model = svc.repo().mapper().model()
             val ddl = _entities.getInfoByName(fullName).entityDDL
-            val sqlTable = ddl?.buildAddTable(_entities.getDbSource(), model, namer = _entities.namer) ?: ""
-            val sqlIndexes = ddl?.buildIndexes(_entities.getDb(), model, namer = _entities.namer) ?: listOf()
+            val sqlTable = ddl?.createTable(model) ?: ""
+            val sqlIndexes = ddl?.createIndex(model) ?: listOf()
             val sql: List<String> = listOf(sqlTable).plus(sqlIndexes)
             val filePath = if (_settings.enableOutput) {
                 _folders?.let { folders ->

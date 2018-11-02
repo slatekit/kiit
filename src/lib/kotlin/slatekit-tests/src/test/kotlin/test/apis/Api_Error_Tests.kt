@@ -35,7 +35,7 @@ class Api_Error_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_api_level() {
 
         // Register the error item
-        ctx.ent.register<ErrorItem>(false, ErrorItem::class, serviceType = ErrorItemService::class, serviceCtx = ctx)
+        ctx.ent.register<ErrorItem>(ErrorItem::class, serviceType = ErrorItemService::class, serviceCtx = ctx)
 
         // get error components
         val queue = ErrorItemQueue("errors", ctx)

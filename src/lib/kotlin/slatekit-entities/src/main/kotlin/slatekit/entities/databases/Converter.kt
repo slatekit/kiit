@@ -1,5 +1,11 @@
 package slatekit.entities.databases
 
+import slatekit.entities.databases.converters.*
+import slatekit.entities.databases.statements.Delete
+import slatekit.entities.databases.statements.Insert
+import slatekit.entities.databases.statements.Select
+import slatekit.entities.databases.statements.Update
+
 
 open class Converter {
     open val bools              = BoolConverter
@@ -11,13 +17,16 @@ open class Converter {
     open val doubles            = DoubleConverter
     open val localDates         = LocalDateConverter
     open val localTimes         = LocalTimeConverter
-    open val localDateTimes     = LocalDateTimeConverter(false)
-    open val localDateTimesUtc  = LocalDateTimeConverter(true)
-    open val zonedDateTimes     = ZonedDateTimeConverter(false)
-    open val zonedDateTimesUtc  = ZonedDateTimeConverter(true)
-    open val dateTimes          = DateTimeConverter(false)
-    open val dateTimesUtc       = DateTimeConverter(true)
+    open val localDateTimes     = LocalDateTimeConverter
+    open val zonedDateTimes     = ZonedDateTimeConverter
+    open val dateTimes          = DateTimeConverter
     open val instants           = InstantConverter
     open val uuids              = UUIDConverter
     open val uniqueIds          = UniqueIdConverter
+    open val enums              = EnumConverter
+
+    open val inserts = Insert()
+    open val updates = Update()
+    open val deletes = Delete()
+    open val selects = Select()
 }

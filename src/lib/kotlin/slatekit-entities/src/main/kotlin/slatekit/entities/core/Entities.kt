@@ -70,7 +70,7 @@ class Entities(
     private var _info = ListMap<String, EntityInfo>(listOf())
     private val _mappers = mutableMapOf<String, EntityMapper>()
     private val logger = logs.getLogger("db")
-    private val builder = EntityComponentBuilder(_dbs, enc)
+    val builder = EntityComponentBuilder(_dbs, enc)
 
     fun <T> register(
             entityType: KClass<*>,
@@ -80,7 +80,7 @@ class Entities(
             mapperType: KClass<*>? = null,
             repository: EntityRepo<T>? = null,
             mapper: EntityMapper? = null,
-            dbType: DbType = DbTypeMySql,
+            dbType: DbType = DbType.DbTypeMemory,
             dbKey: String? = null,
             dbShard: String? = null,
             tableName: String? = null,

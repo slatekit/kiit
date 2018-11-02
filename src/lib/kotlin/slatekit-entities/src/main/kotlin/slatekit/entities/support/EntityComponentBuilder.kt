@@ -118,7 +118,7 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
         return when (dbType) {
             DbTypeMySql -> MySqlEntityMapper(model, tableName, utc, enc, namer)
             DbTypePGres -> PostGresEntityMapper(model, tableName, utc, enc, namer)
-            else -> EntityMapper(model, tableName, utc, enc, namer)
+            else -> EntityMapper(model, MySqlConverter, tableName, utc, '`', enc, namer)
         }
     }
 

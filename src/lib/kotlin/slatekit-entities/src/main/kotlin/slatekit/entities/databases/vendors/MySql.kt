@@ -75,4 +75,4 @@ open class MySqlEntityMapper(model: Model,
                              utc: Boolean = false,
                              enc: Encryptor? = null,
                              namer: Namer? = null)
-    : EntityMapper(model, table, utc, enc, namer, '`')
+    : EntityMapper(model, MySqlConverter, table, utc, '`', enc, namer)

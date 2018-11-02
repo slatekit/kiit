@@ -5,6 +5,7 @@ import slatekit.common.db.Db
 import slatekit.common.db.DbFieldType
 import slatekit.common.db.DbUtils
 import slatekit.common.newline
+import slatekit.entities.Consts.idCol
 import slatekit.meta.models.Model
 
 /**
@@ -26,7 +27,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
         buff.append(createTableName(model))
 
         // 2. build the primary key column
-        buff.append(createKey("id"))
+        buff.append(createKey(idCol))
 
         // 3. Now build all the columns
         // Get only fields ( excluding primary key )
@@ -54,8 +55,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
     }
 
 
-    fun createIndex(db: Db, model: Model, namer: Namer?): List<String> {
-        val dbSrc = db.source
+    fun createIndex(model: Model): List<String> {
         val tableName = namer?.rename(model.name) ?: model.name
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.map { field ->
@@ -80,7 +80,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
 
         // 3. Now build all the columns
         // Get only fields ( excluding primary key )
-        val dataFields = if (filterId) model.fields.filter { "id".compareTo(it.name) != 0 } else model.fields
+        val dataFields = if (filterId) model.fields.filter { idCol.compareTo(it.name) != 0 } else model.fields
 
         // Build sql for the data fields.
         val dataFieldSql = dataFields.fold("", { acc, field ->
