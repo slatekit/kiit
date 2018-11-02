@@ -4,7 +4,7 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.UniqueId
-import test.entities.MapperTests
+import test.entities.Entity_Mapper_ResultSet_Tests
 import java.util.*
 
 data class AuthorR(
@@ -42,8 +42,8 @@ data class AuthorR(
         val salary:Double = 20.5,
 
         @property:Field(required = true)
-        val uid: UUID = UUID.fromString(MapperTests.sampleUUID1),
+        val uid: UUID = UUID.fromString(Entity_Mapper_ResultSet_Tests.sampleUUID1),
 
         @property:Field(required = true)
-        val shardId: UniqueId = UniqueId.fromString(MapperTests.sampleUUID2)
+        val shardId: UniqueId = UniqueId.fromString(Entity_Mapper_ResultSet_Tests.sampleUUID2)
 )

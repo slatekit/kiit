@@ -57,7 +57,7 @@ open class ApiTestsBase {
                 env  = Env("local", Dev),
                 cfg  = Config(),
                 logs = LogsDefault,
-                ent  = Entities(DbLookup()),
+                ent  = Entities(DbLookup(DbConString("", "", "", ""))),
                 inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor

@@ -120,6 +120,7 @@ class Entities(
         )
         val key = builder.key(entityType, dbKey ?: "", dbShard ?: "")
         _info = _info.add(key, info)
+        _mappers.put(entityType.qualifiedName!!, entityMapper)
         return info
     }
 

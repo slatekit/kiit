@@ -77,17 +77,19 @@ open class EntityMapper(model: Model,
         for (ndx in 0 until len) {
             val mapping = model.fields[ndx]
 
-            // Column name e.g first = 'first'
-            // Also for sub-objects
-            val col = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
+            if(mapping.name.toLowerCase() != idCol) {
+                // Column name e.g first = 'first'
+                // Also for sub-objects
+                val col = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
 
-            // Convert to sql value
-            val data = toSql(mapping, item, useKeyValue)
+                // Convert to sql value
+                val data = toSql(mapping, item, useKeyValue)
 
-            // Build up list of values
-            when(data) {
-                is List<*> -> data.forEach { Pair(col, converted.plus(buildValue(col, it ?: "", useKeyValue))) }
-                else       -> converted.plus( Pair(col, buildValue(col, data, useKeyValue)) )
+                // Build up list of values
+                when (data) {
+                    is List<*> -> data.forEach { converted.add(Pair(col, buildValue(col, it ?: "", useKeyValue))) }
+                    else -> converted.add(Pair(col, buildValue(col, data, useKeyValue)))
+                }
             }
         }
         return converted
