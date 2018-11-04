@@ -15,6 +15,7 @@ mantra: Simplicity above all else
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import slatekit.async.futures.AsyncContextFuture
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
@@ -28,7 +29,7 @@ import kotlin.system.measureTimeMillis
 suspend fun main(args:Array<String>) {
 
     testCompose_Via_Futures().await()
-    println("\n\n====================\n")
+    println("\n====================")
     testCompose_Via_Coroutines().await()
 }
 
@@ -69,7 +70,6 @@ fun testCompose_Via_Futures(): Future<String> {
     val f0 = CompletableFuture.supplyAsync {
         println("JAVA FUTURES ================\n")
         val f1 = CompletableFuture.supplyAsync {
-            println("\n")
             println("f1: loading user : begin : " + LocalDateTime.now().toString())
             Thread.sleep(2000L)
             println("f1: loaded  user : end   : " + LocalDateTime.now().toString())
@@ -104,9 +104,8 @@ suspend fun testCompose_Via_Coroutines(): Deferred<String> {
     val f0 = GlobalScope.async {
         println("KOTLIN COROUTINES ================\n")
         val f1 = GlobalScope.async {
-            println("\n")
             println("f1: loading user : begin : " + LocalDateTime.now().toString())
-            Thread.sleep(2000L)
+            delay(2000L)
             println("f1: loaded  user : end   : " + LocalDateTime.now().toString())
             "user_01"
         }
@@ -115,7 +114,7 @@ suspend fun testCompose_Via_Coroutines(): Deferred<String> {
             val it = f1Result
             println("\n")
             println("f2: updating user : begin : " + LocalDateTime.now().toString())
-            Thread.sleep(3000L)
+            delay(3000L)
             println("f2: updated  user : end   : " + LocalDateTime.now().toString())
             "f2: updated user: $it"
         }
@@ -124,7 +123,7 @@ suspend fun testCompose_Via_Coroutines(): Deferred<String> {
             val it = f2Result
             println("\n")
             println("f3: logging user : begin : " + LocalDateTime.now().toString())
-            Thread.sleep(2000L)
+            delay(2000L)
             println("f3: logged  user : end   : " + LocalDateTime.now().toString())
             "f3:logged: $it"
         }
