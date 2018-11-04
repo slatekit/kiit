@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 
 
-import entities.EntityRepo
-import entities.EntityService
+import slatekit.entities.EntityRepo
+import slatekit.entities.EntityService
 import kotlinx.coroutines.Deferred
 import kotlin.system.measureTimeMillis
 

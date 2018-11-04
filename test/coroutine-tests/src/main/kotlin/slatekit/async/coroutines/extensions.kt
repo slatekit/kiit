@@ -1,4 +1,4 @@
-package entities
+package slatekit.async.coroutines
 
 import kotlinx.coroutines.*
 
@@ -19,16 +19,14 @@ mantra: Simplicity above all else
 
 interface AsyncExtensions {
 
-    val scope:CoroutineScope
+    val scope:AsyncContextCo
 
     fun <W> async(block: suspend CoroutineScope.() -> W): Future<W> {
-
-        //block: suspend CoroutineScope.() -> T
-        return scope.async {
+        return scope.scope.async {
             block()
         }
     }
 
 
-    suspend fun <W> await(call: () -> Future<W> ):W = call().await()
+    suspend fun <W> await(call: () -> Future<W>):W = call().await()
 }

@@ -1,7 +1,3 @@
-package entities
-
-import kotlinx.coroutines.*
-
 /**
 <slate_header>
 url: www.slatekit.com
@@ -14,9 +10,6 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
+package slatekit.async
 
-
-
-typealias Future<T> = Deferred<T>
-
-typealias Promise<T> = Deferred<T>
+interface AsyncContext

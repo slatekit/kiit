@@ -1,6 +1,4 @@
-package entities
-
-import kotlinx.coroutines.*
+package slatekit.entities
 
 /**
 <slate_header>

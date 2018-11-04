@@ -1,4 +1,6 @@
-import slatekit.entities.Entity
+package slatekit.async.coroutines
+
+import kotlinx.coroutines.*
 
 /**
 <slate_header>
@@ -14,9 +16,4 @@ mantra: Simplicity above all else
  */
 
 
-data class User(override val id: Long, val name: String) : Entity {
-    override fun withId(id: Long): Entity {
-        return this.copy(id = id)
-    }
-
-}
+typealias Future<T> = Deferred<T>

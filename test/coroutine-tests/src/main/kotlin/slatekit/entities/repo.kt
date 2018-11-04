@@ -1,6 +1,10 @@
-package entities
+package slatekit.entities
 
+import slatekit.async.coroutines.AsyncExtensions
+import slatekit.async.coroutines.Future
 import kotlinx.coroutines.*
+import slatekit.async.AsyncContext
+import slatekit.async.coroutines.AsyncContextCo
 
 /**
 <slate_header>
@@ -17,7 +21,7 @@ mantra: Simplicity above all else
 
 
 class EntityRepo<T>(val items: MutableList<T>,
-                    override val scope:CoroutineScope = GlobalScope) : AsyncExtensions where T : Entity {
+                    override val scope: AsyncContextCo = AsyncContextCo()) : AsyncExtensions where T : Entity {
 
     private var lastId = items.maxBy { it.id }?.id ?: 0
 

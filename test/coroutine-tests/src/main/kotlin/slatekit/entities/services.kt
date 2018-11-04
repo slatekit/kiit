@@ -1,6 +1,9 @@
-package entities
+package slatekit.entities
 
+import slatekit.async.coroutines.AsyncExtensions
+import slatekit.async.coroutines.Future
 import kotlinx.coroutines.*
+import slatekit.async.coroutines.AsyncContextCo
 
 /**
 <slate_header>
@@ -18,7 +21,7 @@ mantra: Simplicity above all else
 
 class EntityService<T>(
     val repo: EntityRepo<T>,
-    override val scope: CoroutineScope = GlobalScope
+    override val scope: AsyncContextCo = AsyncContextCo()
 ) : AsyncExtensions where T : Entity {
 
     fun all(): Future<List<T>> {

@@ -1,5 +1,3 @@
-import slatekit.entities.Entity
-
 /**
 <slate_header>
 url: www.slatekit.com
@@ -12,11 +10,10 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
+package slatekit.async.coroutines
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import slatekit.async.AsyncContext
 
-data class User(override val id: Long, val name: String) : Entity {
-    override fun withId(id: Long): Entity {
-        return this.copy(id = id)
-    }
-
-}
+class AsyncContextCo(val scope: CoroutineScope = GlobalScope) : AsyncContext
