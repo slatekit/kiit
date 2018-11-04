@@ -1,4 +1,4 @@
-package slatekit.entities
+package slatekit.entities.core
 
 
 /* coroutines
@@ -13,6 +13,7 @@ import slatekit.async.futures.AsyncContextFuture
 import slatekit.async.futures.AsyncExtensions
 import slatekit.async.futures.Future
 import slatekit.async.futures.await
+
 // */
 
 /**
@@ -29,22 +30,22 @@ mantra: Simplicity above all else
  */
 
 
-class EntityService<T>(
-    val repo: EntityRepo<T>,
+open class EntityServiceWithId<TId, T>(
+    val repo: EntityRepoWithId<TId, T>,
     override val scope: AsyncContextFuture = AsyncContextFuture()
-) : AsyncExtensions where T : Entity {
+) : AsyncExtensions where T : Entity<TId> {
 
     fun all(): Future<List<T>> {
         return repo.all()
     }
 
 
-    fun get(id: Long): Future<T?> {
+    fun get(id: TId): Future<T?> {
         return repo.get(id)
     }
 
 
-    fun create(item: T): Future<Long> {
+    fun create(item: T): Future<TId> {
         return repo.create(item)
     }
 
@@ -54,7 +55,7 @@ class EntityService<T>(
     }
 
 
-    fun save(item: T): Future<Pair<Boolean, Long>> {
+    fun save(item: T): Future<Pair<Boolean, TId>> {
         return async {
 
             val t = get(item.id).await()

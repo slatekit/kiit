@@ -1,8 +1,7 @@
-package slatekit.entities
+package slatekit.entities.core
 
 //import slatekit.async.coroutines.Future
 //import kotlinx.coroutines.*
-import slatekit.async.AsyncContext
 import slatekit.async.futures.AsyncContextFuture
 import slatekit.async.futures.AsyncExtensions
 import slatekit.async.futures.Future
@@ -23,40 +22,39 @@ mantra: Simplicity above all else
  */
 
 
-class EntityRepo<T>(val items: MutableList<T>,
-                    override val scope: AsyncContextFuture
-) : AsyncExtensions where T : Entity {
+abstract class EntityRepoWithId<TId, TItem>(
+    val items: MutableList<TItem>,
+    override val scope: AsyncContextFuture
+) : AsyncExtensions where TItem : Entity<TId> {
 
-    private var lastId = items.maxBy { it.id }?.id ?: 0
 
-
-    fun all(): Future<List<T>> {
+    fun all(): Future<List<TItem>> {
         return async {
             items.toList()
         }
     }
 
 
-    fun get(id: Long): Future<T?> {
+    fun get(id: TId): Future<TItem?> {
         return async {
             items.firstOrNull { it.id == id }
         }
     }
 
 
-    fun create(item: T): Future<Long> {
+    fun create(item: TItem): Future<TId> {
         return async {
             synchronized(this) {
                 val id = nextId()
                 val itemWithId = item.withId(id)
-                items.add(itemWithId as T)
+                items.add(itemWithId as TItem)
                 id
             }
         }
     }
 
 
-    fun update(item: T): Future<Boolean> {
+    fun update(item: TItem): Future<Boolean> {
         return async {
             synchronized(this) {
                 val index = items.indexOfFirst { it.id == item.id }
@@ -71,8 +69,5 @@ class EntityRepo<T>(val items: MutableList<T>,
     }
 
 
-    private fun nextId(): Long {
-        lastId++
-        return lastId
-    }
+    abstract fun nextId(): TId
 }

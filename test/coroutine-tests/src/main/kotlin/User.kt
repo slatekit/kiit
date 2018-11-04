@@ -1,4 +1,4 @@
-import slatekit.entities.Entity
+import slatekit.entities.core.Entity
 
 /**
 <slate_header>
@@ -14,8 +14,8 @@ mantra: Simplicity above all else
  */
 
 
-data class User(override val id: Long, val name: String) : Entity {
-    override fun withId(id: Long): Entity {
+data class User(override val id: Long, val name: String) : Entity<Long> {
+    override fun withId(id: Long): Entity<Long> {
         return this.copy(id = id)
     }
 

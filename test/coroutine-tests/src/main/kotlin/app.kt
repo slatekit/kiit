@@ -17,8 +17,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import slatekit.async.futures.AsyncContextFuture
-import slatekit.entities.EntityRepo
-import slatekit.entities.EntityService
+import slatekit.entities.repo.EntityRepo
+import slatekit.entities.services.EntityService
 import slatekit.async.futures.Future
 import slatekit.async.futures.await
 import java.time.LocalDateTime

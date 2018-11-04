@@ -1,4 +1,4 @@
-package slatekit.entities
+package slatekit.entities.core
 
 /**
 <slate_header>
@@ -14,8 +14,8 @@ mantra: Simplicity above all else
  */
 
 
-interface Entity {
-    val id: Long
+interface Entity<TId> {
+    val id: TId
 
-    fun withId(id: Long): Entity
+    fun withId(id: TId): Entity<TId>
 }
