@@ -50,13 +50,14 @@ class EntityRepo<T>(val items: MutableList<T>,
 
     fun update(item: T): Future<Boolean> {
         return async {
-            val index = items.indexOfFirst { it.id == item.id }
-            if(index < 0 ) {
-                false
-            }
-            else {
-                items[index] = item
-                true
+            synchronized(this) {
+                val index = items.indexOfFirst { it.id == item.id }
+                if (index < 0) {
+                    false
+                } else {
+                    items[index] = item
+                    true
+                }
             }
         }
     }
