@@ -69,14 +69,15 @@ open class EntityMapper(model: Model,
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean): List<Pair<String, String>> {
+    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean, filterId:Boolean = true): List<Pair<String, String>> {
 
         val converted = mutableListOf<Pair<String, String>>()
         val len = model.fields.size
         for (ndx in 0 until len) {
             val mapping = model.fields[ndx]
-
-            if(mapping.name.toLowerCase() != idCol) {
+            val isIdCol = mapping.name.toLowerCase() == idCol
+            val isFieldMapped = !isIdCol || !filterId
+            if(isFieldMapped) {
                 // Column name e.g first = 'first'
                 // Also for sub-objects
                 val col = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
@@ -86,7 +87,12 @@ open class EntityMapper(model: Model,
 
                 // Build up list of values
                 when (data) {
-                    is List<*> -> data.forEach { converted.add(Pair(col, buildValue(col, it ?: "", useKeyValue))) }
+                    is List<*> -> data.forEach {
+                        when(it) {
+                            is Pair<*, *> -> converted.add( it as Pair<String,String>)
+                            else -> converted.add(Pair(col, buildValue(col, it ?: "", useKeyValue)))
+                        }
+                    }
                     else -> converted.add(Pair(col, buildValue(col, data, useKeyValue)))
                 }
             }
@@ -177,7 +183,7 @@ open class EntityMapper(model: Model,
             converter.enums.toSql(raw)
         } else if (mapping.model != null) {
             val subObject = Reflector.getFieldValue(item, mapping.name)
-            subObject?.let { mapFields(mapping.name, subObject, mapping.model!!, useKeyValue) } ?: Consts.NULL
+            subObject?.let { mapFields(mapping.name, subObject, mapping.model!!, useKeyValue, false) } ?: Consts.NULL
         } else { // other object
             val objVal = Reflector.getFieldValue(item, mapping.name)
             val data = objVal?.toString() ?: ""

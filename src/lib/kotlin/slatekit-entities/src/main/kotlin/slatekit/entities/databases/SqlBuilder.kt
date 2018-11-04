@@ -124,6 +124,8 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
     fun colType(colType: DbFieldType, maxLen: Int): String {
         return if (colType == DbFieldType.DbText && maxLen == -1)
             types.textType.dbType
+        else if (colType == DbFieldType.DbString && maxLen == -1)
+            types.textType.dbType
         else if (colType == DbFieldType.DbString)
             types.stringType.dbType + "($maxLen)"
         else
