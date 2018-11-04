@@ -12,18 +12,24 @@ mantra: Simplicity above all else
  */
 
 
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import slatekit.async.futures.AsyncContextFuture
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.async.futures.Future
 import slatekit.async.futures.await
+import java.time.LocalDateTime
 import java.util.concurrent.CompletableFuture
 import kotlin.system.measureTimeMillis
 
 
 suspend fun main(args:Array<String>) {
 
-    testFutures()
+    testCompose_Via_Futures().await()
+    println("\n\n====================\n")
+    testCompose_Via_Coroutines().await()
 }
 
 
@@ -58,6 +64,81 @@ suspend fun testCoRoutines() {
 }
 
 
+
+fun testCompose_Via_Futures(): Future<String> {
+    val f0 = CompletableFuture.supplyAsync {
+        println("JAVA FUTURES ================\n")
+        val f1 = CompletableFuture.supplyAsync {
+            println("\n")
+            println("f1: loading user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(2000L)
+            println("f1: loaded  user : end   : " + LocalDateTime.now().toString())
+            "user_01"
+        }
+
+        val f2 = f1.thenApply { it ->
+            println("\n")
+            println("f2: updating user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(3000L)
+            println("f2: updated  user : end   : " + LocalDateTime.now().toString())
+            "f2: updated user: $it"
+        }
+
+        val f3 = f2.thenCompose { it ->
+            println("\n")
+            println("f3: logging user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(2000L)
+            println("f3: logged  user : end   : " + LocalDateTime.now().toString())
+            CompletableFuture.completedFuture("f3:logged: $it")
+        }
+        val result = f3.get()
+        println()
+        println(result)
+        result
+    }
+    return f0
+}
+
+
+suspend fun testCompose_Via_Coroutines(): Deferred<String> {
+    val f0 = GlobalScope.async {
+        println("KOTLIN COROUTINES ================\n")
+        val f1 = GlobalScope.async {
+            println("\n")
+            println("f1: loading user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(2000L)
+            println("f1: loaded  user : end   : " + LocalDateTime.now().toString())
+            "user_01"
+        }
+        val f1Result = f1.await()
+        val f2 = GlobalScope.async {
+            val it = f1Result
+            println("\n")
+            println("f2: updating user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(3000L)
+            println("f2: updated  user : end   : " + LocalDateTime.now().toString())
+            "f2: updated user: $it"
+        }
+        val f2Result = f2.await()
+        val f3 = GlobalScope.async {
+            val it = f2Result
+            println("\n")
+            println("f3: logging user : begin : " + LocalDateTime.now().toString())
+            Thread.sleep(2000L)
+            println("f3: logged  user : end   : " + LocalDateTime.now().toString())
+            "f3:logged: $it"
+        }
+        val result = f3.await()
+        println()
+        println(result)
+        result
+    }
+    return f0
+}
+
+
+
+
 fun testFutures(){
 
     val f1 = CompletableFuture.completedFuture(123)
@@ -74,6 +155,7 @@ fun testFutures(){
     val f3Val = f3.get()
     val f4Val = f4.get()
     println(f1Val)
+
     println(f2Val)
     println(f3Val)
     println(f4Val)
