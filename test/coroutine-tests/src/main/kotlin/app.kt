@@ -12,15 +12,24 @@ mantra: Simplicity above all else
  */
 
 
+import slatekit.async.futures.AsyncContextFuture
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
-import kotlinx.coroutines.Deferred
+import slatekit.async.futures.Future
+import slatekit.async.futures.await
+import java.util.concurrent.CompletableFuture
 import kotlin.system.measureTimeMillis
 
 
 suspend fun main(args:Array<String>) {
 
-    val svc = EntityService<User>(EntityRepo<User>(mutableListOf()))
+    testFutures()
+}
+
+
+suspend fun testCoRoutines() {
+    val asyncScope = AsyncContextFuture()
+    val svc = EntityService<User>(EntityRepo<User>(mutableListOf(), asyncScope), asyncScope)
 
     val futures = listOf(
         svc.create(User(0, "user_1")),
@@ -34,7 +43,7 @@ suspend fun main(args:Array<String>) {
     val member = EntityService::class.members.first { it.name == "all" }
     val result = member.call(svc)
     when(result) {
-        is Deferred<*> -> {
+        is Future<*> -> {
             val v = result.await()
             println(v)
         }
@@ -46,6 +55,28 @@ suspend fun main(args:Array<String>) {
 
 
     println("done with suspend")
+}
+
+
+fun testFutures(){
+
+    val f1 = CompletableFuture.completedFuture(123)
+    val f2 = f1.thenApply { it -> it + 1  }
+    val f3 = f1.thenCompose { v -> CompletableFuture.completedFuture(v + 2) }
+    val f4 = f1.thenAccept { it -> it + 3  }
+    f3.handle { t, x ->
+        println(t)
+        println(x)
+    }
+
+    val f1Val = f1.get()
+    val f2Val = f2.get()
+    val f3Val = f3.get()
+    val f4Val = f4.get()
+    println(f1Val)
+    println(f2Val)
+    println(f3Val)
+    println(f4Val)
 }
 
 

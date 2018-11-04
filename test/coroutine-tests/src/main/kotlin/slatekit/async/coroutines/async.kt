@@ -16,4 +16,4 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import slatekit.async.AsyncContext
 
-class AsyncContextCo(val scope: CoroutineScope = GlobalScope) : AsyncContext
+class AsyncContextCoroutine(val scope: CoroutineScope = GlobalScope) : AsyncContext

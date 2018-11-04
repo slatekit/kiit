@@ -1,3 +1,6 @@
+package slatekit.async.futures
+
+
 /**
 <slate_header>
 url: www.slatekit.com
@@ -10,12 +13,6 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.async.futures
-
-import slatekit.async.AsyncContext
-import java.util.concurrent.Executors
-import java.util.concurrent.ExecutorService
 
 
-
-class AsyncContextFuture(val scope:ExecutorService = Executors.newSingleThreadExecutor()): AsyncContext
+typealias Future<T> = java.util.concurrent.Future<T>

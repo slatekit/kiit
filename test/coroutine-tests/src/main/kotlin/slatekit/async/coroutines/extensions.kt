@@ -19,7 +19,7 @@ mantra: Simplicity above all else
 
 interface AsyncExtensions {
 
-    val scope:AsyncContextCo
+    val scope:AsyncContextCoroutine
 
     fun <W> async(block: suspend CoroutineScope.() -> W): Future<W> {
         return scope.scope.async {

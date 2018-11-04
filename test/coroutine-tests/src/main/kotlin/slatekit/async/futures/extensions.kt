@@ -1,5 +1,6 @@
 package slatekit.async.futures
 
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 
@@ -21,14 +22,16 @@ mantra: Simplicity above all else
 
 interface AsyncExtensions {
 
-    val service:ExecutorService
+    val scope:AsyncContextFuture
 
 
     fun <W> async(block: () -> W): Future<W> {
-        return service.submit<W> {
+        return scope.scope.submit<W> {
             block()
         }
     }
+
+
 }
 
 
