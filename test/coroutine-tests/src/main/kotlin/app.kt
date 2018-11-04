@@ -12,23 +12,40 @@ mantra: Simplicity above all else
  */
 
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import entities.EntityRepo
+import entities.EntityService
+import kotlinx.coroutines.Deferred
 import kotlin.system.measureTimeMillis
 
 
 suspend fun main(args:Array<String>) {
 
     val svc = EntityService<User>(EntityRepo<User>(mutableListOf()))
-    svc.create(User(0, "user_1"))
-    svc.create(User(0, "user_2"))
-    svc.create(User(0, "user_3"))
 
-    svc.all().forEach { println(it) }
+    val futures = listOf(
+        svc.create(User(0, "user_1")),
+        svc.create(User(0, "user_2")),
+        svc.create(User(0, "user_3"))
+    )
 
-    println("done")
+    futures.forEach{ it.await() }
+
+
+    val member = EntityService::class.members.first { it.name == "all" }
+    val result = member.call(svc)
+    when(result) {
+        is Deferred<*> -> {
+            val v = result.await()
+            println(v)
+        }
+        else -> println(result)
+    }
+    svc.all().await().forEach { println(it) }
+    //svc.all().forEach { println(it) }
+
+
+
+    println("done with suspend")
 }
 
 
