@@ -1,14 +1,21 @@
 package slatekit.entities.repo
 
-//import slatekit.async.coroutines.Future
-//import kotlinx.coroutines.*
-import slatekit.async.futures.AsyncContextFuture
-import slatekit.async.futures.AsyncExtensions
+///* coroutines
+import slatekit.async.coroutines.AsyncContextCoroutine
+import slatekit.async.coroutines.AsyncExtensions
+import slatekit.async.coroutines.Future
+import kotlinx.coroutines.*
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityRepoWithId
 
-//import java.util.concurrent.Future
+// */
 
+/* java futures
+import slatekit.async.futures.AsyncContextFuture
+import slatekit.async.futures.AsyncExtensions
+import slatekit.async.futures.Future
+import slatekit.async.futures.await
+// */
 /**
 <slate_header>
 url: www.slatekit.com
@@ -25,7 +32,7 @@ mantra: Simplicity above all else
 
 class EntityRepo<TItem>(
     items: MutableList<TItem>,
-    scope: AsyncContextFuture
+    scope: AsyncContextCoroutine
 ) : EntityRepoWithId<Long, TItem>(items, scope),
     AsyncExtensions where TItem : Entity<Long> {
 

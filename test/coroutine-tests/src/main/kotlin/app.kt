@@ -16,6 +16,7 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import slatekit.async.coroutines.AsyncContextCoroutine
 import slatekit.async.futures.AsyncContextFuture
 import slatekit.entities.repo.EntityRepo
 import slatekit.entities.services.EntityService
@@ -35,7 +36,7 @@ suspend fun main(args:Array<String>) {
 
 
 suspend fun testCoRoutines() {
-    val asyncScope = AsyncContextFuture()
+    val asyncScope = AsyncContextCoroutine()
     val svc = EntityService<User>(EntityRepo<User>(mutableListOf(), asyncScope), asyncScope)
 
     val futures = listOf(

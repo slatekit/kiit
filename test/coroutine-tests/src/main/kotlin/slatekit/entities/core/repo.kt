@@ -1,12 +1,19 @@
 package slatekit.entities.core
 
-//import slatekit.async.coroutines.Future
-//import kotlinx.coroutines.*
+
+///* coroutines
+import slatekit.async.coroutines.AsyncContextCoroutine
+import slatekit.async.coroutines.AsyncExtensions
+import slatekit.async.coroutines.Future
+import kotlinx.coroutines.*
+// */
+
+/* java futures
 import slatekit.async.futures.AsyncContextFuture
 import slatekit.async.futures.AsyncExtensions
 import slatekit.async.futures.Future
-
-//import java.util.concurrent.Future
+import slatekit.async.futures.await
+// */
 
 /**
 <slate_header>
@@ -24,7 +31,7 @@ mantra: Simplicity above all else
 
 abstract class EntityRepoWithId<TId, TItem>(
     val items: MutableList<TItem>,
-    override val scope: AsyncContextFuture
+    override val scope: AsyncContextCoroutine
 ) : AsyncExtensions where TItem : Entity<TId> {
 
 
