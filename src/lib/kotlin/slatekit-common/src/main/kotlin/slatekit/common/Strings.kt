@@ -70,6 +70,14 @@ fun String.toUUId(): UUID {
 }
 
 /**
+ * Converts a string to a "soft" id that has "_" instead of spaces.
+ * e.g: "abc& $[]123" = "abc&_$[]123"
+ */
+fun String.toUUIdOrCreate(): UUID {
+    return if(this.trim().isEmpty()) UUID.randomUUID() else UUID.fromString(this)
+}
+
+/**
  * Converts a string to an identifier with only numbers, letters, '-' and '_'
  * e.g: "abc& $[]123" = "abc"
  */

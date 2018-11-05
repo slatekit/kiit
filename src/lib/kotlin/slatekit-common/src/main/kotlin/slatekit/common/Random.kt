@@ -53,7 +53,7 @@ object Random {
 
     fun alphaSymN(n: Int): String = randomize(n, ALPHASYM)
 
-    fun alphaNumN(n: Int): String = randomize(n, ALPHASYM)
+    fun alphaNumN(n: Int): String = randomize(n, ALPHANUM)
 
     fun guid(): String = stringGuid(true)
 

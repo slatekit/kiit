@@ -58,9 +58,9 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
                     batch?.let {
                         worker?.let {
                             if (!batch.isEmpty) {
-                                executor.submit({
+                                executor.submit {
                                     process(batch, worker)
-                                })
+                                }
                             }
                         }
                     }
