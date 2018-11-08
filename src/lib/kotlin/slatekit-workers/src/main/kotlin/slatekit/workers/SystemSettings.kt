@@ -6,5 +6,6 @@ package slatekit.workers
 data class SystemSettings(
     val enableAutoStart: Boolean = true,
     val pauseBetweenCycles: Boolean = false,
-    val pauseTimeInSeconds: Int = 2
+    val pauseTimeInSeconds: Int = 2,
+    val exponentialWaitTimes: List<Int> = listOf(2, 5, 10, 20, 30, 60, 120, 240)
 )

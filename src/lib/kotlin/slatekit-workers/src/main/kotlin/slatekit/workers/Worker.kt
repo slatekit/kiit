@@ -205,7 +205,7 @@ open class Worker<T>(
         val last = _runStatus.get()
         _runState.set(state)
         _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state.mode))
-        events?.let { it.onEvent(Event(this.about.name, this, _runStatus.get().name)) }
+        events.onEvent(Event(this.about.name, this, _runStatus.get().name))
         return _runStatus.get()
     }
 
