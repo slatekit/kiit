@@ -2,6 +2,7 @@ package slatekit.workers
 
 import slatekit.common.*
 import slatekit.common.info.About
+import slatekit.common.log.Logs
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.workers.core.*
 import slatekit.workers.status.*
@@ -52,6 +53,7 @@ open class Worker<T>(
     group: String,
     desc: String,
     version: String,
+    val logs:Logs,
     val settings: WorkerSettings = WorkerSettings(),
     val metrics: Metrics = Metrics(DateTime.now()),
     val handler: Handler = Handler(DateTime.now()),
@@ -61,11 +63,11 @@ open class Worker<T>(
 
 ) : RunStatusSupport {
 
-    protected val _runState = AtomicReference<RunState>(RunStateNotStarted)
-    protected val _runStatus = AtomicReference<RunStatus>(RunStatus())
-    protected val _runDelay = AtomicReference<Int>(0)
-    protected val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
-    protected val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
+    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
+    private val _runStatus = AtomicReference<RunStatus>(RunStatus())
+    private val _runDelay = AtomicReference<Int>(0)
+    private val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
+    private val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
 
     /**
      * Unique id for this worker
@@ -81,6 +83,22 @@ open class Worker<T>(
      * List of queues that this worker can handle jobs from
      */
     val queues: List<String> = listOf("*")
+
+
+    /**
+     * Logger for this worker ( separate from work system/manager )
+     */
+    val log = logs.getLogger(this.javaClass)
+
+    /**
+     * Wraps an operation with useful logging indicating starting/completion of action
+     */
+    fun <T> performLog(name: String, action: () -> ResultEx<T>):ResultEx<T> {
+        log.info("$name starting")
+        val result = action()
+        log.info("$name complete")
+        return result
+    }
 
     /**
      * gets the current state of execution
@@ -148,7 +166,9 @@ open class Worker<T>(
         _lastRunTime.set(DateTime.now())
 
         val result = middleware.run(this, job) {
-            callback?.invoke(job) ?: perform(job)
+            performLog("performing job : ${job.id}  ${job.queue}") {
+                callback?.invoke(job) ?: perform(job)
+            }
         }
         _lastResult.set(result)
         moveToState(RunStateIdle)

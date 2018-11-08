@@ -72,7 +72,10 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
             // Enable pause ?
             if (sys.settings.pauseBetweenCycles) {
                 TODO.IMPLEMENT("workers", "Use Kotlin CoRoutines for non-blocking delay") {
-                    Thread.sleep(waitTimes.next() * 1000L)
+                    val pauseTimeSeconds = waitTimes.next()
+                    perform("pausing for $pauseTimeSeconds") {
+                        Thread.sleep(waitTimes.next() * 1000L)
+                    }
                 }
             }
             state = sys.getState()
@@ -111,6 +114,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
                 log.info("No jobs for queue: ${queue.name}")
                 Batch(queue, jobs, DateTime.now())
             } else {
+                log.info("Got jobs from queue: ${queue.name} : ${jobs?.size ?: 0}")
                 Batch(queue, listOf(), DateTime.now())
             }
         }
@@ -120,12 +124,23 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
      * Gets the next worker that can handle jobs from the supplied queue
      */
     private fun getWorker(queue: QueueInfo): Worker<*>? {
-        val worker = registry.getWorker(queue.name)
-        return worker
+        return registry.getWorker(queue.name)
     }
 
 
     private fun process(batch: Batch, worker: Worker<*>) {
-        worker.work(batch)
+        perform("triggering worker ${worker.id}") {
+            worker.work(batch)
+        }
+    }
+
+
+    /**
+     * Wraps an operation with useful logging indicating starting/completion of action
+     */
+    val perform = { name: String, action: () -> Unit ->
+        log.info("$name starting")
+        action()
+        log.info("$name complete")
     }
 }
