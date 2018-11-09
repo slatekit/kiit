@@ -17,13 +17,17 @@ import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.apis.security.WebProtocol
 import slatekit.apis.core.Auth
+import slatekit.apis.core.Events
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
+import slatekit.common.metrics.Metrics
+import slatekit.common.utils.Tracker
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
+import slatekit.server.common.Diagnostics
 import spark.Request
 import spark.Response
 import spark.Spark
@@ -32,41 +36,49 @@ import java.io.File
 import javax.servlet.MultipartConfigElement
 
 class SparkServer(
-    val config: ServerConfig,
-    val ctx: Context,
-    val auth: Auth?,
-    val apis: List<Api>
+        val config: ServerConfig,
+        val ctx: Context,
+        val auth: Auth?,
+        val apis: List<Api>,
+        val metrics: Metrics,
+        val events: Events = Events()
 ) : AppMetaSupport {
 
     /**
      * initialize with port, prefix for api routes, and all the dependent items
      */
     constructor(
-        port: Int = 5000,
-        prefix: String = "",
-        info: Boolean = true,
-        cors: Boolean = false,
-        docs: Boolean = false,
-        static: Boolean = false,
-        staticDir: String = "",
-        docKey: String = "",
-        apis: List<Api>,
-        auth: Auth? = null,
-        setup: ((Any) -> Unit)? = null,
-        ctx: Context = AppContext.simple("slatekit-server")
+            ctx: Context = AppContext.simple("slatekit-server"),
+            port: Int = 5000,
+            prefix: String = "",
+            info: Boolean = true,
+            cors: Boolean = false,
+            docs: Boolean = false,
+            static: Boolean = false,
+            staticDir: String = "",
+            docKey: String = "",
+            apis: List<Api>,
+            auth: Auth? = null,
+            setup: ((Any) -> Unit)? = null,
+            metrics: Metrics,
+            events: Events
     ) :
-        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
+            this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis, metrics, events)
 
     val container = ApiContainer(ctx,
-        false,
-        auth,
-        WebProtocol,
-        apis,
-        deserializer = { req, enc -> Deserializer(req, enc) },
-        docKey = config.docKey,
-        docBuilder = ::DocWeb)
+            false,
+            auth,
+            WebProtocol,
+            apis,
+            deserializer = { req, enc -> Deserializer(req, enc) },
+            docKey = config.docKey,
+            docBuilder = ::DocWeb)
 
     override fun appMeta(): AppMeta = ctx.app
+
+    val log = ctx.logs.getLogger("slatekit.server.api")
+    val tracker = Tracker<slatekit.common.Request, slatekit.common.Request, slatekit.common.Response<*>, Exception>(Random.guid(), ctx.app.about.name)
+    val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
 
     /**
      * executes the application
@@ -157,8 +169,24 @@ class SparkServer(
      * Slate Kit "Protocol Independent APIs".
      */
     fun exec(req: Request, res: Response): Any {
+
+        // Convert the http request to a SlateKit Request
         val request = SparkRequest.build(ctx, req, config)
+
+        // Execute the API call
+        // The SlateKit ApiContainer will handle the heavy work of
+        // 1. Checking routes to area/api/actions ( methods )
+        // 2. Validating parameters to methods
+        // 3. Decoding request to method parameters
+        // 4. Executing the method
+        // 5. Handling errors
         val result = container.call(request)
+
+        // Record all diagnostics
+        // e.g. logs, track, metrics, event
+        diagnostics.record(container, request, result)
+
+        // Finally convert the result back to a HttpResult
         val text = SparkResponse.result(res, result)
         return text
     }

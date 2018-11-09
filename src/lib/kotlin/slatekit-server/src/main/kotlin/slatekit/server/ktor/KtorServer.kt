@@ -42,6 +42,7 @@ import slatekit.common.utils.Tracker
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
+import slatekit.server.common.Diagnostics
 import java.util.concurrent.TimeUnit
 
 class KtorServer(
@@ -86,10 +87,8 @@ class KtorServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger("slatekit.server.api")
-
-    val tracker = Tracker<Request, Request, Any, Exception>(Random.guid(), ctx.app.about.name)
-
-    val noException = Exception("none")
+    val tracker = Tracker<Request, Request, Response<*>, Exception>(Random.guid(), ctx.app.about.name)
+    val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
 
     /**
      * executes the application
@@ -176,10 +175,10 @@ class KtorServer(
             else -> ""
         }
 
-        // 1. Convert the http request to a SlateKit Request
+        // Convert the http request to a SlateKit Request
         val request = KtorRequest.build(ctx, body, call, config)
 
-        // 3. Execute the API call
+        // Execute the API call
         // The SlateKit ApiContainer will handle the heavy work of
         // 1. Checking routes to area/api/actions ( methods )
         // 2. Validating parameters to methods
@@ -188,17 +187,9 @@ class KtorServer(
         // 5. Handling errors
         val result = container.call(request)
 
-        // Log results
-        log(container, request, result)
-
-        // Track the last results for diagnostics
-        track(container, request, result)
-
-        // Update metrics
-        meter(container, request, result)
-
-        // Notify potential listeners
-        notify(container, request, result)
+        // Record all diagnostics
+        // e.g. logs, track, metrics, event
+        diagnostics.record(container, request, result)
 
         // Finally convert the result back to a HttpResult
         KtorResponse.result(call, result)
@@ -212,63 +203,5 @@ class KtorServer(
         println("STARTING : ")
         this.appLogStart({ name: String, value: String -> println(name + " = " + value) })
         println("===============================================================")
-    }
-
-
-    /**
-     * Logs the result of a processed job
-     */
-    fun log(sender: Any, request: Request, result: Response<*>) {
-        val info =  "${request.path}, tag: ${request.tag}, result: ${result.code}, msg: ${result.msg}"
-        when {
-            ResultChecks.isSuccessRange(result.code)    -> log.info ("Request succeeded: $info")
-            ResultChecks.isFilteredOut(result.code)     -> log.info ("Request filtered:  $info")
-            ResultChecks.isBadRequestRange(result.code) -> log.error("Request failed: $info", result.err ?: noException)
-            else                                   -> log.error("Request failed: $info", result.err ?: noException)
-        }
-    }
-
-
-    /**
-     * Tracks the last job for diagnostics
-     */
-    fun track(sender: Any, request: Request, result: Response<*>) {
-        tracker.requested(request)
-        when (result.code) {
-            ResultCode.SUCCESS  -> tracker.succeeded(result)
-            ResultCode.FILTERED -> tracker.filtered(request)
-            ResultCode.FAILURE  -> tracker.failed(request, result.err ?: noException )
-            else                -> tracker.failed(request, result.err ?: noException )
-        }
-    }
-
-
-    /**
-     * Records metrics (counts) each job result
-     */
-    fun meter(sender: Any, request: Request, result: Response<*>) {
-        val tags = listOf("uri", request.path)
-        metrics.count("apis.requests.${result.code}", tags)
-        metrics.count("apis.total_requests", tags)
-        when (result.code) {
-            ResultCode.SUCCESS  -> metrics.count("apis.total_successes", tags)
-            ResultCode.FILTERED -> metrics.count("apis.total_filtered", tags)
-            ResultCode.FAILURE  -> metrics.count("apis.total_failed", tags)
-            else                -> metrics.count("apis.total_other", tags)
-        }
-    }
-
-
-    /**
-     * Events out the job result to potential listeners
-     */
-    fun notify(sender: Any, request: Request, result: Response<*>) {
-        events.onReqest(sender, request)
-        when (result.code) {
-            ResultCode.SUCCESS  -> events.onSuccess(sender, request, result)
-            ResultCode.FILTERED -> events.onFiltered(sender, request, result)
-            ResultCode.FAILURE  -> events.onErrored(sender, request, result)
-            else                -> events.onEvent(sender, request, result)
-        }
     }
 }

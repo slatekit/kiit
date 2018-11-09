@@ -97,9 +97,9 @@ open class Worker<T>(
 
 
     /**
-     * Tags for metrics
+     * Diagnostics for full logs/metric/tracking/events
      */
-    val tags = listOf<String>()
+    val diagnostics = Diagnostics(events, metrics, log, tracker)
 
     /**
      * Wraps an operation with useful logging indicating starting/completion of action
@@ -166,17 +166,8 @@ open class Worker<T>(
                 // Acknowledge/Abandon
                 complete(sender, queue, job, result)
 
-                // Log result of job
-                log(sender, queue, job, result)
-
-                // Store metrics of job status counts
-                meter(sender, queue, job, result)
-
-                // Track metrics/stats
-                track(sender, queue, job, result)
-
-                // Notify the event listener
-                notify(sender, queue, job, result)
+                // Track all diagnostics
+                diagnostics.record(this, queue, this, job, result)
             }
         }
     }
@@ -272,61 +263,6 @@ open class Worker<T>(
         when(result.success){
             true  -> queue.complete(job.source)
             false -> queue.abandon(job.source)
-        }
-    }
-
-
-    /**
-     * Logs the result of a processed job
-     */
-    protected open fun log(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        when (result.code) {
-            ResultCode.SUCCESS  -> log.info("Job ${job.id} succeeded")
-            ResultCode.FILTERED -> log.info("Job ${job.id} filtered")
-            ResultCode.FAILURE  -> log.info("Job ${job.id} failed with ${result.msg}")
-            else                -> log.info("Job ${job.id} failed with code ${result.code}")
-        }
-    }
-
-
-    /**
-     * Tracks the last job for diagnostics
-     */
-    protected open fun track(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        tracker.request(job)
-        when (result.code) {
-            ResultCode.SUCCESS  -> tracker.success(job, result)
-            ResultCode.FILTERED -> tracker.filtered(job, result)
-            ResultCode.FAILURE  -> tracker.errored(job, result)
-            else                -> tracker.errored(job, result)
-        }
-    }
-
-
-    /**
-     * Records metrics (counts) each job result
-     */
-    protected open fun meter(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        metrics.count("worker.total_requests", tags)
-        when (result.code) {
-            ResultCode.SUCCESS  -> metrics.count("worker.total_successes", tags)
-            ResultCode.FILTERED -> metrics.count("worker.total_filtered", tags)
-            ResultCode.FAILURE  -> metrics.count("worker.total_failed", tags)
-            else                -> metrics.count("worker.total_other", tags)
-        }
-    }
-
-
-    /**
-     * Events out the job result to potential listeners
-     */
-    protected open fun notify(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        events.onJobEvent(this, this, JobRequested)
-        when (result.code) {
-            ResultCode.SUCCESS  -> events.onJobEvent(sender, this, JobSucceeded)
-            ResultCode.FILTERED -> events.onJobEvent(sender, this, JobFiltered)
-            ResultCode.FAILURE  -> events.onJobEvent(sender, this, JobFailed)
-            else                -> events.onJobEvent(sender, this, JobEvent(job.id, result))
         }
     }
 }
