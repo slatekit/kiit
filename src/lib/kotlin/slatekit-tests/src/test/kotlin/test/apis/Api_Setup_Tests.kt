@@ -86,8 +86,8 @@ class Api_Setup_Tests : ApiTestsBase() {
                 Api(VersionApi(ctx), setup = Annotated)
         ), auth = null, allowIO = false)
 
-        assert(!apis.contains("app.SamplePOKO.fakeMethod"))
-        assert(!apis.contains("sys.app.host2"))
+        assert(!apis.routes.contains("app.SamplePOKO.fakeMethod"))
+        assert(!apis.routes.contains("sys.app.host2"))
     }
 
 
@@ -98,8 +98,8 @@ class Api_Setup_Tests : ApiTestsBase() {
                 Api(VersionApi(ctx), setup = Annotated)
         ), auth = null, allowIO = false)
 
-        assert(apis.contains("app.SamplePOKO.getCounter"))
-        assert(apis.contains("app.info.about"))
+        assert(apis.routes.contains("app.SamplePOKO.getCounter"))
+        assert(apis.routes.contains("app.info.about"))
     }
 
 

@@ -1,7 +1,10 @@
 package slatekit.apis.core
 
+import slatekit.apis.ApiRef
 import slatekit.common.Context
+import slatekit.common.ResultMsg
 import slatekit.common.naming.Namer
+import slatekit.common.results.ResultFuncs
 import slatekit.meta.Reflector
 import kotlin.reflect.full.primaryConstructor
 
@@ -49,6 +52,22 @@ data class Routes(
     }
 
     /**
+     * gets the api info associated with the request
+     * @param cmd
+     * @return
+     */
+    fun check(path: String): Boolean {
+        val parts = path.split('.')
+        return when (parts.size) {
+            0 -> false
+            1 -> contains(parts[0]) || contains("", parts[0])
+            2 -> contains(parts[0], parts[1]) || contains("", parts[0], parts[1])
+            3 -> contains(parts[0], parts[1], parts[2])
+            else -> false
+        }
+    }
+
+    /**
      * Whether there is an area w/ the supplied name.
      */
     fun contains(area: String): Boolean = areas.contains(area)
@@ -72,6 +91,27 @@ data class Routes(
      */
     fun api(area: String, name: String): Api? {
         return areas[area]?.apis?.get(name)
+    }
+
+    /**
+     * gets the mapped method associated with the api action.
+     * @param area
+     * @param name
+     * @param action
+     * @return
+     */
+    fun api(area: String, name: String, action: String, ctx:Context): ResultMsg<ApiRef> {
+        if (area.isEmpty()) return ResultFuncs.badRequest("area not supplied")
+        if (name.isEmpty()) return ResultFuncs.badRequest("api not supplied")
+        if (action.isEmpty()) return ResultFuncs.badRequest("action not supplied")
+        if (!contains(area, name, action)) return ResultFuncs.badRequest("api route $area $name $action not found")
+
+        val api = api(area, name)!!
+        val act = api.actions[action]!!
+        val instance = instance(area, name, ctx)
+        return instance?.let { inst ->
+            ResultFuncs.success(ApiRef(api, act, inst))
+        } ?: ResultFuncs.badRequest("api route $area $name $action not found")
     }
 
     /**
@@ -101,8 +141,6 @@ data class Routes(
             }
         }
     }
-
-    fun buildApiKey(area: String, name: String): String = "$area.$name"
 
     fun visitActions(visitor: (Area, Api, Action) -> Unit) {
 

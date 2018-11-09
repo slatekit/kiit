@@ -63,7 +63,7 @@ open class ApiContainer(
     val tracker = middleware?.filter { it is Tracked }?.map { it as Tracked }?.firstOrNull()
     val errs = middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
 
-    val results = ApiResults(ctx, this, rewrites, serializer)
+    val results by lazy { ApiResults(ctx, this, rewrites, serializer) }
 
     /**
      * The settings for the api ( limited for now )
@@ -78,7 +78,7 @@ open class ApiContainer(
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
-    private val _validator = Validation(this)
+    private val _validator by lazy { Validation(this) }
 
     private val formatter = Format()
 
@@ -91,7 +91,7 @@ open class ApiContainer(
     fun rename(text: String): String = namer?.rename(text) ?: text
 
     fun setApiContainerHost() {
-        routes.visitApis({ _, api -> ApiContainer.setApiHost(api.singleton, this) })
+        routes.visitApis{ _, api -> ApiContainer.setApiHost(api.singleton, this) }
     }
 
     /**
@@ -127,22 +127,6 @@ open class ApiContainer(
 
         path.writeText(sample)
         return success("sample call written to : ${path.absolutePath}")
-    }
-
-    /**
-     * gets the api info associated with the request
-     * @param cmd
-     * @return
-     */
-    fun contains(area: String): Boolean {
-        val parts = area.split('.')
-        return when (parts.size) {
-            0 -> false
-            1 -> routes.contains(parts[0]) || routes.contains("", parts[0])
-            2 -> routes.contains(parts[0], parts[1]) || routes.contains("", parts[0], parts[1])
-            3 -> routes.contains(parts[0], parts[1], parts[2])
-            else -> false
-        }
     }
 
     /**
@@ -190,17 +174,7 @@ open class ApiContainer(
      * @return
      */
     fun getApi(area: String, name: String, action: String): ResultMsg<ApiRef> {
-        if (area.isEmpty()) return badRequest("area not supplied")
-        if (name.isEmpty()) return badRequest("api not supplied")
-        if (action.isEmpty()) return badRequest("action not supplied")
-        if (!routes.contains(area, name, action)) return badRequest("api route $area $name $action not found")
-
-        val api = routes.api(area, name)!!
-        val act = api.actions[action]!!
-        val instance = routes.instance(area, name, ctx)
-        return instance?.let { inst ->
-            success(ApiRef(api, act, inst))
-        } ?: badRequest("api route $area $name $action not found")
+        return routes.api(area, name, action, ctx)
     }
 
     /**
