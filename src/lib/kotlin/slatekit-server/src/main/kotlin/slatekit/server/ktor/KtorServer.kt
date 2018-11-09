@@ -57,7 +57,7 @@ class KtorServer(
         apis: List<Api>,
         auth: Auth? = null,
         setup: ((Any) -> Unit)? = null,
-        ctx: Context = AppContext.simple("slatekit-server")
+        ctx: Context
     ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
 
@@ -71,6 +71,8 @@ class KtorServer(
         docBuilder = ::DocWeb)
 
     override fun appMeta(): AppMeta = ctx.app
+
+    val log = ctx.logs.getLogger("slatekit.server.api")
 
     /**
      * executes the application
@@ -155,7 +157,9 @@ class KtorServer(
         // 3. Decoding request to method parameters
         // 4. Executing the method
         // 5. Handling errors
+        log.info("handling request starting - path: ${request.path}, verb: ${request.verb}, tag: ${request.tag}")
         val result = container.call(request)
+        log.info("handling request completed - path: ${request.path}, tag: ${request.tag}, result: ${result.code}, msg: ${result.msg}")
 
         // Convert the result back to a HttpResult
         KtorResponse.result(call, result)

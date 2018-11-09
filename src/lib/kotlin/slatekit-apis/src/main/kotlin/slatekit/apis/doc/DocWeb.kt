@@ -18,24 +18,28 @@ class DocWeb : Doc() {
     override fun toString(): String = writer.toString()
 
     override fun onApiBegin(api: Api, options: ApiVisitOptions?) {
-        writer.title(getFormattedText(api.area + "/" + api.name, (options?.maxLength ?: 0) + 3), endLine = false)
-        writer.keyValue("desc", api.desc, false)
-        writer.keyValue("route", "${api.area}/${api.name}", false)
-        writer.keyValue("area", api.area, false)
-        writer.keyValue("name", api.name, false)
-        writer.keyValue("verb", api.verb, false)
-        writer.keyValue("roles", api.roles, false)
-        writer.keyValue("proto", api.protocol, false)
-        writer.line()
-        writer.line()
+        with(writer) {
+            title(getFormattedText(api.area + "/" + api.name, (options?.maxLength ?: 0) + 3), endLine = false)
+            keyValue("desc", api.desc, false)
+            keyValue("route", "${api.area}/${api.name}", false)
+            keyValue("area", api.area, false)
+            keyValue("name", api.name, false)
+            keyValue("verb", api.verb, false)
+            keyValue("roles", api.roles, false)
+            keyValue("proto", api.protocol, false)
+            line()
+            line()
+        }
     }
 
     override fun onApiActionBegin(api: Api, action: Action, name: String, options: ApiVisitOptions?) {
-        writer.tab(1)
-        writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
-        writer.keyValue("desc", action.desc, false)
-        writer.keyValue("verb", action.verb, false)
-        writer.keyValue("roles", action.roles, false)
-        writer.keyValue("proto", action.protocol, false)
+        with(writer) {
+            tab(1)
+            subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
+            keyValue("desc", action.desc, false)
+            keyValue("verb", action.verb, false)
+            keyValue("roles", action.roles, false)
+            keyValue("proto", action.protocol, false)
+        }
     }
 }
