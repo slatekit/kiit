@@ -2,10 +2,8 @@ package slatekit.apis
 
 import slatekit.apis.core.*
 import slatekit.apis.doc.DocConsole
+import slatekit.apis.helpers.*
 import slatekit.apis.svcs.Format
-import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.helpers.ApiValidator
-import slatekit.apis.helpers.ApiLoader
 import slatekit.apis.middleware.*
 import slatekit.apis.security.Protocol
 import slatekit.apis.security.Protocols
@@ -70,6 +68,8 @@ open class ApiContainer(
     val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
     val tracker = middleware?.filter { it is Tracked }?.map { it as Tracked }?.firstOrNull()
     val errs = middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
+
+    val results = ApiResults(ctx, rewrites, serializer)
 
     /**
      * The settings for the api ( limited for now )
@@ -250,11 +250,11 @@ open class ApiContainer(
      */
     protected fun execute(raw: Request): ResultEx<Any> {
         // Check 1: Check for help / discovery
-        val helpCheck = isHelp(raw)
+        val helpCheck = ApiUtils.isHelp(raw)
         if (helpCheck.code == HELP) return buildHelp(raw, helpCheck).toResultEx()
 
         // Rewrites ( e.g. restify get /movies => get /movies/getAll )
-        val rewrittenReq = convertRequest(raw)
+        val rewrittenReq = results.convert(raw)
 
         // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
@@ -275,7 +275,7 @@ open class ApiContainer(
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
-        return convertResult(req, result)
+        return results.convert(req, result)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -297,28 +297,6 @@ open class ApiContainer(
         } ?: Failure(Exception("Received null"))
     }
 
-    open fun isHelp(req: Request): ResultMsg<String> {
-
-        // Case 3a: Help ?
-        return if (ArgsFuncs.isHelp(req.parts, 0)) {
-            ResultFuncs.help(msg = "?")
-        }
-        // Case 3b: Help on area ?
-        else if (ArgsFuncs.isHelp(req.parts, 1)) {
-            ResultFuncs.help(msg = "area ?")
-        }
-        // Case 3c: Help on api ?
-        else if (ArgsFuncs.isHelp(req.parts, 2)) {
-            ResultFuncs.help(msg = "area.api ?")
-        }
-        // Case 3d: Help on action ?
-        else if (ArgsFuncs.isHelp(req.parts, 3)) {
-            ResultFuncs.help(msg = "area.api.action ?")
-        } else {
-            failure("Unknown help option")
-        }
-    }
-
     /**
      * Handles help request on any part of the api request. Api requests are typically in
      * the format "area.api.action" so you can type help on each part / region.
@@ -330,7 +308,7 @@ open class ApiContainer(
      * @param mode
      */
     open fun buildHelp(req: Request, result: ResultMsg<String>): ResultMsg<Content> {
-        return if (!isDocKeyAvailable(req)) {
+        return if (!ApiUtils.isDocKeyed(req, docKey)) {
             failure("Unauthorized access to API docs")
         } else {
             val content = when (result.msg) {
@@ -355,53 +333,6 @@ open class ApiContainer(
         }
     }
 
-    protected open fun convertRequest(req: Request): Request {
-        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
-        return finalRequest
-    }
-
-    /**
-     * Finally: If the format of the content specified ( json | csv | props )
-     * Then serialize it here and return the content
-     */
-    protected open fun convertResult(req: Request, result: ResultEx<Any>): ResultEx<Any> {
-        return if (result.success && !req.output.isNullOrEmpty()) {
-            val finalSerializer = serializer ?: this::serialize
-            val serialized = finalSerializer(req.output ?: "", result.getOrElse { null })
-            (result as Success).copy(data = serialized!!)
-        } else {
-            result
-        }
-    }
-
-    /**
-     * Explicitly supplied content
-     * Return the value of the result as a content with type
-     */
-    fun serialize(format: String, data: Any?): Any? {
-
-        val content = when (format) {
-            ContentTypeCsv.ext -> Content.csv(Serialization.csv().serialize(data))
-            ContentTypeJson.ext -> Content.json(Serialization.json().serialize(data))
-            ContentTypeProp.ext -> Content.prop(Serialization.props(true).serialize(data))
-            else -> data
-        }
-        return content
-    }
-
-    fun isDocKeyAvailable(req: Request): Boolean {
-        // Ensure that docs are only available w/ help key
-        val docKeyValue = if (req.meta.containsKey(ApiConstants.DocKeyName)) {
-            req.meta.get(ApiConstants.DocKeyName) ?: ""
-        } else if (req.data.containsKey(ApiConstants.DocKeyName)) {
-            req.data.get(ApiConstants.DocKeyName) ?: ""
-        } else
-            ""
-        return docKeyValue == docKey
-    }
-
-    fun isCliAllowed(supportedProtocol: String): Boolean =
-        supportedProtocol == Protocols.all || supportedProtocol == Protocols.cli
 
     companion object {
 
