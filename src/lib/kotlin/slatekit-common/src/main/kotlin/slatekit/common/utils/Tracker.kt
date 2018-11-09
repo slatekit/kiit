@@ -84,11 +84,11 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      */
     fun handleResponse(request: TRequest, result: Result<TSuccess, TFailure>) {
         result.onSuccess {
-            trackSuccess(it)
+            succeeded(it)
             logger.info("Success: " + it.toString(), null)
         }
         result.onFailure {
-            trackFailure(request, it)
+            failed(request, it)
             logger.error("Failure: " + it.toString(), null)
         }
     }
@@ -107,7 +107,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     /**
      * Keep track of total requests ( regardless of success/error )
      */
-    open fun trackRequest(request: TRequest) {
+    open fun requested(request: TRequest) {
         lastRequest.set(request)
         totalRequests.incrementAndGet()
     }
@@ -115,7 +115,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     /**
      * Keep track of total filtered requests ( regardless of success/error )
      */
-    open fun trackFiltered(filteredReason: TFilter) {
+    open fun filtered(filteredReason: TFilter) {
         lastFiltered.set(filteredReason)
         totalFiltered.incrementAndGet()
     }
@@ -123,7 +123,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     /**
      * Keep track of total successfully processed engagements
      */
-    open fun trackSuccess(success: TSuccess) {
+    open fun succeeded(success: TSuccess) {
         lastSuccess.set(success)
         totalSuccesses.incrementAndGet()
     }
@@ -132,7 +132,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
      * Keep track of total errors
      * @param err
      */
-    open fun trackFailure(req: TRequest, failure: TFailure) {
+    open fun failed(req: TRequest, failure: TFailure) {
         lastFailure.set(Pair(req, failure))
         totalFailures.incrementAndGet()
     }

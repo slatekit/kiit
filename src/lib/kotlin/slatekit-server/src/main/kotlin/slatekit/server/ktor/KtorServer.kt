@@ -13,6 +13,7 @@
 
 package slatekit.server.ktor
 
+import com.codahale.metrics.JmxReporter
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -31,15 +32,19 @@ import slatekit.apis.doc.DocWeb
 import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
+import slatekit.common.metrics.Metric
+import slatekit.common.metrics.Metrics
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
+import java.util.concurrent.TimeUnit
 
 class KtorServer(
     val config: ServerConfig,
     val ctx: Context,
     val auth: Auth?,
-    val apis: List<Api>
+    val apis: List<Api>,
+    val metrics:Metrics
 ) : AppMetaSupport {
 
     /**
@@ -57,9 +62,10 @@ class KtorServer(
         apis: List<Api>,
         auth: Auth? = null,
         setup: ((Any) -> Unit)? = null,
-        ctx: Context
+        ctx: Context,
+        metrics: Metrics
     ) :
-        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
+        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis, metrics)
 
     val container = ApiContainer(ctx,
         false,
@@ -81,6 +87,15 @@ class KtorServer(
     fun run() {
 
         val server = embeddedServer(Netty, config.port) {
+
+            // Metrics using DropWizard
+            install(io.ktor.metrics.Metrics) {
+                JmxReporter.forRegistry(registry)
+                        .convertRatesTo(TimeUnit.SECONDS)
+                        .convertDurationsTo(TimeUnit.MILLISECONDS)
+                        .build()
+                        .start()
+            }
             routing {
                 get("/") {
                     ping(call)
@@ -123,7 +138,7 @@ class KtorServer(
      * stops the server ( this is not currently accessible on the command line )
      */
     fun stop() {
-        spark.Spark.stop()
+
     }
 
     /**
@@ -149,16 +164,29 @@ class KtorServer(
             HttpMethod.Delete -> call.receiveText()
             else -> ""
         }
+
+        // 1. Convert the http request to a SlateKit Request
         val request = KtorRequest.build(ctx, body, call, config)
 
+        // 2. Logs / Diagnostics
+        log.info("handling request starting - path: ${request.path}, verb: ${request.verb}, tag: ${request.tag}")
+        metrics.count("http.requests.total", null)
+        metrics.count("http.requests", listOf("uri", request.path))
+
+        // 3. Execute the API call
         // The SlateKit ApiContainer will handle the heavy work of
         // 1. Checking routes to area/api/actions ( methods )
         // 2. Validating parameters to methods
         // 3. Decoding request to method parameters
         // 4. Executing the method
         // 5. Handling errors
-        log.info("handling request starting - path: ${request.path}, verb: ${request.verb}, tag: ${request.tag}")
         val result = container.call(request)
+
+        // 4. Logs / Diagnostics ( separate from ktor diagnostics )
+        when(result.success) {
+            true  -> metrics.count("http.requests.success", null)
+            false -> metrics.count("http.requests.failure", null)
+        }
         log.info("handling request completed - path: ${request.path}, tag: ${request.tag}, result: ${result.code}, msg: ${result.msg}")
 
         // Convert the result back to a HttpResult
