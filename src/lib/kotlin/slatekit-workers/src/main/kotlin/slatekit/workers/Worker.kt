@@ -3,6 +3,10 @@ package slatekit.workers
 import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.log.Logs
+import slatekit.common.metrics.Metrics
+import slatekit.common.metrics.MetricsLite
+import slatekit.common.queues.QueueSource
+import slatekit.common.results.ResultCode
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.workers.core.*
 import slatekit.workers.status.*
@@ -49,17 +53,18 @@ import java.util.concurrent.atomic.AtomicReference
  * @sample : Worker<String>("user.notifications", "notifications", "send notifications to users", "1.0"))
  */
 open class Worker<T>(
-    name: String,
-    group: String,
-    desc: String,
-    version: String,
-    val logs:Logs,
-    val settings: WorkerSettings = WorkerSettings(),
-    val metrics: Metrics = Metrics(DateTime.now()),
-    val handler: Handler = Handler(DateTime.now()),
-    val middleware: Middleware = Middleware(),
-    val events: Events = Events(),
-    val callback: WorkFunction<T>? = null
+        name: String,
+        group: String,
+        desc: String,
+        version: String,
+        val logs: Logs,
+        val settings: WorkerSettings = WorkerSettings(),
+        val metrics: Metrics = MetricsLite(),
+        val tracker: Tracker = Tracker(DateTime.now()),
+        val handler: Handler = Handler(DateTime.now()),
+        val middleware: Middleware = Middleware(),
+        val events: Events = Events(),
+        val callback: WorkFunction<T>? = null
 
 ) : RunStatusSupport {
 
@@ -80,7 +85,7 @@ open class Worker<T>(
     val about: About = About(id, name, desc, group = group, version = version)
 
     /**
-     * List of queues that this worker can handle jobs from
+     * List of names of queues that this worker can handle jobs from
      */
     val queues: List<String> = listOf("*")
 
@@ -90,10 +95,16 @@ open class Worker<T>(
      */
     val log = logs.getLogger(this.javaClass)
 
+
+    /**
+     * Tags for metrics
+     */
+    val tags = listOf<String>()
+
     /**
      * Wraps an operation with useful logging indicating starting/completion of action
      */
-    fun <T> performLog(name: String, action: () -> ResultEx<T>):ResultEx<T> {
+    fun <T> performLog(name: String, action: () -> ResultEx<T>): ResultEx<T> {
         log.info("$name starting")
         val result = action()
         log.info("$name complete")
@@ -132,20 +143,40 @@ open class Worker<T>(
     }
 
     /**
+     * end this task and update current status
+     */
+    fun end() {
+        onEnd()
+        moveToState(RunStateComplete)
+    }
+
+    /**
      * For batching purposes
      */
-    open fun work(batch: Batch) {
+    open fun work(sender: Any, batch: Batch) {
         val jobs = batch.jobs
         val queue = batch.queue.queue
 
         if (!jobs.isEmpty()) {
             jobs.forEach { job ->
-                val result = work(job)
-                if (result.success) {
-                    queue.complete(job.source)
-                } else {
-                    queue.abandon(job.source)
-                }
+
+                // Attempt to work on the job
+                val result = Result.attempt { work(job) }
+
+                // Acknowledge/Abandon
+                complete(sender, queue, job, result)
+
+                // Log result of job
+                log(sender, queue, job, result)
+
+                // Store metrics of job status counts
+                meter(sender, queue, job, result)
+
+                // Track metrics/stats
+                track(sender, queue, job, result)
+
+                // Notify the event listener
+                notify(sender, queue, job, result)
             }
         }
     }
@@ -184,34 +215,26 @@ open class Worker<T>(
         return Failure(Exception("Not implemented"), NOT_IMPLEMENTED, "not implemented")
     }
 
-    /**
-     * end this task and update current status
-     */
-    fun end() {
-        onEnd()
-        moveToState(RunStateComplete)
-    }
-
     fun stats(): Stats {
-        val lastRequest = metrics.lastRequest.get()
-        val lastFiltered = metrics.lastFiltered.get()
-        val lastSuccess = metrics.lastSuccess.get()
-        val lastErrored = metrics.lastErrored.get()
+        val lastRequest  = tracker.lastRequest.get()
+        val lastFiltered = tracker.lastFiltered.get()
+        val lastSuccess  = tracker.lastSuccess.get()
+        val lastErrored  = tracker.lastErrored.get()
 
         return Stats(
-            about.id,
-            about.name,
-            status = _runState.get(),
-            lastRunTime = _lastRunTime.get(),
-            lastResult = _lastResult.get(),
-            totalRequests = metrics.totalRequests.get(),
-            totalSuccesses = metrics.totalSucccess.get(),
-            totalErrored = metrics.totalErrored.get(),
-            totalFiltered = metrics.totalFiltered.get(),
-            lastRequest = lastRequest.copy(source = lastRequest.source.javaClass.name),
-            lastFiltered = lastFiltered.copy(source = lastRequest.source.javaClass.name),
-            lastSuccess = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
-            lastErrored = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+                about.id,
+                about.name,
+                status = _runState.get(),
+                lastRunTime    = _lastRunTime.get(),
+                lastResult     = _lastResult.get(),
+                totalRequests  = metrics.total("worker.total_successes").toLong(),
+                totalSuccesses = metrics.total("worker.total_filtered").toLong(),
+                totalErrored   = metrics.total("worker.total_failed").toLong(),
+                totalFiltered  = metrics.total("worker.total_other").toLong(),
+                lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
+                lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
+                lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
+                lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
         )
     }
 
@@ -242,5 +265,68 @@ open class Worker<T>(
      * provided for subclass task and implementing end code in the derived class
      */
     protected open fun onEnd() {
+    }
+
+
+    protected open fun complete(sender: Any, queue: QueueSource, job:Job, result:ResultEx<*>) {
+        when(result.success){
+            true  -> queue.complete(job.source)
+            false -> queue.abandon(job.source)
+        }
+    }
+
+
+    /**
+     * Logs the result of a processed job
+     */
+    protected open fun log(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
+        when (result.code) {
+            ResultCode.SUCCESS  -> log.info("Job ${job.id} succeeded")
+            ResultCode.FILTERED -> log.info("Job ${job.id} filtered")
+            ResultCode.FAILURE  -> log.info("Job ${job.id} failed with ${result.msg}")
+            else                -> log.info("Job ${job.id} failed with code ${result.code}")
+        }
+    }
+
+
+    /**
+     * Tracks the last job for diagnostics
+     */
+    protected open fun track(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
+        tracker.request(job)
+        when (result.code) {
+            ResultCode.SUCCESS  -> tracker.success(job, result)
+            ResultCode.FILTERED -> tracker.filtered(job, result)
+            ResultCode.FAILURE  -> tracker.errored(job, result)
+            else                -> tracker.errored(job, result)
+        }
+    }
+
+
+    /**
+     * Records metrics (counts) each job result
+     */
+    protected open fun meter(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
+        metrics.count("worker.total_requests", tags)
+        when (result.code) {
+            ResultCode.SUCCESS  -> metrics.count("worker.total_successes", tags)
+            ResultCode.FILTERED -> metrics.count("worker.total_filtered", tags)
+            ResultCode.FAILURE  -> metrics.count("worker.total_failed", tags)
+            else                -> metrics.count("worker.total_other", tags)
+        }
+    }
+
+
+    /**
+     * Events out the job result to potential listeners
+     */
+    protected open fun notify(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
+        events.onJobEvent(this, this, JobRequested)
+        when (result.code) {
+            ResultCode.SUCCESS  -> events.onJobEvent(sender, this, JobSucceeded)
+            ResultCode.FILTERED -> events.onJobEvent(sender, this, JobFiltered)
+            ResultCode.FAILURE  -> events.onJobEvent(sender, this, JobFailed)
+            else                -> events.onJobEvent(sender, this, JobEvent(job.id, result))
+        }
     }
 }

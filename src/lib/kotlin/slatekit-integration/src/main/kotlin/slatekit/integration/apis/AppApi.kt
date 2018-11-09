@@ -29,8 +29,7 @@ class AppApi(val context: AppEntContext) : Tracked {
 
     override val tracker = Tracker<Request, Request, Any, Exception>(
         Random.guid(),
-        "api-tracker",
-        context.logs.getLogger("api")
+        "api-tracker"
     )
 
     @ApiAction(desc = "gets info about this build", roles = "*", verb = "get", protocol = "@parent")
@@ -40,7 +39,11 @@ class AppApi(val context: AppEntContext) : Tracked {
 
     @ApiAction(desc = "get info about the application")
     fun stats(): List<String> {
-        return tracker.diagnostics().map({ it.first + ":" + it.second })
+        return listOf( tracker.lastRequest.get(),
+                tracker.lastSuccess.get(),
+                tracker.lastFailure.get(),
+                tracker.lastFiltered.get()
+        ).map { it.toString() }
     }
 
     @ApiAction(desc = "get info about the application")

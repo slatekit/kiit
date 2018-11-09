@@ -8,6 +8,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
+import slatekit.common.metrics.Metrics
 
 /**
  *

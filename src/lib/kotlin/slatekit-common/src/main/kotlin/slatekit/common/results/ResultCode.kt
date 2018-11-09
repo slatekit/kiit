@@ -56,6 +56,7 @@ object ResultCode {
     const val NOT_FOUND = 404
     const val CONFLICT = 409
     const val DEPRECATED = 426
+    const val FILTERED = 450
 
     const val UNEXPECTED_ERROR = 500
     const val NOT_IMPLEMENTED = 501

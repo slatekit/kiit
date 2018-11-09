@@ -43,6 +43,8 @@ sealed class Result<out T, out E> {
         inline fun <T> attempt(f: () -> T): Result<T, Exception> =
             try {
                 val data = f()
+
+                // Avoid nested Result<T, E>
                 val result = when (data) {
                     is Result<*, *> -> (data as Result<T, Any>).toResultEx()
                     else -> Success(data)

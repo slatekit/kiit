@@ -20,6 +20,8 @@ interface Metrics {
 
     fun provider():Any
 
+    fun total(name: String): Double
+
     fun count(name: String, tags:List<String>?)
 
     fun time(name: String, tags: List<String>?, call:() -> Unit )

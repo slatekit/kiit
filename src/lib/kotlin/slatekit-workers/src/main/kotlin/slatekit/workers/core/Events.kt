@@ -8,24 +8,12 @@ import slatekit.workers.Worker
  */
 class Events(val callback: ((Event) -> Unit)? = null, val logger: Logger? = null) {
 
-    fun onStarted(sender: Any, worker: Worker<*>) {
-        onEvent(Event(sender, worker, "started"))
+    fun onWorkerEvent(sender: Any, worker: Worker<*>, etype:EventType) {
+        onEvent(Event(sender, worker, etype.name))
     }
 
-    fun onPaused(sender: Any, worker: Worker<*>) {
-        onEvent(Event(sender, worker, "paused"))
-    }
-
-    fun onResumed(sender: Any, worker: Worker<*>) {
-        onEvent(Event(sender, worker, "resumed"))
-    }
-
-    fun onStopped(sender: Any, worker: Worker<*>) {
-        onEvent(Event(sender, worker, "stopped"))
-    }
-
-    fun onError(sender: Any, worker: Worker<*>) {
-        onEvent(Event(sender, worker, "errored"))
+    fun onJobEvent(sender:Any, worker:Worker<*>, etype:EventType) {
+        onEvent(Event(sender, worker, etype.name))
     }
 
     fun onEvent(event: Event) {

@@ -2,6 +2,10 @@ package slatekit.workers
 
 import slatekit.common.Context
 import slatekit.common.info.About
+import slatekit.common.metrics.Metrics
+import slatekit.common.metrics.MetricsLite
+import slatekit.common.metrics.MetricsSettings
+import slatekit.common.metrics.Tags
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Stats
 import slatekit.workers.status.*
@@ -25,8 +29,9 @@ open class System(
         val queueInfos: List<QueueInfo>,
         service: ExecutorService? = null,
         val managerCreator: ((System) -> Manager)? = null,
-        val settings: SystemSettings = SystemSettings()
-) : Runnable {
+        val settings: SystemSettings = SystemSettings(),
+        val metrics: Metrics
+        ) : Runnable {
 
 
     private val _runState = AtomicReference<RunState>(RunStateNotStarted)
@@ -221,6 +226,7 @@ open class System(
      * stops the worker
      */
     fun stopWorker(worker: String) = perform("stopping worker: $worker") { get(worker)?.stop() }
+
 
     fun getState(): RunState = _runState.get()
 

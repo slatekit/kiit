@@ -24,6 +24,10 @@ class DDMetrics(val registry: MeterRegistry,
     override fun provider(): Any = registry
 
 
+    override fun total(name: String): Double {
+        return registry.counter(name, listOf()).count()
+    }
+
     /**
      * Increment a counter
      */
