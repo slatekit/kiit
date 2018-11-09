@@ -3,6 +3,7 @@ package test.setup
 import slatekit.common.ResultEx
 import slatekit.common.ResultMsg
 import slatekit.common.Success
+import slatekit.common.log.LogsDefault
 import slatekit.workers.*
 import slatekit.workers.core.*
 import slatekit.workers.WorkFunction
@@ -14,7 +15,8 @@ class MyWorker(
 ) : Worker<Int>(
     "", "", "", "",
     events = events ?: Events(),
-    callback = callback
+    callback = callback,
+    logs = LogsDefault
 ) {
     var isInitialized = false
     var isEnded = false

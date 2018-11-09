@@ -1,5 +1,6 @@
 package slatekit.apis.helpers
 
+import slatekit.apis.ApiContainer
 import slatekit.apis.middleware.Rewriter
 import slatekit.common.*
 import slatekit.common.content.Content
@@ -10,14 +11,15 @@ import slatekit.meta.Serialization
 
 
 class ApiResults(val ctx: Context,
+                 val container:ApiContainer,
                  val rewrites:List<Rewriter>,
-                 val serializer: ((String, Any?) -> String)? = null,) {
+                 val serializer: ((String, Any?) -> String)? = null) {
 
     private val emptyArgs = mapOf<String, Any>()
 
 
     fun convert(req: Request): Request {
-        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, this, emptyArgs) })
+        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, container, emptyArgs) })
         return finalRequest
     }
 

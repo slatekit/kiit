@@ -6,19 +6,13 @@ import slatekit.apis.helpers.*
 import slatekit.apis.svcs.Format
 import slatekit.apis.middleware.*
 import slatekit.apis.security.Protocol
-import slatekit.apis.security.Protocols
 import slatekit.apis.security.WebProtocol
-import slatekit.common.args.ArgsFuncs
-import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.content.Content
-import slatekit.common.content.ContentTypeCsv
-import slatekit.common.content.ContentTypeJson
-import slatekit.common.content.ContentTypeProp
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.naming.Namer
@@ -69,7 +63,7 @@ open class ApiContainer(
     val tracker = middleware?.filter { it is Tracked }?.map { it as Tracked }?.firstOrNull()
     val errs = middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
 
-    val results = ApiResults(ctx, rewrites, serializer)
+    val results = ApiResults(ctx, this, rewrites, serializer)
 
     /**
      * The settings for the api ( limited for now )
@@ -308,7 +302,7 @@ open class ApiContainer(
      * @param mode
      */
     open fun buildHelp(req: Request, result: ResultMsg<String>): ResultMsg<Content> {
-        return if (!ApiUtils.isDocKeyed(req, docKey)) {
+        return if (!ApiUtils.isDocKeyed(req, docKey ?: "")) {
             failure("Unauthorized access to API docs")
         } else {
             val content = when (result.msg) {
