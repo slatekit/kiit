@@ -1,5 +1,6 @@
 package slatekit.workers
 
+import slatekit.common.CircularList
 import slatekit.common.DateTime
 import slatekit.workers.status.RunStateComplete
 import slatekit.workers.status.RunStateRunning
@@ -25,7 +26,8 @@ interface Manager {
 open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager {
 
     private val registry = Registry(sys)
-    private val logger = sys.ctx.logs.getLogger("workers")
+    private val log = sys.ctx.logs.getLogger("slatekit.workers.system")
+    private val waitTimes = CircularList(sys.settings.exponentialWaitTimes)
 
     // # threads = # cores
     private val threads = Runtime.getRuntime().availableProcessors()
@@ -69,7 +71,12 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
 
             // Enable pause ?
             if (sys.settings.pauseBetweenCycles) {
-                Thread.sleep(sys.settings.pauseTimeInSeconds * 1000L)
+                TODO.IMPLEMENT("workers", "Use Kotlin CoRoutines for non-blocking delay") {
+                    val pauseTimeSeconds = waitTimes.next()
+                    perform("pausing for $pauseTimeSeconds") {
+                        Thread.sleep(waitTimes.next() * 1000L)
+                    }
+                }
             }
             state = sys.getState()
         }
@@ -93,14 +100,21 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
      *
      */
     private fun getJobBatch(queuePosition: Int): Batch? {
+
+        // 1. Get the next queue to process
         val queueOpt = registry.getQueueAt(queuePosition)
+
         return queueOpt?.let { queue ->
+
+            // 2. Get jobs in batches
             val jobs = registry.getBatch(queue, jobBatchSize)
 
+            // 3. Any ?
             if (jobs != null && !jobs.isEmpty()) {
-                logger.info("No jobs for queue: ${queue.name}")
+                log.info("No jobs for queue: ${queue.name}")
                 Batch(queue, jobs, DateTime.now())
             } else {
+                log.info("Got jobs from queue: ${queue.name} : ${jobs?.size ?: 0}")
                 Batch(queue, listOf(), DateTime.now())
             }
         }
@@ -110,11 +124,23 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
      * Gets the next worker that can handle jobs from the supplied queue
      */
     private fun getWorker(queue: QueueInfo): Worker<*>? {
-        val worker = registry.getWorker(queue.name)
-        return worker
+        return registry.getWorker(queue.name)
     }
 
+
     private fun process(batch: Batch, worker: Worker<*>) {
-        worker.work(batch)
+        perform("triggering worker ${worker.id}") {
+            worker.work(batch)
+        }
+    }
+
+
+    /**
+     * Wraps an operation with useful logging indicating starting/completion of action
+     */
+    val perform = { name: String, action: () -> Unit ->
+        log.info("$name starting")
+        action()
+        log.info("$name complete")
     }
 }

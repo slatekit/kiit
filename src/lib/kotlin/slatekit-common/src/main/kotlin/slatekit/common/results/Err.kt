@@ -14,6 +14,18 @@ package slatekit.common.results
 
 interface Err {
     val code: Int
-    val error:String
-    val message: String
+    val msg: String
+    val err: Exception?
 }
+
+/**
+ * Default implementation of Err
+ *
+ * For Anonymous creation:
+ * object : Err { override val code = 400; override val msg = "Invalid error"; override val err:Exception? = null }
+ */
+data class ErrorInfo(override val code: Int,
+                override val msg: String,
+                override val err: Exception? = null) : Err
+
+

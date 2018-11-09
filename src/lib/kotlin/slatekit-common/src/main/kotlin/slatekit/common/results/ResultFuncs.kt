@@ -154,7 +154,7 @@ object ResultFuncs {
      * @return
      */
     fun <T> failure(err:Err): ResultErr<T> {
-        return Failure(err, err.code, err.message)
+        return Failure(err, err.code, err.msg)
     }
 
     /**

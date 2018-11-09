@@ -13,6 +13,7 @@ mantra: Simplicity above all else
 package test.apis
 
 import org.json.simple.JSONObject
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
@@ -44,11 +45,11 @@ class Api_Restful_Tests : ApiTestsBase() {
 
        ensure("", "get", mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
 
-            assert(r1.success)
-            assert(r1.code == SUCCESS)
+            Assert.assertTrue(r1.success)
+            Assert.assertTrue(r1.code == SUCCESS)
 
             val all = r1.getOrElse { Movie.samples() } as List<Movie>
-            assert(all.size == 2 )
+           Assert.assertTrue(all.size == 2 )
         })
     }
 
@@ -58,11 +59,11 @@ class Api_Restful_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "1", "get", mapOf(), mapOf())
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
 
         val book = r1.getOrElse { Movie.samples()[0] } as Movie
-        assert(book.title == Movie.samples().first().title)
+        Assert.assertTrue(book.title == Movie.samples().first().title)
     }
 
 
@@ -72,9 +73,9 @@ class Api_Restful_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleREST", "1", "patch", mapOf(),
                 mapOf("title" to "Indiana Jones Original"))
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
-        assert(r1.getOrElse { "" } == "patched 1 with Indiana Jones Original")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.getOrElse { "" } == "patched 1 with Indiana Jones Original")
     }
 
 
@@ -83,9 +84,9 @@ class Api_Restful_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "1", "delete", mapOf(), mapOf())
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
-        assert(r1.getOrElse { "" } == "deleteById 1")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.getOrElse { "" } == "deleteById 1")
     }
 
 
@@ -94,9 +95,9 @@ class Api_Restful_Tests : ApiTestsBase() {
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "activateById", "post", mapOf(), mapOf("id" to 1))
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
-        assert(r1.getOrElse { "" } == "activateById 1")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.getOrElse { "" } == "activateById 1")
     }
 
 
@@ -125,9 +126,9 @@ class Api_Restful_Tests : ApiTestsBase() {
                 data
         )
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
-        assert(r1.getOrElse { 0L } == 3L)
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.getOrElse { 0L } == 3L)
     }
 
 
@@ -154,9 +155,9 @@ class Api_Restful_Tests : ApiTestsBase() {
                 data
         )
 
-        assert(r1.success)
-        assert(r1.code == SUCCESS)
-        assert(r1.getOrElse { "" } == "updated 1")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.getOrElse { "" } == "updated 1")
     }
 
 

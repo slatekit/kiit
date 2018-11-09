@@ -15,6 +15,7 @@ package slatekit.apis.core
 
 import slatekit.apis.*
 import slatekit.apis.helpers.ApiHelper
+import slatekit.apis.helpers.ApiUtils
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.middleware.Filter
 import slatekit.apis.security.WebProtocol
@@ -36,7 +37,7 @@ class Validation(val ctn: ApiContainer) {
         val actualVerb = getReferencedValue(action.verb, api.verb)
         val actualProtocol = getReferencedValue(action.protocol, api.protocol)
         val supportedProtocol = actualProtocol
-        val isCliOk = ctn.isCliAllowed(supportedProtocol)
+        val isCliOk = ApiUtils.isCliAllowed(supportedProtocol)
         val isWeb = ctn.protocol == WebProtocol
 
         // 1. Ensure verb is correct

@@ -5,56 +5,29 @@ package slatekit.common.metrics
  * Standardized set of tags used for metrics.
  * This tags are associated w/ the common SlateKit context values (env, app, etc )
  */
-class Tags(envName: String,
-           appName: String,
-           groupName: String,
-           hostName: String,
-           location: String,
-           shardName: String) {
-
-    /**`
-     * Environment e.g. qa1.qa
-     */
-    val env: Tag = MetricTag("env", envName)
-
+class Tags(val global: List<Tag>) {
 
     /**
-     * Application name: user-service
+     * @param envName  : Environment e.g. qa1.qa
+     * @param appName  : Application name: user-service
+     * @param groupName: Group or department: Registration
+     * @param hostName : Host name
+     * @param location : Location: Relevant location/region
+     * @param shardName: Shard name in a partitioned system
+     *
      */
-    val app: Tag = MetricTag("app", appName)
-
-
-    /**
-     * Group or department: Registration
-     */
-    val grp: Tag = MetricTag("grp", groupName)
-
-
-    /**
-     * Host name
-     */
-    val host: Tag = MetricTag("host", hostName)
-
-
-    /**
-     * Location: Relevant location/region
-     */
-    val loc: Tag = MetricTag("loc", location)
-
-
-    /**
-     * Shard name in a partitioned system
-     */
-    val shard: Tag = MetricTag("shard", shardName)
-
-
-    /**
-     * List of all the global tags above
-     */
-    val global: List<Tag> = listOf(env, app, grp, host, loc)
+    constructor(envName: String,
+                appName: String,
+                groupName: String,
+                hostName: String,
+                location: String,
+                shardName: String) :
+            this(build(envName, appName, groupName, hostName, location, shardName))
 
 
     private val paths = mutableMapOf<String, Tag>()
+
+
     /**
      * A uri of a resource
      */
@@ -63,8 +36,24 @@ class Tags(envName: String,
             paths[path]!!
         } else {
             val tag = MetricTag("uri", path)
-            paths.put(path, tag)
+            paths[path] = tag
             tag
         }
+    }
+
+    companion object {
+        fun build(envName: String,
+                  appName: String,
+                  groupName: String,
+                  hostName: String,
+                  location: String,
+                  shardName: String): List<Tag> = listOf(
+                MetricTag("env", envName),
+                MetricTag("app", appName),
+                MetricTag("grp", groupName),
+                MetricTag("host", hostName),
+                MetricTag("loc", location),
+                MetricTag("shard", shardName)
+        )
     }
 }

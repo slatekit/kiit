@@ -13,6 +13,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
+import slatekit.common.results.Err
+import slatekit.common.results.ErrorInfo
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultFuncs.conflict
@@ -35,31 +37,34 @@ class Example_Results : Cmd("results") {
 
     override fun executeInternal(args: Array<String>?): ResultEx<Any> {
         //<doc:examples>
-        // CASE 1: The Result class is a container for the following
-        // 1. success / failure  - flag
-        // 2. message / error    - informative message
-        // 3. data               - data being returned
-        // 4. code               - matches http status codes
-        // 5. ref                - tag for external id references
-        // 6. exception          - error info
-        // 7. tag                - for referencing/tracking purposes
+        // The Result<S,F> class is a way to model successes and failures.
+        // Design: This is essentially a specialized Either[L,R] with optional integer code/string message.
+        //
+        // FIELDS:
+        // 1. data    : [required] - data being returned in a success case
+        // 2. success : [derived ] - success/ failure flag based on Success/Failure branch
+        // 3. code    : [optional] - integer code to describe error
+        // 4. message : [optional] - string to represent message/error for Success/Failure
 
         // NOTES:
+        // This is essentially a specialized Either[L,R] with optional integer code/string message.
         // - The result is inspired by Scala's Option[T] and Try/Success/Failure
         // - It provides a status code as an integer
         // - The result has 2 branches ( Success and Failure )
         // - You can supply a type parameter for the data
         // - Convenience functions are available to mimick HTTP Status Codes( see samples below ).
+        // - HTTP status are fairly general purpose and can be used outside of an http context.
+        //   However, you can supply and use your own status codes if needed.
 
         // Explicitly build result using the Success "branch" of Result
-        val result1 = Success(
+        val result1:Result<String,Exception> = Success(
                 data = "userId:1234567890",
                 code = SUCCESS,
                 msg = "user created"
         )
 
         // Explicitly build a result using the Failure "branch" of Result
-        val result2 = Failure<Exception>(
+        val result2:Result<String,Exception> = Failure<Exception>(
                 err = IllegalArgumentException("user id"),
                 code = BAD_REQUEST,
                 msg = "user id not supplied"
@@ -74,7 +79,12 @@ class Example_Results : Cmd("results") {
         // level controller / api layer.
 
         // CASE 1: Success ( 200 )
-        val res1 = success(123456, msg = "user created")
+        // NOTE:
+        // 1. The ResultMsg is just a type alias for Result<S, String>
+        //    representing the error type as a simple string.
+        // 2. There is ResultEx ( also a type alias ) for Result<S, Exception>
+        //    representing the error type as an Exception
+        val res1:ResultMsg<Int> = success(123456, msg = "user created")
         printResult(res1)
 
 
@@ -111,13 +121,18 @@ class Example_Results : Cmd("results") {
         // CASE 8: Not available
         val res7 = notAvailable<String>(msg = "operation currently unavailable")
         printResult(res7)
+
+
+        // CASE 9: Build based on the Err model
+        // This allows you to have pre-defined list of error infos to refer to
+        val failure:Result<Int, Err> = failure( ErrorInfo(400, "Invalid user", null) )
         //</doc:examples>
 
         return Success("")
     }
 
 
-    fun printResult(result: Result<Any, Any>): Unit {
+    fun printResult(result: Result<*, *>): Unit {
         println("success: " + result.success)
         println("message: " + result.msg)
         println("code   : " + result.code)

@@ -21,26 +21,53 @@ import java.util.concurrent.TimeUnit
  * 6. control a specific worker life-cycle methods ( start, stop, pause, resume )
  */
 open class System(
-    val ctx: Context,
-    val queueInfos: List<QueueInfo>,
-    service: ExecutorService? = null,
-    val managerCreator: ((System) -> Manager)? = null,
-    val settings: SystemSettings = SystemSettings()
-)
-    : Runnable {
+        val ctx: Context,
+        val queueInfos: List<QueueInfo>,
+        service: ExecutorService? = null,
+        val managerCreator: ((System) -> Manager)? = null,
+        val settings: SystemSettings = SystemSettings()
+) : Runnable {
+
+
+    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
+    private var _thread: Thread? = null
+
 
     /**
      * Queues built from queue infos with priorities, creating "weighted" queues.
      */
     val queues = Queues(queueInfos)
 
-    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
-    private var _thread: Thread? = null
+
+    /**
+     * Log for system level actions :
+     * 1. initialization/execution/shutdown
+     * 2. transition changes
+     * 3. worker management
+     */
+    val log = ctx.logs.getLogger("slatekit.workers.system")
+
+
+    /**
+     * Used as a prefix for all logs here specifically for status changes.
+     */
+    val logPrefix = "WorkSystem: status: "
+
+
+    /**
+     * Wraps an operation with useful logging indicating starting/completion of action
+     */
+    val perform = { name: String, action: () -> Unit ->
+        log.info("$name starting")
+        action()
+        log.info("$name complete")
+    }
 
     /**
      * You can extend the work system and
      */
     open val svc = service ?: Executors.newFixedThreadPool(3)
+
 
     /**
      * organizes all the workers into groups
@@ -51,7 +78,8 @@ open class System(
      * register a worker into the default group
      */
     fun <T> register(worker: Worker<T>) {
-        workers[worker.about.name] = worker
+        workers[worker.id] = worker
+        log.info("registered worker ${worker.id}")
     }
 
     /**
@@ -78,7 +106,12 @@ open class System(
      * all workers and groups and have them ready to be run later
      */
     open fun init() {
-        workers.forEach({ _, worker -> worker.init() })
+        perform("$logPrefix initialization") {
+            workers.forEach { id, worker ->
+                log.info("initializing worker $id")
+                worker.init()
+            }
+        }
     }
 
     /**
@@ -87,6 +120,7 @@ open class System(
      * control and to handle custom execution of all the groups/workers
      */
     open fun exec() {
+
         // Initialize
         moveToState(RunStateInitializing)
         init()
@@ -95,7 +129,12 @@ open class System(
         moveToState(RunStateRunning)
 
         // Move workers to running state
-        workers.forEach { it.value.moveToState(RunStateRunning) }
+        perform("$logPrefix starting workers") {
+            workers.forEach { id, worker ->
+                log.info("moving worker to running $id")
+                worker.moveToState(RunStateRunning)
+            }
+        }
 
         // Get the instance of the runner
         val manager = managerCreator?.invoke(this) ?: DefaultManager(this)
@@ -112,7 +151,12 @@ open class System(
      * any shutdown / end steps
      */
     open fun end() {
-        workers.forEach({ _, worker -> worker.end() })
+        perform("$logPrefix shutdown") {
+            workers.forEach { id, worker ->
+                log.info("shutting down worker $id")
+                worker.end()
+            }
+        }
     }
 
     fun start() {
@@ -161,22 +205,22 @@ open class System(
     /**
      * starts the worker
      */
-    fun startWorker(worker: String) = get(worker)?.start()
+    fun startWorker(worker: String) = perform("starting worker: $worker") { get(worker)?.start() }
 
     /**
      * pauses the worker
      */
-    fun pauseWorker(worker: String) = get(worker)?.pause()
+    fun pauseWorker(worker: String) = perform("pausing worker: $worker") { get(worker)?.pause() }
 
     /**
      * resumes the worker
      */
-    fun resumeWorker(worker: String) = get(worker)?.resume()
+    fun resumeWorker(worker: String) = perform("resuming worker: $worker") { get(worker)?.resume() }
 
     /**
      * stops the worker
      */
-    fun stopWorker(worker: String) = get(worker)?.stop()
+    fun stopWorker(worker: String) = perform("stopping worker: $worker") { get(worker)?.stop() }
 
     fun getState(): RunState = _runState.get()
 
@@ -188,6 +232,7 @@ open class System(
      */
     fun moveToState(state: RunState): RunState {
         _runState.set(state)
+        log.info("$logPrefix transitioning to ${state.mode}")
         return state
     }
 }
