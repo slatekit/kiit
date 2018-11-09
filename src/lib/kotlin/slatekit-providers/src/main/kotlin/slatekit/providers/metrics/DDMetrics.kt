@@ -2,23 +2,20 @@ package slatekit.providers.metrics
 
 import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics
+import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
+import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.datadog.DatadogMeterRegistry
 import slatekit.common.metrics.*
 
 
-class DDMetrics(
-        override val settings: MetricsSettings,
-        override val source: String = "micrometer",
-        val config:DDConfig
-) : Metrics {
-
-    val registry:MeterRegistry = DatadogMeterRegistry(config, Clock.SYSTEM)
+class DDMetrics(val registry: MeterRegistry,
+                override val settings: MetricsSettings) : Metrics {
 
 
-    /**
-     * Global / Common tags to supplied to all metrics
-     */
-    val globals:List<io.micrometer.core.instrument.Tag> = toTags(settings.tags.global)
+    override val source: String = "micrometer"
 
 
     /**
@@ -59,17 +56,27 @@ class DDMetrics(
     }
 
 
-    val emptyGlobals = listOf<io.micrometer.core.instrument.Tag>()
-    private fun globals(): List<io.micrometer.core.instrument.Tag>? {
-        return if (settings.standardize) globals else emptyGlobals
-    }
-
-
     companion object {
         fun toTags(tags: List<Tag>): List<io.micrometer.core.instrument.Tag> {
             return tags.map {
                 io.micrometer.core.instrument.ImmutableTag(it.tagName, it.tagVal)
             }
+        }
+
+        fun build(settings:MetricsSettings, config:DDConfig, bindMetrics:Boolean):MeterRegistry {
+            val registry = DatadogMeterRegistry(config, Clock.SYSTEM)
+            if(settings.standardize) {
+                val globalTags = toTags(settings.tags.global).toMutableList()
+                registry.config().commonTags(globalTags)
+            }
+            if(bindMetrics) {
+                ClassLoaderMetrics().bindTo(registry)
+                JvmMemoryMetrics().bindTo(registry)
+                JvmGcMetrics().bindTo(registry)
+                ProcessorMetrics().bindTo(registry)
+                JvmThreadMetrics().bindTo(registry)
+            }
+            return registry
         }
     }
 }

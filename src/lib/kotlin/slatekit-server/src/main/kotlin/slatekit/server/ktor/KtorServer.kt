@@ -88,14 +88,14 @@ class KtorServer(
 
         val server = embeddedServer(Netty, config.port) {
 
-            // Metrics using DropWizard
-            install(io.ktor.metrics.Metrics) {
-                JmxReporter.forRegistry(registry)
-                        .convertRatesTo(TimeUnit.SECONDS)
-                        .convertDurationsTo(TimeUnit.MILLISECONDS)
-                        .build()
-                        .start()
-            }
+            //// Metrics using DropWizard
+            //install(io.ktor.metrics.Metrics) {
+            //    JmxReporter.forRegistry(registry)
+            //            .convertRatesTo(TimeUnit.SECONDS)
+            //            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            //            .build()
+            //            .start()
+            //}
             routing {
                 get("/") {
                     ping(call)
@@ -168,10 +168,10 @@ class KtorServer(
         // 1. Convert the http request to a SlateKit Request
         val request = KtorRequest.build(ctx, body, call, config)
 
-        // 2. Logs / Diagnostics
+        // 2. Logs / Diagnostics ( for request )
+        val tags = listOf("uri", request.path)
         log.info("handling request starting - path: ${request.path}, verb: ${request.verb}, tag: ${request.tag}")
-        metrics.count("http.requests.total", null)
-        metrics.count("http.requests", listOf("uri", request.path))
+        metrics.count("http.requests.total", tags)
 
         // 3. Execute the API call
         // The SlateKit ApiContainer will handle the heavy work of
@@ -184,9 +184,12 @@ class KtorServer(
 
         // 4. Logs / Diagnostics ( separate from ktor diagnostics )
         when(result.success) {
-            true  -> metrics.count("http.requests.success", null)
-            false -> metrics.count("http.requests.failure", null)
+            true  -> metrics.count("http.requests.success", tags)
+            false -> metrics.count("http.requests.failure", tags)
         }
+
+        // 5. Logs / Diagnostics ( for result )
+        metrics.count("http.requests.${result.code}", tags)
         log.info("handling request completed - path: ${request.path}, tag: ${request.tag}, result: ${result.code}, msg: ${result.msg}")
 
         // Convert the result back to a HttpResult
