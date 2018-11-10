@@ -16,6 +16,7 @@ class DDMetrics(val registry: MeterRegistry,
 
 
     override val source: String = "micrometer"
+    val emptyLocalTags = arrayOf<String>()
 
 
     /**
@@ -32,7 +33,8 @@ class DDMetrics(val registry: MeterRegistry,
      * Increment a counter
      */
     override fun count(name: String, tags: List<String>?) {
-        registry.counter(name, *(tags?.toTypedArray() ?: arrayOf<String>()))
+        val counter = registry.counter(name, *(tags?.toTypedArray() ?: emptyLocalTags))
+        counter.increment()
     }
 
 
@@ -48,7 +50,7 @@ class DDMetrics(val registry: MeterRegistry,
      * Set value on a gauge
      */
     override fun <T> gauge(name: String, value:T) where T: kotlin.Number {
-        registry.gauge(name, value)
+        val gauge = registry.gauge(name, value)
     }
 
 
@@ -56,7 +58,7 @@ class DDMetrics(val registry: MeterRegistry,
      * Times an event
      */
     override fun time(name: String, tags: List<String>?, call:() -> Unit ) {
-        registry.timer(name, *(tags?.toTypedArray() ?: arrayOf<String>())).record(call)
+        registry.timer(name, *(tags?.toTypedArray() ?: emptyLocalTags)).record(call)
     }
 
 

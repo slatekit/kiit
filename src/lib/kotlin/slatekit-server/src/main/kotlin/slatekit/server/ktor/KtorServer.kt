@@ -71,7 +71,7 @@ class KtorServer(
         setup: ((Any) -> Unit)? = null,
         ctx: Context,
         metrics: Metrics,
-        events:Events
+        events:Events = Events()
     ) :
         this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis, metrics, events)
 
@@ -86,7 +86,7 @@ class KtorServer(
 
     override fun appMeta(): AppMeta = ctx.app
 
-    val log = ctx.logs.getLogger("slatekit.server.api")
+    val log = ctx.logs.getLogger(this.javaClass.name)
     val tracker = Tracker<Request, Request, Response<*>, Exception>(Random.guid(), ctx.app.about.name)
     val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
 

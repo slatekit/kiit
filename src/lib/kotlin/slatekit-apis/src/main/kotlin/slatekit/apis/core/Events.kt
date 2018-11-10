@@ -20,6 +20,10 @@ open class Events(val callback: ((Request, Response<*>) -> Unit)? = null) {
     }
 
 
+    open fun onInvalid(sender: Any, request: Request, response:Response<*>) {
+    }
+
+
     open fun onErrored(sender: Any, request: Request, response:Response<*>) {
     }
 

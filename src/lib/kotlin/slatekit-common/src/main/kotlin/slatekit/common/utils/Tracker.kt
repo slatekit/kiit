@@ -27,6 +27,7 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     val lastFiltered = AtomicReference<TFilter>(null)
     val lastSuccess = AtomicReference<TSuccess>(null)
     val lastFailure = AtomicReference<Pair<TRequest, TFailure>>(null)
+    val lastInvalid = AtomicReference<Pair<TRequest, TFailure>>(null)
 
     /**
      * Keep track of total requests ( regardless of success/error )
@@ -36,21 +37,29 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     }
 
     /**
-     * Keep track of total filtered requests ( regardless of success/error )
+     * Keep track of last filtered out request
      */
     open fun filtered(filteredReason: TFilter) {
         lastFiltered.set(filteredReason)
     }
 
     /**
-     * Keep track of total successfully processed engagements
+     * Keep track of last successful request serviced
      */
     open fun succeeded(success: TSuccess) {
         lastSuccess.set(success)
     }
 
     /**
-     * Keep track of total errors
+     * Keep track of last invalid request
+     * @param err
+     */
+    open fun invalid(req: TRequest, failure: TFailure) {
+        lastInvalid.set(Pair(req, failure))
+    }
+
+    /**
+     * Keep track of last failed
      * @param err
      */
     open fun failed(req: TRequest, failure: TFailure) {
