@@ -2,6 +2,9 @@
 package test
 
 import slatekit.common.Random
+import slatekit.common.metrics.MetricsLite
+import slatekit.common.metrics.MetricsSettings
+import slatekit.common.metrics.Tags
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.common.AppContext
 import slatekit.workers.System
@@ -47,7 +50,8 @@ fun testWorkers():Unit {
     val queueInfos = queues.map { QueueInfo(it.name, Priority.Low, it) }
     val sys = System(
         AppContext.simple("test"),
-        queueInfos
+        queueInfos,
+            metrics = MetricsLite.build()
     )
 
     // 3. Register workers

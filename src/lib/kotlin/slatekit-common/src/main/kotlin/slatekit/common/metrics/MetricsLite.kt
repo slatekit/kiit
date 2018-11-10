@@ -70,4 +70,11 @@ class MetricsLite(
             item
         }
     }
+
+
+    companion object {
+        fun build(): MetricsLite {
+            return MetricsLite(MetricsSettings(true, Tags(listOf())))
+        }
+    }
 }
