@@ -40,7 +40,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "com.googlecode.json-simple:json-simple:1.1"
-    compile "io.ktor:ktor-server-netty:0.9.5"
+    compile "io.ktor:ktor-server-netty:$ktor_version"
+    compile "io.ktor:ktor-metrics:$ktor_version"
     compile 'com.sparkjava:spark-core:2.6.0'
 	compile fileTree(dir: 'lib', include: '*.jar')
     compile project(":slatekit-common")

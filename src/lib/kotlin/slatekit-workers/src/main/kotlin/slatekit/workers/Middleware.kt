@@ -20,10 +20,10 @@ open class Middleware {
     open fun <T> run(worker: Worker<T>, job: Job, call: () -> Result<T, Exception>): Result<T, Exception> {
 
         // Track all requests
-        worker.metrics.request(job)
+        //worker.metrics.request(job)
 
         // Let handler do any logging or other behaviour here
-        worker.handler.onRequest(job, worker)
+        //worker.handler.onRequest(job, worker)
 
         // Attempt
         val result = try {
@@ -34,11 +34,11 @@ open class Middleware {
 
         // Track successes/failures
         if (result.success) {
-            worker.metrics.success(job, result)
-            worker.handler.onSuccess(job, worker, result)
+            //worker.metrics.(job, result)
+            //worker.handler.onSuccess(job, worker, result)
         } else {
-            worker.metrics.errored(job, result)
-            worker.handler.onErrored(job, worker, result)
+            //worker.metrics.errored(job, result)
+            //worker.handler.onErrored(job, worker, result)
         }
         return result
     }

@@ -13,31 +13,14 @@
 
 package slatekit.common.results
 
-import slatekit.common.results.ResultCode.BAD_REQUEST
-import slatekit.common.results.ResultCode.CONFLICT
-import slatekit.common.results.ResultCode.DEPRECATED
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.FAILURE
-import slatekit.common.results.ResultCode.HELP
-import slatekit.common.results.ResultCode.NOT_AVAILABLE
-import slatekit.common.results.ResultCode.NOT_FOUND
-import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
-import slatekit.common.results.ResultCode.UNAUTHORIZED
-import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
 
-interface ResultChecks {
+object ResultChecks {
 
-    fun statusCode(): Int
+    fun isSuccessRange(code:Int): Boolean = code in 200..299
 
-    val isFailure: Boolean get() = statusCode() == FAILURE
-    val isUnAuthorized: Boolean get() = statusCode() == UNAUTHORIZED
-    val isNotFound: Boolean get() = statusCode() == NOT_FOUND
-    val isBadRequest: Boolean get() = statusCode() == BAD_REQUEST
-    val isConflict: Boolean get() = statusCode() == CONFLICT
-    val isDeprecated: Boolean get() = statusCode() == DEPRECATED
-    val isUnexpectedError: Boolean get() = statusCode() == UNEXPECTED_ERROR
-    val isNotImplemented: Boolean get() = statusCode() == NOT_IMPLEMENTED
-    val isNotAvailable: Boolean get() = statusCode() == NOT_AVAILABLE
-    val isHelp: Boolean get() = statusCode() == HELP
-    val isExit: Boolean get() = statusCode() == EXIT
+    fun isFilteredOut(code:Int): Boolean = code == ResultCode.FILTERED
+
+    fun isBadRequestRange(code:Int): Boolean = code in 400..499
+
+    fun isFailureRange(code:Int): Boolean = code in 500..599
 }

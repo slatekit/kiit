@@ -1,5 +1,6 @@
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.ApiContainer
 import slatekit.apis.ApiRef
@@ -98,8 +99,8 @@ class Api_Setup_Tests : ApiTestsBase() {
                 Api(VersionApi(ctx), setup = Annotated)
         ), auth = null, allowIO = false)
 
-        assert(apis.routes.contains("app.SamplePOKO.getCounter"))
-        assert(apis.routes.contains("app.info.about"))
+        Assert.assertTrue(apis.routes.check("app.SamplePOKO.getCounter"))
+        Assert.assertTrue(apis.routes.check("app.info.about"))
     }
 
 

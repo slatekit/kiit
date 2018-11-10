@@ -13,6 +13,7 @@
 
 package slatekit.server.ktor
 
+import com.codahale.metrics.JmxReporter
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -23,23 +24,34 @@ import io.ktor.request.receiveText
 import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.netty.NettyApplicationEngine
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.apis.security.WebProtocol
 import slatekit.apis.core.Auth
+import slatekit.apis.core.Events
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
+import slatekit.common.metrics.Metric
+import slatekit.common.metrics.Metrics
+import slatekit.common.results.ResultChecks
+import slatekit.common.results.ResultCode
+import slatekit.common.utils.Tracker
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
+import slatekit.server.common.Diagnostics
+import java.util.concurrent.TimeUnit
 
 class KtorServer(
     val config: ServerConfig,
     val ctx: Context,
     val auth: Auth?,
-    val apis: List<Api>
+    val apis: List<Api>,
+    val metrics:Metrics,
+    val events: Events = Events()
 ) : AppMetaSupport {
 
     /**
@@ -57,9 +69,11 @@ class KtorServer(
         apis: List<Api>,
         auth: Auth? = null,
         setup: ((Any) -> Unit)? = null,
-        ctx: Context
+        ctx: Context,
+        metrics: Metrics,
+        events:Events
     ) :
-        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis)
+        this(ServerConfig(port, prefix, info, cors, docs, docKey, static, staticDir, setup), ctx, auth, apis, metrics, events)
 
     val container = ApiContainer(ctx,
         false,
@@ -73,6 +87,8 @@ class KtorServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger("slatekit.server.api")
+    val tracker = Tracker<Request, Request, Response<*>, Exception>(Random.guid(), ctx.app.about.name)
+    val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
 
     /**
      * executes the application
@@ -81,6 +97,15 @@ class KtorServer(
     fun run() {
 
         val server = embeddedServer(Netty, config.port) {
+
+            //// Metrics using DropWizard
+            //install(io.ktor.metrics.Metrics) {
+            //    JmxReporter.forRegistry(registry)
+            //            .convertRatesTo(TimeUnit.SECONDS)
+            //            .convertDurationsTo(TimeUnit.MILLISECONDS)
+            //            .build()
+            //            .start()
+            //}
             routing {
                 get("/") {
                     ping(call)
@@ -123,7 +148,7 @@ class KtorServer(
      * stops the server ( this is not currently accessible on the command line )
      */
     fun stop() {
-        spark.Spark.stop()
+
     }
 
     /**
@@ -149,19 +174,24 @@ class KtorServer(
             HttpMethod.Delete -> call.receiveText()
             else -> ""
         }
+
+        // Convert the http request to a SlateKit Request
         val request = KtorRequest.build(ctx, body, call, config)
 
+        // Execute the API call
         // The SlateKit ApiContainer will handle the heavy work of
         // 1. Checking routes to area/api/actions ( methods )
         // 2. Validating parameters to methods
         // 3. Decoding request to method parameters
         // 4. Executing the method
         // 5. Handling errors
-        log.info("handling request starting - path: ${request.path}, verb: ${request.verb}, tag: ${request.tag}")
         val result = container.call(request)
-        log.info("handling request completed - path: ${request.path}, tag: ${request.tag}, result: ${result.code}, msg: ${result.msg}")
 
-        // Convert the result back to a HttpResult
+        // Record all diagnostics
+        // e.g. logs, track, metrics, event
+        diagnostics.record(container, request, result)
+
+        // Finally convert the result back to a HttpResult
         KtorResponse.result(call, result)
     }
 

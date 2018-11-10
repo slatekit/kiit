@@ -14,6 +14,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
+import slatekit.common.log.LogsDefault
+import slatekit.common.metrics.MetricsLite
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -38,7 +40,10 @@ class Example_Workers : Cmd("utils") {
         // 3. Manager : Manages a group and ensures each idle worker perform work
         // 4. System  : Top level system that runs workers in a java executor service
         // 5. Queued  : Interface for handling work from a queue
-        val sys = slatekit.workers.System(AppContext.sample("test", "", "", ""), listOf())
+        val sys = slatekit.workers.System(
+                AppContext.sample("test", "", "", ""),
+                listOf(),
+                metrics = MetricsLite.build())
 
         // CASE 1: Register a named worker in the default group "default"
         sys.register(Worker<String>(
@@ -49,7 +54,7 @@ class Example_Workers : Cmd("utils") {
             Thread.sleep(500)
             println("email worker: " + DateTime.now().toString())
             Success("sent registration confirmation to email")
-        }))
+        }, logs = LogsDefault))
 
 
         // CASE 2: Register named workers in the group "notifications"
@@ -61,17 +66,18 @@ class Example_Workers : Cmd("utils") {
                 Thread.sleep(500)
                 println("message worker: " + DateTime.now().toString())
                 Success("sent message to user")
-            }
+            }, logs = LogsDefault
         ))
         sys.register(Worker<String>(
             "reminder_worker", group = "notifications" , version = "1.0",
             desc = "Sends out push notifications of reminders",
             callback = {
-            // NOTE: Simulating work, do not use thread.sleep in a real environment
-            Thread.sleep(500)
-            println("reminder worker: " + DateTime.now().toString())
-            Success("sent reminder to user")
-        }))
+                // NOTE: Simulating work, do not use thread.sleep in a real environment
+                Thread.sleep(500)
+                println("reminder worker: " + DateTime.now().toString())
+                Success("sent reminder to user")
+            }, logs = LogsDefault
+        ))
 
 
         // CASE 3: Register named worker with manager in new group
@@ -88,14 +94,14 @@ class Example_Workers : Cmd("utils") {
                 Thread.sleep(500)
                 println("report worker: " + DateTime.now().toString())
                 Success("generated a report of active users")
-            }
+            }, logs = LogsDefault
         ))
 
 
         // CASE 4: Extend the worker class instead of providing a lambda
         class MyWorker : Worker<String>(
             name ="custom_1", group = "reports", version = "1.0",
-            desc = "Generates a report that determines active users") {
+            desc = "Generates a report that determines active users", logs = LogsDefault) {
 
             override fun perform(job: Job): ResultEx<String> {
                 println("custom worker: " + DateTime.now().toString())
@@ -124,7 +130,7 @@ class Example_Workers : Cmd("utils") {
             callback = { value ->
                 println("queue worker: " + DateTime.now().toString() + " : " + value )
                 Success(1)
-            }
+            }, logs = LogsDefault
         ))
 
         // CASE 6: Start the worker system

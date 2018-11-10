@@ -157,15 +157,15 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
 
             // Hook: Before
             if (instance is Tracked) {
-                instance.tracker.trackRequest(ctx.req)
+                instance.tracker.requested(ctx.req)
             }
 
             val result = proceed()
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.handleResponse(ctx.req, result) }
-                result.onFailure { instance.tracker.handleFailure(ctx.req, it) }
+                result.onSuccess { instance.tracker.succeeded(ctx.req) }
+                result.onFailure { instance.tracker.failed(ctx.req, it) }
             }
             result
         }
@@ -180,15 +180,15 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
 
             // Hook: Before
             if (instance is Tracked) {
-                instance.tracker.trackRequest(ctx.req)
+                instance.tracker.requested(ctx.req)
             }
 
             val result = proceed()
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.handleResponse(ctx.req, result) }
-                result.onFailure { instance.tracker.handleFailure(ctx.req, it) }
+                result.onSuccess { instance.tracker.succeeded(result) }
+                result.onFailure { instance.tracker.failed(ctx.req, it) }
             }
             result
         }
@@ -208,7 +208,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
                 } else {
                     logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
                     if (instance is Tracked) {
-                        instance.tracker.trackFiltered(ctx.req)
+                        instance.tracker.filtered(ctx.req)
                     }
                     filterResult
                 }

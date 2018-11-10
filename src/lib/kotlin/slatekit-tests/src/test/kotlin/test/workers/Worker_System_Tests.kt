@@ -1,5 +1,6 @@
 package test.workers
 
+import slatekit.common.metrics.MetricsLite
 import slatekit.core.common.AppContext
 import slatekit.workers.*
 import slatekit.workers.status.RunStateIdle
@@ -18,7 +19,7 @@ class Worker_System_Tests {
 
     fun build():System {
         TODO.IMPLEMENT("tests", "Workers")
-        val sys = System(AppContext.simple("test"), listOf())
+        val sys = System(AppContext.simple("test"), listOf(), metrics = MetricsLite.build())
         TODO.IMPLEMENT("tests", "Workers")
 //        sys.register("group 1", Worker("group1", "worker 1",  callback = { success("worktype 1:done") } ))
 //        sys.register("group 1", Worker("group1", "worker 2",  callback = { success("worktype 2:done") } ))

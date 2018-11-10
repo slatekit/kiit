@@ -3,6 +3,10 @@ package slatekit.workers
 import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.common.log.Logs
+import slatekit.common.metrics.Metrics
+import slatekit.common.metrics.MetricsLite
+import slatekit.common.queues.QueueSource
+import slatekit.common.results.ResultCode
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.workers.core.*
 import slatekit.workers.status.*
@@ -49,17 +53,18 @@ import java.util.concurrent.atomic.AtomicReference
  * @sample : Worker<String>("user.notifications", "notifications", "send notifications to users", "1.0"))
  */
 open class Worker<T>(
-    name: String,
-    group: String,
-    desc: String,
-    version: String,
-    val logs:Logs,
-    val settings: WorkerSettings = WorkerSettings(),
-    val metrics: Metrics = Metrics(DateTime.now()),
-    val handler: Handler = Handler(DateTime.now()),
-    val middleware: Middleware = Middleware(),
-    val events: Events = Events(),
-    val callback: WorkFunction<T>? = null
+        name: String,
+        group: String,
+        desc: String,
+        version: String,
+        val logs: Logs,
+        val settings: WorkerSettings = WorkerSettings(),
+        val metrics: Metrics = MetricsLite(),
+        val tracker: Tracker = Tracker(DateTime.now()),
+        val handler: Handler = Handler(DateTime.now()),
+        val middleware: Middleware = Middleware(),
+        val events: Events = Events(),
+        val callback: WorkFunction<T>? = null
 
 ) : RunStatusSupport {
 
@@ -80,7 +85,7 @@ open class Worker<T>(
     val about: About = About(id, name, desc, group = group, version = version)
 
     /**
-     * List of queues that this worker can handle jobs from
+     * List of names of queues that this worker can handle jobs from
      */
     val queues: List<String> = listOf("*")
 
@@ -90,10 +95,16 @@ open class Worker<T>(
      */
     val log = logs.getLogger(this.javaClass)
 
+
+    /**
+     * Diagnostics for full logs/metric/tracking/events
+     */
+    val diagnostics = Diagnostics(events, metrics, log, tracker)
+
     /**
      * Wraps an operation with useful logging indicating starting/completion of action
      */
-    fun <T> performLog(name: String, action: () -> ResultEx<T>):ResultEx<T> {
+    fun <T> performLog(name: String, action: () -> ResultEx<T>): ResultEx<T> {
         log.info("$name starting")
         val result = action()
         log.info("$name complete")
@@ -132,20 +143,31 @@ open class Worker<T>(
     }
 
     /**
+     * end this task and update current status
+     */
+    fun end() {
+        onEnd()
+        moveToState(RunStateComplete)
+    }
+
+    /**
      * For batching purposes
      */
-    open fun work(batch: Batch) {
+    open fun work(sender: Any, batch: Batch) {
         val jobs = batch.jobs
         val queue = batch.queue.queue
 
         if (!jobs.isEmpty()) {
             jobs.forEach { job ->
-                val result = work(job)
-                if (result.success) {
-                    queue.complete(job.source)
-                } else {
-                    queue.abandon(job.source)
-                }
+
+                // Attempt to work on the job
+                val result = Result.attempt { work(job) }
+
+                // Acknowledge/Abandon
+                complete(sender, queue, job, result)
+
+                // Track all diagnostics
+                diagnostics.record(this, queue, this, job, result)
             }
         }
     }
@@ -184,34 +206,26 @@ open class Worker<T>(
         return Failure(Exception("Not implemented"), NOT_IMPLEMENTED, "not implemented")
     }
 
-    /**
-     * end this task and update current status
-     */
-    fun end() {
-        onEnd()
-        moveToState(RunStateComplete)
-    }
-
     fun stats(): Stats {
-        val lastRequest = metrics.lastRequest.get()
-        val lastFiltered = metrics.lastFiltered.get()
-        val lastSuccess = metrics.lastSuccess.get()
-        val lastErrored = metrics.lastErrored.get()
+        val lastRequest  = tracker.lastRequest.get()
+        val lastFiltered = tracker.lastFiltered.get()
+        val lastSuccess  = tracker.lastSuccess.get()
+        val lastErrored  = tracker.lastErrored.get()
 
         return Stats(
-            about.id,
-            about.name,
-            status = _runState.get(),
-            lastRunTime = _lastRunTime.get(),
-            lastResult = _lastResult.get(),
-            totalRequests = metrics.totalRequests.get(),
-            totalSuccesses = metrics.totalSucccess.get(),
-            totalErrored = metrics.totalErrored.get(),
-            totalFiltered = metrics.totalFiltered.get(),
-            lastRequest = lastRequest.copy(source = lastRequest.source.javaClass.name),
-            lastFiltered = lastFiltered.copy(source = lastRequest.source.javaClass.name),
-            lastSuccess = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
-            lastErrored = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+                about.id,
+                about.name,
+                status = _runState.get(),
+                lastRunTime    = _lastRunTime.get(),
+                lastResult     = _lastResult.get(),
+                totalRequests  = metrics.total("worker.total_successes").toLong(),
+                totalSuccesses = metrics.total("worker.total_filtered").toLong(),
+                totalErrored   = metrics.total("worker.total_failed").toLong(),
+                totalFiltered  = metrics.total("worker.total_other").toLong(),
+                lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
+                lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
+                lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
+                lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
         )
     }
 
@@ -242,5 +256,13 @@ open class Worker<T>(
      * provided for subclass task and implementing end code in the derived class
      */
     protected open fun onEnd() {
+    }
+
+
+    protected open fun complete(sender: Any, queue: QueueSource, job:Job, result:ResultEx<*>) {
+        when(result.success){
+            true  -> queue.complete(job.source)
+            false -> queue.abandon(job.source)
+        }
     }
 }

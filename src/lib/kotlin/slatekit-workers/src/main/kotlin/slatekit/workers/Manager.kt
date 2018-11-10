@@ -27,6 +27,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
 
     private val registry = Registry(sys)
     private val log = sys.ctx.logs.getLogger("slatekit.workers.system")
+    private val metrics = sys.metrics
     private val waitTimes = CircularList(sys.settings.exponentialWaitTimes)
 
     // # threads = # cores
@@ -73,9 +74,8 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
             if (sys.settings.pauseBetweenCycles) {
                 TODO.IMPLEMENT("workers", "Use Kotlin CoRoutines for non-blocking delay") {
                     val pauseTimeSeconds = waitTimes.next()
-                    perform("pausing for $pauseTimeSeconds") {
-                        Thread.sleep(waitTimes.next() * 1000L)
-                    }
+                    log.info("pausing for $pauseTimeSeconds")
+                    Thread.sleep(waitTimes.next() * 1000L)
                 }
             }
             state = sys.getState()
@@ -129,8 +129,8 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
 
 
     private fun process(batch: Batch, worker: Worker<*>) {
-        perform("triggering worker ${worker.id}") {
-            worker.work(batch)
+        perform(worker) {
+            worker.work(this, batch)
         }
     }
 
@@ -138,9 +138,10 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
     /**
      * Wraps an operation with useful logging indicating starting/completion of action
      */
-    val perform = { name: String, action: () -> Unit ->
-        log.info("$name starting")
+    val perform = { worker: Worker<*>, action: () -> Unit ->
+        val name = worker.about.name
+        log.info("trigger worker $name starting")
+        metrics.count("worker.$name", null)
         action()
-        log.info("$name complete")
     }
 }

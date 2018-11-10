@@ -4,7 +4,7 @@ import java.lang.Number
 
 
 class MetricsLite(
-        override val settings: MetricsSettings,
+        override val settings: MetricsSettings = MetricsSettings(true, Tags(listOf())),
         override val source: String = "slatekit-internal"
 ) : Metrics {
     private val counters = mutableMapOf<String, Counter>()
@@ -16,6 +16,11 @@ class MetricsLite(
      * The provider of the metrics ( Micrometer for now )
      */
     override fun provider(): Any = this
+
+
+    override fun total(name: String): Double {
+        return getOrCreate(name, counters, { Counter(globals(), null) } ).get().toDouble()
+    }
 
 
     /**
@@ -63,6 +68,13 @@ class MetricsLite(
             val item = creator()
             map[name] = item
             item
+        }
+    }
+
+
+    companion object {
+        fun build(): MetricsLite {
+            return MetricsLite(MetricsSettings(true, Tags(listOf())))
         }
     }
 }
