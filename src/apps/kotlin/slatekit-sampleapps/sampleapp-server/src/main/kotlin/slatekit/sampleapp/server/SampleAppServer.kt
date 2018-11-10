@@ -13,11 +13,13 @@ package slatekit.sampleapp.server
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.core.Events
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.common.DateTime
 import slatekit.common.auth.Roles
+import slatekit.common.metrics.MetricsLite
 import slatekit.core.app.AppRunner
 import slatekit.integration.apis.AppApi
 import slatekit.integration.apis.VersionApi
@@ -110,6 +112,8 @@ fun main(args: Array<String>): Unit {
             docKey    = "abc123",
             auth      = auth,
             ctx       = ctx,
+            metrics   = MetricsLite.build(),
+            events    = Events(),
             apis      = listOf(
                     // Sample APIs for demo purposes
                     // Instances are created per request.
