@@ -26,15 +26,20 @@ class DDMetrics(val registry: MeterRegistry,
 
 
     override fun total(name: String): Double {
-        return registry.counter(name, listOf()).count()
+        return if(settings.enabled)
+            registry.counter(name, listOf()).count()
+        else
+            0.0
     }
 
     /**
      * Increment a counter
      */
     override fun count(name: String, tags: List<String>?) {
-        val counter = registry.counter(name, *(tags?.toTypedArray() ?: emptyLocalTags))
-        counter.increment()
+        if(settings.enabled) {
+            val counter = registry.counter(name, *(tags?.toTypedArray() ?: emptyLocalTags))
+            counter.increment()
+        }
     }
 
 
@@ -42,7 +47,9 @@ class DDMetrics(val registry: MeterRegistry,
      * Set value on a gauge
      */
     override fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T: kotlin.Number {
-        registry.gauge(name, toTags(tags ?: listOf()), call(), { it -> it.toDouble() })
+        if(settings.enabled){
+            registry.gauge(name, toTags(tags ?: listOf()), call(), { it -> it.toDouble() })
+        }
     }
 
 
@@ -50,7 +57,9 @@ class DDMetrics(val registry: MeterRegistry,
      * Set value on a gauge
      */
     override fun <T> gauge(name: String, value:T) where T: kotlin.Number {
-        val gauge = registry.gauge(name, value)
+        if(settings.enabled) {
+            registry.gauge(name, value)
+        }
     }
 
 
@@ -58,7 +67,9 @@ class DDMetrics(val registry: MeterRegistry,
      * Times an event
      */
     override fun time(name: String, tags: List<String>?, call:() -> Unit ) {
-        registry.timer(name, *(tags?.toTypedArray() ?: emptyLocalTags)).record(call)
+        if(settings.enabled){
+            registry.timer(name, *(tags?.toTypedArray() ?: emptyLocalTags)).record(call)
+        }
     }
 
 
@@ -75,7 +86,7 @@ class DDMetrics(val registry: MeterRegistry,
                 val globalTags = toTags(settings.tags.global).toMutableList()
                 registry.config().commonTags(globalTags)
             }
-            if(bindMetrics) {
+            if(settings.enabled && bindMetrics) {
                 ClassLoaderMetrics().bindTo(registry)
                 JvmMemoryMetrics().bindTo(registry)
                 JvmGcMetrics().bindTo(registry)

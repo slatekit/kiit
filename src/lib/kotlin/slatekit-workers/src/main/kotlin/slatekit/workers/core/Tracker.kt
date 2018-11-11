@@ -15,22 +15,27 @@ open class Tracker(val started: DateTime) {
 
     val lastRequest = AtomicReference<Job>(Job.empty)
     val lastFiltered = AtomicReference<Job>(Job.empty)
-    val lastErrored = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
+    val lastFailure = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
+    val lastInvalid = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
     val lastSuccess = AtomicReference<Pair<Job, ResultEx<*>>>(Pair(Job.empty, Failure(Exception("not started"))))
 
-    open fun request(job: Job) {
+    open fun requested(job: Job) {
         lastRequest.set(job)
     }
 
-    open fun success(job: Job, result: ResultEx<*>) {
+    open fun succeeded(job: Job, result: ResultEx<*>) {
         lastSuccess.set(Pair(job, result))
+    }
+
+    open fun failed(job: Job, result: ResultEx<*>) {
+        lastFailure.set(Pair(job, result))
+    }
+
+    open fun invalid(job: Job, result:ResultEx<*>) {
+        lastInvalid.set(Pair(job, result))
     }
 
     open fun filtered(job: Job, result:ResultEx<*>) {
         lastFiltered.set(job)
-    }
-
-    open fun errored(job: Job, result: ResultEx<*>) {
-        lastErrored.set(Pair(job, result))
     }
 }

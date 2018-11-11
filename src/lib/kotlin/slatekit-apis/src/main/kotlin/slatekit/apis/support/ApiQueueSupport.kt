@@ -14,12 +14,12 @@ interface ApiQueueSupport {
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
      */
-    fun sendToQueue(req: String, id: String, refId: String, task: String) {
+    fun sendToQueue(payload: String, id: String, refId: String, task: String) {
         val queues = this.queues()
         val rand = java.util.Random()
         val pos = rand.nextInt(queues.size)
         val queue = queues[pos]
-        queue.send(req, mapOf(
+        queue.send(payload, mapOf(
             "id" to id,
             "refId" to refId,
             "task" to task
@@ -43,8 +43,8 @@ interface ApiQueueSupport {
      */
     fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
         // Convert from web request to Queued request
-        val queuedReq = Requests.toJsonAsQueued(req)
-        sendToQueue(queuedReq, Random.guid(), req.tag, "api.action.queued")
+        val payload = Requests.toJsonAsQueued(req)
+        sendToQueue(payload, Random.guid(), req.tag, req.path)
         return Success("Request processed as queue")
     }
 }

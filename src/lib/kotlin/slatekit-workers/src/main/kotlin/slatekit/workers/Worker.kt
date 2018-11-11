@@ -101,15 +101,15 @@ open class Worker<T>(
      */
     val diagnostics = Diagnostics(events, metrics, log, tracker)
 
-    /**
-     * Wraps an operation with useful logging indicating starting/completion of action
-     */
-    fun <T> performLog(name: String, action: () -> ResultEx<T>): ResultEx<T> {
-        log.info("$name starting")
-        val result = action()
-        log.info("$name complete")
-        return result
-    }
+//    /**
+//     * Wraps an operation with useful logging indicating starting/completion of action
+//     */
+//    fun <T> performLog(name: String, action: () -> ResultEx<T>): ResultEx<T> {
+//        log.info("$name starting")
+//        val result = action()
+//        log.info("$name complete")
+//        return result
+//    }
 
     /**
      * gets the current state of execution
@@ -188,9 +188,9 @@ open class Worker<T>(
         _lastRunTime.set(DateTime.now())
 
         val result = middleware.run(this, job) {
-            performLog("performing job : ${job.id}  ${job.queue}") {
+            //performLog("performing job : ${job.id}  ${job.queue}") {
                 callback?.invoke(job) ?: perform(job)
-            }
+            //}
         }
         _lastResult.set(result)
         moveToState(RunStateIdle)
@@ -210,7 +210,7 @@ open class Worker<T>(
         val lastRequest  = tracker.lastRequest.get()
         val lastFiltered = tracker.lastFiltered.get()
         val lastSuccess  = tracker.lastSuccess.get()
-        val lastErrored  = tracker.lastErrored.get()
+        val lastErrored  = tracker.lastFailure.get()
 
         return Stats(
                 about.id,

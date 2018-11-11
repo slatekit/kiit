@@ -4,7 +4,7 @@ import slatekit.common.ResultEx
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
 import slatekit.common.queues.QueueSource
-import slatekit.common.results.ResultCode
+import slatekit.common.results.*
 import slatekit.workers.core.*
 
 
@@ -20,6 +20,9 @@ open class Diagnostics(
                   val metrics: Metrics,
                   val logger: Logger,
                   val tracker: Tracker) {
+
+    val REQUEST_TYPE = "Job"
+    val METRICS_TYPE = "worker"
 
     /**
      * Tags for metrics
@@ -49,11 +52,13 @@ open class Diagnostics(
      * Logs the result of a processed job
      */
     open fun log(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        when (result.code) {
-            ResultCode.SUCCESS  -> logger.info("Job ${job.id} succeeded")
-            ResultCode.FILTERED -> logger.info("Job ${job.id} filtered")
-            ResultCode.FAILURE  -> logger.info("Job ${job.id} failed with ${result.msg}")
-            else                -> logger.info("Job ${job.id} failed with code ${result.code}")
+        val info = "id:${job.id}, queue: ${job.queue}, task: ${job.task}, refId: ${job.refId}, result: ${result.code}, msg: ${result.msg}"
+        when {
+            result.code.isInSuccessRange()    -> logger.info ("$REQUEST_TYPE succeeded: $info")
+            result.code.isFilteredOut()       -> logger.info ("$REQUEST_TYPE filtered: $info")
+            result.code.isInBadRequestRange() -> logger.error("$REQUEST_TYPE invalid: $info")
+            result.code.isInFailureRange()    -> logger.error("$REQUEST_TYPE failed: $info")
+            else                              -> logger.error("$REQUEST_TYPE failed: $info")
         }
     }
 
@@ -62,12 +67,13 @@ open class Diagnostics(
      * Tracks the last job for diagnostics
      */
     open fun track(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        tracker.request(job)
-        when (result.code) {
-            ResultCode.SUCCESS  -> tracker.success(job, result)
-            ResultCode.FILTERED -> tracker.filtered(job, result)
-            ResultCode.FAILURE  -> tracker.errored(job, result)
-            else                -> tracker.errored(job, result)
+        tracker.requested(job)
+        when {
+            result.code.isInSuccessRange()    -> tracker.succeeded(job, result)
+            result.code.isFilteredOut()       -> tracker.filtered(job, result)
+            result.code.isInBadRequestRange() -> tracker.invalid(job, result)
+            result.code.isInFailureRange()    -> tracker.failed(job, result)
+            else                              -> tracker.failed(job, result)
         }
     }
 
@@ -76,12 +82,13 @@ open class Diagnostics(
      * Records metrics (counts) each job result
      */
     open fun meter(sender: Any, queue: QueueSource, job: Job, result: ResultEx<*>) {
-        metrics.count("worker.total_requests", tags)
-        when (result.code) {
-            ResultCode.SUCCESS  -> metrics.count("worker.total_successes", tags)
-            ResultCode.FILTERED -> metrics.count("worker.total_filtered", tags)
-            ResultCode.FAILURE  -> metrics.count("worker.total_failed", tags)
-            else                -> metrics.count("worker.total_other", tags)
+        metrics.count("$METRICS_TYPE.total_requests", tags)
+        when {
+            result.code.isInSuccessRange()    -> metrics.count("$METRICS_TYPE.total_successes", tags)
+            result.code.isFilteredOut()       -> metrics.count("$METRICS_TYPE.total_filtered", tags)
+            result.code.isInBadRequestRange() -> metrics.count("$METRICS_TYPE.total_invalid", tags)
+            result.code.isInFailureRange()    -> metrics.count("$METRICS_TYPE.total_failed", tags)
+            else                              -> metrics.count("$METRICS_TYPE.total_other", tags)
         }
     }
 
@@ -91,11 +98,12 @@ open class Diagnostics(
      */
     open fun notify(sender: Any, queue: QueueSource, worker:Worker<*>, job: Job, result: ResultEx<*>) {
         events.onJobEvent(this, worker, JobRequested)
-        when (result.code) {
-            ResultCode.SUCCESS  -> events.onJobEvent(sender, worker, JobSucceeded)
-            ResultCode.FILTERED -> events.onJobEvent(sender, worker, JobFiltered)
-            ResultCode.FAILURE  -> events.onJobEvent(sender, worker, JobFailed)
-            else                -> events.onJobEvent(sender, worker, JobEvent(job.id, result))
+        when {
+            result.code.isInSuccessRange()    -> events.onJobEvent(sender, worker, JobSucceeded)
+            result.code.isFilteredOut()       -> events.onJobEvent(sender, worker, JobFiltered)
+            result.code.isInBadRequestRange() -> events.onJobEvent(sender, worker, JobInvalid)
+            result.code.isInFailureRange()    -> events.onJobEvent(sender, worker, JobFailed)
+            else                              -> events.onJobEvent(sender, worker, JobEvent(job.id, result))
         }
     }
 }

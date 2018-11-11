@@ -50,7 +50,7 @@ open class System(
      * 2. transition changes
      * 3. worker management
      */
-    val log = ctx.logs.getLogger("slatekit.workers.system")
+    val log = ctx.logs.getLogger(this.javaClass.name)
 
 
     /**

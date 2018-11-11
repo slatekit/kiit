@@ -37,17 +37,18 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     }
 
     /**
-     * Keep track of last filtered out request
-     */
-    open fun filtered(filteredReason: TFilter) {
-        lastFiltered.set(filteredReason)
-    }
-
-    /**
      * Keep track of last successful request serviced
      */
     open fun succeeded(success: TSuccess) {
         lastSuccess.set(success)
+    }
+
+    /**
+     * Keep track of last failed
+     * @param err
+     */
+    open fun failed(req: TRequest, failure: TFailure) {
+        lastFailure.set(Pair(req, failure))
     }
 
     /**
@@ -59,10 +60,9 @@ open class Tracker<TRequest, TFilter, TSuccess, TFailure>(val id: String, val na
     }
 
     /**
-     * Keep track of last failed
-     * @param err
+     * Keep track of last filtered out request
      */
-    open fun failed(req: TRequest, failure: TFailure) {
-        lastFailure.set(Pair(req, failure))
+    open fun filtered(filteredReason: TFilter) {
+        lastFiltered.set(filteredReason)
     }
 }

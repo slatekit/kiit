@@ -95,7 +95,9 @@ class AwsCloudQueue(
         val results = execute<List<Any>>(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(_queueUrl)
                 .withMaxNumberOfMessages(size)
-            val req = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
+            val req1 = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
+            val req2 = req1.withAttributeNames(QueueAttributeName.All)
+            val req = req2.withMessageAttributeNames(QueueAttributeName.All.name)
             val msgs = _sqs.receiveMessage(req).messages
             if (msgs.isNotEmpty() && msgs.size > 0) {
                 val results = mutableListOf<Any>()
@@ -214,12 +216,12 @@ class AwsCloudQueue(
 
     override fun getMessageTag(msgItem: Any?, tagName: String): String {
         return getMessageItemProperty(msgItem, { sqsMsg ->
-            val atts = sqsMsg.attributes
+            val atts = sqsMsg.messageAttributes
             if (atts.isEmpty() || !atts.containsKey(tagName))
                 ""
             else {
                 val tagVal = atts.get(tagName)
-                tagVal ?: ""
+                tagVal?.stringValue ?: ""
             }
         })
     }

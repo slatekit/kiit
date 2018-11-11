@@ -14,13 +14,13 @@
 package slatekit.common.results
 
 
-object ResultChecks {
+fun Int.isInSuccessRange(): Boolean = this in 200..299
 
-    fun isSuccessRange(code:Int): Boolean = code in 200..299
 
-    fun isFilteredOut(code:Int): Boolean = code == ResultCode.FILTERED
+fun Int.isFilteredOut(): Boolean = this == ResultCode.FILTERED
 
-    fun isBadRequestRange(code:Int): Boolean = code in 400..499
 
-    fun isFailureRange(code:Int): Boolean = code in 500..599
-}
+fun Int.isInBadRequestRange(): Boolean = this in 400..499
+
+
+fun Int.isInFailureRange(): Boolean = this in 500..599

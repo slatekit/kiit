@@ -4,7 +4,7 @@ import java.lang.Number
 
 
 class MetricsLite(
-        override val settings: MetricsSettings = MetricsSettings(true, Tags(listOf())),
+        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(listOf())),
         override val source: String = "slatekit-internal"
 ) : Metrics {
     private val counters = mutableMapOf<String, Counter>()
@@ -74,7 +74,7 @@ class MetricsLite(
 
     companion object {
         fun build(): MetricsLite {
-            return MetricsLite(MetricsSettings(true, Tags(listOf())))
+            return MetricsLite(MetricsSettings(true,true, Tags(listOf())))
         }
     }
 }
