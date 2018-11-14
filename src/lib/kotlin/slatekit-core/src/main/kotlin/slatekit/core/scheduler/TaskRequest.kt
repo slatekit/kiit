@@ -1,4 +1,4 @@
-package slatekit.core.slatekit.core.scheduler
+package slatekit.core.scheduler
 
 import slatekit.common.DateTime
 import slatekit.core.scheduler.Task

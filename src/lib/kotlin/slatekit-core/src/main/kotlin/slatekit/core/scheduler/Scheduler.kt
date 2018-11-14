@@ -1,10 +1,9 @@
 package slatekit.core.scheduler
 
 import slatekit.common.DateTime
-import slatekit.common.diagnostics.Diagnostics
+import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.toResponse
-import slatekit.core.slatekit.core.scheduler.TaskRequest
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
@@ -15,9 +14,15 @@ typealias Result<T,E> = slatekit.common.Result<T,E>
  * Wraps the java ScheduledExecutorService with diagnostic info
  */
 class Scheduler(val settings:SchedulerSettings,
+                val logs:Logs,
                 val metrics:Metrics,
-                val service:ScheduledExecutorService = Executors.newScheduledThreadPool(2),
-                val diagnostics:Diagnostics<TaskRequest>) {
+                val service:ScheduledExecutorService = Executors.newScheduledThreadPool(2)) {
+
+    val logger = logs.getLogger(this.javaClass)
+
+
+    val diagnostics = Diagnostics(metrics, logger)
+
 
     /**
      * Stores the enriched runnable as a task

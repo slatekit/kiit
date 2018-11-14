@@ -78,7 +78,7 @@ class SparkServer(
 
     val log = ctx.logs.getLogger("slatekit.server.api")
     val tracker = Tracker<slatekit.common.Request, slatekit.common.Response<*>, Exception>(Random.guid(), ctx.app.about.name)
-    val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
+    val diagnostics = Diagnostics(metrics, log)
 
     /**
      * executes the application
