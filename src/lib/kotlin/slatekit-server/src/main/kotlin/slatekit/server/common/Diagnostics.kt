@@ -7,7 +7,7 @@ import slatekit.common.Response
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
 import slatekit.common.results.*
-import slatekit.common.utils.Tracker
+import slatekit.common.diagnostics.Tracker
 
 /**
  * @param ctx: Application context
@@ -20,7 +20,7 @@ class Diagnostics(val ctx: Context,
                   val events: Events,
                   val metrics: Metrics,
                   val logger: Logger,
-                  val tracker: Tracker<Request, Request, Response<*>, Exception>) {
+                  val tracker: Tracker<Request, Response<*>, Exception>) {
 
     val REQUEST_TYPE = "Request"
     val METRICS_TYPE = "api"

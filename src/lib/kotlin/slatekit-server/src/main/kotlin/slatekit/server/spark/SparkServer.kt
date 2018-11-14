@@ -23,7 +23,7 @@ import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.metrics.Metrics
-import slatekit.common.utils.Tracker
+import slatekit.common.diagnostics.Tracker
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
