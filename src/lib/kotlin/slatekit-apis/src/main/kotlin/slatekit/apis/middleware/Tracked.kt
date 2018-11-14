@@ -17,5 +17,5 @@ import slatekit.common.diagnostics.Tracker
 
 interface Tracked : Middleware {
 
-    val tracker: Tracker<Request, Request, Any, Exception>
+    val tracker: Tracker<Request, Response<*>, Exception>
 }

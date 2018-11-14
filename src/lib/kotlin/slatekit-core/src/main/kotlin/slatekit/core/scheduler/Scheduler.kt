@@ -23,14 +23,14 @@ class Scheduler(val settings:SchedulerSettings,
 
 
     fun scheduleAtFixedRate(name:String, delay:Long, period:Long, units:TimeUnit, call:() -> Unit ) {
-        val command = store(name, call)
-        service.scheduleAtFixedRate(command, delay, period, units)
+        store(name, call)
+        service.scheduleAtFixedRate({ run(name) }, delay, period, units)
     }
 
 
     fun scheduleAtFixedRate(func: KFunction<Unit>, delay:Long, period:Long, units:TimeUnit) {
-        val command = store(func.name, { func.call() })
-        service.scheduleAtFixedRate(command, delay, period, units)
+        val task = store(func.name, { func.call() })
+        service.scheduleAtFixedRate({ run(task.name) }, delay, period, units)
     }
 
 
@@ -44,10 +44,10 @@ class Scheduler(val settings:SchedulerSettings,
     }
 
 
-    private fun store(name:String, call:() -> Unit): () -> Unit  {
+    private fun store(name:String, call:() -> Unit): Task {
         val task = Task(name, call)
         commands[name] = task
-        return task.call
+        return task
     }
 
 

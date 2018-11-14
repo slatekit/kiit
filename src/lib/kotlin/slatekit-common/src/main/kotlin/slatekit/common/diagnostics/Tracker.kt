@@ -19,7 +19,7 @@ open class Tracker<TRequest, TResponse, TFailure>(val id: String, val name: Stri
     // Last values
     val lastRequest = AtomicReference<TRequest>(null)
     val lastFiltered = AtomicReference<TRequest>(null)
-    val lastSuccess = AtomicReference<TResponse>(null)
+    val lastSuccess = AtomicReference<Pair<TRequest, TResponse>>(null)
     val lastFailure = AtomicReference<Pair<TRequest, TFailure?>>(null)
     val lastInvalid = AtomicReference<Pair<TRequest, TFailure?>>(null)
 
@@ -33,8 +33,8 @@ open class Tracker<TRequest, TResponse, TFailure>(val id: String, val name: Stri
     /**
      * Keep track of last successful request serviced
      */
-    open fun succeeded(success: TResponse) {
-        lastSuccess.set(success)
+    open fun succeeded(request:TRequest, response: TResponse) {
+        lastSuccess.set(Pair(request, response))
     }
 
     /**

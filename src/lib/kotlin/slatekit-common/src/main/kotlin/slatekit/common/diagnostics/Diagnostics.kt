@@ -67,7 +67,7 @@ open class Diagnostics<TRequest>(
         tracker?.let {
             tracker.requested(request)
             when {
-                response.code.isInSuccessRange()    -> tracker.succeeded(response)
+                response.code.isInSuccessRange()    -> tracker.succeeded(request, response)
                 response.code.isFilteredOut()       -> tracker.filtered(request)
                 response.code.isInBadRequestRange() -> tracker.invalid(request, response.err)
                 response.code.isInFailureRange()    -> tracker.failed(request, response.err)

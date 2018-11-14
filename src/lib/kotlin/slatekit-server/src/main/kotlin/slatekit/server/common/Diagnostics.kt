@@ -70,7 +70,7 @@ class Diagnostics(val ctx: Context,
     fun track(sender: Any, request: Request, result: Response<*>) {
         tracker.requested(request)
         when  {
-            result.code.isInSuccessRange()    -> tracker.succeeded(result)
+            result.code.isInSuccessRange()    -> tracker.succeeded(request, result)
             result.code.isFilteredOut()       -> tracker.filtered(request)
             result.code.isInBadRequestRange() -> tracker.invalid(request, result.err ?: error)
             result.code.isInFailureRange()    -> tracker.failed(request, result.err ?: error)
