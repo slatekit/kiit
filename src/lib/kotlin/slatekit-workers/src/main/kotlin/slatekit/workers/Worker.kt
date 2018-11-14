@@ -60,10 +60,7 @@ open class Worker<T>(
         val logs: Logs,
         val settings: WorkerSettings = WorkerSettings(),
         val metrics: Metrics = MetricsLite(),
-        val tracker: Tracker = Tracker(DateTime.now()),
-        val handler: Handler = Handler(DateTime.now()),
         val middleware: Middleware = Middleware(),
-        val events: Events = Events(),
         val callback: WorkFunction<T>? = null
 
 ) : RunStatusSupport {
@@ -84,6 +81,13 @@ open class Worker<T>(
      */
     val about: About = About(id, name, desc, group = group, version = version)
 
+
+    /**
+     * Metric used for reporting
+     */
+    val metricId:String = "workers.${name.toId()}"
+
+
     /**
      * List of names of queues that this worker can handle jobs from
      */
@@ -99,17 +103,8 @@ open class Worker<T>(
     /**
      * Diagnostics for full logs/metric/tracking/events
      */
-    val diagnostics = Diagnostics(events, metrics, log, tracker)
+    val diagnostics = Diagnostics(metricId, metrics, log)
 
-//    /**
-//     * Wraps an operation with useful logging indicating starting/completion of action
-//     */
-//    fun <T> performLog(name: String, action: () -> ResultEx<T>): ResultEx<T> {
-//        log.info("$name starting")
-//        val result = action()
-//        log.info("$name complete")
-//        return result
-//    }
 
     /**
      * gets the current state of execution
@@ -155,8 +150,8 @@ open class Worker<T>(
      */
     open fun work(sender: Any, batch: Batch) {
         val jobs = batch.jobs
-        val queue = batch.queue.queue
-
+        val queueInfo = batch.queue
+        val queueSource = batch.queue.queue
         if (!jobs.isEmpty()) {
             jobs.forEach { job ->
 
@@ -164,10 +159,10 @@ open class Worker<T>(
                 val result = Result.attempt { work(job) }
 
                 // Acknowledge/Abandon
-                complete(sender, queue, job, result)
+                complete(sender, queueSource, job, result)
 
                 // Track all diagnostics
-                diagnostics.record(this, queue, this, job, result)
+                diagnostics.record(this, WorkRequest(job, queueInfo, this), result.toResponse())
             }
         }
     }
@@ -207,25 +202,24 @@ open class Worker<T>(
     }
 
     fun stats(): Stats {
-        val lastRequest  = tracker.lastRequest.get()
-        val lastFiltered = tracker.lastFiltered.get()
-        val lastSuccess  = tracker.lastSuccess.get()
-        val lastErrored  = tracker.lastFailure.get()
-
+        val lastRequest  = diagnostics.tracker?.lastRequest?.get()
+        val lastFiltered = diagnostics.tracker?.lastFiltered?.get()
+        val lastSuccess  = diagnostics.tracker?.lastSuccess?.get()
+        val lastErrored  = diagnostics.tracker?.lastFailure?.get()
         return Stats(
                 about.id,
                 about.name,
                 status = _runState.get(),
                 lastRunTime    = _lastRunTime.get(),
                 lastResult     = _lastResult.get(),
-                totalRequests  = metrics.total("worker.total_successes").toLong(),
-                totalSuccesses = metrics.total("worker.total_filtered").toLong(),
-                totalErrored   = metrics.total("worker.total_failed").toLong(),
-                totalFiltered  = metrics.total("worker.total_other").toLong(),
-                lastRequest    = lastRequest.copy(source = lastRequest.source.javaClass.name),
-                lastFiltered   = lastFiltered.copy(source = lastRequest.source.javaClass.name),
-                lastSuccess    = lastSuccess.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name)),
-                lastErrored    = lastErrored.copy(first = lastSuccess.first.copy(source = lastRequest.source.javaClass.name))
+                totalRequests  = metrics.total("$metricId.total_successes").toLong(),
+                totalSuccesses = metrics.total("$metricId.total_filtered").toLong(),
+                totalErrored   = metrics.total("$metricId.total_failed").toLong(),
+                totalFiltered  = metrics.total("$metricId.total_other").toLong(),
+                lastRequest    = lastRequest,
+                lastFiltered   = lastFiltered,
+                lastSuccess    = lastSuccess,
+                lastErrored    = lastErrored
         )
     }
 
@@ -239,7 +233,7 @@ open class Worker<T>(
         val last = _runStatus.get()
         _runState.set(state)
         _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state.mode))
-        events.onEvent(Event(this.about.name, this, _runStatus.get().name))
+        diagnostics.logger?.info("$metricId moving to state: " + state.mode)
         return _runStatus.get()
     }
 

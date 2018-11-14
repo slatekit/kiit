@@ -17,6 +17,7 @@ open class Diagnostics<TRequest>(
         val prefix:String,
         val nameFetcher:(TRequest) -> String,
         val infoFetcher:(TRequest) -> String,
+        val metricFetcher:(TRequest) -> String,
         val tagsFetcher:(TRequest) -> List<String>,
         val logger: Logger? = null,
         val metrics: Metrics? = null,
@@ -49,12 +50,14 @@ open class Diagnostics<TRequest>(
         logger?.let {
             val name = nameFetcher(request)
             val info = infoFetcher(request)
+            val more = "result: ${response.code}, msg: ${response.msg}"
+
             when {
-                response.code.isInSuccessRange()    -> logger.info ("$prefix $name succeeded: $info")
-                response.code.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info")
-                response.code.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info")
-                response.code.isInFailureRange()    -> logger.error("$prefix $name failed: $info")
-                else                                -> logger.error("$prefix $name failed: $info")
+                response.code.isInSuccessRange()    -> logger.info ("$prefix $name succeeded: $info $more")
+                response.code.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info $more")
+                response.code.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info $more")
+                response.code.isInFailureRange()    -> logger.error("$prefix $name failed: $info $more")
+                else                                -> logger.error("$prefix $name failed: $info $more")
             }
         }
     }
@@ -82,15 +85,15 @@ open class Diagnostics<TRequest>(
      */
     open fun meter(sender: Any, request:TRequest, response: Response<*>) {
         metrics?.let {
-            val name = nameFetcher(request)
+            val metric = metricFetcher(request)
             val tags = tagsFetcher(request)
-            metrics.count("$name.total_requests", tags)
+            metrics.count("$metric.total_requests", tags)
             when {
-                response.code.isInSuccessRange()    -> metrics.count("$name.total_successes", tags)
-                response.code.isFilteredOut()       -> metrics.count("$name.total_filtered", tags)
-                response.code.isInBadRequestRange() -> metrics.count("$name.total_invalid", tags)
-                response.code.isInFailureRange()    -> metrics.count("$name.total_failed", tags)
-                else                                -> metrics.count("$name.total_other", tags)
+                response.code.isInSuccessRange()    -> metrics.count("$metric.total_successes", tags)
+                response.code.isFilteredOut()       -> metrics.count("$metric.total_filtered", tags)
+                response.code.isInBadRequestRange() -> metrics.count("$metric.total_invalid", tags)
+                response.code.isInFailureRange()    -> metrics.count("$metric.total_failed", tags)
+                else                                -> metrics.count("$metric.total_other", tags)
             }
         }
     }

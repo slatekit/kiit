@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit
 import kotlin.reflect.KFunction
 typealias Result<T,E> = slatekit.common.Result<T,E>
 
+/**
+ * Wraps the java ScheduledExecutorService with diagnostic info
+ */
 class Scheduler(val settings:SchedulerSettings,
                 val metrics:Metrics,
                 val service:ScheduledExecutorService = Executors.newScheduledThreadPool(2),
