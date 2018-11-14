@@ -9,7 +9,7 @@ import slatekit.common.metrics.Metrics
 class Diagnostics(metrics: Metrics, logger: Logger) : Diagnostics<TaskRequest>(
 
         // Shows up as a prefix in the logs message
-        prefix = "scheduled.tasks",
+        prefix = "scheduler.tasks",
 
         // Shows up after the log prefix ( e.g. "scheduled.tasks cleanup" )
         nameFetcher = { it.task.id },
@@ -19,7 +19,7 @@ class Diagnostics(metrics: Metrics, logger: Logger) : Diagnostics<TaskRequest>(
 
         // Used as the prefix of the metric sent to capture all metrics.
         // scheduled.cleanup.( total_requests | total_successes | total_failed )
-        metricFetcher = { "scheduled." + it.task.id },
+        metricFetcher = { "scheduler." + it.task.id },
 
         // Used as the tags for associating metrics with
         tagsFetcher = { listOf() },

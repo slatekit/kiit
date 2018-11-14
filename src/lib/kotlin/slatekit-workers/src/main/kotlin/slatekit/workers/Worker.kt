@@ -85,7 +85,7 @@ open class Worker<T>(
     /**
      * Metric used for reporting
      */
-    val metricId:String = "workers.${name.toId()}"
+    val metricId:String = name.toId()
 
 
     /**

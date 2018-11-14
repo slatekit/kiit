@@ -80,7 +80,6 @@ class KtorServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger(this.javaClass.name)
-    val tracker = Tracker<Request, Response<*>, Exception>(Random.guid(), ctx.app.about.name)
     val diagnostics = Diagnostics(metrics, log)
 
     /**
