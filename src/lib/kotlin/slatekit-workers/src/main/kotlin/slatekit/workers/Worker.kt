@@ -6,7 +6,6 @@ import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSource
-import slatekit.common.results.ResultCode
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.workers.core.*
 import slatekit.workers.status.*
@@ -63,9 +62,9 @@ open class Worker<T>(
         val middleware: Middleware = Middleware(),
         val callback: WorkFunction<T>? = null
 
-) : RunStatusSupport {
+) : StatusSupport {
 
-    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
+    private val _runState = AtomicReference<Status>(Status.InActive)
     private val _runStatus = AtomicReference<RunStatus>(RunStatus())
     private val _runDelay = AtomicReference<Int>(0)
     private val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
@@ -111,14 +110,14 @@ open class Worker<T>(
      *
      * @return
      */
-    override fun state(): RunState = _runState.get()
+    override fun state(): Status = _runState.get()
 
     /**
      * gets the current status of the application
      *
      * @return
      */
-    override fun status(): RunStatus = _runStatus.get()
+    override fun status(): Status = _runStatus.get().status
 
     /**
      * Whether or not this worker is available for handling jobs
@@ -133,7 +132,7 @@ open class Worker<T>(
      * @return
      */
     fun init(): ResultMsg<Boolean> {
-        moveToState(RunStateInitializing)
+        moveToState(Status.Starting)
         return onInit()
     }
 
@@ -142,7 +141,7 @@ open class Worker<T>(
      */
     fun end() {
         onEnd()
-        moveToState(RunStateComplete)
+        moveToState(Status.Complete)
     }
 
     /**
@@ -179,7 +178,7 @@ open class Worker<T>(
         }
 
         // Update state
-        moveToState(RunStateRunning)
+        moveToState(Status.Running)
         _lastRunTime.set(DateTime.now())
 
         val result = middleware.run(this, job) {
@@ -188,7 +187,7 @@ open class Worker<T>(
             //}
         }
         _lastResult.set(result)
-        moveToState(RunStateIdle)
+        moveToState(Status.Idle)
         return result
     }
 
@@ -229,12 +228,12 @@ open class Worker<T>(
      * @param state
      * @return
      */
-    override fun moveToState(state: RunState): RunStatus {
+    override fun moveToState(state: Status): Status {
         val last = _runStatus.get()
         _runState.set(state)
-        _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state.mode))
-        diagnostics.logger?.info("$metricId moving to state: " + state.mode)
-        return _runStatus.get()
+        _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state))
+        diagnostics.logger?.info("$metricId moving to state: " + state.name)
+        return state
     }
 
     /**

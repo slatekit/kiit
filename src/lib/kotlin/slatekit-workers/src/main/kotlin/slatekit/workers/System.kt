@@ -3,9 +3,6 @@ package slatekit.workers
 import slatekit.common.Context
 import slatekit.common.info.About
 import slatekit.common.metrics.Metrics
-import slatekit.common.metrics.MetricsLite
-import slatekit.common.metrics.MetricsSettings
-import slatekit.common.metrics.Tags
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Stats
 import slatekit.workers.status.*
@@ -34,7 +31,7 @@ open class System(
         ) : Runnable {
 
 
-    private val _runState = AtomicReference<RunState>(RunStateNotStarted)
+    private val _runState = AtomicReference<Status>(Status.InActive)
     private var _thread: Thread? = null
 
 
@@ -127,17 +124,17 @@ open class System(
     open fun exec() {
 
         // Initialize
-        moveToState(RunStateInitializing)
+        moveToState(Status.Starting)
         init()
 
         // Work
-        moveToState(RunStateRunning)
+        moveToState(Status.Running)
 
         // Move workers to running state
         perform("$logPrefix starting workers") {
             workers.forEach { id, worker ->
                 log.info("moving worker to running $id")
-                worker.moveToState(RunStateRunning)
+                worker.moveToState(Status.Running)
             }
         }
 
@@ -146,7 +143,7 @@ open class System(
         manager.manage(this)
 
         // Ending/Complete
-        moveToState(RunStateComplete)
+        moveToState(Status.Complete)
         end()
     }
 
@@ -173,28 +170,28 @@ open class System(
      * pauses the system
      */
     fun pause() = {
-        moveToState(RunStatePaused)
+        moveToState(Status.Paused)
     }
 
     /**
      * resumes the system
      */
     fun resume() = {
-        moveToState(RunStateRunning)
+        moveToState(Status.Running)
     }
 
     /**
      * stops the system
      */
     fun stop() = {
-        moveToState(RunStateStopped)
+        moveToState(Status.Stopped)
     }
 
     /**
      * pauses the system
      */
     fun done() {
-        moveToState(RunStateComplete)
+        moveToState(Status.Complete)
 
         // Graceful shutdown
         svc.shutdown()
@@ -228,7 +225,7 @@ open class System(
     fun stopWorker(worker: String) = perform("stopping worker: $worker") { get(worker)?.stop() }
 
 
-    fun getState(): RunState = _runState.get()
+    fun getState(): Status = _runState.get()
 
     /**
      * moves the current state to the name supplied and performs a status update
@@ -236,9 +233,9 @@ open class System(
      * @param state
      * @return
      */
-    fun moveToState(state: RunState): RunState {
+    fun moveToState(state: Status): Status {
         _runState.set(state)
-        log.info("$logPrefix transitioning to ${state.mode}")
+        log.info("$logPrefix transitioning to ${state.name}")
         return state
     }
 }

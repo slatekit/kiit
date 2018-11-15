@@ -2,9 +2,7 @@ package test.workers
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.ResultEx
 import slatekit.common.Success
-import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.workers.Job
 import slatekit.workers.status.*
@@ -59,37 +57,37 @@ class Worker_Core_Tests {
 
     @Test
     fun can_ensure_not_started() {
-        assertState( {  }, RunStateNotStarted, false)
+        assertState( {  }, Status.InActive, false)
     }
 
 
     @Test
     fun can_change_state_to_started() {
-        assertState( { it.start() }, RunStateIdle)
+        assertState( { it.start() }, Status.Idle)
     }
 
 
     @Test
     fun can_change_state_to_working() {
-        assertState( { it.moveToState(RunStateRunning) }, RunStateRunning)
+        assertState( { it.moveToState(Status.Running) }, Status.Running)
     }
 
 
     @Test
     fun can_change_state_to_paused() {
-        assertState( { it.pause() }, RunStatePaused)
+        assertState( { it.pause() }, Status.Paused)
     }
 
 
     @Test
     fun can_change_state_to_stopped() {
-        assertState( { it.stop() }, RunStateStopped)
+        assertState( { it.stop() }, Status.Stopped)
     }
 
 
     @Test
     fun can_change_state_to_completed() {
-        assertState( { it.complete() }, RunStateComplete)
+        assertState( { it.complete() }, Status.Complete)
     }
 
 
@@ -132,7 +130,7 @@ class Worker_Core_Tests {
     }
 
 
-    fun assertState(callback:(MyWorker) -> Unit, state: RunState, enableNotification:Boolean = true) {
+    fun assertState(callback:(MyWorker) -> Unit, state: Status, enableNotification:Boolean = true) {
         // Test
         val worker = MyWorker()
         callback(worker)

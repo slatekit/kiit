@@ -19,5 +19,5 @@ data class RunStatus(
     val id: String = "",
     val name: String = "",
     val lastRunTime: DateTime = DateTime.now(),
-    val status: String = ""
+    val status: Status = Status.InActive
 )

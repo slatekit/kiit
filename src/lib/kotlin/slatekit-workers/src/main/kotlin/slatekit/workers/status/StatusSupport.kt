@@ -13,28 +13,28 @@
 
 package slatekit.workers.status
 
-interface RunStatusSupport {
+interface StatusSupport {
 
     /**
      * gets the current state of execution
      *
      * @return
      */
-    fun state(): RunState
+    fun state(): Status
 
     /**
      * gets the current status of the application
      *
      * @return
      */
-    fun status(): RunStatus
+    fun status(): Status
 
     /**
      * moves the current state to idle.
      *
      * @return
      */
-    fun start(): RunStatus = moveToState(RunStateIdle)
+    fun start(): Status = moveToState(Status.Idle)
 
     /**
      * moves the current state to paused with a default time
@@ -42,84 +42,84 @@ interface RunStatusSupport {
      * @param seconds
      * @return
      */
-    fun pause(seconds: Int = 60): RunStatus = moveToState(RunStatePaused)
+    fun pause(seconds: Int = 60): Status = moveToState(Status.Paused)
 
     /**
      * moves the current state to stopped.
      *
      * @return
      */
-    fun stop(): RunStatus = moveToState(RunStateStopped)
+    fun stop(): Status = moveToState(Status.Stopped)
 
     /**
      * moves the current state to resumed
      *
      * @return
      */
-    fun resume(): RunStatus = moveToState(RunStateIdle)
+    fun resume(): Status = moveToState(Status.Idle)
 
     /**
      * moves the current state to complete
      *
      * @return
      */
-    fun complete(): RunStatus = moveToState(RunStateComplete)
+    fun complete(): Status = moveToState(Status.Complete)
 
     /**
      * moves the current state to failed
      *
      * @return
      */
-    fun fail(): RunStatus = moveToState(RunStateFailed)
+    fun fail(): Status = moveToState(Status.Failed)
 
     /**
      * whether this is executing
      *
      * @return
      */
-    fun isRunning(): Boolean = isState(RunStateRunning)
+    fun isRunning(): Boolean = isState(Status.Running)
 
     /**
      * whether this is waiting
      *
      * @return
      */
-    fun isIdle(): Boolean = isState(RunStateIdle)
+    fun isIdle(): Boolean = isState(Status.Idle)
 
     /**
      * whether this is paused
      *
      * @return
      */
-    fun isPaused(): Boolean = isState(RunStatePaused)
+    fun isPaused(): Boolean = isState(Status.Paused)
 
     /**
      * whether this is stopped
      *
      * @return
      */
-    fun isStopped(): Boolean = isState(RunStateStopped)
+    fun isStopped(): Boolean = isState(Status.Stopped)
 
     /**
      * whether this is complete
      *
      * @return
      */
-    fun isComplete(): Boolean = isState(RunStateComplete)
+    fun isComplete(): Boolean = isState(Status.Complete)
 
     /**
      * whether this has failed
      *
      * @return
      */
-    fun isFailed(): Boolean = isState(RunStateFailed)
+    fun isFailed(): Boolean = isState(Status.Failed)
 
     /**
      * whether this is not running ( stopped or paused )
      *
      * @return
      */
-    fun isStoppedOrPaused(): Boolean = isState(RunStateStopped) || isState(RunStatePaused)
+    fun isStoppedOrPaused(): Boolean = isState(Status.Stopped) || isState(Status.Paused)
 
     /**
      * whether the current state is at the one supplied.
@@ -127,12 +127,12 @@ interface RunStatusSupport {
      * @param runState
      * @return
      */
-    fun isState(runState: RunState): Boolean = state() == runState
+    fun isState(runState: Status): Boolean = state() == runState
 
     /**
      * moves this state to the one supplied
      * @param state
      * @return
      */
-    fun moveToState(state: RunState): RunStatus
+    fun moveToState(state: Status): Status
 }
