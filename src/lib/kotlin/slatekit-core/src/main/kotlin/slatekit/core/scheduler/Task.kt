@@ -3,7 +3,8 @@ package slatekit.core.scheduler
 import slatekit.common.toId
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
-import slatekit.core.scheduler.core.Status
+import slatekit.common.status.Status
+import slatekit.common.status.StatusSupport
 import java.util.concurrent.atomic.AtomicReference
 
 /**

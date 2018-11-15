@@ -1,13 +1,7 @@
-package slatekit.core.scheduler.core
+package slatekit.common.status
 
 /**
- * The Scheduled tasks can be :
- * 1. started
- * 2. paused
- * 3. resumed
- * 4. stopped
- * 5. completed ( if run mode is limited to x runs )
- * 6. failed ( if an exception occurred )
+ * Represents the different "states" of a life-cycle
  */
 sealed class Status(val name:String, val value:Int) {
     object InActive : Status("InActive", 0)

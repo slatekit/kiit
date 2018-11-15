@@ -6,7 +6,7 @@ import slatekit.common.metrics.Metrics
 import slatekit.common.results.ResultCode
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
-import slatekit.core.scheduler.core.Status
+import slatekit.common.status.Status
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors

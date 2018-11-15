@@ -11,9 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.scheduler
-
-import slatekit.core.scheduler.core.Status
+package slatekit.common.status
 
 interface StatusSupport {
 
