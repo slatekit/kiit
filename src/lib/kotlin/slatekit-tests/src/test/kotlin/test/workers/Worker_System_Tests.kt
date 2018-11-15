@@ -1,9 +1,10 @@
 package test.workers
 
+import org.junit.Assert
 import slatekit.common.metrics.MetricsLite
 import slatekit.core.common.AppContext
 import slatekit.workers.*
-import slatekit.workers.status.Status
+import slatekit.common.status.Status
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
 // http://www.vogella.com/tutorials/JavaConcurrency/article.html
@@ -32,9 +33,9 @@ class Worker_System_Tests {
         val worker1 = sys.get("worker 1")!!
         val worker2 = sys.get("worker 2")!!
 
-        assert(group1.state() == Status.InActive)
-        assert(worker1.state() == Status.InActive)
-        assert(worker2.state() == Status.InActive)
+        Assert.assertEquals(group1 .status(),  Status.InActive)
+        Assert.assertEquals(worker1.status(),  Status.InActive)
+        Assert.assertEquals(worker2.status(),  Status.InActive)
     }
 
 
@@ -47,11 +48,9 @@ class Worker_System_Tests {
         val worker2 = sys.get("worker 2")!!
 
         TODO.IMPLEMENT("tests", "Workers")
-        assert(group1.state() == Status.Running)
-        assert(worker1.state() == Status.Idle)
-        //assert(worker1.lastResult.msg == "not started")
-        assert(worker2.state() == Status.Idle)
-        //assert(worker2.lastResult.msg == "not started")
+        Assert.assertEquals(group1.status(), Status.Running)
+        Assert.assertEquals(worker1.status(), Status.Idle)
+        Assert.assertEquals(worker2.status(), Status.Idle)
     }
 
 
@@ -67,7 +66,7 @@ class Worker_System_Tests {
         val worker1 = sys.get("worker 1")!!
         val worker2 = sys.get("worker 2")!!
         TODO.IMPLEMENT("tests", "Workers")
-        assert(group1.state() == Status.Running)
+        Assert.assertEquals(group1.status(), Status.Running)
 //        assert(worker1.lastResult.getOrElse { "" } == "worktype 1:done")
 //        assert(worker2.lastResult.getOrElse { "" } == "worktype 2:done")
         sys.done()

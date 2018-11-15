@@ -7,8 +7,9 @@ import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSource
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
+import slatekit.common.status.*
 import slatekit.workers.core.*
-import slatekit.workers.status.*
+import slatekit.workers.core.RunStatus
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -110,7 +111,7 @@ open class Worker<T>(
      *
      * @return
      */
-    override fun state(): Status = _runState.get()
+    fun state(): Status = _runState.get()
 
     /**
      * gets the current status of the application

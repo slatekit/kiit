@@ -4,8 +4,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Success
 import slatekit.common.queues.QueueSourceDefault
+import slatekit.common.status.Status
 import slatekit.workers.Job
-import slatekit.workers.status.*
 import test.setup.MyWorker
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
@@ -134,7 +134,7 @@ class Worker_Core_Tests {
         // Test
         val worker = MyWorker()
         callback(worker)
-        val actual = worker.state()
-        assert(actual == state)
+        val actual = worker.status()
+        Assert.assertEquals(actual, state)
     }
 }

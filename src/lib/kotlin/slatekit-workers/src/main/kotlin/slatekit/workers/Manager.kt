@@ -2,9 +2,9 @@ package slatekit.workers
 
 import slatekit.common.CircularList
 import slatekit.common.DateTime
+import slatekit.common.status.Status
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Utils
-import slatekit.workers.status.Status
 import java.util.concurrent.ThreadPoolExecutor
 
 /**

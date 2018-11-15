@@ -15,7 +15,7 @@ package slatekit.workers.core
 import slatekit.common.DateTime
 import slatekit.common.Response
 import slatekit.common.ResultEx
-import slatekit.workers.status.Status
+import slatekit.common.status.Status
 import slatekit.workers.WorkRequest
 
 /**
