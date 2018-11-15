@@ -19,7 +19,8 @@ import slatekit.apis.security.*
 import slatekit.apis.middleware.Tracked
 import slatekit.common.Random
 import slatekit.common.Request
-import slatekit.common.utils.Tracker
+import slatekit.common.Response
+import slatekit.common.diagnostics.Tracker
 import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 
@@ -27,9 +28,9 @@ import slatekit.integration.common.AppEntContext
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class AppApi(val context: AppEntContext) : Tracked {
 
-    override val tracker = Tracker<Request, Request, Any, Exception>(
-        Random.guid(),
-        "api-tracker"
+    override val tracker = Tracker<Request, Response<*>,Exception>(
+            Random.guid(),
+            "api-tracker"
     )
 
     @ApiAction(desc = "gets info about this build", roles = "*", verb = "get", protocol = "@parent")

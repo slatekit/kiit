@@ -13,7 +13,6 @@
 
 package slatekit.server.ktor
 
-import com.codahale.metrics.JmxReporter
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
@@ -24,7 +23,6 @@ import io.ktor.request.receiveText
 import io.ktor.routing.*
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.server.netty.NettyApplicationEngine
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
 import slatekit.apis.security.WebProtocol
@@ -34,15 +32,11 @@ import slatekit.apis.doc.DocWeb
 import slatekit.common.*
 import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
-import slatekit.common.metrics.Metric
 import slatekit.common.metrics.Metrics
-import slatekit.common.results.ResultCode
-import slatekit.common.utils.Tracker
-import slatekit.core.common.AppContext
+import slatekit.common.diagnostics.Tracker
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
-import java.util.concurrent.TimeUnit
 
 class KtorServer(
     val config: ServerConfig,
@@ -86,8 +80,7 @@ class KtorServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger(this.javaClass.name)
-    val tracker = Tracker<Request, Request, Response<*>, Exception>(Random.guid(), ctx.app.about.name)
-    val diagnostics = Diagnostics(ctx, events, metrics, log, tracker)
+    val diagnostics = Diagnostics(metrics, log)
 
     /**
      * executes the application

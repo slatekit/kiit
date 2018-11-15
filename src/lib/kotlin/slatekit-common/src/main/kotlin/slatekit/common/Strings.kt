@@ -62,8 +62,7 @@ fun String.toId(lowerCase: Boolean = true): String {
 }
 
 /**
- * Converts a string to a "soft" id that has "_" instead of spaces.
- * e.g: "abc& $[]123" = "abc&_$[]123"
+ * Converts a string to a UUID
  */
 fun String.toUUId(): UUID {
     return UUID.fromString(this)

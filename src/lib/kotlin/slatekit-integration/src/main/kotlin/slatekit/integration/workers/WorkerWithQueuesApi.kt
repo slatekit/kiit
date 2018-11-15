@@ -10,7 +10,7 @@ open class WorkerWithQueuesApi(
     val container: ApiContainer,
     settings: WorkerSettings
 )
-    : Worker<Any>("api.queues", "apis", "apiqueues", "1.0", container.ctx.logs) {
+    : Worker<Any>("apis", "apis", "apiqueues", "1.0", container.ctx.logs) {
 
     /**
      * Process an message from the queue represented as an API request.

@@ -164,7 +164,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.succeeded(ctx.req) }
+                result.onSuccess { instance.tracker.succeeded(ctx.req, result.toResponse()) }
                 result.onFailure { instance.tracker.failed(ctx.req, it) }
             }
             result
@@ -187,7 +187,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.succeeded(result) }
+                result.onSuccess { instance.tracker.succeeded(ctx.req, result.toResponse()) }
                 result.onFailure { instance.tracker.failed(ctx.req, it) }
             }
             result

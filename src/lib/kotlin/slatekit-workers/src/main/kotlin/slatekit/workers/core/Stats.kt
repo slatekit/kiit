@@ -13,9 +13,10 @@ mantra: Simplicity above all else
 package slatekit.workers.core
 
 import slatekit.common.DateTime
+import slatekit.common.Response
 import slatekit.common.ResultEx
 import slatekit.workers.status.RunState
-import slatekit.workers.Job
+import slatekit.workers.WorkRequest
 
 /**
  * Worker level status that can be supplied to a front-end
@@ -31,9 +32,9 @@ data class Stats(
         val totalSuccesses: Long,
         val totalErrored: Long,
         val totalFiltered: Long,
-        val lastRequest: Job,
-        val lastFiltered: Job,
-        val lastSuccess: Pair<Job, ResultEx<*>>,
-        val lastErrored: Pair<Job, ResultEx<*>>
+        val lastRequest: WorkRequest?,
+        val lastFiltered: WorkRequest?,
+        val lastSuccess: Pair<WorkRequest, Response<*>>?,
+        val lastErrored: Pair<WorkRequest, Exception?>?
 
 )
