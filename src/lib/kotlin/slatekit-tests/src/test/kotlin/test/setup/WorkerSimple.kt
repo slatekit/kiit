@@ -10,11 +10,9 @@ import slatekit.workers.WorkFunction
 
 class MyWorker(
     var acc: Int = 0,
-    events: Events? = null,
     callback: WorkFunction<Int>? = null
 ) : Worker<Int>(
-    "", "", "", "",
-    events = events ?: Events(),
+    "myworker", "", "", "",
     callback = callback,
     logs = LogsDefault
 ) {

@@ -7,7 +7,6 @@ import slatekit.common.Success
 import slatekit.common.getOrElse
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.workers.Job
-import slatekit.workers.core.Events
 import slatekit.workers.status.*
 import test.setup.MyWorker
 
@@ -95,12 +94,6 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_send_status_notifications() {
-        assertNotifications( { it.complete() }, RunStateComplete)
-    }
-
-
-    @Test
     fun can_save_last_result() {
         val worker = MyWorker(0)
         TODO.IMPLEMENT("tests", "Workers") {
@@ -145,30 +138,5 @@ class Worker_Core_Tests {
         callback(worker)
         val actual = worker.state()
         assert(actual == state)
-    }
-
-
-    fun assertNotifications(callback:(MyWorker) -> Unit, state: RunState, enableNotification:Boolean = true) {
-        // Test
-        val worker = MyWorker()
-        callback(worker)
-        val actual = worker.state()
-        assert(actual == state)
-
-        // Same test with notification
-        var status: RunStatus? = null
-        val worker2 = MyWorker(events = Events({ event -> status = event.worker.status() }))
-        callback(worker2)
-        val ac = worker2.state()
-        assert(ac == state)
-        assert(status != null)
-        assert(status?.status == state.mode)
-    }
-
-
-    fun assertResult(result:ResultEx<*>, success:Boolean, data:Any, code:Int){
-        assert(result.success == success)
-        assert(result.getOrElse { null } == data)
-        assert(result.code == code)
     }
 }
