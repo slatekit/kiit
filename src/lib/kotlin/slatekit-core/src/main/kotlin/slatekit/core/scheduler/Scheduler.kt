@@ -149,6 +149,7 @@ class Scheduler(val settings: SchedulerSettings,
                 is Status.Paused -> record(request, ResultCode.PAUSED, "Task paused, skipping this run")
                 is Status.Stopped -> record(request, ResultCode.STOPPED, "Task is stopped, skipping this run")
                 is Status.Running -> record(request, ResultCode.RUNNING, "Task is currently running")
+                is Status.Starting -> execute(request, false)
                 is Status.Idle -> execute(request, false)
                 is Status.InActive -> execute(request, false)
             }
