@@ -66,4 +66,10 @@ object ResultCode {
     const val MISSING = 1404
     const val EXIT = 1001
     const val VERSION = 1002
+    const val INACTIVE = 1003
+    const val STOPPED = 1004
+    const val COMPLETED = 1005
+    const val PAUSED = 1006
+    const val FAILED = 1007
+    const val RUNNING = 1007
 }

@@ -156,17 +156,17 @@ class Example_Workers : Cmd("utils") {
         println( group1?.about )
 
         // CASE 2: Get the status of the worker
-        println( sys.get("message_worker")?.state() )
+        println( sys.get("message_worker")?.status() )
 
         // CASE 3: Get the stats of the worker
-        println( sys.get("message_worker")?.stats() )
+        println( sys.get("message_worker")?.status() )
 
         // CASE 5: You can pause, resume, stop, start the group
         // NOTE: The status of the group will be changed immediately
         // however, some workers in the group may already be queued
         // up for working, so they will only be effected after their
         // current execution/run is complete
-        group1?.pause(30)
+        group1?.pause()
         group1?.resume()
         group1?.stop()
         group1?.start()
@@ -178,7 +178,7 @@ class Example_Workers : Cmd("utils") {
         println(worker1?.about?.name)
 
         // CASE 2: Get the run state of the worker
-        println( sys.get("message_worker")?.state() )
+        println( sys.get("message_worker")?.status() )
 
         // CASE 3: Get the status of a worker which provides more info
         val status = sys.get("message_worker")?.stats()
@@ -198,7 +198,7 @@ class Example_Workers : Cmd("utils") {
         // NOTE: The status of the worker will be changed immediately
         // however, if the worker is queued up for working, it will
         // only be effected after their current execution/run is complete
-        worker1?.pause(30)
+        worker1?.pause()
         worker1?.resume()
         worker1?.stop()
         worker1?.start()

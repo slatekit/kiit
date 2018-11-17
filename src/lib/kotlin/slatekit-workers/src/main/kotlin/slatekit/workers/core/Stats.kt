@@ -15,7 +15,7 @@ package slatekit.workers.core
 import slatekit.common.DateTime
 import slatekit.common.Response
 import slatekit.common.ResultEx
-import slatekit.workers.status.RunState
+import slatekit.common.status.Status
 import slatekit.workers.WorkRequest
 
 /**
@@ -25,7 +25,7 @@ import slatekit.workers.WorkRequest
 data class Stats(
         val id: String,
         val name: String,
-        val status: RunState,
+        val status: Status,
         val lastRunTime: DateTime,
         val lastResult: ResultEx<*>,
         val totalRequests: Long,
