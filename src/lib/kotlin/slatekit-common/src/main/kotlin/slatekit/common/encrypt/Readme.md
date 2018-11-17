@@ -9,7 +9,7 @@ permalink: /kotlin-mod-encrypt
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Encryption using AES | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.encrypt  |
@@ -26,8 +26,8 @@ import slatekit.common.encrypt.Encryptor
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 
 
 ```

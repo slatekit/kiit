@@ -30,16 +30,38 @@ import slatekit.common.nonEmptyOrDefault
  * @param tags : tags describing the app
  */
 data class About(
+
+    @JvmField
     val id: String,
+
+    @JvmField
     val name: String,
+
+    @JvmField
     val desc: String,
+
+    @JvmField
     val company: String = "",
+
+    @JvmField
     val group: String = "",
+
+    @JvmField
     val region: String = "",
+
+    @JvmField
     val url: String = "",
+
+    @JvmField
     val contact: String = "",
+
+    @JvmField
     val version: String = "",
+
+    @JvmField
     val tags: String = "",
+
+    @JvmField
     val examples: String = ""
 ) {
 

@@ -8,8 +8,8 @@ permalink: /kotlin-mod-env
 
 {: .table .table-striped .table-bordered}
 |:--|:--|
-| **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) |
-| **date**| 2018-03-19 |
+| **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.envs  |
@@ -27,8 +27,9 @@ import slatekit.common.envs.*
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 
 
 ```

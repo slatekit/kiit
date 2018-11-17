@@ -9,7 +9,7 @@ permalink: /kotlin-mod-console
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Enhanced printing to console with support for semantic writing like title, subtitle, url, error, etc with colors | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.console  |
@@ -28,8 +28,7 @@ import slatekit.common.console.*
 // optional 
 import slatekit.core.cmds.Cmd
 import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
 
 
 ```

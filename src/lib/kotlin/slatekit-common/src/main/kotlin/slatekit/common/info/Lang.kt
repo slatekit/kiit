@@ -25,11 +25,23 @@ import slatekit.common.utils.Props
  * @param ext1 : additional information about the language
  */
 data class Lang(
+
+    @JvmField
     val name: String,
+
+    @JvmField
     val home: String,
+
+    @JvmField
     val version: String,
+
+    @JvmField
     val vendor: String,
+
+    @JvmField
     val origin: String,
+
+    @JvmField
     val ext1: String
 ) {
 

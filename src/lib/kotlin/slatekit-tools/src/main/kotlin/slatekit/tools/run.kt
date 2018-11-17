@@ -1,6 +1,7 @@
 package slatekit.tools
 
 
+import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
 import slatekit.common.security.ApiKey
@@ -44,7 +45,7 @@ fun main(args: Array<String>): Unit {
                     // or a single paramter taking the same Context as ctx above )
 
                     // Example 1: without annotations ( pure kotlin objects )
-                    Api(DocApi::class, declaredOnly = true)
+                    Api(DocApi::class, setup = Annotated, declaredOnly = true)
             )
     )
 

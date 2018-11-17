@@ -9,7 +9,7 @@ permalink: /kotlin-mod-info
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Get/Set useful diagnostics about the system, language runtime, application and more | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.info  |
@@ -30,8 +30,8 @@ import slatekit.common.info.StartInfo
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
 
 
 ```
