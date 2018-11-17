@@ -14,8 +14,16 @@
 package slatekit.common.info
 
 data class Memory(
+
+    @JvmField
     val used: Long,
+
+    @JvmField
     val free: Long,
+
+    @JvmField
     val total: Long,
+
+    @JvmField
     val max: Long
 )

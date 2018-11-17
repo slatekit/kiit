@@ -14,11 +14,23 @@
 package slatekit.common.info
 
 data class StartInfo(
+
+    @JvmField
     val args: String = "",
+
+    @JvmField
     val logFile: String = "{@app}-{@env}-{@date}.log",
+
+    @JvmField
     val config: String = "{@app}.config",
+
+    @JvmField
     val env: String = "dev",
+
+    @JvmField
     val rootDir: String = "",
+
+    @JvmField
     val confDir: String = ""
 ) {
 

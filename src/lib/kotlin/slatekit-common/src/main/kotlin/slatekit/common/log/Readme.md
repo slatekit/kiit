@@ -9,7 +9,7 @@ permalink: /kotlin-mod-logger
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A simple logger with extensibility for using other 3rd party loggers | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.log  |
@@ -22,13 +22,14 @@ permalink: /kotlin-mod-logger
 ```kotlin 
 // required 
 import slatekit.common.log.*
-import slatekit.common.results.ResultFuncs.ok
 
 
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
+
 
 
 ```
@@ -42,14 +43,14 @@ import slatekit.common.Result
   // 1. log4net
   // 2. loggly
   // 3. new relic
-  override val logger:LoggerBase? = LoggerConsole()
+  override val logger:Logger? = LoggerConsole()
 
 
   // Setup a custom logger
-  class MyCustomLogger : LoggerBase(Warn)  {
+  class MyCustomLogger : Logger(Warn)  {
 
 
-    override val logger:LoggerBase? = LoggerConsole()
+    override val logger:Logger? = LoggerConsole()
 
 
     override fun performLog(entry: LogEntry): Unit
@@ -77,8 +78,8 @@ import slatekit.common.Result
     val logger = LoggerConsole(Debug)
     logger.debug("debug with message only")
     logger.info("info with message and exception", ex)
-    logger.warn("debug with message, exception, and tag", ex, "APP1")
-    logger.fatal("fatal message", tag = "123")
+    logger.warn("debug with message, exception, and tag", ex)
+    logger.fatal("fatal message")
 
     // CASE: 2 Standard info, warn, error levels available
     // Same overloads ( msg, ex, tag ) are available.
@@ -90,7 +91,7 @@ import slatekit.common.Result
 
 
     // CASE 3: Log explicitly using log method.
-    logger.log(Error, "error", ex, "APP1")
+    logger.log(Error, "error", ex)
 
 
     // CASE 4: You can extend a class with the LogSupportIn trait

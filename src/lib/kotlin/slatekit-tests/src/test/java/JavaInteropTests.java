@@ -10,7 +10,7 @@ public class JavaInteropTests {
     public void can_call_kotlin() {
 
         Host host = new Host("mac1", "127.0.0.1", "", "osx", "10", "");
-        host.copy(host.getName(), host.getIp(), host.getOrigin(), host.getArch(), host.getVersion(), host.getExt1());
+        host.copy(host.name, host.ip, host.origin, host.arch, host.version, host.ext1);
 
         Assert.assertTrue(ResultCode.BAD_REQUEST == 400);
     }

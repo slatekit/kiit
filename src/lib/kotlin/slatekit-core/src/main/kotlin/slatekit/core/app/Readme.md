@@ -9,7 +9,7 @@ permalink: /kotlin-mod-app
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A base application with support for command line args, environment selection, configs, encryption, logging, diagnostics and more | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.core.jar  |
 | **namespace** | slatekit.core.app  |
@@ -29,14 +29,17 @@ import slatekit.core.app.AppRunner
 
 // optional 
 import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.success
+import slatekit.common.toResultEx
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
@@ -98,7 +101,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
      *
      * @return
      */
-    override fun onExecute(): Result<Any> {
+    override fun onExecute(): ResultEx<Any> {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -119,7 +122,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
         println(conf.dbCon())
 
         // 5. Get and use logger
-        ctx.log.info("default logger ")
+        ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
         println(ctx.app.about.name)
@@ -141,7 +144,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
 
         info("app completed")
 
-        return ok()
+        return Success("")
     }
 
 
@@ -187,7 +190,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
                 arg = Args.default(),
                 env = conf.env(),
                 cfg = conf,
-                log = LoggerConsole(),
+                logs = LogsDefault,
                 ent = Entities(),
                 dbs = null,
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
@@ -204,7 +207,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
                         tags = "",
                         examples = ""
                 ),
-                state = success(true, "manually built")
+                state = Success(true, msg ="manually built").toResultEx()
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.

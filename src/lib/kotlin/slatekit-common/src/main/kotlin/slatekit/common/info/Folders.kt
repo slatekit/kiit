@@ -47,16 +47,38 @@ import java.io.File
  */
 
 data class Folders(
+
+    @JvmField
     val location: AppLocation,
+
+    @JvmField
     val home: String,
+
+    @JvmField
     val root: String?,
+
+    @JvmField
     val group: String?,
+
+    @JvmField
     val app: String,
+
+    @JvmField
     val cache: String,
+
+    @JvmField
     val inputs: String,
+
+    @JvmField
     val logs: String,
+
+    @JvmField
     val outputs: String,
+
+    @JvmField
     val temp: String,
+
+    @JvmField
     val conf: String
 ) {
 

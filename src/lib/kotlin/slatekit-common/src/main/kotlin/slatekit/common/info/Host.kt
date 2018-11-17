@@ -26,11 +26,22 @@ import slatekit.common.utils.Props
  * @param ext1 : additional information about the server
  */
 data class Host(
+    @JvmField
     val name: String,
+
+    @JvmField
     val ip: String,
+
+    @JvmField
     val origin: String,
+
+    @JvmField
     val arch: String,
+
+    @JvmField
     val version: String,
+
+    @JvmField
     val ext1: String
 ) {
 

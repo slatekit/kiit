@@ -9,7 +9,7 @@ permalink: /kotlin-mod-dblookup
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | Database access utilty to query and manage data using JDBC for MySql. Other database support coming later. | 
-| **date**| 2018-03-19 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.db  |
@@ -25,14 +25,14 @@ permalink: /kotlin-mod-dblookup
 
 
 // optional 
-import slatekit.common.Result
+import slatekit.common.ResultEx
+import slatekit.common.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.DbLookupCompanion.defaultDb
-import slatekit.common.db.DbLookup.DbLookupCompanion.namedDbs
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbLookup.Companion.namedDbs
 import slatekit.core.cmds.Cmd
 
 

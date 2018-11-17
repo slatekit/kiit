@@ -9,7 +9,7 @@ permalink: /kotlin-mod-args
 {: .table .table-striped .table-bordered}
 |:--|:--|
 | **desc** | A lexical command line argument parser with optional support for allowing a route/method call in the beginning | 
-| **date**| 2018-02-10 |
+| **date**| 2018-11-16 |
 | **version** | 0.9.9  |
 | **jar** | slatekit.common.jar  |
 | **namespace** | slatekit.common.args  |
@@ -27,8 +27,10 @@ import slatekit.common.args.ArgsSchema
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.results.ResultFuncs.ok
+import slatekit.common.ResultEx
+import slatekit.common.Success
+import slatekit.common.getOrElse
+
 
 
 ```
