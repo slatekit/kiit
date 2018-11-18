@@ -34,7 +34,7 @@ class EnvTests {
     @Test fun can_construct() {
         val env = Env("qa1", EnvMode.Qat, "nyc")
         assert( env.name      == "qa1" )
-        assert( env.mode.name == "qa"  )
+        assert( env.mode.name == "qat" )
         assert( env.region    == "nyc" )
     }
 
@@ -77,7 +77,7 @@ class EnvTests {
 
 
     @Test fun can_build_key() {
-        assert( Env("qa1", EnvMode.Qat).key == "qa1:qa" )
+        assert( Env("qa1", EnvMode.Qat).key == "qa1:qat" )
     }
 
 
@@ -108,15 +108,15 @@ class EnvTests {
 
     @Test fun can_parse_with_name() {
         assert( Env.parse("dev").isDev)
-        assert( Env.parse("qa").isQat)
+        assert( Env.parse("qat").isQat)
         assert( Env.parse("uat").isUat)
         assert( Env.parse("pro").isPro)
-        assert( Env.parse("dr").isDis)
+        assert( Env.parse("dis").isDis)
         assert( Env.parse("abc").isOther)
     }
 
 
     @Test fun can_parse_with_name_and_mode() {
-        assert( Env.parse("qa1:qa").isQat)
+        assert( Env.parse("qa1:qat").isQat)
     }
 }
