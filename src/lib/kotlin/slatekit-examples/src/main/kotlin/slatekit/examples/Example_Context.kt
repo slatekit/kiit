@@ -13,7 +13,6 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Context
 import slatekit.core.common.AppContext
 //</doc:import_required>
 
@@ -24,12 +23,11 @@ import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
+import slatekit.common.envs.EnvMode
 import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.core.app.AppRunner
@@ -81,7 +79,7 @@ class Example_Context : Cmd("cmd") {
         // - entities ( registrations for orm )
         val ctx1 = AppContext(
             arg = Args.default(),
-            env = Env("dev", Dev, "ny", "dev environment"),
+            env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
             cfg = Config(),
             logs = LogsDefault,
             ent = Entities(),

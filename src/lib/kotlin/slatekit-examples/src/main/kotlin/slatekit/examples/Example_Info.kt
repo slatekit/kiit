@@ -12,7 +12,6 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.envs.Qa
 import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
@@ -23,6 +22,8 @@ import slatekit.common.info.StartInfo
 import slatekit.core.cmds.Cmd
 import slatekit.common.ResultEx
 import slatekit.common.Success
+import slatekit.common.envs.EnvMode
+
 //</doc:import_examples>
 
 
@@ -44,7 +45,7 @@ class Example_Info  : Cmd("info") {
 
 
     // CASE 3: Set startup info ( env, config, log, args)
-    val startup = StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", Qa.name)
+    val startup = StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", EnvMode.Qat.name)
     startup.log( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
