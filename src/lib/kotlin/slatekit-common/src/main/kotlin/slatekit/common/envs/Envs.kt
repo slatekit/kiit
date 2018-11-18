@@ -22,7 +22,7 @@ data class Envs(val all: List<Env>, val current: Env? = null) : EnvSupport {
     /**
      * Initialize with the first one
      */
-    constructor(all: List<Env>): this(all, all.firstOrNull())
+    constructor(all: List<Env>) : this(all, all.firstOrNull())
 
     /**
      * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
@@ -90,5 +90,5 @@ data class Envs(val all: List<Env>, val current: Env? = null) : EnvSupport {
      * @return
      */
     fun get(name: String): Env? =
-            all.filter { item -> item.name == name }.firstOrNull()
+        all.filter { item -> item.name == name }.firstOrNull()
 }
