@@ -9,8 +9,8 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
+import slatekit.common.envs.EnvMode
 import slatekit.common.info.About
 import slatekit.common.log.LogsDefault
 import slatekit.common.types.PhoneUS
@@ -46,7 +46,7 @@ class ReflectorTests {
 
     val ctx: AppEntContext = AppEntContext (
             arg  = Args.default(),
-            env  = Env("local", Dev),
+            env  = Env("local", EnvMode.Dev),
             cfg  = Config(),
             logs = LogsDefault,
             ent  = Entities(),

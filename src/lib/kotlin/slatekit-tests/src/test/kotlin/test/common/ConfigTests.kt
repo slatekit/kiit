@@ -18,7 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
-import slatekit.common.envs.Dev
+import slatekit.common.envs.EnvMode
 import slatekit.meta.map
 import test.setup.Movie
 import test.setup.MyEncryptor
@@ -84,7 +84,7 @@ class ConfigTests {
         val conf  = Config(CONFIG_DEFAULT_PROPERTIES)
         val env = conf.env()
         assert(env.name == "local")
-        assert(env.mode == Dev)
+        assert(env.mode == EnvMode.Dev)
     }
 
 

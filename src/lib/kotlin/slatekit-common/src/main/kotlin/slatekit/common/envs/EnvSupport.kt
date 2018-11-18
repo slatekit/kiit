@@ -15,18 +15,18 @@ package slatekit.common.envs
 
 interface EnvSupport {
 
-    val isProd: Boolean get() = isEnv(Prod)
+    val isPro: Boolean get() = isEnv(EnvMode.Pro)
 
-    val isUat: Boolean get() = isEnv(Uat)
+    val isUat: Boolean get() = isEnv(EnvMode.Uat)
 
-    val isQa: Boolean get() = isEnv(Qa)
+    val isQat: Boolean get() = isEnv(EnvMode.Qat)
 
-    val isDev: Boolean get() = isEnv(Dev)
+    val isDev: Boolean get() = isEnv(EnvMode.Dev)
 
-    val isDis: Boolean get() = isEnv(Dis)
+    val isDis: Boolean get() = isEnv(EnvMode.Dis)
 
     val isOther: Boolean get() {
-        return !isDev && !isQa && !isUat && !isProd && !isDis
+        return !isDev && !isQat && !isUat && !isPro && !isDis
     }
 
     fun isEnv(envMode: EnvMode): Boolean

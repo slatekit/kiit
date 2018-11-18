@@ -56,12 +56,12 @@ object AppFuncs {
      */
     fun envs(): List<Env> =
         listOf(
-            Env("loc", Dev, desc = "Dev environment (local)"),
-            Env("dev", Dev, desc = "Dev environment (shared)"),
-            Env("qa1", Qa, desc = "QA environment  (current release)"),
-            Env("qa2", Qa, desc = "QA environment  (last release)"),
-            Env("stg", Uat, desc = "STG environment (demo)"),
-            Env("pro", Prod, desc = "LIVE environment")
+            Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
+            Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
+            Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
+            Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
+            Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
+            Env("pro", EnvMode.Pro, desc = "LIVE environment")
         )
 
     /**

@@ -15,15 +15,22 @@ package slatekit.common.envs
 
 /**
  * Represents a system environment
- * @param name : e.g. Quality Assurance
- * @param mode : e.g. Qa
+ * @param name : e.g. Quality Assurance test
+ * @param mode : e.g. Qat
  * @param region : new york
- * @param desc : Qa environment 1 in new york
+ * @param desc : Qat environment 1 in new york
  */
 data class Env(
+    @JvmField
     val name: String,
+
+    @JvmField
     val mode: EnvMode,
+
+    @JvmField
     val region: String = "",
+
+    @JvmField
     val desc: String = ""
 ) : EnvSupport {
 
@@ -40,7 +47,7 @@ data class Env(
     companion object {
 
         @JvmStatic
-        val empty = Env("", Dev, "", "")
+        val empty = Env("", EnvMode.Dev, "", "")
 
         /**
          * The list of defaults environments to choose from.
@@ -66,12 +73,12 @@ data class Env(
         @JvmStatic
         fun defaults(): Envs =
             Envs(listOf(
-                Env("loc", Dev, desc = "Dev environment (local)"),
-                Env("dev", Dev, desc = "Dev environment (shared)"),
-                Env("qa1", Qa, desc = "QA environment  (current release)"),
-                Env("qa2", Qa, desc = "QA environment  (last release)"),
-                Env("stg", Uat, desc = "STG environment (demo)"),
-                Env("pro", Prod, desc = "LIVE environment")
+                Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
+                Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
+                Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
+                Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
+                Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
+                Env("pro", EnvMode.Pro, desc = "LIVE environment")
             ))
 
         /**
@@ -82,7 +89,7 @@ data class Env(
         @JvmStatic
         fun parse(text: String): Env {
             if (text == "''" || text == "\"\"") {
-                return Env("", Dev, desc = "Default environment")
+                return Env("", EnvMode.Dev, desc = "Default environment")
             }
             val tokens = text.split(':')
 
@@ -103,12 +110,12 @@ data class Env(
         @JvmStatic
         fun interpret(mode: String): EnvMode =
                 when (mode) {
-                    Dev.name -> Dev
-                    Qa.name -> Qa
-                    Uat.name -> Uat
-                    Prod.name -> Prod
-                    Dis.name -> Dis
-                    else -> Other(mode)
+                    EnvMode.Dev.name -> EnvMode.Dev
+                    EnvMode.Qat.name -> EnvMode.Qat
+                    EnvMode.Uat.name -> EnvMode.Uat
+                    EnvMode.Pro.name -> EnvMode.Pro
+                    EnvMode.Dis.name -> EnvMode.Dis
+                    else -> EnvMode.Other(mode)
                 }
     }
 }

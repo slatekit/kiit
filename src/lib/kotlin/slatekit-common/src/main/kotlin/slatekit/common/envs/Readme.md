@@ -76,9 +76,9 @@ n/a
     // CASE 7: Get info about currently selected environment
     println( envs2.name    )
     println( envs2.isDev   )
-    println( envs2.isQa    )
+    println( envs2.isQat   )
     println( envs2.isUat   )
-    println( envs2.isProd  )
+    println( envs2.isPro   )
     println( envs2.current )
     
 

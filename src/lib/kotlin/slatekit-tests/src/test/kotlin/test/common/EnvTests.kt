@@ -17,8 +17,6 @@ package test.common
 //import kotlin.test.assertEquals
 import slatekit.common.envs.*
 
-
-import org.junit.Assert
 import org.junit.Test
 
 
@@ -34,7 +32,7 @@ class EnvTests {
 
 
     @Test fun can_construct() {
-        val env = Env("qa1", Qa, "nyc")
+        val env = Env("qa1", EnvMode.Qat, "nyc")
         assert( env.name      == "qa1" )
         assert( env.mode.name == "qa"  )
         assert( env.region    == "nyc" )
@@ -43,12 +41,12 @@ class EnvTests {
 
     @Test fun default_envs_can_be_created() {
         val envs = Env.defaults()
-        ensureMatch( envs, "loc", Dev , "Dev environment (local)" )
-        ensureMatch( envs, "dev", Dev , "Dev environment (shared)" )
-        ensureMatch( envs, "qa1", Qa  , "QA environment  (current release)" )
-        ensureMatch( envs, "qa2", Qa  , "QA environment  (last release)" )
-        ensureMatch( envs, "stg", Uat , "STG environment (demo)" )
-        ensureMatch( envs, "pro", Prod, "LIVE environment" )
+        ensureMatch( envs, "loc", EnvMode.Dev , "Dev environment (local)" )
+        ensureMatch( envs, "dev", EnvMode.Dev , "Dev environment (shared)" )
+        ensureMatch( envs, "qa1", EnvMode.Qat  , "QA environment  (current release)" )
+        ensureMatch( envs, "qa2", EnvMode.Qat  , "QA environment  (last release)" )
+        ensureMatch( envs, "stg", EnvMode.Uat , "STG environment (demo)" )
+        ensureMatch( envs, "pro", EnvMode.Pro, "LIVE environment" )
     }
 
 
@@ -56,7 +54,7 @@ class EnvTests {
         val envs = Env.defaults()
         assert( envs.current != null )
         assert( envs.name == "loc")
-        assert( envs.env == Dev.name )
+        assert( envs.env == EnvMode.Dev.name )
         assert( envs.isDev )
     }
 
@@ -66,8 +64,8 @@ class EnvTests {
         val envs = envAll.select("qa1")
         assert( envs.current != null )
         assert( envs.name == "qa1")
-        assert( envs.env == Qa.name )
-        assert( envs.isQa )
+        assert( envs.env == EnvMode.Qat.name )
+        assert( envs.isQat )
     }
 
 
@@ -79,46 +77,46 @@ class EnvTests {
 
 
     @Test fun can_build_key() {
-        assert( Env("qa1", Qa).key == "qa1:qa" )
+        assert( Env("qa1", EnvMode.Qat).key == "qa1:qa" )
     }
 
 
     @Test fun can_check_loc() {
-        assert( Env("loc", Dev).isDev )
+        assert( Env("loc", EnvMode.Dev).isDev )
     }
 
 
     @Test fun can_check_dev() {
-        assert( Env("qa1", Qa).isQa )
+        assert( Env("qa1", EnvMode.Qat).isQat )
     }
 
 
     @Test fun can_check_qa() {
-        assert( Env("qa1", Qa).isQa )
+        assert( Env("qa1", EnvMode.Qat).isQat )
     }
 
 
     @Test fun can_check_stg() {
-        assert( Env("stg", Uat).isUat )
+        assert( Env("stg", EnvMode.Uat).isUat )
     }
 
 
     @Test fun can_check_pro() {
-        assert( Env("pro", Prod).isProd )
+        assert( Env("pro", EnvMode.Pro).isPro )
     }
 
 
     @Test fun can_parse_with_name() {
         assert( Env.parse("dev").isDev)
-        assert( Env.parse("qa").isQa)
+        assert( Env.parse("qa").isQat)
         assert( Env.parse("uat").isUat)
-        assert( Env.parse("pro").isProd)
+        assert( Env.parse("pro").isPro)
         assert( Env.parse("dr").isDis)
         assert( Env.parse("abc").isOther)
     }
 
 
     @Test fun can_parse_with_name_and_mode() {
-        assert( Env.parse("qa1:qa").isQa)
+        assert( Env.parse("qa1:qa").isQat)
     }
 }

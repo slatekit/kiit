@@ -20,8 +20,8 @@ import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigBase
 import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Dev
 import slatekit.common.envs.Env
+import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -79,7 +79,7 @@ data class AppContext(
         fun err(code: Int, msg: String? = null): AppContext =
             AppContext(
                 arg = Args.Companion.default(),
-                env = Env("local", Dev),
+                env = Env("local", EnvMode.Dev),
                 cfg = Config(),
                 logs = LogsDefault,
                 inf = About.none,
@@ -92,7 +92,7 @@ data class AppContext(
         fun simple(name: String): AppContext =
                 AppContext(
                         arg = Args.Companion.default(),
-                        env = Env("local", Dev),
+                        env = Env("local", EnvMode.Dev),
                         cfg = Config(),
                         logs = LogsDefault,
                         inf = About.none,
@@ -105,7 +105,7 @@ data class AppContext(
         fun sample(id: String, name: String, about: String, company: String): AppContext =
             AppContext(
                 arg = Args.Companion.default(),
-                env = Env("local", Dev),
+                env = Env("local", EnvMode.Dev),
                 cfg = Config(),
                 logs = LogsDefault,
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),

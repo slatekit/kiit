@@ -13,35 +13,37 @@
 
 package slatekit.common.envs
 
-abstract class EnvMode(val name: String)
+sealed class EnvMode(val name: String) {
 
-/**
- * production
- */
-object Prod : EnvMode("pro")
+    /**
+     * Development
+     */
+    object Dev : EnvMode("dev")
 
-/**
- * Development
- */
-object Dev : EnvMode("dev")
+    /**
+     * Quality assurance
+     */
+    object Qat : EnvMode("qa")
 
-/**
- * Quality assurance
- */
-object Qa : EnvMode("qa")
+    /**
+     * User Acceptance / Beta
+     */
+    object Uat : EnvMode("uat")
 
-/**
- * User Acceptance / Beta
- */
-object Uat : EnvMode("uat")
+    /**
+     * Disaster recovery
+     */
+    object Dis : EnvMode("dr")
 
-/**
- * Disaster recovery
- */
-object Dis : EnvMode("dr")
+    /**
+     * production
+     */
+    object Pro : EnvMode("pro")
 
-/**
- * Other environment mode
- * @param m
- */
-class Other(m: String) : EnvMode(m)
+    /**
+     * Other environment mode
+     * @param m
+     */
+    class Other(m: String) : EnvMode(m)
+}
+
