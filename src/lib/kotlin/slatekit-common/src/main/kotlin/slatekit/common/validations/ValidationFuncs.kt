@@ -54,6 +54,7 @@ object ValidationFuncs {
   fun isAlphaUpperCase(text: String): Boolean = isMatch(Patterns.alphaUpperCase, text)
   fun isAlphaLowerCase(text: String): Boolean = isMatch(Patterns.alphaLowerCase, text)
   fun isAlphaNumeric(text: String): Boolean = isMatch(Patterns.alphaNumeric, text)
+  fun isWholeNumber(text: String): Boolean = isMatch(Patterns.digits, text)
   fun isNumeric(text: String): Boolean = isMatch(Patterns.numeric, text)
   fun isSocialSecurity(text: String): Boolean = isMatch(Patterns.socialSecurity, text)
   fun isUrl(text: String): Boolean = isMatch(Patterns.url, text)
