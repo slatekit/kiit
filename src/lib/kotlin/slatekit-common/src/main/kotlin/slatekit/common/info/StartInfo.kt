@@ -32,16 +32,16 @@ data class StartInfo(
 
     @JvmField
     val confDir: String = ""
-) {
+) : Info {
 
-    fun log(callback: (String, Any) -> Unit) {
-        callback("args", args)
-        callback("log", logFile)
-        callback("config", config)
-        callback("env", env)
-        callback("rootDir", rootDir)
-        callback("confDir", confDir)
-    }
+    override fun props():List<Pair<String,String>> = listOf(
+        "args"    to args,
+        "log"     to logFile,
+        "config"  to config,
+        "env"     to env,
+        "rootDir" to rootDir,
+        "confDir" to confDir
+    )
 
     companion object {
         @JvmStatic

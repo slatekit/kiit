@@ -80,18 +80,18 @@ data class Folders(
 
     @JvmField
     val conf: String
-) {
+) : Info {
 
-    fun log(callback: (String, String) -> Unit) {
-        callback("root", root ?: "")
-        callback("group", group ?: "")
-        callback("app", app)
-        callback("cache", cache)
-        callback("inputs", app)
-        callback("log", logs)
-        callback("outputs", outputs)
-        callback("temp", temp)
-    }
+    override fun props():List<Pair<String,String>> = listOf(
+        "root"    to  (root ?: ""),
+        "group"   to  (group?: ""),
+        "app"     to  app,
+        "cache"   to  cache,
+        "inputs"  to  app,
+        "log"     to  logs,
+        "outputs" to  outputs,
+        "temp"    to  temp
+    )
 
     val pathToConf: String get() = this.pathToApp + File.separator + conf
     val pathToCache: String get() = this.pathToApp + File.separator + cache
@@ -137,7 +137,7 @@ data class Folders(
         Files.mkDir(appPath, temp)
     }
 
-    companion object Folders {
+    companion object {
 
         @JvmStatic
         val none = Folders(

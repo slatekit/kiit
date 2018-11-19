@@ -3,12 +3,11 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.ApiContainer
-import slatekit.apis.ApiRef
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.getOrElse
 import slatekit.core.common.AppContext
-import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 import test.setup.*
 
@@ -83,7 +82,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_check_action_does_NOT_exist() {
         val apis = ApiContainer(ctx, apis = listOf(
                 Api(SamplePOKOApi::class, "app", "SamplePOKO"),
-                Api(AppApi(ctx), setup = Annotated),
+                Api(InfoApi(ctx), setup = Annotated),
                 Api(VersionApi(ctx), setup = Annotated)
         ), auth = null, allowIO = false)
 
@@ -95,7 +94,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_check_action_exists() {
         val apis = ApiContainer(ctx, apis = listOf(
                 Api(SamplePOKOApi::class, "app", "SamplePOKO"),
-                Api(AppApi(ctx), setup = Annotated),
+                Api(InfoApi(ctx), setup = Annotated),
                 Api(VersionApi(ctx), setup = Annotated)
         ), auth = null, allowIO = false)
 

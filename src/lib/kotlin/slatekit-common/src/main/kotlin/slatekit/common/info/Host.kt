@@ -43,16 +43,17 @@ data class Host(
 
     @JvmField
     val ext1: String
-) {
+) : Info {
 
-    fun log(callback: (String, String) -> Unit) {
-        callback("name", name)
-        callback("ip", ip)
-        callback("origin", origin)
-        callback("arch", arch)
-        callback("version", version)
-        callback("ext1", ext1)
-    }
+    override fun props():List<Pair<String,String>> = listOf(
+            "name"    to name,
+            "ip"      to ip,
+            "origin"  to origin,
+            "arch"    to arch,
+            "version" to version,
+            "ext1"    to ext1
+    )
+
 
     companion object {
 

@@ -34,19 +34,19 @@ class Example_Info  : Cmd("info") {
     //<doc:examples>
     // CASE 1: Get the host info
     val host = Host.local()
-    host.log( { name, value -> println( "${name} : ${value}" ) } )
+    host.each( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 
     // CASE 2: Get the Lang runtime info ( java version, scala version etc )
     val lang = Lang.kotlin()
-    lang.log( { name, value -> println( "${name} : ${value}" ) } )
+    lang.each( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 
     // CASE 3: Set startup info ( env, config, log, args)
     val startup = StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", EnvMode.Qat.name)
-    startup.log( { name, value -> println( "${name} : ${value}" ) } )
+    startup.each( { name, value -> println( "${name} : ${value}" ) } )
     println()
 
 

@@ -21,7 +21,7 @@ import slatekit.common.args.Args
 import slatekit.common.getOrElse
 import slatekit.common.results.ResultCode.HELP
 import slatekit.core.cli.CliCommand
-import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
@@ -100,7 +100,7 @@ class ShellTests  {
 
     // 2. Register the apis using default mode ( uses permissions in annotations on class )
     val apis = listOf(
-            Api(AppApi(ctx)    , setup = Annotated, declaredOnly = true, roles = "qa", protocol = "*"),
+            Api(InfoApi(ctx)    , setup = Annotated, declaredOnly = true, roles = "qa", protocol = "*"),
             Api(VersionApi(ctx), setup = Annotated, declaredOnly = true, roles = "qa", protocol = "*")
     )
 

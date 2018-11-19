@@ -43,16 +43,16 @@ data class Lang(
 
     @JvmField
     val ext1: String
-) {
+) : Info {
 
-    fun log(callback: (String, String) -> Unit) {
-        callback("name", name)
-        callback("home", home)
-        callback("vendor", vendor)
-        callback("version", version)
-        callback("origin", origin)
-        callback("ext1", ext1)
-    }
+    override fun props():List<Pair<String,String>> = listOf(
+            "name"    to name,
+            "home"    to home,
+            "vendor"  to vendor,
+            "version" to version,
+            "origin"  to origin,
+            "ext1"    to ext1
+    )
 
     companion object {
         @JvmStatic
