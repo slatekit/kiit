@@ -10,9 +10,9 @@ package slatekit.common
  * @param format : Format of the exported data    e.g. json | csv | xml
  * @param size   : Size of the exported items     e.g. 200
  * @param data   : Exported data serialized       e.g. JSON | CSV string
- * @param raw    : Raw typed non-serialized data  e.g. JSON | CSV string
+ * @param raw    : Raw typed non-serialized data  e.g. List<TodoItem>
  */
-data class Export<T>(
+data class Export<out T>(
     val version : String,
     val type    : String,
     val path    : String,

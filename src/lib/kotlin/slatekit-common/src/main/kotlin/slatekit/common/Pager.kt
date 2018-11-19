@@ -11,8 +11,8 @@ package slatekit.common
  * 4. move to a specific position via move
  */
 class Pager<T>(
-    val list: List<T>,
-    private val circular: Boolean
+        val list: List<T>,
+        val circular: Boolean
 ) {
     private var index = 0
 
@@ -20,11 +20,15 @@ class Pager<T>(
 
     val start: Int = 0
 
-    val end:Int = list.size - 1
-
-    fun current(): T = list[index]
+    val end: Int = list.size - 1
 
     fun pos(): Int = index
+
+    fun first(): T = list[start]
+
+    fun last(): T = list[end]
+
+    fun current(): T = list[index]
 
     fun isAtStart(): Boolean = pos() == start
 
@@ -38,6 +42,10 @@ class Pager<T>(
         index = 0
         return index
     }
+
+    fun moveFirst():Int = move(start)
+
+    fun moveLast():Int = move(end)
 
     fun move(desired: Int): Int {
         val next = when {

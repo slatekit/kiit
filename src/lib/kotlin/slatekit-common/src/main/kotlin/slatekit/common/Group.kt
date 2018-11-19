@@ -6,7 +6,7 @@ package slatekit.common
  * @param source : Identifies source of data  e.g. userid | group | recent
  * @param items  : Data items in this group   e.g. List<TodoItem>
  */
-data class Group<T>(
+data class Group<out T>(
     val name: String,
     val source: String,
     val items: List<T>
