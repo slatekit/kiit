@@ -1,6 +1,6 @@
 package slatekit.workers
 
-import slatekit.common.CircularList
+import slatekit.common.Pager
 import slatekit.common.DateTime
 import slatekit.common.status.Status
 import slatekit.workers.core.QueueInfo
@@ -27,7 +27,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
     private val registry = Registry(sys)
     private val log = sys.ctx.logs.getLogger("slatekit.workers.system")
     private val metrics = sys.metrics
-    private val waitTimes = CircularList(sys.settings.exponentialWaitTimes)
+    private val waitTimes = Pager(sys.settings.exponentialWaitTimes, true)
 
     // # threads = # cores
     private val threads = Runtime.getRuntime().availableProcessors()
