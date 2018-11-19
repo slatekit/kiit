@@ -29,13 +29,17 @@ class HealthApi(val context: AppEntContext, private val health: Health)  {
 
 
     @ApiAction(desc = "simple heartbeat with version info and timestamp")
-    fun beat(): Group<Pair<String, String>> = health.heartbeat()
+    fun heartbeat(): Group<Pair<String, String>> = health.heartbeat()
+
+
+    @ApiAction(desc = "get metrics/info about health of this app and relevant dependencies/components")
+    fun components(): Group<Status> = health.components()
+
+
+    @ApiAction(desc = "triggers a health check that to check on the relevant dependencies/components")
+    fun check(): Boolean = health.check()
 
 
     @ApiAction(desc = "gets detailed info about the application")
     fun info(): List<Group<Pair<String,String>>> = health.info()
-
-
-    @ApiAction(desc = "get metrics/info about health of this app and relevant dependencies")
-    fun check(): Group<Pair<String,String>> = health.check()
 }

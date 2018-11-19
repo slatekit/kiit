@@ -1,8 +1,18 @@
 package slatekit.common
 
+import slatekit.common.diagnostics.Check
 import slatekit.common.info.Info
+import slatekit.common.info.Status
 
-class Health(val ctx:Context) {
+open class Health(val ctx:Context) {
+
+    private val checks = listOf(
+            Check("app.data" , "n/a", "db"    , "rds"     , .001),
+            Check("app.stor" , "n/a", "files" , "s3"      , .001),
+            Check("app.work" , "n/a", "queue" , "sqs"     , .001),
+            Check("app.sms"  , "n/a", "sms"   , "twilio"  , .001),
+            Check("app.email", "n/a", "emails", "sendgrid", .001)
+    )
 
     fun heartbeat():Group<Pair<String,String>> {
         val info = version()
@@ -16,8 +26,14 @@ class Health(val ctx:Context) {
     }
 
 
-    fun check():Group<Pair<String,String>> {
-        return Group("check", "health", listOf())
+    open fun check():Boolean {
+        // Your health check logic here
+        return true
+    }
+
+
+    open fun components():Group<Status> {
+        return Group("check", "health", checks.map { it.status() } )
     }
 
 
