@@ -115,7 +115,7 @@ data class AppEntContext(
                         inf = About.none,
                         host = Host.local(),
                         lang = Lang.kotlin(),
-                        dirs = Folders.Folders.userDir("slatekit", name.toIdent(), name.toIdent())
+                        dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
                 )
 
         fun sample(id: String, name: String, about: String, company: String): AppEntContext =
@@ -129,7 +129,7 @@ data class AppEntContext(
                 host = Host.local(),
                 lang = Lang.kotlin(),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
-                dirs = Folders.Folders.userDir("slatekit", "samples", "sample1")
+                dirs = Folders.userDir("slatekit", "samples", "sample1")
             )
     }
 }

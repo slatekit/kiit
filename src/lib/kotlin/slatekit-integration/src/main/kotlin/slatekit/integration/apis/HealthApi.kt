@@ -16,11 +16,9 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.*
-import slatekit.common.DateTime
 import slatekit.common.Group
 import slatekit.common.Health
-import slatekit.common.Request
-import slatekit.common.info.*
+import slatekit.common.diagnostics.Status
 import slatekit.integration.common.AppEntContext
 
 @Api(area = "app", name = "health", desc = "api to get health check information",

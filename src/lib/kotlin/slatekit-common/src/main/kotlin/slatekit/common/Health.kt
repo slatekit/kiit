@@ -1,8 +1,8 @@
 package slatekit.common
 
 import slatekit.common.diagnostics.Check
+import slatekit.common.diagnostics.Status
 import slatekit.common.info.Info
-import slatekit.common.info.Status
 
 open class Health(val ctx:Context) {
 
