@@ -267,9 +267,10 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         val result = try {
             call()
         } catch (ex: Exception) {
+            val msg = ex.message
             logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
-            unexpectedError<Any>(Exception("unexpected error in api", ex))
+            unexpectedError<Any>(Exception("unexpected error in api: $msg", ex))
         }
 
         logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $AFTER")
