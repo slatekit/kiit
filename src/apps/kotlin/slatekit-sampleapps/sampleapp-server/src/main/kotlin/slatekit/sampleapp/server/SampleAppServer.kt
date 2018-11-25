@@ -21,7 +21,7 @@ import slatekit.common.DateTime
 import slatekit.common.auth.Roles
 import slatekit.common.metrics.MetricsLite
 import slatekit.core.app.AppRunner
-import slatekit.integration.apis.AppApi
+import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
@@ -155,7 +155,7 @@ fun main(args: Array<String>): Unit {
                     Api(SampleMiddlewareApi() , area = "samples", name = "SampleMiddleware", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
 
                     // Example 9: Provided by Slate Kit
-                    Api(AppApi(ctx)          , setup = Annotated, declaredOnly = true ),
+                    Api(InfoApi(ctx)         , setup = Annotated, declaredOnly = true ),
                     Api(VersionApi(ctx)      , setup = Annotated, declaredOnly = true ),
 
                     // Example 10: More examples from the sample app
