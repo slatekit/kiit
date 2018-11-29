@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
+import slatekit.common.Random;
 import slatekit.common.Types;
 import slatekit.common.envs.Env;
 import slatekit.common.envs.EnvMode;

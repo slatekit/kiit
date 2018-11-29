@@ -16,7 +16,6 @@ import slatekit.common.validations.RefField
 import slatekit.common.validations.Validator
 import slatekit.common.validations.ValidationFuncsExt
 import slatekit.common.validations.ValidationResults
-import slatekit.common.validations.Validations.collect
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -119,13 +118,15 @@ class Example_Validation : Cmd("validation") {
     val reference = RefField("Email")
 
     println("CASE 4: Collect errors via thunks(0 parameter functions)")
-    val errors = collect ( listOf (
-        { -> ValidationFuncsExt.isLength      ( password, 9 , reference, "Email must be 9 characters")          } ,
-        { -> ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") } ,
-        { -> ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") } ,
-        { -> ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
-      )
-    )
+    val errors = listOf (
+        { ValidationFuncsExt.isLength      ( password,   9 , reference, "Email must be 9 characters")          } ,
+        { ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") } ,
+        { ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") } ,
+        { ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
+      ).map    { rule -> rule() }
+       .filter { result -> !result.success }
+       .toList()
+
     errors.forEach{ err -> println( err ) }
     println()
   }
@@ -144,13 +145,15 @@ class Example_Validation : Cmd("validation") {
       val reference = RefField("Email")
 
       println("Case 5: Custom validator object")
-      val errors = collect ( listOf(
-          { -> ValidationFuncsExt.isLength      ( password, 9 , reference, "Email must be 9 characters")          },
-          { -> ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") },
-          { -> ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") },
-          { -> ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
-        )
-      )
+      val errors = listOf(
+          { ValidationFuncsExt.isLength      ( password, 9   , reference, "Email must be 9 characters")          },
+          { ValidationFuncsExt.hasCharsLCase ( password, 3 , reference, "Email must have 3 lowercase letters") },
+          { ValidationFuncsExt.hasCharsUCase ( password, 3 , reference, "Email must have 3 uppercase letters") },
+          { ValidationFuncsExt.hasDigits     ( password, 3 , reference, "Email must have 3 digits")            }
+        ).map    { rule -> rule() }
+         .filter { result -> !result.success }
+         .toList()
+
       return ValidationResults.build(errors)
     }
   }

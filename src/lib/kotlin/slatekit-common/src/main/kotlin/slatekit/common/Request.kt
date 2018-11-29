@@ -57,18 +57,18 @@ data class Request(
      * The top-most, first part of the route
      * e.g. Given /app/users/activate  , the area is 'app'
      */
-    val area = parts.getOrElse(0, { _ -> "" })
+    val area = parts.getOrElse(0) { "" }
 
     /**
      * The second part of the route
      * e.g. Given /app/users/activate , the name is 'users'
      */
-    val name = parts.getOrElse(1, { _ -> "" })
+    val name = parts.getOrElse(1) { "" }
 
     /**
      * The third part of the route
      */
-    val action = parts.getOrElse(2, { _ -> "" })
+    val action = parts.getOrElse(2) { "" }
 
     fun isPath(targetArea: String, targetName: String, targetAction: String): Boolean {
         return area == targetArea && name == targetName && action == targetAction
