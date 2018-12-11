@@ -23,8 +23,6 @@ import slatekit.common.ext.*
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.TextStyle
-import java.util.*
 
 
 class DateTimeTests {
@@ -152,21 +150,37 @@ class DateTimeTests {
     }
 
 
+    @Test fun to_Numeric() {
+
+        val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
+        Assert.assertEquals( dt.toNumeric()  , 20170708091011L)
+    }
+
+
+    //@Test
+    fun to_Id() {
+
+        val dt = DateTime.of(2017, 7, 8, 9, 10, 11, 930)
+        val id = dt.toIdWithRandom()
+        Assert.assertEquals( id  , "1707080910110")
+    }
+
+
     @Test fun to_string_YYYYMMDD() {
 
         val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
-        assert( dt.toStringYYYYMMDD("") == "20170708")
-        assert( dt.toStringYYYYMMDD("-") == "2017-07-08")
-        assert( dt.toStringYYYYMMDD("/") == "2017/07/08")
+        Assert.assertEquals( dt.toStringYYYYMMDD("") , "20170708")
+        Assert.assertEquals( dt.toStringYYYYMMDD("-"), "2017-07-08")
+        Assert.assertEquals( dt.toStringYYYYMMDD("/"), "2017/07/08")
     }
 
 
     @Test fun to_string_MMDDYYYY() {
 
         val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
-        assert( dt.toStringMMDDYYYY("") == "07082017")
-        assert( dt.toStringMMDDYYYY("-") == "07-08-2017")
-        assert( dt.toStringMMDDYYYY("/") == "07/08/2017")
+        Assert.assertEquals( dt.toStringMMDDYYYY("")  , "07082017")
+        Assert.assertEquals( dt.toStringMMDDYYYY("-") , "07-08-2017")
+        Assert.assertEquals( dt.toStringMMDDYYYY("/") , "07/08/2017")
     }
 
 

@@ -11,6 +11,8 @@
  * </slate_header>
  */
 
+package slatekit.common
+
 object TODO {
 
     private var logger: ((String) -> Unit)? = null
@@ -18,7 +20,7 @@ object TODO {
     /**
      * sets the logger for messages
      */
-    fun CONFIGURE(logger: ((String) -> Unit)?) { this.logger = logger }
+    @JvmStatic fun CONFIGURE(logger: ((String) -> Unit)?) { this.logger = logger }
 
     /**
      * Indicates that code is not implemented
@@ -26,7 +28,7 @@ object TODO {
      * @param msg
      * @param callback
      */
-    fun REMOVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun REMOVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(remove): " + msg, tag, callback)
     }
 
@@ -36,7 +38,7 @@ object TODO {
      * @param msg
      * @param callback
      */
-    fun NOT_IMPLEMENTED(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun NOT_IMPLEMENTED(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(not_implement): " + msg, tag, callback)
     }
 
@@ -46,7 +48,7 @@ object TODO {
      * @param msg
      * @param callback
      */
-    fun IMPLEMENT(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun IMPLEMENT(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(implement): " + msg, tag, callback)
     }
 
@@ -56,7 +58,7 @@ object TODO {
      * @param msg
      * @param callback
      */
-    fun IMPROVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun IMPROVE(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(improve): " + msg, tag, callback)
     }
 
@@ -66,7 +68,7 @@ object TODO {
      * @param msg
      * @param callback
      */
-    fun REFACTOR(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun REFACTOR(tag: String = "", msg: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(refactor): " + msg, tag, callback)
     }
 
@@ -77,7 +79,7 @@ object TODO {
      * @param bugId
      * @param callback
      */
-    fun BUG(tag: String = "", msg: String = "", bugId: String = "", callback: (() -> Unit)? = null) {
+    @JvmStatic fun BUG(tag: String = "", msg: String = "", bugId: String = "", callback: (() -> Unit)? = null) {
         exec("TODO(bug) $bugId: $msg", tag, callback)
     }
 

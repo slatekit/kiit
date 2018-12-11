@@ -26,7 +26,6 @@ interface AppMetaSupport {
      * @return
      */
     fun appInfo(addSeparator: Boolean = true): List<Pair<String, Any>> {
-        TODO.IMPLEMENT("display", "", {})
         return listOf<Pair<String, Any>>()
     }
 

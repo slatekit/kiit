@@ -15,6 +15,8 @@ package slatekit.common
 
 import java.time.*
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoField
+import java.time.temporal.TemporalField
 import java.util.*
 
 /**
@@ -199,6 +201,12 @@ data class DateTime(val raw: ZonedDateTime) {
     }
 
     fun toNumeric(): Long = format("yyyyMMddHHmmss").toLong()
+
+    /**
+     * yyMMddHHmmssXXXXXX
+     * 012345678901234567
+     */
+    fun toIdWithRandom(digits:Int = 5): String = format("yyMMddHHmmss").toLong().toString() + Random.digitsN(digits)
 
     fun toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
 
