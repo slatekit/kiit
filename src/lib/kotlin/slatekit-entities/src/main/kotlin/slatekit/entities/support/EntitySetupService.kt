@@ -185,7 +185,7 @@ class EntitySetupService(
         return if (success) Success(sql, msg = info) else Failure(Exception(info), msg = info)
     }
 
-    fun connectionByDefault(): ResultMsg<DbCon> {
+    fun connection(): ResultMsg<DbCon> {
         return _dbs?.let { dbs ->
             success(dbs.default() ?: DbConEmpty)
         } ?: failure<DbCon>("no db setup")

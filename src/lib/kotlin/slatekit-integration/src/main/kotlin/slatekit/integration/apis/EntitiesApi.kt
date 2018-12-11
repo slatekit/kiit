@@ -94,8 +94,8 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     }
 
     @ApiAction(desc = "gets the default db connection")
-    fun connectionByDefault(): ResultMsg<DbCon> {
-        return service().connectionByDefault()
+    fun connection(): ResultMsg<DbCon> {
+        return service().connection()
     }
 
     @ApiAction(desc = "gets the default db connection")

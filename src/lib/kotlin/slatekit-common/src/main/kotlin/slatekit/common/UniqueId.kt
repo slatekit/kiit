@@ -14,17 +14,17 @@ data class UniqueId(
 
     companion object {
 
-        fun newId(): UniqueId {
+        @JvmStatic fun newId(): UniqueId {
             val uid = UUID.randomUUID()
             return UniqueId(null, uid)
         }
 
-        fun newId(prefix: String): UniqueId {
+        @JvmStatic fun newId(prefix: String): UniqueId {
             val uid = UUID.randomUUID()
             return UniqueId(prefix, uid)
         }
 
-        fun fromString(uniqueId: String): UniqueId {
+        @JvmStatic fun fromString(uniqueId: String): UniqueId {
             val cleanid = uniqueId.trim { it <= ' ' }
             val ndxColon = cleanid.indexOf(":")
             var prefix = ""

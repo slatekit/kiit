@@ -13,7 +13,7 @@
 
 package slatekit.cloud.aws
 
-import TODO
+import slatekit.common.TODO
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*

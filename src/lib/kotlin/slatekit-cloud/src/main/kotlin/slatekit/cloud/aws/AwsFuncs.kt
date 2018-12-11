@@ -13,7 +13,7 @@
 
 package slatekit.cloud.aws
 
-import TODO.IMPROVE
+import slatekit.common.TODO
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -46,7 +46,7 @@ object AwsFuncs {
      */
     fun sqs(credentials: AWSCredentials): AmazonSQSClient {
 
-        IMPROVE("AWS", "Allow customization of region")
+        TODO.IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
         val sqs = AmazonSQSClient(credentials)
         sqs.setRegion(usWest2)
@@ -70,7 +70,7 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      */
     fun s3(credentials: AWSCredentials): AmazonS3Client {
-        IMPROVE("AWS", "Allow customization of region")
+        TODO.IMPROVE("AWS", "Allow customization of region")
         val usWest2 = Region.getRegion(Regions.US_WEST_2)
         val s3 = AmazonS3Client(credentials)
         s3.setRegion(usWest2)
