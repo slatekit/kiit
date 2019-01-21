@@ -74,7 +74,7 @@ open class Worker<T>(
     /**
      * Unique id for this worker
      */
-    val id = name + "." + Random.guid()
+    val id = name + "." + Random.uuid()
 
     /**
      * Information about this worker

@@ -14,7 +14,7 @@
 package slatekit.common.queues
 
 import slatekit.common.*
-import slatekit.common.Random.stringGuid
+import slatekit.common.Random.uuid
 import java.io.File
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -57,13 +57,13 @@ class QueueSourceDefault(
             }
 
     override fun send(msg: Any, tagName: String, tagValue: String): ResultEx<String> {
-        val id = stringGuid()
+        val id = uuid()
         val success = _list.offer(QueueSourceData(msg, mapOf(tagName to tagValue), id))
         return if (success) Success(id) else Failure(Exception("Error sending msg with $tagName"))
     }
 
     override fun send(message: String, attributes: Map<String, Any>): ResultEx<String> {
-        val id = Random.stringGuid()
+        val id = Random.uuid()
         _list += QueueSourceData(message, attributes, id)
         return Success(id)
     }

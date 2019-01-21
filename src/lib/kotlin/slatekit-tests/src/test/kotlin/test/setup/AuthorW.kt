@@ -11,7 +11,7 @@ class AuthorW {
     var id: Long = 0
 
     @property:Field(required = true)
-    var uuid: String = Random.stringGuid()
+    var uuid: String = Random.uuid()
 
     @property:Field(required = true)
     var createdAt: DateTime = DateTime.now()

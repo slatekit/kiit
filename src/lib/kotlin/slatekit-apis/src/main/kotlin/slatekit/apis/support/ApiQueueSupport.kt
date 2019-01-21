@@ -44,7 +44,7 @@ interface ApiQueueSupport {
     fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
         // Convert from web request to Queued request
         val payload = Requests.toJsonAsQueued(req)
-        sendToQueue(payload, Random.guid(), req.tag, req.path)
+        sendToQueue(payload, Random.uuid(), req.tag, req.path)
         return Success("Request processed as queue")
     }
 }

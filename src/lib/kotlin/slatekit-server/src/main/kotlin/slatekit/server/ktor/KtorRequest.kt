@@ -131,7 +131,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
                     meta = KtorHeaders(req, ctx.enc),
                     data = KtorParams(body, req, ctx.enc),
                     raw = KtorRequest(call, req),
-                    tag = Random.stringGuid()
+                    tag = Random.uuid()
             )
         }
 

@@ -77,7 +77,7 @@ class SparkServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger("slatekit.server.api")
-    val tracker = Tracker<slatekit.common.Request, slatekit.common.Response<*>, Exception>(Random.guid(), ctx.app.about.name)
+    val tracker = Tracker<slatekit.common.Request, slatekit.common.Response<*>, Exception>(Random.uuid(), ctx.app.about.name)
     val diagnostics = Diagnostics(metrics, log)
 
     /**

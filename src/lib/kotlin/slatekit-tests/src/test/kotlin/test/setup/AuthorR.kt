@@ -11,7 +11,7 @@ data class AuthorR(
         val id: Long             = 0,
 
         @property:Field(required = true)
-        val uuid: String            = Random.stringGuid(),
+        val uuid: String            = Random.uuid(),
 
         @property:Field(required = true)
         val createdAt: DateTime = DateTime.now(),

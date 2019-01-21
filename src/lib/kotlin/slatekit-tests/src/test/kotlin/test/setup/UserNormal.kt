@@ -154,7 +154,7 @@ data class User5(
         val updatedBy: Long = 0,
 
         @property:Field(required = true)
-        val uniqueId: String            = Random.stringGuid()
+        val uniqueId: String            = Random.uuid()
 ) : EntityWithId, EntityUpdatable<User5> {
     /**
      * sets the id on the entity and returns the entity with updated id.

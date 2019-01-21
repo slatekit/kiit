@@ -3,6 +3,7 @@ package slatekit.integration.errors
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
+import slatekit.entities.core.EntityWithLabel
 
 data class ErrorItem(
 
@@ -10,7 +11,7 @@ data class ErrorItem(
     override val id: Long = 0L,
 
     @property:Field(length = 50)
-    override val uuid: String = Random.guid(),
+    override val uuid: String = Random.uuid(),
 
     @property:Field(length = 12)
     override val shard: String = "",

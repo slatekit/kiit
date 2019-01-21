@@ -100,8 +100,8 @@ interface EntityWithUUID {
 /**
  * Entity with support for sorting
  */
-interface EntityWithSorting {
-    val sortIndex: Short
+interface EntityWithOrdinal {
+    val ordinal: Short
 }
 
 /**
@@ -109,8 +109,30 @@ interface EntityWithSorting {
  */
 interface EntityWithShard {
     val shard: String
-    val tag: String
+    val tag  : String
 }
+
+/**
+ * Entity with support for both create/update timestamps and create/update user id
+ */
+interface EntityWithLabel {
+    val label: String
+}
+
+/**
+ * Entity with support for both create/update timestamps and create/update user id
+ */
+interface EntityWithCorrelation {
+    val xid: String
+}
+
+/**
+ * Entity with support for both create/update timestamps and create/update user id
+ */
+interface EntityWithTags {
+    val tags: String
+}
+
 
 /**
  * Entity with support for both create/update timestamps and create/update user id

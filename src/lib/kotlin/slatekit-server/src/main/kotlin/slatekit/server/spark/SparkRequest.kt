@@ -107,7 +107,7 @@ class SparkRequest(val req: Request) : RequestSupport {
                     meta = SparkHeaaders(req, ctx.enc),
                     data = SparkParams(req, ctx.enc),
                     raw = SparkRequest(req),
-                    tag = Random.stringGuid()
+                    tag = Random.uuid()
             )
         }
 
