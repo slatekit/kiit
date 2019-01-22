@@ -22,6 +22,8 @@ import slatekit.common.args.ArgsFuncs
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.info.Folders
 import slatekit.common.info.Status
+import slatekit.common.requests.Response
+import slatekit.common.requests.toResponse
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success

@@ -4,6 +4,7 @@ import slatekit.apis.core.Auth
 import slatekit.apis.security.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs
 import slatekit.common.security.ApiKey
 
@@ -35,10 +36,10 @@ open class Authenticator(
      * @return
      */
     override fun isAuthorized(
-        req: Request,
-        authMode: String,
-        rolesOnAction: String,
-        rolesOnApi: String
+            req: Request,
+            authMode: String,
+            rolesOnAction: String,
+            rolesOnApi: String
     ): ResultMsg<Boolean> {
 
         // 1. No roles or guest ?

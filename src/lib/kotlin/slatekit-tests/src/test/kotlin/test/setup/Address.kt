@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.common.Field
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import java.util.*
 
 data class Address(

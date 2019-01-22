@@ -15,6 +15,7 @@ package slatekit.apis.middleware
 
 import slatekit.apis.core.Action
 import slatekit.common.*
+import slatekit.common.requests.Request
 
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events

@@ -27,6 +27,8 @@ import kotlinx.coroutines.experimental.async
 import slatekit.common.content.ContentTypeHtml
 import slatekit.common.content.ContentTypeText
 import slatekit.common.content.Doc
+import slatekit.common.requests.Request
+import slatekit.common.requests.RequestSupport
 import java.io.*
 
 class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : RequestSupport {
@@ -95,7 +97,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
 
     companion object {
 
-        fun build(ctx: Context, body: String, call: ApplicationCall, conf: ServerConfig): slatekit.common.Request {
+        fun build(ctx: Context, body: String, call: ApplicationCall, conf: ServerConfig): Request {
             val req = call.request
             val httpUri = req.uri
             val rawUri = if (httpUri.startsWith(conf.prefix)) httpUri.substring(conf.prefix.length) else httpUri
@@ -123,7 +125,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
             // tag    : guid
 
             // Reverting change to args.
-            return slatekit.common.Request(
+            return Request(
                     path = uri,
                     parts = parts,
                     source = ApiConstants.SourceWeb,

@@ -16,8 +16,8 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.*
-import slatekit.common.Group
-import slatekit.common.Health
+import slatekit.integration.common.Group
+import slatekit.integration.common.Health
 import slatekit.common.diagnostics.Status
 import slatekit.integration.common.AppEntContext
 
@@ -39,5 +39,5 @@ class HealthApi(val context: AppEntContext, private val health: Health)  {
 
 
     @ApiAction(desc = "gets detailed info about the application")
-    fun info(): List<Group<Pair<String,String>>> = health.info()
+    fun info(): List<Group<Pair<String, String>>> = health.info()
 }

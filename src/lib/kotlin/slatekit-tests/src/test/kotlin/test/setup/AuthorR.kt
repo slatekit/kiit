@@ -3,7 +3,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import java.util.*
 
 data class AuthorR(

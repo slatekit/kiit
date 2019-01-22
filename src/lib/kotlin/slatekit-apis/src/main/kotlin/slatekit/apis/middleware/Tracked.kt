@@ -12,8 +12,9 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.middleware
 
-import slatekit.common.*
 import slatekit.common.diagnostics.Tracker
+import slatekit.common.requests.Request
+import slatekit.common.requests.Response
 
 interface Tracked : Middleware {
 

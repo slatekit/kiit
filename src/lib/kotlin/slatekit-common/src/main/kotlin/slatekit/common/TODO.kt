@@ -20,7 +20,7 @@ object TODO {
     /**
      * sets the logger for messages
      */
-    @JvmStatic fun CONFIGURE(logger: ((String) -> Unit)?) { this.logger = logger }
+    @JvmStatic fun CONFIGURE(logger: ((String) -> Unit)?) { TODO.logger = logger }
 
     /**
      * Indicates that code is not implemented

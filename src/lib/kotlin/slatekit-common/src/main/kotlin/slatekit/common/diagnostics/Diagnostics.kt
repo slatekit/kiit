@@ -1,6 +1,6 @@
 package slatekit.common.diagnostics
 
-import slatekit.common.Response
+import slatekit.common.requests.Response
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
 import slatekit.common.results.*

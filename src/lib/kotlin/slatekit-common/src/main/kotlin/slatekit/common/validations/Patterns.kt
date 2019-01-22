@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.validations
 
 /**
   * Named pattern as a value class
@@ -38,6 +38,6 @@ object Patterns {
     @JvmField val url = Pattern("""^^(ht|f)tp(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_=]*)?$""")
     @JvmField val zipCodeUS = Pattern("""^\d{5}$""")
     @JvmField val zipCodeUSWithFour = Pattern("""\d{5}[-]\d{4}""")
-    @JvmField val sipCodeUSWithFourOptional = Pattern("""\d{5}([-]\d{4})?""")
+    @JvmField val zipCodeUSWithFourOptional = Pattern("""\d{5}([-]\d{4})?""")
     @JvmField val phoneUS = Pattern("""\d{3}[-]?\d{3}[-]?\d{4}""")
 }

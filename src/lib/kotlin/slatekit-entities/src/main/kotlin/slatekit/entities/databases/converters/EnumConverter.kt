@@ -4,6 +4,7 @@ import slatekit.common.*
 import slatekit.common.records.Record
 import slatekit.meta.Reflector
 import slatekit.entities.Consts.NULL
+import slatekit.entities.databases.SqlConverter
 import kotlin.reflect.KClass
 
 

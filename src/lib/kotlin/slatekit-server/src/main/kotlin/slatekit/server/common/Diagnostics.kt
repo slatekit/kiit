@@ -1,6 +1,6 @@
 package slatekit.server.common
 
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.diagnostics.Diagnostics
 import slatekit.common.diagnostics.Events
 import slatekit.common.log.Logger

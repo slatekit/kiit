@@ -1,25 +1,8 @@
-package slatekit.common
+package slatekit.common.ids
 
+import slatekit.common.Random
 import slatekit.common.Result.Companion.attempt
 import java.util.*
-
-
-/**
- * Interface for generating, validation, parsing unique ids
- */
-interface Ids {
-
-    fun create(): String
-
-
-    fun parse(id: String): String
-
-
-    fun isValid(id:String):Boolean
-
-
-    fun split(id:String):Array<String>
-}
 
 
 
@@ -49,11 +32,3 @@ open class UUIDs(val upperCase:Boolean) : Ids {
                 uuid.node().toString())
     }
 }
-
-
-/**
- * Default implementation of the Ids interface with integration with a UUID v4
- */
-object UUIDLCase : UUIDs(false)
-
-

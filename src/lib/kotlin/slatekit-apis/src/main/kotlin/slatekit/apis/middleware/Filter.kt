@@ -14,6 +14,7 @@
 package slatekit.apis.middleware
 
 import slatekit.common.*
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.success
 
 /**

@@ -24,6 +24,7 @@ import slatekit.common.app.AppMeta
 import slatekit.common.app.AppMetaSupport
 import slatekit.common.metrics.Metrics
 import slatekit.common.diagnostics.Tracker
+import slatekit.common.requests.toResponse
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
@@ -77,7 +78,7 @@ class SparkServer(
     override fun appMeta(): AppMeta = ctx.app
 
     val log = ctx.logs.getLogger("slatekit.server.api")
-    val tracker = Tracker<slatekit.common.Request, slatekit.common.Response<*>, Exception>(Random.uuid(), ctx.app.about.name)
+    val tracker = Tracker<slatekit.common.requests.Request, slatekit.common.requests.Response<*>, Exception>(Random.uuid(), ctx.app.about.name)
     val diagnostics = Diagnostics(metrics, log)
 
     /**

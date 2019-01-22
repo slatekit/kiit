@@ -169,21 +169,21 @@ open class System(
     /**
      * pauses the system
      */
-    fun pause() = {
+    fun pause() {
         moveToState(Status.Paused)
     }
 
     /**
      * resumes the system
      */
-    fun resume() = {
+    fun resume() {
         moveToState(Status.Running)
     }
 
     /**
      * stops the system
      */
-    fun stop() = {
+    fun stop() {
         moveToState(Status.Stopped)
     }
 

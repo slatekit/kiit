@@ -7,6 +7,7 @@ import slatekit.common.content.Content
 import slatekit.common.content.ContentTypeCsv
 import slatekit.common.content.ContentTypeJson
 import slatekit.common.content.ContentTypeProp
+import slatekit.common.requests.Request
 import slatekit.meta.Serialization
 
 

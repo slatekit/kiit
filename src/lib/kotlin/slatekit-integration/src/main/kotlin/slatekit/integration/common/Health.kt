@@ -1,10 +1,12 @@
-package slatekit.common
+package slatekit.integration.common
 
+import slatekit.common.Context
+import slatekit.common.DateTime
 import slatekit.common.diagnostics.Check
 import slatekit.common.diagnostics.Status
 import slatekit.common.info.Info
 
-open class Health(val ctx:Context) {
+open class Health(val ctx: Context) {
 
     private val checks = listOf(
             Check("app.data" , "n/a", "db"    , "rds"     , .001),
@@ -14,14 +16,14 @@ open class Health(val ctx:Context) {
             Check("app.email", "n/a", "emails", "sendgrid", .001)
     )
 
-    fun heartbeat():Group<Pair<String,String>> {
+    fun heartbeat(): Group<Pair<String, String>> {
         val info = version()
         val enriched = info.items.plus("timestamp" to DateTime.now().toStringUtc())
         return info.copy(items = enriched)
     }
 
 
-    fun version():Group<Pair<String,String>> {
+    fun version(): Group<Pair<String, String>> {
         return Group("version", "health", ctx.build.props())
     }
 
@@ -32,12 +34,12 @@ open class Health(val ctx:Context) {
     }
 
 
-    open fun components():Group<Status> {
-        return Group("check", "health", checks.map { it.status() } )
+    open fun components(): Group<Status> {
+        return Group("check", "health", checks.map { it.status() })
     }
 
 
-    fun info():List<Group<Pair<String,String>>> {
+    fun info():List<Group<Pair<String, String>>> {
         val parts = listOf(
                 "build" to ctx.app.build,
                 "host" to ctx.app.host,
@@ -50,7 +52,7 @@ open class Health(val ctx:Context) {
     }
 
 
-    fun collect():Group<Pair<String,String>> {
+    fun collect(): Group<Pair<String, String>> {
         val parts = listOf<Info>(ctx.app.build, ctx.app.host, ctx.app.lang, ctx.app.start)
         val names = listOf("build", "host", "lang", "start").joinToString(",")
         val collected = parts.map { it.props() }.flatten()
@@ -58,7 +60,7 @@ open class Health(val ctx:Context) {
     }
 
 
-    fun detail():Group<Pair<String,String>> {
+    fun detail(): Group<Pair<String, String>> {
         return Group("infra", "health", ctx.build.props())
     }
 }

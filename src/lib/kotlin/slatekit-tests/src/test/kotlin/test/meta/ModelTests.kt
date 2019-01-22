@@ -3,7 +3,7 @@ package test.meta
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper

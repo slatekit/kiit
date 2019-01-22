@@ -6,6 +6,7 @@ import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSource
+import slatekit.common.requests.toResponse
 import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
 import slatekit.common.status.*
 import slatekit.workers.core.*

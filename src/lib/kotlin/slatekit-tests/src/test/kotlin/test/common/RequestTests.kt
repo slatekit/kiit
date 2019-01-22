@@ -6,12 +6,11 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.core.Requests
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
-import slatekit.common.Request
-import test.setup.MyEncryptor
+import slatekit.common.requests.Request
 
 class RequestTests {
 
-    val sampleRequest =  Request(
+    val sampleRequest = Request(
             "app.users.activate",
             listOf("app", "users", "activate"),
             ApiConstants.SourceWeb,

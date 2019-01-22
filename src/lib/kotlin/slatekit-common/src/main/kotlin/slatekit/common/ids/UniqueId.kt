@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.ids
 
 import java.util.UUID
 

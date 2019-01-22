@@ -17,10 +17,10 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.security.AllProtocols
 import slatekit.common.security.Credentials
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.toResponse
+import slatekit.common.requests.toResponse
 import test.setup.UserApi
 
 /**

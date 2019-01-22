@@ -16,6 +16,7 @@ package slatekit.apis.helpers
 import slatekit.apis.ApiRef
 import slatekit.apis.core.Action
 import slatekit.common.*
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.success
 
@@ -45,9 +46,9 @@ object ApiValidator {
      * @return
      */
     fun validateCall(
-        req: Request,
-        fetcher: (Request) -> ResultMsg<ApiRef>,
-        allowSingleDefaultParam: Boolean = false
+            req: Request,
+            fetcher: (Request) -> ResultMsg<ApiRef>,
+            allowSingleDefaultParam: Boolean = false
     ): ResultMsg<ApiRef> {
         val fullName = req.fullName
         val args = req.data

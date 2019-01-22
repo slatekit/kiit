@@ -3,7 +3,7 @@ package slatekit.apis.svcs
 import slatekit.apis.ApiContainer
 import slatekit.apis.middleware.Rewriter
 import slatekit.common.Context
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.validations.ValidationFuncs
 
 class Restify : Rewriter() {

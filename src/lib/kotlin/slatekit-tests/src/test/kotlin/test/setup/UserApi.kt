@@ -21,6 +21,7 @@ import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncString
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
+import slatekit.common.requests.Request
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.entities.core.EntityService
 import slatekit.integration.common.AppEntContext

@@ -3,7 +3,7 @@ package test.setup
 import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.yes
 

@@ -10,7 +10,11 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.common
+package slatekit.common.requests
+
+import slatekit.common.Failure
+import slatekit.common.Result
+import slatekit.common.Success
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )

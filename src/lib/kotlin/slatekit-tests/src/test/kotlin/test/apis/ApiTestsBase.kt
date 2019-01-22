@@ -26,11 +26,12 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
-import slatekit.common.db.DbType
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.About
 import slatekit.common.log.LogsDefault
+import slatekit.common.requests.Request
+import slatekit.common.requests.Response
 import slatekit.common.security.ApiKey
 import slatekit.common.security.Credentials
 import slatekit.entities.core.Entities
@@ -126,12 +127,12 @@ open class ApiTestsBase {
 
 
     fun ensure(
-        protocol  : Protocol,
-        middleware: List<Middleware> = listOf(),
-        apis      : List<Api>,
-        user      : Credentials?,
-        request   : Request,
-        response  : Response<*>) {
+            protocol  : Protocol,
+            middleware: List<Middleware> = listOf(),
+            apis      : List<Api>,
+            user      : Credentials?,
+            request   : Request,
+            response  : Response<*>) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }

@@ -1,6 +1,7 @@
 package slatekit.apis.middleware
 
 import slatekit.common.*
+import slatekit.common.requests.Request
 
 /**
  * A "Filter" based middle-ware that either allows/disallows an API call to proceed

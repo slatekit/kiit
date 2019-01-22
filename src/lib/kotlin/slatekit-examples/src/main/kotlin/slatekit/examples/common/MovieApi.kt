@@ -16,7 +16,7 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.common.DateTime
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext

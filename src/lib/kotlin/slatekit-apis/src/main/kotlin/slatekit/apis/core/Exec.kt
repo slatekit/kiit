@@ -18,6 +18,7 @@ import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
 import slatekit.common.*
 import slatekit.common.log.Logger
+import slatekit.common.requests.toResponse
 import slatekit.common.results.ResultFuncs.unexpectedError
 import kotlin.reflect.KCallable
 

@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.utils
 
 /**
  * Allows safe paging and navigation in various ways including:

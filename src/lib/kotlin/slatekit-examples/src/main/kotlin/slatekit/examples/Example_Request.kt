@@ -13,6 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
+import slatekit.common.requests.Request
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -58,14 +59,14 @@ class Example_Request : Cmd("request") {
         // SparkJava request ( with a thin abstraction layer ). The requests are
         // kept very simple/light for maximum performance and data is NEVER copied.
         val request = Request(
-                path     = "app.users.activate",
-                parts    = listOf("app", "users", "activate"),
-                source   = "cli",
-                verb     = "post",
-                meta     = InputArgs(mapOf("api-key" to "ABC-123")),
-                data     = InputArgs(mapOf("userId" to 5001)),
-                raw      = "the raw HTTP SparkJava request or CLI ShellCommand",
-                tag      = Random.uuid()
+                path = "app.users.activate",
+                parts = listOf("app", "users", "activate"),
+                source = "cli",
+                verb = "post",
+                meta = InputArgs(mapOf("api-key" to "ABC-123")),
+                data = InputArgs(mapOf("userId" to 5001)),
+                raw = "the raw HTTP SparkJava request or CLI ShellCommand",
+                tag = Random.uuid()
         )
 
         // NOTES: ResultSupport trait builds results that simulate Http Status codes

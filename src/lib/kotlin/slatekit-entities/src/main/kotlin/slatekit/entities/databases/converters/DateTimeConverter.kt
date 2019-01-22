@@ -1,7 +1,7 @@
 package slatekit.entities.databases.converters
 
 import slatekit.common.DateTime
-import slatekit.common.SqlConverter
+import slatekit.entities.databases.SqlConverter
 import slatekit.common.records.Record
 import slatekit.entities.Consts
 import java.time.format.DateTimeFormatter

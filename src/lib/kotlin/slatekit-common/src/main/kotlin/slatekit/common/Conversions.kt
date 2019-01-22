@@ -117,27 +117,4 @@ object Conversions {
             else -> data.toString()
         }
     }
-
-    /*
-    fun converterFor(tpe: KType): (String) -> Any {
-        val converter = when (tpe) {
-        // Basic types
-            Types.StringType         -> this::toString
-            Types.BoolType           -> this::toBool
-            Types.ShortType          -> this::toShort
-            Types.IntType            -> this::toInt
-            Types.LongType           -> this::toLong
-            Types.FloatType          -> this::toFloat
-            Types.DoubleType         -> this::toDouble
-            Types.LocalDateType      -> this::toLocalDate
-            Types.LocalTimeType      -> this::toLocalTime
-            Types.LocalDateTimeType  -> this::toLocalDateTime
-            Types.ZonedDateTimeClass -> this::toZonedDateTime
-            Types.DateTimeClass      -> this::toDateTime
-            Types.DocType            -> this::toDoc
-            Types.VarsType           -> this::toVars
-            else                     -> this::toString
-        }
-        return converter
-    }*/
 }

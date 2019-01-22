@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.entities.databases
 
 import slatekit.common.records.Record
 

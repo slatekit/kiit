@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.requests
 
 import slatekit.common.content.Doc
 import java.io.InputStream
