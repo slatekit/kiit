@@ -18,9 +18,11 @@ package slatekit.common.encrypt
  * @param _key : The secret key ( must be 16, or 32 bytes long )
  * @param _iv : The iv ( must be 16 or 32 bytes long )
  */
-open class Encryptor(private val key: String, private val iv: String) {
+open class Encryptor(private val key: String,
+                     private val iv: String,
+                     private val b64:B64) {
 
-    fun encrypt(text: String): String = EncryptorAES.encrypt(key, iv, text)
+    fun encrypt(text: String): String = EncryptorAES.encrypt(key, iv, text, b64)
 
-    fun decrypt(encrypted: String): String = EncryptorAES.decrypt(key, iv, encrypted)
+    fun decrypt(encrypted: String): String = EncryptorAES.decrypt(key, iv, encrypted, b64)
 }

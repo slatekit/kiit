@@ -19,6 +19,7 @@ import slatekit.common.encrypt.Encryptor
  */
 
 import org.junit.Test
+import slatekit.common.encrypt.B64Java8
 
 
 class EncryptTests {
@@ -30,7 +31,7 @@ class EncryptTests {
 
     fun encryptor(): Encryptor {
 
-        val enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+        val enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
         return enc
     }
 
