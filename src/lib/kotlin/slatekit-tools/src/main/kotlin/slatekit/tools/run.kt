@@ -4,6 +4,7 @@ package slatekit.tools
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.security.ApiKey
 import slatekit.common.security.Credentials
 import slatekit.common.encrypt.Encryptor
@@ -25,7 +26,7 @@ fun main(args: Array<String>): Unit {
     // conf, command line args database, encryptor, and many other components
     val ctx = AppEntContext.fromAppContext(build(
             args = args,
-            enc = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042")
+            enc = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042", B64Java8)
     ))
 
     // =========================================================================
