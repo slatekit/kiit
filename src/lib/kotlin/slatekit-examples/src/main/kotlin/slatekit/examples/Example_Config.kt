@@ -21,6 +21,7 @@ import slatekit.common.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.cmds.Cmd
 
@@ -125,7 +126,7 @@ class Example_Config : Cmd("config") {
         // CASE 10: Decryp encrypted strings in the config file
         // e.g.
         // db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
-        val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+        val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
         val confs5 = ConfFuncs.loadWithFallbackConfig("env.qa1.conf", "env.conf", enc = encryptor)
         println("db user decrypted : " + confs5.getString("db.user"))
         println("db pswd decrypted : " + confs5.getString("db.pswd"))
