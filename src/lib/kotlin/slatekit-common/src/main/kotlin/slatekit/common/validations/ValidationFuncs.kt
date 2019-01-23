@@ -13,8 +13,6 @@
 
 package slatekit.common.validations
 
-import slatekit.common.Pattern
-import slatekit.common.Patterns
 import slatekit.common.validations.ValidationConsts.NUMS
 import slatekit.common.validations.ValidationConsts.SYMS
 import slatekit.common.validations.ValidationConsts.LETTERS_UCASE

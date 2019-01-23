@@ -11,8 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.requests
 
+import slatekit.common.DateTime
+import slatekit.common.InputArgs
+import slatekit.common.Inputs
+import slatekit.common.Meta
 import slatekit.common.args.Args
 
 /**
@@ -28,17 +32,17 @@ import slatekit.common.args.Args
  * @param tag : Optional tag for tracking individual requests and for error logging.
  */
 data class Request(
-    val path: String,
-    val parts: List<String>,
-    val source: String,
-    val verb: String,
-    val data: Inputs,
-    val meta: Meta,
-    val raw: Any? = null,
-    val output: String? = "",
-    val tag: String = "",
-    val version: String = "1.0",
-    val timestamp: DateTime = DateTime.now()
+        val path: String,
+        val parts: List<String>,
+        val source: String,
+        val verb: String,
+        val data: Inputs,
+        val meta: Meta,
+        val raw: Any? = null,
+        val output: String? = "",
+        val tag: String = "",
+        val version: String = "1.0",
+        val timestamp: DateTime = DateTime.now()
 ) {
 
     /**
@@ -101,7 +105,8 @@ data class Request(
          */
         @JvmStatic
         fun cli(path: String, verb: String, meta: Meta?, args: Args, raw: Any?): Request {
-            return Request(path, args.actionParts, "cli", verb, args, meta ?: InputArgs(mapOf()), raw, "")
+            return Request(path, args.actionParts, "cli", verb, args, meta
+                    ?: InputArgs(mapOf()), raw, "")
         }
 
         /**

@@ -15,6 +15,6 @@ package slatekit.apis.core
 import slatekit.apis.ApiContainer
 import slatekit.apis.ApiRef
 import slatekit.common.Context
-import slatekit.common.Request
+import slatekit.common.requests.Request
 
 data class Ctx(val container: ApiContainer, val context: Context, val req: Request, val apiRef: ApiRef)

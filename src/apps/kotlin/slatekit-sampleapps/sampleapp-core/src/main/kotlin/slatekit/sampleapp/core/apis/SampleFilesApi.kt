@@ -6,9 +6,9 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Verbs
 import slatekit.common.content.Content
 import slatekit.common.content.Doc
-import slatekit.common.Request
-import slatekit.common.RequestSupport
 import slatekit.common.auth.Roles
+import slatekit.common.requests.Request
+import slatekit.common.requests.RequestSupport
 
 
 @Api(area = "samples", name = "files", desc = "sample api to test other features", auth = AuthModes.token, verb = Verbs.auto, roles = Roles.all)

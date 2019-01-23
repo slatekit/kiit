@@ -12,7 +12,7 @@ package test.setup
 
 import slatekit.apis.svcs.Authenticator
 import slatekit.common.security.ApiKey
-import slatekit.common.Request
+import slatekit.common.requests.Request
 
 
 // =======================================================================================

@@ -1,7 +1,6 @@
 package test.common
 
 import org.junit.Assert
-import slatekit.common.results.ResultFuncs.no
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.unAuthorized
@@ -10,6 +9,7 @@ import slatekit.common.results.ResultFuncs.conflict
 import slatekit.common.results.ResultFuncs.notFound
 import org.junit.Test
 import slatekit.common.*
+import slatekit.common.Success
 import slatekit.common.results.*
 import slatekit.common.results.ResultCode.CONFLICT
 import slatekit.common.results.ResultCode.FAILURE
@@ -17,7 +17,6 @@ import slatekit.common.results.ResultCode.NOT_FOUND
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultCode.UNAUTHORIZED
 import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
-import slatekit.common.results.ResultFuncs.yes
 
 /**
   * <slate_header>
@@ -31,8 +30,15 @@ import slatekit.common.results.ResultFuncs.yes
   */
 
 
-class ResultTests {
+//object MyCodes {
+//
+//  val UserCreated = slatekit.common.results.Success(200, "Created user")
+//  val UserUpdated = slatekit.common.results.Success(201, "Updated user")
+//  val UserDeleted = slatekit.common.results.Success(200, "Deleted user")
+//}
 
+
+class ResultTests {
 
 
   data class Person(val name:String)
@@ -64,6 +70,16 @@ class ResultTests {
 
   @Test fun can_build_unauthorized() {
     ensure(unAuthorized(), false, UNAUTHORIZED, "unauthorized", null)
+  }
+
+
+  @Test fun can_build_unauthorized2() {
+    val result1 = unAuthorized<Int>("1")
+    val result2 = unAuthorized<Int, Err>(Invalid(2, "Unauthorized"))
+
+//    val result4 = success2<Person, Err>(Person("kishore"))
+//    val result5 = success2<Person, Err>(Person("kishore"), MyCodes.UserCreated)
+//    val result6 = failure2<Person, Err>(Invalid(300, "Invalid user"))
   }
 
 

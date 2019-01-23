@@ -2,14 +2,12 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Pager
-import slatekit.common.Version
-import slatekit.common.naming.*
+import slatekit.common.utils.Version
 
 
 class VersionTests {
 
-    private fun ensure(version:Version, major:Int, minor:Int, patch:Int, build:Int ){
+    private fun ensure(version: Version, major:Int, minor:Int, patch:Int, build:Int ){
         Assert.assertEquals(version.major, major)
         Assert.assertEquals(version.minor, minor)
         Assert.assertEquals(version.patch, patch)
@@ -57,7 +55,7 @@ class VersionTests {
 
 
     @Test fun can_check_empty() {
-        val version = Version(0,0,0,0)
+        val version = Version(0, 0, 0, 0)
         Assert.assertTrue(version.isEmpty())
     }
 }

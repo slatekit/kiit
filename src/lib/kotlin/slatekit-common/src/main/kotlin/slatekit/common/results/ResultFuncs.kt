@@ -36,7 +36,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun help(msg: String = "success"): ResultMsg<String> {
+    @JvmStatic fun help(msg: String = "success"): ResultMsg<String> {
         return Failure(msg, HELP, msg)
     }
 
@@ -45,7 +45,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> helpOn(msg: String = "success"): ResultMsg<T> {
+    @JvmStatic fun <T> helpOn(msg: String = "success"): ResultMsg<T> {
         return Failure(msg, HELP, msg)
     }
 
@@ -54,7 +54,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun exit(msg: String = "exit"): ResultMsg<String> {
+    @JvmStatic fun exit(msg: String = "exit"): ResultMsg<String> {
         return Failure(msg, EXIT, msg)
     }
 
@@ -64,7 +64,7 @@ object ResultFuncs {
      * @param code : Optional code
      * @return
      */
-    fun yes(msg: String = "", code: Int = SUCCESS): ResultMsg<Boolean> {
+    @JvmStatic fun yes(msg: String = "", code: Int = SUCCESS): ResultMsg<Boolean> {
         return Success(true, code, msg)
     }
 
@@ -77,7 +77,7 @@ object ResultFuncs {
      *              return value of false ( along with the message, tag, etc being
      *              available as part of the Result<T> class.
      */
-    fun no(msg: String = "", code: Int = FAILURE): ResultMsg<Boolean> {
+    @JvmStatic fun no(msg: String = "", code: Int = FAILURE): ResultMsg<Boolean> {
         return Failure(msg, code, msg)
     }
 
@@ -87,7 +87,7 @@ object ResultFuncs {
      *   @return
      *
      */
-    fun <T> successOrError(
+    @JvmStatic fun <T> successOrError(
         success: Boolean,
         value: T?,
         msg: String = ""
@@ -98,7 +98,7 @@ object ResultFuncs {
             Failure(msg, FAILURE, msg)
     }
 
-    fun <T> successOrError(callback: () -> T): ResultEx<T> {
+    @JvmStatic fun <T> successOrError(callback: () -> T): ResultEx<T> {
         return try {
             val v = callback()
             Success(v, SUCCESS)
@@ -113,7 +113,7 @@ object ResultFuncs {
      * @param tag : Optional tag
      * @return
      */
-    fun <T> success(
+    @JvmStatic fun <T> success(
         data: T,
         code: Int = SUCCESS,
         msg: String = "success"
@@ -121,13 +121,14 @@ object ResultFuncs {
         return Success(data, code, msg)
     }
 
+
     /**
      * Builds an FailureResult with no value, and with code set to CONFIRM
      * @param data : Optional data
      * @param msg : Optional msg
      * @return
      */
-    fun <T> confirm(
+    @JvmStatic fun <T> confirm(
         data: T,
         msg: String = "confirm"
     ): ResultMsg<T> {
@@ -140,7 +141,7 @@ object ResultFuncs {
      * @param code : Optional code indicating
      * @return
      */
-    fun <T> failure(
+    @JvmStatic fun <T> failure(
         msg: String = "failure",
         code: Int = FAILURE
     ): ResultMsg<T> {
@@ -153,7 +154,7 @@ object ResultFuncs {
      * @param code : Optional code indicating
      * @return
      */
-    fun <T> failure(err:Err): ResultErr<T> {
+    @JvmStatic fun <T> failure(err:Err): ResultErr<T> {
         return Failure(err, err.code, err.msg)
     }
 
@@ -162,7 +163,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> badRequest(msg: String = "bad request"): ResultMsg<T> {
+    @JvmStatic fun <T> badRequest(msg: String = "bad request"): ResultMsg<T> {
         return Failure(msg, BAD_REQUEST, msg)
     }
 
@@ -171,8 +172,17 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> unAuthorized(msg: String = "unauthorized"): ResultMsg<T> {
+    @JvmStatic fun <T> unAuthorized(msg: String = "unauthorized"): ResultMsg<T> {
         return Failure(msg, UNAUTHORIZED, msg)
+    }
+
+    /**
+     * Builds an FailureResult with no value, and with code set to UNAUTHORIZED
+     * @param msg : Optional message
+     * @return
+     */
+    @JvmStatic fun <T,E> unAuthorized(err:E, msg: String = "unauthorized"): Result<T,E> {
+        return Failure(err, UNAUTHORIZED, msg)
     }
 
     /**
@@ -180,7 +190,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> notFound(msg: String = "not found"): ResultMsg<T> {
+    @JvmStatic fun <T> notFound(msg: String = "not found"): ResultMsg<T> {
         return Failure(msg, NOT_FOUND, msg)
     }
 
@@ -189,7 +199,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> missing(msg: String = "not found"): ResultMsg<T> {
+    @JvmStatic fun <T> missing(msg: String = "not found"): ResultMsg<T> {
         return Failure(msg, MISSING, msg)
     }
 
@@ -198,7 +208,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> conflict(msg: String = "conflict"): ResultMsg<T> {
+    @JvmStatic fun <T> conflict(msg: String = "conflict"): ResultMsg<T> {
         return Failure(msg, CONFLICT, msg)
     }
 
@@ -207,7 +217,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> deprecated(msg: String = "deprecated"): ResultMsg<T> {
+    @JvmStatic fun <T> deprecated(msg: String = "deprecated"): ResultMsg<T> {
         return Failure(msg, DEPRECATED, msg)
     }
 
@@ -216,7 +226,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> notAvailable(msg: String = "not available"): ResultMsg<T> {
+    @JvmStatic fun <T> notAvailable(msg: String = "not available"): ResultMsg<T> {
         return Failure(msg, NOT_AVAILABLE, msg)
     }
 
@@ -225,7 +235,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> notImplemented(msg: String = "not implemented"): ResultMsg<T> {
+    @JvmStatic fun <T> notImplemented(msg: String = "not implemented"): ResultMsg<T> {
         return Failure(msg, NOT_IMPLEMENTED, msg)
     }
 
@@ -234,7 +244,7 @@ object ResultFuncs {
      * @param msg : Optional message
      * @return
      */
-    fun <T> unexpectedError(
+    @JvmStatic fun <T> unexpectedError(
         err: Exception,
         msg: String = "unexpected error"
     ): ResultEx<T> {

@@ -55,9 +55,9 @@ object Random {
 
     @JvmStatic fun alphaNumN(n: Int): String = randomize(n, ALPHANUM)
 
-    @JvmStatic fun guid(): String = stringGuid(true)
+    @JvmStatic fun guid(): String = uuid(true)
 
-    @JvmStatic fun stringGuid(includeDashes: Boolean = true, upperCase: Boolean = false): String {
+    @JvmStatic fun uuid(includeDashes: Boolean = true, upperCase: Boolean = false): String {
         val uuid = java.util.UUID.randomUUID()
         val result = if (upperCase) uuid.toString().toUpperCase() else uuid.toString()
         return if (!includeDashes)

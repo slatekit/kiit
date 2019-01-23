@@ -8,8 +8,7 @@ class StringParser(private val _content: String) {
 
     fun extracts(): MutableMap<String, String> = _extracts
 
-    fun saveUntil(token: String, name: String, ensure: Boolean = true): StringParser
-    {
+    fun saveUntil(token: String, name: String, ensure: Boolean = true): StringParser {
         val start = _pos
         moveInternal(token, ensure)
         if (_lastMatch) {
@@ -20,14 +19,12 @@ class StringParser(private val _content: String) {
         return this
     }
 
-    fun moveTo(token: String, ensure: Boolean = true): StringParser
-    {
+    fun moveTo(token: String, ensure: Boolean = true): StringParser {
         moveInternal(token, ensure)
         return this
     }
 
-    fun moveInternal(token: String, ensure: Boolean = true): StringParser
-    {
+    fun moveInternal(token: String, ensure: Boolean = true): StringParser {
         val ndxMatch = _content.indexOf(token, _pos)
         if (ensure && ndxMatch < 0) {
         } else {

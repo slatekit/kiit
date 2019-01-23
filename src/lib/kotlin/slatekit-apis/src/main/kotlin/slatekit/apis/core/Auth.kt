@@ -13,7 +13,7 @@
 
 package slatekit.apis.core
 
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.ResultMsg
 import slatekit.common.auth.Roles
 

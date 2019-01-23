@@ -3,6 +3,8 @@ package slatekit.core.scheduler
 import slatekit.common.*
 import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
+import slatekit.common.requests.Response
+import slatekit.common.requests.toResponse
 import slatekit.common.results.ResultCode
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode

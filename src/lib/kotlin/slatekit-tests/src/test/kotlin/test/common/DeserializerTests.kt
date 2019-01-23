@@ -5,7 +5,7 @@ import slatekit.apis.ApiConstants
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
 import slatekit.common.Random
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong

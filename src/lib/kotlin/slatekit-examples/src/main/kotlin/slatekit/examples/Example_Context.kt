@@ -22,6 +22,7 @@ import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
@@ -120,7 +121,7 @@ class Example_Context : Cmd("cmd") {
         // to allow you to get the context and modify it before it is returned.
         val ctx3 = AppRunner.build(
                     args   = arrayOf("-env=dev -log -log.level=debug"),
-                    enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                    enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     schema = ArgsSchema()
                             .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
                             .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")

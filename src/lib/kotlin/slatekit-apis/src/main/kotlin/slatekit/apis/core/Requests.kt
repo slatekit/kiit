@@ -18,7 +18,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
 import slatekit.common.Inputs
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.Uris
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Serialization

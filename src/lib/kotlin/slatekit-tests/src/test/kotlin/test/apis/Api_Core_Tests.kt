@@ -18,6 +18,8 @@ import slatekit.apis.core.Api
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
 import slatekit.common.auth.Roles
+import slatekit.common.requests.Request
+import slatekit.common.requests.toResponse
 import slatekit.common.security.Credentials
 import test.setup.*
 

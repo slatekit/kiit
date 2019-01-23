@@ -14,7 +14,6 @@
 package slatekit.common.conf
 
 import slatekit.common.io.Files
-import slatekit.common.Require
 import slatekit.common.*
 import slatekit.common.Uris.URI_PREFIX_FILE
 import slatekit.common.Uris.URI_PREFIX_JARS
@@ -271,7 +270,7 @@ object ConfFuncs {
      */
     fun createFile(appName: String, name: String, callback: () -> String): String {
         val userHome = System.getProperty("user.home")
-        Require.requireText(userHome, "Unable to load user directory from 'user.home' system property")
+        require(!userHome.isNullOrEmpty()) { "Unable to load user directory from 'user.home' system property" }
 
         Files.mkUserDir(appName)
 

@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.common.DateTime
-import slatekit.common.Request
+import slatekit.common.requests.Request
 
 
 @Api(area = "samples", name = "types2", desc = "sample api to test sending different types")

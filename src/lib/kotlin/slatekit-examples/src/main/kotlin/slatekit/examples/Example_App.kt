@@ -25,6 +25,7 @@ import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
@@ -178,7 +179,7 @@ class Example_App : Cmd("app") {
                 logs = LogsDefault,
                 ent = Entities(),
                 dbs = null,
-                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 inf = About(
                         id = "slatekit.examples",
                         name = "Slate Sample App",
@@ -218,7 +219,7 @@ class Example_App : Cmd("app") {
                         AppRunner.build (
 
                             args      = args,
-                            enc       = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                            enc       = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                             schema    =  ArgsSchema()
                                         .text("env"      , "the environment ", false, "dev"  , "dev"  , "loc|dev|qa1" )
                                         .text("log.level", "the log level"   , false, "info" , "info" , "debug|info"),

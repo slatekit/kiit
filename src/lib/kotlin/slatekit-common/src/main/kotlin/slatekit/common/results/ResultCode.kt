@@ -71,5 +71,5 @@ object ResultCode {
     const val COMPLETED = 1005
     const val PAUSED = 1006
     const val FAILED = 1007
-    const val RUNNING = 1007
+    const val RUNNING = 1008
 }

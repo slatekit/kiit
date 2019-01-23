@@ -3,7 +3,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import java.util.*
 
 data class AuthorR(
@@ -11,7 +11,7 @@ data class AuthorR(
         val id: Long             = 0,
 
         @property:Field(required = true)
-        val uuid: String            = Random.stringGuid(),
+        val uuid: String            = Random.uuid(),
 
         @property:Field(required = true)
         val createdAt: DateTime = DateTime.now(),

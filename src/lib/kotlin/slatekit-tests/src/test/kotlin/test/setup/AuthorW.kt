@@ -3,7 +3,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import java.util.*
 
 class AuthorW {
@@ -11,7 +11,7 @@ class AuthorW {
     var id: Long = 0
 
     @property:Field(required = true)
-    var uuid: String = Random.stringGuid()
+    var uuid: String = Random.uuid()
 
     @property:Field(required = true)
     var createdAt: DateTime = DateTime.now()

@@ -14,7 +14,7 @@
 package slatekit.common.records
 
 import slatekit.common.DateTime
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import java.time.*
 
 interface Record {

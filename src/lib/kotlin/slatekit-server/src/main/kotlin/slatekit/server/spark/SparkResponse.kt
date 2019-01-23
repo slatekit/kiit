@@ -23,7 +23,7 @@ object SparkResponse {
     /**
      * Returns the value of the result as an html(string)
      */
-    fun result(res: Response, result: slatekit.common.Response<Any>): Any {
+    fun result(res: Response, result: slatekit.common.requests.Response<Any>): Any {
         return when (result.value) {
             is Content -> content(res, result, result.value as Content)
             is Doc -> file(res, result, result.value as Doc)
@@ -34,7 +34,7 @@ object SparkResponse {
     /**
      * Returns the value of the resulut as JSON.
      */
-    fun json(res: Response, result: slatekit.common.Response<Any>): String {
+    fun json(res: Response, result: slatekit.common.requests.Response<Any>): String {
         res.status(result.code)
         res.type("application/json")
         val json = Serialization.json(true).serialize(result)
@@ -45,7 +45,7 @@ object SparkResponse {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    fun content(res: Response, result: slatekit.common.Response<Any>, content: Content?): String {
+    fun content(res: Response, result: slatekit.common.requests.Response<Any>, content: Content?): String {
         res.status(result.code)
         res.type(content?.tpe?.http ?: "text/plain")
         return content?.text ?: ""
@@ -54,7 +54,7 @@ object SparkResponse {
     /**
      * Returns the value of the result as a file document
      */
-    fun file(res: Response, result: slatekit.common.Response<Any>, doc: Doc): Any {
+    fun file(res: Response, result: slatekit.common.requests.Response<Any>, doc: Doc): Any {
         res.status(result.code)
         val bytes = doc.content.toByteArray()
         val raw = res.raw()

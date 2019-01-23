@@ -19,6 +19,7 @@ import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.common.content.ContentTypeHtml
 import slatekit.common.content.Doc
+import slatekit.common.requests.RequestSupport
 import slatekit.server.ServerConfig
 import spark.Request
 import java.io.*
@@ -79,7 +80,7 @@ class SparkRequest(val req: Request) : RequestSupport {
     companion object {
 
         @JvmStatic
-        fun build(ctx: Context, req: Request, conf: ServerConfig): slatekit.common.Request {
+        fun build(ctx: Context, req: Request, conf: ServerConfig): slatekit.common.requests.Request {
             val rawUri = req.uri()
             val uri = if (rawUri.startsWith(conf.prefix)) rawUri.substring(conf.prefix.length) else rawUri
             val parts = uri.split('/')
@@ -99,7 +100,7 @@ class SparkRequest(val req: Request) : RequestSupport {
             // tag    : guid
 
             // Reverting change to args.
-            return slatekit.common.Request(
+            return slatekit.common.requests.Request(
                     path = req.uri(),
                     parts = parts,
                     source = ApiConstants.SourceWeb,
@@ -107,7 +108,7 @@ class SparkRequest(val req: Request) : RequestSupport {
                     meta = SparkHeaaders(req, ctx.enc),
                     data = SparkParams(req, ctx.enc),
                     raw = SparkRequest(req),
-                    tag = Random.stringGuid()
+                    tag = Random.uuid()
             )
         }
 

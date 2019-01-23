@@ -15,7 +15,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.time.*
 import slatekit.common.Field
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType.DbTypeMySql

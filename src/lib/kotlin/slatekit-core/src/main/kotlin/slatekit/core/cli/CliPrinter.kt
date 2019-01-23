@@ -14,7 +14,7 @@
 package slatekit.core.cli
 
 import slatekit.common.io.Files
-import slatekit.common.Response
+import slatekit.common.requests.Response
 import slatekit.common.console.ConsoleWriter
 import slatekit.meta.Serialization
 import java.io.File

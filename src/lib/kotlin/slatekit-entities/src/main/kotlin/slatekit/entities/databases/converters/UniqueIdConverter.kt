@@ -1,7 +1,7 @@
 package slatekit.entities.databases.converters
 
-import slatekit.common.SqlConverter
-import slatekit.common.UniqueId
+import slatekit.entities.databases.SqlConverter
+import slatekit.common.ids.UniqueId
 import slatekit.common.records.Record
 import slatekit.entities.Consts
 

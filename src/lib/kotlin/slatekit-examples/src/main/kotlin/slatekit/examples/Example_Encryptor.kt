@@ -13,6 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.encrypt.B64Java8
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -28,11 +29,11 @@ class Example_Encryptor : Cmd("encrypt") {
   //<doc:setup>
   // SETUP 1: Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.
   // and use it as a singleton.
-  object TestEncryptor : Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+  object TestEncryptor : Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
 
 
   // SETUP 2: Create an instance encryptor
-  val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+  val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
 
   //</doc:setup>
 

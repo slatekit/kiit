@@ -37,7 +37,7 @@ class UserService(context: AppEntContext, entities: Entities, repo:EntityRepo<Us
       email = email,
       firstName = first,
       lastName = last,
-      token = Random.stringGuid(false),
+      token = Random.uuid(),
       userName = email,
       password = "12356789",
       country = country,

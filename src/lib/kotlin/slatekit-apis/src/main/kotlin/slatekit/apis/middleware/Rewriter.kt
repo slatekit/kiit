@@ -2,7 +2,7 @@ package slatekit.apis.middleware
 
 import slatekit.common.Context
 import slatekit.common.InputsUpdateable
-import slatekit.common.Request
+import slatekit.common.requests.Request
 
 /**
  * A "Rewriter" based middle-ware allows allows for rewriting the API path/call

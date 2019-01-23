@@ -16,6 +16,8 @@ package slatekit.core.cli
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.content.Doc
+import slatekit.common.requests.RequestSupport
+import slatekit.common.requests.Response
 import java.io.InputStream
 
 /**

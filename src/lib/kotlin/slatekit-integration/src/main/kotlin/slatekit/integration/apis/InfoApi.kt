@@ -16,7 +16,7 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.*
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.info.*
 import slatekit.integration.common.AppEntContext
 

@@ -12,10 +12,10 @@
 package slatekit.sampleapp.core.common
 
 import slatekit.apis.svcs.Authenticator
-import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.ResultMsg
 import slatekit.common.conf.Config
+import slatekit.common.requests.Request
 import slatekit.common.security.ApiKey
 import java.io.File
 

@@ -2,14 +2,8 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unexpectedError
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.requests.Request
 
 
 @Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs", roles= "", auth = "app-roles", verb = "*", protocol = "*")

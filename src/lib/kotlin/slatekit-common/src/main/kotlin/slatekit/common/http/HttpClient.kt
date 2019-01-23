@@ -32,7 +32,7 @@ object HttpClient {
 
     // fun post(req:HttpRequest): HttpResponse = HttpResponse(HttpStatusCodes.s200, mapOf(), null)
     fun post(req: HttpRequest): HttpResponse {
-        val response = tryExecute(req, {
+        val response = tryExecute(req) {
 
             // 1. URL
             val url = URL(req.url)
@@ -62,15 +62,15 @@ object HttpClient {
 
             // Return build up con
             con
-        })
+        }
         return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
     }
 
     fun encodeParams(req: HttpRequest): String? {
         return req.params?.let { params ->
-            val encoded = params.fold("", { acc, p ->
+            val encoded = params.fold("") { acc, p ->
                 acc + "&" + URLEncoder.encode(p.first, "UTF-8") + "=" + URLEncoder.encode(p.second, "UTF-8")
-            })
+            }
             encoded
         } ?: ""
     }
@@ -82,7 +82,7 @@ object HttpClient {
        */
       fun get(req: HttpRequest): HttpResponse
       {
-          val response = tryExecute(req, {
+          val response = tryExecute(req) {
 
               // 1. URL
               val url = URL(req.url)
@@ -108,7 +108,7 @@ object HttpClient {
 
               // Return build up con
               con
-          })
+          }
           return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
       }
 

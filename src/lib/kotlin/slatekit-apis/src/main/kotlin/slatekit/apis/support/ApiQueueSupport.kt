@@ -5,6 +5,7 @@ import slatekit.apis.core.Action
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
+import slatekit.common.requests.Request
 
 interface ApiQueueSupport {
 
@@ -44,7 +45,7 @@ interface ApiQueueSupport {
     fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
         // Convert from web request to Queued request
         val payload = Requests.toJsonAsQueued(req)
-        sendToQueue(payload, Random.guid(), req.tag, req.path)
+        sendToQueue(payload, Random.uuid(), req.tag, req.path)
         return Success("Request processed as queue")
     }
 }

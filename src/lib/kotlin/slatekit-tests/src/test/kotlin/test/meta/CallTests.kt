@@ -16,7 +16,7 @@ import org.junit.Test
 import slatekit.common.Conversions
 import slatekit.common.DateTime
 import slatekit.common.InputArgs
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.meta.Reflector
 import slatekit.meta.Deserializer
 import test.setup.UserApi

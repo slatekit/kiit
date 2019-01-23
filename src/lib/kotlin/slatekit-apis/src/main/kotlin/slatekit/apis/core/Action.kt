@@ -14,7 +14,7 @@
 package slatekit.apis.core
 
 import slatekit.common.Meta
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.ext.tail
 import kotlin.reflect.KCallable
 import kotlin.reflect.KParameter

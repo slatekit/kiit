@@ -19,7 +19,7 @@ import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.query.QueryEncoder
-import slatekit.common.UniqueId
+import slatekit.common.ids.UniqueId
 import slatekit.entities.Consts
 import slatekit.entities.Consts.idCol
 import slatekit.entities.databases.Converter

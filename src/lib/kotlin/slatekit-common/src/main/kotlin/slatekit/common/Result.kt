@@ -32,7 +32,7 @@ sealed class Result<out T, out E> {
 
     companion object {
 
-        inline fun <T> of(f: () -> T): Result<T, String> =
+        @JvmStatic inline fun <T> of(f: () -> T): Result<T, String> =
             try {
                 Success(f())
             } catch (e: Exception) {
@@ -40,7 +40,7 @@ sealed class Result<out T, out E> {
                 Failure(err, FAILURE, err)
             }
 
-        inline fun <T> attempt(f: () -> T): Result<T, Exception> =
+        @JvmStatic inline fun <T> attempt(f: () -> T): Result<T, Exception> =
             try {
                 val data = f()
 

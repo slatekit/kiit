@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.db
 
 import slatekit.common.records.Record
 import kotlin.reflect.KClass

@@ -14,7 +14,7 @@ package slatekit.apis.core
 
 import slatekit.apis.ApiRef
 import slatekit.common.Context
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.common.ResultEx
 import slatekit.common.log.Logger
 import slatekit.common.results.ResultFuncs
@@ -23,12 +23,12 @@ import slatekit.common.toResultEx
 class Errors(val logger: Logger) {
 
     open fun handleError(
-        ctx: Context,
-        errs: slatekit.apis.middleware.Error?,
-        api: slatekit.apis.core.Api?,
-        apiRef: ApiRef?,
-        req: Request,
-        ex: Exception
+            ctx: Context,
+            errs: slatekit.apis.middleware.Error?,
+            api: slatekit.apis.core.Api?,
+            apiRef: ApiRef?,
+            req: Request,
+            ex: Exception
     ): ResultEx<Any> {
         // OPTION 1: Api level
         return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {

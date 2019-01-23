@@ -5,6 +5,7 @@ import slatekit.apis.middleware.Rewriter
 import slatekit.common.content.ContentTypeCsv
 import slatekit.common.content.ContentTypeJson
 import slatekit.common.content.ContentTypeProp
+import slatekit.common.requests.Request
 
 class Format : Rewriter() {
 

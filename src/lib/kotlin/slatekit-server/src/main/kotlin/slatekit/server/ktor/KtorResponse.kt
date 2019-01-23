@@ -21,6 +21,7 @@ import io.ktor.response.respondBytes
 import io.ktor.response.respondText
 import slatekit.common.content.Content
 import slatekit.common.content.Doc
+import slatekit.common.requests.Response
 import slatekit.meta.Serialization
 
 object KtorResponse {
@@ -28,7 +29,7 @@ object KtorResponse {
     /**
      * Returns the value of the result as an html(string)
      */
-    suspend fun result(call: ApplicationCall, result: slatekit.common.Response<Any>): Any {
+    suspend fun result(call: ApplicationCall, result: Response<Any>): Any {
         return when (result.value) {
             is Content -> content(call, result, result.value as Content)
             is Doc -> file(call, result, result.value as Doc)
@@ -39,7 +40,7 @@ object KtorResponse {
     /**
      * Returns the value of the resulut as JSON.
      */
-    suspend fun json(call: ApplicationCall, result: slatekit.common.Response<Any>) {
+    suspend fun json(call: ApplicationCall, result: Response<Any>) {
         val text = Serialization.json(true).serialize(result)
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = HttpStatusCode(result.code, "")
@@ -50,7 +51,7 @@ object KtorResponse {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    suspend fun content(call: ApplicationCall, result: slatekit.common.Response<Any>, content: Content?) {
+    suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?) {
         val text = content?.text ?: ""
         val contentType = content?.let { ContentType.parse(it.tpe.http) } ?: io.ktor.http.ContentType.Text.Plain
         val statusCode = HttpStatusCode(result.code, "")
@@ -60,7 +61,7 @@ object KtorResponse {
     /**
      * Returns the value of the result as a file document
      */
-    suspend fun file(call: ApplicationCall, result: slatekit.common.Response<Any>, doc: Doc) {
+    suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc) {
         val bytes = doc.content.toByteArray()
         val statusCode = HttpStatusCode(result.code, "")
 

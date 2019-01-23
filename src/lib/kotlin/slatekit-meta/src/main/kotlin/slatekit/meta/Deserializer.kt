@@ -17,6 +17,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
+import slatekit.common.requests.Request
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.common.types.SSN
@@ -32,9 +33,9 @@ import kotlin.reflect.full.createType
  * represented by rawParams
  */
 open class Deserializer(
-    private val req: Request,
-    private val enc: Encryptor? = null,
-    private val converters: (Map<String, (Request, JSONObject, KType) -> Any?>) = mapOf()
+        private val req: Request,
+        private val enc: Encryptor? = null,
+        private val converters: (Map<String, (Request, JSONObject, KType) -> Any?>) = mapOf()
 ) {
 
     private val typeRequest = Request::class.createType()

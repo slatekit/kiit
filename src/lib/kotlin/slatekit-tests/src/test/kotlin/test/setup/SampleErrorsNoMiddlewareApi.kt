@@ -1,11 +1,6 @@
 package test.setup
 
-import slatekit.apis.support.ApiWithMiddleware
-import slatekit.common.Context
-import slatekit.common.Request
-import slatekit.common.Result
 import slatekit.common.ResultMsg
-import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success

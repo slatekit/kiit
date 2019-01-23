@@ -2,13 +2,12 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Pager
-import slatekit.common.naming.*
+import slatekit.common.utils.Pager
 
 
 class PagerTests {
 
-    private fun <T> ensure(pager:Pager<T>, pos:Int, value:T ){
+    private fun <T> ensure(pager: Pager<T>, pos:Int, value:T ){
 
         Assert.assertEquals(value, pager.current())
         Assert.assertEquals(pos, pager.pos())

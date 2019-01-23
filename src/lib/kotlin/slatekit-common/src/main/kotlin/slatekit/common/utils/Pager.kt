@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.utils
 
 /**
  * Allows safe paging and navigation in various ways including:
@@ -12,9 +12,13 @@ package slatekit.common
  */
 class Pager<T>(
         val list: List<T>,
-        val circular: Boolean
+        val circular: Boolean,
+        start:Int = 0
 ) {
-    private var index = 0
+
+    private var index = if(start < 0 || start >= list.size ) 0 else start
+    private var indexPrevious = index
+    private var hasMoved = false
 
     val size: Int = list.size
 
@@ -24,11 +28,15 @@ class Pager<T>(
 
     fun pos(): Int = index
 
+    fun posPrevious(): Int = indexPrevious
+
     fun first(): T = list[start]
 
     fun last(): T = list[end]
 
     fun current(): T = list[index]
+
+    fun previous(): T = list[indexPrevious]
 
     fun isAtStart(): Boolean = pos() == start
 
@@ -51,7 +59,10 @@ class Pager<T>(
         val next = when {
             desired < 0 -> index
             desired >= size -> index
-            else -> desired
+            else -> {
+                trackLast()
+                desired
+            }
         }
         index = next
         return index
@@ -59,19 +70,48 @@ class Pager<T>(
 
     fun next(): T {
         index = when {
-            isAtEnd() && circular -> start
             isAtEnd() && !circular -> index
-            else -> index + 1
+            isAtEnd() && circular -> {
+                trackLast()
+                start
+            }
+            else -> {
+                trackLast()
+                index + 1
+            }
         }
         return list[index]
     }
 
     fun back(): T {
         index = when {
-            isAtStart() && circular -> end
             isAtStart() && !circular -> index
-            else -> index - 1
+            isAtStart() && circular -> {
+                trackLast()
+                end
+            }
+            else -> {
+                trackLast()
+                index - 1
+            }
         }
         return list[index]
+    }
+
+
+    fun get(pos:Int): T {
+        return when {
+            pos < 0 -> current()
+            pos >= size -> current()
+            else -> list[pos]
+        }
+    }
+
+
+    private fun trackLast(){
+        indexPrevious = index
+        if(!hasMoved){
+            hasMoved = true
+        }
     }
 }

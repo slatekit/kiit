@@ -2,12 +2,9 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Group
-import slatekit.common.Health
+import slatekit.integration.common.Health
 import slatekit.common.info.Build
-import slatekit.common.info.Info
 import slatekit.core.common.AppContext
-import test.setup.StatusEnum
 
 class HealthTests {
 

@@ -18,7 +18,6 @@ import slatekit.common.db.DbUtils.executeStmt
 import slatekit.common.db.DbUtils.fillArgs
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.Mapper
 import slatekit.common.records.RecordSet
 import slatekit.common.repeatWith
 import java.sql.Connection
@@ -349,9 +348,9 @@ class Db(
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     fun <T> callQueryMapped(
-        procName: String,
-        mapper: Mapper,
-        inputs: List<Any>? = null
+            procName: String,
+            mapper: Mapper,
+            inputs: List<Any>? = null
     ): List<T>? {
 
         // {call create_author(?, ?)}

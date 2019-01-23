@@ -1,5 +1,6 @@
-package slatekit.common
+package slatekit.common.utils
 
+import slatekit.common.ResultMsg
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.validations.ValidationFuncs
@@ -37,11 +38,11 @@ data class Version(
     companion object {
 
         @JvmStatic
-        val empty = Version(0,0,0,0)
+        val empty = Version(0, 0, 0, 0)
 
 
         @JvmStatic
-        fun parse(text:String):ResultMsg<Version> {
+        fun parse(text:String): ResultMsg<Version> {
             val parts = text.trim().split('.')
             val numeric = parts.all { ValidationFuncs.isWholeNumber(it) }
             return if(!numeric) {

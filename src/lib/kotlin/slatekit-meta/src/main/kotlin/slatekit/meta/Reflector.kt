@@ -233,7 +233,7 @@ object Reflector {
     //        "java.time.LocalDateTime"  -> KTypes.KLocalDateTimeClass
     //        "slatekit.common.DateTime" -> KTypes.KDateTimeClass
     //        "java.util.UUID"           -> KTypes.KUUIDClass
-    //        "slatekit.common.UniqueId" -> KTypes.KUniqueIdClass
+    //        "slatekit.common.ids.UniqueId" -> KTypes.KUniqueIdClass
     //        else                       -> Any::class
     //    }
     // }

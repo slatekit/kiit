@@ -13,8 +13,6 @@
 
 package slatekit.common.log
 
-import slatekit.common.console.ConsoleWriter
-
 /**
  * Lightweight logger that prints to the console
  * using the ConsoleWriter in slate kit which has support
@@ -28,8 +26,6 @@ class LoggerConsole(
     logType: Class<*>? = null
 ) : Logger(level, name, logType) {
 
-    private val _writer = ConsoleWriter()
-
     /**
      * Logs to the console
      *
@@ -38,12 +34,12 @@ class LoggerConsole(
     override fun performLog(entry: LogEntry) {
         val prefix = "${entry.time} [$name] ${entry.level.name}"
         when (entry.level) {
-            Debug -> _writer.subTitle(prefix + " : " + entry.msg)
-            Info -> _writer.text(prefix + " : " + entry.msg)
-            Warn -> _writer.url(prefix + " : " + entry.msg)
-            Error -> _writer.error(prefix + " : " + entry.msg)
-            Fatal -> _writer.highlight(prefix + " : " + entry.msg)
-            else -> _writer.text(prefix + " : " + entry.msg)
+            Debug -> println(prefix + " : " + entry.msg)
+            Info  -> println(prefix + " : " + entry.msg)
+            Warn  -> println(prefix + " : " + entry.msg)
+            Error -> println(prefix + " : " + entry.msg)
+            Fatal -> println(prefix + " : " + entry.msg)
+            else  -> println(prefix + " : " + entry.msg)
         }
     }
 }

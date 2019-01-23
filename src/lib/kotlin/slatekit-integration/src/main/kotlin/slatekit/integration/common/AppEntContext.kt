@@ -19,6 +19,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigBase
 import slatekit.common.db.DbLookup
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
@@ -128,7 +129,7 @@ data class AppEntContext(
                 inf = About(id, name, about, company, "", "", "", "", "", "", ""),
                 host = Host.local(),
                 lang = Lang.kotlin(),
-                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292"),
+                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 dirs = Folders.userDir("slatekit", "samples", "sample1")
             )
     }

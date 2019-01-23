@@ -6,6 +6,7 @@ import slatekit.apis.core.Requests
 import slatekit.apis.support.ApiQueueSupport
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
+import slatekit.common.requests.Request
 import slatekit.core.common.AppContext
 
 

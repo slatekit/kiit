@@ -3,6 +3,7 @@ package slatekit.integration.errors
 import slatekit.apis.core.Requests
 import slatekit.apis.middleware.Error
 import slatekit.common.*
+import slatekit.common.requests.Request
 import slatekit.integration.common.AppEntContext
 
 class ErrorHandler(val ctx: AppEntContext, val queue: ErrorItemQueue, val enableEncryption: Boolean) : Error {
