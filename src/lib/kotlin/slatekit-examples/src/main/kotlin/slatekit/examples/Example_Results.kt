@@ -14,7 +14,7 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.*
 import slatekit.common.results.Err
-import slatekit.common.results.ErrorInfo
+import slatekit.common.results.ErrInfo
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.SUCCESS
 import slatekit.common.results.ResultFuncs.conflict
@@ -125,7 +125,7 @@ class Example_Results : Cmd("results") {
 
         // CASE 9: Build based on the Err model
         // This allows you to have pre-defined list of error infos to refer to
-        val failure:Result<Int, Err> = failure( ErrorInfo(400, "Invalid user", null) )
+        //val failure:Result<Int, Err> = failure( ErrInfo(400, "Invalid user", null) )
         //</doc:examples>
 
         return Success("")

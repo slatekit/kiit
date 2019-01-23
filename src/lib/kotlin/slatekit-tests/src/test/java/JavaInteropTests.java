@@ -4,19 +4,15 @@ import org.junit.Test;
 import slatekit.common.Random;
 import slatekit.common.Result;
 import slatekit.common.Success;
-import slatekit.common.Types;
 import slatekit.common.envs.Env;
 import slatekit.common.envs.EnvMode;
 import slatekit.common.envs.Envs;
 import slatekit.common.info.Host;
-import slatekit.common.results.Err;
 import slatekit.common.results.ResultCode;
-import slatekit.common.results.ResultFuncs;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static slatekit.common.results.ResultFuncs.success2;
 
 public class JavaInteropTests {
 
@@ -34,7 +30,7 @@ public class JavaInteropTests {
     public void can_use_result() {
 
         Result<Integer, Exception> resS1 = new Success<Integer>(3, ResultCode.SUCCESS, "");
-        Result<Integer, Exception> resS2 = success2(3, ResultCode.SUCCESS, "");
+        //Result<Integer, Exception> resS2 = success2(3, ResultCode.SUCCESS, "");
     }
 
 

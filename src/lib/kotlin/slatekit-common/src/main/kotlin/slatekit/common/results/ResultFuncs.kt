@@ -123,21 +123,6 @@ object ResultFuncs {
 
 
     /**
-     * Builds an FailureResult with no value, and error code of NOT_IMPLEMENTED
-     * @param msg : Optional message
-     * @param tag : Optional tag
-     * @return
-     */
-    @JvmStatic fun <T,E> success2(
-            data: T,
-            code: Int = SUCCESS,
-            msg: String = "success"
-    ): Result<T,E> {
-        return Success(data, code, msg)
-    }
-
-
-    /**
      * Builds an FailureResult with no value, and with code set to CONFIRM
      * @param data : Optional data
      * @param msg : Optional msg
@@ -189,6 +174,15 @@ object ResultFuncs {
      */
     @JvmStatic fun <T> unAuthorized(msg: String = "unauthorized"): ResultMsg<T> {
         return Failure(msg, UNAUTHORIZED, msg)
+    }
+
+    /**
+     * Builds an FailureResult with no value, and with code set to UNAUTHORIZED
+     * @param msg : Optional message
+     * @return
+     */
+    @JvmStatic fun <T,E> unAuthorized(err:E, msg: String = "unauthorized"): Result<T,E> {
+        return Failure(err, UNAUTHORIZED, msg)
     }
 
     /**
