@@ -2,7 +2,7 @@ package slatekit.sampleapp.core.apis
 
 import slatekit.apis.Api
 import slatekit.common.DateTime
-import slatekit.common.Request
+import slatekit.common.requests.Request
 import slatekit.sampleapp.core.models.Movie
 
 

@@ -4,9 +4,9 @@ package slatekit.sampleapp.core.apis
 import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
-import slatekit.common.Request
 import slatekit.common.Result
 import slatekit.common.ResultMsg
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.sampleapp.core.models.User

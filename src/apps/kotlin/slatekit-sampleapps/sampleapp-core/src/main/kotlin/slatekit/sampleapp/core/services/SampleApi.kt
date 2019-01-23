@@ -9,6 +9,7 @@ import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
+import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
 import slatekit.sampleapp.core.models.Movie
