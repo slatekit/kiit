@@ -11,3 +11,6 @@ include ':slatekit-core'
 
 include ':slatekit-apis'
 //project(':slatekit-apis').projectDir=new File('../slatekit-apis')
+
+include ':slatekit-results'
+//project(':slatekit-results').projectDir=new File('../slatekit-results')
