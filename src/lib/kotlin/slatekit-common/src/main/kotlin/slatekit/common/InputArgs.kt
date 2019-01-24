@@ -29,7 +29,7 @@ open class InputArgs(
     override val raw: Any = _map
     override fun toMap(): Map<String, Any> = _map
 
-    override fun getString(key: String): String = InputFuncs.decrypt(_map[key].toString(), _decryptor)
+    override fun getString(key: String): String = Strings.decrypt(_map[key].toString(), _decryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(_map[key].toString())
     override fun getShort(key: String): Short = Conversions.toShort(_map[key].toString())
     override fun getInt(key: String): Int = Conversions.toInt(_map[key].toString())
@@ -43,7 +43,7 @@ open class InputArgs(
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(_map[key].toString())
 
     override fun get(key: String): Any? = if (_map.contains(key)) _map[key] else null
-    override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null
+    //override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null
     override fun containsKey(key: String): Boolean = _map.contains(key)
     override fun size(): Int = _map.size
 

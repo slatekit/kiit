@@ -93,7 +93,7 @@ class Example_Request : Cmd("request") {
         println( request.meta?.getInt("sample-id") )
 
         // CASE 4c: Get a header named "sample-id" as nullable integer
-        println( request.meta?.getIntOpt("sample-id") )
+        println( request.meta?.getIntOrNull("sample-id") )
 
         // CASE 4d: Get a header named "sample-id" as integer with default
         // value if its not there
@@ -109,7 +109,7 @@ class Example_Request : Cmd("request") {
         println( request.meta?.getInt("userId") )
 
         // CASE 5b: Get a parameter named "userId" as nullable integer
-        println( request.meta?.getIntOpt("userId") )
+        println( request.meta?.getIntOrNull("userId") )
 
         // CASE 5c: Get a parameter named "userId" as integer with default
         // value if its not there

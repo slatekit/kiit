@@ -33,10 +33,10 @@ data class Meta(
 
     override fun size(): Int = json.size
     override fun get(key: String): Any? = getStringRaw(key)
-    override fun getObject(key: String): Any? = getStringRaw(key)
+    //override fun getObject(key: String): Any? = getStringRaw(key)
     override fun containsKey(key: String): Boolean = json.containsKey(key)
 
-    override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key).trim(), { it -> enc?.decrypt(it) ?: it })
+    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key).trim()) { it -> enc?.decrypt(it) ?: it }
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))

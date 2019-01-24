@@ -49,7 +49,16 @@ object Conversions {
 
     fun toZonedDateTime(text: String): ZonedDateTime = ZonedDateTime.parse(text)
 
-    fun toDateTime(text: String): DateTime = InputFuncs.convertDate(text)
+    fun toDateTime(text: String): DateTime {
+        return when (text) {
+            "" -> DateTime.now()
+            "@{today}" -> DateTime.today()
+            "@{tomorrow}" -> DateTime.today().plusDays(1)
+            "@{yesterday}" -> DateTime.today().plusDays(-1)
+            "@{now}" -> DateTime.now()
+            else -> DateTime.parse(text)
+        }
+    }
 
     /**
      * Builds a Vars object which is essentially a lookup of items by both index and key

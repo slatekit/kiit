@@ -15,6 +15,7 @@ package slatekit.common.conf
 
 import slatekit.common.InputFuncs
 import slatekit.common.Inputs
+import slatekit.common.Strings
 
 /**
  * Base class to get config settings with support for :
@@ -47,8 +48,8 @@ abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, Confi
      * @return
      */
     override fun getString(key: String): String {
-        val value = getObject(key) ?: ""
-        return InputFuncs.decrypt(value.toString(), _encryptor)
+        val value = get(key) ?: ""
+        return Strings.decrypt(value.toString(), _encryptor)
     }
 
     /**
