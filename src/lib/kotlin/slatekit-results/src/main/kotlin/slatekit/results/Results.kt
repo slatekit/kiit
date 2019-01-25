@@ -42,6 +42,6 @@ object Results {
 
 
     @JvmStatic fun <T> exception(ex:Exception): Result<T,Exception> {
-        return Failure(ex, Codes.UNEXPECTED_ERROR.code, ex.message ?: "")
+        return Failure(ex, Codes.UNEXPECTED.code, ex.message ?: "")
     }
 }

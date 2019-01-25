@@ -3,7 +3,7 @@ package test.common
 import org.junit.Test
 import slatekit.apis.ApiConstants
 import slatekit.common.DateTime
-import slatekit.common.InputArgs
+import slatekit.common.requests.InputArgs
 import slatekit.common.Random
 import slatekit.common.requests.Request
 import slatekit.common.encrypt.EncDouble

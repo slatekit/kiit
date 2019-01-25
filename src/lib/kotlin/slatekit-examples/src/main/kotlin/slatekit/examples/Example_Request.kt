@@ -13,6 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 //</doc:import_required>
 

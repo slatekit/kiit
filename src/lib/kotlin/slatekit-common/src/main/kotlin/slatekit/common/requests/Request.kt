@@ -14,7 +14,6 @@
 package slatekit.common.requests
 
 import slatekit.common.DateTime
-import slatekit.common.InputArgs
 import slatekit.common.Inputs
 import slatekit.common.Meta
 import slatekit.common.args.Args
@@ -52,7 +51,7 @@ data class Request(
         return if (name.isNullOrEmpty())
             area
         else if (action.isNullOrEmpty())
-            area + "." + name
+            "$area.$name"
         else
             "$area.$name.$action"
     }

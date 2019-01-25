@@ -49,11 +49,11 @@ interface Inputs {
     fun getLong(key: String): Long
     fun getFloat(key: String): Float
     fun getDouble(key: String): Double
+    fun getDateTime(key: String): DateTime
     fun getLocalDate(key: String): LocalDate
     fun getLocalTime(key: String): LocalTime
     fun getLocalDateTime(key: String): LocalDateTime
     fun getZonedDateTime(key: String): ZonedDateTime
-    fun getDateTime(key: String): DateTime
 
     // Get values as Option[T]
     fun getStringOrNull(key: String): String? = getOrNull(key) { k: String -> getString(k) }
@@ -63,11 +63,11 @@ interface Inputs {
     fun getLongOrNull(key: String): Long? = getOrNull(key) { k: String -> getLong(k) }
     fun getFloatOrNull(key: String): Float? = getOrNull(key) { k: String -> getFloat(k) }
     fun getDoubleOrNull(key: String): Double? = getOrNull(key) { k: String -> getDouble(k) }
+    fun getDateTimeOrNull(key: String): DateTime? = getOrNull(key) { k: String -> getDateTime(k) }
     fun getLocalDateOrNull(key: String): LocalDate? = getOrNull(key) { k: String -> getLocalDate(k) }
     fun getLocalTimeOrNull(key: String): LocalTime? = getOrNull(key) { k: String -> getLocalTime(k) }
     fun getLocalDateTimeOrNull(key: String): LocalDateTime? = getOrNull(key) { k: String -> getLocalDateTime(k) }
     fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
-    fun getDateTimeOrNull(key: String): DateTime? = getOrNull(key) { k: String -> getDateTime(k) }
 
     // Get value or default
     fun getStringOrElse(key: String, default: String): String = getOrElse(key, { k: String -> getString(k) }, default)
@@ -77,11 +77,11 @@ interface Inputs {
     fun getLongOrElse(key: String, default: Long): Long = getOrElse(key, { k: String -> getLong(k) }, default)
     fun getFloatOrElse(key: String, default: Float): Float = getOrElse(key, { k: String -> getFloat(k) }, default)
     fun getDoubleOrElse(key: String, default: Double): Double = getOrElse(key, { k: String -> getDouble(k) }, default)
+    fun getDateTimeOrElse(key: String, default: DateTime): DateTime = getOrElse(key, { k: String -> getDateTime(k) }, default)
     fun getLocalDateOrElse(key: String, default: LocalDate): LocalDate = getOrElse(key, { k: String -> getLocalDate(k) }, default)
     fun getLocalTimeOrElse(key: String, default: LocalTime): LocalTime = getOrElse(key, { k: String -> getLocalTime(k) }, default)
     fun getLocalDateTimeOrElse(key: String, default: LocalDateTime): LocalDateTime = getOrElse(key, { k: String -> getLocalDateTime(k) }, default)
     fun getZonedDateTimeOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTime(k) }, default)
-    fun getDateTimeOrElse(key: String, default: DateTime): DateTime = getOrElse(key, { k: String -> getDateTime(k) }, default)
 
     // Get list and maps
     /**

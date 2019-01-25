@@ -13,14 +13,17 @@ mantra: Simplicity above all else
 package slatekit.results
 
 
-/**
- * Default implementation of Code
- */
-data class Status(override val code: Int, override val msg: String) : Code
+data class Successful(override val code: Int, override val msg: String) : Code
 
 
-data class Invalid(override val code: Int, override val msg: String, override val ex:Exception? = null) : Err
+data class Invalid(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
 
 
-data class Unknown(override val code: Int, override val msg: String, override val ex: Exception? = null) : Err
+data class Filtered(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
+
+
+data class Unexpected(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
+
+
+class Unhandled(override val msg: String, override val code: Int = 500) : Exception(msg), Err
 

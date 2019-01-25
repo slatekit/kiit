@@ -19,6 +19,7 @@ import slatekit.apis.core.Auth
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.auth.Roles
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.meta.Deserializer

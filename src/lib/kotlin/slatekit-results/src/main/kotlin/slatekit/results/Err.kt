@@ -13,6 +13,11 @@ mantra: Simplicity above all else
 package slatekit.results
 
 
-interface Err : Code {
-    val ex:Exception?
-}
+/**
+ * Enriches the code interface by :
+ * 1. explicitly marks a code as Error subtype
+ * 2. adds an optional exception field for extra information
+ *
+ * NOTE: This can be used to model errors using a hybrid code, message + exception
+ */
+interface Err : Code

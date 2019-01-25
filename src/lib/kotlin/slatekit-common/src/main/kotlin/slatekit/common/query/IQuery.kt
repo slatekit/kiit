@@ -25,6 +25,8 @@ interface IQuery {
 
     fun set(field: String, fieldValue: Any): IQuery
 
+    fun set(vararg pairs:Pair<String, Any>): IQuery
+
     fun where(field: String, compare: String, fieldValue: Any): IQuery
 
     fun where(field: String, compare: Op, fieldValue: Any): IQuery

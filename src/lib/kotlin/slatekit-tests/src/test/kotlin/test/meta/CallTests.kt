@@ -15,7 +15,7 @@ package test.meta
 import org.junit.Test
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.InputArgs
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.meta.Reflector
 import slatekit.meta.Deserializer
@@ -98,32 +98,32 @@ class CallTests {
             assert(args[6] == 900.99)
             assert(args[7] == DateTime.of(2017, 5, 27))
         }
-        ensureTypes(InputArgs( mapOf<String,Any>(
-                "phone"         to "123456789"          ,
-                "current"       to "true"               ,
-                "code"          to "123"                ,
-                "zip"           to "98765"              ,
-                "id"            to "123456"             ,
-                "rating"        to "2.5"                ,
-                "value"         to "900.99"             ,
-                "date"          to "20170527"
+        ensureTypes(InputArgs(mapOf<String, Any>(
+                "phone" to "123456789",
+                "current" to "true",
+                "code" to "123",
+                "zip" to "98765",
+                "id" to "123456",
+                "rating" to "2.5",
+                "value" to "900.99",
+                "date" to "20170527"
         )))
-        ensureTypes(InputArgs( mapOf<String,Any>(
-                "phone"         to "123456789"          ,
-                "current"       to true                 ,
-                "code"          to 123                  ,
-                "zip"           to 98765                ,
-                "id"            to 123456               ,
-                "rating"        to 2.5                  ,
-                "value"         to 900.99               ,
-                "date"          to "20170527"
+        ensureTypes(InputArgs(mapOf<String, Any>(
+                "phone" to "123456789",
+                "current" to true,
+                "code" to 123,
+                "zip" to 98765,
+                "id" to 123456,
+                "rating" to 2.5,
+                "value" to 900.99,
+                "date" to "20170527"
         )))
     }
 
 
     @Test fun can_handle_lists(){
 
-        fun ensureList(inputs:InputArgs, expected:List<Int>):Unit {
+        fun ensureList(inputs: InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
@@ -137,15 +137,15 @@ class CallTests {
                 assert( expected == actual)
             }
         }
-        ensureList(InputArgs( mapOf<String,Any>( "items" to "null" ))        , listOf<Int>())
-        ensureList(InputArgs( mapOf<String,Any>( "items" to "1,2,3,4" ))     , listOf<Int>(1,2,3,4))
-        ensureList(InputArgs( mapOf<String,Any>( "items" to listOf(1,2,3,4))), listOf<Int>(1,2,3,4))
+        ensureList(InputArgs(mapOf<String, Any>("items" to "null")), listOf<Int>())
+        ensureList(InputArgs(mapOf<String, Any>("items" to "1,2,3,4")), listOf<Int>(1,2,3,4))
+        ensureList(InputArgs(mapOf<String, Any>("items" to listOf(1, 2, 3, 4))), listOf<Int>(1,2,3,4))
     }
 
 
     @Test fun can_handle_map(){
 
-        fun ensureMap(inputs:InputArgs, expected:Map<String,Int>):Unit {
+        fun ensureMap(inputs: InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
             val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
@@ -160,8 +160,8 @@ class CallTests {
             }
         }
         val sample = mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4)
-        ensureMap(InputArgs( mapOf<String,Any>( "items" to "null" ))            , mapOf<String,Int>())
-        ensureMap(InputArgs( mapOf<String,Any>( "items" to "a=1,b=2,c=3,d=4" )) , mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4))
-        ensureMap(InputArgs( mapOf<String,Any>( "items" to sample ))            , mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4))
+        ensureMap(InputArgs(mapOf<String, Any>("items" to "null")), mapOf<String,Int>())
+        ensureMap(InputArgs(mapOf<String, Any>("items" to "a=1,b=2,c=3,d=4")), mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4))
+        ensureMap(InputArgs(mapOf<String, Any>("items" to sample)), mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4))
     }
 }

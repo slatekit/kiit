@@ -13,10 +13,12 @@
 
 package slatekit.results
 
+import slatekit.results.Results.exception
+
 
 /**
  * Container for a Success/Failure value of type T with additional values to represent
- * a string message, code, tag, error and more.
+ * a string message, code, error and more.
  *
  * @tparam T      : Type T
  */
@@ -29,13 +31,14 @@ sealed class Result<out T, out E> {
     companion object {
 
         @JvmStatic
-        inline fun <T> of(f: () -> T): Result<T, String> =
+        inline fun <T> of(f: () -> T): Result<T, Err> =
                 try {
                     Success(f())
                 } catch (e: Exception) {
-                    val err = e.message ?: ""
-                    Failure(err, Codes.FAILURE.code, err)
+                    val msg = e.message ?: ""
+                    exception(Unexpected(Codes.UNEXPECTED.code, msg, e))
                 }
+
 
         @JvmStatic
         inline fun <T> attempt(f: () -> T): Result<T, Exception> =
@@ -50,7 +53,7 @@ sealed class Result<out T, out E> {
                     result
                 } catch (e: Exception) {
                     val err = e.message ?: ""
-                    Failure(e, Codes.UNEXPECTED_ERROR.code, err)
+                    Failure(e, Codes.UNEXPECTED.code, err)
                 }
     }
 }

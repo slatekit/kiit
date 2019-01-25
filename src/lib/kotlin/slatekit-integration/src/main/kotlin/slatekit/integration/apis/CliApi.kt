@@ -20,6 +20,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.requests.toResponse
 import slatekit.common.security.Credentials
@@ -97,7 +98,7 @@ class CliApi(
         } else {
             // Supply the api-key into each command.
             val meta = cliMeta?.let { cliMeta.getMetaData(ctx, cmd, creds) } ?: cmd.args.meta.plus(Pair(metaNameForApiKey, creds.key))
-            val metaInputs = slatekit.common.InputArgs(meta)
+            val metaInputs = InputArgs(meta)
             val apiCmd = Request.cli(cmd.line, ApiConstants.SourceCLI, metaInputs, cmd.args, cmd)
             cmd.copy(result = apis.call(apiCmd))
         }
@@ -147,7 +148,7 @@ class CliApi(
     }
 
     private fun buildRequestSample(cmd: CliCommand): ResultMsg<String> {
-        val opts = slatekit.common.InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
+        val opts = InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
         val apiCmd = Request.cli(cmd.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
 
         // Generate sample json

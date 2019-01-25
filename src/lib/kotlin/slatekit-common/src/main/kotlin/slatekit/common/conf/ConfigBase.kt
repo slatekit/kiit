@@ -13,7 +13,6 @@
 
 package slatekit.common.conf
 
-import slatekit.common.InputFuncs
 import slatekit.common.Inputs
 import slatekit.common.Strings
 

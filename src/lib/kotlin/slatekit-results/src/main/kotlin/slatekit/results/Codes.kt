@@ -42,23 +42,27 @@ package slatekit.results
  *
  * The point is you can use any codes you want and some of the http status
  * code are ( on a philosophical level ) considered general purpose in slatekit.
- * 
+ *
  */
 
 object Codes {
-    val SUCCESS          = Status (200, "Success")
-    val CONFIRM          = Status (230, "Confirmation needed")
+    val SUCCESS          = Successful (200, "Success")
+    val CONFIRM          = Successful (230, "Confirmation needed")
 
-    val FAILURE          = Invalid(400, "Failure")
-    val BAD_REQUEST      = Invalid(400, "Bad request")
-    val UNAUTHORIZED     = Invalid(401, "Unauthorized")
-    val FORBIDDEN        = Invalid(403, "Forbidden")
-    val NOT_FOUND        = Invalid(404, "Not found")
-    val CONFLICT         = Invalid(409, "Conflict")
-    val DEPRECATED       = Invalid(426, "Deprecated")
-    val FILTERED         = Invalid(450, "Filtered")
 
-    val UNEXPECTED_ERROR = Unknown(500, "Unexpected error")
-    val NOT_IMPLEMENTED  = Unknown(501, "Not implemented")
-    val NOT_AVAILABLE    = Unknown(503, "Not available")
+    val FAILURE          = Invalid (400, "Failure")
+    val BAD_REQUEST      = Invalid (400, "Bad request")
+    val UNAUTHORIZED     = Invalid (401, "Unauthorized")
+    val FORBIDDEN        = Invalid (403, "Forbidden")
+    val NOT_FOUND        = Invalid (404, "Not found")
+    val CONFLICT         = Invalid (409, "Conflict")
+    val DEPRECATED       = Invalid (426, "Deprecated")
+    val NOT_IMPLEMENTED  = Invalid(501, "Not implemented")
+    val NOT_AVAILABLE    = Invalid(503, "Not available")
+
+
+    val FILTERED         = Filtered(450, "Filtered")
+
+
+    val UNEXPECTED = Unexpected(500, "Unexpected error")
 }

@@ -105,6 +105,20 @@ open class Query : IQuery {
     }
 
     /**
+     * builds up a set field clause
+     *
+     * @param pairs: vararg of Pair representing the field names and values to set
+     * @return
+     */
+    override fun set(vararg pairs:Pair<String, Any>): IQuery {
+        pairs.forEach {
+            val col = QueryEncoder.ensureField(it.first)
+            _data.updates.add(FieldValue(col, it.second))
+        }
+        return this
+    }
+
+    /**
      * builds up a where clause with the supplied arguments
      *
      * @param field:  The field name
