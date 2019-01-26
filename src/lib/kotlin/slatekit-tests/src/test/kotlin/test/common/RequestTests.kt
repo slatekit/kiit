@@ -5,7 +5,7 @@ import org.junit.Test
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Requests
 import slatekit.common.DateTime
-import slatekit.common.InputArgs
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 
 class RequestTests {

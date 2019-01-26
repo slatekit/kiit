@@ -17,6 +17,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
+import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS

@@ -1,1 +1,5 @@
 rootProject.name = 'slatekit-common'
+
+
+include ':slatekit-results'
+//project(':slatekit-results').projectDir=new File('../slatekit-results')

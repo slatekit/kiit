@@ -15,10 +15,10 @@ package slatekit.server.ktor
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.InputFuncs
 import slatekit.common.encrypt.Encryptor
 
 import io.ktor.request.*
+import slatekit.common.Strings
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -33,11 +33,11 @@ data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : slate
     }
 
     override fun get(key: String): Any? = getInternal(key)
-    override fun getObject(key: String): Any? = getInternal(key)
+    //override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = req.headers.contains(key)
     override fun size(): Int = req.headers.names().size
 
-    override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
+    override fun getString(key: String): String = Strings.decrypt(getInternalString(key).trim()) { it -> enc?.decrypt(it) ?: it }
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))

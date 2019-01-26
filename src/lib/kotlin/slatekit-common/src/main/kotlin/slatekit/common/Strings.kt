@@ -33,6 +33,33 @@ object Strings {
         else
             text.substring(0, count)
     }
+
+
+    /**
+     * Interprets a string which could have a macro function inside it.
+     * NOTE: This is currently used for decryption of config settings at runtime
+     * @param value   : "@{decrypt('abc123')"
+     * @param macro   : "decrypt", the name of the expected macro
+     * @param handler : lambda to handle execute the macro given the parameter
+     */
+    fun interpret(value: String, macro: String, handler: ((String) -> String)?): String {
+        return if (value.startsWith("@{$macro('")) {
+            val end = value.indexOf("')}")
+            val paramVal = value.substring(4 + macro.length, end)
+            handler?.invoke(paramVal) ?: paramVal
+        } else
+            value
+    }
+
+
+    /**
+     * Decrypts the text inside the value if value is "@{decrypt('abc')}"
+     * @param value : The value containing an optin @{decrypt function
+     * @param decryptor : The callback to handle the decryption
+     * @return
+     */
+    fun decrypt(value: String, decryptor: ((String) -> String)? = null): String =
+            Strings.interpret(value, "decrypt", decryptor)
 }
 
 /**

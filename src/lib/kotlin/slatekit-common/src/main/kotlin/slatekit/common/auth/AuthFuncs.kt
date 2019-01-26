@@ -47,7 +47,7 @@ object AuthFuncs {
         expectedRoles: String
     ): ResultMsg<Boolean> {
 
-        val key = inputs?.getStringOpt(inputName) ?: ""
+        val key = inputs?.getStringOrNull(inputName) ?: ""
 
         // Check 3: Key is non-empty ?
         return if (key.isNullOrEmpty()) {

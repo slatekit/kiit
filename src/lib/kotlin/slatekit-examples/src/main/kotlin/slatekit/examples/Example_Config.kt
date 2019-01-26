@@ -15,7 +15,6 @@ package slate.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.conf.ConfFuncs
@@ -46,13 +45,13 @@ class Example_Config : Cmd("config") {
         println("double: " + conf.getDouble("dVal"))
 
         // CASE 3: Get typed value: nullable e.g. Int?
-        println("bool  : " + conf.getBoolOpt("bVal"))
-        println("string: " + conf.getStringOpt("sVal"))
-        println("short : " + conf.getShortOpt("hVal"))
-        println("int   : " + conf.getIntOpt("iVal"))
-        println("long  : " + conf.getLongOpt("lVal"))
-        println("float : " + conf.getFloatOpt("fVal"))
-        println("double: " + conf.getDoubleOpt("dVal"))
+        println("bool  : " + conf.getBoolOrNull("bVal"))
+        println("string: " + conf.getStringOrNull("sVal"))
+        println("short : " + conf.getShortOrNull("hVal"))
+        println("int   : " + conf.getIntOrNull("iVal"))
+        println("long  : " + conf.getLongOrNull("lVal"))
+        println("float : " + conf.getFloatOrNull("fVal"))
+        println("double: " + conf.getDoubleOrNull("dVal"))
 
         // CASE 4: Get typed value: with default value if unavailable.
         println("bool  : " + conf.getBoolOrElse("bVal", false))

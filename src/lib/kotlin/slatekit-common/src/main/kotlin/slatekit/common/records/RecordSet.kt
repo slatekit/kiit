@@ -24,7 +24,9 @@ import java.util.UUID
 
 class RecordSet(val rs: ResultSet) : Record {
 
-    override fun init(rec: List<String>) {}
+    override fun getPos(name:String):Int = rs.findColumn(name)
+    override fun getName(pos:Int):String = rs.metaData.getColumnName(pos)
+    override fun contains(name:String):Boolean = rs.findColumn(name) > -1
 
     override fun getString(pos: Int): String? = rs.getString(pos)
     override fun getString(name: String): String? = rs.getString(name)

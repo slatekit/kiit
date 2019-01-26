@@ -15,7 +15,7 @@ package slatekit.common.conf
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.InputFuncs
+import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -52,11 +52,11 @@ class ConfigMulti(
 
     override val raw: Any = _config
     override fun get(key: String): Any? = getInternalString(key)
-    override fun getObject(key: String): Any? = getInternal(key)
+    //override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = containsKeyInternal(key)
     override fun size(): Int = _config.values.size
 
-    override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key), _encryptor)
+    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), _encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))

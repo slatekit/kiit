@@ -42,12 +42,12 @@ data class Params(
 ) : Inputs, InputsUpdateable, JsonSupport {
 
     override fun get(key: String): Any? = getInternal(key)
-    override fun getObject(key: String): Any? = getInternal(key)
+    //override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
     override fun toJson(): JSONObject = json
 
     override val raw: Any = json
-    override fun getString(key: String): String = InputFuncs.decrypt(getInternalString(key).trim(), { it -> enc?.decrypt(it) ?: it })
+    override fun getString(key: String): String = Strings.decrypt(getInternalString(key).trim()) { it -> enc?.decrypt(it) ?: it }
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))

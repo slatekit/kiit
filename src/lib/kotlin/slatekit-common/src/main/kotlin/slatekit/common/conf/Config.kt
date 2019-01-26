@@ -89,11 +89,11 @@ class Config(
     private val _config: Properties = config ?: ConfFuncs.loadPropertiesFrom(fileName)
     override val raw: Any = _config
     override fun get(key: String): Any? = getInternal(key)
-    override fun getObject(key: String): Any? = getInternal(key)
+    //override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = _config.containsKey(key)
     override fun size(): Int = _config.values.size
 
-    override fun getString(key: String): String = InputFuncs.decrypt(getStringRaw(key), _encryptor)
+    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), _encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))

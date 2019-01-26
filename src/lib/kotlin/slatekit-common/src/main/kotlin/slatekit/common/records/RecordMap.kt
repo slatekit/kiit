@@ -21,8 +21,9 @@ import java.util.*
 
 class RecordMap(val rs: ListMap<String, Any>) : Record {
 
-    override fun init(rec: List<String>) {
-    }
+    override fun getPos(name:String):Int = rs.keys().indexOf(name)
+    override fun getName(pos:Int):String = rs.keys()[pos]
+    override fun contains(name:String):Boolean = rs.contains(name)
 
     override fun getString(pos: Int): String? = rs.getAt(pos) as String?
     override fun getString(name: String): String? = rs.get(name) as String?

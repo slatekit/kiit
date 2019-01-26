@@ -8,3 +8,6 @@ project(':slatekit-entities').projectDir=new File('../slatekit-entities')
 
 include ':slatekit-core'
 project(':slatekit-core').projectDir=new File('../slatekit-core')
+
+include ':slatekit-results'
+project(':slatekit-results').projectDir=new File('../slatekit-results')

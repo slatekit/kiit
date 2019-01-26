@@ -220,7 +220,7 @@ class Args(
      * @param key
      * @return
      */
-    override fun getString(key: String): String = InputFuncs.decrypt(named[key] ?: "", _decryptor)
+    override fun getString(key: String): String = Strings.decrypt(named[key] ?: "", _decryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(named[key] ?: "false")
     override fun getShort(key: String): Short = Conversions.toShort(named[key] ?: "0")
     override fun getInt(key: String): Int = Conversions.toInt(named[key] ?: "0")
@@ -234,7 +234,7 @@ class Args(
     override fun getDateTime(key: String): DateTime = Conversions.toDateTime(named[key] ?: "")
 
     override fun get(key: String): Any? = if (named.contains(key)) named[key] else null
-    override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null
+    //override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null
     override fun containsKey(key: String): Boolean = _namedArgs?.contains(key) ?: false
 
     fun hasMetaArgs(): Boolean = _metaArgs?.isNotEmpty() ?: false

@@ -16,7 +16,7 @@ fun <T> Inputs.map(key: String, cls: KClass<*>, decryptor: ((String) -> String)?
     val converted = props.map { prop ->
         val paramType = prop.returnType
         val propKey = "$key.${prop.name}"
-        val rawVal = getObject(propKey)
+        val rawVal = get(propKey)
 
         // Can not handle nulls/default values at the moment.
         rawVal?.let { raw ->

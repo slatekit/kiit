@@ -18,10 +18,16 @@ import slatekit.common.ids.UniqueId
 import java.time.*
 
 interface Record {
-    fun init(rec: List<String>)
+
+    fun getPos(name:String):Int
+    fun getName(pos:Int):String
+    fun contains(name:String):Boolean
 
     fun getString(pos: Int): String?
     fun getString(name: String): String?
+
+    fun getOrDefault(pos:Int, value:String):String = getString(pos) ?: value
+    fun getOrDefault(name:String, value:String):String = getString(name) ?: value
 
     fun getBool(pos: Int): Boolean?
     fun getBool(name: String): Boolean?
@@ -41,6 +47,20 @@ interface Record {
     fun getDouble(pos: Int): Double?
     fun getDouble(name: String): Double?
 
+    fun getUUID(pos: Int): java.util.UUID?
+    fun getUUID(name: String): java.util.UUID?
+
+    fun getUniqueId(pos: Int): UniqueId?
+    fun getUniqueId(name: String): UniqueId?
+
+    // Assumes DateTime at local zone
+    fun getDateTime(pos: Int): DateTime?
+    fun getDateTime(name: String): DateTime?
+
+    // Assumes DateTime as UTC
+    fun getDateTimeAsUTC(pos: Int): DateTime?
+    fun getDateTimeAsUTC(name: String): DateTime?
+
     fun getLocalDate(pos: Int): LocalDate?
     fun getLocalDate(name: String): LocalDate?
 
@@ -55,20 +75,6 @@ interface Record {
 
     fun getInstant(pos: Int): Instant?
     fun getInstant(name: String): Instant?
-
-    // Assumes DateTime at local zone
-    fun getDateTime(pos: Int): DateTime?
-    fun getDateTime(name: String): DateTime?
-
-    // Assumes DateTime as UTC
-    fun getDateTimeAsUTC(pos: Int): DateTime?
-    fun getDateTimeAsUTC(name: String): DateTime?
-
-    fun getUUID(pos: Int): java.util.UUID?
-    fun getUUID(name: String): java.util.UUID?
-
-    fun getUniqueId(pos: Int): UniqueId?
-    fun getUniqueId(name: String): UniqueId?
 
     // ========================================================================
     // All the methods below get the datetime from the underlying value
