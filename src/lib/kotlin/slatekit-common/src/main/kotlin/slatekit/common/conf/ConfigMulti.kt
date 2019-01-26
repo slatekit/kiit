@@ -15,7 +15,6 @@ package slatekit.common.conf
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.InputFuncs
 import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import java.time.LocalDate
