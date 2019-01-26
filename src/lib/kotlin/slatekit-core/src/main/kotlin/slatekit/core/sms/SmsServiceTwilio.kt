@@ -42,13 +42,13 @@ class SmsServiceTwilio(
     password: String,
     phone: String,
     templates: Templates? = null,
-    ctns: List<CountryCode>? = null,
+    countries: List<CountryCode>? = null,
     sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null
 )
-    : SmsService(templates, ctns) {
+    : SmsService(templates, countries) {
 
-    val _sender = sender
-    val _settings = SmsSettings(key, password, phone)
+    private val _sender = sender
+    private val _settings = SmsSettings(key, password, phone)
     private val _baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 
     /**
@@ -56,8 +56,8 @@ class SmsServiceTwilio(
      *
      * @param apiKey
      */
-    constructor(apiKey: ApiLogin, templates: Templates? = null) :
-            this(apiKey.key, apiKey.pass, apiKey.account, templates)
+    constructor(apiKey: ApiLogin, templates: Templates? = null, countries:List<CountryCode>? = null) :
+            this(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
 
     /**
      * sends the sms message to the phone
