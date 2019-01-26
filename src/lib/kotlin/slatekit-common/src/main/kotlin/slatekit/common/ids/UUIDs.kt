@@ -1,7 +1,6 @@
 package slatekit.common.ids
 
 import slatekit.common.Random
-import slatekit.common.Result.Companion.attempt
 import java.util.*
 
 
@@ -19,7 +18,7 @@ open class UUIDs(val upperCase:Boolean) : Ids {
     }
 
     override fun isValid(id: String): Boolean {
-        return attempt { UUID.fromString(id) }.success
+        return try { UUID.fromString(id); true } catch (ex:Exception) { false }
     }
 
     override fun split(id: String): Array<String> {
