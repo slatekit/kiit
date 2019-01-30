@@ -198,24 +198,25 @@ open class ModelMapper(
     @Suppress("IMPLICIT_CAST_TO_ANY")
     private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
+
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass -> getString(record, mapping, colName, _encryptor)
-            KTypes.KBoolClass -> record.getBool(colName)
-            KTypes.KShortClass -> record.getShort(colName)
-            KTypes.KIntClass -> record.getInt(colName)
-            KTypes.KLongClass -> record.getLong(colName)
-            KTypes.KFloatClass -> record.getFloat(colName)
-            KTypes.KDoubleClass -> record.getDouble(colName)
-            KTypes.KLocalDateClass -> record.getLocalDate(colName)
-            KTypes.KLocalTimeClass -> record.getLocalTime(colName)
-            KTypes.KLocalDateTimeClass -> record.getLocalDateTime(colName)
+            KTypes.KStringClass        -> if ( mapping.isRequired ) getString(record, mapping, colName, _encryptor)
+            KTypes.KBoolClass          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
+            KTypes.KShortClass         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
+            KTypes.KIntClass           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)
+            KTypes.KLongClass          -> if ( mapping.isRequired ) record.getLong(colName)          else record.getLongOrNull(colName)
+            KTypes.KFloatClass         -> if ( mapping.isRequired ) record.getFloat(colName)         else record.getFloatOrNull(colName)
+            KTypes.KDoubleClass        -> if ( mapping.isRequired ) record.getDouble(colName)        else record.getDoubleOrNull(colName)
+            KTypes.KLocalDateClass     -> if ( mapping.isRequired ) record.getLocalDate(colName)     else record.getLocalDateOrNull(colName)
+            KTypes.KLocalTimeClass     -> if ( mapping.isRequired ) record.getLocalTime(colName)     else record.getLocalTimeOrNull(colName)
+            KTypes.KLocalDateTimeClass -> if ( mapping.isRequired ) record.getLocalDateTime(colName) else record.getLocalDateOrNull(colName)
             KTypes.KZonedDateTimeClass -> if (isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(
                     colName
             )
-            KTypes.KDateTimeClass -> if (isUTC) record.getDateTimeLocalFromUTC(colName) else record.getDateTime(colName)
-            KTypes.KInstantClass -> record.getInstant(colName)
-            KTypes.KUUIDClass -> record.getUUID(colName)
-            KTypes.KUniqueIdClass -> record.getUniqueId(colName)
+            KTypes.KDateTimeClass      -> if (isUTC) record.getDateTimeLocalFromUTC(colName) else record.getDateTime(colName)
+            KTypes.KInstantClass       -> record.getInstant(colName)
+            KTypes.KUUIDClass          -> if ( mapping.isRequired ) record.getUUID(colName)          else record.getUUIDOrNull(colName)
+            KTypes.KUniqueIdClass      -> if ( mapping.isRequired ) record.getUniqueId(colName)      else record.getUniqueIdOrNull(colName)
             else -> {
                 if (mapping.isEnum) {
                     val enumInt = record.getInt(colName)
@@ -232,11 +233,17 @@ open class ModelMapper(
 
     @Suppress("NOTHING_TO_INLINE")
     inline fun getString(record: Record, mapping: ModelField, colName: String, encryptor: Encryptor?): String? {
-        return if (mapping.encrypt) {
-            val text = record.getString(colName)
-            text?.let { raw -> encryptor?.let { it.decrypt(raw) } ?: raw }
-        } else {
+        val rawValue = if(mapping.isRequired)
             record.getString(colName)
+        else
+            record.getStringOrNull(colName)
+
+        return rawValue?.let { raw ->
+            if (mapping.encrypt) {
+                encryptor?.let { it.decrypt(raw) } ?: raw
+            } else {
+                raw
+            }
         }
     }
 }
