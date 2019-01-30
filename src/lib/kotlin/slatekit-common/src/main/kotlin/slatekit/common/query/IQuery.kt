@@ -23,21 +23,21 @@ interface IQuery {
 
     fun toFilter(): String
 
-    fun set(field: String, fieldValue: Any): IQuery
+    fun set(field: String, fieldValue: Any?): IQuery
 
     fun set(vararg pairs:Pair<String, Any>): IQuery
 
-    fun where(field: String, compare: String, fieldValue: Any): IQuery
+    fun where(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun where(field: String, compare: Op, fieldValue: Any): IQuery
+    fun where(field: String, compare: Op, fieldValue: Any?): IQuery
 
-    fun and(field: String, compare: String, fieldValue: Any): IQuery
+    fun and(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun and(field: String, compare: Op, fieldValue: Any): IQuery
+    fun and(field: String, compare: Op, fieldValue: Any?): IQuery
 
-    fun or(field: String, compare: String, fieldValue: Any): IQuery
+    fun or(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun or(field: String, compare: Op, fieldValue: Any): IQuery
+    fun or(field: String, compare: Op, fieldValue: Any?): IQuery
 
     fun orderBy(field: String, mode: String): IQuery
 

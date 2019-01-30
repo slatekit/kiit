@@ -1,15 +1,19 @@
 package slatekit.meta
 
 import slatekit.common.query.IQuery
+import slatekit.common.query.Query
 
-fun IQuery.where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fieldValue: kotlin.Any): IQuery {
-    return this.where(field.name, compare, fieldValue)
+fun IQuery.where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fieldValue: Any?): IQuery {
+    val finalValue = fieldValue ?: Query.Null
+    return this.where(field.name, compare, finalValue)
 }
 
-fun IQuery.and(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any): IQuery {
-    return this.and(field.name, compare, fieldValue)
+fun IQuery.and(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any?): IQuery {
+    val finalValue = fieldValue ?: Query.Null
+    return this.and(field.name, compare, finalValue)
 }
 
-fun IQuery.or(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any): IQuery {
-    return this.or(field.name, compare, fieldValue)
+fun IQuery.or(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any?): IQuery {
+    val finalValue = fieldValue ?: Query.Null
+    return this.or(field.name, compare, finalValue)
 }

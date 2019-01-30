@@ -98,9 +98,10 @@ open class Query : IQuery {
      * @param fieldValue
      * @return
      */
-    override fun set(field: String, fieldValue: Any): IQuery {
+    override fun set(field: String, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
         val col = QueryEncoder.ensureField(field)
-        _data.updates.add(FieldValue(col, fieldValue))
+        _data.updates.add(FieldValue(col, finalValue))
         return this
     }
 
@@ -118,6 +119,7 @@ open class Query : IQuery {
         return this
     }
 
+
     /**
      * builds up a where clause with the supplied arguments
      *
@@ -126,8 +128,9 @@ open class Query : IQuery {
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun where(field: String, op: String, fieldValue: Any): IQuery {
-        val condition = buildCondition(field, op, fieldValue)
+    override fun where(field: String, op: String, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        val condition = buildCondition(field, op, finalValue)
         _data.conditions.add(condition)
         return this
     }
@@ -140,8 +143,10 @@ open class Query : IQuery {
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun where(field: String, compare: Op, fieldValue: Any): IQuery =
-            where(field, compare.text, fieldValue)
+    override fun where(field: String, compare: Op, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        return where(field, compare.text, finalValue)
+    }
 
     /**
      * adds an and clause with the supplied arguments
@@ -151,14 +156,17 @@ open class Query : IQuery {
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun and(field: String, compare: String, fieldValue: Any): IQuery {
-        val cond = buildCondition(field, compare, fieldValue)
+    override fun and(field: String, compare: String, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        val cond = buildCondition(field, compare, finalValue)
         group("and", cond)
         return this
     }
 
-    override fun and(field: String, compare: Op, fieldValue: Any): IQuery =
-            and(field, compare.text, fieldValue)
+    override fun and(field: String, compare: Op, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        return and(field, compare.text, finalValue)
+    }
 
     /**
      * adds an or clause with the supplied arguments
@@ -168,14 +176,17 @@ open class Query : IQuery {
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun or(field: String, compare: String, fieldValue: Any): IQuery {
-        val cond = buildCondition(field, compare, fieldValue)
+    override fun or(field: String, compare: String, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        val cond = buildCondition(field, compare, finalValue)
         group("or", cond)
         return this
     }
 
-    override fun or(field: String, compare: Op, fieldValue: Any): IQuery =
-            or(field, compare.text, fieldValue)
+    override fun or(field: String, compare: Op, fieldValue: Any?): IQuery {
+        val finalValue = fieldValue ?: Query.Null
+        return or(field, compare.text, finalValue)
+    }
 
     override fun limit(max: Int): IQuery {
         this._limit.set(max)
