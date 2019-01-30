@@ -200,7 +200,7 @@ open class ModelMapper(
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
 
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> if ( mapping.isRequired ) getString(record, mapping, colName, _encryptor)
+            KTypes.KStringClass        -> getString(record, mapping, colName, _encryptor)
             KTypes.KBoolClass          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
             KTypes.KShortClass         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
             KTypes.KIntClass           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)

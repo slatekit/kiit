@@ -191,6 +191,11 @@ open class EntityRepoInMemory<T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
+
+    override fun count(query: IQuery): Long {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
     fun getNextId(): Long = _items.size.toLong() + 1
 
     /**
