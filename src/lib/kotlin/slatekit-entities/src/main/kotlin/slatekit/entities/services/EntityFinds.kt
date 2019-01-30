@@ -85,10 +85,10 @@ interface EntityFinds<T> : ServiceSupport<T> where T : Entity {
         return results.firstOrNull()
     }
 
-    fun where(prop: KProperty<*>, op: String, value: Any): IQuery {
+    fun where(prop: KProperty<*>, op: String, value: Any?): IQuery {
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName
-        return Query().where(column, op, value)
+        return Query().where(column, op, value ?: Query.Null)
     }
 }
