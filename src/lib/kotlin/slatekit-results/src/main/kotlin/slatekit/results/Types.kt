@@ -12,14 +12,27 @@ mantra: Simplicity above all else
  */
 package slatekit.results
 
-
+/**
+ * Represents any type of successful status code
+ */
 data class Successful(override val code: Int, override val msg: String) : Code
 
 
-data class Invalid(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
-
-
+/**
+ * Represents a filter out error code
+ * NOTE: This is a unique case ( depending on context ) is somewhat in-between a success / error.
+ * For example:
+ */
 data class Filtered(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
+
+
+/**
+ * Represents an invalid/bad request error code
+ * NOTE: This can be useful for :
+ * 1. request validation
+ * 2. parameter validation
+ */
+data class Invalid(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
 
 
 data class Unexpected(override val code: Int, override val msg: String, val ex: Exception? = null) : Err
