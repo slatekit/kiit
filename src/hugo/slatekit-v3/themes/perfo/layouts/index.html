@@ -15,24 +15,7 @@
       <title>Slate Kit</title>
 
       <base href="{{ .Site.BaseURL }}">
-      <!-- Favicon -->
-      <link rel="shortcut icon" href="vendor/assets/img/favicon.ico">
-      <!-- Font Awesome Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/font-awesome.css">
-      <!-- Bootstrap Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/bootstrap.css">
-      <!-- Mockup Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/device-mockups.min.css">
-      <!-- Owl Carousel Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/owl.carousel.min.css">
-      <!-- Animate.CSS Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/animate.css">
-      <!-- Animate.CSS Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/preloader.css">
-      <!-- Custom Stylesheet -->
-      <link rel="stylesheet" href="vendor/assets/css/style.default.css">
-
-      <link rel="stylesheet" href="app/app.css">
+      {{ partial "header.html" . }}
    </head>
    <body>
 
@@ -309,20 +292,7 @@
 
 
 
-        <!-- jQuery CDN -->
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
-        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-        <!-- Bootstrap 4 Alpha -->
-        <script src="vendor/assets/js/bootstrap.min.js"></script>
-        <!-- Owl Carousel -->
-        <script src="vendor/assets/js/owl.carousel.min.js"></script>
-        <!-- Easy Scroll -->
-        <script src="vendor/assets/js/easyscroll.min.js"></script>
-        <!-- WOW JS -->
-        <script src="vendor/assets/js/wow.min.js"></script>
-        <!-- Custom Js -->
-        <script src="vendor/assets/js/script.js"></script>
+        {{ partial "footer.html" . }}
 
         <script type="text/javascript">
           var _codehelixAppPage = "home";

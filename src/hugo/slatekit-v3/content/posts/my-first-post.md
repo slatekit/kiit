@@ -7,7 +7,7 @@ layout: section
 ---
 
 # Args
-this is the args component
+slatekit-site-v2 : this is the args component
 customize tables resource https://discourse.gohugo.io/t/how-to-customise-tables/15661
 
 
