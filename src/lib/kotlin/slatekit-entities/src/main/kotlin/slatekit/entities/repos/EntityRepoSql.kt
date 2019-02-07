@@ -177,6 +177,17 @@ abstract class EntityRepoSql<T>(
         return items
     }
 
+
+    /**
+     * Gets the total number of records based on the query provided.
+     */
+    override fun count(query:IQuery):Long {
+        val filter = query.toFilter()
+        val sql = "select count( * ) from ${repoName()} where " + filter
+        val count = _db.getScalarLong(sql)
+        return count
+    }
+
     override fun find(query: IQuery): List<T> {
         val filter = query.toFilter()
         val sql = "select * from ${repoName()} where " + filter

@@ -165,6 +165,13 @@ abstract class EntityRepo<T>(
      */
     abstract fun top(count: Int, desc: Boolean): List<T>
 
+
+    /**
+     * Gets the total number of records based on the query provided.
+     */
+    abstract fun count(query:IQuery):Long
+
+
     /**
      * determines if there are any entities in the datastore
      * @return

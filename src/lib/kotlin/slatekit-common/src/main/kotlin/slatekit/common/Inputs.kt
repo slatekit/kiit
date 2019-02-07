@@ -13,10 +13,12 @@
 
 package slatekit.common
 
+import slatekit.common.ids.UniqueId
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
+import java.util.*
 
 interface InputsUpdateable {
     // Immutable add
@@ -54,6 +56,8 @@ interface Inputs {
     fun getLocalTime(key: String): LocalTime
     fun getLocalDateTime(key: String): LocalDateTime
     fun getZonedDateTime(key: String): ZonedDateTime
+    fun getUUID(key: String): java.util.UUID = UUID.fromString(getString(key))
+    fun getUniqueId(key: String): UniqueId = UniqueId.fromString(getString(key))
 
     // Get values as Option[T]
     fun getStringOrNull(key: String): String? = getOrNull(key) { k: String -> getString(k) }
@@ -68,6 +72,8 @@ interface Inputs {
     fun getLocalTimeOrNull(key: String): LocalTime? = getOrNull(key) { k: String -> getLocalTime(k) }
     fun getLocalDateTimeOrNull(key: String): LocalDateTime? = getOrNull(key) { k: String -> getLocalDateTime(k) }
     fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
+    fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
+    fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.fromString(getString(k)) }
 
     // Get value or default
     fun getStringOrElse(key: String, default: String): String = getOrElse(key, { k: String -> getString(k) }, default)
@@ -82,6 +88,8 @@ interface Inputs {
     fun getLocalTimeOrElse(key: String, default: LocalTime): LocalTime = getOrElse(key, { k: String -> getLocalTime(k) }, default)
     fun getLocalDateTimeOrElse(key: String, default: LocalDateTime): LocalDateTime = getOrElse(key, { k: String -> getLocalDateTime(k) }, default)
     fun getZonedDateTimeOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTime(k) }, default)
+    fun getUUIDOrElse(key: String, default:UUID): UUID = getOrElse(key, { k: String -> UUID.fromString(getString(k)) }, default)
+    fun getUniqueIdOrElse(key: String, default:UniqueId): UniqueId = getOrElse(key, { k: String -> UniqueId.fromString(getString(k)) }, default)
 
     // Get list and maps
     /**

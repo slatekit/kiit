@@ -103,6 +103,12 @@ class QueryTests {
     }
 
 
+    @Test fun can_build_condition_is_null_literal() {
+        val filter = Query().where(Book::rating, "=", null).toFilter()
+        assert(  filter == "rating is null")
+    }
+
+
     @Test fun can_build_condition_is_not_null() {
         val filter = Query().where(Book::rating, "!=", Query.Null).toFilter()
         assert(  filter == "rating is not null")

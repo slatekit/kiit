@@ -16,74 +16,61 @@ package slatekit.common.records
 import slatekit.common.DateTime
 import slatekit.common.ids.UniqueId
 import java.sql.ResultSet
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
+import java.time.*
 import java.util.UUID
 
-class RecordSet(val rs: ResultSet) : Record {
+class RecordSet(private val rs: ResultSet) : Record {
 
+    override val raw: Any = rs
+    override fun size(): Int = 0
+    override fun get(key: String): Any? = rs.getString(key)
     override fun getPos(name:String):Int = rs.findColumn(name)
     override fun getName(pos:Int):String = rs.metaData.getColumnName(pos)
     override fun contains(name:String):Boolean = rs.findColumn(name) > -1
+    override fun containsKey(name:String):Boolean = rs.findColumn(name) > -1
 
-    override fun getString(pos: Int): String? = rs.getString(pos)
-    override fun getString(name: String): String? = rs.getString(name)
+    override fun getString(key: String): String = rs.getString(key)
+    override fun getBool(key: String): Boolean = rs.getBoolean(key)
 
-    override fun getBool(pos: Int): Boolean? = rs.getBoolean(pos)
-    override fun getBool(name: String): Boolean? = rs.getBoolean(name)
+    override fun getShort(key: String): Short = rs.getShort(key)
+    override fun getInt(key: String): Int = rs.getInt(key)
+    override fun getLong(key: String): Long = rs.getLong(key)
+    override fun getFloat(key: String): Float = rs.getFloat(key)
+    override fun getDouble(key: String): Double = rs.getDouble(key)
+    override fun getLocalDate(key: String): LocalDate = rs.getDate(key).toLocalDate()
+    override fun getLocalTime(key: String): LocalTime = rs.getTime(key).toLocalTime()
+    override fun getLocalDateTime(key: String): LocalDateTime = rs.getTimestamp(key).toLocalDateTime()
+    override fun getZonedDateTime(key: String): ZonedDateTime = rs.getTimestamp(key).toLocalDateTime().atZone(ZoneId.systemDefault())
+    override fun getInstant(key: String): Instant = rs.getTimestamp(key).toInstant()
+    override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTime.of(it) }
 
-    override fun getShort(pos: Int): Short? = rs.getShort(pos)
-    override fun getShort(name: String): Short? = rs.getShort(name)
-
-    override fun getInt(pos: Int): Int? = rs.getInt(pos)
-    override fun getInt(name: String): Int? = rs.getInt(name)
-
-    override fun getLong(pos: Int): Long? = rs.getLong(pos)
-    override fun getLong(name: String): Long? = rs.getLong(name)
-
-    override fun getFloat(pos: Int): Float? = rs.getFloat(pos)
-    override fun getFloat(name: String): Float? = rs.getFloat(name)
-
-    override fun getDouble(pos: Int): Double? = rs.getDouble(pos)
-    override fun getDouble(name: String): Double? = rs.getDouble(name)
-
-    override fun getUUID(pos: Int): java.util.UUID? = rs.getString(pos)?.let { UUID.fromString(it) }
-    override fun getUUID(name: String): java.util.UUID? = rs.getString(name)?.let { UUID.fromString(it) }
-
-    override fun getUniqueId(pos: Int): UniqueId? = rs.getString(pos)?.let { UniqueId.fromString(it) }
-    override fun getUniqueId(name: String): UniqueId? = rs.getString(name)?.let { UniqueId.fromString(it) }
-
-    override fun getLocalDate(pos: Int): LocalDate? = rs.getDate(pos)?.toLocalDate()
-    override fun getLocalDate(name: String): LocalDate? = rs.getDate(name)?.toLocalDate()
-
-    override fun getLocalTime(pos: Int): LocalTime? = rs.getTime(pos)?.toLocalTime()
-    override fun getLocalTime(name: String): LocalTime? = rs.getTime(name)?.toLocalTime()
-
-    override fun getLocalDateTime(pos: Int): LocalDateTime? = rs.getTimestamp(pos)?.toLocalDateTime()
-    override fun getLocalDateTime(name: String): LocalDateTime? = rs.getTimestamp(name)?.toLocalDateTime()
-
-    override fun getInstant(pos: Int): Instant? = rs.getTimestamp(pos)?.toInstant()
-    override fun getInstant(name: String): Instant? = rs.getTimestamp(name)?.toInstant()
-
-    override fun getDateTime(pos: Int): DateTime? = rs.getTimestamp(pos)?.let { DateTime.of(it) }
-    override fun getDateTime(name: String): DateTime? = rs.getTimestamp(name)?.let { DateTime.of(it) }
-
-    override fun getDateTimeAsUTC(pos: Int): DateTime? {
+    override fun getDateTimeAsUTC(pos: Int): DateTime {
         val ts = rs.getTimestamp(pos)
-        return ts?.let { DateTime.of(ts).atUtcLocal() }
+        return ts.let { DateTime.of(ts).atUtcLocal() }
     }
 
-    override fun getDateTimeAsUTC(name: String): DateTime? {
+    override fun getDateTimeAsUTC(name: String): DateTime {
         val ts = rs.getTimestamp(name)
-        return ts?.let { DateTime.of(ts).atUtcLocal() }
+        return ts.let { DateTime.of(ts).atUtcLocal() }
     }
 
-    // private fun getUUIDFromBytes(bytes:ByteArray): UUID {
-    //    val buffer = ByteBuffer.wrap(bytes)
-    //    val msb = buffer.long
-    //    val lsb = buffer.long
-    //    return UUID(msb, lsb)
-    // }
+
+    // Helpers
+    override fun <T> getOrNull(key: String, fetcher: (String) -> T): T? {
+        return if (!containsKey(key))
+            null
+        else if (rs.getObject(key) == null)
+            null
+        else
+            fetcher(key)
+    }
+
+    override fun <T> getOrElse(key: String, fetcher: (String) -> T, default: T): T {
+        return if (!containsKey(key))
+            default
+        else if (rs.getObject(key) == null)
+            default
+        else
+            fetcher(key)
+    }
 }

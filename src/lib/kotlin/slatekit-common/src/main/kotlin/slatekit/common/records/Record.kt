@@ -14,67 +14,37 @@
 package slatekit.common.records
 
 import slatekit.common.DateTime
+import slatekit.common.Inputs
 import slatekit.common.ids.UniqueId
 import java.time.*
 
-interface Record {
+interface Record : Inputs {
 
     fun getPos(name:String):Int
     fun getName(pos:Int):String
     fun contains(name:String):Boolean
 
-    fun getString(pos: Int): String?
-    fun getString(name: String): String?
-
-    fun getOrDefault(pos:Int, value:String):String = getString(pos) ?: value
-    fun getOrDefault(name:String, value:String):String = getString(name) ?: value
-
-    fun getBool(pos: Int): Boolean?
-    fun getBool(name: String): Boolean?
-
-    fun getShort(pos: Int): Short?
-    fun getShort(name: String): Short?
-
-    fun getInt(pos: Int): Int?
-    fun getInt(name: String): Int?
-
-    fun getLong(pos: Int): Long?
-    fun getLong(name: String): Long?
-
-    fun getFloat(pos: Int): Float?
-    fun getFloat(name: String): Float?
-
-    fun getDouble(pos: Int): Double?
-    fun getDouble(name: String): Double?
-
-    fun getUUID(pos: Int): java.util.UUID?
-    fun getUUID(name: String): java.util.UUID?
-
-    fun getUniqueId(pos: Int): UniqueId?
-    fun getUniqueId(name: String): UniqueId?
-
-    // Assumes DateTime at local zone
-    fun getDateTime(pos: Int): DateTime?
-    fun getDateTime(name: String): DateTime?
+    fun getString(pos: Int): String = getString(getName(pos))
+    fun getBool(pos: Int): Boolean = getBool(getName(pos))
+    fun getShort(pos: Int): Short = getShort(getName(pos))
+    fun getInt(pos: Int): Int = getInt(getName(pos))
+    fun getLong(pos: Int): Long = getLong(getName(pos))
+    fun getFloat(pos: Int): Float = getFloat(getName(pos))
+    fun getDouble(pos: Int): Double = getDouble(getName(pos))
+    fun getUUID(pos: Int): java.util.UUID = getUUID(getName(pos))
+    fun getUniqueId(pos: Int): UniqueId = getUniqueId(getName(pos))
+    fun getDateTime(pos: Int): DateTime = getDateTime(getName(pos))
+    fun getLocalDate(pos: Int): LocalDate = getLocalDate(getName(pos))
+    fun getLocalTime(pos: Int): LocalTime = getLocalTime(getName(pos))
+    fun getLocalDateTime(pos: Int): LocalDateTime = getLocalDateTime(getName(pos))
+    fun getZonedDateTime(pos: Int): ZonedDateTime = getZonedDateTime(getName(pos))
 
     // Assumes DateTime as UTC
-    fun getDateTimeAsUTC(pos: Int): DateTime?
-    fun getDateTimeAsUTC(name: String): DateTime?
+    fun getDateTimeAsUTC(name: String): DateTime
+    fun getDateTimeAsUTC(pos: Int): DateTime = getDateTimeAsUTC(getName(pos))
 
-    fun getLocalDate(pos: Int): LocalDate?
-    fun getLocalDate(name: String): LocalDate?
-
-    fun getLocalTime(pos: Int): LocalTime?
-    fun getLocalTime(name: String): LocalTime?
-
-    fun getLocalDateTime(pos: Int): LocalDateTime?
-    fun getLocalDateTime(name: String): LocalDateTime?
-
-    fun getZonedDateTime(pos: Int): ZonedDateTime? = getDateTime(pos)?.raw
-    fun getZonedDateTime(name: String): ZonedDateTime? = getDateTime(name)?.raw
-
-    fun getInstant(pos: Int): Instant?
-    fun getInstant(name: String): Instant?
+    fun getInstant(key: String): Instant
+    fun getInstant(pos: Int): Instant = getInstant(getName(pos))
 
     // ========================================================================
     // All the methods below get the datetime from the underlying value
