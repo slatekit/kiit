@@ -20,34 +20,6 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
 
     open val basicTypes = mapOf<KType, TypeInfo>()
 
-    /** Represents type information for the purspose of code generation.
-     * @param isBasicType : whether this is a number, boolean, String
-     * @param isCollection : whether this is a list or map
-     * @param targetParameterType : The target type name used as a parameter input: e.g. "int", "double"
-     * @param targetReturnType : The target type name used as a return type. For parsing/generic purposes,
-     *                               this is the corresponding object type for a type. e.g. Integer for int.
-     *                               e.g. "Integer", "Double"
-     * @param containerType : For collections, the Kotlin class representing the container type. e.g. "List::class", "Map::class"
-     * @param dataType : The Kotlin class representing the data type.
-     * @param conversionType : The Kotlin
-     */
-    data class TypeInfo(
-        val isBasicType: Boolean,
-        val isCollection: Boolean,
-        val targetParameterType: String,
-        val targetReturnType: String,
-        val containerType: KClass<*>,
-        val dataType: KClass<*>,
-        val conversionType: String,
-        val keyType: KClass<*>? = null
-    ) {
-
-        fun isList(): Boolean = containerType == List::class
-        fun isMap(): Boolean = containerType == Map::class
-        fun isObject(): Boolean = !isBasicType && !isCollection
-        fun isPair(): Boolean = isObject() && dataType.simpleName?.startsWith("Pair") ?: false
-    }
-
     open val templateClassSuffix = "Api"
 
     open fun templateClass(): String {
@@ -82,18 +54,12 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         val dateFolder = Files.folderNameByDate()
 
         // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\2017-11-08
-        val outputFolder = File(outputFolderPath)
-        val targetFolder = File(outputFolder, dateFolder)
-        val apiFolder = File(targetFolder, "api")
-        val modelFolder = File(targetFolder, "dto")
-        outputFolder.mkdir()
-        targetFolder.mkdir()
-        apiFolder.mkdir()
-        modelFolder.mkdir()
-        log.info("Target folder: " + targetFolder.absolutePath)
+        val codeGenDirs = CodeGenDirs(outputFolderPath ?: "", dateFolder)
+        codeGenDirs.create(log)
+        codeGenDirs.log(log)
 
         // Collection of all custom types
-        this.settings.host.routes.visitApis({ _, api ->
+        this.settings.host.routes.visitApis { _, api ->
 
             try {
                 if (ApiHelper.isWebProtocol(api.protocol, "")) {
@@ -124,28 +90,28 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                     // Iterate over all the api actions
                     api.actions.items.map { action ->
                         println(action.member.name)
-                        generateModelFromType(action.paramsUser.map { it.type }, modelFolder)
+                        generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
                         try {
-                            generateModelFromType(listOf(action.member.returnType), modelFolder)
+                            generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
                         } catch (ex: Exception) {
-                            log.error("Error tryting to generaate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
+                            log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
                         }
                     }
 
                     // Generate file.
-                    genClientApi(req, api, apiFolder, buff.toString())
+                    genClientApi(req, api, codeGenDirs.apiFolder, buff.toString())
                 }
             } catch (ex: Exception) {
                 log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
                 throw ex
             }
-        })
+        }
     }
 
     fun generateModelFromType(types: List<KType>, modelFolder: File) {
         types.map { buildTypeName(it) }
-            .filter { isTypeApplicableForCodeGen(it) }
-            .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
+                .filter { isTypeApplicableForCodeGen(it) }
+                .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
     }
 
     fun isTypeApplicableForCodeGen(it: TypeInfo): Boolean {
@@ -196,18 +162,18 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         val typeInfo = buildTypeName(action.member.returnType)
         val verb = action.verb
         return mapOf(
-            "route" to api.area + "/" + api.name + "/" + action.name,
-            "verb" to verb,
-            "methodName" to action.name,
-            "methodDesc" to action.desc,
-            "methodParams" to buildArgs(action),
-            "methodReturnType" to typeInfo.targetReturnType,
-            "queryParams" to buildQueryParams(action),
-            "postDataDecl" to if (verb == Verbs.get) "" else "HashMap<String, Object> postData = new HashMap<>();",
-            "postDataVars" to buildDataParams(action),
-            "postDataParam" to if (verb == Verbs.get) "" else "postData,",
-            "converterTypes" to typeInfo.conversionType,
-            "converterClass" to getConverterTypeName(typeInfo)
+                "route" to api.area + "/" + api.name + "/" + action.name,
+                "verb" to verb,
+                "methodName" to action.name,
+                "methodDesc" to action.desc,
+                "methodParams" to buildArgs(action),
+                "methodReturnType" to typeInfo.targetReturnType,
+                "queryParams" to buildQueryParams(action),
+                "postDataDecl" to if (verb == Verbs.get) "" else "HashMap<String, Object> postData = new HashMap<>();",
+                "postDataVars" to buildDataParams(action),
+                "postDataParam" to if (verb == Verbs.get) "" else "postData,",
+                "converterTypes" to typeInfo.conversionType,
+                "converterClass" to getConverterTypeName(typeInfo)
         )
     }
 
@@ -218,9 +184,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
             else
                 "Map"
         else if (info.isPair())
-                "Pair"
-            else
-                "Single"
+            "Pair"
+        else
+            "Single"
     }
 
     /**

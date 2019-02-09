@@ -17,17 +17,11 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.common.*
-import slatekit.common.results.ResultFuncs
 import slatekit.integration.errors.ErrorHandler
 import slatekit.integration.errors.ErrorItem
 import slatekit.integration.errors.ErrorItemQueue
 import slatekit.integration.errors.ErrorItemService
 import test.setup.*
-
-/**
- * Created by kishorereddy on 6/12/17.
- */
 
 
 class Api_Error_Tests : ApiTestsBase() {
