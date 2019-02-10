@@ -26,7 +26,7 @@ object DateTimeConverter : SqlConverter<DateTime> {
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): DateTime? {
         return if (isUTC)
-            record.getDateTimeLocalFromUTC(name)
+            DateTime(record.getZonedDateTimeUtc(name)).atUtcLocal()
         else
             record.getDateTime(name)
     }

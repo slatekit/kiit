@@ -14,10 +14,7 @@
 package slatekit.common
 
 import slatekit.common.content.Doc
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 
 /**
  * Conversions from text to types
@@ -41,6 +38,8 @@ object Conversions {
 
     fun toDouble(text: String): Double = text.toDouble()
 
+    fun toInstant(text: String): Instant = Instant.parse(text)
+
     fun toLocalDate(text: String): LocalDate = LocalDate.parse(text)
 
     fun toLocalTime(text: String): LocalTime = LocalTime.parse(text)
@@ -48,6 +47,8 @@ object Conversions {
     fun toLocalDateTime(text: String): LocalDateTime = LocalDateTime.parse(text)
 
     fun toZonedDateTime(text: String): ZonedDateTime = ZonedDateTime.parse(text)
+
+    fun toZonedDateTimeUtc(text: String): ZonedDateTime = toZonedDateTime(text).withZoneSameLocal(ZoneId.of("UTC"))
 
     fun toDateTime(text: String): DateTime {
         return when (text) {

@@ -14,10 +14,7 @@
 package slatekit.common
 
 import slatekit.common.ids.UniqueId
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 import java.util.*
 
 interface InputsUpdateable {
@@ -51,11 +48,13 @@ interface Inputs {
     fun getLong(key: String): Long
     fun getFloat(key: String): Float
     fun getDouble(key: String): Double
+    fun getInstant(key:String): Instant
     fun getDateTime(key: String): DateTime
     fun getLocalDate(key: String): LocalDate
     fun getLocalTime(key: String): LocalTime
     fun getLocalDateTime(key: String): LocalDateTime
     fun getZonedDateTime(key: String): ZonedDateTime
+    fun getZonedDateTimeUtc(key: String): ZonedDateTime
     fun getUUID(key: String): java.util.UUID = UUID.fromString(getString(key))
     fun getUniqueId(key: String): UniqueId = UniqueId.fromString(getString(key))
 
@@ -67,11 +66,13 @@ interface Inputs {
     fun getLongOrNull(key: String): Long? = getOrNull(key) { k: String -> getLong(k) }
     fun getFloatOrNull(key: String): Float? = getOrNull(key) { k: String -> getFloat(k) }
     fun getDoubleOrNull(key: String): Double? = getOrNull(key) { k: String -> getDouble(k) }
+    fun getInstantOrNull(key: String): Instant? = getOrNull(key) { k: String -> getInstant(k) }
     fun getDateTimeOrNull(key: String): DateTime? = getOrNull(key) { k: String -> getDateTime(k) }
     fun getLocalDateOrNull(key: String): LocalDate? = getOrNull(key) { k: String -> getLocalDate(k) }
     fun getLocalTimeOrNull(key: String): LocalTime? = getOrNull(key) { k: String -> getLocalTime(k) }
     fun getLocalDateTimeOrNull(key: String): LocalDateTime? = getOrNull(key) { k: String -> getLocalDateTime(k) }
     fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
+    fun getZonedDateTimeUtcOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTimeUtc(k) }
     fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
     fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.fromString(getString(k)) }
 
@@ -83,11 +84,13 @@ interface Inputs {
     fun getLongOrElse(key: String, default: Long): Long = getOrElse(key, { k: String -> getLong(k) }, default)
     fun getFloatOrElse(key: String, default: Float): Float = getOrElse(key, { k: String -> getFloat(k) }, default)
     fun getDoubleOrElse(key: String, default: Double): Double = getOrElse(key, { k: String -> getDouble(k) }, default)
+    fun getInstantOrElse(key: String, default: Instant): Instant = getOrElse(key, { k: String -> getInstant(k) }, default)
     fun getDateTimeOrElse(key: String, default: DateTime): DateTime = getOrElse(key, { k: String -> getDateTime(k) }, default)
     fun getLocalDateOrElse(key: String, default: LocalDate): LocalDate = getOrElse(key, { k: String -> getLocalDate(k) }, default)
     fun getLocalTimeOrElse(key: String, default: LocalTime): LocalTime = getOrElse(key, { k: String -> getLocalTime(k) }, default)
     fun getLocalDateTimeOrElse(key: String, default: LocalDateTime): LocalDateTime = getOrElse(key, { k: String -> getLocalDateTime(k) }, default)
     fun getZonedDateTimeOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTime(k) }, default)
+    fun getZonedDateTimeUtcOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTimeUtc(k) }, default)
     fun getUUIDOrElse(key: String, default:UUID): UUID = getOrElse(key, { k: String -> UUID.fromString(getString(k)) }, default)
     fun getUniqueIdOrElse(key: String, default:UniqueId): UniqueId = getOrElse(key, { k: String -> UniqueId.fromString(getString(k)) }, default)
 

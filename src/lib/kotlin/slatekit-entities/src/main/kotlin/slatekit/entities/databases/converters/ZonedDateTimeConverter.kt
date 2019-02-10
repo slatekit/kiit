@@ -25,7 +25,7 @@ object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): ZonedDateTime? {
         return if (isUTC)
-            record.getZonedDateTimeLocalFromUTC(name)
+            record.getZonedDateTimeUtc(name)
         else
             record.getZonedDateTime(name)
     }
