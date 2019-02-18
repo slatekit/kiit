@@ -8,7 +8,6 @@ include 'slatekit-common',
         'slatekit-server',
         'slatekit-workers',
         'slatekit-providers',
-        'slatekit-results',
         'slatekit-tools',
         'slatekit-tests',
         'slatekit-examples'

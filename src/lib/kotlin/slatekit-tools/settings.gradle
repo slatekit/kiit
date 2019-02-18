@@ -14,6 +14,3 @@ include ':slatekit-apis'
 
 include ':slatekit-integration'
 //project(':slatekit-integration').projectDir=new File('../slatekit-integration')
-
-include ':slatekit-results'
-//project(':slatekit-results').projectDir=new File('../slatekit-results')
