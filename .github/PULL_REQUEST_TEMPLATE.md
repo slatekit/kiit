@@ -4,6 +4,12 @@
 ## Ticket(s) 
 <!-- Link to any tickets here -->
 
+## Links(s) 
+<!-- Relevant links -->
+
+## Dependencies
+<!-- Items this depends on -->
+
 ## Design
 <!-- High-level design/changes -->
 
