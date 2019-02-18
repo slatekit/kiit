@@ -14,10 +14,7 @@
 package slatekit.common.requests
 
 import slatekit.common.*
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 
 /**
  * Created by kishorereddy on 5/25/17.
@@ -37,11 +34,13 @@ open class InputArgs(
     override fun getLong(key: String): Long = Conversions.toLong(_map[key].toString())
     override fun getFloat(key: String): Float = Conversions.toFloat(_map[key].toString())
     override fun getDouble(key: String): Double = Conversions.toDouble(_map[key].toString())
+    override fun getInstant(key: String): Instant = Conversions.toInstant(_map[key].toString())
+    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(_map[key].toString())
     override fun getLocalDate(key: String): LocalDate = Conversions.toLocalDate(_map[key].toString())
     override fun getLocalTime(key: String): LocalTime = Conversions.toLocalTime(_map[key].toString())
     override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(_map[key].toString())
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(_map[key].toString())
-    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(_map[key].toString())
+    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(_map[key].toString())
 
     override fun get(key: String): Any? = if (_map.contains(key)) _map[key] else null
     //override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null

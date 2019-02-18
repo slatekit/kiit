@@ -25,9 +25,6 @@ object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
     }
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): LocalDateTime? {
-        return if (isUTC)
-            record.getLocalDateTimeFromUTC(name)
-        else
-            record.getLocalDateTime(name)
+        return record.getLocalDateTime(name)
     }
 }

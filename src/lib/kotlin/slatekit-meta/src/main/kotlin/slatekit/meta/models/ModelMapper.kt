@@ -210,11 +210,9 @@ open class ModelMapper(
             KTypes.KLocalDateClass     -> if ( mapping.isRequired ) record.getLocalDate(colName)     else record.getLocalDateOrNull(colName)
             KTypes.KLocalTimeClass     -> if ( mapping.isRequired ) record.getLocalTime(colName)     else record.getLocalTimeOrNull(colName)
             KTypes.KLocalDateTimeClass -> if ( mapping.isRequired ) record.getLocalDateTime(colName) else record.getLocalDateOrNull(colName)
-            KTypes.KZonedDateTimeClass -> if (isUTC) record.getZonedDateTimeLocalFromUTC(colName) else record.getZonedDateTime(
-                    colName
-            )
-            KTypes.KDateTimeClass      -> if (isUTC) record.getDateTimeLocalFromUTC(colName) else record.getDateTime(colName)
-            KTypes.KInstantClass       -> record.getInstant(colName)
+            KTypes.KZonedDateTimeClass -> if ( mapping.isRequired ) record.getZonedDateTime(colName) else record.getZonedDateTimeOrNull(colName)
+            KTypes.KDateTimeClass      -> if ( mapping.isRequired ) record.getDateTime(colName)      else record.getDateTimeOrNull(colName)
+            KTypes.KInstantClass       -> if ( mapping.isRequired ) record.getInstant(colName)       else record.getInstantOrNull(colName)
             KTypes.KUUIDClass          -> if ( mapping.isRequired ) record.getUUID(colName)          else record.getUUIDOrNull(colName)
             KTypes.KUniqueIdClass      -> if ( mapping.isRequired ) record.getUniqueId(colName)      else record.getUniqueIdOrNull(colName)
             else -> {

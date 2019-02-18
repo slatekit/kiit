@@ -31,40 +31,13 @@ interface Record : Inputs {
     fun getLong(pos: Int): Long = getLong(getName(pos))
     fun getFloat(pos: Int): Float = getFloat(getName(pos))
     fun getDouble(pos: Int): Double = getDouble(getName(pos))
-    fun getUUID(pos: Int): java.util.UUID = getUUID(getName(pos))
-    fun getUniqueId(pos: Int): UniqueId = getUniqueId(getName(pos))
+    fun getInstant(pos: Int): Instant = getInstant(getName(pos))
     fun getDateTime(pos: Int): DateTime = getDateTime(getName(pos))
     fun getLocalDate(pos: Int): LocalDate = getLocalDate(getName(pos))
     fun getLocalTime(pos: Int): LocalTime = getLocalTime(getName(pos))
     fun getLocalDateTime(pos: Int): LocalDateTime = getLocalDateTime(getName(pos))
     fun getZonedDateTime(pos: Int): ZonedDateTime = getZonedDateTime(getName(pos))
-
-    // Assumes DateTime as UTC
-    fun getDateTimeAsUTC(name: String): DateTime
-    fun getDateTimeAsUTC(pos: Int): DateTime = getDateTimeAsUTC(getName(pos))
-
-    fun getInstant(key: String): Instant
-    fun getInstant(pos: Int): Instant = getInstant(getName(pos))
-
-    // ========================================================================
-    // All the methods below get the datetime from the underlying value
-    // which is assumed to be UTC. So we load underlying as UTC and
-    // convert it to accordingly to the local zone
-    fun getLocalDateTimeFromUTC(pos: Int): LocalDateTime? {
-        val atUtc = getDateTimeAsUTC(pos)
-        val local = atUtc?.atZone(ZoneId.systemDefault())
-        return local?.local()
-    }
-
-    fun getLocalDateTimeFromUTC(name: String): LocalDateTime? {
-        val atUtc = getDateTimeAsUTC(name)
-        val local = atUtc?.atZone(ZoneId.systemDefault())
-        return local?.local()
-    }
-
-    fun getZonedDateTimeLocalFromUTC(pos: Int): ZonedDateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())?.raw
-    fun getZonedDateTimeLocalFromUTC(name: String): ZonedDateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())?.raw
-
-    fun getDateTimeLocalFromUTC(pos: Int): DateTime? = getDateTimeAsUTC(pos)?.atZone(ZoneId.systemDefault())
-    fun getDateTimeLocalFromUTC(name: String): DateTime? = getDateTimeAsUTC(name)?.atZone(ZoneId.systemDefault())
+    fun getZonedDateTimeUtc(pos: Int): ZonedDateTime = getZonedDateTimeUtc(getName(pos))
+    fun getUUID(pos: Int): java.util.UUID = getUUID(getName(pos))
+    fun getUniqueId(pos: Int): UniqueId = getUniqueId(getName(pos))
 }

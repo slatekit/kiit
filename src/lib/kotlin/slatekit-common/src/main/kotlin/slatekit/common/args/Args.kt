@@ -14,10 +14,7 @@
 package slatekit.common.args
 
 import slatekit.common.*
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 
 /**
  * Container for parsed command line arguments that are either named or positional.
@@ -227,11 +224,13 @@ class Args(
     override fun getLong(key: String): Long = Conversions.toLong(named[key] ?: "0")
     override fun getFloat(key: String): Float = Conversions.toFloat(named[key] ?: "0")
     override fun getDouble(key: String): Double = Conversions.toDouble(named[key] ?: "0")
+    override fun getInstant(key: String): Instant = Conversions.toInstant(named[key] ?: "0")
     override fun getLocalDate(key: String): LocalDate = Conversions.toLocalDate(named[key] ?: "")
     override fun getLocalTime(key: String): LocalTime = Conversions.toLocalTime(named[key] ?: "")
+    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(named[key] ?: "")
     override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(named[key] ?: "")
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(named[key] ?: "")
-    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(named[key] ?: "")
+    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(named[key] ?: "")
 
     override fun get(key: String): Any? = if (named.contains(key)) named[key] else null
     //override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null

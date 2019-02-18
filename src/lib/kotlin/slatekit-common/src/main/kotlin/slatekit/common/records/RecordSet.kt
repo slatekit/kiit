@@ -27,7 +27,7 @@ class RecordSet(private val rs: ResultSet) : Record {
     override fun getPos(name:String):Int = rs.findColumn(name)
     override fun getName(pos:Int):String = rs.metaData.getColumnName(pos)
     override fun contains(name:String):Boolean = rs.findColumn(name) > -1
-    override fun containsKey(name:String):Boolean = rs.findColumn(name) > -1
+    override fun containsKey(key:String):Boolean = rs.findColumn(key) > -1
 
     override fun getString(key: String): String = rs.getString(key)
     override fun getBool(key: String): Boolean = rs.getBoolean(key)
@@ -37,22 +37,13 @@ class RecordSet(private val rs: ResultSet) : Record {
     override fun getLong(key: String): Long = rs.getLong(key)
     override fun getFloat(key: String): Float = rs.getFloat(key)
     override fun getDouble(key: String): Double = rs.getDouble(key)
+    override fun getInstant(key: String): Instant = rs.getTimestamp(key).toInstant()
+    override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTime.of(it) }
     override fun getLocalDate(key: String): LocalDate = rs.getDate(key).toLocalDate()
     override fun getLocalTime(key: String): LocalTime = rs.getTime(key).toLocalTime()
     override fun getLocalDateTime(key: String): LocalDateTime = rs.getTimestamp(key).toLocalDateTime()
     override fun getZonedDateTime(key: String): ZonedDateTime = rs.getTimestamp(key).toLocalDateTime().atZone(ZoneId.systemDefault())
-    override fun getInstant(key: String): Instant = rs.getTimestamp(key).toInstant()
-    override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTime.of(it) }
-
-    override fun getDateTimeAsUTC(pos: Int): DateTime {
-        val ts = rs.getTimestamp(pos)
-        return ts.let { DateTime.of(ts).atUtcLocal() }
-    }
-
-    override fun getDateTimeAsUTC(name: String): DateTime {
-        val ts = rs.getTimestamp(name)
-        return ts.let { DateTime.of(ts).atUtcLocal() }
-    }
+    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = DateTime.build(rs.getTimestamp(key), DateTime.UTC)
 
 
     // Helpers
