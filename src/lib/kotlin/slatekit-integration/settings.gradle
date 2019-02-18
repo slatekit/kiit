@@ -17,6 +17,3 @@ project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 
 include ':slatekit-workers'
 project(':slatekit-workers').projectDir=new File('../slatekit-workers')
-
-include ':slatekit-results'
-project(':slatekit-results').projectDir=new File('../slatekit-results')
