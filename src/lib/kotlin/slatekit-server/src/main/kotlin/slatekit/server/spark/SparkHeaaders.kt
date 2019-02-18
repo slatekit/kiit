@@ -18,10 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import spark.Request
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
+import java.time.*
 
 data class SparkHeaaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
 
@@ -43,11 +40,13 @@ data class SparkHeaaders(val req: Request, val enc: Encryptor?) : slatekit.commo
     override fun getLong(key: String): Long = Conversions.toLong(getStringRaw(key))
     override fun getFloat(key: String): Float = Conversions.toFloat(getStringRaw(key))
     override fun getDouble(key: String): Double = Conversions.toDouble(getStringRaw(key))
+    override fun getInstant(key: String): Instant = Conversions.toInstant(getStringRaw(key))
+    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
     override fun getLocalDate(key: String): LocalDate = Conversions.toLocalDate(getStringRaw(key))
     override fun getLocalTime(key: String): LocalTime = Conversions.toLocalTime(getStringRaw(key))
     override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(getStringRaw(key))
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
-    override fun getDateTime(key: String): DateTime = Conversions.toDateTime(getStringRaw(key))
+    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(getStringRaw(key))
 
     fun getInternal(key: String): Any? {
         return if (containsKey(key)) {
