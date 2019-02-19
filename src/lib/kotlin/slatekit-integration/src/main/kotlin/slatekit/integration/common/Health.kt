@@ -24,7 +24,7 @@ open class Health(val ctx: Context) {
 
 
     fun version(): Group<Pair<String, String>> {
-        return Group("version", "health", ctx.build.props())
+        return Group("version", "health", ctx.app.build.props())
     }
 
 
@@ -61,6 +61,6 @@ open class Health(val ctx: Context) {
 
 
     fun detail(): Group<Pair<String, String>> {
-        return Group("infra", "health", ctx.build.props())
+        return Group("infra", "health", ctx.app.build.props())
     }
 }

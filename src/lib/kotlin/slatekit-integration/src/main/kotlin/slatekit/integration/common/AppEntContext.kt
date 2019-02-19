@@ -30,6 +30,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.HELP
+import slatekit.core.app.AppFuncs.dbs
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 
@@ -55,9 +56,9 @@ data class AppEntContext(
         override val env: Env,
         override val cfg: Conf,
         override val logs: Logs,
-        val ent: Entities,
         override val app: Info,
-        override val dbs: DbLookup? = null,
+        val ent: Entities,
+        val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
@@ -66,7 +67,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): AppContext {
-        return AppContext(arg, env, cfg, logs, app, dbs, enc, dirs)
+        return AppContext(arg, env, cfg, logs, app, enc, dirs)
     }
 
     companion object {
@@ -82,8 +83,9 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
+            val dbCons = dbs(ctx.cfg)
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, Entities(ctx.dbs, ctx.enc, namer = namer), ctx.app, ctx.dbs, ctx.enc, ctx.dirs
+                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }

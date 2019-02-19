@@ -61,8 +61,7 @@ open class AppProcess(
     // Config from context
     val conf = ctx.cfg
 
-    val meta: Info = Info(ctx.inf, ctx.host, ctx.lang, Status.none,
-            StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()), ctx.build)
+    val meta: Info = ctx.app
 
     override val logger = ctx.logs.getLogger("app")
     override val encryptor = ctx.enc

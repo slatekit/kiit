@@ -43,7 +43,7 @@ object AppRunner {
         // - exit
         // And these are considered failures.
         // Otherwise run the app.
-        val result = when (app.ctx.state.success) {
+        val result = when (app.ctx != null) {
             false -> failed(app).toResultEx()
             else -> execute(app, end)
         }
@@ -209,14 +209,14 @@ object AppRunner {
     }
 
     fun failed(app: AppProcess): ResultMsg<Any> {
-        if (app.ctx.state.code != HELP) {
-            println("Application context invalid... exiting running of app.")
-        }
-        return Failure(app.ctx.state.msg, code = app.ctx.state.code, msg = app.ctx.state.msg)
+//        if (app.ctx.state.code != HELP) {
+//            println("Application context invalid... exiting running of app.")
+//        }
+        return Failure("failed loading")
     }
 
     fun execute(app: AppProcess, end: Boolean = true): ResultEx<Any> =
-            Result.attempt({ ->
+            Result.attempt {
 
                 // 1. Begin app workflow
                 app.init()
@@ -231,5 +231,5 @@ object AppRunner {
 
                 // 4. Result<Any>
                 res
-            })
+            }
 }

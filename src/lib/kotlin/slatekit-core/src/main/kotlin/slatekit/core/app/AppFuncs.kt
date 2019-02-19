@@ -89,13 +89,13 @@ object AppFuncs {
     fun about(conf: Conf): About =
             // Get info about app from base config "env.conf" which is common to all environments.
             About(
-                    id = conf.getStringOrElse("app.id", "sampleapp.console"),
-                    name = conf.getStringOrElse("app.name", "Sample App - Console"),
-                    desc = conf.getStringOrElse("app.desc", "Sample to show the base application"),
-                    company = conf.getStringOrElse("app.company", "slatekit"),
+                    id = conf.getStringOrElse("app.id", "app id"),
+                    name = conf.getStringOrElse("app.name", "app name"),
+                    desc = conf.getStringOrElse("app.desc", "app desc"),
+                    company = conf.getStringOrElse("app.company", "company"),
                     region = conf.getStringOrElse("app.region", "ny"),
                     version = conf.getStringOrElse("app.version", "0.9.1"),
-                    url = conf.getStringOrElse("app.url", "http://sampleapp.slatekit.com"),
+                    url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
                     group = conf.getStringOrElse("app.group", "products-dept"),
                     contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
                     tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
@@ -141,7 +141,7 @@ object AppFuncs {
      */
     fun vars(conf: Conf): Subs {
         val abt = about(conf)
-        return Subs(listOf<Pair<String, (TemplatePart) -> String>>(
+        return Subs(listOf(
                 Pair("user.home", { _ -> System.getProperty("user.home") }),
                 Pair("company.id", { _ -> abt.company.toId() }),
                 Pair("company.name", { _ -> abt.company }),
@@ -158,7 +158,7 @@ object AppFuncs {
 
     fun getConfPath(args: Args, file: String, conf: Conf?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
-        val location = pathFromArgs ?: conf?.getStringOrElse("conf.dir", "") ?: ""
+        val location = pathFromArgs.orElse( conf?.getStringOrElse("conf.dir", "") ?: "")
         val prefix = when (location) {
             "jars" -> ""
             "conf" -> "file://./conf/"
@@ -303,12 +303,10 @@ object AppFuncs {
                 cfg = conf,
                 enc = enc,
                 logs = logs ?: LogsDefault,
-                dbs = dbs(conf),
                 app = Info(about(conf).copy(version = build.version),
                         Host.local(), Lang.kotlin(), Status.none,
                         StartInfo(appInputs.args.line, appInputs.env.key, conf.origin()), build),
                 dirs = folders(conf)
-                // ent = Entities(dbs(conf))
         )
     }
 

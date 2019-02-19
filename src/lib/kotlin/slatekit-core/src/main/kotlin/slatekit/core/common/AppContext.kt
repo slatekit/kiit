@@ -53,7 +53,6 @@ data class AppContext(
         override val cfg: Conf,
         override val logs: Logs,
         override val app: Info,
-        override val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null,
 

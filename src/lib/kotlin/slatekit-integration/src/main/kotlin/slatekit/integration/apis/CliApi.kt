@@ -141,8 +141,8 @@ class CliApi(
 
     override fun collectSummaryExtra(): List<Pair<String, String>>? {
         return listOf(
-                Pair("db.conn", ctx.dbs?.default()?.url ?: ""),
-                Pair("db.user", ctx.dbs?.default()?.user ?: ""),
+                Pair("db.conn", ctx.cfg.dbCon().url ),
+                Pair("db.user", ctx.cfg.dbCon().user),
                 Pair("dirs.app", ctx.dirs?.pathToApp ?: "")
         )
     }
