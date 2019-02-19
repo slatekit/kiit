@@ -11,9 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.app
-
-import slatekit.common.info.Status
+package slatekit.common.info
 
 interface AppMetaSupport {
 

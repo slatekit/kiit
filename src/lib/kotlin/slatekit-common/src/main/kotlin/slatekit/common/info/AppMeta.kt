@@ -11,9 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.app
-
-import slatekit.common.info.*
+package slatekit.common.info
 
 data class AppMeta(
     val about: About,
