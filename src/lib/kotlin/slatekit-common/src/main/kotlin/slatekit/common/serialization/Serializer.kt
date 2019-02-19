@@ -44,9 +44,9 @@ open class Serializer(
     open val standardizeResult = false
     protected val _indenter = Indenter()
     protected var _buff = StringBuilder()
-    protected val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    protected val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-    protected val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+    private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     enum class ParentType {
         ROOT_TYPE, LIST_TYPE, MAP_TYPE, OBJECT_TYPE
