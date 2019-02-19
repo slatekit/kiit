@@ -2,7 +2,7 @@ package slatekit.common
 
 import slatekit.common.info.AppMeta
 import slatekit.common.args.Args
-import slatekit.common.conf.ConfigBase
+import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
@@ -26,7 +26,7 @@ import slatekit.common.log.Logs
 interface Context {
     val arg: Args
     val env: Env
-    val cfg: ConfigBase
+    val cfg: Conf
     val logs: Logs
     val inf: About
     val host: Host

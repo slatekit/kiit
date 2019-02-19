@@ -74,7 +74,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun dbs(conf: ConfigBase): DbLookup = defaultDb(conf.dbCon("db"))
+    fun dbs(conf: Conf): DbLookup = defaultDb(conf.dbCon("db"))
 
     /**
      * builds all the info for this application including its
@@ -84,7 +84,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun about(conf: ConfigBase): About =
+    fun about(conf: Conf): About =
             // Get info about app from base config "env.conf" which is common to all environments.
             About(
                     id = conf.getStringOrElse("app.id", "sampleapp.console"),
@@ -116,7 +116,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun folders(conf: ConfigBase): Folders {
+    fun folders(conf: Conf): Folders {
 
         val abt = about(conf)
 
@@ -137,7 +137,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun vars(conf: ConfigBase): Subs {
+    fun vars(conf: Conf): Subs {
         val abt = about(conf)
         return Subs(listOf<Pair<String, (TemplatePart) -> String>>(
                 Pair("user.home", { _ -> System.getProperty("user.home") }),
@@ -154,7 +154,7 @@ object AppFuncs {
         ))
     }
 
-    fun getConfPath(args: Args, file: String, conf: ConfigBase?): String {
+    fun getConfPath(args: Args, file: String, conf: Conf?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
         val location = pathFromArgs ?: conf?.getStringOrElse("conf.dir", "") ?: ""
         val prefix = when (location) {
@@ -199,7 +199,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun getEnv(args: Args, conf: ConfigBase): Env {
+    fun getEnv(args: Args, conf: Conf): Env {
         val env = getConfOverride(args, conf, "env", "loc")
         return Env.parse(env)
     }
@@ -209,7 +209,7 @@ object AppFuncs {
      *
      * @return
      */
-    fun getLogLevel(args: Args, conf: ConfigBase): LogLevel {
+    fun getLogLevel(args: Args, conf: Conf): LogLevel {
         val level = getConfOverride(args, conf, "log.level", "info")
         return LogHelper.parseLevel(level)
     }
@@ -219,12 +219,12 @@ object AppFuncs {
      *
      * @return
      */
-    fun getLogName(args: Args, conf: ConfigBase): String {
+    fun getLogName(args: Args, conf: Conf): String {
         val log = getConfOverride(args, conf, "log.name", "@{app}-@{env}-@{date}.log")
         return log
     }
 
-    fun getConfOverride(args: Args, conf: ConfigBase, key: String, defaultValue: String?): String {
+    fun getConfOverride(args: Args, conf: Conf, key: String, defaultValue: String?): String {
 
         val finalDefaultValue = defaultValue ?: ""
 

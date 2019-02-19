@@ -29,18 +29,18 @@ class ConfigMulti(
     path: String,
     enc: Encryptor? = null
 )
-    : ConfigBase({ raw -> enc?.decrypt(raw) ?: raw }) {
+    : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
 
     constructor(configPath: String, configParentPath: String, enc: Encryptor?) :
             this(ConfFuncs.loadPropertiesFrom(configPath),
                     ConfFuncs.loadPropertiesFrom(configParentPath),
                     configPath, enc)
 
-    constructor(config: ConfigBase, configParent: ConfigBase, enc: Encryptor?) :
+    constructor(config: Conf, configParent: Conf, enc: Encryptor?) :
             this(config.rawConfig as Properties,
                     configParent.rawConfig as Properties, config.origin(), enc)
 
-    constructor(configPath: String, configParent: ConfigBase, enc: Encryptor?) :
+    constructor(configPath: String, configParent: Conf, enc: Encryptor?) :
             this(ConfFuncs.loadPropertiesFrom(configPath),
                     configParent.rawConfig as Properties, configPath, enc)
 
@@ -86,7 +86,7 @@ class ConfigMulti(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): ConfigBase? = ConfFuncs.load(file, _enc)
+    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, _enc)
 
     fun containsKeyInternal(key: String): Boolean {
         return _config.containsKey(key) || _configParent.containsKey(key)

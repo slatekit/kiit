@@ -75,7 +75,7 @@ class Config(
     enc: Encryptor? = null,
     config: Properties? = null
 )
-    : ConfigBase({ raw -> enc?.decrypt(raw) ?: raw }) {
+    : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
 
     private val _fileName = fileName
     private val _enc = enc
@@ -124,7 +124,7 @@ class Config(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): ConfigBase? = ConfFuncs.load(file, _enc)
+    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, _enc)
 
     fun getInternal(key: String): Any? {
         return if (containsKey(key)) {

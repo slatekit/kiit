@@ -17,7 +17,7 @@ import slatekit.common.*
 import slatekit.common.info.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
-import slatekit.common.conf.ConfigBase
+import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
@@ -47,24 +47,24 @@ import slatekit.common.results.ResultCode.HELP
   * @param tnt : tenant info ( if running in multi-tenant mode - not officially supported )
   */
 data class AppContext(
-    override val arg: Args,
-    override val env: Env,
-    override val cfg: ConfigBase,
-    override val logs: Logs,
-    override val inf: About,
-    override val host: Host = Host.local(),
-    override val lang: Lang = Lang.kotlin(),
-    override val dbs: DbLookup? = null,
-    override val enc: Encryptor? = null,
-    override val dirs: Folders? = null,
-    override val extra: MutableMap<String, Any> = mutableMapOf(),
-    override val state: ResultEx<Boolean> = Success(true),
-    override val build: Build = Build.empty,
+        override val arg: Args,
+        override val env: Env,
+        override val cfg: Conf,
+        override val logs: Logs,
+        override val inf: About,
+        override val host: Host = Host.local(),
+        override val lang: Lang = Lang.kotlin(),
+        override val dbs: DbLookup? = null,
+        override val enc: Encryptor? = null,
+        override val dirs: Folders? = null,
+        override val extra: MutableMap<String, Any> = mutableMapOf(),
+        override val state: ResultEx<Boolean> = Success(true),
+        override val build: Build = Build.empty,
 
         // NOTE: Fix this non-strongly typed Entities object.
         // By using Any for the entities property, we avoid
         // slatekit.core having a dependency on slatekit.entities!
-    val ent: Any? = null
+        val ent: Any? = null
 ) : Context {
     override val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 

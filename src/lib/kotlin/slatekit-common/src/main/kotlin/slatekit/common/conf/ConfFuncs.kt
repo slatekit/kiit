@@ -15,9 +15,6 @@ package slatekit.common.conf
 
 import slatekit.common.io.Files
 import slatekit.common.*
-import slatekit.common.Uris.URI_PREFIX_FILE
-import slatekit.common.Uris.URI_PREFIX_JARS
-import slatekit.common.Uris.URI_PREFIX_USER
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.encrypt.Encryptor
@@ -93,7 +90,7 @@ object ConfFuncs {
      * @param enc : the encryptor for decrypting config settings.
      * @return
      */
-    fun load(fileName: String? = null, enc: Encryptor? = null): ConfigBase =
+    fun load(fileName: String? = null, enc: Encryptor? = null): Conf =
             Config(fileName, enc)
 
     /**
@@ -177,7 +174,7 @@ object ConfFuncs {
         fileName: String,
         parentFilePath: String,
         enc: Encryptor? = null
-    ): ConfigBase {
+    ): Conf {
 
         val conf = ConfigMulti(fileName, parentFilePath, enc)
         return conf

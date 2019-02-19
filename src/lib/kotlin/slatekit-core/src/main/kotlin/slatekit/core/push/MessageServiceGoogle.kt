@@ -18,7 +18,7 @@ import slatekit.common.Failure
 import slatekit.common.io.IO
 import slatekit.common.ResultMsg
 import slatekit.common.Success
-import slatekit.common.conf.ConfigBase
+import slatekit.common.conf.Conf
 import slatekit.common.http.*
 import slatekit.common.log.Logs
 import slatekit.common.results.ResultFuncs
@@ -84,11 +84,11 @@ import java.util.concurrent.Future
  *  2. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
  */
 open class MessageServiceGoogle(
-    _key: String,
-    val config: ConfigBase,
-    val logs: Logs,
-    val executor: ExecutorService ? = null,
-    private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null
+        _key: String,
+        val config: Conf,
+        val logs: Logs,
+        val executor: ExecutorService ? = null,
+        private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null
 ) :
     MessageServiceBase() {
 

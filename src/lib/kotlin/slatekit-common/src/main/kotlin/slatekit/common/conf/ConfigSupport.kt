@@ -23,7 +23,7 @@ import slatekit.common.info.Build
 
 interface ConfigSupport {
 
-    fun config(): ConfigBase
+    fun config(): Conf
 
     /**
      * gets the environment specified in the config via "env.name,env.mode"
@@ -115,7 +115,7 @@ interface ConfigSupport {
             } ?: DbConEmpty
 }
 
-fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
+fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? =
 
         // Section not present!
         if (config().containsKey(key)) {
@@ -128,7 +128,7 @@ fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
                 // 3. "@{app.dir}/sms.conf"
                 // 3. "/conf/sms.conf"
                 val location = config().getString(locationKey)
-                val conf: ConfigBase? = config().loadFrom(location)
+                val conf: Conf? = config().loadFrom(location)
                 conf?.let { c -> mapper(c) }
             } else
                 mapper(config())
