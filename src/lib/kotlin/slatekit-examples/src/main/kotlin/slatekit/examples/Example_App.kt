@@ -29,6 +29,9 @@ import slatekit.common.encrypt.B64Java8
 import slatekit.common.info.About
 import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.info.Build
+import slatekit.common.info.StartInfo
+import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.toResultEx
@@ -112,13 +115,13 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
         ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
-        println(ctx.app.about.name)
+        println(ctx.app.name)
 
         // 7. Get the host computer info
-        println(ctx.app.host)
+        println(ctx.sys.host)
 
         // 8. Get the java runtime info
-        println(ctx.app.lang)
+        println(ctx.sys.lang)
 
         // 9. Get the encryptor to encrypt/decrypt
         println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
@@ -149,8 +152,8 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
      */
     override fun collectSummaryExtra(): List<Pair<String, String>>? {
         return listOf(
-                Pair(ctx.app.about.name, " extra 1  = extra summary data1"),
-                Pair(ctx.app.about.name, " extra 2  = extra summary data2")
+                Pair(ctx.app.name, " extra 1  = extra summary data1"),
+                Pair(ctx.app.name, " extra 2  = extra summary data2")
         )
     }
 }
@@ -178,9 +181,8 @@ class Example_App : Cmd("app") {
                 cfg = conf,
                 logs = LogsDefault,
                 ent = Entities(),
-                dbs = null,
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                inf = About(
+                app = About(
                         id = "slatekit.examples",
                         name = "Slate Sample App",
                         desc = "Sample to show the base application with manually built context",
@@ -193,7 +195,9 @@ class Example_App : Cmd("app") {
                         tags = "",
                         examples = ""
                 ),
-                state = Success(true, msg ="manually built").toResultEx()
+                build = Build.empty,
+                start = StartInfo.none,
+                sys = Sys.build()
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.
@@ -223,7 +227,7 @@ class Example_App : Cmd("app") {
                             schema    =  ArgsSchema()
                                         .text("env"      , "the environment ", false, "dev"  , "dev"  , "loc|dev|qa1" )
                                         .text("log.level", "the log level"   , false, "info" , "info" , "debug|info"),
-                            converter = { context -> context.copy( inf = context.inf.copy(
+                            converter = { context -> context.copy( app = context.app.copy(
                                                 desc = "Sample app to show the base application using auto-built context",
                                                 url = "http://apps.companyabc.com/wiki")
                                         )}

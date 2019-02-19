@@ -113,11 +113,11 @@ data class AppEntContext(
         }
 
         @JvmStatic
-        fun simple(name: String): AppContext {
+        fun simple(name: String): AppEntContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             val conf = Config()
-            return AppContext(
+            return AppEntContext(
                     arg = args,
                     env = env,
                     cfg = conf,
@@ -125,6 +125,7 @@ data class AppEntContext(
                     app = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
+                    ent = Entities(),
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
