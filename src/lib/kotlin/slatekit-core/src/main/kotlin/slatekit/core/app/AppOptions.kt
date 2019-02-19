@@ -13,7 +13,7 @@
 
 package slatekit.core.app
 
-data class AppOptions(
+open class AppOptions(
     val printSummaryBeforeExec: Boolean = false,
     val printSummaryOnShutdown: Boolean = true,
     val getConfNameFromEnv: Boolean = true,

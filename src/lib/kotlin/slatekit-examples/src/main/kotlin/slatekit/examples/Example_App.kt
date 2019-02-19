@@ -13,13 +13,12 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.core.app.AppOptions
-import slatekit.core.app.AppProcess
+import slatekit.core.app.App
 import slatekit.core.app.AppRunner
 
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.Args
@@ -27,14 +26,11 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.info.About
-import slatekit.common.log.LoggerConsole
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.toResultEx
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
@@ -63,7 +59,7 @@ import slatekit.entities.core.Entities
 // There are different ways you can build up the context
 // 1. Manually      ( explictly supply the components - see below )
 // 2. Automatically ( using helper functions to that check command line args )
-class SampleApp(ctx: AppContext) : AppProcess(ctx) {
+class SampleApp(ctx: AppContext) : App(ctx) {
 
     /**
      * Options for the application that you can override
@@ -81,7 +77,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
     /**
      * Life-cycle init hook: for your app to perform any initialization
      */
-    override fun onInit(): Unit {
+    override fun init(): Unit {
         println("app initialized")
     }
 
@@ -91,7 +87,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
      *
      * @return
      */
-    override fun onExecute(): ResultEx<Any> {
+    override fun execute(): ResultEx<Any> {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -141,7 +137,7 @@ class SampleApp(ctx: AppContext) : AppProcess(ctx) {
     /**
      * Life-cycle end hook: called when app is shutting down
      */
-    override fun onEnd(): Unit {
+    override fun end(): Unit {
         info("app shutting down")
     }
 

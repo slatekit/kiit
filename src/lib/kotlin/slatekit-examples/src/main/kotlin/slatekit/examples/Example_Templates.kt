@@ -43,7 +43,7 @@ class Example_Templates : Cmd("templates") {
     // You can also use the Templates constructor directly.
     val templates = Templates.build(
       templates = listOf(
-        Template("welcome", "Hi @{user.api}, Welcome to @{company.api}."),
+        Template("showWelcome", "Hi @{user.api}, Welcome to @{company.api}."),
         Template("confirm", "Your confirmation code for @{app.api} is @{code}.")
       ),
       subs = listOf(
@@ -66,7 +66,7 @@ class Example_Templates : Cmd("templates") {
     print(result.getOrElse { listOf() })
 
     // Case 2: Parse text into a template
-    val template = templates.parseTemplate("welcome", "Hi @{user.api}, Welcome to @{company.api}.")
+    val template = templates.parseTemplate("showWelcome", "Hi @{user.api}, Welcome to @{company.api}.")
     println("Case 2: Parse into a Template containing the parts")
     print(template)
 
@@ -90,13 +90,13 @@ class Example_Templates : Cmd("templates") {
     println()
 
     // Case 5: Resolve ( process ) saved template using the initial variables
-    val text5 = templates.resolveTemplate("welcome")
+    val text5 = templates.resolveTemplate("showWelcome")
     println("Case 5: Resolve named template")
     println(text5)
     println()
 
     // Case 6: Resolve ( process ) saved template using custom variables
-    val text6 = templates.resolveTemplate("welcome", Templates.subs (
+    val text6 = templates.resolveTemplate("showWelcome", Templates.subs (
       listOf(
         Pair("company.api" , { s -> "Gotham"  } ),
         Pair("user.api"    , { s -> "batman"  } )

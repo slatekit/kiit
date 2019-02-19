@@ -146,9 +146,9 @@ class TemplateTests {
 
     @Test fun can_parse_demand_template_as_template() {
         val templates = Templates()
-        val result = templates.parseTemplate("welcome", TEST_TEMPLATE)
+        val result = templates.parseTemplate("showWelcome", TEST_TEMPLATE)
         assert( result.valid )
-        assert( result.name == "welcome")
+        assert( result.name == "showWelcome")
         assert( result.parsed)
         assert( result.valid )
         assert( result.content == TEST_TEMPLATE )
@@ -196,7 +196,7 @@ class TemplateTests {
     @Test fun can_resolve_saved_template_with_saved_vars() {
         val templates = Templates.build(
                 templates = listOf(
-                        Template("welcome", "Hi @{user.api}, Welcome to @{company.api}."),
+                        Template("showWelcome", "Hi @{user.api}, Welcome to @{company.api}."),
                         Template("confirm", "Your confirmation code for @{app.api} is @{code}.")
                 ),
                 subs = listOf(
@@ -206,7 +206,7 @@ class TemplateTests {
                         Pair("code"         , { s -> Random.alpha6()                   })
                 ))
 
-        val result = templates.resolveTemplate("welcome", null)
+        val result = templates.resolveTemplate("showWelcome", null)
         assert(result != null )
         assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
@@ -215,7 +215,7 @@ class TemplateTests {
     @Test fun can_resolve_saved_template_with_custom_vars() {
         val templates = Templates.build(
                 templates = listOf(
-                        Template("welcome", "Hi @{user.api}, Welcome to @{company.api}."),
+                        Template("showWelcome", "Hi @{user.api}, Welcome to @{company.api}."),
                         Template("confirm", "Your confirmation code for @{app.api} is @{code}.")
         ))
 
@@ -225,7 +225,7 @@ class TemplateTests {
                 Pair("user.api"    , { s -> "john.doe"                        }),
                 Pair("code"         , { s -> Random.alpha6()                   })
         ))
-        val result = templates.resolveTemplate("welcome", subs)
+        val result = templates.resolveTemplate("showWelcome", subs)
         assert(result != null )
         assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
@@ -234,7 +234,7 @@ class TemplateTests {
     @Test fun can_resolve_saved_template_with_dictionary_variables_with_global_overrides() {
         val templates = Templates.build(
                 templates = listOf(
-                        Template("welcome", "Hi @{user.api}, Welcome to @{company.api}."),
+                        Template("showWelcome", "Hi @{user.api}, Welcome to @{company.api}."),
                         Template("confirm", "Your confirmation code for @{app.api} is @{code}.")
         ),
         subs = listOf(
@@ -278,7 +278,7 @@ class TemplateTests {
         val templates = Templates.build(
 
                 listOf(
-                        Template("welcome", "Hi @{user.api}, Welcome to @{company.api}."),
+                        Template("showWelcome", "Hi @{user.api}, Welcome to @{company.api}."),
                         Template("confirm", "Your confirmation code for @{app.api} is @{code}.")
                 ),
                 listOf<Pair<String, ((TemplatePart) -> String)>>(

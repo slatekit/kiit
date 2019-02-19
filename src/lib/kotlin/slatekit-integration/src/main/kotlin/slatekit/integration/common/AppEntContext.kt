@@ -30,7 +30,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.HELP
-import slatekit.core.app.AppFuncs.dbs
+import slatekit.core.app.AppBuilder
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 
@@ -86,7 +86,7 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
-            val dbCons = dbs(ctx.cfg)
+            val dbCons = AppBuilder.dbs(ctx.cfg)
             return AppEntContext(
                     ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
