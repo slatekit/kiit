@@ -20,8 +20,8 @@ import slatekit.apis.core.Auth
 import slatekit.apis.core.Events
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
-import slatekit.common.app.AppMeta
-import slatekit.common.app.AppMetaSupport
+import slatekit.common.info.AppMeta
+import slatekit.common.info.AppMetaSupport
 import slatekit.common.metrics.Metrics
 import slatekit.common.diagnostics.Tracker
 import slatekit.common.requests.toResponse

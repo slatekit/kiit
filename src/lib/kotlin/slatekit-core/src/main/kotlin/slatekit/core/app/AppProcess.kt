@@ -15,8 +15,8 @@ package slatekit.core.app
 
 import slatekit.common.ResultEx
 import slatekit.common.Success
-import slatekit.common.app.AppMeta
-import slatekit.common.app.AppMetaSupport
+import slatekit.common.info.AppMeta
+import slatekit.common.info.AppMetaSupport
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport

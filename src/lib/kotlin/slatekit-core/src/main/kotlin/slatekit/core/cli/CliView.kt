@@ -13,7 +13,7 @@
 
 package slatekit.core.cli
 
-import slatekit.common.app.AppMeta
+import slatekit.common.info.AppMeta
 import slatekit.common.console.ConsoleWriter
 
 class CliView(

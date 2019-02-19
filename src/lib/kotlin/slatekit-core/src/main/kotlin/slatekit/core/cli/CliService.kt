@@ -15,8 +15,8 @@ package slatekit.core.cli
 
 import slatekit.common.*
 import slatekit.common.utils.Loops.doUntil
-import slatekit.common.app.AppMeta
-import slatekit.common.app.AppMetaSupport
+import slatekit.common.info.AppMeta
+import slatekit.common.info.AppMetaSupport
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.console.ConsoleWriter
@@ -48,11 +48,11 @@ import java.util.concurrent.atomic.AtomicReference
  * @param settings : Settings for the shell functionality
  */
 open class CliService(
-    val folders: Folders,
-    val settings: CliSettings,
-    protected val _appMeta: AppMeta,
-    protected val _startupCommand: String = "",
-    protected val _writer: ConsoleWriter = ConsoleWriter()
+        val folders: Folders,
+        val settings: CliSettings,
+        protected val _appMeta: AppMeta,
+        protected val _startupCommand: String = "",
+        protected val _writer: ConsoleWriter = ConsoleWriter()
 )
     : AppMetaSupport {
 

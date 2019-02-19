@@ -14,7 +14,7 @@
 package slatekit.integration.common
 
 import slatekit.common.*
-import slatekit.common.app.AppMeta
+import slatekit.common.info.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigBase

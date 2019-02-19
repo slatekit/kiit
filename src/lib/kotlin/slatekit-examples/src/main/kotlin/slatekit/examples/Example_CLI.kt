@@ -22,7 +22,7 @@ import slatekit.core.cli.CliSettings
 //<doc:import_examples>
 import slatekit.apis.ApiConstants
 import slatekit.common.*
-import slatekit.common.app.AppMeta
+import slatekit.common.info.AppMeta
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request

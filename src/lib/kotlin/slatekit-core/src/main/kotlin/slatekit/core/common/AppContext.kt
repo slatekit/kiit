@@ -14,7 +14,7 @@
 package slatekit.core.common
 
 import slatekit.common.*
-import slatekit.common.app.AppMeta
+import slatekit.common.info.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigBase
@@ -66,7 +66,7 @@ data class AppContext(
         // slatekit.core having a dependency on slatekit.entities!
     val ent: Any? = null
 ) : Context {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.Companion.none, StartInfo(arg.line, env.key, cfg.origin()), build)
+    override val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
     companion object {
 

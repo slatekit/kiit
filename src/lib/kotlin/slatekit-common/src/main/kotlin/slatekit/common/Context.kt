@@ -1,6 +1,6 @@
 package slatekit.common
 
-import slatekit.common.app.AppMeta
+import slatekit.common.info.AppMeta
 import slatekit.common.args.Args
 import slatekit.common.conf.ConfigBase
 import slatekit.common.db.DbLookup
@@ -8,7 +8,6 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
-import slatekit.common.metrics.Metrics
 
 /**
  *
