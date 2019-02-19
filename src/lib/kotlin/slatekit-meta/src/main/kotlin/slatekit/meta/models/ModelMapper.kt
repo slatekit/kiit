@@ -18,7 +18,7 @@ import slatekit.common.db.Mapper
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
-import slatekit.common.records.Record
+import slatekit.common.Record
 import slatekit.meta.KTypes
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmErasure

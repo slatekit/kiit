@@ -11,11 +11,10 @@
  * </slate_header>
  */
 
-package slatekit.common.records
+package slatekit.common.utils
 
-import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.utils.ListMap
+import slatekit.common.Record
 import slatekit.common.ids.UniqueId
 import java.time.*
 import java.util.*

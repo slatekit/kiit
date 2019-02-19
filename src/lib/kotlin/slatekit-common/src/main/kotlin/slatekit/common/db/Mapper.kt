@@ -1,6 +1,6 @@
 package slatekit.common.db
 
-import slatekit.common.records.Record
+import slatekit.common.Record
 import kotlin.reflect.KClass
 
 interface Mapper {

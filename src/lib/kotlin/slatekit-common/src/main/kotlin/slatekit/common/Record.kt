@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.records
+package slatekit.common
 
 import slatekit.common.DateTime
 import slatekit.common.Inputs
