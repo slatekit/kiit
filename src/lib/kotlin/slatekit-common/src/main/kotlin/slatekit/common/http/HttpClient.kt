@@ -30,8 +30,18 @@ import java.nio.charset.StandardCharsets
  */
 object HttpClient {
 
-    // fun post(req:HttpRequest): HttpResponse = HttpResponse(HttpStatusCodes.s200, mapOf(), null)
-    fun post(req: HttpRequest): HttpResponse {
+
+    fun put(req: HttpRequest): HttpResponse = send(req, HttpMethod.PUT)
+    fun post(req: HttpRequest): HttpResponse = send(req, HttpMethod.POST)
+    fun delete(req: HttpRequest): HttpResponse = send(req, HttpMethod.DELETE)
+
+
+    /**
+     * executes a get request and returns the string content only.
+     * @param req
+     * @return
+     */
+    fun get(req: HttpRequest): HttpResponse {
         val response = tryExecute(req) {
 
             // 1. URL
@@ -39,7 +49,39 @@ object HttpClient {
             val con = url.openConnection() as HttpURLConnection
 
             // 2. METHOD
-            con.requestMethod = HttpMethod.POST.toString()
+            con.requestMethod = HttpMethod.GET.toString()
+
+            // 3. CREDS
+            setCredentials(con, req)
+
+            // 4. HEADERS
+            req.headers?.let { headers ->
+                headers.forEach { (first, second) -> con.setRequestProperty(first, second) }
+            }
+
+            // 5. OUTPUT
+            con.setDoOutput(true)
+
+            val writer = DataOutputStream(con.outputStream)
+            writer.flush()
+            writer.close()
+
+            // Return build up con
+            con
+        }
+        return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
+    }
+
+    // fun post(req:HttpRequest): HttpResponse = HttpResponse(HttpStatusCodes.s200, mapOf(), null)
+    private fun send(req: HttpRequest, method:HttpMethod? = null): HttpResponse {
+        val response = tryExecute(req) {
+
+            // 1. URL
+            val url = URL(req.url)
+            val con = url.openConnection() as HttpURLConnection
+
+            // 2. METHOD
+            con.requestMethod = method?.toString() ?: req.method.toString()
 
             // 3. CREDS
             setCredentials(con, req)
@@ -66,130 +108,7 @@ object HttpClient {
         return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
     }
 
-    fun encodeParams(req: HttpRequest): String? {
-        return req.params?.let { params ->
-            val encoded = params.fold("") { acc, p ->
-                acc + "&" + URLEncoder.encode(p.first, "UTF-8") + "=" + URLEncoder.encode(p.second, "UTF-8")
-            }
-            encoded
-        } ?: ""
-    }
-
-      /**
-       * executes a get request and returns the string content only.
-       * @param req
-       * @return
-       */
-      fun get(req: HttpRequest): HttpResponse
-      {
-          val response = tryExecute(req) {
-
-              // 1. URL
-              val url = URL(req.url)
-              val con = url.openConnection() as HttpURLConnection
-
-              // 2. METHOD
-              con.requestMethod = HttpMethod.GET.toString()
-
-              // 3. CREDS
-              setCredentials(con, req)
-
-              // 4. HEADERS
-              req.headers?.let { headers ->
-                  headers.forEach { (first, second) -> con.setRequestProperty(first, second) }
-              }
-
-              // 5. OUTPUT
-              con.setDoOutput(true)
-
-              val writer = DataOutputStream(con.outputStream)
-              writer.flush()
-              writer.close()
-
-              // Return build up con
-              con
-          }
-          return HttpResponse(response.code, mapOf(), response.getOrElse { "" })
-      }
-
-    /*
-      /**
-       * executes a Post request and returns the string content only.
-       * @param req
-       * @return
-       */
-      fun post(req:HttpRequest): HttpResponse
-      {
-        val response = tryExecute(req, () ->
-        {
-          val url = URL(req.url)
-
-          // Connection
-          val con = url.openConnection.asInstanceOf[HttpURLConnection]
-
-          // Set request props
-          con.setRequestMethod(HttpMethod.POST.stringVal)
-          HttpHelper.setCredentials(con, req)
-
-          // Headers
-          req.headers.fold(Unit)( headers -> {
-            headers.foreach( h -> con.setRequestProperty(h._1, h._2))
-            Unit
-          })
-          con.setDoOutput(true)
-
-          // Parameters
-          val entity = if(req.params.isDefined){
-            HttpHelper.encodeParams(req).getOrElse("")
-          }
-          else
-            req.entity.getOrElse("")
-
-          val writer = DataOutputStream(con.getOutputStream)
-          writer.writeBytes(entity)
-          writer.flush()
-          writer.close()
-
-          // Return build up con
-          con
-        })
-        response
-      }
-
-
-      private def tryExecute(req:HttpRequest, callback:() -> HttpURLConnection) : HttpResponse =
-      {
-        val result = try
-        {
-          // Let the caller build up the connection
-          val con = callback()
-
-          // Get the response code
-          val statusCode = con.getResponseCode()
-
-          // Get content
-          val inputStream = con.getInputStream
-          val content = io.Source.fromInputStream(inputStream).mkString
-          (true, statusCode, content, Option(inputStream))
-        }
-        catch {
-          case ex: Exception ->
-          {
-            val msg = s"Error getting content from ${req.url}." + ex.getMessage()
-            (false, HttpStatus.s500.code, msg, None)
-          }
-        }
-
-        val inputStream = result._4
-        inputStream.foreach( i -> i.close())
-
-        // TODO: Get the headers and fill http response correctly.
-        val code = if(result._2 == HttpStatus.sOk.code) HttpStatus.sOk else HttpStatus.sErr
-        HttpResponse(code, Map[String,Seq[String]](), Option(result._3))
-      }
-      */
-
-    fun tryExecute(req: HttpRequest, callback: () -> HttpURLConnection): ResultEx<Any> {
+    private fun tryExecute(req: HttpRequest, callback: () -> HttpURLConnection): ResultEx<Any> {
         val result = try {
             // Let the caller build up the connection
             val con = callback()
@@ -215,7 +134,16 @@ object HttpClient {
         return result
     }
 
-    fun setCredentials(con: HttpURLConnection, req: HttpRequest) {
+    private fun encodeParams(req: HttpRequest): String? {
+        return req.params?.let { params ->
+            val encoded = params.fold("") { acc, p ->
+                acc + "&" + URLEncoder.encode(p.first, "UTF-8") + "=" + URLEncoder.encode(p.second, "UTF-8")
+            }
+            encoded
+        } ?: ""
+    }
+
+    private fun setCredentials(con: HttpURLConnection, req: HttpRequest) {
         // Set credentials
         if (req.credentials != null) {
             val credentials = req.credentials

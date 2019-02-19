@@ -15,6 +15,6 @@ package slatekit.common.http
 
 object HttpConstants {
 
-    val defaultConnectTimeOut = 5000
-    val defaultReadTimeOut = 5000
+    const val defaultConnectTimeOut = 5000
+    const val defaultReadTimeOut = 5000
 }

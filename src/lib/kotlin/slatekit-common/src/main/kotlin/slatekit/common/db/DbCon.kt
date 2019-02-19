@@ -16,6 +16,11 @@ interface DbCon {
   val url: String
   val user: String
   val password: String
+
+  companion object {
+
+    val empty = DbConString("", "", "", "")
+  }
 }
 
 /**
