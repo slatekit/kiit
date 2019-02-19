@@ -22,7 +22,7 @@ import slatekit.core.cli.CliSettings
 //<doc:import_examples>
 import slatekit.apis.ApiConstants
 import slatekit.common.*
-import slatekit.common.info.AppMeta
+import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
@@ -35,7 +35,7 @@ import slatekit.core.cmds.Cmd
 class Example_CLI : Cmd("auth") {
 
     //<doc:setup>
-    class AppShell(meta: AppMeta, folders: Folders, settings: CliSettings) : CliService(folders, settings, meta) {
+    class AppShell(meta: Info, folders: Folders, settings: CliSettings) : CliService(folders, settings, meta) {
         
         /**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
@@ -126,7 +126,7 @@ class Example_CLI : Cmd("auth") {
 
         //<doc:examples>
         // CASE 1: Create your own shell by extending the ShellService
-        val shell = AppShell(AppMeta.none, Folders.default, CliSettings())
+        val shell = AppShell(Info.none, Folders.default, CliSettings())
 
 
         // CASE 2: (Optional) configure a startup command

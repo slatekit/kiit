@@ -43,7 +43,7 @@ data class Lang(
 
     @JvmField
     val ext1: String
-) : Info {
+) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
             "name"    to name,

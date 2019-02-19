@@ -15,8 +15,8 @@ package slatekit.core.app
 
 import slatekit.common.ResultEx
 import slatekit.common.Success
-import slatekit.common.info.AppMeta
-import slatekit.common.info.AppMetaSupport
+import slatekit.common.info.Info
+import slatekit.common.info.InfoSupport
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport
@@ -40,7 +40,7 @@ open class AppProcess(
     enc: Encryptor? = null,
     converter: ((AppContext) -> AppContext)? = null
 )
-    : AppMetaSupport,
+    : InfoSupport,
       LogSupport,
       EncryptSupport {
     val schema = schema
@@ -61,7 +61,7 @@ open class AppProcess(
     // Config from context
     val conf = ctx.cfg
 
-    val meta: AppMeta = AppMeta(ctx.inf, ctx.host, ctx.lang, Status.none,
+    val meta: Info = Info(ctx.inf, ctx.host, ctx.lang, Status.none,
             StartInfo(ctx.arg.line, ctx.env.key, ctx.cfg.origin()), ctx.build)
 
     override val logger = ctx.logs.getLogger("app")
@@ -73,7 +73,7 @@ open class AppProcess(
      *
      * @return
      */
-    override fun appMeta(): AppMeta = meta
+    override fun appMeta(): Info = meta
 
     /**
      * initializes this app before applying the arguments

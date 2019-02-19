@@ -16,7 +16,7 @@ data class Build(
 
     @JvmField
     val date: String
-) : Info {
+) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
         "version" to  version,

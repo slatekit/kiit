@@ -15,8 +15,8 @@ package slatekit.core.cli
 
 import slatekit.common.*
 import slatekit.common.utils.Loops.doUntil
-import slatekit.common.info.AppMeta
-import slatekit.common.info.AppMetaSupport
+import slatekit.common.info.Info
+import slatekit.common.info.InfoSupport
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.console.ConsoleWriter
@@ -50,11 +50,11 @@ import java.util.concurrent.atomic.AtomicReference
 open class CliService(
         val folders: Folders,
         val settings: CliSettings,
-        protected val _appMeta: AppMeta,
+        protected val _appMeta: Info,
         protected val _startupCommand: String = "",
         protected val _writer: ConsoleWriter = ConsoleWriter()
 )
-    : AppMetaSupport {
+    : InfoSupport {
 
     val _batchLevel = AtomicReference<Int>(0)
     val _printer = CliPrinter(_writer)
@@ -68,7 +68,7 @@ open class CliService(
      *
      * @return
      */
-    override fun appMeta(): AppMeta = _appMeta
+    override fun appMeta(): Info = _appMeta
 
     /**
      * runs the shell command line with arguments

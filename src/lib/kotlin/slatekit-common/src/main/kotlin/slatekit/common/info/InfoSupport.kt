@@ -13,9 +13,9 @@
 
 package slatekit.common.info
 
-interface AppMetaSupport {
+interface InfoSupport {
 
-    fun appMeta(): AppMeta
+    fun appMeta(): Info
 
     /**
      * builds a list of properties fully describing this app by adding

@@ -1,6 +1,6 @@
 package slatekit.common
 
-import slatekit.common.info.AppMeta
+import slatekit.common.info.Info
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
@@ -16,26 +16,17 @@ import slatekit.common.log.Logs
  * cfg  : config settings
  * log  : logger
  * inf  : info only about the currently running application
- * host : host computer info
- * lang : lang runtime info
  * dbs  : db connection strings lookup
  * enc  : encryption/decryption service
  * dirs : directories used for the app
- * state: the current valid/invalid state of the context
  */
 interface Context {
     val arg: Args
     val env: Env
     val cfg: Conf
     val logs: Logs
-    val inf: About
-    val host: Host
-    val lang: Lang
+    val app: Info
     val dbs: DbLookup?
     val enc: Encryptor?
     val dirs: Folders?
-    val extra: MutableMap<String, Any>
-    val app: AppMeta
-    val state: ResultEx<Boolean>
-    val build: Build
 }

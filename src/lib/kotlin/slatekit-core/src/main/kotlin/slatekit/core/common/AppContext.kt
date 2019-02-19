@@ -14,7 +14,7 @@
 package slatekit.core.common
 
 import slatekit.common.*
-import slatekit.common.info.AppMeta
+import slatekit.common.info.Info
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
@@ -24,6 +24,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
+import slatekit.common.info.Status
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultCode.EXIT
@@ -51,22 +52,16 @@ data class AppContext(
         override val env: Env,
         override val cfg: Conf,
         override val logs: Logs,
-        override val inf: About,
-        override val host: Host = Host.local(),
-        override val lang: Lang = Lang.kotlin(),
+        override val app: Info,
         override val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null,
-        override val extra: MutableMap<String, Any> = mutableMapOf(),
-        override val state: ResultEx<Boolean> = Success(true),
-        override val build: Build = Build.empty,
 
         // NOTE: Fix this non-strongly typed Entities object.
         // By using Any for the entities property, we avoid
         // slatekit.core having a dependency on slatekit.entities!
         val ent: Any? = null
 ) : Context {
-    override val app: AppMeta = AppMeta(inf, host, lang, Status.none, StartInfo(arg.line, env.key, cfg.origin()), build)
 
     companion object {
 
@@ -77,43 +72,48 @@ data class AppContext(
         fun exit(): AppContext = err(EXIT)
 
         @JvmStatic
-        fun err(code: Int, msg: String? = null): AppContext =
-            AppContext(
-                arg = Args.Companion.default(),
-                env = Env("local", EnvMode.Dev),
-                cfg = Config(),
-                logs = LogsDefault,
-                inf = About.none,
-                host = Host.local(),
-                lang = Lang.kotlin(),
-                state = Failure(Exception(msg), code, msg ?: "")
+        fun err(code: Int, msg: String? = null): AppContext {
+            val args = Args.default()
+            val env = Env("local", EnvMode.Dev)
+            val conf = Config()
+            return AppContext(
+                    arg = args,
+                    env = env,
+                    cfg = conf,
+                    logs = LogsDefault,
+                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty)
             )
+        }
 
         @JvmStatic
-        fun simple(name: String): AppContext =
-                AppContext(
-                        arg = Args.Companion.default(),
-                        env = Env("local", EnvMode.Dev),
-                        cfg = Config(),
-                        logs = LogsDefault,
-                        inf = About.none,
-                        host = Host.local(),
-                        lang = Lang.kotlin(),
-                        dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
-                )
+        fun simple(name: String): AppContext {
+            val args = Args.default()
+            val env = Env("local", EnvMode.Dev)
+            val conf = Config()
+            return AppContext(
+                    arg = args,
+                    env = env,
+                    cfg = conf,
+                    logs = LogsDefault,
+                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty),
+                    dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
+            )
+        }
 
         @JvmStatic
-        fun sample(id: String, name: String, about: String, company: String): AppContext =
-            AppContext(
-                arg = Args.Companion.default(),
-                env = Env("local", EnvMode.Dev),
-                cfg = Config(),
-                logs = LogsDefault,
-                inf = About(id, name, about, company, "", "", "", "", "", "", ""),
-                host = Host.local(),
-                lang = Lang.kotlin(),
-                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                dirs = Folders.userDir("slatekit", "samples", "sample1")
+        fun sample(id: String, name: String, about: String, company: String): AppContext {
+            val args = Args.default()
+            val env = Env("local", EnvMode.Dev)
+            val conf = Config()
+            return AppContext(
+                    arg = args,
+                    env = env,
+                    cfg = conf,
+                    logs = LogsDefault,
+                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty),
+                    enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
+                    dirs = Folders.userDir("slatekit", "samples", "sample1")
             )
+        }
     }
 }

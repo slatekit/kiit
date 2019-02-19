@@ -26,6 +26,8 @@ import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
+import slatekit.common.info.Info
+import slatekit.common.info.Status
 import slatekit.common.log.*
 import slatekit.common.results.ResultFuncs.exit
 import slatekit.common.results.ResultFuncs.failure
@@ -302,12 +304,10 @@ object AppFuncs {
                 enc = enc,
                 logs = logs ?: LogsDefault,
                 dbs = dbs(conf),
-                inf = about(conf).copy(version = build.version),
-                host = Host.local(),
-                lang = Lang.kotlin(),
-                dirs = folders(conf),
-                state = Success(true),
-                build = build
+                app = Info(about(conf).copy(version = build.version),
+                        Host.local(), Lang.kotlin(), Status.none,
+                        StartInfo(appInputs.args.line, appInputs.env.key, conf.origin()), build),
+                dirs = folders(conf)
                 // ent = Entities(dbs(conf))
         )
     }

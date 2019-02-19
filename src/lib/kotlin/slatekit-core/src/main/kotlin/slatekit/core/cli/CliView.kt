@@ -13,7 +13,7 @@
 
 package slatekit.core.cli
 
-import slatekit.common.info.AppMeta
+import slatekit.common.info.Info
 import slatekit.common.console.ConsoleWriter
 
 class CliView(
@@ -135,7 +135,7 @@ class CliView(
         _extendedInfo?.invoke(_writer)
     }
 
-    fun showVersion(meta: AppMeta) {
+    fun showVersion(meta: Info) {
         _writer.line()
         _writer.subTitle(meta.about.name)
         _writer.highlight(meta.about.version)

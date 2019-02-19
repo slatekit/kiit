@@ -32,7 +32,7 @@ data class StartInfo(
 
     @JvmField
     val confDir: String = ""
-) : Info {
+) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
         "args"    to args,
