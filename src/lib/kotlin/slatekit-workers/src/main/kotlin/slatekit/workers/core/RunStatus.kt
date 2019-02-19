@@ -14,7 +14,7 @@
 package slatekit.workers.core
 
 import slatekit.common.DateTime
-import slatekit.common.status.Status
+import slatekit.common.Status
 
 data class RunStatus(
     val id: String = "",
