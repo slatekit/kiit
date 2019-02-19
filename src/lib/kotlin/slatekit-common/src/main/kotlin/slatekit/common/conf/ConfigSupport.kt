@@ -16,7 +16,6 @@ package slatekit.common.conf
 import slatekit.common.security.ApiLogin
 import slatekit.common.security.Credentials
 import slatekit.common.db.DbCon
-import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbConString
 import slatekit.common.envs.Env
 import slatekit.common.info.Build
@@ -112,7 +111,7 @@ interface ConfigSupport {
                         conf.getString(prefix + ".user"),
                         conf.getString(prefix + ".pswd")
                 )
-            } ?: DbConEmpty
+            } ?: DbCon.empty
 }
 
 fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? =

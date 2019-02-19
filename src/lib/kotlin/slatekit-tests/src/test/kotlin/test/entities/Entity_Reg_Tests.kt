@@ -13,7 +13,6 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType.DbTypeMemory
