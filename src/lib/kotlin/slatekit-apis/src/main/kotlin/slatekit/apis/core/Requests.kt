@@ -18,6 +18,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
 import slatekit.common.Inputs
+import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.Uris
 import slatekit.common.encrypt.Encryptor
@@ -142,7 +143,7 @@ object Requests {
         val serializer = Serialization.json(true)
         val json = when (source) {
             is JsonSupport -> source.toJson().toString()
-            is slatekit.common.Meta -> serializer.serialize(source.toMap())
+            is Metadata -> serializer.serialize(source.toMap())
             else -> serializer.serialize(rawData)
         }
         return json

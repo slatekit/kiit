@@ -15,7 +15,7 @@ package slatekit.common.requests
 
 import slatekit.common.DateTime
 import slatekit.common.Inputs
-import slatekit.common.Meta
+import slatekit.common.Metadata
 import slatekit.common.args.Args
 
 /**
@@ -36,7 +36,7 @@ data class Request(
         val source: String,
         val verb: String,
         val data: Inputs,
-        val meta: Meta,
+        val meta: Metadata,
         val raw: Any? = null,
         val output: String? = "",
         val tag: String = "",
@@ -103,7 +103,7 @@ data class Request(
          * Builds a cli based request using pre-build data/meta
          */
         @JvmStatic
-        fun cli(path: String, verb: String, meta: Meta?, args: Args, raw: Any?): Request {
+        fun cli(path: String, verb: String, meta: Metadata?, args: Args, raw: Any?): Request {
             return Request(path, args.actionParts, "cli", verb, args, meta
                     ?: InputArgs(mapOf()), raw, "")
         }
