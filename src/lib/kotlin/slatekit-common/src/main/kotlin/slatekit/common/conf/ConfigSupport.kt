@@ -32,12 +32,12 @@ interface ConfigSupport {
      */
     fun env(): Env =
 
-            mapTo("env", { conf ->
+            mapTo("env") { conf ->
 
                 val name = conf.getString("env.name")
                 val mode = conf.getString("env.mode")
                 Env(name, Env.interpret(mode), "$mode : $name")
-            }) ?: Env.empty
+            } ?: Env.empty
 
     /**
      * Gets user credentials from the config.
@@ -105,14 +105,14 @@ interface ConfigSupport {
      */
     fun dbCon(prefix: String = "db"): DbCon =
 
-            mapTo(prefix, { conf ->
+            mapTo(prefix) { conf ->
                 DbConString(
                         conf.getString(prefix + ".driver"),
                         conf.getString(prefix + ".url"),
                         conf.getString(prefix + ".user"),
                         conf.getString(prefix + ".pswd")
                 )
-            }) ?: DbConEmpty
+            } ?: DbConEmpty
 }
 
 fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =

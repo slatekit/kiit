@@ -19,6 +19,8 @@ import slatekit.common.args.ArgsFuncs
 import slatekit.common.args.ArgsFuncs.isExit
 import slatekit.common.args.ArgsFuncs.isVersion
 import slatekit.common.conf.*
+import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
+import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.encrypt.Encryptor

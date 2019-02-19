@@ -49,7 +49,6 @@ class ConfigMulti(
 
     override val raw: Any = _config
     override fun get(key: String): Any? = getInternalString(key)
-    //override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = containsKeyInternal(key)
     override fun size(): Int = _config.values.size
 
