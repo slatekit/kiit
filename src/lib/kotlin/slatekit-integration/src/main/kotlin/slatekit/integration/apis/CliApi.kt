@@ -24,6 +24,7 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.requests.toResponse
 import slatekit.common.info.Credentials
+import slatekit.common.info.Info
 import slatekit.core.cli.CliCommand
 import slatekit.core.cli.CliConstants
 import slatekit.core.cli.CliMeta
@@ -56,7 +57,7 @@ class CliApi(
         apiItems: List<Api> = listOf(),
         val cliMeta: CliMeta? = null
 )
-    : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
+    : slatekit.core.cli.CliService(ctx.dirs!!, settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys)) {
 
     val metaNameForApiKey = "api-key"
 

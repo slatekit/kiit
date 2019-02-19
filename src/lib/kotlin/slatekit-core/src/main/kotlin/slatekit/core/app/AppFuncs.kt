@@ -290,6 +290,9 @@ object AppFuncs {
             Build.empty
         }
 
+        val args = appInputs.args
+        val env = appInputs.env
+
         // The config is inheritance based.
         // Which means the base env.loc.conf inherits from env.conf.
         val conf = ConfigMulti(
@@ -298,14 +301,15 @@ object AppFuncs {
                 enc)
 
         return AppContext(
-                arg = appInputs.args,
-                env = appInputs.env,
+                arg = args,
+                env = env,
                 cfg = conf,
                 enc = enc,
                 logs = logs ?: LogsDefault,
-                app = Info(about(conf).copy(version = build.version),
-                        Host.local(), Lang.kotlin(), Status.none,
-                        StartInfo(appInputs.args.line, appInputs.env.key, conf.origin()), build),
+                app = about(conf),
+                sys = Sys.build(),
+                build = build,
+                start = StartInfo(args.line, env.key, conf.origin(), env.key),
                 dirs = folders(conf)
         )
     }

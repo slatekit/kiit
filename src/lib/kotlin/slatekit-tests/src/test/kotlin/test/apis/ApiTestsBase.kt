@@ -28,12 +28,10 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
-import slatekit.common.info.About
+import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.info.ApiKey
-import slatekit.common.info.Credentials
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import test.setup.MyAuthProvider
@@ -59,7 +57,10 @@ open class ApiTestsBase {
                 cfg  = Config(),
                 logs = LogsDefault,
                 ent  = Entities(DbLookup(DbConString("", "", "", ""))),
-                inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+                app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+                sys = Sys.build(),
+                build = Build.empty,
+                start = StartInfo.none,
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor
         )

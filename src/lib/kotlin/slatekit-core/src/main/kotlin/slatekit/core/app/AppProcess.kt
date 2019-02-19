@@ -61,7 +61,7 @@ open class AppProcess(
     // Config from context
     val conf = ctx.cfg
 
-    val meta: Info = ctx.app
+    val meta: Info = Info(ctx.app, ctx.build, ctx.start, ctx.sys)
 
     override val logger = ctx.logs.getLogger("app")
     override val encryptor = ctx.enc
@@ -155,8 +155,7 @@ open class AppProcess(
         if (options.printSummaryOnShutdown) {
             // Make a copy of the original context
             // with updates to the end time/status.
-            val finalState = appMeta().status.end()
-            logSummary(finalState)
+            //logSummary(finalState)
         }
     }
 
@@ -209,7 +208,7 @@ open class AppProcess(
     /**
      * prints the summary of the arguments
      */
-    fun logSummary(status: Status = appMeta().status) {
+    fun logSummary(status: Status) {
         info("===============================================================")
         info("SUMMARY : ")
         info("===============================================================")
@@ -255,9 +254,9 @@ open class AppProcess(
         logger.info("app:config  :${meta.start.config}")
     }
 
-    private fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
+    private fun collectSummary(status: Status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
-        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) }, status)
+        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) })
         return buf.toList()
     }
 }

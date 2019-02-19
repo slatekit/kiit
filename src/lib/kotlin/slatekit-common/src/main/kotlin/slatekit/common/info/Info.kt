@@ -15,15 +15,13 @@ package slatekit.common.info
 
 data class Info(
     val about: About,
-    val host: Host,
-    val lang: Lang,
-    val status: Status,
+    val build: Build,
     val start: StartInfo,
-    val build: Build
+    val system: Sys
 ) {
 
     companion object {
         @JvmStatic
-        val none = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo.none, Build.empty)
+        val none = Info(About.none, Build.empty, StartInfo.none, Sys.build())
     }
 }

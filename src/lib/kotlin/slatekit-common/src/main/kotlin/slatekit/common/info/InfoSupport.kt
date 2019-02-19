@@ -38,25 +38,24 @@ interface InfoSupport {
         callback("region           ".padEnd(maxLen), meta.about.region)
         callback("contact          ".padEnd(maxLen), meta.about.contact)
         callback("url              ".padEnd(maxLen), meta.about.url)
-        callback("args             ".padEnd(maxLen), meta.start.args.toString())
+        callback("args             ".padEnd(maxLen), meta.start.args)
         callback("env              ".padEnd(maxLen), meta.start.env)
         callback("config           ".padEnd(maxLen), meta.start.config)
         callback("log              ".padEnd(maxLen), meta.start.logFile)
-        callback("started          ".padEnd(maxLen), meta.status.started.toString())
-        callback("host.name        ".padEnd(maxLen), meta.host.name)
-        callback("host.ip          ".padEnd(maxLen), meta.host.ip)
-        callback("host.origin      ".padEnd(maxLen), meta.host.origin)
-        callback("host.version     ".padEnd(maxLen), meta.host.version)
-        callback("lang.name        ".padEnd(maxLen), meta.lang.name)
-        callback("lang.version     ".padEnd(maxLen), meta.lang.version)
-        callback("lang.versionNum  ".padEnd(maxLen), meta.lang.vendor)
-        callback("lang.java        ".padEnd(maxLen), meta.lang.origin)
-        callback("lang.home        ".padEnd(maxLen), meta.lang.home)
+        callback("started          ".padEnd(maxLen), meta.start.started.toString())
+        callback("host.name        ".padEnd(maxLen), meta.system.host.name)
+        callback("host.ip          ".padEnd(maxLen), meta.system.host.ip)
+        callback("host.origin      ".padEnd(maxLen), meta.system.host.origin)
+        callback("host.version     ".padEnd(maxLen), meta.system.host.version)
+        callback("lang.name        ".padEnd(maxLen), meta.system.lang.name)
+        callback("lang.version     ".padEnd(maxLen), meta.system.lang.version)
+        callback("lang.versionNum  ".padEnd(maxLen), meta.system.lang.vendor)
+        callback("lang.java        ".padEnd(maxLen), meta.system.lang.origin)
+        callback("lang.home        ".padEnd(maxLen), meta.system.lang.home)
     }
 
     fun appLogEnd(
-        callback: (String, String) -> Unit,
-        status: Status = appMeta().status
+        callback: (String, String) -> Unit
     ) {
         val meta = appMeta()
         callback("name             ", meta.about.name)
@@ -67,7 +66,7 @@ interface InfoSupport {
         callback("region           ", meta.about.region)
         callback("contact          ", meta.about.contact)
         callback("url              ", meta.about.url)
-        callback("args             ", meta.start.args.toString())
+        callback("args             ", meta.start.args)
         callback("env              ", meta.start.env)
         callback("config           ", meta.start.config)
         callback("log              ", meta.start.logFile)
@@ -77,24 +76,16 @@ interface InfoSupport {
         callback("commit           ", meta.build.commit)
         callback("date             ", meta.build.date)
 
-        // Status is different at start vs end
-        callback("started          ", status.started.toString())
-        callback("ended            ", status.ended.toString())
-        callback("duration         ", status.duration.toString())
-        callback("status           ", status.status)
-        callback("errors           ", status.errors.toString())
-        callback("error            ", status.error)
-
         // Host
-        callback("host.name        ", meta.host.name)
-        callback("host.ip          ", meta.host.ip)
-        callback("host.origin      ", meta.host.origin)
-        callback("host.version     ", meta.host.version)
-        callback("lang.name        ", meta.lang.name)
-        callback("lang.version     ", meta.lang.version)
-        callback("lang.vendor      ", meta.lang.vendor)
-        callback("lang.java        ", meta.lang.origin)
-        callback("lang.home        ", meta.lang.home)
+        callback("host.name        ", meta.system.host.name)
+        callback("host.ip          ", meta.system.host.ip)
+        callback("host.origin      ", meta.system.host.origin)
+        callback("host.version     ", meta.system.host.version)
+        callback("lang.name        ", meta.system.lang.name)
+        callback("lang.version     ", meta.system.lang.version)
+        callback("lang.vendor      ", meta.system.lang.vendor)
+        callback("lang.java        ", meta.system.lang.origin)
+        callback("lang.home        ", meta.system.lang.home)
     }
 
     /**

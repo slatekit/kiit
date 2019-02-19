@@ -56,7 +56,10 @@ data class AppEntContext(
         override val env: Env,
         override val cfg: Conf,
         override val logs: Logs,
-        override val app: Info,
+        override val app: About,
+        override val sys: Sys,
+        override val build: Build,
+        override val start: StartInfo,
         val ent: Entities,
         val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
@@ -67,7 +70,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): AppContext {
-        return AppContext(arg, env, cfg, logs, app, enc, dirs)
+        return AppContext(arg, env, cfg, logs, app, sys, build, start, enc, dirs)
     }
 
     companion object {
@@ -85,7 +88,7 @@ data class AppEntContext(
         fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
             val dbCons = dbs(ctx.cfg)
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -101,7 +104,10 @@ data class AppEntContext(
                     env = env,
                     cfg = conf,
                     logs = LogsDefault,
-                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty),
+                    app = About.none,
+                    sys = Sys.build(),
+                    build = Build.empty,
+                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     ent = Entities()
             )
         }
@@ -116,22 +122,29 @@ data class AppEntContext(
                     env = env,
                     cfg = conf,
                     logs = LogsDefault,
-                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty),
+                    app = About.none,
+                    sys = Sys.build(),
+                    build = Build.empty,
+                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
         }
 
         @JvmStatic
-        fun sample(id: String, name: String, about: String, company: String): AppContext {
+        fun sample(id: String, name: String, about: String, company: String): AppEntContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             val conf = Config()
-            return AppContext(
+            return AppEntContext(
                     arg = args,
                     env = env,
                     cfg = conf,
                     logs = LogsDefault,
-                    app = Info(About.none, Host.local(), Lang.kotlin(), Status.none, StartInfo(args.line, env.key, conf.origin()), Build.empty),
+                    app = About(id, name, about, company),
+                    sys = Sys.build(),
+                    build = Build.empty,
+                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
+                    ent = Entities(),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )

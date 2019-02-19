@@ -377,18 +377,18 @@ open class CliService(
 
         // Standardized info
         // e.g. name, desc, env, log, start-time etc.
-        val args = collectSummary(appMeta().status)
-        val maxLen = args.maxBy { item -> item.first.length }?.first?.length ?: 1
-
-        args.forEach { arg -> _writer.text(arg.first.padEnd(maxLen) + " = " + arg.second) }
-        _writer.text("===============================================================")
+//        val args = collectSummary(appMeta().status)
+//        val maxLen = args.maxBy { item -> item.first.length }?.first?.length ?: 1
+//
+//        args.forEach { arg -> _writer.text(arg.first.padEnd(maxLen) + " = " + arg.second) }
+//        _writer.text("===============================================================")
     }
 
-    protected open fun collectSummary(status: Status = appMeta().status): List<Pair<String, String>> {
+    protected open fun collectSummary(status: Status): List<Pair<String, String>> {
         val buf = mutableListOf<Pair<String, String>>()
 
         // All the pre-build info from appMeta
-        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) }, status)
+        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) })
 
         // App specific fields to add onto
         val extra = collectSummaryExtra()
