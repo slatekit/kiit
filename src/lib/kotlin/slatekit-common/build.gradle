@@ -26,6 +26,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.slatekit:slatekit-results:0.9.8'
 }
 
