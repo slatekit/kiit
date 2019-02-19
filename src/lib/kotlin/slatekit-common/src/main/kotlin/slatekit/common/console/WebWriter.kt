@@ -13,8 +13,8 @@
 
 package slatekit.common.console
 
-import slatekit.common.io.IO
-import slatekit.common.io.StringWriter
+import slatekit.common.IO
+import slatekit.common.StringWriter
 import slatekit.common.escapeHtml
 
 /**

@@ -11,7 +11,13 @@
  * </slate_header>
  */
 
-package slatekit.common.io
+package slatekit.common
+
+interface IO<in I, out O> {
+
+    fun run(i: I): O
+}
+
 
 object Print : IO<Any, Unit> {
 
@@ -20,19 +26,19 @@ object Print : IO<Any, Unit> {
     }
 }
 
-object Println : IO<Any, Unit> {
+object Println : IO<Any?, Unit> {
 
-    override fun run(i: Any) {
+    override fun run(i: Any?) {
         println(i)
     }
 }
 
-object Readln : IO<Any, String> {
+object Readln : IO<Any?, String> {
 
-    override fun run(i: Any) = readLine() ?: ""
+    override fun run(i: Any?) = readLine() ?: ""
 }
 
-class StringWriter(val buffer: StringBuilder) : IO<Any, Unit> {
+class StringWriter(private val buffer: StringBuilder) : IO<Any, Unit> {
 
     override fun run(i: Any) {
         buffer.append(i)
