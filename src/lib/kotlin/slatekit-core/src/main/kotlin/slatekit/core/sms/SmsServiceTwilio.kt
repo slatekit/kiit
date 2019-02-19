@@ -16,7 +16,7 @@ package slatekit.core.sms
 import slatekit.common.*
 import slatekit.common.http.*
 import slatekit.common.results.ResultFuncs.success
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
 import slatekit.common.types.CountryCode
 

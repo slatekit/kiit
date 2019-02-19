@@ -13,7 +13,7 @@
 
 package slatekit.common.auth
 
-import slatekit.common.security.ApiKey
+import slatekit.common.info.ApiKey
 import slatekit.common.Inputs
 import slatekit.common.utils.ListMap
 import slatekit.common.ResultMsg
@@ -41,10 +41,10 @@ object AuthFuncs {
      * @return
      */
     fun isKeyValid(
-        inputs: Inputs?,
-        keys: ListMap<String, ApiKey>,
-        inputName: String,
-        expectedRoles: String
+            inputs: Inputs?,
+            keys: ListMap<String, ApiKey>,
+            inputName: String,
+            expectedRoles: String
     ): ResultMsg<Boolean> {
 
         val key = inputs?.getStringOrNull(inputName) ?: ""

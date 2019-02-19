@@ -20,7 +20,7 @@ import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.requests.Request
 import slatekit.common.requests.toResponse
-import slatekit.common.security.Credentials
+import slatekit.common.info.Credentials
 import test.setup.*
 
 /**

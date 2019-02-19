@@ -18,9 +18,9 @@ import slatekit.common.*
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.security.ApiKey
-import slatekit.common.security.ApiLogin
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiKey
+import slatekit.common.info.ApiLogin
+import slatekit.common.info.Credentials
 import java.io.File
 import java.io.FileInputStream
 import java.util.*

@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Test
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 import slatekit.common.DateTime
 import slatekit.common.conf.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs

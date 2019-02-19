@@ -23,8 +23,8 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.db.DbConString
-import slatekit.common.security.ApiKey
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiKey
+import slatekit.common.info.ApiLogin
 
 //</doc:import_examples>
 
@@ -45,7 +45,7 @@ class Example_Utils : Cmd("utils") {
 
     // CASE 2: Api Keys
     val devKey = ApiKey("dev1", "B8779D64-6104-4244-88B6-F81B4D2AAF5B", "dev", mapOf())
-    val qaKey  = ApiKey("qa1" , "F01718FF-0AF5-43C2-84D7-D1E2B4234644", "qa", mapOf())
+    val qaKey  = ApiKey("qa1", "F01718FF-0AF5-43C2-84D7-D1E2B4234644", "qa", mapOf())
 
     // CASE 3: Guards ( Exceptions are discouraged in favor
     // of functional error handling, however, there are times where

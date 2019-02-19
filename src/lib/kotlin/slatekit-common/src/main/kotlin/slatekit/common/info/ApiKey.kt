@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.security
+package slatekit.common.info
 
 /**
  * Represents a key for accessing an API securely.
@@ -27,7 +27,7 @@ data class ApiKey(
 ) {
 
     constructor(name: String, key: String, roles: String) : this(name, key, roles,
-        build(roles)
+            build(roles)
     )
 
     companion object {

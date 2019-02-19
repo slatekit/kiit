@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.security
+package slatekit.common.info
 
 data class Credentials(
     val id: String = "",

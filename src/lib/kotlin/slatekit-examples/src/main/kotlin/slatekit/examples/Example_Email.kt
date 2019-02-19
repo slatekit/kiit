@@ -23,7 +23,7 @@ import slatekit.common.templates.Templates
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.conf.Config
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 
 //</doc:import_examples>
 

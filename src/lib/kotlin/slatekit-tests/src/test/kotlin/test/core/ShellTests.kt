@@ -15,8 +15,8 @@ import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
-import slatekit.common.security.ApiKey
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiKey
+import slatekit.common.info.Credentials
 import slatekit.common.args.Args
 import slatekit.common.getOrElse
 import slatekit.common.results.ResultCode.HELP
@@ -86,17 +86,17 @@ class ShellTests  {
     val ctx = AppEntContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
 
     val apiKeys = listOf(
-        ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),
-        ApiKey("po", "0F66CD55079C42FF85C001846472343C", "user,po"),
-        ApiKey("qa", "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"),
-        ApiKey("dev", "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"),
-        ApiKey("ops", "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"),
-        ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
+            ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),
+            ApiKey("po", "0F66CD55079C42FF85C001846472343C", "user,po"),
+            ApiKey("qa", "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"),
+            ApiKey("dev", "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"),
+            ApiKey("ops", "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"),
+            ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
       )
 
     // 1. Get the user login info from .slate
     val creds =
-        Credentials("1", "kishore", "kishore@abc.com", apiKeys.last().key, "test", "ny")
+            Credentials("1", "kishore", "kishore@abc.com", apiKeys.last().key, "test", "ny")
 
     // 2. Register the apis using default mode ( uses permissions in annotations on class )
     val apis = listOf(

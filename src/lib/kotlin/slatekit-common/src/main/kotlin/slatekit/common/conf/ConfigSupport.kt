@@ -13,8 +13,8 @@
 
 package slatekit.common.conf
 
-import slatekit.common.security.ApiLogin
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiLogin
+import slatekit.common.info.Credentials
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.envs.Env

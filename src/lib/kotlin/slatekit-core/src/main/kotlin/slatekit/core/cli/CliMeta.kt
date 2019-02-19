@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package slatekit.core.cli
 
 import slatekit.common.Context
-import slatekit.common.security.Credentials
+import slatekit.common.info.Credentials
 
 open class CliMeta {
 
