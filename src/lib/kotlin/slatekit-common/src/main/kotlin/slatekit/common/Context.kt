@@ -26,7 +26,6 @@ interface Context {
     val cfg: Conf
     val logs: Logs
     val app: Info
-    val dbs: DbLookup?
     val enc: Encryptor?
     val dirs: Folders?
 }
