@@ -19,12 +19,16 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.results.*
-import slatekit.results.builders.Results
+import slatekit.results.Try
+import slatekit.results.Success
+import slatekit.results.Failure
+import slatekit.results.builders.OutcomeBuilder
+import slatekit.results.builders.Tries
 
 //</doc:import_examples>
 
 
-class Example_Results : Cmd("results") {
+class Example_Results : Cmd("results") , OutcomeBuilder {
 
     override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
@@ -56,7 +60,7 @@ class Example_Results : Cmd("results") {
 
         // Explicitly build a result using the Failure "branch" of Result
         val result2:Result<String,Exception> = Failure<Exception>(
-                err = IllegalArgumentException("user id"),
+                error = IllegalArgumentException("user id"),
                 code = StatusCodes.BAD_REQUEST.code,
                 msg = "user id not supplied"
         )
@@ -85,32 +89,32 @@ class Example_Results : Cmd("results") {
 
 
         // CASE 2: Failure ( 400 ) with data ( user ), message, and ref tag
-        val res2b = failure<String>(msg = "invalid email")
+        val res2b = errored<String>(msg = "invalid email")
         printResult(res2b)
 
 
         // CASE 4: Unauthorized ( 401 )
-        val res3 = unAuthorized<String>(msg = "invalid email")
+        val res3 = denied<String>(msg = "invalid email")
         printResult(res3)
 
 
         // CASE 5: Unexpected ( 500 )
-        val res4 = unexpectedError<String>(Exception("Invalid email"), msg = "invalid email")
+        val res4 = Tries.unexpected<String>(Err.of("Invalid email"))
         printResult(res4)
 
 
         // CASE 6: Conflict ( 409 )
-        val res5 = conflict<String>(msg = "item already exists")
+        val res5 = errored<String>(StatusCodes.CONFLICT)
         printResult(res5)
 
 
         // CASE 7: Not found
-        val res6 = notFound<String>(msg = "action not found")
+        val res6 = errored<String>(StatusCodes.NOT_FOUND)
         printResult(res6)
 
 
         // CASE 8: Not available
-        val res7 = notAvailable<String>(msg = "operation currently unavailable")
+        val res7 = errored<String>(StatusCodes.UNAVAILABLE)
         printResult(res7)
 
 

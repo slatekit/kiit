@@ -118,7 +118,7 @@ class Example_Workers : Cmd("utils") {
         // Queues have the interface QueueSource and there is a
         // sample QueueSourceDefault available for prototyping/unit-tests purposes.
         // This lambda specifies a converter for the message
-        val queue = QueueSourceDefault("queue1", { item -> item.toString().toInt() })
+        val queue = QueueSourceDefault<Int>("queue1", { item -> item.toString().toInt() })
 
         // Add some sample items to the queue
         (1..10).forEachIndexed{ ndx, _ -> queue.send(ndx) }
