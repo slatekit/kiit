@@ -17,11 +17,15 @@ buildscript {
 
 repositories {
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/codehelixinc/slatekit"
+    }
 }
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'com.slatekit:slatekit-results:0.9.8'
     compile project(":slatekit-common")
 }

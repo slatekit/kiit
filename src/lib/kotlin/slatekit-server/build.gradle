@@ -43,6 +43,7 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-metrics:$ktor_version"
     compile 'com.sparkjava:spark-core:2.6.0'
+    compile 'com.slatekit:slatekit-results:0.9.8'
 	compile fileTree(dir: 'lib', include: '*.jar')
     compile project(":slatekit-common")
     compile project(":slatekit-meta")
