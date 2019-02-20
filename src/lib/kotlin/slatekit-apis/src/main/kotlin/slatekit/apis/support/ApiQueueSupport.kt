@@ -6,10 +6,11 @@ import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
 import slatekit.common.requests.Request
+import slatekit.results.Notice
 
 interface ApiQueueSupport {
 
-    fun queues(): List<QueueSource>
+    fun queues(): List<QueueSource<String>>
 
     /**
      * Creates a request from the parameters and api info and serializes that as json
@@ -30,22 +31,22 @@ interface ApiQueueSupport {
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
-    fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
+    fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Notice<String> {
         // Coming in as http request and mode is queued ?
         return if (req.source != ApiConstants.SourceQueue && target.tag == "queued") {
             sendToQueue(ctx, req, target, source, args)
         } else {
-            Failure("Continue processing")
+            slatekit.results.Failure("Continue processing")
         }
     }
 
     /**
      * This can be overridden to support custom call-modes
      */
-    fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
+    fun sendToQueue(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Notice<String> {
         // Convert from web request to Queued request
         val payload = Requests.toJsonAsQueued(req)
         sendToQueue(payload, Random.uuid(), req.tag, req.path)
-        return Success("Request processed as queue")
+        return slatekit.results.Success("Request processed as queue")
     }
 }

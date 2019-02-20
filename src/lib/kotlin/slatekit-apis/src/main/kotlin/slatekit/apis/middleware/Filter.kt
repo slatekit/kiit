@@ -15,7 +15,7 @@ package slatekit.apis.middleware
 
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.success
+import slatekit.results.Try
 
 /**
  * A "Filter" based middle-ware that either allows/disallows an API call to proceed
@@ -33,7 +33,7 @@ interface Filter : Middleware {
      * @param args : Additional arguments supplied by the source
      */
     @Ignore
-    fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): ResultMsg<Any> {
-        return success("")
+    fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Try<Any> {
+        return slatekit.results.Success("")
     }
 }

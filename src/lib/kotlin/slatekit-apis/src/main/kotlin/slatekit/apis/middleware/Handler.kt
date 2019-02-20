@@ -16,6 +16,9 @@ package slatekit.apis.middleware
 import slatekit.apis.core.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
+import slatekit.results.StatusCodes
+import slatekit.results.Try
+import slatekit.results.builders.Tries
 
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events
@@ -35,7 +38,7 @@ interface Handler : Middleware {
      * @param args : Additional arguments supplied by the source
      */
     @Ignore
-    fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): ResultMsg<String> {
-        return Failure("Not implemented")
+    fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Try<String> {
+        return Tries.errored(StatusCodes.UNIMPLEMENTED)
     }
 }

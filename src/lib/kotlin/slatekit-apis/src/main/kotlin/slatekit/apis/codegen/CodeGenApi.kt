@@ -7,8 +7,7 @@ import slatekit.apis.security.Verbs
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
+import slatekit.results.Notice
 
 /**
  * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
@@ -36,7 +35,7 @@ class CodeGenApi : ApiHostAware {
             classFile: String = "",
             methodFile: String = "",
             modelFile: String = ""
-    ): ResultMsg<String> {
+    ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "kotlin", "kt")
     }
 
@@ -49,7 +48,7 @@ class CodeGenApi : ApiHostAware {
             classFile: String = "",
             methodFile: String = "",
             modelFile: String = ""
-    ): ResultMsg<String> {
+    ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "swift", "swift")
     }
 
@@ -62,7 +61,7 @@ class CodeGenApi : ApiHostAware {
             classFile: String = "",
             methodFile: String = "",
             modelFile: String = ""
-    ): ResultMsg<String> {
+    ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "java", "java")
     }
 
@@ -75,7 +74,7 @@ class CodeGenApi : ApiHostAware {
             classFile: String = "",
             methodFile: String = "",
             modelFile: String = ""
-    ): ResultMsg<String> {
+    ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "js", "js")
     }
 
@@ -89,7 +88,7 @@ class CodeGenApi : ApiHostAware {
             modelFile: String = "",
             lang: String,
             extension: String
-    ): ResultMsg<String> {
+    ): Notice<String> {
 
         val result = this.host?.let { host ->
             val settings = CodeGenSettings(
@@ -112,8 +111,8 @@ class CodeGenApi : ApiHostAware {
                 else -> CodeGenJava(settings)
             }
             gen.generate(req)
-            success("")
-        } ?: failure("Api Container has not been set")
+            slatekit.results.Success("")
+        } ?: slatekit.results.Failure("Api Container has not been set")
         return result
     }
 }

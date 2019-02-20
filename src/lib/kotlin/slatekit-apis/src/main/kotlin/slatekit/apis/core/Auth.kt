@@ -14,8 +14,8 @@
 package slatekit.apis.core
 
 import slatekit.common.requests.Request
-import slatekit.common.ResultMsg
 import slatekit.common.auth.Roles
+import slatekit.results.Notice
 
 /**
  * Class used to authenticate an api with support for 3 modes:
@@ -36,7 +36,7 @@ interface Auth {
      * @param rolesOnApi : The values of the "roles" attribute on the annotation of the Api ( class )
      * @return
      */
-    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): ResultMsg<Boolean>
+    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Notice<Boolean>
 
     /**
      * Gets the user roles that are applicable for the supplied request.

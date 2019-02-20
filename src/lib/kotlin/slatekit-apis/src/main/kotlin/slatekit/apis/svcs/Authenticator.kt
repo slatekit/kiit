@@ -5,8 +5,9 @@ import slatekit.apis.security.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs
 import slatekit.common.info.ApiKey
+import slatekit.results.Notice
+import slatekit.results.builders.Notices
 
 /**
  * Class used to authenticate an api with support for 3 modes:
@@ -40,11 +41,11 @@ open class Authenticator(
             authMode: String,
             rolesOnAction: String,
             rolesOnApi: String
-    ): ResultMsg<Boolean> {
+    ): Notice<Boolean> {
 
         // 1. No roles or guest ?
         if (isRoleEmptyOrGuest(rolesOnAction))
-            return Success(true)
+            return Notices.success(true)
 
         // 2. Get the actual role if the action references the parent via @parent
         val role = determineRole(rolesOnAction, rolesOnApi)
@@ -53,7 +54,7 @@ open class Authenticator(
         return when (authMode) {
             AuthModes.apiKey -> validateApiKey(req, role)
             AuthModes.token -> validateToken(req, role)
-            else -> ResultFuncs.unAuthorized()
+            else -> Notices.denied()
         }
     }
 
@@ -70,7 +71,7 @@ open class Authenticator(
      * 3. The api key "abc123" maps internally to one of key in @see: keys
      * 4. The matched key has associated roles
      */
-    open fun validateApiKey(req: Request, role: String): ResultMsg<Boolean> {
+    open fun validateApiKey(req: Request, role: String): Notice<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
@@ -87,7 +88,7 @@ open class Authenticator(
      * 3. The token "abc123" maps internally to a user
      * 4. We look up the user identified by the token and get their roles
      */
-    open fun validateToken(req: Request, role: String): ResultMsg<Boolean> {
+    open fun validateToken(req: Request, role: String): Notice<Boolean> {
 
         // Get the user roles
         val actualRole = getUserRoles(req)
