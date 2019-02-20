@@ -3,7 +3,7 @@ package slatekit.entities.databases.converters
 import slatekit.entities.databases.SqlConverter
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.nonEmptyOrDefault
-import slatekit.common.query.QueryEncoder
+import slatekit.query.QueryEncoder
 import slatekit.common.Record
 import slatekit.entities.Consts
 

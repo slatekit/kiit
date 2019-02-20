@@ -3,7 +3,7 @@ package slatekit.integration.errors
 import slatekit.common.Failure
 import slatekit.common.ResultEx
 import slatekit.common.Success
-import slatekit.common.query.Query
+import slatekit.query.Query
 import slatekit.common.queues.QueueSourceMsg
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.where

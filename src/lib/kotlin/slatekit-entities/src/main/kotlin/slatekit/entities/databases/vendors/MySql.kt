@@ -3,7 +3,7 @@ package slatekit.entities.databases.vendors
 import slatekit.common.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.common.query.Query
+import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.databases.Converter

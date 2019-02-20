@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.query
+package slatekit.query
 
 class Condition(val field: Any, val comparison: String, val fieldValue: Any) : ICondition {
 

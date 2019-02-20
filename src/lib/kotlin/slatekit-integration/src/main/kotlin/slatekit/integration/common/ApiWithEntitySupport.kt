@@ -15,7 +15,7 @@ package slatekit.integration.common
 
 import slatekit.apis.ApiAction
 import slatekit.common.Ignore
-import slatekit.common.query.Query
+import slatekit.query.Query
 import slatekit.entities.core.Entities
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityService

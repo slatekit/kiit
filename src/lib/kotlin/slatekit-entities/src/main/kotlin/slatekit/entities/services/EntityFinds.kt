@@ -1,7 +1,7 @@
 package slatekit.entities.services
 
-import slatekit.common.query.IQuery
-import slatekit.common.query.Query
+import slatekit.query.IQuery
+import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.ServiceSupport
 import kotlin.reflect.KProperty

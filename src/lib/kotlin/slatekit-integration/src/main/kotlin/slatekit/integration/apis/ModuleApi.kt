@@ -19,6 +19,7 @@ import slatekit.apis.security.Verbs
 import slatekit.common.*
 import slatekit.common.utils.ListMap
 import slatekit.integration.mods.Mod
+import slatekit.query.Query
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
@@ -38,7 +39,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @ApiAction(desc = "creates a new invitee")
     fun enabled(): List<slatekit.integration.mods.Mod> {
-        return ctx.service.find(slatekit.common.query.Query().where("isEnabled", "=", true))
+        return ctx.service.find(Query().where("isEnabled", "=", true))
     }
 
     @ApiAction(desc = "installs all modules from initial setup")
@@ -130,7 +131,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): slatekit.common.ResultMsg<Any> {
 
-        val checkResult = ctx.service.findFirst(slatekit.common.query.Query().where("name", "=", mod.info.name))
+        val checkResult = ctx.service.findFirst(Query().where("name", "=", mod.info.name))
         if (checkResult == null) {
 
             if (mod.info.isEnabled) {

@@ -16,8 +16,8 @@ package slatekit.entities.core
 import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
-import slatekit.common.query.IQuery
-import slatekit.common.query.Query
+import slatekit.query.IQuery
+import slatekit.query.Query
 import slatekit.entities.Consts.idCol
 import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
@@ -169,7 +169,7 @@ abstract class EntityRepo<T>(
     /**
      * Gets the total number of records based on the query provided.
      */
-    abstract fun count(query:IQuery):Long
+    abstract fun count(query: IQuery):Long
 
 
     /**
@@ -235,7 +235,7 @@ abstract class EntityRepo<T>(
     /**
      * Return a query builder for more complex searches
      */
-    open fun query():Query = queryBuilder?.invoke() ?: Query()
+    open fun query(): Query = queryBuilder?.invoke() ?: Query()
 
 
     /**

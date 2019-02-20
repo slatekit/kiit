@@ -13,39 +13,85 @@
 
 package slatekit.common.queues
 
-import slatekit.common.ResultEx
+import slatekit.results.Try
 
-interface QueueSource {
 
+/**
+ * Interface for a general purpose persistent queue ( AWS, etc )
+ */
+interface QueueSource<T> {
+
+    /**
+     * Name of the queue
+     */
     val name: String
 
+    /**
+     * Initialization hook
+     */
     fun init() {}
 
+    /**
+     * Close the queue
+     */
     fun close() {}
 
+    /**
+     * Get total number of items in queue
+     */
     fun count(): Int
 
-    fun next(): Any?
+    /**
+     * Get the next item in the queue
+     */
+    fun next(): T?
 
-    fun nextBatch(size: Int = 10): List<Any>? = null
+    /**
+     * Get the next batch of items
+     */
+    fun next(size: Int = 10): List<T>? = null
 
-    fun <T> nextBatchAs(size: Int = 10): List<T>? = null
+    /**
+     * Completes the item ( essentially removing it from the queue )
+     * Basically an ack ( acknowledgement )
+     */
+    fun complete(item: T?) {}
 
-    fun complete(item: Any?) {}
+    /**
+     * Completes the items ( essentially removing it from the queue )
+     * Basically an ack ( acknowledgement )
+     */
+    fun completeAll(items: List<T>?) {}
 
-    fun completeAll(items: List<Any>?) {}
+    /**
+     * Removes the item from the queue
+     */
+    fun abandon(item: T?) {}
 
-    fun abandon(item: Any?) {}
+    /**
+     * Sends the message to the queue
+     */
+    fun send(value: T, tagName: String = "", tagValue: String = ""): Try<String>
 
-    fun send(msg: Any, tagName: String = "", tagValue: String = ""): ResultEx<String>
+    /**
+     * Sends the item as a message to the queue
+     */
+    fun send(value: T, attributes: Map<String, Any>): Try<String>
 
-    fun send(message: String, attributes: Map<String, Any>): ResultEx<String>
+    /**
+     * Sends the item to the queue from a local file path
+     */
+    fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): Try<String>
 
-    fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): ResultEx<String>
+    /**
+     * Converts a String value into the value for the queue
+     */
+    fun convert(value:String):T?
 
-    fun toString(item: Any?): String {
+
+    fun toString(item: T?): String {
         return when (item) {
-            is QueueSourceData -> item.message.toString()
+            is QueueEntry<*> -> item.value.toString()
             else -> item?.toString() ?: ""
         }
     }

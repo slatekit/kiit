@@ -13,9 +13,16 @@
 
 package slatekit.common.queues
 
-interface QueueSourceMsg : QueueSource {
+interface QueueSourceMsg<T> : QueueSource<T> {
 
-    fun getMessageBody(msgItem: Any?): String
+    /**
+     * Get the message body of the entry
+     */
+    fun getMessageBody(msgItem: T?): String
 
-    fun getMessageTag(msgItem: Any?, tagName: String): String
+
+    /**
+     * Gets the message tag/attribute from metadata
+     */
+    fun getMessageTag(msgItem: T?, tagName: String): String
 }

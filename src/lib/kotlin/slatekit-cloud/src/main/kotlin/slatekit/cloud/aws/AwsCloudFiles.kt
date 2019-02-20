@@ -20,6 +20,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.core.cloud.CloudFilesBase
+import slatekit.results.Try
+import slatekit.results.getOrElse
 import java.io.File
 
 /**
@@ -83,7 +85,7 @@ class AwsCloudFiles(
      * @param name
      * @param content
      */
-    override fun create(folder: String, name: String, content: String): ResultEx<String> {
+    override fun create(folder: String, name: String, content: String): Try<String> {
         return put("create", folder, name, content)
     }
 
@@ -94,7 +96,7 @@ class AwsCloudFiles(
      * @param name
      * @param content
      */
-    override fun update(folder: String, name: String, content: String): ResultEx<String> {
+    override fun update(folder: String, name: String, content: String): Try<String> {
         return put("update", folder, name, content)
     }
 
@@ -104,7 +106,7 @@ class AwsCloudFiles(
      * @param folder
      * @param name
      */
-    override fun delete(folder: String, name: String): ResultEx<String> {
+    override fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "delete", data = fullName, call = { ->
             _s3.deleteObject(_defaultFolder, fullName)
@@ -119,7 +121,7 @@ class AwsCloudFiles(
      * @param name
      * @return
      */
-    override fun getAsText(folder: String, name: String): ResultEx<String> {
+    override fun getAsText(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "getAsText", data = fullName, call = { ->
 
@@ -138,7 +140,7 @@ class AwsCloudFiles(
      * @param localFolder
      * @return
      */
-    override fun download(folder: String, name: String, localFolder: String): ResultEx<String> {
+    override fun download(folder: String, name: String, localFolder: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
             val content = getAsText(folder, name)
@@ -158,7 +160,7 @@ class AwsCloudFiles(
      * @param filePath
      * @return
      */
-    override fun downloadToFile(folder: String, name: String, filePath: String): ResultEx<String> {
+    override fun downloadToFile(folder: String, name: String, filePath: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
             val content = getAsText(folder, name)
@@ -177,7 +179,7 @@ class AwsCloudFiles(
      * @param content
      * @return
      */
-    fun put(action: String, folder: String, name: String, content: String): ResultEx<String> {
+    fun put(action: String, folder: String, name: String, content: String): Try<String> {
         // full name of the file is folder + name
         val fullName = getName(folder, name)
 
@@ -199,6 +201,6 @@ class AwsCloudFiles(
 
         // Case 3: sub-folder
         else
-            folder + "-" + name
+            "$folder-$name"
     }
 }

@@ -10,9 +10,9 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.common.db.types
+package slatekit.db.types
 
-import slatekit.common.db.DbFieldType
+import slatekit.db.DbFieldType
 
 /**
  * Created by kishorereddy on 6/14/17.

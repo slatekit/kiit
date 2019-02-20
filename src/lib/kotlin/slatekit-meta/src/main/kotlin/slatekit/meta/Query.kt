@@ -1,7 +1,7 @@
 package slatekit.meta
 
-import slatekit.common.query.IQuery
-import slatekit.common.query.Query
+import slatekit.query.IQuery
+import slatekit.query.Query
 
 fun IQuery.where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fieldValue: Any?): IQuery {
     val finalValue = fieldValue ?: Query.Null

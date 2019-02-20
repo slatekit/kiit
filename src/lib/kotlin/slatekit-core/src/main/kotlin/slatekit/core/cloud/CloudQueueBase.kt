@@ -19,4 +19,4 @@ import slatekit.common.queues.QueueSourceMsg
 /**
  * Abstraction for cloud based message queue storage and retrieval
  */
-abstract class CloudQueueBase : QueueSource, CloudActions, QueueSourceMsg
+abstract class CloudQueueBase<T> : QueueSource<T>, CloudActions, QueueSourceMsg<T>

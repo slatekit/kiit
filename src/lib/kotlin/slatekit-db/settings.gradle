@@ -1,0 +1,4 @@
+rootProject.name = 'slatekit-db'
+
+include ':slatekit-common'
+//project(':slatekit-common').projectDir=new File('../slatekit-common')

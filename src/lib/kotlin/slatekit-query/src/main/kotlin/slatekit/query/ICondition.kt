@@ -11,6 +11,8 @@
  * </slate_header>
  */
 
-package slatekit.common.queues
+package slatekit.query
 
-data class QueueSourceData(val message: Any, val tags: Map<String, Any>? = null, val id: String? = null)
+interface ICondition {
+    fun toStringQuery(): String
+}

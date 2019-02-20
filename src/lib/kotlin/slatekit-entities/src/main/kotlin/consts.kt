@@ -19,6 +19,7 @@ package slatekit.entities
 import java.time.format.DateTimeFormatter
 
 object Consts {
+
     val version = "0.9.0"
     val NULL = "NULL"
     val idCol = "id"

@@ -8,7 +8,7 @@
   * usage: Please refer to license on github for more info.
   * </slate_header>
   */
-package slatekit.common.db
+package slatekit.db
 
 sealed class DbFieldType {
     object DbNumber : DbFieldType()

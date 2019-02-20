@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.query
+package slatekit.query
 
 import slatekit.common.DateTime
 import java.util.*
@@ -78,7 +78,7 @@ object QueryEncoder {
             }
 
     fun toString(value: String): String {
-        val s = QueryEncoder.ensureValue(value)
+        val s = ensureValue(value)
         val res = if (s.isNullOrEmpty()) "''" else "'$s'"
         return res
     }

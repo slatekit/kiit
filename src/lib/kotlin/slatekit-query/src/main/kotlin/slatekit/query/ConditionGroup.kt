@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.query
+package slatekit.query
 
 data class ConditionGroup(val left: Any, val operator: String, val right: Any) : ICondition {
 

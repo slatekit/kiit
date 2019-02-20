@@ -14,7 +14,6 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.db.types.DbSourceMySql
 import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper

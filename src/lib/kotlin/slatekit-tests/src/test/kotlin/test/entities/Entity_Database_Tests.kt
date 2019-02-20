@@ -18,7 +18,7 @@ import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.db.DbType.DbTypeMySql
 import slatekit.entities.core.*
 import test.setup.MyEncryptor
 import test.setup.StatusEnum

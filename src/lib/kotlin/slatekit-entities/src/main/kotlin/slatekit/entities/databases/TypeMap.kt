@@ -1,8 +1,8 @@
 package slatekit.entities.databases
 
 import slatekit.common.Types
-import slatekit.common.db.DbFieldType
-import slatekit.common.db.types.DbTypeInfo
+import slatekit.db.DbFieldType
+import slatekit.db.types.DbTypeInfo
 
 /**
  * MySql to Java types

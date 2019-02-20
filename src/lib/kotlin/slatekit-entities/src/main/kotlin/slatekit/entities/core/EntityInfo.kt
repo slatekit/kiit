@@ -14,8 +14,8 @@
 package slatekit.entities.core
 
 import slatekit.common.newline
-import slatekit.common.db.DbType
-import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.db.DbType
+import slatekit.db.DbType.DbTypeMySql
 import slatekit.entities.databases.SqlBuilder
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
@@ -37,18 +37,18 @@ import kotlin.reflect.KClass
  *                               ( see DbLookup / Example_Database.scala )
  */
 data class EntityInfo(
-    val entityType: KClass<*>,
-    val model: Model,
-    val entityServiceType: KClass<*>? = null,
-    val entityRepoType: KClass<*>? = null,
-    val entityMapperType: KClass<*>? = null,
-    val entityServiceInstance: IEntityService? = null,
-    val entityRepoInstance: IEntityRepo? = null,
-    val entityMapperInstance: EntityMapper? = null,
-    val entityDDL: SqlBuilder? = null,
-    val dbType: DbType = DbTypeMySql,
-    val dbKey: String = "",
-    val dbShard: String = ""
+        val entityType: KClass<*>,
+        val model: Model,
+        val entityServiceType: KClass<*>? = null,
+        val entityRepoType: KClass<*>? = null,
+        val entityMapperType: KClass<*>? = null,
+        val entityServiceInstance: IEntityService? = null,
+        val entityRepoInstance: IEntityRepo? = null,
+        val entityMapperInstance: EntityMapper? = null,
+        val entityDDL: SqlBuilder? = null,
+        val dbType: DbType = DbTypeMySql,
+        val dbKey: String = "",
+        val dbShard: String = ""
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""
 

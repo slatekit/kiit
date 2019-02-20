@@ -9,10 +9,11 @@ usage: Please refer to license on github for more info.
 </slate_header>
  */
 
-package slatekit.common.db
+package slatekit.db
 
 import slatekit.common.DateTime
 import slatekit.common.Types
+import slatekit.common.db.DbCon
 import java.math.BigDecimal
 import java.sql.*
 import java.time.*
@@ -59,9 +60,9 @@ object DbUtils {
      * @param error : The callback to call for when an error occurrs
      */
     fun executeStmt(
-        con: DbCon,
-        callback: (Connection, Statement) -> Unit,
-        error: (Exception) -> Unit
+            con: DbCon,
+            callback: (Connection, Statement) -> Unit,
+            error: (Exception) -> Unit
     ) {
 
         val conn = connect(con)
@@ -86,10 +87,10 @@ object DbUtils {
      * @param error : The callback to call for when an error occurrs
      */
     fun <T> executePrepAs(
-        con: DbCon,
-        sql: String,
-        callback: (Connection, PreparedStatement) -> T?,
-        error: (Exception) -> Unit
+            con: DbCon,
+            sql: String,
+            callback: (Connection, PreparedStatement) -> T?,
+            error: (Exception) -> Unit
     ): T? {
 
         val conn = connect(con)

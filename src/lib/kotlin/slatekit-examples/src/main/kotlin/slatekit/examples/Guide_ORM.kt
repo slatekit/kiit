@@ -6,9 +6,9 @@ import slatekit.common.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.db.DbLookup.Companion.namedDbs
-import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.db.DbType.DbTypeMySql
 import slatekit.meta.models.*
-import slatekit.common.query.Query
+import slatekit.query.Query
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities

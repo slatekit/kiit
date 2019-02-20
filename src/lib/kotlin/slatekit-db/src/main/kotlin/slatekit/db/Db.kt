@@ -9,15 +9,17 @@ usage: Please refer to license on github for more info.
 </slate_header>
  */
 
-package slatekit.common.db
+package slatekit.db
 
 import slatekit.common.DateTime
-import slatekit.common.db.DbUtils.executeCon
-import slatekit.common.db.DbUtils.executePrepAs
-import slatekit.common.db.DbUtils.executeStmt
-import slatekit.common.db.DbUtils.fillArgs
-import slatekit.common.db.types.DbSource
-import slatekit.common.db.types.DbSourceMySql
+import slatekit.common.db.DbCon
+import slatekit.common.db.Mapper
+import slatekit.db.DbUtils.executeCon
+import slatekit.db.DbUtils.executePrepAs
+import slatekit.db.DbUtils.executeStmt
+import slatekit.db.DbUtils.fillArgs
+import slatekit.db.types.DbSource
+import slatekit.db.types.DbSourceMySql
 import slatekit.common.repeatWith
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -36,9 +38,9 @@ import java.time.LocalTime
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
 class Db(
-    private val _dbCon: DbCon,
-    val source: DbSource = DbSourceMySql(),
-    val errorCallback: ((Exception) -> Unit)? = null
+        private val _dbCon: DbCon,
+        val source: DbSource = DbSourceMySql(),
+        val errorCallback: ((Exception) -> Unit)? = null
 ) {
 
     val onError = errorCallback ?: this::errorHandler

@@ -13,7 +13,7 @@
 
 package slatekit.core.cloud
 
-import slatekit.common.ResultEx
+import slatekit.results.Try
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
@@ -39,7 +39,7 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
         create(_defaultFolder, name, content)
     }
 
-    fun createFromPath(folder: String, name: String, filePath: String): ResultEx<String> {
+    fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
         // val content = "simulating from file : " + filePath
         val content = loadFromFile(filePath)
         return create(folder, name, content)
@@ -49,13 +49,13 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
         delete(_defaultFolder, name)
     }
 
-    fun getAsText(name: String): ResultEx<String> = getAsText(_defaultFolder, name)
+    fun getAsText(name: String): Try<String> = getAsText(_defaultFolder, name)
 
-    fun download(name: String, localFolder: String): ResultEx<String> {
+    fun download(name: String, localFolder: String): Try<String> {
         return download(_defaultFolder, name, localFolder)
     }
 
-    fun downloadToFile(name: String, localFilePath: String): ResultEx<String> {
+    fun downloadToFile(name: String, localFilePath: String): Try<String> {
         return downloadToFile(_defaultFolder, name, localFilePath)
     }
 
@@ -63,29 +63,29 @@ abstract class CloudFilesBase(val _defaultFolder: String, val _createDefaultFold
         update(_defaultFolder, name, content)
     }
 
-    fun updateFromPath(name: String, filePath: String): ResultEx<String> {
+    fun updateFromPath(name: String, filePath: String): Try<String> {
         val content = "simulating from file : " + filePath; // loadFromFile(filePath)
         return update(_defaultFolder, name, content)
     }
 
-    fun updateFromPath(folder: String, name: String, filePath: String): ResultEx<String> {
+    fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
         val content = loadFromFile(filePath)
         return update(folder, name, content)
     }
 
     abstract fun createRootFolder(rootFolder: String): Unit
 
-    abstract fun create(folder: String, name: String, content: String): ResultEx<String>
+    abstract fun create(folder: String, name: String, content: String): Try<String>
 
-    abstract fun update(folder: String, name: String, content: String): ResultEx<String>
+    abstract fun update(folder: String, name: String, content: String): Try<String>
 
-    abstract fun delete(folder: String, name: String): ResultEx<String>
+    abstract fun delete(folder: String, name: String): Try<String>
 
-    abstract fun getAsText(folder: String, name: String): ResultEx<String>
+    abstract fun getAsText(folder: String, name: String): Try<String>
 
-    abstract fun download(folder: String, name: String, localFolder: String): ResultEx<String>
+    abstract fun download(folder: String, name: String, localFolder: String): Try<String>
 
-    abstract fun downloadToFile(folder: String, name: String, filePath: String): ResultEx<String>
+    abstract fun downloadToFile(folder: String, name: String, filePath: String): Try<String>
 
     protected fun loadFromFile(filePath: String): String {
         return File(filePath).readText()

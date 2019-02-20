@@ -5,8 +5,9 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.Reflector
-import slatekit.common.db.DbType.*
+import slatekit.db.DbType.*
 import slatekit.common.naming.Namer
+import slatekit.db.DbType
 import slatekit.entities.databases.SqlBuilder
 import slatekit.entities.databases.vendors.*
 import slatekit.meta.models.Model

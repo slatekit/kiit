@@ -15,7 +15,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType.DbTypeMemory
+import slatekit.db.DbType.DbTypeMemory
 import slatekit.entities.core.*
 import test.setup.Phone
 import test.setup.User5

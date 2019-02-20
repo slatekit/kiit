@@ -18,7 +18,7 @@ package slatekit.entities.core
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.common.query.QueryEncoder
+import slatekit.query.QueryEncoder
 import slatekit.common.ids.UniqueId
 import slatekit.entities.Consts
 import slatekit.entities.Consts.idCol

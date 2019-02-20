@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.query
+package slatekit.query
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger
 open class Query : IQuery {
 
     class QueryData(
-        val conditions: MutableList<ICondition>,
-        val updates: MutableList<FieldValue>
+            val conditions: MutableList<ICondition>,
+            val updates: MutableList<FieldValue>
     )
 
     protected val _limit = AtomicInteger(0)
@@ -80,8 +80,8 @@ open class Query : IQuery {
         else
             " order by " + _orders.joinToString(",", transform = { (fieldRaw, modeRaw) ->
                 val mode = when (modeRaw.toLowerCase()) {
-                    Query.Asc -> "asc"
-                    Query.Desc -> "desc"
+                    Asc -> "asc"
+                    Desc -> "desc"
                     else -> QueryEncoder.convertVal(modeRaw)
                 }
                 val field = QueryEncoder.ensureField(fieldRaw)
@@ -99,7 +99,7 @@ open class Query : IQuery {
      * @return
      */
     override fun set(field: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         val col = QueryEncoder.ensureField(field)
         _data.updates.add(FieldValue(col, finalValue))
         return this
@@ -129,7 +129,7 @@ open class Query : IQuery {
      * @return this instance
      */
     override fun where(field: String, op: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         val condition = buildCondition(field, op, finalValue)
         _data.conditions.add(condition)
         return this
@@ -144,7 +144,7 @@ open class Query : IQuery {
      * @return this instance
      */
     override fun where(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         return where(field, compare.text, finalValue)
     }
 
@@ -157,14 +157,14 @@ open class Query : IQuery {
      * @return this instance
      */
     override fun and(field: String, compare: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         val cond = buildCondition(field, compare, finalValue)
         group("and", cond)
         return this
     }
 
     override fun and(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         return and(field, compare.text, finalValue)
     }
 
@@ -177,14 +177,14 @@ open class Query : IQuery {
      * @return this instance
      */
     override fun or(field: String, compare: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         val cond = buildCondition(field, compare, finalValue)
         group("or", cond)
         return this
     }
 
     override fun or(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Query.Null
+        val finalValue = fieldValue ?: Null
         return or(field, compare.text, finalValue)
     }
 
@@ -205,7 +205,7 @@ open class Query : IQuery {
 
     protected fun buildCondition(field: String, op: String, fieldValue: Any): Condition {
         val col = QueryEncoder.ensureField(field)
-        val comparison = if (fieldValue == Query.Null) {
+        val comparison = if (fieldValue == Null) {
             val comp = when (op) {
                 "=" -> "is"
                 "is" -> "is"

@@ -9,12 +9,12 @@ usage: Please refer to license on github for more info.
 </slate_header>
  */
 
-package slatekit.common.db.types
+package slatekit.db.types
 
 import slatekit.common.Types
-import slatekit.common.db.*
-import slatekit.common.db.DbUtils.ensureField
+import slatekit.db.DbUtils.ensureField
 import slatekit.common.newline
+import slatekit.db.DbFieldType
 import java.rmi.UnexpectedException
 
 /**
@@ -24,7 +24,7 @@ open class DbSourcePostGres : DbSource {
 
     val types = listOf(
             DbTypeInfo(DbFieldType.DbString, "NVARCHAR", Types.JStringClass),
-            DbTypeInfo(DbFieldType.DbBool, "BIT" , Types.JBoolClass),
+            DbTypeInfo(DbFieldType.DbBool, "BIT", Types.JBoolClass),
             DbTypeInfo(DbFieldType.DbShort, "TINYINT", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbNumber, "INTEGER", Types.JStringClass),
             DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JStringClass),

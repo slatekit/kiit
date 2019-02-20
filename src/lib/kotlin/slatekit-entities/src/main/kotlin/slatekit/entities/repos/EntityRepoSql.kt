@@ -16,13 +16,12 @@ package slatekit.entities.repos
 import slatekit.common.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.common.query.IQuery
-import slatekit.common.query.Op
-import slatekit.common.query.Query
+import slatekit.query.IQuery
+import slatekit.query.Op
+import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
-import sun.util.resources.cldr.ne.CurrencyNames_ne
 import kotlin.reflect.KClass
 
 /**
@@ -181,7 +180,7 @@ abstract class EntityRepoSql<T>(
     /**
      * Gets the total number of records based on the query provided.
      */
-    override fun count(query:IQuery):Long {
+    override fun count(query: IQuery):Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${repoName()} where " + filter
         val count = _db.getScalarLong(sql)
