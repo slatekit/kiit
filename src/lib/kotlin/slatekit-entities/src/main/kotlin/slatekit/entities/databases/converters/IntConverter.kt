@@ -1,7 +1,7 @@
 package slatekit.entities.databases.converters
 
 import slatekit.entities.databases.SqlConverter
-import slatekit.common.records.Record
+import slatekit.common.Record
 import slatekit.entities.Consts
 
 object IntConverter : SqlConverter<Int> {

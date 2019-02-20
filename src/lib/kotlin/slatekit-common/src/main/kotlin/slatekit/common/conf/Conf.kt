@@ -24,7 +24,7 @@ import slatekit.common.Strings
  *
  * @param _encryptor: Optional encryptor for decrypting encrypted config settings.
  */
-abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
+abstract class Conf(val _encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
 
     /**
      * access to raw config object. e.g. could be a type-safe config.
@@ -63,11 +63,11 @@ abstract class ConfigBase(val _encryptor: ((String) -> String)?) : Inputs, Confi
      * @param file
      * @return
      */
-    open fun loadFrom(file: String?): ConfigBase? = null
+    open fun loadFrom(file: String?): Conf? = null
 
     /**
      * To support convenience methods
      * @return
      */
-    override fun config(): ConfigBase = this
+    override fun config(): Conf = this
 }

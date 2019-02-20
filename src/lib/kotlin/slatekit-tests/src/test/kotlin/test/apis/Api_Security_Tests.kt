@@ -16,7 +16,7 @@ import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.security.AllProtocols
-import slatekit.common.security.Credentials
+import slatekit.common.info.Credentials
 import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.results.ResultFuncs.unAuthorized

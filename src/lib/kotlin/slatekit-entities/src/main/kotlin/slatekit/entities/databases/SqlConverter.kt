@@ -1,6 +1,6 @@
 package slatekit.entities.databases
 
-import slatekit.common.records.Record
+import slatekit.common.Record
 
 
 interface SqlConverter<T> {

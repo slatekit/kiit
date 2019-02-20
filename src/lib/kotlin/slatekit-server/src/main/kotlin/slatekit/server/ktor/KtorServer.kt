@@ -30,8 +30,8 @@ import slatekit.apis.core.Auth
 import slatekit.apis.core.Events
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
-import slatekit.common.app.AppMeta
-import slatekit.common.app.AppMetaSupport
+import slatekit.common.info.Info
+import slatekit.common.info.InfoSupport
 import slatekit.common.metrics.Metrics
 import slatekit.common.requests.toResponse
 import slatekit.meta.Deserializer
@@ -45,7 +45,7 @@ class KtorServer(
     val apis: List<Api>,
     val metrics:Metrics,
     val events: Events = Events()
-) : AppMetaSupport {
+) : InfoSupport {
 
     /**
      * initialize with port, prefix for api routes, and all the dependent items
@@ -77,7 +77,7 @@ class KtorServer(
         docKey = config.docKey,
         docBuilder = ::DocWeb)
 
-    override fun appMeta(): AppMeta = ctx.app
+    override fun appMeta(): Info = ctx.app
 
     val log = ctx.logs.getLogger(this.javaClass.name)
     val diagnostics = Diagnostics(metrics, log)

@@ -3,7 +3,7 @@ package slatekit.workers
 import slatekit.common.Context
 import slatekit.common.info.About
 import slatekit.common.metrics.Metrics
-import slatekit.common.status.Status
+import slatekit.common.Status
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Stats
 import java.util.concurrent.ExecutorService

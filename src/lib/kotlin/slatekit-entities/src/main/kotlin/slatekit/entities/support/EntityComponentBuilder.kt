@@ -78,7 +78,7 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
         val err = if (dbKey.isEmpty()) err2 else err3
         val con = con()
                 ?: throw IllegalArgumentException("Database connection not available for key/shard $dbKey:$dbShard")
-        require(con != DbConEmpty, { "$err1 $err" })
+        require(con != DbCon.empty, { "$err1 $err" })
         return if (open) Db(con).open() else Db(con)
     }
 
@@ -152,7 +152,7 @@ class EntityComponentBuilder(val dbs: DbLookup? = null,
         val entityIdType = Long::class
 
         // 1. DB: JDBC wrapper
-        val db = if(dbType == DbTypeMemory) Db(DbConEmpty) else  db(dbKey, dbShard)
+        val db = if(dbType == DbTypeMemory) Db(DbCon.empty) else  db(dbKey, dbShard)
 
         // 2. Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {

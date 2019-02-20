@@ -25,19 +25,19 @@ import slatekit.integration.common.AppEntContext
 class InfoApi(val context: AppEntContext)  {
 
     @ApiAction(desc = "gets info about this build")
-    fun build(): Build = context.app.build
+    fun build(): Build = context.build
 
 
     @ApiAction(desc = "get info about the application")
-    fun about(): About = context.app.about
+    fun about(): About = context.app
 
 
     @ApiAction(desc = "get info about the application")
-    fun cmd(cmd: Request): About = context.app.about
+    fun cmd(cmd: Request): About = context.app
 
 
     @ApiAction(desc = "gets info about the language")
-    fun lang(): Lang = context.app.lang
+    fun lang(): Lang = context.sys.lang
 
 
     @ApiAction(desc = "gets info about the folders")
@@ -45,10 +45,6 @@ class InfoApi(val context: AppEntContext)  {
 
 
     @ApiAction(desc = "gets info about the start up time")
-    fun start(): StartInfo = context.app.start
-
-
-    @ApiAction(desc = "gets info about the status")
-    fun status(): Status = context.app.status
+    fun start(): StartInfo = context.start
 
 }

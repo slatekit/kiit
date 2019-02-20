@@ -6,7 +6,7 @@ import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.requests.Request
 import slatekit.common.results.ResultFuncs
-import slatekit.common.security.ApiKey
+import slatekit.common.info.ApiKey
 
 /**
  * Class used to authenticate an api with support for 3 modes:
@@ -20,8 +20,8 @@ import slatekit.common.security.ApiKey
  * @param callback : Callback used for handing the actual logic for validating an action
  */
 open class Authenticator(
-    protected val keys: List<ApiKey>,
-    private val headerKey: String = "api-key"
+        protected val keys: List<ApiKey>,
+        private val headerKey: String = "api-key"
 ) : Auth {
 
     private val _keyLookup = AuthFuncs.convertKeys(keys)

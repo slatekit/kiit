@@ -5,7 +5,7 @@ import org.junit.Test
 import slatekit.common.TODO
 import slatekit.common.Success
 import slatekit.common.queues.QueueSourceDefault
-import slatekit.common.status.Status
+import slatekit.common.Status
 import slatekit.workers.Job
 import test.setup.MyWorker
 

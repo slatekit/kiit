@@ -22,7 +22,7 @@ import java.time.*
 open class InputArgs(
     val _map: Map<String, Any>,
     private val _decryptor: ((String) -> String)? = null
-) : Meta, InputsUpdateable {
+) : Metadata, InputsUpdateable {
 
     override val raw: Any = _map
     override fun toMap(): Map<String, Any> = _map

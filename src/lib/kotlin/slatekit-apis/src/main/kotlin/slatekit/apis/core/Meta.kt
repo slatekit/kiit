@@ -17,7 +17,7 @@ data class Meta(
     val rawSource: Any,
     val json: JSONObject,
     val enc: Encryptor?
-) : slatekit.common.Meta, JsonSupport {
+) : Metadata, JsonSupport {
     override val raw: Any = json
     override fun toJson(): JSONObject = json
 

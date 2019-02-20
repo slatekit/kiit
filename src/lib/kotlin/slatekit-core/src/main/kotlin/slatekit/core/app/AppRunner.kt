@@ -24,18 +24,75 @@ import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.FAILURE
 import slatekit.common.results.ResultCode.HELP
+import slatekit.common.results.ResultFuncs
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
 
 object AppRunner {
 
+
+    // Simple utility function to "compose" 2 functions
+    // into a new function that calls both.
+    fun <A, B, C> compose(f: (B) -> C, g: (A) -> B): (A) -> C {
+        return { x -> f(g(x)) }
+    }
+
+
+    /**
+     * Initialize the app
+     */
+    fun init(app: App) {
+        app.init()
+        try {
+            app.ctx.dirs?.create()
+        } catch (e: Exception) {
+            println("Error while creating directories for application in user.home directory")
+        }
+    }
+
+
+    /**
+     * Initialize the app
+     */
+    fun execute(app: App):ResultEx<Any> {
+        if (app.options.printSummaryBeforeExec) {
+            app.info()
+        }
+
+        val res: ResultEx<Any> =
+                try {
+                    app.execute()
+                } catch (e: Exception) {
+                    ResultFuncs.unexpectedError(msg = "Unexpected error : " + e.message, err = e)
+                }
+        return res
+    }
+
+
+    /**
+     * Shutdown / end the app
+     */
+    fun end(app: App) {
+        try {
+            app.end()
+        } catch (e: Exception) {
+            error("error while shutting down app : " + e.message)
+        }
+        if (app.options.printSummaryOnShutdown) {
+            // Make a copy of the original context
+            // with updates to the end time/status.
+            //app.summary(finalState)
+        }
+    }
+
+
     /**
      * Runs the application
      * @param app : Builds the application
      * @return
      */
-    fun run(app: AppProcess, end: Boolean = true): ResultEx<Any> {
+    fun run(app: App, end: Boolean = true): ResultEx<Any> {
         // If the context was derived via the build method below, it goes
         // through proper checks/validation. In which case, we check
         // for user supplying the following on the command line:
@@ -43,7 +100,7 @@ object AppRunner {
         // - exit
         // And these are considered failures.
         // Otherwise run the app.
-        val result = when (app.ctx.state.success) {
+        val result = when (app.ctx != null) {
             false -> failed(app).toResultEx()
             else -> execute(app, end)
         }
@@ -208,28 +265,18 @@ object AppRunner {
         println(helpText)
     }
 
-    fun failed(app: AppProcess): ResultMsg<Any> {
-        if (app.ctx.state.code != HELP) {
-            println("Application context invalid... exiting running of app.")
-        }
-        return Failure(app.ctx.state.msg, code = app.ctx.state.code, msg = app.ctx.state.msg)
+    fun failed(app: App): ResultMsg<Any> {
+//        if (app.ctx.state.code != HELP) {
+//            println("Application context invalid... exiting running of app.")
+//        }
+        return Failure("failed loading")
     }
 
-    fun execute(app: AppProcess, end: Boolean = true): ResultEx<Any> =
-            Result.attempt({ ->
-
-                // 1. Begin app workflow
-                app.init()
-
-                // 2. Execute the app
-                val res = app.exec()
-
-                // 3 Shutdown the app
-                if (end) {
-                    app.end()
-                }
-
-                // 4. Result<Any>
+    fun execute(app: App, end: Boolean = true): ResultEx<Any> =
+            Result.attempt {
+                init(app)
+                val res = execute(app)
+                end(app)
                 res
-            })
+            }
 }

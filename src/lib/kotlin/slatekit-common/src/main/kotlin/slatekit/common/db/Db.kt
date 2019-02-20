@@ -18,7 +18,6 @@ import slatekit.common.db.DbUtils.executeStmt
 import slatekit.common.db.DbUtils.fillArgs
 import slatekit.common.db.types.DbSource
 import slatekit.common.db.types.DbSourceMySql
-import slatekit.common.records.RecordSet
 import slatekit.common.repeatWith
 import java.sql.Connection
 import java.sql.PreparedStatement

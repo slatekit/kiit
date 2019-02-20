@@ -1,7 +1,7 @@
 package slatekit.core.events
 
 import slatekit.common.Inputs
-import slatekit.common.Meta
+import slatekit.common.Metadata
 
 /**
 @param path     : app.share.shareNew
@@ -24,7 +24,7 @@ data class Event(
         val source   : String,  // app
         val origin   : String,  // controller.BillController
         val verb     : String,  // create
-        val meta     : Meta  ,  // { type:'blend.core.models.Bill' },
+        val meta     : Metadata,  // { type:'blend.core.models.Bill' },
         val data     : Inputs,  // { id:12, uuid: 'abc123', type:'blend.core.models.Bill', data:"" }
         val tag      : String,  // "qwebj3341883bmdasd",
         val version  : String,  // "1.0",

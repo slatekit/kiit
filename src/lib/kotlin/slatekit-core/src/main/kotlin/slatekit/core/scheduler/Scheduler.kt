@@ -8,7 +8,7 @@ import slatekit.common.requests.toResponse
 import slatekit.common.results.ResultCode
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
-import slatekit.common.status.Status
+import slatekit.common.Status
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors

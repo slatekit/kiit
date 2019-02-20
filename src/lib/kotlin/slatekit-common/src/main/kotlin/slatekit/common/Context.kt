@@ -1,14 +1,11 @@
 package slatekit.common
 
-import slatekit.common.app.AppMeta
 import slatekit.common.args.Args
-import slatekit.common.conf.ConfigBase
-import slatekit.common.db.DbLookup
+import slatekit.common.conf.Conf
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.Logs
-import slatekit.common.metrics.Metrics
 
 /**
  *
@@ -16,27 +13,22 @@ import slatekit.common.metrics.Metrics
  * env  : environment selection ( dev, qa, staging, prod )
  * cfg  : config settings
  * log  : logger
- * inf  : info only about the currently running application
- * host : host computer info
- * lang : lang runtime info
- * dbs  : db connection strings lookup
+ * app  : info about the application
+ * build: build information ( version, commit id, date )
+ * sys  : system level info ( host, lang )
+ * start: start info
  * enc  : encryption/decryption service
  * dirs : directories used for the app
- * state: the current valid/invalid state of the context
  */
 interface Context {
     val arg: Args
     val env: Env
-    val cfg: ConfigBase
+    val cfg: Conf
     val logs: Logs
-    val inf: About
-    val host: Host
-    val lang: Lang
-    val dbs: DbLookup?
+    val app: About
+    val sys: Sys
+    val build: Build
+    val start: StartInfo
     val enc: Encryptor?
     val dirs: Folders?
-    val extra: MutableMap<String, Any>
-    val app: AppMeta
-    val state: ResultEx<Boolean>
-    val build: Build
 }

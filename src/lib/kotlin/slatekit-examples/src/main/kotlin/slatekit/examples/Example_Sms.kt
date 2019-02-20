@@ -22,7 +22,7 @@ import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
 import slatekit.common.conf.Config
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
 import slatekit.core.sms.SmsMessage
 import slatekit.core.sms.SmsServiceTwilio

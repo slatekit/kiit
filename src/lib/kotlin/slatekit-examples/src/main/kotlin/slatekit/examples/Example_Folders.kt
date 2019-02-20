@@ -17,10 +17,8 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
-import slatekit.common.app.LocationUserDir
 import slatekit.common.info.Folders
 import slatekit.core.cmds.Cmd
 
@@ -47,7 +45,6 @@ class Example_Folders : Cmd("folders") {
         //        - outputs
         //        - temp
         val folders = Folders(
-                location = LocationUserDir,
                 home = System.getProperty("user.dir"),
                 root = "company-1",
                 group = "department-1",

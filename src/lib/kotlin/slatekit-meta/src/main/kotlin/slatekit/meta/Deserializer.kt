@@ -40,12 +40,12 @@ open class Deserializer(
 ) {
 
     private val typeRequest = Request::class.createType()
-    private val typeMeta = Meta::class.createType()
+    private val typeMeta = Metadata::class.createType()
 
     open fun deserialize(parameters: List<KParameter>): Array<Any?> {
 
         val data: Inputs = req.data
-        val meta: Meta = req.meta
+        val meta: Metadata = req.meta
         // Check each parameter to api call
         val inputs = mutableListOf<Any?>()
         val jsonRaw = data.raw as? JSONObject

@@ -15,12 +15,13 @@ package slatekit.server.spark
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
+import slatekit.common.Metadata
 import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import spark.Request
 import java.time.*
 
-data class SparkHeaaders(val req: Request, val enc: Encryptor?) : slatekit.common.Meta {
+data class SparkHeaaders(val req: Request, val enc: Encryptor?) : Metadata {
 
     override val raw: Any = req.headers()
     override fun toMap(): Map<String, Any> {

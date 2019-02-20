@@ -11,6 +11,19 @@
  * </slate_header>
  */
 
-package slatekit.common.http
+package slatekit.common.info
 
-data class HttpCredentials(val mode: String, val name: String, val password: String)
+data class Credentials(
+    val id: String = "",
+    val name: String = "",
+    val email: String = "",
+    val key: String = "",
+    val env: String = "",
+    val region: String = "",
+    val roles: String = ""
+) {
+    companion object {
+        @JvmStatic
+        val empty = Credentials()
+    }
+}

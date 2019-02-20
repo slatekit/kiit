@@ -13,7 +13,7 @@
 
 package slatekit.apis.core
 
-import slatekit.common.Meta
+import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.ext.tail
 import kotlin.reflect.KCallable
@@ -87,7 +87,7 @@ data class Action(
         val TypeRequest = Request::class.createType()
 
         @JvmStatic
-        val TypeMeta = Meta::class.createType()
+        val TypeMeta = Metadata::class.createType()
 
         @JvmStatic
         fun filter(args: List<KParameter>): List<KParameter> {

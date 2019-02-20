@@ -13,6 +13,8 @@
 
 package slatekit.common.info
 
+import slatekit.common.DateTime
+
 data class StartInfo(
 
     @JvmField
@@ -31,8 +33,11 @@ data class StartInfo(
     val rootDir: String = "",
 
     @JvmField
-    val confDir: String = ""
-) : Info {
+    val confDir: String = "",
+
+    @JvmField
+    val started: DateTime = DateTime.now()
+) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
         "args"    to args,
@@ -40,7 +45,8 @@ data class StartInfo(
         "config"  to config,
         "env"     to env,
         "rootDir" to rootDir,
-        "confDir" to confDir
+        "confDir" to confDir,
+        "started" to started.toString()
     )
 
     companion object {

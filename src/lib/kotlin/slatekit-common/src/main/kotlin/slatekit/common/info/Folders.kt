@@ -13,9 +13,7 @@
 
 package slatekit.common.info
 
-import slatekit.common.io.Files
-import slatekit.common.app.AppLocation
-import slatekit.common.app.LocationUserDir
+import slatekit.common.utils.Files
 import java.io.File
 
 /**
@@ -36,7 +34,7 @@ import java.io.File
  *         - inputs
  *         - outputs
  *
- * @param location: location of where the folders reside ( local (to app) | programs | user.home )
+ * @param home: location of where the folders reside ( local (to app) | programs | user.home )
  * @param root : optional name of root folder or company name
  * @param group : optional name of group folder that holds all apps
  * @param app : name of the application folder for this app
@@ -47,9 +45,6 @@ import java.io.File
  */
 
 data class Folders(
-
-    @JvmField
-    val location: AppLocation,
 
     @JvmField
     val home: String,
@@ -80,7 +75,7 @@ data class Folders(
 
     @JvmField
     val conf: String
-) : Info {
+) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
         "root"    to  (root ?: ""),
@@ -141,7 +136,6 @@ data class Folders(
 
         @JvmStatic
         val none = Folders(
-                location = LocationUserDir,
                 home = System.getProperty("user.dir"),
                 root = null,
                 group = null,
@@ -156,7 +150,6 @@ data class Folders(
 
         @JvmStatic
         val default = Folders(
-                location = LocationUserDir,
                 home = System.getProperty("user.dir"),
                 root = "slatekit",
                 group = "samples",
@@ -172,7 +165,6 @@ data class Folders(
         @JvmStatic
         fun userDir(root: String, group: String, app: String) =
                 Folders(
-                        LocationUserDir,
                         System.getProperty("user.home"),
                         root = root,
                         group = group,

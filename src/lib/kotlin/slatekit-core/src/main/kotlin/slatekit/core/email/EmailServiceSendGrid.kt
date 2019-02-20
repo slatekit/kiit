@@ -13,7 +13,7 @@
 
 package slatekit.core.email
 
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 import slatekit.common.Failure
 import slatekit.common.ResultMsg
 import slatekit.common.http.HttpConstants

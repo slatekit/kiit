@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.entities
 
 import org.junit.Test
-import slatekit.common.records.RecordMap
+import slatekit.common.utils.RecordMap
 import slatekit.common.ids.UniqueId
 import slatekit.common.utils.ListMap
 import slatekit.entities.core.EntityMapper

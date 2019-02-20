@@ -61,7 +61,7 @@ import kotlin.reflect.KClass
  *
  */
 class Entities(
-        private val _dbs: DbLookup? = DbLookup.defaultDb(DbConEmpty),
+        private val _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
         val namer: Namer? = null

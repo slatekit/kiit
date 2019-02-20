@@ -23,7 +23,7 @@ import slatekit.common.templates.Templates
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.conf.Config
-import slatekit.common.security.ApiLogin
+import slatekit.common.info.ApiLogin
 
 //</doc:import_examples>
 
@@ -63,10 +63,10 @@ class Example_Email  : Cmd("auth") {
 
     //<doc:examples>
     // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-    val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "welcome!", false)
+    val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
 
     // Use case 2: Send using a constructed message object
-    email2.send(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "welcome!", false))
+    email2.send(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
 
     // Use case 3: Send message using one of the setup templates
     email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,

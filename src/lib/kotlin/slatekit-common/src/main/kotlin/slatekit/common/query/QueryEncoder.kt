@@ -14,7 +14,6 @@
 package slatekit.common.query
 
 import slatekit.common.DateTime
-import slatekit.common.EnumLike
 import java.util.*
 
 object QueryEncoder {
@@ -32,7 +31,7 @@ object QueryEncoder {
             is DateTime -> "'" + value.toStringMySql() + "'"
             is List<*> -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
             is Array<*> -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
-            is EnumLike -> value.value.toString()
+            is Enum<*> -> value.ordinal.toString()
             else -> value.toString()
         }
     }

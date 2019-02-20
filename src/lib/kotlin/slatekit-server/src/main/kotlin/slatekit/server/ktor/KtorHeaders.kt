@@ -18,10 +18,11 @@ import slatekit.common.DateTime
 import slatekit.common.encrypt.Encryptor
 
 import io.ktor.request.*
+import slatekit.common.Metadata
 import slatekit.common.Strings
 import java.time.*
 
-data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : slatekit.common.Meta {
+data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : Metadata {
 
     override val raw: Any = req.headers
     override fun toMap(): Map<String, Any> {

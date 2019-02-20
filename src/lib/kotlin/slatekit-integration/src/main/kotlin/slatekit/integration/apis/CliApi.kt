@@ -23,7 +23,8 @@ import slatekit.common.console.ConsoleWriter
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.requests.toResponse
-import slatekit.common.security.Credentials
+import slatekit.common.info.Credentials
+import slatekit.common.info.Info
 import slatekit.core.cli.CliCommand
 import slatekit.core.cli.CliConstants
 import slatekit.core.cli.CliMeta
@@ -49,14 +50,14 @@ import java.io.File
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
 class CliApi(
-    private val creds: Credentials,
-    val ctx: slatekit.common.Context,
-    val auth: slatekit.apis.core.Auth,
-    settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
-    apiItems: List<Api> = listOf(),
-    val cliMeta: CliMeta? = null
+        private val creds: Credentials,
+        val ctx: slatekit.common.Context,
+        val auth: slatekit.apis.core.Auth,
+        settings: slatekit.core.cli.CliSettings = slatekit.core.cli.CliSettings(),
+        apiItems: List<Api> = listOf(),
+        val cliMeta: CliMeta? = null
 )
-    : slatekit.core.cli.CliService(ctx.dirs!!, settings, ctx.app) {
+    : slatekit.core.cli.CliService(ctx.dirs!!, settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys)) {
 
     val metaNameForApiKey = "api-key"
 
@@ -141,8 +142,8 @@ class CliApi(
 
     override fun collectSummaryExtra(): List<Pair<String, String>>? {
         return listOf(
-                Pair("db.conn", ctx.dbs?.default()?.url ?: ""),
-                Pair("db.user", ctx.dbs?.default()?.user ?: ""),
+                Pair("db.conn", ctx.cfg.dbCon().url ),
+                Pair("db.user", ctx.cfg.dbCon().user),
                 Pair("dirs.app", ctx.dirs?.pathToApp ?: "")
         )
     }

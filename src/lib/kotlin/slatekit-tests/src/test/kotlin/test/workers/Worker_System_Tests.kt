@@ -5,7 +5,7 @@ import slatekit.common.TODO
 import slatekit.common.metrics.MetricsLite
 import slatekit.core.common.AppContext
 import slatekit.workers.*
-import slatekit.common.status.Status
+import slatekit.common.Status
 
 // https://stackoverflow.com/questions/2233561/producer-consumer-work-queues
 // http://www.vogella.com/tutorials/JavaConcurrency/article.html

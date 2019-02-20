@@ -13,17 +13,16 @@
 
 package slatekit.common.conf
 
-import slatekit.common.security.ApiLogin
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiLogin
+import slatekit.common.info.Credentials
 import slatekit.common.db.DbCon
-import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbConString
 import slatekit.common.envs.Env
 import slatekit.common.info.Build
 
 interface ConfigSupport {
 
-    fun config(): ConfigBase
+    fun config(): Conf
 
     /**
      * gets the environment specified in the config via "env.name,env.mode"
@@ -32,12 +31,12 @@ interface ConfigSupport {
      */
     fun env(): Env =
 
-            mapTo("env", { conf ->
+            mapTo("env") { conf ->
 
                 val name = conf.getString("env.name")
                 val mode = conf.getString("env.mode")
                 Env(name, Env.interpret(mode), "$mode : $name")
-            }) ?: Env.empty
+            } ?: Env.empty
 
     /**
      * Gets user credentials from the config.
@@ -105,17 +104,17 @@ interface ConfigSupport {
      */
     fun dbCon(prefix: String = "db"): DbCon =
 
-            mapTo(prefix, { conf ->
+            mapTo(prefix) { conf ->
                 DbConString(
                         conf.getString(prefix + ".driver"),
                         conf.getString(prefix + ".url"),
                         conf.getString(prefix + ".user"),
                         conf.getString(prefix + ".pswd")
                 )
-            }) ?: DbConEmpty
+            } ?: DbCon.empty
 }
 
-fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
+fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? =
 
         // Section not present!
         if (config().containsKey(key)) {
@@ -128,7 +127,7 @@ fun <T> ConfigSupport.mapTo(key: String, mapper: (ConfigBase) -> T): T? =
                 // 3. "@{app.dir}/sms.conf"
                 // 3. "/conf/sms.conf"
                 val location = config().getString(locationKey)
-                val conf: ConfigBase? = config().loadFrom(location)
+                val conf: Conf? = config().loadFrom(location)
                 conf?.let { c -> mapper(c) }
             } else
                 mapper(config())

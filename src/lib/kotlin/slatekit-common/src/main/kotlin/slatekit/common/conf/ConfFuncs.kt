@@ -13,17 +13,14 @@
 
 package slatekit.common.conf
 
-import slatekit.common.io.Files
+import slatekit.common.utils.Files
 import slatekit.common.*
-import slatekit.common.Uris.URI_PREFIX_FILE
-import slatekit.common.Uris.URI_PREFIX_JARS
-import slatekit.common.Uris.URI_PREFIX_USER
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.security.ApiKey
-import slatekit.common.security.ApiLogin
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiKey
+import slatekit.common.info.ApiLogin
+import slatekit.common.info.Credentials
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
@@ -32,6 +29,14 @@ import java.util.*
  * Created by kishorereddy on 6/4/17.
  */
 object ConfFuncs {
+
+
+    val CONFIG_DEFAULT_SUFFIX = ".conf"
+    val CONFIG_DEFAULT_PROPERTIES = "env.conf"
+    val CONFIG_DEFAULT_SECTION_DB = "db"
+    val CONFIG_DEFAULT_SECTION_LOGIN = "login"
+    val CONFIG_DEFAULT_SECTION_API = "api"
+
 
     /**
      * loads the db info from the location specified
@@ -85,39 +90,8 @@ object ConfFuncs {
      * @param enc : the encryptor for decrypting config settings.
      * @return
      */
-    fun load(fileName: String? = null, enc: Encryptor? = null): ConfigBase =
+    fun load(fileName: String? = null, enc: Encryptor? = null): Conf =
             Config(fileName, enc)
-
-    /**
-     * Loads a config file from the resources directory
-     *
-     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc : the encryptor for decrypting config settings.
-     * @return
-     */
-    fun loadFromJars(fileName: String, enc: Encryptor? = null): ConfigBase =
-            Config(URI_PREFIX_JARS + fileName, enc)
-
-    /**
-     * Loads a config file from the app config directory in the user directory
-     * e.g. user/company/apps/app/conf
-     *
-     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc : the encryptor for decrypting config settings.
-     * @return
-     */
-    fun loadFromUserHome(fileName: String, enc: Encryptor? = null): ConfigBase =
-            Config(URI_PREFIX_USER + fileName, enc)
-
-    /**
-     * Loads a config file using the source/location supplied.
-     *
-     * @param fileName : name of file e.g. email.conf ( defaults to "env.conf" )
-     * @param enc : the encryptor for decrypting config settings.
-     * @return
-     */
-    fun loadFromFile(fileName: String, enc: Encryptor? = null): ConfigBase =
-            Config(URI_PREFIX_FILE + fileName, enc)
 
     /**
      * creates a api credentials file in the app directory of the user home path
@@ -200,7 +174,7 @@ object ConfFuncs {
         fileName: String,
         parentFilePath: String,
         enc: Encryptor? = null
-    ): ConfigBase {
+    ): Conf {
 
         val conf = ConfigMulti(fileName, parentFilePath, enc)
         return conf

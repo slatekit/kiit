@@ -16,6 +16,11 @@ interface DbCon {
   val url: String
   val user: String
   val password: String
+
+  companion object {
+
+    val empty = DbConString("", "", "", "")
+  }
 }
 
 /**
@@ -32,12 +37,3 @@ data class DbConString(
     override val password: String
 ) : DbCon
 
-/**
-  * Empty connection string
-  */
-object DbConEmpty : DbCon {
-  override val driver: String = ""
-  override val url: String = ""
-  override val user: String = ""
-  override val password: String = ""
-}

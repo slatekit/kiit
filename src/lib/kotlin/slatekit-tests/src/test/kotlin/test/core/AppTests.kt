@@ -12,7 +12,6 @@
 package slate.test
 
 import org.junit.Test
-import slatekit.common.Result
 import slatekit.common.ResultEx
 import slatekit.common.Success
 import slatekit.common.args.Arg
@@ -21,8 +20,7 @@ import slatekit.common.getOrElse
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.HELP
-import slatekit.common.results.ResultFuncs.success
-import slatekit.core.app.AppProcess
+import slatekit.core.app.App
 import slatekit.core.app.AppRunner
 
 
@@ -50,29 +48,29 @@ class AppTests  {
 
 
   @Test fun can_run_process_with_null_args_schema_without_raw_args() {
-    runApp({ args ->
+    runApp { args ->
       val res = AppRunner.run(AppArgsSchemaNull(args))
       assertResult(res, "ok", 200, "schema null")
       res
-    })
+    }
   }
 
 
   @Test fun can_run_process_with_empty_args_schema() {
-    runApp({ args ->
+    runApp { args ->
       val res = AppRunner.run( AppArgsSchemaEmpty(args))
       assertResult(res, "ok", 200, "schema empty")
       res
-    })
+    }
   }
 
 
   @Test fun can_run_process_with_empty_args_defined() {
-    runApp({ args ->
+    runApp { args ->
       val res = AppRunner.run(AppArgsSchemaBasicNoneRequired(args))
       assertResult(res, "ok", 200, "schema basic")
       res
-    })
+    }
   }
 
 
@@ -144,9 +142,9 @@ class AppTests  {
 
   class AppConfigTest(
                        args:Array<String>?
-                     )  : AppProcess(null, args) {
+                     )  : App(null, args) {
 
-    override fun onExecute():ResultEx<Any> {
+    override fun execute():ResultEx<Any> {
       val data = ConfigValueTest(
         ctx.env.name,
         conf.getString("test_stri"),
@@ -160,9 +158,9 @@ class AppTests  {
 
   class AppErrorTest(
                       args:Array<String>?
-                    )  : AppProcess(null, args) {
+                    )  : App(null, args) {
 
-    override fun onExecute():ResultEx<Any> {
+    override fun execute():ResultEx<Any> {
       if(conf != null ) {
         throw Exception("error test")
       }
@@ -172,24 +170,24 @@ class AppTests  {
 
 
 
-  fun runApp( call: (Array<String>?) -> ResultEx<Any>) :Unit  {
+  fun runApp( call: (Array<String>?) -> ResultEx<Any>)   {
     call(null)
 
-    call(arrayOf<String>())
+    call(arrayOf())
 
     call(arrayOf("-a=1", "-b=2"))
   }
 
 
 
-  fun assertResult(res:ResultEx<Any>, value:String, code:Int, msg:String):Unit {
+  fun assertResult(res:ResultEx<Any>, value:String, code:Int, msg:String) {
     assert( res.getOrElse { null } == value)
     assert( res.code == code)
     assert( res.msg == msg)
   }
 
 
-  fun checkHelp(words:Array<String>, code:Int, msg:String):Unit {
+  fun checkHelp(words:Array<String>, code:Int, msg:String) {
     for(word in words){
       val res = AppRunner.run(AppArgsSchemaBasic1Required(arrayOf(word)))
       assertResultBasic(res, code, msg)
@@ -198,7 +196,7 @@ class AppTests  {
 
 
 
-  fun assertResultBasic(res:ResultEx<Any>, code:Int, msg:String):Unit {
+  fun assertResultBasic(res:ResultEx<Any>, code:Int, msg:String) {
     assert( res.code == code)
     assert( res.msg == msg)
   }
@@ -207,9 +205,9 @@ class AppTests  {
   /**
    * Case: No schema
    */
-  class AppArgsSchemaNull(args:Array<String>?)  : AppProcess(null, args) {
+  class AppArgsSchemaNull(args:Array<String>?)  : App(null, args) {
 
-    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema null")
+    override fun execute():ResultEx<Any> = Success("ok", msg ="schema null")
   }
 
 
@@ -220,9 +218,9 @@ class AppTests  {
   class AppArgsSchemaEmpty(
                             args  : Array<String>?,
                             schema: ArgsSchema? = ArgsSchema(listOf<Arg>())
-                          )  : AppProcess(null, args, schema) {
+                          )  : App(null, args, schema) {
 
-    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema empty")
+    override fun execute():ResultEx<Any> = Success("ok", msg ="schema empty")
   }
 
 
@@ -238,9 +236,9 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
   )
-    : AppProcess(null, args, schema) {
+    : App(null, args, schema) {
 
-    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema basic")
+    override fun execute():ResultEx<Any> = Success("ok", msg ="schema basic")
   }
 
 
@@ -256,9 +254,9 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
   )
-    : AppProcess(null, args, schema) {
+    : App(null, args, schema) {
 
-    override fun onExecute():ResultEx<Any> = Success("ok", msg ="schema args 1")
+    override fun execute():ResultEx<Any> = Success("ok", msg ="schema args 1")
   }
 
 
@@ -270,8 +268,8 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , true, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", true, "info" , "info" , "debug|info|warn|error")
   )
-    : AppProcess(null, args, schema) {
+    : App(null, args, schema) {
 
-    override fun onExecute():ResultEx<Any> = Success("ok")
+    override fun execute():ResultEx<Any> = Success("ok")
   }
 }

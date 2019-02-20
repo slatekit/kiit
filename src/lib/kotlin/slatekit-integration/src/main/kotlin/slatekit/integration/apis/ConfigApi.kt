@@ -19,9 +19,9 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
-import slatekit.common.security.ApiKey
-import slatekit.common.security.ApiLogin
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiKey
+import slatekit.common.info.ApiLogin
+import slatekit.common.info.Credentials
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon

@@ -4,7 +4,7 @@ import slatekit.common.Context
 import slatekit.common.DateTime
 import slatekit.common.diagnostics.Check
 import slatekit.common.diagnostics.Status
-import slatekit.common.info.Info
+import slatekit.common.info.Meta
 
 open class Health(val ctx: Context) {
 
@@ -41,10 +41,10 @@ open class Health(val ctx: Context) {
 
     fun info():List<Group<Pair<String, String>>> {
         val parts = listOf(
-                "build" to ctx.app.build,
-                "host" to ctx.app.host,
-                "lang" to ctx.app.lang,
-                "start" to ctx.app.start
+                "build" to ctx.build,
+                "host" to ctx.sys.host,
+                "lang" to ctx.sys.lang,
+                "start" to ctx.start
         )
 
         val all = parts.map { Group(it.first, "health", it.second.props()) }
@@ -53,7 +53,7 @@ open class Health(val ctx: Context) {
 
 
     fun collect(): Group<Pair<String, String>> {
-        val parts = listOf<Info>(ctx.app.build, ctx.app.host, ctx.app.lang, ctx.app.start)
+        val parts = listOf<Meta>(ctx.build, ctx.sys.host, ctx.sys.lang, ctx.start)
         val names = listOf("build", "host", "lang", "start").joinToString(",")
         val collected = parts.map { it.props() }.flatten()
         return Group(names, "health", collected)

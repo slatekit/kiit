@@ -1,5 +1,5 @@
 package slatekit.common
 
-interface Meta : Inputs {
+interface Metadata : Inputs {
     fun toMap(): Map<String, Any>
 }

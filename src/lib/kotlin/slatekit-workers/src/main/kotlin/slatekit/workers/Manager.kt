@@ -3,7 +3,7 @@ package slatekit.workers
 import slatekit.common.utils.Pager
 import slatekit.common.DateTime
 import slatekit.common.TODO
-import slatekit.common.status.Status
+import slatekit.common.Status
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Utils
 import java.util.concurrent.ThreadPoolExecutor

@@ -26,9 +26,7 @@ import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
-import slatekit.common.info.About
-import slatekit.common.info.Host
-import slatekit.common.info.Lang
+import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.core.app.AppRunner
@@ -84,9 +82,10 @@ class Example_Context : Cmd("cmd") {
             cfg = Config(),
             logs = LogsDefault,
             ent = Entities(),
-            host = Host.local(),
-            lang = Lang.kotlin(),
-            inf = About(
+            sys = Sys.build(),
+            build = Build.empty,
+            start = StartInfo.none,
+            app = About(
                     id = "sample-app-1",
                     name = "Sample App-1",
                     desc = "Sample application 1",
@@ -127,7 +126,7 @@ class Example_Context : Cmd("cmd") {
                             .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
                             .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
                             .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error"),
-                    converter = { context -> context.copy( inf = context.inf.copy(
+                    converter = { context -> context.copy( app = context.app.copy(
                         desc = "Sample to show converter to convert context before final use"
                     ))}
         )
@@ -147,9 +146,9 @@ class Example_Context : Cmd("cmd") {
         println("env : " + ctx.env)
         println("conf: " + ctx.cfg)
         println("logs: " + ctx.logs)
-        println("inf : " + ctx.inf)
+        println("app : " + ctx.app)
         println("dirs: " + ctx.dirs)
-        println("host: " + ctx.host)
+        println("host: " + ctx.sys.host)
     }
 
 }

@@ -28,12 +28,10 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
-import slatekit.common.info.About
+import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.security.ApiKey
-import slatekit.common.security.Credentials
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import test.setup.MyAuthProvider
@@ -59,7 +57,10 @@ open class ApiTestsBase {
                 cfg  = Config(),
                 logs = LogsDefault,
                 ent  = Entities(DbLookup(DbConString("", "", "", ""))),
-                inf  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+                app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+                sys = Sys.build(),
+                build = Build.empty,
+                start = StartInfo.none,
                 dbs  = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc  = MyEncryptor
         )
@@ -70,12 +71,12 @@ open class ApiTestsBase {
 
     fun buildKeys():List<ApiKey> {
         val keys = listOf(
-            ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),
-            ApiKey("po", "0F66CD55079C42FF85C001846472343C", "user,po"),
-            ApiKey("qa", "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"),
-            ApiKey("dev", "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"),
-            ApiKey("ops", "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"),
-            ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
+                ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),
+                ApiKey("po", "0F66CD55079C42FF85C001846472343C", "user,po"),
+                ApiKey("qa", "EB7EB37764AD4411A1763E6A593992BD", "user,po,qa"),
+                ApiKey("dev", "3E35584A8DE0460BB28D6E0D32FB4CFD", "user,po,qa,dev"),
+                ApiKey("ops", "5020F4A237A443B4BEDC37D8A08588A3", "user,po,qa,dev,ops"),
+                ApiKey("admin", "54B1817194C1450B886404C6BEA81673", "user,po,qa,dev,ops,admin")
         )
         return keys
     }

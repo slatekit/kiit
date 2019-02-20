@@ -5,8 +5,8 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
 import slatekit.common.encrypt.B64Java8
-import slatekit.common.security.ApiKey
-import slatekit.common.security.Credentials
+import slatekit.common.info.ApiKey
+import slatekit.common.info.Credentials
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.app.AppRunner.build
 import slatekit.core.cli.CliSettings

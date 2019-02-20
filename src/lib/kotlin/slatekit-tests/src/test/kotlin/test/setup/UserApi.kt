@@ -157,7 +157,7 @@ class UserApi(context: AppEntContext): ApiBaseEntity<User, EntityService<User>>(
 
 
   @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
-  fun argTypeMeta(meta: Meta): ResultMsg<String> {
+  fun argTypeMeta(meta: Metadata): ResultMsg<String> {
     return Success("ok", msg ="raw meta token: " + meta.get("token"))
   }
 

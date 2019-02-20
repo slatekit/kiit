@@ -11,13 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.common.records
+package slatekit.common.db
 
 import slatekit.common.DateTime
-import slatekit.common.ids.UniqueId
+import slatekit.common.Record
 import java.sql.ResultSet
 import java.time.*
-import java.util.UUID
 
 class RecordSet(private val rs: ResultSet) : Record {
 

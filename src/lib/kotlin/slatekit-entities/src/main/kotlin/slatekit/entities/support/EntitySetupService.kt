@@ -15,10 +15,9 @@ package slatekit.entities.support
 
 import slatekit.common.*
 import slatekit.common.db.DbCon
-import slatekit.common.db.DbConEmpty
 import slatekit.common.db.DbLookup
 import slatekit.common.info.Folders
-import slatekit.common.io.Files
+import slatekit.common.utils.Files
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.utils.Props
@@ -187,13 +186,13 @@ class EntitySetupService(
 
     fun connection(): ResultMsg<DbCon> {
         return _dbs?.let { dbs ->
-            success(dbs.default() ?: DbConEmpty)
+            success(dbs.default() ?: DbCon.empty)
         } ?: failure<DbCon>("no db setup")
     }
 
     fun connectionByName(name: String): ResultMsg<DbCon> {
         return _dbs?.let { dbs ->
-            success(dbs.named(name) ?: DbConEmpty)
+            success(dbs.named(name) ?: DbCon.empty)
         } ?: failure<DbCon>("no db setup")
     }
 

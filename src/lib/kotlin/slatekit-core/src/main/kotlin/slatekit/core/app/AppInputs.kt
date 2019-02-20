@@ -14,12 +14,12 @@
 package slatekit.core.app
 
 import slatekit.common.args.Args
-import slatekit.common.conf.ConfigBase
+import slatekit.common.conf.Conf
 import slatekit.common.envs.Env
 
 data class AppInputs(
-    val args: Args,
-    val env: Env,
-    val confBase: ConfigBase,
-    val confEnv: ConfigBase
+        val args: Args,
+        val env: Env,
+        val confBase: Conf,
+        val confEnv: Conf
 )

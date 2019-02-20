@@ -1,7 +1,7 @@
 package slatekit.entities.databases.converters
 
 import slatekit.common.*
-import slatekit.common.records.Record
+import slatekit.common.Record
 import slatekit.meta.Reflector
 import slatekit.entities.Consts.NULL
 import slatekit.entities.databases.SqlConverter
