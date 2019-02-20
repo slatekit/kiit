@@ -38,10 +38,8 @@ class MessageServiceIOS(executor: ExecutorService? = null) : MessageServiceBase(
    * @return
    * @note : implement in derived class that can actually send the message
    */
-  override fun sendAsync(msg: Message): Future<ResultMsg<Boolean>> {
+  override fun sendAsync(msg: Message, callback:(ResultMsg<Boolean>) -> Unit) {
     TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
-    return exec.submit(Callable {
-      send(msg)
-    })
+
   }
 }

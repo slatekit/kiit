@@ -4,6 +4,9 @@ import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.utils.StringParser
+import slatekit.results.Notice
+import slatekit.results.Try
+import slatekit.results.Success
 import java.io.File
 
 class DocService(val _rootdir:String, val _outputDir:String, val templatePath:String) {
@@ -75,7 +78,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     )
 
 
-    fun process(): ResultEx<String> {
+    fun process(): Try<String> {
 
         val keys = _docs.map { d -> d.name }.toList()
         val maxLength = (keys.maxBy { it.length }?.length ?: 0) + 3
@@ -88,7 +91,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    fun process(name:String): ResultEx<String> {
+    fun process(name:String): Try<String> {
         val doc = _docs.first { it.name == name }
         process(doc, 0, doc.name.length)
         return Success(_outputDir, msg ="generated docs to " + _outputDir)
@@ -123,7 +126,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun fill(doc:Doc, data:Map<String,String>):ResultMsg<String>
+    private fun fill(doc:Doc, data:Map<String,String>):Notice<String>
     {
         var template = _template
         template = replace(template, "layout"                    , data, "layout"            )
@@ -153,7 +156,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
         template = replace(template, DocConstants.examples        , data, "examples"	        )
         template = replace(template, DocConstants.notes           , data, "notes"             )
         template = replaceWithSection("Output", template, DocConstants.output , data, "output" )
-        return success(template)
+        return slatekit.results.Success(template)
     }
 
 
@@ -208,7 +211,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun generate(doc:Doc, data:Any, result:ResultMsg<String>): String
+    private fun generate(doc:Doc, data:Any, result:Notice<String>): String
     {
         val fileName = "mod-" + doc.name.toLowerCase() + ".md"
         val outputPath = File(_rootdir, _outputDir)
@@ -220,7 +223,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     }
 
 
-    private fun generateReadMe(doc:Doc, data:Any, result: ResultMsg<String>): Unit
+    private fun generateReadMe(doc:Doc, data:Any, result: Notice<String>): Unit
     {
         val fileName = if (doc.multi) "Readme_" + doc.name + ".md" else "Readme.md"
         val outputPath = _docFiles.buildComponentFolder(_rootdir, doc)

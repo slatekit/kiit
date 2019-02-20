@@ -18,11 +18,12 @@ import slatekit.common.db.DbCon
 import slatekit.common.db.DbLookup
 import slatekit.common.info.Folders
 import slatekit.common.io.Files
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.utils.Props
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
+import slatekit.results.Notice
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 /**
  * Created by kreddy on 3/23/2016.
@@ -51,20 +52,20 @@ class EntitySetupService(
      * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
      * @return
      */
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): ResultEx<String> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Try<String> {
         val result = generateSql(name, version)
         val err = "Unable to install, can not generate sql for model $name"
 
        return when (result) {
-            is Success -> {
+            is slatekit.results.Success -> {
                 val db = _entities.builder.db(dbKey, dbShard)
-                result.data.forEach {
+                result.value.forEach {
                     if (!it.isNullOrEmpty()) { db.update(it) }
                 }
-                Success("Installed all tables")
+                slatekit.results.Success("Installed all tables")
             }
-            is Failure -> {
-                Failure(result.err, msg = err)
+            is slatekit.results.Failure -> {
+                slatekit.results.Failure(result.error, msg = err)
             }
         }
     }
@@ -78,31 +79,31 @@ class EntitySetupService(
      * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
      * @return
      */
-    fun uinstall(name: String): ResultEx<String> {
+    fun uinstall(name: String): Try<String> {
         delete(name)
         return drop(name)
     }
 
-    fun delete(name: String): ResultEx<String> {
+    fun delete(name: String): Try<String> {
         return operate("Delete", name, { info, tableName -> _entities.getDbSource().buildDeleteAll(tableName) })
     }
 
-    fun drop(name: String): ResultEx<String> {
+    fun drop(name: String): Try<String> {
         return operate("Drop", name, { info, tableName -> _entities.getDbSource().buildDropTable(tableName) })
     }
 
-    fun installAll(): ResultEx<List<String>> {
+    fun installAll(): Try<List<String>> {
         return each({ entity -> install(entity.entityTypeName) })
     }
 
-    fun generateSqlFiles(): ResultEx<List<String>> {
-        return each({ entity ->
+    fun generateSqlFiles(): Try<List<String>> {
+        return each { entity ->
             val result = generateSql(entity.entityTypeName)
             result.map { it.joinToString(newline) }
-        })
+        }
     }
 
-    fun generateSqlAllInstall(): ResultEx<String> {
+    fun generateSqlAllInstall(): Try<String> {
         val fileName = "sql-all-install-" + DateTime.now().toStringNumeric()
         val results = _entities.getEntities().map { entity ->
             val result = generateSql(entity.entityTypeName)
@@ -118,10 +119,10 @@ class EntitySetupService(
         val finalFileName = "$fileName.sql"
         Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
         val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
-        return Success(filePath)
+        return slatekit.results.Success(filePath)
     }
 
-    fun generateSqlAllUninstall(): ResultEx<String> {
+    fun generateSqlAllUninstall(): Try<String> {
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = _entities.getEntities().map { entity ->
 
@@ -136,14 +137,14 @@ class EntitySetupService(
         val finalFileName = "$fileName.sql"
         Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
         val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
-        return Success(filePath)
+        return slatekit.results.Success(filePath)
     }
 
-    fun deleteAll(): ResultEx<List<String>> {
+    fun deleteAll(): Try<List<String>> {
         return each({ entity -> delete(entity.entityTypeName) })
     }
 
-    fun dropAll(): ResultEx<List<String>> {
+    fun dropAll(): Try<List<String>> {
         return each({ entity -> drop(entity.entityTypeName) })
     }
 
@@ -154,7 +155,7 @@ class EntitySetupService(
      * @param version : the version of the model
      * @return
      */
-    fun generateSql(moduleName: String, version: String = ""): ResultEx<List<String>> {
+    fun generateSql(moduleName: String, version: String = ""): Try<List<String>> {
         val result = try {
             val fullName = moduleName
             val svc = _entities.getSvcByTypeName(fullName)
@@ -181,22 +182,22 @@ class EntitySetupService(
         val sql = result.third
         val path = result.second
         val info = if (success) "generated sql for model: $moduleName $path" else "error generating sql"
-        return if (success) Success(sql, msg = info) else Failure(Exception(info), msg = info)
+        return if (success) slatekit.results.Success(sql, msg = info) else slatekit.results.Failure(Exception(info), msg = info)
     }
 
-    fun connection(): ResultMsg<DbCon> {
+    fun connection(): Notice<DbCon> {
         return _dbs?.let { dbs ->
-            success(dbs.default() ?: DbCon.empty)
-        } ?: failure<DbCon>("no db setup")
+            slatekit.results.Success(dbs.default() ?: DbCon.empty)
+        } ?: slatekit.results.Failure("no db setup")
     }
 
-    fun connectionByName(name: String): ResultMsg<DbCon> {
+    fun connectionByName(name: String): Notice<DbCon> {
         return _dbs?.let { dbs ->
-            success(dbs.named(name) ?: DbCon.empty)
-        } ?: failure<DbCon>("no db setup")
+            slatekit.results.Success(dbs.named(name) ?: DbCon.empty)
+        } ?: slatekit.results.Failure("no db setup")
     }
 
-    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityInfo, String) -> String): ResultEx<String> {
+    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityInfo, String) -> String): Try<String> {
         val ent = _entities.getInfoByName(entityName)
         val svc = _entities.getSvcByTypeName(entityName)
         val table = svc.repo().repoName()
@@ -204,17 +205,17 @@ class EntitySetupService(
         return try {
             val db = _entities.getDb()
             db.update(sql)
-            Success("Operation $operationName successful on $table")
+            slatekit.results.Success("Operation $operationName successful on $table")
         } catch (ex: Exception) {
-            Failure(ex, msg = "Unable to delete :$table. ${ex.message}")
+            slatekit.results.Failure(ex, msg = "Unable to delete :$table. ${ex.message}")
         }
     }
 
-    private fun each(operation: (EntityInfo) -> ResultEx<String>): ResultEx<List<String>> {
+    private fun each(operation: (EntityInfo) -> Try<String>): Try<List<String>> {
         val results = _entities.getEntities().map { operation(it) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }
         val error = if (success) "" else messages.joinToString(newline)
-        return if (success) Success(messages, msg = "") else Failure(Exception(error), msg = error)
+        return if (success) slatekit.results.Success(messages, msg = "") else slatekit.results.Failure(Exception(error), msg = error)
     }
 }

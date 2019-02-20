@@ -21,7 +21,6 @@ import slatekit.apis.core.Events
 import slatekit.apis.doc.DocWeb
 import slatekit.common.*
 import slatekit.common.info.Info
-import slatekit.common.info.InfoSupport
 import slatekit.common.metrics.Metrics
 import slatekit.common.diagnostics.Tracker
 import slatekit.common.requests.toResponse
@@ -43,7 +42,7 @@ class SparkServer(
         val apis: List<Api>,
         val metrics: Metrics,
         val events: Events = Events()
-) : InfoSupport {
+)  {
 
     /**
      * initialize with port, prefix for api routes, and all the dependent items
@@ -75,11 +74,11 @@ class SparkServer(
             docKey = config.docKey,
             docBuilder = ::DocWeb)
 
-    override fun appMeta(): Info = ctx.app
 
     val log = ctx.logs.getLogger("slatekit.server.api")
-    val tracker = Tracker<slatekit.common.requests.Request, slatekit.common.requests.Response<*>, Exception>(Random.uuid(), ctx.app.about.name)
+    val tracker = Tracker<slatekit.common.requests.Request, slatekit.common.requests.Response<*>, Exception>(Random.uuid(), ctx.app.name)
     val diagnostics = Diagnostics(metrics, log)
+    val info = Info(ctx.app, ctx.build, ctx.start, ctx.sys)
 
     /**
      * executes the application
@@ -198,7 +197,7 @@ class SparkServer(
     fun info() {
         println("===============================================================")
         println("STARTING : ")
-        this.appLogStart({ name: String, value: String -> println(name + " = " + value) })
+        info.each({ name: String, value: String -> println(name + " = " + value) })
         println("===============================================================")
     }
 }
