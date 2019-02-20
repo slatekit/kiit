@@ -92,5 +92,5 @@ abstract class MessageServiceBase {
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    abstract fun sendAsync(msg: Message): Future<ResultMsg<Boolean>>
+    abstract fun sendAsync(msg: Message, callback:(ResultMsg<Boolean>) -> Unit)
 }

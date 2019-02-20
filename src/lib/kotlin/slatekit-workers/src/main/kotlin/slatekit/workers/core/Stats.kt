@@ -14,8 +14,8 @@ package slatekit.workers.core
 
 import slatekit.common.DateTime
 import slatekit.common.requests.Response
-import slatekit.common.ResultEx
 import slatekit.common.Status
+import slatekit.results.Try
 import slatekit.workers.WorkRequest
 
 /**
@@ -27,7 +27,7 @@ data class Stats(
         val name: String,
         val status: Status,
         val lastRunTime: DateTime,
-        val lastResult: ResultEx<*>,
+        val lastResult: Try<*>,
         val totalRequests: Long,
         val totalSuccesses: Long,
         val totalErrored: Long,

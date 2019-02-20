@@ -13,19 +13,9 @@ mantra: Simplicity above all else
 
 package slatekit.core.push
 
-import slatekit.common.TODO
-import slatekit.common.Failure
-import slatekit.common.io.IO
-import slatekit.common.ResultMsg
-import slatekit.common.Success
+import slatekit.common.*
 import slatekit.common.conf.Conf
-import slatekit.common.http.*
 import slatekit.common.log.Logs
-import slatekit.common.results.ResultFuncs
-import java.util.concurrent.Callable
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 
 /**
  * Google FCM ( Fire base Cloud Messaging ) Service.
@@ -86,9 +76,7 @@ import java.util.concurrent.Future
 open class MessageServiceGoogle(
         _key: String,
         val config: Conf,
-        val logs: Logs,
-        val executor: ExecutorService ? = null,
-        private val call: IO<HttpRequest, ResultMsg<Boolean>>? = null
+        val logs: Logs
 ) :
     MessageServiceBase() {
 
@@ -101,20 +89,13 @@ open class MessageServiceGoogle(
      * Sends a push notification to Android using the data from the Message supplied.
      */
     override fun send(msg: Message): ResultMsg<Boolean> {
-        val req = buildRequest(msg)
-
         return if (_sendNotifications) {
-            // Supplied an IO ? use that ( e.g. for custom sending )
-            // Or use the default
-            call?.let { call.run(req) } ?: sendSync(req)
+            sendSync(msg)
         } else {
-            _logger.warn("Push notification disabled for: ${req.url}: ${req.entity}")
+            _logger.warn("Push notification disabled for: ${msg.to}")
             Success(true, msg = "Disabled")
         }
     }
-
-    // TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
-    private val exec = executor ?: Executors.newSingleThreadExecutor()
 
     /**
      * Sends the message asynchronously
@@ -123,12 +104,8 @@ open class MessageServiceGoogle(
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    override fun sendAsync(msg: Message): Future<ResultMsg<Boolean>> {
+    override fun sendAsync(msg: Message, callback:(ResultMsg<Boolean>) -> Unit) {
 
-        TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
-        return exec.submit(Callable {
-            send(msg)
-        })
     }
 
     /**
@@ -141,7 +118,7 @@ open class MessageServiceGoogle(
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    protected fun buildRequest(msg: Message): HttpRequest {
+    protected fun sendSync(msg: Message):ResultMsg<Boolean> {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices
@@ -164,37 +141,17 @@ open class MessageServiceGoogle(
             else -> "{$to:$recipient, \"notification\":$alert}"
         }
 
-        // 3. Build immutable http request.
-        // Note: For now this is using the simple slatekit httprequest and
-        // synchronous http call. Later on this will be converted to one of
-        // a. the java async http libraries
-        // b. apache commons http async
-        // c. kotlin http async libraries
-        val req = HttpRequest(
-            url = _baseUrl,
-            method = HttpMethod.POST,
-            params = null,
-            headers = listOf(
-                Pair("Content-Type", "application/json"),
-                Pair("Authorization", "key=" + _settings.key)
-            ),
-            credentials = null,
-            entity = content,
-            connectTimeOut = HttpConstants.defaultConnectTimeOut,
-            readTimeOut = HttpConstants.defaultReadTimeOut
+        // 3. Send off w/ json
+        val result = HttpRPC().sendSync(
+                method = HttpRPC.Method.Post,
+                url = _baseUrl,
+                headers = mapOf(
+                        "Content-Type" to "application/json",
+                        "Authorization" to "key=" + _settings.key
+                ),
+                body = HttpRPC.Body.JsonContent(content)
         )
-        return req
-    }
-
-    /**
-     * Simple default for sending the request synchronously.
-     * Clients should use the sendAsync method
-     */
-    private fun sendSync(req: HttpRequest): ResultMsg<Boolean> {
-        val res = HttpClient.post(req)
-        val result = if (res.is2xx) ResultFuncs.success(true, msg = res.result?.toString() ?: "")
-        else Failure("error sending sms to ${req.url}")
-        return result
+        return result.fold( { Success(true) }, { Failure(it.message ?: "") })
     }
 
     private fun buildAlert(alert: Notification): String {

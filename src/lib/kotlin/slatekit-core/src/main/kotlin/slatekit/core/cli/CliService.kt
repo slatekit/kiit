@@ -16,7 +16,6 @@ package slatekit.core.cli
 import slatekit.common.*
 import slatekit.common.utils.Loops.doUntil
 import slatekit.common.info.Info
-import slatekit.common.info.InfoSupport
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.console.ConsoleWriter
@@ -54,27 +53,19 @@ open class CliService(
         protected val _startupCommand: String = "",
         protected val _writer: ConsoleWriter = ConsoleWriter()
 )
-    : InfoSupport {
+     {
 
     val _batchLevel = AtomicReference<Int>(0)
     val _printer = CliPrinter(_writer)
     val _view = CliView(_writer,
-            { ok: Boolean, callback: (Int, Pair<String, Any>) -> Unit -> appInfoList(ok, callback) },
+            null,
             { writer: ConsoleWriter -> showExtendedHelp(writer) })
-
-    /**
-     * gets the application metadata containing information about this shell application,
-     * host, language runtime. The meta can be updated in the derived class.
-     *
-     * @return
-     */
-    override fun appMeta(): Info = _appMeta
 
     /**
      * runs the shell command line with arguments
      */
     fun run() {
-        val result = Result.attempt({ ->
+        val result = Result.attempt {
             // Allow derived classes to initialize
             onShellInit()
 
@@ -86,7 +77,7 @@ open class CliService(
 
             // Hooks for after running is completed.
             onShellEnd()
-        })
+        }
 
         if (result is Failure<*>) {
             _writer.error(result.msg)
@@ -111,7 +102,7 @@ open class CliService(
         handleStartup()
 
         // Keep reading from console until ( exit, quit ) is hit.
-        doUntil({
+        doUntil {
 
             // Show prompt
             _writer.text(":>", false)
@@ -127,7 +118,6 @@ open class CliService(
             }
             // Case 2: "exit, quit" ?
             else if (ArgsFuncs.isExit(listOf<String>(line.trim()), 0)) {
-                logSummary()
                 display(msg = "Exiting...")
                 false
             }
@@ -136,7 +126,7 @@ open class CliService(
                 tryLine(line)
             }
             keepReading
-        })
+        }
     }
 
     /**
@@ -321,7 +311,7 @@ open class CliService(
 
     open fun showAbout(): Unit = _view.showAbout()
 
-    open fun showVersion(): Unit = _view.showVersion(appMeta())
+    open fun showVersion(): Unit = _view.showVersion(_appMeta)
 
     open fun showHelp(): Unit = _view.showHelp()
 
@@ -366,37 +356,4 @@ open class CliService(
             is Failure -> error(argsResult)
         }
     }
-
-    /**
-     * prints the summary of the arguments
-     */
-    private fun logSummary() {
-        _writer.text("===============================================================")
-        _writer.title("SUMMARY : ")
-        _writer.text("===============================================================")
-
-        // Standardized info
-        // e.g. name, desc, env, log, start-time etc.
-//        val args = collectSummary(appMeta().status)
-//        val maxLen = args.maxBy { item -> item.first.length }?.first?.length ?: 1
-//
-//        args.forEach { arg -> _writer.text(arg.first.padEnd(maxLen) + " = " + arg.second) }
-//        _writer.text("===============================================================")
-    }
-
-    protected open fun collectSummary(status: Status): List<Pair<String, String>> {
-        val buf = mutableListOf<Pair<String, String>>()
-
-        // All the pre-build info from appMeta
-        this.appLogEnd({ name: String, value: String -> buf.add(Pair(name, value)) })
-
-        // App specific fields to add onto
-        val extra = collectSummaryExtra()
-
-        // Combine both
-        buf.addAll(extra?.filterNotNull() ?: listOf())
-        return buf.toList()
-    }
-
-    open fun collectSummaryExtra(): List<Pair<String, String>>? = listOf()
 }

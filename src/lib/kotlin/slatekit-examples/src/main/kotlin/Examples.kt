@@ -32,6 +32,7 @@ fun main(args:Array<String>)  {
 
     println(Paths.get(""))
 
+
     fun testlog(logger:slatekit.common.log.Logger) {
         val name = logger.name
         //logger.trace("test logging $name with trace")

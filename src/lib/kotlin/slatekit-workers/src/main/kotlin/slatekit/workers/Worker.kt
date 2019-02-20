@@ -6,8 +6,11 @@ import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSource
+import slatekit.common.requests.Response
 import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultCode.NOT_IMPLEMENTED
+import slatekit.results.Notice
+import slatekit.results.StatusCodes
+import slatekit.results.Try
 import slatekit.workers.core.*
 import slatekit.workers.core.RunStatus
 import java.util.concurrent.atomic.AtomicReference
@@ -68,7 +71,7 @@ open class Worker<T>(
     private val _runState = AtomicReference<Status>(Status.InActive)
     private val _runStatus = AtomicReference<RunStatus>(RunStatus())
     private val _runDelay = AtomicReference<Int>(0)
-    private val _lastResult = AtomicReference<ResultEx<T>>(Failure(Exception("not started")))
+    private val _lastResult = AtomicReference<Try<T>>(slatekit.results.Failure(Exception("not started")))
     private val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
 
     /**
@@ -132,7 +135,7 @@ open class Worker<T>(
      * initialize this task and update current status
      * @return
      */
-    fun init(): ResultMsg<Boolean> {
+    fun init(): Notice<Boolean> {
         moveToState(Status.Starting)
         return onInit()
     }
@@ -156,7 +159,7 @@ open class Worker<T>(
             jobs.forEach { job ->
 
                 // Attempt to work on the job
-                val result = Result.attempt { work(job) }
+                val result = work(job)
 
                 // Acknowledge/Abandon
                 complete(sender, queueSource, job, result)
@@ -171,11 +174,11 @@ open class Worker<T>(
      * Works on the job while also handling metrics, middleware, events
      * @return
      */
-    fun work(job: Job): ResultEx<T> {
+    fun work(job: Job): Try<T> {
 
         // Check current status
         if (isFailed() || isStopped() || isPaused()) {
-            return _lastResult.get().toResultEx()
+            return _lastResult.get()
         }
 
         // Update state
@@ -197,8 +200,8 @@ open class Worker<T>(
      *
      * @return
      */
-    open fun perform(job: Job): ResultEx<T> {
-        return Failure(Exception("Not implemented"), NOT_IMPLEMENTED, "not implemented")
+    open fun perform(job: Job): Try<T> {
+        return slatekit.results.Failure(Exception("Not implemented"), StatusCodes.UNIMPLEMENTED)
     }
 
     fun stats(): Stats {
@@ -242,8 +245,8 @@ open class Worker<T>(
      * @param args
      * @return
      */
-    protected open fun onInit(): ResultMsg<Boolean> {
-        return Success(true)
+    protected open fun onInit(): Notice<Boolean> {
+        return slatekit.results.Success(true)
     }
 
     /**
@@ -253,10 +256,27 @@ open class Worker<T>(
     }
 
 
-    protected open fun complete(sender: Any, queue: QueueSource, job:Job, result:ResultEx<*>) {
+    protected open fun complete(sender: Any, queue: QueueSource, job:Job, result:Try<*>) {
         when(result.success){
             true  -> queue.complete(job.source)
             false -> queue.abandon(job.source)
+        }
+    }
+}
+
+
+/**
+ * Converts result to Response.
+ */
+fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
+    return when (this) {
+        is slatekit.results.Success -> Response(this.success, this.code, null, this.value, this.msg, null)
+        is slatekit.results.Failure -> {
+            val ex:Exception = when (this.error) {
+                is Exception -> this.error as Exception
+                else -> Exception(this.error.toString())
+            }
+            Response(this.success, this.code, null, null, this.msg, ex)
         }
     }
 }

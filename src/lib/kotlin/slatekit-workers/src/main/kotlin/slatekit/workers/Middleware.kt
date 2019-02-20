@@ -12,12 +12,12 @@ mantra: Simplicity above all else
  */
 package slatekit.workers
 
-import slatekit.common.Failure
-import slatekit.common.Result
+import slatekit.results.Failure
+import slatekit.results.Try
 
 open class Middleware {
 
-    open fun <T> run(worker: Worker<T>, job: Job, call: () -> Result<T, Exception>): Result<T, Exception> {
+    open fun <T> run(worker: Worker<T>, job: Job, call: () -> Try<T>): Try<T> {
 
         // Track all requests
         //worker.metrics.request(job)
@@ -31,6 +31,7 @@ open class Middleware {
         } catch (ex: Exception) {
             Failure(ex, msg = "Unexpected error : " + ex.message)
         }
+
 
         // Track successes/failures
         if (result.success) {

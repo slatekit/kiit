@@ -166,9 +166,14 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
                   creds: Auth? = null,
                   body: Body? = null,
                   callback: (Result<Response, IOException>) -> Unit) {
-        val client = OkHttpClient()
-        val request = buildRequest(method, urlRaw, headerParams, queryParams, creds, body)
+        val request = build(method, urlRaw, headerParams, queryParams, creds, body)
+        sendAsync(request, callback)
+    }
 
+
+    fun sendAsync(request: Request,
+                  callback: (Result<Response, IOException>) -> Unit) {
+        val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call?, response: Response) {
                 callback(Success(response))
@@ -195,7 +200,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
                   creds: Auth? = null,
                   body: Body? = null): Result<Response, Exception> {
         val client = OkHttpClient()
-        val request = buildRequest(method, url, headers, queryParams, creds, body)
+        val request = build(method, url, headers, queryParams, creds, body)
         val response = client.newCall(request).execute()
         return if(response.isSuccessful) {
             Success(response)
@@ -205,12 +210,12 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
     }
 
 
-    private fun buildRequest(method: Method,
-                             urlRaw: String,
-                             headerParams: Map<String, String>? = null,
-                             queryParams: Map<String, String>? = null,
-                             creds: Auth? = null,
-                             body: Body? = null):Request {
+    fun build(method: Method,
+              urlRaw: String,
+              headerParams: Map<String, String>? = null,
+              queryParams: Map<String, String>? = null,
+              creds: Auth? = null,
+              body: Body? = null):Request {
         // URL
         val url = buildUrl(urlRaw, queryParams)
 

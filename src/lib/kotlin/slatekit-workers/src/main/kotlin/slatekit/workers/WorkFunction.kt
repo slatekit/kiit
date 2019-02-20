@@ -1,10 +1,10 @@
 package slatekit.workers
 
-import slatekit.common.ResultEx
+import slatekit.results.Try
 
 /**
  * Type Alias for the function inputs/outputs representing a work method.
  * Workers can be created with either a simple anonymous function or
  * derived from Worker.
  */
-typealias WorkFunction<T> = (Job) -> ResultEx<T>
+typealias WorkFunction<T> = (Job) -> Try<T>
