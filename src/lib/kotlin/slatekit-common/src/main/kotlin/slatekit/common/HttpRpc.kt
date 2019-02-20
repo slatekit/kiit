@@ -18,18 +18,17 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
     }
 
 
-    enum class Encoding(val value:Int) {
-        None(0),
-        Form(1),
-        Url (2),
-        Raw (3),
-        Json(4)
+    sealed class Auth {
+        data class Basic(val name:String, val pswd:String): Auth()
+        data class Bearer(val token:String): Auth()
     }
 
 
-    sealed class AuthInfo {
-        data class Basic(val name:String, val pswd:String): AuthInfo()
-        data class Bearer(val token:String): AuthInfo()
+    sealed class Body {
+        data class FormData(val values:List<Pair<String,String>>): Body()
+        data class RawContent(val content:String) :  Body()
+        data class JsonContent(val content:String) :  Body()
+        data class JsonObject(val content:String) :  Body()
     }
 
 
@@ -37,30 +36,31 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
      * Media types for posting data
      */
     private val jsonType = MediaType.parse("application/json charset=utf-8")
+    private val textType = MediaType.parse("application/text charset=utf-8")
 
 
     /**
      * Performs an HTTP get operation and supplies the response back in the Callback
-     * @param route       : The route endpoint ( without the base route )
+     * @param url       : The url endpoint ( without the base url )
      * @param headers     : Http headers to use
      * @param queryParams : Query parameters to use
      * @param callback    : The callback to call when the response is available.
      * @param <T>         : The datatype of the expected result
      */
-    fun get(route: String,
+    fun get(url: String,
             headerParams: Map<String, String>? = null,
             queryParams: Map<String, String>? = null,
-            creds: AuthInfo? = null,
+            creds: Auth? = null,
             callback: (Result<Response, IOException>) -> Unit) {
         val client = OkHttpClient()
-        val url = buildUrl(route, queryParams)
+        val url = buildUrl(url, queryParams)
         val headers = buildHeaders(headerParams)
         val builder = Request.Builder().url(url).headers(headers)
 
         // AUTHORIZATION
         when(creds) {
-            is AuthInfo.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
-            is AuthInfo.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
+            is Auth.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
+            is Auth.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
             else               -> {}
         }
 
@@ -81,126 +81,94 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
     /**
      * Performs an HTTP post operation and supplies the response back in the Callback
-     * @param route       : The route endpoint ( without the base route )
+     * @param url       : The url endpoint ( without the base url )
      * @param headers     : Http headers to use
      * @param queryParams : Query parameters to use
-     * @param dataParams  : Post/Entity parameters to use
+     * @param body        : Body data
      * @param callback    : The callback to call when the response is available.
      */
-    fun post(route: String,
+    fun post(url: String,
              headers: Map<String, String>? = null,
              queryParams: Map<String, String>? = null,
-             dataParams: Map<String, Any>? = null,
-             credentials: AuthInfo? = null,
-             encoding: Encoding = Encoding.Json,
+             credentials: Auth? = null,
+             body: Body? = null,
              callback: (Result<Response, IOException>) -> Unit) {
-        this.send(Method.Post, route, headers, queryParams, dataParams, credentials, encoding, callback)
+        this.sendAsync(Method.Post, url, headers, queryParams, credentials, body, callback)
     }
 
 
     /**
      * Performs an HTTP patch operation and supplies the response back in the Callback
-     * @param route       : The route endpoint ( without the base route )
+     * @param url       : The url endpoint ( without the base url )
      * @param headers     : Http headers to use
      * @param queryParams : Query parameters to use
-     * @param dataParams  : Post/Entity parameters to use
+     * @param body        : Body data
      * @param callback    : The callback to call when the response is available.
      */
-    fun patch(route: String,
+    fun patch(url: String,
               headers: Map<String, String>? = null,
               queryParams: Map<String, String>? = null,
-              dataParams: Map<String, Any>? = null,
-              credentials: AuthInfo? = null,
-              encoding: Encoding = Encoding.Json,
+              credentials: Auth? = null,
+              body: Body? = null,
               callback: (Result<Response, IOException>) -> Unit) {
-        this.send(Method.Patch, route, headers, queryParams, dataParams, credentials, encoding, callback)
+        this.sendAsync(Method.Patch, url, headers, queryParams, credentials, body, callback)
     }
 
 
     /**
      * Performs an HTTP put operation and supplies the response back in the Callback
-     * @param route       : The route endpoint ( without the base route )
+     * @param url       : The url endpoint ( without the base url )
      * @param headers     : Http headers to use
      * @param queryParams : Query parameters to use
-     * @param dataParams  : Post/Entity parameters to use
+     * @param body        : Body data
      * @param callback    : The callback to call when the response is available.
      */
-    fun put(route: String,
+    fun put(url: String,
             headers: Map<String, String>? = null,
             queryParams: Map<String, String>? = null,
-            dataParams: Map<String, Any>? = null,
-            credentials: AuthInfo? = null,
-            encoding: Encoding = Encoding.Json,
+            credentials: Auth? = null,
+            body: Body? = null,
             callback: (Result<Response, IOException>) -> Unit) {
-        this.send(Method.Put, route, headers, queryParams, dataParams, credentials, encoding, callback)
+        this.sendAsync(Method.Put, url, headers, queryParams, credentials, body, callback)
     }
 
 
     /**
      * Performs an HTTP delete operation and supplies the response back in the Callback
-     * @param route       : The route endpoint ( without the base route )
+     * @param url       : The url endpoint ( without the base url )
      * @param headers     : Http headers to use
      * @param queryParams : Query parameters to use
-     * @param dataParams  : Post/Entity parameters to use
+     * @param body        : Body data
      * @param callback    : The callback to call when the response is available.
      */
-    fun delete(route: String,
+    fun delete(url: String,
                headers: Map<String, String>? = null,
                queryParams: Map<String, String>? = null,
-               dataParams: Map<String, Any>? = null,
-               credentials: AuthInfo? = null,
-               encoding: Encoding = Encoding.Json,
+               credentials: Auth? = null,
+               body: Body? = null,
                callback: (Result<Response, IOException>) -> Unit) {
-        this.send(Method.Delete, route, headers, queryParams, dataParams, credentials, encoding, callback)
+        this.sendAsync(Method.Delete, url, headers, queryParams, credentials, body, callback)
     }
 
 
     /**
      * Performs an HTTP operation and supplies the response back in the Callback
      * @param verb        : The http verb
-     * @param route       : The route endpoint ( without the base route )
+     * @param url         : The url endpoint ( without the base url )
      * @param headerParams: Http headers to use
      * @param queryParams : Query parameters to use
      * @param callback    : The callback to call when the response is available.
      */
-    fun send(method: Method,
-             route: String,
-             headerParams: Map<String, String>? = null,
-             queryParams: Map<String, String>? = null,
-             dataParams: Map<String, Any>? = null,
-             creds: AuthInfo? = null,
-             encoding: Encoding = Encoding.Json,
-             callback: (Result<Response, IOException>) -> Unit) {
+    fun sendAsync(method: Method,
+                  urlRaw: String,
+                  headerParams: Map<String, String>? = null,
+                  queryParams: Map<String, String>? = null,
+                  creds: Auth? = null,
+                  body: Body? = null,
+                  callback: (Result<Response, IOException>) -> Unit) {
         val client = OkHttpClient()
+        val request = buildRequest(method, urlRaw, headerParams, queryParams, creds, body)
 
-        // URL
-        val url = buildUrl(route, queryParams)
-
-        // HEADERS
-        val headers = buildHeaders(headerParams)
-        val builder = Request.Builder().url(url).headers(headers)
-
-        // FORM Body
-        val body = when(encoding) {
-            Encoding.Form -> buildForm(dataParams)
-            else -> RequestBody.create(jsonType, serializer?.let{ it(dataParams) } ?: "" )
-        }
-
-        // AUTHORIZATION
-        when(creds) {
-            is AuthInfo.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
-            is AuthInfo.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
-            else               -> {}
-        }
-
-        // SEND ( post / put / etc )
-        val request = when (method) {
-            Method.Post   -> builder.post(body).build()
-            Method.Delete -> builder.delete(body).build()
-            Method.Put    -> builder.put(body).build()
-            Method.Patch  -> builder.patch(body).build()
-            else          -> builder.post(body).build()
-        }
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call?, response: Response) {
                 callback(Success(response))
@@ -212,6 +180,71 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
         })
     }
 
+    /**
+     * Performs an HTTP operation and supplies synchronously
+     * @param method      : The http method
+     * @param url         : The url to send to
+     * @param headers     : Http headers to use
+     * @param queryParams : Query parameters to use
+     * @param callback    : The callback to call when the response is available.
+     */
+    fun sendSync(method: Method,
+                  url: String,
+                  headers: Map<String, String>? = null,
+                  queryParams: Map<String, String>? = null,
+                  creds: Auth? = null,
+                  body: Body? = null): Result<Response, Exception> {
+        val client = OkHttpClient()
+        val request = buildRequest(method, url, headers, queryParams, creds, body)
+        val response = client.newCall(request).execute()
+        return if(response.isSuccessful) {
+            Success(response)
+        } else {
+            Failure(Exception(response.message()))
+        }
+    }
+
+
+    private fun buildRequest(method: Method,
+                             urlRaw: String,
+                             headerParams: Map<String, String>? = null,
+                             queryParams: Map<String, String>? = null,
+                             creds: Auth? = null,
+                             body: Body? = null):Request {
+        // URL
+        val url = buildUrl(urlRaw, queryParams)
+
+        // HEADERS
+        val headers = buildHeaders(headerParams)
+        val builder = Request.Builder().url(url).headers(headers)
+
+        // BODY
+        val finalBody = when(body) {
+            is Body.FormData    -> buildForm(body.values)
+            is Body.RawContent  -> RequestBody.create(textType, body.content )
+            is Body.JsonContent -> RequestBody.create(jsonType, body.content )
+            is Body.JsonObject  -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+            else                -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+        }
+
+        // AUTHORIZATION
+        when(creds) {
+            is Auth.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
+            is Auth.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
+            else           -> {}
+        }
+
+        // SEND ( post / put / etc )
+        val request = when (method) {
+            Method.Post   -> builder.post(finalBody).build()
+            Method.Delete -> builder.delete(finalBody).build()
+            Method.Put    -> builder.put(finalBody).build()
+            Method.Patch  -> builder.patch(finalBody).build()
+            else          -> builder.post(finalBody).build()
+        }
+        return request
+    }
+
 
     private fun buildUrl(url: String, queryParams: Map<String, String>? = null): HttpUrl {
         val urlBuilder = HttpUrl.parse(url)?.newBuilder() ?: throw Exception("Invalid url")
@@ -220,19 +253,9 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
     }
 
 
-    private fun buildForm(dataParams: Map<String, Any>?): FormBody {
+    private fun buildForm(dataParams: List<Pair<String, String>>): FormBody {
         val fe = FormBody.Builder()
-        dataParams?.let { data ->
-            data.forEach { fe.add(it.key, it.value.toString()) }
-        }
-        return fe.build()
-    }
-
-    private fun buildJson(dataParams: Map<String, Any>?): FormBody {
-        val fe = FormBody.Builder()
-        dataParams?.let { data ->
-            data.forEach { fe.add(it.key, it.value.toString()) }
-        }
+        dataParams.forEach { fe.add(it.first, it.second) }
         return fe.build()
     }
 

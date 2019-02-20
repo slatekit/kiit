@@ -14,7 +14,6 @@
 package slatekit.core.sms
 
 import slatekit.common.*
-import slatekit.common.http.*
 import slatekit.common.results.ResultFuncs.success
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
@@ -42,12 +41,10 @@ class SmsServiceTwilio(
     password: String,
     phone: String,
     templates: Templates? = null,
-    countries: List<CountryCode>? = null,
-    sender: ((HttpRequest) -> ResultMsg<Boolean>)? = null
+    countries: List<CountryCode>? = null
 )
     : SmsService(templates, countries) {
 
-    private val _sender = sender
     private val _settings = SmsSettings(key, password, phone)
     private val _baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 
@@ -67,39 +64,27 @@ class SmsServiceTwilio(
      */
     override fun send(msg: SmsMessage): ResultMsg<Boolean> {
 
-        val result = massagePhone(msg.countryCode, msg.phone)
-        return when (result) {
+        val phoneResult = massagePhone(msg.countryCode, msg.phone)
+        return when(phoneResult) {
             is Success -> {
-
-                val phone = result.data
-                // Create an immutable http request.
-                val req = HttpRequest(
+                val phone = phoneResult.data
+                val result = HttpRPC().sendSync(
+                        method = HttpRPC.Method.Post,
                         url = _baseUrl,
-                        method = HttpMethod.POST,
-                        params = listOf(
+                        headers = null,
+                        creds = HttpRPC.Auth.Basic(_settings.key, _settings.password),
+                        body = HttpRPC.Body.FormData(listOf(
                                 Pair("To", phone),
                                 Pair("From", _settings.account),
-                                Pair("Body", msg.msg)
-                        ),
-                        headers = null,
-                        credentials = HttpCredentials("Basic", _settings.key, _settings.password),
-                        entity = null,
-                        connectTimeOut = HttpConstants.defaultConnectTimeOut,
-                        readTimeOut = HttpConstants.defaultReadTimeOut
+                                Pair("Body", msg.msg))
+                        )
                 )
-                // This optionally uses the IO monad supplied or actually posts ( impure )
-                // This approach allows for testing this without actually sending a http request.
-                _sender?.let { s -> s(req) } ?: post(req)
+                result.fold( { Success(true) }, { Failure(it.message ?: "") })
             }
-            is Failure -> Failure(result.msg)
+            is Failure -> Failure(phoneResult.msg)
         }
     }
 
-    private fun post(req: HttpRequest): ResultMsg<Boolean> {
-        val res = HttpClient.post(req)
-        return if (res.is2xx) success(true, msg = res.result?.toString() ?: "")
-        else Failure("error sending sms to ${req.url}")
-    }
 
     /**
      * Format phone to ensure "+" and "iso" is present. e.g. "+{iso}{phone}"
