@@ -12,7 +12,7 @@
 package slatekit.tutorial
 
 
-import slatekit.common.ResultEx
+import slatekit.common.Try
 import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import kotlin.reflect.KProperty
@@ -25,7 +25,7 @@ class Example_Kotlin_Misc : Cmd("types") {
 
 
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         testExtensions()
         testOperator()
         return Success("")

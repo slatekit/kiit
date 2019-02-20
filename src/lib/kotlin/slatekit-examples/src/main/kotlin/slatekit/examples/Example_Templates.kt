@@ -21,10 +21,10 @@ import slatekit.common.templates.Templates
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
 import slatekit.common.Random
-import slatekit.common.ResultEx
-import slatekit.common.getOrElse
+import slatekit.results.Try
+import slatekit.results.Success
+import slatekit.results.getOrElse
 
 //</doc:import_examples>
 
@@ -33,7 +33,7 @@ import slatekit.common.getOrElse
   */
 class Example_Templates : Cmd("templates") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:setup>
     // Setup the templates with list of predefined(named) templates and

@@ -15,8 +15,8 @@ package slate.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
@@ -29,7 +29,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Config : Cmd("config") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // CASE 1: Load up config from resources directory
         val conf = Config("env.dev.conf")

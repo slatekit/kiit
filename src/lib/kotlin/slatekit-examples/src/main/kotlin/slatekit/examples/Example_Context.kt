@@ -17,8 +17,6 @@ import slatekit.core.common.AppContext
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
@@ -28,17 +26,19 @@ import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.core.app.AppRunner
 import slatekit.entities.core.Entities
 import slatekit.core.cmds.Cmd
+import slatekit.results.StatusCodes
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
 
 class Example_Context : Cmd("cmd") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
 
         // OVERVIEW:
@@ -133,7 +133,7 @@ class Example_Context : Cmd("cmd") {
         showContext(ctx3)
 
         // CASE 4: You can also build an error context representing an invalid context
-        val ctx4 = AppContext.err(BAD_REQUEST, "Bad context, invalid inputs supplied")
+        val ctx4 = AppContext.err(StatusCodes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 
         //</doc:examples>

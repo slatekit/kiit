@@ -18,8 +18,8 @@ import slatekit.entities.core.EntityInfo
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.db.DbType.DbTypeMySql
@@ -35,7 +35,7 @@ import slatekit.examples.common.UserService
  */
 class Example_Entities_Reg : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.scala for more info

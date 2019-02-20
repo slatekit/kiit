@@ -18,7 +18,8 @@ import slatekit.common.*
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.results.ResultTimed
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.utils.Measure
 
 //</doc:import_examples>
@@ -28,7 +29,7 @@ import slatekit.common.utils.Measure
   */
 class Example_Timer : Cmd("timer") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // CASE 1: Benchmark an operation 1 time

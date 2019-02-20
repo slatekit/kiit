@@ -20,12 +20,14 @@ import slatekit.entities.databases.vendors.MySqlEntityRepo
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.db.Mapper
 import slatekit.core.cmds.Cmd
 import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
@@ -94,7 +96,7 @@ class Example_Entities_Repo : Cmd("entities") {
     //</doc:setup>
 
 
-    override protected fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override protected fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // CASE 1: Create 3-4 users for showing use-cases
         repo.create(User(firstName ="john", lastName = "doe-01"))

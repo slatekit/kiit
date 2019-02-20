@@ -17,8 +17,8 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.info.Folders
 import slatekit.core.cmds.Cmd
 
@@ -27,7 +27,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_Folders : Cmd("folders") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
 
         // CASE 1: Build a folder structure for an application

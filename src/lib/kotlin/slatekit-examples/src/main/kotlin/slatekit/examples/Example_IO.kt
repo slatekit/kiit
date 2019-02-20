@@ -16,14 +16,14 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
 class Example_IO : Cmd("io") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
 /*

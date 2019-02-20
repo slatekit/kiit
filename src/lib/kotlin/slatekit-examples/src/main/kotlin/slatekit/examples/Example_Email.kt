@@ -21,6 +21,8 @@ import slatekit.common.templates.Templates
 //</doc:import_required>
 
 //<doc:import_examples>
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.core.cmds.Cmd
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
@@ -30,7 +32,7 @@ import slatekit.common.info.ApiLogin
 
 class Example_Email  : Cmd("auth") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config

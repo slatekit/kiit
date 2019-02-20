@@ -2,7 +2,7 @@ package slatekit.examples
 
 import slatekit.common.*
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.db.DbLookup.Companion.namedDbs
@@ -18,6 +18,8 @@ import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.entities.databases.vendors.MySqlEntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.examples.common.*
+import slatekit.results.Try
+import slatekit.results.Success
 
 
 /**
@@ -25,7 +27,7 @@ import slatekit.examples.common.*
  */
 class Guide_ORM : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.scala for more info

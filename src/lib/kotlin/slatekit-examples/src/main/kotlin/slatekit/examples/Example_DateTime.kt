@@ -17,8 +17,8 @@ import slatekit.common.DateTime
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.ext.days
 import slatekit.common.ext.minutes
 import slatekit.common.ext.months
@@ -29,7 +29,7 @@ import java.time.ZoneId
 
 class Example_DateTime  : Cmd("datetime") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     //

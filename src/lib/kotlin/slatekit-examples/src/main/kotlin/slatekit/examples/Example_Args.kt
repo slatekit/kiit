@@ -19,15 +19,15 @@ import slatekit.common.args.ArgsSchema
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
-import slatekit.common.getOrElse
+import slatekit.results.Success
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 //</doc:import_examples>
 
 class Example_Args  : Cmd("args") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // Example:
@@ -88,7 +88,7 @@ class Example_Args  : Cmd("args") {
 
 
   //<doc:examples_support>
-  fun showResults(result:ResultEx<Args>):Unit  {
+  fun showResults(result:Try<Args>)  {
     println("RESULTS:")
 
     if(!result.success) {

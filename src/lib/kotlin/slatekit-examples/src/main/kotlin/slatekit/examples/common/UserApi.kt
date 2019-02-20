@@ -30,7 +30,7 @@ import slatekit.integration.common.AppEntContext
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<User, UserService>(ctx, User::class) {
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
-  fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): ResultEx<String> {
+  fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Try<String> {
     return Success("activated $phone, $code, $isPremiumUser, $date")
   }
 

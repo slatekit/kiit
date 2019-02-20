@@ -19,8 +19,6 @@ import slatekit.core.app.AppRunner
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
@@ -34,6 +32,8 @@ import slatekit.common.log.LogsDefault
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
+import slatekit.results.Success
+import slatekit.results.Try
 
 //</doc:import_examples>
 
@@ -59,20 +59,10 @@ import slatekit.entities.core.Entities
 // There are different ways you can build up the context
 // 1. Manually      ( explictly supply the components - see below )
 // 2. Automatically ( using helper functions to that check command line args )
-class SampleApp(ctx: AppContext) : App(ctx) {
-
-    /**
-     * Options for the application that you can override
-     * E.g. Just shown for example, not needed to override.
-     * By default, the app process prints a summary of your app ( see example at bottom of this file )
-     * at the end of the app process, but you can customize here
-     * if you want the summary to be shown at the beginning of life-cycle.
-     */
-    override val options = AppOptions(
-            printSummaryBeforeExec = false,
-            printSummaryOnShutdown = true
-    )
-
+class SampleApp(ctx: AppContext) : App(ctx, AppOptions(
+        printSummaryBeforeExec = false,
+        printSummaryOnShutdown = true
+)) {
 
     /**
      * Life-cycle init hook: for your app to perform any initialization
@@ -87,7 +77,7 @@ class SampleApp(ctx: AppContext) : App(ctx) {
      *
      * @return
      */
-    override fun execute(): ResultEx<Any> {
+    override fun execute(): Try<Any> {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -100,12 +90,12 @@ class SampleApp(ctx: AppContext) : App(ctx) {
         println(ctx.arg.raw)
 
         // 3. Get the setting from base config ( common config that all other configs inherit from )
-        println(conf.getString("app.api"))
+        println(ctx.cfg.getString("app.api"))
 
         // 4. Get value from inherited config ( env.qa.conf ) that inherits
         // from the common config ( env.conf )
-        println(conf.getString("app.api"))
-        println(conf.dbCon())
+        println(ctx.cfg.getString("app.api"))
+        println(ctx.cfg.dbCon())
 
         // 5. Get and use logger
         ctx.logs.getLogger().info("default logger ")
@@ -142,23 +132,23 @@ class SampleApp(ctx: AppContext) : App(ctx) {
     }
 
 
-    /**
-     * template method: allows you to build up info to show in the summary
-     * displayed at the end of the application
-     */
-    override fun collectSummaryExtra(): List<Pair<String, String>>? {
-        return listOf(
-                Pair(ctx.app.name, " extra 1  = extra summary data1"),
-                Pair(ctx.app.name, " extra 2  = extra summary data2")
-        )
-    }
+//    /**
+//     * template method: allows you to build up info to show in the summary
+//     * displayed at the end of the application
+//     */
+//    override fun collectSummaryExtra(): List<Pair<String, String>>? {
+//        return listOf(
+//                Pair(ctx.app.name, " extra 1  = extra summary data1"),
+//                Pair(ctx.app.name, " extra 2  = extra summary data2")
+//        )
+//    }
 }
 //</doc:setup>
 
 
 class Example_App : Cmd("app") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // NOTE: The application uses an AppContext ( see docs for more info )
         // which contains many core dependencies available in a single container

@@ -25,6 +25,8 @@ import slatekit.meta.models.ModelMapper
 //</doc:import_required>
 
 //<doc:import_examples>
+import slatekit.results.Try
+import slatekit.results.Success
 //</doc:import_examples>
 
 
@@ -101,7 +103,7 @@ class Example_Mapper : Cmd("mapper") {
     //</doc:setup>
 
 
-    override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+    override fun executeInternal(args: Array<String>?) : Try<Any>
     {
         //<doc:examples>
         // NOTE: There are 3 different ways to load the schema of the entity.

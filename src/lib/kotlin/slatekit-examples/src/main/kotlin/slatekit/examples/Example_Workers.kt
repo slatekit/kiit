@@ -23,13 +23,15 @@ import slatekit.common.queues.QueueSourceDefault
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.workers.*
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
 
 class Example_Workers : Cmd("utils") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:setup>
         // The background workers system is designed with a few basic
         // principles and concepts:
@@ -103,7 +105,7 @@ class Example_Workers : Cmd("utils") {
             name ="custom_1", group = "reports", version = "1.0",
             desc = "Generates a report that determines active users", logs = LogsDefault) {
 
-            override fun perform(job: Job): ResultEx<String> {
+            override fun perform(job: Job): Try<String> {
                 println("custom worker: " + DateTime.now().toString())
                 return Success("customer worker class")
             }

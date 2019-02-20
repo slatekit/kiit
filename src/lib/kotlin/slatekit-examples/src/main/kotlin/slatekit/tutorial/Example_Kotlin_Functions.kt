@@ -13,7 +13,7 @@ package slatekit.tutorial
 
 
 import slatekit.common.TODO
-import slatekit.common.ResultEx
+import slatekit.common.Try
 import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 
@@ -22,7 +22,7 @@ import slatekit.core.cmds.Cmd
  */
 class Example_Kotlin_Functions : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         testFuncs()
         hof_pass_func()
         hof_return_func()
@@ -32,7 +32,7 @@ class Example_Kotlin_Functions : Cmd("types") {
 
 
     // Test the functions
-    fun testFuncs(): ResultEx<Any> {
+    fun testFuncs(): Try<Any> {
 
         // function with parameters
         val r1 = salary(10.50, 8)

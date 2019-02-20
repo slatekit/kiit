@@ -22,9 +22,8 @@ import slatekit.meta.Reflector
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Result
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.examples.common.User
 import slatekit.examples.common.UserApi
 import slatekit.integration.common.AppEntContext
@@ -34,7 +33,7 @@ import slatekit.integration.common.AppEntContext
 
 class Example_Reflect : Cmd("reflect") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+  override fun executeInternal(args: Array<String>?) : Try<Any> {
     // JAVA
     // 1. getFields NOT working
     // 2. getDeclaredFields working

@@ -20,9 +20,9 @@ import slatekit.entities.repos.EntityRepoInMemory
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
-import slatekit.common.db.Db
+import slatekit.results.Try
+import slatekit.results.Success
+import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.core.cmds.Cmd
 import slatekit.entities.databases.vendors.MySqlConverter
@@ -96,7 +96,7 @@ class Example_Entities_Service : Cmd("service") {
     //</doc:setup>
 
 
-    override protected fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override protected fun executeInternal(args: Array<String>?): Try<Any> {
 
         //<doc:examples>
         // The Service layer initialized with an repository .

@@ -20,15 +20,15 @@ import slatekit.common.auth.User
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.queues.QueueSourceDefault
 //</doc:import_examples>
 
 
 class Example_Queue : Cmd("queue") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:setup>
     // The QueueSourceDefault interface is implemented in 2 ways:
@@ -41,7 +41,7 @@ class Example_Queue : Cmd("queue") {
     //
     // as the in memory queue remove the items from calls to next/nextBatch.
 
-    val queue = QueueSourceDefault()
+    val queue = QueueSourceDefault<String>()
     //</doc:setup>
 
     //<doc:examples>
@@ -60,7 +60,7 @@ class Example_Queue : Cmd("queue") {
     println( item1 )
 
     // Use case 4: receive 2 messages
-    val items = queue.nextBatch(2)
+    val items = queue.next(2)
     println( items )
 
     // Use case 5: print tags - abandon a message

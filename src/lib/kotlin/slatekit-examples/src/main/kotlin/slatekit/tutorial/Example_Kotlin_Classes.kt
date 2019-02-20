@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 
 package slatekit.tutorial
 
-import slatekit.common.ResultEx
+import slatekit.common.Try
 import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import java.time.LocalDate
@@ -21,7 +21,7 @@ import java.time.LocalDate
 
 class Example_Kotlin_Classes : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
 
         return Success("")
     }

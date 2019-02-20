@@ -12,8 +12,8 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.serialization.*
 //</doc:import_required>
 
@@ -27,7 +27,7 @@ import slatekit.examples.common.User
 
 class Example_Serialization : Cmd("serialization") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
 
     //<doc:setup>

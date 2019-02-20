@@ -13,27 +13,20 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.results.ResultCode.BAD_REQUEST
-import slatekit.common.results.ResultCode.SUCCESS
-import slatekit.common.results.ResultFuncs.conflict
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.notAvailable
-import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.results.ResultFuncs.unexpectedError
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
+import slatekit.results.*
+import slatekit.results.builders.Results
 
 //</doc:import_examples>
 
 
 class Example_Results : Cmd("results") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // The Result<S,F> class is a way to model successes and failures.
         // Design: This is essentially a specialized Either[L,R] with optional integer code/string message.
@@ -56,15 +49,15 @@ class Example_Results : Cmd("results") {
 
         // Explicitly build result using the Success "branch" of Result
         val result1:Result<String,Exception> = Success(
-                data = "userId:1234567890",
-                code = SUCCESS,
+                value = "userId:1234567890",
+                code = StatusCodes.SUCCESS.code,
                 msg = "user created"
         )
 
         // Explicitly build a result using the Failure "branch" of Result
         val result2:Result<String,Exception> = Failure<Exception>(
                 err = IllegalArgumentException("user id"),
-                code = BAD_REQUEST,
+                code = StatusCodes.BAD_REQUEST.code,
                 msg = "user id not supplied"
         )
 
@@ -80,14 +73,14 @@ class Example_Results : Cmd("results") {
         // NOTE:
         // 1. The ResultMsg is just a type alias for Result<S, String>
         //    representing the error type as a simple string.
-        // 2. There is ResultEx ( also a type alias ) for Result<S, Exception>
+        // 2. There is Try ( also a type alias ) for Result<S, Exception>
         //    representing the error type as an Exception
-        val res1:ResultMsg<Int> = success(123456, msg = "user created")
+        val res1:Notice<Int> = Success(123456, msg = "user created")
         printResult(res1)
 
 
         // CASE 2: Failure ( 400 ) with message and ref tag
-        val res2a = failure<String>(msg = "invalid email")
+        val res2a = errored<String>(msg = "invalid email")
         printResult(res2a)
 
 

@@ -26,6 +26,8 @@ import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
 import slatekit.core.sms.SmsMessage
 import slatekit.core.sms.SmsServiceTwilio
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
@@ -33,7 +35,7 @@ import slatekit.core.sms.SmsServiceTwilio
 
 class Example_Sms : Cmd("sms") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config

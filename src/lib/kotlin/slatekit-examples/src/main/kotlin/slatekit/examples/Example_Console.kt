@@ -20,13 +20,14 @@ import slatekit.common.console.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.DateTime
-import slatekit.common.ResultEx
+import slatekit.results.Try
+import slatekit.results.Success
 //</doc:import_examples>
 
 
 class Example_Console : Cmd("console") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
@@ -78,7 +79,7 @@ class Example_Console : Cmd("console") {
       ConsoleItem(Highlight , "visit us for more info"      , true)
     ))
     //</doc:examples>
-    return slatekit.common.Success("")
+    return Success("")
   }
 
   /*

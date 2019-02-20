@@ -20,8 +20,8 @@ import slatekit.common.info.StartInfo
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.envs.EnvMode
 
 //</doc:import_examples>
@@ -29,7 +29,7 @@ import slatekit.common.envs.EnvMode
 
 class Example_Info  : Cmd("info") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // CASE 1: Get the host info

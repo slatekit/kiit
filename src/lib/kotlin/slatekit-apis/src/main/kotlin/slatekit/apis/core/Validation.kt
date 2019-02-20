@@ -19,19 +19,17 @@ import slatekit.apis.helpers.ApiUtils
 import slatekit.apis.helpers.ApiValidator
 import slatekit.apis.middleware.Filter
 import slatekit.apis.security.WebProtocol
-import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.success
+import slatekit.results.*
+import slatekit.results.builders.Notices
 
 class Validation(val ctn: ApiContainer) {
 
-    fun validateApi(req: Request): ResultMsg<ApiRef> {
+    fun validateApi(req: Request): Notice<ApiRef> {
         return ctn.getApi(req.area, req.name, req.action)
     }
 
-    fun validateProtocol(req: Request, apiRef: ApiRef): ResultMsg<Request> {
+    fun validateProtocol(req: Request, apiRef: ApiRef): Notice<Request> {
         // Ensure verb is correct get/post
         val action = apiRef.action
         val api = apiRef.api
@@ -43,40 +41,40 @@ class Validation(val ctn: ApiContainer) {
 
         // 1. Ensure verb is correct
         return if (isWeb && req.verb == ApiConstants.SourceQueue) {
-            success(req)
+            Success(req)
         } else if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
-            badRequest(msg = "expected verb $actualVerb, but got ${req.verb}")
+            Failure("expected verb $actualVerb, but got ${req.verb}")
         }
 
         // 2. Ensure protocol is correct get/post
         else if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, ctn.protocol.name)) {
-            notFound(msg = "${req.fullName} not found")
+            Notices.errored<Request>("${req.fullName} not found", StatusCodes.NOT_FOUND)
         }
         // 3. Good to go
         else
-            success(req)
+            Success(req)
     }
 
-    fun validateMiddleware(req: Request, filters: List<Filter>): ResultMsg<Any> {
-        val failed = filters.fold(success(""), { acc, filter ->
+    fun validateMiddleware(req: Request, filters: List<Filter>): Notice<Any> {
+        val failed = filters.fold(Success("") as Result<Any, String>) { acc, filter ->
             if (!acc.success) {
                 acc
             } else {
-                filter.onFilter(ctn.ctx, req, ctn, null).map({ _ -> "" })
+                filter.onFilter(ctn.ctx, req, ctn, null).map { "" }
             }
-        })
+        }
         return failed
     }
 
-    fun validateAuthorization(req: Request, apiRef: ApiRef): ResultMsg<Any> {
+    fun validateAuthorization(req: Request, apiRef: ApiRef): Notice<Any> {
         return ApiHelper.isAuthorizedForCall(req, apiRef, ctn.auth)
     }
 
-    fun validateParameters(request: Request): ResultMsg<ApiRef> {
+    fun validateParameters(request: Request): Notice<ApiRef> {
         val checkResult = ApiValidator.validateCall(request, { req -> ctn.get(req) }, true)
         return if (!checkResult.success) {
             // Don't return the result from internal ( as it contains too much info )
-            badRequest(checkResult.msg)
+            Notices.invalid(checkResult.msg)
         } else
             checkResult
     }

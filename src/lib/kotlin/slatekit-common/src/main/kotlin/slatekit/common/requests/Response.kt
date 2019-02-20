@@ -12,9 +12,6 @@ mantra: Simplicity above all else
  */
 package slatekit.common.requests
 
-import slatekit.common.Failure
-import slatekit.common.Result
-import slatekit.common.Success
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
@@ -47,18 +44,20 @@ data class Response<out T>(
     }
 }
 
+
 /**
  * Converts result to Response.
  */
-fun <T, E> Result<T, E>.toResponse(): Response<T> {
+fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
     return when (this) {
-        is Success -> Response(this.success, this.code, null, this.data, this.msg, null)
-        is Failure -> {
-            val ex = when (this.err) {
-                is Exception -> this.err
-                else -> Exception(this.err.toString())
+        is slatekit.results.Success -> Response(this.success, this.code, null, this.value, this.msg, null)
+        is slatekit.results.Failure -> {
+            val ex:Exception = when (this.error) {
+                is Exception -> this.error as Exception
+                else -> Exception(this.error.toString())
             }
             Response(this.success, this.code, null, null, this.msg, ex)
         }
     }
 }
+

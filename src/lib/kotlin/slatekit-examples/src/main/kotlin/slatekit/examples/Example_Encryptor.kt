@@ -18,8 +18,8 @@ import slatekit.common.encrypt.B64Java8
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 //</doc:import_examples>
 
 
@@ -38,7 +38,7 @@ class Example_Encryptor : Cmd("encrypt") {
   //</doc:setup>
 
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+  override fun executeInternal(args: Array<String>?) : Try<Any> {
 
     //<doc:examples>
     // CASE 1: Encrypt using AES ( text is base64 encoded without newlines )

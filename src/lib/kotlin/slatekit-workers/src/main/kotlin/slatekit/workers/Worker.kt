@@ -256,27 +256,10 @@ open class Worker<T>(
     }
 
 
-    protected open fun complete(sender: Any, queue: QueueSource, job:Job, result:Try<*>) {
+    protected open fun complete(sender: Any, queue: QueueSource<String>, job:Job, result:Try<*>) {
         when(result.success){
-            true  -> queue.complete(job.source)
-            false -> queue.abandon(job.source)
-        }
-    }
-}
-
-
-/**
- * Converts result to Response.
- */
-fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
-    return when (this) {
-        is slatekit.results.Success -> Response(this.success, this.code, null, this.value, this.msg, null)
-        is slatekit.results.Failure -> {
-            val ex:Exception = when (this.error) {
-                is Exception -> this.error as Exception
-                else -> Exception(this.error.toString())
-            }
-            Response(this.success, this.code, null, null, this.msg, ex)
+            true  -> queue.complete(job.source as String?)
+            false -> queue.abandon(job.source as String?)
         }
     }
 }

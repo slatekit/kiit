@@ -12,9 +12,8 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Result
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.types.*
 //</doc:import_required>
 
@@ -26,7 +25,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_SmartStrings : Cmd("results") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // Smart strings provide a way to store, validate and describe
         // a strongly typed/formatted string. This concept is called

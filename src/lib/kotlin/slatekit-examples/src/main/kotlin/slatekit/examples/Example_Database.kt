@@ -13,13 +13,13 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.common.db.DbConString
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.databases.vendors.MySqlConverter
@@ -30,7 +30,7 @@ import slatekit.meta.models.ModelMapper
 
 class Example_Database : Cmd("db") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // NOTES:
         // 1. The Db.kt simply uses JDBC

@@ -17,8 +17,8 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
@@ -31,7 +31,7 @@ import slatekit.core.cmds.Cmd
 
 class Example_DbLookup : Cmd("db") {
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
         // These examples just shows the database connection registration
         // There is separate Db component in slatekit.common.db.Db

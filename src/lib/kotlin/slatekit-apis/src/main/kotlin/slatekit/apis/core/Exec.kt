@@ -16,10 +16,10 @@ import slatekit.apis.middleware.Filter
 import slatekit.apis.middleware.Handler
 import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
-import slatekit.common.*
 import slatekit.common.log.Logger
 import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultFuncs.unexpectedError
+import slatekit.results.Try
+import slatekit.results.builders.Tries
 import kotlin.reflect.KCallable
 
 /**
@@ -32,7 +32,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Executes the final API action after going through all the middleware first.
      */
-    fun run(execute: (Ctx) -> Result<Any, Exception>): Result<Any, Exception> {
+    fun run(execute: (Ctx) -> Try<Any>): Try<Any> {
 
         // Compose the various middleware components into a "pipeline"
         // using the convenient Kotlin syntax for single/last parameter being a lambda
@@ -88,8 +88,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Ensures valid protocols before processing
      */
-    fun protocol(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::protocol) {
+    fun protocol(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::protocol) {
 
             val check = validator.validateProtocol(ctx.req, ctx.apiRef)
             val result = if (check.success) {
@@ -104,8 +104,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Ensures valid authorization before processing
      */
-    fun auth(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::auth) {
+    fun auth(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::auth) {
 
             val check = validator.validateAuthorization(ctx.req, ctx.apiRef)
             val result = if (check.success) {
@@ -120,8 +120,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Ensures valid authorization before processing
      */
-    fun middleware(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::middleware) {
+    fun middleware(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::middleware) {
 
             val check = validator.validateMiddleware(ctx.req, ctx.container.filters)
             val result = if (check.success) {
@@ -136,8 +136,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Ensures valid authorization before processing
      */
-    fun params(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::params) {
+    fun params(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::params) {
 
             val check = validator.validateParameters(ctx.req)
             val result = if (check.success) {
@@ -152,8 +152,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the tracking middleware to track requests, successes, failures
      */
-    fun track(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::track) {
+    fun track(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::track) {
             val instance = ctx.container.tracker
 
             // Hook: Before
@@ -175,8 +175,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the tracking middleware to track requests, successes, failures
      */
-    fun diagnostics(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::track) {
+    fun diagnostics(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::track) {
             val instance = ctx.apiRef.instance
 
             // Hook: Before
@@ -198,12 +198,12 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the filter middleware to filter out requests
      */
-    fun filter(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::filter) {
+    fun filter(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::filter) {
             val instance = ctx.apiRef.instance
 
             val result = if (instance is Filter) {
-                val filterResult = instance.onFilter(ctx.context, ctx.req, ctx.container, null).toResultEx()
+                val filterResult = instance.onFilter(ctx.context, ctx.req, ctx.container, null).toTry()
                 if (filterResult.success) {
                     proceed()
                 } else {
@@ -223,8 +223,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the hooks middleware before/after execution of action
      */
-    fun hook(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::hook) {
+    fun hook(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::hook) {
 
             val instance = ctx.apiRef.instance
 
@@ -246,13 +246,13 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the handler middleware to either handle the request or proceed
      */
-    fun handle(proceed: () -> Result<Any, Exception>): Result<Any, Exception> {
-        return log(::handle) {
+    fun handle(proceed: () -> Try<Any>): Try<Any> {
+        return log(this::handle) {
             val instance = ctx.apiRef.instance
             val result = if (instance is Handler) {
                 val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
                 if (handlerResult.success) {
-                    handlerResult.toResultEx()
+                    handlerResult.toTry()
                 } else {
                     proceed()
                 }
@@ -263,7 +263,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         }
     }
 
-    private fun attempt(call: () -> Result<Any, Exception>): Result<Any, Exception> {
+    private fun attempt(call: () -> Try<Any>): Try<Any> {
         // Build a message
         val result = try {
             call()
@@ -271,7 +271,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val msg = ex.message
             logError("attempt", ex)
             ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
-            unexpectedError<Any>(Exception("unexpected error in api: $msg", ex))
+            Tries.unexpected<Any>(Exception("unexpected error in api: $msg", ex))
         }
 
         logger.debug("API pipeline: attempting to process: ${ctx.req.fullName} : $AFTER")
@@ -279,7 +279,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         return result
     }
 
-    private fun log(method: KCallable<*>, call: () -> Result<Any, Exception>): Result<Any, Exception> {
+    private fun log(method: KCallable<*>, call: () -> Try<Any>): Try<Any> {
         // Build a message
         val result = call()
 

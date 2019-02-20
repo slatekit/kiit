@@ -19,8 +19,8 @@ import slatekit.meta.models.*
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
 import slatekit.common.DateTime
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.auth.User
 import slatekit.common.info.Host
 import slatekit.entities.databases.vendors.MySqlBuilder
@@ -33,7 +33,7 @@ import kotlin.reflect.full.createType
 
 class Example_Model : Cmd("model") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // ABOUT:

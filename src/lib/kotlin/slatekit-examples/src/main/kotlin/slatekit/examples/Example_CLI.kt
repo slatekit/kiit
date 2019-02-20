@@ -21,13 +21,13 @@ import slatekit.core.cli.CliSettings
 
 //<doc:import_examples>
 import slatekit.apis.ApiConstants
-import slatekit.common.*
 import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultFuncs.success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.core.cmds.Cmd
 //</doc:import_examples>
 
@@ -98,7 +98,7 @@ class Example_CLI : Cmd("auth") {
 
             // 3c. Do something with the request
             // you logic goes here.
-            val res = success("Sample result from CLI for req: " + req.path)
+            val res = Success("Sample result from CLI for req: " + req.path)
 
             // 4. Now return the command w/ the new result.
             val cliResult = cmd.copy(result = res.toResponse())
@@ -120,7 +120,7 @@ class Example_CLI : Cmd("auth") {
     //</doc:setup>
 
 
-    override fun executeInternal(args: Array<String>?): ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?): Try<Any> {
         // About: The shell component allows you to quicly setup an interactive
         // command line shell where you can handle your own commands
 

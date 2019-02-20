@@ -25,13 +25,15 @@ import slatekit.core.cmds.Cmd
 import slatekit.common.db.DbConString
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 
 
 class Example_Utils : Cmd("utils") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:examples>
     // Miscellaneous utilities.

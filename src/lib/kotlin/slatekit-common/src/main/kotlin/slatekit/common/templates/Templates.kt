@@ -13,10 +13,10 @@
 
 package slatekit.common.templates
 
-import slatekit.common.ResultEx
-import slatekit.common.getOrElse
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 /**
  * Handles processing of text templates with variables/substitutions inside.
@@ -44,7 +44,7 @@ class Templates(
      * @param text
      * @return
      */
-    fun parse(text: String): ResultEx<List<TemplatePart>> = TemplateParser(text).parse()
+    fun parse(text: String): Try<List<TemplatePart>> = TemplateParser(text).parse()
 
     /**
      * parses the text and returns a parsed template with individual parts.

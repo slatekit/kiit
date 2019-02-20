@@ -9,6 +9,9 @@ import slatekit.common.content.ContentTypeJson
 import slatekit.common.content.ContentTypeProp
 import slatekit.common.requests.Request
 import slatekit.meta.Serialization
+import slatekit.results.Success
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 
 class ApiResults(val ctx: Context,
@@ -29,11 +32,11 @@ class ApiResults(val ctx: Context,
      * Finally: If the format of the content specified ( json | csv | props )
      * Then serialize it here and return the content
      */
-    fun convert(req: Request, result: ResultEx<Any>): ResultEx<Any> {
+    fun convert(req: Request, result: Try<Any>): Try<Any> {
         return if (result.success && !req.output.isNullOrEmpty()) {
             val finalSerializer = serializer ?: this::serialize
             val serialized = finalSerializer(req.output ?: "", result.getOrElse { null })
-            (result as Success).copy(data = serialized!!)
+            (result as Success).copy(value = serialized!!)
         } else {
             result
         }

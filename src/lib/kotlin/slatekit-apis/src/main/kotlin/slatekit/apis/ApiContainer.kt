@@ -7,8 +7,6 @@ import slatekit.apis.svcs.Format
 import slatekit.apis.middleware.*
 import slatekit.apis.security.Protocol
 import slatekit.apis.security.WebProtocol
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.content.Content
@@ -18,10 +16,11 @@ import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultCode.HELP
-import slatekit.common.results.ResultFuncs.notFound
 import slatekit.meta.*
+import slatekit.results.*
+import slatekit.results.builders.Notices
 import java.io.File
+import kotlin.Result.Companion.failure
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -102,7 +101,7 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun check(request: Request): ResultMsg<ApiRef> {
+    fun check(request: Request): Notice<ApiRef> {
         return ApiValidator.validateCall(request, { req -> get(req) })
     }
 
@@ -111,15 +110,15 @@ open class ApiContainer(
      * @param cmd
      * @return
      */
-    fun get(cmd: Request): ResultMsg<ApiRef> {
+    fun get(cmd: Request): Notice<ApiRef> {
         return getApi(cmd.area, cmd.name, cmd.action)
     }
 
-    fun sample(cmd: Request, path: File): ResultMsg<String> {
+    fun sample(cmd: Request, path: File): Notice<String> {
         val action = get(cmd)
         val sample = if (action.success) {
             val parameters = when (action) {
-                is Success -> action.data.action.paramsUser
+                is Success -> action.value.action.paramsUser
                 is Failure -> listOf()
             }
             val serializer = Serialization.sampler() as SerializerSample
@@ -128,7 +127,7 @@ open class ApiContainer(
         } else "Unable to find command: " + cmd.path
 
         path.writeText(sample)
-        return success("sample call written to : ${path.absolutePath}")
+        return Success("sample call written to : ${path.absolutePath}")
     }
 
     /**
@@ -145,12 +144,12 @@ open class ApiContainer(
      * @param req
      * @return
      */
-    fun callAsResult(req: Request): ResultEx<Any> {
-        val result: ResultEx<Any> = try {
+    fun callAsResult(req: Request): Try<Any> {
+        val result = try {
             execute(req)
         } catch (ex: Exception) {
             logger.error("Unexpected error executing ${req.fullName}", ex)
-            errs?.onError(ctx, req, req.path, this, ex, null)?.toResultEx()
+            errs?.onError(ctx, req, req.path, this, ex, null)?.toTry()
             Failure(ex)
         }
         return result
@@ -163,7 +162,7 @@ open class ApiContainer(
         verb: String,
         opts: Map<String, Any>,
         args: Map<String, Any>
-    ): ResultEx<Any> {
+    ): Try<Any> {
         val req = Request.cli(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
@@ -175,7 +174,7 @@ open class ApiContainer(
      * @param action
      * @return
      */
-    fun getApi(area: String, name: String, action: String): ResultMsg<ApiRef> {
+    fun getApi(area: String, name: String, action: String): Notice<ApiRef> {
         return routes.api(area, name, action, ctx)
     }
 
@@ -186,7 +185,7 @@ open class ApiContainer(
      * @param action
      * @return
      */
-    fun getApi(clsType: KClass<*>, member: KCallable<*>): ResultMsg<ApiRef> {
+    fun getApi(clsType: KClass<*>, member: KCallable<*>): Notice<ApiRef> {
         val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
         val result = apiAnno?.let { anno ->
 
@@ -199,7 +198,7 @@ open class ApiContainer(
             } ?: member.name
             val info = getApi(area, api, action)
             info
-        } ?: notFound("member/annotation not found for : ${member.name}")
+        } ?: Notices.errored("member/annotation not found for : ${member.name}")
         return result
     }
 
@@ -218,10 +217,10 @@ open class ApiContainer(
      * @param cmd
      * @return
      */
-    protected fun execute(raw: Request): ResultEx<Any> {
+    protected fun execute(raw: Request): Try<Any> {
         // Check 1: Check for help / discovery
         val helpCheck = ApiUtils.isHelp(raw)
-        if (helpCheck.code == HELP) return buildHelp(raw, helpCheck).toResultEx()
+        if (helpCheck.code == HELP.code) return buildHelp(raw, helpCheck).toTry()
 
         // Rewrites ( e.g. restify get /movies => get /movies/getAll )
         val rewrittenReq = results.convert(raw)
@@ -239,7 +238,7 @@ open class ApiContainer(
             val runCtx = Ctx(this, this.ctx, req, apiRef)
 
             // Execute using a pipeline
-            Exec(runCtx, _validator, logger).run(::executeMethod)
+            Exec(runCtx, _validator, logger).run(this::executeMethod)
         }
         val result = resultRaw.toResultEx()
 
@@ -249,7 +248,7 @@ open class ApiContainer(
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open fun executeMethod(runCtx: Ctx): ResultEx<Any> {
+    protected open fun executeMethod(runCtx: Ctx): Try<Any> {
         // Finally make call.
         val req = runCtx.req
         val apiRef = runCtx.apiRef
@@ -260,7 +259,7 @@ open class ApiContainer(
 
         return returnVal?.let { res ->
             if (res is Result<*, *>) {
-                (res as Result<Any, Any>).toResultEx()
+                (res as Result<Any, Any>).toTry()
             } else {
                 Success(res)
             }
@@ -277,9 +276,9 @@ open class ApiContainer(
      * @param cmd
      * @param mode
      */
-    open fun buildHelp(req: Request, result: ResultMsg<String>): ResultMsg<Content> {
+    open fun buildHelp(req: Request, result: Notice<String>): Notice<Content> {
         return if (!ApiUtils.isDocKeyed(req, docKey ?: "")) {
-            failure("Unauthorized access to API docs")
+            Failure("Unauthorized access to API docs")
         } else {
             val content = when (result.msg) {
                 // 1: {area} ? = help on area
@@ -299,7 +298,7 @@ open class ApiContainer(
                     help.action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }
-            success(Content.html(content))
+            Success(Content.html(content))
         }
     }
 
@@ -313,4 +312,7 @@ open class ApiContainer(
             }
         }
     }
+
+
+    val HELP = StatusGroup.Errored(10000, "help")
 }

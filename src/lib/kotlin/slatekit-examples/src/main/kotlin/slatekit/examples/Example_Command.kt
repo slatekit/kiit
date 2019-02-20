@@ -18,8 +18,8 @@ import slatekit.core.cmds.Cmd
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.core.cmds.Cmds
 
 //</doc:import_examples>
@@ -32,7 +32,7 @@ class Example_Command : Cmd("auth") {
    */
   class CmdCleanTempDirectory : Cmd("clean_temp_dir")  {
 
-    override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?) : Try<Any> {
       // Your code here
       return Success("temp directory cleared")
     }
@@ -44,7 +44,7 @@ class Example_Command : Cmd("auth") {
    */
   class CmdCreateTestUsers : Cmd("create_test_users") {
 
-    override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?) : Try<Any> {
       // Your code here
       return Success("demo users created")
     }
@@ -60,7 +60,7 @@ class Example_Command : Cmd("auth") {
   //</doc:setup>
 
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   { 
 
     //<doc:examples>

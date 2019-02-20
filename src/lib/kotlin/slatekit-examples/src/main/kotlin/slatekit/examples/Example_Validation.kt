@@ -20,8 +20,8 @@ import slatekit.common.validations.ValidationResults
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.validations.ValidationFuncs.isEmpty
 import slatekit.common.validations.ValidationFuncs.isNotEmpty
 import slatekit.common.validations.ValidationFuncs.isLength
@@ -50,7 +50,7 @@ import slatekit.common.validations.ValidationFuncs.isZipCodeUS
   */
 class Example_Validation : Cmd("validation") {
 
-  override fun executeInternal(args: Array<String>?) : ResultEx<Any>
+  override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     showSimple()
     showSimpleRegEx()
