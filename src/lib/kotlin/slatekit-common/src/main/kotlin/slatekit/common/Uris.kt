@@ -18,12 +18,12 @@ import java.io.File
 
 object Uris {
 
-    val URI_PREFIX_USER = "user://"
-    val URI_PREFIX_TEMP = "temp://"
-    val URI_PREFIX_FILE = "file://"
-    val URI_PREFIX_JARS = "jars://"
-    val URI_PREFIX_CONF = "conf://"
-    val CONF_DIR = "conf"
+    const val URI_PREFIX_USER = "user://"
+    const val URI_PREFIX_TEMP = "temp://"
+    const val URI_PREFIX_FILE = "file://"
+    const val URI_PREFIX_JARS = "jars://"
+    const val URI_PREFIX_CONF = "conf://"
+    const val CONF_DIR = "conf"
 
     /**
      * Interprets the path URI to support references to various locations:

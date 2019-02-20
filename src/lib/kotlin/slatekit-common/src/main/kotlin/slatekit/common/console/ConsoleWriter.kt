@@ -13,8 +13,8 @@
 
 package slatekit.common.console
 
-import slatekit.common.IO
-import slatekit.common.Print
+import slatekit.common.io.IO
+import slatekit.common.io.Print
 
 /**
  * Semantic console writer to print text in different colors and in Uppercase/lowercase for
