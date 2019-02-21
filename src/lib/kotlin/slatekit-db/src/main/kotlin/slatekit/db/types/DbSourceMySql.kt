@@ -51,7 +51,7 @@ open class DbSourceMySql : DbSource {
         Types.JLongClass to  DbFieldType.DbLong,
         Types.JFloatClass to  DbFieldType.DbFloat,
         Types.JDoubleClass to  DbFieldType.DbDouble,
-        Types.JDecimalClass to  DbFieldType.DbDecimal,
+        //Types.JDecimalClass to  DbFieldType.DbDecimal,
         Types.JLocalDateClass to  DbFieldType.DbLocalDate,
         Types.JLocalTimeClass to  DbFieldType.DbLocalTime,
         Types.JLocalDateTimeClass to  DbFieldType.DbLocalDateTime,

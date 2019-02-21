@@ -1,7 +1,7 @@
 package slatekit.entities.databases
 
 import slatekit.common.naming.Namer
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.db.DbFieldType
 import slatekit.db.DbUtils
 import slatekit.common.newline

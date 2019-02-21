@@ -24,6 +24,7 @@ import slatekit.db.types.DbSourcePostGres
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
+import slatekit.db.Db
 import slatekit.db.DbType
 import slatekit.entities.support.EntityComponentBuilder
 import slatekit.meta.models.Model

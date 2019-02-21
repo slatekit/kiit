@@ -199,7 +199,7 @@ class Templates(
                 // Build the  template
                 template.copy(parsed = true,
                         valid = result.success,
-                        parts = result.getOrElse { listOf<Template>() }
+                        parts = result.getOrElse{ listOf() }
                 )
             }
             return parsed

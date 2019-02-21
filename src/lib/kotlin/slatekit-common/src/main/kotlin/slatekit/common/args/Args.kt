@@ -288,7 +288,7 @@ class Args(
             hasAction: Boolean = false,
             metaChar: String = "@",
             sysChar: String = "$"
-        ): ResultEx<Args> {
+        ): Try<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {
                 args.joinToString(" ")

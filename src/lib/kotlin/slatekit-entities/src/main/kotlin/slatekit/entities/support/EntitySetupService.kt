@@ -22,6 +22,7 @@ import slatekit.common.utils.Props
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.results.Notice
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
 

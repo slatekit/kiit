@@ -37,7 +37,7 @@ object Utils {
     /**
      * Converts a message from any queue into a Job
      */
-    fun toJob(item: Any, queueInfo: QueueInfo, queue: QueueSourceMsg): Job {
+    fun toJob(item: Any, queueInfo: QueueInfo, queue: QueueSourceMsg<Any>): Job {
         val id = queue.getMessageTag(item, "id")
         val refId = queue.getMessageTag(item, "refId")
         val task = queue.getMessageTag(item, "task")

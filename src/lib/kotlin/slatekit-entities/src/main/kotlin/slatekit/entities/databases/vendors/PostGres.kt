@@ -1,6 +1,6 @@
 package slatekit.entities.databases.vendors
 
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.Query

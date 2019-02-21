@@ -1,8 +1,8 @@
 package slatekit.common.diagnostics
 
-import slatekit.common.requests.Response
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
+import slatekit.common.requests.*
 
 /**
  * Handles boilerplate diagnostics which include ( logs, metrics, tracking ( last request/result ) and eventing
@@ -105,10 +105,10 @@ open class Diagnostics<TRequest>(
         events?.let {
             events.onRequest(sender, request)
             when {
-                response.code.isInSuccessRange()    -> events.onSuccess(sender, request, response)
-                response.code.isFilteredOut()       -> events.onFiltered(sender, request, response)
-                response.code.isInBadRequestRange() -> events.onInvalid(sender, request, response.err)
-                response.code.isInFailureRange()    -> events.onErrored(sender, request, response.err)
+                response.isInSuccessRange()    -> events.onSuccess(sender, request, response)
+                response.isFilteredOut()       -> events.onFiltered(sender, request, response)
+                response.isInBadRequestRange() -> events.onInvalid(sender, request, response.err)
+                response.isInFailureRange()    -> events.onErrored(sender, request, response.err)
                 else                                -> events.onEvent(sender, request, response)
             }
         }

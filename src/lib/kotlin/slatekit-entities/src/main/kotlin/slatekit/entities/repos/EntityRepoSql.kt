@@ -13,7 +13,7 @@
 
 package slatekit.entities.repos
 
-import slatekit.common.db.Db
+import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.IQuery

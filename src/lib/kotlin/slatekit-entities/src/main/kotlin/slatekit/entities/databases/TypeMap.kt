@@ -42,7 +42,7 @@ open class TypeMap {
     open val longType = DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JLongClass)
     open val floatType = DbTypeInfo(DbFieldType.DbFloat, "FLOAT", Types.JFloatClass)
     open val doubleType = DbTypeInfo(DbFieldType.DbDouble, "DOUBLE", Types.JDoubleClass)
-    open val decimalType = DbTypeInfo(DbFieldType.DbDecimal, "DECIMAL", Types.JDecimalClass)
+    //open val decimalType = DbTypeInfo(DbFieldType.DbDecimal, "DECIMAL", Types.JDecimalClass)
 
     /**
      * DATES / TIMES
@@ -65,7 +65,7 @@ open class TypeMap {
             longType.metaType to longType,
             floatType.metaType to floatType,
             doubleType.metaType to doubleType,
-            decimalType.metaType to decimalType,
+            //decimalType.metaType to decimalType,
             localdateType.metaType to localdateType,
             localtimeType.metaType to localtimeType,
             localDateTimeType.metaType to localDateTimeType,

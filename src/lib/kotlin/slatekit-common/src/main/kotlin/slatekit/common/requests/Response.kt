@@ -12,6 +12,8 @@ mantra: Simplicity above all else
  */
 package slatekit.common.requests
 
+import slatekit.results.StatusCodes
+
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
@@ -45,7 +47,7 @@ data class Response<out T>(
 }
 
 
-
-fun <T> Response<T>.isInSuccessRange()    : Boolean = this.code >= 200
-fun <T> Response<T>.isFilteredOut()       : Boolean = this.code >= 200
-fun <T> Response<T>.isInBadRequestRange() : Boolean = this.code >= 200
+fun <T> Response<T>.isInSuccessRange(): Boolean = this.code in StatusCodes.SUCCESS.code .. StatusCodes.QUEUED.code
+fun <T> Response<T>.isFilteredOut(): Boolean = this.code == StatusCodes.IGNORED.code
+fun <T> Response<T>.isInBadRequestRange(): Boolean = this.code in StatusCodes.BAD_REQUEST.code .. StatusCodes.UNAUTHORIZED.code
+fun <T> Response<T>.isInFailureRange(): Boolean = this.code in StatusCodes.ERRORED.code .. StatusCodes.UNEXPECTED.code

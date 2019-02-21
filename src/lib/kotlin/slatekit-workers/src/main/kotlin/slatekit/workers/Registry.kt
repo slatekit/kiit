@@ -44,8 +44,8 @@ class Registry(val sys: System) {
      * Gets a batch of jobs from the next queue
      */
     fun getBatch(queueInfo: QueueInfo, size: Int): List<Job>? {
-        val queue = queueInfo.queue as QueueSourceMsg
-        val items = queue.nextBatch(size)
+        val queue = queueInfo.queue as QueueSourceMsg<Any>
+        val items = queue.next(size)
         return items?.map { item ->
             Utils.toJob(item, queueInfo, queue)
         }

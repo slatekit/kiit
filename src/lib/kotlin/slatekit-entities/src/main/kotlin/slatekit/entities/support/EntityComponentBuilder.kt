@@ -7,6 +7,7 @@ import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.Reflector
 import slatekit.db.DbType.*
 import slatekit.common.naming.Namer
+import slatekit.db.Db
 import slatekit.db.DbType
 import slatekit.entities.databases.SqlBuilder
 import slatekit.entities.databases.vendors.*
