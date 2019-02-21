@@ -1,11 +1,8 @@
-import kotlin.Unit;
-import org.junit.Assert;
+
 import org.junit.Test;
-import slatekit.common.Random;
 import slatekit.common.envs.Env;
 import slatekit.common.envs.EnvMode;
 import slatekit.common.envs.Envs;
-import slatekit.common.info.Host;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,7 @@ import java.util.List;
 
 public class JavaInteropTests {
 
-    
+
 
 
     @Test
