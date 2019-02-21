@@ -21,11 +21,5 @@ fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
 }
 
 
-
-fun <T,E> slatekit.results.Result<T,E>.isInSuccessRange()    : Boolean = this.code >= 200
-fun <T,E> slatekit.results.Result<T,E>.isFilteredOut()       : Boolean = this.code >= 200
-fun <T,E> slatekit.results.Result<T,E>.isInBadRequestRange() : Boolean = this.code >= 200
-fun <T,E> slatekit.results.Result<T,E>.isInFailureRange()    : Boolean = this.code >= 200
-
 val EXIT = StatusGroup.Errored(4001, "Exiting")
 val HELP = StatusGroup.Errored(4002, "Help")
