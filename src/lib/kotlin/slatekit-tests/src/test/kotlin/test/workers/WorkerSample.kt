@@ -12,10 +12,10 @@ mantra: Simplicity above all else
  */
 package test.workers
 
-import slatekit.common.Try
-import slatekit.common.Notice
-import slatekit.common.Success
 import slatekit.common.log.LogsDefault
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 import slatekit.workers.Job
 import slatekit.workers.Worker
 

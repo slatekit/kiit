@@ -1,10 +1,8 @@
 package test.setup
 
-import slatekit.common.Notice
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.validations.ValidationFuncs
+import slatekit.results.Notice
+import slatekit.results.builders.Notices
 
 
 open class SampleErrorsNoMiddlewareApi  {
@@ -16,13 +14,13 @@ open class SampleErrorsNoMiddlewareApi  {
     fun parseNumberWithResults(text:String): Notice<Int> {
 
         return if(text.isNullOrEmpty()) {
-            badRequest("You must supply a non-empty string")
+            Notices.invalid("You must supply a non-empty string")
         }
         else if(!ValidationFuncs.isNumeric(text)){
-            failure("$text is not a valid number")
+            Notices.errored("$text is not a valid number")
         }
         else {
-            success(text.toInt(), msg ="You supplied a valid number")
+            Notices.success(text.toInt(), "You supplied a valid number")
         }
     }
 

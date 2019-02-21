@@ -21,7 +21,9 @@ import slatekit.apis.svcs.Restify
 import slatekit.common.*
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.Namer
-import slatekit.common.results.ResultCode.SUCCESS
+import slatekit.results.Result
+import slatekit.results.StatusCodes
+import slatekit.results.getOrElse
 import test.setup.SampleRESTApi
 import test.setup.Movie
 
@@ -46,7 +48,7 @@ class Api_Restful_Tests : ApiTestsBase() {
        ensure("", "get", mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
 
             Assert.assertTrue(r1.success)
-            Assert.assertTrue(r1.code == SUCCESS)
+            Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
 
             val all = r1.getOrElse { Movie.samples() } as List<Movie>
            Assert.assertTrue(all.size == 2 )
@@ -60,7 +62,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleREST", "1", "get", mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
 
         val book = r1.getOrElse { Movie.samples()[0] } as Movie
         Assert.assertTrue(book.title == Movie.samples().first().title)
@@ -74,7 +76,7 @@ class Api_Restful_Tests : ApiTestsBase() {
                 mapOf("title" to "Indiana Jones Original"))
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { "" } == "patched 1 with Indiana Jones Original")
     }
 
@@ -85,7 +87,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleREST", "1", "delete", mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { "" } == "deleteById 1")
     }
 
@@ -96,7 +98,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleREST", "activateById", "post", mapOf(), mapOf("id" to 1))
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { "" } == "activateById 1")
     }
 
@@ -127,7 +129,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         )
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { 0L } == 3L)
     }
 
@@ -156,12 +158,12 @@ class Api_Restful_Tests : ApiTestsBase() {
         )
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == SUCCESS)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { "" } == "updated 1")
     }
 
 
-    fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*,*>) -> Unit): Unit {
+    fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
 
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)

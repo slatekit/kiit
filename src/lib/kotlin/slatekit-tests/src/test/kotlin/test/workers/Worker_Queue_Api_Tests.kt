@@ -28,7 +28,7 @@ class Worker_Queue_Api_Tests {
         val ctx = AppContext.simple("queues")
 
         // 2. queues
-        val queues = listOf(QueueSourceDefault())
+        val queues = listOf(QueueSourceDefault<String>())
 
         // 3. apis
         val api = WorkerSampleApi(ctx, queues)
@@ -59,7 +59,7 @@ class Worker_Queue_Api_Tests {
     @Test
     fun can_run_from_queue() {
         val container = buildContainer()
-        val queues = listOf(QueueSourceDefault())
+        val queues = listOf(QueueSourceDefault<String>())
         TODO.IMPLEMENT("tests", "Workers")
         //val worker = WorkerWithQueuesApi(container, queues,null, null, WorkerSettings())
         val json1 = """

@@ -19,6 +19,7 @@ import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
+import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
 import test.setup.StatusEnum

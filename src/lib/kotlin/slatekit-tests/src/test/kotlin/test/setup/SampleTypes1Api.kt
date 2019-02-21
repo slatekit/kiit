@@ -1,13 +1,13 @@
 package test.setup
 
 import slatekit.apis.Api
-import slatekit.common.Result
-import slatekit.common.Try
-import slatekit.common.Notice
 import slatekit.common.encrypt.Encryptor
 import slatekit.results.Notice
+import slatekit.results.StatusCodes
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 
 
 @Api(area = "samples", name = "types1", desc = "sample api to test getting different values")
@@ -35,12 +35,12 @@ class SampleTypes1Api {
      * These examples use the Slate Kit Result<T> to model success and failures.
      * The Result<T> has status codes that are HTTP compliant
      */
-    fun getSuccess()              : Notice<Movie>     = success(Movie.samples().first())
-    fun getBadRequest()           : Notice<Movie>     = badRequest("Check your inputs")
-    fun getNotFound()             : Notice<Movie>     = notFound("Item not found")
-    fun getUnauthorized()         : Notice<Movie>     = unAuthorized("You can not edit this item")
-    fun getConflict()             : Notice<Movie>     = conflict("Item has already been changed")
-    fun getFailure()              : Notice<Movie>     = failure("Error finding item")
-    fun getDeprecated()           : Notice<Movie>     = deprecated("This feature is deprecated")
-    fun getUnexpected()           : Try<Movie>        = unexpectedError(Exception("Unexpected errro occured"))
+    fun getSuccess()              : Notice<Movie>     = Success(Movie.samples().first())
+    fun getBadRequest()           : Notice<Movie>     = Notices.invalid("Check your inputs")
+    fun getNotFound()             : Notice<Movie>     = Notices.errored("Item not found", StatusCodes.NOT_FOUND)
+    fun getUnauthorized()         : Notice<Movie>     = Notices.denied ("You can not edit this item")
+    fun getConflict()             : Notice<Movie>     = Notices.errored("Item has already been changed", StatusCodes.CONFLICT)
+    fun getFailure()              : Notice<Movie>     = Notices.errored("Error finding item")
+    fun getDeprecated()           : Notice<Movie>     = Notices.errored("This feature is deprecated", StatusCodes.DEPRECATED)
+    fun getUnexpected()           : Try<Movie>        = Tries.unexpected(Exception("Unexpected errro occured"))
 }

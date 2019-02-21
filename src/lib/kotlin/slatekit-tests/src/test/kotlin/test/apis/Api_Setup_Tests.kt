@@ -5,10 +5,10 @@ import org.junit.Test
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.common.getOrElse
 import slatekit.core.common.AppContext
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
+import slatekit.results.getOrElse
 import test.setup.*
 
 

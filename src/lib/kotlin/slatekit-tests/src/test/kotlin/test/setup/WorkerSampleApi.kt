@@ -39,7 +39,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource<String>> =
             Success("Request processed as queue")
         }
         else {
-            Failure(Err.of("Continue processing"))
+            Failure(Exception("Continue processing"))
         }
     }
 

@@ -3,15 +3,14 @@ package test.setup
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unexpectedError
 import slatekit.common.validations.ValidationFuncs
+import slatekit.results.Notice
+import slatekit.results.Try
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 
 
 open class SampleErrorsApi : ApiWithMiddleware {
-
 
 
     /**
@@ -21,13 +20,13 @@ open class SampleErrorsApi : ApiWithMiddleware {
     fun parseNumberWithResults(text:String): Notice<Int> {
 
         return if(text.isNullOrEmpty()) {
-            badRequest("You must supply a non-empty string")
+            Notices.invalid("You must supply a non-empty string")
         }
         else if(!ValidationFuncs.isNumeric(text)){
-            failure("$text is not a valid number")
+            Notices.errored("$text is not a valid number")
         }
         else {
-            success(text.toInt(), msg = "You supplied a valid number")
+            Notices.success(text.toInt(), msg = "You supplied a valid number")
         }
     }
 
@@ -47,7 +46,7 @@ open class SampleErrorsApi : ApiWithMiddleware {
 
 
     override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any>{
-        return unexpectedError(Exception("unexpected error in api", ex))
+        return Tries.unexpected(Exception("unexpected error in api", ex))
     }
 }
 

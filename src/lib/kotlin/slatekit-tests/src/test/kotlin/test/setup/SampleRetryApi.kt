@@ -4,6 +4,9 @@ import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.common.*
 import slatekit.common.requests.Request
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 
 
 @Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs", roles= "", auth = "app-roles", verb = "*", protocol = "*")

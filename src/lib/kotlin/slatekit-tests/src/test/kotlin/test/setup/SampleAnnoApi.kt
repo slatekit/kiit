@@ -10,10 +10,11 @@ import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Notice
+import slatekit.results.Success
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
@@ -27,7 +28,7 @@ class SampleAnnoApi(val context: AppEntContext) {
 
     @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
     fun inputRequest(req: Request): Notice<String> {
-        return success("ok", msg = "raw request id: " + req.data!!.getInt("id"))
+        return Success("ok", msg = "raw request id: " + req.data!!.getInt("id"))
     }
 
 
@@ -45,13 +46,13 @@ class SampleAnnoApi(val context: AppEntContext) {
 
     @ApiAction(desc = "accepts a list of strings from request", roles= "*", verb = "post", protocol = "@parent")
     fun inputListString(items:List<String>): Notice<String> {
-        return success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr } ))
+        return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr } ))
     }
 
 
     @ApiAction(desc = "accepts a list of integers from request", roles= "*", verb = "post", protocol = "@parent")
     fun inputListInt(items:List<Int>): Notice<String> {
-        return success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr.toString() } ))
+        return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr.toString() } ))
     }
 
 
@@ -59,33 +60,33 @@ class SampleAnnoApi(val context: AppEntContext) {
     fun inputMapInt(items:Map<String,Int>): Notice<String> {
         val sortedPairs = items.keys.toList().sortedBy{ k:String -> k }.map{ key -> Pair(key, items[key]) }
         val delimited = sortedPairs.fold("", { acc, curr -> acc + "," + curr.first + "=" + curr.second } )
-        return success("ok", msg = delimited)
+        return Success("ok", msg = delimited)
     }
 
 
     @ApiAction(desc = "accepts an encrypted int that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
     fun inputDecInt(id: EncInt): Notice<String> {
-        return success("ok", msg ="decrypted int : " + id.value)
+        return Success("ok", msg ="decrypted int : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted long that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
     fun inputDecLong(id: EncLong): Notice<String> {
-        return success("ok", msg ="decrypted long : " + id.value)
+        return Success("ok", msg ="decrypted long : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted double that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
     fun inputDecDouble(id: EncDouble): Notice<String>
     {
-        return success("ok", msg = "decrypted double : " + id.value)
+        return Success("ok", msg = "decrypted double : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted string that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
     fun inputDecString(id: EncString): Notice<String>
     {
-        return success("ok", msg = "decrypted string : " + id.value)
+        return Success("ok", msg = "decrypted string : " + id.value)
     }
 
 

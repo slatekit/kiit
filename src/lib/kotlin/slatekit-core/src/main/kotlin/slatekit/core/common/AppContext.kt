@@ -69,6 +69,9 @@ data class AppContext(
         fun exit(): AppContext = err(EXIT.code)
 
         @JvmStatic
+        val empty: AppContext = err(HELP.code)
+
+        @JvmStatic
         fun err(code: Int, msg: String? = null): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)

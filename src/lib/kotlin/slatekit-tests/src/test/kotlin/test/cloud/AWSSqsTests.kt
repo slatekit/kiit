@@ -70,7 +70,7 @@ class AwsSqsTests {
     }
 
 
-    fun ensureQueue(queue: CloudQueueBase, expectedContent:String):Unit {
+    fun ensureQueue(queue: CloudQueueBase<String>, expectedContent:String):Unit {
 
         // Get text
         val result1 = queue.next()

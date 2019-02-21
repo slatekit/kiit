@@ -19,9 +19,10 @@ import slatekit.apis.security.AllProtocols
 import slatekit.apis.security.CliProtocol
 import slatekit.common.info.Credentials
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.requests.toResponse
+import slatekit.common.toResponse
+import slatekit.results.StatusCodes
+import slatekit.results.Success
+import slatekit.results.builders.Notices
 import test.setup.UserApi
 
 /**
@@ -42,7 +43,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("protocolAny", msg="1 abc").toResponse()
+                response = Success("protocolAny", msg="1 abc").toResponse()
         )
     }
 
@@ -56,7 +57,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("protocolCLI", msg="1 abc").toResponse()
+                response = Success("protocolCLI", msg="1 abc").toResponse()
         )
     }
 
@@ -70,7 +71,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("protocolParent", msg="1 abc").toResponse()
+                response = Success("protocolParent", msg="1 abc").toResponse()
         )
     }
 
@@ -84,7 +85,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )).copy(source = "web"),
-                response = notFound<String>(msg = "app.users.protocolWeb not found").toResponse()
+                response = Notices.errored<String>("app.users.protocolWeb not found", StatusCodes.NOT_FOUND).toResponse()
         )
     }
 }

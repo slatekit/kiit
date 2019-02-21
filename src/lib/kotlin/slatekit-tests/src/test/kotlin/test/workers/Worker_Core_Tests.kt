@@ -3,9 +3,9 @@ package test.workers
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.TODO
-import slatekit.common.Success
 import slatekit.common.queues.QueueSourceDefault
 import slatekit.common.Status
+import slatekit.results.Success
 import slatekit.workers.Job
 import test.setup.MyWorker
 
@@ -45,7 +45,7 @@ class Worker_Core_Tests {
 
     @Test
     fun can_use_Queue() {
-        val queue = QueueSourceDefault( converter = { item -> item.toString().toInt() })
+        val queue = QueueSourceDefault<String>( converter = { item -> item.toString().toInt() })
         queue.send("101")
         queue.send("201")
         queue.send("301")

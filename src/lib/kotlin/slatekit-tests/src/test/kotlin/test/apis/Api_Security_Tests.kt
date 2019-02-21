@@ -18,9 +18,9 @@ import slatekit.apis.core.Api
 import slatekit.apis.security.AllProtocols
 import slatekit.common.info.Credentials
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.requests.toResponse
+import slatekit.common.toResponse
+import slatekit.results.Success
+import slatekit.results.builders.Notices
 import test.setup.UserApi
 
 /**
@@ -41,7 +41,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesAny", msg="1 abc").toResponse()
+                response = Success("rolesAny", msg="1 abc").toResponse()
         )
 
         ensure(
@@ -52,7 +52,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesAny", msg="1 abc").toResponse()
+                response = Success("rolesAny", msg="1 abc").toResponse()
         )
 
         ensure(
@@ -63,7 +63,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<Any>("unauthorized").toResponse()
+                response = Notices.denied<Any>("unauthorized").toResponse()
         )
     }
 
@@ -77,7 +77,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
+                response = Notices.denied<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
         )
     }
 
@@ -91,7 +91,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesSpecific", msg="1 abc").toResponse()
+                response = Success("rolesSpecific", msg="1 abc").toResponse()
         )
     }
 
@@ -105,7 +105,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>("unauthorized").toResponse()
+                response = Notices.denied<String>("unauthorized").toResponse()
         )
     }
 
@@ -119,7 +119,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesParent", msg="1 abc").toResponse()
+                response = Success("rolesParent", msg="1 abc").toResponse()
         )
     }
 
@@ -133,7 +133,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>("unauthorized").toResponse()
+                response = Notices.denied<String>("unauthorized").toResponse()
         )
     }
 
@@ -150,7 +150,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesAny", msg="1 abc").toResponse()
+                response = Success("rolesAny", msg="1 abc").toResponse()
         )
     }
 
@@ -164,7 +164,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
+                response = Notices.denied<String>(msg = "Unable to authorize, authorization provider not set").toResponse()
         )
     }
 
@@ -180,7 +180,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesSpecific", msg="1 abc").toResponse()
+                response = Success("rolesSpecific", msg="1 abc").toResponse()
         )
     }
 
@@ -196,7 +196,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>("unauthorized").toResponse()
+                response = Notices.denied<String>("unauthorized").toResponse()
         )
     }
 
@@ -212,7 +212,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = success("rolesParent", msg="1 abc").toResponse()
+                response = Success("rolesParent", msg="1 abc").toResponse()
         )
     }
 
@@ -228,7 +228,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
-                response = unAuthorized<String>("unauthorized").toResponse()
+                response = Notices.denied<String>("unauthorized").toResponse()
         )
     }
 }

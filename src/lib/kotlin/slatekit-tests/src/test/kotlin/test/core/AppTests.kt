@@ -15,11 +15,10 @@ import org.junit.Test
 import slatekit.common.*
 import slatekit.common.args.Arg
 import slatekit.common.args.ArgsSchema
-import slatekit.common.results.ResultCode.BAD_REQUEST
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.HELP
 import slatekit.core.app.App
 import slatekit.core.app.AppRunner
+import slatekit.core.common.AppContext
+import slatekit.results.StatusCodes
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
@@ -77,7 +76,7 @@ class AppTests  {
 
   @Test fun can_run_process_with_args_defined_and_required_and_missing() {
     val res = AppRunner.run(AppArgsSchemaBasic1Required( arrayOf<String>()))
-    assertResultBasic(res, BAD_REQUEST, "invalid arguments supplied: Missing : env")
+    assertResultBasic(res, StatusCodes.BAD_REQUEST.code, "invalid arguments supplied: Missing : env")
   }
 
 
@@ -143,7 +142,7 @@ class AppTests  {
 
   class AppConfigTest(
                        args:Array<String>?
-                     )  : App(null, args) {
+                     )  : App(AppContext.empty) {
 
     override fun execute():Try<Any> {
       val data = ConfigValueTest(
@@ -159,7 +158,7 @@ class AppTests  {
 
   class AppErrorTest(
                       args:Array<String>?
-                    )  : App(null, args) {
+                    )  : App(AppContext.empty) {
 
     override fun execute():Try<Any> {
       if(ctx.cfg != null ) {
@@ -206,7 +205,7 @@ class AppTests  {
   /**
    * Case: No schema
    */
-  class AppArgsSchemaNull(args:Array<String>?)  : App(null, args) {
+  class AppArgsSchemaNull(args:Array<String>?)  : App(AppContext.empty) {
 
     override fun execute():Try<Any> = Success("ok", msg ="schema null")
   }
@@ -219,7 +218,7 @@ class AppTests  {
   class AppArgsSchemaEmpty(
                             args  : Array<String>?,
                             schema: ArgsSchema? = ArgsSchema(listOf<Arg>())
-                          )  : App(null, args, schema) {
+                          )  : App(AppContext.empty) {
 
     override fun execute():Try<Any> = Success("ok", msg ="schema empty")
   }
@@ -237,7 +236,7 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
   )
-    : App(null, args, schema) {
+    : App(AppContext.empty) {
 
     override fun execute():Try<Any> = Success("ok", msg ="schema basic")
   }
@@ -255,7 +254,7 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , false, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", false, "info" , "info" , "debug|info|warn|error")
   )
-    : App(null, args, schema) {
+    : App(AppContext.empty) {
 
     override fun execute():Try<Any> = Success("ok", msg ="schema args 1")
   }
@@ -269,7 +268,7 @@ class AppTests  {
                   .text("region"     , "the region linked to app" , true, "us"   , "us"   , "us|europe|india|*")
                   .text("log.level"  , "the log level for logging", true, "info" , "info" , "debug|info|warn|error")
   )
-    : App(null, args, schema) {
+    : App(AppContext.empty) {
 
     override fun execute():Try<Any> = Success("ok")
   }

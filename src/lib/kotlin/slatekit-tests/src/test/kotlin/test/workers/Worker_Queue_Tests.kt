@@ -13,7 +13,7 @@ class Worker_Queue_Tests {
     @Test
     fun can_load_queues_basic() {
 
-        val infos = (0..2).map { it -> QueueInfo(it.toString(), Priority.Low, QueueSourceDefault()) }
+        val infos = (0..2).map { it -> QueueInfo(it.toString(), Priority.Low, QueueSourceDefault<String>()) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
         Assert.assertEquals(queues.get(0)?.name, "0")
@@ -28,7 +28,7 @@ class Worker_Queue_Tests {
     fun can_load_queues_prioritized() {
 
         val infos =
-            (0..2).map { it -> QueueInfo(it.toString(), Priority.convert(it + 1) as Priority, QueueSourceDefault()) }
+            (0..2).map { it -> QueueInfo(it.toString(), Priority.convert(it + 1) as Priority, QueueSourceDefault<String>()) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
         Assert.assertEquals(6, queues.prioritizedQueues.size)
