@@ -13,11 +13,11 @@
 
 package slatekit.integration.mods
 
-import slatekit.common.Failure
-import slatekit.common.ResultEx
-import slatekit.common.Success
 import slatekit.common.newline
 import slatekit.core.common.AppContext
+import slatekit.results.Failure
+import slatekit.results.Success
+import slatekit.results.Try
 
 abstract class Module(
     val appCtx: AppContext,
@@ -35,7 +35,7 @@ abstract class Module(
     /**
      * install this module
      */
-    open fun install(): ResultEx<String> {
+    open fun install(): Try<String> {
         return if (info.isDbDependent) {
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.install(it, info.version, "", "") }
@@ -52,7 +52,7 @@ abstract class Module(
     /**
      * install this module
      */
-    open fun uninstall(): ResultEx<String> {
+    open fun uninstall(): Try<String> {
         return if (info.isDbDependent) {
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.uinstall(it) }

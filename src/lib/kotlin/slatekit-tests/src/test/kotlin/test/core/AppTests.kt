@@ -12,38 +12,39 @@
 package slate.test
 
 import org.junit.Test
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.common.*
 import slatekit.common.args.Arg
 import slatekit.common.args.ArgsSchema
-import slatekit.common.getOrElse
 import slatekit.common.results.ResultCode.BAD_REQUEST
 import slatekit.common.results.ResultCode.EXIT
 import slatekit.common.results.ResultCode.HELP
 import slatekit.core.app.App
 import slatekit.core.app.AppRunner
+import slatekit.results.Success
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 
 class AppTests  {
 
 
   @Test fun can_request_help() {
-    checkHelp(arrayOf("help", "-help", "--help", "/help", "?"), HELP, "help")
+    checkHelp(arrayOf("help", "-help", "--help", "/help", "?"), HELP.code, "help")
   }
 
 
   @Test fun can_request_about() {
-    checkHelp(arrayOf("about", "-about", "--about", "/about", "info"), HELP, "help")
+    checkHelp(arrayOf("about", "-about", "--about", "/about", "info"), HELP.code, "help")
   }
 
 
   @Test fun can_request_version() {
-    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"),HELP,  "help")
+    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"),HELP.code,  "help")
   }
 
 
   @Test fun can_request_exit() {
-    checkHelp(arrayOf("exit", "-exit", "--exit", "/exit", "exit"),EXIT, "exit")
+    checkHelp(arrayOf("exit", "-exit", "--exit", "/exit", "exit"),EXIT.code, "exit")
   }
 
 
@@ -100,25 +101,25 @@ class AppTests  {
 
     @Test fun can_select_and_use_env_local() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='loc'")))
-      val res2 = res as ResultEx<ConfigValueTest>
+      val res2 = res as Try<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("loc", "env loc", 1, 20.1), 200, "success")
     }
 
     @Test fun can_select_and_use_env_dev() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='dev'")))
-      val res2 = res as ResultEx<ConfigValueTest>
+      val res2 = res as Try<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("dev", "env dev", 2, 20.2), 200, "success")
     }
 
     @Test fun can_select_and_use_env_qa1() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='qa1'")))
-      val res2 = res as ResultEx<ConfigValueTest>
+      val res2 = res as Try<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("qa1", "env qa1", 3, 20.3), 200, "success")
     }
 
     @Test fun can_select_and_use_env_qa2() {
       val res = AppRunner.run(AppConfigTest(arrayOf("-env='qa2'")))
-      val res2 = res as ResultEx<ConfigValueTest>
+      val res2 = res as Try<ConfigValueTest>
       assertConfigResult(res2, ConfigValueTest("qa2", "env qa2", 4, 20.4), 200, "success")
     }
   
@@ -129,7 +130,7 @@ class AppTests  {
     }
 
 
-  fun assertConfigResult(res:ResultEx<ConfigValueTest>,
+  fun assertConfigResult(res:Try<ConfigValueTest>,
                          expected:ConfigValueTest, code:Int, msg:String):Unit {
     assert( res.code == code)
     assert( res.msg == msg)
@@ -144,12 +145,12 @@ class AppTests  {
                        args:Array<String>?
                      )  : App(null, args) {
 
-    override fun execute():ResultEx<Any> {
+    override fun execute():Try<Any> {
       val data = ConfigValueTest(
         ctx.env.name,
-        conf.getString("test_stri"),
-        conf.getInt("test_int"),
-        conf.getDouble("test_doub")
+        ctx.cfg.getString("test_stri"),
+        ctx.cfg.getInt("test_int"),
+        ctx.cfg.getDouble("test_doub")
       )
       return Success(data)
     }
@@ -160,8 +161,8 @@ class AppTests  {
                       args:Array<String>?
                     )  : App(null, args) {
 
-    override fun execute():ResultEx<Any> {
-      if(conf != null ) {
+    override fun execute():Try<Any> {
+      if(ctx.cfg != null ) {
         throw Exception("error test")
       }
       return Success("ok")
@@ -170,7 +171,7 @@ class AppTests  {
 
 
 
-  fun runApp( call: (Array<String>?) -> ResultEx<Any>)   {
+  fun runApp( call: (Array<String>?) -> Try<Any>)   {
     call(null)
 
     call(arrayOf())
@@ -180,7 +181,7 @@ class AppTests  {
 
 
 
-  fun assertResult(res:ResultEx<Any>, value:String, code:Int, msg:String) {
+  fun assertResult(res:Try<Any>, value:String, code:Int, msg:String) {
     assert( res.getOrElse { null } == value)
     assert( res.code == code)
     assert( res.msg == msg)
@@ -196,7 +197,7 @@ class AppTests  {
 
 
 
-  fun assertResultBasic(res:ResultEx<Any>, code:Int, msg:String) {
+  fun assertResultBasic(res:Try<Any>, code:Int, msg:String) {
     assert( res.code == code)
     assert( res.msg == msg)
   }
@@ -207,7 +208,7 @@ class AppTests  {
    */
   class AppArgsSchemaNull(args:Array<String>?)  : App(null, args) {
 
-    override fun execute():ResultEx<Any> = Success("ok", msg ="schema null")
+    override fun execute():Try<Any> = Success("ok", msg ="schema null")
   }
 
 
@@ -220,7 +221,7 @@ class AppTests  {
                             schema: ArgsSchema? = ArgsSchema(listOf<Arg>())
                           )  : App(null, args, schema) {
 
-    override fun execute():ResultEx<Any> = Success("ok", msg ="schema empty")
+    override fun execute():Try<Any> = Success("ok", msg ="schema empty")
   }
 
 
@@ -238,7 +239,7 @@ class AppTests  {
   )
     : App(null, args, schema) {
 
-    override fun execute():ResultEx<Any> = Success("ok", msg ="schema basic")
+    override fun execute():Try<Any> = Success("ok", msg ="schema basic")
   }
 
 
@@ -256,7 +257,7 @@ class AppTests  {
   )
     : App(null, args, schema) {
 
-    override fun execute():ResultEx<Any> = Success("ok", msg ="schema args 1")
+    override fun execute():Try<Any> = Success("ok", msg ="schema args 1")
   }
 
 
@@ -270,6 +271,6 @@ class AppTests  {
   )
     : App(null, args, schema) {
 
-    override fun execute():ResultEx<Any> = Success("ok")
+    override fun execute():Try<Any> = Success("ok")
   }
 }

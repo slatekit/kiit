@@ -15,16 +15,16 @@ import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
+import slatekit.common.HELP
 import slatekit.common.info.ApiKey
 import slatekit.common.info.Credentials
 import slatekit.common.args.Args
-import slatekit.common.getOrElse
-import slatekit.common.results.ResultCode.HELP
 import slatekit.core.cli.CliCommand
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
 import slatekit.integration.common.AppEntContext
+import slatekit.results.getOrElse
 
 
 class ShellTests  {
@@ -48,7 +48,7 @@ class ShellTests  {
       val shell = getCli()
       val result = shell.onCommandExecute("?")
       assert( result.getOrElse { null } == null )
-      assert( result.code == HELP )
+      assert( result.code == HELP.code )
       assert( result.msg  == "help")
     }
 
@@ -57,7 +57,7 @@ class ShellTests  {
       val shell = getCli()
       val result = shell.onCommandExecute("app ?")
       assert( result.getOrElse { null } == null )
-      assert( result.code == HELP )
+      assert( result.code == HELP.code )
       assert( result.msg  == "area ?")
     }
 
@@ -66,7 +66,7 @@ class ShellTests  {
       val shell = getCli()
       val result = shell.onCommandExecute("app.info ?")
       assert( result.getOrElse { null } == null )
-      assert( result.code == HELP )
+      assert( result.code == HELP.code )
       assert(result.msg == "area.api ?")
     }
 
@@ -75,7 +75,7 @@ class ShellTests  {
       val shell = getCli()
       val result = shell.onCommandExecute("app.version.host ?")
       assert( result.getOrElse { null } == null )
-      assert( result.code == HELP )
+      assert( result.code == HELP.code )
       assert( result.msg  == "area.api.action ?")
     }
   

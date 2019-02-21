@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
 fun testWorkers():Unit {
 
     // 1. Queues
-    val queues = (1..4).mapIndexed{ index, ndx -> QueueSourceDefault("q" + index.toString()) }
+    val queues = (1..4).mapIndexed{ index, ndx -> QueueSourceDefault<String>("q" + index.toString()) }
 
     // Populate each queue
     queues.forEachIndexed { index, queue ->

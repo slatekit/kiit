@@ -18,8 +18,6 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
 import slatekit.common.info.ApiLogin
-import slatekit.common.Failure
-import slatekit.common.ResultEx
 import slatekit.common.Uris
 import slatekit.core.cloud.CloudQueueBase
 import slatekit.results.Try

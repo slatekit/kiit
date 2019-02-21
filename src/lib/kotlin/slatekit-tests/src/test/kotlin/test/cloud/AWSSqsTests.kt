@@ -1,11 +1,7 @@
 package test.cloud
 
-import org.junit.Test
-import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.DateTime
-import slatekit.common.Uris
-import slatekit.core.cloud.CloudFilesBase
 import slatekit.core.cloud.CloudQueueBase
 import java.io.File
 
@@ -19,7 +15,7 @@ class AwsSqsTests {
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue<String>("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         queue.init()
 
@@ -43,7 +39,7 @@ class AwsSqsTests {
     fun can_test_update() {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue<String>("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         queue.init()
 
@@ -59,7 +55,7 @@ class AwsSqsTests {
         queue.send(contentBatch3)
 
         // Get text
-        val results = queue.nextBatch(2)
+        val results = queue.next(2)
         assert(results.size == 2)
 
         val item1 = queue.toString(results[0])

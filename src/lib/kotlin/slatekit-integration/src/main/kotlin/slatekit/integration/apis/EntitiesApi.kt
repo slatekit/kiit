@@ -19,15 +19,14 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiBase
-import slatekit.common.ResultEx
-import slatekit.common.ResultMsg
 import slatekit.common.db.DbCon
-import slatekit.common.map
 import slatekit.common.newline
 import slatekit.core.app.AppBuilder
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Notice
+import slatekit.results.Try
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
@@ -35,32 +34,32 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 
     @ApiAction(desc = "installs the model to the database shard")
-    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): ResultEx<String> {
+    fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Try<String> {
         return service().install(name, version, dbKey, dbShard)
     }
 
     @ApiAction(desc = "installs all the models in the default database")
-    fun installAll(): ResultEx<List<String>> {
+    fun installAll(): Try<List<String>> {
         return service().installAll()
     }
 
     @ApiAction(desc = "deletes data in the table supplied")
-    fun delete(name: String): ResultEx<String> {
+    fun delete(name: String): Try<String> {
         return service().delete(name)
     }
 
     @ApiAction(desc = "deletes data in all the tables")
-    fun deleteAll(): ResultEx<List<String>> {
+    fun deleteAll(): Try<List<String>> {
         return service().deleteAll()
     }
 
     @ApiAction(desc = "drops the table supplied")
-    fun drop(name: String): ResultEx<String> {
+    fun drop(name: String): Try<String> {
         return service().drop(name)
     }
 
     @ApiAction(desc = "dropss the table")
-    fun dropAll(): ResultEx<List<String>> {
+    fun dropAll(): Try<List<String>> {
         return service().dropAll()
     }
 
@@ -75,32 +74,32 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     }
 
     @ApiAction(desc = "generates sql install files for the model")
-    fun generateSql(name: String, version: String = ""): ResultEx<String> {
+    fun generateSql(name: String, version: String = ""): Try<String> {
         return service().generateSql(name, version).map { it.joinToString(newline) }
     }
 
     @ApiAction(desc = "generates sql install files for all models")
-    fun generateSqlFiles(): ResultEx<List<String>> {
+    fun generateSqlFiles(): Try<List<String>> {
         return service().generateSqlFiles()
     }
 
     @ApiAction(desc = "generates a single sql install file for all models")
-    fun generateSqlAllInstall(): ResultEx<String> {
+    fun generateSqlAllInstall(): Try<String> {
         return service().generateSqlAllInstall()
     }
 
     @ApiAction(desc = "generates a single sql install file for all models")
-    fun generateSqlAllUninstall(): ResultEx<String> {
+    fun generateSqlAllUninstall(): Try<String> {
         return service().generateSqlAllUninstall()
     }
 
     @ApiAction(desc = "gets the default db connection")
-    fun connection(): ResultMsg<DbCon> {
+    fun connection(): Notice<DbCon> {
         return service().connection()
     }
 
     @ApiAction(desc = "gets the default db connection")
-    fun connectionByName(name: String): ResultMsg<DbCon> {
+    fun connectionByName(name: String): Notice<DbCon> {
         return service().connectionByName(name)
     }
 

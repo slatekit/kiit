@@ -18,7 +18,7 @@ open class SampleErrorsApi : ApiWithMiddleware {
      * Error-handling using the Result<T> object to model
      * successes and failures for all scenarios
      */
-    fun parseNumberWithResults(text:String): ResultMsg<Int> {
+    fun parseNumberWithResults(text:String): Notice<Int> {
 
         return if(text.isNullOrEmpty()) {
             badRequest("You must supply a non-empty string")
@@ -46,7 +46,7 @@ open class SampleErrorsApi : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any>{
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any>{
         return unexpectedError(Exception("unexpected error in api", ex))
     }
 }

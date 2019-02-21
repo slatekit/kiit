@@ -3,31 +3,32 @@ package slatekit.apis.helpers
 import slatekit.apis.ApiConstants
 import slatekit.apis.security.Protocols
 import slatekit.common.requests.Request
-import slatekit.common.ResultMsg
 import slatekit.common.args.ArgsFuncs
-import slatekit.common.results.ResultFuncs
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 object ApiUtils {
 
-    fun isHelp(req: Request): ResultMsg<String> {
+    fun isHelp(req: Request): Notice<String> {
 
         // Case 3a: Help ?
         return if (ArgsFuncs.isHelp(req.parts, 0)) {
-            ResultFuncs.help(msg = "?")
+            Success("?")
         }
         // Case 3b: Help on area ?
         else if (ArgsFuncs.isHelp(req.parts, 1)) {
-            ResultFuncs.help(msg = "area ?")
+            Success("area ?")
         }
         // Case 3c: Help on api ?
         else if (ArgsFuncs.isHelp(req.parts, 2)) {
-            ResultFuncs.help(msg = "area.api ?")
+            Success("area.api ?")
         }
         // Case 3d: Help on action ?
         else if (ArgsFuncs.isHelp(req.parts, 3)) {
-            ResultFuncs.help(msg = "area.api.action ?")
+            Success("area.api.action ?")
         } else {
-            ResultFuncs.failure("Unknown help option")
+            Failure("Unknown help option")
         }
     }
 

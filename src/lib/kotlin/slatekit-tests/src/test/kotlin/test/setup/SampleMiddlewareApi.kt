@@ -34,7 +34,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): ResultMsg<Any>  {
+    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Notice<Any>  {
         return if(req.action.startsWith("hi")) {
             badRequest<Boolean>("filtered out")
         } else {
@@ -43,7 +43,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
         return Success("")
     }
 

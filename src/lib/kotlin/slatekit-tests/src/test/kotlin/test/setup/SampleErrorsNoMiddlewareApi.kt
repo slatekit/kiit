@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.common.ResultMsg
+import slatekit.common.Notice
 import slatekit.common.results.ResultFuncs.badRequest
 import slatekit.common.results.ResultFuncs.failure
 import slatekit.common.results.ResultFuncs.success
@@ -13,7 +13,7 @@ open class SampleErrorsNoMiddlewareApi  {
      * Error-handling using the Result<T> object to model
      * successes and failures for all scenarios
      */
-    fun parseNumberWithResults(text:String): ResultMsg<Int> {
+    fun parseNumberWithResults(text:String): Notice<Int> {
 
         return if(text.isNullOrEmpty()) {
             badRequest("You must supply a non-empty string")

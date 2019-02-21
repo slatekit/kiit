@@ -2,10 +2,11 @@ package slatekit.apis.core
 
 import slatekit.apis.ApiRef
 import slatekit.common.Context
-import slatekit.common.ResultMsg
 import slatekit.common.naming.Namer
-import slatekit.common.results.ResultFuncs
 import slatekit.meta.Reflector
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.builders.Notices
 import kotlin.reflect.full.primaryConstructor
 
 /**
@@ -100,18 +101,18 @@ data class Routes(
      * @param action
      * @return
      */
-    fun api(area: String, name: String, action: String, ctx:Context): ResultMsg<ApiRef> {
-        if (area.isEmpty()) return ResultFuncs.badRequest("area not supplied")
-        if (name.isEmpty()) return ResultFuncs.badRequest("api not supplied")
-        if (action.isEmpty()) return ResultFuncs.badRequest("action not supplied")
-        if (!contains(area, name, action)) return ResultFuncs.badRequest("api route $area $name $action not found")
+    fun api(area: String, name: String, action: String, ctx:Context): Notice<ApiRef> {
+        if (area.isEmpty()) return Notices.invalid("area not supplied")
+        if (name.isEmpty()) return Notices.invalid("api not supplied")
+        if (action.isEmpty()) return Notices.invalid("action not supplied")
+        if (!contains(area, name, action)) return Notices.invalid("api route $area $name $action not found")
 
         val api = api(area, name)!!
         val act = api.actions[action]!!
         val instance = instance(area, name, ctx)
         return instance?.let { inst ->
-            ResultFuncs.success(ApiRef(api, act, inst))
-        } ?: ResultFuncs.badRequest("api route $area $name $action not found")
+            Success(ApiRef(api, act, inst))
+        } ?: Notices.invalid("api route $area $name $action not found")
     }
 
     /**

@@ -21,8 +21,10 @@ import slatekit.common.auth.AuthFuncs
 import slatekit.common.auth.Roles
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.unAuthorized
 import slatekit.meta.Deserializer
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.builders.Notices
 
 object ApiHelper {
 
@@ -78,7 +80,7 @@ object ApiHelper {
      *  Checks the action and api to ensure the current request (cmd) is authorizated to
      *  make the call
      */
-    fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): ResultMsg<Boolean> {
+    fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): Notice<Boolean> {
         val noAuth = auth == null // || apiRef.api.auth.isNullOrEmpty()
         val isActionNotAuthed = isActionNotAuthed(apiRef.action.roles)
         val isApiNotAuthed = isApiNotAuthed(apiRef.action.roles, apiRef.api.roles)
@@ -93,11 +95,11 @@ object ApiHelper {
         }
         // CASE 3: No auth and action requires roles!
         else if (noAuth) {
-            unAuthorized(msg = "Unable to authorize, authorization provider not set")
+            Notices.denied("Unable to authorize, authorization provider not set")
         } else {
             // auth-mode, action roles, api roles
             auth?.isAuthorized(cmd, apiRef.api.auth, apiRef.action.roles, apiRef.api.roles)
-                    ?: unAuthorized(msg = "Unable to authorize, authorization provider not set")
+                    ?: Notices.denied("Unable to authorize, authorization provider not set")
         }
     }
 

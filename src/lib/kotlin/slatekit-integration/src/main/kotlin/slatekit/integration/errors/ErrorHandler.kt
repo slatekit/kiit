@@ -5,6 +5,8 @@ import slatekit.apis.middleware.Error
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Failure
+import slatekit.results.Try
 
 class ErrorHandler(val ctx: AppEntContext, val queue: ErrorItemQueue, val enableEncryption: Boolean) : Error {
 
@@ -18,7 +20,7 @@ class ErrorHandler(val ctx: AppEntContext, val queue: ErrorItemQueue, val enable
      * @param args : Additional arguments supplied by the source
      */
     @Ignore
-    override fun onError(ctx: Context, req: Request, target: Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+    override fun onError(ctx: Context, req: Request, target: Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
 
         return try {
             // Put the request into the

@@ -21,10 +21,11 @@ import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.content.Doc
 import slatekit.common.queues.QueueSource
+import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class QueueApi(val queue: QueueSource, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
+class QueueApi(val queue: QueueSource<String>, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
 
     @ApiAction(desc = "close the queue")
     fun close() {
@@ -47,7 +48,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
 
     @ApiAction(desc = "get the next set of items in the queue")
     fun nextBatch(size: Int = 10, complete: Boolean): List<Any> {
-        val items = queue.nextBatch(size)
+        val items = queue.next(size)
         items?.let { all ->
             for (item in items) {
                 if (complete) {
@@ -59,7 +60,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
     fun getContent(msg: Any?): String {
-        return (queue as slatekit.common.queues.QueueSourceMsg).getMessageBody(msg)
+        return (queue as slatekit.common.queues.QueueSourceMsg).getMessageBody(msg?.toString() ?: "")
     }
 
     @ApiAction(desc = "gets next item and saves it to file")
@@ -73,7 +74,7 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
 
     @ApiAction(desc = "gets next set of items and saves them to files")
     fun nextBatchToFiles(size: Int = 10, complete: Boolean, fileNameLocal: String): List<String?> {
-        val items = queue.nextBatch(size)
+        val items = queue.next(size)
         val result = items?.let { all ->
             all.mapIndexed { index, any -> writeToFile(all[index], fileNameLocal, index, { m -> getContent(m) }) }
         } ?: listOf("No items available")
@@ -81,17 +82,17 @@ class QueueApi(val queue: QueueSource, override val context: slatekit.core.commo
     }
 
     @ApiAction(desc = "sends a message to the queue")
-    fun send(msg: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
+    fun send(msg: String, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.send(msg, tagName, tagValue)
     }
 
     @ApiAction(desc = "sends a message to queue using content from file")
-    fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
+    fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.sendFromFile(uri, tagName, tagValue)
     }
 
     @ApiAction(desc = "sends a message to queue using content from file")
-    fun sendFromDoc(doc: Doc, tagName: String = "", tagValue: String = ""): slatekit.common.ResultEx<String> {
+    fun sendFromDoc(doc: Doc, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.send(doc.content, tagName, tagValue)
     }
 }

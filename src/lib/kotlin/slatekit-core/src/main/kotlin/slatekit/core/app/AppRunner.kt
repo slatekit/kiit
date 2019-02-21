@@ -201,7 +201,7 @@ object AppRunner {
                     StatusCodes.ERRORED.code -> validate(args, schema)
                     EXIT.code -> Failure("exit", "exit", helpCheck.code)
                     HELP.code -> Failure("help", "help", helpCheck.code)
-                    else -> Failure("exit", helpCheck.code, helpCheck.msg)
+                    else      -> Failure("exit", helpCheck.msg, helpCheck.code)
                 }
             }
         }

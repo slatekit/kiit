@@ -19,8 +19,8 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
-import slatekit.common.ResultMsg
 import slatekit.common.Vars
+import slatekit.results.Notice
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
         auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
@@ -35,7 +35,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      * @return
      */
     @ApiAction(desc = "send an email")
-    fun send(to: String, subject: String, body: String, html: Boolean): ResultMsg<Boolean> {
+    fun send(to: String, subject: String, body: String, html: Boolean): Notice<Boolean> {
         val content = slatekit.common.Uris.readText("user://blendlife-kotlin/templates/template_vacation.html")!!
         return this.svc.send(to, subject, content, html)
     }
@@ -49,7 +49,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      * @return
      */
     @ApiAction(desc = "send an email")
-    fun sendFile(to: String, subject: String, filePath: String, html: Boolean): ResultMsg<Boolean> {
+    fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Notice<Boolean> {
         val content = slatekit.common.Uris.readText(filePath)!!
         return this.svc.send(to, subject, content, html)
     }
@@ -64,7 +64,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an email using a template")
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): ResultMsg<Boolean> {
+    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): Notice<Boolean> {
         return this.svc.sendUsingTemplate(name, to, subject, html, vars)
     }
 }

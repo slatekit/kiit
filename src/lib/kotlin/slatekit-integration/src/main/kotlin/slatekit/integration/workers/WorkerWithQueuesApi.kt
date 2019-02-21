@@ -4,6 +4,8 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Requests
 import slatekit.common.*
+import slatekit.results.Failure
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.workers.*
 
@@ -30,8 +32,8 @@ open class WorkerWithQueuesApi(
         // this will follow the same pipeline/flow as the http requests now.
         val result = container.callAsResult(req)
         val resultFinal:Try<Any> = when(result) {
-            is Success -> slatekit.results.Success(result.data)
-            is Failure -> slatekit.results.Failure(result.err)
+            is Success -> slatekit.results.Success(result.value)
+            is Failure -> slatekit.results.Failure(result.error)
         }
         return resultFinal
     }

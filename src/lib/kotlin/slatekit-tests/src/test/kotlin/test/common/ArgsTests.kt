@@ -18,12 +18,10 @@ package test.common
  */
 
 import org.junit.Test
-import slatekit.common.Result
-import slatekit.common.ResultEx
-import slatekit.common.ResultMsg
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
-import slatekit.common.getOrElse
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 
 class ArgsTests {
@@ -214,7 +212,7 @@ class ArgsTests {
     }
 
 
-    private fun ensure(result: ResultEx<Args>, success:Boolean, size:Int,
+    private fun ensure(result: Try<Args>, success:Boolean, size:Int,
                        expectedNamed:List<Pair<String,String>>,
                        expectedMeta:List<Pair<String,String>>? = null,
                        expectedSys:List<Pair<String,String>>? = null,

@@ -28,8 +28,6 @@ import slatekit.common.info.Status
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.HELP
 import slatekit.core.app.AppBuilder
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
@@ -75,9 +73,9 @@ data class AppEntContext(
 
     companion object {
 
-        fun help(): AppEntContext = err(HELP)
+        fun help(): AppEntContext = err(HELP.code)
 
-        fun exit(): AppEntContext = err(EXIT)
+        fun exit(): AppEntContext = err(EXIT.code)
 
 
 

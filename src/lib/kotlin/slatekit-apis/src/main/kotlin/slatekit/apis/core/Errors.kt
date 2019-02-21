@@ -15,10 +15,9 @@ package slatekit.apis.core
 import slatekit.apis.ApiRef
 import slatekit.common.Context
 import slatekit.common.requests.Request
-import slatekit.common.ResultEx
 import slatekit.common.log.Logger
-import slatekit.common.results.ResultFuncs
-import slatekit.common.toResultEx
+import slatekit.results.Try
+import slatekit.results.builders.Tries
 
 class Errors(val logger: Logger) {
 
@@ -29,16 +28,16 @@ class Errors(val logger: Logger) {
             apiRef: ApiRef?,
             req: Request,
             ex: Exception
-    ): ResultEx<Any> {
+    ): Try<Any> {
         // OPTION 1: Api level
         return if (apiRef != null && apiRef.instance is slatekit.apis.middleware.Error) {
             logger.debug("Handling error at api level")
-            apiRef.instance.onError(ctx, req, apiRef, this, ex, null).toResultEx()
+            apiRef.instance.onError(ctx, req, apiRef, this, ex, null).toTry()
         }
         // OPTION 2: GLOBAL Level custom handler
         else if (errs != null) {
             logger.debug("Handling error at global middleware")
-            errs.onError(ctx, req, req.path, this, ex, null).toResultEx()
+            errs.onError(ctx, req, req.path, this, ex, null).toTry()
         }
         // OPTION 3: GLOBAL Level default handler
         else {
@@ -55,8 +54,8 @@ class Errors(val logger: Logger) {
      * @param ex : the exception
      * @return
      */
-    fun handleErrorInternally(req: Request, ex: Exception): ResultEx<Any> {
+    fun handleErrorInternally(req: Request, ex: Exception): Try<Any> {
         val msg = "error executing : " + req.path + ", check inputs"
-        return ResultFuncs.unexpectedError(Exception(msg, ex))
+        return Tries.unexpected(Exception(msg, ex))
     }
 }

@@ -86,6 +86,6 @@ class Worker_Queue_Api_Tests {
 //        val result = worker.lastResult
 //        assert( result.success )
 //        assert( result.msg == "samples.types2.loadBasicTypes")
-//        assert( (result.getOrElse { null } as ResultEx<Any>).getOrElse { "" } == "user1@abc.com, true, 123, 2018-01-27T09:30:45-05:00[America/New_York]" )
+//        assert( (result.getOrElse { null } as Try<Any>).getOrElse { "" } == "user1@abc.com, true, 123, 2018-01-27T09:30:45-05:00[America/New_York]" )
     }
 }

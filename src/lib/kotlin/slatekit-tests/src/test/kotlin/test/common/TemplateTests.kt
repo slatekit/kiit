@@ -17,6 +17,8 @@ import slatekit.common.*
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.*
 import slatekit.common.templates.TemplateConstants.TypeText
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Created by kishorereddy on 6/3/17.
@@ -255,9 +257,9 @@ class TemplateTests {
     }
 
 
-    fun checkResult(subsResult: ResultEx<List<TemplatePart>>, expected:List<Pair<Short,String>>)  {
+    fun checkResult(subsResult: Try<List<TemplatePart>>, expected:List<Pair<Short,String>>)  {
         assert(subsResult.success)
-        val subs = (subsResult as Success).data
+        val subs = (subsResult as Success).value
         check(subs, expected)
     }
 

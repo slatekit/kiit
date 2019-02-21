@@ -20,6 +20,10 @@ import slatekit.common.*
 import slatekit.common.utils.ListMap
 import slatekit.integration.mods.Mod
 import slatekit.query.Query
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
@@ -28,7 +32,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     private var _items = ListMap<String, Module>()
 
     @ApiAction(desc = "sets up the db to support modules")
-    fun setupDb(): slatekit.common.ResultEx<Any> {
+    fun setupDb(): Try<Any> {
         return ctx.setup.install(slatekit.integration.mods.Mod::class.qualifiedName!!, "1", "", "")
     }
 
@@ -43,7 +47,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @ApiAction(desc = "installs all modules from initial setup")
-    fun install(): slatekit.common.ResultMsg<Any> {
+    fun install(): Notice<Any> {
         val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
@@ -59,13 +63,13 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @ApiAction(desc = "installs a specific module")
-    fun installByName(name: String): slatekit.common.ResultMsg<Any> {
-        return _items[name]?.let { installUpdate(it, false) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
+    fun installByName(name: String): Notice<Any> {
+        return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : " + name)
     }
 
     @ApiAction(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
-    fun forceInstallByName(name: String): slatekit.common.ResultMsg<Any> {
-        return _items[name]?.let { installUpdate(it, true) } ?: slatekit.common.results.ResultFuncs.failure("Unknown module : " + name)
+    fun forceInstallByName(name: String): Notice<Any> {
+        return _items[name]?.let { installUpdate(it, true) } ?: Failure("Unknown module : " + name)
     }
 
     @ApiAction(desc = "gets the names of the modules")
@@ -74,7 +78,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @ApiAction(desc = "gets the names of the modules")
-    fun uninstallAll(): ResultEx<String> {
+    fun uninstallAll(): Try<String> {
         val all = _items.all().map { it.info.name }
         val results = all.map { name -> uninstall(name) }
         val success = results.foldRight(true, { res, acc -> if (!res.success) false else acc })
@@ -84,12 +88,12 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @ApiAction(desc = "gets the names of the modules")
-    fun uninstall(name: String): ResultEx<String> {
-        val tablesResult = _items[name]?.let { it.uninstall() } ?: Failure("Unknown module : $name").toResultEx()
+    fun uninstall(name: String): Try<String> {
+        val tablesResult = _items[name]?.let { it.uninstall() } ?: Failure("Unknown module : $name").toTry()
         val moduleResult = tablesResult.map { ctx.service.deleteByField(Mod::name, name) }
         return when (moduleResult) {
             is Success -> Success("Removed module and tables for : $name")
-            is Failure -> Failure(moduleResult.err)
+            is Failure -> Failure(moduleResult.error)
         }
     }
 
@@ -106,7 +110,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @ApiAction(desc = "seeds all the modules")
-    fun seed(): slatekit.common.ResultMsg<Any> {
+    fun seed(): Notice<Any> {
         val res = _items.all().map { module -> seedModule(module) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
@@ -118,7 +122,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
      * @param mod
      * @return
      */
-    fun seedModule(mod: Module): ResultMsg<Any> {
+    fun seedModule(mod: Module): Notice<Any> {
         val result = try {
             mod.seed()
             Success("Seeded module: " + mod.info.name)
@@ -129,7 +133,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         return result
     }
 
-    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): slatekit.common.ResultMsg<Any> {
+    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
 
         val checkResult = ctx.service.findFirst(Query().where("name", "=", mod.info.name))
         if (checkResult == null) {
@@ -154,6 +158,6 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
                 mod.install()
             }
         }
-        return slatekit.common.results.ResultFuncs.success("installed")
+        return Success("installed")
     }
 }

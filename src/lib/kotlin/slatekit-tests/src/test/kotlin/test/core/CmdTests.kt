@@ -13,9 +13,10 @@ package test
 
 import org.junit.Test
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.success
 import slatekit.core.cmds.Cmd
 import slatekit.core.cmds.Cmds
+import slatekit.results.Success
+import slatekit.results.Try
 
 
 class CmdTests {
@@ -32,7 +33,7 @@ class CmdTests {
 
   class CmdCreateAdmin(var count:Int = 0) :  Cmd("create admin") {
 
-    override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?) : Try<Any> {
       count += 1
       return Success("admin_" + count )
     }
@@ -42,7 +43,7 @@ class CmdTests {
 
   class CmdError(var count:Int = 0) :  Cmd("create error")  {
 
-    override fun executeInternal(args: Array<String>?) : ResultEx<Any> {
+    override fun executeInternal(args: Array<String>?) : Try<Any> {
       count += 1
       throw IllegalArgumentException("error_" + count)
     }

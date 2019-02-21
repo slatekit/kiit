@@ -1,9 +1,12 @@
 package test.setup
 
-import slatekit.common.ResultEx
-import slatekit.common.ResultMsg
+import slatekit.common.Try
+import slatekit.common.Notice
 import slatekit.common.Success
 import slatekit.common.log.LogsDefault
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 import slatekit.workers.*
 import slatekit.workers.core.*
 import slatekit.workers.WorkFunction
@@ -19,7 +22,7 @@ class MyWorker(
     var isInitialized = false
     var isEnded = false
 
-    override fun onInit(): ResultMsg<Boolean> {
+    override fun onInit(): Notice<Boolean> {
         isInitialized = true
         return super.onInit()
     }
@@ -29,7 +32,7 @@ class MyWorker(
         super.onEnd()
     }
 
-    override fun perform(job: Job): ResultEx<Int> {
+    override fun perform(job: Job): Try<Int> {
         acc += 1
 
         // Simulate different results for testing purposes

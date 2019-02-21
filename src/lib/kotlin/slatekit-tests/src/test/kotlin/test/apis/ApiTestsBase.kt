@@ -34,6 +34,7 @@ import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Try
 import test.setup.MyAuthProvider
 import test.setup.UserApi
 import test.setup.MyEncryptor
@@ -100,7 +101,7 @@ open class ApiTestsBase {
                    path      : String,
                    inputs    : List<Pair<String,Any>>?,
                    opts      : List<Pair<String,Any>>?,
-                   expected  : ResultEx<String>):Unit
+                   expected  : Try<String>)
     {
         val apis = if(user != null) {
             val keys = buildKeys()

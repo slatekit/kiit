@@ -7,7 +7,7 @@ class QueueSourceTests {
 
     @Test
     fun can_add() {
-        val queue = QueueSourceDefault()
+        val queue = QueueSourceDefault<String>()
         queue.send("1")
         queue.send("2")
         assert( queue.count() == 2)
@@ -16,7 +16,7 @@ class QueueSourceTests {
 
     @Test
     fun can_take() {
-        val queue = QueueSourceDefault()
+        val queue = QueueSourceDefault<String>()
         queue.send("1")
         queue.send("2")
         queue.send("3")
@@ -33,13 +33,13 @@ class QueueSourceTests {
 
     @Test
     fun can_take_many() {
-        val queue = QueueSourceDefault()
+        val queue = QueueSourceDefault<String>()
         queue.send("1")
         queue.send("2")
         queue.send("3")
         assert( queue.count() == 3)
 
-        val items = queue.nextBatch(2)!!
+        val items = queue.next(2)!!
         val item1 = queue.getMessageBody(items[0])
         val item2 = queue.getMessageBody(items[1])
 
@@ -51,7 +51,7 @@ class QueueSourceTests {
 
     @Test
     fun can_have_limit() {
-        val queue = QueueSourceDefault(size = 3)
+        val queue = QueueSourceDefault<String>(size = 3)
         queue.send("1")
         queue.send("2")
         val result3 = queue.send("3")

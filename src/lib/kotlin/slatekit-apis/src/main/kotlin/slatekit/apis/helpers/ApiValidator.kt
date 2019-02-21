@@ -17,20 +17,22 @@ import slatekit.apis.ApiRef
 import slatekit.apis.core.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.success
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.builders.Notices
 
 object ApiValidator {
 
     /**
      * Checks the "route" ( area.api.action ) is valid.
      */
-    fun check(req: Request, fetcher: (Request) -> ResultMsg<ApiRef>): ResultMsg<ApiRef> {
+    fun check(req: Request, fetcher: (Request) -> Notice<ApiRef>): Notice<ApiRef> {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
         val totalParts = req.parts.size
         return if (totalParts < 2) {
-           badRequest(req.action + ": invalid call")
+           Notices.invalid(req.action + ": invalid call")
         } else {
             // Check 2: Not found ?
             val check = fetcher(req)
@@ -47,45 +49,45 @@ object ApiValidator {
      */
     fun validateCall(
             req: Request,
-            fetcher: (Request) -> ResultMsg<ApiRef>,
+            fetcher: (Request) -> Notice<ApiRef>,
             allowSingleDefaultParam: Boolean = false
-    ): ResultMsg<ApiRef> {
+    ): Notice<ApiRef> {
         val fullName = req.fullName
         val args = req.data
         val apiRefCheck = check(req, fetcher)
 
         return when (apiRefCheck) {
-            is Failure -> badRequest(msg = "bad request : $fullName: inputs not supplied")
+            is Failure -> Notices.invalid("bad request : $fullName: inputs not supplied")
             is Success -> {
-                val apiRef = apiRefCheck.data
+                val apiRef = apiRefCheck.value
                 val action = apiRef.action
 
                 // 1 param with default argument.
                 if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
-                    success(apiRef)
+                    Success(apiRef)
                 }
                 // Param: Raw ApiCmd itself!
                 else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
-                    success(apiRef)
+                    Success(apiRef)
                 }
                 // Params - check args needed
                 else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                    badRequest(msg = "bad request : $fullName: inputs not supplied")
+                    Notices.invalid<ApiRef>("bad request : $fullName: inputs not supplied")
 
                 // Params - ensure matching args
                 else if (action.hasArgs) {
                     val argCheck = validateArgs(action, args)
                     if (argCheck.success) {
-                        success(apiRef)
+                        Success(apiRef)
                     } else
-                        badRequest(msg = "bad request : $fullName: inputs not supplied")
+                        Notices.invalid<ApiRef>("bad request : $fullName: inputs not supplied")
                 } else
-                    success(apiRef)
+                    Success(apiRef)
             }
         }
     }
 
-    private fun validateArgs(action: Action, args: Inputs): ResultMsg<Boolean> {
+    private fun validateArgs(action: Action, args: Inputs): Notice<Boolean> {
         var error = ": inputs missing or invalid "
         var totalErrors = 0
 
@@ -103,7 +105,7 @@ object ApiValidator {
         // Any errors ?
         return if (totalErrors > 0) {
             error = "$error )"
-            badRequest(msg = "bad request: action " + action.name + error)
+            Notices.invalid("bad request: action " + action.name + error)
         } else {
             Success(true)
         }

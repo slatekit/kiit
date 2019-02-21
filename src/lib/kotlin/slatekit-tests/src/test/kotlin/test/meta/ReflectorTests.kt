@@ -22,6 +22,8 @@ import slatekit.entities.core.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.meta.kClass
+import slatekit.results.Notice
+import slatekit.results.getOrElse
 import test.setup.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -212,7 +214,7 @@ class ReflectorTests {
         ctx.ent.register<User>( User::class)
         val api = UserApi(ctx)
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTime.of(2017, 5, 27)))
-        val result = res as ResultMsg<String>
+        val result = res as Notice<String>
         val v = result.getOrElse { "" }
         assert(v == "ok")
         assert(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")

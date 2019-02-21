@@ -5,7 +5,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.ApiContainer
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.LowerUnderscoreNamer
-import slatekit.common.getOrElse
+import slatekit.results.getOrElse
 import test.setup.SampleExtendedApi
 import test.setup.SamplePOKOApi
 

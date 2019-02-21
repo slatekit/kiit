@@ -5,7 +5,7 @@ import org.junit.Ignore
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.Db
+import slatekit.db.Db
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime

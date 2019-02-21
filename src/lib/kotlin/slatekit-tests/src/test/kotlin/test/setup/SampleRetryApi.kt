@@ -17,7 +17,7 @@ open class SampleRetryApi(val err:slatekit.apis.middleware.Error) : slatekit.api
      * successes and failures for all scenarios
      */
     @ApiAction(desc = "tests a retry attempt with the error queue", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun test(text:String): ResultMsg<Int> {
+    fun test(text:String): Notice<Int> {
         counter += 1
         if(counter % 2 == 0){
             throw Exception("testing retry")
@@ -27,7 +27,7 @@ open class SampleRetryApi(val err:slatekit.apis.middleware.Error) : slatekit.api
 
 
     @Ignore
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): ResultEx<Any> {
+    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
         return err.onError(ctx, req, target, source, ex, args)
     }
 }

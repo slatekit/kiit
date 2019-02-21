@@ -8,15 +8,16 @@ import slatekit.common.*
 import slatekit.common.queues.QueueSource
 import slatekit.common.requests.Request
 import slatekit.core.common.AppContext
+import slatekit.results.*
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
-class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf())
+class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource<String>> = listOf())
     : ApiQueueSupport, slatekit.apis.middleware.Handler {
 
     var _lastResult = ""
 
-    override fun queues(): List<QueueSource> = queues
+    override fun queues(): List<QueueSource<String>> = queues
 
 
     @ApiAction(desc = "", roles= "", verb = "post", protocol = "@parent", tag = "queued")
@@ -29,7 +30,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
-    override fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : ResultMsg<String>  {
+    override fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : Try<String>  {
         // Coming in as http request ? and mode is queued ?
         return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
             // Convert from web request to Queued request
@@ -38,7 +39,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource> = listOf(
             Success("Request processed as queue")
         }
         else {
-            Failure("Continue processing")
+            Failure(Err.of("Continue processing"))
         }
     }
 
