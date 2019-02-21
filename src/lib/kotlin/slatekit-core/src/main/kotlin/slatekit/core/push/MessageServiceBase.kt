@@ -12,8 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.core.push
 
-import slatekit.common.ResultMsg
-import java.util.concurrent.Future
+import slatekit.results.Notice
 
 abstract class MessageServiceBase {
 
@@ -24,7 +23,7 @@ abstract class MessageServiceBase {
      * @param alert : the json data to put into the "notification" portion of the notification
      * @return
      */
-    fun sendAlert(to: String, alert: Notification): ResultMsg<Boolean> {
+    fun sendAlert(to: String, alert: Notification): Notice<Boolean> {
         return sendAlert(listOf(to), alert)
     }
 
@@ -35,7 +34,7 @@ abstract class MessageServiceBase {
      * @param alert : the json data to put into the "notification" portion of the notification
      * @return
      */
-    fun sendAlert(to: List<String>, alert: Notification): ResultMsg<Boolean> {
+    fun sendAlert(to: List<String>, alert: Notification): Notice<Boolean> {
         val message = Message(to, MessageTypeAlert, "", alert)
         return send(message)
     }
@@ -47,7 +46,7 @@ abstract class MessageServiceBase {
      * @param data : the json data to put into the "data" portion of the notification
      * @return
      */
-    fun sendData(to: String, data: String): ResultMsg<Boolean> {
+    fun sendData(to: String, data: String): Notice<Boolean> {
        return sendData(listOf(to), data)
     }
 
@@ -58,7 +57,7 @@ abstract class MessageServiceBase {
      * @param data : the json data to put into the "data" portion of the notification
      * @return
      */
-    fun sendData(to: List<String>, data: String): ResultMsg<Boolean> {
+    fun sendData(to: List<String>, data: String): Notice<Boolean> {
         val message = Message(to, MessageTypeData, data)
         return send(message)
     }
@@ -71,7 +70,7 @@ abstract class MessageServiceBase {
      * @param alert : the json data to put into the "notification" portion of the notification
      * @return
      */
-    fun sendAlertAndData(to: List<String>, data: String, alert: Notification): ResultMsg<Boolean> {
+    fun sendAlertAndData(to: List<String>, data: String, alert: Notification): Notice<Boolean> {
         val message = Message(to, MessageTypeBoth, data, alert)
         return send(message)
     }
@@ -83,7 +82,7 @@ abstract class MessageServiceBase {
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    abstract fun send(msg: Message): ResultMsg<Boolean>
+    abstract fun send(msg: Message): Notice<Boolean>
 
     /**
      * Sends the message asynchronously
@@ -92,5 +91,5 @@ abstract class MessageServiceBase {
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    abstract fun sendAsync(msg: Message, callback:(ResultMsg<Boolean>) -> Unit)
+    abstract fun sendAsync(msg: Message, callback:(Notice<Boolean>) -> Unit)
 }

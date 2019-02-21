@@ -1,6 +1,6 @@
 package slatekit.core.loader
 
-import slatekit.common.ResultMsg
+import slatekit.results.Notice
 
 interface SampleGenerator<T> where T : Sample {
 
@@ -8,14 +8,14 @@ interface SampleGenerator<T> where T : Sample {
      * Generates a default sample
      * @return
      */
-    fun default(): ResultMsg<T>
+    fun default(): Notice<T>
 
     /**
      * Generates a sample with random values from existing set of data
      * such as existing user ids, etc.
      * @return
      */
-    fun random(): ResultMsg<T>
+    fun random(): Notice<T>
 
     /**
      * Generates a sample event with the data supplied in the request.

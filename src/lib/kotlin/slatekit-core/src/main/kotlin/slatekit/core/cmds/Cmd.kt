@@ -13,11 +13,12 @@
 
 package slatekit.core.cmds
 
-import slatekit.common.*
 import slatekit.common.DateTime.Companion.now
-import slatekit.common.results.ResultFuncs.notImplemented
-import slatekit.common.results.ResultFuncs.successOrError
-import slatekit.common.results.ResultFuncs.unexpectedError
+import slatekit.results.Failure
+import slatekit.results.StatusCodes
+import slatekit.results.Success
+import slatekit.results.Try
+import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -75,15 +76,19 @@ open class Cmd(
         val start = now()
 
         // Result
-        val result: ResultEx<Any> =
+        val result: Try<Any> =
                 try {
 
                     _call?.let { c ->
                         val res = c(args)
-                        successOrError(res != null, res).toResultEx()
+                        val finalResult = when(res){
+                            null -> Failure("unable to execute command")
+                            else -> Success(res)
+                        }
+                        finalResult.toTry()
                     } ?: executeInternal(args)
                 } catch (ex: Exception) {
-                    unexpectedError(ex, "Error while executing : " + name + ". " + ex.message)
+                    Tries.unexpected<Any>(Exception("Error while executing : " + name + ". " + ex.message, ex))
                 }
 
         // Stop tracking time (inclusive of possible error )
@@ -105,6 +110,6 @@ open class Cmd(
      * @param args
      * @return
      */
-    protected open fun executeInternal(args: Array<String>?): ResultEx<Any> =
-            notImplemented<Any>().toResultEx()
+    protected open fun executeInternal(args: Array<String>?): Try<Any> =
+            Failure<Any>(StatusCodes.UNIMPLEMENTED).toTry()
 }

@@ -14,21 +14,16 @@
 package slatekit.core.common
 
 import slatekit.common.*
-import slatekit.common.info.Info
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
-import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
-import slatekit.common.info.Status
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.HELP
 
 /**
   *
@@ -68,10 +63,10 @@ data class AppContext(
     companion object {
 
         @JvmStatic
-        fun help(): AppContext = err(HELP)
+        fun help(): AppContext = err(HELP.code)
 
         @JvmStatic
-        fun exit(): AppContext = err(EXIT)
+        fun exit(): AppContext = err(EXIT.code)
 
         @JvmStatic
         fun err(code: Int, msg: String? = null): AppContext {

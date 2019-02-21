@@ -1,6 +1,7 @@
 package slatekit.core.gate
 
-import slatekit.common.Result
+
+import slatekit.results.Result
 
 interface Gated {
 

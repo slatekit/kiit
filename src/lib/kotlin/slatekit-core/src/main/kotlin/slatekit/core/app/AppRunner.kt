@@ -20,14 +20,10 @@ import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
-import slatekit.common.results.ResultCode.BAD_REQUEST
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.FAILURE
-import slatekit.common.results.ResultCode.HELP
-import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.success
 import slatekit.core.common.AppContext
+import slatekit.results.*
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 
 object AppRunner {
 
@@ -55,16 +51,16 @@ object AppRunner {
     /**
      * Initialize the app
      */
-    fun execute(app: App):ResultEx<Any> {
+    fun execute(app: App):Try<Any> {
         if (app.options.printSummaryBeforeExec) {
             app.info()
         }
 
-        val res: ResultEx<Any> =
+        val res: Try<Any> =
                 try {
                     app.execute()
                 } catch (e: Exception) {
-                    ResultFuncs.unexpectedError(msg = "Unexpected error : " + e.message, err = e)
+                    Tries.unexpected(Exception("Unexpected error : " + e.message, e))
                 }
         return res
     }
@@ -92,7 +88,7 @@ object AppRunner {
      * @param app : Builds the application
      * @return
      */
-    fun run(app: App, end: Boolean = true): ResultEx<Any> {
+    fun run(app: App, end: Boolean = true): Try<Any> {
         // If the context was derived via the build method below, it goes
         // through proper checks/validation. In which case, we check
         // for user supplying the following on the command line:
@@ -101,7 +97,7 @@ object AppRunner {
         // And these are considered failures.
         // Otherwise run the app.
         val result = when (app.ctx != null) {
-            false -> failed(app).toResultEx()
+            false -> failed(app).toTry()
             else -> execute(app, end)
         }
 
@@ -109,7 +105,7 @@ object AppRunner {
         println(Console.RESET)
 
         // Error ?
-        if (!result.success && result.code != HELP) {
+        if (!result.success && result.code != HELP.code) {
             println()
             println("==================================")
             println("ERROR !!")
@@ -118,14 +114,14 @@ object AppRunner {
             println("msg : " + result.msg)
             println()
             if (result is Failure<*>) {
-                when (result.err) {
+                when (result.error) {
                     is Exception -> {
-                        val ex = result.err as Exception
+                        val ex = result.error as Exception
                         println("err.source : " + ex)
                         println("err.message : " + ex.message)
                         println("err.stacktrace[0] : " + ex.stackTrace[0])
                     }
-                    else -> println("err : " + result.err)
+                    else -> println("err : " + result.error)
                 }
             }
             println("==================================")
@@ -151,7 +147,7 @@ object AppRunner {
         converter: ((AppContext) -> AppContext)? = null
     ): AppContext {
         // 1. Ensure command line args
-        val safeArgs = args ?: arrayOf<String>()
+        val safeArgs = args ?: arrayOf()
 
         // 2. Check args (for help, exit), and validate args
         val result = check(safeArgs, schema)
@@ -168,7 +164,7 @@ object AppRunner {
                         // - Args ( parsed command line arguments )
                         // - Env  ( selected environment e.g. dev, qa, etc )
                         // - Config( config object for env - common env.conf and env.qa.conf )
-                        val inputs = AppFuncs.buildAppInputs(result.data, enc)
+                        val inputs = AppFuncs.buildAppInputs(result.value, enc)
                         val ctx = inputs
                                 .map { inp -> AppFuncs.buildContext(inp, enc, logs) }
                                 .map { ctx -> converter?.let { c -> c(ctx) } ?: ctx }
@@ -185,16 +181,16 @@ object AppRunner {
      * @param schema : the argument schema that defines what arguments are supported.
      * @return
      */
-    fun check(rawArgs: Array<String>, schema: ArgsSchema?): ResultMsg<Args> {
+    fun check(rawArgs: Array<String>, schema: ArgsSchema?): Notice<Args> {
 
         // 1. Parse args
         val result = Args.parseArgs(rawArgs, "-", "=", false)
 
         // 2. Bad args?
         return when (result) {
-            is Failure -> badRequest<Args>(msg = "invalid arguments supplied")
+            is Failure -> Notices.invalid("invalid arguments supplied")
             is Success -> {
-                val args = result.data
+                val args = result.value
 
                 // 3. Check for "help", "exit"
                 val helpCheck = AppFuncs.isMetaCommand(rawArgs.toList())
@@ -202,9 +198,9 @@ object AppRunner {
                 // 4. Handle different results ( help, exit, etc )
                 // Different messages ?
                 when (helpCheck.code) {
-                    FAILURE -> validate(args, schema)
-                    EXIT -> Failure("exit", helpCheck.code, "exit")
-                    HELP -> Failure("help", helpCheck.code, "help")
+                    StatusCodes.ERRORED.code -> validate(args, schema)
+                    EXIT.code -> Failure("exit", "exit", helpCheck.code)
+                    HELP.code -> Failure("help", "help", helpCheck.code)
                     else -> Failure("exit", helpCheck.code, helpCheck.msg)
                 }
             }
@@ -218,7 +214,7 @@ object AppRunner {
      * @param schema
      * @return
      */
-    fun validate(result: Args, schema: ArgsSchema?): ResultMsg<Args> {
+    fun validate(result: Args, schema: ArgsSchema?): Notice<Args> {
         // 4. Invalid inputs
         val args = result
 
@@ -230,11 +226,11 @@ object AppRunner {
 
             // Invalid args ? error out
             if (!checkResult.success) {
-                badRequest<Args>(msg = checkResult.msg)
+                Notices.invalid<Args>(checkResult.msg)
             } else {
-                success(args)
+                Success(args)
             }
-        } ?: success(args)
+        } ?: Success(args)
 
         return finalResult
     }
@@ -246,15 +242,15 @@ object AppRunner {
      * @param schema
      * @param result
      */
-    fun help(schema: ArgsSchema?, result: ResultMsg<Args>) {
+    fun help(schema: ArgsSchema?, result: Notice<Args>) {
 
         val writer = ConsoleWriter()
 
         when (result.code) {
-            BAD_REQUEST -> {
+            StatusCodes.BAD_REQUEST.code -> {
                 writer.error(newline + "Input parameters invalid" + newline)
             }
-            HELP -> {
+            HELP.code -> {
                 writer.line()
             }
             else -> {
@@ -265,14 +261,14 @@ object AppRunner {
         println(helpText)
     }
 
-    fun failed(app: App): ResultMsg<Any> {
+    fun failed(app: App): Notice<Any> {
 //        if (app.ctx.state.code != HELP) {
 //            println("Application context invalid... exiting running of app.")
 //        }
         return Failure("failed loading")
     }
 
-    fun execute(app: App, end: Boolean = true): ResultEx<Any> =
+    fun execute(app: App, end: Boolean = true): Try<Any> =
             Result.attempt {
                 init(app)
                 val res = execute(app)

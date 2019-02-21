@@ -16,6 +16,9 @@ package slatekit.core.email
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 class EmailServiceSendGrid(
     user: String,
@@ -35,7 +38,7 @@ class EmailServiceSendGrid(
     constructor(apiKey: ApiLogin, templates: Templates? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
 
-    override fun send(msg: EmailMessage): ResultMsg<Boolean> {
+    override fun send(msg: EmailMessage): Notice<Boolean> {
 
         // Parameters
         val bodyArg = if (msg.html) "html" else "text"

@@ -13,14 +13,14 @@
 
 package slatekit.core.cli
 
+import slatekit.common.EXIT
+import slatekit.common.HELP
 import slatekit.common.io.Files
-import slatekit.common.ResultMsg
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.info.Folders
-import slatekit.common.results.ResultCode.EXIT
-import slatekit.common.results.ResultCode.HELP
-import slatekit.common.results.ResultFuncs.no
-import slatekit.common.results.ResultFuncs.yes
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 object CliFuncs {
 
@@ -32,41 +32,41 @@ object CliFuncs {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
 
-    fun checkForAssistance(cmd: CliCommand): ResultMsg<Boolean> {
+    fun checkForAssistance(cmd: CliCommand): Notice<Boolean> {
         val words = cmd.args.raw
         val verbs = cmd.args.actionParts
 
         // Case 1: Exit ?
         return if (ArgsFuncs.isExit(words, 0)) {
-            yes("exit", EXIT)
+            Success(true,"exit", EXIT.code)
         }
         // Case 2a: version ?
         else if (ArgsFuncs.isVersion(words, 0)) {
-            yes("version", HELP)
+            Success(true,"version", HELP.code)
         }
         // Case 2b: about ?
         else if (ArgsFuncs.isAbout(words, 0)) {
-            yes("about", HELP)
+            Success(true,"about", HELP.code)
         }
         // Case 3a: Help ?
         else if (ArgsFuncs.isHelp(words, 0)) {
-            yes("help", HELP)
+            Success(true,"help", HELP.code)
         }
         // Case 3b: Help on area ?
         else if (ArgsFuncs.isHelp(verbs, 1)) {
-            yes("area ?", HELP)
+            Success(true,"area ?", HELP.code)
         }
         // Case 3c: Help on api ?
         else if (ArgsFuncs.isHelp(verbs, 2)) {
-            yes("area.api ?", HELP)
+            Success(true,"area.api ?", HELP.code)
         }
         // Case 3d: Help on action ?
         else if (!cmd.args.action.isNullOrEmpty() &&
                 (ArgsFuncs.isHelp(cmd.args.positional, 0) ||
                         ArgsFuncs.isHelp(verbs, 3))
                      ) {
-            yes("area.api.action ?", HELP)
+            Success(true, "area.api.action ?", HELP.code)
         } else
-            no()
+            Failure("")
     }
 }

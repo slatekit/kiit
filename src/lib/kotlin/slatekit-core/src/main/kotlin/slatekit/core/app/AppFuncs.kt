@@ -21,21 +21,14 @@ import slatekit.common.args.ArgsFuncs.isVersion
 import slatekit.common.conf.*
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
-import slatekit.common.info.Info
-import slatekit.common.info.Status
 import slatekit.common.log.*
-import slatekit.common.results.ResultFuncs.exit
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.help
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.templates.Subs
-import slatekit.common.templates.TemplatePart
 import slatekit.core.common.AppContext
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 object AppFuncs {
 
@@ -61,22 +54,22 @@ object AppFuncs {
      * @param raw
      * @return
      */
-    fun isMetaCommand(raw: List<String>): ResultMsg<String> {
+    fun isMetaCommand(raw: List<String>): Notice<String> {
 
         // Case 1: Exit ?
         return if (isExit(raw, 0)) {
-            exit()
+            Success("exit", EXIT)
         }
         // Case 2a: version ?
         else if (isVersion(raw, 0)) {
-            help()
+            Success("version")
         }
         // Case 2b: about ?
         // Case 3a: Help ?
         else if (ArgsFuncs.isAbout(raw, 0) || ArgsFuncs.isHelp(raw, 0)) {
-            help()
+            Success("about")
         } else {
-            failure()
+            Failure("other")
         }
     }
 
@@ -127,7 +120,7 @@ object AppFuncs {
             cfg ?: finalDefaultValue
     }
 
-    fun buildAppInputs(args: Args, enc: Encryptor?): ResultMsg<AppInputs> {
+    fun buildAppInputs(args: Args, enc: Encryptor?): Notice<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
         // or specified in the "conf.dirs" config setting in the env.conf file
         // a) -conf="jars"                  = embedded in jar files
@@ -159,8 +152,8 @@ object AppFuncs {
             val overrideConfPath = getConfPath(args, "env.${env.name}" + CONFIG_DEFAULT_SUFFIX, confBase)
             val confEnv = ConfigMulti(overrideConfPath, confBase, enc)
 
-            success(AppInputs(args, envCheck, confBase, confEnv))
-        } ?: failure<AppInputs>(msg = "Unknown environment name : $envName supplied")
+            Success(AppInputs(args, envCheck, confBase, confEnv))
+        } ?: Failure("Unknown environment name : $envName supplied")
     }
 
     fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {

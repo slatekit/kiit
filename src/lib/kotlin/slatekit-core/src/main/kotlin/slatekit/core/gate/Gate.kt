@@ -1,7 +1,10 @@
 package slatekit.core.gate
 
 import slatekit.common.*
-import slatekit.common.results.ResultCode.UNEXPECTED_ERROR
+import slatekit.results.Failure
+import slatekit.results.Result
+import slatekit.results.StatusCodes
+import slatekit.results.Success
 import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
@@ -175,7 +178,7 @@ open class Gate(
             Success(result)
         } catch (ex: Exception) {
             errorLimiter.inc(ex)
-            Failure(buildGateEvent(), UNEXPECTED_ERROR)
+            Failure(buildGateEvent(), StatusCodes.UNEXPECTED)
         } finally {
             val count = volumeLimiter.inc()
 

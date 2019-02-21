@@ -30,8 +30,8 @@ import slatekit.core.cli.CliConstants.HELP_ACTION
 import slatekit.core.cli.CliConstants.HELP_API
 import slatekit.core.cli.CliConstants.HELP_AREA
 import slatekit.core.cli.CliConstants.VERSION
-import slatekit.results.Notice
-import slatekit.results.Success
+import slatekit.results.*
+import slatekit.results.builders.Notices
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -135,7 +135,7 @@ open class CliService(
     fun tryLine(line: String): Boolean =
             try {
                 val result = onCommandExecute(line)
-                val isExit = result.code == slatekit.common.results.ResultCode.EXIT
+                val isExit = result.code == slatekit.common.EXIT.code
                 result.success || !isExit
             } catch (ex: Exception) {
                 display(null, ex)
@@ -171,13 +171,13 @@ open class CliService(
         // after
         onCommandAfterExecute(resultCmd)
 
-        return success(resultCmd)
+        return Success(resultCmd)
     }
 
     protected open fun onCommandExecuteBatch(cmd: CliCommand): CliCommand {
         val blevel = _batchLevel.get()
         return if (blevel > 0) {
-            CliCommand("sys", "cli", "batch", cmd.line, cmd.args, Failure("already in batch mode").toResultEx().toResponse())
+            CliCommand("sys", "cli", "batch", cmd.line, cmd.args, Failure("already in batch mode").toTry().toResponse())
         } else {
             _batchLevel.set(blevel + 1)
             val batch = CliBatch(cmd, this)
@@ -335,7 +335,7 @@ open class CliService(
 
         fun error(argsResult: Notice<Args>): Notice<CliCommand> {
             _view.showArgumentsError(argsResult.msg)
-            return badRequest(msg = argsResult.msg)
+            return Notices.errored(argsResult.msg, StatusCodes.BAD_REQUEST)
         }
         return when (argsResult) {
             is Success -> {
@@ -343,10 +343,10 @@ open class CliService(
                 val cmd = CliCommand.build(argsResult.value!!, line)
 
                 // Check for exit, help, about, etc
-                val help = if (checkHelp) checkForHelp(cmd) else no()
+                val help = if (checkHelp) checkForHelp(cmd) else Failure("continue")
 
                 if (help.success) {
-                    Failure("Help", help.code, msg = help.msg)
+                    Failure("Help", code = help.code, msg = help.msg)
                 } else {
                     onCommandExecute(cmd)
                 }

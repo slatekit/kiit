@@ -1,6 +1,7 @@
 package slatekit.common
 
 import slatekit.common.requests.Response
+import slatekit.results.StatusGroup
 
 
 /**
@@ -25,3 +26,6 @@ fun <T,E> slatekit.results.Result<T,E>.isInSuccessRange()    : Boolean = this.co
 fun <T,E> slatekit.results.Result<T,E>.isFilteredOut()       : Boolean = this.code >= 200
 fun <T,E> slatekit.results.Result<T,E>.isInBadRequestRange() : Boolean = this.code >= 200
 fun <T,E> slatekit.results.Result<T,E>.isInFailureRange()    : Boolean = this.code >= 200
+
+val EXIT = StatusGroup.Errored(4001, "Exiting")
+val HELP = StatusGroup.Errored(4002, "Help")

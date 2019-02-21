@@ -37,7 +37,7 @@ class CliBatch(val cmd: CliCommand, val svc: CliService) {
             val messages = results.fold("", { s, res ->
                 when (res) {
                     is Success -> {
-                        s + "success: " + res.data.fullName() + " = " + (cmd.result?.value?.toString() ?: "") + newline
+                        s + "success: " + res.value.fullName() + " = " + (cmd.result?.value?.toString() ?: "") + newline
                     }
                     is Failure -> {
                         s + "failed: " + cmd.fullName() + " = " + (cmd.result?.msg ?: "") + newline

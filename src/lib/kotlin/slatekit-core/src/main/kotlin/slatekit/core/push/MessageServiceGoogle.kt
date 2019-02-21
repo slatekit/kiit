@@ -16,6 +16,9 @@ package slatekit.core.push
 import slatekit.common.*
 import slatekit.common.conf.Conf
 import slatekit.common.log.Logs
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 /**
  * Google FCM ( Fire base Cloud Messaging ) Service.
@@ -88,7 +91,7 @@ open class MessageServiceGoogle(
     /**
      * Sends a push notification to Android using the data from the Message supplied.
      */
-    override fun send(msg: Message): ResultMsg<Boolean> {
+    override fun send(msg: Message): Notice<Boolean> {
         return if (_sendNotifications) {
             sendSync(msg)
         } else {
@@ -104,7 +107,7 @@ open class MessageServiceGoogle(
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    override fun sendAsync(msg: Message, callback:(ResultMsg<Boolean>) -> Unit) {
+    override fun sendAsync(msg: Message, callback:(Notice<Boolean>) -> Unit) {
 
     }
 
@@ -118,7 +121,7 @@ open class MessageServiceGoogle(
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    protected fun sendSync(msg: Message):ResultMsg<Boolean> {
+    protected fun sendSync(msg: Message):Notice<Boolean> {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices

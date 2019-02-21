@@ -14,9 +14,10 @@
 package slatekit.core.email
 
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 abstract class EmailService(val templates: Templates? = null) {
 
@@ -25,7 +26,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param msg
      * @return
      */
-    abstract fun send(msg: EmailMessage): ResultMsg<Boolean>
+    abstract fun send(msg: EmailMessage): Notice<Boolean>
 
     /**
      * Sends the email message
@@ -35,7 +36,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html : Whether or not the email is html formatted
      * @return
      */
-    fun send(to: String, subject: String, body: String, html: Boolean): ResultMsg<Boolean> {
+    fun send(to: String, subject: String, body: String, html: Boolean): Notice<Boolean> {
         // NOTE: This guards are more readable that other alternatives
         val result = validate(to, subject)
         return if (result.success) {
@@ -52,7 +53,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html : Whether or not the email is html formatted
      * @param variables : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): ResultMsg<Boolean> {
+    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): Notice<Boolean> {
         val result = validate(to, subject)
         return if (result.success) {
             // Send the message
@@ -67,8 +68,8 @@ abstract class EmailService(val templates: Templates? = null) {
         }
     }
 
-    private fun validate(to: String, subject: String): ResultMsg<String> =
-            if (to.isNullOrEmpty()) failure(msg = "to not provided")
-            else if (subject.isNullOrEmpty()) failure(msg = "subject not provided")
-            else success("")
+    private fun validate(to: String, subject: String): Notice<String> =
+            if (to.isNullOrEmpty()) Failure("to not provided")
+            else if (subject.isNullOrEmpty()) Failure("subject not provided")
+            else Success("")
 }

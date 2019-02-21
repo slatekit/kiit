@@ -15,6 +15,9 @@ package slatekit.core.cmds
 
 import slatekit.common.*
 import slatekit.common.DateTime.Companion.now
+import slatekit.results.Failure
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 object CmdFuncs {
 
@@ -83,7 +86,7 @@ object CmdFuncs {
         name: String,
         start: DateTime,
         end: DateTime,
-        result: ResultEx<Any>
+        result: Try<Any>
     ): CmdResult {
 
         // The result
@@ -91,7 +94,7 @@ object CmdFuncs {
                 name = name,
                 success = result.success,
                 message = result.msg,
-                error = if (result is Failure) result.err else null,
+                error = if (result is Failure) result.error else null,
                 result = result.getOrElse { null },
                 started = start,
                 ended = end,

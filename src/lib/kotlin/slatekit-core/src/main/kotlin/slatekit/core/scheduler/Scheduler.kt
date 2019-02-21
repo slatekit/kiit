@@ -4,11 +4,10 @@ import slatekit.common.*
 import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.requests.Response
-import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultCode
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
 import slatekit.common.Status
+import slatekit.results.*
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors
@@ -16,7 +15,6 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KFunction
 
-typealias Result<T, E> = slatekit.common.Result<T, E>
 
 /**
  * Wraps the java ScheduledExecutorService with diagnostic info
@@ -50,7 +48,7 @@ class Scheduler(val settings: SchedulerSettings,
     /**
      * Forces an execution of a task ( used for manually on demand runs )
      */
-    fun force(name: String): Result<Boolean, Exception> {
+    fun force(name: String): Try<Boolean> {
         return commands[name]?.let { task ->
             execute(TaskRequest(task, DateTime.now()), true)
         } ?: Failure(Exception("Could not find task with name: $name"))
@@ -86,7 +84,7 @@ class Scheduler(val settings: SchedulerSettings,
     /**
      * Pauses a task for the duration supplied
      */
-    fun pause(name: String, duration: Duration): Result<Boolean, Exception> {
+    fun pause(name: String, duration: Duration): Try<Boolean> {
         return commands[name]?.let { task ->
 
             // Pause the task
@@ -110,7 +108,7 @@ class Scheduler(val settings: SchedulerSettings,
     /**
      * Stops the task from running again
      */
-    fun stop(name: String): Result<Boolean, Exception> {
+    fun stop(name: String): Try<Boolean> {
         return commands[name]?.let { task ->
             task.moveToState(Status.Stopped)
             Success(true)
@@ -146,11 +144,11 @@ class Scheduler(val settings: SchedulerSettings,
             val status = task.status()
             val request = TaskRequest(task, DateTime.now())
             when (status) {
-                is Status.Complete -> record(request, ResultCode.COMPLETED, "Task completed, skipping this run")
-                is Status.Failed -> record(request, ResultCode.FAILED, "Task failed, skipping this run")
-                is Status.Paused -> record(request, ResultCode.PAUSED, "Task paused, skipping this run")
-                is Status.Stopped -> record(request, ResultCode.STOPPED, "Task is stopped, skipping this run")
-                is Status.Running -> record(request, ResultCode.RUNNING, "Task is currently running")
+                is Status.Complete -> record(request, StatusCodes.SUCCESS.code, "Task completed, skipping this run")
+                is Status.Failed -> record(request, StatusCodes.ERRORED.code, "Task failed, skipping this run")
+                is Status.Paused -> record(request, StatusCodes.SUCCESS.code, "Task paused, skipping this run")
+                is Status.Stopped -> record(request, StatusCodes.ERRORED.code, "Task is stopped, skipping this run")
+                is Status.Running -> record(request, StatusCodes.SUCCESS.code, "Task is currently running")
                 is Status.Starting -> execute(request, false)
                 is Status.Idle -> execute(request, false)
                 is Status.InActive -> execute(request, false)

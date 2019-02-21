@@ -14,11 +14,12 @@
 package slatekit.core.sms
 
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.CountryCode
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 /**
  * Sms Service base class with support for templates and countries
@@ -42,7 +43,7 @@ abstract class SmsService(
      * @return
      * @note : implement in derived class that can actually send the message
      */
-    abstract fun send(msg: SmsMessage): ResultMsg<Boolean>
+    abstract fun send(msg: SmsMessage): Notice<Boolean>
 
     /**
      * sends a message via an IO wrapper that can be later called.
@@ -51,7 +52,7 @@ abstract class SmsService(
      * @param countryCode : destination phone country code
      * @param phone : destination phone
      */
-    fun send(message: String, countryCode: String, phone: String): ResultMsg<Boolean> {
+    fun send(message: String, countryCode: String, phone: String): Notice<Boolean> {
         val result = validate(countryCode, phone)
         return if (result.success) {
             send(SmsMessage(message, countryCode, phone))
@@ -68,7 +69,7 @@ abstract class SmsService(
      * @param phone : destination phone
      * @param variables : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): ResultMsg<Boolean> {
+    fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): Notice<Boolean> {
         val result = validate(countryCode, phone)
         return if (result.success) {
             // Send the message
@@ -90,18 +91,18 @@ abstract class SmsService(
      * @param phone
      * @return
      */
-    open fun massagePhone(iso: String, phone: String): ResultMsg<String> {
+    open fun massagePhone(iso: String, phone: String): Notice<String> {
         val finalIso = iso.toUpperCase()
 
         val result = validate(finalIso, phone)
 
         // Case 1: Invalid params
         return if (!result.success) {
-            failure(result.msg)
+            Failure(result.msg)
         }
         // Case 2: Invalid iso or unsupported
         else if (!countries.contains(finalIso)) {
-            failure<String>("$finalIso is not a valid country code")
+            Failure("$finalIso is not a valid country code")
         }
         // Case 3: Inputs valid so massage
         else {
@@ -114,12 +115,12 @@ abstract class SmsService(
                 }
             }
 
-            success(finalPhone ?: phone)
+            Success(finalPhone ?: phone)
         }
     }
 
-    private fun validate(countryCode: String, phone: String): ResultMsg<String> =
-            if (countryCode.isNullOrEmpty()) failure(msg = "country code not provided")
-            else if (phone.isNullOrEmpty()) failure(msg = "phone not provided")
-            else success("")
+    private fun validate(countryCode: String, phone: String): Notice<String> =
+            if (countryCode.isNullOrEmpty()) Failure("country code not provided")
+            else if (phone.isNullOrEmpty()) Failure("phone not provided")
+            else Success("")
 }

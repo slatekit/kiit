@@ -14,10 +14,12 @@
 package slatekit.core.sms
 
 import slatekit.common.*
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
 import slatekit.common.types.CountryCode
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 /**
  * simple service to send sms messages using Twilio with support for templates and
@@ -62,12 +64,12 @@ class SmsServiceTwilio(
      * @param msg : message to send
      * @return
      */
-    override fun send(msg: SmsMessage): ResultMsg<Boolean> {
+    override fun send(msg: SmsMessage): Notice<Boolean> {
 
         val phoneResult = massagePhone(msg.countryCode, msg.phone)
         return when(phoneResult) {
             is Success -> {
-                val phone = phoneResult.data
+                val phone = phoneResult.value
                 val result = HttpRPC().sendSync(
                         method = HttpRPC.Method.Post,
                         url = _baseUrl,
@@ -92,11 +94,11 @@ class SmsServiceTwilio(
      * @param phone
      * @return
      */
-    override fun massagePhone(iso: String, phone: String): ResultMsg<String> {
+    override fun massagePhone(iso: String, phone: String): Notice<String> {
         // Remove the "+" and allow base function to ensure the country code is present
         val result = super.massagePhone(iso, phone.replace("+", ""))
         return when (result) {
-            is Success -> success("+" + result.data)
+            is Success -> Success("+" + result.value)
             is Failure -> result
         }
     }

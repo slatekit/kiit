@@ -13,8 +13,6 @@
 
 package slatekit.core.app
 
-import slatekit.common.ResultEx
-import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport
@@ -22,6 +20,8 @@ import slatekit.common.info.About
 import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
 import slatekit.core.common.AppContext
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Application base class providing most of the scaffolding to support command line argument
@@ -167,7 +167,7 @@ open class App( val ctx: AppContext,
      * and return a Success/Failure
      *
      */
-    open fun init(): slatekit.common.Result<Boolean, Exception> {
+    open fun init(): Try<Boolean> {
         return Success(true, msg = "default initialization")
     }
 
@@ -178,7 +178,7 @@ open class App( val ctx: AppContext,
      *
      * @return
      */
-    open fun execute(): ResultEx<Any> {
+    open fun execute(): Try<Any> {
         return Success<Any>("default")
     }
 
@@ -189,7 +189,7 @@ open class App( val ctx: AppContext,
      * and return a Success/Failure
      *
      */
-    open fun end(): slatekit.common.Result<Boolean, Exception> {
+    open fun end(): Try<Boolean> {
         return Success(true, msg = "default initialization")
     }
 
