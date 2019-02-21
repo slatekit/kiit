@@ -16,11 +16,12 @@ import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.security.CliProtocol
-import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.requests.Request
-import slatekit.common.requests.toResponse
 import slatekit.common.info.Credentials
+import slatekit.common.toResponse
+import slatekit.results.Failure
+import slatekit.results.Success
 import test.setup.*
 
 /**

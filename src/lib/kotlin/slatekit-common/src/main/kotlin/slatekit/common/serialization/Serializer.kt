@@ -14,8 +14,8 @@
 package slatekit.common.serialization
 
 import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.getOrElse
+import slatekit.results.Result
+import slatekit.results.getOrElse
 import java.time.*
 import java.time.format.DateTimeFormatter
 

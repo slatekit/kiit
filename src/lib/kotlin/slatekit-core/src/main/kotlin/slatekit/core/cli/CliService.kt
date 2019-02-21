@@ -22,10 +22,6 @@ import slatekit.common.console.ConsoleWriter
 import slatekit.common.info.Folders
 import slatekit.common.info.Status
 import slatekit.common.requests.Response
-import slatekit.common.requests.toResponse
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.no
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.utils.Loops
 import slatekit.core.cli.CliConstants.ABOUT
 import slatekit.core.cli.CliConstants.EXIT
@@ -34,6 +30,8 @@ import slatekit.core.cli.CliConstants.HELP_ACTION
 import slatekit.core.cli.CliConstants.HELP_API
 import slatekit.core.cli.CliConstants.HELP_AREA
 import slatekit.core.cli.CliConstants.VERSION
+import slatekit.results.Notice
+import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -158,7 +156,7 @@ open class CliService(
      * @param cmd
      * @return
      */
-    fun onCommandExecute(cmd: CliCommand): ResultMsg<CliCommand> {
+    fun onCommandExecute(cmd: CliCommand): Notice<CliCommand> {
 
         // before
         onCommandBeforeExecute(cmd)
@@ -228,7 +226,7 @@ open class CliService(
      * @param line
      * @return
      */
-    fun onCommandExecute(line: String): ResultMsg<CliCommand> = executeLine(line, true)
+    fun onCommandExecute(line: String): Notice<CliCommand> = executeLine(line, true)
 
     /**
      * Executes a batch of commands ( 1 per line )
@@ -237,9 +235,9 @@ open class CliService(
      * @param mode
      * @return
      */
-    fun onCommandBatchExecute(lines: List<String>, mode: Int): List<ResultMsg<CliCommand>> {
+    fun onCommandBatchExecute(lines: List<String>, mode: Int): List<Notice<CliCommand>> {
         // Keep track of all the command results per line
-        val results = mutableListOf<ResultMsg<CliCommand>>()
+        val results = mutableListOf<Notice<CliCommand>>()
 
         // For x lines
         Loops.doUntilIndex(lines.size, { ndx ->
@@ -280,7 +278,7 @@ open class CliService(
      *
      * @param cmd
      */
-    protected fun checkForHelp(cmd: CliCommand): ResultMsg<Boolean> {
+    protected fun checkForHelp(cmd: CliCommand): Notice<Boolean> {
         return handleHelp(cmd, CliFuncs.checkForAssistance(cmd))
     }
 
@@ -293,7 +291,7 @@ open class CliService(
      * @param cmd
      * @param result
      */
-    fun handleHelp(cmd: CliCommand, result: ResultMsg<Boolean>): ResultMsg<Boolean> {
+    fun handleHelp(cmd: CliCommand, result: Notice<Boolean>): Notice<Boolean> {
         val msg = result.msg ?: ""
 
         when (msg) {
@@ -330,19 +328,19 @@ open class CliService(
         _writer.line()
     }
 
-    private fun executeLine(line: String, checkHelp: Boolean): ResultMsg<CliCommand> {
+    private fun executeLine(line: String, checkHelp: Boolean): Notice<CliCommand> {
 
         // 1st step, parse the command line into arguments
         val argsResult = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
 
-        fun error(argsResult: ResultMsg<Args>): ResultMsg<CliCommand> {
+        fun error(argsResult: Notice<Args>): Notice<CliCommand> {
             _view.showArgumentsError(argsResult.msg)
             return badRequest(msg = argsResult.msg)
         }
         return when (argsResult) {
             is Success -> {
                 // Build command from arguments
-                val cmd = CliCommand.build(argsResult.data!!, line)
+                val cmd = CliCommand.build(argsResult.value!!, line)
 
                 // Check for exit, help, about, etc
                 val help = if (checkHelp) checkForHelp(cmd) else no()

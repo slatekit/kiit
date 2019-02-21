@@ -3,7 +3,6 @@ package slatekit.common.diagnostics
 import slatekit.common.requests.Response
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
-import slatekit.common.results.*
 
 /**
  * Handles boilerplate diagnostics which include ( logs, metrics, tracking ( last request/result ) and eventing
@@ -53,10 +52,10 @@ open class Diagnostics<TRequest>(
             val more = "result: ${response.code}, msg: ${response.msg}"
 
             when {
-                response.code.isInSuccessRange()    -> logger.info ("$prefix $name succeeded: $info $more")
-                response.code.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info $more")
-                response.code.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info $more")
-                response.code.isInFailureRange()    -> logger.error("$prefix $name failed: $info $more")
+                response.isInSuccessRange()    -> logger.info ("$prefix $name succeeded: $info $more")
+                response.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info $more")
+                response.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info $more")
+                response.isInFailureRange()    -> logger.error("$prefix $name failed: $info $more")
                 else                                -> logger.error("$prefix $name failed: $info $more")
             }
         }
@@ -70,10 +69,10 @@ open class Diagnostics<TRequest>(
         tracker?.let {
             tracker.requested(request)
             when {
-                response.code.isInSuccessRange()    -> tracker.succeeded(request, response)
-                response.code.isFilteredOut()       -> tracker.filtered(request)
-                response.code.isInBadRequestRange() -> tracker.invalid(request, response.err)
-                response.code.isInFailureRange()    -> tracker.failed(request, response.err)
+                response.isInSuccessRange()    -> tracker.succeeded(request, response)
+                response.isFilteredOut()       -> tracker.filtered(request)
+                response.isInBadRequestRange() -> tracker.invalid(request, response.err)
+                response.isInFailureRange()    -> tracker.failed(request, response.err)
                 else                                -> tracker.failed(request, response.err)
             }
         }
@@ -89,10 +88,10 @@ open class Diagnostics<TRequest>(
             val tags = tagsFetcher(request)
             metrics.count("$metric.total_requests", tags)
             when {
-                response.code.isInSuccessRange()    -> metrics.count("$metric.total_successes", tags)
-                response.code.isFilteredOut()       -> metrics.count("$metric.total_filtered", tags)
-                response.code.isInBadRequestRange() -> metrics.count("$metric.total_invalid", tags)
-                response.code.isInFailureRange()    -> metrics.count("$metric.total_failed", tags)
+                response.isInSuccessRange()    -> metrics.count("$metric.total_successes", tags)
+                response.isFilteredOut()       -> metrics.count("$metric.total_filtered", tags)
+                response.isInBadRequestRange() -> metrics.count("$metric.total_invalid", tags)
+                response.isInFailureRange()    -> metrics.count("$metric.total_failed", tags)
                 else                                -> metrics.count("$metric.total_other", tags)
             }
         }

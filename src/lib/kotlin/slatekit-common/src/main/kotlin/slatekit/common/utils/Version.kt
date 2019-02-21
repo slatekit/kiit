@@ -1,9 +1,9 @@
 package slatekit.common.utils
 
-import slatekit.common.ResultMsg
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.validations.ValidationFuncs
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
 
 data class Version(
     val major: Int,
@@ -42,19 +42,19 @@ data class Version(
 
 
         @JvmStatic
-        fun parse(text:String): ResultMsg<Version> {
+        fun parse(text:String): Notice<Version> {
             val parts = text.trim().split('.')
             val numeric = parts.all { ValidationFuncs.isWholeNumber(it) }
             return if(!numeric) {
-                badRequest("Not all parts of the version are numeric")
+                Failure("Not all parts of the version are numeric")
             } else {
                 val digits = parts.map { it.trim().toInt() }
                 when (parts.size) {
-                    1 -> success(Version(digits[0]))
-                    2 -> success(Version(digits[0], digits[1]))
-                    3 -> success(Version(digits[0], digits[1], digits[2]))
-                    4 -> success(Version(digits[0], digits[1], digits[2], digits[3]))
-                    else -> badRequest("Invalid version, expected 4 parts separated by .")
+                    1 -> Success(Version(digits[0]))
+                    2 -> Success(Version(digits[0], digits[1]))
+                    3 -> Success(Version(digits[0], digits[1], digits[2]))
+                    4 -> Success(Version(digits[0], digits[1], digits[2], digits[3]))
+                    else -> Failure("Invalid version, expected 4 parts separated by .")
                 }
             }
         }

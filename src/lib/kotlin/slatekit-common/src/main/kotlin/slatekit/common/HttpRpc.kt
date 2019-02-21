@@ -1,6 +1,9 @@
 package slatekit.common
 
 import okhttp3.*
+import slatekit.results.Failure
+import slatekit.results.Result
+import slatekit.results.Success
 import java.io.IOException
 
 /**

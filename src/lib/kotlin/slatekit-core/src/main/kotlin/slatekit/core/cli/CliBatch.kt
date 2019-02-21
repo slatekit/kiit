@@ -15,7 +15,8 @@ package slatekit.core.cli
 
 import slatekit.common.*
 import slatekit.common.io.Files
-import slatekit.common.requests.toResponse
+import slatekit.results.Failure
+import slatekit.results.Success
 import java.io.File
 import java.io.FileNotFoundException
 

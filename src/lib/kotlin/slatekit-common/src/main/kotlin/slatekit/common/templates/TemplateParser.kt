@@ -18,6 +18,9 @@ import slatekit.common.lex.LexState
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
 import slatekit.common.utils.Loops
+import slatekit.results.Failure
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Parses a text template that can contain variables/substitutions.
@@ -40,7 +43,7 @@ class TemplateParser(val text: String) {
 
     private val _state = LexState(text)
 
-    fun parse(): ResultEx<List<TemplatePart>> {
+    fun parse(): Try<List<TemplatePart>> {
 
         val subs = mutableListOf<TemplatePart>()
         val result =

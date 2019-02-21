@@ -14,6 +14,7 @@
 package slatekit.common.args
 
 import slatekit.common.*
+import slatekit.results.Try
 import java.time.*
 
 /**
@@ -263,7 +264,7 @@ class Args(
             hasAction: Boolean = false,
             metaChar: String = "@",
             sysChar: String = "$"
-        ): ResultEx<Args> {
+        ): Try<Args> {
             return ArgsService().parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
 

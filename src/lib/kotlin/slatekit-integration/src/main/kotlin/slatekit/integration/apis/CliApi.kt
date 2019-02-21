@@ -22,12 +22,12 @@ import slatekit.common.*
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.toResponse
 import slatekit.common.info.Credentials
 import slatekit.common.info.Info
 import slatekit.core.cli.CliCommand
 import slatekit.core.cli.CliConstants
 import slatekit.core.cli.CliMeta
+import slatekit.results.Notice
 import java.io.File
 
 /**
@@ -87,7 +87,7 @@ class CliApi(
             val cmdResult = when (metaCmd) {
 
                 // Case 1: Generate a sample command to output/file
-                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toResultEx().toResponse())
+                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toTry().toResponse())
 
                 // Case 2: Get command from params file and execute
                 CliConstants.SysFile -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
@@ -148,7 +148,7 @@ class CliApi(
 //        )
 //    }
 
-    private fun buildRequestSample(cmd: CliCommand): ResultMsg<String> {
+    private fun buildRequestSample(cmd: CliCommand): Notice<String> {
         val opts = InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
         val apiCmd = Request.cli(cmd.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
 

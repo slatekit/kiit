@@ -15,12 +15,10 @@ import slatekit.common.log.Logger
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.requests.toResponse
 import slatekit.meta.*
 import slatekit.results.*
 import slatekit.results.builders.Notices
 import java.io.File
-import kotlin.Result.Companion.failure
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
@@ -240,7 +238,7 @@ open class ApiContainer(
             // Execute using a pipeline
             Exec(runCtx, _validator, logger).run(this::executeMethod)
         }
-        val result = resultRaw.toResultEx()
+        val result = resultRaw.toTry()
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content

@@ -13,9 +13,10 @@
 
 package slatekit.common.args
 
-import slatekit.common.*
 import slatekit.common.lex.Lexer
-import slatekit.common.results.ResultFuncs.successOrError
+import slatekit.results.Failure
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Parses arguments.
@@ -40,7 +41,7 @@ class ArgsService {
         hasAction: Boolean = false,
         metaChar: String = "@",
         sysChar: String = "$"
-    ): ResultEx<Args> {
+    ): Try<Args> {
         // Check 1: Empty line ?
         return if (line.isEmpty()) {
             Success(Args("", listOf(), "", listOf(), prefix, sep,
@@ -76,9 +77,9 @@ class ArgsService {
         hasAction: Boolean,
         metaChar: String,
         sysChar: String
-    ): ResultEx<Args> {
-        return successOrError(
-                {
+    ): Try<Args> {
+        return Try.attempt {
+
                     // if input = "area.api.action -arg1="1" -arg2="2"
                     // result = "area.api.action"
                     val result = if (hasAction) {
@@ -118,6 +119,6 @@ class ArgsService {
                     val args = Args(line, tokens, action, verbs.toList(), prefix, sep,
                             argsResult.named, argsResult.meta, argsResult.sys, indexResult, null)
                     args
-                })
+                }
     }
 }

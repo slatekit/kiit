@@ -13,11 +13,11 @@
 
 package slatekit.common.args
 
-import slatekit.common.ResultMsg
 import slatekit.common.Types
 import slatekit.common.console.ConsoleWriter
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
+import slatekit.common.console.Success
+import slatekit.results.Failure
+import slatekit.results.Notice
 
 /**
  * stores and builds a list of 1 or more arguments which collectively represent the schema.
@@ -127,12 +127,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
         return ArgsSchema(newList)
     }
 
-    fun validate(args: Args): ResultMsg<Boolean> {
+    fun validate(args: Args): Notice<Boolean> {
         val missing = items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
         return if (missing.isNotEmpty()) {
-            failure("invalid arguments supplied: Missing : " + missing.first().name)
+            Failure("invalid arguments supplied: Missing : " + missing.first().name)
         } else {
-            success(true)
+            slatekit.results.Success(true)
         }
     }
 

@@ -23,9 +23,9 @@ import slatekit.common.*
 import slatekit.common.info.Info
 import slatekit.common.metrics.Metrics
 import slatekit.common.diagnostics.Tracker
-import slatekit.common.requests.toResponse
 import slatekit.core.common.AppContext
 import slatekit.meta.Deserializer
+import slatekit.results.Success
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
 import spark.Request

@@ -25,7 +25,7 @@ import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.toResponse
+import slatekit.common.toResponse
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.core.cmds.Cmd

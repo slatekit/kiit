@@ -14,11 +14,9 @@
 package slatekit.common.utils
 
 import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.ResultEx
 import slatekit.common.info.Memory
-import slatekit.common.results.ResultTimed
 
+/*
 object Measure {
 
     /**
@@ -116,3 +114,4 @@ object Measure {
         return ResultTimed(desc, started, ended, duration, result, memory, ms)
     }
 }
+*/

@@ -17,7 +17,7 @@ import slatekit.apis.middleware.Handler
 import slatekit.apis.middleware.Hook
 import slatekit.apis.middleware.Tracked
 import slatekit.common.log.Logger
-import slatekit.common.requests.toResponse
+import slatekit.common.toResponse
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import kotlin.reflect.KCallable
@@ -95,7 +95,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val result = if (check.success) {
                 proceed()
             } else {
-                check.toResultEx()
+                check.toTry()
             }
             result
         }
@@ -111,7 +111,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val result = if (check.success) {
                 proceed()
             } else {
-                check.toResultEx()
+                check.toTry()
             }
             result
         }
@@ -127,7 +127,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val result = if (check.success) {
                 proceed()
             } else {
-                check.toResultEx()
+                check.toTry()
             }
             result
         }
@@ -143,7 +143,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val result = if (check.success) {
                 proceed()
             } else {
-                check.toResultEx()
+                check.toTry()
             }
             result
         }

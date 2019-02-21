@@ -45,19 +45,7 @@ data class Response<out T>(
 }
 
 
-/**
- * Converts result to Response.
- */
-fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
-    return when (this) {
-        is slatekit.results.Success -> Response(this.success, this.code, null, this.value, this.msg, null)
-        is slatekit.results.Failure -> {
-            val ex:Exception = when (this.error) {
-                is Exception -> this.error as Exception
-                else -> Exception(this.error.toString())
-            }
-            Response(this.success, this.code, null, null, this.msg, ex)
-        }
-    }
-}
 
+fun <T> Response<T>.isInSuccessRange()    : Boolean = this.code >= 200
+fun <T> Response<T>.isFilteredOut()       : Boolean = this.code >= 200
+fun <T> Response<T>.isInBadRequestRange() : Boolean = this.code >= 200
