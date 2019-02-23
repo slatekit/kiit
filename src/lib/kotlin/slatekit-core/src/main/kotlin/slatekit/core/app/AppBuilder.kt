@@ -9,6 +9,12 @@ import slatekit.common.info.*
 import slatekit.common.templates.Subs
 import slatekit.common.toId
 
+/**
+ * Builds default application components:
+ * 1. env   : environments
+ * 2. about : info about app
+ * 3. schema: command line argument schema
+ */
 object AppBuilder {
     /**
      * The list of available environments to choose from.

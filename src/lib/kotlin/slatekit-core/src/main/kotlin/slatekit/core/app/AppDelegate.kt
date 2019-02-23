@@ -4,6 +4,12 @@ import slatekit.common.flatten
 import slatekit.results.*
 
 
+/**
+ * Executes the App workflow methods below safely
+ * 1. init
+ * 2 execute
+ * 3. end
+ */
 class AppDelegate {
 
     /**

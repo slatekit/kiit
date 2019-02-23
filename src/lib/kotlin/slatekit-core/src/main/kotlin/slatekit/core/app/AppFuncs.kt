@@ -18,6 +18,7 @@ import slatekit.common.args.Args
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.args.ArgsFuncs.isExit
 import slatekit.common.args.ArgsFuncs.isVersion
+import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.*
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
@@ -29,6 +30,7 @@ import slatekit.core.common.AppContext
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
+import slatekit.results.flatMap
 
 object AppFuncs {
 
@@ -119,7 +121,12 @@ object AppFuncs {
             cfg ?: finalDefaultValue
     }
 
-    fun buildAppInputs(args: Args, enc: Encryptor?): Notice<AppInputs> {
+    fun context(args: Args, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppContext> {
+        val inputs = inputs(args, about, schema, enc, logs)
+        return inputs.flatMap { Success( buildContext(it, enc, logs)) }
+    }
+
+    private fun inputs(args: Args, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
         // or specified in the "conf.dirs" config setting in the env.conf file
         // a) -conf="jars"                  = embedded in jar files
@@ -153,6 +160,42 @@ object AppFuncs {
 
             Success(AppInputs(args, envCheck, confBase, confEnv))
         } ?: Failure("Unknown environment name : $envName supplied")
+    }
+
+
+    private fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
+
+        val buildInfoExists = resourceExists("build.conf")
+        val build = if (buildInfoExists) {
+            val stamp = Config(getConfPath(appInputs.args, "build.conf", null), enc)
+            val info = stamp.buildStamp("build")
+            info
+        } else {
+            Build.empty
+        }
+
+        val args = appInputs.args
+        val env = appInputs.env
+
+        // The config is inheritance based.
+        // Which means the base env.loc.conf inherits from env.conf.
+        val conf = ConfigMulti(
+                appInputs.confEnv,
+                appInputs.confBase,
+                enc)
+
+        return AppContext(
+                arg = args,
+                env = env,
+                cfg = conf,
+                enc = enc,
+                logs = logs ?: LogsDefault,
+                app = AppBuilder.about(conf),
+                sys = Sys.build(),
+                build = build,
+                start = StartInfo(args.line, env.key, conf.origin(), env.key),
+                dirs = AppBuilder.folders(conf)
+        )
     }
 
 

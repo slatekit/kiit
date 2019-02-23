@@ -1,9 +1,7 @@
 package slatekit.common
 
 import slatekit.common.requests.Response
-import slatekit.results.Failure
-import slatekit.results.StatusGroup
-import slatekit.results.Try
+import slatekit.results.*
 
 
 /**
@@ -22,7 +20,26 @@ fun <T, E> slatekit.results.Result<T, E>.toResponse(): Response<T> {
     }
 }
 
-fun <T> slatekit.results.Try<Try<T>>.flatten(): Try<T> = this.fold( { it }, { Failure(it) } )
+
+/**
+ * Applies supplied function `f` if this is a [Success]
+ *
+ * @param f: the function to apply
+ *
+ * # Example
+ * ```
+ * val r1 = Success("Superman").flatMap { Success("Clark Kent") }  // Success("Clark Kent")
+ * val r2 = Failure("Unknown" ).flatMap { Success("???")        }  // Failure("Unknown")
+ * ```
+ */
+inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, E> =
+        when (this) {
+            is Success -> f(this.value)
+            is Failure -> this
+        }
+
+
+fun <T,E> slatekit.results.Result<Result<T, E>,E>.flatten(): Result<T,E> = this.fold( { it }, { Failure(it) } )
 
 val EXIT    = StatusGroup.Errored(4001, "Exiting")
 val HELP    = StatusGroup.Errored(4002, "Help")
