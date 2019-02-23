@@ -32,7 +32,6 @@ import slatekit.results.Success
 
 object AppFuncs {
 
-
     fun getConfPath(args: Args, file: String, conf: Conf?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
         val location = pathFromArgs.orElse( conf?.getStringOrElse("conf.dir", "") ?: "")
@@ -156,40 +155,7 @@ object AppFuncs {
         } ?: Failure("Unknown environment name : $envName supplied")
     }
 
-    fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
 
-        val buildInfoExists = resourceExists("build.conf")
-        val build = if (buildInfoExists) {
-            val stamp = Config(getConfPath(appInputs.args, "build.conf", null), enc)
-            val info = stamp.buildStamp("build")
-            info
-        } else {
-            Build.empty
-        }
-
-        val args = appInputs.args
-        val env = appInputs.env
-
-        // The config is inheritance based.
-        // Which means the base env.loc.conf inherits from env.conf.
-        val conf = ConfigMulti(
-                appInputs.confEnv,
-                appInputs.confBase,
-                enc)
-
-        return AppContext(
-                arg = args,
-                env = env,
-                cfg = conf,
-                enc = enc,
-                logs = logs ?: LogsDefault,
-                app = AppBuilder.about(conf),
-                sys = Sys.build(),
-                build = build,
-                start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                dirs = AppBuilder.folders(conf)
-        )
-    }
 
     fun resourceExists(path: String): Boolean {
         val res = this.javaClass.getResource("/$path")

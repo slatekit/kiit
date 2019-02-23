@@ -38,12 +38,12 @@ class AppTests  {
 
 
   @Test fun can_request_version() {
-    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"),HELP.code,  "help")
+    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"), HELP.code,  "help")
   }
 
 
   @Test fun can_request_exit() {
-    checkHelp(arrayOf("exit", "-exit", "--exit", "/exit", "exit"),EXIT.code, "exit")
+    checkHelp(arrayOf("exit", "-exit", "--exit", "/exit", "exit"), EXIT.code, "exit")
   }
 
 

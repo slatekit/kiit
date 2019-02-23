@@ -19,6 +19,7 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.Console
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.info.About
 import slatekit.common.log.Logs
 import slatekit.core.common.AppContext
 import slatekit.results.*
@@ -36,50 +37,30 @@ object AppRunner {
 
 
     /**
-     * Initialize the app
+     * Builds an application context using just the command line args, optional args schema, encryptor, logs
+     *
+     * @param rawArgs : The raw arguments from command line
+     * @param schema : The schema of the command line arguments
+     * @param enc    : Optional encryptor
+     * @param logs   : Optional logs
+     * @return
      */
-    fun init(app: App) {
-        app.init()
-        try {
-            app.ctx.dirs?.create()
-        } catch (e: Exception) {
-            println("Error while creating directories for application in user.home directory")
+    fun run(
+            rawArgs: Array<String>,
+            about: About,
+            builder: ((AppContext) -> App)?,
+            schema: ArgsSchema? = null,
+            enc: Encryptor? = null,
+            logs: Logs? = null
+    ): Try<Any> {
+
+        val argsResult = Args.parseArgs(rawArgs, "-", "=", false)
+
+        // 1. Check for help | version | about
+        argsResult.map {
+
         }
-    }
-
-
-    /**
-     * Initialize the app
-     */
-    fun execute(app: App):Try<Any> {
-        if (app.options.printSummaryBeforeExec) {
-            app.info()
-        }
-
-        val res: Try<Any> =
-                try {
-                    app.execute()
-                } catch (e: Exception) {
-                    Tries.unexpected(Exception("Unexpected error : " + e.message, e))
-                }
-        return res
-    }
-
-
-    /**
-     * Shutdown / end the app
-     */
-    fun end(app: App) {
-        try {
-            app.end()
-        } catch (e: Exception) {
-            error("error while shutting down app : " + e.message)
-        }
-        if (app.options.printSummaryOnShutdown) {
-            // Make a copy of the original context
-            // with updates to the end time/status.
-            //app.summary(finalState)
-        }
+        return Success(true)
     }
 
 

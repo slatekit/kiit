@@ -30,7 +30,7 @@ import slatekit.results.Try
  */
 open class App( val ctx: AppContext,
                 val options:AppOptions = AppOptions(),
-                val schema:ArgsSchema? = null) : LogSupport, EncryptSupport {
+                val schema:ArgsSchema? = AppBuilder.schema()) : LogSupport, EncryptSupport {
 
     /**
      * Provides logger support by supplying debug info, warn, error
