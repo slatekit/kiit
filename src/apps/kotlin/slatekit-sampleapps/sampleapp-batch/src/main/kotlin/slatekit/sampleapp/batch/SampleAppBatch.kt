@@ -48,7 +48,7 @@ fun main(args: Array<String>) {
             about   = SampleAppBatch.about,
             schema  = SampleAppBatch.schema,
             enc     = AppEncryptor,
-            logs = LogbackLogs(),
+            logs    = LogbackLogs(),
             builder = { ctx:AppContext -> SampleAppBatch(ctx) }
     )
 }

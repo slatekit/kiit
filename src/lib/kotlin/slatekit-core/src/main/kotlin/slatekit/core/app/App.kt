@@ -53,17 +53,17 @@ open class App( val ctx: AppContext,
     fun about(): About {
         val conf = ctx.cfg
         return About(
-                id = conf.getStringOrElse("app.id", "app id"),
-                name = conf.getStringOrElse("app.name", "app name"),
-                desc = conf.getStringOrElse("app.desc", "app desc"),
-                company = conf.getStringOrElse("app.company", "company"),
-                region = conf.getStringOrElse("app.region", "ny"),
-                version = conf.getStringOrElse("app.version", "0.9.1"),
-                url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
-                group = conf.getStringOrElse("app.group", "products-dept"),
-                contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
-                tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
-                examples = conf.getStringOrElse("app.examples", "")
+                id = conf.getStringOrElse("app.id", ctx.app.id),
+                name = conf.getStringOrElse("app.name", ctx.app.name),
+                desc = conf.getStringOrElse("app.desc", ctx.app.desc),
+                company = conf.getStringOrElse("app.company", ctx.app.company),
+                region = conf.getStringOrElse("app.region", ctx.app.region),
+                version = conf.getStringOrElse("app.version", ctx.app.version),
+                url = conf.getStringOrElse("app.url", ctx.app.url),
+                group = conf.getStringOrElse("app.group", ctx.app.group),
+                contact = conf.getStringOrElse("app.contact", ctx.app.contact),
+                tags = conf.getStringOrElse("app.tags", ctx.app.tags),
+                examples = conf.getStringOrElse("app.examples", ctx.app.examples)
         )
     }
 
