@@ -204,4 +204,13 @@ object AppFuncs {
         val res = this.javaClass.getResource("/$path")
         return res != null
     }
+
+
+
+    data class AppInputs(
+            val args: Args,
+            val env: Env,
+            val confBase: Conf,
+            val confEnv: Conf
+    )
 }

@@ -26,7 +26,12 @@ import slatekit.results.builders.Notices
 object AppRunner {
 
     /**
-     * Builds an application context using just the command line args, optional args schema, encryptor, logs
+     * Runs the app by :
+     * 1. checking for command line args
+     * 2. validation command line args
+     * 3. building an AppContext for the app ( from inputs )
+     * 4. creating an App using supplied lambda
+     * 5. executing the life-cycle steps ( init, execute, end )
      *
      * @param rawArgs : The raw arguments from command line
      * @param schema : The schema of the command line arguments
@@ -72,7 +77,7 @@ object AppRunner {
         }.then { app ->
 
             // STEP 4: Run - Finally run the application with workflow ( init, exec, end )
-            AppDelegate().run(app)
+            run(app)
         }
         return result
     }
@@ -102,5 +107,75 @@ object AppRunner {
         } ?: Success(args)
 
         return finalResult
+    }
+
+
+    /**
+     * Run the app using the workflow init -> execute -> end
+     */
+    fun run(app:App): Try<Any> = init(app).map { execute(app) }.map { end(app) }
+
+
+    /**
+     * Initialize the app
+     */
+    private fun init(app:App):Try<Any> {
+        // Wrap App.init() call for safety
+        // This will produce a nested Try<Try<Boolean>>
+        val rawResult = Try.attempt { app.init() }
+
+        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
+        val result = rawResult.flatten()
+
+        // Finally flatMap it to ensure creation of directories for the app.
+        return result.flatMap {
+            Try.attempt {
+                app.ctx.dirs?.create()
+                it
+            }.onFailure {
+                println("Error while creating directories for application in user.home directory")
+            }
+        }
+    }
+
+
+    /**
+     * Execute the app
+     */
+    private fun execute(app:App):Try<Any> {
+
+        if (app.options.printSummaryBeforeExec) {
+            app.info()
+        }
+
+        // Wrap App.init() call for safety
+        // This will produce a nested Try<Try<Boolean>>
+        val rawResult = Try.attempt { app.execute() }
+
+        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
+        val result = rawResult.flatten()
+
+        // Finally convert the error
+        return result.mapError {
+            Exception("Unexpected error : " + it.message, it)
+        }
+    }
+
+
+    /**
+     * Shutdown / end the app
+     */
+    private fun end(app:App): Try<Any> {
+        // Wrap App.init() call for safety
+        // This will produce a nested Try<Try<Boolean>>
+        val rawResult = Try.attempt { app.end() }
+
+        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
+        val result = rawResult.flatten()
+
+        // Finally convert the error
+        return result.mapError {
+            Exception("error while shutting down app : " + it.message, it)
+        }
     }
 }
