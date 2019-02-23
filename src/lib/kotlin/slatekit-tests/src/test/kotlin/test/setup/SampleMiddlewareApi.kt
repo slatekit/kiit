@@ -4,10 +4,7 @@ import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.results.*
 
 
 open class SampleMiddlewareApi() : ApiWithMiddleware {
@@ -38,7 +35,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
      */
     override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Try<Any>  {
         return if(req.action.startsWith("hi")) {
-            Failure(Exception("filtered out"))
+            Failure(Exception("filtered out"), StatusCodes.IGNORED)
         } else {
             Success(true)
         }

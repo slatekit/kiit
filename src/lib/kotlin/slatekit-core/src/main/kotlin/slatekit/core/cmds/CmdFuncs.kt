@@ -16,6 +16,7 @@ package slatekit.core.cmds
 import slatekit.common.*
 import slatekit.common.DateTime.Companion.now
 import slatekit.results.Failure
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
@@ -47,10 +48,7 @@ object CmdFuncs {
             // The result
             CmdResult(
                     name = name,
-                    success = false,
-                    message = null,
-                    error = null,
-                    result = null,
+                    result = Success("default"),
                     started = DateTime.MIN,
                     ended = DateTime.MIN,
                     totalMs = 0
@@ -72,7 +70,7 @@ object CmdFuncs {
      * @return
      */
     fun errorResult(name: String, message: String): CmdResult =
-            CmdResult(name, false, message, null, null, now(), now(), 0)
+            CmdResult(name, Failure<Any>(message),  now(), now(), 0)
 
     /**
      * Converts an Tuple to the CmdResult
@@ -88,18 +86,12 @@ object CmdFuncs {
         end: DateTime,
         result: Try<Any>
     ): CmdResult {
-
-        // The result
-        val cmdResult = CmdResult(
+        return CmdResult(
                 name = name,
-                success = result.success,
-                message = result.msg,
-                error = if (result is Failure) result.error else null,
-                result = result.getOrElse { null },
+                result = result,
                 started = start,
                 ended = end,
                 totalMs = end.durationFrom(start).toMillis()
         )
-        return cmdResult
     }
 }

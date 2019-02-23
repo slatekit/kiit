@@ -107,8 +107,8 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleMiddleware", "hi", "get", mapOf(), mapOf())
 
         assert(!r1.success)
-        assert(r1.code == StatusCodes.BAD_REQUEST.code)
-        assert(r1.msg == "filtered out")
+        assert(r1.code == StatusCodes.IGNORED.code)
+        assert(r1.msg == "Ignored")
     }
 
 

@@ -88,7 +88,7 @@ class CmdTests {
       assert(result.success)
       assert(result.ended > DateTime.MIN)
       assert(result.error == null)
-      assert(result.result == "user_0")
+      assert(result.value == "user_0")
       assert(result.started > DateTime.MIN)
     }
 
@@ -104,7 +104,7 @@ class CmdTests {
       assert(result.success)
       assert(result.ended > DateTime.MIN)
       assert(result.error == null)
-      assert(result.result == "admin_1")
+      assert(result.value == "admin_1")
       assert(result.started > DateTime.MIN)
     }
 
@@ -122,7 +122,7 @@ class CmdTests {
       assert(state.hasRun)
       assert(state.errorCount == 0)
       assert(state.runCount == 1)
-      assert(state.lastResult!!.result == "user_0")
+      assert(state.lastResult?.value == "user_0")
       assert(state.name == "create user")
     }
 
@@ -141,7 +141,7 @@ class CmdTests {
       assert(state.hasRun)
       assert(state.errorCount == 0)
       assert(state.runCount == 2)
-      assert(state.lastResult!!.result == "admin_2")
+      assert(state.lastResult!!.value == "admin_2")
       assert(state.name == "create admin")
     }
 
@@ -156,8 +156,9 @@ class CmdTests {
       assert(!result.success)
       assert(result.ended > DateTime.MIN)
       assert(result.error != null)
-      assert(result.message == "Error while executing : create error. error_1")
-      assert(result.error!!.message == "error_1")
+      assert(result.message == "Unexpected")
+      assert(result.error!!.message == "Error while executing : create error. error_1")
+      assert(result.error!!.cause!!.message == "error_1")
       assert(result.started > DateTime.MIN)
     }
 
@@ -174,7 +175,8 @@ class CmdTests {
       assert(state.hasRun)
       assert(state.errorCount == 1)
       assert(state.runCount == 1)
-      assert(state.lastResult!!.message == "Error while executing : create error. error_1")
+      assert(state.lastResult!!.message == "Unexpected")
+      assert(state.lastResult!!.error!!.message == "Error while executing : create error. error_1")
       assert(state.name == "create error")
     }
 
@@ -192,7 +194,7 @@ class CmdTests {
       assert(state.hasRun)
       assert(state.errorCount == 2)
       assert(state.runCount == 2)
-      assert(state.lastResult!!.message == "Error while executing : create error. error_2")
+      assert(state.lastResult!!.error!!.message == "Error while executing : create error. error_2")
       assert(state.name == "create error")
     }
 }

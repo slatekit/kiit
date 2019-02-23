@@ -14,6 +14,9 @@
 package slatekit.core.cmds
 
 import slatekit.common.DateTime
+import slatekit.results.Failure
+import slatekit.results.Result
+import slatekit.results.Success
 
 /**
   * The result of command ( cmd ) that was run
@@ -27,11 +30,17 @@ import slatekit.common.DateTime
   */
 data class CmdResult(
     val name: String,
-    val success: Boolean,
-    val message: String?,
-    val error: Throwable?,
-    val result: Any?,
+    val result: Result<*,*>,
     val started: DateTime,
     val ended: DateTime,
     val totalMs: Long
-)
+) {
+
+    val success: Boolean = result.success
+    val message: String = result.msg
+    val value : Any? = result.getOrNull()
+    val error: Throwable? = when( result ) {
+        is Success -> null
+        is Failure -> result.error as Throwable ?
+    }
+}
