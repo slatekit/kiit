@@ -125,7 +125,7 @@ object AppRunner {
         val rawResult = Try.attempt { app.init() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.flatten()
+        val result = rawResult.inner()
 
         // Finally flatMap it to ensure creation of directories for the app.
         return result.flatMap {
@@ -153,7 +153,7 @@ object AppRunner {
         val rawResult = Try.attempt { app.execute() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.flatten()
+        val result = rawResult.inner()
 
         // Finally convert the error
         return result.mapError {
@@ -171,7 +171,7 @@ object AppRunner {
         val rawResult = Try.attempt { app.end() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.flatten()
+        val result = rawResult.inner()
 
         // Finally convert the error
         return result.mapError {

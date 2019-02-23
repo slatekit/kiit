@@ -12,15 +12,16 @@ usage: Please refer to license on github for more info.
 package slatekit.sampleapp.batch
 
 
-import slatekit.common.ResultEx
-import slatekit.common.Success
 import slatekit.common.args.ArgsSchema
-import slatekit.core.app.AppProcess
+import slatekit.common.info.About
+import slatekit.core.app.App
 import slatekit.core.app.AppRunner
 import slatekit.core.common.AppContext
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.results.Success
+import slatekit.results.Try
 import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.User
 import slatekit.sampleapp.core.services.UserService
@@ -40,64 +41,16 @@ import slatekit.sampleapp.core.services.UserService
  *
  * @param args
  */
-fun main(args: Array<String>): Unit {
+fun main(args: Array<String>) {
 
     AppRunner.run(
-
-            // 2. The custom app that extends from AppProcess
-            SampleAppBatch(
-
-                    // 3. Build the Application context for the app.
-                    // NOTES:
-                    // The AppContext ( see docs online and example app info )
-                    // is a container to store core dependencies such as
-                    //    - selected environment
-                    //    - config settings
-                    //    - logger
-                    //    - encryptor
-                    //    - info about app
-                    // There are different ways you can build up the context:
-                    // 1. Manually      ( explictly supply the components - see below )
-                    // 2. Automatically ( using helper functions to that check command line args )
-                    AppRunner.build(
-                            args = args,
-                            enc = AppEncryptor,
-                            schema = schema,
-                            logs = LogbackLogs(),
-                            converter = ::convert
-                    )
-            )
+            rawArgs = args,
+            about   = SampleAppBatch.about,
+            schema  = SampleAppBatch.schema,
+            enc     = AppEncryptor,
+            logs = LogbackLogs(),
+            builder = { ctx:AppContext -> SampleAppBatch(ctx) }
     )
-}
-
-
-// setup the command line arguments.
-// NOTE:
-// 1. These values can can be setup in the env.conf file
-// 2. If supplied on command line, they override the values in .conf file
-// 3. If any of these are required and not supplied, then an error is display and program exits
-// 4. Help text can be easily built from this schema.
-val schema = ArgsSchema()
-        .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-        .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
-        .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
-        .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
-
-
-/**
- * Converts a built AppContext into a final one for use in this app.
- * NOTE: This is allow customization of any member of the app context:
- * e.g.
- * - encryptor
- * - logger
- * - database
- * - metadata etc
- *
- * @param ctx
- * @return
- */
-fun convert(ctx: AppContext): AppContext {
-    return ctx.copy(inf = ctx.inf.copy(url = "http://apps.companyabc.com/wiki"))
 }
 
 
@@ -114,8 +67,45 @@ fun convert(ctx: AppContext): AppContext {
  * 1. you can extend from AppBase ( SampleApp.Core ) to avoid initializing context in onInit here
  * 2. command line arguments are optional but set up here for demo purposes
  */
-class SampleAppBatch(context: AppContext?) : AppProcess(context) {
+class SampleAppBatch(context: AppContext) : App(context) {
     val ctxEnt = AppEntContext.fromAppContext(ctx)
+
+
+    companion object {
+
+        /**
+         * setup the command line arguments.
+         * NOTE:
+         * 1. These values can can be setup in the env.conf file
+         * 2. If supplied on command line, they override the values in .conf file
+         * 3. If any of these are required and not supplied, then an error is display and program exits
+         * 4. Help text can be easily built from this schema.
+         */
+        val schema = ArgsSchema()
+                .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+                .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
+                .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
+                .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+
+
+        /**
+         * Default static info about the app.
+         * This can be overriden in your env.conf file
+         */
+        val about = About(
+                id = "sample_app_batch",
+                name = "Sample App Batch",
+                desc = "Sample Batch / Script ",
+                company = "Slatekit",
+                region = "NY",
+                version = "1.0.0",
+                url = "www.slatekit.com",
+                group = "codehelix",
+                contact = "kishore@codehelix.co",
+                tags = "sample, template, app",
+                examples = "http://www.slatekit.com/kotlin-core-app.html"
+        )
+    }
 
     /**
      * initialize app context, database and ORM / entities.
@@ -127,7 +117,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
      * 2. cli
      * 3. server
      */
-    override fun onInit(): Unit {
+    override fun init(): Try<Boolean> {
         // 4. Setup the User entity services
         // NOTE(s):
         // 1. See the ORM documentation for more info.
@@ -139,6 +129,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
                 serviceType = UserService::class,
                 repository = EntityRepoInMemory<User>(User::class),
                 serviceCtx = ctxEnt)
+        return Success(true)
     }
 
 
@@ -147,16 +138,16 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
      *
      * @return
      */
-    override fun onExecute(): ResultEx<Any> {
+    override fun execute(): Try<Boolean> {
         info("app executing now")
 
-        info("conf source:" + conf.origin())
-        info("app arg: " + appMeta().start.args)
-        info("app dir: " + appMeta().start.rootDir)
-        info("app env: " + appMeta().start.env)
-        info("app cfg: " + appMeta().start.config)
-        info(conf.getString("env.desc"))
-        info(conf.getString("log.level"))
+        info("conf source:" + ctx.cfg.origin())
+        info("app arg: " + ctx.start.args)
+        info("app dir: " + ctx.start.rootDir)
+        info("app env: " + ctx.start.env)
+        info("app cfg: " + ctx.start.config)
+        info(ctx.cfg.getString("env.desc"))
+        info(ctx.cfg.getString("log.level"))
 
         // Feature 1: Log methods available from LogSupport trait
         // NOTE: This uses the console logger setup in the context in init.
@@ -186,7 +177,7 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
         // Feature 3: Get config settings
         // NOTE: This uses the config setup in the context in the init
         info("CONFIG examples: ==================================================")
-        info("app.name = " + conf.getString("app.name"))
+        info("app.name = " + ctx.cfg.getString("app.name"))
         info("====================================================================")
         info("simulating work for 1 second. please wait...")
         Thread.sleep(1000)
@@ -200,17 +191,8 @@ class SampleAppBatch(context: AppContext?) : AppProcess(context) {
     /**
      * HOOK for when app is shutting down
      */
-    override fun onEnd(): Unit {
+    override fun end(): Try<Boolean> {
         info("app shutting down")
-    }
-
-
-    /**
-     * HOOK for adding items to the summary of data shown at the end of app execution
-     */
-    override fun collectSummaryExtra(): List<Pair<String, String>> {
-        return listOf(
-                Pair("region", ctx.arg.getStringOrElse("region", "n/a"))
-        )
+        return Success(true)
     }
 }
