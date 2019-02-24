@@ -10,7 +10,8 @@
   */
 package slatekit.sampleapp.core.common
 
-import slatekit.common.security.ApiKey
+import slatekit.common.info.ApiKey
+
 
 object AppApiKeys {
 
