@@ -18,10 +18,10 @@ import slatekit.common.DateTime
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
 import slatekit.common.info.Credentials
-import slatekit.core.app.App
-import slatekit.core.app.AppRunner
+import slatekit.app.App
+import slatekit.app.AppRunner
+import slatekit.common.Context
 import slatekit.core.cli.CliSettings
-import slatekit.core.common.AppContext
 import slatekit.integration.apis.CliApi
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
@@ -47,12 +47,12 @@ fun main(args: Array<String>) {
             schema  = SampleAppCLI.schema,
             enc     = AppEncryptor,
             logs    = LogbackLogs(),
-            builder = { ctx: AppContext -> SampleAppCLI(ctx) }
+            builder = { ctx: Context -> SampleAppCLI(ctx) }
     )
 }
 
 
-class SampleAppCLI(context: AppContext) : App<AppEntContext>(AppEntContext.fromAppContext(context)) {
+class SampleAppCLI(context: Context) : App<AppEntContext>(AppEntContext.fromContext(context)) {
 
     companion object {
 

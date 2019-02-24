@@ -11,6 +11,8 @@
 
 package slatekit.common.db
 
+import slatekit.common.conf.Conf
+
 /**
   * Lookup for database connections. Supports a default connection
   * 1. default connection: { connectionString }
@@ -63,6 +65,12 @@ class DbLookup(
     fun defaultDb(con: DbCon): DbLookup {
       val db = DbLookup(defaultCon = con)
       return db
+    }
+
+
+    @JvmStatic
+    fun fromConfig(conf: Conf):DbLookup {
+      return DbLookup.defaultDb(conf.dbCon("db"))
     }
 
     /**

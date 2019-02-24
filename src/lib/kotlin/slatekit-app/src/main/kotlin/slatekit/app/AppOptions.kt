@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.app
+package slatekit.app
 
 open class AppOptions(
     val printSummaryBeforeExec: Boolean = false,

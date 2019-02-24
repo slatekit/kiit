@@ -14,9 +14,9 @@ package slatekit.sampleapp.batch
 
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
-import slatekit.core.app.App
-import slatekit.core.app.AppRunner
-import slatekit.core.common.AppContext
+import slatekit.app.App
+import slatekit.app.AppRunner
+import slatekit.common.Context
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.providers.logs.logback.LogbackLogs
@@ -49,7 +49,7 @@ fun main(args: Array<String>) {
             schema  = SampleAppBatch.schema,
             enc     = AppEncryptor,
             logs    = LogbackLogs(),
-            builder = { ctx:AppContext -> SampleAppBatch(ctx) }
+            builder = { ctx: Context -> SampleAppBatch(ctx) }
     )
 }
 
@@ -67,7 +67,7 @@ fun main(args: Array<String>) {
  * 1. you can extend from AppBase ( SampleApp.Core ) to avoid initializing context in onInit here
  * 2. command line arguments are optional but set up here for demo purposes
  */
-class SampleAppBatch(context: AppContext) : App<AppEntContext>(AppEntContext.fromAppContext(context)) {
+class SampleAppBatch(context: Context) : App<AppEntContext>(AppEntContext.fromContext(context)) {
 
     companion object {
 

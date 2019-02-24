@@ -29,6 +29,7 @@ dependencies {
     //compile "com.sparkjava:spark-core:2.1"
     compile "io.ktor:ktor-server-netty:0.9.5"
     compile project(":slatekit-common")
+    compile project(":slatekit-app")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")

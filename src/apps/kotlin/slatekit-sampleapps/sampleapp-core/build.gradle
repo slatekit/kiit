@@ -25,6 +25,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 	compile fileTree(dir: 'lib', include: '*.jar')
     compile project(":slatekit-common")
+    compile project(":slatekit-app")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")

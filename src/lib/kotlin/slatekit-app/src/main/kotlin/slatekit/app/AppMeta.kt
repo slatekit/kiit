@@ -1,4 +1,4 @@
-package slatekit.core.app
+package slatekit.app
 
 import slatekit.common.ABOUT
 import slatekit.common.HELP

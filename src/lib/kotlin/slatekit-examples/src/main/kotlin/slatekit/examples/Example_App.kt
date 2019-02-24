@@ -13,9 +13,9 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.Context
-import slatekit.core.app.AppOptions
-import slatekit.core.app.App
-import slatekit.core.app.AppRunner
+import slatekit.app.AppOptions
+import slatekit.app.App
+import slatekit.app.AppRunner
 
 //</doc:import_required>
 

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.app
+package slatekit.app
 
 import slatekit.common.*
 import slatekit.common.args.Args

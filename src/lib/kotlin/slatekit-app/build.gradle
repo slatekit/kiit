@@ -15,6 +15,18 @@ buildscript {
 }
 
 
+compileKotlin {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        apiVersion = "1.1"
+        languageVersion = "1.1"
+    }
+}
+
+
 repositories {
     mavenCentral()
 }
@@ -23,15 +35,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    compile "com.googlecode.json-simple:json-simple:1.1"
 	compile fileTree(dir: 'lib', include: '*.jar')
+    compile 'com.slatekit:slatekit-results:0.9.8'
     compile project(":slatekit-common")
-    compile project(":slatekit-app")
-    compile project(":slatekit-meta")
-    compile project(":slatekit-entities")
-    compile project(":slatekit-core")
-    compile project(":slatekit-apis")
-    compile project(":slatekit-integration")
-    compile project(":slatekit-providers")
-    compile project(":sampleapp-core")
 }

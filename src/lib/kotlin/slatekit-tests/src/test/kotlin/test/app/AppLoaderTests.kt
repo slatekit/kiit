@@ -15,9 +15,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Context
 import slatekit.common.info.About
-import slatekit.core.app.App
-import slatekit.core.app.AppRunner
-import slatekit.core.common.AppContext
+import slatekit.app.App
+import slatekit.app.AppRunner
 import slatekit.results.Status
 import slatekit.results.StatusCodes
 import slatekit.results.Success

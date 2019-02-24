@@ -10,7 +10,7 @@
   */
 package slatekit.sampleapp.core.common
 
-import slatekit.core.app.App
+import slatekit.app.App
 import slatekit.core.common.AppContext
 import slatekit.results.Success
 import slatekit.results.Try
