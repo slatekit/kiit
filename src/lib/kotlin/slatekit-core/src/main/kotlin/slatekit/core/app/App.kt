@@ -190,7 +190,7 @@ open class App( val ctx: AppContext,
      *
      */
     open fun end(): Try<Boolean> {
-        return Success(true, msg = "default initialization")
+        return Success(true)
     }
 
 

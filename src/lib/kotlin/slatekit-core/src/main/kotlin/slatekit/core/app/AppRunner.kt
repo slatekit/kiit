@@ -113,7 +113,18 @@ object AppRunner {
     /**
      * Run the app using the workflow init -> execute -> end
      */
-    fun run(app:App): Try<Any> = init(app).map { execute(app) }.map { end(app) }
+    fun run(app:App): Try<Any> {
+        val execResult = init(app).then { execute(app) }
+
+        // Let the end method run
+        execResult.onSuccess { end(execResult, app)  }
+
+        // always return the exec result for now.
+        // Not sure if failure of the "end" method should
+        // designate a failure entirely.
+        // Perhaps, there should be a configuration flag ?
+        return execResult
+    }
 
 
     /**
@@ -165,7 +176,7 @@ object AppRunner {
     /**
      * Shutdown / end the app
      */
-    private fun end(app:App): Try<Any> {
+    private fun end(execResult:Try<Any>, app:App): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Try.attempt { app.end() }
