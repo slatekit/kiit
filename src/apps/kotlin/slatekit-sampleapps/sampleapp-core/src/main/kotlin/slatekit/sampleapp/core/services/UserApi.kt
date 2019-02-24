@@ -13,10 +13,9 @@ package slatekit.sampleapp.core.services
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.ResultMsg
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Notice
 import slatekit.sampleapp.core.models.User
 
 
@@ -31,21 +30,21 @@ class UserApi( context: AppEntContext) : ApiBaseEntity<User, UserService>(contex
 
 
   @ApiAction(name= "", desc= "updates", roles= "@parent", verb = "put", protocol = "*")
-  fun updatePhone(id:Long, phone:String): ResultMsg<String>
+  fun updatePhone(id:Long, phone:String): Notice<String>
   {
     return service.updatePhone(id,phone)
   }
 
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "admin", verb = "@parent", protocol = "@parent")
-  fun activate(id:Long, phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): ResultMsg<String>
+  fun activate(id:Long, phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Notice<String>
   {
     return service.activate(id, phone, code, isPremiumUser, date)
   }
 
 
   @ApiAction(name = "", desc = "gets the current promo code", roles= "@parent", verb = "post", protocol = "@parent")
-  fun promoCode(year:Int, month:Int, region:String): ResultMsg<String>
+  fun promoCode(year:Int, month:Int, region:String): Notice<String>
   {
     return service.promoCode(year, month, region)
   }

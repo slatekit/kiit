@@ -1,14 +1,20 @@
 package slatekit.core.app
 
+import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
-import slatekit.common.info.About
-import slatekit.common.info.Folders
+import slatekit.common.info.*
 import slatekit.common.templates.Subs
 import slatekit.common.toId
 
+/**
+ * Builds default application components:
+ * 1. env   : environments
+ * 2. about : info about app
+ * 3. schema: command line argument schema
+ */
 object AppBuilder {
     /**
      * The list of available environments to choose from.
@@ -29,15 +35,14 @@ object AppBuilder {
      *
      * @return
      */
-    fun envs(): List<Env> =
-            listOf(
-                    Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
-                    Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
-                    Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
-                    Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
-                    Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
-                    Env("pro", EnvMode.Pro, desc = "LIVE environment")
-            )
+    fun envs(): List<Env> = listOf(
+            Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
+            Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
+            Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
+            Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
+            Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
+            Env("pro", EnvMode.Pro, desc = "LIVE environment")
+    )
 
 
     /**
@@ -50,6 +55,7 @@ object AppBuilder {
      */
     fun dbs(conf: Conf): DbLookup = DbLookup.defaultDb(conf.dbCon("db"))
 
+
     /**
      * builds all the info for this application including its
      * id, name, company, contact info, etc.
@@ -58,21 +64,34 @@ object AppBuilder {
      *
      * @return
      */
-    fun about(conf: Conf): About =
-    // Get info about app from base config "env.conf" which is common to all environments.
-            About(
-                    id = conf.getStringOrElse("app.id", "app id"),
-                    name = conf.getStringOrElse("app.name", "app name"),
-                    desc = conf.getStringOrElse("app.desc", "app desc"),
-                    company = conf.getStringOrElse("app.company", "company"),
-                    region = conf.getStringOrElse("app.region", "ny"),
-                    version = conf.getStringOrElse("app.version", "0.9.1"),
-                    url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
-                    group = conf.getStringOrElse("app.group", "products-dept"),
-                    contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
-                    tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
-                    examples = conf.getStringOrElse("app.examples", "")
-            )
+    fun about(conf: Conf): About = About(
+            id = conf.getStringOrElse("app.id", "app id"),
+            name = conf.getStringOrElse("app.name", "app name"),
+            desc = conf.getStringOrElse("app.desc", "app desc"),
+            company = conf.getStringOrElse("app.company", "company"),
+            region = conf.getStringOrElse("app.region", "ny"),
+            version = conf.getStringOrElse("app.version", "0.9.1"),
+            url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
+            group = conf.getStringOrElse("app.group", "products-dept"),
+            contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
+            tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
+            examples = conf.getStringOrElse("app.examples", "")
+    )
+
+
+    /**
+     * setup the command line arguments.
+     * NOTE:
+     * 1. These values can can be setup in the env.conf file
+     * 2. If supplied on command line, they override the values in .conf file
+     * 3. If any of these are required and not supplied, then an error is display and program exits
+     * 4. Help text can be easily built from this schema.
+     */
+    fun schema():ArgsSchema = ArgsSchema()
+            .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+            .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
+            .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+
 
     /**
      * builds a list of directories used by the application for logs/output ( NOT BINARIES ).
@@ -111,8 +130,7 @@ object AppBuilder {
      *
      * @return
      */
-    fun vars(conf: Conf): Subs {
-        val abt = about(conf)
+    fun vars(abt:About): Subs {
         return Subs(listOf(
                 Pair("user.home", { _ -> System.getProperty("user.home") }),
                 Pair("company.id", { _ -> abt.company.toId() }),
@@ -127,4 +145,5 @@ object AppBuilder {
                 Pair("app.dir", { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
         ))
     }
+
 }

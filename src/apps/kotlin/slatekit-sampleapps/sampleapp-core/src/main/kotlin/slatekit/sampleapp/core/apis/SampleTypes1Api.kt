@@ -1,18 +1,10 @@
 package slatekit.sampleapp.core.apis
 
 import slatekit.apis.Api
-import slatekit.common.Result
-import slatekit.common.ResultEx
-import slatekit.common.ResultMsg
+import slatekit.results.*
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.conflict
-import slatekit.common.results.ResultFuncs.deprecated
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.notFound
-import slatekit.common.results.ResultFuncs.success
-import slatekit.common.results.ResultFuncs.unAuthorized
-import slatekit.common.results.ResultFuncs.unexpectedError
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 import slatekit.sampleapp.core.common.AppEncryptor
 import slatekit.sampleapp.core.models.Movie
 
@@ -31,7 +23,7 @@ class SampleTypes1Api {
     fun getBasicLong()            : Long              = 20L
     fun getBasicDouble()          : Double            = 123.45
     fun getEncrypted(text:String) : String            = enc.encrypt(text)
-    fun getResult()               : ResultMsg<Int>       = success(12345, msg = "result object")
+    fun getResult()               : Notice<Int>       = Success(12345, msg = "result object")
     fun getPair()                 : Pair<String,Long> = Pair("abc", 123)
     fun getBasicList()            : List<String>      = listOf("a", "b", "c")
     fun getBasicMap()             : Map<String,Int>   = mapOf("a" to 1, "b" to 2, "c" to 3)
@@ -42,12 +34,12 @@ class SampleTypes1Api {
      * These examples use the Slate Kit Result<T> to model success and failures.
      * The Result<T> has status codes that are HTTP compliant
      */
-    fun getSuccess()              : ResultMsg<Movie>     = success(Movie.samples().first())
-    fun getBadRequest()           : ResultMsg<Movie>     = badRequest("Check your inputs")
-    fun getNotFound()             : ResultMsg<Movie>     = notFound("Item not found")
-    fun getUnauthorized()         : ResultMsg<Movie>     = unAuthorized("You can not edit this item")
-    fun getConflict()             : ResultMsg<Movie>     = conflict("Item has already been changed")
-    fun getFailure()              : ResultMsg<Movie>     = failure("Error finding item")
-    fun getDeprecated()           : ResultMsg<Movie>     = deprecated("This feature is deprecated")
-    fun getUnexpected()           : ResultEx<Movie>      = unexpectedError(Exception("Unexpected errro occured"))
+    fun getSuccess()              : Notice<Movie>     = Notices.success(Movie.samples().first())
+    fun getBadRequest()           : Notice<Movie>     = Notices.invalid("Check your inputs")
+    fun getNotFound()             : Notice<Movie>     = Notices.errored("Item not found", StatusCodes.NOT_FOUND)
+    fun getUnauthorized()         : Notice<Movie>     = Notices.denied("You can not edit this item")
+    fun getConflict()             : Notice<Movie>     = Notices.errored("Item has already been changed", StatusCodes.CONFLICT)
+    fun getFailure()              : Notice<Movie>     = Notices.errored("Error finding item")
+    fun getDeprecated()           : Notice<Movie>     = Notices.errored("This feature is deprecated", StatusCodes.DEPRECATED)
+    fun getUnexpected()           : Try<Movie>        = Tries.unexpected(Exception("Unexpected errro occured"))
 }

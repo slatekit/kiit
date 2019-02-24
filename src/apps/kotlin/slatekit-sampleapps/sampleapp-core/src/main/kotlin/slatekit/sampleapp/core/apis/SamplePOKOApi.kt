@@ -1,13 +1,8 @@
 package slatekit.sampleapp.core.apis
 
 import slatekit.common.DateTime
-import slatekit.common.Result
-import slatekit.common.ResultMsg
+import slatekit.results.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.badRequest
-import slatekit.common.results.ResultFuncs.failure
-import slatekit.common.results.ResultFuncs.success
-
 
 /**
  * Sample 1:
@@ -48,7 +43,7 @@ open class SamplePOKOApi {
     fun request(req: Request): String = req.data?.getString("greeting") ?: "hi"
 
 
-    fun response(guess:Int): ResultMsg<Int> = if(guess == 1) success(1, msg ="Correct") else failure("Try again")
+    fun response(guess:Int): Notice<Int> = if(guess == 1) Success(1, msg ="Correct") else Failure("Try again")
 
 
     /**

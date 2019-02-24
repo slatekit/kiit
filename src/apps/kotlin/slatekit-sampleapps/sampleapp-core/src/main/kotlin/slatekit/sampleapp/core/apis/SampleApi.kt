@@ -10,10 +10,11 @@ import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs.success
 import slatekit.common.types.Email
 import slatekit.common.types.PhoneUS
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Notice
+import slatekit.results.Success
 import slatekit.sampleapp.core.models.Movie
 
 
@@ -58,8 +59,8 @@ class SampleApi(context: AppEntContext): ApiBase(context) {
 
 
     @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
-    fun inputRequest(req: Request): ResultMsg<String> {
-        return success("ok", msg ="raw request id: " + req.data!!.getInt("id"))
+    fun inputRequest(req: Request): Notice<String> {
+        return Success("ok", msg ="raw request id: " + req.data!!.getInt("id"))
     }
 
 
@@ -76,48 +77,48 @@ class SampleApi(context: AppEntContext): ApiBase(context) {
 
 
     @ApiAction(desc = "accepts a list of strings from request", roles= "*", verb = "post", protocol = "@parent")
-    fun inputListString(items:List<String>): ResultMsg<String> {
-        return success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr } ))
+    fun inputListString(items:List<String>): Notice<String> {
+        return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr } ))
     }
 
 
     @ApiAction(desc = "accepts a list of integers from request", roles= "*", verb = "post", protocol = "@parent")
-    fun inputListInt(items:List<Int>): ResultMsg<String> {
-        return success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr.toString() } ))
+    fun inputListInt(items:List<Int>): Notice<String> {
+        return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr.toString() } ))
     }
 
 
     @ApiAction(desc = "accepts a map of string/ints from request", roles= "*", verb = "post", protocol = "@parent")
-    fun inputMapInt(items:Map<String,Int>): ResultMsg<String> {
+    fun inputMapInt(items:Map<String,Int>): Notice<String> {
         val sortedPairs = items.keys.toList().sortedBy{ k:String -> k }.map{ key -> Pair(key, items[key]) }
         val delimited = sortedPairs.fold("", { acc, curr -> acc + "," + curr.first + "=" + curr.second } )
-        return success("ok", msg =  delimited)
+        return Success("ok", msg =  delimited)
     }
 
 
     @ApiAction(desc = "accepts an encrypted int that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecInt(id: EncInt): ResultMsg<String> {
-        return success("ok", msg = "decrypted int : " + id.value)
+    fun inputDecInt(id: EncInt): Notice<String> {
+        return Success("ok", msg = "decrypted int : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted long that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecLong(id: EncLong): ResultMsg<String> {
-        return success("ok", msg = "decrypted long : " + id.value)
+    fun inputDecLong(id: EncLong): Notice<String> {
+        return Success("ok", msg = "decrypted long : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted double that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecDouble(id: EncDouble): ResultMsg<String>
+    fun inputDecDouble(id: EncDouble): Notice<String>
     {
-        return success("ok", msg = "decrypted double : " + id.value)
+        return Success("ok", msg = "decrypted double : " + id.value)
     }
 
 
     @ApiAction(desc = "accepts an encrypted string that will be decrypted", roles= "*", verb = "@parent", protocol = "@parent")
-    fun inputDecString(id: EncString): ResultMsg<String>
+    fun inputDecString(id: EncString): Notice<String>
     {
-        return success("ok", msg = "decrypted string : " + id.value)
+        return Success("ok", msg = "decrypted string : " + id.value)
     }
 
 
@@ -133,7 +134,7 @@ class SampleApi(context: AppEntContext): ApiBase(context) {
     // OUTPUT / RESULT TESTS
     //====================================================================================
     @ApiAction(desc = "test getting return type result[T]", roles = "@parent", verb = "@parent", protocol = "@parent")
-    fun outputResult(): ResultMsg<Int> = success(12345, msg="result object")
+    fun outputResult(): Notice<Int> = Success(12345, msg="result object")
 
 
     @ApiAction(desc = "test getting return type string", roles = "@parent", verb = "@parent", protocol = "@parent")

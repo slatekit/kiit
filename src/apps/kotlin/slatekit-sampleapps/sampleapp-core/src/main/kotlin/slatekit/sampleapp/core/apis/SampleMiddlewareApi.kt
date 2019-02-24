@@ -4,15 +4,13 @@ package slatekit.sampleapp.core.apis
 import slatekit.apis.core.Action
 import slatekit.apis.support.ApiWithMiddleware
 import slatekit.common.Context
-import slatekit.common.Result
-import slatekit.common.ResultMsg
+import slatekit.results.*
 import slatekit.common.requests.Request
-import slatekit.common.results.ResultFuncs
-import slatekit.common.results.ResultFuncs.badRequest
+import slatekit.results.builders.Tries
 import slatekit.sampleapp.core.models.User
 
 
-open class SampleMiddlewareApi() : ApiWithMiddleware {
+open class SampleMiddlewareApi : ApiWithMiddleware {
 
 
 
@@ -41,11 +39,11 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): ResultMsg<Any> {
+    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Try<Any> {
         return if(req.action.startsWith("hi")) {
-            badRequest<Boolean>("filtered out")
+            Tries.invalid<Boolean>("filtered out")
         } else {
-            ResultFuncs.yes()
+            Tries.success(true)
         }
     }
 

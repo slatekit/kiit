@@ -10,10 +10,12 @@
   */
 package slatekit.sampleapp.core.common
 
-import slatekit.core.app.AppProcess
+import slatekit.core.app.App
 import slatekit.core.common.AppContext
+import slatekit.results.Success
+import slatekit.results.Try
 
-class AppBase(context: AppContext?) : AppProcess(context)
+class AppBase(context: AppContext?) : App(context ?: AppContext.empty)
 {
   /**
     * Initialize app
@@ -22,7 +24,5 @@ class AppBase(context: AppContext?) : AppProcess(context)
     * 1. Base class parses the raw command line args and builds the Args object
     * 2. Base class has command line args Array[String] iniitally supplied as rawArgs
     */
-  override fun onInit(): Unit
-  {
-  }
+  override fun init(): Try<Boolean> = Success(true)
 }
