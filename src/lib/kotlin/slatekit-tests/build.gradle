@@ -31,6 +31,7 @@ compileKotlin {
 repositories {
     mavenCentral()
     maven { url "http://dl.bintray.com/jetbrains/spek" }
+    maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
 }
 
 

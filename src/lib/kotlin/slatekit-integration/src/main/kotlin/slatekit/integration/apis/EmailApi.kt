@@ -24,7 +24,7 @@ import slatekit.results.Notice
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
         auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
-class EmailApi(val svc: slatekit.core.email.EmailService, override val context: slatekit.core.common.AppContext) : ApiWithSupport {
+class EmailApi(val svc: slatekit.core.email.EmailService, override val context: slatekit.common.Context) : ApiWithSupport {
 
     /**
      * Sends the email message

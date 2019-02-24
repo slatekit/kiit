@@ -19,6 +19,7 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiBase
+import slatekit.common.Context
 import slatekit.core.common.AppContext
 
 /**
@@ -26,7 +27,7 @@ import slatekit.core.common.AppContext
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.cli)
-class EncryptApi(context: AppContext) : ApiBase(context) {
+class EncryptApi(context: Context) : ApiBase(context) {
 
     @ApiAction(desc = "encryptes the text")
     override fun encrypt(text: String): String {

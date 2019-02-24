@@ -19,6 +19,7 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.Context
 import slatekit.common.Vars
 import slatekit.core.common.AppContext
 import slatekit.core.sms.SmsService
@@ -26,7 +27,7 @@ import slatekit.results.Try
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
         auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
-class SmsApi(val svc: SmsService, override val context: AppContext) : ApiWithSupport {
+class SmsApi(val svc: SmsService, override val context: Context) : ApiWithSupport {
     /**
      * sends a message
      * @param message : message to send

@@ -27,7 +27,7 @@ import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.core.common.AppContext) : slatekit.apis.support.ApiWithSupport {
+class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.ApiWithSupport {
 
     private var _items = ListMap<String, Module>()
 

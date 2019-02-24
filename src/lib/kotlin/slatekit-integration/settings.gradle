@@ -1,22 +1,22 @@
 rootProject.name = 'slatekit-integration'
 
 include ':slatekit-common'
-project(':slatekit-common').projectDir=new File('../slatekit-common')
+//project(':slatekit-common').projectDir=new File('../slatekit-common')
 
 include ':slatekit-meta'
-project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+//project(':slatekit-meta').projectDir=new File('../slatekit-meta')
 
 include ':slatekit-entities'
-project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+//project(':slatekit-entities').projectDir=new File('../slatekit-entities')
 
 include ':slatekit-core'
-project(':slatekit-core').projectDir=new File('../slatekit-core')
+//project(':slatekit-core').projectDir=new File('../slatekit-core')
 
 include ':slatekit-apis'
-project(':slatekit-apis').projectDir=new File('../slatekit-apis')
+//project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 
 include ':slatekit-workers'
-project(':slatekit-workers').projectDir=new File('../slatekit-workers')
+//project(':slatekit-workers').projectDir=new File('../slatekit-workers')
 
 include ':slatekit-query'
-project(':slatekit-query').projectDir=new File('../slatekit-query')
+//project(':slatekit-query').projectDir=new File('../slatekit-query')
