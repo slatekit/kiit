@@ -17,6 +17,7 @@ import slatekit.apis.core.Events
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
+import slatekit.common.Context
 import slatekit.common.DateTime
 import slatekit.common.args.ArgsSchema
 import slatekit.common.auth.Roles
@@ -52,12 +53,11 @@ fun main(args: Array<String>) {
             schema  = SampleAppServer.schema,
             enc     = AppEncryptor,
             logs    = LogbackLogs(),
-            builder = { ctx:AppContext -> SampleAppServer(ctx) }
+            builder = { ctx: Context -> SampleAppServer(ctx) }
     )
 }
 
-class SampleAppServer(context: AppContext) : App(context) {
-    val ctxEnt = AppEntContext.fromAppContext(context)
+class SampleAppServer(context: Context) : App<AppEntContext>(AppEntContext.fromContext(context)) {
 
     companion object {
 
@@ -111,9 +111,9 @@ class SampleAppServer(context: AppContext) : App(context) {
         //    serviceType = MovieService::class,
         //    repository  = EntityRepoMySql<Movie>(Movie::class)
         // )
-        ctxEnt.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
-        ctxEnt.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
-        val svc = ctxEnt.ent.getSvc<Movie>(Movie::class)
+        ctx.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
+        ctx.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
+        val svc = ctx.ent.getSvc<Movie>(Movie::class)
 
 
         // =========================================================================
@@ -211,19 +211,19 @@ class SampleAppServer(context: AppContext) : App(context) {
                 // Example 7: Singleton APIS - 1 instance for all requests
                 // NOTE: be careful and ensure that your APIs are stateless
                 // This example shows integration with the ORM
-                Api(SampleEntityApi(ctxEnt), area = "samples", name = "SampleEntity", declaredOnly = false, desc = "Sample to show APIs with built in support for entities/CRUD"),
+                Api(SampleEntityApi(ctx), area = "samples", name = "SampleEntity", declaredOnly = false, desc = "Sample to show APIs with built in support for entities/CRUD"),
 
                 // Example 8: Middleware
                 Api(SampleErrorsApi(true), area = "samples", name = "SampleErrors", declaredOnly = false, desc = "Sample to show APIs with error handling"),
                 Api(SampleMiddlewareApi(), area = "samples", name = "SampleMiddleware", declaredOnly = false, desc = "Sample to show APIs with middle ware ( hooks, filters )"),
 
                 // Example 9: Provided by Slate Kit
-                Api(InfoApi(ctxEnt), setup = Annotated, declaredOnly = true),
-                Api(VersionApi(ctxEnt), setup = Annotated, declaredOnly = true),
+                Api(InfoApi(ctx), setup = Annotated, declaredOnly = true),
+                Api(VersionApi(ctx), setup = Annotated, declaredOnly = true),
 
                 // Example 10: More examples from the sample app
-                Api(UserApi(ctxEnt), setup = Annotated, declaredOnly = false),
-                Api(MovieApi(ctxEnt), setup = Annotated, declaredOnly = false)
+                Api(UserApi(ctx), setup = Annotated, declaredOnly = false),
+                Api(MovieApi(ctx), setup = Annotated, declaredOnly = false)
         )
     }
 

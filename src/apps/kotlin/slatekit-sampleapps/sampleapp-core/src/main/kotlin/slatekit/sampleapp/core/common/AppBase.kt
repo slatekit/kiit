@@ -10,12 +10,12 @@
   */
 package slatekit.sampleapp.core.common
 
-import slatekit.core.app.App
+import slatekit.app.App
 import slatekit.core.common.AppContext
 import slatekit.results.Success
 import slatekit.results.Try
 
-class AppBase(context: AppContext?) : App(context ?: AppContext.empty)
+class AppBase(context: AppContext?) : App<AppContext>(context ?: AppContext.empty)
 {
   /**
     * Initialize app

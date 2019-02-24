@@ -14,9 +14,9 @@ package slatekit.sampleapp.batch
 
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
-import slatekit.core.app.App
-import slatekit.core.app.AppRunner
-import slatekit.core.common.AppContext
+import slatekit.app.App
+import slatekit.app.AppRunner
+import slatekit.common.Context
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.providers.logs.logback.LogbackLogs
@@ -49,7 +49,7 @@ fun main(args: Array<String>) {
             schema  = SampleAppBatch.schema,
             enc     = AppEncryptor,
             logs    = LogbackLogs(),
-            builder = { ctx:AppContext -> SampleAppBatch(ctx) }
+            builder = { ctx: Context -> SampleAppBatch(ctx) }
     )
 }
 
@@ -67,9 +67,7 @@ fun main(args: Array<String>) {
  * 1. you can extend from AppBase ( SampleApp.Core ) to avoid initializing context in onInit here
  * 2. command line arguments are optional but set up here for demo purposes
  */
-class SampleAppBatch(context: AppContext) : App(context) {
-    val ctxEnt = AppEntContext.fromAppContext(ctx)
-
+class SampleAppBatch(context: Context) : App<AppEntContext>(AppEntContext.fromContext(context)) {
 
     companion object {
 
@@ -124,11 +122,11 @@ class SampleAppBatch(context: AppContext) : App(context) {
         // 2. The entity services uses a Generic Service/Repository pattern for ORM functionality.
         // 3. The services support CRUD operations out of the box for single-table mapped entities.
         // 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
-        ctxEnt.ent.register(
+        ctx.ent.register(
                 entityType = User::class,
                 serviceType = UserService::class,
                 repository = EntityRepoInMemory<User>(User::class),
-                serviceCtx = ctxEnt)
+                serviceCtx = ctx)
         return Success(true)
     }
 

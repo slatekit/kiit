@@ -11,25 +11,19 @@
  * </slate_header>
  */
 
-package slatekit.integration.common
+package slatekit.app
 
 import slatekit.common.*
-import slatekit.common.info.Info
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
-import slatekit.common.db.DbLookup
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
-import slatekit.common.info.Status
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.naming.Namer
-import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
 
 /**
   *
@@ -48,7 +42,7 @@ import slatekit.entities.core.Entities
   * @param res : translated resource strings ( i18n )
   * @param tnt : tenant info ( if running in multi-tenant mode - not officially supported )
   */
-data class AppEntContext(
+data class AppContext(
         override val arg: Args,
         override val env: Env,
         override val cfg: Conf,
@@ -57,58 +51,32 @@ data class AppEntContext(
         override val sys: Sys,
         override val build: Build,
         override val start: StartInfo,
-        val ent: Entities,
-        val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
-        override val dirs: Folders? = null
+        override val dirs: Folders? = null,
+
+        // NOTE: Fix this non-strongly typed Entities object.
+        // By using Any for the entities property, we avoid
+        // slatekit.core having a dependency on slatekit.entities!
+        val ent: Any? = null
 ) : Context {
-    /**
-     * converts this to an app context which is basically
-     * the same context without the Entities
-     */
-    fun toAppContext(): AppContext {
-        return AppContext(arg, env, cfg, logs, app, sys, build, start, enc, dirs)
-    }
 
     companion object {
 
-        fun help(): AppEntContext = err(HELP.code)
-
-        fun exit(): AppEntContext = err(EXIT.code)
-
-
-
-        /**
-         * converts this to an app context which is basically
-         * the same context without the Entities
-         */
-        fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.cfg)
-            return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
-            )
-
-        }
-
-        /**
-         * converts this to an app context which is basically
-         * the same context without the Entities
-         */
-        fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.cfg)
-            return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
-            )
-
-        }
-
+        @JvmStatic
+        fun help(): AppContext = err(HELP.code)
 
         @JvmStatic
-        fun err(code: Int, msg: String? = null): AppEntContext {
+        fun exit(): AppContext = err(EXIT.code)
+
+        @JvmStatic
+        val empty: AppContext = err(HELP.code)
+
+        @JvmStatic
+        fun err(code: Int, msg: String? = null): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             val conf = Config()
-            return AppEntContext(
+            return AppContext(
                     arg = args,
                     env = env,
                     cfg = conf,
@@ -116,17 +84,16 @@ data class AppEntContext(
                     app = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    ent = Entities()
+                    start = StartInfo(args.line, env.key, conf.origin(), env.key)
             )
         }
 
         @JvmStatic
-        fun simple(name: String): AppEntContext {
+        fun simple(name: String): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             val conf = Config()
-            return AppEntContext(
+            return AppContext(
                     arg = args,
                     env = env,
                     cfg = conf,
@@ -134,18 +101,17 @@ data class AppEntContext(
                     app = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
-                    ent = Entities(),
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
         }
 
         @JvmStatic
-        fun sample(id: String, name: String, about: String, company: String): AppEntContext {
+        fun sample(id: String, name: String, about: String, company: String): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             val conf = Config()
-            return AppEntContext(
+            return AppContext(
                     arg = args,
                     env = env,
                     cfg = conf,
@@ -154,7 +120,6 @@ data class AppEntContext(
                     sys = Sys.build(),
                     build = Build.empty,
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    ent = Entities(),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )

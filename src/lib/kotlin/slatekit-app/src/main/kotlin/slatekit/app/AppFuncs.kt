@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.app
+package slatekit.app
 
 import slatekit.common.*
 import slatekit.common.args.Args
@@ -26,7 +26,6 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
 import slatekit.common.log.*
-import slatekit.core.common.AppContext
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success

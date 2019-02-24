@@ -1,4 +1,4 @@
-package slatekit.core.app
+package slatekit.app
 
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf

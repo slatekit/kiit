@@ -26,6 +26,7 @@ dependencies {
     compile "com.googlecode.json-simple:json-simple:1.1"
 	compile fileTree(dir: 'lib', include: '*.jar')
     compile project(":slatekit-common")
+    compile project(":slatekit-app")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")

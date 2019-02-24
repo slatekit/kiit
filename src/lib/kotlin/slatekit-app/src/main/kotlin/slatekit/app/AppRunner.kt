@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.app
+package slatekit.app
 
 import slatekit.common.*
 import slatekit.common.args.Args
@@ -19,7 +19,6 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
 import slatekit.common.log.Logs
-import slatekit.core.common.AppContext
 import slatekit.results.*
 import slatekit.results.builders.Notices
 
@@ -39,10 +38,10 @@ object AppRunner {
      * @param logs   : Optional logs
      * @return
      */
-    fun run(
+    fun <C:Context> run(
             rawArgs: Array<String>,
             about: About,
-            builder: (AppContext) -> App,
+            builder: (Context) -> App<C>,
             schema: ArgsSchema? = null,
             enc: Encryptor? = null,
             logs: Logs? = null
@@ -113,7 +112,7 @@ object AppRunner {
     /**
      * Run the app using the workflow init -> execute -> end
      */
-    fun run(app:App): Try<Any> {
+    fun <C:Context> run(app:App<C>): Try<Any> {
         val execResult = init(app).then { execute(app) }
 
         // Let the end method run
@@ -130,7 +129,7 @@ object AppRunner {
     /**
      * Initialize the app
      */
-    private fun init(app:App):Try<Any> {
+    private fun <C:Context> init(app:App<C>):Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Try.attempt { app.init() }
@@ -153,7 +152,7 @@ object AppRunner {
     /**
      * Execute the app
      */
-    private fun execute(app:App):Try<Any> {
+    private fun <C:Context> execute(app:App<C>):Try<Any> {
 
         if (app.options.printSummaryBeforeExec) {
             app.info()
@@ -176,7 +175,7 @@ object AppRunner {
     /**
      * Shutdown / end the app
      */
-    private fun end(execResult:Try<Any>, app:App): Try<Any> {
+    private fun <C:Context> end(execResult:Try<Any>, app:App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Try.attempt { app.end() }

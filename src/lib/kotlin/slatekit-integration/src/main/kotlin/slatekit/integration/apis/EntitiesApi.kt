@@ -21,7 +21,7 @@ import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.db.DbCon
 import slatekit.common.newline
-import slatekit.core.app.AppBuilder
+import slatekit.common.db.DbLookup
 import slatekit.entities.support.EntitySetupService
 import slatekit.entities.support.EntitySetupSettings
 import slatekit.integration.common.AppEntContext
@@ -103,7 +103,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
         return service().connectionByName(name)
     }
 
-    private val dbLookup by lazy { AppBuilder.dbs(context.cfg) }
+    private val dbLookup by lazy { DbLookup.fromConfig(context.cfg) }
 
     private fun service(): EntitySetupService {
         return EntitySetupService(appContext.ent, dbLookup, EntitySetupSettings(), context.dirs)
