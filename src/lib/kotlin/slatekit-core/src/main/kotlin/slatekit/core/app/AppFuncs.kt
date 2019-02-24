@@ -63,12 +63,15 @@ object AppFuncs {
         }
         // Case 2a: version ?
         else if (isVersion(raw, 0)) {
-            Success("version")
+            Success("version", VERSION)
         }
         // Case 2b: about ?
+        else if (ArgsFuncs.isAbout(raw, 0)) {
+            Success("about", ABOUT)
+        }
         // Case 3a: Help ?
-        else if (ArgsFuncs.isAbout(raw, 0) || ArgsFuncs.isHelp(raw, 0)) {
-            Success("about")
+        else if ( ArgsFuncs.isHelp(raw, 0)) {
+            Success("help", HELP)
         } else {
             Failure("other")
         }

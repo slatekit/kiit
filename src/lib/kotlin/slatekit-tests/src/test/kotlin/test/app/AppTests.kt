@@ -26,27 +26,7 @@ import slatekit.results.getOrElse
 
 class AppTests  {
 
-
-  @Test fun can_request_help() {
-    checkHelp(arrayOf("help", "-help", "--help", "/help", "?"), HELP.code, "help")
-  }
-
-
-  @Test fun can_request_about() {
-    checkHelp(arrayOf("about", "-about", "--about", "/about", "info"), HELP.code, "help")
-  }
-
-
-  @Test fun can_request_version() {
-    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"), HELP.code,  "help")
-  }
-
-
-  @Test fun can_request_exit() {
-    checkHelp(arrayOf("exit", "-exit", "--exit", "/exit", "exit"), EXIT.code, "exit")
-  }
-
-
+  
   @Test fun can_run_process_with_null_args_schema_without_raw_args() {
     runApp { args ->
       val res = AppRunner.run(AppArgsSchemaNull(args))
