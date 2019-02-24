@@ -12,6 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
+import slatekit.common.Context
 import slatekit.core.app.AppOptions
 import slatekit.core.app.App
 import slatekit.core.app.AppRunner
@@ -32,6 +33,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
+import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -59,7 +61,7 @@ import slatekit.results.Try
 // There are different ways you can build up the context
 // 1. Manually      ( explictly supply the components - see below )
 // 2. Automatically ( using helper functions to that check command line args )
-class SampleApp(ctx: AppContext) : App(ctx, AppOptions(
+class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         printSummaryBeforeExec = false,
         printSummaryOnShutdown = true
 )) {
@@ -67,8 +69,9 @@ class SampleApp(ctx: AppContext) : App(ctx, AppOptions(
     /**
      * Life-cycle init hook: for your app to perform any initialization
      */
-    override fun init(): Unit {
+    override fun init(): Try<Boolean> {
         println("app initialized")
+        return Success(true)
     }
 
 
@@ -127,8 +130,9 @@ class SampleApp(ctx: AppContext) : App(ctx, AppOptions(
     /**
      * Life-cycle end hook: called when app is shutting down
      */
-    override fun end(): Unit {
+    override fun end(): Try<Boolean> {
         info("app shutting down")
+        return Success(true)
     }
 
 
@@ -187,7 +191,7 @@ class Example_App : Cmd("app") {
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.
-        AppRunner.run( SampleApp( ctx ) )
+        AppRunner.run(SampleApp(ctx))
 
 
         // APPROACH 2: Automatically build the AppContext using the AppRunner.build function
@@ -202,23 +206,13 @@ class Example_App : Cmd("app") {
         // - Env : By default, the first supported environment is used which is local "env.local"
         // - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
         // - You can store info about the your app in your config file and that can be loaded.
-        val res = AppRunner.run (
-
-                    SampleApp (
-
-                        AppRunner.build (
-
-                            args      = args,
-                            enc       = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                            schema    =  ArgsSchema()
-                                        .text("env"      , "the environment ", false, "dev"  , "dev"  , "loc|dev|qa1" )
-                                        .text("log.level", "the log level"   , false, "info" , "info" , "debug|info"),
-                            converter = { context -> context.copy( app = context.app.copy(
-                                                desc = "Sample app to show the base application using auto-built context",
-                                                url = "http://apps.companyabc.com/wiki")
-                                        )}
-                        )
-                    )
+        val res = AppRunner.run(
+                rawArgs = args ?: arrayOf(),
+                schema = ArgsSchema(),
+                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
+                logs = LogbackLogs(),
+                about = About.none,
+                builder = { ctx -> SampleApp(ctx) }
         )
         return res
         //</doc:examples>

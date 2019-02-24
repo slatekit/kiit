@@ -13,6 +13,7 @@ package slate.test
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.common.Context
 import slatekit.common.info.About
 import slatekit.core.app.App
 import slatekit.core.app.AppRunner
@@ -80,7 +81,7 @@ class AppLoaderTests  {
     }
 
 
-    class AppConfigTest(ctx:AppContext) : App(ctx) {
+    class AppConfigTest(ctx:Context) : App<Context>(ctx) {
 
         override fun execute(): Try<Any> {
             val data = ConfigValueTest(

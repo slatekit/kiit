@@ -67,9 +67,7 @@ fun main(args: Array<String>) {
  * 1. you can extend from AppBase ( SampleApp.Core ) to avoid initializing context in onInit here
  * 2. command line arguments are optional but set up here for demo purposes
  */
-class SampleAppBatch(context: AppContext) : App(context) {
-    val ctxEnt = AppEntContext.fromAppContext(ctx)
-
+class SampleAppBatch(context: AppContext) : App<AppEntContext>(AppEntContext.fromAppContext(context)) {
 
     companion object {
 
@@ -124,11 +122,11 @@ class SampleAppBatch(context: AppContext) : App(context) {
         // 2. The entity services uses a Generic Service/Repository pattern for ORM functionality.
         // 3. The services support CRUD operations out of the box for single-table mapped entities.
         // 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
-        ctxEnt.ent.register(
+        ctx.ent.register(
                 entityType = User::class,
                 serviceType = UserService::class,
                 repository = EntityRepoInMemory<User>(User::class),
-                serviceCtx = ctxEnt)
+                serviceCtx = ctx)
         return Success(true)
     }
 

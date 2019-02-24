@@ -13,13 +13,13 @@
 
 package slatekit.core.app
 
+import slatekit.common.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.info.About
 import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
-import slatekit.core.common.AppContext
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -28,9 +28,9 @@ import slatekit.results.Try
  * checking, app metadata, life-cycle template methods and more. This allows derived classes
  * to be very thin and focus on simply executing main logic of the app.
  */
-open class App( val ctx: AppContext,
-                val options:AppOptions = AppOptions(),
-                val schema:ArgsSchema? = AppBuilder.schema()) : LogSupport, EncryptSupport {
+open class App<C: Context>(val ctx: C,
+                           val options:AppOptions = AppOptions(),
+                           val schema:ArgsSchema? = AppBuilder.schema()) : LogSupport, EncryptSupport {
 
     /**
      * Provides logger support by supplying debug info, warn, error

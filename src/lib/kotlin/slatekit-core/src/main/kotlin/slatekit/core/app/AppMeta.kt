@@ -6,7 +6,6 @@ import slatekit.common.VERSION
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
-import slatekit.core.common.AppContext
 import slatekit.results.*
 
 class AppMeta(val ctx:AppContext, val args:ArgsSchema) {

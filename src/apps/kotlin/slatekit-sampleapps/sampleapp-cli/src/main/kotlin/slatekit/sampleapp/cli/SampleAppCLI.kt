@@ -52,9 +52,7 @@ fun main(args: Array<String>) {
 }
 
 
-class SampleAppCLI(context: AppContext) : App(context) {
-    val ctxEnt = AppEntContext.fromAppContext(ctx)
-
+class SampleAppCLI(context: AppContext) : App<AppEntContext>(AppEntContext.fromAppContext(context)) {
 
     companion object {
 
@@ -117,9 +115,9 @@ class SampleAppCLI(context: AppContext) : App(context) {
         //    entityType = typeOf[Movie],
         //    serviceType= typeOf[MovieService],
         //    repository= EntityRepoMySql[Movie](typeOf[Movie]))
-        ctxEnt.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
-        ctxEnt.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
-        val svc = ctxEnt.ent.getSvc<Movie>(Movie::class)
+        ctx.ent.register<User>(entityType = User::class, serviceType = UserService::class, serviceCtx = ctx)
+        ctx.ent.register<Movie>(entityType = Movie::class, serviceType = MovieService::class, serviceCtx = ctx)
+        val svc = ctx.ent.getSvc<Movie>(Movie::class)
 
         // =========================================================================
         // 3: Create some sample data for demo purposes.
@@ -205,8 +203,8 @@ class SampleAppCLI(context: AppContext) : App(context) {
                         //Api(VersionApi(ctx)      , setup = Annotated, declaredOnly = true ),
 
                         // Example 10: More examples from the sample app
-                        Api(UserApi(ctxEnt), setup = Annotated, declaredOnly = false),
-                        Api(MovieApi(ctxEnt), setup = Annotated, declaredOnly = false)
+                        Api(UserApi(ctx), setup = Annotated, declaredOnly = false),
+                        Api(MovieApi(ctx), setup = Annotated, declaredOnly = false)
 
                 )
         )
