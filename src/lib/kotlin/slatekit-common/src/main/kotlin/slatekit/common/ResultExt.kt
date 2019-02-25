@@ -41,6 +41,7 @@ inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, 
 
 fun <T,E> slatekit.results.Result<Result<T, E>,E>.inner(): Result<T,E> = this.fold( { it }, { Failure(it) } )
 
+val CONFIRM = StatusGroup.Pending(1010, "Confirm")
 val EXIT    = StatusGroup.Errored(4001, "Exiting")
 val HELP    = StatusGroup.Errored(4002, "Help")
 val ABOUT   = StatusGroup.Errored(4003, "About")
