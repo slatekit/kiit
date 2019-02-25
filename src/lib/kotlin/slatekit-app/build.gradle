@@ -37,6 +37,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 	compile fileTree(dir: 'lib', include: '*.jar')
-    compile 'com.slatekit:slatekit-results:0.9.8'
+    compile 'com.slatekit:slatekit-results:0.9.9'
     compile project(":slatekit-common")
 }
