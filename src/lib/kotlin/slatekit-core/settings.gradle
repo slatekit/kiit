@@ -1,7 +1,7 @@
 rootProject.name = 'slatekit-core'
 
 include ':slatekit-common'
-project(':slatekit-common').projectDir=new File('../slatekit-common')
+//project(':slatekit-common').projectDir=new File('../slatekit-common')
 
 include ':slatekit-meta'
-project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+//project(':slatekit-meta').projectDir=new File('../slatekit-meta')

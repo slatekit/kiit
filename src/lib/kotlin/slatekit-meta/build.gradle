@@ -18,6 +18,7 @@ buildscript {
 repositories {
     mavenCentral()
     jcenter()
+    maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
 }
 
 configurations {
