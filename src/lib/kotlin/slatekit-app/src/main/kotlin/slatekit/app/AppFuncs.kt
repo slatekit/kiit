@@ -26,10 +26,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.*
 import slatekit.common.info.*
 import slatekit.common.log.*
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.flatMap
+import slatekit.results.*
 
 object AppFuncs {
 
@@ -58,19 +55,19 @@ object AppFuncs {
 
         // Case 1: Exit ?
         return if (isExit(raw, 0)) {
-            Success("exit", EXIT)
+            Success("exit", StatusCodes.EXIT)
         }
         // Case 2a: version ?
         else if (isVersion(raw, 0)) {
-            Success("version", VERSION)
+            Success("version", StatusCodes.VERSION)
         }
         // Case 2b: about ?
         else if (ArgsFuncs.isAbout(raw, 0)) {
-            Success("about", ABOUT)
+            Success("about", StatusCodes.ABOUT)
         }
         // Case 3a: Help ?
         else if ( ArgsFuncs.isHelp(raw, 0)) {
-            Success("help", HELP)
+            Success("help", StatusCodes.HELP)
         } else {
             Failure("other")
         }

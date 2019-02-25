@@ -39,7 +39,7 @@ dependencies {
 	compile "com.amazonaws:aws-java-sdk-core:1.11.100"
     compile "com.amazonaws:aws-java-sdk-s3:1.11.100"
     compile "com.amazonaws:aws-java-sdk-sqs:1.11.100"
-    compile 'com.slatekit:slatekit-results:0.9.8'
+    compile 'com.slatekit:slatekit-results:0.9.9'
     compile project(":slatekit-common")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")

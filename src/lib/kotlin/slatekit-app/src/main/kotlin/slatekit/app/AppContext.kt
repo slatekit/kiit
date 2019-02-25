@@ -24,6 +24,7 @@ import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
+import slatekit.results.StatusCodes
 
 /**
   *
@@ -63,13 +64,13 @@ data class AppContext(
     companion object {
 
         @JvmStatic
-        fun help(): AppContext = err(HELP.code)
+        fun help(): AppContext = err(StatusCodes.HELP.code)
 
         @JvmStatic
-        fun exit(): AppContext = err(EXIT.code)
+        fun exit(): AppContext = err(StatusCodes.EXIT.code)
 
         @JvmStatic
-        val empty: AppContext = err(HELP.code)
+        val empty: AppContext = err(StatusCodes.HELP.code)
 
         @JvmStatic
         fun err(code: Int, msg: String? = null): AppContext {

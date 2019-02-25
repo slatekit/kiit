@@ -30,6 +30,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
+import slatekit.results.StatusCodes
 
 /**
   *
@@ -72,9 +73,9 @@ data class AppEntContext(
 
     companion object {
 
-        fun help(): AppEntContext = err(HELP.code)
+        fun help(): AppEntContext = err(StatusCodes.HELP.code)
 
-        fun exit(): AppEntContext = err(EXIT.code)
+        fun exit(): AppEntContext = err(StatusCodes.EXIT.code)
 
 
 

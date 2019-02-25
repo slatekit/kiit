@@ -42,7 +42,7 @@ dependencies {
     compile "mysql:mysql-connector-java:5.1.13"
     //compile "postgresql:postgresql:42.1.1"
     compile "postgresql:postgresql:9.1-901-1.jdbc4"
-    compile 'com.slatekit:slatekit-results:0.9.8'
+    compile 'com.slatekit:slatekit-results:0.9.9'
     compile project(":slatekit-common")
     compile project(":slatekit-app")
     compile project(":slatekit-db")

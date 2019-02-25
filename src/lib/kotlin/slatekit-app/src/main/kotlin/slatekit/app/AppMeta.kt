@@ -1,8 +1,5 @@
 package slatekit.app
 
-import slatekit.common.ABOUT
-import slatekit.common.HELP
-import slatekit.common.VERSION
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
@@ -38,9 +35,9 @@ class AppMeta(val ctx:AppContext, val args:ArgsSchema) {
     fun handle( check:Notice<String>) {
         if (check.success) {
             when(check.code) {
-                HELP.code    -> help()
-                ABOUT.code   -> about()
-                VERSION.code -> version()
+                StatusCodes.HELP.code    -> help()
+                StatusCodes.ABOUT.code   -> about()
+                StatusCodes.VERSION.code -> version()
                 else         -> println("Unexpected command: " + check.msg)
             }
         }
