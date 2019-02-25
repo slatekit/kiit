@@ -13,8 +13,10 @@
 
 package slatekit.common
 
-import java.time.*
-import java.time.format.DateTimeFormatter
+//import java.time.*
+import org.threeten.bp.*
+import org.threeten.bp.format.DateTimeFormatter
+//import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
@@ -283,7 +285,9 @@ data class DateTime(val raw: ZonedDateTime) {
 
         @JvmStatic
         fun build(date: Date, zone: ZoneId): ZonedDateTime {
-            val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
+            //val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
+            val local = LocalDateTime.of(date.year, date.month, date.date, date.hours, date.minutes, date.seconds, 0)
+            val dateTime = ZonedDateTime.ofInstant(local.toInstant(ZoneOffset.MIN), zone)
             return dateTime
         }
 
