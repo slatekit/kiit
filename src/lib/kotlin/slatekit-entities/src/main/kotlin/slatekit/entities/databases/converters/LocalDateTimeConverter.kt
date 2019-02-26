@@ -4,7 +4,8 @@ import slatekit.common.DateTime
 import slatekit.entities.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.entities.Consts
-import java.time.LocalDateTime
+//import java.time.*
+import org.threeten.bp.*
 
 object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
 

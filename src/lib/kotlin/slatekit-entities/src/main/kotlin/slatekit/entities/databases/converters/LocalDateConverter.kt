@@ -3,7 +3,8 @@ package slatekit.entities.databases.converters
 import slatekit.entities.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.entities.Consts
-import java.time.LocalDate
+//import java.time.*
+import org.threeten.bp.*
 
 object LocalDateConverter : SqlConverter<LocalDate> {
 
