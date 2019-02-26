@@ -20,7 +20,8 @@ import slatekit.common.encrypt.Encryptor
 import io.ktor.request.*
 import slatekit.common.Metadata
 import slatekit.common.Strings
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
 
 data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : Metadata {
 

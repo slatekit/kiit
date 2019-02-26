@@ -8,7 +8,8 @@ import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
 import slatekit.common.Status
 import slatekit.results.*
-import java.time.Duration
+//import java.time.Duration
+import org.threeten.bp.Duration
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService

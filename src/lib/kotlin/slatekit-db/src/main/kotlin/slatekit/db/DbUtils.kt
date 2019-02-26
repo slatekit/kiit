@@ -16,7 +16,8 @@ import slatekit.common.Types
 import slatekit.common.db.DbCon
 import java.math.BigDecimal
 import java.sql.*
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
 
 object DbUtils {
 
@@ -129,12 +130,12 @@ object DbUtils {
                 Types.JFloatAnyClass -> stmt.setFloat(pos, arg as Float)
                 Types.JDoubleAnyClass -> stmt.setDouble(pos, arg as Double)
                 //Types.JDecimalClass -> stmt.setBigDecimal(pos, arg as BigDecimal)
-                Types.JLocalDateAnyClass -> stmt.setDate(pos, java.sql.Date.valueOf(arg as LocalDate))
-                Types.JLocalTimeAnyClass -> stmt.setTime(pos, java.sql.Time.valueOf(arg as LocalTime))
-                Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(arg as LocalDateTime))
-                Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as ZonedDateTime).toLocalDateTime()))
-                Types.JInstantAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault())))
-                Types.JDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as DateTime).local()))
+                Types.JLocalDateAnyClass -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
+                Types.JLocalTimeAnyClass -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
+                Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
+                Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
+                Types.JInstantAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
+                Types.JDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
             }
         }
     }
@@ -183,4 +184,31 @@ object DbUtils {
             else {
                 text.trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' }
             }
+
+
+    fun org.threeten.bp.LocalDate.toJava8LocalDate():java.time.LocalDate {
+        return java.time.LocalDate.of(this.year, this.month.value, this.dayOfMonth)
+    }
+
+
+    fun org.threeten.bp.LocalTime.toJava8LocalTime():java.time.LocalTime {
+        return java.time.LocalTime.of(this.hour, this.minute, this.second, this.nano)
+    }
+
+
+    fun org.threeten.bp.LocalDateTime.toJava8LocalDateTime():java.time.LocalDateTime {
+        return java.time.LocalDateTime.of(this.year, this.month.value, this.dayOfMonth,
+            this.hour, this.minute, this.second, this.nano)
+    }
+
+
+    fun org.threeten.bp.ZonedDateTime.toJava8ZonedDateTime():java.time.ZonedDateTime {
+        return java.time.ZonedDateTime.of(this.year, this.month.value, this.dayOfMonth,
+            this.hour, this.minute, this.second, this.nano, java.time.ZoneId.of(this.zone.id))
+    }
+
+
+    fun org.threeten.bp.Instant.toJava8Instant():java.time.Instant {
+        return java.time.Instant.ofEpochMilli(this.toEpochMilli())
+    }
 }
