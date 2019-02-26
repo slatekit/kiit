@@ -3,6 +3,7 @@ package slatekit.common.metrics
 import slatekit.common.DateTime
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.ext.durationFrom
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
@@ -74,7 +75,7 @@ data class Timer(override val tags: List<Tag>, val customTags:List<String>? = nu
         call()
         val end = DateTime.now()
         val diffMs = end.durationFrom(start).toMillis()
-        last.set(Record(start.raw.toInstant(), end.raw.toInstant(), diffMs))
+        last.set(Record(start.toInstant(), end.toInstant(), diffMs))
         value.incrementAndGet()
     }
 }

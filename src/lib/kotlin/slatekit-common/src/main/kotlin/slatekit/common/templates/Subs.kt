@@ -14,6 +14,8 @@
 package slatekit.common.templates
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
+import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.utils.ListMap
 
 /**
@@ -78,13 +80,13 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
     private fun defaults() {
 
         // Default functions.
-        _groups.add("today", { _ -> DateTime.today().toStringYYYYMMDD() })
-        _groups.add("yesterday", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
-        _groups.add("tomorrow", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("t", { _ -> DateTime.today().toStringYYYYMMDD() })
-        _groups.add("t-1", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
-        _groups.add("t+1", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("today+1", { _ -> DateTime.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("today-1", { _ -> DateTime.today().plusDays(-1).toStringYYYYMMDD() })
+        _groups.add("today"    , {  DateTimes.today().toStringYYYYMMDD() })
+        _groups.add("yesterday", {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        _groups.add("tomorrow" , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        _groups.add("t"        , {  DateTimes.today().toStringYYYYMMDD() })
+        _groups.add("t-1"      , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        _groups.add("t+1"      , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        _groups.add("today+1"  , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        _groups.add("today-1"  , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
     }
 }

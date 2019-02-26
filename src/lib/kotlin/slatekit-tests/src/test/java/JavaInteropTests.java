@@ -15,6 +15,7 @@ public class JavaInteropTests {
 
     @Test
     public void can_test_env(){
+
         List<Env> all = new ArrayList<Env>();
         all.add( new Env("loc", EnvMode.parse("Dev"), "","Dev environment (local)"));
         all.add( new Env("dv1", EnvMode.parse("Dev"), "","Dev 1 environment (shared)"));

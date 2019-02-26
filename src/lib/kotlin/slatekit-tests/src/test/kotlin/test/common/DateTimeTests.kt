@@ -157,12 +157,12 @@ class DateTimeTests {
 
 
     //@Test
-    fun to_Id() {
-
-        val dt = DateTime.of(2017, 7, 8, 9, 10, 11, 930)
-        val id = dt.toIdWithRandom()
-        Assert.assertEquals( id  , "1707080910110")
-    }
+//    fun to_Id() {
+//
+//        val dt = DateTime.of(2017, 7, 8, 9, 10, 11, 930)
+//        val id = dt.toIdWithRandom()
+//        Assert.assertEquals( id  , "1707080910110")
+//    }
 
 
     @Test fun to_string_YYYYMMDD() {
@@ -228,6 +228,7 @@ class DateTimeTests {
 
 
     fun ensure(dt:DateTime, zoneId:ZoneId):Unit {
+
         assert(dt.raw is ZonedDateTime)
         assert(dt.year    == 2017)
         assert(dt.month   == 7)

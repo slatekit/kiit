@@ -19,6 +19,7 @@ import org.threeten.bp.format.DateTimeFormatter
 //import java.time.format.DateTimeFormatter
 import java.util.*
 
+typealias DateTime = ZonedDateTime
 
 /**
  * DateTime wraps a ZonedDateTime, making using the
@@ -74,177 +75,30 @@ import java.util.*
  *
  * @param raw
  */
-data class DateTime(val raw: ZonedDateTime) {
+class DateTimes {
 
-    val year get() = raw.year
-    val month get() = raw.month.value
-    val day get() = raw.dayOfMonth
-    val hours get() = raw.hour
-    val minutes get() = raw.minute
-    val seconds get() = raw.second
-    val nano get() = raw.nano
-
-    /**
-     * Gets the Local Date time from internal ZonedDateTime
-     */
-    fun local(): LocalDateTime = raw.toLocalDateTime()
-
-    /**
-     * Gets the current ZonedDateTime as a LocalDate ( removing the time portion )
-     */
-    fun date(): LocalDate = raw.toLocalDate()
-
-    /**
-     * Gets the current ZonedDateTime as a LocalTime
-     */
-    fun time(): LocalTime = raw.toLocalTime()
-
-    /**
-     * Gets the current zone for this date/time.
-     */
-    val zone: ZoneId = raw.zone
-
-    /**
-     * Whether or not this is at the UTC zone
-     */
-    val isUtc: Boolean get() = raw.zone == ZoneId.of("UTC")
-
-    /**
-     * Whether or not this is at the UTC zone
-     */
-    fun isZone(id: String): Boolean = raw.zone.id == id
-
-    /**
-     * Gets the current ZonedDateTime at UTC at the same "instant"
-     * This essential converts the time from e.g. New York to UTC ( +4hr )
-     */
-    fun atUtc(): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.of("UTC")))
-
-    /**
-     * Gets the current ZonedDateTime at UTC at the same "local" time
-     * This essential converts the time from e.g. New York to UTC
-     */
-    fun atUtcLocal(): DateTime = DateTime(raw.withZoneSameLocal(ZoneId.of("UTC")))
-
-    /**
-     * Gets the current ZonedDateTime at the local timezone
-     */
-    fun atLocalInstant(): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.systemDefault()))
-
-    /**
-     * Gets the current ZonedDateTime at the same "instant" of timezone supplied.
-     * This essential converts the time from e.g. New York to Europe/Athens ( +7hr )
-     */
-    fun atZone(zone: String): DateTime = DateTime(raw.withZoneSameInstant(ZoneId.of(zone)))
-
-    /**
-     * Gets the current ZonedDateTime at the same "instant" of timezone supplied.
-     * This essential converts the time from e.g. New York to Europe/Athens ( +7hr )
-     */
-    fun atZone(zone: ZoneId): DateTime = DateTime(raw.withZoneSameInstant(zone))
-
-    /**
-     * Format the date using the pattern supplied.
-     */
-    fun format(pattern: String): String = raw.format(DateTimeFormatter.ofPattern(pattern))
-
-    /**
-     * Format the date using the pattern supplied.
-     */
-    fun format(formatter: DateTimeFormatter): String = raw.format(formatter)
-
-    fun plusYears(years: Long): DateTime = DateTime(raw.plusYears(years))
-    fun plusMonths(months: Long): DateTime = DateTime(raw.plusMonths(months))
-    fun plusDays(days: Long): DateTime = DateTime(raw.plusDays(days))
-    fun plusHours(hours: Long): DateTime = DateTime(raw.plusHours(hours))
-    fun plusMinutes(mins: Long): DateTime = DateTime(raw.plusMinutes(mins))
-    fun plusSeconds(secs: Long): DateTime = DateTime(raw.plusSeconds(secs))
-
-    fun withYear(year: Int): DateTime = DateTime(raw.withYear(year))
-    fun withMonth(month: Int): DateTime = DateTime(raw.withMonth(month))
-    fun withDayOfMonth(dayOfMonth: Int): DateTime = DateTime(raw.withDayOfMonth(dayOfMonth))
-    fun withHour(hour: Int): DateTime = DateTime(raw.withHour(hour))
-    fun withMinute(minutes: Int): DateTime = DateTime(raw.withMinute(minutes))
-    fun withSecond(seconds: Int): DateTime = DateTime(raw.withSecond(seconds))
-
-    operator fun compareTo(dt: DateTime): Int = raw.compareTo(dt.raw)
-
-    operator fun plus(duration: Duration): DateTime = DateTime(raw.plus(duration))
-
-    operator fun plus(period: Period): DateTime = DateTime(raw.plus(period))
-
-    operator fun minus(duration: Duration): DateTime = DateTime(raw.minus(duration))
-
-    operator fun minus(period: Period): DateTime = DateTime(raw.minus(period))
-
-    fun yearsTo(dt: DateTime): Int = periodFrom(dt).years
-
-    fun monthsTo(dt: DateTime): Int = periodFrom(dt).months
-
-    fun daysTo(dt: DateTime): Int = periodFrom(dt).days
-
-    fun hoursTo(dt: DateTime): Long = durationFrom(dt).toHours()
-
-    fun minutesTo(dt: DateTime): Duration = durationFrom(dt)
-
-    fun secondsTo(dt: DateTime): Duration = durationFrom(dt)
-
-    fun nanoTo(dt: DateTime): Duration = durationFrom(dt)
-
-    fun durationFrom(dt: DateTime): Duration {
-        val duration = Duration.between(raw.toInstant(), dt.raw.toInstant())
-        return duration
-    }
-
-    fun periodFrom(dt: DateTime): Period {
-        val period = Period.between(raw.toLocalDate(), dt.raw.toLocalDate())
-        return period
-    }
-
-    fun toNumeric(): Long = format("yyyyMMddHHmmss").toLong()
-
-    /**
-     * yyMMddHHmmssXXXXXX
-     * 012345678901234567
-     */
-    fun toIdWithRandom(digits:Int = 5): String = format("yyMMddHHmmss").toLong().toString() + Random.digitsN(digits)
-
-    fun toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
-
-    fun toStringYYYYMMDD(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd")
-
-    fun toStringMMDDYYYY(sep: String = "-"): String = format("MM${sep}dd${sep}yyyy")
-
-    fun toStringMySql(): String = format("yyyy-MM-dd HH:mm:ss")
-
-    fun toStringUtc(): String = format("yyyy-MM-dd'T'HH:mm:ss'Z'")
-
-    fun toStringTime(sep: String = "-"): String = format("HH${sep}mm${sep}ss")
-
-    override fun toString(): String = raw.toString()
 
     companion object {
+
+        val ZONE = ZoneId.systemDefault()
 
         @JvmStatic
         val UTC: ZoneId = ZoneId.of("UTC")
 
         @JvmStatic
-        val MIN: DateTime = DateTime(LocalDateTime.MIN.atZone(ZoneId.systemDefault()))
+        val MIN: DateTime = LocalDateTime.MIN.atZone(ZoneId.systemDefault())
 
         @JvmStatic
-        fun of(d: ZonedDateTime): DateTime = DateTime(d)
+        fun of(d: LocalDateTime): ZonedDateTime = ZonedDateTime.of(d, ZoneId.systemDefault())
 
         @JvmStatic
-        fun of(d: LocalDateTime): DateTime = DateTime(build(d))
+        fun of(d: Date): DateTime = build(d, ZoneId.systemDefault())
 
         @JvmStatic
-        fun of(d: Date): DateTime = DateTime(build(d, ZoneId.systemDefault()))
+        fun of(d: Date, zoneId: ZoneId): DateTime = build(d, zoneId)
 
         @JvmStatic
-        fun of(d: Date, zoneId: ZoneId): DateTime = DateTime(build(d, zoneId))
-
-        @JvmStatic
-        fun of(d: LocalDate): DateTime = DateTime(build(d.year, d.month.value, d.dayOfMonth, zoneId = ZoneId.systemDefault()))
+        fun of(d: LocalDate): DateTime = build(d.year, d.month.value, d.dayOfMonth, zoneId = ZoneId.systemDefault())
 
         /**
          * Builds a DateTime ( ZonedDateTime of system zone ) using explicit values.
@@ -261,7 +115,7 @@ data class DateTime(val raw: ZonedDateTime) {
             zone: String = ""
         ): DateTime {
             val zoneId = if (zone.isNullOrEmpty()) ZoneId.systemDefault() else ZoneId.of(zone)
-            return DateTime(build(year, month, day, hours, minutes, seconds, nano, zoneId))
+            return build(year, month, day, hours, minutes, seconds, nano, zoneId)
         }
 
         /**
@@ -278,7 +132,7 @@ data class DateTime(val raw: ZonedDateTime) {
             nano: Int = 0,
             zoneId: ZoneId
         ): DateTime {
-            return DateTime(build(year, month, day, hours, minutes, seconds, nano, zoneId))
+            return build(year, month, day, hours, minutes, seconds, nano, zoneId)
         }
 
         @JvmStatic
@@ -322,25 +176,25 @@ data class DateTime(val raw: ZonedDateTime) {
          * Builds a DateTime ( ZonedDateTime of system zone ) with current date/time.
          */
         @JvmStatic
-        fun now(): DateTime = DateTime(ZonedDateTime.now())
+        fun now(): DateTime = ZonedDateTime.now()
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
         @JvmStatic
-        fun nowUtc(): DateTime = DateTime(ZonedDateTime.now(ZoneId.of("UTC")))
+        fun nowUtc(): DateTime = ZonedDateTime.now(ZoneId.of("UTC"))
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
         @JvmStatic
-        fun nowAt(zone: String): DateTime = DateTime(ZonedDateTime.now(ZoneId.of(zone)))
+        fun nowAt(zone: String): DateTime = ZonedDateTime.now(ZoneId.of(zone))
 
         /**
          * Builds a DateTime ( ZonedDateTime of UTC ) with current date/time.
          */
         @JvmStatic
-        fun nowAt(zone: ZoneId): DateTime = DateTime(ZonedDateTime.now(zone))
+        fun nowAt(zone: ZoneId): DateTime = ZonedDateTime.now(zone)
 
         @JvmStatic
         fun today(): DateTime {
@@ -349,16 +203,16 @@ data class DateTime(val raw: ZonedDateTime) {
         }
 
         @JvmStatic
-        fun tomorrow(): DateTime = DateTime.today().plusDays(1)
+        fun tomorrow(): DateTime = today().plusDays(1)
 
         @JvmStatic
         fun yesterday(): DateTime = today().plusDays(-1)
 
         @JvmStatic
-        fun daysAgo(days: Long): DateTime = DateTime.today().plusDays(-1 * days)
+        fun daysAgo(days: Long): DateTime = today().plusDays(-1 * days)
 
         @JvmStatic
-        fun daysFromNow(days: Long): DateTime = DateTime.today().plusDays(days)
+        fun daysFromNow(days: Long): DateTime = today().plusDays(days)
 
         @JvmStatic
         fun parse(value: String): DateTime {
@@ -367,7 +221,7 @@ data class DateTime(val raw: ZonedDateTime) {
             } else if (value.contains("T")) {
                 DateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
             } else {
-                DateTime.parseNumeric(value)
+                parseNumeric(value)
             }
         }
 
@@ -379,7 +233,7 @@ data class DateTime(val raw: ZonedDateTime) {
         @JvmStatic
         fun parse(text: String, formatter: DateTimeFormatter): DateTime {
             val zonedDt = ZonedDateTime.parse(text, formatter)
-            return DateTime(zonedDt)
+            return zonedDt
         }
 
         @JvmStatic
@@ -388,14 +242,14 @@ data class DateTime(val raw: ZonedDateTime) {
 
             // Check 1: Empty string ?
             val res = if (text.isNullOrEmpty()) {
-                DateTime.MIN
+                DateTimes.MIN
             } else if (text == "0") {
-                DateTime.MIN
+                DateTimes.MIN
             }
             // Check 2: Date only - no time ?
             // yyyymmdd = 8 chars
             else if (text.length == 8) {
-                DateTime.of(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyyMMdd")))
+                DateTimes.of(LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyyMMdd")))
             }
             // Check 3: Date with time
             // yyyymmddhhmm = 12chars
@@ -421,7 +275,7 @@ data class DateTime(val raw: ZonedDateTime) {
                 date
             } else {
                 // Unexpected
-                DateTime.MIN
+                DateTimes.MIN
             }
             return res
         }

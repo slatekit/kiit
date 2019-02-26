@@ -54,9 +54,9 @@ object Conversions {
     fun toDateTime(text: String): DateTime {
         return when (text) {
             "" -> DateTime.now()
-            "@{today}" -> DateTime.today()
-            "@{tomorrow}" -> DateTime.today().plusDays(1)
-            "@{yesterday}" -> DateTime.today().plusDays(-1)
+            "@{today}" -> DateTimes.today()
+            "@{tomorrow}" -> DateTimes.today().plusDays(1)
+            "@{yesterday}" -> DateTimes.today().plusDays(-1)
             "@{now}" -> DateTime.now()
             else -> DateTime.parse(text)
         }
