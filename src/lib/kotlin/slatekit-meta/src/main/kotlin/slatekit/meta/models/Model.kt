@@ -19,6 +19,7 @@ import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
@@ -231,7 +232,7 @@ class Model(
             0,
             0,
             storedName,
-            DateTime.MIN,
+            DateTimes.MIN,
             false,
             tag,
             cat
@@ -265,7 +266,7 @@ class Model(
             0,
             0,
             storedName,
-            DateTime.MIN,
+            DateTimes.MIN,
             false,
             tag,
             cat
@@ -299,7 +300,7 @@ class Model(
             0,
             0,
             storedName,
-            DateTime.MIN,
+            DateTimes.MIN,
             false,
             tag,
             cat
@@ -333,7 +334,7 @@ class Model(
             0,
             0,
             storedName,
-            DateTime.MIN,
+            DateTimes.MIN,
             false,
             tag,
             cat

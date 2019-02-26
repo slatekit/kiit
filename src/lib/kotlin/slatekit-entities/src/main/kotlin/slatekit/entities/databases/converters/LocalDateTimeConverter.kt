@@ -6,6 +6,9 @@ import slatekit.common.Record
 import slatekit.entities.Consts
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
+import slatekit.common.ext.atUtc
+import slatekit.common.ext.local
 
 object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
 
@@ -16,7 +19,7 @@ object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
 
     fun toSql(value: LocalDateTime?, isUTC: Boolean = false): String {
         return value?.let {
-            val converted = if (isUTC) DateTime.of(value).atUtc().local() else value
+            val converted = if (isUTC) DateTimes.of(value).atUtc().local() else value
             "'" + converted.format(Consts.dateTimeFormat) + "'"
         } ?: Consts.NULL
     }

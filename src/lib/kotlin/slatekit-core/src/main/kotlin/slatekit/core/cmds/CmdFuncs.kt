@@ -14,7 +14,7 @@
 package slatekit.core.cmds
 
 import slatekit.common.*
-import slatekit.common.DateTime.Companion.now
+import slatekit.common.ext.durationFrom
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -31,7 +31,7 @@ object CmdFuncs {
             CmdState(
                     name = name,
                     msg = "Not yet run",
-                    lastRuntime = DateTime.MIN,
+                    lastRuntime = DateTimes.MIN,
                     hasRun = false,
                     runCount = 0,
                     errorCount = 0,
@@ -49,8 +49,8 @@ object CmdFuncs {
             CmdResult(
                     name = name,
                     result = Success("default"),
-                    started = DateTime.MIN,
-                    ended = DateTime.MIN,
+                    started = DateTimes.MIN,
+                    ended = DateTimes.MIN,
                     totalMs = 0
             )
 
@@ -61,7 +61,7 @@ object CmdFuncs {
      * @return
      */
     fun errorState(name: String, message: String): CmdState =
-            CmdState(name, message, DateTime.MIN, false, 0, 0, null)
+            CmdState(name, message, DateTimes.MIN, false, 0, 0, null)
 
     /**
      * builds an error Command Result
@@ -70,7 +70,7 @@ object CmdFuncs {
      * @return
      */
     fun errorResult(name: String, message: String): CmdResult =
-            CmdResult(name, Failure<Any>(message),  now(), now(), 0)
+            CmdResult(name, Failure<Any>(message),  DateTime.now(), DateTime.now(), 0)
 
     /**
      * Converts an Tuple to the CmdResult

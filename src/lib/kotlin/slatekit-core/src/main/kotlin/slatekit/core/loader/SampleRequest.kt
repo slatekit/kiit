@@ -1,6 +1,7 @@
 package slatekit.core.loader
 
 import slatekit.common.DateTime
+import slatekit.common.ext.format
 
 /**
  * Represents the request to create a batch for load testing.

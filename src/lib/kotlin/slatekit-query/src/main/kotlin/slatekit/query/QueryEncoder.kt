@@ -14,6 +14,7 @@
 package slatekit.query
 
 import slatekit.common.DateTime
+import slatekit.common.ext.toStringMySql
 import java.util.*
 
 object QueryEncoder {

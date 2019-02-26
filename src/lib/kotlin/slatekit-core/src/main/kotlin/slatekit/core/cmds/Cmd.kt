@@ -13,7 +13,7 @@
 
 package slatekit.core.cmds
 
-import slatekit.common.DateTime.Companion.now
+import slatekit.common.DateTime
 import slatekit.results.Failure
 import slatekit.results.StatusCodes
 import slatekit.results.Success
@@ -73,7 +73,7 @@ open class Cmd(
      */
     fun execute(args: Array<String>? = null): CmdResult {
         // Track time
-        val start = now()
+        val start = DateTime.now()
 
         // Result
         val result: Try<Any> =
@@ -92,7 +92,7 @@ open class Cmd(
                 }
 
         // Stop tracking time (inclusive of possible error )
-        val end = now()
+        val end = DateTime.now()
 
         // The result
         val cmdResult = CmdFuncs.fromResult(name, start, end, result)

@@ -27,6 +27,7 @@ import java.sql.ResultSet
 import java.sql.Statement
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
 import kotlin.io.*
 
 /**
@@ -165,7 +166,7 @@ class Db(
      * @return
      */
     fun getScalarDate(sql: String, inputs: List<Any>? = null): DateTime =
-            getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTime.MIN
+            getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
 
     /**
      * gets a scalar string value using the sql provided

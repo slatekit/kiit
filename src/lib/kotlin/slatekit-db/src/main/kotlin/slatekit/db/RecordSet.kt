@@ -18,6 +18,11 @@ import slatekit.common.Record
 import java.sql.ResultSet
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
+import slatekit.common.ext.atZone
+import slatekit.common.ext.date
+import slatekit.common.ext.local
+import slatekit.common.ext.time
 
 class RecordSet(private val rs: ResultSet) : Record {
 
@@ -37,13 +42,13 @@ class RecordSet(private val rs: ResultSet) : Record {
     override fun getLong(key: String): Long = rs.getLong(key)
     override fun getFloat(key: String): Float = rs.getFloat(key)
     override fun getDouble(key: String): Double = rs.getDouble(key)
-    override fun getInstant(key: String): Instant = DateTime.of(rs.getTimestamp(key)).raw.toInstant()
-    override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTime.of(it) }
-    override fun getLocalDate(key: String): LocalDate = DateTime.of(rs.getDate(key)).date()
-    override fun getLocalTime(key: String): LocalTime = DateTime.of(rs.getTime(key)).time()
-    override fun getLocalDateTime(key: String): LocalDateTime = DateTime.of(rs.getTimestamp(key)).local()
-    override fun getZonedDateTime(key: String): ZonedDateTime = DateTime.of(rs.getTimestamp(key)).atZone(ZoneId.systemDefault()).raw
-    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = DateTime.build(rs.getTimestamp(key), DateTime.UTC)
+    override fun getInstant(key: String): Instant = DateTimes.of(rs.getTimestamp(key)).toInstant()
+    override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTimes.of(it) }
+    override fun getLocalDate(key: String): LocalDate = DateTimes.of(rs.getDate(key)).date()
+    override fun getLocalTime(key: String): LocalTime = DateTimes.of(rs.getTime(key)).time()
+    override fun getLocalDateTime(key: String): LocalDateTime = DateTimes.of(rs.getTimestamp(key)).local()
+    override fun getZonedDateTime(key: String): ZonedDateTime = DateTimes.of(rs.getTimestamp(key)).atZone(ZoneId.systemDefault())
+    override fun getZonedDateTimeUtc(key: String): ZonedDateTime = DateTimes.build(rs.getTimestamp(key), DateTimes.UTC)
 
     // Helpers
     override fun <T> getOrNull(key: String, fetcher: (String) -> T): T? {

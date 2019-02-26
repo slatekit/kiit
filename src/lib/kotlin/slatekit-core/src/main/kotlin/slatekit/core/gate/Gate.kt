@@ -249,7 +249,7 @@ open class Gate(
             val batchProcessed = volumeLimiter.count.get().toDouble()
             val end = DateTime.now()
             val start = statusTimeStamp.get()
-            val mins = start.raw.until(end.raw, ChronoUnit.MINUTES)
+            val mins = start.until(end, ChronoUnit.MINUTES)
             val perMin = mins / batchProcessed
             perMin > settings.volumeThresholdPerMinute
         } else {

@@ -18,6 +18,8 @@ import java.math.BigDecimal
 import java.sql.*
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
+import slatekit.common.ext.local
 
 object DbUtils {
 
@@ -157,7 +159,7 @@ object DbUtils {
         else if (typ == Types.JLocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
         else if (typ == Types.JZonedDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
         else if (typ == Types.JInstantClass) rs.getTimestamp(pos).toInstant() as T
-        else if (typ == Types.JDateTimeClass) DateTime.of(rs.getTimestamp(pos)) as T
+        else if (typ == Types.JDateTimeClass) DateTimes.of(rs.getTimestamp(pos)) as T
         else null
     }
 

@@ -14,7 +14,6 @@
 package slatekit.core.cache
 
 import slatekit.common.DateTime
-import slatekit.common.DateTime.Companion.now
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
@@ -59,7 +58,7 @@ data class CacheEntry(
      * The actual cache item which is updatd only when its refreshed.
      */
     val item = AtomicReference<CacheItem>(
-            CacheItem(key, null, text, null, seconds, now().plusSeconds(seconds.toLong()), null, 0, null, null)
+            CacheItem(key, null, text, null, seconds, DateTime.now().plusSeconds(seconds.toLong()), null, 0, null, null)
     )
 
     /**

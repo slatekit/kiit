@@ -1,6 +1,8 @@
 package slatekit.meta
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
+import slatekit.common.ext.local
 import slatekit.common.serialization.Serializer
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -72,12 +74,12 @@ class SerializerSample(
             KTypes.KLongType -> _buff.append(100L)
             KTypes.KFloatType -> _buff.append(10.0.toFloat())
             KTypes.KDoubleType -> _buff.append(10.00)
-            KTypes.KDateTimeType -> _buff.append("\"" + DateTime.of(2017, 8, 20) + "\"")
-            KTypes.KLocalDateType -> _buff.append("\"" + DateTime.of(2017, 8, 20).local().toLocalDate() + "\"")
-            KTypes.KLocalTimeType -> _buff.append("\"" + DateTime.of(2017, 8, 20).local().toLocalTime() + "\"")
-            KTypes.KLocalDateTimeType -> _buff.append("\"" + DateTime.of(2017, 8, 20).local() + "\"")
-            KTypes.KZonedDateTimeType -> _buff.append("\"" + DateTime.of(2017, 8, 20).raw + "\"")
-            KTypes.KInstantType -> _buff.append("\"" + DateTime.of(2017, 8, 20).raw.toInstant() + "\"")
+            KTypes.KDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
+            KTypes.KLocalDateType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalDate() + "\"")
+            KTypes.KLocalTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalTime() + "\"")
+            KTypes.KLocalDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local() + "\"")
+            KTypes.KZonedDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
+            KTypes.KInstantType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).toInstant() + "\"")
             KTypes.KDocType -> _buff.append("\"user://myapp/conf/abc.conf\"")
             KTypes.KVarsType -> _buff.append("\"a=1,b=2,c=3\"")
             KTypes.KSmartStringType -> _buff.append("\"123-456-7890\"")

@@ -6,6 +6,8 @@ import slatekit.common.Record
 import slatekit.entities.Consts
 //import java.time.format.DateTimeFormatter
 import org.threeten.bp.format.*
+import slatekit.common.ext.atUtc
+import slatekit.common.ext.atUtcLocal
 
 object DateTimeConverter : SqlConverter<DateTime> {
     private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -16,7 +18,7 @@ object DateTimeConverter : SqlConverter<DateTime> {
 
     fun toSql(value: DateTime?, isUTC: Boolean = false): String {
         return value?.let {
-            val converted = if (isUTC) value.atUtc().raw else value.raw
+            val converted = if (isUTC) value.atUtc() else value
             "'" + converted.format(dateTimeFormat) + "'"
         } ?: Consts.NULL
     }
@@ -27,7 +29,7 @@ object DateTimeConverter : SqlConverter<DateTime> {
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): DateTime? {
         return if (isUTC)
-            DateTime(record.getZonedDateTimeUtc(name)).atUtcLocal()
+            record.getZonedDateTimeUtc(name).atUtcLocal()
         else
             record.getDateTime(name)
     }

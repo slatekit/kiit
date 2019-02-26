@@ -6,6 +6,8 @@ import slatekit.common.Record
 import slatekit.entities.Consts
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
+import slatekit.common.ext.atUtc
 
 object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {
 
@@ -15,7 +17,7 @@ object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {
 
     fun toSql(value: ZonedDateTime?, isUTC: Boolean = false): String {
         return value?.let {
-            val converted = if (isUTC) DateTime.of(value).atUtc().raw else value
+            val converted = if (isUTC) it.atUtc() else value
             "'" + converted.format(Consts.dateTimeFormat) + "'"
         } ?: Consts.NULL
     }

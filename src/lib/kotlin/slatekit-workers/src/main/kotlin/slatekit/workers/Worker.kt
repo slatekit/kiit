@@ -70,7 +70,7 @@ open class Worker<T>(
     private val _runStatus = AtomicReference<RunStatus>(RunStatus())
     private val _runDelay = AtomicReference<Int>(0)
     private val _lastResult = AtomicReference<Try<T>>(slatekit.results.Failure(Exception("not started")))
-    private val _lastRunTime = AtomicReference<DateTime>(DateTime.MIN)
+    private val _lastRunTime = AtomicReference<DateTime>(DateTimes.MIN)
 
     /**
      * Unique id for this worker
