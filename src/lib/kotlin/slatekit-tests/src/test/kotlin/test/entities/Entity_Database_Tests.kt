@@ -13,7 +13,8 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
 import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs

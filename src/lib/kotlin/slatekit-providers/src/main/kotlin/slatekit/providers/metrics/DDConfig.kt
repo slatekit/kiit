@@ -1,7 +1,8 @@
 package slatekit.providers.metrics
 
 import io.micrometer.datadog.DatadogConfig
-import java.time.Duration
+import java.time.*
+//import org.threeten.bp.Duration
 
 /**
  * Configuration class for datadog

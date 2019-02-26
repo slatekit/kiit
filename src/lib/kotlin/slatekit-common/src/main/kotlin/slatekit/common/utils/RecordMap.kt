@@ -16,7 +16,8 @@ package slatekit.common.utils
 import slatekit.common.DateTime
 import slatekit.common.Record
 import slatekit.common.ids.UniqueId
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
 import java.util.*
 
 class RecordMap(private val rs: ListMap<String, Any>) : Record {
@@ -38,11 +39,11 @@ class RecordMap(private val rs: ListMap<String, Any>) : Record {
     override fun getDouble(key: String): Double = rs.get(key) as Double
     override fun getUUID(key: String): java.util.UUID = rs.get(key) as UUID
     override fun getUniqueId(key: String): UniqueId = rs.get(key) as UniqueId
-    override fun getInstant(key: String): Instant = (rs.get(key) as java.sql.Timestamp).toInstant()
+    override fun getInstant(key: String): Instant = DateTime.of(rs.get(key) as java.sql.Timestamp).raw.toInstant()
     override fun getDateTime(key: String): DateTime = (rs.get(key) as java.sql.Timestamp).let { DateTime.of(it) }
-    override fun getLocalDate(key: String): LocalDate = (rs.get(key) as java.sql.Date).toLocalDate()
-    override fun getLocalTime(key: String): LocalTime = (rs.get(key) as java.sql.Time).toLocalTime()
-    override fun getLocalDateTime(key: String): LocalDateTime = (rs.get(key) as java.sql.Timestamp).toLocalDateTime()
-    override fun getZonedDateTime(key: String): ZonedDateTime = (rs.get(key) as java.sql.Timestamp).toLocalDateTime().atZone(ZoneId.systemDefault())
+    override fun getLocalDate(key: String): LocalDate = DateTime.of(rs.get(key) as java.sql.Date).date()
+    override fun getLocalTime(key: String): LocalTime = DateTime.of(rs.get(key) as java.sql.Time).time()
+    override fun getLocalDateTime(key: String): LocalDateTime = DateTime.of(rs.get(key) as java.sql.Timestamp).local()
+    override fun getZonedDateTime(key: String): ZonedDateTime = DateTime.of(rs.get(key) as java.sql.Timestamp).atZone(ZoneId.systemDefault()).raw
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = DateTime.build((rs.get(key) as java.sql.Timestamp), DateTime.UTC)
 }

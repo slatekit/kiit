@@ -3,9 +3,8 @@ package slatekit.entities.databases.converters
 import slatekit.entities.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.entities.Consts
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
+//import java.time.*
+import org.threeten.bp.*
 
 object InstantConverter : SqlConverter<Instant> {
 

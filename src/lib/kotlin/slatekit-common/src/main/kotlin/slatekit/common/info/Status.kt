@@ -14,7 +14,8 @@
 package slatekit.common.info
 
 import slatekit.common.DateTime
-import java.time.Duration
+//import java.time.*
+import org.threeten.bp.*
 
 data class Status(
     val started: DateTime = DateTime.now(),

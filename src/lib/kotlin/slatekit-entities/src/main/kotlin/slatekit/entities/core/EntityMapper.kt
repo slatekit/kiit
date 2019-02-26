@@ -28,7 +28,9 @@ import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 import slatekit.meta.models.ModelMapper
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
+
 /**
  * Maps an entity to sql and from sql records.
  *

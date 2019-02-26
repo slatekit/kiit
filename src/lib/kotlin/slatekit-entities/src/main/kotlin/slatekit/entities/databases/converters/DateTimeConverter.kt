@@ -4,7 +4,8 @@ import slatekit.common.DateTime
 import slatekit.entities.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.entities.Consts
-import java.time.format.DateTimeFormatter
+//import java.time.format.DateTimeFormatter
+import org.threeten.bp.format.*
 
 object DateTimeConverter : SqlConverter<DateTime> {
     private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")

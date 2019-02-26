@@ -15,7 +15,8 @@ package slatekit.common.conf
 
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
-import java.time.*
+//import java.time.*
+import org.threeten.bp.*
 import java.util.*
 
 /**
