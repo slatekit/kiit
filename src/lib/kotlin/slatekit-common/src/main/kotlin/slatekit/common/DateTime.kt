@@ -19,6 +19,7 @@ import org.threeten.bp.format.DateTimeFormatter
 //import java.time.format.DateTimeFormatter
 import java.util.*
 
+
 /**
  * DateTime wraps a ZonedDateTime, making using the
  * new Java 8 date/time/zones a bit simpler & concise,
@@ -286,8 +287,17 @@ data class DateTime(val raw: ZonedDateTime) {
         @JvmStatic
         fun build(date: Date, zone: ZoneId): ZonedDateTime {
             //val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
-            val local = LocalDateTime.of(date.year, date.month, date.date, date.hours, date.minutes, date.seconds, 0)
-            val dateTime = ZonedDateTime.ofInstant(local.toInstant(ZoneOffset.MIN), zone)
+            //val date = Instant.ofEpochMilli(date.toInstant().toEpochMilli()))
+            val d = java.util.Date()
+            val calendar = java.util.GregorianCalendar()
+            calendar.time = date
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH) + 1
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val min = calendar.get(Calendar.MINUTE)
+            val sec = calendar.get(Calendar.SECOND)
+            val dateTime = ZonedDateTime.of(year, month, day, hour, min, sec, 0, zone)
             return dateTime
         }
 
