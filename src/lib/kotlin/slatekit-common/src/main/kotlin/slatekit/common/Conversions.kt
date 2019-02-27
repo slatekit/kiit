@@ -47,7 +47,7 @@ object Conversions {
 
     fun toLocalDateTime(text: String): LocalDateTime = LocalDateTime.parse(text)
 
-    fun toZonedDateTime(text: String): ZonedDateTime = DateTimes.parse(text)
+    fun toZonedDateTime(text: String): ZonedDateTime = toDateTime(text)
 
     fun toZonedDateTimeUtc(text: String): ZonedDateTime = toZonedDateTime(text).withZoneSameLocal(ZoneId.of("UTC"))
 
