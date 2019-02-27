@@ -86,10 +86,10 @@ class CmdTests {
       )
       val result = cmds.run("create user")
       assert(result.success)
-      assert(result.ended > DateTime.MIN)
+      assert(result.ended > DateTimes.MIN)
       assert(result.error == null)
       assert(result.value == "user_0")
-      assert(result.started > DateTime.MIN)
+      assert(result.started > DateTimes.MIN)
     }
 
 
@@ -102,10 +102,10 @@ class CmdTests {
       )
       val result = cmds.run("create admin")
       assert(result.success)
-      assert(result.ended > DateTime.MIN)
+      assert(result.ended > DateTimes.MIN)
       assert(result.error == null)
       assert(result.value == "admin_1")
-      assert(result.started > DateTime.MIN)
+      assert(result.started > DateTimes.MIN)
     }
 
 
@@ -154,12 +154,12 @@ class CmdTests {
       )
       val result = cmds.run("create error")
       assert(!result.success)
-      assert(result.ended > DateTime.MIN)
+      assert(result.ended > DateTimes.MIN)
       assert(result.error != null)
       assert(result.message == "Unexpected")
       assert(result.error!!.message == "Error while executing : create error. error_1")
       assert(result.error!!.cause!!.message == "error_1")
-      assert(result.started > DateTime.MIN)
+      assert(result.started > DateTimes.MIN)
     }
 
 

@@ -15,6 +15,7 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.query.Query
 import slatekit.query.QueryEncoder
 import slatekit.meta.where
@@ -59,7 +60,7 @@ class QueryTests {
 
 
     @Test fun can_convert_boolean_datetime() {
-        Assert.assertTrue( QueryEncoder.convertVal(DateTime.of(2016, 10, 16)) == "'2016-10-16 00:00:00'")
+        Assert.assertTrue( QueryEncoder.convertVal(DateTimes.of(2016, 10, 16)) == "'2016-10-16 00:00:00'")
     }
 
 
@@ -88,7 +89,7 @@ class QueryTests {
 
 
     @Test fun can_build_where_with_1_field_of_type_datetime() {
-        Assert.assertTrue(  Query().where("date", "=", DateTime.of(2016, 10, 16)).toFilter() == "date = '2016-10-16 00:00:00'")
+        Assert.assertTrue(  Query().where("date", "=", DateTimes.of(2016, 10, 16)).toFilter() == "date = '2016-10-16 00:00:00'")
     }
 
 

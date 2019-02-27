@@ -2,6 +2,7 @@ package test.setup
 
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.Field
 import slatekit.entities.core.EntityWithId
 
@@ -60,7 +61,7 @@ data class Movie(
                         playing = false,
                         cost = 10,
                         rating = 4.5,
-                        released = DateTime.of(1985, 8, 10)
+                        released = DateTimes.of(1985, 8, 10)
                 ),
                 Movie(
                         id = 2L,
@@ -69,7 +70,7 @@ data class Movie(
                         playing = true,
                         cost = 100,
                         rating = 4.2,
-                        released = DateTime.of(2017, 7, 4)
+                        released = DateTimes.of(2017, 7, 4)
                 )
         )
 

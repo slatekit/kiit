@@ -19,6 +19,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.svcs.Restify
 import slatekit.common.*
+import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.Namer
 import slatekit.results.Result
@@ -113,9 +114,9 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("cost"      , "30")
         json.put("rating"    , "4.8")
         json.put("released"  , "19810612")
-        json.put("createdAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("createdAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
         val apis = ApiContainer(ctx,
@@ -145,9 +146,9 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("cost"      , "30")
         json.put("rating"    , "4.8")
         json.put("released"  , "19810612")
-        json.put("createdAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("createdAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTime.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
         val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))

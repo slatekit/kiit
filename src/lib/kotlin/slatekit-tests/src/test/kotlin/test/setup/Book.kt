@@ -1,6 +1,7 @@
 package test.setup
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 
 
 data class Book(
@@ -22,7 +23,7 @@ data class Book(
                             category = "fiction",
                             cost = 11,
                             rating = 4.1,
-                            released = DateTime.of(1950, 1, 1)
+                            released = DateTimes.of(1950, 1, 1)
                     ),
                     Book(
                             id = 2,
@@ -30,7 +31,7 @@ data class Book(
                             category = "fiction",
                             cost = 12,
                             rating = 4.2,
-                            released = DateTime.of(1950, 2, 2)
+                            released = DateTimes.of(1950, 2, 2)
                     )
             )
         }

@@ -15,6 +15,7 @@ package test.meta
 import org.junit.Test
 import slatekit.common.Conversions
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.meta.Reflector
@@ -96,7 +97,7 @@ class CallTests {
             assert(args[4] == 123456.toLong())
             assert(args[5] == 2.5f)
             assert(args[6] == 900.99)
-            assert(args[7] == DateTime.of(2017, 5, 27))
+            assert(args[7] == DateTimes.of(2017, 5, 27))
         }
         ensureTypes(InputArgs(mapOf<String, Any>(
                 "phone" to "123456789",

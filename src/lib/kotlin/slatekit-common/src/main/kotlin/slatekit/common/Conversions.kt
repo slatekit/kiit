@@ -47,7 +47,7 @@ object Conversions {
 
     fun toLocalDateTime(text: String): LocalDateTime = LocalDateTime.parse(text)
 
-    fun toZonedDateTime(text: String): ZonedDateTime = ZonedDateTime.parse(text)
+    fun toZonedDateTime(text: String): ZonedDateTime = DateTimes.parse(text)
 
     fun toZonedDateTimeUtc(text: String): ZonedDateTime = toZonedDateTime(text).withZoneSameLocal(ZoneId.of("UTC"))
 
@@ -58,7 +58,7 @@ object Conversions {
             "@{tomorrow}" -> DateTimes.today().plusDays(1)
             "@{yesterday}" -> DateTimes.today().plusDays(-1)
             "@{now}" -> DateTime.now()
-            else -> DateTime.parse(text)
+            else -> DateTimes.parse(text)
         }
     }
 

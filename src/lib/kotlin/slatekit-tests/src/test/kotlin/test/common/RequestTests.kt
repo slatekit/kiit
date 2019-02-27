@@ -5,6 +5,7 @@ import org.junit.Test
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Requests
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 
@@ -21,7 +22,7 @@ class RequestTests {
             "csv",
             "abc123",
             "1.1",
-            DateTime.of(2018, 7, 1, 10, 30, 45)
+            DateTimes.of(2018, 7, 1, 10, 30, 45)
     )
 
 

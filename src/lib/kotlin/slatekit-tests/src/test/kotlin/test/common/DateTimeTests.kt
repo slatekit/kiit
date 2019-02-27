@@ -22,6 +22,7 @@ import slatekit.common.DateTime
 import slatekit.common.ext.*
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
 
 
 class DateTimeTests {
@@ -31,49 +32,49 @@ class DateTimeTests {
     @Test fun can_create_with_defaults() {
 
         fun ensure(dt:DateTime, checkTime:Boolean = true):Unit {
-            assert(dt.raw is ZonedDateTime)
+            assert(dt is ZonedDateTime)
             assert(dt.year    == 2017)
-            assert(dt.month   == 7)
-            assert(dt.day     == 10)
+            assert(dt.month.value   == 7)
+            assert(dt.dayOfMonth     == 10)
             if(checkTime) {
-                assert(dt.hours == 12)
-                assert(dt.minutes == 30)
-                assert(dt.seconds == 45)
+                assert(dt.hour == 12)
+                assert(dt.minute == 30)
+                assert(dt.second == 45)
                 assert(dt.nano == 10)
             }
             assert(dt.zone  == ZoneId.systemDefault())
         }
 
-        ensure(DateTime.of(2017, 7, 10), false)
-        ensure(DateTime.of(2017, 7, 10, 12, 30, 45, 10))
-        ensure(DateTime.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.systemDefault()))
-        ensure(DateTime.of(LocalDateTime.of(2017, 7, 10, 12, 30, 45, 10)))
-        ensure(DateTime.of(ZonedDateTime.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.systemDefault())))
+        ensure(DateTimes.of(2017, 7, 10), false)
+        ensure(DateTimes.of(2017, 7, 10, 12, 30, 45, 10))
+        ensure(DateTimes.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.systemDefault()))
+        ensure(DateTimes.of(LocalDateTime.of(2017, 7, 10, 12, 30, 45, 10)))
+        ensure(ZonedDateTime.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.systemDefault()))
     }
 
 
     @Test fun can_create_with_now(){
         fun ensure(dt:DateTime, zone:String):Unit {
             assert(dt.zone.id == zone)
-            assert(dt.isZone(zone))
+            assert(dt.zone.id == zone)
             println(dt)
         }
         ensure(DateTime.now(), ZoneId.systemDefault().id)
-        ensure(DateTime.nowUtc(), "UTC")
-        ensure(DateTime.nowAt("GMT"), "GMT")
+        ensure(DateTimes.nowUtc(), "UTC")
+        ensure(DateTimes.nowAt("GMT"), "GMT")
     }
 
 
     @Test fun can_convert_to_utc_instant() {
 
         val dt = DateTime.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.of("America/New_York")).atUtc()
-        assert(dt.raw is ZonedDateTime)
+        assert(dt is ZonedDateTime)
         assert(dt.year    == 2017)
-        assert(dt.month   == 7)
-        assert(dt.day     == 10)
-        assert(dt.hours == 16)
-        assert(dt.minutes == 30)
-        assert(dt.seconds == 45)
+        assert(dt.month.value   == 7)
+        assert(dt.dayOfMonth     == 10)
+        assert(dt.hour == 16)
+        assert(dt.minute == 30)
+        assert(dt.second == 45)
         assert(dt.nano == 10)
         assert(dt.zone  == ZoneId.of("UTC"))
     }
@@ -82,13 +83,13 @@ class DateTimeTests {
     @Test fun can_convert_to_utc_local() {
 
         val dt = DateTime.of(2017, 7, 10, 12, 30, 45, 10, ZoneId.of("America/New_York")).atUtcLocal()
-        assert(dt.raw is ZonedDateTime)
+        assert(dt is ZonedDateTime)
         assert(dt.year    == 2017)
-        assert(dt.month   == 7)
-        assert(dt.day     == 10)
-        assert(dt.hours == 12)
-        assert(dt.minutes == 30)
-        assert(dt.seconds == 45)
+        assert(dt.month.value   == 7)
+        assert(dt.dayOfMonth     == 10)
+        assert(dt.hour == 12)
+        assert(dt.minute == 30)
+        assert(dt.second == 45)
         assert(dt.nano == 10)
         assert(dt.zone  == ZoneId.of("UTC"))
     }
@@ -96,13 +97,13 @@ class DateTimeTests {
 
     @Test fun can_add_time_with_methods() {
 
-        val dt1 = DateTime.of(2016, 7, 22, 8, 30, 45)
+        val dt1 = DateTimes.of(2016, 7, 22, 8, 30, 45)
         assert( dt1.plusYears(1)  .year    == 2017)
-        assert( dt1.plusMonths(1) .month   == 8)
-        assert( dt1.plusDays(1)   .day     == 23)
-        assert( dt1.plusHours(1)  .hours   == 9)
-        assert( dt1.plusMinutes(1).minutes == 31)
-        assert( dt1.plusSeconds(1).seconds == 46)
+        assert( dt1.plusMonths(1) .month.value  == 8)
+        assert( dt1.plusDays(1)   .dayOfMonth     == 23)
+        assert( dt1.plusHours(1)  .hour   == 9)
+        assert( dt1.plusMinutes(1).minute == 31)
+        assert( dt1.plusSeconds(1).second == 46)
     }
 
 
@@ -110,14 +111,14 @@ class DateTimeTests {
 
         fun ensure(dt:DateTime, y:Int, m:Int, d:Int, h:Int, mm:Int, s:Int){
             assert( dt.year    == y)
-            assert( dt.month   == m)
-            assert( dt.day     == d)
-            assert( dt.hours   == h)
-            assert( dt.minutes == mm)
-            assert( dt.seconds == s)
+            assert( dt.month.value   == m)
+            assert( dt.dayOfMonth     == d)
+            assert( dt.hour  == h)
+            assert( dt.minute == mm)
+            assert( dt.second == s)
         }
 
-        val d = DateTime.of(2016, 7, 22, 6, 30, 45)
+        val d = DateTimes.of(2016, 7, 22, 6, 30, 45)
         ensure( (d + 2.years  ), 2018, 7, 22, 6, 30, 45)
         ensure( (d + 2.months ), 2016, 9, 22, 6, 30, 45)
         ensure( (d + 2.days   ), 2016, 7, 24, 6, 30, 45)
@@ -129,7 +130,7 @@ class DateTimeTests {
 
     @Test fun can_compare_dates(){
 
-        val dt1 = DateTime.of(2016, 7, 22, 8, 30, 45)
+        val dt1 = DateTimes.of(2016, 7, 22, 8, 30, 45)
         ensureTrue(dt1, "> ", dt1.plusHours(-1), dt1 > dt1.plusHours(-1))
         ensureTrue(dt1, ">=", dt1.plusHours(-1), dt1 >= dt1.plusHours(-1))
         ensureTrue(dt1, ">=", dt1.plusHours(0), dt1 >= dt1.plusHours(0))
@@ -151,7 +152,7 @@ class DateTimeTests {
 
     @Test fun to_Numeric() {
 
-        val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
+        val dt = DateTimes.of(2017, 7, 8, 9, 10, 11)
         Assert.assertEquals( dt.toNumeric()  , 20170708091011L)
     }
 
@@ -167,7 +168,7 @@ class DateTimeTests {
 
     @Test fun to_string_YYYYMMDD() {
 
-        val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
+        val dt = DateTimes.of(2017, 7, 8, 9, 10, 11)
         Assert.assertEquals( dt.toStringYYYYMMDD("") , "20170708")
         Assert.assertEquals( dt.toStringYYYYMMDD("-"), "2017-07-08")
         Assert.assertEquals( dt.toStringYYYYMMDD("/"), "2017/07/08")
@@ -176,7 +177,7 @@ class DateTimeTests {
 
     @Test fun to_string_MMDDYYYY() {
 
-        val dt = DateTime.of(2017, 7, 8, 9, 10, 11)
+        val dt = DateTimes.of(2017, 7, 8, 9, 10, 11)
         Assert.assertEquals( dt.toStringMMDDYYYY("")  , "07082017")
         Assert.assertEquals( dt.toStringMMDDYYYY("-") , "07-08-2017")
         Assert.assertEquals( dt.toStringMMDDYYYY("/") , "07/08/2017")
@@ -185,15 +186,15 @@ class DateTimeTests {
 
     @Test fun to_string_mysql() {
 
-        val dt = DateTime.of(2016, 8, 10, 12, 30, 45)
+        val dt = DateTimes.of(2016, 8, 10, 12, 30, 45)
         assert( dt.toStringMySql() == "2016-08-10 12:30:45")
     }
 
 
     @Test fun can_parse_numeric_dates() {
-        ensure(DateTime.parseNumeric("20170710"))
-        ensure(DateTime.parseNumeric("201707101230"),true, false)
-        ensure(DateTime.parseNumeric("20170710123045"), true, true)
+        ensure(DateTimes.parseNumeric("20170710"))
+        ensure(DateTimes.parseNumeric("201707101230"),true, false)
+        ensure(DateTimes.parseNumeric("20170710123045"), true, true)
     }
 
 
@@ -211,16 +212,16 @@ class DateTimeTests {
 
 
     fun ensure(dt:DateTime, checkTime:Boolean = false, checkSeconds:Boolean = false):Unit {
-        assert(dt.raw is ZonedDateTime)
+        assert(dt is ZonedDateTime)
         assert(dt.year    == 2017)
-        assert(dt.month   == 7)
-        assert(dt.day     == 10)
+        assert(dt.month.value   == 7)
+        assert(dt.dayOfMonth     == 10)
         if(checkTime) {
-            assert(dt.hours == 12)
-            assert(dt.minutes == 30)
+            assert(dt.hour == 12)
+            assert(dt.minute == 30)
         }
         if(checkSeconds) {
-            assert(dt.seconds == 45)
+            assert(dt.second == 45)
         }
         assert(dt.zone  == ZoneId.systemDefault())
     }
@@ -229,13 +230,13 @@ class DateTimeTests {
 
     fun ensure(dt:DateTime, zoneId:ZoneId):Unit {
 
-        assert(dt.raw is ZonedDateTime)
+        assert(dt is ZonedDateTime)
         assert(dt.year    == 2017)
-        assert(dt.month   == 7)
-        assert(dt.day     == 10)
-        assert(dt.hours == 12)
-        assert(dt.minutes == 30)
-        assert(dt.seconds == 45)
+        assert(dt.month.value   == 7)
+        assert(dt.dayOfMonth     == 10)
+        assert(dt.hour == 12)
+        assert(dt.minute == 30)
+        assert(dt.second == 45)
 
         val zone = dt.zone
         assert(zone == zoneId)

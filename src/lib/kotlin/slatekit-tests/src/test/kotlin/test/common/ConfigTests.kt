@@ -15,6 +15,7 @@ package test.common
 import org.junit.Test
 import slatekit.common.info.ApiLogin
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.envs.EnvMode
@@ -106,7 +107,7 @@ class ConfigTests {
         assert(!movie.playing )
         assert(movie.cost == 30)
         assert(movie.rating == 4.8)
-        assert(movie.released == DateTime.of(1981, 6, 12))
+        assert(movie.released == DateTimes.of(1981, 6, 12))
     }
 
 

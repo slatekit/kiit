@@ -4,6 +4,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.db.Db
 import java.time.LocalDate
@@ -104,7 +105,7 @@ class Db_Tests_MySql {
 
     @Test
     fun can_query_scalar_date() {
-        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarDate(sql) }, DateTime.of(2017, 7, 6, 9, 25, 0))
+        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarDate(sql) }, DateTimes.of(2017, 7, 6, 9, 25, 0))
     }
 
 

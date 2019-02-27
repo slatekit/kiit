@@ -15,6 +15,7 @@ package test.entities
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.ids.UniqueId
 import slatekit.common.toUUId
 import slatekit.entities.core.EntityMapper
@@ -30,7 +31,7 @@ import test.setup.*
 
 class Entity_Mapper_Sql_Tests {
 
-    val sampleDate = DateTime.of(2018, 11, 1, 8, 30, 0)
+    val sampleDate = DateTimes.of(2018, 11, 1, 8, 30, 0)
     val sampleUser = AuthorR(0, sampleUUID1, sampleDate, 0, sampleDate, 0, "k@abc.com",
             true, 35, StatusEnum.Active, 123.45, sampleUUID1.toUUId(), UniqueId.fromString("us:" + sampleUUID1) )
 

@@ -15,6 +15,7 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.ext.tail
 import slatekit.common.newline
 import slatekit.meta.Serialization
@@ -66,9 +67,9 @@ class SerializerTests {
 
     @Test fun can_serialize_dates() {
         val serializer = Serialization.json()
-        val d1 = serializer.serialize(DateTime.of(2017,6,1))
-        val d2 = serializer.serialize(DateTime.of(2017,6,1,9,5,0))
-        val d3 = serializer.serialize(DateTime.of(2017,6,1,9,5,5))
+        val d1 = serializer.serialize(DateTimes.of(2017,6,1))
+        val d2 = serializer.serialize(DateTimes.of(2017,6,1,9,5,0))
+        val d3 = serializer.serialize(DateTimes.of(2017,6,1,9,5,5))
 
         Assert.assertTrue( d1 == "\"2017-06-01T00:00:00-04:00\"" )
         Assert.assertTrue( d2 == "\"2017-06-01T09:05:00-04:00\"" )
@@ -82,7 +83,7 @@ class SerializerTests {
         Assert.assertTrue( serializer.serialize(listOf(1, 2, 3)) == "[1, 2, 3]")
         Assert.assertTrue( serializer.serialize(listOf(true, false, true)) == "[true, false, true]")
         Assert.assertTrue( serializer.serialize(listOf(1.2, 3.4, 5.6)) == "[1.2, 3.4, 5.6]")
-        Assert.assertTrue( serializer.serialize(listOf("a", 1, 2.3, true, DateTime.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00\"]")
+        Assert.assertTrue( serializer.serialize(listOf("a", 1, 2.3, true, DateTimes.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00\"]")
     }
 
 

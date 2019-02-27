@@ -14,6 +14,7 @@ import slatekit.meta.Deserializer
 import test.setup.Movie
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTimes
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
@@ -57,7 +58,7 @@ class ConvertTests {
         assert(results[0] == LocalDate.of(2017, 7, 6))
         assert(results[1] == LocalTime.of(10,30,45))
         assert(results[2] == LocalDateTime.of(2017,7,6, 10,30, 45))
-        assert(results[3] == DateTime.of(2017,7,6, 10,30))
+        assert(results[3] == DateTimes.of(2017,7,6, 10,30))
     }
 
 
