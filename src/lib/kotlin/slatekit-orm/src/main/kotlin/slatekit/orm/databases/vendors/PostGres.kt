@@ -6,6 +6,7 @@ import slatekit.common.naming.Namer
 import slatekit.query.Query
 import slatekit.meta.models.Model
 import slatekit.entities.core.Entity
+import slatekit.entities.core.EntityMapper
 import slatekit.entities.repos.EntityRepoSql
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
@@ -24,15 +25,13 @@ object PostGreseMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-class PostGresConverter<TId, T> : Converter<TId, T>() where TId:kotlin.Comparable<TId>, T:Entity<TId>
+class PostGresConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
 
 
 class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGreseMap, namer)
 
 
 class PostGresQuery : Query()
-
-
 
 
 /**
@@ -48,8 +47,8 @@ open class PostGresEntityRepo<TId, T>(
         db: Db,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
-        entityMapper: OrmMapper<TId, T>,
-        nameOfTable: String? = null,
+        entityMapper: EntityMapper<TId, T>,
+        nameOfTable: String,
         encryptor: Encryptor? = null,
         namer: Namer? = null
 ) : EntityRepoSql<TId, T>(
@@ -61,9 +60,8 @@ open class PostGresEntityRepo<TId, T>(
         encryptor = encryptor,
         namer = namer,
         encodedChar = '"',
-        query = { PostGresQuery() },
-        lastId = null
-) where TId:Comparable<TId>, T:Entity<TId>
+        query = { PostGresQuery() }
+) where TId : Comparable<TId>, T : Entity<TId>
 
 
 /**
@@ -71,8 +69,9 @@ open class PostGresEntityRepo<TId, T>(
  *
  * @param model
  */
-open class PostGresEntityMapper(model: Model,
-                                utc: Boolean = false,
-                                enc: Encryptor? = null,
-                                namer: Namer? = null)
-    : EntityMapper(model, PostGresConverter, utc, '"', enc, namer)
+open class PostGresEntityMapper<TId, T>(model: Model,
+                                        utc: Boolean = false,
+                                        enc: Encryptor? = null,
+                                        namer: Namer? = null)
+    : OrmMapper<TId, T>(model, MySqlConverter(), utc, '"', enc, namer)
+        where TId : kotlin.Comparable<TId>, T : slatekit.entities.core.Entity<TId>

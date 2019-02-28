@@ -13,7 +13,7 @@
 
 package slatekit.orm.migrations
 
-data class EntitySetupSettings(
+data class OrmMigrationSettings(
     val enableLogging: Boolean = true,
     val enableOutput: Boolean = true
 )

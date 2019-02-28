@@ -16,6 +16,10 @@ package slatekit.orm.core
 import slatekit.common.newline
 import slatekit.db.DbType
 import slatekit.db.DbType.DbTypeMySql
+import slatekit.entities.core.EntityInfo
+import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.IEntityRepo
+import slatekit.entities.core.IEntityService
 import slatekit.orm.databases.SqlBuilder
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
@@ -26,7 +30,6 @@ import kotlin.reflect.KClass
  * @param entityType : the type of the entity
  * @param entityServiceType : the type of the service    ( EntityService[T] or derivative )
  * @param entityRepoType : the type of the repository ( EntityRepository[T] or derivative )
- * @param entityMapperType : the type of the mapper     ( EntityMapper[T] or derivative )
  * @param entityServiceInstance : an instance of the service ( singleton usage )
  * @param entityRepoInstance : an instance of the repo    ( singleton usage )
  * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
@@ -36,21 +39,19 @@ import kotlin.reflect.KClass
  * @param dbShard : a key identifying the database shard
  *                               ( see DbLookup / Example_Database.scala )
  */
-data class OrmEntityInfo(
-        val entityType: KClass<*>,
+class OrmEntityInfo(
         val model: Model,
-        val entityServiceType: KClass<*>? = null,
-        val entityRepoType: KClass<*>? = null,
-        val entityMapperType: KClass<*>? = null,
-        val entityServiceInstance: IEntityService? = null,
-        val entityRepoInstance: IEntityRepo? = null,
-        val entityMapperInstance: EntityMapper? = null,
-        val entityDDL: SqlBuilder? = null,
-        val dbType: DbType = DbTypeMySql,
-        val dbKey: String = "",
-        val dbShard: String = ""
-) {
-    val entityTypeName = entityType.qualifiedName ?: ""
+        val entityDDL: SqlBuilder,
+        entityType: KClass<*>,
+        entityServiceType: KClass<*>,
+        entityRepoType: KClass<*>,
+        entityServiceInstance: IEntityService?,
+        entityRepoInstance: IEntityRepo,
+        entityMapperInstance: EntityMapper<*, *>,
+        dbType: DbType,
+        dbKey: String = "",
+        dbShard: String = ""
+) : EntityInfo(entityType, entityServiceType, entityRepoType, entityRepoInstance, entityMapperInstance, dbType, dbKey, dbShard, entityServiceInstance) {
 
     fun toStringDetail(): String {
         val text = "entity type  : " + entityTypeName + newline +
@@ -59,7 +60,7 @@ data class OrmEntityInfo(
                 "svc     inst : " + getTypeNameFromInst(entityServiceInstance) + newline +
                 "repo    type : " + getTypeName(entityRepoType) + newline +
                 "repo    inst : " + getTypeNameFromInst(entityRepoInstance) + newline +
-                "mapper  type : " + getTypeName(entityMapperType) + newline +
+                "mapper  type : " + getTypeName(entityMapperInstance::class) + newline +
                 "mapper  inst : " + getTypeNameFromInst(entityMapperInstance) + newline +
                 "db type      : " + dbType + newline +
                 "db key       : " + dbKey + newline +
@@ -67,7 +68,7 @@ data class OrmEntityInfo(
         return text
     }
 
-    fun getTypeName(tpe: KClass<*>?): String = tpe?.qualifiedName ?: ""
+    private fun getTypeName(tpe: KClass<*>?): String = tpe?.qualifiedName ?: ""
 
-    fun getTypeNameFromInst(tpe: Any?): String = tpe?.kClass?.qualifiedName ?: ""
+    private fun getTypeNameFromInst(tpe: Any?): String = tpe?.kClass?.qualifiedName ?: ""
 }

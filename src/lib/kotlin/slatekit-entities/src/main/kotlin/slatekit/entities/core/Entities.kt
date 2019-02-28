@@ -61,17 +61,17 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-open class Entities(
+open class Entities<TInfo>(
         _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
         val namer: Namer? = null
-) {
+) where TInfo:EntityInfo {
 
-    private var _info = ListMap<String, EntityInfo>(listOf())
-    private val _mappers = mutableMapOf<String, EntityMapper<*,*>>()
-    private val logger = logs.getLogger("db")
-    val builder = EntityBuilder(_dbs, enc)
+    protected var _info = ListMap<String, TInfo>(listOf())
+    protected val _mappers = mutableMapOf<String, EntityMapper<*,*>>()
+    protected val logger = logs.getLogger("db")
+    open val builder = EntityBuilder(_dbs, enc)
 
     open fun <TId, T> register(
             entityType: KClass<*>,
@@ -85,24 +85,25 @@ open class Entities(
             tableName: String? = null,
             serviceCtx: Any? = null,
             persistUTC: Boolean = false
-    ): EntityInfo where TId:Comparable<TId>, T:Entity<TId> {
+    ): TInfo where TId:Comparable<TId>, T:Entity<TId> {
 
         // 1. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)
+        val serviceTypeFinal = serviceType ?: service::class
 
         // 2. Now store all the info for easy lookup
         val info = EntityInfo(
                 entityType,
-                model,
-                serviceType,
+                serviceTypeFinal,
                 repo::class,
-                service,
                 repo,
                 mapper,
                 dbType,
                 dbKey ?: "",
-                dbShard ?: ""
-        )
+                dbShard ?: "",
+                service
+        ) as TInfo
+
         val key = builder.key(entityType, dbKey ?: "", dbShard ?: "")
         _info = _info.add(key, info)
         _mappers.put(entityType.qualifiedName!!, mapper)
@@ -158,13 +159,13 @@ open class Entities(
             getSvcByType(tpe, dbKey, dbShard) as EntityService<TId, T>
 
 
-    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityInfo {
+    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): TInfo {
         val key = builder.key(entityType, dbKey, dbShard)
         require(_info.contains(key), { "Entity invalid or not registered with key : " + key })
         return _info.get(key)!!
     }
 
-    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityInfo {
+    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): TInfo {
         val key = builder.key(entityType, dbKey, dbShard)
         if (!_info.contains(key)) {
             logger.error("Mapper not found for $key")

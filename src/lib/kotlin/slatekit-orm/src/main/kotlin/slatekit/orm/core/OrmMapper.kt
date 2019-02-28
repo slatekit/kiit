@@ -38,25 +38,43 @@ import slatekit.entities.core.EntityMapper
  *
  * @param model
  */
-open class OrmMapper<TId, T>(model: Model,
-                        val converter: Converter<TId, T>,
-                        val isUtc: Boolean = false,
-                        val quoteChar: Char = '`',
-                        encryptor: Encryptor? = null,
-                        namer: Namer? = null)
-    : EntityMapper<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+open class OrmMapper<TId, T>(
+        val model: Model,
+        val converter: Converter<TId, T>,
+        val isUtc: Boolean = false,
+        val quoteChar: Char = '`',
+        val encryptor: Encryptor? = null,
+        val namer: Namer? = null)
+    : EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+
+
+    override fun setId(id: TId, entity: T): T {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun mapSqlInsert(entity: T): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun mapSqlUpdate(entity: T): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun <T> mapFrom(record: Record): T? {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
     /**
      * Gets all the column names mapped to the field names
      */
-    val cols:List<String> by lazy { model.fields.map { it.storedName } }
+    val cols: List<String> by lazy { model.fields.map { it.storedName } }
 
 
     /**
      * Gets all the column names excluding the primary key ("id" for now ) mapped to field names.
      */
-    val colsWithoutId:List<String> by lazy {
+    val colsWithoutId: List<String> by lazy {
         model.fields.filter { it.name.toLowerCase() != idCol }.map { it.storedName }
     }
 
@@ -71,7 +89,7 @@ open class OrmMapper<TId, T>(model: Model,
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean, filterId:Boolean = true): List<Pair<String, String>> {
+    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean, filterId: Boolean = true): List<Pair<String, String>> {
 
         val converted = mutableListOf<Pair<String, String>>()
         val len = model.fields.size
@@ -79,7 +97,7 @@ open class OrmMapper<TId, T>(model: Model,
             val mapping = model.fields[ndx]
             val isIdCol = mapping.name.toLowerCase() == idCol
             val isFieldMapped = !isIdCol || !filterId
-            if(isFieldMapped) {
+            if (isFieldMapped) {
                 // Column name e.g first = 'first'
                 // Also for sub-objects
                 val col = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
@@ -90,8 +108,8 @@ open class OrmMapper<TId, T>(model: Model,
                 // Build up list of values
                 when (data) {
                     is List<*> -> data.forEach {
-                        when(it) {
-                            is Pair<*, *> -> converted.add( it as Pair<String,String>)
+                        when (it) {
+                            is Pair<*, *> -> converted.add(it as Pair<String, String>)
                             else -> converted.add(Pair(col, buildValue(col, it ?: "", useKeyValue)))
                         }
                     }
@@ -103,7 +121,7 @@ open class OrmMapper<TId, T>(model: Model,
     }
 
 
-    open fun tableName():String = buildName(_model.table)
+    open fun tableName(): String = buildName(model.table)
 
 
     open fun buildName(name: String): String {
@@ -121,7 +139,7 @@ open class OrmMapper<TId, T>(model: Model,
      * Builds the value as either "'john'" or "first='john'"
      * which is needed for insert/update
      */
-    private inline fun buildValue(col:String, data:Any, useKeyValue: Boolean):String {
+    private inline fun buildValue(col: String, data: Any, useKeyValue: Boolean): String {
         return if (useKeyValue) "$col=$data" else data.toString()
     }
 
@@ -137,7 +155,7 @@ open class OrmMapper<TId, T>(model: Model,
         // Similar to the Mapper class but reversed
         val data = if (mapping.dataCls == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
-            converter.strings.toSql(sVal, mapping.encrypt, _encryptor)
+            converter.strings.toSql(sVal, mapping.encrypt, encryptor)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             converter.bools.toSql(bVal)

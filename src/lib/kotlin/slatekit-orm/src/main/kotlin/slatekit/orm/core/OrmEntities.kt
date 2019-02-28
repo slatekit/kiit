@@ -13,20 +13,13 @@
 
 package slatekit.orm.core
 
-import slatekit.common.utils.ListMap
 import slatekit.common.naming.Namer
 import slatekit.common.db.*
-import slatekit.db.DbType.DbTypeMySql
-import slatekit.db.DbType.DbTypePGres
-import slatekit.db.types.DbSource
-import slatekit.db.types.DbSourceMySql
-import slatekit.db.types.DbSourcePostGres
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.db.Db
 import slatekit.db.DbType
-import slatekit.orm.support.EntityComponentBuilder
+import slatekit.entities.core.*
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
@@ -63,59 +56,55 @@ import kotlin.reflect.KClass
  *
  */
 class OrmEntities(
-        private val _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
-        val enc: Encryptor? = null,
-        val logs: Logs = LogsDefault,
-        val namer: Namer? = null
-) {
+        dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
+        enc: Encryptor? = null,
+        logs: Logs = LogsDefault,
+        namer: Namer? = null
+) : Entities<OrmEntityInfo>(dbs, enc, logs, namer) {
 
-    private var _info = ListMap<String, OrmEntityInfo>(listOf())
-    private val _mappers = mutableMapOf<String, OrmMapper<*,*>>()
-    private val logger = logs.getLogger("db")
-    val builder = OrmBuilder(_dbs, enc)
+    val builder2:OrmBuilder = OrmBuilder(dbs, enc)
 
     fun <TId, T> register(
             entityType: KClass<*>,
             model: Model? = null,
-            serviceType: KClass<*>? = null,
-            repoType: KClass<*>? = null,
-            mapperType: KClass<*>? = null,
-            repository: OrmRepo<TId, T>? = null,
-            mapper: EntityMapper? = null,
+            tableName: String,
+            serviceType: KClass<*>,
+            repository: EntityRepo<TId, T>? = null,
+            mapper: EntityMapper<TId,T>? = null,
             dbType: DbType = DbType.DbTypeMemory,
             dbKey: String? = null,
             dbShard: String? = null,
-            tableName: String? = null,
             serviceCtx: Any? = null,
             persistUTC: Boolean = false
-    ): OrmEntityInfo where TId:Comparable<TId>, T:Entity<TId> {
+    ): OrmEntityInfo where TId:Comparable<TId>, T: Entity<TId> {
 
         // 1. Model ( schema of the entity )
-        val entityModel = model ?: builder.model(entityType, namer, tableName)
+        val entityModel = model ?: builder2.model(entityType, namer, tableName)
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val entityMapper = mapper ?: builder.mapper(dbType, entityModel, persistUTC, enc, namer)
+        val entityMapper = mapper ?: builder2.mapper(dbType, entityModel, persistUTC, enc, namer)
+        val mapperType = entityMapper::class
 
         // 3. Repo ( provides CRUD using the Mapper)
-        val entityRepo = repository ?: builder.repo<TId, T>(dbType, dbKey ?: "", dbShard ?: "", entityType, entityMapper, tableName)
+        val entityRepo = repository ?: builder2.repo(dbType, dbKey ?: "", dbShard ?: "", entityType, entityMapper, tableName)
+        val repoType = entityRepo::class
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
-        val entityService = builder.service(this, serviceType, entityRepo, serviceCtx)
+        val entityService = builder2.service(this, serviceType, entityRepo, serviceCtx)
 
         // 5. DDL ( for table creation schema, ddl management )
-        val ddl = builder.ddl(dbType, namer)
+        val entityDdl = builder2.ddl(dbType, namer)
 
         // 6. Now store all the info for easy lookup
         val info = OrmEntityInfo(
-                entityType,
                 entityModel,
+                entityDdl,
+                entityType,
                 serviceType,
                 repoType,
-                mapperType,
                 entityService,
                 entityRepo,
                 entityMapper,
-                ddl,
                 dbType,
                 dbKey ?: "",
                 dbShard ?: ""
@@ -124,113 +113,5 @@ class OrmEntities(
         _info = _info.add(key, info)
         _mappers.put(entityType.qualifiedName!!, entityMapper)
         return info
-    }
-
-
-    /**
-     * Gets the default database
-     */
-    fun getDb(): Db = builder.db()
-
-
-    /**
-     * Gets a database by its name/alias
-     */
-    fun getDbByName(name: String): Db = builder.db(name)
-
-
-    /**
-     * Gets a list of all the registered entities
-     */
-    fun getEntities(): List<OrmEntityInfo> = _info.all()
-
-
-    /**
-     * Gets a registered model ( schema for an entity ) for the entity type
-     */
-    fun getModel(entityType: KClass<*>): Model {
-        val entityKey = builder.key(entityType)
-        if (!_info.contains(entityKey)) {
-            logger.error("Model not found for $entityKey")
-            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
-        }
-        return _info.get(entityKey)?.model!!
-    }
-
-
-    /**
-     * Gets a registered mapper for the entity type
-     */
-    fun getMapper(entityType: KClass<*>): EntityMapper {
-        val entityKey = entityType.qualifiedName
-        if (!_mappers.contains(entityKey)) {
-            logger.error("Mapper not found for $entityKey")
-            throw IllegalArgumentException("mapper not found for :$entityKey")
-        }
-
-        val mapper = _mappers[entityKey]
-        return mapper!!
-    }
-
-    /**
-     * Get a registered repository for the entity type
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<TId, T> where TId:Comparable<TId>, T:Entity<TId> =
-            getRepoByType(tpe, dbKey, dbShard) as EntityRepo<TId, T>
-
-    /**
-     * Get a registered service for the entity type
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <TId, T> getSvc(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityService<TId, T> where TId:Comparable<TId>, T : Entity<TId> =
-            getSvcByType(tpe, dbKey, dbShard) as EntityService<TId, T>
-
-
-    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): OrmEntityInfo {
-        val key = builder.key(entityType, dbKey, dbShard)
-        require(_info.contains(key), { "Entity invalid or not registered with key : " + key })
-        return _info.get(key)!!
-    }
-
-    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): OrmEntityInfo {
-        val key = builder.key(entityType, dbKey, dbShard)
-        if (!_info.contains(key)) {
-            logger.error("Mapper not found for $key")
-            throw IllegalArgumentException("invalid entity : $key")
-        }
-        return _info.get(key)!!
-    }
-
-    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
-        val info = getInfoByName(entityType, dbKey, dbShard)
-        return info.entityServiceInstance!!
-    }
-
-
-    private fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
-        val info = getInfo(entityType, dbKey, dbShard)
-        return info.entityServiceInstance!!
-    }
-
-
-    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityRepo {
-        val info = getInfo(tpe, dbKey, dbShard)
-        return info.entityRepoInstance!!
-    }
-
-
-    fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
-        val dbType = builder.con(dbKey, dbShard)
-
-        // Only supporting MySql for now.
-        val source = dbType?.let { type ->
-            when (type.driver) {
-                DbTypeMySql.driver -> DbSourceMySql()
-                DbTypePGres.driver -> DbSourcePostGres()
-                else -> DbSourceMySql()
-            }
-        } ?: DbSourceMySql()
-        return source
     }
 }

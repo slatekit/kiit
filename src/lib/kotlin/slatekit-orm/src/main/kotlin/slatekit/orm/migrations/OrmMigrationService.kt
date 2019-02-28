@@ -30,10 +30,10 @@ import slatekit.orm.core.OrmEntityInfo
 /**
  * Created by kreddy on 3/23/2016.
  */
-class EntitySetupService(
+class OrmMigrationService(
         private val _entities: OrmEntities,
         private val _dbs: DbLookup?,
-        private val _settings: EntitySetupSettings,
+        private val _settings: OrmMigrationSettings,
         private val _folders: Folders?
 ) {
 
@@ -128,8 +128,8 @@ class EntitySetupService(
     fun generateSqlAllUninstall(): Try<String> {
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = _entities.getEntities().map { entity ->
-
-            val dropTable = _entities.getDbSource().buildDropTable(entity.model.table)
+            val ormEntityInfo = entity as OrmEntityInfo
+            val dropTable = _entities.getDbSource().buildDropTable(ormEntityInfo.model.table)
 
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }
@@ -162,14 +162,14 @@ class EntitySetupService(
         val result = try {
             val fullName = moduleName
             val svc = _entities.getSvcByTypeName(fullName)
-            val model = svc.repo().mapper().model()
+            val info = _entities.getInfoByName(moduleName)
             val ddl = _entities.getInfoByName(fullName).entityDDL
-            val sqlTable = ddl?.createTable(model) ?: ""
-            val sqlIndexes = ddl?.createIndex(model) ?: listOf()
+            val sqlTable = ddl.createTable(info.model)
+            val sqlIndexes = ddl.createIndex(info.model)
             val sql: List<String> = listOf(sqlTable).plus(sqlIndexes)
             val filePath = if (_settings.enableOutput) {
                 _folders?.let { folders ->
-                    val fileName = "model-${model.name}.sql"
+                    val fileName = "model-${info.model.name}.sql"
                     Files.writeDatedFile(folders.pathToOutputs, fileName, sql.joinToString(newline))
                     folders.pathToOutputs + Props.pathSeparator + fileName
                 }
@@ -215,7 +215,7 @@ class EntitySetupService(
     }
 
     private fun each(operation: (OrmEntityInfo) -> Try<String>): Try<List<String>> {
-        val results = _entities.getEntities().map { operation(it) }
+        val results = _entities.getEntities().map { operation(it as OrmEntityInfo) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }
         val error = if (success) "" else messages.joinToString(newline)

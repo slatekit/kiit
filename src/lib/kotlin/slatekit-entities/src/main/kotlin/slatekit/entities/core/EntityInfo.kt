@@ -34,15 +34,14 @@ import kotlin.reflect.KClass
  */
 open class EntityInfo(
         val entityType: KClass<*>,
-        val model: Model? = null,
-        val entityServiceType: KClass<*>? = null,
-        val entityRepoType: KClass<*>? = null,
-        val entityServiceInstance: IEntityService? = null,
+        val entityServiceType: KClass<*>,
+        val entityRepoType: KClass<*>,
         val entityRepoInstance: IEntityRepo,
         val entityMapperInstance: EntityMapper<*,*>,
         val dbType: DbType = DbTypeMySql,
         val dbKey: String = "",
-        val dbShard: String = ""
+        val dbShard: String = "",
+        val entityServiceInstance: IEntityService? = null
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""
 }

@@ -6,7 +6,7 @@ import slatekit.common.naming.Namer
 import slatekit.entities.repos.EntityRepoSql
 import slatekit.query.Query
 import slatekit.entities.core.Entity
-import slatekit.orm.core.EntityMapper
+import slatekit.entities.core.EntityMapper
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
 import slatekit.orm.databases.TypeMap
@@ -25,7 +25,7 @@ object MySqlTypeMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-object MySqlConverter : Converter()
+class MySqlConverter<TId, T> : Converter<TId, T>() where TId:kotlin.Comparable<TId>, T:Entity<TId>
 
 
 class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
@@ -47,8 +47,8 @@ open class MySqlEntityRepo<TId, T>(
         db: Db,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
-        entityMapper: OrmMapper<TId, T>,
-        nameOfTable: String? = null,
+        entityMapper: EntityMapper<TId, T>,
+        nameOfTable: String,
         encryptor: Encryptor? = null,
         namer: Namer? = null
 ) : EntityRepoSql<TId, T>(
@@ -60,8 +60,7 @@ open class MySqlEntityRepo<TId, T>(
         encryptor = encryptor,
         namer = namer,
         encodedChar = '`',
-        query = { MySqlQuery() },
-        lastId = "SELECT LAST_INSERT_ID();"
+        query = { MySqlQuery() }
 ) where TId:Comparable<TId>, T: Entity<TId>
 
 
@@ -71,8 +70,9 @@ open class MySqlEntityRepo<TId, T>(
  *
  * @param model
  */
-open class MySqlEntityMapper(model: Model,
+open class MySqlEntityMapper<TId, T>(model: Model,
                              utc: Boolean = false,
                              enc: Encryptor? = null,
                              namer: Namer? = null)
-    : EntityMapper(model, MySqlConverter, utc, '`', enc, namer)
+    : OrmMapper<TId, T>(model, MySqlConverter(), utc, '`', enc, namer)
+        where TId:Comparable<TId>, T: Entity<TId>

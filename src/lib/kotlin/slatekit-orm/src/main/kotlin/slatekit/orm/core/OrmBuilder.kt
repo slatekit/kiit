@@ -8,6 +8,8 @@ import slatekit.db.Db
 import slatekit.db.DbType
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityBuilder
+import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.EntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.orm.databases.SqlBuilder
 import slatekit.orm.databases.vendors.*
@@ -49,11 +51,12 @@ class OrmBuilder(dbs: DbLookup? = null,
      * @param enc: Optional encrptor to support encryption of selected columns
      * @param namer: Optional namer to create naming conventions
      */
-    fun mapper(dbType: DbType, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null): EntityMapper {
+    fun <TId, T> mapper(dbType: DbType, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null)
+            : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
         return when (dbType) {
             DbTypeMySql -> MySqlEntityMapper(model, utc, enc, namer)
             DbTypePGres -> PostGresEntityMapper(model, utc, enc, namer)
-            else -> EntityMapper(model, MySqlConverter, utc, '`', enc, namer)
+            else -> OrmMapper(model, MySqlConverter(), utc, '`', enc, namer)
         }
     }
 
@@ -74,8 +77,8 @@ class OrmBuilder(dbs: DbLookup? = null,
             dbKey: String,
             dbShard: String,
             entityType: KClass<*>,
-            mapper: EntityMapper,
-            tableName: String? = null,
+            mapper: EntityMapper<TId, T>,
+            tableName: String,
             utc: Boolean = false,
             enc: Encryptor? = null,
             namer: Namer? = null
@@ -114,11 +117,11 @@ class OrmBuilder(dbs: DbLookup? = null,
             dbShard: String,
             entityType: KClass<*>,
             model: Model,
-            tableName: String? = null,
+            tableName: String,
             utc: Boolean = false,
             enc: Encryptor? = null,
             namer: Namer? = null
-    ): EntityRepo<TId,T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
         // NOTE: Only long primary keys supported for now.
         val entityIdType = Long::class
@@ -127,7 +130,7 @@ class OrmBuilder(dbs: DbLookup? = null,
         val db = db(dbKey, dbShard)
 
         // 2. Mapper: Dynamically maps item to/from sql
-        val mapper = mapper(dbType, model, utc, enc, namer)
+        val mapper = mapper<TId, T>(dbType, model, utc, enc, namer)
 
         // 3. Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
