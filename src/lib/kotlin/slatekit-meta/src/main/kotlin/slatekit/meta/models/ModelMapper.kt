@@ -47,7 +47,7 @@ open class ModelMapper(
      * Creates the entity/model expecting a 0 parameter constructor
      * @return
      */
-    override fun createEntity(): Any? =
+    open fun createEntity(): Any? =
             _model.dataType?.let { type -> Reflector.create<Any>(type) }
 
     /**
@@ -55,7 +55,7 @@ open class ModelMapper(
      * @param args
      * @return
      */
-    override fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any =
+    open fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any =
             Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
 
     fun <T> copyWithId(id: Any, entity: T): T = entity
@@ -67,13 +67,13 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    override fun mapFrom(record: Record): Any? {
+    override fun <T> mapFrom(record: Record): T? {
         return if (_model.any && _model.dataType != null) {
             _model.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
-                    mapFromToValType(record)
+                    mapFromToValType<T>(record)
                 } else
-                    mapFromToVarType(record)
+                    mapFromToVarType<T>(record)
             }
         } else
             null
@@ -86,9 +86,9 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    @Suppress("IMPLICIT_CAST_TO_ANY")
-    override fun mapFromToValType(record: Record): Any? {
-        return mapFromToValType(null, record, _model)
+    @Suppress("UNCHECKED_CAST")
+    fun <T>  mapFromToValType(record: Record): T? {
+        return mapFromToValType(null, record, _model) as T?
     }
 
     /**
@@ -98,9 +98,9 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    @Suppress("IMPLICIT_CAST_TO_ANY")
-    override fun mapFromToVarType(record: Record): Any? {
-        return mapFromToVarType(null, record, _model)
+    @Suppress("UNCHECKED_CAST")
+    fun <T> mapFromToVarType(record: Record): T? {
+        return mapFromToVarType(null, record, _model) as T?
     }
 
     override fun toString(): String =

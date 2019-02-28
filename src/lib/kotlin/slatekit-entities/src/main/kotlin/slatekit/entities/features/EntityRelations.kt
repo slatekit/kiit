@@ -1,4 +1,4 @@
-package slatekit.entities.services
+package slatekit.entities.features
 
 import slatekit.common.TODO
 import slatekit.entities.core.Entity
@@ -6,7 +6,7 @@ import slatekit.entities.core.ServiceSupport
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-interface EntityRelations<T> : ServiceSupport<T> where T : Entity {
+interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
 
     /**
      * Gets a relation model associated w the current model by the property supplied.
@@ -16,13 +16,13 @@ interface EntityRelations<T> : ServiceSupport<T> where T : Entity {
      * @param prop : the field to check on current model for the foreign key id
      * @sample member.getRelation[User](1, Member::userId, User::class)
      */
-    fun <R> getRelation(id: Long, prop: KProperty<*>, model: KClass<*>): R? where R : Entity {
+    fun <R> getRelation(id: TId, prop: KProperty<*>, model: KClass<*>): R? where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
-            val id = prop.getter.call(entity) as Long
-            val relRepo = entities().getRepo<R>(model)
+            val id = prop.getter.call(entity) as TId
+            val relRepo = entities().getRepo<TId, R>(model)
             val rel = relRepo.get(id)
             rel
         }
@@ -36,13 +36,13 @@ interface EntityRelations<T> : ServiceSupport<T> where T : Entity {
      * @param prop : the field to check on current model for the foreign key id
      * @sample member.getRelation[User](1, Member::userId, User::class)
      */
-    fun <R> getWithRelation(id: Long, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity {
+    fun <R> getWithRelation(id: TId, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
-            val id = prop.getter.call(entity) as Long
-            val relRepo = entities().getRepo<R>(model)
+            val id = prop.getter.call(entity) as TId
+            val relRepo = entities().getRepo<TId, R>(model)
             val rel = relRepo.get(id)
             Pair(entity, rel)
         } ?: Pair(null, null)
@@ -56,12 +56,12 @@ interface EntityRelations<T> : ServiceSupport<T> where T : Entity {
      * @param prop : the field to check on current model for the foreign key id
      * @sample group.getWithRelations[Member](1, Member::class, Member::groupId)
      */
-    fun <R> getWithRelations(id: Long, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity {
+    fun <R> getWithRelations(id: TId, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
-            val relRepo = entities().getRepo<R>(model)
+            val relRepo = entities().getRepo<TId, R>(model)
             val relations = relRepo.findBy(prop.name, "=", id)
             Pair(entity, relations)
         } ?: Pair(null, listOf())

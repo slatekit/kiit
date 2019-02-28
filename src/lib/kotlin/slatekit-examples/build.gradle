@@ -54,6 +54,7 @@ dependencies {
     compile project(":slatekit-app")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")
+    compile project(":slatekit-orm")
     compile project(":slatekit-core")
     compile project(":slatekit-apis")
     compile project(":slatekit-workers")

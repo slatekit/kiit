@@ -16,12 +16,16 @@ package slatekit.entities.repos
 import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
+import slatekit.common.toUUId
+import slatekit.meta.KTypes
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
+import slatekit.meta.models.Model
+import java.util.*
 import kotlin.reflect.KClass
 
 /**
@@ -30,42 +34,39 @@ import kotlin.reflect.KClass
  * @param entityIdType : The data type of the primary key/identity field
  * @param entityMapper : The entity mapper that maps to/from entities / records
  * @param nameOfTable : The name of the table ( defaults to entity name )
- * @param _db
+ * @param db
  * @tparam T
  */
-abstract class EntityRepoSql<T>(
-        db: Db,
+abstract class EntityRepoSql<TId, T>(
+        val db: Db,
         entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null,
-        nameOfTable: String? = null,
+        entityIdType: KClass<*>,
+        entityMapper: EntityMapper<TId, T>,
+        nameOfTable: String,
+        model: Model? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null,
         encodedChar: Char = '`',
-        query: (() -> Query)? = null,
-        val lastId: String? = null
-) : EntityRepo<T>(entityType, entityIdType, entityMapper, nameOfTable, encryptor, namer, encodedChar, query) where T : Entity {
-
-    protected val _db = db
+        query: (() -> Query)? = null
+) : EntityRepo<TId, T>(entityType, entityIdType, entityMapper, nameOfTable, encodedChar, model, encryptor, namer, query)
+        where TId:Comparable<TId>, T:Entity<TId> {
 
 
     override fun repoName(): String = "$encodedChar" + super.repoName() + "$encodedChar"
 
 
-    override fun create(entity: T): Long {
-        val mapper = _entityMapper
-        val inserts = _entityMapper.converter.inserts
-        val sql = inserts.sql(entity, mapper.model(), mapper)
-        val id = _db.insert(sql)
-        return id
+    override fun create(entity: T): TId {
+        val mapper = entityMapper
+        val sql = mapper.mapSqlInsert(entity)
+        val id = db.insertAndGetStringId(sql)
+        return convertToId(id)
     }
 
-    override fun update(entity: T): T {
-        val mapper = _entityMapper
-        val updates = _entityMapper.converter.updates
-        val sql = updates.sql(entity, mapper.model(), mapper)
-        sqlExecute(sql)
-        return entity
+    override fun update(entity: T): Boolean {
+        val mapper = entityMapper
+        val sql = mapper.mapSqlUpdate(entity)
+        val count = sqlExecute(sql)
+        return count > 0
     }
 
     /**
@@ -77,14 +78,14 @@ abstract class EntityRepoSql<T>(
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
         val sql = "update " + repoName() + updateSql
-        return _db.update(sql)
+        return db.update(sql)
     }
 
     /**
      * updates items using the proc and args
      */
     override fun updateByProc(name: String, args: List<Any>?): Int {
-        return _db.callUpdate(name, args)
+        return db.callUpdate(name, args)
     }
 
     /**
@@ -94,7 +95,7 @@ abstract class EntityRepoSql<T>(
     override fun updateByQuery(query: IQuery): Int {
         val updateSql = query.toUpdatesText()
         val sql = "update " + repoName() + updateSql
-        return _db.update(sql)
+        return db.update(sql)
     }
 
     /**
@@ -102,7 +103,7 @@ abstract class EntityRepoSql<T>(
      *
      * @param id
      */
-    override fun delete(id: Long): Boolean {
+    override fun delete(id: TId): Boolean {
         val count = sqlExecute("delete from ${repoName()} where ${idName()} = $id;")
         return count > 0
     }
@@ -112,7 +113,7 @@ abstract class EntityRepoSql<T>(
      * @param ids
      * @return
      */
-    override fun delete(ids: List<Long>): Int {
+    override fun delete(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
         val count = sqlExecute("delete from ${repoName()} where ${idName()} in ($delimited);")
         return count
@@ -128,7 +129,7 @@ abstract class EntityRepoSql<T>(
         val query = Query().where(field, "=", value)
         val filter = query.toFilter()
         val sql = "delete from " + repoName() + " where " + filter
-        return _db.update(sql)
+        return db.update(sql)
     }
 
     /**
@@ -139,13 +140,13 @@ abstract class EntityRepoSql<T>(
     override fun deleteByQuery(query: IQuery): Int {
         val filter = query.toFilter()
         val sql = "delete from " + repoName() + " where " + filter
-        return _db.update(sql)
+        return db.update(sql)
     }
 
     /**
      * gets the entity associated with the id
      */
-    override fun get(id: Long): T? {
+    override fun get(id: TId): T? {
         return sqlMapOne("select * from ${repoName()} where ${idName()} = $id;")
     }
 
@@ -154,7 +155,7 @@ abstract class EntityRepoSql<T>(
      * @param ids
      * @return
      */
-    override fun get(ids: List<Long>): List<T> {
+    override fun get(ids: List<TId>): List<T> {
         val delimited = ids.joinToString(",")
         return sqlMapMany("select * from ${repoName()} where ${idName()} in ($delimited);") ?: listOf()
     }
@@ -165,14 +166,14 @@ abstract class EntityRepoSql<T>(
     }
 
     override fun count(): Long {
-        val count = _db.getScalarLong("select count(*) from ${repoName()};")
+        val count = db.getScalarLong("select count(*) from ${repoName()};")
         return count
     }
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
         val sql = "select * from " + repoName() + orderBy + " limit " + count
-        val items = _db.mapMany<T>(sql, _entityMapper) ?: listOf<T>()
+        val items = db.mapMany<T>(sql, entityMapper) ?: listOf<T>()
         return items
     }
 
@@ -183,7 +184,7 @@ abstract class EntityRepoSql<T>(
     override fun count(query: IQuery):Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${repoName()} where " + filter
-        val count = _db.getScalarLong(sql)
+        val count = db.getScalarLong(sql)
         return count
     }
 
@@ -232,20 +233,29 @@ abstract class EntityRepoSql<T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return _db.callQueryMapped(name, _entityMapper, args)
+        return db.callQueryMapped(name, entityMapper, args)
     }
 
-    protected open fun scriptLastId(): String = lastId ?: ""
+
+    @Suppress("UNCHECKED_CAST")
+    protected fun convertToId(id:String):TId {
+        return when(this.entityType) {
+            Int::class  -> id.toInt() as TId
+            Long::class -> id.toLong() as TId
+            UUID::class -> id.toUUId() as TId
+            else        -> id as TId
+        }
+    }
 
     private fun sqlExecute(sql: String): Int {
-        return _db.update(sql)
+        return db.update(sql)
     }
 
     private fun sqlMapMany(sql: String): List<T>? {
-        return _db.mapMany<T>(sql, _entityMapper)
+        return db.mapMany(sql, entityMapper)
     }
 
     private fun sqlMapOne(sql: String): T? {
-        return _db.mapOne<T>(sql, _entityMapper)
+        return db.mapOne<T>(sql, entityMapper)
     }
 }

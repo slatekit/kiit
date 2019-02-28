@@ -1,4 +1,4 @@
-package slatekit.entities.services
+package slatekit.entities.features
 
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityWithUUID
@@ -11,7 +11,7 @@ import java.util.*
  * supply another type constraint on T to be EntityWithUUID to provide compile time safety.
  *
  */
-interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
+interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
 
     /**
      * gets the entity from the datastore using the uuid as a string
@@ -19,7 +19,7 @@ interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun getByUUID(id: String): T? {
-        return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id)
+        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id)
     }
 
     /**
@@ -28,7 +28,7 @@ interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun getByUUID(id: UUID): T? {
-        return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
+        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
     }
 
     /**
@@ -37,6 +37,6 @@ interface EntityUUID<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun getByUUIDs(ids: List<String>): List<T>? {
-        return entityRepo().findBy(EntityWithUUID::uuid.name, "in", ids)
+        return repoT().findBy(EntityWithUUID::uuid.name, "in", ids)
     }
 }

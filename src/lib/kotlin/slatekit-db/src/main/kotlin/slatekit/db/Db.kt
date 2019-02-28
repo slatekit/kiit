@@ -324,7 +324,7 @@ class Db(
 
             val rec = RecordSet(rs)
             if (rs.next())
-                mapper.mapFrom(rec) as T
+                mapper.mapFrom<T>(rec)
             else
                 null
         }, false, inputs)
@@ -346,7 +346,7 @@ class Db(
             val rec = RecordSet(rs)
             val buf = mutableListOf<T>()
             while (rs.next()) {
-                val item = mapper.mapFrom(rec)
+                val item = mapper.mapFrom<T>(rec)
                 buf.add(item as T)
             }
             buf.toList()

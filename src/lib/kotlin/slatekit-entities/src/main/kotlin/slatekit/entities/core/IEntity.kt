@@ -18,7 +18,7 @@ import slatekit.common.serialization.Serializer
 import slatekit.meta.Serialization
 import slatekit.meta.models.Model
 
-interface Entity {
+interface Entity<TId:Comparable<TId>> {
 
     /**
      * gets the id
@@ -30,32 +30,27 @@ interface Entity {
      *
      * @return
      */
-    fun identity(): Long
+    fun identity(): TId
 
     /**
      * whether or not this entity is persisted.
      * @return
      */
-    fun isPersisted(): Boolean = identity() > 0
+    fun isPersisted(): Boolean
 }
 
 /**
  * Base entity interface that must define if it is persisted or not
  * This is the recommended approach.
  */
-interface EntityWithId : Entity {
+interface EntityWithId<TId:Comparable<TId>> : Entity<TId> {
 
     /**
      * currently standardized to id of type long ( primary key, auto-inc )
      */
-    val id: Long
+    val id: TId
 
-    /**
-     * provide a consistent approach to getting the identity for different
-     * implementations of domain entities ( via either case class or non-case class )
-     * @return
-     */
-    override fun identity(): Long = id
+    override fun identity():TId = id
 }
 
 /**
@@ -63,14 +58,21 @@ interface EntityWithId : Entity {
  * e.g. case class copying which must be implemented in the case class
  * @tparam T
  */
-interface EntityUpdatable<T> {
+interface EntityUpdatable<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
 
     /**
      * sets the id on the entity and returns the entity with updated id.
      * @param id
      * @return
      */
-    fun withId(id: Long): T
+    fun withId(id: TId): T
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    fun withIdAny(id: Any): T = withId(id as TId)
 }
 
 /**

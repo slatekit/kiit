@@ -85,13 +85,13 @@ open class EntityRepoInMemory<TId, T>(
      *
      * @param entity
      */
-    override fun update(entity: T): T {
+    override fun update(entity: T): Boolean {
         // Check 1: already persisted ?
         if (entity.isPersisted() && _items.contains(entity.identity())) {
             _items = _items.minus(entity.identity())
             _items = _items.add(entity.identity(), entity)
         }
-        return entity
+        return true
     }
 
     /**

@@ -15,25 +15,24 @@ package slatekit.entities.core
 
 import slatekit.entities.services.EntityServices
 
+
+
+
 /**
  * Base entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<T>(
-    protected val _entities: Entities,
-    protected val _repo: EntityRepo<T>
+open class EntityService<TId,T>(
+        protected val _entities: Entities,
+        protected val _repo: EntityRepo<TId, T>
 )
-    : EntityServices<T> where T : Entity {
-
-    override fun entityRepo(): EntityRepo<T> = _repo
+    : EntityServices<TId, T> where TId: Comparable<TId>, T : Entity<TId> {
 
     override fun entities(): Entities = _entities
 
-    /**
-     * gets the repo representing the underlying datastore
-     * @return
-     */
     override fun repo(): IEntityRepo = _repo
+
+    override fun repoT(): EntityRepo<TId, T> = _repo
 }

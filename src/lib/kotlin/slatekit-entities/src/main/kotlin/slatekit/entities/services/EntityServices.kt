@@ -9,15 +9,15 @@ import slatekit.entities.core.IEntityService
  * on the entities for create/update operations
  * @tparam T
  */
-open interface EntityServices<T> : IEntityService,
-        EntityFeatureAll<T> where T : Entity {
+interface EntityServices<TId, T> : IEntityService,
+        EntityRecord<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the total number of entities in the datastore
      * @return
      */
     override fun count(): Long {
-        return entityRepo().count()
+        return repoT().count()
     }
 
     /**
@@ -25,7 +25,7 @@ open interface EntityServices<T> : IEntityService,
      * @return
      */
     override fun any(): Boolean {
-        return entityRepo().any()
+        return repoT().any()
     }
 
     /**

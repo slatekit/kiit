@@ -1,17 +1,17 @@
-package slatekit.entities.services
+package slatekit.entities.features
 
 import slatekit.entities.core.Entity
 import slatekit.entities.core.ServiceSupport
 
-interface EntityReads<T> : ServiceSupport<T> where T : Entity {
+interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
 
     /**
      * gets the entity from the datastore using the id
      * @param id
      * @return
      */
-    fun get(id: Long): T? {
-        return entityRepo().get(id)
+    fun get(id: TId): T? {
+        return repoT().get(id)
     }
 
     /**
@@ -19,8 +19,8 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @param id
      * @return
      */
-    fun get(ids: List<Long>): List<T> {
-        return entityRepo().get(ids)
+    fun get(ids: List<TId>): List<T> {
+        return repoT().get(ids)
     }
 
     /**
@@ -28,7 +28,7 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun getAll(): List<T> {
-        return entityRepo().getAll()
+        return repoT().getAll()
     }
 
     /**
@@ -38,7 +38,7 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun top(count: Int, desc: Boolean): List<T> {
-        return entityRepo().top(count, desc)
+        return repoT().top(count, desc)
     }
 
     /**
@@ -46,7 +46,7 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun first(): T? {
-        return entityRepo().first()
+        return repoT().first()
     }
 
     /**
@@ -54,7 +54,7 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun last(): T? {
-        return entityRepo().last()
+        return repoT().last()
     }
 
     /**
@@ -63,7 +63,7 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun recent(count: Int): List<T> {
-        return entityRepo().recent(count)
+        return repoT().recent(count)
     }
 
     /**
@@ -72,6 +72,6 @@ interface EntityReads<T> : ServiceSupport<T> where T : Entity {
      * @return
      */
     fun oldest(count: Int): List<T> {
-        return entityRepo().oldest(count)
+        return repoT().oldest(count)
     }
 }

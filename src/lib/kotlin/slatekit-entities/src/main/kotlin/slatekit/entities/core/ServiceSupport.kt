@@ -1,9 +1,9 @@
 package slatekit.entities.core
 
-interface ServiceSupport<T> where T : Entity {
+interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     fun repo(): IEntityRepo
-    fun entityRepo(): EntityRepo<T>
+    fun repoT(): EntityRepo<TId, T>
     fun entities(): Entities
 
     /**

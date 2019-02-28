@@ -64,12 +64,12 @@ abstract class EntityRepoSql<TId, T>(
         return convertToId(id)
     }
 
-    override fun update(entity: T): T {
+    override fun update(entity: T): Boolean {
         val mapper = _entityMapper
         val updates = _entityMapper.converter.updates
         val sql = updates.sql(entity, mapper.model(), mapper)
-        sqlExecute(sql)
-        return entity
+        val count = sqlExecute(sql)
+        return count > 0
     }
 
     /**
