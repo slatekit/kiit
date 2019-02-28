@@ -14,6 +14,7 @@
 
 package slatekit.entities.core
 
+import slatekit.common.Record
 import slatekit.common.db.Mapper
 import slatekit.meta.models.Model
 import kotlin.reflect.KProperty

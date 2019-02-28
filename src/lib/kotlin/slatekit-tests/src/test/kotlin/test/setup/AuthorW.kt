@@ -4,11 +4,14 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.ids.UniqueId
+import slatekit.entities.core.EntityWithId
 import java.util.*
 
-class AuthorW {
+class AuthorW : EntityWithId<Long> {
+    override fun isPersisted(): Boolean = id > 0
+
     @property:Field(required = true)
-    var id: Long = 0
+    override var id: Long = 0
 
     @property:Field(required = true)
     var uuid: String = Random.uuid()

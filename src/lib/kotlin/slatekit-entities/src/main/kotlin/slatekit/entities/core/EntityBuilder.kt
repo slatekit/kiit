@@ -97,7 +97,7 @@ open class EntityBuilder(val dbs: DbLookup? = null,
      * @param args: Additional arguments to constructor of service during creation
      */
     fun <TId, T> service(
-            entities: Entities,
+            entities: Entities<*>,
             serviceType: KClass<*>?,
             repo: EntityRepo<TId, T>,
             args: Any?

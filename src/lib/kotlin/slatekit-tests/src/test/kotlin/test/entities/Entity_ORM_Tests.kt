@@ -19,20 +19,28 @@ import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.orm.core.*
-import slatekit.orm.repos.EntityRepoInMemory
-import slatekit.orm.repos.LongIdGenerator
+import slatekit.db.DbType
+import slatekit.entities.core.Entities
+import slatekit.entities.core.EntityInfo
+import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.LongIdGenerator
+import slatekit.entities.core.*
+import slatekit.entities.repos.EntityMapperInMemory
 
 
 class Entity_ORM_Tests {
 
-    private var entities = Entities()
+    private var entities = Entities<EntityInfo>()
 
 
     @Before fun setup(){
         entities = Entities(DbLookup(DbConString("", "", "", "")))
-        entities.register<Long, ORMUser>(ORMUser::class,
-                repository = EntityRepoInMemory(ORMUser::class, Long::class, idGenerator =  LongIdGenerator()))
+        entities.register(ORMUser::class,
+                EntityRepoInMemory( ORMUser::class,  Long::class,  EntityMapperInMemory<Long, ORMUser>(),
+                        null, null, LongIdGenerator()),
+                EntityMapperInMemory(),
+                DbType.DbTypeMemory
+        )
     }
 
 

@@ -26,6 +26,8 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.db.Db
 import slatekit.db.DbType
+import slatekit.entities.repos.EntityMapperInMemory
+import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
@@ -72,6 +74,16 @@ open class Entities<TInfo>(
     protected val _mappers = mutableMapOf<String, EntityMapper<*,*>>()
     protected val logger = logs.getLogger("db")
     open val builder = EntityBuilder(_dbs, enc)
+
+    open fun <TId, T> register(
+            entityType: KClass<*>
+    ): TInfo where TId:Comparable<TId>, T:Entity<TId> {
+        val mapper = EntityMapperInMemory<TId, T>()
+        return register(entityType,
+                EntityRepoInMemory(entityType, Long::class, mapper),
+                mapper, DbType.DbTypeMemory)
+    }
+
 
     open fun <TId, T> register(
             entityType: KClass<*>,

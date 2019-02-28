@@ -78,8 +78,13 @@ data class ErrorItem(
     override val updatedBy: String = ""
 )
 
-    : slatekit.entities.core.EntityWithId, slatekit.entities.core.EntityWithMeta,
-        slatekit.entities.core.EntityWithShard, slatekit.entities.core.EntityUpdatable<ErrorItem> {
+    : slatekit.entities.core.EntityWithId<Long>, slatekit.entities.core.EntityWithMeta,
+        slatekit.entities.core.EntityWithShard, slatekit.entities.core.EntityUpdatable<Long, ErrorItem> {
+
+
+
+    override fun isPersisted(): Boolean = id > 0
+
     /**
      * sets the id on the entity and returns the entity with updated id.
      * @param id

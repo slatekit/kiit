@@ -19,10 +19,16 @@ import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
+import slatekit.db.DbType
 import slatekit.db.DbType.DbTypeMySql
 import slatekit.entities.core.*
+import slatekit.entities.repos.EntityMapperInMemory
+import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.LongIdGenerator
+import slatekit.orm.core.OrmEntities
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
+import test.setup.User
 import java.util.*
 
 
@@ -75,7 +81,7 @@ class Entity_Database_Tests {
 
     @Test fun can_use_all_types(): Unit {
         val entities = realDb()
-        val svc = entities.getSvc<SampleEntity>(SampleEntity::class)
+        val svc = entities.getSvc<Long, SampleEntity>(SampleEntity::class)
         val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
         val ddl = inf.entityDDL
         val sql = ddl?.createTable(inf.model) ?: ""
@@ -134,10 +140,10 @@ class Entity_Database_Tests {
 
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
 
-    private fun realDb(): Entities {
+    private fun realDb(): OrmEntities {
         val dbs = DbLookup.defaultDb(con!!)
-        val entities = Entities(dbs, MyEncryptor)
-        entities.register<SampleEntity>(SampleEntity::class, dbType = DbTypeMySql, tableName = "sample_entity")
+        val entities = OrmEntities(dbs, MyEncryptor)
+        entities.register<Long, SampleEntity>(SampleEntity::class, null, "sample_entity")
         return entities
     }
 
@@ -218,14 +224,16 @@ class Entity_Database_Tests {
             @property:Field(length = 50)
             val test_uniqueId: UniqueId = UniqueId.newId("usa")
 
-    ) : EntityWithId, EntityUpdatable<SampleEntity> {
+    ) : EntityWithId<Long>, EntityUpdatable<Long, SampleEntity> {
+        override fun isPersisted(): Boolean = id > 0
+
         /**
          * sets the id on the entity and returns the entity with updated id.
          * @param id
          * @return
          */
         override fun withId(id:Long): SampleEntity {
-            return this.copy(id)
+            return this.copy(id = id)
         }
     }
 }

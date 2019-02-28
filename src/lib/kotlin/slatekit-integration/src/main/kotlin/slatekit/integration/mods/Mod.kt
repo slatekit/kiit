@@ -64,4 +64,8 @@ data class Mod(
     @property:Field(length = 50)
     override val uuid: String = ""
 )
-    : EntityWithId, EntityWithUUID
+    : EntityWithId<Long>, EntityWithUUID {
+
+    override fun isPersisted(): Boolean = id > 0
+
+}

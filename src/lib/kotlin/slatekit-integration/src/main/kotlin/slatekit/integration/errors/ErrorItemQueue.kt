@@ -14,7 +14,7 @@ class ErrorItemQueue(queueName: String = "errors", appEntContext: AppEntContext)
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    val svc = appEntContext.ent.getSvc<ErrorItem>(ErrorItem::class)
+    val svc = appEntContext.ent.getSvc<Long, ErrorItem>(ErrorItem::class)
 
     override val name: String = queueName
 

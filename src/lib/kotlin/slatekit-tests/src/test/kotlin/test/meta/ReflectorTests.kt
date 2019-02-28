@@ -19,6 +19,8 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.types.PhoneUS
 import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
+import slatekit.entities.core.EntityInfo
+import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.meta.kClass
@@ -54,7 +56,7 @@ class ReflectorTests {
             env  = Env("local", EnvMode.Dev),
             cfg  = Config(),
             logs = LogsDefault,
-            ent  = Entities(),
+            ent  = Entities<EntityInfo>(),
             app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
             sys = Sys.build(),
             build = Build.empty,
@@ -211,7 +213,7 @@ class ReflectorTests {
 
 
     @Test fun can_call_method() {
-        ctx.ent.register<User>( User::class)
+        ctx.ent.register<Long, User>(User::class)
         val api = UserApi(ctx)
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
         val result = res as Notice<String>

@@ -4,11 +4,12 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.ids.UniqueId
+import slatekit.entities.core.EntityWithId
 import java.util.*
 
 data class AuthorR(
         @property:Field(required = true)
-        val id: Long             = 0,
+        override val id: Long             = 0,
 
         @property:Field(required = true)
         val uuid: String            = Random.uuid(),
@@ -45,4 +46,6 @@ data class AuthorR(
 
         @property:Field(required = true)
         val shardId: UniqueId = UniqueId.fromString(UUIDs.sampleUUID2)
-)
+) : EntityWithId<Long> {
+        override fun isPersisted(): Boolean = id > 0
+}

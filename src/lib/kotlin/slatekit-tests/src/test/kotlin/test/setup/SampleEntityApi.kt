@@ -39,14 +39,14 @@ import slatekit.integration.common.AppEntContext
  *      SampleREST.deleteById -id=1
  *      SampleREST.patch      -id=1 -title="abc"
  */
-class SampleEntityApi(ctx: AppEntContext) : ApiBaseEntity<Movie, EntityService<Movie>>(ctx, Movie::class) {
+class SampleEntityApi(ctx: AppEntContext) : ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class) {
 
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }
 
 
 @Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class SampleEntity2Api(ctx: AppEntContext) : ApiBaseEntity<Movie, EntityService<Movie>>(ctx, Movie::class) {
+class SampleEntity2Api(ctx: AppEntContext) : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class) {
 
     @ApiAction(name = "", desc = "gets the total number of users", roles = "@parent", verb = "post", protocol = "@parent")
     fun patch(id:Long, title:String): String = "patched $id with $title"

@@ -4,7 +4,7 @@ interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     fun repo(): IEntityRepo
     fun repoT(): EntityRepo<TId, T>
-    fun entities(): Entities
+    fun entities(): Entities<*>
 
     /**
      * Hook for derived to apply any other logic/field changes before create/update

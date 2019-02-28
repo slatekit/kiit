@@ -68,7 +68,7 @@ class OrmEntities(
             entityType: KClass<*>,
             model: Model? = null,
             tableName: String,
-            serviceType: KClass<*>,
+            serviceType: KClass<*>? = null,
             repository: EntityRepo<TId, T>? = null,
             mapper: EntityMapper<TId,T>? = null,
             dbType: DbType = DbType.DbTypeMemory,
@@ -91,6 +91,7 @@ class OrmEntities(
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val entityService = builder2.service(this, serviceType, entityRepo, serviceCtx)
+        val svcType = entityService::class
 
         // 5. DDL ( for table creation schema, ddl management )
         val entityDdl = builder2.ddl(dbType, namer)
@@ -100,7 +101,7 @@ class OrmEntities(
                 entityModel,
                 entityDdl,
                 entityType,
-                serviceType,
+                svcType,
                 repoType,
                 entityService,
                 entityRepo,
@@ -113,5 +114,18 @@ class OrmEntities(
         _info = _info.add(key, info)
         _mappers.put(entityType.qualifiedName!!, entityMapper)
         return info
+    }
+
+
+    /**
+     * Gets a registered model ( schema for an entity ) for the entity type
+     */
+    fun getModel(entityType: KClass<*>): Model {
+        val entityKey = builder.key(entityType)
+        if (!_info.contains(entityKey)) {
+            logger.error("Model not found for $entityKey")
+            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+        }
+        return _info.get(entityKey)?.model!!
     }
 }

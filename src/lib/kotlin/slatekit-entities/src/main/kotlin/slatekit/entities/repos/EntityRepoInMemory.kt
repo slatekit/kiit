@@ -27,7 +27,9 @@ import slatekit.meta.Reflector
 import java.util.*
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.Record
 import kotlin.reflect.KClass
+
 
 
 /**
@@ -230,4 +232,16 @@ open class EntityRepoInMemory<TId, T>(
             }
         } ?: false
     }
+}
+
+
+class EntityMapperInMemory<TId, T> : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+    override fun setId(id: TId, entity: T): T = entity
+
+    override fun mapSqlInsert(entity: T): String = ""
+
+    override fun mapSqlUpdate(entity: T): String = ""
+
+    override fun <T> mapFrom(record: Record): T? = null
+
 }
