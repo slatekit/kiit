@@ -14,8 +14,7 @@
 package slatekit.orm.core
 
 import slatekit.common.newline
-import slatekit.db.DbType
-import slatekit.db.DbType.DbTypeMySql
+import slatekit.common.db.DbType
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.IEntityRepo

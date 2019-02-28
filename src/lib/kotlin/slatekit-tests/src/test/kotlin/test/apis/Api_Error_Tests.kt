@@ -17,7 +17,7 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.db.DbType
+import slatekit.common.db.DbType
 import slatekit.entities.repos.EntityMapperInMemory
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.LongIdGenerator

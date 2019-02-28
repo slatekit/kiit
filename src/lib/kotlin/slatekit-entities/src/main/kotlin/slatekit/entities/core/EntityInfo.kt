@@ -13,9 +13,8 @@
 
 package slatekit.entities.core
 
-import slatekit.db.DbType
-import slatekit.db.DbType.DbTypeMySql
-import slatekit.meta.models.Model
+import slatekit.common.db.DbType
+import slatekit.common.db.DbType.DbTypeMySql
 import kotlin.reflect.KClass
 
 /**

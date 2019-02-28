@@ -8,7 +8,7 @@
   usage: Please refer to license on github for more info.
 </slate_header>
   */
-package slatekit.db
+package slatekit.common.db
 
 sealed class DbType(val name: String, val driver: String) {
   object DbTypeMySql : DbType("mysql", "com.mysql.jdbc.Driver")

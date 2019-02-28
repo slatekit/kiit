@@ -13,7 +13,7 @@
 
 package slatekit.entities.repos
 
-import slatekit.db.Db
+import slatekit.common.db.IDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.toUUId
@@ -37,7 +37,7 @@ import kotlin.reflect.KClass
  * @tparam T
  */
 abstract class EntityRepoSql<TId, T>(
-        val db: Db,
+        val db: IDb,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         entityMapper: EntityMapper<TId, T>,
@@ -165,7 +165,7 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     override fun count(): Long {
-        val count = db.getScalarLong("select count(*) from ${repoName()};")
+        val count = db.getScalarLong("select count(*) from ${repoName()};", null)
         return count
     }
 
@@ -183,7 +183,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun count(query: IQuery):Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${repoName()} where " + filter
-        val count = db.getScalarLong(sql)
+        val count = db.getScalarLong(sql, null)
         return count
     }
 

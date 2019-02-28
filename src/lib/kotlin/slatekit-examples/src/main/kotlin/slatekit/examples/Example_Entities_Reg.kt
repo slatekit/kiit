@@ -22,7 +22,7 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
-import slatekit.db.DbType.DbTypeMySql
+import slatekit.common.db.DbType.DbTypeMySql
 import slatekit.core.cmds.Cmd
 import slatekit.examples.common.User
 import slatekit.examples.common.UserRepository

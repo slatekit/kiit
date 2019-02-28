@@ -16,16 +16,9 @@ package slatekit.entities.core
 import slatekit.common.utils.ListMap
 import slatekit.common.naming.Namer
 import slatekit.common.db.*
-import slatekit.db.DbType.DbTypeMySql
-import slatekit.db.DbType.DbTypePGres
-import slatekit.db.types.DbSource
-import slatekit.db.types.DbSourceMySql
-import slatekit.db.types.DbSourcePostGres
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.db.Db
-import slatekit.db.DbType
 import slatekit.entities.repos.EntityMapperInMemory
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.models.Model
@@ -64,6 +57,7 @@ import kotlin.reflect.KClass
  *
  */
 open class Entities<TInfo>(
+        dbCreator: (DbCon) -> IDb,
         _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
@@ -73,7 +67,7 @@ open class Entities<TInfo>(
     protected var _info = ListMap<String, TInfo>(listOf())
     protected val _mappers = mutableMapOf<String, EntityMapper<*,*>>()
     protected val logger = logs.getLogger("db")
-    open val builder = EntityBuilder(_dbs, enc)
+    open val builder = EntityBuilder(dbCreator, _dbs, enc)
 
     open fun <TId, T> register(
             entityType: KClass<*>
@@ -126,13 +120,13 @@ open class Entities<TInfo>(
     /**
      * Gets the default database
      */
-    fun getDb(): Db = builder.db()
+    fun getDb(): IDb = builder.db()
 
 
     /**
      * Gets a database by its name/alias
      */
-    fun getDbByName(name: String): Db = builder.db(name)
+    fun getDbByName(name: String): IDb = builder.db(name)
 
 
     /**
@@ -204,17 +198,17 @@ open class Entities<TInfo>(
     }
 
 
-    fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
-        val dbType = builder.con(dbKey, dbShard)
-
-        // Only supporting MySql for now.
-        val source = dbType?.let { type ->
-            when (type.driver) {
-                DbTypeMySql.driver -> DbSourceMySql()
-                DbTypePGres.driver -> DbSourcePostGres()
-                else -> DbSourceMySql()
-            }
-        } ?: DbSourceMySql()
-        return source
-    }
+//    fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
+//        val dbType = builder.con(dbKey, dbShard)
+//
+//        // Only supporting MySql for now.
+//        val source = dbType?.let { type ->
+//            when (type.driver) {
+//                DbTypeMySql.driver -> DbSourceMySql()
+//                DbTypePGres.driver -> DbSourcePostGres()
+//                else -> DbSourceMySql()
+//            }
+//        } ?: DbSourceMySql()
+//        return source
+//    }
 }

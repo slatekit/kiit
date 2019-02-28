@@ -15,10 +15,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.db.DbType.DbTypeMemory
+import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.entities.core.*
 import slatekit.orm.core.OrmEntities
-import slatekit.orm.core.OrmEntityInfo
 import test.setup.Phone
 import test.setup.User5
 import kotlin.reflect.KClass

@@ -14,11 +14,11 @@ package slatekit.db
 import slatekit.common.DateTime
 import slatekit.common.Types
 import slatekit.common.db.DbCon
-import java.math.BigDecimal
 import java.sql.*
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
+import slatekit.common.db.DbFieldType
 import slatekit.common.ext.local
 
 object DbUtils {

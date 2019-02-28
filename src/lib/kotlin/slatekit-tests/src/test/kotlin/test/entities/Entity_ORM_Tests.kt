@@ -19,7 +19,7 @@ import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.db.DbType
+import slatekit.common.db.DbType
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.EntityRepoInMemory

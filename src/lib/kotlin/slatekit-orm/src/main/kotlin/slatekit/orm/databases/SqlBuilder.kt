@@ -1,8 +1,7 @@
 package slatekit.orm.databases
 
 import slatekit.common.naming.Namer
-import slatekit.db.Db
-import slatekit.db.DbFieldType
+import slatekit.common.db.DbFieldType
 import slatekit.db.DbUtils
 import slatekit.common.newline
 import slatekit.orm.Consts.idCol

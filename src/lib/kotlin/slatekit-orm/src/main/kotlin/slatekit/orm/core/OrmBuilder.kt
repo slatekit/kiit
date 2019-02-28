@@ -2,10 +2,10 @@ package slatekit.orm.core
 
 import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
-import slatekit.db.DbType.*
+import slatekit.common.db.DbType.*
 import slatekit.common.naming.Namer
 import slatekit.db.Db
-import slatekit.db.DbType
+import slatekit.common.db.DbType
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.core.EntityMapper

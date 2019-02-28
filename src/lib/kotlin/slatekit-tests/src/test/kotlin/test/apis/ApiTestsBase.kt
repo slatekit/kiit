@@ -20,7 +20,6 @@ import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.middleware.Middleware
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.security.Protocol
-import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -32,15 +31,13 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.db.DbType
+import slatekit.common.db.DbType
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.EntityMapperInMemory
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.integration.common.AppEntContext
-import slatekit.integration.errors.ErrorItem
-import slatekit.integration.errors.ErrorItemService
 import slatekit.results.Try
 import test.setup.MyAuthProvider
 import test.setup.UserApi

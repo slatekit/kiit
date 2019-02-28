@@ -4,7 +4,7 @@ import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
 import slatekit.common.naming.Namer
-import slatekit.db.Db
+//import slatekit.db.Db
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -18,8 +18,10 @@ import kotlin.reflect.KClass
  * 5. Repo    : Repository implementation ( depends on Db above )
  * 6. Service : Service implementation ( depends on Repo above )
  */
-open class EntityBuilder(val dbs: DbLookup? = null,
-                    val enc: Encryptor? = null) {
+open class EntityBuilder(
+        val dbCreator: (DbCon) -> IDb,
+        val dbs: DbLookup? = null,
+        val enc: Encryptor? = null) {
 
 
     /**
@@ -67,7 +69,7 @@ open class EntityBuilder(val dbs: DbLookup? = null,
      * @param dbKey: The name of the database key ( empty / "" by default if only 1 database )
      * @param dbShard: The name of the database shard ( empty / "" by default if only 1 database )
      */
-    fun db(dbKey: String = "", dbShard: String = "", open: Boolean = true): Db {
+    fun db(dbKey: String = "", dbShard: String = "", open: Boolean = true): IDb {
         val err1 = "Error getting database for registration in Entities."
         val err2 = "Database connection not setup and/or available in config."
         val err3 = "Database connection not setup and/or available in config for $dbKey & $dbShard."
@@ -75,7 +77,7 @@ open class EntityBuilder(val dbs: DbLookup? = null,
         val con = con()
                 ?: throw IllegalArgumentException("Database connection not available for key/shard $dbKey:$dbShard")
         require(con != DbCon.empty, { "$err1 $err" })
-        return if (open) Db(con).open() else Db(con)
+        return if (open) dbCreator(con).open() else dbCreator(con)
     }
 
 

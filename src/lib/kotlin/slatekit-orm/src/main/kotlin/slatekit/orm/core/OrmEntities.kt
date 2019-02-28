@@ -18,7 +18,8 @@ import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.db.DbType
+import slatekit.common.db.DbType
+import slatekit.db.Db
 import slatekit.entities.core.*
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
@@ -60,7 +61,7 @@ class OrmEntities(
         enc: Encryptor? = null,
         logs: Logs = LogsDefault,
         namer: Namer? = null
-) : Entities<OrmEntityInfo>(dbs, enc, logs, namer) {
+) : Entities<OrmEntityInfo>({ con -> Db(con) }, dbs, enc, logs, namer) {
 
     val builder2:OrmBuilder = OrmBuilder(dbs, enc)
 
@@ -83,7 +84,6 @@ class OrmEntities(
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
         val entityMapper = mapper ?: builder2.mapper(dbType, entityModel, persistUTC, enc, namer)
-        val mapperType = entityMapper::class
 
         // 3. Repo ( provides CRUD using the Mapper)
         val entityRepo = repository ?: builder2.repo(dbType, dbKey ?: "", dbShard ?: "", entityType, entityMapper, tableName)

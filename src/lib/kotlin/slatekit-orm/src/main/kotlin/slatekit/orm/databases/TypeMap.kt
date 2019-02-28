@@ -1,7 +1,7 @@
 package slatekit.orm.databases
 
 import slatekit.common.Types
-import slatekit.db.DbFieldType
+import slatekit.common.db.DbFieldType
 import slatekit.db.types.DbTypeInfo
 
 /**

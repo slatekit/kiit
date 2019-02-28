@@ -19,16 +19,10 @@ import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
-import slatekit.db.DbType
-import slatekit.db.DbType.DbTypeMySql
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityMapperInMemory
-import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.LongIdGenerator
 import slatekit.orm.core.OrmEntities
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
-import test.setup.User
 import java.util.*
 
 
