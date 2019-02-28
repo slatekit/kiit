@@ -228,6 +228,38 @@ class Db(
     }
 
     /**
+     * executes an insert using the sql or stored proc and gets the id
+     *
+     * @param sql : The sql or stored proc
+     * @param inputs : The inputs for the sql or stored proc
+     * @return : The id ( primary key )
+     */
+    fun insertAndGetStringId(sql: String, inputs: List<Any>? = null): String {
+        val res = executeCon(_dbCon, { con: Connection ->
+
+            val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
+            stmt.use { s ->
+                // fill all the arguments into the prepared stmt
+                inputs?.let { fillArgs(s, inputs) }
+
+                // execute the update
+                s.executeUpdate()
+
+                // get id.
+                val rs = s.generatedKeys
+                rs.use { r ->
+                    val id = if (r.next()) {
+                        r.getString(1)
+                    } else
+                        ""
+                    id
+                }
+            }
+        }, onError)
+        return res ?: ""
+    }
+
+    /**
      * executes the update sql or stored proc
      *
      * @param sql : The sql or stored proc

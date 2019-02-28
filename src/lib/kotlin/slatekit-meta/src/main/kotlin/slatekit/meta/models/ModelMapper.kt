@@ -58,7 +58,7 @@ open class ModelMapper(
     override fun createEntityWithArgs(cls: KClass<*>, args: List<Any?>?): Any =
             Reflector.createWithArgs(cls, args?.toTypedArray() ?: arrayOf())
 
-    fun <T> copyWithId(id: Long, entity: T): T = entity
+    fun <T> copyWithId(id: Any, entity: T): T = entity
 
     /**
      * Maps all the parameters to a class that takes in all parameters in the constructor
