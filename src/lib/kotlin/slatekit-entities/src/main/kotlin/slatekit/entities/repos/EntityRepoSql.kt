@@ -17,7 +17,6 @@ import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.toUUId
-import slatekit.meta.KTypes
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.query.Query
