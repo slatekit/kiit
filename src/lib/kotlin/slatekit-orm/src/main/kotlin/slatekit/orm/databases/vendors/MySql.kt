@@ -1,5 +1,6 @@
 package slatekit.orm.databases.vendors
 
+import slatekit.common.db.IDb
 import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
@@ -44,7 +45,7 @@ class MySqlQuery : Query()
  * @tparam T
  */
 open class MySqlEntityRepo<TId, T>(
-        db: Db,
+        db: IDb,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         entityMapper: EntityMapper<TId, T>,

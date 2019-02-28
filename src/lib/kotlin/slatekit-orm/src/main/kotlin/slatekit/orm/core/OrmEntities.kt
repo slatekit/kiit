@@ -20,6 +20,9 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.db.DbType
 import slatekit.db.Db
+import slatekit.db.types.DbSource
+import slatekit.db.types.DbSourceMySql
+import slatekit.db.types.DbSourcePostGres
 import slatekit.entities.core.*
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
@@ -63,7 +66,7 @@ class OrmEntities(
         namer: Namer? = null
 ) : Entities<OrmEntityInfo>({ con -> Db(con) }, dbs, enc, logs, namer) {
 
-    val builder2:OrmBuilder = OrmBuilder(dbs, enc)
+    val builder2:OrmBuilder = OrmBuilder({ con -> Db(con) }, dbs, enc)
 
     fun <TId, T> register(
             entityType: KClass<*>,
@@ -116,6 +119,20 @@ class OrmEntities(
         return info
     }
 
+
+    fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
+        val dbType = builder.con(dbKey, dbShard)
+
+        // Only supporting MySql for now.
+        val source = dbType?.let { type ->
+            when (type.driver) {
+                DbType.DbTypeMySql.driver -> DbSourceMySql()
+                DbType.DbTypePGres.driver -> DbSourcePostGres()
+                else -> DbSourceMySql()
+            }
+        } ?: DbSourceMySql()
+        return source
+    }
 
     /**
      * Gets a registered model ( schema for an entity ) for the entity type

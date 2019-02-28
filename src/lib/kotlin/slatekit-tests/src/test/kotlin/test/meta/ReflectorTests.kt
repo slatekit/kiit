@@ -17,6 +17,7 @@ import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.common.types.PhoneUS
+import slatekit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
@@ -56,7 +57,7 @@ class ReflectorTests {
             env  = Env("local", EnvMode.Dev),
             cfg  = Config(),
             logs = LogsDefault,
-            ent  = Entities<EntityInfo>(),
+            ent  = Entities<EntityInfo>({ con -> Db(con) }),
             app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
             sys = Sys.build(),
             build = Build.empty,

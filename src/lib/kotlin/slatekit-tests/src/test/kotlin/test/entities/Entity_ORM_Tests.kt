@@ -20,6 +20,7 @@ import slatekit.common.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType
+import slatekit.db.Db
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.EntityRepoInMemory
@@ -30,11 +31,11 @@ import slatekit.entities.repos.EntityMapperInMemory
 
 class Entity_ORM_Tests {
 
-    private var entities = Entities<EntityInfo>()
+    private var entities = Entities<EntityInfo>({ con -> Db(con) })
 
 
     @Before fun setup(){
-        entities = Entities(DbLookup(DbConString("", "", "", "")))
+        entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
         entities.register(ORMUser::class,
                 EntityRepoInMemory( ORMUser::class,  Long::class,  EntityMapperInMemory<Long, ORMUser>(),
                         null, null, LongIdGenerator()),

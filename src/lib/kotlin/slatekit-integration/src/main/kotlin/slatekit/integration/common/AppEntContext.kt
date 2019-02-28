@@ -29,6 +29,7 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.core.common.AppContext
+import slatekit.db.Db
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.results.StatusCodes
@@ -87,7 +88,7 @@ data class AppEntContext(
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
             val dbCons = DbLookup.fromConfig(ctx.cfg)
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities<EntityInfo>(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities<EntityInfo>({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -99,7 +100,7 @@ data class AppEntContext(
         fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
             val dbCons = DbLookup.fromConfig(ctx.cfg)
             return AppEntContext(
-                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities<EntityInfo>(dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities<EntityInfo>({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -119,7 +120,7 @@ data class AppEntContext(
                     sys = Sys.build(),
                     build = Build.empty,
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    ent = Entities<EntityInfo>()
+                    ent = Entities<EntityInfo>({ con -> Db(con) })
             )
         }
 
@@ -136,7 +137,7 @@ data class AppEntContext(
                     app = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
-                    ent = Entities<EntityInfo>(),
+                    ent = Entities<EntityInfo>({ con -> Db(con) }),
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
@@ -156,7 +157,7 @@ data class AppEntContext(
                     sys = Sys.build(),
                     build = Build.empty,
                     start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    ent = Entities<EntityInfo>(),
+                    ent = Entities<EntityInfo>({ con -> Db(con) }),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )

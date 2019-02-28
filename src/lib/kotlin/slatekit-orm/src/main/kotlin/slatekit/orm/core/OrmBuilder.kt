@@ -25,8 +25,9 @@ import kotlin.reflect.KClass
  * 5. Repo    : Repository implementation ( depends on Db above )
  * 6. Service : Service implementation ( depends on Repo above )
  */
-class OrmBuilder(dbs: DbLookup? = null,
-                 enc: Encryptor? = null) : EntityBuilder(dbs, enc) {
+class OrmBuilder(dbCreator: (DbCon) -> IDb,
+                 dbs: DbLookup? = null,
+                 enc: Encryptor? = null) : EntityBuilder(dbCreator, dbs, enc) {
 
     /**
      * Builds Sql builder used for creating the schema/ddl statements for setup/migration

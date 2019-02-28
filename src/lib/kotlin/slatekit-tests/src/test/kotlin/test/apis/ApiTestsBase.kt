@@ -32,6 +32,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.common.db.DbType
+import slatekit.db.Db
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.EntityMapperInMemory
@@ -61,7 +62,7 @@ open class ApiTestsBase {
                 env = Env("local", EnvMode.Dev),
                 cfg = Config(),
                 logs = LogsDefault,
-                ent = Entities<EntityInfo>(DbLookup(DbConString("", "", "", ""))),
+                ent = Entities<EntityInfo>({con -> Db(con) }, DbLookup(DbConString("", "", "", ""))),
                 app = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 sys = Sys.build(),
                 build = Build.empty,

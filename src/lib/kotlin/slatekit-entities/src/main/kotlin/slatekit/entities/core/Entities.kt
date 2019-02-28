@@ -197,18 +197,4 @@ open class Entities<TInfo>(
         return info.entityRepoInstance!!
     }
 
-
-//    fun getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
-//        val dbType = builder.con(dbKey, dbShard)
-//
-//        // Only supporting MySql for now.
-//        val source = dbType?.let { type ->
-//            when (type.driver) {
-//                DbTypeMySql.driver -> DbSourceMySql()
-//                DbTypePGres.driver -> DbSourcePostGres()
-//                else -> DbSourceMySql()
-//            }
-//        } ?: DbSourceMySql()
-//        return source
-//    }
 }
