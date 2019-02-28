@@ -1,8 +1,7 @@
 package slatekit.common.db
 
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalTime
+// import java.time.*
+import org.threeten.bp.*
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import java.sql.ResultSet
@@ -153,7 +152,7 @@ interface IDb {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insertAndGetStringId(sql: String, inputs: List<Any>? = null): String
+    fun insertGetId(sql: String, inputs: List<Any>? = null): String
 
     /**
      * executes the update sql or stored proc

@@ -57,7 +57,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun create(entity: T): TId {
         val mapper = entityMapper
         val sql = mapper.mapSqlInsert(entity)
-        val id = db.insertAndGetStringId(sql)
+        val id = db.insertGetId(sql)
         return convertToId(id)
     }
 

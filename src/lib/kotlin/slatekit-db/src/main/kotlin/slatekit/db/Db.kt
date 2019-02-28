@@ -126,7 +126,7 @@ class Db(
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    override fun insertAndGetStringId(sql: String, inputs: List<Any>?): String {
+    override fun insertGetId(sql: String, inputs: List<Any>?): String {
         val res = executeCon(_dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)

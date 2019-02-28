@@ -11,7 +11,8 @@
 package slatekit.common.db
 
 sealed class DbType(val name: String, val driver: String) {
-  object DbTypeMySql : DbType("mysql", "com.mysql.jdbc.Driver")
-  object DbTypePGres : DbType("pgres", "org.postgresql.Driver")
+  object DbTypeMySql  : DbType("mysql", "com.mysql.jdbc.Driver")
+  object DbTypePGres  : DbType("pgres", "org.postgresql.Driver")
+  object DbTypeSqLite : DbType("sqlite", "org.sqlite.JDBC")
   object DbTypeMemory : DbType("memory", "com.slatekit.entities.repository-in-memory")
 }

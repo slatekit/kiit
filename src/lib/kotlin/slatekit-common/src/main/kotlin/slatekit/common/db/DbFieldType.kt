@@ -11,21 +11,26 @@
 package slatekit.common.db
 
 sealed class DbFieldType {
-    object DbNumber : DbFieldType()
-    object DbShort : DbFieldType()
-    object DbLong : DbFieldType()
+
+    object DbBool : DbFieldType()
+
     object DbChar : DbFieldType()
     object DbString : DbFieldType()
     object DbText : DbFieldType()
-    object DbBool : DbFieldType()
+
+    object DbShort : DbFieldType()
+    object DbNumber : DbFieldType()
+    object DbLong : DbFieldType()
     object DbFloat : DbFieldType()
     object DbDouble : DbFieldType()
     object DbDecimal : DbFieldType()
+
     object DbLocalDate : DbFieldType()
     object DbLocalTime : DbFieldType()
     object DbLocalDateTime : DbFieldType()
     object DbZonedDateTime : DbFieldType()
     object DbInstant : DbFieldType()
     object DbDateTime : DbFieldType()
+
     object DbEnum : DbFieldType()
 }
