@@ -40,7 +40,7 @@ interface IdGenerator<TId:Comparable<TId>> {
 class LongIdGenerator : IdGenerator<Long>{
     private var id = 0L
 
-    override fun nextId():Long = id++
+    override fun nextId():Long = ++id
 }
 
 

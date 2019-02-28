@@ -49,6 +49,8 @@ interface EntityWithId<TId:Comparable<TId>> : Entity<TId> {
      * currently standardized to id of type long ( primary key, auto-inc )
      */
     val id: TId
+
+    override fun identity():TId = id
 }
 
 /**

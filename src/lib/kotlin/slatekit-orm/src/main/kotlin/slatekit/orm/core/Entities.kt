@@ -202,21 +202,19 @@ class Entities(
         return _info.get(key)!!
     }
 
-
-    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
-        val info = getInfo(entityType, dbKey, dbShard)
-        return info.entityServiceInstance!!
-    }
-
     fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance!!
     }
 
-    /**
-     * get the repository by class
-     */
-    fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityRepo {
+
+    private fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
+        val info = getInfo(entityType, dbKey, dbShard)
+        return info.entityServiceInstance!!
+    }
+
+
+    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityRepo {
         val info = getInfo(tpe, dbKey, dbShard)
         return info.entityRepoInstance!!
     }
