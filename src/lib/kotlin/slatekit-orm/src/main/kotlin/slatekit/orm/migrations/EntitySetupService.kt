@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.orm.support
+package slatekit.orm.migrations
 
 import slatekit.common.*
 import slatekit.common.db.DbCon
@@ -31,10 +31,10 @@ import slatekit.orm.core.EntityInfo
  * Created by kreddy on 3/23/2016.
  */
 class EntitySetupService(
-    private val _entities: Entities,
-    private val _dbs: DbLookup?,
-    private val _settings: EntitySetupSettings,
-    private val _folders: Folders?
+        private val _entities: Entities,
+        private val _dbs: DbLookup?,
+        private val _settings: EntitySetupSettings,
+        private val _folders: Folders?
 ) {
 
     fun names(): List<Pair<String, String>> = _entities.getEntities().map {

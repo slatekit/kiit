@@ -1,4 +1,4 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
 import slatekit.query.IQuery
 import slatekit.query.Query
@@ -14,7 +14,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun find(query: IQuery): List<T> {
-        return entityRepo().find(query)
+        return repoT().find(query)
     }
 
     /**
@@ -27,7 +27,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName
-        return entityRepo().findBy(column, "=", value)
+        return repoT().findBy(column, "=", value)
     }
 
     /**
@@ -41,7 +41,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName
         val query = Query().where(column, "=", value).limit(limit)
-        return entityRepo().find(query)
+        return repoT().find(query)
     }
 
     /**
@@ -54,7 +54,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName
-        return entityRepo().findIn(column, value)
+        return repoT().findIn(column, value)
     }
 
     /**
@@ -67,14 +67,14 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         // The property could have a different column name
         val field = this.repo().mapper().model().fields.first { it.name == prop.name }
         val column = field.storedName
-        return entityRepo().findFirstBy(column, "=", value)
+        return repoT().findFirstBy(column, "=", value)
     }
 
     /**
      * finds items by a stored proc
      */
     fun findByProc(name: String, args: List<Any>? = null): List<T>? {
-        return entityRepo().findByProc(name, args)
+        return repoT().findByProc(name, args)
     }
 
     /**

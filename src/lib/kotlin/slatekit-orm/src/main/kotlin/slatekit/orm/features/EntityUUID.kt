@@ -1,4 +1,4 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
 import slatekit.orm.core.Entity
 import slatekit.orm.core.EntityWithUUID
@@ -19,7 +19,7 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUID(id: String): T? {
-        return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id)
+        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id)
     }
 
     /**
@@ -28,7 +28,7 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUID(id: UUID): T? {
-        return entityRepo().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
+        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
     }
 
     /**
@@ -37,6 +37,6 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUIDs(ids: List<String>): List<T>? {
-        return entityRepo().findBy(EntityWithUUID::uuid.name, "in", ids)
+        return repoT().findBy(EntityWithUUID::uuid.name, "in", ids)
     }
 }

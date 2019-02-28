@@ -1,4 +1,4 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
 import slatekit.query.IQuery
 import slatekit.orm.core.Entity
@@ -10,6 +10,6 @@ interface EntityCounts<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compar
      * Gets the total number of records satisfying the query
      */
     fun count(query: IQuery):Long {
-        return entityRepo().count(query)
+        return repoT().count(query)
     }
 }

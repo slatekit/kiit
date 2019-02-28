@@ -1,4 +1,4 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
 import slatekit.orm.core.Entity
 import slatekit.orm.core.ServiceSupport
@@ -13,7 +13,7 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
     fun save(entity: T?) {
         entity?.let { item ->
             val finalEntity = applyFieldData(3, item)
-            entityRepo().save(finalEntity)
+            repoT().save(finalEntity)
         }
     }
 
@@ -23,6 +23,6 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @param items
      */
     fun saveAll(items: List<T>) {
-        entityRepo().saveAll(items)
+        repoT().saveAll(items)
     }
 }

@@ -2,8 +2,9 @@ package slatekit.orm.services
 
 import slatekit.orm.core.Entity
 import slatekit.orm.core.ServiceSupport
+import slatekit.orm.features.*
 
-interface EntityFeatureAll<TId,T> : ServiceSupport<TId, T>,
+interface EntityRecord<TId,T> : ServiceSupport<TId, T>,
         EntityCounts<TId, T>,
         EntityCreates<TId, T>,
         EntityDeletes<TId, T>,

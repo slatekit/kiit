@@ -30,13 +30,9 @@ open class EntityService<TId,T>(
 )
     : EntityServices<TId, T> where TId: Comparable<TId>, T : Entity<TId> {
 
-    override fun entityRepo(): EntityRepo<TId, T> = _repo
-
     override fun entities(): Entities = _entities
 
-    /**
-     * gets the repo representing the underlying datastore
-     * @return
-     */
     override fun repo(): IEntityRepo = _repo
+
+    override fun repoT(): EntityRepo<TId, T> = _repo
 }

@@ -1,10 +1,13 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
+import slatekit.common.DateTime
 import slatekit.query.IQuery
 import slatekit.orm.core.Entity
 import slatekit.orm.core.ServiceSupport
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
+import slatekit.orm.core.EntityEvent
+import slatekit.orm.slatekit.orm.features.EntityHooks
 import kotlin.reflect.KProperty
 
 interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
@@ -14,9 +17,20 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @param entity
      * @return
      */
-    fun update(entity: T): T {
+    fun update(entity: T): Boolean {
+        val original:T? = if (this is EntityHooks ) repoT().get(entity.identity()) else null
         val finalEntity = applyFieldData(2, entity)
-        return entityRepo().update(finalEntity)
+        val success = repoT().update(finalEntity)
+
+        // Event out
+        if ( this is EntityHooks) {
+            when(success) {
+                true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entity, DateTime.now()))
+                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
+                        Exception("unable to update: " + entity.toString()), DateTime.now()))
+            }
+        }
+        return success
     }
 
     /**
@@ -27,7 +41,7 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun update(id: TId, field: String, value: String) {
-        val item = entityRepo().get(id)
+        val item = repoT().get(id)
         item?.let { entity ->
             Reflector.setFieldValue(entity.kClass, entity, field, value)
             update(entity)
@@ -41,20 +55,20 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun updateByField(prop: KProperty<*>, value: Any): Int {
-        return entityRepo().updateByField(prop.name, value)
+        return repoT().updateByField(prop.name, value)
     }
 
     /**
      * updates items by a stored proc
      */
     fun updateByProc(name: String, args: List<Any>? = null): Int {
-        return entityRepo().updateByProc(name, args)
+        return repoT().updateByProc(name, args)
     }
 
     /**
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int {
-        return entityRepo().updateByQuery(query)
+        return repoT().updateByQuery(query)
     }
 }

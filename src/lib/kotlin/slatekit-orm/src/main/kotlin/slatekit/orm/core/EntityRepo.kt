@@ -83,7 +83,7 @@ abstract class EntityRepo<TId, T>(
      * @param entity
      * @return
      */
-    abstract fun update(entity: T): T
+    abstract fun update(entity: T): Boolean
 
     /**
      * updates items based on the field name

@@ -1,4 +1,4 @@
-package slatekit.orm.services
+package slatekit.orm.features
 
 import slatekit.common.TODO
 import slatekit.orm.core.Entity
@@ -19,7 +19,7 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Com
     fun <R> getRelation(id: TId, prop: KProperty<*>, model: KClass<*>): R? where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
             val relRepo = entities().getRepo<TId, R>(model)
@@ -39,7 +39,7 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Com
     fun <R> getWithRelation(id: TId, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
             val relRepo = entities().getRepo<TId, R>(model)
@@ -59,7 +59,7 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Com
     fun <R> getWithRelations(id: TId, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity<TId> {
 
         TODO.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = entityRepo().get(id)
+        val entity = repoT().get(id)
         return entity?.let { ent ->
             val relRepo = entities().getRepo<TId, R>(model)
             val relations = relRepo.findBy(prop.name, "=", id)

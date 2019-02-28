@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.orm.support
+package slatekit.orm.migrations
 
 data class EntitySetupSettings(
     val enableLogging: Boolean = true,

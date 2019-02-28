@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.orm.support
+package slatekit.orm.services
 
 import slatekit.common.Context
 import slatekit.common.encrypt.EncryptSupport

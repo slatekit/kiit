@@ -3,7 +3,7 @@ package slatekit.orm.core
 interface ServiceSupport<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
     fun repo(): IEntityRepo
-    fun entityRepo(): EntityRepo<TId,T>
+    fun repoT(): EntityRepo<TId,T>
     fun entities(): Entities
 
     /**
