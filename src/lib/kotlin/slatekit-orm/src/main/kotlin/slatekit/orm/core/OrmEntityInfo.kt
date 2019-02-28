@@ -36,7 +36,7 @@ import kotlin.reflect.KClass
  * @param dbShard : a key identifying the database shard
  *                               ( see DbLookup / Example_Database.scala )
  */
-data class EntityInfo(
+data class OrmEntityInfo(
         val entityType: KClass<*>,
         val model: Model,
         val entityServiceType: KClass<*>? = null,

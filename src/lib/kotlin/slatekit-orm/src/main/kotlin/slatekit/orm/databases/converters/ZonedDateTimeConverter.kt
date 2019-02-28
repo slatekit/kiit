@@ -1,12 +1,10 @@
 package slatekit.orm.databases.converters
 
-import slatekit.common.DateTime
 import slatekit.orm.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.common.DateTimes
 import slatekit.common.ext.atUtc
 
 object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {

@@ -1,11 +1,12 @@
 package slatekit.orm.databases.statements
 
-import slatekit.orm.core.EntityMapper
 import slatekit.meta.models.Model
+import slatekit.entities.core.Entity
+import slatekit.orm.core.OrmMapper
 
-class Insert : Statement {
+class Insert<TId, T> : Statement<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
-    override fun sql(item:Any, model: Model, mapper: EntityMapper): String {
+    override fun sql(item: Entity<TId>, model: Model, mapper: OrmMapper<TId, T>): String {
         val table = mapper.tableName()
         val result = mapper.mapFields(null, item, model, false)
         val cols = "(" + result.joinToString( ",", transform = {it.first } ) + ") "

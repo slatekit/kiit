@@ -62,17 +62,17 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-class Entities(
+class OrmEntities(
         private val _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
         val namer: Namer? = null
 ) {
 
-    private var _info = ListMap<String, EntityInfo>(listOf())
-    private val _mappers = mutableMapOf<String, EntityMapper>()
+    private var _info = ListMap<String, OrmEntityInfo>(listOf())
+    private val _mappers = mutableMapOf<String, OrmMapper<*,*>>()
     private val logger = logs.getLogger("db")
-    val builder = EntityComponentBuilder(_dbs, enc)
+    val builder = OrmBuilder(_dbs, enc)
 
     fun <TId, T> register(
             entityType: KClass<*>,
@@ -80,7 +80,7 @@ class Entities(
             serviceType: KClass<*>? = null,
             repoType: KClass<*>? = null,
             mapperType: KClass<*>? = null,
-            repository: EntityRepo<TId, T>? = null,
+            repository: OrmRepo<TId, T>? = null,
             mapper: EntityMapper? = null,
             dbType: DbType = DbType.DbTypeMemory,
             dbKey: String? = null,
@@ -88,7 +88,7 @@ class Entities(
             tableName: String? = null,
             serviceCtx: Any? = null,
             persistUTC: Boolean = false
-    ): EntityInfo where TId:Comparable<TId>, T:Entity<TId> {
+    ): OrmEntityInfo where TId:Comparable<TId>, T:Entity<TId> {
 
         // 1. Model ( schema of the entity )
         val entityModel = model ?: builder.model(entityType, namer, tableName)
@@ -106,7 +106,7 @@ class Entities(
         val ddl = builder.ddl(dbType, namer)
 
         // 6. Now store all the info for easy lookup
-        val info = EntityInfo(
+        val info = OrmEntityInfo(
                 entityType,
                 entityModel,
                 serviceType,
@@ -142,7 +142,7 @@ class Entities(
     /**
      * Gets a list of all the registered entities
      */
-    fun getEntities(): List<EntityInfo> = _info.all()
+    fun getEntities(): List<OrmEntityInfo> = _info.all()
 
 
     /**
@@ -187,13 +187,13 @@ class Entities(
             getSvcByType(tpe, dbKey, dbShard) as EntityService<TId, T>
 
 
-    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityInfo {
+    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): OrmEntityInfo {
         val key = builder.key(entityType, dbKey, dbShard)
         require(_info.contains(key), { "Entity invalid or not registered with key : " + key })
         return _info.get(key)!!
     }
 
-    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityInfo {
+    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): OrmEntityInfo {
         val key = builder.key(entityType, dbKey, dbShard)
         if (!_info.contains(key)) {
             logger.error("Mapper not found for $key")

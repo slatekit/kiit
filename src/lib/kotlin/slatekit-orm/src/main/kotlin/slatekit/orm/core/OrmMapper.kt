@@ -30,19 +30,21 @@ import slatekit.meta.models.ModelField
 import slatekit.meta.models.ModelMapper
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.entities.core.Entity
+import slatekit.entities.core.EntityMapper
 
 /**
  * Maps an entity to sql and from sql records.
  *
  * @param model
  */
-open class EntityMapper(model: Model,
-                        val converter: Converter,
+open class OrmMapper<TId, T>(model: Model,
+                        val converter: Converter<TId, T>,
                         val isUtc: Boolean = false,
                         val quoteChar: Char = '`',
                         encryptor: Encryptor? = null,
                         namer: Namer? = null)
-    : ModelMapper(model, _encryptor = encryptor, namer = namer) {
+    : EntityMapper<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
 
     /**

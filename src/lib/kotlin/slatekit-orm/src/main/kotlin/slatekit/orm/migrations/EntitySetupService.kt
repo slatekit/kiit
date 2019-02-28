@@ -24,14 +24,14 @@ import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
-import slatekit.orm.core.Entities
-import slatekit.orm.core.EntityInfo
+import slatekit.orm.core.OrmEntities
+import slatekit.orm.core.OrmEntityInfo
 
 /**
  * Created by kreddy on 3/23/2016.
  */
 class EntitySetupService(
-        private val _entities: Entities,
+        private val _entities: OrmEntities,
         private val _dbs: DbLookup?,
         private val _settings: EntitySetupSettings,
         private val _folders: Folders?
@@ -41,9 +41,10 @@ class EntitySetupService(
         Pair(it.entityTypeName, it.entityRepoInstance?.repoName() ?: it.entityTypeName)
     }
 
-    fun counts(): List<Pair<String, Long>> = _entities.getEntities().map {
-        Pair(it.entityTypeName, it.entityRepoInstance?.count() ?: 0)
-    }
+
+//    fun counts(): List<Pair<String, Long>> = _entities.getEntities().map {
+//        Pair(it.entityTypeName, it.entityRepoInstance?.count() ?: 0)
+//    }
 
     /**
      * installs the model name supplied into the database.
@@ -199,7 +200,7 @@ class EntitySetupService(
         } ?: slatekit.results.Failure("no db setup")
     }
 
-    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityInfo, String) -> String): Try<String> {
+    private fun operate(operationName: String, entityName: String, sqlBuilder: (OrmEntityInfo, String) -> String): Try<String> {
         val ent = _entities.getInfoByName(entityName)
         val svc = _entities.getSvcByTypeName(entityName)
         val table = svc.repo().repoName()
@@ -213,7 +214,7 @@ class EntitySetupService(
         }
     }
 
-    private fun each(operation: (EntityInfo) -> Try<String>): Try<List<String>> {
+    private fun each(operation: (OrmEntityInfo) -> Try<String>): Try<List<String>> {
         val results = _entities.getEntities().map { operation(it) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }

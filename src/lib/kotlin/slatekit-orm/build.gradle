@@ -40,4 +40,5 @@ dependencies {
     compile project(":slatekit-meta")
     compile project(":slatekit-db")
     compile project(":slatekit-query")
+    compile project(":slatekit-entities")
 }

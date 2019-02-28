@@ -4,13 +4,13 @@ import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.Query
-import slatekit.orm.core.Entity
-import slatekit.orm.core.EntityMapper
+import slatekit.meta.models.Model
+import slatekit.entities.core.Entity
+import slatekit.entities.repos.EntityRepoSql
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
 import slatekit.orm.databases.TypeMap
-import slatekit.orm.repos.EntityRepoSql
-import slatekit.meta.models.Model
+import slatekit.orm.core.OrmMapper
 import kotlin.reflect.KClass
 
 /**
@@ -24,7 +24,7 @@ object PostGreseMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-object PostGresConverter : Converter()
+class PostGresConverter<TId, T> : Converter<TId, T>() where TId:kotlin.Comparable<TId>, T:Entity<TId>
 
 
 class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGreseMap, namer)
@@ -47,8 +47,8 @@ class PostGresQuery : Query()
 open class PostGresEntityRepo<TId, T>(
         db: Db,
         entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null,
+        entityIdType: KClass<*>,
+        entityMapper: OrmMapper<TId, T>,
         nameOfTable: String? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null

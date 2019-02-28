@@ -1,5 +1,6 @@
 package slatekit.orm.databases
 
+import slatekit.entities.core.Entity
 import slatekit.orm.databases.converters.*
 import slatekit.orm.databases.statements.Delete
 import slatekit.orm.databases.statements.Insert
@@ -7,7 +8,7 @@ import slatekit.orm.databases.statements.Select
 import slatekit.orm.databases.statements.Update
 
 
-open class Converter {
+open class Converter<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
     open val bools              = BoolConverter
     open val strings            = StringConverter
     open val shorts             = ShortConverter
@@ -25,8 +26,8 @@ open class Converter {
     open val uniqueIds          = UniqueIdConverter
     open val enums              = EnumConverter
 
-    open val inserts = Insert()
-    open val updates = Update()
-    open val deletes = Delete()
-    open val selects = Select()
+    open val inserts = Insert<TId, T>()
+    open val updates = Update<TId, T>()
+    open val deletes = Delete<TId, T>()
+    open val selects = Select<TId, T>()
 }

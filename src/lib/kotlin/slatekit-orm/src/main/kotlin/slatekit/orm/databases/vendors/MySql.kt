@@ -3,14 +3,15 @@ package slatekit.orm.databases.vendors
 import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
+import slatekit.entities.repos.EntityRepoSql
 import slatekit.query.Query
-import slatekit.orm.core.Entity
+import slatekit.entities.core.Entity
 import slatekit.orm.core.EntityMapper
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
 import slatekit.orm.databases.TypeMap
-import slatekit.orm.repos.EntityRepoSql
 import slatekit.meta.models.Model
+import slatekit.orm.core.OrmMapper
 import kotlin.reflect.KClass
 
 /**
@@ -45,8 +46,8 @@ class MySqlQuery : Query()
 open class MySqlEntityRepo<TId, T>(
         db: Db,
         entityType: KClass<*>,
-        entityIdType: KClass<*>? = null,
-        entityMapper: EntityMapper? = null,
+        entityIdType: KClass<*>,
+        entityMapper: OrmMapper<TId, T>,
         nameOfTable: String? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null
