@@ -1,6 +1,5 @@
 package slatekit.orm.databases.statements
 
-import slatekit.orm.core.Entity
 import slatekit.orm.core.EntityMapper
 import slatekit.orm.core.EntityWithId
 import slatekit.meta.Reflector

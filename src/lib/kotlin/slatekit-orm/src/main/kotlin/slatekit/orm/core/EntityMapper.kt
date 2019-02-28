@@ -48,9 +48,7 @@ open class EntityMapper(model: Model,
     /**
      * Gets all the column names mapped to the field names
      */
-    val cols:List<String> by lazy {
-        model.fields.map { it.storedName }
-    }
+    val cols:List<String> by lazy { model.fields.map { it.storedName } }
 
 
     /**
