@@ -165,6 +165,20 @@ class DateTimeTests {
 //        Assert.assertEquals( id  , "1707080910110")
 //    }
 
+    @Test fun can_convert_local_date_time() {
+
+        val dt = LocalDateTime.of(2017, 7, 8, 9, 10, 11)
+        Assert.assertEquals( dt.toStringNumeric("") , "20170708091011")
+        Assert.assertEquals( dt.toStringNumeric("-"), "2017-07-08-09-10-11")
+        Assert.assertEquals( dt.toStringNumeric("/"), "2017/07/08/09/10/11")
+    }
+
+    @Test fun can_convert_basic_types() {
+        Assert.assertEquals( LocalDate.of(2017, 7, 8).toNumeric(), 20170708)
+        Assert.assertEquals( LocalTime.of(9, 30, 45).toNumeric(), 93045)
+        Assert.assertEquals( LocalTime.of(14, 30, 45).toNumeric(), 143045)
+    }
+
 
     @Test fun to_string_YYYYMMDD() {
 

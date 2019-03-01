@@ -8,10 +8,15 @@ import slatekit.common.Random
 // ********************************************
 // Conversions
 // ********************************************
+fun LocalDate.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
+fun LocalDate.toNumeric(): Int = format("yyyyMMdd").toInt()
+fun LocalTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
+fun LocalTime.toNumeric(): Int = format("HHmmss").toInt()
 fun LocalDateTime.zoned(): ZonedDateTime = this.atZone(ZoneId.systemDefault())
 fun ZonedDateTime.local(): LocalDateTime = this.toLocalDateTime()
 fun ZonedDateTime.date(): LocalDate = this.toLocalDate()
 fun ZonedDateTime.time(): LocalTime = this.toLocalTime()
+fun ZonedDateTime.toNumeric(): Long = format("yyyyMMddHHmmss").toLong()
 
 
 // ********************************************
@@ -38,8 +43,10 @@ operator fun ZonedDateTime.minus(period: Period): ZonedDateTime = this.minus(per
 // ********************************************
 // To String
 // ********************************************
+fun LocalDateTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
+fun LocalDateTime.toStringMySql(): String = format("yyyy-MM-dd HH:mm:ss")
+fun LocalDateTime.toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
 fun ZonedDateTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
-fun ZonedDateTime.toNumeric(): Long = format("yyyyMMddHHmmss").toLong()
 fun ZonedDateTime.toIdWithRandom(digits:Int = 5): String = format("yyMMddHHmmss").toLong().toString() + Random.digitsN(digits)
 fun ZonedDateTime.toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
 fun ZonedDateTime.toStringYYYYMMDD(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd")
