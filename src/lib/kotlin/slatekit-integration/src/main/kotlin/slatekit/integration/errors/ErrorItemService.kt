@@ -12,7 +12,7 @@ import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 
-class ErrorItemService(ctx: AppEntContext, entities: Entities<*>, repo: slatekit.entities.core.EntityRepo<Long, ErrorItem>)
+class ErrorItemService(ctx: AppEntContext, entities: Entities, repo: slatekit.entities.core.EntityRepo<Long, ErrorItem>)
     : slatekit.entities.services.EntityServiceWithSupport<Long, ErrorItem>(ctx, entities, repo), ApiHostAware {
 
     private var container: ApiContainer? = null

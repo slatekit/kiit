@@ -27,7 +27,7 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
 
     val entityIdType:KClass<*>
     val entityType: KClass<*>
-    val entities: Entities<*>
+    val entities: Entities
     val entitySvc: EntityService<TId, T>
 
     @ApiAction(name = "", desc = "gets the total number of users", roles = "@parent", verb = "get", protocol = "@parent")

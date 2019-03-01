@@ -29,7 +29,7 @@ open class ApiBaseEntity<TId, T, TSvc>(context: AppEntContext,
                                        override val entityType: KClass<*>)
     : ApiBase(context), ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Entity<TId>, TSvc : EntityService<TId, T> {
 
-    override val entities: Entities<*> = context.ent
+    override val entities: Entities = context.ent
 
     override val entitySvc: EntityService<TId, T> by lazy { entities.getSvc<TId, T>(entityType) }
 
