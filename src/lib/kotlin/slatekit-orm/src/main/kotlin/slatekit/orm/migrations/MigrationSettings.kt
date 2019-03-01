@@ -13,7 +13,7 @@
 
 package slatekit.orm.migrations
 
-data class OrmMigrationSettings(
+data class MigrationSettings(
     val enableLogging: Boolean = true,
     val enableOutput: Boolean = true
 )

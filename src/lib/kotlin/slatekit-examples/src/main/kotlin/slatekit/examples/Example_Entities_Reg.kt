@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityInfo
+import slatekit.entities.core.EntityContext
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -63,50 +63,50 @@ class Example_Entities_Reg : Cmd("types") {
         val entities = Entities(dbs)
 
         // Case 1: In-memory
-        showResults("Case 1", entities.register<User>(entityType = User::class))
+        showResults("Case 1", entities.prototype<User>(entityType = User::class))
 
         // Case 2: In-memory + with custom service
-        showResults("Case 2", entities.register<User>(entityType = User::class,
+        showResults("Case 2", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class))
 
         // Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
         // Note: this uses the default database connection above
-        showResults("Case 3", entities.register<User>(entityType = User::class,
+        showResults("Case 3", entities.prototype<User>(entityType = User::class,
                 dbType = DbTypeMySql))
 
         // Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
         // Note: this uses the default database connection above
-        showResults("Case 4", entities.register<User>(entityType = User::class,
+        showResults("Case 4", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, dbType = DbTypeMySql))
 
         // Case 5: Custom repository
         // Note: this uses the default database connection above
-        showResults("Case 5", entities.register<User>(entityType = User::class,
+        showResults("Case 5", entities.prototype<User>(entityType = User::class,
                 repository = UserRepository(User::class), dbType = DbTypeMySql))
 
         // Case 6: Custom service type, custom repository, database type
-        showResults("Case 6", entities.register<User>(entityType = User::class,
+        showResults("Case 6", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, repository = UserRepository (User::class), dbType = DbTypeMySql))
 
         // Case 7: Custom service type, custom repository, database specified
         // Note: this uses the named database connection above called "user_db"
-        showResults("Case 7", entities.register<User>(entityType = User::class,
+        showResults("Case 7", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, repository = UserRepository (User::class),
                 dbType = DbTypeMySql, dbKey = "user_db"))
 
         // Case 8: Custom service type, custom repository, database specified, mapper specified
         // Each registration will simply overwrite an existing registration for the same entity type
-        showResults("Case 8", entities.register<User>(entityType = User::class,
+        showResults("Case 8", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, repository = UserRepository (User::class),
                 dbType = DbTypeMySql))
 
         // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 9", entities.register<User>(entityType = User::class,
+        showResults("Case 9", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, repository = UserRepository (User::class),
                 dbType = DbTypeMySql, dbKey = "user_db"))
 
         // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 10", entities.register<User>(entityType = User::class,
+        showResults("Case 10", entities.prototype<User>(entityType = User::class,
                 serviceType = UserService::class, repository = UserRepository (User::class),
                 dbType = DbTypeMySql, dbKey = "group1", dbShard = "shard1"))
         //</doc:setup>
@@ -129,7 +129,7 @@ class Example_Entities_Reg : Cmd("types") {
     }
 
 
-    fun showResults(desc: String, regInfo: EntityInfo): Unit {
+    fun showResults(desc: String, regInfo: EntityContext): Unit {
         println(desc)
         println(regInfo.toStringDetail())
         println()
