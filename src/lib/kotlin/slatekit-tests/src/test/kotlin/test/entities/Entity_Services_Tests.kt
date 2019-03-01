@@ -24,14 +24,14 @@ import test.setup.User5
 
 class Entity_Services_Tests {
 
-    private var entities = Entities<EntityContext>({ con -> Db(con) })
+    private var entities = Entities({ con -> Db(con) })
 
 
     @Before fun setup(){
         entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
-        entities.prototype<Long, User5>(User5::class)
-        entities.prototype<Long, Member>(Member::class)
-        entities.prototype<Long, Group>(Group::class)
+        entities.prototype<User5>(User5::class)
+        entities.prototype<Member>(Member::class)
+        entities.prototype<Group>(Group::class)
     }
 
 

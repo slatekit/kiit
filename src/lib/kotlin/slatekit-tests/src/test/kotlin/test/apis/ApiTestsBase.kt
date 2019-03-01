@@ -62,7 +62,7 @@ open class ApiTestsBase {
                 env = Env("local", EnvMode.Dev),
                 cfg = Config(),
                 logs = LogsDefault,
-                ent = Entities<EntityContext>({ con -> Db(con) }, DbLookup(DbConString("", "", "", ""))),
+                ent = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", ""))),
                 app = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 sys = Sys.build(),
                 build = Build.empty,
@@ -70,11 +70,7 @@ open class ApiTestsBase {
                 dbs = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc = MyEncryptor
         )
-        ctx.ent.register<Long, User>(User::class,
-                EntityRepoInMemory(User::class, Long::class, EntityMapperInMemory(), null, null, LongIdGenerator()),
-                EntityMapperInMemory(),
-                DbType.DbTypeMemory,
-                null, serviceCtx = ctx)
+        ctx.ent.prototype<User>(User::class, serviceCtx = ctx)
         return ctx
     }
 

@@ -91,8 +91,8 @@ open class Entities(
      *
      * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
      */
-    open fun <T> prototype(entityType: KClass<*>) where T:Entity<Long> {
-        this.prototype<Long, T>(entityType, Long::class, LongIdGenerator())
+    open fun <T> prototype(entityType: KClass<*>, serviceCtx:Any? = null) where T:Entity<Long> {
+        this.prototype<Long, T>(entityType, Long::class, LongIdGenerator(), serviceCtx = serviceCtx)
     }
 
 

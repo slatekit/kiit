@@ -33,13 +33,12 @@ class Api_Error_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_api_level() {
 
         // Register the error item
-        ctx.ent.register<Long, ErrorItem>(
+        ctx.ent.prototype<Long, ErrorItem>(
                 ErrorItem::class,
-                EntityRepoInMemory(ErrorItem::class, Long::class, EntityMapperInMemory(), null, null, LongIdGenerator()),
-                EntityMapperInMemory(),
-                DbType.DbTypeMemory,
-                null,
-                ErrorItemService::class, serviceCtx = ctx)
+                Long::class,
+                LongIdGenerator(),
+                serviceType = ErrorItemService::class,
+                serviceCtx = ctx)
 
         // get error components
         val queue = ErrorItemQueue("errors", ctx)

@@ -31,17 +31,12 @@ import slatekit.entities.repos.EntityMapperInMemory
 
 class Entity_ORM_Tests {
 
-    private var entities = Entities<EntityContext>({ con -> Db(con) })
+    private var entities = Entities({ con -> Db(con) })
 
 
     @Before fun setup(){
         entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
-        entities.prototype(ORMUser::class,
-                EntityRepoInMemory( ORMUser::class,  Long::class,  EntityMapperInMemory<Long, ORMUser>(),
-                        null, null, LongIdGenerator()),
-                EntityMapperInMemory(),
-                DbType.DbTypeMemory
-        )
+        entities.prototype<ORMUser>(ORMUser::class)
     }
 
 

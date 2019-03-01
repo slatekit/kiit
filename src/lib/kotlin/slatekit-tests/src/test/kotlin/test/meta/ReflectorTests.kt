@@ -53,7 +53,7 @@ class ReflectorTests {
             env  = Env("local", EnvMode.Dev),
             cfg  = Config(),
             logs = LogsDefault,
-            ent  = Entities<EntityContext>({ con -> Db(con) }),
+            ent  = Entities({ con -> Db(con) }),
             app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
             sys = Sys.build(),
             build = Build.empty,
@@ -210,7 +210,7 @@ class ReflectorTests {
 
 
     @Test fun can_call_method() {
-        ctx.ent.register<Long, User>(User::class)
+        ctx.ent.prototype<User>(User::class)
         val api = UserApi(ctx)
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
         val result = res as Notice<String>
