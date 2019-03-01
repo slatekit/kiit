@@ -1,4 +1,4 @@
-package slatekit.meta
+package slatekit.query
 
 import slatekit.query.IQuery
 import slatekit.query.Query

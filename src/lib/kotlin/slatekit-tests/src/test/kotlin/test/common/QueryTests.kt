@@ -14,11 +14,10 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.query.Query
 import slatekit.query.QueryEncoder
-import slatekit.meta.where
+import slatekit.query.where
 import test.setup.Book
 import test.setup.StatusEnum
 
