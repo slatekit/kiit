@@ -19,8 +19,11 @@ import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
+import slatekit.common.db.DbType
+import slatekit.db.Db
 import slatekit.entities.core.*
-import slatekit.orm.core.OrmEntities
+import slatekit.orm.core.orm
+import slatekit.orm.core.sqlBuilder
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
@@ -77,8 +80,8 @@ class Entity_Database_Tests {
         val entities = realDb()
         val svc = entities.getSvc<Long, SampleEntity>(SampleEntity::class)
         val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
-        val ddl = inf.entityDDL
-        val sql = ddl?.createTable(inf.model) ?: ""
+        val ddl = entities.sqlBuilder(SampleEntity::class.qualifiedName!!)
+        val sql = ddl?.createTable(inf.model)
 
         val id = svc.create(SampleEntity(
                 test_string = "create",
@@ -134,10 +137,10 @@ class Entity_Database_Tests {
 
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
 
-    private fun realDb(): OrmEntities {
+    private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
-        val entities = OrmEntities(dbs, MyEncryptor)
-        entities.register<Long, SampleEntity>(SampleEntity::class, null, "sample_entity")
+        val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
+        entities.orm<Long, SampleEntity>(DbType.DbTypeMySql, SampleEntity::class, Long::class, "sample_entity")
         return entities
     }
 

@@ -20,18 +20,21 @@ import slatekit.common.ext.toStringNumeric
 import slatekit.common.info.Folders
 import slatekit.common.io.Files
 import slatekit.common.utils.Props
+import slatekit.entities.core.Entities
+import slatekit.entities.core.EntityContext
+import slatekit.orm.core.getDbSource
+import slatekit.orm.core.sqlBuilder
+import slatekit.orm.databases.SqlBuilder
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
-import slatekit.orm.core.OrmEntities
-import slatekit.orm.core.OrmEntityInfo
 
 /**
  * Created by kreddy on 3/23/2016.
  */
 class OrmMigrationService(
-        private val _entities: OrmEntities,
+        private val _entities: Entities,
         private val _dbs: DbLookup?,
         private val _settings: OrmMigrationSettings,
         private val _folders: Folders?
@@ -128,7 +131,7 @@ class OrmMigrationService(
     fun generateSqlAllUninstall(): Try<String> {
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = _entities.getEntities().map { entity ->
-            val ormEntityInfo = entity as OrmEntityInfo
+            val ormEntityInfo = entity
             val dropTable = _entities.getDbSource().buildDropTable(ormEntityInfo.model.table)
 
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
@@ -163,7 +166,8 @@ class OrmMigrationService(
             val fullName = moduleName
             val svc = _entities.getSvcByTypeName(fullName)
             val info = _entities.getInfoByName(moduleName)
-            val ddl = _entities.getInfoByName(fullName).entityDDL
+            val ctx = _entities.getInfoByName(fullName)
+            val ddl = _entities.sqlBuilder(fullName)
             val sqlTable = ddl.createTable(info.model)
             val sqlIndexes = ddl.createIndex(info.model)
             val sql: List<String> = listOf(sqlTable).plus(sqlIndexes)
@@ -200,7 +204,7 @@ class OrmMigrationService(
         } ?: slatekit.results.Failure("no db setup")
     }
 
-    private fun operate(operationName: String, entityName: String, sqlBuilder: (OrmEntityInfo, String) -> String): Try<String> {
+    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext, String) -> String): Try<String> {
         val ent = _entities.getInfoByName(entityName)
         val svc = _entities.getSvcByTypeName(entityName)
         val table = svc.repo().repoName()
@@ -214,8 +218,8 @@ class OrmMigrationService(
         }
     }
 
-    private fun each(operation: (OrmEntityInfo) -> Try<String>): Try<List<String>> {
-        val results = _entities.getEntities().map { operation(it as OrmEntityInfo) }
+    private fun each(operation: (EntityContext) -> Try<String>): Try<List<String>> {
+        val results = _entities.getEntities().map { operation(it ) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }
         val error = if (success) "" else messages.joinToString(newline)

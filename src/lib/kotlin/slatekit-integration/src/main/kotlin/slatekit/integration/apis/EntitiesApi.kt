@@ -23,7 +23,6 @@ import slatekit.common.db.DbCon
 import slatekit.common.newline
 import slatekit.common.db.DbLookup
 import slatekit.integration.common.AppEntContext
-import slatekit.orm.core.OrmEntities
 import slatekit.orm.migrations.OrmMigrationService
 import slatekit.orm.migrations.OrmMigrationSettings
 import slatekit.results.Notice
@@ -108,6 +107,6 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     private val dbLookup by lazy { DbLookup.fromConfig(context.cfg) }
 
     private fun service(): OrmMigrationService {
-        return OrmMigrationService(appContext.ent as OrmEntities, dbLookup, OrmMigrationSettings(), context.dirs)
+        return OrmMigrationService(appContext.ent, dbLookup, OrmMigrationSettings(), context.dirs)
     }
 }

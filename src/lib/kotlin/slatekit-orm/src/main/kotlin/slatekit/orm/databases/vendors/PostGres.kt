@@ -1,7 +1,6 @@
 package slatekit.orm.databases.vendors
 
 import slatekit.common.db.IDb
-import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.Query
@@ -19,7 +18,7 @@ import kotlin.reflect.KClass
  * MySql to Java types
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
-object PostGreseMap : TypeMap()
+object PostGresMap : TypeMap()
 
 
 /**
@@ -29,7 +28,7 @@ object PostGreseMap : TypeMap()
 class PostGresConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
 
 
-class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGreseMap, namer)
+class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGresMap, namer)
 
 
 class PostGresQuery : Query()

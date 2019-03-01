@@ -19,6 +19,9 @@ import slatekit.db.types.DbSourceMySql
 import slatekit.db.types.DbSourcePostGres
 import slatekit.entities.core.*
 import slatekit.meta.models.Model
+import slatekit.orm.databases.SqlBuilder
+import slatekit.orm.databases.vendors.MySqlTypeMap
+import slatekit.orm.databases.vendors.PostGresMap
 import kotlin.reflect.KClass
 
 /**
@@ -123,6 +126,22 @@ fun Entities.getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
     } ?: DbSourceMySql()
     return source
 }
+
+
+/**
+ * Gets the Database source to Build DDL
+ */
+fun Entities.sqlBuilder(entityFullName:String): SqlBuilder {
+    val ctx = getInfoByName(entityFullName)
+    // Only supporting MySql for now.
+    val sqlBuilder = when (ctx.dbType) {
+        DbType.DbTypeMySql -> SqlBuilder(MySqlTypeMap, namer)
+        DbType.DbTypePGres -> SqlBuilder(PostGresMap, namer)
+        else                      -> SqlBuilder(MySqlTypeMap, namer)
+    }
+    return sqlBuilder
+}
+
 
 /**
  * Gets a registered model ( schema for an entity ) for the entity type
