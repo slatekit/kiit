@@ -17,8 +17,10 @@ import slatekit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
 import slatekit.common.Context
+import slatekit.common.db.DbType
 import slatekit.integration.common.AppEntContext
 import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try
@@ -124,9 +126,11 @@ class SampleAppBatch(context: Context) : App<AppEntContext>(AppEntContext.fromCo
         // 4. This uses an In-Memory repository for demo but you can use EntityRepoMySql for MySql
         ctx.ent.register(
                 entityType = User::class,
+                entityIdType = Long::class,
                 serviceType = UserService::class,
-                repository = EntityRepoInMemory<User>(User::class),
-                serviceCtx = ctx)
+                serviceCtx = ctx,
+                repo = EntityRepoInMemoryWithLongId(User::class),
+                dbType = DbType.DbTypeMemory)
         return Success(true)
     }
 

@@ -12,18 +12,16 @@
 package slatekit.tutorial
 
 
-import slatekit.common.Try
-import slatekit.common.Success
 import slatekit.core.cmds.Cmd
 import kotlin.reflect.KProperty
 import slatekit.common.ext.*
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Created by kreddy on 4/4/2016.
  */
 class Example_Kotlin_Misc : Cmd("types") {
-
-
 
     override fun executeInternal(args: Array<String>?): Try<Any> {
         testExtensions()

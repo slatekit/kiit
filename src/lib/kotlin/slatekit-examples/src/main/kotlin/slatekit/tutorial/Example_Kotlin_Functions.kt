@@ -13,9 +13,9 @@ package slatekit.tutorial
 
 
 import slatekit.common.TODO
-import slatekit.common.Try
-import slatekit.common.Success
 import slatekit.core.cmds.Cmd
+import slatekit.results.Success
+import slatekit.results.Try
 
 /**
  * Created by kreddy on 4/4/2016.

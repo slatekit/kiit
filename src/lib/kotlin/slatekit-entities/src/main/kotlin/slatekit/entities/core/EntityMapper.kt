@@ -14,7 +14,6 @@
 
 package slatekit.entities.core
 
-import slatekit.common.Record
 import slatekit.common.db.Mapper
 import slatekit.meta.models.Model
 import kotlin.reflect.KProperty
@@ -67,6 +66,10 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T:Entity<TId>
      * or defaults to the property name.
      */
     fun columnName(prop: KProperty<*>):String {
-        return this.schema()?.fields?.first { it.name == prop.name }?.storedName ?: prop.name
+        val model:Model? = schema()
+        return when(model) {
+            null -> prop.name
+            else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
+        }
     }
 }

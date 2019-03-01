@@ -19,8 +19,8 @@ import slatekit.common.TODO
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Try
-import slatekit.common.Success
+import slatekit.results.Success
+import slatekit.results.Try
 
 //</doc:import_examples>
 

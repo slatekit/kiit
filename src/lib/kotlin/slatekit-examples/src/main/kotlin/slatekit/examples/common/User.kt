@@ -38,8 +38,9 @@ data class User(
             @property:Field(required = true)
             val age:Int = 35
 
-) : EntityWithId {
+) : EntityWithId<Long> {
 
+    override fun isPersisted(): Boolean = id > 0
 
   fun fullname():String = firstName + " " + lastName
 

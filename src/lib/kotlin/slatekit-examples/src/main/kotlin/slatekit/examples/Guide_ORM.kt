@@ -14,8 +14,8 @@ import slatekit.core.common.AppContext
 import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityContext
 import slatekit.entities.core.EntityMapper
-import slatekit.entities.databases.vendors.MySqlConverter
-import slatekit.entities.databases.vendors.MySqlEntityRepo
+import slatekit.orm.databases.vendors.MySqlConverter
+import slatekit.orm.databases.vendors.MySqlEntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.examples.common.*
 import slatekit.results.Try
@@ -25,6 +25,7 @@ import slatekit.results.Success
 /**
  * Created by kreddy on 3/15/2016.
  */
+/*
 class Guide_ORM : Cmd("types") {
 
     override fun executeInternal(args: Array<String>?): Try<Any> {
@@ -78,10 +79,10 @@ class Guide_ORM : Cmd("types") {
         // - use a certain type of database ( mysql only for now )
         // - use the default EntityRepository ( mysql ) or a custom repository
         // - use a supplied EntityMapper or a custom mapper
-        val entities = Entities(dbLookup1)
+        val entities = Entities({ con -> Db(con)}, dbLookup1)
 
         // Case 1: In-memory
-        showResults("Case 1", entities.prototype<Movie>(entityType = Movie::class))
+        showResults("Case 1", entities.prototype<Movie>(Movie::class))
 
         // Case 2: In-memory + with custom service
         showResults("Case 2", entities.prototype<Movie>(entityType = Movie::class,
@@ -144,7 +145,7 @@ class Guide_ORM : Cmd("types") {
     }
 
 
-    fun service():Unit {
+    fun service() {
 
         // =================================================================================
         // The Service layer initialized with an repository .
@@ -367,3 +368,5 @@ class Guide_ORM : Cmd("types") {
         }
     }
 }
+
+*/

@@ -12,8 +12,6 @@
 package slatekit.examples.common
 
 import slatekit.entities.repos.*
-import kotlin.reflect.KClass
 
 
-class UserRepository(entityType: KClass<*>) : EntityRepoInMemory<User>(entityType) {
-}
+class UserRepository : EntityRepoInMemoryWithLongId<User>(User::class)

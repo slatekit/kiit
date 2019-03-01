@@ -1,8 +1,6 @@
 package slatekit.examples.common
 
-import slatekit.entities.repos.EntityRepoInMemory
-import kotlin.reflect.KClass
+import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 
 
-class MovieRepository() : EntityRepoInMemory<Movie>(Movie::class) {
-}
+class MovieRepository : EntityRepoInMemoryWithLongId<Movie>(Movie::class)

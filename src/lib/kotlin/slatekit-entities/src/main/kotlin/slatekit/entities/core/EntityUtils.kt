@@ -1,5 +1,6 @@
 package slatekit.entities.core
 
+import slatekit.common.naming.Namer
 import slatekit.common.toUUId
 import java.util.*
 import kotlin.reflect.KClass
@@ -13,4 +14,11 @@ fun <TId> convertToId(id:String, entityType:KClass<*> ):TId {
         UUID::class -> id.toUUId() as TId
         else        -> id as TId
     }
+}
+
+
+fun buildTableName(entityType: KClass<*>, tableName:String?, namer: Namer?):String {
+    val rawTableName = tableName ?: entityType.simpleName!! // "user"
+    val table = namer?.rename(rawTableName) ?: rawTableName.toLowerCase()
+    return table
 }

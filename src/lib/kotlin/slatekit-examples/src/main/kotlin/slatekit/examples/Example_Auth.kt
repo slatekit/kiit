@@ -21,8 +21,8 @@ import slatekit.common.auth.User
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
-import slatekit.common.Try
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 
 //</doc:import_examples>
 

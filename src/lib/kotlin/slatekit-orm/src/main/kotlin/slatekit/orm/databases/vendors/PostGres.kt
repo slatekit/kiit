@@ -7,6 +7,7 @@ import slatekit.query.Query
 import slatekit.meta.models.Model
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.buildTableName
 import slatekit.entities.repos.EntityRepoSql
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
@@ -48,7 +49,7 @@ open class PostGresEntityRepo<TId, T>(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         entityMapper: EntityMapper<TId, T>,
-        nameOfTable: String,
+        nameOfTable: String? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null
 ) : EntityRepoSql<TId, T>(
@@ -56,7 +57,7 @@ open class PostGresEntityRepo<TId, T>(
         entityType = entityType,
         entityIdType = entityIdType,
         entityMapper = entityMapper,
-        nameOfTable = nameOfTable,
+        nameOfTable = buildTableName(entityType, nameOfTable, namer),
         encryptor = encryptor,
         namer = namer,
         encodedChar = '"',

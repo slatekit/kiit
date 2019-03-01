@@ -16,7 +16,6 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.Field
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityRepoInMemory
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -25,9 +24,11 @@ import slatekit.results.Success
 import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.core.cmds.Cmd
-import slatekit.entities.databases.vendors.MySqlConverter
-import slatekit.entities.databases.vendors.MySqlEntityRepo
+import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.OrmMapper
+import slatekit.orm.databases.vendors.MySqlConverter
+import slatekit.orm.databases.vendors.MySqlEntityRepo
 
 //</doc:import_examples>
 
@@ -61,7 +62,9 @@ class Example_Entities_Service : Cmd("service") {
             @property:Field(required = true)
             val age: Int = 35
 
-    ) : EntityWithId, EntityUpdatable<User> {
+    ) : EntityWithId<Long>, EntityUpdatable<Long, User> {
+
+        override fun isPersisted(): Boolean = id > 0
 
         /**
          * sets the id on the entity and returns the entity with updated id.
@@ -71,28 +74,27 @@ class Example_Entities_Service : Cmd("service") {
         override fun withId(id: Long): User = copy(id = id)
     }
 
-    // 1. Setup the mapper
+    // First setup the database
+    val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
     val model = ModelMapper.loadSchema(User::class)
-    val mapper = EntityMapper(model, MySqlConverter)
+    val mapper = OrmMapper<Long, User>(model, db, Long::class, MySqlConverter())
 
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality
     // but is very useful for rapid prototyping of a data model when you are trying to
     // figure out what fields/properties should exist on the model
-    val repo = EntityRepoInMemory<User>(User::class)
+    val repo = EntityRepoInMemoryWithLongId<User>(User::class)
 
     // CASE 1A: Explicitly setup the type of id ( long ) and mapper to use
-    val repoSetup2 = EntityRepoInMemory<User>(User::class, Long::class, mapper)
+    val repoSetup2 = EntityRepoInMemoryWithLongId<User>(User::class)
 
     // CASE 2: My-sql ( persisted ) repository can be easily setup
     // More examples of database setup/entity registration available in Setup/Registration docs.
-    // 1. First setup the database
-    val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
 
-    // 3. Now create the repo with database and mapper
-    val repoMySql = MySqlEntityRepo<User>(db, User::class, Long::class, mapper)
+    // Now create the repo with database and mapper
+    val repoMySql = MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserService(repo: EntityRepo<User>) : EntityService<User>(Entities(), repo)
+    class UserService(repo: EntityRepo<Long, User>) : EntityService<Long, User>(Entities({con -> Db(con)}), repo)
     //</doc:setup>
 
 

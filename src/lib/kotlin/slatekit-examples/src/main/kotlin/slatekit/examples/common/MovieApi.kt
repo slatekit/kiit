@@ -31,7 +31,7 @@ import slatekit.integration.common.AppEntContext
  */
 @Api(area = "app", name = "movies", desc = "api for users",
         auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
-class MovieApi( context: AppEntContext) : ApiBaseEntity<Movie, MovieService>(context, Movie::class)
+class MovieApi( context: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(context, Long::class, Movie::class)
 {
     /**
      * Create a sample movie using the fields.

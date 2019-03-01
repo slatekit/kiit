@@ -13,7 +13,6 @@
 
 package slatekit.entities.repos
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import slatekit.common.DateTime
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
@@ -33,6 +32,9 @@ import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
 
+open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>)
+    : EntityRepoInMemory<Long, T>(cls, Long::class, EntityMapperInMemory<Long,T>(Model(cls), LongIdGenerator()) )
+        where T:Entity<Long>
 
 /**
  * An In-Memory repository to store entities.

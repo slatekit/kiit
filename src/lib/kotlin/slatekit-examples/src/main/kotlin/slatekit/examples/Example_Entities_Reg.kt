@@ -21,12 +21,22 @@ import slatekit.entities.core.EntityContext
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
+import slatekit.common.db.DbCon
+import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
+import slatekit.common.db.DbType
 import slatekit.common.db.DbType.DbTypeMySql
 import slatekit.core.cmds.Cmd
+import slatekit.db.Db
 import slatekit.examples.common.User
 import slatekit.examples.common.UserRepository
 import slatekit.examples.common.UserService
+import slatekit.meta.models.Model
+import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.orm
+import slatekit.orm.databases.vendors.MySqlEntityMapper
+import slatekit.orm.databases.vendors.MySqlEntityRepo
+
 //</doc:import_examples>
 
 
@@ -60,78 +70,54 @@ class Example_Entities_Reg : Cmd("types") {
         // - use a certain type of database ( mysql only for now )
         // - use the default EntityRepository ( mysql ) or a custom repository
         // - use a supplied EntityMapper or a custom mapper
-        val entities = Entities(dbs)
+        val entities = Entities({con -> Db(con) })
 
         // Case 1: In-memory
-        showResults("Case 1", entities.prototype<User>(entityType = User::class))
+        showResults("Case 1", entities.prototype<User>(User::class))
 
         // Case 2: In-memory + with custom service
-        showResults("Case 2", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class))
+        showResults("Case 2", entities.prototype<User>(User::class, UserService::class))
 
-        // Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
-        // Note: this uses the default database connection above
-        showResults("Case 3", entities.prototype<User>(entityType = User::class,
-                dbType = DbTypeMySql))
+        // Case 3: EntityService<TId, T>
+        // NOTE: This is the Entities approach ( you handle the Repo/ Mapper implementation )
+        showResults("Case 3", entities.register(
+                User::class, Long::class, UserService(entities, UserRepository()), DbType.DbTypeMemory))
 
-        // Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
-        // Note: this uses the default database connection above
-        showResults("Case 4", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, dbType = DbTypeMySql))
+        // Case 4: ORM : EntityService<TId, T> with supplied MySqlRepo, OrmMapper
+        showResults("Case 3", entities.orm<Long, User>(
+                DbType.DbTypeMySql, User::class, Long::class, "users", UserService::class))
 
-        // Case 5: Custom repository
-        // Note: this uses the default database connection above
-        showResults("Case 5", entities.prototype<User>(entityType = User::class,
-                repository = UserRepository(User::class), dbType = DbTypeMySql))
+        // Case 5: Manual setup
+        val con = DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/mydb", "user", "password")
+        val db = Db(con)
+        val model = ModelMapper.loadSchema(User::class)
+        val mapper = MySqlEntityMapper<Long, User>(model, db, Long::class)
+        val repo = MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper, "users")
+        val service = UserService(entities, repo)
+        showResults("Case 3", entities.register(User::class, Long::class, service, DbType.DbTypeMemory))
 
-        // Case 6: Custom service type, custom repository, database type
-        showResults("Case 6", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, repository = UserRepository (User::class), dbType = DbTypeMySql))
-
-        // Case 7: Custom service type, custom repository, database specified
-        // Note: this uses the named database connection above called "user_db"
-        showResults("Case 7", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, repository = UserRepository (User::class),
-                dbType = DbTypeMySql, dbKey = "user_db"))
-
-        // Case 8: Custom service type, custom repository, database specified, mapper specified
-        // Each registration will simply overwrite an existing registration for the same entity type
-        showResults("Case 8", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, repository = UserRepository (User::class),
-                dbType = DbTypeMySql))
-
-        // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 9", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, repository = UserRepository (User::class),
-                dbType = DbTypeMySql, dbKey = "user_db"))
-
-        // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 10", entities.prototype<User>(entityType = User::class,
-                serviceType = UserService::class, repository = UserRepository (User::class),
-                dbType = DbTypeMySql, dbKey = "group1", dbShard = "shard1"))
         //</doc:setup>
 
         //<doc:examples>
         // Use case 1: Get repository
-        val repo = entities.getRepo<User>(User::class)
+        val repo2 = entities.getRepo<Long, User>(User::class)
 
         // Use case 2: Get the service
-        val svc = entities.getSvc<User>(User::class)
+        val svc = entities.getSvc<Long, User>(User::class)
 
         // Use case 3: Get the entity mapper
-        val mapper = entities.getMapper(User::class)
+        val mapper2 = entities.getMapper<Long,User>(User::class)
 
         // Use case 4: Get the repo for a specific shard
-        val repoShard = entities.getRepo<User>(User::class)
+        val repoShard = entities.getRepo<Long, User>(User::class)
         //</doc:examples>
 
         return Success("")
     }
 
 
-    fun showResults(desc: String, regInfo: EntityContext): Unit {
+    fun showResults(desc: String, regInfo: EntityContext) {
         println(desc)
-        println(regInfo.toStringDetail())
         println()
     }
 }

@@ -8,6 +8,7 @@ import slatekit.entities.repos.EntityRepoSql
 import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
+import slatekit.entities.core.buildTableName
 import slatekit.orm.databases.Converter
 import slatekit.orm.databases.SqlBuilder
 import slatekit.orm.databases.TypeMap
@@ -49,7 +50,7 @@ open class MySqlEntityRepo<TId, T>(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         entityMapper: EntityMapper<TId, T>,
-        nameOfTable: String,
+        nameOfTable: String? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null
 ) : EntityRepoSql<TId, T>(
@@ -57,7 +58,7 @@ open class MySqlEntityRepo<TId, T>(
         entityType = entityType,
         entityIdType = entityIdType,
         entityMapper = entityMapper,
-        nameOfTable = nameOfTable,
+        nameOfTable = buildTableName(entityType, nameOfTable, namer),
         encryptor = encryptor,
         namer = namer,
         encodedChar = '`',

@@ -14,13 +14,17 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
+import slatekit.common.db.DbCon
 import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
+import slatekit.db.Db
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityWithId
-import slatekit.entities.databases.vendors.MySqlBuilder
-import slatekit.entities.databases.vendors.MySqlConverter
+import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.OrmMapper
+import slatekit.orm.databases.vendors.MySqlBuilder
+import slatekit.orm.databases.vendors.MySqlConverter
 
 //</doc:import_required>
 
@@ -77,8 +81,11 @@ class Example_Mapper : Cmd("mapper") {
             @property:Field(required = true)
             val updatedBy :Long  = 0
     )
-        : EntityWithId
+        : EntityWithId<Long>
     {
+
+        override fun isPersisted(): Boolean = id > 0
+
         companion object {
             fun samples():List<Movie> = listOf(
                     Movie(
@@ -87,7 +94,7 @@ class Example_Mapper : Cmd("mapper") {
                             playing = false,
                             cost = 10,
                             rating = 4.5,
-                            released = DateTime.of(1985, 8, 10)
+                            released = DateTimes.of(1985, 8, 10)
                     ),
                     Movie(
                             title = "WonderWoman",
@@ -95,7 +102,7 @@ class Example_Mapper : Cmd("mapper") {
                             playing = true,
                             cost = 100,
                             rating = 4.2,
-                            released = DateTime.of(2017, 7, 4)
+                            released = DateTimes.of(2017, 7, 4)
                     )
             )
         }
@@ -145,7 +152,7 @@ class Example_Mapper : Cmd("mapper") {
 
 
         // CASE 4: Now with a schema of the entity, you create a mapper
-        val mapper = EntityMapper (schema1, MySqlConverter)
+        val mapper = OrmMapper<Long, User>(schema1, Db(DbCon.empty), Long::class, MySqlConverter())
 
         // Create sample instance to demo the mapper
         val movie = Movie(
@@ -154,7 +161,7 @@ class Example_Mapper : Cmd("mapper") {
                         playing = false,
                         cost = 100,
                         rating = 4.0,
-                        released = DateTime.of(2015, 7, 4)
+                        released = DateTimes.of(2015, 7, 4)
                 )
 
         // CASE 5: Get the sql for create

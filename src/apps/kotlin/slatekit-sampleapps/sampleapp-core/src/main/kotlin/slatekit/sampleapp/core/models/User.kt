@@ -89,8 +89,10 @@ data class User (
 
                   @property:Field(required = true)
                   val updatedBy :Long  = 0
-) : EntityWithId, EntityUpdatable<User>
+) : EntityWithId<Long>, EntityUpdatable<Long, User>
 {
+    override fun isPersisted(): Boolean = id > 0
+
   /**
     * sets the id on the entity and returns the entity with updated id.
     * @param id

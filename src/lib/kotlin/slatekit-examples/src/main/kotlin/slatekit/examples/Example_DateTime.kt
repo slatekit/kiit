@@ -12,6 +12,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 
 //</doc:import_required>
 
@@ -19,10 +20,9 @@ import slatekit.common.DateTime
 import slatekit.core.cmds.Cmd
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.ext.days
-import slatekit.common.ext.minutes
-import slatekit.common.ext.months
-import java.time.ZoneId
+//import java.time.ZoneId
+import org.threeten.bp.*
+import slatekit.common.ext.*
 
 //</doc:import_examples>
 
@@ -54,16 +54,16 @@ class Example_DateTime  : Cmd("datetime") {
     // Case 1. Get datetime now, either locally, at utc and other zones
     // These will return a DateTime that wraps a ZonedDateTime.
     println( DateTime.now() )
-    println( DateTime.nowUtc() )
-    println( DateTime.nowAt("America/New_York"))
-    println( DateTime.nowAt("Europe/Athens"))
-    println( DateTime.nowAt(ZoneId.of("Europe/Athens")))
+    println( DateTimes.nowUtc() )
+    println( DateTimes.nowAt("America/New_York"))
+    println( DateTimes.nowAt("Europe/Athens"))
+    println( DateTimes.nowAt(ZoneId.of("Europe/Athens")))
 
 
     // Case 2: Build datetime explicitly
-    println( DateTime.of(2017, 7, 10))
-    println( DateTime.of(2017, 7, 10, 11, 30, 0))
-    println( DateTime.of(2017, 7, 10, 11, 30, 0, 0, "America/New_York"))
+    println( DateTimes.of(2017, 7, 10))
+    println( DateTimes.of(2017, 7, 10, 11, 30, 0))
+    println( DateTimes.of(2017, 7, 10, 11, 30, 0, 0))
     println( DateTime.of(2017, 7, 10, 11, 30, 0, 0, ZoneId.of("America/New_York")))
 
 
@@ -71,10 +71,10 @@ class Example_DateTime  : Cmd("datetime") {
     val dt = DateTime.now()
     println( "year  : " + dt.year      )
     println( "month : " + dt.month     )
-    println( "day   : " + dt.day       )
-    println( "hour  : " + dt.hours     )
-    println( "mins  : " + dt.minutes   )
-    println( "secs  : " + dt.seconds   )
+    println( "day   : " + dt.dayOfMonth)
+    println( "hour  : " + dt.hour      )
+    println( "mins  : " + dt.minute    )
+    println( "secs  : " + dt.second    )
     println( "nano  : " + dt.nano      )
     println( "zone  : " + dt.zone.id )
 
@@ -96,8 +96,6 @@ class Example_DateTime  : Cmd("datetime") {
     println(    DateTime.now() + 3.days            )
     println(    DateTime.now() - 3.minutes         )
     println(    DateTime.now() - 3.months          )
-    println(    DateTime.now().secondsTo( later )  )
-    println(    DateTime.now().minutesTo( later )  )
 
 
     // Case 6. Add time ( just like Java 8 )

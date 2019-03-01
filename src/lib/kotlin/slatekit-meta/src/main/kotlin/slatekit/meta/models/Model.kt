@@ -38,7 +38,7 @@ class Model(
     val namer: Namer? = null
 ) {
 
-    constructor(dataType: KClass<*>) : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType)
+    constructor(dataType: KClass<*>, tableName:String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName)
 
     /**
      * The name of the table

@@ -32,6 +32,7 @@ import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
+import slatekit.db.Db
 import slatekit.entities.core.Entities
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
@@ -170,7 +171,7 @@ class Example_App : Cmd("app") {
                 env = conf.env(),
                 cfg = conf,
                 logs = LogsDefault,
-                ent = Entities(),
+                ent = Entities({con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 app = About(
                         id = "slatekit.examples",

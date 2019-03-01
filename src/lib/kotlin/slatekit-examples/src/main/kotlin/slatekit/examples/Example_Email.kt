@@ -79,6 +79,6 @@ class Example_Email  : Cmd("auth") {
       )))
     //</doc:examples>
 
-    return result.toResultEx()
+    return result.toTry()
   }
 }

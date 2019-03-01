@@ -33,7 +33,10 @@ class Example_Entities : Cmd("entities") {
                           override val id        : Long = 0,
                           val firstName : String = "John",
                           val lastName  : String = "Doe"
-                        ) : EntityWithId
+                        ) : EntityWithId<Long> {
+
+    override fun isPersisted(): Boolean = id > 0
+  }
 
 
   // CASE 2 : Create a new entity class with support for
@@ -49,7 +52,10 @@ class Example_Entities : Cmd("entities") {
                             override val updatedBy : String = "",
                             override val createdBy : String = ""
                         )
-    : EntityWithId, EntityWithTime, EntityWithUser
+    : EntityWithId<Long>, EntityWithTime, EntityWithUser {
+
+    override fun isPersisted(): Boolean = id > 0
+  }
 
 
 
@@ -68,8 +74,11 @@ class Example_Entities : Cmd("entities") {
                          override val createdBy : String = "",
                          override val uuid  : String = Random.uuid()
                        )
-    : EntityWithId, EntityWithTime, EntityWithUser, EntityWithUUID
+    : EntityWithId<Long>, EntityWithTime, EntityWithUser, EntityWithUUID
   {
+
+    override fun isPersisted(): Boolean = id > 0
+
     // The unique id is a guid and unique regardless of environment ( dev, qa, staging, prod )
     // It serves as a easy way to check for existing items across different environments and
     // also makes it easy to import/export items from 1 environment to another ( e.g. pro to dev )
@@ -92,7 +101,10 @@ class Example_Entities : Cmd("entities") {
                           override val createdBy : String = "",
                           override val uuid  : String = Random.uuid()
                         )
-    : EntityWithId, EntityWithMeta
+    : EntityWithId<Long>, EntityWithMeta {
+
+    override fun isPersisted(): Boolean = id > 0
+  }
 
 //</doc:examples>
 

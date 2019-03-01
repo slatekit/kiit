@@ -15,17 +15,17 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.common.*
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.databases.vendors.MySqlEntityRepo
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.db.Db
 import slatekit.common.db.DbConString
-import slatekit.common.db.Mapper
 import slatekit.core.cmds.Cmd
-import slatekit.entities.databases.vendors.MySqlConverter
+import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.OrmMapper
+import slatekit.orm.databases.vendors.MySqlConverter
+import slatekit.orm.databases.vendors.MySqlEntityRepo
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -58,7 +58,9 @@ class Example_Entities_Repo : Cmd("entities") {
             @property:Field(required = true)
             val age:Int = 35
 
-    ) : EntityWithId {
+    ) : EntityWithId<Long> {
+
+        override fun isPersisted(): Boolean = id > 0
 
 
         fun fullname():String = firstName + " " + lastName
@@ -73,7 +75,7 @@ class Example_Entities_Repo : Cmd("entities") {
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality
     // but is very useful for rapid prototyping of a data model when you are trying to
     // figure out what fields/properties should exist on the model
-    val repo = EntityRepoInMemory<User>(User::class)
+    val repo = EntityRepoInMemoryWithLongId(User::class)
 
     // CASE 2: My-sql ( persisted ) repository can be easily setup
     // More examples of database setup/entity registration available in Setup/Registration docs.
@@ -82,14 +84,14 @@ class Example_Entities_Repo : Cmd("entities") {
 
     // 2. Setup the mapper
     val model = ModelMapper.loadSchema(User::class)
-    val mapper = EntityMapper(model, MySqlConverter)
+    val mapper:EntityMapper<Long,User> = OrmMapper(model, db, Long::class, MySqlConverter())
 
 
     // 3. Now create the repo with database and mapper
-    val repoMySql = MySqlEntityRepo<User>(db, User::class, null, mapper)
+    val repoMySql = MySqlEntityRepo(db, User::class, Long::class, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserRepository(db:Db, mapper: Mapper) : MySqlEntityRepo<User>(db, User::class)
+    class UserRepository(db:Db, mapper: EntityMapper<Long,User>) : MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
 
 
     val userRepo = UserRepository(db, mapper)

@@ -13,10 +13,9 @@ mantra: Simplicity above all else
 
 package slatekit.tutorial
 
-import slatekit.common.Try
-import slatekit.common.Success
 import slatekit.core.cmds.Cmd
-import java.time.LocalDate
+import slatekit.results.Success
+import slatekit.results.Try
 
 
 class Example_Kotlin_Classes : Cmd("types") {

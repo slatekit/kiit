@@ -22,9 +22,10 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.core.cmds.Cmd
 import slatekit.entities.core.EntityMapper
-import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.OrmMapper
+import slatekit.orm.databases.vendors.MySqlConverter
 
 //</doc:import_examples>
 
@@ -57,15 +58,15 @@ class Example_Database : Cmd("db") {
         db.open()
 
         // CASE 4: Get scalar values
-        val total1 = db.getScalarString       ("select test_string from db_tests where id = 1")
-        val total2 = db.getScalarBool         ("select test_bool   from db_tests where id = 1")
-        val total3 = db.getScalarShort        ("select test_short  from db_tests where id = 1")
-        val total4 = db.getScalarInt          ("select test_int    from db_tests where id = 1")
-        val total5 = db.getScalarLong         ("select test_long   from db_tests where id = 1")
-        val total6 = db.getScalarDouble       ("select test_double from db_tests where id = 1")
-        val total7 = db.getScalarLocalDate    ("select test_ldate  from db_tests where id = 1")
-        val total8 = db.getScalarLocalTime    ("select test_ltime  from db_tests where id = 1")
-        val total9 = db.getScalarLocalDateTime("select test_ldtime from db_tests where id = 1")
+        val total1 = db.getScalarString       ("select test_string from db_tests where id = 1", null)
+        val total2 = db.getScalarBool         ("select test_bool   from db_tests where id = 1", null)
+        val total3 = db.getScalarShort        ("select test_short  from db_tests where id = 1", null)
+        val total4 = db.getScalarInt          ("select test_int    from db_tests where id = 1", null)
+        val total5 = db.getScalarLong         ("select test_long   from db_tests where id = 1", null)
+        val total6 = db.getScalarDouble       ("select test_double from db_tests where id = 1", null)
+        val total7 = db.getScalarLocalDate    ("select test_ldate  from db_tests where id = 1", null)
+        val total8 = db.getScalarLocalTime    ("select test_ltime  from db_tests where id = 1", null)
+        val total9 = db.getScalarLocalDateTime("select test_ldtime from db_tests where id = 1", null)
 
         // CASE 5: Execute a sql insert
         val id1 = db.insert("insert into `city`(`name`) values( 'ny' )")
@@ -101,7 +102,7 @@ class Example_Database : Cmd("db") {
         // The mapper will load a schema from the User class by checking
         // for "Field" annotations
         val userModelSchema = ModelMapper.loadSchema(User::class)
-        val mapper = EntityMapper(userModelSchema, MySqlConverter)
+        val mapper = OrmMapper<Long,User>(userModelSchema, db, Long::class, MySqlConverter())
         val item1 = db.mapOne<User>("select * from `user` where id = 1", mapper)
         println(item1)
 

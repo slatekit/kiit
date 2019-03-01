@@ -40,7 +40,7 @@ fun <TId, T> Entities.orm(
         tableName: String? = null,
         serviceType: KClass<*>? = null,
         serviceCtx: Any? = null,
-        persistUTC: Boolean = false) where TId : Comparable<TId>, T : Entity<TId> {
+        persistUTC: Boolean = false):EntityContext where TId : Comparable<TId>, T : Entity<TId> {
 
     // NOTE: The ORM builder is an "enhanced" Builder of Entity/ORM components
     // compared to the EntityBuilder. This is because the EntityBuilder does
@@ -50,8 +50,7 @@ fun <TId, T> Entities.orm(
     val builder = OrmBuilder(this.builder.dbCreator, this.dbs, this.enc)
 
     // 1. Table name
-    val rawTableName = tableName ?: entityType.simpleName!! // "user"
-    val table = this.namer?.rename(rawTableName) ?: rawTableName.toLowerCase()
+    val table = buildTableName(entityType, tableName, namer)
 
     // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
     val model = builder.model(entityType, namer, tableName)
@@ -77,6 +76,8 @@ fun <TId, T> Entities.orm(
 
     // 9. Finally Register
     this.register(context)
+
+    return context
 }
 
 
