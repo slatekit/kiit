@@ -1,6 +1,5 @@
 package slatekit.orm.databases.converters
 
-import slatekit.common.DateTime
 import slatekit.orm.databases.SqlConverter
 import slatekit.common.Record
 import slatekit.orm.Consts

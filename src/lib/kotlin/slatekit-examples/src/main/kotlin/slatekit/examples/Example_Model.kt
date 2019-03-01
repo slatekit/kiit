@@ -23,8 +23,8 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.auth.User
 import slatekit.common.info.Host
-import slatekit.entities.databases.vendors.MySqlBuilder
 import slatekit.meta.KTypes
+import slatekit.orm.databases.vendors.MySqlBuilder
 import kotlin.reflect.full.createType
 
 //</doc:import_examples>

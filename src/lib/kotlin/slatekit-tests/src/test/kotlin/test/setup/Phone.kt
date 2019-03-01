@@ -22,4 +22,7 @@ data class Phone (
 
         val updatedBy : Int  = 0
 
-) : EntityWithId
+) : EntityWithId<Long> {
+
+    override fun isPersisted(): Boolean = id > 0
+}

@@ -11,7 +11,7 @@ import slatekit.results.Notice
 
 @Api(area = "app", name = "errors", desc = "messaging service for users and groups", auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class ErrorItemApi(entCtx: AppEntContext)
-    : ApiBaseEntity<ErrorItem, ErrorItemService>(entCtx, ErrorItem::class), ApiHostAware {
+    : ApiBaseEntity<Long, ErrorItem, ErrorItemService>(entCtx, Long::class, ErrorItem::class), ApiHostAware {
 
     private var container: ApiContainer? = null
 

@@ -19,74 +19,67 @@ import slatekit.meta.models.Model
 import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
-import slatekit.entities.databases.vendors.MySqlConverter
-import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
  * NOTE: This is basically a GenericRepository implementation
- * @param entityType : The data type of the entity/model
+ * @param entityType   : The data type of the entity/model
  * @param entityIdType : The data type of the primary key/identity field
  * @param entityMapper : The entity mapper that maps to/from entities / records
- * @param nameOfTable : The name of the table ( defaults to entity name )
+ * @param tableName    : The name of the table ( defaults to entity name )
+ * @param encodedChar  : The name of the table ( defaults to entity name )
  * @tparam T
  */
-abstract class EntityRepo<T>(
-    entityType: KClass<*>,
-    entityIdType: KClass<*>? = null,
-    entityMapper: EntityMapper? = null,
-    nameOfTable: String? = null,
-    encryptor: Encryptor? = null,
-    val namer: Namer? = null,
+abstract class EntityRepo<TId, T>(
+    val entityType: KClass<*>,
+    val entityIdType: KClass<*>,
+    val entityMapper: EntityMapper<TId,T>,
+    val tableName:String,
     val encodedChar: Char = '`',
-    val queryBuilder:(() -> Query)? = null
+    protected val model:Model? = null,
+    protected val encryptor: Encryptor? = null,
+    protected val namer: Namer? = null,
+    protected val queryBuilder:(() -> Query)? = null
 )
-    : IEntityRepo where T : Entity {
-    protected val _nameOfTable = nameOfTable
-    protected val _entityType: KClass<*> = entityType
-    protected val _entityIdType: KClass<*> = entityIdType ?: Long::class
-    protected val _entityModel: Model = entityMapper?.model() ?: ModelMapper.loadSchema(entityType, namer = namer)
-    protected val _entityMapper: EntityMapper = entityMapper ?: EntityMapper(_entityModel, MySqlConverter, encryptor = encryptor)
+    : IEntityRepo where TId:Comparable<TId>, T : Entity<TId> {
 
     /**
      * The name of the table in the datastore
      */
     override fun repoName(): String {
-        val rawName = _nameOfTable ?: _entityType.simpleName ?: ""
-        val finalName = namer?.rename(rawName) ?: rawName[0].toLowerCase() + rawName.substring(1)
-        return finalName
+        return namer?.rename(tableName) ?: tableName[0].toLowerCase() + tableName.substring(1)
     }
 
     /**
      * gets the internal mapper used to convert entities to sql or records to entity
      * @return
      */
-    override fun mapper(): EntityMapper = _entityMapper
+    override fun mapper(): EntityMapper<TId, T> = entityMapper
 
     /**
      * the name of the id field.
      * @return
      */
-    fun idName(): String = _entityModel.idField?.name ?: idCol
+    fun idName(): String = model?.idField?.name ?: idCol
 
     /**
-     * creates the entity in the datastore
+     * creates the entity in the data store
      * @param entity
      * @return
      */
-    abstract fun create(entity: T): Long
+    abstract fun create(entity: T): TId
 
     /**
      * updates the entity in the datastore
      * @param entity
      * @return
      */
-    abstract fun update(entity: T): T
+    abstract fun update(entity: T): Boolean
 
     /**
      * updates items based on the field name
-     * @param prop: The property reference
+     * @param field: The property reference
      * @param value: The value to set
      * @return
      */
@@ -107,14 +100,14 @@ abstract class EntityRepo<T>(
      * @param id
      * @return
      */
-    abstract fun delete(id: Long): Boolean
+    abstract fun delete(id: TId): Boolean
 
     /**
-     * deletes all entities from the datastore using the ids
+     * deletes all entities from the data store using the ids
      * @param ids
      * @return
      */
-    abstract fun delete(ids: List<Long>): Int
+    abstract fun delete(ids: List<TId>): Int
 
     /**
      * deletes the entity in memory
@@ -126,7 +119,7 @@ abstract class EntityRepo<T>(
 
     /**
      * deletes items based on the field name and value
-     * @param prop: The property reference
+     * @param field: The property reference
      * @param value: The value to check for
      * @return
      */
@@ -142,14 +135,14 @@ abstract class EntityRepo<T>(
      * @param id
      * @return
      */
-    abstract fun get(id: Long): T?
+    abstract fun get(id: TId): T?
 
     /**
      * gets the entity from the datastore using the id
      * @param ids
      * @return
      */
-    abstract fun get(ids: List<Long>): List<T>
+    abstract fun get(ids: List<TId>): List<T>
 
     /**
      * gets all the entities from the datastore.
@@ -203,13 +196,13 @@ abstract class EntityRepo<T>(
      * Gets the first/oldest item
      * @return
      */
-    fun first(): T? = takeFirst({ -> oldest(1) })
+    fun first(): T? = takeFirst { oldest(1) }
 
     /**
      * Gets the last/recent item
      * @return
      */
-    fun last(): T? = takeFirst({ -> recent(1) })
+    fun last(): T? = takeFirst { recent(1) }
 
     /**
      * Gets the most recent n items represented by count
@@ -273,14 +266,9 @@ abstract class EntityRepo<T>(
 
     /**
      * finds items by using the sql
-     * @param query
+     * @param name: Name of the stored proc
+     * @param args: Arguments to the proc
      * @return
      */
     open fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
-
-    /**
-     * Hook for derived classes to handle additional logic before saving
-     * @param entity
-     */
-    protected fun onBeforeSave(entity: T) = {}
 }

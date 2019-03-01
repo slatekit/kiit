@@ -22,9 +22,10 @@ import slatekit.apis.support.ApiBase
 import slatekit.common.db.DbCon
 import slatekit.common.newline
 import slatekit.common.db.DbLookup
-import slatekit.entities.support.EntitySetupService
-import slatekit.entities.support.EntitySetupSettings
 import slatekit.integration.common.AppEntContext
+import slatekit.orm.core.OrmEntities
+import slatekit.orm.migrations.OrmMigrationService
+import slatekit.orm.migrations.OrmMigrationSettings
 import slatekit.results.Notice
 import slatekit.results.Try
 
@@ -70,7 +71,8 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     @ApiAction(desc = "installs all the models in the default database")
     fun counts(): List<Pair<String, Long>> {
-        return service().counts()
+        //return service().counts()
+        return listOf()
     }
 
     @ApiAction(desc = "generates sql install files for the model")
@@ -105,7 +107,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     private val dbLookup by lazy { DbLookup.fromConfig(context.cfg) }
 
-    private fun service(): EntitySetupService {
-        return EntitySetupService(appContext.ent, dbLookup, EntitySetupSettings(), context.dirs)
+    private fun service(): OrmMigrationService {
+        return OrmMigrationService(appContext.ent as OrmEntities, dbLookup, OrmMigrationSettings(), context.dirs)
     }
 }

@@ -17,6 +17,10 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.common.db.DbType
+import slatekit.entities.repos.EntityMapperInMemory
+import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.LongIdGenerator
 import slatekit.integration.errors.ErrorHandler
 import slatekit.integration.errors.ErrorItem
 import slatekit.integration.errors.ErrorItemQueue
@@ -29,7 +33,13 @@ class Api_Error_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_api_level() {
 
         // Register the error item
-        ctx.ent.register<ErrorItem>(ErrorItem::class, serviceType = ErrorItemService::class, serviceCtx = ctx)
+        ctx.ent.register<Long, ErrorItem>(
+                ErrorItem::class,
+                EntityRepoInMemory(ErrorItem::class, Long::class, EntityMapperInMemory(), null, null, LongIdGenerator()),
+                EntityMapperInMemory(),
+                DbType.DbTypeMemory,
+                null,
+                ErrorItemService::class, serviceCtx = ctx)
 
         // get error components
         val queue = ErrorItemQueue("errors", ctx)

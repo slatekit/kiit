@@ -16,9 +16,9 @@ import org.junit.Test
 import slatekit.common.utils.RecordMap
 import slatekit.common.ids.UniqueId
 import slatekit.common.utils.ListMap
-import slatekit.entities.core.EntityMapper
-import slatekit.entities.databases.vendors.MySqlConverter
 import slatekit.meta.models.ModelMapper
+import slatekit.orm.core.OrmMapper
+import slatekit.orm.databases.vendors.MySqlConverter
 import test.setup.*
 import java.sql.Timestamp
 import java.util.*
@@ -33,10 +33,10 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
 
-        val mapper = EntityMapper(model, MySqlConverter)
+        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorR>())
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
-        val entity = mapper.mapFrom(source)!!as AuthorR
+        val entity = mapper.mapFrom<AuthorR>(source)!!
 
         assert( entity.id == 1L )
         assert( entity.uuid == "ABC" )
@@ -53,10 +53,10 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_writable_class(){
         val model = ModelMapper.loadSchema(AuthorW::class, AuthorW::id.name)
 
-        val mapper = EntityMapper(model, MySqlConverter)
+        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorW>())
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
-        val entity = mapper.mapFrom(source)!!as AuthorW
+        val entity = mapper.mapFrom<AuthorW>(source)!!
 
         assert( entity.id == 1L )
         assert( entity.uuid == "ABC" )
@@ -73,10 +73,10 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class_with_embedded_object(){
         val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
 
-        val mapper = EntityMapper(model, MySqlConverter)
+        val mapper = OrmMapper(model, MySqlConverter<Long, UserWithAddress>())
         val data = buildSampleDataForEmbeddedObject()
         val source = RecordMap(data)
-        val entity = mapper.mapFrom(source)!!as UserWithAddress
+        val entity = mapper.mapFrom<UserWithAddress>(source)!!
 
         assert( entity.id == 1L )
         assert( entity.email == "kishore@abc.com" )

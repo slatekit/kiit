@@ -15,6 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
+import slatekit.db.Db
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.meta.models.ModelMapper
@@ -25,21 +26,21 @@ import test.setup.User5
 
 class Entity_Services_Tests {
 
-    private var entities = Entities()
+    private var entities = Entities<EntityInfo>({ con -> Db(con) })
 
 
     @Before fun setup(){
-        entities = Entities(DbLookup(DbConString("", "", "", "")))
-        entities.register<User5>(User5::class)
-        entities.register<Member>(Member::class)
-        entities.register<Group>(Group::class)
+        entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
+        entities.register<Long, User5>(User5::class)
+        entities.register<Long, Member>(Member::class)
+        entities.register<Long, Group>(Group::class)
     }
 
 
-    private fun getUserService(setupSamples:Boolean): EntityService<User5> {
-        val userSvc = entities.getSvc<User5>(User5::class)
-        val memsSvc = entities.getSvc<Member>(Member::class)
-        val grpSvc = entities.getSvc<Group>(Group::class)
+    private fun getUserService(setupSamples:Boolean): EntityService<Long, User5> {
+        val userSvc = entities.getSvc<Long, User5>(User5::class)
+        val memsSvc = entities.getSvc<Long, Member>(Member::class)
+        val grpSvc = entities.getSvc<Long, Group>(Group::class)
 
         if(setupSamples) {
             // 1. Create first user
@@ -127,7 +128,7 @@ class Entity_Services_Tests {
 
     @Test fun can_get_by_id() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Member>(Member::class)
+        val memsSvc = entities.getSvc<Long, Member>(Member::class)
         val first = userSvc.first()
         val firstById = userSvc.get(first?.id ?: 1)
         val memberById = memsSvc.get(first?.id ?: 1)
@@ -154,7 +155,7 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relation() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Member>(Member::class)
+        val memsSvc = entities.getSvc<Long, Member>(Member::class)
         val user = memsSvc.getRelation<User5>(1, Member::userId, User5::class)
         assert( user != null)
         assert( user!!.email == "jdoe1@abc.com")
@@ -163,7 +164,7 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relation_with_object() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Member>(Member::class)
+        val memsSvc = entities.getSvc<Long, Member>(Member::class)
         val userAndMember = memsSvc.getWithRelation<User5>(2, Member::userId, User5::class)
         assert( userAndMember != null)
         assert(userAndMember!!.first?.groupId == 2L)
@@ -174,7 +175,7 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relations() {
         val userSvc = getUserService(true)
-        val grpSvc = entities.getSvc<Group>(Group::class)
+        val grpSvc = entities.getSvc<Long, Group>(Group::class)
 
         val results = grpSvc.getWithRelations<Member>(2, Member::class, Member::groupId)
         assert(results != null)

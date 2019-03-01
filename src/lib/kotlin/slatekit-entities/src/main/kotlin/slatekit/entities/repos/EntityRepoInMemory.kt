@@ -24,37 +24,48 @@ import slatekit.entities.core.EntityRepo
 import slatekit.entities.core.EntityUpdatable
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZonedDateTime
 import java.util.*
+//import java.time.*
+import org.threeten.bp.*
+import slatekit.common.Record
 import kotlin.reflect.KClass
 
-open class EntityRepoInMemory<T>(
-    entityType: KClass<*>,
-    entityIdType: KClass<*>? = null,
-    entityMapper: EntityMapper? = null,
-    encryptor: Encryptor? = null,
-    namer: Namer? = null
-)
-    : EntityRepo<T>(entityType, entityIdType, entityMapper, null, encryptor = encryptor, namer = namer) where T : Entity {
 
-    private var _items = ListMap<Long, T>(listOf())
+
+/**
+ * An In-Memory repository to store entities.
+ * Used as an alternative to mocking for testing/prototyping.
+ *
+ * WARNING!!!!!!
+ * Should NOT be used outside of prototyping
+ */
+open class EntityRepoInMemory<TId, T>(
+    entityType: KClass<*>,
+    entityIdType: KClass<*>,
+    entityMapper: EntityMapper<TId, T>,
+    encryptor: Encryptor? = null,
+    namer: Namer? = null,
+    idGenerator: IdGenerator<TId>? = null
+)
+    : EntityRepo<TId, T>(entityType, entityIdType, entityMapper, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
+        where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+
+    private val _idGenerator = idGenerator ?: LongIdGenerator()
+    private var _items = ListMap<TId, T>(listOf())
 
     /**
      * create the entity in memory
      *
      * @param entity
      */
-    override fun create(entity: T): Long {
+    override fun create(entity: T): TId {
         // Check 1: already persisted ?
         return if (!entity.isPersisted()) {
             // get next id
             val id = getNextId()
             val en = when (entity) {
-                is EntityUpdatable<*> -> entity.withId(id)
-                else -> _entityMapper.copyWithId(id, entity)
+                is EntityUpdatable<*, *> -> entity.withIdAny(id)
+                else -> mapper().setId(id, entity)
             }
 
             // store
@@ -69,13 +80,13 @@ open class EntityRepoInMemory<T>(
      *
      * @param entity
      */
-    override fun update(entity: T): T {
+    override fun update(entity: T): Boolean {
         // Check 1: already persisted ?
         if (entity.isPersisted() && _items.contains(entity.identity())) {
             _items = _items.minus(entity.identity())
             _items = _items.add(entity.identity(), entity)
         }
-        return entity
+        return true
     }
 
     /**
@@ -83,7 +94,7 @@ open class EntityRepoInMemory<T>(
      *
      * @param id
      */
-    override fun delete(id: Long): Boolean {
+    override fun delete(id: TId): Boolean {
         return if (!_items.contains(id))
             false
         else {
@@ -97,7 +108,7 @@ open class EntityRepoInMemory<T>(
      * @param ids
      * @return
      */
-    override fun delete(ids: List<Long>): Int {
+    override fun delete(ids: List<TId>): Int {
         return ids.map({ delete(it) }).count { it }
     }
 
@@ -106,7 +117,7 @@ open class EntityRepoInMemory<T>(
      *
      * @param id
      */
-    override fun get(id: Long): T? {
+    override fun get(id: TId): T? {
         return _items[id]
     }
 
@@ -115,7 +126,7 @@ open class EntityRepoInMemory<T>(
      * @param ids
      * @return
      */
-    override fun get(ids: List<Long>): List<T> {
+    override fun get(ids: List<TId>): List<T> {
         return ids.mapNotNull { _items[it] }
     }
 
@@ -125,7 +136,7 @@ open class EntityRepoInMemory<T>(
      * @return
      */
     override fun findBy(field: String, op: String, value: Any): List<T> {
-        val prop = Reflector.findProperty(_entityType, field)
+        val prop = Reflector.findProperty(entityType, field)
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
@@ -196,7 +207,7 @@ open class EntityRepoInMemory<T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    fun getNextId(): Long = _items.size.toLong() + 1
+    fun getNextId(): TId = _idGenerator.nextId() as TId
 
     /**
      * Simple equality comparison fields ( used mostly in
@@ -221,4 +232,16 @@ open class EntityRepoInMemory<T>(
             }
         } ?: false
     }
+}
+
+
+class EntityMapperInMemory<TId, T> : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+    override fun setId(id: TId, entity: T): T = entity
+
+    override fun mapSqlInsert(entity: T): String = ""
+
+    override fun mapSqlUpdate(entity: T): String = ""
+
+    override fun <T> mapFrom(record: Record): T? = null
+
 }

@@ -1,6 +1,6 @@
 package slatekit.db.types
 
-import slatekit.db.DbFieldType
+import slatekit.common.db.DbFieldType
 
 data class DbTypeInfo(val metaType: DbFieldType,
                       val dbType: String,

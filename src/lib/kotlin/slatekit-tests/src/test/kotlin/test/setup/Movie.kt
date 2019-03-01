@@ -50,8 +50,10 @@ data class Movie(
         @property:Field(required = true)
         val updatedBy :Long  = 0
 )
-    : EntityWithId
-{
+    : EntityWithId<Long> {
+
+    override fun isPersisted(): Boolean = id > 0
+
     companion object {
         fun samples():List<Movie> = listOf(
                 Movie(

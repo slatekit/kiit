@@ -46,21 +46,21 @@ data class ModelField(
     override fun toString(): String {
         val text = StringBuilder()
 
-        text.append("( name" + " : " + name)
-        text.append(", desc" + " : " + desc)
-        text.append(", dataCls" + " : " + dataCls)
-        text.append(", storedName" + " : " + storedName)
-        text.append(", pos" + " : " + pos)
-        text.append(", isRequired" + " : " + isRequired)
-        text.append(", minLength" + " : " + minLength)
-        text.append(", maxLength" + " : " + maxLength)
-        text.append(", defaultVal" + " : " + defaultVal)
-        text.append(", encrypt" + " : " + encrypt)
-        text.append(", example" + " : " + example)
-        text.append(", key" + " : " + key)
-        text.append(", extra" + " : " + extra)
-        text.append(", tag" + " : " + tag)
-        text.append(", cat" + " : " + cat)
+        text.append("( name : $name")
+        text.append(", desc : $desc")
+        text.append(", dataCls : $dataCls")
+        text.append(", storedName : $storedName")
+        text.append(", pos : $pos")
+        text.append(", isRequired : $isRequired")
+        text.append(", minLength : $minLength")
+        text.append(", maxLength : $maxLength")
+        text.append(", defaultVal : $defaultVal")
+        text.append(", encrypt : $encrypt")
+        text.append(", example : $example")
+        text.append(", key : $key")
+        text.append(", extra : $extra")
+        text.append(", tag : $tag")
+        text.append(", cat : $cat")
         text.append(" )")
         return text.toString()
     }
@@ -80,7 +80,6 @@ data class ModelField(
          * builds a new model field that is an id
          * @param name
          * @param dataType
-         * @param autoIncrement
          * @return
          */
         @JvmStatic

@@ -22,5 +22,5 @@ interface IEntityRepo {
 
     fun count(): Long
 
-    fun mapper(): EntityMapper
+    fun mapper(): EntityMapper<*,*>
 }

@@ -74,55 +74,55 @@ class Db_Tests_Postgres {
 
     @Test
     fun can_query_scalar_string() {
-        ensure_scalar("test_string", { db, sql -> db.getScalarString(sql) }, "abcd")
+        ensure_scalar("test_string", { db, sql -> db.getScalarString(sql, null) }, "abcd")
     }
 
 
     @Test
     fun can_query_scalar_bool() {
-        ensure_scalar("test_bool", { db, sql -> db.getScalarBool(sql) }, true)
+        ensure_scalar("test_bool", { db, sql -> db.getScalarBool(sql, null) }, true)
     }
 
 
     @Test
     fun can_query_scalar_short() {
-        ensure_scalar("test_short", { db, sql -> db.getScalarShort(sql) }, 123)
+        ensure_scalar("test_short", { db, sql -> db.getScalarShort(sql, null) }, 123)
     }
 
 
     @Test
     fun can_query_scalar_int() {
-        ensure_scalar("test_int", { db, sql -> db.getScalarInt(sql) }, 123456)
+        ensure_scalar("test_int", { db, sql -> db.getScalarInt(sql, null) }, 123456)
     }
 
 
     @Test
     fun can_query_scalar_long() {
-        ensure_scalar("test_long", { db, sql -> db.getScalarLong(sql) }, 123456789)
+        ensure_scalar("test_long", { db, sql -> db.getScalarLong(sql, null) }, 123456789)
     }
 
 
     @Test
     fun can_query_scalar_float() {
-        ensure_scalar("test_float", { db, sql -> db.getScalarFloat(sql) }, 123.45f)
+        ensure_scalar("test_float", { db, sql -> db.getScalarFloat(sql, null) }, 123.45f)
     }
 
 
     @Test
     fun can_query_scalar_double() {
-        ensure_scalar("test_double", { db, sql -> db.getScalarDouble(sql) }, 123456.789)
+        ensure_scalar("test_double", { db, sql -> db.getScalarDouble(sql, null) }, 123456.789)
     }
 
 
     @Test
     fun can_query_scalar_localdate() {
-        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql) }, LocalDate.of(2017, 6, 1))
+        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql, null) }, LocalDate.of(2017, 6, 1))
     }
 
 
     @Test
     fun can_query_scalar_localtime() {
-        ensure_scalar("test_localtime", { db, sql -> db.getScalarLocalTime(sql) }, LocalTime.of(9, 25, 0))
+        ensure_scalar("test_localtime", { db, sql -> db.getScalarLocalTime(sql, null) }, LocalTime.of(9, 25, 0))
     }
 
 
@@ -130,7 +130,7 @@ class Db_Tests_Postgres {
     fun can_query_scalar_localdatetime() {
         ensure_scalar(
             "test_localdatetime",
-            { db, sql -> db.getScalarLocalDateTime(sql) },
+            { db, sql -> db.getScalarLocalDateTime(sql, null) },
             LocalDateTime.of(2017, 7, 6, 9, 25, 0)
         )
     }
@@ -138,7 +138,7 @@ class Db_Tests_Postgres {
 
     @Test
     fun can_query_scalar_date() {
-        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarDate(sql) }, DateTimes.of(2017, 7, 6, 9, 25, 0))
+        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarDate(sql, null) }, DateTimes.of(2017, 7, 6, 9, 25, 0))
     }
 
 
@@ -191,7 +191,7 @@ class Db_Tests_Postgres {
 
         // 3. get
         val sql = "select test_int from $tableName where id = $id"
-        val updatedVal = db.getScalarInt(sql)
+        val updatedVal = db.getScalarInt(sql, null)
         assert(updatedVal == 987)
     }
 

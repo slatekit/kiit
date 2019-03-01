@@ -11,8 +11,8 @@ usage: Please refer to license on github for more info.
 
 package slatekit.db
 
-import slatekit.common.DateTime
 import slatekit.common.db.DbCon
+import slatekit.common.db.IDb
 import slatekit.common.db.Mapper
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
@@ -25,10 +25,9 @@ import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-//import java.time.*
-import org.threeten.bp.*
-import slatekit.common.DateTimes
 import kotlin.io.*
+
+
 
 /**
  * Light-weight database wrapper.
@@ -41,33 +40,25 @@ import kotlin.io.*
 class Db(
         private val _dbCon: DbCon,
         val source: DbSource = DbSourceMySql(),
-        val errorCallback: ((Exception) -> Unit)? = null
-) {
+        errorCallback: ((Exception) -> Unit)? = null
+) : IDb {
 
-    val onError = errorCallback ?: this::errorHandler
+    override val onError = errorCallback ?: this::errorHandler
 
     /**
      * registers the jdbc driver
      *
      * @return
      */
-    fun open(): Db {
+    override fun open(): Db {
         Class.forName(_dbCon.driver)
         return this
     }
 
-    fun execute(sql: String) {
+    override fun execute(sql: String) {
         executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, onError)
     }
 
-    /**
-     * gets a scalar string value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any>?): T? =
-            getScalarOpt<T>(sql, typ, inputs)
 
     /**
      * gets a scalar string value using the sql provided
@@ -75,106 +66,7 @@ class Db(
      * @param sql : The sql text
      * @return
      */
-    fun getScalarString(sql: String, inputs: List<Any>? = null): String =
-            getScalar<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
-
-    /**
-     * gets a scalar int value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarShort(sql: String, inputs: List<Any>? = null): Short =
-            getScalar(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
-
-    /**
-     * gets a scalar int value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarInt(sql: String, inputs: List<Any>? = null): Int =
-            getScalar(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
-
-    /**
-     * gets a scalar long value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarLong(sql: String, inputs: List<Any>? = null): Long =
-            getScalar(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
-
-    /**
-     * gets a scalar double value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarFloat(sql: String, inputs: List<Any>? = null): Float =
-            getScalar(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
-
-    /**
-     * gets a scalar double value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarDouble(sql: String, inputs: List<Any>? = null): Double =
-            getScalar(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
-
-    /**
-     * gets a scalar bool value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarBool(sql: String, inputs: List<Any>? = null): Boolean =
-            getScalar(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
-
-    /**
-     * gets a scalar local date value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarLocalDate(sql: String, inputs: List<Any>? = null): LocalDate =
-            getScalar(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
-
-    /**
-     * gets a scalar local time value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarLocalTime(sql: String, inputs: List<Any>? = null): LocalTime =
-            getScalar(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
-
-    /**
-     * gets a scalar local datetime value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarLocalDateTime(sql: String, inputs: List<Any>? = null): LocalDateTime =
-            getScalar(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
-
-    /**
-     * gets a scalar local datetime value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarDate(sql: String, inputs: List<Any>? = null): DateTime =
-            getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
-
-    /**
-     * gets a scalar string value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
+    override fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
         return executePrepAs<T>(_dbCon, sql, { _, stmt ->
 
@@ -202,7 +94,7 @@ class Db(
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insert(sql: String, inputs: List<Any>? = null): Long {
+    override fun insert(sql: String, inputs: List<Any>?): Long {
         val res = executeCon(_dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
@@ -234,7 +126,7 @@ class Db(
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insertAndGetStringId(sql: String, inputs: List<Any>? = null): String {
+    override fun insertGetId(sql: String, inputs: List<Any>?): String {
         val res = executeCon(_dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
@@ -266,7 +158,7 @@ class Db(
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
-    fun update(sql: String, inputs: List<Any>? = null): Int {
+    override fun update(sql: String, inputs: List<Any>?): Int {
         val result = executePrepAs<Int>(_dbCon, sql, { con, stmt ->
 
             // fill all the arguments into the prepared stmt
@@ -286,11 +178,11 @@ class Db(
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> query(
+    override fun <T> query(
         sql: String,
         callback: (ResultSet) -> T?,
-        moveNext: Boolean = true,
-        inputs: List<Any>? = null
+        moveNext: Boolean,
+        inputs: List<Any>?
     ): T? {
         val result = executePrepAs<T>(_dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
@@ -319,12 +211,12 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>? = null): T? {
+    override fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             if (rs.next())
-                mapper.mapFrom(rec) as T
+                mapper.mapFrom<T>(rec)
             else
                 null
         }, false, inputs)
@@ -340,13 +232,13 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>? = null): List<T>? {
+    override fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             val buf = mutableListOf<T>()
             while (rs.next()) {
-                val item = mapper.mapFrom(rec)
+                val item = mapper.mapFrom<T>(rec)
                 buf.add(item as T)
             }
             buf.toList()
@@ -361,11 +253,11 @@ class Db(
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> callQuery(
+    override fun <T> callQuery(
         procName: String,
         callback: (ResultSet) -> T?,
-        moveNext: Boolean = true,
-        inputs: List<Any>? = null
+        moveNext: Boolean,
+        inputs: List<Any>?
     ): T? {
 
         // {call create_author(?, ?)}
@@ -381,10 +273,10 @@ class Db(
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun <T> callQueryMapped(
+    override fun <T> callQueryMapped(
             procName: String,
             mapper: Mapper,
-            inputs: List<Any>? = null
+            inputs: List<Any>?
     ): List<T>? {
 
         // {call create_author(?, ?)}
@@ -400,7 +292,7 @@ class Db(
      * @param moveNext : Whether or not to automatically move the resultset to the next/first row
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun callUpdate(procName: String, inputs: List<Any>? = null): Int {
+    override fun callUpdate(procName: String, inputs: List<Any>?): Int {
 
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
@@ -408,7 +300,7 @@ class Db(
         return update(sql, inputs)
     }
 
-    fun errorHandler(ex: Exception) {
+    override fun errorHandler(ex: Exception) {
         println("Database error : " + ex.message)
     }
 

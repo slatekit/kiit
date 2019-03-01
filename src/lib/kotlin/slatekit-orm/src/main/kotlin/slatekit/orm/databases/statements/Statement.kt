@@ -1,8 +1,10 @@
 package slatekit.orm.databases.statements
 
-import slatekit.orm.core.EntityMapper
+import slatekit.entities.core.Entity
+import slatekit.orm.core.OrmMapper
 import slatekit.meta.models.Model
 
-interface Statement {
-    fun sql(item:Any, model: Model, mapper: EntityMapper):String
+interface Statement<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+
+    fun sql(item:Entity<TId>, model: Model, mapper: OrmMapper<TId, T>):String
 }
