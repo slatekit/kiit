@@ -79,6 +79,7 @@ class Model(
      */
     val fields: List<ModelField> get() = _propList ?: listOf<ModelField>()
 
+
     /**
      * builds a new model by adding an text field to the list of fields
      * @param name

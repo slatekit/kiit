@@ -20,19 +20,15 @@ import slatekit.common.types.PhoneUS
 import slatekit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityInfo
-import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.core.EntityContext
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
-import slatekit.meta.kClass
 import slatekit.results.Notice
 import slatekit.results.getOrElse
 import test.setup.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.*
-import kotlin.reflect.jvm.javaField
-import kotlin.reflect.jvm.javaSetter
 import kotlin.reflect.jvm.javaType
 import kotlin.test.assertEquals
 
@@ -57,7 +53,7 @@ class ReflectorTests {
             env  = Env("local", EnvMode.Dev),
             cfg  = Config(),
             logs = LogsDefault,
-            ent  = Entities<EntityInfo>({ con -> Db(con) }),
+            ent  = Entities<EntityContext>({ con -> Db(con) }),
             app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
             sys = Sys.build(),
             build = Build.empty,

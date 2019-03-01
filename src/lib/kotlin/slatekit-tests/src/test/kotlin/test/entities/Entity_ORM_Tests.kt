@@ -22,7 +22,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType
 import slatekit.db.Db
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityInfo
+import slatekit.entities.core.EntityContext
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.entities.core.*
@@ -31,12 +31,12 @@ import slatekit.entities.repos.EntityMapperInMemory
 
 class Entity_ORM_Tests {
 
-    private var entities = Entities<EntityInfo>({ con -> Db(con) })
+    private var entities = Entities<EntityContext>({ con -> Db(con) })
 
 
     @Before fun setup(){
         entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
-        entities.register(ORMUser::class,
+        entities.prototype(ORMUser::class,
                 EntityRepoInMemory( ORMUser::class,  Long::class,  EntityMapperInMemory<Long, ORMUser>(),
                         null, null, LongIdGenerator()),
                 EntityMapperInMemory(),

@@ -21,6 +21,8 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.entities.repos.EntityMapperInMemory
 import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.IdGenerator
+import slatekit.entities.repos.LongIdGenerator
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
@@ -56,64 +58,86 @@ import kotlin.reflect.KClass
  *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
  *
  */
-open class Entities<TInfo>(
+open class Entities(
         dbCreator: (DbCon) -> IDb,
-        _dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
+        val dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
         val namer: Namer? = null
-) where TInfo:EntityInfo {
+)  {
 
-    protected var _info = ListMap<String, TInfo>(listOf())
-    protected val _mappers = mutableMapOf<String, EntityMapper<*,*>>()
-    protected val logger = logs.getLogger("db")
-    open val builder = EntityBuilder(dbCreator, _dbs, enc)
+    // TODO: Make this private
+    var info = ListMap<String, EntityContext>(listOf())
+    val mappers = mutableMapOf<String, EntityMapper<*,*>>()
+    val logger = logs.getLogger("db")
+    open val builder = EntityBuilder(dbCreator, dbs, enc)
 
-    open fun <TId, T> register(
-            entityType: KClass<*>
-    ): TInfo where TId:Comparable<TId>, T:Entity<TId> {
-        val mapper = EntityMapperInMemory<TId, T>()
-        return register(entityType,
-                EntityRepoInMemory(entityType, Long::class, mapper),
-                mapper, DbType.DbTypeMemory)
+
+    /**
+     * Register the entity using a pre-built [EntityContext] object
+     * which contains all the relevant info about an Entity, its id,
+     * and its corresponding mapper, repo, service, etc.
+     */
+    open fun register(ctx:EntityContext) {
+        val key = builder.key(ctx.entityType, "", "")
+        info = info.add(key, ctx)
+        mappers[ctx.entityType.qualifiedName!!] = ctx.entityMapperInstance
     }
 
 
-    open fun <TId, T> register(
+    /**
+     * Register a Entity with a Long Id, and an In-Memory Repository for prototyping / testing purposes
+     * WARNING!!! : This should only be used for Domain Driven prototyping, mocking, testing purposes
+     *
+     * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
+     */
+    open fun <T> prototype(entityType: KClass<*>) where T:Entity<Long> {
+        this.prototype<Long, T>(entityType, Long::class, LongIdGenerator())
+    }
+
+
+    /**
+     * Register a Entity with a In-Memory Repository for prototyping / testing purposes
+     * WARNING!!! : This should only be used for Domain Driven prototyping, mocking, testing purposes
+     *
+     * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
+     * @param entityIdType :  Type of the id of the Entity / Domain class ( e.g. Long )
+     * @param entityIdGen  :  Id generator for primary keys / ids for the In-Memory repository
+     * @param tableName    :  Optional name of the database table for entityt ( defaults to class name e.g. "user" )
+     * @param serviceType  :  Optional type of the [EntityService] to create instance
+     * @param serviceCtx   :  Context info to pass to the [EntityService] type for creation
+     */
+    open fun <TId, T> prototype(
             entityType: KClass<*>,
-            repo: EntityRepo<TId, T>,
-            mapper: EntityMapper<TId, T>,
-            dbType: DbType,
-            model:Model? = null,
-            serviceType: KClass<*>? = null,
-            dbKey: String? = null,
-            dbShard: String? = null,
+            entityIdType: KClass<*>,
+            entityIdGen: IdGenerator<TId>,
             tableName: String? = null,
-            serviceCtx: Any? = null,
-            persistUTC: Boolean = false
-    ): TInfo where TId:Comparable<TId>, T:Entity<TId> {
+            serviceType: KClass<*>? = null,
+            serviceCtx: Any? = null) where TId : Comparable<TId>, T : Entity<TId> {
 
-        // 1. Service ( used to provide validation, placeholder for business functionality )
+        val table = tableName ?: entityType.simpleName!!.toLowerCase() // "user"
+
+        // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
+        val model = Model(entityType) // Empty model as this is in-memory
+
+        // 2. Mapper ( maps entities to/from sql using the model/schema )
+        val mapper = EntityMapperInMemory<TId, T>() // Empty mapper as this is in-memory
+
+        // 3. Repo ( provides CRUD using the Mapper)
+        val repo = EntityRepoInMemory(entityType, entityIdType, mapper, this.enc, this.namer, entityIdGen)
+
+        // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)
-        val serviceTypeFinal = serviceType ?: service::class
 
-        // 2. Now store all the info for easy lookup
-        val info = EntityInfo(
-                entityType,
-                serviceTypeFinal,
-                repo::class,
-                repo,
-                mapper,
-                dbType,
-                dbKey ?: "",
-                dbShard ?: "",
-                service
-        ) as TInfo
+        // 5. Capture the actual service type ( could be the default EntityService implementation )
+        val svcType = service::class
 
-        val key = builder.key(entityType, dbKey ?: "", dbShard ?: "")
-        _info = _info.add(key, info)
-        _mappers.put(entityType.qualifiedName!!, mapper)
-        return info
+        // 6. Entity context captures all relevant info about a mapped Entity( id type, entity type, etc. )
+        val context = EntityContext(entityType, entityIdType, svcType, repo, mapper, DbType.DbTypeMemory, model, "", "",
+                service, serviceCtx)
+
+        // 7. Finally Register
+        this.register(context)
     }
 
 
@@ -132,7 +156,7 @@ open class Entities<TInfo>(
     /**
      * Gets a list of all the registered entities
      */
-    fun getEntities(): List<EntityInfo> = _info.all()
+    fun getEntities(): List<EntityContext> = info.all()
 
 
     /**
@@ -141,12 +165,12 @@ open class Entities<TInfo>(
     @Suppress("UNCHECKED_CAST")
     fun <TId, T> getMapper(entityType: KClass<*>): EntityMapper<TId,T> where TId:Comparable<TId>, T:Entity<TId> {
         val entityKey = entityType.qualifiedName
-        if (!_mappers.contains(entityKey)) {
+        if (!mappers.contains(entityKey)) {
             logger.error("Mapper not found for $entityKey")
             throw IllegalArgumentException("mapper not found for :$entityKey")
         }
 
-        val mapper = _mappers[entityKey]
+        val mapper = mappers[entityKey]
         return mapper as EntityMapper<TId, T>
     }
 
@@ -165,19 +189,19 @@ open class Entities<TInfo>(
             getSvcByType(tpe, dbKey, dbShard) as EntityService<TId, T>
 
 
-    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): TInfo {
+    fun getInfo(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityContext {
         val key = builder.key(entityType, dbKey, dbShard)
-        require(_info.contains(key), { "Entity invalid or not registered with key : " + key })
-        return _info.get(key)!!
+        require(info.contains(key), { "Entity invalid or not registered with key : " + key })
+        return info.get(key)!!
     }
 
-    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): TInfo {
+    fun getInfoByName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityContext {
         val key = builder.key(entityType, dbKey, dbShard)
-        if (!_info.contains(key)) {
+        if (!info.contains(key)) {
             logger.error("Mapper not found for $key")
             throw IllegalArgumentException("invalid entity : $key")
         }
-        return _info.get(key)!!
+        return info.get(key)!!
     }
 
     fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
