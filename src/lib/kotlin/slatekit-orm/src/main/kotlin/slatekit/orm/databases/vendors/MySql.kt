@@ -26,7 +26,7 @@ object MySqlTypeMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-class MySqlConverter<TId, T> : Converter<TId, T>() where TId:kotlin.Comparable<TId>, T:Entity<TId>
+class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
 
 
 class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
@@ -62,8 +62,7 @@ open class MySqlEntityRepo<TId, T>(
         namer = namer,
         encodedChar = '`',
         query = { MySqlQuery() }
-) where TId:Comparable<TId>, T: Entity<TId>
-
+) where TId : Comparable<TId>, T : Entity<TId>
 
 
 /**
@@ -71,9 +70,12 @@ open class MySqlEntityRepo<TId, T>(
  *
  * @param model
  */
-open class MySqlEntityMapper<TId, T>(model: Model,
-                             utc: Boolean = false,
-                             enc: Encryptor? = null,
-                             namer: Namer? = null)
-    : OrmMapper<TId, T>(model, MySqlConverter(), utc, '`', enc, namer)
-        where TId:Comparable<TId>, T: Entity<TId>
+open class MySqlEntityMapper<TId, T>(
+        model: Model,
+        db:IDb,
+        idType:KClass<*>,
+        utc: Boolean = false,
+        enc: Encryptor? = null,
+        namer: Namer? = null)
+    : OrmMapper<TId, T>(model, db, idType, MySqlConverter(), utc, '`', enc, namer)
+        where TId : Comparable<TId>, T : Entity<TId>

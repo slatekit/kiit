@@ -60,7 +60,7 @@ import kotlin.reflect.KClass
  */
 open class Entities(
         dbCreator: (DbCon) -> IDb,
-        val dbs: DbLookup? = DbLookup.defaultDb(DbCon.empty),
+        val dbs: DbLookup = DbLookup.defaultDb(DbCon.empty),
         val enc: Encryptor? = null,
         val logs: Logs = LogsDefault,
         val namer: Namer? = null
@@ -121,7 +121,7 @@ open class Entities(
         val model = Model(entityType) // Empty model as this is in-memory
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val mapper = EntityMapperInMemory<TId, T>() // Empty mapper as this is in-memory
+        val mapper = EntityMapperInMemory<TId, T>(entityIdGen) // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
         val repo = EntityRepoInMemory(entityType, entityIdType, mapper, this.enc, this.namer, entityIdGen)

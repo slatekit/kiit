@@ -27,11 +27,12 @@ import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
-import slatekit.meta.models.ModelMapper
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityMapper
+import slatekit.common.db.IDb
+import slatekit.entities.core.*
+import slatekit.meta.models.ModelMapper
+import kotlin.reflect.KClass
 
 /**
  * Maps an entity to sql and from sql records.
@@ -39,31 +40,16 @@ import slatekit.entities.core.EntityMapper
  * @param model
  */
 open class OrmMapper<TId, T>(
-        val model: Model,
+        model: Model,
+        val db: IDb,
+        val idType: KClass<*>,
         val converter: Converter<TId, T>,
         val isUtc: Boolean = false,
         val quoteChar: Char = '`',
-        val encryptor: Encryptor? = null,
-        val namer: Namer? = null)
-    : EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
-
-
-    override fun setId(id: TId, entity: T): T {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun mapSqlInsert(entity: T): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun mapSqlUpdate(entity: T): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun <T> mapFrom(record: Record): T? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
+        encryptor: Encryptor? = null,
+        namer: Namer? = null)
+    : ModelMapper(model, _encryptor = encryptor, namer = namer),
+        EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * Gets all the column names mapped to the field names
@@ -76,6 +62,41 @@ open class OrmMapper<TId, T>(
      */
     val colsWithoutId: List<String> by lazy {
         model.fields.filter { it.name.toLowerCase() != idCol }.map { it.storedName }
+    }
+
+
+    /**
+     * Gets the optional Model schema which stores field/properties
+     * and their corresponding column metadata
+     */
+    override fun schema(): Model? = _model
+
+
+    @Suppress("UNCHECKED_CAST")
+    override fun setId(id: TId, entity: T): T {
+        return when(entity){
+            is EntityUpdatable<*, *> -> entity.withIdAny(id) as T
+            else -> entity
+        }
+    }
+
+    /**
+     * Inserts the entity into the database and returns the new primary key id
+     */
+    override fun insert(entity: T): TId {
+        val sql = converter.inserts.sql(entity, _model, this)
+        val id = db.insertGetId(sql, null)
+        return convertToId(id, idType)
+    }
+
+
+    /**
+     * Updates the entity into the database and returns whether or not the update was successful
+     */
+    override fun update(entity: T): Boolean {
+        val sql = converter.updates.sql(entity, _model, this)
+        val count = db.update(sql)
+        return count > 0
     }
 
 
@@ -100,7 +121,7 @@ open class OrmMapper<TId, T>(
             if (isFieldMapped) {
                 // Column name e.g first = 'first'
                 // Also for sub-objects
-                val col = prefix?.let { buildName(it, mapping.storedName) } ?: buildName(mapping.storedName)
+                val col = prefix?.let { columnName(it, mapping.storedName) } ?: columnName(mapping.storedName)
 
                 // Convert to sql value
                 val data = toSql(mapping, item, useKeyValue)
@@ -121,15 +142,22 @@ open class OrmMapper<TId, T>(
     }
 
 
-    open fun tableName(): String = buildName(model.table)
+    open fun tableName(): String = columnName(_model.table)
 
 
-    open fun buildName(name: String): String {
+    /**
+     * Builds an escaped column name e.g. user => 'user'
+     */
+    open fun columnName(name: String): String {
         val finalName = namer?.rename(name) ?: name
         return "$quoteChar$finalName$quoteChar"
     }
 
-    open fun buildName(prefix: String, name: String): String {
+
+    /**
+     * Builds an escaped column name with the prefix e.g. address, state => 'address_state'
+     */
+    open fun columnName(prefix: String, name: String): String {
         val finalName = namer?.rename(name) ?: name
         return "$quoteChar${prefix}_$finalName$quoteChar"
     }
@@ -155,7 +183,7 @@ open class OrmMapper<TId, T>(
         // Similar to the Mapper class but reversed
         val data = if (mapping.dataCls == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
-            converter.strings.toSql(sVal, mapping.encrypt, encryptor)
+            converter.strings.toSql(sVal, mapping.encrypt, _encryptor)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             converter.bools.toSql(bVal)

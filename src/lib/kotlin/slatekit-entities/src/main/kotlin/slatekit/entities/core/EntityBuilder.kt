@@ -20,7 +20,7 @@ import kotlin.reflect.KClass
  */
 open class EntityBuilder(
         val dbCreator: (DbCon) -> IDb,
-        val dbs: DbLookup? = null,
+        val dbs: DbLookup,
         val enc: Encryptor? = null) {
 
 
@@ -48,8 +48,8 @@ open class EntityBuilder(
      * @param dbKey: The name of the database key ( empty / "" by default if only 1 database )
      * @param dbShard: The name of the database shard ( empty / "" by default if only 1 database )
      */
-    fun con(dbKey: String = "", dbShard: String = ""): DbCon? {
-        return dbs?.let { dbs ->
+    fun con(dbKey: String = "", dbShard: String = ""): DbCon {
+        val db = dbs.let { dbs ->
             when {
                 // Case 1: default connection
                 dbKey.isEmpty() -> dbs.default()
@@ -60,7 +60,8 @@ open class EntityBuilder(
                 // Case 3: shard
                 else -> dbs.group(dbKey, dbShard)
             }
-        }
+        } ?: throw Exception("Unable to get database connection with $dbKey, $dbShard")
+        return db
     }
 
 
@@ -70,13 +71,18 @@ open class EntityBuilder(
      * @param dbShard: The name of the database shard ( empty / "" by default if only 1 database )
      */
     fun db(dbKey: String = "", dbShard: String = "", open: Boolean = true): IDb {
-        val err1 = "Error getting database for registration in Entities."
-        val err2 = "Database connection not setup and/or available in config."
-        val err3 = "Database connection not setup and/or available in config for $dbKey & $dbShard."
-        val err = if (dbKey.isEmpty()) err2 else err3
-        val con = con()
-                ?: throw IllegalArgumentException("Database connection not available for key/shard $dbKey:$dbShard")
-        require(con != DbCon.empty, { "$err1 $err" })
+        val con = con(dbKey, dbShard)
+        return db(con, open)
+    }
+
+
+    /**
+     * Builds the database by loading up the connection info for the database key / shard provided.
+     * @param con: The database connection with properties
+     * @param open: whether or not to open the database
+     */
+    fun db(con:DbCon, open: Boolean = true): IDb {
+        require(con != DbCon.empty) { "Db connection supplied is empty" }
         return if (open) dbCreator(con).open() else dbCreator(con)
     }
 

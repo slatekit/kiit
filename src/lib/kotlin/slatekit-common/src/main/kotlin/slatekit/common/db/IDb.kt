@@ -4,7 +4,9 @@ package slatekit.common.db
 import org.threeten.bp.*
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
+import slatekit.common.toUUId
 import java.sql.ResultSet
+import java.util.*
 
 interface IDb {
     val onError: (Exception) -> Unit

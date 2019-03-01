@@ -13,6 +13,7 @@
 
 package slatekit.entities.repos
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import slatekit.common.DateTime
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
@@ -235,12 +236,14 @@ open class EntityRepoInMemory<TId, T>(
 }
 
 
-class EntityMapperInMemory<TId, T> : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+class EntityMapperInMemory<TId, T>(val idGen:IdGenerator<TId>)
+    : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+
     override fun setId(id: TId, entity: T): T = entity
 
-    override fun mapSqlInsert(entity: T): String = ""
+    override fun insert(entity: T): TId = idGen.nextId()
 
-    override fun mapSqlUpdate(entity: T): String = ""
+    override fun update(entity: T): Boolean = true
 
     override fun <T> mapFrom(record: Record): T? = null
 

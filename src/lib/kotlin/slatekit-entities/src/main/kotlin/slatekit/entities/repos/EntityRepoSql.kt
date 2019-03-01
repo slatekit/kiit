@@ -23,6 +23,7 @@ import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.EntityMapper
 import slatekit.entities.core.EntityRepo
+import slatekit.entities.core.convertToId
 import slatekit.meta.models.Model
 import java.util.*
 import kotlin.reflect.KClass
@@ -55,17 +56,11 @@ abstract class EntityRepoSql<TId, T>(
 
 
     override fun create(entity: T): TId {
-        val mapper = entityMapper
-        val sql = mapper.mapSqlInsert(entity)
-        val id = db.insertGetId(sql)
-        return convertToId(id)
+        return entityMapper.insert(entity)
     }
 
     override fun update(entity: T): Boolean {
-        val mapper = entityMapper
-        val sql = mapper.mapSqlUpdate(entity)
-        val count = sqlExecute(sql)
-        return count > 0
+        return entityMapper.update(entity)
     }
 
     /**
@@ -103,7 +98,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param id
      */
     override fun delete(id: TId): Boolean {
-        val count = sqlExecute("delete from ${repoName()} where ${idName()} = $id;")
+        val count = db.update("delete from ${repoName()} where ${idName()} = $id;")
         return count > 0
     }
 
@@ -114,7 +109,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun delete(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
-        val count = sqlExecute("delete from ${repoName()} where ${idName()} in ($delimited);")
+        val count = db.update("delete from ${repoName()} where ${idName()} in ($delimited);")
         return count
     }
 
@@ -233,21 +228,6 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
         return db.callQueryMapped(name, entityMapper, args)
-    }
-
-
-    @Suppress("UNCHECKED_CAST")
-    protected fun convertToId(id:String):TId {
-        return when(this.entityType) {
-            Int::class  -> id.toInt() as TId
-            Long::class -> id.toLong() as TId
-            UUID::class -> id.toUUId() as TId
-            else        -> id as TId
-        }
-    }
-
-    private fun sqlExecute(sql: String): Int {
-        return db.update(sql)
     }
 
     private fun sqlMapMany(sql: String): List<T>? {

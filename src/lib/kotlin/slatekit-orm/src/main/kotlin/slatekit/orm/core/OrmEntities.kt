@@ -56,23 +56,26 @@ fun <TId, T> Entities.orm(
     // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
     val model = builder.model(entityType, namer, tableName)
 
-    // 3. Mapper ( maps entities to/from sql using the model/schema )
-    val mapper = builder.mapper<TId, T>(dbType, model, persistUTC, enc, namer)
+    // 3. Connection info ( using default connection )
+    val con = builder.con()
 
-    // 4. Repo ( provides CRUD using the Mapper)
-    val repo = builder.repo(dbType, "", "", entityType, mapper, table)
+    // 4. Db ( JDBC database call wrapper with connection )
+    val db = builder.db( con )
 
-    // 5. Service ( used to provide validation, placeholder for business functionality )
+    // 5. Mapper ( maps entities to/from sql using the model/schema )
+    val mapper = builder.mapper<TId, T>(dbType, db, entityIdType, model, persistUTC, enc, namer)
+
+    // 6. Repo ( provides CRUD using the Mapper)
+    val repo = builder.repo(dbType, db, entityType, entityIdType, mapper, table)
+
+    // 7. Service ( used to provide validation, placeholder for business functionality )
     val service = builder.service(this, serviceType, repo, serviceCtx)
 
-    // 6. Capture the actual service type ( could be the default EntityService implementation )
-    val svcType = service::class
-
-    // 7. Entity context captures all relevant info about a mapped Entity( id type, entity type, etc. )
-    val context = EntityContext(entityType, entityIdType, svcType, repo, mapper, dbType, model, "", "",
+    // 8. Entity context captures all relevant info about a mapped Entity( id type, entity type, etc. )
+    val context = EntityContext(entityType, entityIdType, service::class, repo, mapper, dbType, model, "", "",
             service, serviceCtx)
 
-    // 8. Finally Register
+    // 9. Finally Register
     this.register(context)
 }
 
@@ -90,7 +93,7 @@ fun Entities.getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
             DbType.DbTypePGres.driver -> DbSourcePostGres()
             else -> DbSourceMySql()
         }
-    } ?: DbSourceMySql()
+    }
     return source
 }
 

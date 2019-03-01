@@ -26,7 +26,7 @@ import kotlin.reflect.KClass
  * 6. Service : Service implementation ( depends on Repo above )
  */
 class OrmBuilder(dbCreator: (DbCon) -> IDb,
-                 dbs: DbLookup? = null,
+                 dbs: DbLookup,
                  enc: Encryptor? = null) : EntityBuilder(dbCreator, dbs, enc) {
 
     /**
@@ -46,18 +46,18 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
     /**
      * Builds the database by loading up the connection info for the database key / shard provided.
      * @param dbType: The type of the database to create
+     * @param db: The Db wrapper for making database calls
      * @param model: The schema of the Entity represented as a Model definition
-     * @param tableName: Optional name of the table for the model if different than entity name
      * @param utc: Optional flag to save all datetimes in UTC ( defaults to false )
      * @param enc: Optional encrptor to support encryption of selected columns
      * @param namer: Optional namer to create naming conventions
      */
-    fun <TId, T> mapper(dbType: DbType, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null)
+    fun <TId, T> mapper(dbType: DbType, db:IDb, idType:KClass<*>, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null)
             : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
         return when (dbType) {
-            DbTypeMySql -> MySqlEntityMapper(model, utc, enc, namer)
-            DbTypePGres -> PostGresEntityMapper(model, utc, enc, namer)
-            else -> OrmMapper(model, MySqlConverter(), utc, '`', enc, namer)
+            DbTypeMySql -> MySqlEntityMapper(model, db, idType, utc, enc, namer)
+            DbTypePGres -> PostGresEntityMapper(model, db, idType, utc, enc, namer)
+            else        -> OrmMapper(model, db, idType, MySqlConverter(), utc, '`', enc, namer)
         }
     }
 
@@ -75,9 +75,9 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      */
     fun <TId, T> repo(
             dbType: DbType,
-            dbKey: String,
-            dbShard: String,
+            db:IDb,
             entityType: KClass<*>,
+            entityIdType:KClass<*>,
             mapper: EntityMapper<TId, T>,
             tableName: String,
             utc: Boolean = false,
@@ -85,55 +85,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             namer: Namer? = null
     ): EntityRepo<TId,T> where TId:Comparable<TId>, T : Entity<TId> {
 
-        // NOTE: Only long primary keys supported for now.
-        val entityIdType = Long::class
-
-        // 1. DB: JDBC wrapper
-        val db = if(dbType == DbTypeMemory) Db(DbCon.empty) else  db(dbKey, dbShard)
-
-        // 2. Repo: Handles all the CRUD / lookup functionality
-        return when (dbType) {
-            DbTypeMySql -> MySqlEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
-            DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
-            else -> EntityRepoInMemory(entityType, entityIdType, mapper, enc, namer)
-        }
-    }
-
-
-    /**
-     * Builds the repository associated w/ the database type
-     * @param entityType: The class name e.g. "MyApp.User" of the Entity
-     * @param dbType: The type of the database to create
-     * @param dbKey: The name of the database key ( empty / "" by default if only 1 database )
-     * @param dbShard: The name of the database shard ( empty / "" by default if only 1 database )
-     * @param model: The schema of the Entity represented as a Model definition
-     * @param tableName: Optional name of the table for the model if different than entity name
-     * @param utc: Optional flag to save all datetimes in UTC ( defaults to false )
-     * @param enc: Optional encrptor to support encryption of selected columns
-     * @param namer: Optional namer to create naming conventions
-     */
-    fun <TId, T> repoWithMapper(
-            dbType: DbType,
-            dbKey: String,
-            dbShard: String,
-            entityType: KClass<*>,
-            model: Model,
-            tableName: String,
-            utc: Boolean = false,
-            enc: Encryptor? = null,
-            namer: Namer? = null
-    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
-
-        // NOTE: Only long primary keys supported for now.
-        val entityIdType = Long::class
-
-        // 1. DB: JDBC wrapper
-        val db = db(dbKey, dbShard)
-
-        // 2. Mapper: Dynamically maps item to/from sql
-        val mapper = mapper<TId, T>(dbType, model, utc, enc, namer)
-
-        // 3. Repo: Handles all the CRUD / lookup functionality
+        // Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
             DbTypeMySql -> MySqlEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
             DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)

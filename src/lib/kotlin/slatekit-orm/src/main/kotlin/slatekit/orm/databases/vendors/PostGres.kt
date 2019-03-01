@@ -69,9 +69,12 @@ open class PostGresEntityRepo<TId, T>(
  *
  * @param model
  */
-open class PostGresEntityMapper<TId, T>(model: Model,
-                                        utc: Boolean = false,
-                                        enc: Encryptor? = null,
-                                        namer: Namer? = null)
-    : OrmMapper<TId, T>(model, MySqlConverter(), utc, '"', enc, namer)
+open class PostGresEntityMapper<TId, T>(
+        model: Model,
+        db:IDb,
+        idType:KClass<*>,
+        utc: Boolean = false,
+        enc: Encryptor? = null,
+        namer: Namer? = null)
+    : OrmMapper<TId, T>(model, db, idType, MySqlConverter(), utc, '"', enc, namer)
         where TId : kotlin.Comparable<TId>, T : slatekit.entities.core.Entity<TId>

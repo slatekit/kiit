@@ -41,7 +41,7 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T:Entity<TId>
      * Gets the optional Model schema which stores field/properties
      * and their corresponding column metadata
      */
-    fun model(): Model? = null
+    fun schema(): Model? = null
 
 
     /**
@@ -53,13 +53,13 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T:Entity<TId>
     /**
      * Maps the entity to a sql Insert
      */
-    fun mapSqlInsert(entity:T):String
+    fun insert(entity:T):TId
 
 
     /**
      * Maps the entity to a sql Update
      */
-    fun mapSqlUpdate(entity:T):String
+    fun update(entity:T):Boolean
 
 
     /**
@@ -67,6 +67,6 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T:Entity<TId>
      * or defaults to the property name.
      */
     fun columnName(prop: KProperty<*>):String {
-        return this.model()?.fields?.first { it.name == prop.name }?.storedName ?: prop.name
+        return this.schema()?.fields?.first { it.name == prop.name }?.storedName ?: prop.name
     }
 }
