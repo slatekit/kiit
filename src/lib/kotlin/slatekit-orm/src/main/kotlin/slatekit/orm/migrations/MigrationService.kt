@@ -24,7 +24,6 @@ import slatekit.entities.core.Entities
 import slatekit.entities.core.EntityContext
 import slatekit.orm.core.getDbSource
 import slatekit.orm.core.sqlBuilder
-import slatekit.orm.databases.SqlBuilder
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -33,10 +32,10 @@ import slatekit.results.getOrElse
 /**
  * Created by kreddy on 3/23/2016.
  */
-class OrmMigrationService(
+class MigrationService(
         private val _entities: Entities,
         private val _dbs: DbLookup?,
-        private val _settings: OrmMigrationSettings,
+        private val _settings: MigrationSettings,
         private val _folders: Folders?
 ) {
 

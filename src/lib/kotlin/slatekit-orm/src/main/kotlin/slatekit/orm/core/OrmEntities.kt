@@ -25,39 +25,6 @@ import slatekit.orm.databases.vendors.PostGresMap
 import kotlin.reflect.KClass
 
 /**
- *  A registry for all the entities and their corresponding services, repositories, database
- *  types, and connection keys.
- *
- *   // Case 1: In-memory
- *   Entities.Register[Invitation](sqlRepo: false)
- *
- *   // Case 2: In-memory, with custom service
- *   Entities.register[Invitation](sqlRepo: false, serviceType: typeof(InvitationService));
- *
- *   // Case 3: Sql-repo
- *   Entities.register[Invitation](sqlRepo: true)
- *
- *   // Case 4: Sql-repo, with custom service
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService));
- *
- *   // Case 5: Custom repository
- *   Entities.register[Invitation](sqlRepo: true, repo: InvitationRepository());
- *
- *   // Case 6: Custom repo with provider type specified
- *   Entities.register[Invitation](sqlRepo: true, repo: InvitationRepository(),
- *     dbType: "mysql");
- *
- *   // Case 7: Full customization
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
- *     repo: InvitationRepository(), dbType: "mysql");
- *
- *   // Case 8: Full customization
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
- *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
- *
- */
-
-/**
  * @param dbType       :  Database type see[DbType]
  * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
  * @param entityIdType :  Type of the id of the Entity / Domain class ( e.g. Long )

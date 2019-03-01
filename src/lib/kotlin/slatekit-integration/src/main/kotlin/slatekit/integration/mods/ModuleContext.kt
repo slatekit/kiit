@@ -13,7 +13,7 @@
 
 package slatekit.integration.mods
 
-import slatekit.orm.migrations.OrmMigrationService
+import slatekit.orm.migrations.MigrationService
 
 data class ModuleContext(
 
@@ -25,5 +25,5 @@ data class ModuleContext(
     /**
      * service to add / manage entities models.
      */
-    val setup: OrmMigrationService
+    val setup: MigrationService
 )
