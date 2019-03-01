@@ -13,9 +13,11 @@ mantra: Simplicity above all else
 package test.entities
 
 import org.junit.Test
+import slatekit.common.db.DbCon
 import slatekit.common.utils.RecordMap
 import slatekit.common.ids.UniqueId
 import slatekit.common.utils.ListMap
+import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.core.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
@@ -33,7 +35,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
 
-        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorR>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorR>())
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorR>(source)!!
@@ -53,7 +55,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_writable_class(){
         val model = ModelMapper.loadSchema(AuthorW::class, AuthorW::id.name)
 
-        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorW>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorW>())
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorW>(source)!!
@@ -73,7 +75,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class_with_embedded_object(){
         val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
 
-        val mapper = OrmMapper(model, MySqlConverter<Long, UserWithAddress>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, UserWithAddress>())
         val data = buildSampleDataForEmbeddedObject()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<UserWithAddress>(source)!!

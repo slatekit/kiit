@@ -29,6 +29,7 @@ import java.util.*
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
+import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
 
@@ -236,8 +237,10 @@ open class EntityRepoInMemory<TId, T>(
 }
 
 
-class EntityMapperInMemory<TId, T>(val idGen:IdGenerator<TId>)
+class EntityMapperInMemory<TId, T>(val model:Model, val idGen:IdGenerator<TId>)
     : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+
+    override fun schema(): Model? = model
 
     override fun setId(id: TId, entity: T): T = entity
 

@@ -82,7 +82,7 @@ class Entity_Reg_Tests {
 
         fun check(mapper:EntityMapper<Long, *>?, cls: KClass<*>):Unit {
             Assert.assertTrue(mapper != null)
-            Assert.assertTrue(mapper?.model()?.dataType == cls)
+            Assert.assertTrue(mapper?.schema()?.dataType == cls)
         }
         check(ent.getMapper(User5::class), User5::class)
         check(ent.getMapper(Phone::class), Phone::class)

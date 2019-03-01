@@ -15,8 +15,10 @@ package test.entities
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTimes
+import slatekit.common.db.DbCon
 import slatekit.common.ids.UniqueId
 import slatekit.common.toUUId
+import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.core.OrmMapper
 import slatekit.orm.databases.statements.Insert
@@ -37,7 +39,7 @@ class Entity_Mapper_Sql_Tests {
 
     @Test fun can_map_sql_insert(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
-        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorR>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorR>())
         val actual = Insert<Long, AuthorR>().sql(sampleUser, model, mapper)
         val exepected = """insert into `AuthorR` (`uuid`,`createdAt`,`createdBy`,`updatedAt`,`updatedBy`,`email`,`isActive`,`age`,`status`,`salary`,`uid`,`shardId`)  VALUES ('67bdb72a-1d74-11e8-b467-0ed5f89f718b','2018-11-01 08:30:00',0,'2018-11-01 08:30:00',0,'k@abc.com',1,35,1,123.45,'67bdb72a-1d74-11e8-b467-0ed5f89f718b','us:67bdb72a-1d74-11e8-b467-0ed5f89f718b');"""
         Assert.assertEquals(exepected, actual)
@@ -46,7 +48,7 @@ class Entity_Mapper_Sql_Tests {
 
     @Test fun can_map_sql_update(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
-        val mapper = OrmMapper(model, MySqlConverter<Long, AuthorR>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorR>())
         val actual = Update<Long, AuthorR>().sql(sampleUser.copy(id = 2), model, mapper)
         val exepected = """update `AuthorR` set  `uuid`='67bdb72a-1d74-11e8-b467-0ed5f89f718b',`createdAt`='2018-11-01 08:30:00',`createdBy`=0,`updatedAt`='2018-11-01 08:30:00',`updatedBy`=0,`email`='k@abc.com',`isActive`=1,`age`=35,`status`=1,`salary`=123.45,`uid`='67bdb72a-1d74-11e8-b467-0ed5f89f718b',`shardId`='us:67bdb72a-1d74-11e8-b467-0ed5f89f718b' where id = 2;"""
         Assert.assertEquals(exepected, actual)
