@@ -4,7 +4,6 @@ import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
 import slatekit.common.naming.Namer
-//import slatekit.db.Db
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
