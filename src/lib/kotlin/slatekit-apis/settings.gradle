@@ -1,7 +1,1 @@
 rootProject.name = 'slatekit-apis'
-
-include ':slatekit-common'
-project(':slatekit-common').projectDir=new File('../slatekit-common')
-
-include ':slatekit-meta'
-project(':slatekit-meta').projectDir=new File('../slatekit-meta')
