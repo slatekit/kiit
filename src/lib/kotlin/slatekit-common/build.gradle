@@ -16,6 +16,33 @@ apply plugin: 'java'
 apply plugin: 'kotlin'
 
 
+// Slate Kit Component info ( for variables for pom / package / etc )
+def slatekitComponentId = 'common'
+def slatekitComponentName = 'Common'
+def slatekitComponentDesc = 'SlateKit Common: Kotlin Utilities for Android and Server'
+def slatekitComponentVersion = '0.9.9'
+
+
+// ==================================================================
+// Slate Kit Setup mode: defaults to maven vs loading project sources
+// ==================================================================
+ext.slatekitSetupViaMaven = System.getenv('SLATEKIT_SETUP_MODE') != 'sources'
+task info {
+    println('slatekit.setup     : ' + System.getenv('SLATEKIT_SETUP_MODE'))
+    println('slatekit.maven     : ' + slatekitSetupViaMaven)
+    println('slatekit.comp.id   : ' + slatekitComponentId)
+    println('slatekit.comp.name : ' + slatekitComponentName)
+    println('slatekit.comp.desc : ' + slatekitComponentDesc)
+    println('slatekit.comp.vers : ' + slatekitComponentVersion)
+    println()
+    println('project.name       : ' + project.name)
+    println('project.path       : ' + project.path)
+    println('project.desc       : ' + project.description)
+    println('project.projectDir : ' + project.projectDir)
+    println('project.buildDir   : ' + project.buildDir)
+}
+
+
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     sourceCompatibility = JavaVersion.VERSION_1_6
     targetCompatibility = JavaVersion.VERSION_1_6
@@ -50,13 +77,6 @@ dependencies {
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
-
-
-// Slate Kit Component info ( for variables for pom / package / etc )
-def slatekitComponentId = 'common'
-def slatekitComponentName = 'Common'
-def slatekitComponentDesc = 'SlateKit Common: Kotlin Utilities for Android and Server'
-def slatekitComponentVersion = '0.9.9'
 
 
 // Maven packages require the sources/docs.
