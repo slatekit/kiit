@@ -1,4 +1,1 @@
 rootProject.name = 'slatekit-workers'
-
-include ':slatekit-common'
-//project(':slatekit-common').projectDir=new File('../slatekit-common')
