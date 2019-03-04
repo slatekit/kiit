@@ -18,6 +18,7 @@ import slatekit.apis.svcs.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.info.Credentials
 import slatekit.common.args.Args
+import slatekit.common.conf.Config
 import slatekit.core.cli.CliCommand
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
@@ -83,7 +84,7 @@ class ShellTests  {
 
   private fun getCli(): CliApi {
 
-    val ctx = AppEntContext.sample("id", "slate.tests", "slate unit tests", "slatekit")
+    val ctx = AppEntContext.sample(Config(),"id", "slate.tests", "slate unit tests", "slatekit")
 
     val apiKeys = listOf(
             ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),

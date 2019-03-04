@@ -5,15 +5,14 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
 import slatekit.results.*
 
-class AppMeta(val ctx:AppContext, val args:ArgsSchema) {
+class AppMeta(val about:About, val args:ArgsSchema) {
 
     companion object {
         fun process(rawArgs:List<String>, args:Args, about: About, schema:ArgsSchema?):Try<Args> {
             val isHelp = AppFuncs.isMetaCommand(rawArgs.toList())
             return if (isHelp.success) {
                 // Delegate help to the AppMeta component for (help | version | about )
-                val tempContext = AppContext.empty.copy(app = about)
-                val appMeta = AppMeta(tempContext, schema ?: AppBuilder.schema())
+                val appMeta = AppMeta(about, schema ?: AppBuilder.schema())
                 appMeta.handle(isHelp)
 
                 // Prevent futher processing by return failure
@@ -45,27 +44,27 @@ class AppMeta(val ctx:AppContext, val args:ArgsSchema) {
 
 
     private fun help() {
-        println("app.name         " + ctx.app.name)
-        println("app.desc         " + ctx.app.desc)
-        println("app.version      " + ctx.app.version)
+        println("app.name         " + about.name)
+        println("app.desc         " + about.desc)
+        println("app.version      " + about.version)
         println(args.buildHelp())
     }
 
 
     private fun about() {
-        println("app.name         " + ctx.app.name)
-        println("app.desc         " + ctx.app.desc)
-        println("app.version      " + ctx.app.version)
-        println("app.tags         " + ctx.app.tags)
-        println("app.group        " + ctx.app.group)
-        println("app.region       " + ctx.app.region)
-        println("app.contact      " + ctx.app.contact)
-        println("app.url          " + ctx.app.url)
+        println("app.name         " + about.name)
+        println("app.desc         " + about.desc)
+        println("app.version      " + about.version)
+        println("app.tags         " + about.tags)
+        println("app.group        " + about.group)
+        println("app.region       " + about.region)
+        println("app.contact      " + about.contact)
+        println("app.url          " + about.url)
         println(args.buildHelp())
     }
 
 
     private fun version() {
-        println(ctx.app.version)
+        println(about.version)
     }
 }

@@ -73,12 +73,6 @@ data class AppEntContext(
 
     companion object {
 
-        fun help(): AppEntContext = err(StatusCodes.HELP.code)
-
-        fun exit(): AppEntContext = err(StatusCodes.EXIT.code)
-
-
-
         /**
          * converts this to an app context which is basically
          * the same context without the Entities
@@ -103,49 +97,10 @@ data class AppEntContext(
 
         }
 
-
         @JvmStatic
-        fun err(code: Int, msg: String? = null): AppEntContext {
+        fun sample(conf:Config, id: String, name: String, about: String, company: String): AppEntContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
-            val conf = Config()
-            return AppEntContext(
-                    arg = args,
-                    env = env,
-                    cfg = conf,
-                    logs = LogsDefault,
-                    app = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    ent = Entities({ con -> Db(con) })
-            )
-        }
-
-        @JvmStatic
-        fun simple(name: String): AppEntContext {
-            val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
-            val conf = Config()
-            return AppEntContext(
-                    arg = args,
-                    env = env,
-                    cfg = conf,
-                    logs = LogsDefault,
-                    app = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty,
-                    ent = Entities({ con -> Db(con) }),
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
-                    dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
-            )
-        }
-
-        @JvmStatic
-        fun sample(id: String, name: String, about: String, company: String): AppEntContext {
-            val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
-            val conf = Config()
             return AppEntContext(
                     arg = args,
                     env = env,

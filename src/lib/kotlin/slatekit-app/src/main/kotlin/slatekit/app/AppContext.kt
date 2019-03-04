@@ -64,19 +64,15 @@ data class AppContext(
     companion object {
 
         @JvmStatic
-        fun help(): AppContext = err(StatusCodes.HELP.code)
+        fun help(conf:Config): AppContext = err(conf, StatusCodes.HELP.code)
 
         @JvmStatic
-        fun exit(): AppContext = err(StatusCodes.EXIT.code)
+        fun exit(conf:Config): AppContext = err(conf, StatusCodes.EXIT.code)
 
         @JvmStatic
-        val empty: AppContext = err(StatusCodes.HELP.code)
-
-        @JvmStatic
-        fun err(code: Int, msg: String? = null): AppContext {
+        fun err(conf:Config, code: Int, msg: String? = null): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
-            val conf = Config()
             return AppContext(
                     arg = args,
                     env = env,

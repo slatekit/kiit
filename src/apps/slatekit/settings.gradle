@@ -4,7 +4,7 @@ include ':slatekit-common'
 project(':slatekit-common').projectDir=new File('../../lib/kotlin/slatekit-common')
 
 include ':slatekit-app'
-project(':slatekit-app').projectDir=new File('../../../../slatekit-app')
+project(':slatekit-app').projectDir=new File('../../lib/kotlin/slatekit-app')
 
 include ':slatekit-db'
 project(':slatekit-db').projectDir=new File('../../lib/kotlin/slatekit-db')
