@@ -19,7 +19,7 @@ import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.Uris
-import slatekit.core.cloud.CloudQueueBase
+import slatekit.core.cloud.CloudQueue
 import slatekit.results.Try
 import java.io.File
 import java.io.IOException
@@ -37,7 +37,7 @@ class AwsCloudQueue<T>(
     queue: String,
     creds: AWSCredentials,
     val waitTimeInSeconds: Int = 0
-) : CloudQueueBase<T>(), AwsSupport {
+) : CloudQueue<T>(), AwsSupport {
 
     private val _queue = queue
     private val _sqs: AmazonSQSClient = AwsFuncs.sqs(creds)

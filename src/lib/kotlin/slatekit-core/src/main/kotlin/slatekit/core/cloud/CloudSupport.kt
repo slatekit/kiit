@@ -15,7 +15,7 @@ package slatekit.core.cloud
 
 import slatekit.results.Try
 
-interface CloudActions {
+interface CloudSupport {
 
     fun <T> execute(
         source: String,
