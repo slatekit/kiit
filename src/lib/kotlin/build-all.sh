@@ -1,6 +1,6 @@
 
-cd slatekit-common      && gradle clean build && cd ../ 
-cd slatekit-app         && gradle clean build && cd ../ 
+cd slatekit-common        && gradle clean build && cd ../ && sleep 5s
+cd slatekit-app           && gradle clean build && cd ../ && sleep 5s
 
 # cd slatekit-apis        && gradle clean build && cd ../       
 # cd slatekit-app         && gradle clean build && cd ../   

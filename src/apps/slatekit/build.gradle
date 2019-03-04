@@ -76,24 +76,24 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.slatekit:slatekit-results:0.9.9'
+    compile "com.slatekit:slatekit-results:$slatekit_version"
     compile 'org.threeten:threetenbp:1.3.8'
 
     if( slatekitSetupViaMaven ) {
-        compile 'com.slatekit:slatekit-common:0.9.9'
-        compile 'com.slatekit:slatekit-app:0.9.9'
-        compile 'com.slatekit:slatekit-db:0.9.9'
-        compile 'com.slatekit:slatekit-meta:0.9.9'
-        compile 'com.slatekit:slatekit-cloud:0.9.9'
-        compile 'com.slatekit:slatekit-query:0.9.9'
-        compile 'com.slatekit:slatekit-entities:0.9.9'
-        compile 'com.slatekit:slatekit-orm:0.9.9'
-        compile 'com.slatekit:slatekit-core:0.9.9'
-        compile 'com.slatekit:slatekit-apis:0.9.9'
-        compile 'com.slatekit:slatekit-integration:0.9.9'
-        compile 'com.slatekit:slatekit-server:0.9.9'
-        compile 'com.slatekit:slatekit-providers:0.9.9'
-        compile 'com.slatekit:slatekit-workers:0.9.9'
+        compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-app:$slatekit_version"
+        compile "com.slatekit:slatekit-db:$slatekit_version"
+        compile "com.slatekit:slatekit-meta:$slatekit_version"
+        compile "com.slatekit:slatekit-cloud:$slatekit_version"
+        compile "com.slatekit:slatekit-query:$slatekit_version"
+        compile "com.slatekit:slatekit-entities:$slatekit_version"
+        compile "com.slatekit:slatekit-orm:$slatekit_version"
+        compile "com.slatekit:slatekit-core:$slatekit_version"
+        compile "com.slatekit:slatekit-apis:$slatekit_version"
+        compile "com.slatekit:slatekit-integration:$slatekit_version"
+        compile "com.slatekit:slatekit-server:$slatekit_version"
+        compile "com.slatekit:slatekit-providers:$slatekit_version"
+        compile "com.slatekit:slatekit-workers:$slatekit_version"
     } else {
         compile project(":slatekit-common")
         compile project(":slatekit-app")
