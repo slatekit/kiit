@@ -42,5 +42,5 @@ project(':slatekit-workers').projectDir=new File('../../lib/kotlin/slatekit-work
 include ':slatekit-providers'
 project(':slatekit-providers').projectDir=new File('../../lib/kotlin/slatekit-providers')
 
-include ':slatekit-tests'
-project(':slatekit-tests').projectDir=new File('../../lib/kotlin/slatekit-tests')
+//include ':slatekit-tests'
+//project(':slatekit-tests').projectDir=new File('../../lib/kotlin/slatekit-tests')

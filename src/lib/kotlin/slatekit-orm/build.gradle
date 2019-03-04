@@ -1,3 +1,4 @@
+apply from: '../../../../build/gradle/slatekit-common.gradle'
 
 buildscript {
     ext.kotlin_version = '1.3.0'
@@ -20,7 +21,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'orm'
 def slatekitComponentName = 'ORM'
 def slatekitComponentDesc = 'SlateKit ORM: Light-Weight SQL ORM'
-def slatekitComponentVersion = '0.9.9'
+def slatekitComponentVersion = getCommonVersion()
 
 
 // ==================================================================
@@ -40,6 +41,10 @@ task info {
     println('project.desc       : ' + project.description)
     println('project.projectDir : ' + project.projectDir)
     println('project.buildDir   : ' + project.buildDir)
+    println()
+    println('build.commit       : ' + gitCommitId())
+    println('build.branch       : ' + gitBranchName())
+    println('build.date         : ' + getBuildDate())
 }
 
 

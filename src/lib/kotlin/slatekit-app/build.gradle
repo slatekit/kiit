@@ -1,3 +1,4 @@
+apply from: '../../../../build/gradle/slatekit-common.gradle'
 
 buildscript {
     ext.kotlin_version = '1.3.0'
@@ -22,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'app'
 def slatekitComponentName = 'App'
 def slatekitComponentDesc = 'SlateKit App: Application template'
-def slatekitComponentVersion = '0.9.9'
+def slatekitComponentVersion = getCommonVersion()
 
 
 // ==================================================================
@@ -42,6 +43,10 @@ task info {
     println('project.desc       : ' + project.description)
     println('project.projectDir : ' + project.projectDir)
     println('project.buildDir   : ' + project.buildDir)
+    println()
+    println('build.commit       : ' + gitCommitId())
+    println('build.branch       : ' + gitBranchName())
+    println('build.date         : ' + getBuildDate())
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
