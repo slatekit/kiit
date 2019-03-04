@@ -13,13 +13,13 @@
 
 num | about | note
 -----|------|------
-1 | who is it for? | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
-2 | what is it?    | This is a modular set of utilities and architecture components.
-3 | where to reach us?  | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/kishore_reddy), and log issues on the issues board here.
-4 | when was it made?    | This has been around for 3 years as a internal library which we slowly open-sourced.
-5 | why use it?    | Designed as reusable modules for any company / product. We use it internally for all projects.
-6 | how to set up?    | Check out our website at www.slatekit.com for more info, overview, details, usage, docs, etc.
-7 | compared to others | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework.
+1 | who | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
+2 | what    | This is a modular set of utilities and architecture components.
+3 | where  | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/kishore_reddy), and log issues on the issues board here.
+4 | when | This has been around for 3 years as a internal library which we slowly open-sourced.
+5 | why | Designed as reusable modules for any company / product. We use it internally for all projects.
+6 | how | Check out our website at www.slatekit.com for more info, overview, details, usage, docs, etc.
+7 | compare | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework.
 
 # Install
 You can set up gradle using the example below. You can use a little or as many slatekit-components as you need. 
