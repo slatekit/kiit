@@ -84,6 +84,7 @@ dependencies {
 
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-app:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version"
         compile "com.slatekit:slatekit-query:$slatekit_version"
         compile "com.slatekit:slatekit-entities:$slatekit_version"
@@ -94,6 +95,7 @@ dependencies {
         compile "com.slatekit:slatekit-integration:$slatekit_version"
     } else {
         compile project(":slatekit-common")
+        compile project(":slatekit-app")
         compile project(":slatekit-meta")
         compile project(":slatekit-query")
         compile project(":slatekit-entities")

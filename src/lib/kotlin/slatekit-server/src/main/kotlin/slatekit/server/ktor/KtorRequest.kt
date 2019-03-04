@@ -44,7 +44,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name: String): Doc {
-        return getFile(name, { stream ->
+        return getFile(name) { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -55,7 +55,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
             }
             val text = buf.toString()
             Doc(name, text, ContentTypeHtml, text.length.toLong())
-        })
+        }
     }
 
     /**

@@ -17,6 +17,9 @@ import spark.Response
 import slatekit.common.content.Content
 import slatekit.common.content.Doc
 import slatekit.meta.Serialization
+import slatekit.results.Status
+import slatekit.results.StatusCodes
+import slatekit.results.StatusGroup
 
 object SparkResponse {
 
@@ -35,7 +38,9 @@ object SparkResponse {
      * Returns the value of the resulut as JSON.
      */
     fun json(res: Response, result: slatekit.common.requests.Response<Any>): String {
-        res.status(result.code)
+        val httpStatus = toHttpStatus(result)
+        val code = httpStatus.first
+        res.status(code)
         res.type("application/json")
         val json = Serialization.json(true).serialize(result)
         return json
@@ -46,7 +51,9 @@ object SparkResponse {
      * Return the value of the result as a content with type
      */
     fun content(res: Response, result: slatekit.common.requests.Response<Any>, content: Content?): String {
-        res.status(result.code)
+        val httpStatus = toHttpStatus(result)
+        val code = httpStatus.first
+        res.status(code)
         res.type(content?.tpe?.http ?: "text/plain")
         return content?.text ?: ""
     }
@@ -55,7 +62,9 @@ object SparkResponse {
      * Returns the value of the result as a file document
      */
     fun file(res: Response, result: slatekit.common.requests.Response<Any>, doc: Doc): Any {
-        res.status(result.code)
+        val httpStatus = toHttpStatus(result)
+        val code = httpStatus.first
+        res.status(code)
         val bytes = doc.content.toByteArray()
         val raw = res.raw()
 
@@ -66,5 +75,10 @@ object SparkResponse {
         raw.outputStream.flush()
         raw.outputStream.close()
         return res.raw()
+    }
+
+
+    private fun toHttpStatus(response:slatekit.common.requests.Response<Any>): Pair<Int, Status> {
+        return StatusCodes.toHttp(StatusGroup.Succeeded(response.code, response.msg ?: ""))
     }
 }
