@@ -1,0 +1,46 @@
+rootProject.name = 'slatekit'
+
+include ':slatekit-common'
+project(':slatekit-common').projectDir=new File('../slatekit-common')
+
+include ':slatekit-app'
+project(':slatekit-app').projectDir=new File('../slatekit-app')
+
+include ':slatekit-db'
+project(':slatekit-db').projectDir=new File('../slatekit-db')
+
+include ':slatekit-query'
+project(':slatekit-query').projectDir=new File('../slatekit-query')
+
+include ':slatekit-meta'
+project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+
+include ':slatekit-entities'
+project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+
+include ':slatekit-orm'
+project(':slatekit-orm').projectDir=new File('../slatekit-orm')
+
+include ':slatekit-core'
+project(':slatekit-core').projectDir=new File('../slatekit-core')
+
+include ':slatekit-apis'
+project(':slatekit-apis').projectDir=new File('../slatekit-apis')
+
+include ':slatekit-cloud'
+project(':slatekit-cloud').projectDir=new File('../slatekit-cloud')
+
+include ':slatekit-integration'
+project(':slatekit-integration').projectDir=new File('../slatekit-integration')
+
+include ':slatekit-server'
+project(':slatekit-server').projectDir=new File('../slatekit-server')
+
+include ':slatekit-workers'
+project(':slatekit-workers').projectDir=new File('../slatekit-workers')
+
+include ':slatekit-providers'
+project(':slatekit-providers').projectDir=new File('../slatekit-providers')
+
+include ':slatekit-tests'
+project(':slatekit-tests').projectDir=new File('../slatekit-tests')
