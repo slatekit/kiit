@@ -11,13 +11,7 @@
 # About
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
 
-It is comprised of 3 core feature categories.
-
-1. Common utilities ( for both server / client )
-2. Server API Framework ( called Universal APIs )
-3. Architecture Components ( micro-orm, cli, workers, and more)
-
-num | info | note
+num | about | note
 -----|------|------
 1 | who     | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
 2 | what    | This is a modular set of utilities and architecture components.
@@ -28,7 +22,8 @@ num | info | note
 7 | compare | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework.
 
 # Install
-You can use 
+You can set up gradle using the example below. You can use a little or as many slatekit-components as you need. 
+
 ```groovy
 repositories {
     maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
@@ -36,8 +31,14 @@ repositories {
 
 dependencies {
 	// other libraries
+	
+	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
     	compile 'com.slatekit:slatekit-results:0.9.9'
+	
+	// slatekit-common: Utilities for Android or Server
     	compile 'com.slatekit:slatekit-common:0.9.9'
+	
+	// Misc architecture components ( all depend on results/common components above )
 	compile 'com.slatekit:slatekit-app:0.9.9'
 	compile 'com.slatekit:slatekit-db:0.9.9'
 	compile 'com.slatekit:slatekit-meta:0.9.9'
