@@ -17,6 +17,50 @@ It is comprised of 3 core feature categories.
 2. Server API Framework ( called Universal APIs )
 3. Architecture Components ( micro-orm, cli, workers, and more)
 
+num | info | note
+-----|------|------
+1 | who     | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
+2 | what    | This is a modular set of utilities and architecture components.
+3 | where   | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/kishore_reddy), and log issues on the issues board here.
+4 | when    | This has been around for 3 years as a internal library which we slowly open-sourced.
+5 | why     | Designed as reusable modules for any company / product. We use it internally for all projects.
+6 | how     | Check out our website at www.slatekit.com for more info, overview, details, usage, docs, etc.
+7 | compare | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework.
+
+# Install
+You can use 
+```groovy
+repositories {
+    maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+}
+
+dependencies {
+	// other libraries
+    	compile 'com.slatekit:slatekit-results:0.9.9'
+    	compile 'com.slatekit:slatekit-common:0.9.9'
+	compile 'com.slatekit:slatekit-app:0.9.9'
+	compile 'com.slatekit:slatekit-db:0.9.9'
+	compile 'com.slatekit:slatekit-meta:0.9.9'
+	compile 'com.slatekit:slatekit-cloud:0.9.9'
+	compile 'com.slatekit:slatekit-query:0.9.9'
+	compile 'com.slatekit:slatekit-entities:0.9.9'
+	compile 'com.slatekit:slatekit-orm:0.9.9'
+	compile 'com.slatekit:slatekit-core:0.9.9'
+	compile 'com.slatekit:slatekit-apis:0.9.9'
+	compile 'com.slatekit:slatekit-integration:0.9.9'
+	compile 'com.slatekit:slatekit-server:0.9.9'
+	compile 'com.slatekit:slatekit-providers:0.9.9'
+	compile 'com.slatekit:slatekit-workers:0.9.9'
+}
+```
+
+# Goals
+Slate Kit is a Kotlin based open-source set of utilities, libraries and modular architecture components
+TODO
+
+# Design
+Slate Kit is designed as a collection of modular components. In this way, it is more like a library than an `framework`.
+TODO
 
 # Links
 Some important links / pages for more info.
@@ -85,13 +129,19 @@ dependencies {
 }
 ```
 
-# Author
+# Upcoming
+1. A stable 1.0.0 release coming in March 2019
+2. A technical white-paper on the slatekit-results component
+3. A techincal white-paper on the slatekit-apis ( Universal APIs ) component
+
+
+# Contact
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com
 - **company**: www.codehelix.co
 
 
-# Like Slate Kit ? :heart:
+# Like Us ? :heart:
 - Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
 - Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work nights/weekends! ( coming soon )
 - Contribute to continued development https://opencollective.com/kishorepreddy-placeholder ( coming soon )
