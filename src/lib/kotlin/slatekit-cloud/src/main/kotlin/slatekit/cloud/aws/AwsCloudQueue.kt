@@ -37,7 +37,7 @@ class AwsCloudQueue<T>(
     queue: String,
     creds: AWSCredentials,
     val waitTimeInSeconds: Int = 0
-) : CloudQueue<T>(), AwsSupport {
+) : CloudQueue<T>, AwsSupport {
 
     private val _queue = queue
     private val _sqs: AmazonSQSClient = AwsFuncs.sqs(creds)
