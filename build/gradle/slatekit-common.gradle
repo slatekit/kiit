@@ -1,0 +1,41 @@
+
+// Gets the git commit id: e.g. a9c188e5b4a04cc37ddaf5df2ea11fadb7370a9f
+def gitCommitId() {
+    def output = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', 'HEAD'
+        standardOutput = output
+    }
+    return output.toString().replace("\n","")
+}
+
+// Gets the branch name: e.g master
+def gitBranchName() {
+    def output = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+        standardOutput = output
+    }
+    return output.toString().trim().replace("\n","")
+}
+
+// Get a date in string format yyyy-MM-dd_HH-mm-ss
+// NOTE: This is used for generating a "version.txt"
+def getBuildDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyy-MM-dd_HH-mm-ss')
+    return formattedDate
+}
+
+// Loads the version number from a version file
+def getCommonVersion() {
+    String fileVersion = new File('../version.txt').text
+    return fileVersion
+}
+
+ext {
+    gitCommitId = this.&gitCommitId
+    gitBranchName = this.&gitBranchName
+    getBuildDate = this.&getBuildDate
+    getCommonVersion = this.&getCommonVersion
+}

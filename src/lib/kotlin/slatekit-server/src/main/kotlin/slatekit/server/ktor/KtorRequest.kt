@@ -23,7 +23,7 @@ import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import io.ktor.request.*
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.async
 import slatekit.common.content.ContentTypeHtml
 import slatekit.common.content.ContentTypeText
 import slatekit.common.content.Doc
@@ -44,7 +44,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name: String): Doc {
-        return getFile(name, { stream ->
+        return getFile(name) { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -55,7 +55,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
             }
             val text = buf.toString()
             Doc(name, text, ContentTypeHtml, text.length.toLong())
-        })
+        }
     }
 
     /**
@@ -85,14 +85,14 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
-        async {
-            val multiPart = call.receiveMultipart()
-            val part = multiPart.readAllParts().find { (it.name ?: "") == name }
-            part?.let {
-                val file = it as PartData.FileItem
-                file.streamProvider().use(callback)
-            }
-        }
+        //async {
+        //    val multiPart = call.receiveMultipart()
+        //    val part = multiPart.readAllParts().find { (it.name ?: "") == name }
+        //    part?.let {
+        //        val file = it as PartData.FileItem
+        //        file.streamProvider().use(callback)
+        //    }
+        //}
     }
 
     companion object {

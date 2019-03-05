@@ -23,6 +23,8 @@ import slatekit.common.content.Content
 import slatekit.common.content.Doc
 import slatekit.common.requests.Response
 import slatekit.meta.Serialization
+import slatekit.results.StatusCodes
+import slatekit.results.StatusGroup
 
 object KtorResponse {
 
@@ -43,7 +45,7 @@ object KtorResponse {
     suspend fun json(call: ApplicationCall, result: Response<Any>) {
         val text = Serialization.json(true).serialize(result)
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
-        val statusCode = HttpStatusCode(result.code, "")
+        val statusCode = toHttpStatus(result)
         call.respondText(text, contentType, statusCode)
     }
 
@@ -54,7 +56,7 @@ object KtorResponse {
     suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?) {
         val text = content?.text ?: ""
         val contentType = content?.let { ContentType.parse(it.tpe.http) } ?: io.ktor.http.ContentType.Text.Plain
-        val statusCode = HttpStatusCode(result.code, "")
+        val statusCode = toHttpStatus(result)
         call.respondText(text, contentType, statusCode)
     }
 
@@ -63,10 +65,16 @@ object KtorResponse {
      */
     suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc) {
         val bytes = doc.content.toByteArray()
-        val statusCode = HttpStatusCode(result.code, "")
+        val statusCode = toHttpStatus(result)
 
         // Make files downloadable
         call.response.header("Content-Disposition", "attachment; filename=" + doc.name)
         call.respondBytes(bytes, ContentType.parse(doc.tpe.http), statusCode)
+    }
+
+
+    private fun toHttpStatus(response:Response<Any>): HttpStatusCode {
+        val http = StatusCodes.toHttp(StatusGroup.Succeeded(response.code, response.msg ?: ""))
+        return HttpStatusCode(http.first, http.second.msg)
     }
 }

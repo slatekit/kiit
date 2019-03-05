@@ -11,19 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.server.spark
+package slatekit.core.cloud
 
-import spark.ResponseTransformer
+import slatekit.common.queues.QueueSource
+import slatekit.common.queues.QueueSourceMsg
 
-class JsonTransformer : ResponseTransformer {
-    override fun render(obj: Any): String {
-        return ""
-    }
-
-    companion object {
-        @JvmStatic
-        fun json(): ResponseTransformer {
-            return JsonTransformer()
-        }
-    }
-}
+/**
+ * Abstraction for cloud based message queue storage and retrieval
+ */
+abstract class CloudQueue<T> : QueueSource<T>, CloudSupport, QueueSourceMsg<T>

@@ -38,7 +38,7 @@ class SparkRequest(val req: Request) : RequestSupport {
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name: String): Doc {
-        return getFile(name, { stream ->
+        return getFile(name) { stream ->
 
             val bis = BufferedInputStream(stream)
             val buf = ByteArrayOutputStream()
@@ -49,7 +49,7 @@ class SparkRequest(val req: Request) : RequestSupport {
             }
             val text = buf.toString()
             Doc(name, text, ContentTypeHtml, text.length.toLong())
-        })
+        }
     }
 
     /**
@@ -105,7 +105,7 @@ class SparkRequest(val req: Request) : RequestSupport {
                     parts = parts,
                     source = ApiConstants.SourceWeb,
                     verb = req.requestMethod().toLowerCase(),
-                    meta = SparkHeaaders(req, ctx.enc),
+                    meta = SparkHeaders(req, ctx.enc),
                     data = SparkParams(req, ctx.enc),
                     raw = SparkRequest(req),
                     tag = Random.uuid()

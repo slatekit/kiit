@@ -3,7 +3,7 @@ package test.cloud
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
-import slatekit.core.cloud.CloudQueueBase
+import slatekit.core.cloud.CloudQueue
 import java.io.File
 
 
@@ -71,7 +71,7 @@ class AwsSqsTests {
     }
 
 
-    fun ensureQueue(queue: CloudQueueBase<String>, expectedContent:String):Unit {
+    fun ensureQueue(queue: CloudQueue<String>, expectedContent:String):Unit {
 
         // Get text
         val result1 = queue.next()

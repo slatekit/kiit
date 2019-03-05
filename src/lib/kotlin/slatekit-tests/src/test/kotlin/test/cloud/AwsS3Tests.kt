@@ -6,7 +6,7 @@ import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.common.DateTime
 import slatekit.common.Uris
 import slatekit.common.ext.toStringNumeric
-import slatekit.core.cloud.CloudFilesBase
+import slatekit.core.cloud.CloudFiles
 import slatekit.results.getOrElse
 import java.io.File
 
@@ -45,7 +45,7 @@ class AwsS3Tests {
     }
 
 
-    fun ensureFile(files: CloudFilesBase, fileName:String, expectedContent:String):Unit {
+    fun ensureFile(files: CloudFiles, fileName:String, expectedContent:String):Unit {
 
         // Get text
         val result1 = files.getAsText(fileName)

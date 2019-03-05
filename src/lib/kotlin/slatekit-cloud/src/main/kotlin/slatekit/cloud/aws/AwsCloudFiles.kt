@@ -19,7 +19,8 @@ import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
-import slatekit.core.cloud.CloudFilesBase
+import slatekit.core.cloud.CloudFiles
+import slatekit.core.cloud.CloudUtils
 import slatekit.results.Try
 import slatekit.results.getOrElse
 import java.io.File
@@ -35,8 +36,10 @@ class AwsCloudFiles(
     bucket: String,
     createBucket: Boolean,
     creds: AWSCredentials
-)
-    : CloudFilesBase(bucket, createBucket), AwsSupport {
+) : CloudFiles, AwsSupport {
+
+    override val defaultFolder = bucket
+    override val createDefaultFolder = createBucket
 
     private val SOURCE = "aws:s3"
     private val _s3: AmazonS3Client = AwsFuncs.s3(creds)
@@ -62,8 +65,8 @@ class AwsCloudFiles(
      * hook for any initialization
      */
     override fun init() {
-        if (_createDefaultFolder) {
-            _s3.createBucket(_defaultFolder)
+        if (createDefaultFolder) {
+            _s3.createBucket(defaultFolder)
         }
     }
 
@@ -73,7 +76,7 @@ class AwsCloudFiles(
      * @param rootFolder
      */
     override fun createRootFolder(rootFolder: String) {
-        if (!rootFolder.isNullOrEmpty() && rootFolder != _defaultFolder) {
+        if (!rootFolder.isNullOrEmpty() && rootFolder != defaultFolder) {
             _s3.createBucket(rootFolder)
         }
     }
@@ -109,7 +112,7 @@ class AwsCloudFiles(
     override fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "delete", data = fullName, call = { ->
-            _s3.deleteObject(_defaultFolder, fullName)
+            _s3.deleteObject(defaultFolder, fullName)
             fullName
         })
     }
@@ -125,8 +128,8 @@ class AwsCloudFiles(
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "getAsText", data = fullName, call = { ->
 
-            val obj = _s3.getObject(GetObjectRequest(_defaultFolder, fullName))
-            val content = toString(obj.getObjectContent())
+            val obj = _s3.getObject(GetObjectRequest(defaultFolder, fullName))
+            val content = CloudUtils.toString(obj.getObjectContent())
             // val content = "simulating download of " + fullName
             content
         })
@@ -185,7 +188,7 @@ class AwsCloudFiles(
 
         return executeResult<String>(SOURCE, action, data = fullName, call = { ->
 
-            _s3.putObject(_defaultFolder, fullName, toInputStream(content), ObjectMetadata())
+            _s3.putObject(defaultFolder, fullName, CloudUtils.toInputStream(content), ObjectMetadata())
             fullName
         })
     }
@@ -196,7 +199,7 @@ class AwsCloudFiles(
             name
 
         // Case 2: folder == root folder
-        else if (folder == _defaultFolder)
+        else if (folder == defaultFolder)
             name
 
         // Case 3: sub-folder

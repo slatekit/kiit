@@ -22,7 +22,7 @@ import spark.Request
 //import java.time.*
 import org.threeten.bp.*
 
-data class SparkHeaaders(val req: Request, val enc: Encryptor?) : Metadata {
+data class SparkHeaders(val req: Request, val enc: Encryptor?) : Metadata {
 
     override val raw: Any = req.headers()
     override fun toMap(): Map<String, Any> {
