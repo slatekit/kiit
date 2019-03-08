@@ -13,9 +13,13 @@
 
 package slatekit.cli
 
+import slatekit.common.console.ConsoleSettings
 import slatekit.common.io.Files
 import slatekit.common.requests.Response
 import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.ConsoleWrites
+import slatekit.common.console.TextType
+import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
@@ -25,7 +29,25 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-open class CliIO(private val writer: ConsoleWriter) {
+open class CliIO(private val io: IO<CliOutput, Unit>) : ConsoleWrites {
+
+    override val settings = ConsoleSettings()
+
+    // This is needed for the ConsoleWrites interface, but won't be used
+    // as we override the write method below to intercept all semantic console writes
+    override val _io: IO<Any?, Unit> = slatekit.common.io.Println
+
+    /**
+     * Writes the text using the TextType
+     *
+     * @param mode
+     * @param text
+     * @param endLine
+     */
+    override fun write(mode: TextType, text: String, endLine: Boolean) {
+        io.run(CliOutput(mode, text, endLine))
+    }
+
 
     /**
      * Different types of serializers
@@ -58,8 +80,8 @@ open class CliIO(private val writer: ConsoleWriter) {
      * prints empty result
      */
     private fun empty() {
-        writer.important("no results/data")
-        writer.line()
+        important("no results/data")
+        line()
     }
 
     /**
@@ -68,10 +90,10 @@ open class CliIO(private val writer: ConsoleWriter) {
      * @param result
      */
     private fun summary(result: CliResponse<*>) {
-        writer.text("Success : " + result.success)
-        writer.text("Status  : " + result.code)
-        writer.text("Message : " + result.msg)
-        writer.text("Tag     : " + result.tag)
+        text("Success : " + result.success)
+        text("Status  : " + result.code)
+        text("Message : " + result.msg)
+        text("Tag     : " + result.tag)
     }
 
     /**
@@ -80,24 +102,24 @@ open class CliIO(private val writer: ConsoleWriter) {
      * @param obj
      */
     private fun write(request:CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
-        val format = request.args.getStringOrElse(CliConstants.SysFormat, "props")
-        writer.text("===============================")
+        val format = request.args.getStringOrElse(SysParam.Format.id, "props")
+        text("===============================")
         val text = when (format) {
             "csv" -> serializerCsv.serialize(obj)
             "json" -> serializerJson.serialize(obj)
             "prop" -> serializerProp.serialize(obj)
             else -> serializerProp.serialize(obj)
         }
-        writer.text(text)
-        writer.text("===============================")
+        text(text)
+        text("===============================")
 
         // Writer to log
-        val log = request.args.getSysStringOrElse(CliConstants.SysLog, "false")
+        val log = request.args.getSysStringOrElse(SysParam.Log.id, "false")
         if (log.trim() == "true") {
             val fileName = Files.fileNameAsAsTimeStamp()
             val filePath = File(outputDir, fileName)
             filePath.writeText(text)
-            writer.text("Wrote content to: ${filePath.absolutePath}")
+            text("Wrote content to: ${filePath.absolutePath}")
         }
     }
 

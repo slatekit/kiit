@@ -12,6 +12,9 @@ mantra: Simplicity above all else
  */
 package slatekit.cli
 
+import slatekit.common.args.Args
+import slatekit.common.requests.Response
+
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
  * NOTE: This is used for the APIs in Slate Kit
@@ -24,6 +27,7 @@ package slatekit.cli
  * @param tag : Tag used as a correlation field
  */
 data class CliResponse<out T>(
+        val request:CliRequest,
         override val success: Boolean,
         override val code: Int,
         override val meta: Map<String, String>?,
@@ -36,9 +40,20 @@ data class CliResponse<out T>(
     /**
      * adds to the existing metadata
      */
-    fun withMeta(meta: List<Pair<String, String>>): Response<T> {
+    override fun withMeta(meta: List<Pair<String, String>>): Response<T> {
         return this.meta?.let {
             copy(meta = it.plus(meta))
         } ?: copy(meta = meta.toMap())
+    }
+
+
+    companion object {
+        val empty = CliResponse(
+                CliRequest.build(Args.default(), ""),
+                true,
+                1,
+                mapOf(),
+                "empty"
+        )
     }
 }

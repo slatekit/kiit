@@ -23,7 +23,7 @@ import slatekit.results.Success
 
 object CliUtils {
 
-    fun log(folders: Folders, cmd: CliCommand, content: String) {
+    fun log(folders: Folders, req: CliRequest, content: String) {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
 
@@ -31,40 +31,26 @@ object CliUtils {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
 
-    fun checkForAssistance(cmd: CliCommand): Notice<Boolean> {
-        val words = cmd.args.raw
-        val verbs = cmd.args.actionParts
+    fun checkForAssistance(req: CliRequest): Notice<Boolean> {
+        val words = req.args.raw
+        val verbs = req.args.actionParts
+
         return with(ArgsFuncs) {
             // Case 1: Exit ?
             if (isExit(words, 0)) {
-                Success(true,"exit", StatusCodes.EXIT.code)
+                Success(true, Command.Exit.id, StatusCodes.EXIT.code)
             }
             // Case 2a: version ?
             else if (isVersion(words, 0)) {
-                Success(true,"version", StatusCodes.HELP.code)
+                Success(true,Command.Version.id, StatusCodes.HELP.code)
             }
             // Case 2b: about ?
             else if (isAbout(words, 0)) {
-                Success(true,"about", StatusCodes.HELP.code)
+                Success(true,Command.About.id, StatusCodes.HELP.code)
             }
             // Case 3a: Help ?
             else if (isHelp(words, 0)) {
-                Success(true,"help", StatusCodes.HELP.code)
-            }
-            // Case 3b: Help on area ?
-            else if (isHelp(verbs, 1)) {
-                Success(true,"area ?", StatusCodes.HELP.code)
-            }
-            // Case 3c: Help on api ?
-            else if (isHelp(verbs, 2)) {
-                Success(true,"area.api ?", StatusCodes.HELP.code)
-            }
-            // Case 3d: Help on action ?
-            else if (!cmd.args.action.isNullOrEmpty() &&
-                    (isHelp(cmd.args.positional, 0) ||
-                            isHelp(verbs, 3))
-            ) {
-                Success(true, "area.api.action ?", StatusCodes.HELP.code)
+                Success(true,Command.Help.id, StatusCodes.HELP.code)
             } else
                 Failure("")
         }

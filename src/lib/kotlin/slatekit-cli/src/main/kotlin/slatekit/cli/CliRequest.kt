@@ -8,6 +8,8 @@ import slatekit.common.args.Args
 import slatekit.common.content.Doc
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.RequestSupport
+import slatekit.common.requests.Request
+import slatekit.common.requests.Source
 import java.io.InputStream
 
 /**
@@ -43,12 +45,12 @@ data class CliRequest(
     /**
      * Defaulted to CLI for now
      */
-    override val source: String = "cli"
+    override val source: Source = Source.CLI
 
     /**
      * Defaulted to CLI for now ( mimics an Http method )
      */
-    override val verb: String = "cli"
+    override val verb: String = Source.CLI.id
 
     /**
      * Access to any underlying raw request
