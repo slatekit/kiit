@@ -13,20 +13,19 @@
 
 package slatekit.common.console
 
-sealed class TextType(val color: String, val upperCase: Boolean) {
+sealed class TextType(val name:String, val color: String, private val upperCase: Boolean) {
 
     fun format(text: String): String {
-        val checkedText = text
-        val res = if (upperCase) checkedText.toUpperCase() else checkedText
-        return res
+        return if (upperCase) text.toUpperCase() else text
     }
 }
 
-object Title : TextType(Console.BLUE, true)
-object Subtitle : TextType(Console.CYAN, false)
-object Url : TextType(Console.BLUE, false)
-object Important : TextType(Console.RED, false)
-object Highlight : TextType(Console.YELLOW, false)
-object Success : TextType(Console.GREEN, false)
-object Error : TextType(Console.RED, false)
-object Text : TextType(Console.WHITE, false)
+object Title     : TextType("title", Console.BLUE, true)
+object Subtitle  : TextType("subtitle", Console.CYAN, false)
+object Url       : TextType("url", Console.BLUE, false)
+object Important : TextType("important", Console.RED, false)
+object Highlight : TextType("highlight", Console.YELLOW, false)
+object Success   : TextType("success", Console.GREEN, false)
+object Failure   : TextType("failure", Console.RED, false)
+object Text      : TextType("text", Console.WHITE, false)
+object NoFormat  : TextType("none", "",false)

@@ -30,7 +30,7 @@ interface ConsoleWrites {
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.scala for details.
      */
-    val _io: IO<Any, Unit>
+    val _io: IO<Any?, Unit>
 
     /**
      * Map the text type to functions that can implement it.
@@ -42,7 +42,7 @@ interface ConsoleWrites {
             Important to this::important,
             Highlight to this::highlight,
             Success to this::success,
-            Error to this::error,
+            Failure to this::failure,
             Text to this::text
     )
 
@@ -82,15 +82,15 @@ interface ConsoleWrites {
      */
     fun convert(mode: String): TextType {
         return when (mode.toLowerCase()) {
-
-            "title" -> Title
-            "subtitle" -> Subtitle
-            "url" -> Url
-            "important" -> Important
-            "highlight" -> Highlight
-            "success" -> Success
-            "srror" -> Error
-            "text" -> Text
+            Title    .name -> Title
+            Subtitle .name -> Subtitle
+            Url      .name -> Url
+            Important.name -> Important
+            Highlight.name -> Highlight
+            Success  .name -> Success
+            Failure  .name -> Failure
+            Text     .name -> Text
+            NoFormat .name -> NoFormat
             else -> Text
         }
     }
@@ -101,19 +101,19 @@ interface ConsoleWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun write(color: String, text: String, endLine: Boolean) {
+    fun write(color: String?, text: String, endLine: Boolean) {
+        val finalColor = if(color == null || color == "") "" else "$color "
         val finalText = if (endLine)
-            color + " " + text + newline
+            finalColor + text + newline
         else
-            color + " " + text
-
+            finalColor + text
         _io.run(finalText)
     }
 
     /**
      * prints a empty line
      */
-    fun line() = _io.run(NEWLINE)
+    fun line() = write(NoFormat, NEWLINE, false)
 
     /**
      * prints a empty line
@@ -125,7 +125,7 @@ interface ConsoleWrites {
      *
      * @param count
      */
-    fun tab(count: Int = 1) = (0..count).forEach { _io.run(TAB) }
+    fun tab(count: Int = 1) = (0..count).forEach { write(Text, TAB, false) }
 
     /**
      * Writes the text using the TextType
@@ -192,7 +192,7 @@ interface ConsoleWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun error(text: String, endLine: Boolean = true): Unit = write(Error, text, endLine)
+    fun failure(text: String, endLine: Boolean = true): Unit = write(Failure, text, endLine)
 
     /**
      * prints text in normal format ( WHITE )

@@ -33,9 +33,9 @@ object Println : IO<Any?, Unit> {
     }
 }
 
-object Readln : IO<Any?, String> {
+object Readln : IO<Any?, String?> {
 
-    override fun run(i: Any?) = readLine() ?: ""
+    override fun run(i: Any?):String? = readLine()
 }
 
 class StringWriter(private val buffer: StringBuilder) : IO<Any, Unit> {
