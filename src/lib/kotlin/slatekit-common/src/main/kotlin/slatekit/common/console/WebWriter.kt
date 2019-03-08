@@ -41,7 +41,7 @@ class WebWriter : ConsoleWrites {
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.scala for details.
      */
-    override val _io: IO<Any, Unit> = StringWriter(buffer)
+    override val _io: IO<Any?, Unit> = StringWriter(buffer)
 
     override val TAB: String get() = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
@@ -62,7 +62,7 @@ class WebWriter : ConsoleWrites {
             Important -> writeTag("h4", mode.format(msg), endLine, "color:Black ")
             Highlight -> writeTag("p", mode.format(msg), endLine, "color:Orange")
             Success -> writeTag("p", mode.format(msg), endLine, "color:Green ")
-            Error -> writeTag("p", mode.format(msg), endLine, "color:Red   ")
+            Failure -> writeTag("p", mode.format(msg), endLine, "color:Red   ")
             Text -> writeTag("p", mode.format(msg), endLine, "color:Black ")
         }
     }

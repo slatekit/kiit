@@ -15,8 +15,6 @@ package slatekit.common.requests
 
 import slatekit.common.DateTime
 import slatekit.common.Inputs
-import slatekit.common.Metadata
-import slatekit.common.args.Args
 
 
 /**
@@ -79,5 +77,22 @@ interface Request {
     fun isAction(targetArea: String, targetName: String, targetAction: String): Boolean {
         return area == targetArea && name == targetName && action == targetAction
     }
+
+
+    /**
+     * To transform / rewrite the request
+     */
+    fun clone(
+            otherPath: String,
+            otherParts: List<String>,
+            otherSource: Source,
+            otherVerb: String,
+            otherData: Inputs,
+            otherMeta: slatekit.common.Metadata,
+            otherRaw: Any?,
+            otherOutput: String?,
+            otherTag: String,
+            otherVersion: String,
+            otherTimestamp:DateTime) : Request
 }
 

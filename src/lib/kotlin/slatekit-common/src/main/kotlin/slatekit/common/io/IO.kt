@@ -19,9 +19,9 @@ interface IO<in I, out O> {
 }
 
 
-object Print : IO<Any, Unit> {
+object Print : IO<Any?, Unit> {
 
-    override fun run(i: Any) {
+    override fun run(i: Any?) {
         print(i)
     }
 }
@@ -38,9 +38,9 @@ object Readln : IO<Any?, String?> {
     override fun run(i: Any?):String? = readLine()
 }
 
-class StringWriter(private val buffer: StringBuilder) : IO<Any, Unit> {
+class StringWriter(private val buffer: StringBuilder) : IO<Any?, Unit> {
 
-    override fun run(i: Any) {
+    override fun run(i: Any?) {
         buffer.append(i)
     }
 }

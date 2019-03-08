@@ -29,5 +29,5 @@ class ConsoleWriter(private val _settings: ConsoleSettings = Console.defaults())
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.scala for details.
      */
-    override val _io: IO<Any, Unit> = Print
+    override val _io: IO<Any?, Unit> = Print
 }

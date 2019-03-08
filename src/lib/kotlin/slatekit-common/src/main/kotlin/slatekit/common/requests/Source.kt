@@ -9,4 +9,19 @@ sealed class Source(val id: String) {
     object Queue : Source("queue") // queues
     object Web   : Source("web")   // http
     data class Other(val name: String) : Source("other")
+
+    companion object {
+        fun parse(name:String): Source {
+            return when(name) {
+                API   .id -> API
+                Auto  .id -> Auto
+                Chat  .id -> Chat
+                CLI   .id -> CLI
+                File  .id -> File
+                Queue .id -> Queue
+                Web   .id -> Web
+                else      -> Other(name)
+            }
+        }
+    }
 }
