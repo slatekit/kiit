@@ -15,6 +15,7 @@ import slatekit.common.log.Logger
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
+import slatekit.common.requests.SimpleRequest
 import slatekit.meta.*
 import slatekit.results.*
 import slatekit.results.builders.Notices
@@ -161,7 +162,7 @@ open class ApiContainer(
         opts: Map<String, Any>,
         args: Map<String, Any>
     ): Try<Any> {
-        val req = Request.cli(area, api, action, verb, opts, args)
+        val req = SimpleRequest.cli(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
 

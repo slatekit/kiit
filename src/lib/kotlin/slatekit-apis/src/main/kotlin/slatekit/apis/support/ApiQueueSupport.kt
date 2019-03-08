@@ -6,6 +6,7 @@ import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
 import slatekit.common.requests.Request
+import slatekit.common.requests.Source
 import slatekit.results.Notice
 
 interface ApiQueueSupport {
@@ -33,7 +34,7 @@ interface ApiQueueSupport {
      */
     fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Notice<String> {
         // Coming in as http request and mode is queued ?
-        return if (req.source != ApiConstants.SourceQueue && target.tag == "queued") {
+        return if (req.source != Source.Queue && target.tag == "queued") {
             sendToQueue(ctx, req, target, source, args)
         } else {
             slatekit.results.Failure("Continue processing")

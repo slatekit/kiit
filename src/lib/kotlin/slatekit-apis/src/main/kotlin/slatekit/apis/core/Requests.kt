@@ -22,6 +22,8 @@ import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.Uris
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 import slatekit.meta.Serialization
 import java.io.File
 
@@ -89,11 +91,11 @@ object Requests {
         val jsonMeta = jsonRoot.get("meta") as JSONObject
         val sep = if (path.contains("/")) "/" else "."
 
-        return Request(
+        return SimpleRequest(
                 version = version,
                 path = path,
                 parts = path.split(sep),
-                source = sourceOverride ?: source,
+                source = Source.parse(sourceOverride ?: source),
                 verb = verbOverride ?: verb,
                 meta = Meta(rawSource ?: "json", jsonMeta, enc),
                 data = Params(rawSource ?: "json", ApiConstants.SourceFile, true, enc, jsonData),
@@ -112,7 +114,7 @@ object Requests {
         val data = convertDataToJson(req.data, req.data.raw)
         val finalMeta = enc?.encrypt(meta) ?: meta
         val finalData = enc?.encrypt(data) ?: data
-        val finalSource = source ?: req.source
+        val finalSource = source ?: req.source.id
         val finalVerb = verb ?: req.verb
         val finalPath = req.parts.joinToString(".")
         val json = """

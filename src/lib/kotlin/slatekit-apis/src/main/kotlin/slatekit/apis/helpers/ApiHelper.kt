@@ -21,6 +21,8 @@ import slatekit.common.auth.AuthFuncs
 import slatekit.common.auth.Roles
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 import slatekit.meta.Deserializer
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -71,7 +73,7 @@ object ApiHelper {
         val tokens = path.split('.').toList()
         val args = buildArgs(inputs)
         val opts = buildArgs(headers)
-        val apiCmd = Request(path, tokens, ApiConstants.SourceCLI, "get", args, opts,
+        val apiCmd = SimpleRequest(path, tokens, Source.CLI, "get", args, opts,
                 null, "", "", ApiConstants.Version, DateTime.now())
         return apiCmd
     }

@@ -38,7 +38,7 @@ abstract class Doc : ApiVisit {
     }
 
     override fun onApiError(msg: String) {
-        writer.error(msg)
+        writer.failure(msg)
     }
 
     override fun onVisitSeparator() {
