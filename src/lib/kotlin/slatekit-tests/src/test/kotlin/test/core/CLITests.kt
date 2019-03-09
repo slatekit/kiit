@@ -29,6 +29,7 @@ class CLITests {
             CliSettings(),
             Info.none.copy(about = Info.none.about.copy(version = version)),
             Folders.default,
+            null,
             commands,reader,writer) {
 
         var testInit = false
@@ -45,7 +46,8 @@ class CLITests {
         /**
          * executes a line of text by handing it off to the executor
          */
-        override fun executeInternal(args:Args): Try<CliResponse<*>> {
+        override fun executeRequest(request:CliRequest): Try<CliResponse<*>> {
+            val args = request.args
             val text = args.line
             testExec.add(text)
             val req = CliRequest.build(Args.default(), text)

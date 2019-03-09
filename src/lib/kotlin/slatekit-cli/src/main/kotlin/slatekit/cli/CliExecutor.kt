@@ -18,40 +18,30 @@ import slatekit.common.info.Folders
 import slatekit.results.*
 
 /**
- * Executes a single CliRequest
- *
- * @param _appMeta : Metadata about the app used for displaying help about app
- * @param folders : Used to write output to app directories
- * @param settings : Settings for the shell functionality
+ * Executes a single CliRequest with hooks ( before, after )
+ * This can be used by derived to incorporate hooks / middle into the
+ * request processing pipeline
  */
-open class CliExecutor(
-        val folders: Folders,
-        val settings: CliSettings
-) {
+open class CliExecutor {
 
     /**
      * Executes the line and returns a CliResponse
      */
-    open fun excecute(args:Args): Try<CliResponse<*>> {
+    open fun excecute(cli:CLI, request:CliRequest): Try<CliResponse<*>> {
 
         // Convert line into a CliRequest
         // Run the life-cycle methods ( before, execute, after )
-        val req = convert(args, true)
-
         // 1. Before
-        return req.then { request ->
+        return before(cli, request)
+        .then {
 
-            before(request)
+            // 2. Process
+            process(cli, request)
         }
-        // 2. Execute
-        .then { request ->
-
-            process(request)
-        }
-        // 3. After
         .then { response ->
 
-            after(response)
+            // 3. After
+            after(cli, response)
         }
     }
 
@@ -62,19 +52,19 @@ open class CliExecutor(
      * @param request
      * @return
      */
-    protected fun before(request: CliRequest): Try<CliRequest> = Success(request)
+    protected fun before(cli:CLI, request: CliRequest): Try<CliRequest> = Success(request)
 
 
     /**
      * Hook to
      */
-    protected fun after(response: CliResponse<*>): Try<CliResponse<*>> = Success(response)
+    protected fun after(cli:CLI, response: CliResponse<*>): Try<CliResponse<*>> = Success(response)
 
 
     /**
      * Hook to
      */
-    protected fun process(request: CliRequest): Try<CliResponse<*>> = Success(
+    protected fun process(cli:CLI, request: CliRequest): Try<CliResponse<*>> = Success(
             CliResponse(
                     request,
                     true,
@@ -83,10 +73,4 @@ open class CliExecutor(
                     ""
             )
     )
-
-
-    private fun convert(args:Args, checkHelp: Boolean): Try<CliRequest> {
-        // 1st step, parse the command line into arguments
-        return Success(CliRequest.build(args, args.line))
-    }
 }

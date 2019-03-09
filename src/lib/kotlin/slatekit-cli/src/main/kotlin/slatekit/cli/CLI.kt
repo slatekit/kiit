@@ -38,6 +38,7 @@ open class CLI(
         val settings: CliSettings,
         val info: Info,
         val folders: Folders,
+        val callback: ((CLI, CliRequest) -> CliResponse<*>)? = null,
         commands: List<String?>? = listOf(),
         ioReader:((Unit) -> String?)? = null,
         ioWriter:((CliOutput) -> Unit)? = null
@@ -47,12 +48,6 @@ open class CLI(
      * Display prompt
      */
     val PROMPT = ":>"
-
-    /**
-     * Executes each command from reader
-     */
-    val executor:CliExecutor = CliExecutor(folders, settings)
-
 
     /**
      * Context to hold the reader, writer, help, io services
@@ -98,14 +93,22 @@ open class CLI(
 
 
     /**
+     * Hook for shutdown for derived classes
+     */
+    open fun end(status:Status) : Try<Boolean> {
+        return Success(true, status)
+    }
+
+
+    /**
      * runs any start up commands
      */
-    open fun startUp() : Try<CliResponse<*>> {
+    fun startUp() : Try<CliResponse<*>> {
         val results = context.commands?.map { command ->
             when(command){
                 null -> Tries.success(CliResponse.empty)
                 ""   -> Tries.success(CliResponse.empty)
-                else -> transform(command) { args -> executeInternal(args ) }
+                else -> transform(command) { args -> executeRequest(CliUtils.convert(args)) }
             }
         } ?: listOf(Tries.success(CliResponse.empty))
 
@@ -122,7 +125,7 @@ open class CLI(
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
     private val lastArgs = AtomicReference<Args>(Args.default())
-    protected fun repl() : Try<Status> {
+    fun repl() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
@@ -149,17 +152,9 @@ open class CLI(
 
 
     /**
-     * Hook for shutdown for derived classes
-     */
-    open fun end(status:Status) : Try<Boolean> {
-        return Success(true, status)
-    }
-
-
-    /**
      * Evaluates the text read in from user input.
      */
-    open fun eval(text:String): Try<Pair<Args, Boolean>> {
+    fun eval(text:String): Try<Pair<Args, Boolean>> {
 
         // Use process for both handling interactive user supplied text
         // and also the startup commands
@@ -181,7 +176,7 @@ open class CLI(
     /**
      * Evaluates the arguments read in from user input.
      */
-    open fun eval(args:Args): Try<Boolean> {
+    fun eval(args:Args): Try<Boolean> {
 
         // Single command ( e.g. help, quit, about, version )
         // These are typically system level
@@ -191,15 +186,26 @@ open class CLI(
                 Command.Help   .id -> { context.help.showHelp()   ; Success(true, StatusCodes.HELP)    }
                 Command.Version.id -> { context.help.showVersion(); Success(true, StatusCodes.VERSION) }
                 Command.Last   .id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
-                Command.Retry  .id -> { execute(lastArgs.get()) }
+                Command.Retry  .id -> { executeRepl(lastArgs.get()) }
                 Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
                 Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
-                else               -> execute(args)
+                else               -> executeRepl(args)
             }
         }
         else {
-            execute(args)
+            executeRepl(args)
         }
+    }
+
+
+    /**
+     * executes a line of text by handing it off to the executor
+     * This can be overridden in derived class
+     */
+    fun executeText(text:String) : Try<CliResponse<*>> {
+        // Use process for both handling interactive user supplied text
+        // and also the startup commands
+        return this.transform(text) { args -> executeArgs(args)  }
     }
 
 
@@ -207,11 +213,30 @@ open class CLI(
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    open fun execute(args:Args): Try<Boolean> {
+    fun executeArgs(args:Args): Try<CliResponse<*>> {
+        val request = CliUtils.convert(args)
+        return executeRequest(request)
+    }
+
+
+    /**
+     * Execute the command by delegating work to the actual executor.
+     * Clients can create their own executor to handle middleware / hooks etc
+     */
+    fun executeRepl(args:Args): Try<Boolean> {
         return try {
-            val result = executeInternal(args)
-            print(result)
-            result.map { true }
+            val result = executeRequest(CliUtils.convert(args))
+
+            // If the request was a help at the application level, the app
+            // should handle that, so don't let it propagate back up because
+            // we would end up showing help text at the global / CLI level.
+            val finalResult = when(result.status.code) {
+                // Even for failure, let the repl continue processing
+                StatusCodes.HELP.code -> result.withStatus(StatusCodes.SUCCESS, StatusCodes.SUCCESS)
+                else  -> result
+            }
+            print(finalResult)
+            finalResult.map { true }
         } catch (ex: Exception) {
 
             context.writer.failure(ex.message ?:"", true)
@@ -227,8 +252,11 @@ open class CLI(
      * executes a line of text by handing it off to the executor
      * This can be overridden in derived class
      */
-    open fun executeInternal(args:Args) : Try<CliResponse<*>> {
-        return executor.excecute(args)
+    open fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
+        return when(callback) {
+            null -> CliExecutor().excecute(this, request)
+            else -> Success(callback.invoke(this, request))
+        }
     }
 
 
