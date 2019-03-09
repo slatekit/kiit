@@ -8,6 +8,7 @@ sealed class Command(val id: String) {
     object About       : Command("about")
     object Help        : Command("help")
     object Retry       : Command("retry")
+    object Last        : Command("last")
     data class Normal(val text:String)  : Command("normal")
 
     companion object {
@@ -18,6 +19,7 @@ sealed class Command(val id: String) {
             Version.id -> Version
             About  .id -> About
             Help   .id -> Help
+            Last   .id -> Last
             Retry  .id -> Retry
             else       -> Normal(name)
         }

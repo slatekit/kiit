@@ -35,11 +35,12 @@ class CLITests {
 
     class MyCLI(version: String = "1.0.0",
                 commands: List<String> = listOf(),
-                reader: ((Unit) -> String?)? = null) : CLI(
+                reader: ((Unit) -> String?)? = null,
+                writer: ((CliOutput) -> Unit)? = null) : CLI(
             Info.none.copy(about = Info.none.about.copy(version = version)),
             Folders.default,
             CliSettings(),
-            commands, reader) {
+            commands, reader,writer) {
 
         var testInit = false
         var testEnd = false
@@ -106,6 +107,28 @@ class CLITests {
         Assert.assertEquals("c1", cli.testExec[0])
         Assert.assertEquals("c1", cli.testExec[1])
         Assert.assertEquals("exit", cli.last())
+    }
+
+
+    @Test
+    fun can_ensure_last() {
+        var ndx = 0
+        val commands = listOf("c2", "last", "exit")
+        val reader = { i: Unit ->
+            val cmd = commands[ndx]
+            ndx++
+            cmd
+        }
+        val written = mutableListOf<String>()
+        val writer = { i:CliOutput ->
+            written.add(i.text ?: "")
+            Unit
+        }
+        val cli = MyCLI(reader = reader, writer = writer)
+        val result = cli.run()
+        Assert.assertEquals(true, result.success)
+        Assert.assertEquals("c2", cli.testExec[0])
+        Assert.assertEquals(written[9], "c2")
     }
 
 

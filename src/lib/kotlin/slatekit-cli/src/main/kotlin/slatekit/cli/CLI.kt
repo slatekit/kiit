@@ -185,6 +185,7 @@ open class CLI(
             Command.About  .id -> { help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
             Command.Help   .id -> { help.showHelp()   ; Success(true, StatusCodes.HELP)    }
             Command.Version.id -> { help.showVersion(); Success(true, StatusCodes.VERSION) }
+            Command.Last   .id -> { write(lastLine.get(), false); Success(true) }
             Command.Retry  .id -> { attempt(lastLine.get()) }
             Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
             Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
@@ -234,4 +235,10 @@ open class CLI(
 
 
     fun last():String = lastLine.get()
+
+
+
+    private fun write(text:String, newLine:Boolean){
+        writer.run(CliOutput(SemanticText.Text, text, newLine))
+    }
 }
