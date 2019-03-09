@@ -47,6 +47,7 @@ dependencies {
     compile 'org.threeten:threetenbp:1.3.8'
     compile project(":slatekit-common")
     compile project(":slatekit-app")
+    compile project(":slatekit-cli")
     compile project(":slatekit-db")
     compile project(":slatekit-query")
     compile project(":slatekit-meta")
