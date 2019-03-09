@@ -13,9 +13,10 @@
 
 package slatekit.cli
 
+import slatekit.common.args.Args
 import slatekit.common.utils.Loops.doUntil
 import slatekit.common.info.Info
-import slatekit.common.console.SemanticType
+import slatekit.common.console.SemanticText
 import slatekit.common.info.Folders
 import slatekit.common.io.IO
 import slatekit.common.io.Readln
@@ -77,6 +78,12 @@ open class CLI(
 
 
     /**
+     * Handles output of command results
+     */
+    val output = CliIO(writer)
+
+
+    /**
      * runs the shell command line with arguments
      */
     fun run():Try<Boolean> {
@@ -88,7 +95,7 @@ open class CLI(
         init().then {
 
             // Startup commands
-            start()
+            startUp()
         }
         // 2. Read, Eval, Print, Loop
         .then {
@@ -116,19 +123,19 @@ open class CLI(
     /**
      * runs any start up commands
      */
-    open fun start() : Try<CliResponse<*>> {
+    open fun startUp() : Try<CliResponse<*>> {
         val results = commands?.map { command ->
             when(command){
                 null -> Tries.success(CliResponse.empty)
                 ""   -> Tries.success(CliResponse.empty)
-                else -> executor.excecute(command)
+                else -> execute(command)
             }
         } ?: listOf(Tries.success(CliResponse.empty))
 
         // success if all succeeded, failure = 1st
         val failed = results.firstOrNull { !it.success }
         return when(failed) {
-            null -> results.last()
+            null -> if(results.isEmpty()) Tries.success(CliResponse.empty) else results.last()
             else -> failed
         }
     }
@@ -138,23 +145,24 @@ open class CLI(
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
     private val lastLine = AtomicReference<String>("")
-
-
     protected fun repl() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
 
             // Show prompt ":>"
-            writer.run(CliOutput(SemanticType.Text, PROMPT, false))
+            writer.run(CliOutput(SemanticText.Text, PROMPT, false))
 
             // Get line
             val raw = reader.run(Unit)
             val text = raw?.let { it.trim() } ?: ""
-            val keepReading = eval(text)
+            val result = eval(text)
 
             // Track last line ( to allow for "retry" command )
             lastLine.set(text)
+
+            // Only exit when user typed "exit"
+            val keepReading = result.success && result.status != StatusCodes.EXIT
             keepReading
         }
         return Tries.success(StatusCodes.EXIT)
@@ -172,15 +180,15 @@ open class CLI(
     /**
      * Evaluates the text read in from user input.
      */
-    open fun eval(text:String):Boolean {
+    open fun eval(text:String): Try<Boolean> {
         return when(text) {
-            Command.About  .id -> { help.showAbout(); true }
-            Command.Help   .id -> { help.showHelp(); true }
-            Command.Version.id -> { help.showVersion(); true }
-            Command.Retry  .id -> { execute(lastLine.get()) }
-            Command.Exit   .id -> { false }
-            Command.Quit   .id -> { false }
-            else               -> execute(text)
+            Command.About  .id -> { help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
+            Command.Help   .id -> { help.showHelp()   ; Success(true, StatusCodes.HELP)    }
+            Command.Version.id -> { help.showVersion(); Success(true, StatusCodes.VERSION) }
+            Command.Retry  .id -> { attempt(lastLine.get()) }
+            Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
+            Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
+            else               -> attempt(text)
         }
     }
 
@@ -189,15 +197,41 @@ open class CLI(
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    open fun execute(line: String): Boolean {
+    open fun attempt(line: String): Try<Boolean> {
         return try {
-            val result = executor.excecute(line)
-            val isExit = result.code == StatusCodes.EXIT.code
-            result.success || !isExit
+            val result = execute(line)
+            print(result)
+            result.map { true }
         } catch (ex: Exception) {
-            writer.run(CliOutput(SemanticType.Failure, ex.message, true))
-            writer.run(CliOutput(SemanticType.Failure, ex.stackTrace.toString(), true))
-            true
+
+            writer.run(CliOutput(SemanticText.Failure, ex.message, true))
+            writer.run(CliOutput(SemanticText.Failure, ex.stackTrace.toString(), true))
+
+            // Keep going until user types exit | quit
+            Success(true)
         }
     }
+
+
+    /**
+     * Print the result of the CLI command
+     */
+    open fun print(result:Try<CliResponse<*>>) {
+        when(result) {
+            is Success -> output.output(Success(result.value), folders.pathToOutputs)
+            is Failure -> output.output(Failure(result.error), folders.pathToOutputs)
+        }
+    }
+
+
+    /**
+     * executes a line of text by handing it off to the executor
+     */
+    open fun execute(line:String) : Try<CliResponse<*>> {
+        return executor.excecute(line)
+    }
+
+
+
+    fun last():String = lastLine.get()
 }

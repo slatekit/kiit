@@ -15,7 +15,7 @@ package slatekit.cli
 
 import slatekit.common.io.Files
 import slatekit.common.console.SemanticWrites
-import slatekit.common.console.SemanticType
+import slatekit.common.console.SemanticText
 import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
@@ -35,7 +35,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
         io.run(CliOutput(mode, text, endLine))
     }
 
@@ -51,14 +51,14 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
     /**
      * Output the results of the response
      */
-    fun output(result:Try<Pair<CliRequest, CliResponse<*>>>, outputDir: String) {
+    fun output(result:Try<CliResponse<*>>, outputDir: String) {
         when(result) {
             is Failure -> {
-                println("error : " + result.error.toString())
+                write(SemanticText.Failure, "error : " + result.error.toString())
             }
             is Success -> {
-                val request = result.value.first
-                val response = result.value.second
+                val request = result.value.request
+                val response = result.value
                 response.value?.let { value ->
                     write(request, response, value, outputDir)
                     summary(response)

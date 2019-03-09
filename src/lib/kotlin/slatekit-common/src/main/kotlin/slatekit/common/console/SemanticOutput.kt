@@ -17,4 +17,4 @@ package slatekit.common.console
  * Created by kishorereddy on 5/19/17.
  */
 
-data class SemanticOutput(val textType: SemanticType, val msg: String, val endLine: Boolean = false)
+data class SemanticOutput(val textType: SemanticText, val msg: String, val endLine: Boolean = false)

@@ -74,21 +74,21 @@ data class Arg(
         val namePart = (prefix ?: "-") + nameFill
 
         val logs = mutableListOf(
-                SemanticOutput(Highlight, namePart, false),
-                SemanticOutput(Text, separator ?: "=", false),
-                SemanticOutput(Text, desc, true),
-                SemanticOutput(Text, " ".repeat(nameLen + 6), false))
+                SemanticOutput(SemanticText.Highlight, namePart, false),
+                SemanticOutput(SemanticText.Text, separator ?: "=", false),
+                SemanticOutput(SemanticText.Text, desc, true),
+                SemanticOutput(SemanticText.Text, " ".repeat(nameLen + 6), false))
 
         if (isRequired) {
-            logs.add(SemanticOutput(Important, "!", false))
-            logs.add(SemanticOutput(Text, "required ", false))
+            logs.add(SemanticOutput(SemanticText.Important, "!", false))
+            logs.add(SemanticOutput(SemanticText.Text, "required ", false))
         } else {
-            logs.add(SemanticOutput(Success, "?", false))
-            logs.add(SemanticOutput(Text, "optional ", false))
+            logs.add(SemanticOutput(SemanticText.Success, "?", false))
+            logs.add(SemanticOutput(SemanticText.Text, "optional ", false))
         }
 
-        logs.add(SemanticOutput(Subtitle, "[$dataType] ", false))
-        logs.add(SemanticOutput(Text, "e.g. $example", true))
+        logs.add(SemanticOutput(SemanticText.Subtitle, "[$dataType] ", false))
+        logs.add(SemanticOutput(SemanticText.Text, "e.g. $example", true))
         return logs.toList()
     }
 }

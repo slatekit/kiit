@@ -13,8 +13,6 @@
 
 package slatekit.common.console
 
-import slatekit.common.io.IO
-import slatekit.common.io.StringWriter
 import slatekit.common.escapeHtml
 
 /**
@@ -35,14 +33,6 @@ class WebWriter : SemanticWrites {
     private val buffer = StringBuilder()
     val settings = SemanticConsoleSettings()
 
-    /**
-     * IO abstraction for system.println.
-     * Assists with testing and making code a bit more "purely functional"
-     * This is a simple, custom alternative to the IO Monad.
-     * Refer to IO.scala for details.
-     */
-    override val semanticIO: IO<Any?, Unit> = StringWriter(buffer)
-
     override val TAB: String get() = "&nbsp;&nbsp;&nbsp;&nbsp;"
 
     override val NEWLINE: String get() = "<br/>"
@@ -54,16 +44,16 @@ class WebWriter : SemanticWrites {
      * @param msg
      * @param endLine
      */
-    override fun writeItem(mode: SemanticType, msg: String, endLine: Boolean) {
+    override fun writeItem(mode: SemanticText, msg: String, endLine: Boolean) {
         when (mode) {
-            Title -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
-            Subtitle -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
-            Url -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
-            Important -> writeTag("h4", mode.format(msg), endLine, "color:Black ")
-            Highlight -> writeTag("p", mode.format(msg), endLine, "color:Orange")
-            Success -> writeTag("p", mode.format(msg), endLine, "color:Green ")
-            Failure -> writeTag("p", mode.format(msg), endLine, "color:Red   ")
-            Text -> writeTag("p", mode.format(msg), endLine, "color:Black ")
+            SemanticText.Title -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
+            SemanticText.Subtitle -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
+            SemanticText.Url -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
+            SemanticText.Important -> writeTag("h4", mode.format(msg), endLine, "color:Black ")
+            SemanticText.Highlight -> writeTag("p", mode.format(msg), endLine, "color:Orange")
+            SemanticText.Success -> writeTag("p", mode.format(msg), endLine, "color:Green ")
+            SemanticText.Failure -> writeTag("p", mode.format(msg), endLine, "color:Red   ")
+            SemanticText.Text -> writeTag("p", mode.format(msg), endLine, "color:Black ")
         }
     }
 
@@ -74,7 +64,7 @@ class WebWriter : SemanticWrites {
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
         writeItem(mode, text, endLine)
     }
 
@@ -85,7 +75,7 @@ class WebWriter : SemanticWrites {
      * @param endLine : whether or not to include a newline at the end
      */
     override fun label(text: String, endLine: Boolean) {
-        writeItem(Text, text, endLine)
+        writeItem(SemanticText.Text, text, endLine)
     }
 
     /**

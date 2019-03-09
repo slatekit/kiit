@@ -13,18 +13,18 @@
 
 package slatekit.common.console
 
-sealed class SemanticType(val name:String, val color: String, private val upperCase: Boolean) {
+sealed class SemanticText(val name:String, val color: String, private val upperCase: Boolean) {
 
-    object Title     : SemanticType("title"    , Console.BLUE, true)
-    object Subtitle  : SemanticType("subtitle" , Console.CYAN, false)
-    object Url       : SemanticType("url"      , Console.BLUE, false)
-    object Important : SemanticType("important", Console.RED, false)
-    object Highlight : SemanticType("highlight", Console.YELLOW, false)
-    object Success   : SemanticType("success"  , Console.GREEN, false)
-    object Failure   : SemanticType("failure"  , Console.RED, false)
-    object Text      : SemanticType("text"     , Console.WHITE, false)
-    object Label     : SemanticType("label"    , Console.WHITE, false)
-    object NoFormat  : SemanticType("none"     , "",false)
+    object Title     : SemanticText("title"    , Console.BLUE, true)
+    object Subtitle  : SemanticText("subtitle" , Console.CYAN, false)
+    object Url       : SemanticText("url"      , Console.BLUE, false)
+    object Important : SemanticText("important", Console.RED, false)
+    object Highlight : SemanticText("highlight", Console.YELLOW, false)
+    object Success   : SemanticText("success"  , Console.GREEN, false)
+    object Failure   : SemanticText("failure"  , Console.RED, false)
+    object Text      : SemanticText("text"     , Console.WHITE, false)
+    object Label     : SemanticText("label"    , Console.WHITE, false)
+    object NoFormat  : SemanticText("none"     , "",false)
 
     fun format(text: String): String {
         return if (upperCase) text.toUpperCase() else text
@@ -37,7 +37,7 @@ sealed class SemanticType(val name:String, val color: String, private val upperC
          *
          * @param mode
          */
-        fun parse(mode: String): SemanticType {
+        fun parse(mode: String): SemanticText {
             return when (mode.toLowerCase()) {
                 Title    .name -> Title
                 Subtitle .name -> Subtitle

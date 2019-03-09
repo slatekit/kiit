@@ -13,13 +13,11 @@
 
 package slatekit.cli
 
+import slatekit.common.args.Args
 import slatekit.common.io.Files
 import slatekit.common.args.ArgsFuncs
 import slatekit.common.info.Folders
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.StatusCodes
-import slatekit.results.Success
+import slatekit.results.*
 
 object CliUtils {
 
@@ -29,6 +27,13 @@ object CliUtils {
 
     fun log(folders: Folders, content: String) {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
+    }
+
+
+    fun convert(line: String, prefix:String, separator:String): Try<CliRequest> {
+        // 1st step, parse the command line into arguments
+        val argsResult = Args.parse(line, prefix, separator, true)
+        return Success(CliRequest.build((argsResult as Success<Args>).value, line))
     }
 
     fun checkForAssistance(req: CliRequest): Notice<Boolean> {

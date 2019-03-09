@@ -15,7 +15,7 @@ package slatekit.cli
 
 import slatekit.common.info.Info
 import slatekit.common.console.SemanticWrites
-import slatekit.common.console.SemanticType
+import slatekit.common.console.SemanticText
 import slatekit.common.io.IO
 
 open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>) : SemanticWrites {
@@ -27,7 +27,7 @@ open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>)
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
         io.run(CliOutput(mode, text, endLine))
     }
 

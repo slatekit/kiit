@@ -31,7 +31,7 @@ class SemanticConsole(
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.scala for details.
      */
-    val semanticIO: IO<Any?, Unit> = writer ?: Print
+    val semanticIO: IO<Any?, Unit> = writer ?: Print()
 
 
     /**
@@ -41,7 +41,7 @@ class SemanticConsole(
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
         write(mode.color, mode.format(text), endLine)
     }
 

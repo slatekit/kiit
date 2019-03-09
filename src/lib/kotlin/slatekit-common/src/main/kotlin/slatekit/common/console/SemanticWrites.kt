@@ -13,7 +13,6 @@
 
 package slatekit.common.console
 
-import slatekit.common.io.IO
 import slatekit.common.newline
 
 interface SemanticWrites {
@@ -25,15 +24,15 @@ interface SemanticWrites {
     /**
      * Map the text type to functions that can implement it.
      */
-    val lookup: Map<SemanticType, (String, Boolean) -> Unit> get() = mapOf(
-            Title to this::title,
-            Subtitle to this::subTitle,
-            Url to this::url,
-            Important to this::important,
-            Highlight to this::highlight,
-            Success to this::success,
-            Failure to this::failure,
-            Text to this::text
+    val lookup: Map<SemanticText, (String, Boolean) -> Unit> get() = mapOf(
+            SemanticText.Title to this::title,
+            SemanticText.Subtitle to this::subTitle,
+            SemanticText.Url to this::url,
+            SemanticText.Important to this::important,
+            SemanticText.Highlight to this::highlight,
+            SemanticText.Success to this::success,
+            SemanticText.Failure to this::failure,
+            SemanticText.Text to this::text
     )
 
     /**
@@ -52,7 +51,7 @@ interface SemanticWrites {
      * @param msg
      * @param endLine
      */
-    fun writeItem(mode: SemanticType, msg: String, endLine: Boolean) {
+    fun writeItem(mode: SemanticText, msg: String, endLine: Boolean) {
         lookup[mode]?.invoke(msg, endLine)
     }
 
@@ -63,12 +62,12 @@ interface SemanticWrites {
      * @param text
      * @param endLine
      */
-    fun write(mode: SemanticType, text: String, endLine: Boolean = true)
+    fun write(mode: SemanticText, text: String, endLine: Boolean = true)
 
     /**
      * prints a empty line
      */
-    fun line() = write(NoFormat, NEWLINE, false)
+    fun line() = write(SemanticText.NoFormat, NEWLINE, false)
 
     /**
      * prints a empty line
@@ -80,7 +79,7 @@ interface SemanticWrites {
      *
      * @param count
      */
-    fun tab(count: Int = 1) = (0..count).forEach { write(Text, TAB, false) }
+    fun tab(count: Int = 1) = (0..count).forEach { write(SemanticText.Text, TAB, false) }
 
     /**
      * prints text in title format ( UPPERCASE and BLUE )
@@ -88,7 +87,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun title(text: String, endLine: Boolean = true): Unit = write(Title, text, endLine)
+    fun title(text: String, endLine: Boolean = true): Unit = write(SemanticText.Title, text, endLine)
 
     /**
      * prints text in subtitle format ( CYAN )
@@ -96,7 +95,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun subTitle(text: String, endLine: Boolean = true): Unit = write(Subtitle, text, endLine)
+    fun subTitle(text: String, endLine: Boolean = true): Unit = write(SemanticText.Subtitle, text, endLine)
 
     /**
      * prints text in url format ( BLUE )
@@ -104,7 +103,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun url(text: String, endLine: Boolean = true): Unit = write(Url, text, endLine)
+    fun url(text: String, endLine: Boolean = true): Unit = write(SemanticText.Url, text, endLine)
 
     /**
      * prints text in important format ( RED )
@@ -112,7 +111,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun important(text: String, endLine: Boolean = true): Unit = write(Important, text, endLine)
+    fun important(text: String, endLine: Boolean = true): Unit = write(SemanticText.Important, text, endLine)
 
     /**
      * prints text in highlight format ( YELLOW )
@@ -120,7 +119,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun highlight(text: String, endLine: Boolean = true): Unit = write(Highlight, text, endLine)
+    fun highlight(text: String, endLine: Boolean = true): Unit = write(SemanticText.Highlight, text, endLine)
 
     /**
      * prints text in title format ( UPPERCASE and BLUE )
@@ -128,7 +127,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun success(text: String, endLine: Boolean = true): Unit = write(Success, text, endLine)
+    fun success(text: String, endLine: Boolean = true): Unit = write(SemanticText.Success, text, endLine)
 
     /**
      * prints text in error format ( RED )
@@ -136,7 +135,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun failure(text: String, endLine: Boolean = true): Unit = write(Failure, text, endLine)
+    fun failure(text: String, endLine: Boolean = true): Unit = write(SemanticText.Failure, text, endLine)
 
     /**
      * prints text in normal format ( WHITE )
@@ -144,7 +143,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun text(text: String, endLine: Boolean = true): Unit = write(Text, text, endLine)
+    fun text(text: String, endLine: Boolean = true): Unit = write(SemanticText.Text, text, endLine)
 
     /**
      * prints text in normal format ( WHITE )
@@ -152,7 +151,7 @@ interface SemanticWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun label(text: String, endLine: Boolean = true):Unit = write(Label, text, endLine)
+    fun label(text: String, endLine: Boolean = true):Unit = write(SemanticText.Label, text, endLine)
 
     /**
      * Prints a list of items with indentation
