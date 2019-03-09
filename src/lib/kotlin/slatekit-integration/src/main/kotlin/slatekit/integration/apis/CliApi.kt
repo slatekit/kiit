@@ -13,23 +13,17 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.ApiConstants
 import slatekit.apis.ApiContainer
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
-import slatekit.apis.core.Requests
 import slatekit.cli.*
-import slatekit.common.*
+import slatekit.common.args.Args
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
 import slatekit.common.info.Credentials
 import slatekit.common.info.Info
-import slatekit.common.requests.SimpleRequest
-import slatekit.results.Notice
+import slatekit.results.StatusCodes
 import slatekit.results.Success
 import slatekit.results.Try
-import slatekit.results.builders.Tries
-import java.io.File
 
 /**
  * Layer on top of the core CliService to provide support for handling command line requests
@@ -58,65 +52,57 @@ class CliApi(
         apiItems: List<Api> = listOf()
         //val cliMeta: CliMeta? = null
 )
-   // : CLI(ctx.dirs!!, settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys))
+    // TODO: get rid of the "!!" its left over from early days
+    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs!!)
 {
 
-    fun process(line:String):Try<CliResponse<*>> = slatekit.results.Success(CliResponse.empty)
-    /*
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
     val apis = ApiContainer(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
 
-    /**
-     * Exposed life-cycle hook for when the shell is ending/shutting down.
-     */
-    override fun end(status:Status):Try<Boolean> {
-        _writer.highlight("Shutting down ${info.about.name} command line")
-        return Tries.success(true)
+    enum class ApiHelpType {
+        Listing,
+        Area,
+        Api,
+        Action,
+        NA
     }
 
     /**
-     * Converts the raw CliRequest the ApiCmd for passing along the API container
-     * which will ultimately delegate the call to the respective api action.
-     *
-     * @param cmd : The raw user entered command.
-     * @return
+     * executes a line of text by handing it off to the executor
+     * This can be overridden in derived class
      */
-    override fun onCommandExecuteInternal(cmd: CliRequest): CliRequest {
-        _writer.highlight("Executing ${info.about.name} api command " + cmd.fullName)
+    override fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
+        val args = request.args
+        context.writer.highlight("Executing ${info.about.name} api command " + request.fullName)
 
-        // Supplying params from file ?
-        return if (containsRequestLevelSystemCommand(cmd)) {
-            val metaCmd = cmd.args.sys.keys.first()
-            val cmdResult = when (metaCmd) {
-
-                // Case 1: Generate a sample command to output/file
-                CliConstants.SysSample -> cmd.copy(result = buildRequestSample(cmd).toTry().toResponse())
-
-                // Case 2: Get command from params file and execute
-                CliConstants.SysFile -> cmd.copy(result = apis.call(buildRequestFromFile(cmd)))
-
-                // Case 3: Unknown
-                else -> cmd
-            }
-            cmdResult
-        } else {
+        // Check for help
+        val helpCheck = checkForHelp(request)
+        return if(helpCheck.first) {
+            showHelpFor(request, helpCheck.second)
+            Success(CliResponse(request, true, StatusCodes.HELP.code, mapOf(), args.line), StatusCodes.HELP)
+        }
+        else {
             // Supply the api-key into each command.
-            val meta = cliMeta?.let { cliMeta.getMetaData(ctx, cmd, creds) } ?: cmd.args.meta.plus(Pair(metaNameForApiKey, creds.key))
-            val metaInputs = InputArgs(meta)
-            val apiCmd = Request.cli(cmd.line, ApiConstants.SourceCLI, metaInputs, cmd.args, cmd)
-            cmd.copy(result = apis.call(apiCmd))
+            val metaWithKey = request.meta.toMap().plus(metaNameForApiKey to creds.key)
+            val metaUpdated = InputArgs(metaWithKey)
+            val requestWithMeta = request.copy(meta = metaUpdated)
+            val response = apis.call(requestWithMeta)
+            val cliResponse = CliResponse(
+                    requestWithMeta,
+                    response.success,
+                    response.code,
+                    response.meta,
+                    response.value,
+                    response.msg,
+                    response.err,
+                    response.tag
+            )
+            Success(cliResponse)
         }
     }
 
-    override fun showExtendedHelp(writer: ConsoleWriter) {
-        apis.help.help()
-    }
-
-    override fun showHelp() {
-        _view.showHelp()
-    }
 
     /**
      * Handles help request on any part of the api request. Api requests are typically in
@@ -125,22 +111,50 @@ class CliApi(
      * 1. area ?
      * 2. area.api ?
      * 3. area.api.action ?
-     * @param cmd
+     * @param req
      * @param mode
      */
-    override fun showHelpFor(cmd: CliRequest, mode: Int) {
+    fun showHelpFor(req: CliRequest, mode: ApiHelpType) {
         when (mode) {
             // 1: {area} ? = help on area
-            CliConstants.VerbPartArea -> {
-                apis.help.area(cmd.args.getVerb(0))
+            ApiHelpType.Listing -> {
+                apis.help.help()
             }
-            // 2. {area}.{api} = help on api
-            CliConstants.VerbPartApi -> {
-                apis.help.api(cmd.args.getVerb(0), cmd.args.getVerb(1))
+            // 2: {area} ? = help on area
+            ApiHelpType.Area -> {
+                apis.help.area(req.args.getVerb(0))
             }
-            // 3. {area}.{api}.{action} = help on api action
+            // 3. {area}.{api} = help on api
+            ApiHelpType.Api -> {
+                apis.help.api(req.args.getVerb(0), req.args.getVerb(1))
+            }
+            // 4. {area}.{api}.{action} = help on api action
+            ApiHelpType.Action-> {
+                apis.help.action(req.args.getVerb(0), req.args.getVerb(1), req.args.getVerb(2))
+            }
             else -> {
-                apis.help.action(cmd.args.getVerb(0), cmd.args.getVerb(1), cmd.args.getVerb(2))
+                context.writer.failure("Unexpected command")
+            }
+        }
+    }
+
+
+    fun checkForHelp(req:CliRequest):Pair<Boolean, ApiHelpType> {
+        val args = req.args
+        val hasQuestion = args.actionParts.isNotEmpty() && args.actionParts.last() == "?"
+        return if( hasQuestion ) {
+            when(args.actionParts.size ) {
+                1    -> Pair(true, ApiHelpType.Listing)
+                2    -> Pair(true, ApiHelpType.Area)
+                3    -> Pair(true, ApiHelpType.Api)
+                4    -> Pair(true, ApiHelpType.Action)
+                else -> Pair(false, ApiHelpType.NA)
+            }
+        } else {
+            if(args.actionParts.isNotEmpty() && args.actionParts[0] == "?" ){
+                Pair(true, ApiHelpType.Listing)
+            } else {
+                Pair(false, ApiHelpType.NA)
             }
         }
     }
@@ -153,34 +167,34 @@ class CliApi(
 //        )
 //    }
 
-    private fun buildRequestSample(cmd: CliRequest): Notice<String> {
-        val opts = InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
-        val apiCmd = SimpleRequest.cli(cmd.args.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
-
-        // Generate sample json
-        val fileName = cmd.args.getSysString(SysParam.Sample.id)
-        val filePath = File(ctx.dirs?.pathToOutputs, fileName).absolutePath
-        val file = File(filePath)
-        return apis.sample(apiCmd, file)
-    }
-
-    private fun buildRequestFromFile(cmd: CliRequest): Request {
-        // The file path
-        val rawPath = cmd.args.getSysString(SysParam.File.id)
-        val route = cmd.fullName
-        val req = Requests.fromFileWithMeta(
-                route,
-                rawPath ?: "",
-                mapOf(metaNameForApiKey to creds.key),
-                ctx.enc)
-        return req
-    }
-
-    private fun containsRequestLevelSystemCommand(cmd: CliRequest): Boolean {
-        return cmd.args.sys.isNotEmpty() &&
-                (cmd.args.sys.containsKey(SysParam.File.id) ||
-                  cmd.args.sys.containsKey(SysParam.Sample.id)
-                )
-    }
-    */
+//    private fun buildRequestSample(cmd: CliRequest): Notice<String> {
+//        val opts = InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
+//        val apiCmd = SimpleRequest.cli(cmd.args.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
+//
+//        // Generate sample json
+//        val fileName = cmd.args.getSysString(SysParam.Sample.id)
+//        val filePath = File(ctx.dirs?.pathToOutputs, fileName).absolutePath
+//        val file = File(filePath)
+//        return apis.sample(apiCmd, file)
+//    }
+//
+//    private fun buildRequestFromFile(cmd: CliRequest): Request {
+//        // The file path
+//        val rawPath = cmd.args.getSysString(SysParam.File.id)
+//        val route = cmd.fullName
+//        val req = Requests.fromFileWithMeta(
+//                route,
+//                rawPath ?: "",
+//                mapOf(metaNameForApiKey to creds.key),
+//                ctx.enc)
+//        return req
+//    }
+//
+//
+//    private fun containsRequestLevelSystemCommand(cmd: CliRequest): Boolean {
+//        return cmd.args.sys.isNotEmpty() &&
+//                (cmd.args.sys.containsKey(SysParam.File.id) ||
+//                  cmd.args.sys.containsKey(SysParam.Sample.id)
+//                )
+//    }
 }

@@ -36,28 +36,9 @@ object CliUtils {
         return Success(CliRequest.build((argsResult as Success<Args>).value, line))
     }
 
-    fun checkForAssistance(req: CliRequest): Notice<Boolean> {
-        val words = req.args.raw
-        val verbs = req.args.actionParts
 
-        return with(ArgsFuncs) {
-            // Case 1: Exit ?
-            if (isExit(words, 0)) {
-                Success(true, Command.Exit.id, StatusCodes.EXIT.code)
-            }
-            // Case 2a: version ?
-            else if (isVersion(words, 0)) {
-                Success(true,Command.Version.id, StatusCodes.HELP.code)
-            }
-            // Case 2b: about ?
-            else if (isAbout(words, 0)) {
-                Success(true,Command.About.id, StatusCodes.HELP.code)
-            }
-            // Case 3a: Help ?
-            else if (isHelp(words, 0)) {
-                Success(true,Command.Help.id, StatusCodes.HELP.code)
-            } else
-                Failure("")
-        }
+    fun convert(args:Args): CliRequest {
+        // 1st step, parse the command line into arguments
+        return CliRequest.build(args, args.line)
     }
 }
