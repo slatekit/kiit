@@ -23,6 +23,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
+import slatekit.common.utils.Pager
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
@@ -86,6 +87,24 @@ class CLITests {
         Assert.assertEquals(true, result.success)
         Assert.assertEquals("c1", cli.testExec[0])
         Assert.assertEquals("c2", cli.testExec[1])
+        Assert.assertEquals("exit", cli.last())
+    }
+
+
+    @Test
+    fun can_ensure_retry() {
+        var ndx = 0
+        val commands = listOf("c1", "retry", "exit")
+        val reader = { i: Unit ->
+            val cmd = commands[ndx]
+            ndx++
+            cmd
+        }
+        val cli = MyCLI(reader = reader)
+        val result = cli.run()
+        Assert.assertEquals(true, result.success)
+        Assert.assertEquals("c1", cli.testExec[0])
+        Assert.assertEquals("c1", cli.testExec[1])
         Assert.assertEquals("exit", cli.last())
     }
 

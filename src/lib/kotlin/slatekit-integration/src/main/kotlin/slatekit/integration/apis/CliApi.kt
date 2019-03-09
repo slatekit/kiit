@@ -20,7 +20,6 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.cli.*
 import slatekit.common.*
-import slatekit.common.console.ConsoleWriter
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.info.Credentials
