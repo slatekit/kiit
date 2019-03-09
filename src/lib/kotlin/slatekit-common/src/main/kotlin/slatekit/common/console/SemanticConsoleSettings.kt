@@ -13,8 +13,4 @@
 
 package slatekit.common.console
 
-/**
- * Created by kishorereddy on 5/19/17.
- */
-
-data class ConsoleItem(val textType: TextType, val msg: String, val endLine: Boolean = false)
+data class SemanticConsoleSettings(val darkMode: Boolean = true)

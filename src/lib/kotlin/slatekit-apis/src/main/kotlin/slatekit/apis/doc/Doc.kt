@@ -16,9 +16,9 @@ package slatekit.apis.doc
 import slatekit.apis.ApiArg
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
-import slatekit.common.console.ConsoleSettings
-import slatekit.common.console.ConsoleWriter
-import slatekit.common.console.ConsoleWrites
+import slatekit.common.console.SemanticConsoleSettings
+import slatekit.common.console.SemanticConsole
+import slatekit.common.console.SemanticWrites
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
@@ -27,7 +27,7 @@ import kotlin.reflect.KParameter
 
 abstract class Doc : ApiVisit {
 
-    protected open val writer: ConsoleWrites = ConsoleWriter(ConsoleSettings())
+    protected open val writer: SemanticWrites = SemanticConsole(SemanticConsoleSettings())
     override val docSettings = DocSettings()
     open val pathSeparator = "."
     open val helpSuffix = "?"

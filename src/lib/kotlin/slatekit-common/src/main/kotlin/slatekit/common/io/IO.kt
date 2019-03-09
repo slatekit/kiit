@@ -13,30 +13,39 @@
 
 package slatekit.common.io
 
+
 interface IO<in I, out O> {
 
     fun run(i: I): O
 }
 
 
-object Print : IO<Any?, Unit> {
+class Print(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
 
-    override fun run(i: Any?) {
-        print(i)
+    override fun run(i: Any?) = when (io) {
+        null -> print(i)
+        else -> io.invoke(i)
     }
 }
 
-object Println : IO<Any?, Unit> {
 
-    override fun run(i: Any?) {
-        println(i)
+class Println(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
+
+    override fun run(i: Any?) = when (io) {
+        null -> println(i)
+        else -> io.invoke(i)
     }
 }
 
-object Readln : IO<Any?, String?> {
 
-    override fun run(i: Any?):String? = readLine()
+class Readln(val io: ((Unit) -> String?)? = null) : IO<Unit, String?> {
+
+    override fun run(i: Unit): String? = when (io) {
+        null -> readLine()
+        else -> io.invoke(Unit)
+    }
 }
+
 
 class StringWriter(private val buffer: StringBuilder) : IO<Any?, Unit> {
 

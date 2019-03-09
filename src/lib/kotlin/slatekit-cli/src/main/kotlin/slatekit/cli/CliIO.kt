@@ -13,12 +13,9 @@
 
 package slatekit.cli
 
-import slatekit.common.console.ConsoleSettings
 import slatekit.common.io.Files
-import slatekit.common.requests.Response
-import slatekit.common.console.ConsoleWriter
-import slatekit.common.console.ConsoleWrites
-import slatekit.common.console.TextType
+import slatekit.common.console.SemanticWrites
+import slatekit.common.console.SemanticType
 import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
@@ -29,13 +26,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-open class CliIO(private val io: IO<CliOutput, Unit>) : ConsoleWrites {
-
-    override val settings = ConsoleSettings()
-
-    // This is needed for the ConsoleWrites interface, but won't be used
-    // as we override the write method below to intercept all semantic console writes
-    override val _io: IO<Any?, Unit> = slatekit.common.io.Println
+open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
 
     /**
      * Writes the text using the TextType
@@ -44,7 +35,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : ConsoleWrites {
      * @param text
      * @param endLine
      */
-    override fun write(mode: TextType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
         io.run(CliOutput(mode, text, endLine))
     }
 

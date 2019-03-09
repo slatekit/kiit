@@ -13,19 +13,12 @@
 
 package slatekit.cli
 
-import slatekit.common.console.ConsoleSettings
 import slatekit.common.info.Info
-import slatekit.common.console.ConsoleWrites
-import slatekit.common.console.TextType
+import slatekit.common.console.SemanticWrites
+import slatekit.common.console.SemanticType
 import slatekit.common.io.IO
 
-open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>) : ConsoleWrites {
-
-    override val settings = ConsoleSettings()
-
-    // This is needed for the ConsoleWrites interface, but won't be used
-    // as we override the write method below to intercept all semantic console writes
-    override val _io: IO<Any?, Unit> = slatekit.common.io.Println
+open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>) : SemanticWrites {
 
     /**
      * Writes the text using the TextType
@@ -34,7 +27,7 @@ open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>)
      * @param text
      * @param endLine
      */
-    override fun write(mode: TextType, text: String, endLine: Boolean) {
+    override fun write(mode: SemanticType, text: String, endLine: Boolean) {
         io.run(CliOutput(mode, text, endLine))
     }
 
@@ -74,10 +67,10 @@ open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>)
         url("type 'info' for detailed information")
     }
 
-    fun showVersion(meta: Info) {
+    fun showVersion() {
         line()
-        subTitle(meta.about.name)
-        highlight(meta.about.version)
+        subTitle(info.about.name)
+        highlight(info.about.version)
     }
 
     fun showAbout() {

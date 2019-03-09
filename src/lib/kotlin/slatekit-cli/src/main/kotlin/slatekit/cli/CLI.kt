@@ -15,12 +15,13 @@ package slatekit.cli
 
 import slatekit.common.utils.Loops.doUntil
 import slatekit.common.info.Info
-import slatekit.common.args.ArgsFuncs
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.SemanticType
 import slatekit.common.info.Folders
 import slatekit.common.io.IO
+import slatekit.common.io.Readln
 import slatekit.results.*
 import slatekit.results.builders.Tries
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Core CLI( Command line interface ) shell provider with life-cycle events,
@@ -40,10 +41,13 @@ open class CLI(
         val folders: Folders,
         val settings: CliSettings,
         val commands: List<String?>? = listOf(),
-        ioReader:IO<Any?, String?>? = null,
-        ioWriter:IO<CliOutput, Unit>? = null
+        ioReader:((Unit) -> String?)? = null,
+        ioWriter:((CliOutput) -> Unit)? = null
 ) {
 
+    /**
+     * Display prompt
+     */
     val PROMPT = ":>"
 
     /**
@@ -53,44 +57,24 @@ open class CLI(
 
 
     /**
-     * Default writer to console ( unless overridden by the writer from constructor )
-     * This is part of [slatekit.common.console.Console] and handles semantic writing:
-     * 1. Title
-     * 2. Subtitle
-     * 3. Url
-     * 4. Success
-     * 5. Failure
-     * 6. Line
-     */
-    private val consoleWriter = ConsoleWriter()
-
-    /**
-     * Default writer to console ( unless overridden by the writer from constructor )
-     */
-    class Writeln(private val consoleWriter: ConsoleWriter) : IO<CliOutput, Unit> {
-
-        override fun run(i: CliOutput) {
-            consoleWriter.write(i.type, i.text ?: "", i.newline)
-        }
-    }
-
-
-    /**
-     * Actual writer to either write to console using [WriteLn] IO above or the provided writer
+     * Actual writer to either write to console using [CliWriter] or the provided writer
      * This is to abstract out IO to any function and facilitate unit-testing
      */
-    val writer: IO<CliOutput, Unit> = ioWriter ?: Writeln(consoleWriter)
+    val writer: IO<CliOutput, Unit> = CliWriter(ioWriter)
 
 
     /**
-     * Actual reader to either read from console using the [ReadLn] IO above or the provided reader
+     * Actual reader to either read from console using the [ReadLn] IO or the provided reader
      * This is to abstract out IO to any function and facilitate unit-testing
      */
-    val reader: IO<Any?, String?> = ioReader ?: slatekit.common.io.Readln
+    val reader: IO<Unit, String?> = Readln(ioReader)
 
 
+    /**
+     * Handles display of help, about, version, etc
+     */
     val help = CliHelp(info, writer)
-    val printer = CliIO(writer)
+
 
     /**
      * runs the shell command line with arguments
@@ -150,32 +134,30 @@ open class CLI(
     /**
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
+    private val lastLine = AtomicReference<String>("")
+
     protected fun execute() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
 
             // Show prompt ":>"
-            writer.run(CliOutput(slatekit.common.console.Text, PROMPT, false))
+            writer.run(CliOutput(SemanticType.Text, PROMPT, false))
 
             // Get line
-            val rawLine = reader.run(Unit)
-            val line = rawLine ?: ""
+            val raw = reader.run(Unit)
+            val text = raw?.let { it.trim() } ?: ""
 
-            // Case 1: Nothing Keep going
-            val keepReading = if (line.isNullOrEmpty()) {
-                writer.run(CliOutput(slatekit.common.console.Failure, "No command/action provided", true))
-                true
+            val keepReading = when(text) {
+                Command.About  .id -> { help.showAbout(); true }
+                Command.Help   .id -> { help.showHelp(); true }
+                Command.Version.id -> { help.showVersion(); true }
+                Command.Retry  .id -> { executeLine(lastLine.get()) }
+                Command.Exit   .id -> { false }
+                Command.Quit   .id -> { false }
+                else               -> executeLine(text)
             }
-            // Case 2: "exit, quit" ?
-            else if (ArgsFuncs.isExit(listOf(line.trim()), 0)) {
-                writer.run(CliOutput(slatekit.common.console.Failure, "Exiting", true))
-                false
-            }
-            // Case 3: Keep going
-            else {
-                executeLine(line)
-            }
+            lastLine.set(text)
             keepReading
         }
         return Tries.success(StatusCodes.EXIT)
@@ -200,8 +182,8 @@ open class CLI(
             val isExit = result.code == StatusCodes.EXIT.code
             result.success || !isExit
         } catch (ex: Exception) {
-            writer.run(CliOutput(slatekit.common.console.Failure, ex.message, true))
-            writer.run(CliOutput(slatekit.common.console.Failure, ex.stackTrace.toString(), true))
+            writer.run(CliOutput(SemanticType.Failure, ex.message, true))
+            writer.run(CliOutput(SemanticType.Failure, ex.stackTrace.toString(), true))
             true
         }
     }

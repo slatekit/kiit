@@ -16,26 +16,16 @@ package slatekit.common.console
 import slatekit.common.io.IO
 import slatekit.common.newline
 
-interface ConsoleWrites {
-
-    val settings: ConsoleSettings
+interface SemanticWrites {
 
     val TAB: String get() = "    "
 
     val NEWLINE: String get() = newline
 
     /**
-     * IO abstraction for println.
-     * Assists with testing and making code a bit more "purely functional"
-     * This is a simple, custom alternative to the IO Monad.
-     * Refer to IO.scala for details.
-     */
-    val _io: IO<Any?, Unit>
-
-    /**
      * Map the text type to functions that can implement it.
      */
-    val lookup: Map<TextType, (String, Boolean) -> Unit> get() = mapOf(
+    val lookup: Map<SemanticType, (String, Boolean) -> Unit> get() = mapOf(
             Title to this::title,
             Subtitle to this::subTitle,
             Url to this::url,
@@ -51,64 +41,29 @@ interface ConsoleWrites {
      *
      * @param items
      */
-    fun writeItems(items: List<ConsoleItem>) {
+    fun writeItems(items: List<SemanticOutput>) {
         items.forEach { item -> writeItem(item.textType, item.msg, item.endLine) }
     }
 
     /**
-     * Write many items based on the semantic modes
-     *
-     * @param items
-     */
-    fun writeItemsByText(items: List<ConsoleItem>) {
-        items.forEach { item -> writeItem(item.textType, item.msg, item.endLine) }
-    }
-
-    /**
-     * Write a single item based on the semantic mode
+     * Write a single item based on the semantic textType
      *
      * @param mode
      * @param msg
      * @param endLine
      */
-    fun writeItem(mode: TextType, msg: String, endLine: Boolean) {
+    fun writeItem(mode: SemanticType, msg: String, endLine: Boolean) {
         lookup[mode]?.invoke(msg, endLine)
     }
 
     /**
-     * Converts the string representation of a semantic text to the strongly typed object
+     * Writes the text using the TextType
      *
      * @param mode
+     * @param text
+     * @param endLine
      */
-    fun convert(mode: String): TextType {
-        return when (mode.toLowerCase()) {
-            Title    .name -> Title
-            Subtitle .name -> Subtitle
-            Url      .name -> Url
-            Important.name -> Important
-            Highlight.name -> Highlight
-            Success  .name -> Success
-            Failure  .name -> Failure
-            Text     .name -> Text
-            NoFormat .name -> NoFormat
-            else -> Text
-        }
-    }
-
-    /**
-     * prints text in the color supplied.
-     *
-     * @param text : the text to print
-     * @param endLine : whether or not to include a newline at the end
-     */
-    fun write(color: String?, text: String, endLine: Boolean) {
-        val finalColor = if(color == null || color == "") "" else "$color "
-        val finalText = if (endLine)
-            finalColor + text + newline
-        else
-            finalColor + text
-        _io.run(finalText)
-    }
+    fun write(mode: SemanticType, text: String, endLine: Boolean = true)
 
     /**
      * prints a empty line
@@ -126,17 +81,6 @@ interface ConsoleWrites {
      * @param count
      */
     fun tab(count: Int = 1) = (0..count).forEach { write(Text, TAB, false) }
-
-    /**
-     * Writes the text using the TextType
-     *
-     * @param mode
-     * @param text
-     * @param endLine
-     */
-    fun write(mode: TextType, text: String, endLine: Boolean = true) {
-        write(mode.color, mode.format(text), endLine)
-    }
 
     /**
      * prints text in title format ( UPPERCASE and BLUE )
@@ -208,10 +152,7 @@ interface ConsoleWrites {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun label(text: String, endLine: Boolean = true) {
-        val color = if (settings.darkMode) Console.BLACK else Console.WHITE
-        write(color, text, endLine)
-    }
+    fun label(text: String, endLine: Boolean = true):Unit = write(Label, text, endLine)
 
     /**
      * Prints a list of items with indentation
@@ -238,7 +179,7 @@ interface ConsoleWrites {
      * @param endLine : whether or not to include a newline at the end
      */
     fun keyValue(key: String, value: String, endLine: Boolean = true) {
-        label(key + " = ", false)
+        label("$key = ", false)
         text(value, endLine)
     }
 }

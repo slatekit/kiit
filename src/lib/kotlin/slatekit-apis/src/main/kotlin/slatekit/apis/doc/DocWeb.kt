@@ -2,7 +2,7 @@ package slatekit.apis.doc
 
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
-import slatekit.common.console.ConsoleWrites
+import slatekit.common.console.SemanticWrites
 import slatekit.common.console.WebWriter
 
 /**
@@ -13,7 +13,7 @@ class DocWeb : Doc() {
     override val helpSuffix = "help"
     override val helpSeparator = "/"
 
-    override val writer: ConsoleWrites = WebWriter()
+    override val writer: SemanticWrites = WebWriter()
 
     override fun toString(): String = writer.toString()
 

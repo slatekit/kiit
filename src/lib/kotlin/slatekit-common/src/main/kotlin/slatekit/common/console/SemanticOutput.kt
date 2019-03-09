@@ -13,4 +13,8 @@
 
 package slatekit.common.console
 
-data class ConsoleSettings(val darkMode: Boolean = true)
+/**
+ * Created by kishorereddy on 5/19/17.
+ */
+
+data class SemanticOutput(val textType: SemanticType, val msg: String, val endLine: Boolean = false)
