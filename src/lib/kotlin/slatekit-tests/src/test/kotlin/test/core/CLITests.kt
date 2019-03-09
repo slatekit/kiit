@@ -13,21 +13,10 @@ package test.core
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.core.Annotated
-import slatekit.apis.core.Api
-import slatekit.apis.svcs.Authenticator
 import slatekit.cli.*
-import slatekit.common.info.ApiKey
-import slatekit.common.info.Credentials
 import slatekit.common.args.Args
-import slatekit.common.conf.Config
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
-import slatekit.common.utils.Pager
-import slatekit.integration.apis.InfoApi
-import slatekit.integration.apis.CliApi
-import slatekit.integration.apis.VersionApi
-import slatekit.integration.common.AppEntContext
 import slatekit.results.*
 
 
@@ -37,10 +26,10 @@ class CLITests {
                 commands: List<String> = listOf(),
                 reader: ((Unit) -> String?)? = null,
                 writer: ((CliOutput) -> Unit)? = null) : CLI(
+            CliSettings(),
             Info.none.copy(about = Info.none.about.copy(version = version)),
             Folders.default,
-            CliSettings(),
-            commands, reader,writer) {
+            commands,reader,writer) {
 
         var testInit = false
         var testEnd = false
@@ -56,10 +45,11 @@ class CLITests {
         /**
          * executes a line of text by handing it off to the executor
          */
-        override fun execute(line: String): Try<CliResponse<*>> {
-            testExec.add(line)
-            val req = CliRequest.build(Args.default(), line)
-            return Success(CliResponse(req, true, StatusCodes.SUCCESS.code, mapOf(), line))
+        override fun executeInternal(args:Args): Try<CliResponse<*>> {
+            val text = args.line
+            testExec.add(text)
+            val req = CliRequest.build(Args.default(), text)
+            return Success(CliResponse(req, true, StatusCodes.SUCCESS.code, mapOf(), text))
         }
 
 

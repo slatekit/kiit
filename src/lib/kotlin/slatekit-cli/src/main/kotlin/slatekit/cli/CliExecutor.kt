@@ -32,11 +32,11 @@ open class CliExecutor(
     /**
      * Executes the line and returns a CliResponse
      */
-    open fun excecute(line: String): Try<CliResponse<*>> {
+    open fun excecute(args:Args): Try<CliResponse<*>> {
 
         // Convert line into a CliRequest
         // Run the life-cycle methods ( before, execute, after )
-        val req = convert(line, true)
+        val req = convert(args, true)
 
         // 1. Before
         return req.then { request ->
@@ -85,9 +85,8 @@ open class CliExecutor(
     )
 
 
-    private fun convert(line: String, checkHelp: Boolean): Try<CliRequest> {
+    private fun convert(args:Args, checkHelp: Boolean): Try<CliRequest> {
         // 1st step, parse the command line into arguments
-        val argsResult = Args.parse(line, settings.argPrefix, settings.argSeparator, true)
-        return Success(CliRequest.build((argsResult as Success<Args>).value, line))
+        return Success(CliRequest.build(args, args.line))
     }
 }

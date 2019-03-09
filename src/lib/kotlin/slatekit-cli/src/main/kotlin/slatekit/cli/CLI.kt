@@ -16,10 +16,7 @@ package slatekit.cli
 import slatekit.common.args.Args
 import slatekit.common.utils.Loops.doUntil
 import slatekit.common.info.Info
-import slatekit.common.console.SemanticText
 import slatekit.common.info.Folders
-import slatekit.common.io.IO
-import slatekit.common.io.Readln
 import slatekit.results.*
 import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference
@@ -38,10 +35,10 @@ import java.util.concurrent.atomic.AtomicReference
  * @param writer   : Optional interface to write output ( abstracted out IO to support unit-testing )
  */
 open class CLI(
+        val settings: CliSettings,
         val info: Info,
         val folders: Folders,
-        val settings: CliSettings,
-        val commands: List<String?>? = listOf(),
+        commands: List<String?>? = listOf(),
         ioReader:((Unit) -> String?)? = null,
         ioWriter:((CliOutput) -> Unit)? = null
 ) {
@@ -58,29 +55,9 @@ open class CLI(
 
 
     /**
-     * Actual writer to either write to console using [CliWriter] or the provided writer
-     * This is to abstract out IO to any function and facilitate unit-testing
+     * Context to hold the reader, writer, help, io services
      */
-    val writer: IO<CliOutput, Unit> = CliWriter(ioWriter)
-
-
-    /**
-     * Actual reader to either read from console using the [ReadLn] IO or the provided reader
-     * This is to abstract out IO to any function and facilitate unit-testing
-     */
-    val reader: IO<Unit, String?> = Readln(ioReader)
-
-
-    /**
-     * Handles display of help, about, version, etc
-     */
-    val help = CliHelp(info, writer)
-
-
-    /**
-     * Handles output of command results
-     */
-    val output = CliIO(writer)
+    val context = CliContext(info, commands, ioReader, ioWriter)
 
 
     /**
@@ -124,11 +101,11 @@ open class CLI(
      * runs any start up commands
      */
     open fun startUp() : Try<CliResponse<*>> {
-        val results = commands?.map { command ->
+        val results = context.commands?.map { command ->
             when(command){
                 null -> Tries.success(CliResponse.empty)
                 ""   -> Tries.success(CliResponse.empty)
-                else -> execute(command)
+                else -> transform(command) { args -> executeInternal(args ) }
             }
         } ?: listOf(Tries.success(CliResponse.empty))
 
@@ -144,22 +121,24 @@ open class CLI(
     /**
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
-    private val lastLine = AtomicReference<String>("")
+    private val lastArgs = AtomicReference<Args>(Args.default())
     protected fun repl() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
 
             // Show prompt ":>"
-            writer.run(CliOutput(SemanticText.Text, PROMPT, false))
+            context.writer.text( PROMPT, false)
 
             // Get line
-            val raw = reader.run(Unit)
+            val raw = context.reader.run(Unit)
             val text = raw?.let { it.trim() } ?: ""
             val result = eval(text)
 
             // Track last line ( to allow for "retry" command )
-            lastLine.set(text)
+            result.onSuccess {
+                lastArgs.set(it.first)
+            }
 
             // Only exit when user typed "exit"
             val keepReading = result.success && result.status != StatusCodes.EXIT
@@ -180,16 +159,46 @@ open class CLI(
     /**
      * Evaluates the text read in from user input.
      */
-    open fun eval(text:String): Try<Boolean> {
-        return when(text) {
-            Command.About  .id -> { help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
-            Command.Help   .id -> { help.showHelp()   ; Success(true, StatusCodes.HELP)    }
-            Command.Version.id -> { help.showVersion(); Success(true, StatusCodes.VERSION) }
-            Command.Last   .id -> { write(lastLine.get(), false); Success(true) }
-            Command.Retry  .id -> { attempt(lastLine.get()) }
-            Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
-            Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
-            else               -> attempt(text)
+    open fun eval(text:String): Try<Pair<Args, Boolean>> {
+
+        // Use process for both handling interactive user supplied text
+        // and also the startup commands
+        return this.transform(text) { args ->
+
+            val evalResult = eval(args)
+            when(evalResult) {
+
+                // Transfer value back upstream with original parsed args
+                is Success -> Success(Pair(args, evalResult.value), evalResult.status)
+
+                // Continue processing until exit | quit supplied
+                is Failure -> Success(Pair(args, true), evalResult.status)
+            }
+        }
+    }
+
+
+    /**
+     * Evaluates the arguments read in from user input.
+     */
+    open fun eval(args:Args): Try<Boolean> {
+
+        // Single command ( e.g. help, quit, about, version )
+        // These are typically system level
+        return if( args.actionParts.size == 1 ){
+            when(args.line) {
+                Command.About  .id -> { context.help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
+                Command.Help   .id -> { context.help.showHelp()   ; Success(true, StatusCodes.HELP)    }
+                Command.Version.id -> { context.help.showVersion(); Success(true, StatusCodes.VERSION) }
+                Command.Last   .id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
+                Command.Retry  .id -> { execute(lastArgs.get()) }
+                Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
+                Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
+                else               -> execute(args)
+            }
+        }
+        else {
+            execute(args)
         }
     }
 
@@ -198,15 +207,15 @@ open class CLI(
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    open fun attempt(line: String): Try<Boolean> {
+    open fun execute(args:Args): Try<Boolean> {
         return try {
-            val result = execute(line)
+            val result = executeInternal(args)
             print(result)
             result.map { true }
         } catch (ex: Exception) {
 
-            writer.run(CliOutput(SemanticText.Failure, ex.message, true))
-            writer.run(CliOutput(SemanticText.Failure, ex.stackTrace.toString(), true))
+            context.writer.failure(ex.message ?:"", true)
+            context.writer.failure(ex.stackTrace.toString(), true)
 
             // Keep going until user types exit | quit
             Success(true)
@@ -215,30 +224,48 @@ open class CLI(
 
 
     /**
+     * executes a line of text by handing it off to the executor
+     * This can be overridden in derived class
+     */
+    open fun executeInternal(args:Args) : Try<CliResponse<*>> {
+        return executor.excecute(args)
+    }
+
+
+    /**
      * Print the result of the CLI command
      */
     open fun print(result:Try<CliResponse<*>>) {
         when(result) {
-            is Success -> output.output(Success(result.value), folders.pathToOutputs)
-            is Failure -> output.output(Failure(result.error), folders.pathToOutputs)
+            is Success -> context.output.output(Success(result.value), folders.pathToOutputs)
+            is Failure -> context.output.output(Failure(result.error), folders.pathToOutputs)
         }
     }
 
 
     /**
-     * executes a line of text by handing it off to the executor
+     * Gets the last line of text entered
      */
-    open fun execute(line:String) : Try<CliResponse<*>> {
-        return executor.excecute(line)
-    }
+    fun last():String = lastArgs.get().line
 
 
+    /**
+     * Evaluates the text read in from user input.
+     */
+    private fun <T> transform(text:String, callback:(Args) -> Try<T>): Try<T> {
+        // Parse lexically into arguments
+        val argsResult = Args.parse(text, settings.argPrefix, settings.argSeparator, true)
 
-    fun last():String = lastLine.get()
+        return when(argsResult) {
+            is Success -> {
+                callback(argsResult.value)
+            }
+            is Failure -> {
+                context.writer.failure("Error evaluating : $text", true)
 
-
-
-    private fun write(text:String, newLine:Boolean){
-        writer.run(CliOutput(SemanticText.Text, text, newLine))
+                // This should never happen if the Args.parse works as expected
+                argsResult
+            }
+        }
     }
 }
