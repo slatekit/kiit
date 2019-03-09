@@ -1,7 +1,7 @@
 package slatekit.tools.docs
 
 import slatekit.common.*
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.SemanticConsole
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.utils.StringParser
 import slatekit.results.Notice
@@ -13,7 +13,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
 
     private val _templatePath = File (_rootdir, templatePath).toString()
     private var _template = ""
-    private val _writer = ConsoleWriter ()
+    private val _writer = SemanticConsole ()
     private val _docFiles = DocFiles()
     private val _version = "0.9.9"
 
@@ -46,7 +46,7 @@ class DocService(val _rootdir:String, val _outputDir:String, val templatePath:St
     , Doc("Serialization",  "slatekit-common", "slatekit.common.serialization.Serializer"     , _version, "Example_Serialization"    , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "Serializers for data classes to generate CSV, Props, HOCON, JSON files")
     , Doc("Templates"    ,  "slatekit-common", "slatekit.common.templates.Templates"          , _version, "Example_Templates"        , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "A micro template system for processing text with variables, useful for generating dynamic emails/messages.")
     , Doc("Validations"  ,  "slatekit-common", "slatekit.common.validation.ValidationFuncs"   , _version, "Example_Validation"       , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "A set of validation related components, simple validation checks, RegEx checks, error collection and custom validators")
-    , Doc("Utils"        ,  "slatekit-common", "slatekit.common.console.ConsoleWriter"        , _version, "Example_Utils"            , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "Various utilities available in the Slate library")
+    , Doc("Utils"        ,  "slatekit-common", "slatekit.common.console.SemanticConsole"        , _version, "Example_Utils"            , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "Various utilities available in the Slate library")
     , Doc("Reflect"      ,  "slatekit-common", "slatekit.common.Reflector"                    , _version, "Example_Reflect"          , true  , false, false, "utils", "", "slatekit.common.jar"  , ""                    , "Reflection helper to create instances, get methods, fields, annotations and more" )
     , Doc("Orm-Model"    ,  "slatekit-common", "slatekit.common.Model"                        , _version, "Example_Model"            , true  , false, false, "orm"  , "", "slatekit.common.jar"  , "com"                 , "A model schema builder")
     , Doc("Orm-Entity"   ,  "slatekit-common", "slatekit.common.entities.Entity"              , _version, "Example_Entities"         , true  , false, false, "orm"  , "", "slatekit.entities.jar", "com"                 , "A base class for persistent domain entities")

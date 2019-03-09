@@ -15,7 +15,7 @@ package slatekit.app
 
 import slatekit.common.Context
 import slatekit.common.args.ArgsSchema
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.SemanticConsole
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.info.About
 import slatekit.common.info.Status
@@ -95,7 +95,7 @@ open class App<C: Context>(val ctx: C,
      */
     open fun welcome() {
         // Basic welcome
-        val writer = ConsoleWriter()
+        val writer = SemanticConsole()
         writer.text("************************************")
         writer.title("Welcome to ${ctx.app.name}")
         writer.text("************************************")

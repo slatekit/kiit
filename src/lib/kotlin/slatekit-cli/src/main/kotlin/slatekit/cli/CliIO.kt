@@ -14,8 +14,9 @@
 package slatekit.cli
 
 import slatekit.common.io.Files
-import slatekit.common.requests.Response
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.SemanticWrites
+import slatekit.common.console.SemanticText
+import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
@@ -25,7 +26,19 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-open class CliIO(private val writer: ConsoleWriter) {
+open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
+
+    /**
+     * Writes the text using the TextType
+     *
+     * @param mode
+     * @param text
+     * @param endLine
+     */
+    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
+        io.run(CliOutput(mode, text, endLine))
+    }
+
 
     /**
      * Different types of serializers
@@ -38,14 +51,14 @@ open class CliIO(private val writer: ConsoleWriter) {
     /**
      * Output the results of the response
      */
-    fun output(result:Try<Pair<CliRequest, CliResponse<*>>>, outputDir: String) {
+    fun output(result:Try<CliResponse<*>>, outputDir: String) {
         when(result) {
             is Failure -> {
-                println("error : " + result.error.toString())
+                write(SemanticText.Failure, "error : " + result.error.toString())
             }
             is Success -> {
-                val request = result.value.first
-                val response = result.value.second
+                val request = result.value.request
+                val response = result.value
                 response.value?.let { value ->
                     write(request, response, value, outputDir)
                     summary(response)
@@ -58,8 +71,8 @@ open class CliIO(private val writer: ConsoleWriter) {
      * prints empty result
      */
     private fun empty() {
-        writer.important("no results/data")
-        writer.line()
+        important("no results/data")
+        line()
     }
 
     /**
@@ -68,10 +81,10 @@ open class CliIO(private val writer: ConsoleWriter) {
      * @param result
      */
     private fun summary(result: CliResponse<*>) {
-        writer.text("Success : " + result.success)
-        writer.text("Status  : " + result.code)
-        writer.text("Message : " + result.msg)
-        writer.text("Tag     : " + result.tag)
+        text("Success : " + result.success)
+        text("Status  : " + result.code)
+        text("Message : " + result.msg)
+        text("Tag     : " + result.tag)
     }
 
     /**
@@ -80,24 +93,24 @@ open class CliIO(private val writer: ConsoleWriter) {
      * @param obj
      */
     private fun write(request:CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
-        val format = request.args.getStringOrElse(CliConstants.SysFormat, "props")
-        writer.text("===============================")
+        val format = request.args.getStringOrElse(SysParam.Format.id, "props")
+        text("===============================")
         val text = when (format) {
             "csv" -> serializerCsv.serialize(obj)
             "json" -> serializerJson.serialize(obj)
             "prop" -> serializerProp.serialize(obj)
             else -> serializerProp.serialize(obj)
         }
-        writer.text(text)
-        writer.text("===============================")
+        text(text)
+        text("===============================")
 
         // Writer to log
-        val log = request.args.getSysStringOrElse(CliConstants.SysLog, "false")
+        val log = request.args.getSysStringOrElse(SysParam.Log.id, "false")
         if (log.trim() == "true") {
             val fileName = Files.fileNameAsAsTimeStamp()
             val filePath = File(outputDir, fileName)
             filePath.writeText(text)
-            writer.text("Wrote content to: ${filePath.absolutePath}")
+            text("Wrote content to: ${filePath.absolutePath}")
         }
     }
 

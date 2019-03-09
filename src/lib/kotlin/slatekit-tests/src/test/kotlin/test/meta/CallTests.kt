@@ -18,6 +18,8 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 import slatekit.meta.Reflector
 import slatekit.meta.Deserializer
 import test.setup.UserApi
@@ -84,7 +86,7 @@ class CallTests {
     @Test fun can_handle_types(){
 
         fun ensureTypes(inputs: InputArgs):Unit {
-            val req = Request("app.users.testTypes", listOf("app", "users", "testTypes"), "cli", "post", inputs, InputArgs(mapOf()))
+            val req = SimpleRequest("app.users.testTypes", listOf("app", "users", "testTypes"), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = deserializer.deserialize(method!!.parameters.drop(1))
@@ -126,7 +128,7 @@ class CallTests {
 
         fun ensureList(inputs: InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
-            val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
+            val req = SimpleRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
@@ -148,7 +150,7 @@ class CallTests {
 
         fun ensureMap(inputs: InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
-            val req = Request("app.users.$name", listOf("app", "users", name), "cli", "post", inputs, InputArgs(mapOf()))
+            val req = SimpleRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))

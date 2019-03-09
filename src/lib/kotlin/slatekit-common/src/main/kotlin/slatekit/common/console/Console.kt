@@ -39,5 +39,5 @@ object Console {
     val WHITE: String = "\u001B[37m"
     val RESET: String = "\u001B[0m"
 
-    fun defaults(): ConsoleSettings = ConsoleSettings(darkMode = true)
+    fun defaults(): SemanticConsoleSettings = SemanticConsoleSettings(darkMode = true)
 }

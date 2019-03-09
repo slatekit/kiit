@@ -26,34 +26,35 @@ import slatekit.results.*
  */
 open class CliExecutor(
         val folders: Folders,
-        val settings: CliSettings,
-        val view:CliHelp
+        val settings: CliSettings
 ) {
 
-    fun run(line:String): Try<CliResponse<*>> {
+    /**
+     * Executes the line and returns a CliResponse
+     */
+    open fun excecute(line: String): Try<CliResponse<*>> {
 
         // Convert line into a CliRequest
         // Run the life-cycle methods ( before, execute, after )
         val req = convert(line, true)
 
         // 1. Before
-        val res = req.then { request ->
+        return req.then { request ->
 
             before(request)
         }
         // 2. Execute
         .then { request ->
 
-            execute(request).fold( { Success(Pair(request, it)) }, { Failure(it) } )
+            process(request)
         }
         // 3. After
-        .then { info ->
+        .then { response ->
 
-            after(info)
+            after(response)
         }
-
-        return res
     }
+
 
     /**
      * hook for command before it is executed
@@ -67,15 +68,21 @@ open class CliExecutor(
     /**
      * Hook to
      */
-    protected fun after(info:Pair<CliRequest, CliResponse<*>>): Try<Pair<CliRequest, CliResponse<*>>> = Success(info)
+    protected fun after(response: CliResponse<*>): Try<CliResponse<*>> = Success(response)
 
 
     /**
      * Hook to
      */
-    protected fun execute(request: CliRequest): Try<CliResponse<*>> = Success(CliResponse(
-            true, 0, mapOf(), ""
-    ))
+    protected fun process(request: CliRequest): Try<CliResponse<*>> = Success(
+            CliResponse(
+                    request,
+                    true,
+                    0,
+                    mapOf(),
+                    ""
+            )
+    )
 
 
     private fun convert(line: String, checkHelp: Boolean): Try<CliRequest> {

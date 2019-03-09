@@ -11,12 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.core.cli
+package slatekit.common.console
 
-data class CliSettings(
-    val argPrefix: String = "-",
-    val argSeparator: String = "=",
-    val enableLogging: Boolean = false,
-    val enableOutput: Boolean = false,
-    val enableStartLog: Boolean = false
-)
+data class SemanticConsoleSettings(val darkMode: Boolean = true)

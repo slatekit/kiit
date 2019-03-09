@@ -8,6 +8,8 @@ import slatekit.common.args.Args
 import slatekit.common.content.Doc
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.RequestSupport
+import slatekit.common.requests.Request
+import slatekit.common.requests.Source
 import java.io.InputStream
 
 /**
@@ -43,12 +45,12 @@ data class CliRequest(
     /**
      * Defaulted to CLI for now
      */
-    override val source: String = "cli"
+    override val source: Source = Source.CLI
 
     /**
      * Defaulted to CLI for now ( mimics an Http method )
      */
-    override val verb: String = "cli"
+    override val verb: String = Source.CLI.id
 
     /**
      * Access to any underlying raw request
@@ -75,6 +77,34 @@ data class CliRequest(
      */
     override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
     }
+
+    /**
+     * To transform / rewrite the request
+     */
+    override fun clone(
+            otherPath: String,
+            otherParts: List<String>,
+            otherSource: Source,
+            otherVerb: String,
+            otherData: Inputs,
+            otherMeta: slatekit.common.Metadata,
+            otherRaw: Any?,
+            otherOutput: String?,
+            otherTag: String,
+            otherVersion: String,
+            otherTimestamp:DateTime) : Request {
+        return this.copy(
+                path      = otherPath,
+                data      = otherData,
+                meta      = otherMeta,
+                raw       = otherRaw,
+                output    = otherOutput,
+                tag       = otherTag,
+                version   = otherVersion,
+                timestamp = otherTimestamp
+        )
+    }
+
 
 
     companion object {

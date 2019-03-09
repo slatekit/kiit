@@ -67,28 +67,28 @@ data class Arg(
         prefix: String? = "-",
         separator: String? = "=",
         maxWidth: Int? = null
-    ): List<ConsoleItem> {
+    ): List<SemanticOutput> {
 
         val nameLen = maxWidth ?: name.length
         val nameFill = name.padEnd(nameLen)
         val namePart = (prefix ?: "-") + nameFill
 
         val logs = mutableListOf(
-                ConsoleItem(Highlight, namePart, false),
-                ConsoleItem(Text, separator ?: "=", false),
-                ConsoleItem(Text, desc, true),
-                ConsoleItem(Text, " ".repeat(nameLen + 6), false))
+                SemanticOutput(SemanticText.Highlight, namePart, false),
+                SemanticOutput(SemanticText.Text, separator ?: "=", false),
+                SemanticOutput(SemanticText.Text, desc, true),
+                SemanticOutput(SemanticText.Text, " ".repeat(nameLen + 6), false))
 
         if (isRequired) {
-            logs.add(ConsoleItem(Important, "!", false))
-            logs.add(ConsoleItem(Text, "required ", false))
+            logs.add(SemanticOutput(SemanticText.Important, "!", false))
+            logs.add(SemanticOutput(SemanticText.Text, "required ", false))
         } else {
-            logs.add(ConsoleItem(Success, "?", false))
-            logs.add(ConsoleItem(Text, "optional ", false))
+            logs.add(SemanticOutput(SemanticText.Success, "?", false))
+            logs.add(SemanticOutput(SemanticText.Text, "optional ", false))
         }
 
-        logs.add(ConsoleItem(Subtitle, "[$dataType] ", false))
-        logs.add(ConsoleItem(Text, "e.g. $example", true))
+        logs.add(SemanticOutput(SemanticText.Subtitle, "[$dataType] ", false))
+        logs.add(SemanticOutput(SemanticText.Text, "e.g. $example", true))
         return logs.toList()
     }
 }

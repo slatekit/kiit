@@ -26,24 +26,19 @@ import slatekit.results.StatusCodes
  * @param err : Exception in event of failure
  * @param tag : Tag used as a correlation field
  */
-data class Response<out T>(
-    val success: Boolean,
-    val code: Int,
-    val meta: Map<String, String>?,
-    val value: T?,
-    val msg: String? = null,
-    val err: Exception? = null,
-    val tag: String? = null
-) {
+interface Response<out T>  {
+    val success: Boolean
+    val code: Int
+    val meta: Map<String, String>?
+    val value: T?
+    val msg: String?
+    val err: Exception?
+    val tag: String?
 
     /**
      * adds to the existing metadata
      */
-    fun withMeta(meta: List<Pair<String, String>>): Response<T> {
-        return this.meta?.let {
-            copy(meta = it.plus(meta))
-        } ?: copy(meta = meta.toMap())
-    }
+    fun withMeta(meta: List<Pair<String, String>>): Response<T>
 }
 
 

@@ -100,10 +100,10 @@ class SparkRequest(val req: Request) : RequestSupport {
             // tag    : guid
 
             // Reverting change to args.
-            return slatekit.common.requests.Request(
+            return slatekit.common.requests.SimpleRequest(
                     path = req.uri(),
                     parts = parts,
-                    source = ApiConstants.SourceWeb,
+                    source = slatekit.common.requests.Source.Web,
                     verb = req.requestMethod().toLowerCase(),
                     meta = SparkHeaders(req, ctx.enc),
                     data = SparkParams(req, ctx.enc),

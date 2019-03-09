@@ -18,6 +18,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.security.AllProtocols
 import slatekit.common.info.Credentials
 import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
 import slatekit.common.toResponse
 import slatekit.results.Success
 import slatekit.results.builders.Notices
@@ -37,7 +38,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -48,7 +49,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -59,7 +60,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = ""),
-                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -73,7 +74,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = null,
-                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -87,7 +88,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -101,7 +102,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "ops"),
-                request  = Request.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -115,7 +116,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesParent", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -129,7 +130,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesParent", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -144,7 +145,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesAny", "get", mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -160,7 +161,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = null,
-                request  = Request.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -174,7 +175,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesSpecific", "get", mapOf(
+                request  = SimpleRequest.path("app.users.rolesSpecific", "get", mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -190,7 +191,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = Request.path("app.users.rolesSpecific", "get", mapOf(
+                request  = SimpleRequest.path("app.users.rolesSpecific", "get", mapOf(
                         Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -206,7 +207,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.path("app.users.rolesParent", "get", mapOf(
+                request  = SimpleRequest.path("app.users.rolesParent", "get", mapOf(
                         Pair("api-key", "54B1817194C1450B886404C6BEA81673")
                 ), mapOf(
                         Pair("code", "1"),
@@ -222,7 +223,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = Request.path("app.users.rolesParent", "get", mapOf(
+                request  = SimpleRequest.path("app.users.rolesParent", "get", mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),

@@ -29,6 +29,7 @@ import slatekit.common.content.ContentTypeText
 import slatekit.common.content.Doc
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
+import slatekit.common.requests.SimpleRequest
 import java.io.*
 
 class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : RequestSupport {
@@ -125,10 +126,10 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
             // tag    : guid
 
             // Reverting change to args.
-            return Request(
+            return SimpleRequest(
                     path = uri,
                     parts = parts,
-                    source = ApiConstants.SourceWeb,
+                    source = slatekit.common.requests.Source.Web,
                     verb = method,
                     meta = KtorHeaders(req, ctx.enc),
                     data = KtorParams(body, req, ctx.enc),
