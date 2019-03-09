@@ -7,6 +7,7 @@ import slatekit.apis.support.ApiQueueSupport
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
 import slatekit.common.requests.Request
+import slatekit.common.requests.Source
 import slatekit.core.common.AppContext
 import slatekit.results.*
 
@@ -32,7 +33,7 @@ class WorkerSampleApi(val ctx:AppContext, val queues:List<QueueSource<String>> =
      */
     override fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : Try<String>  {
         // Coming in as http request ? and mode is queued ?
-        return if(req.source != ApiConstants.SourceQueue && target.tag == "queued"){
+        return if(req.source != Source.Queue && target.tag == "queued"){
             // Convert from web request to Queued request
             val queuedReq = Requests.toJsonAsQueued(req)
             sendToQueue(queuedReq, Random.guid().toString(), req.tag, "api-queue")

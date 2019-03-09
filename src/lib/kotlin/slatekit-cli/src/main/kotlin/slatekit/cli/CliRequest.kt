@@ -78,6 +78,34 @@ data class CliRequest(
     override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
     }
 
+    /**
+     * To transform / rewrite the request
+     */
+    override fun clone(
+            otherPath: String,
+            otherParts: List<String>,
+            otherSource: Source,
+            otherVerb: String,
+            otherData: Inputs,
+            otherMeta: slatekit.common.Metadata,
+            otherRaw: Any?,
+            otherOutput: String?,
+            otherTag: String,
+            otherVersion: String,
+            otherTimestamp:DateTime) : Request {
+        return this.copy(
+                path      = otherPath,
+                data      = otherData,
+                meta      = otherMeta,
+                raw       = otherRaw,
+                output    = otherOutput,
+                tag       = otherTag,
+                version   = otherVersion,
+                timestamp = otherTimestamp
+        )
+    }
+
+
 
     companion object {
 

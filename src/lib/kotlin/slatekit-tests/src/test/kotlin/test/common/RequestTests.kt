@@ -7,14 +7,15 @@ import slatekit.apis.core.Requests
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 
 class RequestTests {
 
-    val sampleRequest = Request(
+    val sampleRequest = SimpleRequest(
             "app.users.activate",
             listOf("app", "users", "activate"),
-            ApiConstants.SourceWeb,
+            Source.Web,
             "get",
             InputArgs(mapOf("a" to true, "b" to 2, "c" to 3.0, "email" to "user1@abc.com")),
             InputArgs(mapOf("token" to "mmxZr5tkf\\MUV5duU2rhHg", "api-key" to "2DFAD90A0F624D55B9F95A4648D7619A")),
@@ -85,7 +86,7 @@ class RequestTests {
         assert( req.area == "app")
         assert( req.name == "users")
         assert( req.action == "activate")
-        assert( req.source == ApiConstants.SourceWeb)
+        assert( req.source == Source.Web)
         assert( req.verb == "get")
         assert( req.fullName == "app.users.activate")
         assert( req.tag == "abc123")
@@ -117,7 +118,7 @@ class RequestTests {
         assert( req.area == "app")
         assert( req.name == "users")
         assert( req.action == "activate")
-        assert( req.source == ApiConstants.SourceQueue)
+        assert( req.source == Source.Queue)
         assert( req.verb == ApiConstants.SourceQueue)
         assert( req.fullName == "app.users.activate")
         assert( req.tag == "abc123")

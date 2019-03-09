@@ -19,6 +19,8 @@ import slatekit.apis.security.AllProtocols
 import slatekit.apis.security.CliProtocol
 import slatekit.common.info.Credentials
 import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 import slatekit.common.toResponse
 import slatekit.results.StatusCodes
 import slatekit.results.Success
@@ -39,7 +41,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.path("app.users.protocolAny", "get", mapOf(), mapOf(
+                request  = SimpleRequest.path("app.users.protocolAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -53,7 +55,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.cli("app.users.protocolCLI",  listOf(), listOf(
+                request  = SimpleRequest.cli("app.users.protocolCLI",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -67,7 +69,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = AllProtocols,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.cli("app.users.protocolParent",  listOf(), listOf(
+                request  = SimpleRequest.cli("app.users.protocolParent",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -81,10 +83,10 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = CliProtocol,
                 apis     = listOf(Api(UserApi(ctx), setup = Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = Request.cli("app.users.protocolWeb",  listOf(), listOf(
+                request  = (SimpleRequest.cli("app.users.protocolWeb",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
-                )).copy(source = "web"),
+                )) as SimpleRequest).copy(source = Source.Web),
                 response = Notices.errored<String>("app.users.protocolWeb not found", StatusCodes.NOT_FOUND).toResponse()
         )
     }
