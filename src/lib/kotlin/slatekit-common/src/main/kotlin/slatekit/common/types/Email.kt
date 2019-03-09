@@ -43,7 +43,7 @@ class Email(text: String, required: Boolean = true) : SmartString(text, required
     override val name = "Email"
     override val desc = "Email Address"
     override val examples = listOf("user@abc.com")
-    override val formats = listOf("xxxx@xxxxxxx")
+    override val formats = listOf("xxxx@xxxxxxx.xx")
 
     fun isDashed(): Boolean = !text.isNullOrEmpty() && text.contains("-")
 
