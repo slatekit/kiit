@@ -79,25 +79,29 @@ dependencies {
     compile "com.slatekit:slatekit-results:0.9.9"
     compile 'org.threeten:threetenbp:1.3.8'
 
+    // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version"
         compile "com.slatekit:slatekit-query:$slatekit_version"
+        compile "com.slatekit:slatekit-cli:$slatekit_version"
         compile "com.slatekit:slatekit-entities:$slatekit_version"
         compile "com.slatekit:slatekit-orm:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-workers:$slatekit_version"
     } else {
+        // */
         compile project(":slatekit-common")
         compile project(":slatekit-meta")
         compile project(":slatekit-query")
+        compile project(":slatekit-cli")
         compile project(":slatekit-entities")
         compile project(":slatekit-orm")
         compile project(":slatekit-core")
         compile project(":slatekit-apis")
         compile project(":slatekit-workers")
-    }
+    } //</slatekit_local>
 }
 
 // ==================================================================
