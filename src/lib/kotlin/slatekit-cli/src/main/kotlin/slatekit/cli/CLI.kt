@@ -93,7 +93,7 @@ open class CLI(
         // 2. Read, Eval, Print, Loop
         .then {
 
-            execute()
+            repl()
         }
         // 3. End ( shutdown code )
         .then {
@@ -113,6 +113,9 @@ open class CLI(
     }
 
 
+    /**
+     * runs any start up commands
+     */
     open fun start() : Try<CliResponse<*>> {
         val results = commands?.map { command ->
             when(command){
@@ -136,7 +139,8 @@ open class CLI(
      */
     private val lastLine = AtomicReference<String>("")
 
-    protected fun execute() : Try<Status> {
+
+    protected fun repl() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
@@ -147,16 +151,9 @@ open class CLI(
             // Get line
             val raw = reader.run(Unit)
             val text = raw?.let { it.trim() } ?: ""
+            val keepReading = eval(text)
 
-            val keepReading = when(text) {
-                Command.About  .id -> { help.showAbout(); true }
-                Command.Help   .id -> { help.showHelp(); true }
-                Command.Version.id -> { help.showVersion(); true }
-                Command.Retry  .id -> { executeLine(lastLine.get()) }
-                Command.Exit   .id -> { false }
-                Command.Quit   .id -> { false }
-                else               -> executeLine(text)
-            }
+            // Track last line ( to allow for "retry" command )
             lastLine.set(text)
             keepReading
         }
@@ -173,10 +170,26 @@ open class CLI(
 
 
     /**
+     * Evaluates the text read in from user input.
+     */
+    open fun eval(text:String):Boolean {
+        return when(text) {
+            Command.About  .id -> { help.showAbout(); true }
+            Command.Help   .id -> { help.showHelp(); true }
+            Command.Version.id -> { help.showVersion(); true }
+            Command.Retry  .id -> { execute(lastLine.get()) }
+            Command.Exit   .id -> { false }
+            Command.Quit   .id -> { false }
+            else               -> execute(text)
+        }
+    }
+
+
+    /**
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    open fun executeLine(line: String): Boolean {
+    open fun execute(line: String): Boolean {
         return try {
             val result = executor.excecute(line)
             val isExit = result.code == StatusCodes.EXIT.code
