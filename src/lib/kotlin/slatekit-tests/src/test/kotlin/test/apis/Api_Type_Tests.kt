@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
@@ -76,19 +77,19 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_smart_type_phone() {
 
-        ensureSmartString("getSmartStringPhone", ""   , "false - true - ")
-        ensureSmartString("getSmartStringPhone", "abc", "false - false - abc")
-        ensureSmartString("getSmartStringPhone", "123-456-789", "false - false - 123-456-789")
-        ensureSmartString("getSmartStringPhone", "123-456-7890", "true - false - 123-456-7890")
+        ensureSmartString("getSmartStringPhone", ""   , false, "")
+        ensureSmartString("getSmartStringPhone", "abc", false, "")
+        ensureSmartString("getSmartStringPhone", "123-456-789", false, "")
+        ensureSmartString("getSmartStringPhone", "123-456-7890", true,"123-456-7890")
     }
 
 
     @Test fun can_use_smart_type_email() {
 
-        ensureSmartString("getSmartStringEmail", ""   , "false - true - ")
-        ensureSmartString("getSmartStringEmail", "abc", "false - false - abc")
-        ensureSmartString("getSmartStringEmail", "123@", "false - false - 123@")
-        ensureSmartString("getSmartStringEmail", "123@abc.com", "true - false - 123@abc.com")
+        ensureSmartString("getSmartStringEmail", ""   , false, "")
+        ensureSmartString("getSmartStringEmail", "abc", false, "")
+        ensureSmartString("getSmartStringEmail", "123@", false, "")
+        ensureSmartString("getSmartStringEmail", "123@abc.com", true,"123@abc.com")
     }
 
 
@@ -123,12 +124,14 @@ class Api_Type_Tests : ApiTestsBase() {
     }
 
 
-    fun ensureSmartString(method:String, text:String, expected:String) {
+    fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
         val api = SampleTypes3Api()
         val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
         val r1 = apis.call("samples", "types3", method, "get", mapOf(), mapOf("text" to text))
 
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == expected)
+        Assert.assertEquals(success, r1.success)
+        if(success) {
+            Assert.assertEquals(expected, r1.getOrElse { "" })
+        }
     }
 }

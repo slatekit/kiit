@@ -206,8 +206,8 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 val genType = tpe.arguments[0].type!!
                 val finalType = buildTypeName(genType)
                 finalType
-            } else if (cls.supertypes.contains(KTypes.KSmartStringType)) {
-                TypeInfo(true, false, "String", "String", KTypes.KSmartStringClass, KTypes.KSmartStringClass, "String.class")
+            } else if (cls.supertypes.contains(KTypes.KSmartValueType)) {
+                TypeInfo(true, false, "String", "String", KTypes.KSmartValueClass, KTypes.KSmartValueClass, "String.class")
             } else if (cls == List::class) {
                 val listType = tpe.arguments[0].type!!
                 val listCls = KTypes.getClassFromType(listType)

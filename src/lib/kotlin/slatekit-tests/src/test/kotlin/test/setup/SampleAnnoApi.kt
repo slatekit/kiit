@@ -10,8 +10,8 @@ import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 import slatekit.common.requests.Request
-import slatekit.common.types.Email
-import slatekit.common.types.PhoneUS
+import slatekit.common.smartvalues.Email
+import slatekit.common.smartvalues.PhoneUS
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -91,11 +91,11 @@ class SampleAnnoApi(val context: AppEntContext) {
 
 
     @ApiAction(desc = "accepts a smart string of phone", roles= "?", verb = "@parent", protocol = "@parent")
-    fun smartStringPhone(text: PhoneUS): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun smartStringPhone(text: PhoneUS): String = "${text.value}"
 
 
     @ApiAction(desc = "accepts a smart string of email", roles= "?", verb = "@parent", protocol = "@parent")
-    fun smartStringEmail(text: Email): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun smartStringEmail(text: Email): String = "${text.value}"
 
 
 }

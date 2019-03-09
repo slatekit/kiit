@@ -8,8 +8,8 @@ import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
-import slatekit.common.types.Email
-import slatekit.common.types.PhoneUS
+import slatekit.common.smartvalues.Email
+import slatekit.common.smartvalues.PhoneUS
 
 
 @Api(area = "samples", name = "types3", desc = "sample api to test other features", auth = AuthModes.apiKey, roles = Roles.none)
@@ -32,11 +32,11 @@ class SampleTypes3Api {
 
 
     @ApiAction(desc = "accepts a smart string of phone")
-    fun getSmartStringPhone(text: PhoneUS): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun getSmartStringPhone(text: PhoneUS): String = "${text.value}"
 
 
     @ApiAction(desc = "accepts a smart string of email")
-    fun getSmartStringEmail(text: Email): String = "${text.isValid} - ${text.isEmpty} - ${text.text}"
+    fun getSmartStringEmail(text: Email): String = "${text.value}"
 
 
     @ApiAction(desc = "accepts a smart string of email")

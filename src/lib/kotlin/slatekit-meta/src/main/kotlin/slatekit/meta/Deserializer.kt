@@ -19,14 +19,13 @@ import slatekit.common.*
 import slatekit.common.encrypt.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.types.Email
-import slatekit.common.types.PhoneUS
-import slatekit.common.types.SSN
-import slatekit.common.types.ZipCode
+import slatekit.common.smartvalues.SmartCreation
+import slatekit.common.smartvalues.SmartValue
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
+import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.full.createType
 
 /**
@@ -167,7 +166,9 @@ open class Deserializer(
         val paramName = parameter.name!!
         val cls = tpe.classifier as KClass<*>
 
-        val result = if (cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0) {
+        val result = if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
+            handleSmartString(raw, tpe)
+        } else if (cls.supertypes.indexOf(KTypes.KSmartValuedType) >= 0) {
             handleSmartString(raw, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             val enumVal = data.get(paramName)
@@ -190,7 +191,7 @@ open class Deserializer(
             }
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
-            else if (cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0) {
+            else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
                 handleSmartString(raw, tpe)
             }
             // Case 4: Object / Complex type
@@ -231,7 +232,7 @@ open class Deserializer(
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types
-        else if (cls.supertypes.indexOf(KTypes.KSmartStringType) >= 0) {
+        else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
             handleSmartString(raw, tpe)
         }
         // Case 4: Slate Kit Enm
@@ -344,16 +345,11 @@ open class Deserializer(
         return instance
     }
 
-    fun parseSmartString(txt: String, tpe: KType): SmartString {
+    fun parseSmartString(txt: String, tpe: KType): SmartValue {
 
         val cls = tpe.classifier as KClass<*>
-        val smartString = when (cls) {
-            PhoneUS::class -> PhoneUS(txt)
-            Email::class -> Email(txt)
-            ZipCode::class -> ZipCode(txt)
-            SSN::class -> SSN(txt)
-            else -> Reflector.createWithArgs<Any>(cls, arrayOf(txt)) as SmartString
-        }
-        return smartString
+        val creator = cls.companionObjectInstance as SmartCreation<*>
+        val result = creator.of(txt)
+        return result
     }
 }

@@ -20,6 +20,7 @@ import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.smartvalues.SmartValue
 
 object Types {
 
@@ -40,7 +41,6 @@ object Types {
     val JInstantClass = Instant.MIN.javaClass
     val JDocClass = Doc.javaClass
     val JVarsClass = Vars.javaClass
-    val JSmartStringClass = SmartString.javaClass
     val JDecIntClass = EncInt.javaClass
     val JDecLongClass = EncLong.javaClass
     val JDecDoubleClass = EncDouble.javaClass

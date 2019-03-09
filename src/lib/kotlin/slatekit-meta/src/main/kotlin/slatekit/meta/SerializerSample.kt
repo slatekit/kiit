@@ -1,6 +1,5 @@
 package slatekit.meta
 
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.ext.local
 import slatekit.common.serialization.Serializer
@@ -82,7 +81,7 @@ class SerializerSample(
             KTypes.KInstantType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).toInstant() + "\"")
             KTypes.KDocType -> _buff.append("\"user://myapp/conf/abc.conf\"")
             KTypes.KVarsType -> _buff.append("\"a=1,b=2,c=3\"")
-            KTypes.KSmartStringType -> _buff.append("\"123-456-7890\"")
+            KTypes.KSmartValueType -> _buff.append("\"123-456-7890\"")
             KTypes.KDecStringType -> _buff.append("\"ALK342481SFA\"")
             KTypes.KDecIntType -> _buff.append("\"ALK342481SFA\"")
             KTypes.KDecLongType -> _buff.append("\"ALK342481SFA\"")

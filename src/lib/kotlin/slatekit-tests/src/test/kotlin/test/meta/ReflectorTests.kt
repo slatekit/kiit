@@ -16,7 +16,9 @@ import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.common.types.PhoneUS
+import slatekit.common.smartvalues.SmartValue
+import slatekit.common.smartvalues.PhoneUS
+import slatekit.common.smartvalues.SmartValued
 import slatekit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.core.Entities
@@ -89,7 +91,7 @@ class ReflectorTests {
     @Test fun can_check_subtype(){
         val tpe = PhoneUS::class
         tpe.supertypes.forEach { println(it) }
-        val ndx = tpe.supertypes.indexOf(SmartString::class.createType())
+        val ndx = tpe.supertypes.indexOf(SmartValued::class.createType())
         assert(ndx == 0)
     }
 

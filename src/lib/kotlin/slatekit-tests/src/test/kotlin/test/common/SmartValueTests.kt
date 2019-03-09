@@ -27,7 +27,7 @@ class SmartValueTests {
         Assert.assertEquals(p1.success, valid)
         p1.onSuccess {
             Assert.assertEquals(it.value, text)
-            Assert.assertEquals(it.metadata, Email.metadata)
+            Assert.assertEquals(it.meta, Email.metadata)
         }
     }
 }

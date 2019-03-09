@@ -27,7 +27,7 @@ class CodeGenJava(settings: CodeGenSettings) : CodeGenBase(settings) {
             Pair(KTypes.KZonedDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "Date" + ".class")),
             Pair(KTypes.KDocType, TypeInfo(true, false, "String", "String", KTypes.KDocClass, KTypes.KDocClass, "String" + ".class")),
             Pair(KTypes.KVarsType, TypeInfo(true, false, "String", "String", KTypes.KVarsClass, KTypes.KVarsClass, "String" + ".class")),
-            Pair(KTypes.KSmartStringType, TypeInfo(true, false, "String", "String", KTypes.KSmartStringClass, KTypes.KSmartStringClass, "String" + ".class")),
+            Pair(KTypes.KSmartValueType, TypeInfo(true, false, "String", "String", KTypes.KSmartValueClass, KTypes.KSmartValueClass, "String" + ".class")),
             Pair(KTypes.KUniqueIdType, TypeInfo(true, false, "String", "String", KTypes.KUniqueIdClass, KTypes.KUniqueIdClass, "String" + ".class")),
             Pair(KTypes.KUUIDType, TypeInfo(true, false, "String", "String", KTypes.KUUIDClass, KTypes.KUUIDClass, "String" + ".class")),
             Pair(KTypes.KContentType, TypeInfo(true, false, "String", "String", KTypes.KContentClass, KTypes.KContentClass, "String" + ".class")),

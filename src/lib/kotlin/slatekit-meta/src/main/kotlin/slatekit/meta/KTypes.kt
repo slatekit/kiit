@@ -13,6 +13,8 @@ import org.threeten.bp.*
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.ext.toStringTime
 import slatekit.common.ext.toStringYYYYMMDD
+import slatekit.common.smartvalues.SmartValue
+import slatekit.common.smartvalues.SmartValued
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
@@ -36,7 +38,7 @@ object KTypes {
     val KUniqueIdClass = UniqueId::class
     val KDocClass = Doc::class
     val KVarsClass = Vars::class
-    val KSmartStringClass = SmartString::class
+    val KSmartValueClass = SmartValue::class
     val KEnumLikeClass = EnumLike::class
     val KContentClass = Content::class
     val KDecStringClass = EncString::class
@@ -62,7 +64,8 @@ object KTypes {
     val KUniqueIdType = UniqueId::class.createType()
     val KDocType = Doc::class.createType()
     val KVarsType = Vars::class.createType()
-    val KSmartStringType = SmartString::class.createType()
+    val KSmartValueType = SmartValue::class.createType()
+    val KSmartValuedType = SmartValued::class.createType()
     val KEnumLikeType = EnumLike::class.createType()
     val KContentType = Content::class.createType()
     val KDecStringType = EncString::class.createType()
@@ -91,7 +94,7 @@ object KTypes {
             KUniqueIdType -> KUniqueIdClass
             KDocType -> KDocClass
             KVarsType -> KVarsClass
-            KSmartStringType -> KSmartStringClass
+            KSmartValueType -> KSmartValueClass
             KContentType -> KContentClass
             KDecStringType -> KDecStringClass
             KDecIntType -> KDecIntClass
@@ -121,7 +124,7 @@ object KTypes {
             KUniqueIdType -> "prefix:782d1a4a-9223-4c49-96ee-cecb4c368a61"
             KDocType -> "user://myapp/conf/abc.conf"
             KVarsType -> "a=1,b=2,c=3"
-            KSmartStringType -> "123-456-7890"
+            KSmartValueType -> "123-456-7890"
             KContentType -> "john@abc.com"
             KDecStringType -> "ALK342481SFA"
             KDecIntType -> "ALK342481SFA"
@@ -149,7 +152,7 @@ object KTypes {
             KInstantType -> true
             KUUIDType -> true
             KUniqueIdType -> true
-            KSmartStringType -> true
+            KSmartValueType -> true
             KDecStringType -> true
             KDecIntType -> true
             KDecLongType -> true
@@ -176,7 +179,7 @@ object KTypes {
             KInstantClass -> true
             KUUIDClass -> true
             KUniqueIdClass -> true
-            KSmartStringClass -> true
+            KSmartValueClass -> true
             KDecStringClass -> true
             KDecIntClass -> true
             KDecLongClass -> true
