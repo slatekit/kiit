@@ -30,7 +30,7 @@ kotlin {
 def slatekitComponentId = 'server'
 def slatekitComponentName = 'Server'
 def slatekitComponentDesc = 'SlateKit Server: Universal API Server using Ktor or Spark'
-def slatekitComponentVersion = '0.9.13'
+def slatekitComponentVersion = getCommonVersion()
 
 
 // ==================================================================
