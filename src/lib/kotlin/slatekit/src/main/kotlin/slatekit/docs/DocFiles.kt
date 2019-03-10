@@ -1,9 +1,9 @@
-package slatekit.tools.docs
+package slatekit.docs
 
 import java.io.File
 
 
-class DocFiles(val ext:String = "kt", val lang:String = "kotlin") {
+class DocFiles(val ext: String = "kt", val lang: String = "kotlin") {
 
     fun buildComponentFolder(root: String, doc: Doc): String {
         // s"${root}\src\lib\scala\Slate.Common\src\main\scala
@@ -13,7 +13,7 @@ class DocFiles(val ext:String = "kt", val lang:String = "kotlin") {
     }
 
 
-    fun buildComponentExamplePath(root:String, doc:Doc):String {
+    fun buildComponentExamplePath(root: String, doc: Doc): String {
         // s"${root}\src\lib\scala\Slate.Common\src\main\scala
         val result = File(root, buildComponentExamplePathLink(doc))
         return result.absolutePath
@@ -23,21 +23,21 @@ class DocFiles(val ext:String = "kt", val lang:String = "kotlin") {
     /**
      * Path to the example file
      */
-    fun buildComponentExamplePathLink(doc:Doc):String {
+    fun buildComponentExamplePathLink(doc: Doc): String {
         // {root}/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Examples_Args.kt
         val result = "src/lib/$lang/slatekit-examples/src/main/$lang/slatekit/examples/${doc.example}.$ext"
         return result.replace("/", "/")
     }
 
 
-    fun buildSourceFolder(proj:String, folder:String):String {
-        return when(proj) {
-            "common"   -> "slatekit-common/src/main/${lang}/slatekit/common/${folder}"
+    fun buildSourceFolder(proj: String, folder: String): String {
+        return when (proj) {
+            "common" -> "slatekit-common/src/main/${lang}/slatekit/common/${folder}"
             "entities" -> "slatekit-entities/src/main/${lang}/slatekit/entities/${folder}"
-            "core"     -> "slatekit-core/src/main/${lang}/slatekit/core/${folder}"
-            "cloud"    -> "slatekit-cloud/src/main/${lang}/slatekit/cloud/${folder}"
-            "ext"      -> "slatekit-ext/src/main/${lang}/slatekit/ext/${folder}"
-            else       -> ""
+            "core" -> "slatekit-core/src/main/${lang}/slatekit/core/${folder}"
+            "cloud" -> "slatekit-cloud/src/main/${lang}/slatekit/cloud/${folder}"
+            "ext" -> "slatekit-ext/src/main/${lang}/slatekit/ext/${folder}"
+            else -> ""
         }
     }
 }

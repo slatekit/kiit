@@ -1,4 +1,4 @@
-package slatekit.tools
+package slatekit
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
@@ -15,7 +15,7 @@ import slatekit.common.info.Credentials
 import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
-import slatekit.tools.docs.DocApi
+import slatekit.docs.DocApi
 
 class SlateKit(ctx: Context) : App<Context>(ctx) {
 
@@ -44,9 +44,9 @@ class SlateKit(ctx: Context) : App<Context>(ctx) {
                 company = "codehelix.co",
                 region = "NY",
                 version = "1.0.0",
-                url = "www.blend.life",
+                url = "www.slatekit.life",
                 group = "codehelix",
-                contact = "kishore@codehelix.co",
+                contact = "user@company.co",
                 tags = "sample, template, app",
                 examples = "http://www.slatekit.com"
         )

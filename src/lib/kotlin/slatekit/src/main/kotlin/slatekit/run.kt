@@ -1,4 +1,4 @@
-package slatekit.tools
+package slatekit
 
 
 import slatekit.app.AppRunner

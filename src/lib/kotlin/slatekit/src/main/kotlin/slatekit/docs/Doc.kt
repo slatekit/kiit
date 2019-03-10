@@ -1,4 +1,4 @@
-package slatekit.tools.docs
+package slatekit.docs
 
 data class Doc(
         val name     : String,
@@ -23,7 +23,7 @@ data class Doc(
     }
 
 
-    fun sourceFolder(files:DocFiles):String
+    fun sourceFolder(files: DocFiles):String
     {
         //"slate.common.args.Args"
         val path = namespace().replace(".", "/")
