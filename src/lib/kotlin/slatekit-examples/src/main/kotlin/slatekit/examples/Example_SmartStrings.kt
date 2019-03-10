@@ -12,13 +12,15 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
+import slatekit.common.smartvalues.Email
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.types.*
+import slatekit.common.smartvalues.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
+import slatekit.results.Outcome
 
 //</doc:import_examples>
 
@@ -36,38 +38,38 @@ class Example_SmartStrings : Cmd("results") {
         // 2. PhoneUS
         // 3. SSN
         // 4. ZipCode
-        val email = Email("batman@gotham.com", true)
+        val email = Email.of("batman@gotham.com")
 
         // Case 1: Get the actual value
-        println("value: " + email.text)
+        println("value: " + email.value)
 
         // Case 2: Check if valid
-        println("valid?: " + email.isValid)
+        println("valid?: " + Email.isValid("batman@gotham.com"))
 
         // Case 3: Get the name / type of smart string
-        println("name: " + email.name)
+        println("name: " + email.meta.name)
 
         // Case 4: Description
-        println("desc: " + email.desc)
+        println("desc: " + email.meta.desc)
 
         // Case 4: Examples of valid string
-        println("examples: " + email.examples)
+        println("examples: " + email.meta.examples)
 
         // Case 5: Format of the string
-        println("format(s): " + email.formats)
+        println("format(s): " + email.meta.formats)
 
         // Case 6: The regular expression representing string
-        println("reg ex: " + email.expressions)
+        println("reg ex: " + email.meta.expressions)
 
         // Case 7: Get the first example
-        println("example: " + email.example())
+        println("example: " + email.meta.example)
 
-        // Case 8: Get the Email specific values ( domain )
-        println("domain?: " + email.domain())
-        println("dashed?: " + email.isDashed())
+        // Case 9: Using slatekit.result types
+        // Try<Email> = Result<Email,Exception>
+        val email2:Try<Email> = Email.attempt("batman@gotham.com")
 
-        // Case 9: Other smart strings
-        val phone = PhoneUS("212-456-7890")
+        // Outcome<Email> = Result<Email,Err>
+        val email3:Outcome<Email> = Email.outcome("batman@gotham.com")
         //</doc:examples>
 
         return Success("")

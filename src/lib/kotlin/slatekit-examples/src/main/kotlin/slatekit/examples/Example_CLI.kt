@@ -13,79 +13,71 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.core.cli.CliCommand
-import slatekit.core.cli.CliService
-import slatekit.core.cli.CliSettings
+import slatekit.cli.CLI
+import slatekit.cli.CliRequest
+import slatekit.cli.CliSettings
 
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.apis.ApiConstants
+import slatekit.cli.CliResponse
 import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.toResponse
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.core.cmds.Cmd
+import slatekit.results.Status
+import slatekit.results.StatusCodes
+
 //</doc:import_examples>
 
 
 class Example_CLI : Cmd("auth") {
 
     //<doc:setup>
-    class AppShell(meta: Info, folders: Folders, settings: CliSettings) : CliService(folders, settings, meta) {
-        
+    class AppCLI(info: Info, folders: Folders, settings: CliSettings) : CLI(settings, info, folders) {
+
         /**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
          */
-        override fun onShellStart(): Unit {
+        override fun init(): Try<Boolean> {
             // You don't need to override this as the base method displays help info
-            _view.showHelp()
-            _writer.highlight("\thook: onShellStart - starting myapp command line interface")
+            context.help.showHelp()
+            context.writer.highlight("\thook: onShellStart - starting myapp command line interface")
+            return Success(true)
         }
 
 
         /**
          * Use case 3b : ( OPTIONAL ) do some stuff before ending the shell this is called
          */
-        override fun onShellEnd(): Unit {
-            _writer.highlight("\thook: onShellEnd - ending myapp command line interface")
+        override fun end(status: Status): Try<Boolean> {
+            context.writer.highlight("\thook: onShellEnd - ending myapp command line interface")
+            return Success(true)
         }
 
 
         /**
-         * Use case 3c : ( OPTIONAL ) do some stuff before executing the command
-         *
-         * @param cmd
-         * @return
+         * Handle execution of the CLI Request
          */
-        override fun onCommandBeforeExecute(cmd: CliCommand): CliCommand {
-            _writer.highlight("\thook: onCommandBeforeExecute - before command is executed")
-            return cmd
-        }
-
-
-        /**
-         * Use case 3c: ( REQUIRED ) you must override this method to handle your command
-         *
-         * @param cmd
-         * @return
-         */
-        override fun onCommandExecuteInternal(cmd: CliCommand): CliCommand {
+        override fun executeRequest(request: CliRequest): Try<CliResponse<*>> {
 
             // 1. Here is where you can put in your code to handle the command.
-            _writer.highlight("\thook: onCommandExecuteInternal handling : " + cmd.fullName())
+            context.writer.highlight("\thook: onCommandExecuteInternal handling : " + request.fullName)
 
-            // 2. You have access to all the command fields and arguments.
-            println("line   : " + cmd.line)
-            println("call   : " + cmd.fullName())
-            println("area   : " + cmd.area)
-            println("api   : " + cmd.name)
-            println("action : " + cmd.action)
-            println("arg #  : " + cmd.args.size())
-            println("arg 1   : " + cmd.args.getString("email"))
+            /** 2. You have access to all the command fields and arguments.
+            // NOTE: The command is parsed into a [slatekit.common.args.Args] component.
+            // The Args component is then put inside a [slatekit.cli.CliRequest] component
+             */
+            println("line   : " + request.args.line)
+            println("path   : " + request.fullName)
+            println("area   : " + request.area)
+            println("api    : " + request.name)
+            println("action : " + request.action)
+            println("arg #  : " + request.args.size())
+            println("arg 1  : " + request.args.getString("email"))
 
             // 3. You can integrate with the API's feature ( for calling methods dynamically )
             // Refer to the APIs module.
@@ -93,28 +85,35 @@ class Example_CLI : Cmd("auth") {
             // 3a. Create global inputs to the API ( e.g. api-keys )
             val opts = InputArgs(mapOf<String, Any>("api-key" to "123456789"))
 
-            // 3b. Convert the shell command to an api command
-            val req = Request.cli(cmd.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
+            // 3b. Modify the request if you need to
+            val reqClone: Request = request.clone(
+                    otherArgs = request.args,
+                    otherPath = request.path,
+                    otherData = request.data,
+                    otherMeta = request.meta,
+                    otherRaw = request.raw,
+                    otherOutput = request.output,
+                    otherTag = request.tag,
+                    otherVersion = request.version,
+                    otherTimestamp = request.timestamp
+            )
 
             // 3c. Do something with the request
             // you logic goes here.
-            val res = Success("Sample result from CLI for req: " + req.path)
+            val res = Success("Sample result from CLI for req: " + request.path)
 
-            // 4. Now return the command w/ the new result.
-            val cliResult = cmd.copy(result = res.toResponse())
-            return cliResult
-        }
-
-
-        /**
-         * Use case 3d: ( OPTIONAL ) do some stuff after the command execution
-         *
-         * @param cmd
-         * @return
-         */
-        override fun onCommandAfterExecute(cmd: CliCommand): CliCommand {
-            _writer.highlight("\thook: onCommandAfterExecute - after command is executed")
-            return cmd
+            // 4. Now return the response
+            return Success(
+                    CliResponse(
+                            request = request,
+                            success = true,
+                            code = StatusCodes.SUCCESS.code,
+                            meta = mapOf(),
+                            value = "Sample Response",
+                            msg = "Processed",
+                            err = null,
+                            tag = "tag-123"
+                    ))
         }
     }
     //</doc:setup>
@@ -126,7 +125,7 @@ class Example_CLI : Cmd("auth") {
 
         //<doc:examples>
         // CASE 1: Create your own shell by extending the ShellService
-        val shell = AppShell(Info.none, Folders.default, CliSettings())
+        val shell = AppCLI(Info.none, Folders.default, CliSettings())
 
 
         // CASE 2: (Optional) configure a startup command
@@ -148,7 +147,7 @@ class Example_CLI : Cmd("auth") {
 
         // CASE 4: Example command line ( simulating user entered text )
         // NOTE: the action "app.users.invite" is translated to "area.api.action"
-        shell.onCommandExecute("app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'")
+        shell.executeText("app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'")
 
 
         // CASE 5: exit

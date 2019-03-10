@@ -9,7 +9,7 @@ import slatekit.common.info.ApiKey
 import slatekit.common.info.Credentials
 import slatekit.common.encrypt.Encryptor
 import slatekit.app.AppRunner
-import slatekit.core.cli.CliSettings
+import slatekit.cli.CliSettings
 import slatekit.integration.apis.CliApi
 import slatekit.integration.common.AppEntContext
 import slatekit.tools.docs.DocApi

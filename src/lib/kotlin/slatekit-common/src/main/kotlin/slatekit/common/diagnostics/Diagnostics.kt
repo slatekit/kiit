@@ -56,7 +56,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info $more")
                 response.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info $more")
                 response.isInFailureRange()    -> logger.error("$prefix $name failed: $info $more")
-                else                                -> logger.error("$prefix $name failed: $info $more")
+                else                           -> logger.error("$prefix $name failed: $info $more")
             }
         }
     }
@@ -73,7 +73,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> tracker.filtered(request)
                 response.isInBadRequestRange() -> tracker.invalid(request, response.err)
                 response.isInFailureRange()    -> tracker.failed(request, response.err)
-                else                                -> tracker.failed(request, response.err)
+                else                           -> tracker.failed(request, response.err)
             }
         }
     }
@@ -92,7 +92,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> metrics.count("$metric.total_filtered", tags)
                 response.isInBadRequestRange() -> metrics.count("$metric.total_invalid", tags)
                 response.isInFailureRange()    -> metrics.count("$metric.total_failed", tags)
-                else                                -> metrics.count("$metric.total_other", tags)
+                else                           -> metrics.count("$metric.total_other", tags)
             }
         }
     }
@@ -109,7 +109,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> events.onFiltered(sender, request, response)
                 response.isInBadRequestRange() -> events.onInvalid(sender, request, response.err)
                 response.isInFailureRange()    -> events.onErrored(sender, request, response.err)
-                else                                -> events.onEvent(sender, request, response)
+                else                           -> events.onEvent(sender, request, response)
             }
         }
     }
