@@ -14,31 +14,31 @@ import slatekit.common.requests.*
  */
 open class Diagnostics<TRequest>(
         val prefix:String,
-        val nameFetcher:(TRequest) -> String,
-        val infoFetcher:(TRequest) -> String,
-        val metricFetcher:(TRequest) -> String,
-        val tagsFetcher:(TRequest) -> List<String>,
-        val logger: Logger? = null,
-        val metrics: Metrics? = null,
-        val events: Events<TRequest, Response<*>, Exception>? = null,
-        val tracker: Tracker<TRequest, Response<*>, Exception>? = null) {
+        protected val nameFetcher:(TRequest) -> String,
+        protected val infoFetcher:(TRequest) -> String,
+        protected val metricFetcher:(TRequest) -> String,
+        protected val tagsFetcher:(TRequest) -> List<String>,
+        protected val logger: Logger? = null,
+        protected val metrics: Metrics? = null,
+        protected val events: Events<TRequest, Response<*>, Exception>? = null,
+        protected val tracker: Tracker<TRequest, Response<*>, Exception>? = null) {
 
 
     /**
      * Record all relevant diagnostics
      */
-    open fun record(sender: Any, request: TRequest, result: Response<*>) {
+    open fun record(sender: Any, request: TRequest, response: Response<*>) {
         // Log results
-        logger?.let { log(sender, request, result) }
+        logger?.let { log(sender, request, response) }
 
         // Track the last response
-        tracker?.let { track(sender, request, result) }
+        tracker?.let { track(sender, request, response) }
 
         // Update metrics
-        metrics?.let { meter(sender, request, result) }
+        metrics?.let { meter(sender, request, response) }
 
         // Notify event listeners
-        events?.let { notify(sender, request, result) }
+        events?.let { notify(sender, request, response) }
     }
 
 

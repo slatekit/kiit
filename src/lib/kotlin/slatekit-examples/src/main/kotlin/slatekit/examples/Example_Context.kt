@@ -59,11 +59,10 @@ class Example_Context : Cmd("cmd") {
         // 4.  log : the global logger ( you can easily have local loggers )
         // 5.  inf : info about the application (name, desc, group, etc)
         // 6.  ent : the entities which are mapped ORM entities ( optional )
-        // 7.  host: the computer host running the app
-        // 8.  lang: the version info of java/scala running the app
-        // 9.  dbs : a list of available database connections
-        // 10. dirs: the standardized runtime folders for the app
-        // 11. enc : the encryption service to handle encryption/decryption
+        // 7.  sys : the system info including host and language
+        // 8.  dirs: the standardized runtime folders for the app
+        // 9.  enc : the encryption service to handle encryption/decryption
+        // 10. app : the application info/about
         //
         // NOTES:
         // 1. Many of these are OPTIONAL
