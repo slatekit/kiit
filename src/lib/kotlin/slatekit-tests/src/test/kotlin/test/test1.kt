@@ -3,9 +3,8 @@ package test
 
 import slatekit.common.Random
 import slatekit.common.metrics.MetricsLite
-import slatekit.common.metrics.MetricsSettings
-import slatekit.common.metrics.Tags
-import slatekit.common.queues.QueueSourceDefault
+import slatekit.common.queues.QueueSourceInMemory
+import slatekit.common.queues.QueueStringConverter
 import slatekit.core.common.AppContext
 import slatekit.workers.System
 import test.workers.WorkerSample
@@ -28,7 +27,10 @@ fun main(args: Array<String>) {
 fun testWorkers():Unit {
 
     // 1. Queues
-    val queues = (1..4).mapIndexed{ index, ndx -> QueueSourceDefault<String>("q" + index.toString()) }
+    val converter = QueueStringConverter()
+    val queues = (1..4).mapIndexed { index, ndx ->
+        QueueSourceInMemory<String>("q" + index.toString(), converter)
+    }
 
     // Populate each queue
     queues.forEachIndexed { index, queue ->

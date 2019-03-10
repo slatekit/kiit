@@ -1,5 +1,7 @@
 package slatekit.workers
 
+import slatekit.common.queues.QueueEntry
+
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
  * A job is stored as a single message in queue or a record in a database.
@@ -18,7 +20,12 @@ package slatekit.workers
  *  payload  = "JSON data...",
  *  source   = rawSource ( e.g. AWS SQS messages )
  */
-data class Job(val id: String, val queue: String, val task: String, val payload: String, val refId: String, val source: Any) {
+data class Job(val id: String,
+               val queue: String,
+               val task: String,
+               val payload: String,
+               val refId: String,
+               val source: Any) {
 
     companion object {
 

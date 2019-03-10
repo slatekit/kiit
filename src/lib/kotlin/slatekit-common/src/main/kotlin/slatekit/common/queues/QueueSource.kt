@@ -26,73 +26,82 @@ interface QueueSource<T> {
      */
     val name: String
 
+
+    /**
+     * Handles conversion to / from String to the type
+     */
+    val converter:QueueValueConverter<T>
+
+
     /**
      * Initialization hook
      */
     fun init() {}
+
 
     /**
      * Close the queue
      */
     fun close() {}
 
+
     /**
      * Get total number of items in queue
      */
     fun count(): Int
 
+
     /**
      * Get the next item in the queue
      */
-    fun next(): T?
+    fun next(): QueueEntry<T>?
+
 
     /**
      * Get the next batch of items
      */
-    fun next(size: Int = 10): List<T>? = null
+    fun next(size: Int = 10): List<QueueEntry<T>>? = null
+
 
     /**
      * Completes the item ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun complete(item: T?) {}
+    fun complete(entry: QueueEntry<T>?) {}
+
 
     /**
      * Completes the items ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun completeAll(items: List<T>?) {}
+    fun completeAll(entries: List<QueueEntry<T>>?) {}
+
 
     /**
      * Removes the item from the queue
      */
-    fun abandon(item: T?) {}
+    fun abandon(entry: QueueEntry<T>?) {}
+
 
     /**
      * Sends the message to the queue
      */
     fun send(value: T, tagName: String = "", tagValue: String = ""): Try<String>
 
+
     /**
      * Sends the item as a message to the queue
      */
     fun send(value: T, attributes: Map<String, Any>): Try<String>
+
 
     /**
      * Sends the item to the queue from a local file path
      */
     fun sendFromFile(fileNameLocal: String, tagName: String = "", tagValue: String = ""): Try<String>
 
-    /**
-     * Converts a String value into the value for the queue
-     */
-    fun convert(value:String):T?
-
 
     fun toString(item: T?): String {
-        return when (item) {
-            is QueueEntry<*> -> item.value.toString()
-            else -> item?.toString() ?: ""
-        }
+        return converter.convertToString(item) ?: ""
     }
 }

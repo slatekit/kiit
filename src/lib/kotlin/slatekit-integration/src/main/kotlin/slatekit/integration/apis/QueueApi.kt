@@ -60,25 +60,26 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         return items ?: listOf()
     }
 
-    fun getContent(msg: Any?): String {
-        return (queue as slatekit.common.queues.QueueSourceMsg).getMessageBody(msg?.toString() ?: "")
-    }
-
     @ApiAction(desc = "gets next item and saves it to file")
     fun nextToFile(complete: Boolean, fileNameLocal: String): Any? {
         val item = queue.next()
         if (complete) {
             queue.complete(item)
         }
-        return writeToFile(item, fileNameLocal, 0, { m -> getContent(m) })
+        return writeToFile(item, fileNameLocal, 0) { m -> item?.getValue() ?: "" }
     }
 
     @ApiAction(desc = "gets next set of items and saves them to files")
     fun nextBatchToFiles(size: Int = 10, complete: Boolean, fileNameLocal: String): List<String?> {
         val items = queue.next(size)
         val result = items?.let { all ->
-            all.mapIndexed { index, any -> writeToFile(all[index], fileNameLocal, index, { m -> getContent(m) }) }
-        } ?: listOf("No items available")
+            val res= all.mapIndexed { index, entry ->
+                val content = entry.getValue() ?: ""
+                writeToFile(all[index], fileNameLocal, index) { content }
+                content
+            }
+            res
+        } ?: listOf<String?>("No items available")
         return result
     }
 

@@ -13,8 +13,6 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.auth.AuthConsole
-import slatekit.common.auth.User
 
 //</doc:import_required>
 
@@ -22,7 +20,7 @@ import slatekit.common.auth.User
 import slatekit.core.cmds.Cmd
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.queues.QueueSourceDefault
+import slatekit.common.queues.QueueSourceInMemory
 //</doc:import_examples>
 
 
@@ -41,7 +39,7 @@ class Example_Queue : Cmd("queue") {
     //
     // as the in memory queue remove the items from calls to next/nextBatch.
 
-    val queue = QueueSourceDefault<String>()
+    val queue = QueueSourceInMemory<String>()
     //</doc:setup>
 
     //<doc:examples>

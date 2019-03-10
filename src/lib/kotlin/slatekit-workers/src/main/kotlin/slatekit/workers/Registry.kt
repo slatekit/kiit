@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.workers
 
-import slatekit.common.queues.QueueSourceMsg
+import slatekit.common.queues.QueueSource
 import slatekit.workers.core.QueueInfo
 import slatekit.workers.core.Utils
 import java.util.*
@@ -44,10 +44,10 @@ class Registry(val sys: System) {
      * Gets a batch of jobs from the next queue
      */
     fun getBatch(queueInfo: QueueInfo, size: Int): List<Job>? {
-        val queue = queueInfo.queue as QueueSourceMsg<Any>
-        val items = queue.next(size)
-        return items?.map { item ->
-            Utils.toJob(item, queueInfo, queue)
+        val queue = queueInfo.queue
+        val entries = queue.next(size)
+        return entries?.map { entry ->
+            Utils.toJob(entry, queueInfo)
         }
     }
 

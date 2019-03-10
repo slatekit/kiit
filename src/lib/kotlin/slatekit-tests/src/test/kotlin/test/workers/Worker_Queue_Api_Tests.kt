@@ -7,7 +7,7 @@ import slatekit.apis.ApiContainer
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.*
-import slatekit.common.queues.QueueSourceDefault
+import slatekit.common.queues.QueueSourceInMemory
 import slatekit.core.common.AppContext
 import test.setup.SampleTypes2Api
 import test.setup.WorkerSampleApi
@@ -28,7 +28,7 @@ class Worker_Queue_Api_Tests {
         val ctx = AppContext.simple("queues")
 
         // 2. queues
-        val queues = listOf(QueueSourceDefault<String>())
+        val queues = listOf(QueueSourceInMemory.stringQueue())
 
         // 3. apis
         val api = WorkerSampleApi(ctx, queues)
@@ -59,7 +59,7 @@ class Worker_Queue_Api_Tests {
     @Test
     fun can_run_from_queue() {
         val container = buildContainer()
-        val queues = listOf(QueueSourceDefault<String>())
+        val queues = listOf(QueueSourceInMemory.stringQueue())
         TODO.IMPLEMENT("tests", "Workers")
         //val worker = WorkerWithQueuesApi(container, queues,null, null, WorkerSettings())
         val json1 = """
