@@ -10,8 +10,8 @@ import slatekit.results.Try
 
 
 @Api(area = "slate", name = "setup", desc= "new project setup",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class SetupApi(val context: Context) {
+        auth = AuthModes.apiKey, roles = "", verb = Verbs.auto, protocol = Protocols.cli)
+class SetupApi(context: Context) {
 
     val service = SetupService(context)
 

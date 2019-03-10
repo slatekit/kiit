@@ -19,12 +19,15 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.Context
+import slatekit.common.Uris
 import slatekit.common.Vars
+import slatekit.core.email.EmailService
 import slatekit.results.Notice
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
         auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
-class EmailApi(val svc: slatekit.core.email.EmailService, override val context: slatekit.common.Context) : ApiWithSupport {
+class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSupport {
 
     /**
      * Sends the email message
@@ -36,8 +39,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      */
     @ApiAction(desc = "send an email")
     fun send(to: String, subject: String, body: String, html: Boolean): Notice<Boolean> {
-        val content = slatekit.common.Uris.readText("user://blendlife-kotlin/templates/template_vacation.html")!!
-        return this.svc.send(to, subject, content, html)
+        return this.svc.send(to, subject, body, html)
     }
 
     /**
@@ -50,7 +52,7 @@ class EmailApi(val svc: slatekit.core.email.EmailService, override val context: 
      */
     @ApiAction(desc = "send an email")
     fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Notice<Boolean> {
-        val content = slatekit.common.Uris.readText(filePath)!!
+        val content = Uris.readText(filePath)!!
         return this.svc.send(to, subject, content, html)
     }
 

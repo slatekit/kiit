@@ -17,7 +17,8 @@ import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.docs.DocApi
 
-class SlateKit(ctx: Context) : App<Context>(ctx) {
+class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
+
 
     companion object {
 
@@ -78,23 +79,22 @@ class SlateKit(ctx: Context) : App<Context>(ctx) {
         val keys = listOf(ApiKey("cli", "abc", "dev,qa,ops,admin"))
         val creds = Credentials("1", "john doe", "jdoe@abc.com", key = keys.first().key)
         val auth = Authenticator(keys)
-        val cli = CliApi(creds, ctx, auth,
-                CliSettings(enableLogging = true, enableOutput = true),
-                listOf(
-                        // Sample APIs for demo purposes
-                        // Instances are created per request.
-                        // The primary constructor must have either 0 parameters
-                        // or a single paramter taking the same Context as ctx above )
 
-                        // Example 1: without annotations ( pure kotlin objects )
-                        Api(DocApi::class, setup = Annotated, declaredOnly = true),
-                        Api(InfoApi::class, setup = Annotated, declaredOnly = true),
-                        Api(VersionApi::class, setup = Annotated, declaredOnly = true)
-//                        Api(EmailApi::class, setup = Annotated, declaredOnly = true),
-//                        Api(SmsApi::class, setup = Annotated, declaredOnly = true),
-//                        Api(FilesApi::class, setup = Annotated, declaredOnly = true),
-//                        Api(QueueApi::class, setup = Annotated, declaredOnly = true)
-                )
+        // APIs
+        val requiredApis = listOf(
+                Api(DocApi::class, setup = Annotated, declaredOnly = true),
+                Api(InfoApi(ctx)           , declaredOnly = true, setup = Annotated),
+                Api(VersionApi(ctx)        , declaredOnly = true, setup = Annotated)
+        )
+        val optionalApis = loadOptionalApis()
+        val allApis = requiredApis.plus(optionalApis)
+
+        val cli = CliApi(
+                creds = creds,
+                ctx = ctx,
+                auth = auth,
+                settings = CliSettings(enableLogging = true, enableOutput = true),
+                apiItems = allApis
         )
 
         // =========================================================================
@@ -102,6 +102,23 @@ class SlateKit(ctx: Context) : App<Context>(ctx) {
         // =========================================================================
         cli.run()
         return Success(true)
+    }
+
+
+    private fun loadOptionalApis():List<Api>{
+
+        // @param key : "email"
+        fun load(key:String, call:() -> Api ):Api? {
+            val enabled = ctx.cfg.getBoolOrElse(key, false)
+            return if(enabled) call() else null
+        }
+        val apis = listOf(
+            load( "email") { Api(EmailApi(emails(), ctx) , declaredOnly = true, setup = Annotated) },
+            load( "files") { Api(FilesApi(files(), ctx)  , declaredOnly = true, setup = Annotated) },
+            load( "queues") { Api(QueueApi(queues(), ctx) , declaredOnly = true, setup = Annotated) },
+            load( "sms") { Api(SmsApi(sms(), ctx)      , declaredOnly = true, setup = Annotated) }
+        )
+        return apis.filterNotNull()
     }
 
 
