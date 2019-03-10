@@ -15,6 +15,8 @@ package slatekit.examples
 import slatekit.common.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
+import slatekit.common.requests.SimpleRequest
+import slatekit.common.requests.Source
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -60,10 +62,10 @@ class Example_Request : Cmd("request") {
         // the request is appropriately built from either a CLI Command or the
         // SparkJava request ( with a thin abstraction layer ). The requests are
         // kept very simple/light for maximum performance and data is NEVER copied.
-        val request = Request(
+        val request:Request = SimpleRequest(
                 path = "app.users.activate",
                 parts = listOf("app", "users", "activate"),
-                source = "cli",
+                source = Source.CLI,
                 verb = "post",
                 meta = InputArgs(mapOf("api-key" to "ABC-123")),
                 data = InputArgs(mapOf("userId" to 5001)),

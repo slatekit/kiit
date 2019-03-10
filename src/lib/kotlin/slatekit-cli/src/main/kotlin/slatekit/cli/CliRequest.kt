@@ -105,6 +105,32 @@ data class CliRequest(
         )
     }
 
+    /**
+     * To transform / rewrite the request
+     */
+    fun clone(
+            otherArgs: Args,
+            otherPath: String,
+            otherData: Inputs,
+            otherMeta: slatekit.common.Metadata,
+            otherRaw: Any?,
+            otherOutput: String?,
+            otherTag: String,
+            otherVersion: String,
+            otherTimestamp:DateTime) : Request {
+        return this.copy(
+                args      = otherArgs,
+                path      = otherPath,
+                data      = otherData,
+                meta      = otherMeta,
+                raw       = otherRaw,
+                output    = otherOutput,
+                tag       = otherTag,
+                version   = otherVersion,
+                timestamp = otherTimestamp
+        )
+    }
+
 
 
     companion object {

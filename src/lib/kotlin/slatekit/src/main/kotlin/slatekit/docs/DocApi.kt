@@ -1,4 +1,4 @@
-package slatekit.tools.docs
+package slatekit.docs
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
@@ -36,8 +36,6 @@ class DocApi(val context: AppEntContext) {
      * @param name    : name of the component
      * sys.docs.generateComponent -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit" -name="Api"
      */
-
-
     @ApiAction(name = "", desc= "generates the markdown docs")
     fun generateComponent(root:String, template:String, output:String, name:String): Try<String> {
         val doc = DocService(root, output, template)

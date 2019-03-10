@@ -1,4 +1,4 @@
-package slatekit.tools.docs
+package slatekit.docs
 
 object DocConstants {
     val header 		  = "doc:header"

@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.workers.core
 
-import slatekit.common.queues.QueueSourceMsg
+import slatekit.common.queues.QueueEntry
 import slatekit.workers.Job
 import slatekit.workers.Worker
 import java.util.concurrent.ThreadPoolExecutor
@@ -37,12 +37,12 @@ object Utils {
     /**
      * Converts a message from any queue into a Job
      */
-    fun toJob(item: Any, queueInfo: QueueInfo, queue: QueueSourceMsg<Any>): Job {
-        val id = queue.getMessageTag(item, "id")
-        val refId = queue.getMessageTag(item, "refId")
-        val task = queue.getMessageTag(item, "task")
-        val body = queue.getMessageBody(item)
-        val job = Job(id, queueInfo.name, task, body, refId, item)
+    fun toJob(entry: QueueEntry<String>, queueInfo: QueueInfo): Job {
+        val id = entry.getTag("id") ?: ""
+        val refId = entry.getTag("refId") ?: ""
+        val task = entry.getTag("task") ?: ""
+        val body = entry.getValue()?.toString() ?: ""
+        val job = Job(id, queueInfo.name, task, body, refId, entry)
         return job
     }
 

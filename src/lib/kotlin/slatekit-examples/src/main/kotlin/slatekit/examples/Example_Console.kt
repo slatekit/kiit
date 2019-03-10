@@ -31,7 +31,7 @@ class Example_Console : Cmd("console") {
   {
     //<doc:examples>
     // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-    val writer = ConsoleWriter()
+    val writer = SemanticConsole()
 
     // Case 1: Title - prints text in title format ( CAPS + Color Cyan )
     writer.title("title is in CAPS")
@@ -49,7 +49,7 @@ class Example_Console : Cmd("console") {
     writer.important("important is red")
 
     // Case 6: Subtitle ( Color Red )
-    writer.error("error shown in red")
+    writer.failure("error shown in red")
 
     // Case 7: Subtitle ( Color Green )
     writer.success("success is in green")
@@ -72,11 +72,11 @@ class Example_Console : Cmd("console") {
     writer.list( listOf( 2, false, "www.codehelix.co", DateTime.now(), 56.78 ), true)
 
     // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
-    writer.writeItemsByText(listOf(
-      ConsoleItem(Title     , "About App"                   , true),
-      ConsoleItem(Subtitle  , "Example of Console component", true),
-      ConsoleItem(Url       , "http://www.slatekit.com"     , true),
-      ConsoleItem(Highlight , "visit us for more info"      , true)
+    writer.writeItems(listOf(
+      SemanticOutput(SemanticText.Title     , "About App"                   , true),
+      SemanticOutput(SemanticText.Subtitle  , "Example of Console component", true),
+      SemanticOutput(SemanticText.Url       , "http://www.slatekit.com"     , true),
+      SemanticOutput(SemanticText.Highlight , "visit us for more info"      , true)
     ))
     //</doc:examples>
     return Success("")

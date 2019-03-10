@@ -14,10 +14,10 @@ import slatekit.common.requests.*
  */
 open class Diagnostics<TRequest>(
         val prefix:String,
-        val nameFetcher:(TRequest) -> String,
-        val infoFetcher:(TRequest) -> String,
-        val metricFetcher:(TRequest) -> String,
-        val tagsFetcher:(TRequest) -> List<String>,
+        protected val nameFetcher:(TRequest) -> String,
+        protected val infoFetcher:(TRequest) -> String,
+        protected val metricFetcher:(TRequest) -> String,
+        protected val tagsFetcher:(TRequest) -> List<String>,
         val logger: Logger? = null,
         val metrics: Metrics? = null,
         val events: Events<TRequest, Response<*>, Exception>? = null,
@@ -27,18 +27,18 @@ open class Diagnostics<TRequest>(
     /**
      * Record all relevant diagnostics
      */
-    open fun record(sender: Any, request: TRequest, result: Response<*>) {
+    open fun record(sender: Any, request: TRequest, response: Response<*>) {
         // Log results
-        logger?.let { log(sender, request, result) }
+        logger?.let { log(sender, request, response) }
 
         // Track the last response
-        tracker?.let { track(sender, request, result) }
+        tracker?.let { track(sender, request, response) }
 
         // Update metrics
-        metrics?.let { meter(sender, request, result) }
+        metrics?.let { meter(sender, request, response) }
 
         // Notify event listeners
-        events?.let { notify(sender, request, result) }
+        events?.let { notify(sender, request, response) }
     }
 
 
@@ -56,7 +56,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> logger.info ("$prefix $name filtered: $info $more")
                 response.isInBadRequestRange() -> logger.error("$prefix $name invalid: $info $more")
                 response.isInFailureRange()    -> logger.error("$prefix $name failed: $info $more")
-                else                                -> logger.error("$prefix $name failed: $info $more")
+                else                           -> logger.error("$prefix $name failed: $info $more")
             }
         }
     }
@@ -73,7 +73,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> tracker.filtered(request)
                 response.isInBadRequestRange() -> tracker.invalid(request, response.err)
                 response.isInFailureRange()    -> tracker.failed(request, response.err)
-                else                                -> tracker.failed(request, response.err)
+                else                           -> tracker.failed(request, response.err)
             }
         }
     }
@@ -92,7 +92,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> metrics.count("$metric.total_filtered", tags)
                 response.isInBadRequestRange() -> metrics.count("$metric.total_invalid", tags)
                 response.isInFailureRange()    -> metrics.count("$metric.total_failed", tags)
-                else                                -> metrics.count("$metric.total_other", tags)
+                else                           -> metrics.count("$metric.total_other", tags)
             }
         }
     }
@@ -109,7 +109,7 @@ open class Diagnostics<TRequest>(
                 response.isFilteredOut()       -> events.onFiltered(sender, request, response)
                 response.isInBadRequestRange() -> events.onInvalid(sender, request, response.err)
                 response.isInFailureRange()    -> events.onErrored(sender, request, response.err)
-                else                                -> events.onEvent(sender, request, response)
+                else                           -> events.onEvent(sender, request, response)
             }
         }
     }

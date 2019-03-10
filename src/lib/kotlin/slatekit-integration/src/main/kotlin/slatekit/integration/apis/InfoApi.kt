@@ -16,13 +16,13 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
 import slatekit.apis.security.*
+import slatekit.common.Context
 import slatekit.common.requests.Request
 import slatekit.common.info.*
-import slatekit.integration.common.AppEntContext
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class InfoApi(val context: AppEntContext)  {
+class InfoApi(val context: Context)  {
 
     @ApiAction(desc = "gets info about this build")
     fun build(): Build = context.build

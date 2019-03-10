@@ -22,4 +22,4 @@ import slatekit.common.queues.QueueSource
  * @param priority : Priority of the queue ( low, medium, high ) for weighted selection
  * @param queue : The actual queue source / implementation
  */
-data class QueueInfo(val name: String, val priority: Priority, val queue: QueueSource<*>)
+data class QueueInfo(val name: String, val priority: Priority, val queue: QueueSource<String>)

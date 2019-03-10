@@ -68,6 +68,11 @@ class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: 
         return files.delete(folder, name)
     }
 
+    @ApiAction(desc = "get file as text")
+    fun getAsText(folder: String, name: String):Try<String> {
+        return files.getAsText(folder, name)
+    }
+
     @ApiAction(desc = "downloads the file specified by folder and name to the local folder specified.")
     fun download(folder: String, name: String, localFolder: String, display: Boolean): Try<String> {
         return show(files.download(folder, name, interpretUri(localFolder) ?: localFolder), display)

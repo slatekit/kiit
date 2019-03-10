@@ -111,7 +111,7 @@ class AwsCloudFiles(
      */
     override fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
-        return executeResult<String>(SOURCE, "delete", data = fullName, call = { ->
+        return executeResult(SOURCE, "delete", data = fullName, call = {
             _s3.deleteObject(defaultFolder, fullName)
             fullName
         })
@@ -126,7 +126,7 @@ class AwsCloudFiles(
      */
     override fun getAsText(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
-        return executeResult<String>(SOURCE, "getAsText", data = fullName, call = { ->
+        return executeResult(SOURCE, "getAsText", data = fullName, call = {
 
             val obj = _s3.getObject(GetObjectRequest(defaultFolder, fullName))
             val content = CloudUtils.toString(obj.getObjectContent())
@@ -145,7 +145,7 @@ class AwsCloudFiles(
      */
     override fun download(folder: String, name: String, localFolder: String): Try<String> {
         val fullName = getName(folder, name)
-        return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
+        return executeResult<String>(SOURCE, "download", data = fullName, call = {
             val content = getAsText(folder, name)
             val finalFolder = Uris.interpret(localFolder)
             val localFile = File(finalFolder, name)
@@ -165,7 +165,7 @@ class AwsCloudFiles(
      */
     override fun downloadToFile(folder: String, name: String, filePath: String): Try<String> {
         val fullName = getName(folder, name)
-        return executeResult<String>(SOURCE, "download", data = fullName, call = { ->
+        return executeResult(SOURCE, "download", data = fullName, call = {
             val content = getAsText(folder, name)
             val localFile = Uris.interpret(filePath)
             val localFileName = localFile ?: name
@@ -186,7 +186,7 @@ class AwsCloudFiles(
         // full name of the file is folder + name
         val fullName = getName(folder, name)
 
-        return executeResult<String>(SOURCE, action, data = fullName, call = { ->
+        return executeResult(SOURCE, action, data = fullName, call = {
 
             _s3.putObject(defaultFolder, fullName, CloudUtils.toInputStream(content), ObjectMetadata())
             fullName
@@ -195,15 +195,14 @@ class AwsCloudFiles(
 
     private fun getName(folder: String, name: String): String {
         // Case 1: no folder supplied, assume in root bucket
-        return if (folder.isNullOrEmpty())
-            name
+        return when {
+            folder.isNullOrEmpty() -> name
 
-        // Case 2: folder == root folder
-        else if (folder == defaultFolder)
-            name
+            // Case 2: folder == root folder
+            folder == defaultFolder -> name
 
-        // Case 3: sub-folder
-        else
-            "$folder-$name"
+            // Case 3: sub-folder
+            else -> "$folder-$name"
+        }
     }
 }

@@ -3,6 +3,7 @@ package test.cloud
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
+import slatekit.common.queues.QueueStringConverter
 import slatekit.core.cloud.CloudQueue
 import java.io.File
 
@@ -16,7 +17,11 @@ class AwsSqsTests {
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue<String>("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue<String>(
+                "slatekit-unit-tests",
+                QueueStringConverter(),
+                "user://$SLATEKIT_DIR/conf/aws.conf",
+                "aws")
 
         queue.init()
 
@@ -30,7 +35,7 @@ class AwsSqsTests {
 
         // Get text
         val result1 = queue.next()
-        val item = queue.toString(result1)
+        val item = result1?.getValue()
         assert(item != null)
         assert(item == contentCreate)
         queue.complete(result1)
@@ -40,7 +45,11 @@ class AwsSqsTests {
     fun can_test_update() {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val queue = AwsCloudQueue<String>("slatekit-unit-tests", "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+        val queue = AwsCloudQueue<String>(
+                "slatekit-unit-tests",
+                QueueStringConverter(),
+                "user://$SLATEKIT_DIR/conf/aws.conf",
+                "aws")
 
         queue.init()
 
@@ -59,12 +68,12 @@ class AwsSqsTests {
         val results = queue.next(2)
         assert(results.size == 2)
 
-        val item1 = queue.toString(results[0])
+        val item1 = results[0]?.getValue()
         assert(item1 != null)
         assert(item1 == contentBatch1)
         queue.complete(results[0])
 
-        val item2 = queue.toString(results[1])
+        val item2 = results[1]?.getValue()
         assert(item2 != null)
         assert(item2 == contentBatch2)
         queue.complete(results[1])
@@ -75,7 +84,7 @@ class AwsSqsTests {
 
         // Get text
         val result1 = queue.next()
-        val item = queue.toString(result1)
+        val item = result1?.getValue()
         assert(item != null)
         assert(item == expectedContent)
         queue.complete(result1)

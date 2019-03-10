@@ -1,10 +1,12 @@
 package slatekit.workers
 
 import slatekit.common.*
+import slatekit.common.TODO.IMPROVE
 import slatekit.common.info.About
 import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
+import slatekit.common.queues.QueueEntry
 import slatekit.common.queues.QueueSource
 import slatekit.results.Notice
 import slatekit.results.StatusCodes
@@ -160,7 +162,7 @@ open class Worker<T>(
                 val result = work(job)
 
                 // Acknowledge/Abandon
-                complete(sender, queueSource as QueueSource<Any>, job, result)
+                complete(sender, queueSource, job, result)
 
                 // Track all diagnostics
                 diagnostics.record(this, WorkRequest(job, queueInfo, this), result.toResponse())
@@ -254,10 +256,11 @@ open class Worker<T>(
     }
 
 
-    protected open fun complete(sender: Any, queue: QueueSource<Any>, job:Job, result:Try<*>) {
+    protected open fun complete(sender: Any, queue: QueueSource<String>, job:Job, result:Try<*>) {
+        IMPROVE("workers", "make the source type safe or decouple it from the job")
         when(result.success){
-            true  -> queue.complete(job.source as String?)
-            false -> queue.abandon(job.source as String?)
+            true  -> queue.complete(job.source as QueueEntry<String>)
+            false -> queue.abandon(job.source as QueueEntry<String>)
         }
     }
 }

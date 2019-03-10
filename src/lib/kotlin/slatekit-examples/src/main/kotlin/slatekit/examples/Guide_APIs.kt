@@ -2,6 +2,7 @@ package slatekit.examples
 
 import slatekit.apis.ApiContainer
 import slatekit.apis.core.Api
+import slatekit.common.conf.Config
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.core.cmds.Cmd
@@ -22,7 +23,7 @@ class Guide_APIs : Cmd("types") {
 
     fun setup():Unit {
 
-        val ctx = AppEntContext.simple("myapp")
+        val ctx = AppEntContext.sample(Config(), "myapp", "myapp", "App1", "Company1")
         val container = ApiContainer(
                 ctx  = ctx,
                 auth = null,

@@ -19,12 +19,12 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.Context
 import slatekit.common.info.Host
-import slatekit.integration.common.AppEntContext
 
 @Api(area = "app", name = "version", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class VersionApi(override val context: AppEntContext) : ApiWithSupport {
+class VersionApi(override val context: Context) : ApiWithSupport {
 
     @ApiAction(desc = "gets info about the host")
     fun host(): Host = context.sys.host
