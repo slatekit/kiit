@@ -131,7 +131,7 @@ class Example_Diagnostics : Cmd("cmd") {
 
         // CASE 5: Track only ( store last request/response )
         diagnostics.track( sender = this, request = request1, response = response1 )
-        
+
         //</doc:examples>
         return Success("")
     }

@@ -18,10 +18,10 @@ open class Diagnostics<TRequest>(
         protected val infoFetcher:(TRequest) -> String,
         protected val metricFetcher:(TRequest) -> String,
         protected val tagsFetcher:(TRequest) -> List<String>,
-        protected val logger: Logger? = null,
-        protected val metrics: Metrics? = null,
-        protected val events: Events<TRequest, Response<*>, Exception>? = null,
-        protected val tracker: Tracker<TRequest, Response<*>, Exception>? = null) {
+        val logger: Logger? = null,
+        val metrics: Metrics? = null,
+        val events: Events<TRequest, Response<*>, Exception>? = null,
+        val tracker: Tracker<TRequest, Response<*>, Exception>? = null) {
 
 
     /**
