@@ -2,6 +2,7 @@ package slatekit
 
 
 import slatekit.app.AppRunner
+import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 
 
@@ -15,6 +16,6 @@ fun main(args: Array<String>) {
             schema = SlateKit.schema,
             enc = SlateKit.encryptor,
             logs = LogbackLogs(),
-            builder = { ctx -> SlateKit(ctx) }
+            builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
     )
 }
