@@ -80,9 +80,11 @@ dependencies {
     // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-meta:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-common")
+        compile project(":slatekit-meta")
     } //</slatekit_local>
 }
 
