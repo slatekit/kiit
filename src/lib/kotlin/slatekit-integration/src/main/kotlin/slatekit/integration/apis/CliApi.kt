@@ -45,11 +45,11 @@ import slatekit.results.Try
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
 class CliApi(
-        private val creds: Credentials,
         val ctx: slatekit.common.Context,
         val auth: slatekit.apis.core.Auth,
         settings: CliSettings = CliSettings(),
-        apiItems: List<Api> = listOf()
+        apiItems: List<Api> = listOf(),
+        val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
         //val cliMeta: CliMeta? = null
 )
     // TODO: get rid of the "!!" its left over from early days
@@ -85,8 +85,9 @@ class CliApi(
         }
         else {
             // Supply the api-key into each command.
-            val metaWithKey = request.meta.toMap().plus(metaNameForApiKey to creds.key)
-            val metaUpdated = InputArgs(metaWithKey)
+            val existingMeta = request.meta.toMap()
+            val transformedMeta = metaTransform?.invoke(existingMeta)?.toMap() ?: existingMeta
+            val metaUpdated = InputArgs(transformedMeta)
             val requestWithMeta = request.copy(meta = metaUpdated)
             val response = apis.call(requestWithMeta)
             val cliResponse = CliResponse(

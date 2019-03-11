@@ -21,6 +21,7 @@ import slatekit.common.serialization.Serializer
 import slatekit.common.serialization.SerializerCsv
 import slatekit.common.serialization.SerializerJson
 import slatekit.common.serialization.SerializerProps
+import slatekit.meta.Serialization
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -43,9 +44,9 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
     /**
      * Different types of serializers
      */
-    private val serializerCsv  by lazy { SerializerCsv(this::serialize, true) }
-    private val serializerJson by lazy { SerializerJson(this::serialize, true) }
-    private val serializerProp by lazy { SerializerProps(false, this::serialize, true) }
+    //private val serializerCsv  by lazy { SerializerCsv(this::serialize, true) }
+    //private val serializerJson by lazy { SerializerJson(this::serialize, true) }
+    //private val serializerProp by lazy { SerializerProps(false, this::serialize, true) }
 
 
     /**
@@ -93,13 +94,13 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
      * @param obj
      */
     private fun write(request:CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
-        val format = request.args.getStringOrElse(SysParam.Format.id, "props")
+        val format = request.args.getStringOrElse(SysParam.Format.id, "prop")
         text("===============================")
         val text = when (format) {
-            "csv" -> serializerCsv.serialize(obj)
-            "json" -> serializerJson.serialize(obj)
-            "prop" -> serializerProp.serialize(obj)
-            else -> serializerProp.serialize(obj)
+            "csv"  -> Serialization.csv().serialize(obj)
+            "json" -> Serialization.json().serialize(obj)
+            "prop" -> Serialization.props().serialize(obj)
+            else   -> Serialization.props().serialize(obj)
         }
         text(text)
         text("===============================")

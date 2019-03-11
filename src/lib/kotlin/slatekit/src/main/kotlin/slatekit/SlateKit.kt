@@ -2,11 +2,12 @@ package slatekit
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.support.ApiModule
 import slatekit.apis.svcs.Authenticator
 import slatekit.app.App
 import slatekit.cli.CliSettings
-import slatekit.common.Context
 import slatekit.common.args.ArgsSchema
+import slatekit.common.db.DbType
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
@@ -16,9 +17,19 @@ import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.docs.DocApi
+import slatekit.info.Dependency
+import slatekit.info.DependencyApi
+import slatekit.info.DependencyModule
+import slatekit.info.DependencyService
+import slatekit.integration.common.AppEntContext
+import slatekit.integration.mods.Mod
+import slatekit.integration.mods.ModService
+import slatekit.integration.mods.ModuleContext
+import slatekit.orm.core.orm
+import slatekit.orm.migrations.MigrationService
+import slatekit.orm.migrations.MigrationSettings
 
-class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
-
+class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
     companion object {
 
@@ -61,6 +72,15 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
 
     override fun init(): Try<Boolean> {
         println("initializing")
+
+        // System level ( slate kit )
+        // This ModServices allow storing/checking for installed modules in the DB
+        ctx.ent.orm<Long, Mod>(DbType.DbTypeMySql, Mod::class, Long::class,null, ModService::class)
+
+
+        // Application level
+        // All application level components should go here.
+        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMySql, Dependency::class, Long::class,null, DependencyService::class)
         return super.init()
     }
 
@@ -80,21 +100,28 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
         val creds = Credentials("1", "john doe", "jdoe@abc.com", key = keys.first().key)
         val auth = Authenticator(keys)
 
+        // Module api
+        val moduleApi = ModuleApi(moduleContext(), ctx)
+        moduleApi.register(DependencyModule(ctx, moduleContext()))
+
         // APIs
         val requiredApis = listOf(
                 Api(DocApi::class, setup = Annotated, declaredOnly = true),
                 Api(InfoApi(ctx)           , declaredOnly = true, setup = Annotated),
-                Api(VersionApi(ctx)        , declaredOnly = true, setup = Annotated)
+                Api(VersionApi(ctx)        , declaredOnly = true, setup = Annotated),
+                Api(moduleApi , declaredOnly = true, setup = Annotated)
         )
         val optionalApis = loadOptionalApis()
         val allApis = requiredApis.plus(optionalApis)
 
         val cli = CliApi(
-                creds = creds,
                 ctx = ctx,
                 auth = auth,
                 settings = CliSettings(enableLogging = true, enableOutput = true),
-                apiItems = allApis
+                apiItems = allApis,
+                metaTransform = {
+                    listOf("api-key" to creds.key)
+                }
         )
 
         // =========================================================================
@@ -113,10 +140,11 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
             return if(enabled) call() else null
         }
         val apis = listOf(
-            load( "email") { Api(EmailApi(emails(), ctx) , declaredOnly = true, setup = Annotated) },
-            load( "files") { Api(FilesApi(files(), ctx)  , declaredOnly = true, setup = Annotated) },
+            load( "email")  { Api(EmailApi(emails(), ctx) , declaredOnly = true, setup = Annotated) },
+            load( "files")  { Api(FilesApi(files(), ctx)  , declaredOnly = true, setup = Annotated) },
             load( "queues") { Api(QueueApi(queues(), ctx) , declaredOnly = true, setup = Annotated) },
-            load( "sms") { Api(SmsApi(sms(), ctx)      , declaredOnly = true, setup = Annotated) }
+            load( "sms")    { Api(SmsApi(sms(), ctx)      , declaredOnly = true, setup = Annotated) },
+            load( "db")     { Api(DependencyApi(ctx)  , declaredOnly = false, setup = Annotated)     }
         )
         return apis.filterNotNull()
     }
