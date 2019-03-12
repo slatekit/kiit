@@ -10,10 +10,12 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.workers
+package slatekit.workers.utils
 
 import slatekit.results.Failure
 import slatekit.results.Try
+import slatekit.workers.Job
+import slatekit.workers.Worker
 
 open class Middleware {
 

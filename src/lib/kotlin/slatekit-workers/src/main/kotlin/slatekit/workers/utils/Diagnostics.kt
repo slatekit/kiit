@@ -1,11 +1,11 @@
-package slatekit.workers
+package slatekit.workers.utils
 
 import slatekit.common.diagnostics.Diagnostics
 import slatekit.common.diagnostics.Events
 import slatekit.common.diagnostics.Tracker
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
-
+import slatekit.workers.WorkRequest
 
 
 /**

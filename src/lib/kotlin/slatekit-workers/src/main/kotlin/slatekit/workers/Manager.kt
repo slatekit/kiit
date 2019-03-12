@@ -99,7 +99,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
      * Gets the next batch of jobs from the next queue.
      *
      */
-    private fun getJobBatch(queuePosition: Int): Batch? {
+    private fun getJobBatch(queuePosition: Int): JobBatch? {
 
         // 1. Get the next queue to process
         val queueOpt = registry.getQueueAt(queuePosition)
@@ -112,10 +112,10 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
             // 3. Any ?
             if (jobs != null && !jobs.isEmpty()) {
                 log.info("No jobs for queue: ${queue.name}")
-                Batch(queue, jobs, DateTime.now())
+                JobBatch(jobs, queue, DateTime.now())
             } else {
                 log.info("Got jobs from queue: ${queue.name} : ${jobs?.size ?: 0}")
-                Batch(queue, listOf(), DateTime.now())
+                JobBatch(listOf(), queue, DateTime.now())
             }
         }
     }
@@ -128,7 +128,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
     }
 
 
-    private fun process(batch: Batch, worker: Worker<*>) {
+    private fun process(batch: JobBatch, worker: Worker<*>) {
         perform(worker) {
             worker.work(this, batch)
         }

@@ -13,6 +13,7 @@ mantra: Simplicity above all else
 package slatekit.workers.core
 
 import slatekit.common.queues.QueueSource
+import slatekit.workers.Priority
 
 /**
  * Wraps the underlying queue holding the messages with other metadata ( name, priority )

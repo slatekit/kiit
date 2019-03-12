@@ -6,7 +6,7 @@ import org.junit.Test
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
 import slatekit.workers.*
-import slatekit.workers.core.Priority
+import slatekit.workers.Priority
 import slatekit.workers.core.QueueInfo
 
 class Worker_Queue_Tests {

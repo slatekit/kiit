@@ -13,6 +13,8 @@ import slatekit.results.StatusCodes
 import slatekit.results.Try
 import slatekit.workers.core.*
 import slatekit.workers.core.RunStatus
+import slatekit.workers.utils.Diagnostics
+import slatekit.workers.utils.Middleware
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -151,7 +153,7 @@ open class Worker<T>(
     /**
      * For batching purposes
      */
-    open fun work(sender: Any, batch: Batch) {
+    open fun work(sender: Any, batch: JobBatch) {
         val jobs = batch.jobs
         val queueInfo = batch.queue
         val queueSource = batch.queue.queue

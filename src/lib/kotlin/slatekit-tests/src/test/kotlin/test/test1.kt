@@ -8,7 +8,7 @@ import slatekit.common.queues.QueueStringConverter
 import slatekit.core.common.AppContext
 import slatekit.workers.System
 import test.workers.WorkerSample
-import slatekit.workers.core.Priority
+import slatekit.workers.Priority
 import slatekit.workers.core.QueueInfo
 
 
