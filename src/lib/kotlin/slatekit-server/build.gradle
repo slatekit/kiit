@@ -2,7 +2,7 @@ apply from: '../../../../build/gradle/slatekit-common.gradle'
 
 buildscript {
     ext.kotlin_version = '1.3.0'
-    ext.ktor_version = '0.9.5'
+    ext.ktor_version = '1.0.0'
     ext.slatekit_version = new File('../version.txt').text
 
     repositories {
@@ -84,7 +84,7 @@ dependencies {
 
 
     compile "com.googlecode.json-simple:json-simple:1.1"
-    compile 'com.sparkjava:spark-core:2.6.0'
+    //compile 'com.sparkjava:spark-core:2.6.0'
     compile "com.slatekit:slatekit-results:0.9.9"
     compile 'org.threeten:threetenbp:1.3.8'
 	compile fileTree(dir: 'lib', include: '*.jar')
