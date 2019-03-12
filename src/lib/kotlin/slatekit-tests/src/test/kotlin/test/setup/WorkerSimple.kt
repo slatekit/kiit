@@ -5,7 +5,6 @@ import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.workers.*
-import slatekit.workers.core.*
 import slatekit.workers.WorkFunction
 
 class MyWorker(
@@ -13,7 +12,7 @@ class MyWorker(
     callback: WorkFunction<Int>? = null
 ) : Worker<Int>(
     "myworker", "", "", "",
-    callback = callback,
+    work = callback,
     logs = LogsDefault
 ) {
     var isInitialized = false

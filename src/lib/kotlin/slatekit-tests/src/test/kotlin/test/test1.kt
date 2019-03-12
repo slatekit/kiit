@@ -9,7 +9,7 @@ import slatekit.core.common.AppContext
 import slatekit.workers.System
 import test.workers.WorkerSample
 import slatekit.workers.Priority
-import slatekit.workers.core.QueueInfo
+import slatekit.workers.Queue
 
 
 /**
@@ -49,7 +49,7 @@ fun testWorkers():Unit {
     }
 
     // 2. Work system.
-    val queueInfos = queues.map { QueueInfo(it.name, Priority.Low, it) }
+    val queueInfos = queues.map { Queue(it.name, Priority.Low, it) }
     val sys = System(
         AppContext.simple("test"),
         queueInfos,

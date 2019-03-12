@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.workers.core
+package slatekit.workers
 
 import slatekit.common.DateTime
 import slatekit.common.requests.Response
@@ -22,19 +22,15 @@ import slatekit.workers.WorkRequest
  * Worker level status that can be supplied to a front-end
  * and / or for logging/diagnostics purposes.
  */
-data class Stats(
+data class WorkerStats(
         val id: String,
         val name: String,
         val status: Status,
         val lastRunTime: DateTime,
         val lastResult: Try<*>,
-        val totalRequests: Long,
-        val totalSuccesses: Long,
-        val totalErrored: Long,
-        val totalFiltered: Long,
+        val totals:List<Pair<String,Long>>,
         val lastRequest: WorkRequest?,
         val lastFiltered: WorkRequest?,
         val lastSuccess: Pair<WorkRequest, Response<*>>?,
         val lastErrored: Pair<WorkRequest, Exception?>?
-
 )

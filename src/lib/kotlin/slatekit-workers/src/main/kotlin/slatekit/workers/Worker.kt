@@ -4,6 +4,7 @@ import slatekit.common.*
 import slatekit.common.TODO.IMPROVE
 import slatekit.common.info.About
 import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueEntry
@@ -11,10 +12,6 @@ import slatekit.common.queues.QueueSource
 import slatekit.results.Notice
 import slatekit.results.StatusCodes
 import slatekit.results.Try
-import slatekit.workers.core.*
-import slatekit.workers.core.RunStatus
-import slatekit.workers.utils.Diagnostics
-import slatekit.workers.utils.Middleware
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -62,16 +59,27 @@ open class Worker<T>(
         group: String,
         desc: String,
         version: String,
-        val logs: Logs,
+        val queues:List<String> = listOf("*"),
+        val work: WorkFunction<T>? = null,
         val settings: WorkerSettings = WorkerSettings(),
-        val metrics: Metrics = MetricsLite(),
-        val middleware: Middleware = Middleware(),
-        val callback: WorkFunction<T>? = null
+        val logs: Logs = LogsDefault,
+        val metrics: Metrics = MetricsLite()
 
 ) : StatusSupport {
 
+    /**
+     * Initialize with just the name, desc
+     */
+    constructor(name:String, desc:String): this( name, "", desc, "" )
+
+    /**
+     * Initialize with just the name, desc
+     */
+    constructor(name:String, desc:String, queues:List<String>): this( name, "", desc, "", queues )
+
+
     private val _runState = AtomicReference<Status>(Status.InActive)
-    private val _runStatus = AtomicReference<RunStatus>(RunStatus())
+    private val _runStatus = AtomicReference<WorkerStatus>(WorkerStatus())
     private val _runDelay = AtomicReference<Int>(0)
     private val _lastResult = AtomicReference<Try<T>>(slatekit.results.Failure(Exception("not started")))
     private val _lastRunTime = AtomicReference<DateTime>(DateTimes.MIN)
@@ -79,7 +87,7 @@ open class Worker<T>(
     /**
      * Unique id for this worker
      */
-    val id = name + "." + Random.uuid()
+    val id = name.toId() + "." + Random.uuid()
 
     /**
      * Information about this worker
@@ -94,12 +102,6 @@ open class Worker<T>(
 
 
     /**
-     * List of names of queues that this worker can handle jobs from
-     */
-    val queues: List<String> = listOf("*")
-
-
-    /**
      * Logger for this worker ( separate from work system/manager )
      */
     val log = logs.getLogger(this.javaClass)
@@ -108,7 +110,7 @@ open class Worker<T>(
     /**
      * Diagnostics for full logs/metric/tracking/events
      */
-    val diagnostics = Diagnostics(metricId, metrics, log)
+    val diagnostics = WorkDiagnostics(metricId, metrics, log)
 
 
     /**
@@ -187,11 +189,7 @@ open class Worker<T>(
         moveToState(Status.Running)
         _lastRunTime.set(DateTime.now())
 
-        val result = middleware.run(this, job) {
-            //performLog("performing job : ${job.id}  ${job.queue}") {
-                callback?.invoke(job) ?: perform(job)
-            //}
-        }
+        val result = work?.invoke(job) ?: perform(job)
         _lastResult.set(result)
         moveToState(Status.Idle)
         return result
@@ -206,25 +204,27 @@ open class Worker<T>(
         return slatekit.results.Failure(Exception("Not implemented"), StatusCodes.UNIMPLEMENTED)
     }
 
-    fun stats(): Stats {
+    fun stats(): WorkerStats {
         val lastRequest  = diagnostics.tracker?.lastRequest?.get()
         val lastFiltered = diagnostics.tracker?.lastFiltered?.get()
         val lastSuccess  = diagnostics.tracker?.lastSuccess?.get()
         val lastErrored  = diagnostics.tracker?.lastFailure?.get()
-        return Stats(
+        return WorkerStats(
                 about.id,
                 about.name,
                 status = _runState.get(),
-                lastRunTime    = _lastRunTime.get(),
-                lastResult     = _lastResult.get(),
-                totalRequests  = metrics.total("$metricId.total_successes").toLong(),
-                totalSuccesses = metrics.total("$metricId.total_filtered").toLong(),
-                totalErrored   = metrics.total("$metricId.total_failed").toLong(),
-                totalFiltered  = metrics.total("$metricId.total_other").toLong(),
-                lastRequest    = lastRequest,
-                lastFiltered   = lastFiltered,
-                lastSuccess    = lastSuccess,
-                lastErrored    = lastErrored
+                lastRunTime = _lastRunTime.get(),
+                lastResult = _lastResult.get(),
+                totals = listOf(
+                    Pair("totalRequests" , metrics.total ("$metricId.total_requests").toLong()),
+                    Pair("totalSuccesses", metrics.total("$metricId.total_successes").toLong()),
+                    Pair("totalErrored"  , metrics.total  ("$metricId.total_failed").toLong()),
+                    Pair("totalFiltered" , metrics.total ("$metricId.total_filtered").toLong())
+                ),
+                lastRequest = lastRequest,
+                lastFiltered = lastFiltered,
+                lastSuccess = lastSuccess,
+                lastErrored = lastErrored
         )
     }
 
@@ -237,7 +237,7 @@ open class Worker<T>(
     override fun moveToState(state: Status): Status {
         val last = _runStatus.get()
         _runState.set(state)
-        _runStatus.set(RunStatus(about.id, about.name, DateTime.now(), state))
+        _runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))
         diagnostics.logger?.info("$metricId moving to state: " + state.name)
         return state
     }
