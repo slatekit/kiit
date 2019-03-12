@@ -10,10 +10,17 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.ApiContainer
 import slatekit.common.DateTime
+import slatekit.common.info.Info
 import slatekit.common.toResponse
 import slatekit.results.Success
 import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
+
+
+//fun main(args:Array<String>){
+//    SampleServer(args).run()
+//}
+
 
 class SampleServer(val args:Array<String>) {
 
@@ -42,6 +49,9 @@ class SampleServer(val args:Array<String>) {
                 get(config.prefix + "/ping") {
                     ping(call)
                 }
+                get("module1/feature1/action1") {
+                    KtorResponse.json(call, Success("action 1 : " + DateTime.now().toString()).toResponse())
+                }
 
                 // Allow slatekit server to handle routes beginning with /api/
                 handler.register(this)
@@ -53,6 +63,9 @@ class SampleServer(val args:Array<String>) {
             server.application.install(CORS)
         }
 
+        val info = Info(context.app, context.build, context.start, context.sys)
+        info.each({ key, value ->  println("$key : $value") })
+        println("server.port : ${config.port}")
         server.start(wait = true)
     }
 

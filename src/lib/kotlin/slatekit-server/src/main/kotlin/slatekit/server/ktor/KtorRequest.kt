@@ -19,11 +19,11 @@ import io.ktor.http.content.readAllParts
 import io.ktor.http.content.streamProvider
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.apis.ApiConstants
 import slatekit.common.*
 import slatekit.server.ServerConfig
 import io.ktor.request.*
-import kotlinx.coroutines.experimental.async
+//import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.async
 import slatekit.common.content.ContentTypeHtml
 import slatekit.common.content.ContentTypeText
 import slatekit.common.content.Doc
@@ -86,14 +86,14 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
      * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
-        async {
-            val multiPart = call.receiveMultipart()
-            val part = multiPart.readAllParts().find { (it.name ?: "") == name }
-            part?.let {
-                val file = it as PartData.FileItem
-                file.streamProvider().use(callback)
-            }
-        }
+//        async {
+//            val multiPart = call.receiveMultipart()
+//            val part = multiPart.readAllParts().find { (it.name ?: "") == name }
+//            part?.let {
+//                val file = it as PartData.FileItem
+//                file.streamProvider().use(callback)
+//            }
+//        }
     }
 
     companion object {
