@@ -142,19 +142,16 @@ coming soon
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Template</strong></td>
-        <td>Provide template for any application 
-        ( Console, Batch, CLI, Server )</td>
+        <td><strong>1. Goal A</strong></td>
+        <td>Description of goal</td>
     </tr>
     <tr>
-        <td><strong>2. Features</strong> </td>
-        <td>Provide pre-built support commandline args, 
-        config, logging, and more.</td>                     
+        <td><strong>2. Goal B</strong> </td>
+        <td>Description of goal</td>                     
     </tr>
     <tr>
-        <td><strong>3. Standardized</strong></td>
-        <td>Provide standardized setup, functionality and diagnostics</td>
-        </td>                       
+        <td><strong>3. Goal C</strong></td>
+        <td>Description of goal</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
@@ -167,19 +164,16 @@ coming soon
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Template</strong></td>
-        <td>Provide template for any application 
-        ( Console, Batch, CLI, Server )</td>
+        <td><strong>1. Concept A</strong></td>
+        <td>Description of concept</td>
     </tr>
     <tr>
-        <td><strong>2. Features</strong> </td>
-        <td>Provide pre-built support commandline args, 
-        config, logging, and more.</td>                     
+        <td><strong>2. Concept B</strong> </td>
+        <td>Description of concept</td>                     
     </tr>
     <tr>
-        <td><strong>3. Standardized</strong></td>
-        <td>Provide standardized setup, functionality and diagnostics</td>
-        </td>                       
+        <td><strong>3. Concept C</strong></td>
+        <td>Description of concept</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
@@ -192,19 +186,16 @@ coming soon
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Template</strong></td>
-        <td>Provide template for any application 
-        ( Console, Batch, CLI, Server )</td>
+        <td><strong>1. Feature A</strong></td>
+        <td>Description of feature</td>
     </tr>
     <tr>
-        <td><strong>2. Features</strong> </td>
-        <td>Provide pre-built support commandline args, 
-        config, logging, and more.</td>                     
+        <td><strong>2. Feature B</strong> </td>
+        <td>Description of feature</td>                     
     </tr>
     <tr>
-        <td><strong>3. Standardized</strong></td>
-        <td>Provide standardized setup, functionality and diagnostics</td>
-        </td>                       
+        <td><strong>3. Feature C</strong></td>
+        <td>Description of feature</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}

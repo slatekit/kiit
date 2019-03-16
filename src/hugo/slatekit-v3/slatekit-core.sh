@@ -2,6 +2,7 @@ hugo new core/apis.md
 hugo new core/app.md
 hugo new core/cache.md
 hugo new core/commands.md
+hugo new core/cli.md
 hugo new core/context.md
 hugo new core/email.md
 hugo new core/files.md
