@@ -78,7 +78,7 @@
                      
                       <!-- Heading Area -->
                       <div class="text text-right col-md-6 col-sm-12">
-                          <h2 class="h1 has-text-shadow">Components <br/> </h2>
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
                       </div>
                   </div>
 
@@ -90,13 +90,13 @@
           <!--=============== About Section ===============-->
           <section id="about" class="about no-padding-bottom">
               <div class="container">
-          				<h1 id="aws-s3">AWS-S3</h1>
+          				<h1 id="serialization">Serialization</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>Abstraction layer on cloud file storage to Amazon S3</td>
+      <td>Serializers for data classes to generate CSV, Props, HOCON, JSON files</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
@@ -108,15 +108,15 @@
     </tr>
     <tr>
       <td><strong>jar</strong></td>
-      <td>slatekit.cloud.jar</td>
+      <td>slatekit.common.jar</td>
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slatekit.cloud.aws</td>
+      <td>slatekit.common.serialization</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slatekit.cloud.aws.AwsCloudFiles.kt</td>
+      <td>slatekit.common.serialization.Serializer.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -124,24 +124,26 @@
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Aws_S3.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Aws_S3.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Serialization.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td>slatekit.common.jar slatekit.core.jar</td>
+      <td> </td>
     </tr>
   </tbody>
 </table>
 
 <h2 id="import">Import</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required </span>
-<span class="k">import</span> <span class="nn">slatekit.cloud.aws.AwsCloudFiles</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.serialization.*</span>
 
 
 <span class="c1">// optional </span>
 <span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
-<span class="k">import</span> <span class="nn">slatekit.common.Result</span>
 <span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.examples.common.User</span>
+
 
 
 </code></pre>
@@ -150,18 +152,10 @@
 <h2 id="setup">Setup</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Not storing any key/secret in source code for security purposes</span>    
-    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"</span>    
-    <span class="kd">val</span> <span class="py">files1</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-files-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
-
-    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"</span>    
-    <span class="c1">// Specify the api key section as "sqs"</span>    
-    <span class="kd">val</span> <span class="py">files2</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-files-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"user://myapp/conf/files.conf"</span><span class="p">,</span> <span class="s">"s3"</span><span class="p">)</span>
-
-    <span class="c1">// Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"</span>    
-    <span class="c1">// Specify the api key section as "sqs"</span>   
-    <span class="kd">val</span> <span class="py">files3</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">"app1-queue-1"</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="s">"user://myapp/conf/files.conf"</span><span class="p">,</span> <span class="s">"s3-1"</span><span class="p">)</span>
-
+    <span class="c1">// Setup some sample data to serialize</span>   
+    <span class="kd">val</span> <span class="py">user1</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">2</span><span class="p">,</span> <span class="s">"superman@metro.com"</span><span class="p">,</span> <span class="s">"super"</span><span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">user2</span> <span class="p">=</span> <span class="n">User</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="s">"batman@gotham.com"</span> <span class="p">,</span> <span class="s">"bat"</span>  <span class="p">,</span> <span class="s">"man"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="m">35</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">users</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">user1</span><span class="p">,</span> <span class="n">user2</span><span class="p">)</span>
     
 
 </code></pre>
@@ -170,43 +164,67 @@
 <h2 id="usage">Usage</h2>
 <div class="highlighter-rouge"><pre class="highlight"><code>
 
-    <span class="c1">// Use case 1: Connect using parameters</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+    <span class="c1">// The serializers come in very handy during the serialization of</span>
+    <span class="c1">// entities in the ORM and is used in the CLI and HTTP server.</span>
+    <span class="c1">// However, they are general purpose and can be used else where.</span>
+    <span class="c1">// They are :</span>
+    <span class="c1">// 1. Optimized for data classes</span>
+    <span class="c1">// 2. Use reflection to get the properties to serialize</span>
+    <span class="c1">// 3. Support recursion into nested objects</span>
+    <span class="c1">// 4. Handle lists of type List&lt;*&gt; and maps of basic types Map&lt;*,*&gt;</span>
 
-    <span class="c1">// Use case 2: create using just name and content</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"version 1"</span><span class="p">)</span>
+    <span class="c1">// Case 1: Serialize CSV</span>    
+    <span class="kd">val</span> <span class="py">csvSerializer</span> <span class="p">=</span> <span class="n">SerializerCsv</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">csvData</span> <span class="p">=</span> <span class="n">csvSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"CSV ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">csvData</span><span class="p">)</span>
 
-    <span class="c1">// Use case 3: update using just name and content</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"version 2"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 4: create using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"version 1"</span><span class="p">)</span>
+    <span class="c1">// Case 2: Serialize Properties files</span>    
+    <span class="kd">val</span> <span class="py">propsSerializer</span> <span class="p">=</span> <span class="n">SerializerProps</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">propsData</span> <span class="p">=</span> <span class="n">propsSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"HCON ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">propsData</span><span class="p">)</span>
 
-    <span class="c1">// Use case 5: update using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"version 2"</span><span class="p">)</span>
 
-    <span class="c1">// Use case 6: get file as a text using just name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">)</span>
+    <span class="c1">// Case 3: Serialize JSON</span>    
+    <span class="kd">val</span> <span class="py">jsonSerializer</span> <span class="p">=</span> <span class="n">SerializerJson</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">jsonData</span> <span class="p">=</span> <span class="n">jsonSerializer</span><span class="p">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s">"JSON ===================="</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">jsonData</span><span class="p">)</span>
 
-    <span class="c1">// Use case 7: get file using folder and file name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">)</span>
-
-    <span class="c1">// Use case 8: download file to local folder</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"c:/dev/temp/"</span><span class="p">)</span>
-
-    <span class="c1">// Use case 9: download using folder and file name to local folder</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">,</span> <span class="s">"c:/dev/temp"</span><span class="p">)</span>
-
-    <span class="c1">// Use case 10: delete file by just the name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">)</span>
-
-    <span class="c1">// Use case 11: delete using folder and name</span>    
-    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">"2016_nba_v3"</span><span class="p">,</span> <span class="s">"chi"</span><span class="p">)</span>
     
 
 </code></pre>
 </div>
 
+<h2 id="output">Output</h2>
+
+<pre><code class="language-bat">2, "superman@metro.com", "super", "man", true, 35
+3, "batman@gotham.com", "bat", "man", true, 35
+</code></pre>
+
+<pre><code class="language-bat">id = 2
+email = superman@metro.com
+firstName = super
+lastName = man
+isMale = true
+age = 35
+
+
+id = 3
+email = batman@gotham.com
+firstName = bat
+lastName = man
+isMale = true
+age = 35
+</code></pre>
+
+<pre><code class="language-bat">[
+  {"id" : 2, "email" : "superman@metro.com", "firstName" : "super", "lastName" : "man", "isMale" : true, "age" : 35},
+  {"id" : 3, "email" : "batman@gotham.com", "firstName" : "bat", "lastName" : "man", "isMale" : true, "age" : 35}
+]
+</code></pre>
 
               </div>
           </section>
