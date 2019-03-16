@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala 101 tutorial and cheat sheet" />
+    <title>Slate Kit - Scala 101 Tutorial</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-navbar navbar navbar-fixed-top">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+				<div class="row">
+
+				  <aside class="widget">
+					<h1 class="widget-title">Scala 101</h1>
+					<h3>                  
+						An intro to Scala and its specific features!
+					</h3>
+				  </aside>
+				</div>
+			</div>
+		</footer>
+		
+		<section id="codeExample" class="section" >
+			<div class="container">
+				<h1 id="scala">Scala 101</h1>
+<p>This is a brief introduction to Scala which covers some basics, and specific Scala features.  Please note, this doesn’t cover all the features available 
+in Scala. For more in-depth documentation please refer to the resources below.</p>
+<br/>
+
+<h1 id="resources">Resources</h1>
+<ul>
+   <li><a class="url-ch" href="http://docs.scala-lang.org/cheatsheets/">http://docs.scala-lang.org/cheatsheets/</a></li>
+   <li><a class="url-ch" href="https://mbonaci.github.io/scala/">https://mbonaci.github.io/scala/</a></li>
+   <li><a class="url-ch" href="http://rea.tech/java-to-scala-cheatsheet/">http://rea.tech/java-to-scala-cheatsheet/</a></li>
+   <li><a class="url-ch" href="http://ktoso.github.io/scala-types-of-types/">http://ktoso.github.io/scala-types-of-types/</a></li>
+</ul>
+<br/>
+
+
+<h1 id="scala_101_basics">1. Basics</h1>
+<p>Some basic language features of scala.</p>
+
+<table id="overview" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>main</strong></td>
+      <td>a simple main method as the entry point for your app</td>
+      <td class=" text-center"><a href="#scala-main" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>package</strong></td>
+      <td>how to declare a package</td>
+      <td class=" text-center"><a href="#scala-package" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td class="col-md-2"><strong>import</strong></td>
+      <td>the different ways to import components</td>
+      <td class="col-md-2 text-center"><a href="#scala-import" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>vals</strong></td>
+      <td>declare immutable values of different data types</td>
+      <td class=" text-center"><a href="#scala-vals" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>vars *</strong></td>
+      <td>declare mutable variables of different data types</td>
+      <td class=" text-center"><a href="#scala-vars" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_types">2. Types</h1>
+<p>Data types available in Scala</p>
+
+<table id="overview" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>types</strong></td>
+      <td>an overview of the basic data types</td>
+      <td class="col-md-2 text-center"><a href="#scala-types" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>strings</strong></td>
+      <td>strings and some string operations</td>
+      <td class=" text-center"><a href="#scala-strings" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>dates</strong></td>
+      <td>using date and time via java 8 types</td>
+      <td class=" text-center"><a href="#scala-dates" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>lists</strong></td>
+      <td>declare, use and perform operations on lists</td>
+      <td class=" text-center"><a href="#scala-lists" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>maps</strong></td>
+      <td>declare, use and perform operations on maps</td>
+      <td class=" text-center"><a href="#scala-maps" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>tuples</strong></td>
+      <td>declare, use and perform operations on tuples</td>
+      <td class=" text-center"><a href="#scala-tuples" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_control">3. Control</h1>
+<p>Loops, conditions, functions, collections, etc.</p>
+<table id="language" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>conditions</strong></td>
+      <td>conditional expressions using if else</td>
+      <td class="col-md-2 text-center"><a href="#scala-conditions" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>loops *</strong></td>
+      <td>using various types of loops</td>
+      <td class=" text-center"><a href="#scala-loops" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>try catch *</strong></td>
+      <td>constructing try catch finally blocks</td>
+      <td class=" text-center"><a href="#scala-trycatch" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>throw *</strong></td>
+      <td>throwing exceptions</td>
+      <td class=" text-center"><a href="#scala-throw" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>return *</strong></td>
+      <td>returning from a function/method</td>
+      <td class=" text-center"><a href="#scala-return" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>iteration</strong></td>
+      <td>various ways to iterate over collections</td>
+      <td class=" text-center"><a href="#scala-iterations" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>aggregates</strong></td>
+      <td>aggregate functions</td>
+      <td class=" text-center"><a href="#scala-aggregates" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_functions">4. Functions</h1>
+<p>Functions, methods and HOF's ( Higher Order Functions )</p>
+<table id="scala_101_functions_list" class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>simple</strong></td>
+      <td>simple functions with return types</td>
+      <td class="col-md-2 text-center"><a href="#scala-functions-simple" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>named parameters</strong></td>
+      <td>calling functions using named parameters</td>
+      <td class=" text-center"><a href="#scala-functions-named" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>default parameter values</strong></td>
+      <td>calling functions with default parameter values</td>
+      <td class=" text-center"><a href="#scala-functions-default" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Passing a function</strong></td>
+      <td>passing a function as a parameter</td>
+      <td class=" text-center"><a href="#scala-functions-hof-passing" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Returning a function</strong></td>
+      <td>return a function as a result from a function</td>
+      <td class=" text-center"><a href="#scala-functions-hof-return" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Function composition</strong></td>
+      <td>composing functions together</td>
+      <td class=" text-center"><a href="#scala-functions-hof-compose" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>HOF: Call by name</strong></td>
+      <td>passing a block of code to a function</td>
+      <td class=" text-center"><a href="#scala-functions-hof-callbyname" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+
+<h1 id="scala_101_classes">5. Classes</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>Basics</strong></td>
+      <td>creating instances of classes</td>
+      <td class="col-md-2 text-center"><a href="#scala-classes-basics" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>access control</strong></td>
+      <td>restricting access to members</td>
+      <td class=" text-center"><a href="#scala-classes-access" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>traits</strong></td>
+      <td>interfaces with implemented methods</td>
+      <td class=" text-center"><a href="#scala-classes-traits" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>sub-classing</strong></td>
+      <td>creating derived classes and sub-classes</td>
+      <td class=" text-center"><a href="#scala-classes-subclassing" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>static methods</strong></td>
+      <td>how to use static methods via "modules"</td>
+      <td class=" text-center"><a href="#scala-classes-static" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>case classes</strong></td>
+      <td>easily build immutable classes</td>
+      <td class=" text-center"><a href="#scala-classes-case" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>operators</strong></td>
+      <td>creating your own operators for types using operator overloading</td>
+      <td class=" text-center"><a href="#scala-classes-operators" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+<h1 id="scala_101_misc">6. Misc</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>apply</strong></td>
+      <td>how to create instances without using "new"</td>
+      <td class=" text-center"><a href="#scala-apply" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>immutability</strong></td>
+      <td>Various ways to obtain immutability</td>
+      <td class=" text-center"><a href="#scala-immutable" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>option</strong></td>
+      <td>how to work with nullable values using Option, Some, None</td>
+      <td class=" text-center"><a href="#scala-option" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>pattern match</strong></td>
+      <td>pattern match on values, and types</td>
+      <td class=" text-center"><a href="#scala-pattern-matching" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>implicits</strong></td>
+      <td>conversion methods you can apply to types</td>
+      <td class=" text-center"><a href="#scala-implicits" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+
+<h1 id="scala_101_futures">7. Futures</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>creation</strong></td>
+      <td>creating a future to run an asynchronous work</td>
+      <td class="col-md-2 text-center"><a href="#scala-futures-creation" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>completion</strong></td>
+      <td>how to handle the result of a future</td>
+      <td class=" text-center"><a href="#scala-futures-completion" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>success</strong></td>
+      <td>handling the success result of a future</td>
+      <td class=" text-center"><a href="#scala-futures-success" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>failure</strong></td>
+      <td>handling the failure of a future</td>
+      <td class=" text-center"><a href="#scala-futures-failure" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>errors</strong></td>
+      <td>dealing with errors gracefully</td>
+      <td class=" text-center"><a href="#scala-futures-errors" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>nesting</strong></td>
+      <td>multiple futures and nesting of futures</td>
+      <td class=" text-center"><a href="#scala-futures-nesting" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!--
+<br/><br/>
+<h1 id="scala_101_futures">8. More</h1>
+<p>These are more specific features of the scala language</p>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td class="col-md-2"><strong>value classes</strong></td>
+      <td>strings that span multiple lines</td>
+      <td class="col-md-2 text-center"><a href="#scala-types-values" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type alias</strong></td>
+      <td>how to create instances without using "new"</td>
+      <td class=" text-center"><a href="#scala-types-alias" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type parameters</strong></td>
+      <td>create immutable values of different types</td>
+      <td class=" text-center"><a href="#scala-types-params" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type classes</strong></td>
+      <td>how to work with nullable values using Option, Some, None</td>
+      <td class=" text-center"><a href="#scala-types-classes" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>type bounds</strong></td>
+      <td>strings that span multiple lines</td>
+      <td class=" text-center"><a href="#scala-types-bounds" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+    <tr>
+      <td><strong>phantom types</strong></td>
+      <td>passing a block of code to a function</td>
+      <td class=" text-center"><a href="#scala-types-phantom" class="more"><span class="btn btn-primary">More</span></a></td>
+    </tr>
+  </tbody>
+</table>
+-->
+<br/><br/><br/>
+<h1>1. Basics</h1>
+<hr/>
+<h2 id="scala-main">Main</h2>
+<p>Simple main method as entry point into application. use println to print to the system console</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="k">package</span> <span class="nn">slate.examples.sampleApp</span>
+  
+  <span class="k">object</span> <span class="nc">Examples</span> <span class="o">{</span>
+
+    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"hello world"</span> <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-package">Package</h2>
+<p>Declaring your code in a pacakge</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="k">package</span> <span class="nn">slate.common.logging</span>
+  
+  <span class="k">class</span> <span class="nc">Logger</span> <span class="o">{</span>
+  
+    <span class="c1">// ....
+</span>  
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-import">Import</h2>
+<p>You can import items from a package in various ways, 1 item, multiple items, all items from a package, or functions from a module</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// 1. Import 1 item from a package 
+</span>  <span class="k">import</span> <span class="nn">slate.common.logging.Logger</span>
+  
+  
+  <span class="c1">// 2. Import multiple items from a package using { ... }
+</span>  <span class="k">import</span> <span class="nn">slate.common.logging.</span><span class="o">{</span> <span class="nc">Logger</span><span class="o">,</span> <span class="nc">LogLevel</span> <span class="o">}</span>
+
+  
+  <span class="c1">// 3. Import all items from a pacakge using "_"
+</span>  <span class="k">import</span> <span class="nn">slate.common.logging._</span>
+  
+  
+  <span class="c1">// 4. Import 1 method ( string6 ) from an Object ( Random )
+</span>  <span class="c1">// NOTE: An object is essentially a Singleton class 
+</span>  <span class="c1">// that serves as a "module" containing 1 or more functions
+</span>  <span class="k">import</span> <span class="nn">slate.common.Random.</span><span class="o">{</span> <span class="n">string6</span> <span class="o">}</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
+  
+  
+  <span class="c1">// 5. Import all methods from the Random module
+</span>  <span class="k">import</span> <span class="nn">slate.common.Random._</span> 
+  <span class="n">println</span><span class="o">(</span> <span class="n">string3</span><span class="o">()</span> <span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">string6</span><span class="o">()</span> <span class="o">)</span>
+  
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-vals">Vals</h2>
+<p>Constants / immutable values are declared using <strong>val</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+   <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
+   <span class="k">val</span> <span class="n">age</span> <span class="k">=</span> <span class="mi">35</span>
+   <span class="k">val</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">12345678901L</span>
+   <span class="k">val</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">false</span>
+   <span class="k">val</span> <span class="n">salary</span> <span class="k">=</span> <span class="mf">20.5</span>
+   <span class="k">val</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+   
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-vars">Vars</h2>
+<p>Variables are declared using <strong>var</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+   <span class="k">var</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
+   <span class="k">var</span> <span class="n">age</span> <span class="k">=</span> <span class="mi">35</span>
+   <span class="k">var</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">1234567890L</span>
+   <span class="k">var</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">false</span>
+   <span class="k">var</span> <span class="n">salary</span> <span class="k">=</span> <span class="mf">20.5</span>
+   <span class="k">var</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+   
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> You can replace vars in favour of vals to obtain immutability. In functional programming, everything is an expression and so in Scala if/else/try return the last expression in their block(s) which you can then assign to a val. You can leverage this basic concept to promote use of vals and immutability. Check the <strong><a class="url-ch" href="scala101-functional.html">Functional 101</a></strong> page for more info on how to avoid vars and make things immutable.</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+
+<h1>2. Types</h1>
+<hr/>
+<h2 id="scala-types">Data Types</h2>
+<p>You can declare types simply using the values or explicitly specifying the type name</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>	
+    <span class="c1">// Inferred types
+</span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
+    <span class="k">val</span> <span class="n">age1</span>      <span class="k">=</span> <span class="mi">35</span>
+    <span class="k">val</span> <span class="n">account1</span>  <span class="k">=</span> <span class="mi">1234567890L</span>
+    <span class="k">val</span> <span class="n">isActive1</span> <span class="k">=</span> <span class="kc">false</span>
+    <span class="k">val</span> <span class="n">salary1</span>   <span class="k">=</span> <span class="mf">20.5</span>
+    <span class="k">val</span> <span class="n">date1</span>     <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="k">val</span> <span class="n">tuple1</span>    <span class="k">=</span> <span class="o">(</span><span class="s">"john doe"</span><span class="o">,</span> <span class="mi">35</span><span class="o">,</span> <span class="mi">123456789L</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="mf">20.5</span> <span class="o">)</span>
+	
+
+    <span class="c1">// Specified types
+</span>    <span class="k">val</span> <span class="n">name2</span>     <span class="k">:</span><span class="kt">String</span>        <span class="o">=</span> <span class="s">"john doe"</span>
+    <span class="k">val</span> <span class="n">age2</span>      <span class="k">:</span><span class="kt">Int</span>           <span class="o">=</span> <span class="mi">35</span>
+    <span class="k">val</span> <span class="n">account2</span>  <span class="k">:</span><span class="kt">Long</span>          <span class="o">=</span> <span class="mi">1234567890L</span>
+    <span class="k">val</span> <span class="n">isActive2</span> <span class="k">:</span><span class="kt">Boolean</span>       <span class="o">=</span> <span class="kc">false</span>
+    <span class="k">val</span> <span class="n">salary2</span>   <span class="k">:</span><span class="kt">Double</span>        <span class="o">=</span> <span class="mf">20.5</span>
+    <span class="k">val</span> <span class="n">date2</span>     <span class="k">:</span><span class="kt">LocalDateTime</span> <span class="o">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+    <span class="k">val</span> <span class="n">tuple2</span>    <span class="k">:</span><span class="o">(</span><span class="kt">String</span><span class="o">,</span><span class="kt">Int</span><span class="o">,</span><span class="nc">Long</span><span class="o">,</span><span class="nc">Boolean</span><span class="o">,</span><span class="nc">Double</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span><span class="s">"john doe"</span><span class="o">,</span> <span class="mi">35</span><span class="o">,</span> <span class="mi">123456789L</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="mf">20.5</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> Scala is a hybrid Object-Functional and imperative/functional language, and so there are both <strong>mutable</strong> and <strong>immutable</strong> versions of lists and maps.</p>	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-strings">Strings</h2>
+<p>Here are some basic String operations along with 
+  examples on string interpolation ( referencing of other values/expressions inside a string )</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>    
+    <span class="c1">// 1. Declaring strings
+</span>    <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
+    
+
+    <span class="c1">// 2. Adding strings together
+</span>    <span class="k">val</span> <span class="n">fullName</span> <span class="k">=</span> <span class="s">"Clark"</span> <span class="o">+</span> <span class="s">", Kent"</span> 
+
+
+    <span class="c1">// 3. Getting a char position in a string e.g. 1st pos
+</span>    <span class="k">var</span> <span class="n">c1</span> <span class="k">=</span> <span class="s">"Batman"</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span>
+
+
+    <span class="c1">// 4. Convert strings to other types
+</span>    <span class="k">val</span> <span class="n">age</span>     <span class="k">=</span> <span class="s">"30"</span><span class="o">.</span><span class="n">toInt</span>
+    <span class="k">val</span> <span class="n">isActive</span>  <span class="k">=</span> <span class="s">"true"</span><span class="o">.</span><span class="n">toBoolean</span>
+    <span class="k">val</span> <span class="n">salary</span>  <span class="k">=</span> <span class="s">"20.5"</span><span class="o">.</span><span class="n">toDouble</span>
+
+
+    <span class="c1">// 5. String interpolation
+</span>    <span class="k">val</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">1234567890L</span>
+    <span class="k">val</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+
+    <span class="k">val</span> <span class="n">info1</span> <span class="k">=</span> <span class="n">s</span><span class="s">"$name $age $account $isActive $salary $date"</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">info1</span> <span class="o">)</span>
+  
+
+    <span class="c1">// 6. String interpolation ( with braces )
+</span>    <span class="c1">// Use this explicit approach when you dont have spaces
+</span>    <span class="k">val</span> <span class="n">info2</span> <span class="k">=</span> <span class="n">s</span><span class="s">"${name}${age}${account}${isActive}${salary}${date}"</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">info2</span> <span class="o">)</span>
+  
+
+    <span class="c1">// 7. String interpolation with more expressions
+</span>    <span class="k">val</span> <span class="n">info3</span> <span class="k">=</span> <span class="n">s</span><span class="s">"${name} salary is now ${salary + 200} start on ${date}"</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">info3</span> <span class="o">)</span>
+    
+  
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-multiline-strings">Multiline strings</h2>
+<p>Multiline strings begin with “””</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>    <span class="c1">// 1. Space / indentation is preserved
+</span>    <span class="k">val</span> <span class="n">example1</span> <span class="k">=</span> <span class="s">""" app.users.activate
+                      - userid: number ( required )
+                      - phone : string ( required )
+                      - email : string ( required )
+                   """</span>
+
+    <span class="c1">// 2. Indentation is stripped and next line starts after "|"
+</span>    <span class="k">val</span> <span class="n">example2</span> <span class="k">=</span> <span class="s">""" app.users.activate
+                     | - userid: number ( required )
+                     | - phone : string ( required )
+                     | - email : string ( required )
+                     | """</span><span class="o">.</span><span class="n">stripMargin</span>
+
+    <span class="c1">// 3. Indentation is stripped and next line starts after "#"
+</span>    <span class="k">val</span> <span class="n">example3</span> <span class="k">=</span> <span class="s">""" app.users.activate
+                     # - userid: number ( required )
+                     # - phone : string ( required )
+                     # - email : string ( required )
+                     # """</span><span class="o">.</span><span class="n">stripMargin</span><span class="o">(</span><span class="sc">'#'</span><span class="o">)</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-dates">Dates</h2>
+<p>Date and time using Java 8</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// Refer to Java 8 Date/Time classes
+</span>   
+</code></pre>
+</div>
+
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-link"></i> If you are using Java 8, you can use the new built-in Date/Time classes.</p>  
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-lists">Lists</h2>
+<p>Lists can be immutable ( readonly ) or mutable ( editable ). This shows the immutable version</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+    <span class="c1">// 1. Declare an empty Immutable list
+</span>    <span class="k">val</span> <span class="n">items0</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">]()</span>
+
+    <span class="c1">// 2. Declare an immutable list of 3 items
+</span>    <span class="c1">// NOTE: Later in this example we will show how to
+</span>    <span class="c1">// iterate over the items and also how to convert the
+</span>    <span class="c1">// items from strings to numbers without manual loops
+</span>    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span> <span class="s">"1"</span><span class="o">,</span> <span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span> <span class="o">)</span>
+
+    <span class="c1">// 3. Get the size
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">.</span><span class="n">size</span> <span class="o">)</span>
+
+    <span class="c1">// 4. Get an item by key
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// 5. Get the first item ( head )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">.</span><span class="n">head</span> <span class="o">)</span>
+
+    <span class="c1">// 6. Get all the items after the first
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">.</span><span class="n">tail</span> <span class="o">)</span>
+
+    <span class="c1">// 7. Get all last one
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">.</span><span class="n">last</span> <span class="o">)</span>
+
+    <span class="c1">// 8. Get the first N elements
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items</span><span class="o">.</span><span class="n">take</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// 9. Add item ( to the end )
+</span>    <span class="c1">// NOTE: this is immutable so it will return a new instance
+</span>    <span class="c1">// Also, the operation ":+" is used to append.
+</span>    <span class="c1">// Think of the "+" as being at the end of the ":+" operator
+</span>    <span class="c1">// indicating that the item adds to the end of the list
+</span>    <span class="k">val</span> <span class="n">items2</span> <span class="k">=</span> <span class="n">items</span> <span class="o">:+</span> <span class="s">"4"</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items2</span> <span class="o">)</span>
+
+    <span class="c1">// 10. Add item ( to the beginning )
+</span>    <span class="c1">// NOTE: this is immutable so it will return a new instance
+</span>    <span class="c1">// Think of the "+" as being at the front of the "+:" operator
+</span>    <span class="c1">// and the item being added must also be at the front.
+</span>    <span class="k">val</span> <span class="n">items3</span> <span class="k">=</span> <span class="s">"0"</span> <span class="o">+:</span> <span class="n">items2</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items3</span> <span class="o">)</span>
+
+    <span class="c1">// 11. Update a key ( set the ndx 1 = 10
+</span>    <span class="k">val</span> <span class="n">items4</span> <span class="k">=</span> <span class="n">items3</span><span class="o">.</span><span class="n">updated</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"10"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items4</span> <span class="o">)</span>
+
+    <span class="c1">// 12. Insert at position ( lets fix the values )
+</span>    <span class="c1">// NOTE: You have to supply a list of items as the replacements
+</span>    <span class="k">val</span> <span class="n">items5</span> <span class="k">=</span> <span class="n">items4</span><span class="o">.</span><span class="n">patch</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">),</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">items5</span><span class="o">)</span>
+
+    <span class="c1">// 13. Remove an item at index 3
+</span>    <span class="k">val</span> <span class="n">items6</span> <span class="k">=</span> <span class="n">items5</span><span class="o">.</span><span class="n">patch</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="nc">Nil</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items6</span> <span class="o">)</span>
+
+    <span class="c1">// 14. Convert to map
+</span>    <span class="c1">// This is slightly tricky syntax, but whats happening is
+</span>    <span class="c1">// that all the items in the list are converted to key/value pairs
+</span>    <span class="c1">// and then these are supplied to the map constructor as individual
+</span>    <span class="c1">// items.
+</span>    <span class="k">val</span> <span class="n">map</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="n">items6</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">-&gt;</span> <span class="n">a</span> <span class="o">)</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">map</span><span class="o">)</span>
+
+    <span class="c1">// 15. Iterate over pairs
+</span>    <span class="n">items6</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">item</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="n">item</span> <span class="o">))</span>
+
+    <span class="c1">// 16. Convert each item in the list to an integer
+</span>    <span class="c1">// NOTE: You don't need to iterate yourself.
+</span>    <span class="k">val</span> <span class="n">nums</span> <span class="k">=</span> <span class="n">items6</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">text</span> <span class="k">=&gt;</span> <span class="n">text</span><span class="o">.</span><span class="n">toInt</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">nums</span> <span class="o">)</span>
+
+    <span class="c1">// 17. Finally, combine 2 lists together
+</span>    <span class="k">val</span> <span class="n">items7</span> <span class="k">=</span> <span class="n">items6</span> <span class="o">++</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"6"</span><span class="o">,</span> <span class="s">"7"</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items7</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> versions of List[T] are in the <strong>scala.collection.mutable</strong> package, such as the ListBuffer[T]. It has methods to append to items and you can call <strong>toList</strong> to convert an instance of the mutable ListBuffer[T] to an instance of an immutable List[T]</p>	
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-maps">Maps</h2>
+<p>Maps can be immutable ( readonly ) or mutable ( editable ). This shows the immutable version</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>	<span class="c1">// 1. Declare empty immutable list
+</span>    <span class="k">val</span> <span class="n">items1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">]()</span>
+
+    <span class="c1">// 2. Declare immutable list with pairs of items
+</span>    <span class="k">val</span> <span class="n">items2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">](</span> <span class="s">"a"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">,</span> <span class="s">"b"</span> <span class="o">-&gt;</span> <span class="mi">2</span><span class="o">,</span> <span class="s">"c"</span> <span class="o">-&gt;</span> <span class="mi">3</span><span class="o">)</span>
+
+    <span class="c1">// 3. SIZE
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items2</span><span class="o">.</span><span class="n">size</span> <span class="o">)</span>
+
+    <span class="c1">// 4. GET 
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items2</span><span class="o">(</span><span class="s">"a"</span><span class="o">)</span> <span class="o">)</span>
+
+    <span class="c1">// 5. Get all keys
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items2</span><span class="o">.</span><span class="n">keys</span> <span class="o">)</span>
+
+    <span class="c1">// 6. Get all values
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">items2</span><span class="o">.</span><span class="n">values</span> <span class="o">)</span>
+
+    <span class="c1">// 7. Add another item ( this is immutable so it will return a new map )
+</span>    <span class="k">val</span> <span class="n">items3</span> <span class="k">=</span> <span class="n">items2</span> <span class="o">+</span> <span class="o">(</span> <span class="s">"d"</span> <span class="o">-&gt;</span> <span class="mi">4</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items3</span> <span class="o">)</span>
+
+    <span class="c1">// 8. Add multiple items
+</span>    <span class="k">val</span> <span class="n">items4</span> <span class="k">=</span> <span class="n">items3</span> <span class="o">+</span> <span class="o">(</span> <span class="s">"e"</span> <span class="o">-&gt;</span> <span class="mi">5</span><span class="o">,</span> <span class="s">"f"</span> <span class="o">-&gt;</span> <span class="mi">6</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items4</span> <span class="o">)</span>
+
+    <span class="c1">// 9. Update a key
+</span>    <span class="k">val</span> <span class="n">items5</span> <span class="k">=</span> <span class="n">items4</span> <span class="o">+</span> <span class="o">(</span> <span class="s">"f"</span> <span class="o">-&gt;</span> <span class="mi">300</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items5</span> <span class="o">)</span>
+
+    <span class="c1">// 10. Remove an item
+</span>    <span class="k">val</span> <span class="n">items6</span> <span class="k">=</span> <span class="n">items5</span> <span class="o">-</span> <span class="s">"f"</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">items6</span> <span class="o">)</span>
+
+    <span class="c1">// 11. Iterate over pairs
+</span>    <span class="n">items6</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">pair</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span> <span class="s">"key: "</span> <span class="o">+</span> <span class="n">pair</span><span class="o">.</span><span class="n">_1</span> <span class="o">+</span> <span class="s">", val: "</span> <span class="o">+</span> <span class="n">pair</span><span class="o">.</span><span class="n">_2</span> <span class="o">))</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> The <strong>mutable</strong> version of Map[A,B] is also available in the <strong>scala.collection.mutable</strong> namespace</p>	
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-tuples">Tuples</h2>
+<p>Creating and using tuples</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// 1. Create a tuple of 3 items of string, bool, int
+</span>   <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="o">(</span> <span class="s">"John"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">3</span> <span class="o">)</span>
+
+   <span class="c1">// 2. Access the individual items 
+</span>   <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_1</span> 
+   <span class="k">val</span> <span class="n">active</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_2</span> 
+   <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">_3</span> 
+
+   <span class="c1">// 3. Declare a tuple explicity
+</span>   <span class="k">val</span> <span class="n">user2</span><span class="k">:</span> <span class="o">(</span> <span class="kt">String</span><span class="o">,</span> <span class="kt">Boolean</span><span class="o">,</span> <span class="nc">Int</span><span class="o">)</span> <span class="k">=</span> <span class="o">(</span> <span class="s">"Jane"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="mi">2</span> <span class="o">)</span>
+   
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/><br/>
+
+<h1>3. Control</h1>
+<hr/>
+
+<h2 id="scala-conditions">Conditions</h2>
+<p>If conditions, using single line ( no braces ) and multi-line ( with braces ). there is no ternary "? :" operation.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// 1. if only
+</span>    <span class="k">if</span> <span class="o">(</span> <span class="kc">true</span> <span class="o">)</span> <span class="n">println</span> <span class="o">(</span> <span class="s">"true"</span> <span class="o">)</span>
+
+    <span class="c1">// 2. No braces
+</span>    <span class="k">val</span> <span class="n">code</span> <span class="k">=</span> <span class="mi">200</span>
+    <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"ok"</span> <span class="o">)</span>
+    <span class="k">else</span> <span class="k">if</span>  <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"not found"</span><span class="o">)</span>
+    <span class="k">else</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"unknown"</span> <span class="o">)</span>
+
+    <span class="c1">// 3. If conditions are expressions!
+</span>    <span class="c1">// This means they return a value.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the 
+</span>    <span class="c1">// if to a value ( in this case message )
+</span>    <span class="k">val</span> <span class="n">message</span> <span class="k">=</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
+        <span class="s">"ok"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">404</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="s">"not found"</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="o">{</span>
+        <span class="s">"unknown"</span>
+      <span class="o">}</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">message</span><span class="o">)</span>
+
+    <span class="c1">// 4. There is no ternary "? :" operation, but in scala
+</span>    <span class="c1">// you do not need it as a simple if/else is sufficient
+</span>    <span class="k">val</span> <span class="n">status</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">200</span> <span class="o">)</span> <span class="s">"ok"</span> <span class="k">else</span> <span class="s">"unknown"</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">status</span><span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-info-circle"></i> Once you are familiar with functional programming and using <strong>Option[T]</strong> or alternatives, there are times when you can replace if/else conditions with functional equivalents ( such as map/flatMap/for comprehensions )</p>
+  
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-loops">Loops</h2>
+<p>For loops and while loops</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// 1. for loop inclusive ( 5 included )
+</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o"> ) {</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 2. for loop exclusive ( 5 excluded )
+</span>    <span class="k">for</span> <span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">until</span> <span class="mi">5</span><span class="o"> ) {</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 3. for loop with setup using values
+</span>    <span class="k">val</span> <span class="n">start</span> <span class="k">=</span> <span class="mi">1</span>
+    <span class="k">val</span> <span class="n">end</span> <span class="k">=</span> <span class="mi">5</span>
+    <span class="k">for</span><span class="o">(</span> <span class="n">a</span> <span class="k">&lt;-</span> <span class="n">start</span> <span class="n">until</span> <span class="n">end</span><span class="o"> ) {</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 4. for loop over collection
+</span>    <span class="k">val</span> <span class="n">words</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a1"</span><span class="o">,</span> <span class="s">"b2"</span><span class="o">,</span> <span class="s">"c3"</span><span class="o">,</span> <span class="s">"d4"</span><span class="o">,</span> <span class="s">"e5"</span><span class="o">)</span>
+    <span class="k">for</span> <span class="o">(</span> <span class="n">word</span> <span class="k">&lt;-</span> <span class="n">words</span> <span class="o"> ) {</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">word</span> <span class="o">)</span>
+    <span class="o">}</span>
+	
+
+    <span class="c1">// 5. while loop
+</span>    <span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">a</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="o"> ) {</span>
+      <span class="n">println</span><span class="o">(</span> <span class="s">"Value of a: "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
+      <span class="n">a</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="o">}</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i>  You can generally avoid the traditional while/for loops in Scala in favor of functional approaches to iterate over collections. See the <strong>iterations</strong> and <strong>aggregates</strong> sections for more info.</p>	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-trycatch">Try/Catch</h2>
+<p>Try catch blocks use a pattern matching syntax for catching exceptions. ( see pattern matching for more info )</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Everything is an expression, which means that
+</span>    <span class="c1">// the try/catch will return a value.
+</span>    <span class="c1">// In this example, we return a tuple( boolean, string )
+</span>    <span class="c1">// indicating, success, and a message.
+</span>    <span class="c1">// NOTE: This helps with immutability
+</span>    <span class="c1">// as you can assign the result of the try
+</span>    <span class="c1">// to a value ( in this case the result )
+</span>    <span class="k">val</span> <span class="n">result</span><span class="k">:</span><span class="o">(</span><span class="kt">Boolean</span><span class="o">,</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+      <span class="k">try</span>
+      <span class="o">{</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"try catch example"</span><span class="o">)</span>
+        <span class="o">(</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"success"</span> <span class="o">)</span>
+      <span class="o">}</span>
+      <span class="k">catch</span>
+        <span class="o">{</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">IllegalArgumentException</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"bad argument: "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+          <span class="k">case</span> <span class="n">ex</span><span class="k">:</span><span class="kt">Exception</span> <span class="o">=&gt;</span>
+          <span class="o">{</span>
+            <span class="o">(</span><span class="kc">false</span><span class="o">,</span> <span class="s">"unexpected  : "</span> <span class="o">+</span> <span class="n">ex</span><span class="o">.</span><span class="n">getMessage</span> <span class="o">)</span>
+          <span class="o">}</span>
+        <span class="o">}</span>
+      <span class="k">finally</span> <span class="o">{</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">"finally!"</span><span class="o">)</span>
+      <span class="o">}</span>
+
+    <span class="c1">// Now print the result ( tuple )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">result</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+  <p><i class="fa fa-info-circle"></i> An alternative to using the built-in try/catch is to use Scala <strong>Try</strong> class.</p>  
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-throw">Throw</h2>
+<p>Throwing exceptions in Scala.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="k">throw</span> <span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">"testing throwing of exception"</span><span class="o">)</span>
+   
+</code></pre>
+</div>
+
+<div class="alert alert-danger" role="alert">
+	<p><i class="fa fa-warning"></i> If you are incorporating functional programming, then throwing exceptions is <strong>generally</strong> discouraged in favor of functional error-handling using Option[T], Either[A,B] or alternatives. Functional programming aims to remove side-effects, runtime errors, and chaotic flow-control. Throwing of exceptions, nulls, and early exists can result in unexpected behaviour.</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-return">Return</h2>
+<p>Returning from a function.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code>  
+   <span class="c1">// To return from a function that returns int
+</span>   <span class="k">return</span> <span class="mi">1</span>
+
+   <span class="c1">// To return from a function that returns "unit" 
+</span>   <span class="k">return</span> <span class="nc">Unit</span>
+   
+</code></pre>
+</div>
+
+<div class="alert alert-danger" role="alert">
+	<p><i class="fa fa-warning"></i>If you are incorporating functional programming, returning early or mid-way in a function is generally discouraged, as the last expression in a code block is automatically returned. Returning early from a function ( with arguably the exception of guards ) results in short-circuiting of logic and breaks a clean flow to a return value.</p>
+	
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-iterations">Iterations</h2>
+<p>How to iterate over collections</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// NOTE: There are multiple ways to iterate over a collection
+</span>    <span class="c1">// without using traditional "while" or "for" loops with variables</span>    
+    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
+    
+    <span class="c1">// Case 1: Indices
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">ndx</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">items</span><span class="o">(</span><span class="n">ndx</span><span class="o">)))</span>
+    <span class="n">println</span><span class="o">()</span>
+    
+    <span class="c1">// Case 2: Zip with index ( You get a tuple of ( value, index ) )
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span> <span class="n">d</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">d</span><span class="o">.</span><span class="n">_1</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">d</span><span class="o">.</span><span class="n">_2</span><span class="o">)</span> <span class="o">)</span>
+    
+    <span class="c1">// Case 3: Zip with index with case
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">zipWithIndex</span><span class="o">.</span><span class="n">foreach</span><span class="o">{</span> <span class="k">case</span><span class="o">(</span><span class="n">item</span><span class="o">,</span> <span class="n">index</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="n">item</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">index</span><span class="o">)</span> <span class="o">}</span>
+    
+    <span class="c1">// Case 4: Using a range
+</span>    <span class="mf">4.</span><span class="n">until</span><span class="o">(</span><span class="mi">6</span><span class="o">).</span><span class="n">foreach</span><span class="o">(</span> <span class="n">v</span> <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">" "</span> <span class="o">+</span> <span class="n">v</span> <span class="o">)</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> While there are several functional approaches to looping over items ( as shown above ), keep in mind there may be a cost. In some functional loops, intermediary collections are created.</p>
+	
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-aggregates">Aggregates</h2>
+<p>How to use the built-in map, filter, reduce and aggregate functions</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="k">val</span> <span class="n">items</span> <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"1"</span><span class="o">,</span><span class="s">"2"</span><span class="o">,</span> <span class="s">"3"</span><span class="o">)</span>
+    
+    <span class="c1">// Case 1: apply function to each
+</span>    <span class="c1">// Prints:
+</span>    <span class="c1">// 1
+</span>    <span class="c1">// 2
+</span>    <span class="c1">// 3
+</span>    <span class="n">items</span><span class="o">.</span><span class="n">foreach</span><span class="o">(</span><span class="n">println</span><span class="o">)</span>
+    
+    <span class="c1">// Case 2: map strings to new list of numbers
+</span>    <span class="c1">// Result: List[Int](1, 2, 3)
+</span>    <span class="k">val</span> <span class="n">nums</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">map</span><span class="o">(</span> <span class="n">i</span> <span class="k">=&gt;</span> <span class="n">i</span><span class="o">.</span><span class="n">toInt</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="n">nums</span><span class="o">)</span>
+    
+    <span class="c1">// Case 3: reduce to 1 value
+</span>    <span class="c1">// Result: "1:2:3"
+</span>    <span class="k">val</span> <span class="n">total</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">reduce</span><span class="o">(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">":"</span> <span class="o">+</span> <span class="n">b</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"reduce: "</span> <span class="o">+</span> <span class="s">"'"</span> <span class="o">+</span> <span class="n">total</span> <span class="o">+</span> <span class="s">"'"</span><span class="o">)</span>
+    
+    <span class="c1">// Case 4a: fold to single value from the Left side
+</span>    <span class="c1">// Result: "LEFT,1,2,3"
+</span>    <span class="k">val</span> <span class="n">totalLeft</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldLeft</span><span class="o">(</span><span class="s">"LEFT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"fold left: "</span> <span class="o">+</span> <span class="n">totalLeft</span><span class="o">)</span>
+    
+    <span class="c1">// Case 4b: fold to single value from the Right side
+</span>    <span class="c1">// Result:  "1,2,3,RIGHT"
+</span>    <span class="k">val</span> <span class="n">totalRight</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">foldRight</span><span class="o">(</span><span class="s">"RIGHT"</span><span class="o">)(</span> <span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">a</span> <span class="o">+</span> <span class="s">","</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"fold right: "</span> <span class="o">+</span> <span class="n">totalRight</span><span class="o">)</span>
+    
+    <span class="c1">// Case 5: max
+</span>    <span class="c1">// Result: 3
+</span>    <span class="k">val</span> <span class="n">max</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">maxBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"max: "</span> <span class="o">+</span> <span class="n">max</span><span class="o">)</span>
+    
+    <span class="c1">// Case 6: min
+</span>    <span class="c1">// Result: 1
+</span>    <span class="k">val</span> <span class="n">min</span> <span class="k">=</span> <span class="n">items</span><span class="o">.</span><span class="n">minBy</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span> <span class="n">a</span> <span class="k">=&gt;</span> <span class="n">a</span><span class="o">.</span><span class="n">toInt</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span><span class="s">"min: "</span> <span class="o">+</span> <span class="n">min</span><span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i>These built in aggregate methods on collections ( <strong>map, reduce, filter, fold, indexOf, minBy, maxBy, etc</strong>) are incredibly powerful. You can generally avoid looping through and / or converting items in collections manually, and instead rely on these built-in functions.</p>
+	
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
+<br/><br/><br/>
+
+<h1>4. Functions</h1>
+<hr/>
+<h2 id="scala-functions-simple">Functions</h2>
+<p>Scala has many features related to functions/methods. this is a partial list. 
+	But before you read these examples, you should first understand the difference between methods and functions. See these links: </p>
+<ol>
+	<li><a href="http://stackoverflow.com/questions/2529184/difference-between-method-and-function-in-scala" class="url_ch">StackOverflow</a>
+	<li><a href="https://tpolecat.github.io/2014/06/09/methods-functions.html" class="url_ch">Methods are not functions</a>
+</ol>
+				
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Sample function to simulate creating a new user.
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">createUser</span><span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-functions-named">Named Parameters</h2>
+<p>Function calls with named parameters</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Sample function to simulate creating a new user.
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with parameters
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with named parameters
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-functions-default">Default Parameter Value</h2>
+<p>Supplying default function parameter values</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Function has last parameter defaulted
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">account</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// call the functions  
+</span>  <span class="k">def</span> <span class="n">test</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    
+    <span class="c1">// 1. function with all parameters supplied
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">)</span>
+
+    <span class="c1">// 2. function with last parameter defaulted
+</span>    <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-functions-hof-passing">HOF: Passing a function</h2>
+<p>One type of Higher Order Functions ( HOF ) is a function that is passed as a parameter to another function</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Sample function to simulate creating a new user with a callback
+</span>  <span class="c1">// function supplied. This function takes 1 parameter of type Int
+</span>  <span class="c1">// and returns nothing ( Unit ).
+</span>  <span class="k">def</span> <span class="n">createUser</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">onComplete</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> 
+    
+    <span class="n">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span><span class="o">)</span>
+    
+    <span class="c1">// simulate saving to database....
+</span>    <span class="k">val</span> <span class="n">id</span> <span class="k">=</span> <span class="mi">2</span>
+    
+    <span class="c1">// notify caller 
+</span>    <span class="n">onComplete</span><span class="o">(</span> <span class="n">id</span> <span class="o">)</span> 
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// create user with a callback for when the user has 
+</span>  <span class="c1">// been created with the id.
+</span>  <span class="n">createUser</span> <span class="o">(</span> <span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="o">(</span><span class="n">id</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"id: "</span> <span class="o">+</span> <span class="n">id</span><span class="o">)</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-functions-hof-return">HOF: Returning a function</h2>
+<p>Another type of Higher Order Functions ( HOF ) is a function that is returned from another function</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// Return a function that uses the salary, overtimePay in its calculation
+</span>  <span class="c1">// and only needs 1 parameter representing the hours worked  
+</span>  <span class="k">def</span> <span class="n">getSalaryCalculator</span><span class="o">(</span><span class="n">salary</span><span class="k">:</span><span class="kt">Int</span><span class="o">,</span> <span class="n">overtimePay</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span><span class="k">:</span><span class="o">(</span><span class="kt">Int</span><span class="o">)</span> <span class="o">=&gt;</span> <span class="nc">Int</span> <span class="k">=</span> <span class="o">{</span>
+    
+    <span class="c1">// NOTE: As an analogy, you have basically "dependency injected"
+</span>    <span class="c1">// the salary and overtimePay into the function you are returning.
+</span>    <span class="k">val</span> <span class="n">f</span> <span class="k">=</span> <span class="o">(</span><span class="n">hours</span><span class="k">:</span><span class="kt">Int</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span> <span class="n">hours</span> <span class="o">&lt;=</span> <span class="mi">8</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="n">salary</span> <span class="o">*</span> <span class="n">hours</span>
+      <span class="o">}</span>
+      <span class="k">else</span> <span class="o">{</span>
+        <span class="o">(</span> <span class="n">salary</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">)</span> <span class="o">+</span> <span class="o">(</span> <span class="n">overtimePay</span> <span class="o">*</span> <span class="o">(</span><span class="n">hours</span> <span class="o">-</span> <span class="mi">8</span><span class="o">)</span> <span class="o">)</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+	
+    <span class="c1">// Return the function here.
+</span>    <span class="n">f</span>
+   <span class="o">}</span>
+   
+   <span class="c1">// Supply the initial inputs ( salary per hour, overtime pay per hour )
+</span>   <span class="k">val</span> <span class="n">calc</span> <span class="k">=</span> <span class="n">getSalaryCalculator</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">15</span><span class="o">)</span>
+   
+   <span class="c1">// Now you have a function that only requires the hours worked
+</span>   <span class="k">val</span> <span class="n">pay</span> <span class="k">=</span> <span class="n">calc</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+   <span class="n">println</span><span class="o">(</span><span class="n">pay</span><span class="o">)</span>
+  
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-functions-hof-compose">HOF: Function composition</h2>
+<p>Functions can be composed, allowing 1 function to be the composite of 2 functions.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// Function 1 to generate html for h1
+</span>    <span class="k">val</span> <span class="n">h1</span> <span class="k">=</span> <span class="o">(</span><span class="n">text</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"&lt;h1&gt;"</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s">"&lt;/h1&gt;"</span>
+
+    <span class="c1">// Function 2 to generate html for section
+</span>    <span class="k">val</span> <span class="n">section</span> <span class="k">=</span> <span class="o">(</span><span class="n">content</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="s">"&lt;div class='section'&gt;"</span> <span class="o">+</span> <span class="n">content</span> <span class="o">+</span> <span class="s">"&lt;/div&gt;"</span>
+
+    <span class="c1">// Now lets combine section and h1 via "compose"
+</span>    <span class="c1">// to create a custom heading
+</span>    <span class="c1">// NOTE: section.compose(h1) = section( h1( x ) )
+</span>    <span class="k">val</span> <span class="n">heading</span> <span class="k">=</span> <span class="n">section</span><span class="o">.</span><span class="n">compose</span><span class="o">(</span><span class="n">h1</span><span class="o">)</span>
+
+    <span class="c1">// Generate the heading html
+</span>    <span class="k">val</span> <span class="n">html</span> <span class="k">=</span> <span class="n">heading</span><span class="o">(</span><span class="s">"Welcome"</span><span class="o">)</span>
+
+    <span class="c1">// e.g. &lt;div class="section"&gt;&lt;h1&gt;Welcome&lt;/h1&gt;&lt;/div&gt;"
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">html</span> <span class="o">)</span>
+	
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> Function composition is one of the fundamental concepts in functional programming, and leads to other more sophisticated concepts such as currying.</p>
+	
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-functions-hof-callbyname">HOF: Call by name</h2>
+<p>The call by name feature allows passing in a code block to a function, such that the code block is only evaluated when used <strong>inside the function</strong>. It has also has a slightly more concise approach to passing a 0 parameter code block. </p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// CALL BY NAME: takes a code block using syntax : =&gt;
+</span>  <span class="k">def</span> <span class="n">refactor1</span><span class="o">(</span><span class="n">block</span><span class="k">:</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"review this code in area"</span> <span class="o">)</span>
+    <span class="n">block</span>
+  <span class="o">}</span>
+
+
+  <span class="c1">// Same function using normal function
+</span>  <span class="k">def</span> <span class="n">refactor2</span> <span class="o">(</span><span class="n">block</span><span class="k">:</span><span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span> <span class="o">)</span> <span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">println</span><span class="o">(</span> <span class="s">"review this code in area : "</span> <span class="o">+</span> <span class="n">area</span> <span class="o">)</span>
+    <span class="n">block</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="n">showCallByName</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="c1">// this block of code is wrapped up as a function and called.
+</span>    <span class="c1">// With call by name, you DO NOT have to use syntax () =&gt; for passing a function
+</span>    <span class="n">refactor1</span> <span class="o">{</span>
+	
+      <span class="n">println</span><span class="o">(</span><span class="s">"refactor this code!"</span><span class="o">)</span>
+    
+    <span class="o">}</span>
+
+
+    <span class="c1">// Without call by name, notice you MUST use syntax () =&gt; for passing a function
+</span>    <span class="n">refactor2</span> <span class="o">(</span> <span class="o">()</span> <span class="k">=&gt;</span> <span class="o">{</span>
+    
+      <span class="n">println</span><span class="o">(</span><span class="s">"refactor this code!"</span><span class="o">)</span>
+    
+    <span class="o">})</span>
+  <span class="o">}</span>
+	
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> This provides a way to have parameters evaluated only when used in the function, and also a little bit of clean syntax for creating custom control structures.</p>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h1>5. Classes</h1>
+<hr/>
+<h2 id="scala-classes-basics">Classes</h2>
+<p>Some basics of classes and constructors. This is a partial list of features</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// 1. You can declare class members in the constructor!
+</span>  <span class="c1">// 2. You can declare set the access modifiers ( none = public, protected, private )
+</span>  <span class="c1">// 3. You can declare whether they are mutable ( var ) or immutable ( val )
+</span>  <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
+              <span class="k">var</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span>
+              <span class="k">protected</span> <span class="k">val</span> <span class="n">email</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span>
+              <span class="k">private</span> <span class="k">val</span> <span class="n">account</span><span class="k">:</span><span class="kt">Int</span>
+  
+             <span class="o">)</span>
+  <span class="o">{</span>
+  
+    <span class="c1">// Overloaded constructors must call the primary constructor first
+</span>    <span class="k">def</span> <span class="k">this</span><span class="o">()</span> <span class="k">=</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+  
+    <span class="c1">// Overloaded constructors must call the primary constructor first
+</span>    <span class="k">def</span> <span class="k">this</span><span class="o">(</span><span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">=</span>
+    <span class="o">{</span>
+      <span class="k">this</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+  
+    <span class="c1">// You can start executing code after the primary constructor is called.
+</span>    <span class="n">println</span><span class="o">(</span><span class="s">"instantiated with : "</span> <span class="o">+</span> <span class="n">name</span><span class="o">)</span>
+    
+  
+    <span class="k">def</span> <span class="n">printInfo</span><span class="o">()</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">name</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">email</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">account</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">isActive</span> <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-classes-access">Access control</h2>
+<p>Access modifiers are similar to other languages, with the convenience
+of specifying the access level right at the constructor level.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// 1. Scala members are public by default
+</span>  <span class="c1">// 2. protected works similar to java 
+</span>  <span class="c1">// 3. private works similar to java 
+</span>  <span class="c1">// 4. By setting field to "val" you make it immutable
+</span>  <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> 
+              <span class="k">val</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> 
+              <span class="k">protected</span> <span class="k">val</span> <span class="n">account</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> 
+              <span class="k">private</span> <span class="k">val</span> <span class="n">ssn</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span>
+  <span class="o">{</span>
+  <span class="o">}</span>
+  
+  <span class="k">val</span> <span class="n">p</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"kishore"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"abc"</span><span class="o">,</span> <span class="s">"123"</span><span class="o">)</span>
+
+  <span class="c1">// Accessible
+</span>  <span class="n">println</span><span class="o">(</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">p</span><span class="o">.</span><span class="n">isActive</span> <span class="o">)</span>
+  
+  <span class="c1">// Unaccessible
+</span>  <span class="c1">// println( p.account )
+</span>  <span class="c1">// println( p.ssn )
+</span><span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-classes-traits">Traits</h2>
+<p>Traits are like interfaces/contracts with implementations. You can then extend a class with multiple traits.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code> 
+  <span class="c1">// Traits are like interfaces with implementations
+</span>  <span class="c1">// You can compose your clases to extend the trait.
+</span>  <span class="k">trait</span> <span class="nc">LogTrait</span> <span class="o">{</span>
+  
+    <span class="c1">// debug only for classes and subclases
+</span>    <span class="k">protected</span> <span class="k">def</span> <span class="n">debug</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">(</span><span class="s">"debug"</span><span class="o">,</span> <span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+  
+    <span class="c1">// info - public access 
+</span>    <span class="k">def</span> <span class="n">info</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">(</span><span class="s">"info"</span><span class="o">,</span> <span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+	
+    <span class="c1">// error - public access 
+</span>    <span class="k">def</span> <span class="n">error</span><span class="o">(</span><span class="n">msg</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">log</span><span class="o">(</span><span class="s">"error"</span><span class="o">,</span> <span class="n">msg</span><span class="o">)</span>
+    <span class="o">}</span>
+  
+  
+    <span class="c1">// no access in any class that uses this trait   
+</span>    <span class="k">private</span> <span class="k">def</span> <span class="n">log</span><span class="o">(</span><span class="n">level</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">msg</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">println</span><span class="o">(</span> <span class="n">s</span><span class="s">"${level} : ${msg}"</span> <span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  
+  <span class="c1">// Easy to now extend your class using the trait
+</span>  <span class="c1">// Traits provide a way to compose/attach behaviour to your class easily
+</span>  <span class="k">class</span> <span class="nc">Service1</span> <span class="k">extends</span> <span class="nc">LogTrait</span> <span class="o">{</span>
+  
+    <span class="k">def</span> <span class="n">process</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="n">debug</span><span class="o">(</span><span class="s">"my service 1"</span><span class="o">)</span>
+      <span class="n">info</span><span class="o">(</span><span class="s">"starting"</span><span class="o">)</span>
+      <span class="n">error</span><span class="o">(</span><span class="s">"error!"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+    
+  <span class="c1">// Trait method access from external class
+</span>  <span class="k">class</span> <span class="nc">MyApp</span> <span class="o">{</span>
+  
+    <span class="k">def</span> <span class="n">process</span><span class="o">()</span><span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="n">svc</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Service1</span><span class="o">()</span>
+  
+      <span class="c1">// Compile error ( protected )
+</span>      <span class="c1">//svc.debug("my service 2")
+</span>	  
+      <span class="n">svc</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">"starting"</span><span class="o">)</span>
+      <span class="n">svc</span><span class="o">.</span><span class="n">error</span><span class="o">(</span><span class="s">"error!"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-classes-subclassing">Sub-Classing</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// 1. You can declare class members in the constructor
+</span>  <span class="c1">// 2. You can declare set the access modifiers ( none = public, protected, private )
+</span>  <span class="c1">// 3. You can declare whether they are mutable ( var ) or immutable ( val )
+</span>  <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="k">val</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="k">val</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="k">val</span> <span class="n">roles</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span>
+  <span class="o">{</span>
+  <span class="o">}</span>
+
+
+  <span class="c1">// Just a simple example showing how to extend a class.
+</span>  <span class="k">class</span> <span class="nc">Admin</span><span class="o">()</span> <span class="k">extends</span> <span class="nc">User</span><span class="o">(</span><span class="s">"Administrator"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"admin"</span><span class="o">)</span> 
+  <span class="o">{</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-classes-static">Static methods</h2>
+<p>Scala does not have static methods. but you can declare the class as an <strong>object</strong> accessing it statically</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">object</span> <span class="nc">Checks</span> <span class="o">{</span>
+  
+    <span class="k">def</span> <span class="n">ifElse</span><span class="o">(</span><span class="n">condition</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">a</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">condition</span><span class="o">)</span> <span class="n">a</span> <span class="k">else</span> <span class="n">b</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  
+  <span class="k">val</span> <span class="n">userId</span> <span class="k">=</span> <span class="mi">2</span>
+  
+  <span class="c1">// Call using class name
+</span>  <span class="n">println</span><span class="o">(</span> <span class="nc">Checks</span><span class="o">.</span><span class="n">ifElse</span> <span class="o">(</span> <span class="n">userId</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">,</span> <span class="s">"user"</span><span class="o">,</span> <span class="s">"no-one"</span>  <span class="o">)</span> <span class="o">)</span>
+  
+  <span class="c1">// Call using imported method
+</span>  <span class="k">import</span> <span class="nn">Checks.ifElse</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">ifElse</span> <span class="o">(</span> <span class="n">userId</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">,</span> <span class="s">"admin"</span><span class="o">,</span> <span class="s">"normal"</span> <span class="o">)</span> <span class="o">)</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-classes-case">Case classes</h2>
+<p>Case classes provide a convenient way to make all members of the class readonly/vals. Boiler-plate code such as copy methods are automatically created,
+and they are used for pattern-matching.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// CASE Classes
+</span>  <span class="c1">// 1. members in constructor are immutable by default ( e.g. val )
+</span>  <span class="c1">// 2. copy support built-in
+</span>  <span class="c1">// 3. useful for pattern-matching ( explained later )
+</span>  <span class="c1">// Just add "case" before the class name
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">User</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">isActive</span><span class="k">:</span><span class="kt">Boolean</span><span class="o">,</span> <span class="n">email</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">account</span><span class="k">:</span><span class="kt">Int</span> <span class="o">)</span>
+  <span class="o">{</span>
+  <span class="o">}</span>
+
+  
+  <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"john doe"</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="s">"johndoe@gmail.com"</span><span class="o">,</span> <span class="mi">123456</span><span class="o">)</span>
+
+  <span class="c1">// 1. Case class constructor members are immutable by default
+</span>  <span class="c1">// Compile error
+</span>  <span class="c1">// user.email = "j@gmail.com"
+</span>  
+  <span class="c1">// 2. Case classes give you automatic copy constructors
+</span>  <span class="k">val</span> <span class="n">jane</span> <span class="k">=</span> <span class="n">user</span><span class="o">.</span><span class="n">copy</span><span class="o">(</span><span class="s">"jane doe"</span><span class="o">)</span>
+  <span class="n">println</span><span class="o">(</span> <span class="n">jane</span> <span class="o">)</span>
+  
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> You can declare members in the case class constructor to also be <strong>var</strong>. However, if you are incorporating functional programming, then you should avoid vars in case classes. 
+	Also, you should <strong>generally</strong> avoid using default values for parameters in case classes. The reasoning is that if you add/remove a field later on, you <strong>may</strong> easily break existing code by having the constructor still work with different sequence of similarly typed parameters but which have different meanings.</p>
+</div>
+<br/>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+<h2 id="scala-classes-operators">Operators</h2>
+<p>Operator overloading is implemented using simple method syntax. this examples creates a custom DateTime class that is a simple wrapper on the java 8 LocalDateTime.
+It implements the &lt;, &lt;= , &gt;, &gt;=, ==, != operators to be able to compare instances of this class.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">class</span> <span class="nc">DateTime</span><span class="o">(</span><span class="k">private</span> <span class="k">val</span> <span class="nc">_date</span><span class="k">:</span> <span class="kt">LocalDateTime</span> <span class="o">)</span>  <span class="o">{</span>
+
+  <span class="k">val</span> <span class="n">year</span>    <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getYear</span>
+  <span class="k">val</span> <span class="n">month</span>   <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getMonth</span><span class="o">.</span><span class="n">getValue</span>
+  <span class="k">val</span> <span class="n">day</span>     <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getDayOfMonth</span>
+  <span class="k">val</span> <span class="n">hours</span>   <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getHour</span>
+  <span class="k">val</span> <span class="n">minutes</span> <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getMinute</span>
+  <span class="k">val</span> <span class="n">seconds</span> <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">getSecond</span>
+  <span class="k">val</span> <span class="n">raw</span>     <span class="k">=</span> <span class="nc">_date</span>
+
+  <span class="c1">// Implement the &lt;, &lt;= , &gt;, &gt;=, ==, != operators 
+</span>  <span class="c1">// for this DateTime class.
+</span>  
+
+  <span class="k">def</span> <span class="o">&lt;</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="o">&lt;=</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">&lt;=</span> <span class="mi">0</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="o">&gt;</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="o">&gt;=</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="o">==</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">==</span> <span class="mi">0</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="o">!=</span> <span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">)</span> <span class="o">!=</span> <span class="mi">0</span>
+  <span class="o">}</span>
+
+
+  <span class="k">def</span> <span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="k">:</span><span class="kt">DateTime</span><span class="o">)</span> <span class="k">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="nc">_date</span><span class="o">.</span><span class="n">toInstant</span><span class="o">(</span><span class="nc">ZoneOffset</span><span class="o">.</span><span class="nc">UTC</span><span class="o">).</span><span class="n">compareTo</span><span class="o">(</span><span class="n">dt</span><span class="o">.</span><span class="nc">_date</span><span class="o">.</span><span class="n">toInstant</span><span class="o">(</span><span class="nc">ZoneOffset</span><span class="o">.</span><span class="nc">UTC</span><span class="o">))</span>
+    <span class="n">result</span>
+  <span class="o">}</span>
+ 
+<span class="o">}</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h1>6. Misc</h1>
+<hr/>
+<h2 id="scala-apply">Apply</h2>
+<p>By using <strong>object</strong> classes with an <strong>apply</strong> method, you can call the apply method simply using the name of the object. The apply method can act like a factory method while removing the need for using the "new" keyword.<br/></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  
+  <span class="c1">// Represents an environment ( e.g. "qa1", "qa" environment )
+</span>  <span class="k">case</span> <span class="k">class</span> <span class="nc">EnvItem</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">key</span><span class="k">:</span><span class="kt">String</span> <span class="o">)</span> <span class="o">{</span>
+  
+  <span class="o">}</span>
+  
+  <span class="c1">// Object class with apply ( acts as a factory method to build an EnvItem )</span>  
+  <span class="k">object</span> <span class="nc">EnvItem</span> <span class="o">{</span>
+    <span class="k">def</span> <span class="n">apply</span><span class="o">(</span> <span class="n">name</span><span class="k">:</span><span class="kt">String</span><span class="o">,</span> <span class="n">env</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="k">:</span> <span class="kt">EnvItem</span> <span class="o">=</span> <span class="o">{</span>
+      <span class="nc">EnvItem</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">env</span><span class="o">,</span> <span class="n">s</span><span class="s">"$name.$env"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  
+  <span class="c1">// 1. Build up with class constructor ( key = "name"."mode" )
+</span>  <span class="k">val</span> <span class="n">qa1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">,</span> <span class="s">"dev1.env"</span><span class="o">)</span>
+  
+  <span class="c1">// 2. Build up with object apply ( do NOT need "new" )
+</span>  <span class="k">val</span> <span class="n">qa2</span> <span class="k">=</span> <span class="nc">EnvItem</span><span class="o">(</span><span class="s">"qa1"</span><span class="o">,</span> <span class="nc">Env</span><span class="o">.</span><span class="nc">QA</span><span class="o">)</span>
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> When you have a class implemented using both the standard <strong>class</strong> keyword and also a corresponding <strong>object</strong> keyword, the object is considered the <strong>Companion object</strong> to the class.</p>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-immutable">Immutable</h2>
+<p>You can easily make items immutable via the “val” keyword. collections have mutable and immutable versions.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+   <span class="k">import</span> <span class="nn">scala.collections.immutable.List</span> 
+   <span class="k">import</span> <span class="nn">scala.collections.immutable.Map</span> 
+   
+   <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">"john doe"</span>
+   <span class="k">val</span> <span class="n">age</span> <span class="k">=</span> <span class="mi">35</span>
+   <span class="k">val</span> <span class="n">account</span> <span class="k">=</span> <span class="mi">12345678901L</span>
+   <span class="k">val</span> <span class="n">isActive</span> <span class="k">=</span> <span class="kc">false</span>
+   <span class="k">val</span> <span class="n">salary</span> <span class="k">=</span> <span class="mf">20.5</span>
+   <span class="k">val</span> <span class="n">date</span> <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+   <span class="k">val</span> <span class="n">user</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"john doe"</span><span class="o">,</span> <span class="s">"john@gmail.com"</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>         
+   <span class="k">val</span> <span class="n">items</span>  <span class="k">=</span> <span class="nc">List</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">,</span> <span class="s">"d"</span><span class="o">,</span> <span class="s">"e"</span> <span class="o">)</span>
+   <span class="k">val</span> <span class="n">lookup</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">[</span><span class="kt">String</span>,<span class="kt">Int</span><span class="o">](</span> <span class="s">"a"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">,</span> <span class="s">"b"</span> <span class="o">-&gt;</span> <span class="mi">2</span> <span class="o">)</span>
+   
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h2 id="scala-option">Option</h2>
+<p>Option classes can be used to "wrap" values and to represent if there is a value ( Some ) or not ( None ). This allows for avoiding nulls in code.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// Value
+</span>    <span class="k">val</span> <span class="n">name1</span>     <span class="k">=</span> <span class="s">"john doe"</span>
+    <span class="k">val</span> <span class="n">age1</span>      <span class="k">=</span> <span class="mi">35</span>
+    <span class="k">val</span> <span class="n">account1</span>  <span class="k">=</span> <span class="mi">12345678901L</span>
+    <span class="k">val</span> <span class="n">isActive1</span> <span class="k">=</span> <span class="kc">false</span>
+    <span class="k">val</span> <span class="n">salary1</span>   <span class="k">=</span> <span class="mf">20.5</span>
+    <span class="k">val</span> <span class="n">date1</span>     <span class="k">=</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span>
+
+    <span class="c1">// Values as implicit Option[T] with an actual ( Some ) value
+</span>    <span class="k">val</span> <span class="n">name2</span>     <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">age2</span>      <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">35</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">account2</span>  <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">12345678901L</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">isActive2</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="kc">false</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">salary2</span>   <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mf">20.5</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">date2</span>     <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">)</span>
+
+    <span class="c1">// Values with explicit type as Option[T] with an actual ( Some ) value
+</span>    <span class="k">val</span> <span class="n">name3</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="s">"john doe"</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">age3</span>      <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>           <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">35</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">account3</span>  <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span>          <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mi">12345678901L</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">isActive3</span> <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>       <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="kc">false</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">salary3</span>   <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="mf">20.5</span> <span class="o">)</span>
+    <span class="k">val</span> <span class="n">date3</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">LocalDateTime</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span> <span class="nc">LocalDateTime</span><span class="o">.</span><span class="n">now</span><span class="o">()</span> <span class="o">)</span>
+
+    <span class="c1">// Values with explicit type as Option[T] with no ( None ) value
+</span>    <span class="k">val</span> <span class="n">name4</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">age4</span>      <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span>           <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">account4</span>  <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span>          <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">isActive4</span> <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Boolean</span><span class="o">]</span>       <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">salary4</span>   <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">Double</span><span class="o">]</span>        <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">date4</span>     <span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">LocalDateTime</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+	
+    <span class="c1">// Usage
+</span>    <span class="k">val</span> <span class="n">batman</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">None</span>
+    <span class="k">val</span> <span class="n">catwoman</span><span class="k">:</span><span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"Selina Kyle"</span><span class="o">)</span>
+
+    <span class="c1">// Is the value there ?
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">isDefined</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">isEmpty</span> <span class="o">)</span>
+
+    <span class="c1">// Discouraged ( as it could be null )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">get</span> <span class="o">)</span>
+    <span class="n">println</span><span class="o">(</span> <span class="n">catwoman</span><span class="o">.</span><span class="n">get</span> <span class="o">)</span>
+
+    <span class="c1">// Encouraged ( get if present or default - to avoid null exception )
+</span>    <span class="n">println</span><span class="o">(</span> <span class="n">batman</span><span class="o">.</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">"Bruce Wayne"</span><span class="o">).</span><span class="n">toUpperCase</span><span class="o">)</span>
+
+</code></pre>
+</div>
+<div class="alert alert-info" role="alert">
+	<p><i class="fa fa-info-circle"></i> The concept behind Option is one the fundamentals of functional programming. It offers not only a way to avoid nulls, but the ability to "map" or convert the value inside an option to another option, and to be able to "chain" a sequence of operations that also involve usage of Option.</p>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-pattern-matching">Pattern matching</h2>
+<p>Scala contains pattern matching for easily matching values against either basic types, values, or case classes.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="k">def</span> <span class="n">testMatch</span><span class="o">(</span><span class="n">message</span><span class="k">:</span><span class="kt">Any</span><span class="o">)</span> <span class="k">:</span><span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+
+    <span class="n">message</span> <span class="k">match</span> <span class="o">{</span>
+	
+      <span class="c1">// 1. exact value match
+</span>      <span class="k">case</span> <span class="mi">7</span>                                <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"lucky 7"</span><span class="o">)</span>
+      <span class="k">case</span> <span class="s">"cat"</span>                            <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"meow"</span><span class="o">)</span>
+      <span class="k">case</span> <span class="s">"hawk"</span> <span class="o">|</span> <span class="s">"eagle"</span>                 <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"soar"</span><span class="o">)</span>
+
+      <span class="c1">// 2. data type + value match
+</span>      <span class="k">case</span> <span class="nc">User3</span><span class="o">(</span><span class="s">"john"</span>  <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"john "</span><span class="o">)</span>
+      <span class="k">case</span> <span class="nc">User3</span><span class="o">(</span><span class="s">"jane"</span>  <span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"jane "</span><span class="o">)</span>
+      <span class="k">case</span> <span class="nc">User3</span><span class="o">(</span><span class="s">"batman"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span>      <span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"bats "</span><span class="o">)</span>
+
+      <span class="c1">// 3. data type match
+</span>      <span class="k">case</span> <span class="n">a</span><span class="k">:</span><span class="kt">Int</span>                            <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"number "</span> <span class="o">+</span> <span class="n">a</span><span class="o">)</span>
+      <span class="k">case</span> <span class="n">b</span><span class="k">:</span><span class="kt">Double</span>                         <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"double "</span> <span class="o">+</span> <span class="n">b</span><span class="o">)</span>
+      <span class="k">case</span> <span class="n">s</span><span class="k">:</span><span class="kt">String</span>                         <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"text "</span> <span class="o">+</span> <span class="n">s</span><span class="o">)</span>
+      <span class="k">case</span> <span class="n">u</span><span class="k">:</span><span class="kt">User3</span>                          <span class="o">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"user"</span> <span class="o">)</span>
+
+      <span class="c1">// 4. Option
+</span>      <span class="k">case</span> <span class="nc">None</span>                             <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span> <span class="s">"No value supplied"</span> <span class="o">)</span>
+      <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">x</span><span class="o">)</span>                          <span class="k">=&gt;</span> <span class="n">print</span><span class="o">(</span> <span class="s">"Some value"</span> <span class="o">+</span> <span class="n">x</span> <span class="o">)</span>
+        
+      <span class="c1">// 5. default case
+</span>      <span class="k">case</span> <span class="k">_</span>                                <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"unknown"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  <span class="n">testMatch</span><span class="o">(</span><span class="s">"dog"</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="s">"cat"</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="s">"hawk"</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="mf">3.5</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="s">"some text"</span><span class="o">)</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"john"</span>  <span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"jane"</span>  <span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">1234567</span><span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">(</span><span class="nc">User3</span><span class="o">(</span><span class="s">"batman"</span><span class="o">,</span> <span class="kc">true</span> <span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="mi">0</span>      <span class="o">))</span>
+  <span class="n">testMatch</span><span class="o">((</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">))</span>
+  
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+
+
+<h2 id="scala-implicits">Implicits</h2>
+<p>Implicit methods allow for apply custom methods on types for conversions.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="k">package</span> <span class="nn">slate.common</span> 
+
+<span class="k">object</span> <span class="nc">StringHelpers</span> <span class="o">{</span>
+
+  <span class="k">implicit</span> <span class="k">class</span> <span class="nc">StringExt</span><span class="o">(</span><span class="n">text</span><span class="k">:</span><span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+
+    <span class="cm">/**
+     * converts the text to valid url path which means:
+     * 1. trim leading / trailing spaces
+     * 2. remove spaces and replace with '-'
+     * @return
+     */</span>
+    <span class="k">def</span> <span class="n">toUrlPath</span><span class="o">()</span><span class="k">:</span><span class="kt">String</span> <span class="o">=</span>
+    <span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span><span class="n">text</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="k">return</span> <span class="s">""</span>
+      <span class="n">text</span><span class="o">.</span><span class="n">trim</span><span class="o">().</span><span class="n">replaceAllLiterally</span><span class="o">(</span><span class="s">" "</span><span class="o">,</span> <span class="s">"-"</span><span class="o">)</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+ <span class="c1">// ...
+</span> 
+ <span class="k">import</span> <span class="nn">slate.common.StringHelpers.StringExts</span>
+ 
+ <span class="k">val</span> <span class="n">name</span> <span class="k">=</span> <span class="s">" slate kit "</span>
+ <span class="k">val</span> <span class="n">urlPath</span> <span class="k">=</span> <span class="n">name</span><span class="o">.</span><span class="n">toUrlPath</span><span class="o">()</span>
+ <span class="n">println</span><span class="o">(</span> <span class="n">urlPath</span><span class="o">)</span>
+
+</code></pre>
+</div>
+
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<h1>7. Futures</h1>
+<div class="alert alert-warning" role="alert">
+	<p><i class="fa fa-link"></i> For more in depth information on scala Futures and Promises visit <a class="url-ch" href="http://docs.scala-lang.org/overviews/core/futures.html">Scala Futures</a></p>	
+</div>
+<hr/>
+
+<h2 id="scala-futures-creation">Futures: Creating</h2>
+<p>Creating a future</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// NOTE: The type of action = Future[Int]
+</span>  <span class="c1">// since the future returns value 2 in this example
+</span>  <span class="k">val</span> <span class="n">action</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span>
+  
+    <span class="c1">// Simulating a long running operation via Thread.sleep 
+</span>    <span class="c1">// NOTE: not for use in a real system :-)
+</span>    <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+    
+    <span class="c1">// Return sample result
+</span>    <span class="mi">2</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-futures-completion">Futures: Completion</h2>
+<p>Handling the completion</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// NOTE: The type of action = Future[Int]
+</span>  <span class="c1">// since the future returns value 2 in this example
+</span>  <span class="k">val</span> <span class="n">action</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span>
+  
+    <span class="c1">// Simulating a long running operation via Thread.sleep 
+</span>    <span class="c1">// NOTE: not for use in a real system :-)
+</span>    <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+    
+    <span class="c1">// Return sample result
+</span>    <span class="mi">2</span>
+  <span class="o">}</span>
+	
+  <span class="c1">// Now handle the result ( success/failure ) of the action
+</span>  <span class="n">action</span><span class="o">.</span><span class="n">onComplete</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">res</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"result: "</span> <span class="o">+</span> <span class="n">res</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">err</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"error : "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-futures-failure">Futures: Failure</h2>
+<p>Handling a failure result</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// NOTE: The type of action = Future[Int]
+</span>  <span class="c1">// since the future returns value 2 in this example
+</span>  <span class="k">val</span> <span class="n">action</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span>
+  
+    <span class="c1">// Simulating a long running operation
+</span>    <span class="c1">// via Thread.sleep ( not for use in a real system )
+</span>    <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+    
+    <span class="c1">// Forcing a failure
+</span>    <span class="k">throw</span> <span class="k">new</span> <span class="nc">Exception</span><span class="o">(</span><span class="s">"Simulating failure"</span><span class="o">)</span>
+  <span class="o">}</span>
+	
+  <span class="c1">// Now handle the result ( success/failure ) of the action
+</span>  <span class="n">action</span><span class="o">.</span><span class="n">onComplete</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">res</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"result: "</span> <span class="o">+</span> <span class="n">res</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">err</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"error : "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+  <span class="o">}</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-futures-multiple">Futures: Multiple</h2>
+<p>Working with multiple futures</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// To run multiple future in parallel
+</span>  <span class="c1">// You must first declare them.
+</span>  <span class="c1">// Again, let simulate a long running task 
+</span>  <span class="c1">// via Thread.sleep ( not for use in a real system )
+</span>  <span class="k">val</span> <span class="n">f1</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span> <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span> <span class="mi">1</span> <span class="o">}</span>
+  <span class="k">val</span> <span class="n">f2</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span> <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span> <span class="mi">2</span> <span class="o">}</span>
+  <span class="k">val</span> <span class="n">f3</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span> <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">3000</span><span class="o">);</span> <span class="mi">3</span> <span class="o">}</span>
+  
+  <span class="c1">// Now setup a for comprehension to chain them
+</span>  <span class="c1">// Add up the results of each future ( e.g. 6 )
+</span>  <span class="k">val</span> <span class="n">result</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+    <span class="n">r1</span> <span class="k">&lt;-</span> <span class="n">f1</span>
+    <span class="n">r2</span> <span class="k">&lt;-</span> <span class="n">f2</span>
+    <span class="n">r3</span> <span class="k">&lt;-</span> <span class="n">f3</span>
+  <span class="o">}</span> <span class="k">yield</span> <span class="n">r1</span> <span class="o">+</span> <span class="n">r2</span> <span class="o">+</span> <span class="n">r3</span> 
+  
+  
+  <span class="c1">// Finally handle completion ( e.g. result = 6 )
+</span>  <span class="n">result</span><span class="o">.</span><span class="n">onComplete</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">res</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"Multiple completed: "</span> <span class="o">+</span> <span class="n">res</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">err</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"Multiple failed   : "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-futures-nesting">Futures: And Then</h2>
+<p>Allow for chaining of futures while preserving ordering of calls</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// NOTE: The type of action = Future[Int]
+</span>  <span class="c1">// since the future returns value 2 in this example
+</span>  <span class="k">val</span> <span class="n">action</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span>
+  
+    <span class="c1">// Simulating a long running operation via Thread.sleep 
+</span>    <span class="c1">// NOTE: not for use in a real system :-)
+</span>    <span class="nc">Thread</span><span class="o">.</span><span class="n">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+    
+    <span class="c1">// Return sample result
+</span>    <span class="mi">2</span>
+  <span class="o">}</span>
+  
+  <span class="c1">// You can chain handling of future with "andThen" 
+</span>  <span class="c1">// and preserve ordering.
+</span>  <span class="n">action</span><span class="o">.</span><span class="n">andThen</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Success</span><span class="o">(</span><span class="n">res</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"Multiple completed: "</span> <span class="o">+</span> <span class="n">res</span><span class="o">)</span>
+    <span class="k">case</span> <span class="nc">Failure</span><span class="o">(</span><span class="n">err</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">"Multiple failed   : "</span> <span class="o">+</span> <span class="n">err</span><span class="o">.</span><span class="n">getMessage</span><span class="o">)</span>
+  <span class="o">}</span>
+	
+  <span class="c1">// return future to caller 
+</span>  <span class="n">action</span> 
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+<!--
+<h1>8. More</h1>
+<hr/>
+
+<h2 id="scala-types-values">Value classes</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-types-alias">Type alias</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-types-params">Type parameters</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-types-classes">Type classes</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-types-bounds">Type bounds</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+
+
+<h2 id="scala-types-phantom">Phantom types</h2>
+<p>Coming soon...</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+  <span class="c1">// coming soon</span>
+
+</code></pre>
+</div>
+<a href="#overview" class="more"><span class="btn btn-primary">Back to top</span></a> <br/><br/>
+-->
+
+			</div>
+		</section>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div class="street-address">416 Water St.</div>
+                    <span class="locality">New York</span>,
+                    <abbr class="region" title="New York">NY</abbr>,
+                    <span class="postal-code">10002</span>,
+                    <span class="country-name">U.S.A</span>
+                  </div>
+                  <div>Phone: <span class="tel">+1.123.456.7890</span></div>
+                  <div>Website: <a class="url" href="http://www.yoarts.com">http://www.yoarts.com</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "scala 101";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-84704317-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>

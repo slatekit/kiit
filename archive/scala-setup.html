@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Scala tool-kit, utilities, and server back-end for web and mobile apps" />
+    <title>Slate Kit - Setup</title>
+    <link href="themes/start/assets/css/template.css" rel="stylesheet">	
+    <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="themes/start/app/app.css" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="header" class="site-navbar navbar navbar-fixed-top">
+        <nav id="topbar" class="site-topbar visible-lg visible-md">
+          <div class="container">
+            <div class="row">
+              <div id="topbar_title" class="col-sm-6">Questions? Call us toll free: +1 234 4567 890</div>
+              <div class="social-links col-sm-6">
+                <a id="topbar_social_github"  href="#"><i class="fa fa-github"></i></a>
+                <a id="topbar_social_gitter"  href="#"><i class="fa fa-group"></i></a>
+                <a id="topbar_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a>
+                <a id="topbar_social_twitter" href="#"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <nav id="navbar" class="site-navbar navbar" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="fa fa-bars"></i>
+              </button>
+              <h1 class="navbar-brand"><i class="fa fa-power-off"></i> <a href="index.html">Slate Kit</a></h1>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+               <ul id="navigation" class="nav navbar-nav navbar-right">
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main" class="site-main">
+
+		<footer class="site-footer">
+			<div class="container">
+			<div class="row">
+
+              <aside class="widget">
+                <h1 class="widget-title">Setup</h1>
+                <h3>
+                  Setup Slate Kit for rapid development.<br />
+                </h3>
+              </aside>
+
+            </div>
+			</div>
+		</footer>
+		
+		<section id="features" class="section">
+          <div class="container">
+			
+            <div class="alert alert-info text-center" role="alert">
+				<h3>Slate Kit will soon be available on Scaladex and Maven</h3>
+			</div>
+			<br/>
+			
+			<div>			
+				<h1>Required</h1>
+				<p>All the software below is required to run Scala and Slate Kit. Scala is dependent on 
+				<strong>Java</strong>. Using <strong>Sbt</strong> ( the Scala build tool ) will making building 
+				and packaging your apps easier.
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Tech</strong></td>
+						<td class="col-sm-2"><strong>Version</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Link</strong></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-2"><strong>Java</strong></td>
+						<td class="col-sm-2">1.8</td>
+						<td class="col-sm-3">Java</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+					<tr class="">
+						<td class="col-sm-2"><strong>Scala</strong></td>
+						<td class="col-sm-2 error">2.11</td>
+						<td class="col-sm-3">Scala</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Sbt</strong></td>
+						<td class="col-sm-2">0.13</td>
+						<td class="col-sm-3">Build tool</td>
+						<td class="col-sm-2"><a class="url-ch" href="#installation">see notes below</a></td>
+					</tr>
+				</table>
+			</div>
+			<br/><br/>
+			<div>			
+				<h1>Suggested</h1>
+				<p>The software below is recommended but not required. Any IDE ( IntelliJ, Eclipse ) is fine. 
+				Slate Kit supports MySql with limited support for Sql-Server. Having the MySql Java Connector will 
+				help with the sample apps and is also needed for the ORM ( entities ).
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Tech</strong></td>
+						<td class="col-sm-2"><strong>Version</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Link</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>IntelliJ, Eclipse, etc</strong></td>
+						<td class="col-sm-2">latest</td>
+						<td class="col-sm-3">IDE</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://www.jetbrains.com/idea/download/">download</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>MySql Connector</strong></td>
+						<td class="col-sm-2">5.7</td>
+						<td class="col-sm-3">Database connectivity</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
+					</tr>
+				</table>			
+            </div>
+			<br/><br/>
+			<div>			
+				<h1>Optional</h1>
+				<p>Slate Kit support building Web APIs using <strong>Akka-Http</strong>, Cloud Services ( Files, Queues ) using <strong>AWS</strong> and databases using <strong>MySql</strong>. The following are needed if you plan on using any of these.
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Tech</strong></td>
+						<td class="col-sm-2"><strong>Version</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Link</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Akka</strong></td>
+						<td class="col-sm-2">2.4.10</td>
+						<td class="col-sm-3">For Akka-Http used in Slate API Server</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">download</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>AWS Sdk ( For Java )</strong></td>
+						<td class="col-sm-2">latest</td>
+						<td class="col-sm-3">Cloud Storage of Files(S3), Queues(SQS)</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://aws.amazon.com/sdk-for-java/">download</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>MySql</strong></td>
+						<td class="col-sm-2">5.7</td>
+						<td class="col-sm-3">Database Server</td>
+						<td class="col-sm-2"><a class="url-ch" href="https://dev.mysql.com/downloads/mysql/">download</a></td>
+					</tr>
+				</table>				
+            </div>
+			<br/><br/>
+			<div>			
+				<h1>Installation</h1>
+				<p>Installation of Java, Scala, SBT and Slate Kit is fairly easy. We recommend the following insallation steps and centralized location for simplicity.
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Tech</strong></td>
+						<td class="col-sm-2"><strong>Version</strong></td>
+						<td class="col-sm-2"><strong>Download</strong></td>
+						<td class="col-sm-6"><strong>Instructions</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Java</strong></td>
+						<td class="col-sm-2">1.8</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">download</a></td>
+						<td >							
+							<ul>
+								<li>install java 1.8.0 to example: <strong>C:\Tools\Java\jdk1.8.0</strong></li>
+								<li>add home env variable: <strong>JAVA_HOME=C:\Tools\Java\jdk1.8.0</strong></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Scala</strong></td>
+						<td class="col-sm-2">2.17</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://www.scala-lang.org/">download</a></td>
+						<td >
+							<ul>
+								<li>install scala from download url below to <strong>c:\tools\scala\lang</strong></li>
+								<li>add <strong>C:\tools\scala\lang\bin;</strong> to your system PATH variable.</li>
+								<li>add environment variable <strong>SCALA_HOME=C:\Tools\Scala\Lang</strong></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SBT</strong></td>
+						<td class="col-sm-2">Latest</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://www.scala-sbt.org/">download</a></td>
+						<td >
+							<ul>
+								<li>install sbt ( scala build tool ) from download url below to <strong>c:\tools\scala\sbt</strong></li>
+								<li>add <strong>C:\tools\scala\sbt\bin;</strong> to your system PATH variable.</li>
+								<li>add environment variable <strong>SBT_HOME=C:\tools\Scala\SBT\</strong></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>Slate</strong></td>
+						<td class="col-sm-2">0.9.1</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://www.scala-sbt.org/">download</a></td>
+						<td >							
+							<ul>
+								<li>download slatekit to <strong>c:\tools\scala\slatekit</strong></li>
+								<li>add <strong>C:\tools\scala\slatekit\bin;</strong> to your system PATH variable.</li>
+								<li>add environment variable <strong>SLATEKIT_HOME=C:\tools\Scala\slatekit\</strong></li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+            </div>
+			<br/><br/>
+			<div>
+				<h1>Libraries</h1>
+				<p>Below is a list of all the libraries/jars needed for Slate Kit Components.
+					Majority of the Slate Kit components ( Common, Core, ORM, etc ) only need the Scala libraries.
+				</p>
+				<div class="alert alert-info text-center" role="alert">
+					<h3><a href="https://github.com/code-helix/slatekit/blob/master/src/lib/scala/build.sbt" class="url-ch">Click here for the Slate Kit build.sbt for more info</a></h3>
+				</div>
+				
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><h3>Name</h3>
+						<td class="col-sm-2"><strong>Maven group</strong></td>
+						<td class="col-sm-2"><strong>Maven artifact</strong></td>
+						<td class="col-sm-2"><strong>Maven version</strong></td>
+					</tr>
+					<tr>
+						<td><strong>All projects</strong></td>
+						<td>org.scala-lang</td>
+						<td>scala-reflect</td>
+						<td>2.11.7</td>
+					</td>
+					<tr>
+						<td></td>
+						<td>com.typesafe</td>
+						<td>config</td>
+						<td>1.3.0</td>
+					</td>
+					<tr>
+						<td></td>
+						<td>com.googlecode.json-simple</td>
+						<td>json-simple</td>
+						<td>1.1</td>
+					</td>
+					<tr>
+						<td><strong>Slate Entities</strong></td>
+						<td>mysql</td>
+						<td>mysql-connector-java</td>
+						<td>>= 5.1.40</td>					
+					</tr>
+					<tr>
+						<td><strong>Slate Cloud</strong></td>
+						<td>com.amazonaws</td>
+						<td>aws-java-sdk-core</td>
+						<td>>= 1.10.55</td>					
+					</tr>
+					<tr>
+						<td><strong>-</strong></td>
+						<td>com.amazonaws</td>
+						<td>aws-java-sdk-s3</td>
+						<td>>= 1.10.55</td>					
+					</tr>
+					<tr>
+						<td><strong>-</strong></td>
+						<td>com.amazonaws</td>
+						<td>aws-java-sdk-sqs</td>
+						<td>>= 1.10.55</td>					
+					</tr>
+				</table>
+				<br/>
+				
+				<h3>Slate Server</h3>
+				<p>The Slate Server is a thin layer on top of Akka-Http to support the Slate Kit API approach 
+				( protocol independent APIs that can run as Web APIs and on the CLI Command line ). 
+				I've had some issues downloading the Akka-Http versions via Maven, but you can easily get the 
+				libraries from their official 2.4 release. 
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-1"><h3>Name</h3>
+						<td class="col-sm-2"><strong>Group</strong></td>
+						<td class="col-sm-2"><strong>Artifact</strong></td>
+						<td class="col-sm-2"><strong>Version</strong></td>
+					</tr>
+					<tr><td><strong>Slate Server </strong></td><td>akka-http</td><td>akka-actor_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>akka-http</td><td>akka-http-core_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>akka-http-experimental_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>akka-http-spray-json-experimental_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>akka-parsing_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>akka-stream_2.11-2.4.10.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>reactive-streams-1.0.0.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>scala-java8-compat_2.11-0.7.0.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>scala-parser-combinators_2.11-1.0.4.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>spray-json_2.11-1.3.2.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>ssl-config-akka_2.11-0.2.1.jar</td><td></td></tr>
+					<tr><td></td><td>-</td><td>ssl-config-core_2.11-0.2.1.jar</td><td></td></tr>
+				</table>
+			</div>
+			<br/><br/>
+			<div>
+				<h1>Sample Apps</h1>
+				<p>There are 3 sample apps available showing the components and features of Slate Kit. There is an 
+				emphasis on showing <strong>application setup</strong>, <strong>utilities</strong>, <strong>core architecture</strong> components and <strong>APIs</strong> using an approach that we call <strong>Protocol Independent APIs</strong>. 
+				<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+				</p>
+				<table class="table table-bordered table-striped">
+					<tr class="">
+						<td class="col-sm-2"><strong>Name</strong></td>
+						<td class="col-sm-2"><strong>Type</strong></td>
+						<td class="col-sm-3"><strong>About</strong></td>
+						<td class="col-sm-2"><strong>Source</strong></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Core</strong></td>
+						<td class="col-sm-2">Library</td>
+						<td class="col-sm-3">
+							The core library for all the sample apps. <br/><br/>
+							Contains some sample services that can be used in either the CLI or the Server Web API ( using Protocol Independent APIs )<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Console</strong></td>
+						<td class="col-sm-2">Console</td>
+						<td class="col-sm-3">
+							Console app with several pre-built features <br/><br/>
+							<ul>
+								<li>environment selection</li>
+								<li>configiguration (with inherited configs)</li>
+								<li>logging</li>
+								<li>encryption</li>
+								<li>and much more</li>
+							</ul>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp CLI</strong></td>
+						<td class="col-sm-2">CLI</td>
+						<td class="col-sm-3">Command line interface ( Shell )<br/><br/>
+							Provides a CLI interface for services in Sample Core Library.
+							Shows how to easily setup and run Slate Kit <strong>Protocol Independent APIs</strong>. to run in a CLI<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+					<tr>
+						<td class="col-sm-2"><strong>SampleApp Server</strong></td>
+						<td class="col-sm-2">Server</td>
+						<td class="col-sm-3">
+							Server Web API for services in Sample Core Library <br/><br/>
+							Shows how to easily setup Slate Kit <strong>Protocol Independent APIs</strong> to run in a web container.<br/><br/>
+							<a class="url-ch" href="apis-detail.html">See APIs for more info</a>
+						</td>
+						<td class="col-sm-2"><a class="url-ch" href="http://akka.io/docs/?_ga=1.145776375.2114122309.1460495927">source</a></td>
+					</tr>
+				</table>
+				<br/>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>								
+					  <li>The Sample Apps are packaged to contain the necessary dependencies on Akka-Http</li>
+					  <li>The Sample Apps are packaged to contain the necessary dependencies on MySql</li>
+					  <li>The Sample Core Library contains services that can be run in CLI or Server</li>
+					  <li>All the sample apps use the Application component ( see App page for more info )</li>
+					</ol>
+				</div>
+				
+			</div>
+			<br/><br/>
+			<div>			
+				<h1>Compiling</h1>
+				<p>Slate Kit is not yet available on Maven ( work is in progress ). You can use pre-built jars 
+				available from the release or reference Slate Kit projects/modules from source code.
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>	
+						<li>Ensure dependent jars ( listed above ) are in your <strong>build.sbt</strong> or in your <strong>lib</strong> folder</li>
+						<li>Slate Kit is <strong>NOT YET</strong> available on Maven Central, you must use the release pre-built jars or source code </li>						
+						<li>If you are using binaries, drop the Slate Kit jar files from the release into your sbt lib folder ( see below )</li>
+						<li>If you want to use using sources, add project dependencies to the slate kit projects ( via IntelliJ )</li>
+						<li>Refer to the Sample Apps for more info</li>
+					</ol>	
+				</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">cloud_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>   
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">common_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>  
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">core_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>    
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">entities_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">ext_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span>     
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">slate</span><span class="o">-</span><span class="n">tools_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span> 
+ 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="n">library</span><span class="o">.</span><span class="n">jar</span>  
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="n">reflect</span><span class="o">.</span><span class="n">jar</span> 
+ 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">config</span><span class="o">-</span><span class="mf">1.2</span><span class="o">.</span><span class="mf">1.</span><span class="n">jar</span>                    
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">json_simple</span><span class="o">-</span><span class="mf">1.1</span><span class="o">.</span><span class="n">jar</span>                 
+ <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">\</span><span class="n">lib</span><span class="o">\</span><span class="n">mysql</span><span class="o">-</span><span class="n">connector</span><span class="o">-</span><span class="n">java</span><span class="o">-</span><span class="mf">5.1</span><span class="o">.</span><span class="mi">38</span><span class="o">-</span><span class="n">bin</span><span class="o">.</span><span class="n">jar</span> 
+ 
+</code></pre>
+</div>
+
+				<h2 id="compile">Compile</h2>
+				<p>Open a command window and move to the root directory of your app</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="n">compile</span>
+
+</code></pre>
+</div>
+
+				<h2 id="run">Run</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="n">run</span>
+
+</code></pre>
+</div>
+
+				<h2 id="package">Package</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">sbt</span> <span class="k">package</span>
+
+</code></pre>
+</div>
+
+<pre><code class="language-props">
+c:\apps\MySampleApp\target\scala-2.11\mysampleapp.jar
+
+</code></pre>
+			</div>
+			<br/><br/><br/>
+			<div>			
+				<h1>Running</h1>
+				<p>There are multiple options to run your Scala app with Slate Kit dependencies. The easiest 
+				may be to just reference the Slate Kit pre-built jars that come with the release. If you are 
+				new to Scala, please refer to the different ways of running Scala below. Also check the 
+				run scripts that come with the release.</p>
+				<h3>Notes</h3>
+				<div class="alert alert-info" role="alert">
+					<ol>	
+						<li>You can run a development version of your app via Scala</li>
+						<li>You can run a production version of your app via Scala</li>
+						<li>You can run a production version of your app via Java</li>
+						<li>Slate Kit is <strong>NOT YET</strong> available on Maven Central, ensure the pre-built release jars are available on the classpath </li>						
+						<li>Refer to the run scripts available for both <strong>Mac</strong>, <strong>Windows</strong>
+						    in the release to see how to run using Java with libraries correctly put into proper folders</li>
+					</ol>	
+				</div>
+				<h2 id="using-scala">Using Scala</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// Include all your jars here!
+</span><span class="n">scala</span> <span class="o">-</span><span class="n">classpath</span> <span class="s">"slate-common_2.11-1.0.jar;...;mysampleapp.jar"</span> <span class="n">mycompany</span><span class="o">.</span><span class="n">apps</span><span class="o">.</span><span class="nc">MySampleApp</span>
+
+</code></pre>
+</div>
+
+				<h2 id="using-java">Using Java Classpath ( Jars )</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// Include all your jars here!
+</span><span class="n">java</span> <span class="o">-</span><span class="n">cp</span> <span class="n">slate</span><span class="o">-</span><span class="n">common_2</span><span class="o">.</span><span class="mi">11</span><span class="o">-</span><span class="mf">1.0</span><span class="o">.</span><span class="n">jar</span><span class="o">;...;</span><span class="n">mysamplepp</span><span class="o">.</span><span class="n">jar</span><span class="o">;</span> <span class="n">mycompany</span><span class="o">.</span><span class="n">apps</span><span class="o">.</span><span class="nc">MySampleApp</span>
+
+</code></pre>
+</div>
+
+<h2 id="using-java">Using Java Classpath ( Folders )</h2>
+<p>Please refer to the run scripts in the release downloads for more info</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">set</span> <span class="nc">APP_HOME</span><span class="o">=.</span>
+<span class="n">set</span> <span class="nc">APP_CLASSPATH</span><span class="o">=%</span><span class="nc">APP_HOME</span><span class="o">%\</span><span class="n">bin</span><span class="o">\*;%</span><span class="nc">APP_HOME</span><span class="o">%\</span><span class="n">lib</span><span class="o">\*;%</span><span class="nc">APP_HOME</span><span class="o">%\</span><span class="n">ext</span><span class="o">\*</span>
+<span class="n">java</span> <span class="o">-</span><span class="n">cp</span> <span class="s">"%APP_CLASSPATH%"</span> <span class="n">slate</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="nc">SlateShell</span> <span class="o">-</span><span class="n">conf</span><span class="o">.</span><span class="n">dir</span><span class="o">='</span><span class="n">file</span><span class="o">://./</span><span class="n">conf</span><span class="o">/</span><span class="n">slate</span><span class="o">-</span><span class="n">shell</span><span class="o">/'</span>
+
+</code></pre>
+</div>
+
+				<h2 id="using-java-manifest">Using Java Manifest</h2>
+				<p>To package an app for deployment, it may be easier to pacakge your app using a manifest file</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="c1">// NOTES: This example is using windows commands 
+// 1. Package up your app using sbt package above 
+// C:\apps\MySampleApp&gt;sbt package
+</span>
+<span class="c1">// 2. Copy classes over from app\target to some temp directory
+</span><span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">xcopy</span> <span class="o">/</span><span class="n">e</span> <span class="o">/</span><span class="n">v</span> <span class="o">/</span><span class="n">y</span> <span class="n">target</span><span class="o">\</span><span class="n">scala</span><span class="o">-</span><span class="mf">2.11</span><span class="o">\</span><span class="n">classes</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">\</span>
+
+<span class="c1">// 3. move to temp to package everything using jar and manifest
+</span><span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="nc">MySampleApp</span><span class="o">&gt;</span><span class="n">cd</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">\</span>
+
+<span class="c1">// 4. jar all the files with custom manifest
+</span><span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">&gt;</span><span class="n">jar</span> <span class="o">-</span><span class="n">cvfm</span> <span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">build</span><span class="o">\</span><span class="n">manifest</span><span class="o">.</span><span class="n">txt</span> <span class="o">*</span>
+
+<span class="c1">// 5. Copy the built jar into a final destination directory 
+</span><span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">temp</span><span class="o">&gt;</span><span class="n">copy</span> <span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> <span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">dist</span><span class="o">\</span><span class="n">mysampleapp</span><span class="o">.</span><span class="n">jar</span> 
+
+<span class="c1">// NOTE!! Ensure all the other dependent libraries from the manifest are also
+// in this destination directory.
+</span>
+</code></pre>
+</div>
+
+				<p>The manifest file will look something like this.</p>
+
+<pre><code class="language-props">Manifest-Version: 1.0
+Main-Class: mycompany.apps.MySampleApp
+Class-Path: config-1.2.1.jar
+  json_simple-1.1.jar
+  mysql-connector-java-5.1.38-bin.jar
+  scala-library.jar
+  scala-reflect.jar
+  slate-common_2.11-1.0.jar
+  slate-entities_2.11-1.0.jar
+  slate-core_2.11-1.0.jar
+  slate-integration_2.11-1.0.jar
+  slate-cloud_2.11-1.0.jar
+</code></pre>
+
+				<p>Now you can simply run your app using the jar.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+<span class="n">c</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">dist</span><span class="o">&gt;</span><span class="n">java</span> <span class="o">-</span><span class="n">jar</span> <span class="n">mysamplepp</span><span class="o">.</span><span class="n">jar</span>
+
+</code></pre>
+</div>			
+            </div>
+          </div>
+        </section>
+        
+		<br/>
+		<br/>
+      </main>
+
+      <footer id="footer" class="site-footer">
+        <div class="container">
+
+          <div id="sidebar-footer-1">
+            <div class="row">
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">About Us</h5>
+                <p id="footer_aboutus">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Contact</h5>
+                <div class="textwidget">
+                  <div class="adr">
+                    <div  id="footer_addr_street"  class="street-address">416 Water St.</div>
+                    <span id="footer_addr_city"    class="locality">New York</span>,
+                    <abbr id="footer_addr_region"  class="region" title="New York">NY</abbr>,
+                    <span id="footer_addr_zip"     class="postal-code">10002</span>,
+                    <span id="footer_addr_country" class="country-name">U.S.A</span>
+                  </div>
+                  <div>Website: <a class="url" href="http://www.codehelix.co">http://www.codehelix.co</a></div>
+                </div>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Need Help?</h5>
+                <p id="footer_needhelp">Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptate rerum voluptates. <a href="#">Read more</a></p>
+              </aside>
+
+              <aside class="widget col-md-3 col-sm-6">
+                <h5 class="widget-title">Get in touch</h5>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Your Email">
+                  <span class="input-group-btn">
+                    <button class="btn btn-danger" type="button"><i class="fa fa-arrow-right"></i></button>
+                  </span>
+                </div>
+                <ul class="social-links">
+                  <li><a id="footer_social_github"  href="#"><i class="fa fa-github"></i></a></li>
+                  <li><a id="footer_social_gitter"  href="#"><i class="fa fa-group"></i></a></li>
+                  <li><a id="footer_social_gplus"   href="#"><i class="fa fa-google-plus"></i></a></li>
+                  <li><a id="footer_social_twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                </ul>
+              </aside>
+
+            </div>
+          </div>
+
+          <div class="copyright"><p>© 2014 Company, Inc.<br /> Theme: Start 1.2.3. Designed by <a href="http://www.yoarts.com">YoArts</a></p></div>
+        </div>
+      </footer>
+    </div>
+
+    <div class="scroll-to-top" data-spy="affix" data-offset-top="200"><a href="#page" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/bootstrap-3.1.1.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.isotope.min.js?v=1.5.26"></script>
+    <script type="text/javascript" src="themes/start/assets/js/jquery.singlePageNav.min.js"></script>
+    <script type="text/javascript" src="themes/start/assets/js/main.js"></script>
+	<script type="text/javascript">
+		var _codehelixAppPage = "setup";
+	</script>
+    <script type="text/javascript" src="themes/start/app/app.js"></script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-84704317-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
