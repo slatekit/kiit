@@ -53,7 +53,7 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#examples">Examples</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
@@ -207,7 +207,7 @@ todo
 {{% section-end mod="core/cli" %}}
 
 
-# Examples
+# Details
 todo
 
 ## Feature 1

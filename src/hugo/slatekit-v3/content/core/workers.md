@@ -1,6 +1,7 @@
 ---
 title: "Workers"
-date: 2019-03-16T15:07:03-04:00
+date: 2019-03-16T16:04:50-04:00
+draft: true
 ---
 
 # Overview
@@ -52,11 +53,11 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#examples">Examples</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Install
 {{< highlight groovy >}}
@@ -92,7 +93,7 @@ Table of contents for this page
         <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Requires
 This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
@@ -102,22 +103,15 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Template</strong></td>
-        <td>Provide template for any application 
-        ( Console, Batch, CLI, Server )</td>
+        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
+        <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
-        <td><strong>2. Features</strong> </td>
-        <td>Provide pre-built support commandline args, 
-        config, logging, and more.</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Standardized</strong></td>
-        <td>Provide standardized setup, functionality and diagnostics</td>
-        </td>                       
+        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td>Common utilities for both android + server</td>
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Sample
 {{< highlight kotlin >}}
@@ -127,7 +121,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     }
 
 {{< /highlight >}}
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Goals
 <table class="table table-bordered table-striped">
@@ -151,7 +145,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         </td>                       
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Concepts
 <table class="table table-bordered table-striped">
@@ -175,7 +169,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         </td>                       
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Features
 <table class="table table-bordered table-striped">
@@ -199,7 +193,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         </td>                       
     </tr>
 </table>
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Setup
 todo
@@ -210,10 +204,10 @@ todo
     }
 
 {{< /highlight >}}
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 
-# Examples
+# Details
 todo
 
 ## Feature 1
@@ -246,5 +240,5 @@ todo
 {{< /highlight >}}
 {{% break %}}
 
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 

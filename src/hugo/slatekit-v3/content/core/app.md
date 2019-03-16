@@ -1,10 +1,11 @@
 ---
-title: "Cli"
-date: 2019-03-16T14:21:20-04:00
+title: "App"
+date: 2019-03-16T16:03:16-04:00
+draft: true
 ---
 
 # Overview
-This {COMPONENT} is a template for building CLI ( command line interaction ) apps.
+Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
 {{% break %}}
 
 # Index
@@ -58,8 +59,7 @@ Table of contents for this page
 </table>
 {{% section-end mod="core/cli" %}}
 
-
-# Install 
+# Install
 {{< highlight groovy >}}
 
     repositories {
@@ -70,7 +70,7 @@ Table of contents for this page
     dependencies {
         // other dependencies ...
 
-        compile 'com.slatekit:slatekit-cli:0.9.9'
+        compile 'com.slatekit:slatekit-{COMPONENT_ID}:0.9.9'
     }
 
 {{< /highlight >}}
@@ -78,19 +78,19 @@ Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>jar</strong></td>
-        <td>slatekit.core.jar</td>
+        <td>slatekit.{COMPONENT_ID}.jar</td>
     </tr>
     <tr>
         <td><strong>package</strong></td>
-        <td>slatekit.core.app</td>
+        <td>slatekit.{COMPONENT_ID}</td>
     </tr>
     <tr>
         <td><strong>source</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.app</a></td>
+        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.{COMPONENT_ID}</a></td>
     </tr>
     <tr>
         <td><strong>example</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
+        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
@@ -121,7 +121,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     }
 
 {{< /highlight >}}
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Goals
 <table class="table table-bordered table-striped">
