@@ -96,13 +96,13 @@
               <div class="container">
                   
 
-<h1 id="args">Args</h1>
+<h1 id="env">Env</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A lexical command line argument parser with optional support for allowing a route/method call in the beginning</td>
+      <td>Environment selector and validator for environments such as (local, dev, qa, stg, prod) )</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
@@ -118,19 +118,19 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slatekit.common.args</td>
+      <td>slatekit.common.envs</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slatekit.common.args.Args.kt</td>
+      <td>slatekit.common.envs.Env.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Env.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Env.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -142,15 +142,14 @@
 <h2 id="import">Import</h2>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.args.Args
-<span style="color:#66d9ef">import</span> slatekit.common.args.ArgsSchema
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.envs.*
+
 
 
 <span style="color:#75715e">// optional 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
-<span style="color:#66d9ef">import</span> slatekit.results.Success
 <span style="color:#66d9ef">import</span> slatekit.results.Try
-<span style="color:#66d9ef">import</span> slatekit.results.getOrElse</code></pre></div>
+<span style="color:#66d9ef">import</span> slatekit.results.Success</code></pre></div>
 
 <h2 id="setup">Setup</h2>
 
@@ -158,163 +157,41 @@
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Example:
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Given on the the command line:
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// -log.level=info -env=dev -text=&#39;hello world&#39;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;-log.level=info -env=dev -text=&#39;hello world&#39;&#34;</span>, sep=<span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// CASE 1: Build a list of environments
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> envs1 = Envs(listOf(
+            Env(<span style="color:#e6db74">&#34;loc&#34;</span>, EnvMode.Dev , desc = <span style="color:#e6db74">&#34;Dev environment (local)&#34;</span>),
+            Env(<span style="color:#e6db74">&#34;dev&#34;</span>, EnvMode.Dev , desc = <span style="color:#e6db74">&#34;Dev environment (shared)&#34;</span>),
+            Env(<span style="color:#e6db74">&#34;qa1&#34;</span>, EnvMode.Qat , desc = <span style="color:#e6db74">&#34;QA environment  (current release)&#34;</span>),
+            Env(<span style="color:#e6db74">&#34;qa2&#34;</span>, EnvMode.Qat , desc = <span style="color:#e6db74">&#34;QA environment  (last release)&#34;</span>),
+            Env(<span style="color:#e6db74">&#34;stg&#34;</span>, EnvMode.Uat , desc = <span style="color:#e6db74">&#34;STG environment (demo)&#34;</span>),
+            Env(<span style="color:#e6db74">&#34;pro&#34;</span>, EnvMode.Pro , desc = <span style="color:#e6db74">&#34;LIVE environment&#34;</span>)
+    ))
 
-    <span style="color:#75715e">// CASE 1: Parse using defaults. E.g. the key/value prefix = &#34;-&#34;, separator = &#34;:&#34;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;-env:dev -text:&#39;hello world&#39; -batch:10&#34;</span> ) )
+    <span style="color:#75715e">// CASE 2: Use the default list of environments ( same as above )
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> envs = slatekit.common.envs.Env.defaults()
 
+    <span style="color:#75715e">// CASE 3: Get one of the environments by api
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> qa1 = envs.<span style="color:#66d9ef">get</span>(<span style="color:#e6db74">&#34;qa1&#34;</span>)
+    println( qa1 )
 
-    <span style="color:#75715e">// CASE 2: Custom prefix and sep e.g. &#34;!&#34; and separator &#34;=&#34;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;!env=dev !text=&#39;hello word&#39; !batch=10 &#34;</span>, prefix = <span style="color:#e6db74">&#34;!&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span> ) )
+    <span style="color:#75715e">// CASE 4: Validate one of the environments by api
+</span><span style="color:#75715e"></span>    println( envs.isValid(<span style="color:#e6db74">&#34;qa2&#34;</span>) )
 
+    <span style="color:#75715e">// CASE 5: Current environment ( nothing - none selected )
+</span><span style="color:#75715e"></span>    println( envs.current )
 
-    <span style="color:#75715e">// CASE 3a: Check for action/method call in the beginning
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;area.service.method -env=dev -text=&#39;hello word&#39; -batch=10&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>,
-                 sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
+    <span style="color:#75715e">// CASE 6: Select an environment
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> envs2 = envs.select(<span style="color:#e6db74">&#34;dev&#34;</span>)
+    println( envs2 )
 
-
-    <span style="color:#75715e">// CASE 3b: Check for method call in the beginning
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method -env=dev -text=&#39;hello word&#39; -batch=10&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>,
-                 sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 3c: Check for only action name in the beginning.
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;method&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 4: No args
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 5a: Help request ( &#34;?&#34;, &#34;help&#34;)
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;?&#34;</span>         ) )
-
-
-    <span style="color:#75715e">// CASE 5b: Help request with method call ( &#34;method.action&#34; ? )
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method help&#34;</span>   , hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 6: Version request ( &#34;ver&#34;, &#34;version&#34; )
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;version&#34;</span>  ) )
-
-
-    <span style="color:#75715e">// CASE 7: Exit request
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;exit&#34;</span>     ) )
-
-
-    <span style="color:#75715e">// CASE 8: Build up the schema
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> schema = ArgsSchema().text(<span style="color:#e6db74">&#34;env&#34;</span>).flag(<span style="color:#e6db74">&#34;log&#34;</span>).number(<span style="color:#e6db74">&#34;level&#34;</span>)
-    print(schema)
-
+    <span style="color:#75715e">// CASE 7: Get info about currently selected environment
+</span><span style="color:#75715e"></span>    println( envs2.name    )
+    println( envs2.isDev   )
+    println( envs2.isQat    )
+    println( envs2.isUat   )
+    println( envs2.isPro  )
+    println( envs2.current )
     </code></pre></div>
-
-<h2 id="output">Output</h2>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 3
-  	text : hello<span style="color:#75715e"> world</span>
-  	batch : 10
-  	env : dev
-  index    : 0
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;!&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
-
-
-  RESULTS:
-  action   : area.service.method
-  parts    : area<span style="color:#75715e"> service method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
-
-
-  RESULTS:
-  action   : service.method
-  parts    : service<span style="color:#75715e"> method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
-
-
-  RESULTS:
-  action   : method
-  parts    : method
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   : service.method
-  parts    : service<span style="color:#75715e"> method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1
-  	?
-  help
-
-
-  RESULTS:
-  action   : service.method.help
-  parts    : service<span style="color:#75715e"> method help</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1
-  	version
-  version
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1</code></pre></div>
 
               </div>
           </section>

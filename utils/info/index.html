@@ -96,13 +96,13 @@
               <div class="container">
                   
 
-<h1 id="args">Args</h1>
+<h1 id="info">Info</h1>
 
 <table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
-      <td>A lexical command line argument parser with optional support for allowing a route/method call in the beginning</td>
+      <td>Get/Set useful diagnostics about the system, language runtime, application and more</td>
     </tr>
     <tr>
       <td><strong>date</strong></td>
@@ -118,19 +118,19 @@
     </tr>
     <tr>
       <td><strong>namespace</strong></td>
-      <td>slatekit.common.args</td>
+      <td>slatekit.common.info</td>
     </tr>
     <tr>
       <td><strong>source core</strong></td>
-      <td>slatekit.common.args.Args.kt</td>
+      <td>slatekit.common.info.About.kt</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/info" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/info</a></td>
     </tr>
     <tr>
       <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt</a></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Info.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Info.kt</a></td>
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
@@ -142,15 +142,17 @@
 <h2 id="import">Import</h2>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.args.Args
-<span style="color:#66d9ef">import</span> slatekit.common.args.ArgsSchema
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.info.About
+<span style="color:#66d9ef">import</span> slatekit.common.info.Host
+<span style="color:#66d9ef">import</span> slatekit.common.info.Lang
+<span style="color:#66d9ef">import</span> slatekit.common.info.StartInfo
 
 
 <span style="color:#75715e">// optional 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
-<span style="color:#66d9ef">import</span> slatekit.results.Success
 <span style="color:#66d9ef">import</span> slatekit.results.Try
-<span style="color:#66d9ef">import</span> slatekit.results.getOrElse</code></pre></div>
+<span style="color:#66d9ef">import</span> slatekit.results.Success
+<span style="color:#66d9ef">import</span> slatekit.common.envs.EnvMode</code></pre></div>
 
 <h2 id="setup">Setup</h2>
 
@@ -158,163 +160,75 @@
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Example:
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// Given on the the command line:
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// -log.level=info -env=dev -text=&#39;hello world&#39;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;-log.level=info -env=dev -text=&#39;hello world&#39;&#34;</span>, sep=<span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-    <span style="color:#75715e">// CASE 1: Parse using defaults. E.g. the key/value prefix = &#34;-&#34;, separator = &#34;:&#34;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;-env:dev -text:&#39;hello world&#39; -batch:10&#34;</span> ) )
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// CASE 1: Get the host info
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> host = Host.local()
+    host.each { name, value -&gt; println( <span style="color:#e6db74">&#34;$name : $value&#34;</span> ) }
+    println()
 
 
-    <span style="color:#75715e">// CASE 2: Custom prefix and sep e.g. &#34;!&#34; and separator &#34;=&#34;
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;!env=dev !text=&#39;hello word&#39; !batch=10 &#34;</span>, prefix = <span style="color:#e6db74">&#34;!&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span> ) )
+    <span style="color:#75715e">// CASE 2: Get the Lang runtime info ( java version, scala version etc )
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> lang = Lang.kotlin()
+    lang.each { name, value -&gt; println( <span style="color:#e6db74">&#34;$name : $value&#34;</span> ) }
+    println()
 
 
-    <span style="color:#75715e">// CASE 3a: Check for action/method call in the beginning
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;area.service.method -env=dev -text=&#39;hello word&#39; -batch=10&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>,
-                 sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
+    <span style="color:#75715e">// CASE 3: Set startup info ( env, config, log, args)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> startup = StartInfo(<span style="color:#e6db74">&#34;-level=error&#34;</span>, <span style="color:#e6db74">&#34;{@app}-{@env}-{@date}.log&#34;</span>, <span style="color:#e6db74">&#34;{@app}.config&#34;</span>, EnvMode.Qat.name)
+    startup.each { name, value -&gt; println( <span style="color:#e6db74">&#34;$name : $value&#34;</span> ) }
+    println()
 
 
-    <span style="color:#75715e">// CASE 3b: Check for method call in the beginning
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method -env=dev -text=&#39;hello word&#39; -batch=10&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>,
-                 sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 3c: Check for only action name in the beginning.
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;method&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 4: No args
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method&#34;</span>, prefix = <span style="color:#e6db74">&#34;-&#34;</span>, sep = <span style="color:#e6db74">&#34;=&#34;</span>, hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 5a: Help request ( &#34;?&#34;, &#34;help&#34;)
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;?&#34;</span>         ) )
-
-
-    <span style="color:#75715e">// CASE 5b: Help request with method call ( &#34;method.action&#34; ? )
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;service.method help&#34;</span>   , hasAction = <span style="color:#66d9ef">true</span> ) )
-
-
-    <span style="color:#75715e">// CASE 6: Version request ( &#34;ver&#34;, &#34;version&#34; )
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;version&#34;</span>  ) )
-
-
-    <span style="color:#75715e">// CASE 7: Exit request
-</span><span style="color:#75715e"></span>    showResults( Args.parse( <span style="color:#e6db74">&#34;exit&#34;</span>     ) )
-
-
-    <span style="color:#75715e">// CASE 8: Build up the schema
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> schema = ArgsSchema().text(<span style="color:#e6db74">&#34;env&#34;</span>).flag(<span style="color:#e6db74">&#34;log&#34;</span>).number(<span style="color:#e6db74">&#34;level&#34;</span>)
-    print(schema)
-
+    <span style="color:#75715e">// CASE 4: Set up info about your application.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> app = About(
+      id = <span style="color:#e6db74">&#34;slatekit.examples&#34;</span>,
+      name = <span style="color:#e6db74">&#34;My sample app&#34;</span>,
+      desc = <span style="color:#e6db74">&#34;Sample app using Slate Kit&#34;</span>,
+      company = <span style="color:#e6db74">&#34;slatekit&#34;</span>,
+      region = <span style="color:#e6db74">&#34;usa.ny&#34;</span>,
+      version = <span style="color:#e6db74">&#34;1.0.1.3&#34;</span>,
+      tags = <span style="color:#e6db74">&#34;api,slate,app&#34;</span>,
+      group = <span style="color:#e6db74">&#34;product division&#34;</span>,
+      url = <span style="color:#e6db74">&#34;http://products.myapp.com&#34;</span>,
+      contact = <span style="color:#e6db74">&#34;kishore@codehelix.co&#34;</span>,
+      examples = <span style="color:#e6db74">&#34;myapp.exe -env=dev -level=info&#34;</span>
+    )
+    app.log( { name, value -&gt; println( <span style="color:#e6db74">&#34;${name} : ${value}&#34;</span> ) } )
     </code></pre></div>
 
 <h2 id="output">Output</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat">  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 3
-  	text : hello<span style="color:#75715e"> world</span>
-  	batch : 10
-  	env : dev
-  index    : 0
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">  <span style="color:#75715e">// HOST INFO
+</span><span style="color:#75715e"></span>  api : KRPC1
+  ip : Windows <span style="color:#ae81ff">10</span>
+  origin : local
+  arch : amd64
+  version : <span style="color:#ae81ff">10.0</span>
+  ext1 : C:/Users/kv/AppData/Local/Temp/
 
+  <span style="color:#75715e">// LANGUAGE INFO
+</span><span style="color:#75715e"></span>  api : scala
+  home : C:/Tools/Java/jdk1.<span style="color:#ae81ff">8.0</span>_91/jre
+  versionNum : <span style="color:#ae81ff">2.11</span>.<span style="color:#ae81ff">7</span>
+  version : <span style="color:#ae81ff">1.8</span>.<span style="color:#ae81ff">0</span>_91
+  origin : local
+  ext1 :
 
-  RESULTS:
-  action   :
-  prefix   : &#39;!&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
+  <span style="color:#75715e">// STARTUP INFO
+</span><span style="color:#75715e"></span>  args : Some([Ljava.lang.String;<span style="color:#ae81ff">11</span>c20519)
+  log : {app}-{env}-{date}.log
+  config : {app}.config
+  env : qa
 
-
-  RESULTS:
-  action   : area.service.method
-  parts    : area<span style="color:#75715e"> service method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
-
-
-  RESULTS:
-  action   : service.method
-  parts    : service<span style="color:#75715e"> method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 3
-  	text = hello word
-  	batch = 10
-  	env = dev
-  index    : 0
-
-
-  RESULTS:
-  action   : method
-  parts    : method
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   : service.method
-  parts    : service<span style="color:#75715e"> method</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;=&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1
-  	?
-  help
-
-
-  RESULTS:
-  action   : service.method.help
-  parts    : service<span style="color:#75715e"> method help</span>
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 0
-  empty
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1
-  	version
-  version
-
-
-  RESULTS:
-  action   :
-  prefix   : &#39;-&#39;
-  separator: &#39;:&#39;
-  named    : 0
-  index    : 1</code></pre></div>
+  <span style="color:#75715e">// APP INFO
+</span><span style="color:#75715e"></span>  api     : My sample app
+  desc     : Sample app using Slate Kit
+  group    : product division
+  region   : usa.ny
+  url      : <span style="color:#e6db74">&#34;http://products.myapp.com&#34;</span>
+  contact  : kishore@codehelix.co
+  version  : <span style="color:#ae81ff">1.0</span>.<span style="color:#ae81ff">1.3</span>
+  tags     : api,slate,app
+  examples : myapp.exe -env=dev -level=info</code></pre></div>
 
               </div>
           </section>
