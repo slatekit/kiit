@@ -1,6 +1,6 @@
 ---
 title: "Entities"
-date: 2019-03-16T16:04:04-04:00
+date: 2019-03-16T17:22:14-04:00
 draft: true
 ---
 
@@ -208,9 +208,37 @@ todo
 
 
 # Details
-todo
+Details on using the features here.
 
-## Feature 1
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Section</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Description</strong></td>
+        <td><strong>More</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Feature 1</strong></td>
+        <td>Brief description of feature 1</td>
+        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Feature 2</strong></td>
+        <td>Brief description of feature 2</td>
+        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Feature 3</strong></td>
+        <td>Brief description of feature 3</td>
+        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+</table>
+<br/>
+
+## Feature 1 {#feature1}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -218,9 +246,9 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
-## Feature 2
+## Feature 2 {#feature2}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -228,9 +256,9 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
-## Feature 3
+## Feature 3 {#feature3}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -238,7 +266,7 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
 {{% section-end mod="core/cli" %}}
 

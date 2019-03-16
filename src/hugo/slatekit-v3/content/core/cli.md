@@ -1,10 +1,11 @@
 ---
 title: "Cli"
-date: 2019-03-16T14:21:20-04:00
+date: 2019-03-16T17:02:02-04:00
+draft: true
 ---
 
 # Overview
-This {COMPONENT} is a template for building CLI ( command line interaction ) apps.
+Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
 {{% break %}}
 
 # Index
@@ -58,8 +59,7 @@ Table of contents for this page
 </table>
 {{% section-end mod="core/cli" %}}
 
-
-# Install 
+# Install
 {{< highlight groovy >}}
 
     repositories {
@@ -70,7 +70,7 @@ Table of contents for this page
     dependencies {
         // other dependencies ...
 
-        compile 'com.slatekit:slatekit-cli:0.9.9'
+        compile 'com.slatekit:slatekit-{COMPONENT_ID}:0.9.9'
     }
 
 {{< /highlight >}}
@@ -78,19 +78,19 @@ Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>jar</strong></td>
-        <td>slatekit.core.jar</td>
+        <td>slatekit.{COMPONENT_ID}.jar</td>
     </tr>
     <tr>
         <td><strong>package</strong></td>
-        <td>slatekit.core.app</td>
+        <td>slatekit.{COMPONENT_ID}</td>
     </tr>
     <tr>
         <td><strong>source</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.app</a></td>
+        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.{COMPONENT_ID}</a></td>
     </tr>
     <tr>
         <td><strong>example</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a> : Small reference example on setup/usage</td>
+        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
@@ -121,7 +121,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     }
 
 {{< /highlight >}}
-{{% section-end %}}
+{{% section-end mod="core/cli" %}}
 
 # Goals
 <table class="table table-bordered table-striped">
@@ -208,9 +208,37 @@ todo
 
 
 # Details
-todo
+Details on using the features here.
 
-## Feature 1
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Section</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Description</strong></td>
+        <td><strong>More</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Feature 1</strong></td>
+        <td>Brief description of feature 1</td>
+        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Feature 2</strong></td>
+        <td>Brief description of feature 2</td>
+        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Feature 3</strong></td>
+        <td>Brief description of feature 3</td>
+        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+</table>
+<br/>
+
+## Feature 1 {#feature1}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -218,9 +246,9 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
-## Feature 2
+## Feature 2 {#feature2}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -228,9 +256,9 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
-## Feature 3
+## Feature 3 {#feature3}
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -238,7 +266,7 @@ todo
     }
 
 {{< /highlight >}}
-{{% break %}}
+{{% feature-end mod="core/cli" %}}
 
 {{% section-end mod="core/cli" %}}
 
