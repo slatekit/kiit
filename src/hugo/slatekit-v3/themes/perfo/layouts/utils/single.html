@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -13,29 +12,9 @@
       <meta name="author" content="CodeHelix">
 
       <!-- Page Title -->
-      <title>Slate Kit Section</title>
-    <base href="{{ .Site.BaseURL }}">
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="vendor/css/img/favicon.ico">
-    <!-- Font Awesome Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/font-awesome.css">
-    <!-- Bootstrap Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/bootstrap.css">
-    <!-- Mockup Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/device-mockups.min.css">
-    <!-- Owl Carousel Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/owl.carousel.min.css">
-    <!-- Animate.CSS Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/animate.css">
-    <!-- Animate.CSS Stylesheet -->
-    <link rel="stylesheet" type="text/css" href="vendor/css/preloader.css">
-    <!-- Custom Stylesheet -->
-
-    <link rel="stylesheet" type="text/css" href="vendor/css/style.default2.css">
-   
-    <link rel="stylesheet" type="text/css" href="vendor/css/lang.css" media="screen">
-
-    <link rel="stylesheet" href="app/app.css">
+      <title>Slate Kit Utils</title>
+    <base href="../../">
+      {{ partial "header.html" . }}
     <!--
      -->
     
@@ -182,25 +161,13 @@
            </div>
            <!--=============== /. Scroll To Top ===============-->
       </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
-        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
-
-        <!-- Bootstrap 4 Alpha -->
-        <script src="vendor/js/bootstrap.min.js"></script>
-        <!-- Owl Carousel -->
-        <script src="vendor/js/owl.carousel.min.js"></script>
-        <!-- Easy Scroll -->
-        <script src="vendor/js/easyscroll.min.js"></script>
-        <!-- WOW JS -->
-        <script src="vendor/js/wow.min.js"></script>
-        <!-- Custom Js -->
-        <script src="vendor/js/script.js"></script>
+    
+        {{ partial "footer.html" . }}
 
         <script type="text/javascript">
           var _codehelixAppPage = "infra";
         </script>
-          <script type="text/javascript" src="app/app.js"></script>
+          <script type="text/javascript" src="assets/app/app.js"></script>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
