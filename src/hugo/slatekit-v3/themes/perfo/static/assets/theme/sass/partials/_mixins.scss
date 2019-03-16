@@ -1,0 +1,71 @@
+// Gradient Main
+@mixin gradient-main($direction, $startColor: $lightblue, $endColor: $violet) {
+    background-image: -webkit-linear-gradient($direction, $startColor, $endColor);
+    background-image: -webkit-gradient(linear, left top, left bottom, from($direction), color-stop($startColor), to($endColor));
+    background-image: linear-gradient($direction, $startColor, $endColor);
+}
+
+// Gradient Alternativ
+@mixin gradient-secondary($direction, $startColor: $orange, $endColor: $lightorange) {
+    background-image: -webkit-linear-gradient($direction, $startColor, $endColor);
+    background-image: -webkit-gradient(linear, left top, left bottom, from($direction), color-stop($startColor), to($endColor));
+    background-image: linear-gradient($direction, $startColor, $endColor);
+}
+
+// Position
+@mixin position($position, $top: null, $right: null, $bottom: null, $left: null) {
+    position: $position;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+// Box
+@mixin box($width: null, $height: null, $bg: null, $display: null) {
+    width: $width;
+    height: $height;
+    background: $bg;
+    display: $display
+}
+
+// Font
+@mixin font($size: null, $weight: null, $color: null, $family: null, $line-height: null, $transform: null, $decoration: null, $style: null, $spacing: null, $align: null) {
+    font-size: $size;
+    font-weight: $weight;
+    color: $color;
+    line-height: $line-height;
+    text-transform: $transform;
+    text-decoration: $decoration;
+    font-style: $style;
+    letter-spacing: $spacing;
+    text-align: $align;
+    font-family: $family;
+}
+
+// Custom Page scrollbars
+@mixin scrollbars($size, $foreground-color, $background-color: null) {
+    // For Google Chrome
+    ::-webkit-scrollbar {
+        width:  $size;
+        height: $size;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: $foreground-color;
+    }
+    ::-webkit-scrollbar-track {
+        background: $background-color;
+    }
+    // For Internet Explorer
+    body {
+        scrollbar-face-color: $foreground-color;
+        scrollbar-track-color: $background-color;
+    }
+}
+
+// Placeholder
+@mixin placeholder {
+  &::-moz-placeholder { @content }
+  &::-webkit-input-placeholder { @content }
+  &:-ms-input-placeholder { @content }
+}

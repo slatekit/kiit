@@ -126,7 +126,7 @@ var codeHelixMeta = {
 	{ name: "Setup"         ,  page: "kotlin-setup.html"  , children: null },
 	{ name: "Get Started"   ,  page: "components.html"    , children: null },
 	{ name: "Architecture"  ,  page: "infra.html"         , children: null },
-	{ name: "Utilities"     ,  page: "utils.html"         , children: null },
+	{ name: "Utilities"     ,  page: "utils/args"         , children: null },
 	{ name: "Features"      ,  page: "features.html"      , children: null },
 	{ name: "Releases"      ,  page: "releases.html"      , children: null },	
 	{ name: "Git"           ,  page: "https://github.com/code-helix/slatekit", children: null },
