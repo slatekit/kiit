@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zxx">
+   <head>
+      <meta charset="utf-8">
+      <!-- Responsive meta -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- IE Compatibility meta -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Description meta -->
+      <meta name="description" content="Kotlin Tool-Kit">
+      <!-- Author meta -->
+      <meta name="author" content="CodeHelix">
+
+      <!-- Page Title -->
+      <title>Slate Kit</title>
+
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="themes/perfo/assets/img/favicon.ico">
+      <!-- Font Awesome Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/font-awesome.css">
+      <!-- Bootstrap Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/bootstrap.css">
+      <!-- Mockup Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/device-mockups.min.css">
+      <!-- Owl Carousel Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/owl.carousel.min.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/animate.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/preloader.css">
+      <!-- Custom Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/style.default.css">
+
+      <link rel="stylesheet" type="text/css" href="themes/_common/css/lang.css" media="screen">
+
+      <link rel="stylesheet" href="themes/perfo/app/app.css">
+   </head>
+   <body>
+
+
+      <div class="page-header">
+          <!--=============== Navbar ===============-->
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      <!-- Navbar Brand -->
+                      <a href="index.html" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    <!-- Toggle Button -->
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      <!-- Navbar Menu -->
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
+              </div>
+          </nav><!--=============== /. Navbar ===============-->
+
+
+          <!--=============== Separator Section ===============-->
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
+
+                  <div class="row">
+                      <!-- Mockup Image  -->
+                      <div class="image col-md-6 hidden-sm-down">
+                          <!--<img src="themes/perfo/assets/img/iphone.png" alt="...." class="img-fluid">-->
+                      </div>
+                     
+                      <!-- Heading Area -->
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Concepts <br/> </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          <!--=============== /. Separator Section ===============-->
+
+
+          <!--=============== About Section ===============-->
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+
+                  <header>
+                      <h2 class="with-bg-text has-line" data-text="Concepts">Concepts</h2>
+                  </header>
+				<p>There are just a few key concepts in Slate Kit that you need to know to 
+				   get up and running quickly. 
+				</p>				
+				<br/>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Concept</strong></td>
+						<td class="col-sm-5"><strong>About</strong></td>
+						<td><strong>More</strong></td>
+					</tr>
+					<tr> 
+						<td><strong>1. Env</strong></td>
+						<td>Represents a logical environment such as local, dev, qa, prod</td>
+						<td><a href="#concept-env" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>2. Config</strong></td>
+						<td>Configuration settings as a thin layer on Java Properties with extra
+						features. There is 1 config file per environment</td>
+						<td><a href="#concept-config" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>3. Context</strong></td>
+						<td>The AppContext is a container for common dependencies ( env, config, logger, encryptor )
+						and is passed to components.</td>
+						<td><a href="#concept-context" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>4. Cloud </strong></td>
+						<td>Slate Kit integrates with Cloud infrastructure such as File Storage and Queues.
+						AWS ( S3, SQS ) is the default but its abstracted so you can easily customize
+						to other providers.</td>
+						<td><a href="#concept-cloud" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>5. Apis</strong></td>
+						<td>APIs in Slate Kit are are normal methods on classes and are "protocol independent" which means they 
+						can be made accessible on the CLI ( command line ) or as an HTTP Endpoint</td>
+						<td><a href="#concept-apis" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>6. Routes </strong></td>
+						<td>Abstracts a request whether it is on the CLI ( command line ) or a HTTP Request.
+						This is used to build Slate Kit APIs ( which are protocol independent ).</td>
+						<td><a href="#concept-routes" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>7. Request </strong></td>
+						<td>Abstracts a request whether it is on the CLI ( command line ) or a HTTP Request.
+						This is used to build Slate Kit APIs ( which are protocol independent ).</td>
+						<td><a href="#concept-request" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+					<tr> 
+						<td><strong>8. Result</strong></td>
+						<td>Abstracts a response and models success/failures, whether it's on the CLI (Command Line)
+						or an HTTP Response. This is used to build Slate Kit APIs and is compatible with HTTP status codes</td>
+						<td><a href="#concept-result" class="more"><span class="btn btn-primary">more</span></a></td>
+					</tr>
+				</table>
+				<br/><br/>
+				<h1 id="concept-env">1. Envs</h1>
+				<p>You can setup different environments <strong>( local, dev, qa1, qa2, etc )</strong> for your application.
+				This is accomplished using the Env component below. It is used in the Slate Kit App ( Base App )
+				<p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Typed</strong></td>
+						<td>Environment name and mode is type-safe</td>
+					</tr>
+					<tr>
+						<td><strong>Validated</strong></td>
+						<td>Environment can be validated at startup</td>
+					</tr>
+					<tr>
+						<td><strong>About</strong></td>
+						<td>Clear description of the environment</td>
+					</tr>
+					<tr>
+						<td><strong>Defaults</strong></td>
+						<td>Choose from defaults available</td>
+					</tr>
+					<tr>
+						<td><strong>Names</strong></td>
+						<td>Allow for multiple environments by name and mode</td>
+					</tr>
+				</table>				
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.common.envs</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs">slatekit.common.envs</a></td>
+					</tr>
+				</table>
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="cm">/**
+   * The available environments to choose from.
+   * An environment key is built name and mode. e.g. "qa1.QA"
+   *
+   * Each of these environments should map to an associated env.{name}.conf
+   * config file in the /resources/ directory. 
+   *
+   * e.g.
+   * /resources/env.conf     ( common      config )
+   * /resources/env.dev.conf ( development config )
+   * etc ..
+   *
+   * @return
+   */</span>
+  <span class="k">fun</span> <span class="nf">defaults</span><span class="p">():</span> <span class="n">Envs</span> <span class="p">=</span>
+      <span class="n">Envs</span><span class="p">(</span> <span class="n">listOf</span><span class="p">(</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"loc"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (local)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"dev"</span><span class="p">,</span> <span class="n">Dev</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"Dev environment (shared)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"qa1"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (current release)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"qa2"</span><span class="p">,</span> <span class="n">Qa</span>  <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"QA environment  (last release)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"stg"</span><span class="p">,</span> <span class="n">Uat</span> <span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"STG environment (demo)"</span><span class="p">),</span>
+          <span class="n">Env</span><span class="p">(</span><span class="s">"pro"</span><span class="p">,</span> <span class="n">Prod</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"LIVE environment"</span><span class="p">)</span>
+      <span class="p">))</span>
+</code></pre>
+</div>	 						
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full example:  <strong><a href="scala-mod-env.html" class="url-ch">Env</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_env" class="url-ch">App</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>	
+			<div class="container">			
+				<h1 id="concept-config">2. Config</h1>
+				<p>All the different types of Apps and Sample Apps using a common configuration scheme.
+				For each app, there is a single common configuration file <strong>env.conf</strong> and then
+				1 environment specific configuration file for each environment. e.g. <strong>env.dev.conf</strong>
+				All the environment configs are located in the <strong>resources</strong> directory but you can put
+				them and reference them anywhere. Slate Kit configs are simple abstractions over Java properties files.
+				It is used in the Slate Kit App ( Base App ).
+				</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Typed</strong></td>
+						<td>Get typed values such as bool, int, long etc.</td>
+					</tr>
+					<tr>
+						<td><strong>Nullable</strong></td>
+						<td>Get nullable values such as Int?</td>
+					</tr>
+					<tr>
+						<td><strong>Defaults</strong></td>
+						<td>Get default values when unavailable</td>
+					</tr>
+					<tr>
+						<td><strong>Lists</strong></td>
+						<td>Get lists of basic types</td>
+					</tr>
+					<tr>
+						<td><strong>Maps</strong></td>
+						<td>Get maps of basic types</td>
+					</tr>
+					<tr>
+						<td><strong>Decryption</strong></td>
+						<td>Auto decrypt encrypted strings</td>
+					</tr>
+					<tr>
+						<td><strong>Objects</strong></td>
+						<td>Auto load objects from config such as Db connection, Api-Keys</td>
+					</tr>
+					<tr>
+						<td><strong>URIs</strong></td>
+						<td>Reference files in user directory to load objects for added security</td>
+					</tr>
+				</table>					 								 
+				<h3>Source</h3>				
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.common.conf</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf">slatekit.common.conf</a></td>
+					</tr>
+				</table>
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Examples of just a few features...
+</span>  <span class="c1">// 1. Typed settings
+</span>  <span class="c1">// 2. Nullable
+</span>  <span class="c1">// 3. Defaults 
+</span>  <span class="c1">// 4. Lists/Maps 
+</span>  <span class="c1">// 5. Encryption/File Refs/Inheritance
+</span>  
+  <span class="c1">// Load the env.dev.conf file from /resources
+</span>  <span class="kd">val</span> <span class="py">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(</span><span class="s">"env.dev.conf"</span><span class="p">)</span>
+
+  <span class="c1">// Get typed value: non-nullable
+</span>  <span class="c1">// NOTE: default value for typed returned if unavailable
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShort</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"long  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getLong</span><span class="p">(</span><span class="s">"lVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDouble</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">))</span>
+  
+  <span class="c1">// Get typed value: with default value if unavailable.
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"bool  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getBoolOrElse</span><span class="p">(</span><span class="s">"bVal"</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"string: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getStringOrElse</span><span class="p">(</span><span class="s">"sVal"</span><span class="p">,</span> <span class="s">"abc"</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"short : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getShortOrElse</span><span class="p">(</span><span class="s">"hVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"int   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">"iVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"long  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getLongOrElse</span><span class="p">(</span><span class="s">"lVal"</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"float : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getFloatOrElse</span><span class="p">(</span><span class="s">"fVal"</span><span class="p">,</span> <span class="m">0.0f</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"double: "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getDoubleOrElse</span><span class="p">(</span><span class="s">"dVal"</span><span class="p">,</span> <span class="m">0.0</span><span class="p">))</span>
+  
+  <span class="c1">// Get lists/maps
+</span>  <span class="n">println</span><span class="p">(</span><span class="s">"list  : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getList</span><span class="p">(</span><span class="s">"listValInt"</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">(</span><span class="s">"map   : "</span> <span class="p">+</span> <span class="n">conf</span><span class="p">.</span><span class="n">getMap</span><span class="p">(</span><span class="s">"mapValInt"</span><span class="p">,</span> <span class="n">String</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="n">Int</span><span class="o">::</span><span class="k">class</span><span class="p">))</span>
+  <span class="n">println</span><span class="p">()</span>
+  
+  <span class="c1">// More features such as decryption, file refs and more.
+</span>  <span class="c1">// ...
+</span></code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full example: <strong><a href="scala-mod-config.html" class="url-ch">Config</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in app: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
+					</p>
+				</div>	
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+            </div>	
+			<br/><br/>				
+			<div class="container">
+				<h1 id="concept_apis">3. Context</h1>
+				<p>The context is a container for global objects needed for most components.
+				Such items include the current environment ( dev, qa, pro, etc ), 
+				config settings, a logger, database info, encryptor, the host computer,
+				the runtime version of java, and access to the 
+				Entities that provide the ORM entity services. <strong>It is created at startup and 
+				is read-only</strong>.</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Container</strong></td>
+						<td>Conveniently store app level dependencies.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Global</strong></td>
+						<td>Application level can be globally available</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>Easily pass around a single context vs many dependencies</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.core.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-core.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/common">slatekit.core.common</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="n">AppContext</span><span class="p">(</span>
+      <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+      <span class="n">env</span> <span class="p">=</span> <span class="n">Env</span><span class="p">(</span><span class="s">"local"</span><span class="p">,</span> <span class="n">Dev</span><span class="p">),</span>
+      <span class="n">cfg</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>
+      <span class="n">log</span> <span class="p">=</span> <span class="n">LoggerConsole</span><span class="p">(),</span>
+      <span class="n">ent</span> <span class="p">=</span> <span class="n">Entities</span><span class="p">(),</span>
+      <span class="n">inf</span> <span class="p">=</span> <span class="n">About</span><span class="p">(</span><span class="s">"myapp"</span><span class="p">,</span> <span class="s">"App1"</span><span class="p">,</span> <span class="s">"Sample app"</span><span class="p">,</span> <span class="s">"Company1, "", "", "", "", "", "", ""),
+</span>      <span class="n">host</span> <span class="p">=</span> <span class="n">Host</span><span class="p">.</span><span class="n">local</span><span class="p">(),</span>
+      <span class="n">lang</span> <span class="p">=</span> <span class="n">Lang</span><span class="p">.</span><span class="n">kotlin</span><span class="p">(),</span>
+      <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">"wejklhviuxywehjk"</span><span class="p">,</span> <span class="s">"3214maslkdf03292"</span><span class="p">),</span>
+      <span class="n">dirs</span> <span class="p">=</span> <span class="n">Folders</span><span class="p">.</span><span class="n">userDir</span><span class="p">(</span><span class="s">"slatekit"</span><span class="p">,</span> <span class="s">"apps"</span><span class="p">,</span> <span class="s">"sample1"</span><span class="p">)</span>
+  <span class="p">)</span>
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-ctx.html" class="url-ch">Context</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-app.html#area_context" class="url-ch">App</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>
+			<div class="container">
+				<h1 id="concept_cloud">4. Cloud</h1>
+				<p>Slate Kit integrates with cloud based file storage and message queues.
+				This is implemented via abstraction layers for both files and queues while
+				providing default implementations for AWS.</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Abstraction</strong></td>
+						<td>Provides an abstraction layer to files and queues while supporting
+						most common operations and use-cases</td>
+					</tr>
+					<tr>
+						<td><strong>Defaults</strong></td>
+						<td>Sensible default implementations provided for AWS S3 and SQS.</td>
+					</tr>
+					<tr>
+						<td><strong>Extendible</strong></td>
+						<td>Easily extends the base classes to integrate with other providers such as Google Cloud or Microsoft Azure.</td>
+					</tr>
+					<tr>
+						<td><strong>Portable</strong></td>
+						<td>With the abstractions and extensibility, you can easily switch providers while keeping most of your code intact</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>type</strong></td>
+						<td><strong>package</strong></td>
+						<td><strong>jar</strong></td>
+						<td><strong>source</strong></td>
+					</tr>
+					<tr>
+						<td>Abstractions</td>
+						<td>slatekit.core.cloud</td>
+						<td>slatekit-core.jar</td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cloud">slatekit.core.cloud</a></td>
+					</tr>
+					<tr>
+						<td>Implementation ( AWS )</td>
+						<td>slatekit.cloud.aws</td>
+						<td>slatekit-cloud.jar</td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud/src/main/kotlin/slatekit/cloud/aws">slatekit.cloud.aws</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>
+    <span class="c1">// Not storing any key/secret in source code for security purposes
+</span>    <span class="c1">// Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+</span>    <span class="k">val</span> <span class="n">files: CloudFiles</span> <span class="k">=</span> <span class="nc">AwsCloudFiles</span><span class="o">(</span><span class="s">"app1-dev-folder-events"</span><span class="o">,</span> <span class="kc">false</span><span class="o">)</span>
+
+    <span class="c1">// Use case 1: create using just name and content
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">create</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 1"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 2: update using just name and content
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">update</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"version 2"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 3: get file as a text using just name
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">getAsText</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">)</span>
+
+    <span class="c1">// Use case 4: download file to local folder
+</span>    <span class="n">files</span><span class="o">.</span><span class="n">download</span><span class="o">(</span><span class="s">"2016_nba_v3"</span><span class="o">,</span> <span class="s">"c:/dev/temp/"</span><span class="o">)</span>
+
+    <span class="c1">// ... more use cases supported
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> S3 ( Files ): <strong><a href="kotlin-mod-aws-s3.html" class="url-ch">AwsS3 example</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> SQS ( Queues ): <strong><a href="kotlin-mod-aws-sqs.html" class="url-ch">AwsSqs example</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>		
+			<div class="container">
+				<h1 id="concept_apis">5. APIs</h1>
+				<p>APIs are a core architectural component of Slate Kit.
+				One of the main design goals of builing APIs in Slate Kit is allow any API to be 
+				hosted as a Web/HTTP API and/or hosted on the CLI ( Command Line ) for easy 
+				accessibility. We call this approach Protocol Independent APIs.
+				<div class="alert alert-info text-left" role="alert">
+					<strong>Why make APIs available on the CLI ? </strong><br/>
+					This provides enormous benefits which include:<br/><br/>
+					<ol>
+						<li>Accessibility to your APIs ( for testing / debugging )</li>
+						<li>Support for API discovery and documentation</li>
+						<li>Securing and segregating of APIs into local, private, public</li>
+						<li>Convenient CLI access to your entire application</li>
+					</ol>
+				</div>
+				</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Unified Routes</strong></td>
+						<td>Unified routing ( see below ) to support both HTTP and CLI </td>
+					</tr>
+					<tr>
+						<td><strong>Unified Requests</strong></td>
+						<td>Requests are abstracted out using the Request class ( see below ) to
+						allow your APIs to be accessible via any protocol ( currently only HTTP and CLI supported )</td>
+					</tr>
+					<tr>
+						<td><strong>Unified Responses</strong></td>
+						<td>Responses are abstracted out using the Result class ( see below )
+						to allow your APIs to return meaningful successes/failures that can be 
+						easily converted to HTTP and CLI responses.</td>
+					</tr>
+					<tr>
+						<td><strong>POKO</strong></td>
+						<td>You can easily build APIs using plain old Kotlin objects with 
+						simple annotations</td>
+					</tr>
+					<tr>
+						<td><strong>Discoverable</strong></td>
+						<td>APIs become easily discoverable ( see routing below )</td>
+					</tr>
+					<tr>
+						<td><strong>Auto Mapping</strong></td>
+						<td>The system will auto-convert HTTP parameters( query string ) and JSON data 
+						to your API actions/methods.</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.apis</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-apis.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/ApiContainer.kt">ApiContainer.kt</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code> 
+  <span class="n">@Api</span><span class="p">(</span><span class="n">area</span> <span class="p">=</span> <span class="s">"app"</span><span class="p">,</span> <span class="n">name</span> <span class="p">=</span> <span class="s">"users"</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"manage users"</span><span class="p">,</span>
+       <span class="n">roles</span><span class="p">=</span> <span class="s">"admin"</span><span class="p">,</span> <span class="n">auth</span> <span class="p">=</span> <span class="s">"app"</span><span class="p">,</span> <span class="n">verb</span> <span class="p">=</span> <span class="s">"*"</span><span class="p">,</span> <span class="n">protocol</span> <span class="p">=</span> <span class="s">"*"</span><span class="p">)</span>
+  <span class="kd">class</span> <span class="nc">UserApi</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span><span class="n">AppContext</span><span class="p">)</span> <span class="p">:</span> <span class="n">ApiBaseEntity</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span> <span class="p">{</span>
+  
+      <span class="n">@ApiAction</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">"activates a users account"</span><span class="p">,</span> <span class="n">roles</span><span class="p">=</span> <span class="s">"@parent"</span><span class="p">)</span>
+      <span class="n">@ApiArg</span><span class="p">(</span><span class="s">"phone"</span><span class="p">,</span> <span class="s">"the phone number"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="s">"1-234-567-8901"</span><span class="p">)</span>
+      <span class="k">fun</span> <span class="nf">activate</span><span class="p">(</span><span class="n">phone</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="n">isPremiumUser</span><span class="p">:</span><span class="n">Boolean</span><span class="p">):</span> <span class="n">Result</span><span class="p">&lt;</span><span class="n">Boolean</span><span class="p">&gt;</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="n">ok</span><span class="p">(</span><span class="s">"activated $phone, $code, $isPremiumUser"</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="c1">// ...
+</span>  <span class="p">}</span>
+</code></pre>
+</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> See : <strong><a href="kotlin-core-apis.html" class="url-ch">APIs</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>
+			<div class="container">
+				<h1 id="concept-routes">6. Routes</h1>
+				<p>In Slate Kit, all requests ( HTTP or CLI ) confirm to what is called the "Unified Routing Format" which is a 3 part 
+				routing structure defined below. This simple yet convenient approach ( while not fully REST Compliant by design ) is one part that 
+				helps make Slate Kit APIs protocol independent and thus available on both HTTP and CLI. 
+				</p>
+				<div class="alert alert-success text-left" role="alert">
+					<p>
+					<h4>area | api | action</h4>
+					e.g. <strong>app/users/activate</strong>
+					</p>
+				</div>
+				<div class="highlighter-rouge"><pre class="highlight"><code> <span class="c1">// NOTES: 
+</span> <span class="c1">// - Slate uses a unified routing format ( area/api/action ) 
+</span> <span class="c1">//   for both Http and CLI requests.
+</span> <span class="c1">// - See the "Unified Routing" section for more info.
+</span> 
+ <span class="c1">// 1. app.users.activate via Http GET ( query string )
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span><span class="o">?</span><span class="n">email</span><span class="k">=</span><span class="n">kishore</span><span class="nd">@abc</span><span class="o">.</span><span class="n">com</span>
+ 
+ <span class="c1">// 2. app.users.activate via Http POST ( json data 
+</span> <span class="n">http</span><span class="o">://</span><span class="n">mycompany</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">app</span><span class="o">/</span><span class="n">users</span><span class="o">/</span><span class="n">activate</span> <span class="o">{</span> <span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span> <span class="o">}</span> 
+ 
+ <span class="c1">// 3. app.users.activate via CLI 
+</span> <span class="n">C</span><span class="o">:\</span><span class="n">apps</span><span class="o">\</span><span class="n">app1</span><span class="o">&gt;</span> <span class="n">app</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">activate</span> <span class="o">-</span><span class="n">email</span><span class="o">=</span><span class="s">"kishore@abc.com"</span>
+ 
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> More info: <strong><a href="kotlin-core-apis.html#area_routes" class="url-ch">Routes</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> On the CLI you can easily discover the areas, apis, and actions by 
+					simply typing a <strong>?</strong> next to the part. e.g.
+					<ol>
+						<li>?</li>
+						<li>area?</li>
+						<li>area.api?</li>
+						<li>area.api.action?</li>
+					</ol>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>
+			<div class="container">
+				<h1 id="concept-request">7. Request</h1>
+				<p>The Request class abstracts a request whether it is on the CLI ( command line ) or a HTTP Request. This is used to build Slate Kit APIs ( which are protocol independent ).
+				
+				</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>API Design</strong></td>
+						<td>One of the fundamental data structures for making APIs "protocol independent"</td>
+					</tr>
+					<tr>
+						<td><strong>Uniformity</strong></td>
+						<td>Allows 1 model to be uniformly used to represent both HTTP and CLI requests.</td>
+					</tr>
+					<tr>
+						<td><strong>Immutable</strong></td>
+						<td>Immutable data can be safely passed around</td>
+					</tr>
+					<tr>
+						<td><strong>Routing</strong></td>
+						<td>Has a built in 3 part routing structure ( area.api.action ) to standardize
+						the routing for both HTTP and CLI.</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Request.kt">Request.kt</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// The request can be built to represent requests from different sources
+</span>  <span class="c1">// 1. http: http://abc.com/api/app/users/activate { post data }
+</span>  <span class="c1">// 2. cli : app.users.activate -userId=5001 
+</span>  <span class="kd">val</span> <span class="py">request</span> <span class="p">=</span> <span class="n">Request</span><span class="p">(</span>
+      <span class="n">path</span>   <span class="p">=</span> <span class="s">"app.users.activate"</span><span class="p">,</span>
+      <span class="n">parts</span>  <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">"app"</span><span class="p">,</span> <span class="s">"users"</span><span class="p">,</span> <span class="s">"activate"</span><span class="p">),</span>
+      <span class="n">verb</span>   <span class="p">=</span> <span class="s">"post"</span><span class="p">,</span>
+      <span class="n">opts</span>   <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"api-key"</span> <span class="n">to</span> <span class="s">"ABC-123"</span><span class="p">)),</span>
+      <span class="n">args</span>   <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">"userId"</span> <span class="n">to</span> <span class="m">5001</span><span class="p">)),</span>
+      <span class="n">raw</span>    <span class="p">=</span> <span class="s">"the raw HTTP SparkJava request or CLI request"</span><span class="p">,</span>
+      <span class="n">tag</span>    <span class="p">=</span> <span class="n">Random</span><span class="p">.</span><span class="n">stringGuid</span><span class="p">()</span>
+  <span class="p">)</span>
+
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-request.html" class="url-ch">Request</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in App: <strong><a href="kotlin-core-apis.html#area_request" class="url-ch">APIs</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+			<br/><br/>
+			<div class="container">
+				<h1 id="concept-result">8. Result</h1>
+				<p>The Result represents an abstraction for a response
+				and also models successes and failures using a combined set of fields for a code, value, message, and success/failure flag.
+				It is general purpose enough to be used anywhere. However, in Slate it is used in conjunction with the Request to allow Slate Kit APIs to be "protocol independent", allowing APIs to 
+				run as both HTTP Endpoints and on the CLI (Command Line Interface)</p>
+				<h3>Features</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>Success/Failure</strong></td>
+						<td>Can represent many types of successes and failures</td>
+					</tr>
+					<tr>
+						<td><strong>Modeling</strong></td>
+						<td>Functions available to model common errors ( unexpected error, unauthorized, etc )</td>
+					</tr>
+					<tr>
+						<td><strong>Type Safe</strong></td>
+						<td>The Result supports generics to make the value it holds type safe</td>
+					</tr>
+					<tr>
+						<td><strong>HTTP Status</strong></td>
+						<td>Easy to model Http status codes and also easy to convert a Result to an Http Response</td>
+					</tr>
+					<tr>
+						<td><strong>API Design</strong></td>
+						<td>Improves API design by facilitating meaningful results/failures to 
+						originate from a service layer rather than from a Controller/API layer</td>
+					</tr>
+					<tr>
+						<td><strong>CLI</strong></td>
+						<td>The general purpose design of the Result allows it to be used
+						as the response for both HTTP and CLI(Command Line Interface) requests in Slate.</td>
+					</tr>
+				</table>
+				<h3>Source</h3>
+				<table class="table table-bordered table-striped">
+					<tr>
+						<td><strong>package</strong></td>
+						<td>slatekit.common.common</td>
+					</tr>
+					<tr>
+						<td><strong>jar</strong></td>
+						<td>slatekit-common.jar</td>
+					</tr>
+					<tr>
+						<td><strong>source</strong></td>
+						<td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Result.kt">Result.kt</a>
+						    and helpers to build HTTP compatible results
+							<a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/results/ResultFuncs.kt">ResultFuncs.kt</a></td>
+					</tr>
+				</table>	 								 
+				<h3>Example</h3>
+				<div class="highlighter-rouge"><pre class="highlight"><code>  <span class="c1">// Build a result using the Success "branch" of Result
+</span>  <span class="kd">val</span> <span class="py">result1</span> <span class="p">=</span> <span class="n">Success</span><span class="p">(</span>
+      <span class="n">data</span> <span class="p">=</span> <span class="s">"userId:1234567890"</span><span class="p">,</span>
+      <span class="n">code</span> <span class="p">=</span> <span class="n">SUCCESS</span><span class="p">,</span>
+      <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span>
+      <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+      <span class="n">ref</span> <span class="p">=</span> <span class="s">"XY123"</span>
+  <span class="p">)</span>
+
+  <span class="c1">// Build a result using the Failure "branch" of Result
+</span>  <span class="kd">val</span> <span class="py">result2</span> <span class="p">=</span> <span class="n">Failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span>
+      <span class="n">code</span> <span class="p">=</span> <span class="n">BAD_REQUEST</span><span class="p">,</span>
+      <span class="n">msg</span> <span class="p">=</span> <span class="s">"user id not supplied"</span><span class="p">,</span>
+      <span class="n">tag</span> <span class="p">=</span> <span class="s">"tag001"</span><span class="p">,</span>
+      <span class="n">err</span> <span class="p">=</span> <span class="n">IllegalArgumentException</span><span class="p">(</span><span class="s">"user id"</span><span class="p">),</span>
+      <span class="n">ref</span> <span class="p">=</span> <span class="k">null</span>
+  <span class="p">)</span>
+  
+  <span class="c1">// CASE 1: Success ( 200 )
+</span>  <span class="kd">val</span> <span class="py">res1</span> <span class="p">=</span> <span class="n">success</span><span class="p">(</span><span class="m">123456</span><span class="p">,</span> <span class="n">msg</span> <span class="p">=</span> <span class="s">"user created"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"promoCode:ny001"</span><span class="p">)</span>
+  <span class="n">printResult</span><span class="p">(</span><span class="n">res1</span><span class="p">)</span>  
+  
+  <span class="c1">// CASE 2: Failure ( 400 ) with message and ref tag
+</span>  <span class="kd">val</span> <span class="py">res2a</span> <span class="p">=</span> <span class="n">failure</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">,</span> <span class="n">tag</span> <span class="p">=</span> <span class="s">"23SKASDF23"</span><span class="p">)</span>
+  <span class="n">printResult</span><span class="p">(</span><span class="n">res2a</span><span class="p">)</span> 
+  
+  <span class="c1">// CASE 3: Unauthorized ( 401 )
+</span>  <span class="kd">val</span> <span class="py">res3</span> <span class="p">=</span> <span class="n">unAuthorized</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="n">msg</span> <span class="p">=</span> <span class="s">"invalid email"</span><span class="p">)</span>
+  <span class="n">printResult</span><span class="p">(</span><span class="n">res3</span><span class="p">)</span>  
+  
+</code></pre>
+</div>
+				<div class="alert alert-warning text-left" role="alert">
+					<p><i class="fa fa-link"></i> Full Example: <strong><a href="kotlin-mod-result.html" class="url-ch">Result</a></strong>
+					</p>
+				</div>
+				<div class="alert alert-info text-left" role="alert">
+					<p><i class="fa fa-info-circle"></i> Usage in APIs: <strong><a href="kotlin-core-app.html#area_result" class="url-ch">APIs</a></strong>
+					</p>
+				</div>
+				<a href="#concept-overview" class="more"><span class="btn btn-template">Back to top</span></a>
+				<br/><br/><br/>
+			</div>
+
+
+              </div>
+          </section>
+          <!--=============== /. About Section ===============-->
+
+
+          
+
+          
+
+    
+           <!--=============== Footer ===============-->
+           <footer id="main-footer" class="main-footer">
+               <div class="container text-center">
+
+                   <!-- Brand -->
+                   <div class="logo">
+                       <strong class="brand-text">Slate Kit</strong>
+                   </div>
+                   <!-- Description -->
+                   <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+                   <!-- Social Icons Menu -->
+                   <ul class="social list-inline">
+                       <li class="list-inline-item">
+                           <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                       </li>
+                   </ul>
+               </div>
+
+              <!-- Copyrights -->
+               <div class="copyrights">
+                   <div class="container">
+                       <div class="row">
+                           <div class="col-md-6">
+                               <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+                           </div>
+                           <div class="col-md-6 text-right">
+                               <ul class="list-inline">
+                                   <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                   <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                                   <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div> <!-- End Copyrights -->
+           </footer>
+           <!--=============== /. Footer ===============-->
+
+
+           <!--=============== Preloader ===============-->
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           <!--=============== /. Preloader ===============-->
+
+
+           <!--=============== Scroll To Top ===============-->
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           <!--=============== /. Scroll To Top ===============-->
+      </div>
+
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <!-- Bootstrap 4 Alpha -->
+        <script src="themes/perfo/assets/js/bootstrap.min.js"></script>
+        <!-- Owl Carousel -->
+        <script src="themes/perfo/assets/js/owl.carousel.min.js"></script>
+        <!-- Easy Scroll -->
+        <script src="themes/perfo/assets/js/easyscroll.min.js"></script>
+        <!-- WOW JS -->
+        <script src="themes/perfo/assets/js/wow.min.js"></script>
+        <!-- Custom Js -->
+        <script src="themes/perfo/assets/js/script.js"></script>
+
+        <script type="text/javascript">
+          var _codehelixAppPage = "about";
+        </script>
+          <script type="text/javascript" src="themes/perfo/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+    </body>
+</html>
