@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zxx">
+   <head>
+      <meta charset="utf-8">
+      <!-- Responsive meta -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!-- IE Compatibility meta -->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Description meta -->
+      <meta name="description" content="Kotlin Tool-Kit">
+      <!-- Author meta -->
+      <meta name="author" content="CodeHelix">
+
+      <!-- Page Title -->
+      <title>Slate Kit</title>
+
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="themes/perfo/assets/img/favicon.ico">
+      <!-- Font Awesome Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/font-awesome.css">
+      <!-- Bootstrap Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/bootstrap.css">
+      <!-- Mockup Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/device-mockups.min.css">
+      <!-- Owl Carousel Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/owl.carousel.min.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/animate.css">
+      <!-- Animate.CSS Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/preloader.css">
+      <!-- Custom Stylesheet -->
+      <link rel="stylesheet" href="themes/perfo/assets/css/style.default.css">
+      
+      <link rel="stylesheet" type="text/css" href="themes/start/assets/css/lang.css" media="screen">
+
+      <link rel="stylesheet" href="themes/perfo/app/app.css">
+   </head>
+   <body>
+
+
+      <div class="page-header">
+          <!--=============== Navbar ===============-->
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      <!-- Navbar Brand -->
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    <!-- Toggle Button -->
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      <!-- Navbar Menu -->
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
+              </div>
+          </nav><!--=============== /. Navbar ===============-->
+
+
+          <!--=============== Separator Section ===============-->
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
+
+                  <div class="row">
+                      <!-- Mockup Image  -->
+                      <div class="image col-md-6 hidden-sm-down">
+                          <!--<img src="themes/perfo/assets/img/iphone.png" alt="...." class="img-fluid">-->
+                      </div>
+                     
+                      <!-- Heading Area -->
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          <!--=============== /. Separator Section ===============-->
+
+
+          <!--=============== About Section ===============-->
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+          				<h1 id="orm-repo">Orm-Repo</h1>
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A repository pattern for entity/model CRUD operations</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2018-03-19</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.entities.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.entities</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.entities.EntityRepo.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/" class="url-ch">src/lib/kotlin/slatekit/</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Entities_Repo.kt" class="url-ch">/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Entities_Repo.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="import">Import</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// required 
+</span><span class="k">import</span> <span class="nn">slatekit.common.Field</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.core.*</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.repos.EntityRepoInMemory</span>
+<span class="k">import</span> <span class="nn">slatekit.entities.repos.EntityRepoMySql</span>
+<span class="k">import</span> <span class="nn">slatekit.common.Mapper</span>
+
+
+<span class="c1">// optional 
+</span><span class="k">import</span> <span class="nn">slatekit.common.Result</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.Db</span>
+<span class="k">import</span> <span class="nn">slatekit.common.db.DbConString</span>
+<span class="k">import</span> <span class="nn">slatekit.common.results.ResultFuncs.ok</span>
+<span class="k">import</span> <span class="nn">slatekit.core.cmds.Cmd</span>
+<span class="k">import</span> <span class="nn">slatekit.meta.models.ModelMapper</span>
+
+
+
+</code></pre>
+</div>
+
+<h2 id="setup">Setup</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+    <span class="c1">// Example entity that the Repo with manage via CRUD operations
+</span>    <span class="kd">data class</span> <span class="nc">User</span><span class="p">(</span>
+            <span class="k">override</span> <span class="kd">val</span> <span class="py">id</span><span class="p">:</span><span class="n">Long</span> <span class="p">=</span> <span class="m">0L</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">email</span><span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span> <span class="m">30</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">length</span> <span class="p">=</span><span class="m">30</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span><span class="n">String</span> <span class="p">=</span> <span class="s">""</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">isMale</span><span class="p">:</span><span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">,</span>
+
+
+            <span class="n">@property</span><span class="p">:</span><span class="n">Field</span><span class="p">(</span><span class="n">required</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+            <span class="kd">val</span> <span class="py">age</span><span class="p">:</span><span class="n">Int</span> <span class="p">=</span> <span class="m">35</span>
+
+    <span class="p">)</span> <span class="p">:</span> <span class="n">EntityWithId</span> <span class="p">{</span>
+
+
+        <span class="k">fun</span> <span class="nf">fullname</span><span class="p">():</span><span class="n">String</span> <span class="p">=</span> <span class="n">firstName</span> <span class="p">+</span> <span class="s">" "</span> <span class="p">+</span> <span class="n">lastName</span>
+
+
+
+        <span class="k">override</span> <span class="k">fun</span> <span class="nf">toString</span><span class="p">():</span><span class="n">String</span>  <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"$email, $firstName, $lastName, $isMale, $age"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// CASE 1: In-memory ( non-persisted ) repository has limited functionality
+</span>    <span class="c1">// but is very useful for rapid prototyping of a data model when you are trying to
+</span>    <span class="c1">// figure out what fields/properties should exist on the model
+</span>    <span class="kd">val</span> <span class="py">repo</span> <span class="p">=</span> <span class="n">EntityRepoInMemory</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+
+    <span class="c1">// CASE 2: My-sql ( persisted ) repository can be easily setup
+</span>    <span class="c1">// More examples of database setup/entity registration available in Setup/Registration docs.
+</span>    <span class="c1">// 1. First setup the database
+</span>    <span class="kd">val</span> <span class="py">db</span> <span class="p">=</span> <span class="n">Db</span><span class="p">(</span><span class="n">DbConString</span><span class="p">(</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="p">,</span> <span class="s">"jdbc:mysql://localhost/user_db"</span><span class="p">,</span> <span class="s">"root"</span><span class="p">,</span> <span class="s">"abcdefghi"</span><span class="p">))</span>
+
+    <span class="c1">// 2. Setup the mapper
+</span>    <span class="kd">val</span> <span class="py">model</span> <span class="p">=</span> <span class="n">ModelMapper</span><span class="p">.</span><span class="n">loadSchema</span><span class="p">(</span><span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">mapper</span> <span class="p">=</span> <span class="n">EntityMapper</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+
+    <span class="c1">// 3. Now create the repo with database and mapper
+</span>    <span class="kd">val</span> <span class="py">repoMySql</span> <span class="p">=</span> <span class="n">EntityRepoMySql</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">db</span><span class="p">,</span> <span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
+
+    <span class="c1">// CASE 3: You can also extend from EntityRepositoryMySql
+</span>    <span class="kd">class</span> <span class="nc">UserRepository</span><span class="p">(</span><span class="n">db</span><span class="p">:</span><span class="n">Db</span><span class="p">,</span> <span class="n">mapper</span><span class="p">:</span><span class="n">Mapper</span><span class="p">)</span> <span class="p">:</span> <span class="n">EntityRepoMySql</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;(</span><span class="n">db</span><span class="p">,</span> <span class="n">User</span><span class="o">::</span><span class="k">class</span><span class="p">)</span>
+
+
+    <span class="kd">val</span> <span class="py">userRepo</span> <span class="p">=</span> <span class="n">UserRepository</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">mapper</span><span class="p">)</span>
+    
+
+</code></pre>
+</div>
+
+<h2 id="usage">Usage</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>
+
+        <span class="c1">// CASE 1: Create 3-4 users for showing use-cases
+</span>        <span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span><span class="s">"john"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-01"</span><span class="p">))</span>
+        <span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span><span class="s">"jane"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-02"</span><span class="p">))</span>
+        <span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span><span class="s">"john"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-03"</span><span class="p">))</span>
+        <span class="n">repo</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="n">User</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span><span class="s">"jane"</span><span class="p">,</span> <span class="n">lastName</span> <span class="p">=</span> <span class="s">"doe-04"</span><span class="p">))</span>
+
+        <span class="c1">// CASE 2: Get by id
+</span>        <span class="n">printOne</span><span class="p">(</span><span class="s">"2"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+        <span class="c1">// CASE 3: Update
+</span>        <span class="kd">val</span> <span class="py">item2</span> <span class="p">=</span> <span class="n">repo</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+        <span class="n">item2</span><span class="o">?.</span><span class="n">let</span> <span class="p">{</span> <span class="n">item</span> <span class="p">-&gt;</span>
+            <span class="kd">val</span> <span class="py">updated</span> <span class="p">=</span> <span class="n">item</span><span class="p">.</span><span class="n">copy</span><span class="p">(</span><span class="n">firstName</span> <span class="p">=</span> <span class="s">"user_two"</span><span class="p">)</span>
+            <span class="n">repo</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">updated</span><span class="p">)</span>
+        <span class="p">}</span>
+
+
+        <span class="c1">// CASE 4: Get all
+</span>        <span class="n">printAll</span><span class="p">(</span><span class="s">"all"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">getAll</span><span class="p">())</span>
+
+        <span class="c1">// CASE 5: Get recent users ( 03, 04 )
+</span>        <span class="n">printAll</span><span class="p">(</span><span class="s">"recent"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">recent</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+        <span class="c1">// CASE 6: Get oldest users ( 01, 02 )
+</span>        <span class="n">printAll</span><span class="p">(</span><span class="s">"oldest"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">oldest</span><span class="p">(</span><span class="m">2</span><span class="p">))</span>
+
+        <span class="c1">// CASE 7: Get first one ( oldest - 01 )
+</span>        <span class="n">printOne</span><span class="p">(</span><span class="s">"first"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">first</span><span class="p">())</span>
+
+        <span class="c1">// CASE 8: Get last one ( recent - 04 )
+</span>        <span class="n">printOne</span><span class="p">(</span><span class="s">"last"</span><span class="p">,</span> <span class="n">repo</span><span class="p">.</span><span class="n">last</span><span class="p">())</span>
+
+        <span class="c1">// CASE 9: Delete by id
+</span>        <span class="n">repo</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="m">4</span><span class="p">)</span>
+
+        <span class="c1">// CASE 10: Get total ( 4 )
+</span>        <span class="n">println</span><span class="p">(</span><span class="n">repo</span><span class="p">.</span><span class="n">count</span><span class="p">())</span>
+
+        
+
+</code></pre>
+</div>
+
+<h2 id="output">Output</h2>
+
+<pre><code class="language-bat">  2
+  User: 2, jane, doe-02
+
+  ALL
+  User: 1, john, doe-01
+  User: 3, john, doe-03
+  User: 4, jane, doe-04
+  User: 2, user_two, doe-02
+
+  RECENT
+  User: 4, jane, doe-04
+  User: 3, john, doe-03
+
+  OLDEST
+  User: 1, john, doe-01
+  User: 2, user_two, doe-02
+
+  FIRST
+  User: 1, john, doe-01
+
+  LAST
+  User: 4, jane, doe-04
+  3
+</code></pre>
+
+              </div>
+          </section>
+          <!--=============== /. About Section ===============-->
+
+
+          
+
+          
+
+    
+           <!--=============== Footer ===============-->
+           <footer id="main-footer" class="main-footer">
+               <div class="container text-center">
+
+                   <!-- Brand -->
+                   <div class="logo">
+                       <strong class="brand-text">Slate Kit</strong>
+                   </div>
+                   <!-- Description -->
+                   <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+                   <!-- Social Icons Menu -->
+                   <ul class="social list-inline">
+                       <li class="list-inline-item">
+                           <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+                       </li>
+                       <li class="list-inline-item">
+                           <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+                       </li>
+                   </ul>
+               </div>
+
+              <!-- Copyrights -->
+               <div class="copyrights">
+                   <div class="container">
+                       <div class="row">
+                           <div class="col-md-6">
+                               <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+                           </div>
+                           <div class="col-md-6 text-right">
+                               <ul class="list-inline">
+                                   <li class="list-inline-item"><a href="#">FAQ</a></li>
+                                   <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                                   <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                               </ul>
+                           </div>
+                       </div>
+                   </div>
+               </div> <!-- End Copyrights -->
+           </footer>
+           <!--=============== /. Footer ===============-->
+
+
+           <!--=============== Preloader ===============-->
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           <!--=============== /. Preloader ===============-->
+
+
+           <!--=============== Scroll To Top ===============-->
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           <!--=============== /. Scroll To Top ===============-->
+      </div>
+
+
+
+        <!-- jQuery CDN -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <!-- Tether CDN [Reuired for Bootstrap 4 tooltip] -->
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        <!-- Bootstrap 4 Alpha -->
+        <script src="themes/perfo/assets/js/bootstrap.min.js"></script>
+        <!-- Owl Carousel -->
+        <script src="themes/perfo/assets/js/owl.carousel.min.js"></script>
+        <!-- Easy Scroll -->
+        <script src="themes/perfo/assets/js/easyscroll.min.js"></script>
+        <!-- WOW JS -->
+        <script src="themes/perfo/assets/js/wow.min.js"></script>
+        <!-- Custom Js -->
+        <script src="themes/perfo/assets/js/script.js"></script>
+
+        <script type="text/javascript">
+          var _codehelixAppPage = "infra";
+        </script>
+          <script type="text/javascript" src="themes/perfo/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+  </body>
+</html>
