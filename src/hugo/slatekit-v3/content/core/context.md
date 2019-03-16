@@ -1,6 +1,6 @@
 ---
 title: "Context"
-date: 2019-03-16T17:22:14-04:00
+date: 2019-03-16T17:30:45-04:00
 draft: true
 ---
 
@@ -18,48 +18,58 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td>Current status of this component</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
         <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
-        <td><strong>2</strong></td>
+        <td><strong>3</strong></td>
         <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
-        <td><strong>3</strong></td>
+        <td><strong>4</strong></td>
         <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
-        <td><strong>4</strong></td>
+        <td><strong>5</strong></td>
         <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
-        <td><strong>5</strong></td>
+        <td><strong>6</strong></td>
         <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
-        <td><strong>6</strong></td>
+        <td><strong>7</strong></td>
         <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
-        <td><strong>7</strong></td>
+        <td><strong>8</strong></td>
         <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
-        <td><strong>8</strong></td>
+        <td><strong>9</strong></td>
         <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
 
+# Status
+coming soon
+{{% section-end mod="core/cli" %}}
+
 # Install
+coming soon
 {{< highlight groovy >}}
 
     repositories {
@@ -114,6 +124,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="core/cli" %}}
 
 # Sample
+coming soon
 {{< highlight kotlin >}}
 
     fun quick_sample() {
@@ -124,6 +135,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="core/cli" %}}
 
 # Goals
+coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Goal</strong></td>
@@ -148,6 +160,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="core/cli" %}}
 
 # Concepts
+coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Concept</strong></td>
@@ -172,6 +185,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="core/cli" %}}
 
 # Features
+coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Feature</strong></td>
@@ -196,7 +210,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="core/cli" %}}
 
 # Setup
-todo
+coming soon
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -209,6 +223,7 @@ todo
 
 # Details
 Details on using the features here.
+coming soon
 
 <table class="table table-bordered table-striped">
     <tr>
@@ -239,6 +254,7 @@ Details on using the features here.
 <br/>
 
 ## Feature 1 {#feature1}
+coming soon
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -249,6 +265,7 @@ Details on using the features here.
 {{% feature-end mod="core/cli" %}}
 
 ## Feature 2 {#feature2}
+coming soon
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -259,6 +276,7 @@ Details on using the features here.
 {{% feature-end mod="core/cli" %}}
 
 ## Feature 3 {#feature3}
+coming soon
 {{< highlight kotlin >}}
 
     fun setup() {
