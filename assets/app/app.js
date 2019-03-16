@@ -123,7 +123,7 @@ var codeHelixMeta = {
   [
 	{ name: "Home"          ,  page: "index.html"         , children: null },
 	{ name: "Overview"      ,  page: "overview.html"      , children: null },
-	{ name: "Setup"         ,  page: "kotlin-setup.html"  , children: null },
+	{ name: "Setup"         ,  page: "setup.html"  , children: null },
 	{ name: "Get Started"   ,  page: "components.html"    , children: null },
 	{ name: "Architecture"  ,  page: "core/infra.html"         , children: null },
 	{ name: "Utilities"     ,  page: "utils/utils.html"         , children: null },
