@@ -37,25 +37,7 @@ Table of contents for this page
 
 {{% heading name="Heading 1" %}}
 coming soon
-
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>jar</strong></td>
-        <td>slatekit.{COMPONENT_ID}.jar</td>
-    </tr>
-    <tr>
-        <td><strong>package</strong></td>
-        <td>slatekit.{COMPONENT_ID}</td>
-    </tr>
-    <tr>
-        <td><strong>source</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.{COMPONENT_ID}</a></td>
-    </tr>
-    <tr>
-        <td><strong>example</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
-    </tr>
-</table>
+{{% sk-modules %}}
 {{% section-end mod="core/cli" %}}
 
 
@@ -84,34 +66,39 @@ coming soon
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong>Sub-Heading 1</strong></td>
+        <td><strong>Results</strong></td>
         <td>Brief description of Sub-Heading 1</td>
-        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="info/overview#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong>Sub-Heading 2</strong></td>
+        <td><strong>Common</strong></td>
         <td>Brief description of Sub-Heading 2</td>
-        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="info/overview#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong>Sub-Heading 3</strong></td>
+        <td><strong>App</strong></td>
         <td>Brief description of Sub-Heading 3</td>
-        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="info/overview#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
 <br/>
 
-## Sub-heading 1 {#sub-heading1}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
+## App {#app}
+An application template with built-in support for many features
+{{% sk-module 
+    name="App"
+    package="slatekit.app"
+    jar="slatekit.app.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
+    url="core/app"
+    uses="slatekit.results, slatekit.common"
+    exampleUrl=""
+    exampleFileName="Example_App.kt"
+%}}
+{{% break %}}
 {{% feature-end mod="core/cli" %}}
 
 ## Sub-heading 2 {#sub-heading2}

@@ -1,6 +1,6 @@
 ---
 title: "Queues"
-date: 2019-03-16T17:37:44-04:00
+date: 2019-03-17T14:30:52-04:00
 draft: true
 ---
 
@@ -84,25 +84,17 @@ coming soon
     }
 
 {{< /highlight >}}
-        
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>jar</strong></td>
-        <td>slatekit.{COMPONENT_ID}.jar</td>
-    </tr>
-    <tr>
-        <td><strong>package</strong></td>
-        <td>slatekit.{COMPONENT_ID}</td>
-    </tr>
-    <tr>
-        <td><strong>source</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.{COMPONENT_ID}</a></td>
-    </tr>
-    <tr>
-        <td><strong>example</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
-    </tr>
-</table>
+{{% sk-module 
+    name="App"
+    package="slatekit.app"
+    jar="slatekit.app.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
+    url="core/app"
+    uses="slatekit.results, slatekit.common"
+    exampleUrl=""
+    exampleFileName="Example_App.kt"
+%}}
 {{% section-end mod="core/cli" %}}
 
 # Requires

@@ -12,6 +12,13 @@ hugo new core/orm.md
 hugo new core/queues.md
 hugo new core/server.md
 hugo new core/sms.md
-hugo new core/workers.mdexists
 hugo new core/workers.md
 hugo new core/results.md
+
+
+hugo new info/overview.md
+hugo new info/setup.md
+hugo new info/start.md
+hugo new info/releases.md
+hugo new info/more.md
+hugo new info/aboutus.md
