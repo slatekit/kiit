@@ -19,12 +19,21 @@ import org.threeten.bp.format.DateTimeFormatter
 //import java.time.format.DateTimeFormatter
 import java.util.*
 
+/**
+ * Currently a typealias for the ThreeTenBP ZonedDateTime
+ * The slatekit.common uses this datetime library instead of Java 8 because:
+ * 1. slatekit.common is used for android projects
+ * 2. targets android projects prior to API 26
+ * 3. Java 8 datetime APIs are not available in android devices older than API 26
+ */
 typealias DateTime = ZonedDateTime
 
 /**
- * DateTime wraps a ZonedDateTime, making using the
- * new Java 8 date/time/zones a bit simpler & concise,
- * and essentially adding a lot of syntactic sugar.
+ * DateTimes provides some convenient "static" functions
+ *
+ * See the extension methods on the DateTime ( ZonedDateTime )
+ * which essentially just add additional convenience functions
+ * for conversion, formatting methods
  *
  *
  * FEATURES
@@ -73,7 +82,6 @@ typealias DateTime = ZonedDateTime
  *    - val txt      = now.toStringNumeric("-")
  *
  *
- * @param raw
  */
 class DateTimes {
 

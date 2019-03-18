@@ -17,6 +17,11 @@ import slatekit.common.ids.UniqueId
 //import java.time.*
 import org.threeten.bp.*
 
+
+/**
+ * Supplies default methods for reading inputs from a record
+ * based data structure.
+ */
 interface Record : Inputs {
 
     fun getPos(name:String):Int

@@ -24,7 +24,7 @@ interface InputsUpdateable {
 }
 
 /**
- * Base class to support retrieving inputs form multiple sources:
+ * Interface to support reading inputs from multiple sources:
  * 1. command line arguments
  * 2. config settings
  * 3. http requests
