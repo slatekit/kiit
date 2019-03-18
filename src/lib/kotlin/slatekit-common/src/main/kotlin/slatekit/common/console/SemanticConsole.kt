@@ -27,9 +27,9 @@ class SemanticConsole(
 
     /**
      * IO abstraction for system.println.
-     * Assists with testing and making code a bit more "purely functional"
+     * Assists with testing and making code a bit more "functional"
      * This is a simple, custom alternative to the IO Monad.
-     * Refer to IO.scala for details.
+     * Refer to IO.kt for details.
      */
     val semanticIO: IO<Any?, Unit> = writer ?: Print()
 

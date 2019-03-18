@@ -53,7 +53,7 @@ class Example_Utils : Cmd("utils") {
     // of functional error handling, however, there are times where
     // a guard like approach to inputs is preferable
     requireText("slate-kit", "Name must be supplied" )
-    requireOneOf( "scala", listOf("scala", "go"), "Name not valid")
+    requireOneOf( "kotlin", listOf("kotlin", "go"), "Name not valid")
     requireValidIndex( 3, 4, "Index is must be 0 <= index <= 4")
 
     // CASE 4: Db connection

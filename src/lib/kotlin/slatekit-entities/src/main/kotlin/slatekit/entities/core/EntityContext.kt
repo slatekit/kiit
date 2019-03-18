@@ -27,9 +27,9 @@ import kotlin.reflect.KClass
  * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
  * @param dbType : the database provider type
  * @param dbKey : a key identifying the database connection
- *                               ( see DbLookup / Example_Database.scala )
+ *                               ( see DbLookup / Example_Database.kt )
  * @param dbShard : a key identifying the database shard
- *                               ( see DbLookup / Example_Database.scala )
+ *                               ( see DbLookup / Example_Database.kt )
  */
 open class EntityContext(
         val entityType: KClass<*>,

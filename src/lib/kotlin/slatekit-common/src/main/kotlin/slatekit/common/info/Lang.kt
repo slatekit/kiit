@@ -19,7 +19,7 @@ import slatekit.common.utils.Props
  * Represents a host such as a cloud server. e.g. ec2
  * @param name : name of the language
  * @param home : home directory of the language
- * @param origin : origin of the language, e.g. for scala -reference to jre
+ * @param origin : origin of the language, e.g. for kotlin -reference to jre
  * @param versionNum : version of the language
  * @param version : addition info about architechture for lang ( e.g. 64 bit )
  * @param ext1 : additional information about the language

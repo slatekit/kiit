@@ -98,7 +98,7 @@ class Example_Context : Cmd("cmd") {
                     url = "http://company1.com/dep1/sampleapp-1",
                     contact = "dept1@company1.com",
                     version = "1.0.1",
-                    tags = "sample app slatekit scala",
+                    tags = "sample app slatekit",
                     examples = ""
             )
         )

@@ -147,7 +147,7 @@ object AppFuncs {
         // 2. Validate the environment
         // Get all
         val allEnvs = AppBuilder.envs()
-        val envCheck = Envs(allEnvs, allEnvs.firstOrNull()).validate(envSelected)
+        val envCheck = Envs(allEnvs).validate(envSelected)
         val envName = envSelected.name
 
         return envCheck?.let { env ->

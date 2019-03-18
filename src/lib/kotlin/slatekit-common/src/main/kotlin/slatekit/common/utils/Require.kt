@@ -14,7 +14,7 @@
 package slatekit.common.utils
 
 /**
- * Additional alternatives to scala require guard method.
+ * Supplements kotlin require guard method.
  */
 object Require {
 

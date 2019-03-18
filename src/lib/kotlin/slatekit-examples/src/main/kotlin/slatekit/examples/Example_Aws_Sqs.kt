@@ -52,10 +52,10 @@ class Example_Aws_Sqs  : Cmd("sqs") {
     queue2.init()
 
     // Use case 2: send 1 message
-    queue2.send("scala test 1")
+    queue2.send("test 1")
 
     // Use case 3: send multiple messages
-    queue2.send("scala test 2")
+    queue2.send("test 2")
 
     // Use case 4: send message with tags
     queue2.send("user=kishore", tagName="type", tagValue="reg")
