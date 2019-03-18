@@ -1,10 +1,10 @@
 /**
 <slate_header>
   author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
+  url: www.github.com/code-helix/slatekit
   copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
+  license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+  desc: A tool-kit, utility library and server-backend
   usage: Please refer to license on github for more info.
 </slate_header>
   */
@@ -38,7 +38,7 @@ class Example_Info  : Cmd("info") {
     println()
 
 
-    // CASE 2: Get the Lang runtime info ( java version, scala version etc )
+    // CASE 2: Get the Lang runtime info ( java version, kotlin version etc )
     val lang = Lang.kotlin()
     lang.each { name, value -> println( "$name : $value" ) }
     println()
@@ -83,7 +83,7 @@ class Example_Info  : Cmd("info") {
   ext1 : C:/Users/kv/AppData/Local/Temp/
 
   // LANGUAGE INFO
-  api : scala
+  api : kotlin
   home : C:/Tools/Java/jdk1.8.0_91/jre
   versionNum : 2.11.7
   version : 1.8.0_91

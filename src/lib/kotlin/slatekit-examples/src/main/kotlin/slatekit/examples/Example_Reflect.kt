@@ -1,10 +1,10 @@
 /**
 <slate_header>
   author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
+  url: www.github.com/code-helix/slatekit
   copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
+  license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+  desc: A tool-kit, utility library and server-backend
   usage: Please refer to license on github for more info.
 </slate_header>
   */
@@ -40,7 +40,7 @@ class Example_Reflect : Cmd("reflect") {
     // 2. getDeclaredFields working
     // 3. can NOT use duplicate annotations on a method
 
-    // SCALA
+    // Kotlin
     // 1. all parameters explicitly setup without named parameters works:
     //    @EntityField2("", true, 12)
     //    var isMale = false

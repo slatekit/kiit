@@ -1,10 +1,10 @@
 /**
 <slate_header>
 author: Kishore Reddy
-url: https://github.com/kishorereddy/scala-slate
+url: www.github.com/code-helix/slatekit
 copyright: 2016 Kishore Reddy
-license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-desc: a scala micro-framework
+license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+desc: A tool-kit, utility library and server-backend
 usage: Please refer to license on github for more info.
 </slate_header>
  */
@@ -48,7 +48,7 @@ class Example_Entities_Reg : Cmd("types") {
     override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
-        // See Example_Database.scala for more info
+        // See Example_Database.kt for more info
 
         // 1. Register the default connection
         val dbs = DbLookup.defaultDb(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)

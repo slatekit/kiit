@@ -334,7 +334,7 @@ class Example_Kotlin_Basics : Cmd("auth") {
                 }
         println(message)
 
-        // 4. There is no ternary "? :" operation, but in scala,
+        // 4. There is no ternary "? :" operation, but in kotlin,
         // you do not need it as a simple if/else is sufficient
         val status = if (code == 200) "ok" else "unknown"
         println(status)
