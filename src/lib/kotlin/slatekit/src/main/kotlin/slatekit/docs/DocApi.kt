@@ -14,7 +14,7 @@ class DocApi(val context: AppEntContext) {
 
     /**
      * Generate the markdown docs for the components
-     * @param root    : C:/Dev/github/blend-server
+     * @param root    : /Users/kishore.reddy/dev/tmp/slatekit/slatekit
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
      * slate.docs.generateAll -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
@@ -30,7 +30,7 @@ class DocApi(val context: AppEntContext) {
     
     /**
      * Generate the markdown docs for the components
-     * @param root    : C:/Dev/github/blend-server
+     * @param root    : /Users/kishore.reddy/dev/tmp/slatekit/slatekit
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
      * @param name    : name of the component
@@ -39,7 +39,7 @@ class DocApi(val context: AppEntContext) {
     @ApiAction(name = "", desc= "generates the markdown docs")
     fun generateComponent(root:String, template:String, output:String, name:String): Try<String> {
         val doc = DocService(root, output, template)
-        val result = doc.process(name)
+        val result = doc.processComponent(name)
         return result
     }
 }

@@ -1,32 +1,60 @@
----
-layout: start_page_mods_utils
-title: module DbLookup
-permalink: /kotlin-mod-dblookup
----
 
 # DbLookup
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | Database access utilty to query and manage data using JDBC for MySql. Other database support coming later. | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.db  |
-| **source core** | slatekit.common.db.DbLookup.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Database access utilty to query and manage data using JDBC for MySql. Other database support coming later.</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.db</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.db.DbLookup.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_DbLookup.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 
 
 
 // optional 
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
@@ -37,17 +65,20 @@ import slatekit.core.cmds.Cmd
 
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 n/a
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
         // These examples just shows the database connection registration
@@ -118,5 +149,6 @@ n/a
         showResult(dbs5.named("files"))
         
 
-```
+{{< /highlight >}}
+
 

@@ -13,13 +13,12 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-
+import slatekit.common.info.Folders
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.info.Folders
 import slatekit.core.cmds.Cmd
 
 //</doc:import_examples>

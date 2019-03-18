@@ -1,25 +1,53 @@
----
-layout: start_page_mods_utils
-title: module Logger
-permalink: /kotlin-mod-logger
----
 
 # Logger
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | A simple logger with extensibility for using other 3rd party loggers | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.log  |
-| **source core** | slatekit.common.log.Logger.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A simple logger with extensibility for using other 3rd party loggers</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.log</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.log.Logger.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/log" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/log</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Logger.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 import slatekit.common.log.*
 
@@ -27,15 +55,17 @@ import slatekit.common.log.*
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 
   // NOTE: The logger is very simple and designed to be extended for customization
@@ -62,10 +92,11 @@ import slatekit.common.Success
 
   
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
     // Sample exception
@@ -114,5 +145,6 @@ import slatekit.common.Success
     log.fatal("fatal from trait")
     
 
-```
+{{< /highlight >}}
+
 

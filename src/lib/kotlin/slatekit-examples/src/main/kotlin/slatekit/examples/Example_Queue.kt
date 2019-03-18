@@ -21,6 +21,8 @@ import slatekit.core.cmds.Cmd
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.queues.QueueSourceInMemory
+import slatekit.common.queues.QueueStringConverter
+
 //</doc:import_examples>
 
 
@@ -39,7 +41,7 @@ class Example_Queue : Cmd("queue") {
     //
     // as the in memory queue remove the items from calls to next/nextBatch.
 
-    val queue = QueueSourceInMemory<String>()
+    val queue = QueueSourceInMemory<String>(converter = QueueStringConverter())
     //</doc:setup>
 
     //<doc:examples>
@@ -63,8 +65,8 @@ class Example_Queue : Cmd("queue") {
 
     // Use case 5: print tags - abandon a message
     val item4 = queue.next()
-    println(queue.getMessageBody(item4))
-    println(queue.getMessageTag(item4, "type"))
+    println(item4?.getValue())
+    println(item4?.getTag("type"))
 
     // Use case 6: get count ( approximation )
     val count = queue.count()

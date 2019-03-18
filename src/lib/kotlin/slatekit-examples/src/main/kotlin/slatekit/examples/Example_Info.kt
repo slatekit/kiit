@@ -73,7 +73,7 @@ class Example_Info  : Cmd("info") {
 /*
 
   //<doc:output>
-```java
+{{< highlight kotlin >}}
   // HOST INFO
   api : KRPC1
   ip : Windows 10
@@ -106,6 +106,6 @@ class Example_Info  : Cmd("info") {
   version  : 1.0.1.3
   tags     : api,slate,app
   examples : myapp.exe -env=dev -level=info
-```
+{{< /highlight >}}
   //</doc:output>
 * */

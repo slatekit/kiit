@@ -15,6 +15,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.cloud.aws.AwsCloudQueue
+import slatekit.common.queues.QueueStringConverter
 
 //</doc:import_required>
 
@@ -31,17 +32,18 @@ class Example_Aws_Sqs  : Cmd("sqs") {
   override fun executeInternal(args: Array<String>?) : Try<Any>
   {
     //<doc:setup>
+    val converter = QueueStringConverter()
     // Not storing any key/secret in source code for security purposes
     // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-    val queue1 = AwsCloudQueue<String>("app1-queue-1")
+    val queue1 = AwsCloudQueue<String>("app1-queue-1", converter)
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section "sqs" by default
-    val queue2 = AwsCloudQueue<String>("app1-queue-1", "user://myapp/conf/queue.conf")
+    val queue2 = AwsCloudQueue<String>("app1-queue-1", converter,"user://myapp/conf/queue.conf")
 
     // Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )
-    val queue3 = AwsCloudQueue<String>("app1-queue-1", "user://myapp/conf/queue.conf", "sqs-1")
+    val queue3 = AwsCloudQueue<String>("app1-queue-1",  converter, "user://myapp/conf/queue.conf", "sqs-1")
 
     //</doc:setup>
 
@@ -60,8 +62,8 @@ class Example_Aws_Sqs  : Cmd("sqs") {
 
     // Use case 5: receive 1 message
     val item1 = queue2.next()
-    println(queue2.getMessageBody(item1))
-    println(queue2.getMessageTag(item1, "type"))
+    println(item1?.getValue())
+    println(item1?.getTag("type"))
 
     // Use case 6: recieve 2 messages
     val items = queue2.next(2)

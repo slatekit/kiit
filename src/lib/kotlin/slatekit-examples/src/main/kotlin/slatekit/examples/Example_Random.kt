@@ -85,7 +85,7 @@ class Example_Random : Cmd("random") {
 
   /*
   //<doc:output>
-```java
+{{< highlight kotlin >}}
   Random STRINGS - UPPER + lower case
   len 3 : ndo
   len 6 : mRqDIz
@@ -114,7 +114,7 @@ class Example_Random : Cmd("random") {
   len 3 : n0i
   len 6 : m27h6h
   len n : k}y!m+fz)
-```
+{{< /highlight >}}
   //</doc:output>
   */
 }

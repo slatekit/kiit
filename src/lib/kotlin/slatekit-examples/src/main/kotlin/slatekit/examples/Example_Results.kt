@@ -137,7 +137,7 @@ class Example_Results : Cmd("results") , OutcomeBuilder {
 
     /*
 //<doc:output>
-```bat
+{{< highlight bat >}}
     success: true
     message: user created
     code   : 200

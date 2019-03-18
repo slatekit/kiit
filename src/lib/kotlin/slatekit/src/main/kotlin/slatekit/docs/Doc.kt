@@ -3,6 +3,7 @@ package slatekit.docs
 data class Doc(
         val name     : String,
         val proj     : String,
+        val namespace: String,
         val source   : String,
         val version  : String,
         val example  : String,
@@ -10,29 +11,19 @@ data class Doc(
         val multi    : Boolean,
         val readme   : Boolean,
         val group    : String,
-        val folder   : String,
         val jar      : String,
         val depends  : String,
         val desc     : String
 )
 {
 
-    fun namespace():String  {
-        //"slate.common.args.Args"
-        return source.substring(0, source.lastIndexOf("."))
-    }
-
-
     fun sourceFolder(files: DocFiles):String
     {
         //"slate.common.args.Args"
-        val path = namespace().replace(".", "/")
-        val proj = path.split('/')[0]
-        val nsfolder = path.split('/').last()
+        val path = namespace.replace(".", "/")
 
         // Adjust for file in root namespace ( e.g. slatekit.common.Result.kt )
-        val finalNSFolder = if(nsfolder.endsWith("common")) "" else nsfolder
-        val sourceFolderPath = "src/lib/${files.lang}/${proj}/" + files.buildSourceFolder(proj, finalNSFolder)
+        val sourceFolderPath = "src/lib/${files.lang}/${proj}/src/main/kotlin/${path}"
         return sourceFolderPath
     }
 

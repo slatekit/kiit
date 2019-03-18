@@ -1,25 +1,53 @@
----
-layout: start_page_mods_utils
-title: module Args
-permalink: /kotlin-mod-args
----
 
 # Args
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | A lexical command line argument parser with optional support for allowing a route/method call in the beginning | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.args  |
-| **source core** | slatekit.common.args.Args.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>A lexical command line argument parser with optional support for allowing a route/method call in the beginning</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.args</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.args.Args.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/args</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Args.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
@@ -27,23 +55,26 @@ import slatekit.common.args.ArgsSchema
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
-import slatekit.common.getOrElse
+import slatekit.results.Success
+import slatekit.results.Try
+import slatekit.results.getOrElse
 
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 n/a
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
     // Example:
@@ -99,12 +130,13 @@ n/a
 
     
 
-```
+{{< /highlight >}}
+
 
 
 ## Output
 
-```bat
+{{< highlight bat >}}
   RESULTS:
   action   :
   prefix   : '-'
@@ -208,5 +240,5 @@ n/a
   named    : 0
   index    : 1
 
-```
+{{< /highlight >}}
   

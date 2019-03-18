@@ -149,7 +149,7 @@ class Example_Config : Cmd("config") {
 
     /*
 //<doc:output>
-```bat
+{{< highlight bat >}}
    env.api: lc1
     db.enabled: true
 
@@ -186,7 +186,7 @@ class Example_Config : Cmd("config") {
 
     db user decrypted : root
     db pswd decrypted : 123456789
-```
+{{< /highlight >}}
 //</doc:output>
     */
 }

@@ -90,7 +90,7 @@ class Example_ConsoleWeb : Cmd("console-web") {
 
     /*
     //<doc:output>
-  ```java
+  {{< highlight kotlin >}}
     TITLE IS IN CAPS
     subtitle is in color cyan
     url is in blue
@@ -108,7 +108,7 @@ class Example_ConsoleWeb : Cmd("console-web") {
     http://www.slatekit.com
     visit us for more info
 
-  ```
+  {{< /highlight >}}
     //</doc:output>
     */
 }

@@ -139,7 +139,7 @@ class Example_Templates : Cmd("templates") {
 
 /*
 //<doc:output>
-```bat
+{{< highlight yaml >}}
   Case 1: Parse into individual parts
   type: txt, pos : 0, len : 3, text: Hi
   type: sub, pos : 5, len : 14, var: user.api
@@ -166,7 +166,7 @@ class Example_Templates : Cmd("templates") {
 
   Case 6: Resolve named template with custom variables
   Some(Hi batman, Welcome to Gotham.)
-```
+{{< /highlight >}}
 //</doc:output>
 */
 }

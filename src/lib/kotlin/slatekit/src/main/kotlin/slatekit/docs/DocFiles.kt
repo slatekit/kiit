@@ -7,7 +7,7 @@ class DocFiles(val ext: String = "kt", val lang: String = "kotlin") {
 
     fun buildComponentFolder(root: String, doc: Doc): String {
         // s"${root}\src\lib\scala\Slate.Common\src\main\scala
-        val componentFolder = doc.namespace().replace(".", "/")
+        val componentFolder = doc.namespace.replace(".", "/")
         val result = "${root}/src/lib/$lang/${doc.proj}/src/main/$lang/${componentFolder}"
         return result
     }

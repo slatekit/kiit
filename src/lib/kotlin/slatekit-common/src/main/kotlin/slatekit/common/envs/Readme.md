@@ -1,25 +1,53 @@
----
-layout: start_page_mods_utils
-title: module Env
-permalink: /kotlin-mod-env
----
 
 # Env
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | Environment selector and validator for environments such as (local, dev, qa, stg, prod) ) | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.envs  |
-| **source core** | slatekit.common.envs.Env.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Env.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Env.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Environment selector and validator for environments such as (local, dev, qa, stg, prod) )</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.envs</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.envs.Env.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/envs</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Env.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Env.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 import slatekit.common.envs.*
 
@@ -27,33 +55,36 @@ import slatekit.common.envs.*
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 n/a
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
 
     // CASE 1: Build a list of environments
     val envs1 = Envs(listOf(
-            Env("loc", Dev , desc = "Dev environment (local)"),
-            Env("dev", Dev , desc = "Dev environment (shared)"),
-            Env("qa1", Qa  , desc = "QA environment  (current release)"),
-            Env("qa2", Qa  , desc = "QA environment  (last release)"),
-            Env("stg", Uat , desc = "STG environment (demo)"),
-            Env("pro", Prod, desc = "LIVE environment")
+            Env("loc", EnvMode.Dev , desc = "Dev environment (local)"),
+            Env("dev", EnvMode.Dev , desc = "Dev environment (shared)"),
+            Env("qa1", EnvMode.Qat , desc = "QA environment  (current release)"),
+            Env("qa2", EnvMode.Qat , desc = "QA environment  (last release)"),
+            Env("stg", EnvMode.Uat , desc = "STG environment (demo)"),
+            Env("pro", EnvMode.Pro , desc = "LIVE environment")
     ))
 
     // CASE 2: Use the default list of environments ( same as above )
@@ -76,11 +107,12 @@ n/a
     // CASE 7: Get info about currently selected environment
     println( envs2.name    )
     println( envs2.isDev   )
-    println( envs2.isQat   )
+    println( envs2.isQat    )
     println( envs2.isUat   )
-    println( envs2.isPro   )
+    println( envs2.isPro  )
     println( envs2.current )
     
 
-```
+{{< /highlight >}}
+
 

@@ -1,55 +1,87 @@
----
-layout: start_page_mods_utils
-title: module Encrypt
-permalink: /kotlin-mod-encrypt
----
 
 # Encrypt
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | Encryption using AES | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.encrypt  |
-| **source core** | slatekit.common.encrypt.Encryptor.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Encryption using AES</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.encrypt</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.encrypt.Encryptor.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/encrypt" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/encrypt</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.encrypt.B64Java8
 
 
 // optional 
 import slatekit.core.cmds.Cmd
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 
   // SETUP 1: Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.
   // and use it as a singleton.
-  object TestEncryptor : Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+  object TestEncryptor : Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
 
 
   // SETUP 2: Create an instance encryptor
-  val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+  val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
 
   
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
     // CASE 1: Encrypt using AES ( text is base64 encoded without newlines )
@@ -73,5 +105,6 @@ import slatekit.common.Success
     println( encryptor.decrypt(encrypted) )
     
 
-```
+{{< /highlight >}}
+
 

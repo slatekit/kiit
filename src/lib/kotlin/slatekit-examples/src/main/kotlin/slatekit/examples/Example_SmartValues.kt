@@ -25,7 +25,7 @@ import slatekit.results.Outcome
 //</doc:import_examples>
 
 
-class Example_SmartStrings : Cmd("results") {
+class Example_SmartValues : Cmd("results") {
 
     override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:examples>
@@ -77,7 +77,7 @@ class Example_SmartStrings : Cmd("results") {
 
 /*
 //<doc:output>
-```bat
+{{< highlight yaml >}}
   value: batman@gotham.com
   valid?: true
   name: Email
@@ -89,7 +89,7 @@ class Example_SmartStrings : Cmd("results") {
   domain?: gotham.com
   dashed?: false
 
-```
+{{< /highlight >}}
   //</doc:output>
   */
 }

@@ -125,7 +125,7 @@ class Example_Args  : Cmd("args") {
 
   /*
   //<doc:output>
-```bat
+{{< highlight bat >}}
   RESULTS:
   action   :
   prefix   : '-'
@@ -229,7 +229,7 @@ class Example_Args  : Cmd("args") {
   named    : 0
   index    : 1
 
-```
+{{< /highlight >}}
   //</doc:output>
   */
   /**

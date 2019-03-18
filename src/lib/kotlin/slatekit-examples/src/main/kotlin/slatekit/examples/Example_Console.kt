@@ -54,24 +54,27 @@ class Example_Console : Cmd("console") {
     // Case 7: Subtitle ( Color Green )
     writer.success("success is in green")
 
-    // Case 8: Tab
+    // Case 8: Subtitle ( Color Green )
+    writer.text("normal text")
+
+    // Case 9: Tab
     writer.tab()
 
-    // Case 9: New line
+    // Case 10: New line
     writer.line()
 
-    // Case 10: Label "Key :"
+    // Case 11: Label "Key :"
     writer.label("Key")
 
-    // Case 11: Key/Value = "Name : Superman"
+    // Case 12: Key/Value = "Name : Superman"
     writer.keyValue("Name", "Superman")
     writer.lines(2)
 
-    // Case 12: List of items ( unordered and ordered )
+    // Case 13: List of items ( unordered and ordered )
     writer.list( listOf( 1, true , "www.slatekit.com", DateTime.now(), 12.34 ), true)
     writer.list( listOf( 2, false, "www.codehelix.co", DateTime.now(), 56.78 ), true)
 
-    // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
+    // Case 14: Supply a list of items to print specifying the semantic mode ( title, url, etc )
     writer.writeItems(listOf(
       SemanticOutput(SemanticText.Title     , "About App"                   , true),
       SemanticOutput(SemanticText.Subtitle  , "Example of Console component", true),
@@ -84,7 +87,7 @@ class Example_Console : Cmd("console") {
 
   /*
   //<doc:output>
-```java
+{{< highlight kotlin >}}
   TITLE IS IN CAPS
   subtitle is in color cyan
   url is in blue
@@ -102,7 +105,7 @@ class Example_Console : Cmd("console") {
   http://www.slatekit.com
   visit us for more info
 
-```
+{{< /highlight >}}
   //</doc:output>
   */
 }

@@ -20,6 +20,7 @@ import slatekit.common.metrics.MetricsLite
 
 //<doc:import_examples>
 import slatekit.common.queues.QueueSourceInMemory
+import slatekit.common.queues.QueueValueConverter
 import slatekit.core.cmds.Cmd
 import slatekit.core.common.AppContext
 import slatekit.workers.*
@@ -118,7 +119,11 @@ class Example_Workers : Cmd("utils") {
         // Queues have the interface QueueSource and there is a
         // sample QueueSourceDefault available for prototyping/unit-tests purposes.
         // This lambda specifies a converter for the message
-        val queue = QueueSourceInMemory<Int>("queue1", { item -> item.toString().toInt() })
+        val converter = object : QueueValueConverter<Int> {
+            override fun convertToString(item:Int?):String? = item?.toString()
+            override fun convertFromString(content:String?):Int? = content?.toInt()
+        }
+        val queue = QueueSourceInMemory<Int>("queue1", converter)
 
         // Add some sample items to the queue
         (1..10).forEachIndexed{ ndx, _ -> queue.send(ndx) }

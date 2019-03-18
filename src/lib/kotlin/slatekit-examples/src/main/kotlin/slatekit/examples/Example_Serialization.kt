@@ -76,12 +76,12 @@ class Example_Serialization : Cmd("serialization") {
 /*
 //<doc:output>
 
-```bat
+{{< highlight yaml >}}
 2, "superman@metro.com", "super", "man", true, 35
 3, "batman@gotham.com", "bat", "man", true, 35
-```
+{{< /highlight >}}
 
-```bat
+{{< highlight yaml >}}
 id = 2
 email = superman@metro.com
 firstName = super
@@ -96,13 +96,13 @@ firstName = bat
 lastName = man
 isMale = true
 age = 35
-```
+{{< /highlight >}}
 
-```bat
+{{< highlight yaml >}}
 [
   {"id" : 2, "email" : "superman@metro.com", "firstName" : "super", "lastName" : "man", "isMale" : true, "age" : 35},
   {"id" : 3, "email" : "batman@gotham.com", "firstName" : "bat", "lastName" : "man", "isMale" : true, "age" : 35}
 ]
-```
+{{< /highlight >}}
 //</doc:output>
 */

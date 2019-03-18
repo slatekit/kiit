@@ -1,52 +1,83 @@
----
-layout: start_page_mods_utils
-title: module Config
-permalink: /kotlin-mod-config
----
 
 # Config
 
-{: .table .table-striped .table-bordered}
-|:--|:--|
-| **desc** | Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys | 
-| **date**| 2018-11-16 |
-| **version** | 0.9.9  |
-| **jar** | slatekit.common.jar  |
-| **namespace** | slatekit.common.conf  |
-| **source core** | slatekit.common.conf.Config.kt  |
-| **source folder** | [src/lib/kotlin/slatekit/](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit/){:.url-ch}  |
-| **example** | [/src/apps/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Config.kt](https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Config.kt){:.url-ch} |
-| **depends on** |   |
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Thin wrapper over typesafe config with decryption support, uri loading, and mapping of database connections and api keys</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-15</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.9</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.conf</td>
+    </tr>
+    <tr>
+      <td><strong>source core</strong></td>
+      <td>slatekit.common.conf.Config.kt</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/conf</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Config.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Config.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+
 
 ## Import
-```kotlin 
+{{< highlight kotlin >}}
+
+
 // required 
 
 
 
 // optional 
-import slatekit.common.Result
-import slatekit.common.ResultEx
-import slatekit.common.Success
+import slatekit.results.Try
+import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
+import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.cmds.Cmd
 
 
 
-```
+
+{{< /highlight >}}
 
 ## Setup
-```kotlin
+{{< highlight kotlin >}}
+
 
 n/a
 
-```
+
+{{< /highlight >}}
 
 ## Usage
-```kotlin
+{{< highlight kotlin >}}
 
 
         // CASE 1: Load up config from resources directory
@@ -63,13 +94,13 @@ n/a
         println("double: " + conf.getDouble("dVal"))
 
         // CASE 3: Get typed value: nullable e.g. Int?
-        println("bool  : " + conf.getBoolOpt("bVal"))
-        println("string: " + conf.getStringOpt("sVal"))
-        println("short : " + conf.getShortOpt("hVal"))
-        println("int   : " + conf.getIntOpt("iVal"))
-        println("long  : " + conf.getLongOpt("lVal"))
-        println("float : " + conf.getFloatOpt("fVal"))
-        println("double: " + conf.getDoubleOpt("dVal"))
+        println("bool  : " + conf.getBoolOrNull("bVal"))
+        println("string: " + conf.getStringOrNull("sVal"))
+        println("short : " + conf.getShortOrNull("hVal"))
+        println("int   : " + conf.getIntOrNull("iVal"))
+        println("long  : " + conf.getLongOrNull("lVal"))
+        println("float : " + conf.getFloatOrNull("fVal"))
+        println("double: " + conf.getDoubleOrNull("dVal"))
 
         // CASE 4: Get typed value: with default value if unavailable.
         println("bool  : " + conf.getBoolOrElse("bVal", false))
@@ -143,19 +174,20 @@ n/a
         // CASE 10: Decryp encrypted strings in the config file
         // e.g.
         // db.user = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
-        val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292")
+        val encryptor = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8)
         val confs5 = ConfFuncs.loadWithFallbackConfig("env.qa1.conf", "env.conf", enc = encryptor)
         println("db user decrypted : " + confs5.getString("db.user"))
         println("db pswd decrypted : " + confs5.getString("db.pswd"))
         println()
         
 
-```
+{{< /highlight >}}
+
 
 
 ## Output
 
-```bat
+{{< highlight bat >}}
    env.api: lc1
     db.enabled: true
 
@@ -192,4 +224,4 @@ n/a
 
     db user decrypted : root
     db pswd decrypted : 123456789
-```
+{{< /highlight >}}
