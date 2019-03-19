@@ -93,12 +93,12 @@
           
           <section id="about" class="about no-padding-bottom">
               <div class="container">
-                  
-
-<p><header>
+                  <p><header>
   <h2 class="with-bg-text has-line" data-text="Overview">Overview</h2>
 </header>
-Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+To get started with Slate Kit, first take a look at the overview page.
+This will provide info on the goals, use-cases, technology, philosophy
+and the components offered.
 <br/><br/></p>
 
 <p><header>
@@ -113,17 +113,37 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#status">Setup</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#install">Projects</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Results</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Utilities</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Concepts</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Components</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>7</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Samples</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
 </table>
@@ -132,110 +152,235 @@ Table of contents for this page
 <br/><br/><br/></p>
 
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Heading 1">Heading 1</h2>
+  <h2 class="with-bg-text has-line" data-text="Setup">Setup</h2>
 </header>
-coming soon</p>
+Review the setup page for requirements, dependencies, supported versions
+of Kotlin, MySql, and optional tools. You can also find how to donwload
+Slate Kit binaries using Bintray, Github.
+<br/><br/>
+<a href="" class="more"><span class="btn btn-template">see setup</span></a>
+<br/><br/>
+<br/><br/></p>
 
-<p><table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>jar</strong></td>
-        <td>slatekit.{COMPONENT_ID}.jar</td>
-    </tr>
-    <tr>
-        <td><strong>package</strong></td>
-        <td>slatekit.{COMPONENT_ID}</td>
-    </tr>
-    <tr>
-        <td><strong>source</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit.{COMPONENT_ID}</a></td>
-    </tr>
-    <tr>
-        <td><strong>example</strong></td>
-        <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_{COMPONENT_ID}.kt</a> : Small reference example on setup/usage</td>
-    </tr>
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Projects">Projects</h2>
+</header>
+All the components available are located in various projects for the purpose of organization and modularity. Take a look at the projects to get an understanding of the purpose of each project and the dependencies between them. You can use as little of Slate Kit or as much as you need.
+<strong>The simplest way to start is with the Results component, followed by the Utilities</strong>. Then you can proceed to checking out the concepts, sample apps and using just the individual libraries that you need.
+<br/><br/>
+<table class="table table-bordered">
+  <tr>
+    <td ><strong>Component</strong></td>
+    <td ><strong>Docs</strong></td>
+    <td ><strong>Source</strong></td>
+    <td ><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/target.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-app.html">Results</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-results</a></strong></td>
+    <td>Models successes and failures with optional status codes</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/multitool.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="utils.html">Common</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-common</a></strong></td>
+    <td>General purpose utility components to extend the standard library</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/desktop.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-app.html">App</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-app</a></strong></td>
+    <td>An app template with support for args, envs, logs, configs, help and more</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/webapi.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-apis.html">API</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-apis</a></strong></td>
+    <td>Components for building Univeral APIS that can run on the CLI and Web</td>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/terminal.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-shell.html">CLI</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-cli</a></strong></td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/cloud_sync.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-shell.html">Cloud</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-cloud</a></strong></td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/gears.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-jobs.html">Jobs</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-jobs</a></strong></td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/layers.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-orm.html">Entities</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-entities</a></strong></td>
+    <td>Light-weight ORM with a DDD/Entity Services approach </td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/server.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-server.html">Server</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-server</a></strong></td>
+    <td>General purpose utility components to extend the standard library</td>
+  </tr>
 </table>
-<br/><br/><br/>
-<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
-<br/><br/><br/></p>
+<a href="" class="more"><span class="btn btn-template">see overview</span></a>
+<br/><br/>
+<br/><br/></p>
 
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Heading 2">Heading 2</h2>
+  <h2 class="with-bg-text has-line" data-text="Results">Results</h2>
 </header>
-coming soon
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">quick_sample</span>() {
-        
-    }</code></pre></div>
-<br/><br/><br/>
-<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
-<br/><br/><br/></p>
+The Result component is used throughout Slate Kit to model Successes and Failures in code using optional status codes.
+<br/><br/>
+<ol>
+    <li>Has 0 dependencies</li>
+    <li>Can be used in Android + Server </li>
+    <li>Is used throughout all other projects</li>
+    <li>Has typealiases for further simplifying usage</li>
+</ol>
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <td><strong>package</strong></td>
+    <td>slatekit.results</td>
+  </tr>
+  <tr>
+    <td><strong>jar</strong></td>
+    <td>slatekit.results.jar</td>
+  </tr>
+  <tr>
+    <td><strong>git</strong></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit-result">slatekit-result</a></td>
+  </tr>
+  <tr>
+    <td><strong>docs</strong></td>
+    <td><a class="url-ch" href="core/result">Results</a></td>
+  </tr>
+  <tr>
+    <td><strong>cost</strong></td>
+    <td>free ( check license )</td>
+  </tr>
+  <tr>
+    <td><strong>uses</strong></td>
+    <td>none</td>
+  </tr>
+  <tr>
+      <td><strong>example</strong></td>
+      <td><a class="url-ch" href="">Example_Result.kt</a></td>
+  </tr>
+</table>
+<br/><br/>
+<a href="" class="more"><span class="btn btn-template">see result component</span></a>
+<br/><br/>
+<br/><br/></p>
 
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Heading 3">Heading 3</h2>
+  <h2 class="with-bg-text has-line" data-text="Utilities">Utilities</h2>
 </header>
-Details on using the features here.
-coming soon</p>
+The Utilities supplement the Kotlin standard library by offering a set of powerful general purpose components that can be used for any application. Thse are located in the <a class="url-ch" href="util/utils.html">SlateKit.Common</a>project and used by all other architectural components.
+<br/><br/>
+<ol>
+    <li>Contains several ( almost 24+ ) utilities</li>
+    <li>Many utilities are very general purpose</li>
+    <li>Can be used in Android + Server </li>
+    <li>Only depends on the Slate Kit Results component</li>
+</ol>
 
-<p><table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Section</strong></td>
-        <td><strong>Name</strong></td>
-        <td><strong>Description</strong></td>
-        <td><strong>More</strong></td>
-    </tr>
+<table class="table table-bordered table-striped">
+  <tr>
+    <td><strong>package</strong></td>
+    <td>slatekit.common</td>
+  </tr>
+  <tr>
+    <td><strong>jar</strong></td>
+    <td>slatekit.common.jar</td>
+  </tr>
+  <tr>
+    <td><strong>git</strong></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-common</a></td>
+  </tr>
+  <tr>
+    <td><strong>docs</strong></td>
+    <td><a class="url-ch" href="utils/utils.html">Common</a></td>
+  </tr>
+  <tr>
+    <td><strong>cost</strong></td>
+    <td>free ( check license )</td>
+  </tr>
+  <tr>
+    <td><strong>uses</strong></td>
+    <td>slatekit-results</td>
+  </tr>
+  <tr>
+      <td><strong>example</strong></td>
+      <td><a class="url-ch" href=""></a></td>
+  </tr>
+</table>
+<br/><br/>
+<a href="" class="more"><span class="btn btn-template">see overview</span></a>
+<br/><br/>
+<br/><br/></p>
+
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Concepts">Concepts</h2>
+</header>
+There are some key concepts in Slate Kit that are used throughout the project in various components. They are fairly straigh-forward, but understanding them will make reading the docs even easier.
+<br/><br/>
+<a href="" class="more"><span class="btn btn-template">see concepts</span></a>
+<br/><br/>
+<br/><br/></p>
+
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Components">Components</h2>
+</header>
+Review the setup page for requirements, dependencies, supported versions
+of Kotlin, MySql, and optional tools. You can also find how to donwload
+Slate Kit binaries using Bintray, Github.
+<br/><br/>
+<a href="" class="more"><span class="btn btn-template">see overview</span></a>
+<br/><br/>
+<br/><br/></p>
+
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Samples">Samples</h2>
+</header>
+There are multiple examples, unit-tests, sample applications, and docs available to fully understand how to use the Slate Kit components.
+<br/><br/>
+<table class="table table-bordered">
     <tr>
         <td><strong>1</strong></td>
-        <td><strong>Sub-Heading 1</strong></td>
-        <td>Brief description of Sub-Heading 1</td>
-        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Docs</strong></td>
+        <td><img src="assets/media/img/white/manual.png" width="50" alt=""></td>
+        <td> Building mobile apps? Leverage reusable components for both Android and Server</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong>Sub-Heading 2</strong></td>
-        <td>Brief description of Sub-Heading 2</td>
-        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Sources</strong></td>
+        <td><img src="assets/media/img/white/text.png" width="50" alt=""></td>
+        <td> Start with a strong base architecture to quickly build high-quality MVP that can scale</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong>Sub-Heading 3</strong></td>
-        <td>Brief description of Sub-Heading 3</td>
-        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Samples</strong></td>
+        <td><img src="assets/media/img/white/desktop.png" width="50" alt=""></td>
+        <td>Support services and more offerings coming soon</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Contact us</strong></td>
+        <td><img src="assets/media/img/white/email.png" width="50" alt=""></td>
+        <td>Support services and more offerings coming soon</td>
     </tr>
 </table>
-<br/></p>
-
-<h2 id="sub-heading1">Sub-heading 1</h2>
-
-<p>coming soon
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">setup</span>() {
-        
-    }</code></pre></div>
-<a href="core/cli#details" class="more"><span class="btn btn-primary">Back to details</span></a>
-<a href="core/cli#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-<br/><br/><br/></p>
-
-<h2 id="sub-heading2">Sub-heading 2</h2>
-
-<p>coming soon
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">setup</span>() {
-        
-    }</code></pre></div>
-<a href="core/cli#details" class="more"><span class="btn btn-primary">Back to details</span></a>
-<a href="core/cli#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-<br/><br/><br/></p>
-
-<h2 id="sub-heading3">Sub-heading 3</h2>
-
-<p>coming soon
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">setup</span>() {
-        
-    }</code></pre></div>
-<a href="core/cli#details" class="more"><span class="btn btn-primary">Back to details</span></a>
-<a href="core/cli#overview" class="more"><span class="btn btn-primary">Back to top</span></a>
-<br/><br/><br/></p>
-
-<br/><br/><br/>
-<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
-<br/><br/><br/>
+<a href="" class="more"><span class="btn btn-template">see overview</span></a>
+<br/><br/>
+<br/><br/></p>
 
               </div>
           </section>

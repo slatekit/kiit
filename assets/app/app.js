@@ -122,9 +122,9 @@ var codeHelixMeta = {
   menu: 
   [
 	{ name: "Home"          ,  page: "index.html"         , children: null },
-	{ name: "Overview"      ,  page: "overview.html"      , children: null },
-	{ name: "Setup"         ,  page: "setup.html"  , children: null },
-	{ name: "Get Started"   ,  page: "components.html"    , children: null },
+	{ name: "Overview"      ,  page: "info/overview"      , children: null },
+	{ name: "Setup"         ,  page: "info/setup"  , children: null },
+	{ name: "Get Started"   ,  page: "info/start"    , children: null },
 	{ name: "Architecture"  ,  page: "core/kotlin-infra.html"         , children: null },
 	{ name: "Utilities"     ,  page: "utils/utils.html"         , children: null },
 	{ name: "Features"      ,  page: "features.html"      , children: null },
