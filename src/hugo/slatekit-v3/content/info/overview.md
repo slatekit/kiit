@@ -17,7 +17,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">1. Who</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#who">1. Who</a></strong></td>
         <td><strong>Who is Slate Kit for?</strong>
             <br/>
             Hobbyists, small-businesses, start-ups and event enterprise companies. 
@@ -25,7 +25,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#who" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">2. What</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#what">2. What</a></strong></td>
         <td><strong>What is Slate Kit exactly, what is the tech, and how is it structured?</strong>
             <br/>
             Modular utils and architecture components for both Android + Server, in 100% Kotlin
@@ -33,7 +33,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#what" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">3. Where</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#where">3. Where</a></strong></td>
         <td><strong>Where can I find sources, binaries, resources, discussions?</strong>
             <br/>
             Docs on site, Sources on Git, binaries on bintray, social media
@@ -41,7 +41,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#where" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">4. When</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#when">4. When</a></strong></td>
         <td><strong>When was Slate Kit created and how stable is it?</strong>
             <br/>
             Been around for 3 years, extracted from a production app, soon to release a stable 1.0.0.
@@ -49,7 +49,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#when" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">5. Why</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#why">5. Why</a></strong></td>
         <td><strong>Why would you use / not use Slate Kit, what are alternatives?</strong>
             <br/>
             Save time, effort, and money. Use utilities and components. Designed to be cloud-agnostic.
@@ -57,7 +57,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#why" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">6. How</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#how">6. How</a></strong></td>
         <td><strong>How do I use Slate Kit?</strong>
             <br/>
             Reference libraries via gradle, check docs, review sample apps, and examples provided
@@ -65,7 +65,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#how" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#status">7. Compare</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#compare">7. Compare</a></strong></td>
         <td><strong>What are the alternatives and how does Slate Kit compare?</strong>
             <br/>
             Java Spring Source, Vert.x. Slate Kit is more like a library, simpler, 100% Kotlin, and can be used in Android
@@ -73,7 +73,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#compare" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#install">8. Cost</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#cost">8. Cost</a></strong></td>
         <td><strong>What is the cost?</strong>
             <br/>
             Free! Open-Core: Open-source version. Pro, enterprise coming soon.
@@ -81,7 +81,15 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><a href="info/overview#cost" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong><a class="url-ch" href="info/overview#install">9. Philosophy</a></strong></td>
+        <td><strong><a class="url-ch" href="info/overview#tech">9. Tech</a></strong></td>
+        <td><strong>Technology being used</strong>
+            <br/>
+            What is all the technology behind building Slat Kit?
+        </td>
+        <td><a href="info/overview#tech" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong><a class="url-ch" href="info/overview#philosophy">10. Philosophy</a></strong></td>
         <td><strong>Philosophy</strong>
             <br/>
             What is the philosophy behind building Slat Kit?
@@ -306,6 +314,19 @@ Since Slate Kit is <strong>100% Kotlin</strong> and runs on the JVM, it only mak
 </table>
 {{% section-end mod="info/index" %}}
 
+{{% heading name="Tech" %}}
+Slate Kit is built for the <strong>JVM</strong> using <strong>100% Kotlin</strong>. Here are some of the other tools/libraries/integrations available with Slate Kit.
+{{% break %}}
+<table class="table table-bordered">
+    <tr><td>Libs</td><td><strong>Kotlin</strong></td><td> All Slate Kit projects/components are in Kotlin</td></tr>
+    <tr><td>HTTP</td><td><strong>Ktor</strong></td><td>  Used as the Http server for Kotlin </td></tr>
+    <tr><td>DB</td><td><strong>MySql</strong></td><td>The Slate Kit ORM ( Entity Services ) integrates with MySql ( PostGres coming later ) </td></tr>
+    <tr><td>Cloud</td><td><strong>AWS</strong></td><td>Integrates with S3, SQS for file storage and queues. </td></tr>
+    <tr><td>SMS</td><td><strong>Twilio</strong></td><td>Used for SMS / Text messages< </td></tr>
+    <tr><td>Email</td><td><strong>SendGrid</strong></td><td>Used for sending email </td></tr>
+    <tr><td>Push</td><td><strong>Push</strong></td><td>Integrates with Google Cloud Messaging for Android </td></tr>
+  </table>
+{{% section-end mod="info/index" %}}
 
 {{% heading name="Philosophy" %}}
 <table class="table table-bordered table-striped">
