@@ -131,32 +131,7 @@ Slate Kit is made of 10+ projects, where each project/component is typically a h
 
 
 {{% heading name="Where to find resources?" %}}
-<table class="table table-bordered">
-    <tr>
-        <td><strong>1</strong></td>
-        <td><strong>Docs</strong></td>
-        <td><img src="assets/media/img/white/manual.png" width="50" alt=""></td>
-        <td> Building mobile apps? Leverage reusable components for both Android and Server</td>
-    </tr>
-    <tr>
-        <td><strong>2</strong></td>
-        <td><strong>Sources</strong></td>
-        <td><img src="assets/media/img/white/text.png" width="50" alt=""></td>
-        <td> Start with a strong base architecture to quickly build high-quality MVP that can scale</td>
-    </tr>
-    <tr>
-        <td><strong>3</strong></td>
-        <td><strong>Samples</strong></td>
-        <td><img src="assets/media/img/white/desktop.png" width="50" alt=""></td>
-        <td>Support services and more offerings coming soon</td>
-    </tr>
-    <tr>
-        <td><strong>4</strong></td>
-        <td><strong>Contact us</strong></td>
-        <td><img src="assets/media/img/white/email.png" width="50" alt=""></td>
-        <td>Support services and more offerings coming soon</td>
-    </tr>
-</table>
+{{% sk-resources %}}
 {{% section-end mod="info/index" %}}
 
 
