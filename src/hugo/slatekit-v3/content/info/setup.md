@@ -75,7 +75,6 @@ and is the build tool for Slate Kit.
 The software below is recommended but not required. 
 Slate Kit supports MySql with support for PostGres and Sql Server coming later. Having the MySql Java Connector will 
 help with the sample apps and is also needed for the ORM ( entities ).
-
 <table class="table table-bordered table-striped">
     <tr class="">
         <td><strong>Tech</strong></td>

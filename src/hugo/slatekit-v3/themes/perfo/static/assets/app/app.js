@@ -123,11 +123,11 @@ var codeHelixMeta = {
   [
 	{ name: "Home"          ,  page: "index.html"         , children: null },
 	{ name: "Overview"      ,  page: "info/overview"      , children: null },
-	{ name: "Setup"         ,  page: "info/setup"         , children: null },
+	//{ name: "Setup"         ,  page: "info/setup"         , children: null },
 	{ name: "Get Started"   ,  page: "info/start"         , children: null },
 	{ name: "Architecture"  ,  page: "infra.html"         , children: null },
 	{ name: "Utilities"     ,  page: "utils/args"         , children: null },
-	{ name: "Features"      ,  page: "features.html"      , children: null },
+	//{ name: "Features"      ,  page: "features.html"      , children: null },
 	{ name: "Releases"      ,  page: "info/releases"      , children: null },	
 	{ name: "Git"           ,  page: "https://github.com/code-helix/slatekit", children: null },
 	{ name: "More"          ,  page: "more.html"          , children: null }
