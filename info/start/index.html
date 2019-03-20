@@ -93,7 +93,9 @@
           
           <section id="about" class="about no-padding-bottom">
               <div class="container">
-                  <p><header>
+                  
+
+<p><header>
   <h2 class="with-bg-text has-line" data-text="Overview">Overview</h2>
 </header>
 To get started with Slate Kit, first take a look at the overview page.
@@ -113,36 +115,41 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="core/cli#status">Install</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Projects</a></strong></td>
-        <td>Installation instructions and references to sources</td>
+        <td><strong><a class="url-ch" href="core/cli#status">Setup</a></strong></td>
+        <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Results</a></strong></td>
-        <td>Lists all the Slate Kit and third-party dependencies</td>
+        <td><strong><a class="url-ch" href="core/cli#install">Available</a></strong></td>
+        <td>Overview of all the modules available</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Utilities</a></strong></td>
-        <td>Lists all the Slate Kit and third-party dependencies</td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Results</a></strong></td>
+        <td>Start with the Results component used throughout the project</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Concepts</a></strong></td>
-        <td>Lists all the Slate Kit and third-party dependencies</td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Utilities</a></strong></td>
+        <td>Use the common component for 24+ utilities for both Android + Server</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Components</a></strong></td>
-        <td>Lists all the Slate Kit and third-party dependencies</td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Concepts</a></strong></td>
+        <td>Some general concepts before diving into the other modules</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Components</a></strong></td>
+        <td>All the components available and their artifacts</td>
+    </tr>
+    <tr>
+        <td><strong>8</strong></td>
         <td><strong><a class="url-ch" href="core/cli#requires">Samples</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
@@ -152,18 +159,131 @@ Table of contents for this page
 <br/><br/><br/></p>
 
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Setup">Setup</h2>
+  <h2 class="with-bg-text has-line" data-text="Install">Install</h2>
 </header>
-Review the setup page for requirements, dependencies, supported versions
-of Kotlin, MySql, and optional tools. You can also find how to donwload
-Slate Kit binaries using Bintray, Github.
-<br/><br/>
-<a href="" class="more"><span class="btn btn-template">see setup</span></a>
-<br/><br/>
+All software below is required to run Kotlin and Slate Kit. Kotlin is dependent on Java. Gradle is used to build and package Kotlin projects and is the build tool for Slate Kit.
 <br/><br/></p>
 
+<h3 id="required">Required</h3>
+
+<p><table class="table table-bordered table-striped">
+    <tr class="">
+        <td><strong>Tech</strong></td>
+        <td><strong>Version</strong></td>
+        <td><strong>About</strong></td>
+        <td><strong>Link</strong></td>
+    </tr>
+    <tr class="">
+        <td><strong>Java</strong></td>
+        <td>1.8</td>
+        <td>Java</td>
+        <td><a class="url-ch" href="#installation">see below</a></td>
+    </tr>
+    <tr class="">
+        <td><strong>Kotlin</strong></td>
+        <td>1.1.2</td>
+        <td>Kotlin</td>
+        <td><a class="url-ch" href="#installation">see below</a></td>
+    </tr>
+</table>
+<br/><br/></p>
+
+<h3 id="suggested">Suggested</h3>
+
+<p>The software below is recommended but not required. Slate Kit supports MySql with support for PostGres and Sql Server coming later. Having the MySql Java Connector will help with the sample apps and is also needed for the ORM ( entities ).
+<table class="table table-bordered table-striped">
+    <tr class="">
+        <td><strong>Tech</strong></td>
+        <td><strong>Version</strong></td>
+        <td><strong>About</strong></td>
+        <td><strong>Link</strong></td>
+    </tr>
+    <tr>
+        <td><strong>IntelliJ</strong></td>
+        <td>2017.2</td>
+        <td>IDE</td>
+        <td><a class="url-ch" href="https://www.jetbrains.com/idea/download/">download</a></td>
+    </tr>
+    <tr>
+        <td><strong>Gradle</strong></td>
+        <td>3.5</td>
+        <td>Build tool</td>
+        <td><a class="url-ch" href="#installation">see below</a></td>
+    </tr>
+</table>
+<br/><br/></p>
+
+<h3 id="optional">Optional</h3>
+
+<p>Slate Kit supports building Web APIs using Spark Java, Cloud Services ( Files, Queues ) using AWS and databases using MySql. The following are needed if you plan on using any of these.
+<table class="table table-bordered table-striped">
+    <tr class="">
+        <td><strong>Tech</strong></td>
+        <td><strong>Version</strong></td>
+        <td><strong>About</strong></td>
+        <td><strong>Link</strong></td>
+    </tr>
+    <tr>
+        <td><strong>MySql</strong></td>
+        <td>5.7</td>
+        <td>Database Server</td>
+        <td><a class="url-ch" href="https://dev.mysql.com/downloads/mysql/">download</a></td>
+    </tr>
+    <tr>
+        <td><strong>MySql Connector</strong></td>
+        <td>5.7</td>
+        <td>For database connectivity and orm</td>
+        <td><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
+    </tr>
+    <tr>
+        <td><strong>Spark Java</strong></td>
+        <td>2.6</td>
+        <td>For Slate API Server</td>
+        <td><a class="url-ch" href="http://sparkjava.com/">visit</a></td>
+    </tr>
+    <tr>
+        <td><strong>AWS Sdk</strong></td>
+        <td>1.10.55</td>
+        <td>File Storage( S3 ), Queues( SQS )</td>
+        <td><a class="url-ch" href="https://aws.amazon.com/sdk-for-java/">download</a></td>
+    </tr>
+</table>
+<br/><br/><br/>
+<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
+<br/><br/><br/></p>
+
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Projects">Projects</h2>
+  <h2 class="with-bg-text has-line" data-text="Setup">Setup</h2>
+</header>
+You can reference all the Slate Kit modules in gradle. The binaries are available from <strong>bintray</strong>.
+First you just have to include the Slate Kit maven url.
+Only the results, utilities modules are listed here for sample purposes.
+You can include additional projects
+<br/><br/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories {
+        maven { url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> }
+    }
+
+    dependencies {
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>        
+        <span style="color:#75715e">// slatekit-results: Result&lt;T,E&gt; to model successes/failures with optional status codes
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-results:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+        
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-common:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+        
+        <span style="color:#75715e">// Misc architecture components ( all depend on results/common components above )
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Use only what you need ( see artifacts next section )
+</span><span style="color:#75715e"></span>
+    }</code></pre></div>
+<br/><br/><br/>
+<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
+<br/><br/><br/></p>
+
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Available">Available</h2>
 </header>
 All the components available are located in various projects for the purpose of organization and modularity. Take a look at the projects to get an understanding of the purpose of each project and the dependencies between them. You can use as little of Slate Kit or as much as you need.
 <strong>The simplest way to start is with the Results component, followed by the Utilities</strong>. Then you can proceed to checking out the concepts, sample apps and using just the individual libraries that you need.
@@ -238,12 +358,17 @@ All the components available are located in various projects for the purpose of 
 </header>
 The Result component is used throughout Slate Kit to model Successes and Failures in code using optional status codes.
 <br/><br/>
-<ol>
-    <li>Has 0 dependencies</li>
-    <li>Can be used in Android + Server </li>
-    <li>Is used throughout all other projects</li>
-    <li>Has typealiases for further simplifying usage</li>
-</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories {
+        maven { url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> }
+    }
+
+    dependencies {
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>        
+        <span style="color:#75715e">// slatekit-results: Result&lt;T,E&gt; to model successes/failures with optional status codes
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-results:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+    }</code></pre></div>
 
 <table class="table table-bordered table-striped">
   <tr>
@@ -275,6 +400,12 @@ The Result component is used throughout Slate Kit to model Successes and Failure
       <td><a class="url-ch" href="">Example_Result.kt</a></td>
   </tr>
 </table>
+<ol>
+    <li>Has 0 dependencies</li>
+    <li>Can be used in Android + Server </li>
+    <li>Is used throughout all other projects</li>
+    <li>Has typealiases for further simplifying usage</li>
+</ol>
 <br/><br/>
 <a href="" class="more"><span class="btn btn-template">see result component</span></a>
 <br/><br/>
@@ -285,12 +416,17 @@ The Result component is used throughout Slate Kit to model Successes and Failure
 </header>
 The Utilities supplement the Kotlin standard library by offering a set of powerful general purpose components that can be used for any application. Thse are located in the <a class="url-ch" href="util/utils.html">SlateKit.Common</a>project and used by all other architectural components.
 <br/><br/>
-<ol>
-    <li>Contains several ( almost 24+ ) utilities</li>
-    <li>Many utilities are very general purpose</li>
-    <li>Can be used in Android + Server </li>
-    <li>Only depends on the Slate Kit Results component</li>
-</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories {
+        maven { url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> }
+    }
+
+    dependencies {
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>        
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-common:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+    }</code></pre></div>
 
 <table class="table table-bordered table-striped">
   <tr>
@@ -322,6 +458,12 @@ The Utilities supplement the Kotlin standard library by offering a set of powerf
       <td><a class="url-ch" href=""></a></td>
   </tr>
 </table>
+<ol>
+    <li>Contains several ( almost 24+ ) utilities</li>
+    <li>Many utilities are very general purpose</li>
+    <li>Can be used in Android + Server </li>
+    <li>Only depends on the Slate Kit Results component</li>
+</ol>
 <br/><br/>
 <a href="" class="more"><span class="btn btn-template">see overview</span></a>
 <br/><br/>
@@ -332,17 +474,127 @@ The Utilities supplement the Kotlin standard library by offering a set of powerf
 </header>
 There are some key concepts in Slate Kit that are used throughout the project in various components. They are fairly straigh-forward, but understanding them will make reading the docs even easier.
 <br/><br/>
+<table class="table table-bordered table-striped">
+    <tr class="">
+        <td><strong>Number</strong></td>
+        <td><strong>Component</strong></td>
+        <td><strong>Source</strong></td>
+        <td><strong>Example</strong></td>
+        <td><strong>Purpose</strong></td>
+    </tr>
+    <tr>
+        <td><strong>IntelliJ</strong></td>
+        <td>2017.2</td>
+        <td>IDE</td>
+        <td>IDE</td>
+        <td><a class="url-ch" href="https://www.jetbrains.com/idea/download/">download</a></td>
+    </tr>
+    <tr>
+        <td><strong>IntelliJ</strong></td>
+        <td>2017.2</td>
+        <td>IDE</td>
+        <td>IDE</td>
+        <td><a class="url-ch" href="https://www.jetbrains.com/idea/download/">download</a></td>
+    </tr>
+    <tr>
+        <td><strong>Gradle</strong></td>
+        <td>3.5</td>
+        <td>Build tool</td>
+        <td>IDE</td>
+        <td><a class="url-ch" href="#installation">see below</a></td>
+    </tr>
+</table>
 <a href="" class="more"><span class="btn btn-template">see concepts</span></a>
 <br/><br/>
 <br/><br/></p>
 
 <p><header>
-  <h2 class="with-bg-text has-line" data-text="Components">Components</h2>
+  <h2 class="with-bg-text has-line" data-text="Projects">Projects</h2>
 </header>
-Review the setup page for requirements, dependencies, supported versions
-of Kotlin, MySql, and optional tools. You can also find how to donwload
-Slate Kit binaries using Bintray, Github.
+All the components available are located in various projects for the purpose of organization and modularity. Take a look at the projects to get an understanding of the purpose of each project and the dependencies between them. You can use as little of Slate Kit or as much as you need.
+<strong>The simplest way to start is with the Results component, followed by the Utilities</strong>. Then you can proceed to checking out the concepts, sample apps and using just the individual libraries that you need.
 <br/><br/>
+<table class="table table-bordered">
+  <tr>
+    <td ><strong>Component</strong></td>
+    <td ><strong>Docs</strong></td>
+    <td ><strong>Source</strong></td>
+    <td ><strong>Artifact</strong></td>
+    <td ><strong>Version</strong></td>
+    <td ><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/target.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-app.html">Results</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-results</a></strong></td>
+    <td>com.slatekit:slatekit-results</td>
+    <td>0.9.9</td>
+    <td>Models successes and failures with optional status codes</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/multitool.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="utils.html">Common</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-common</a></strong></td>
+    <td>com.slatekit:slatekit-common</td>
+    <td>0.9.9</td>
+    <td>General purpose utility components to extend the standard library</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/desktop.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-app.html">App</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-app</a></strong></td>
+    <td>com.slatekit:slatekit-app</td>
+    <td>0.9.9</td>
+    <td>An app template with support for args, envs, logs, configs, help and more</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/webapi.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-apis.html">API</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-apis</a></strong></td>
+    <td>com.slatekit:slatekit-apis</td>
+    <td>0.9.9</td>
+    <td>Components for building Univeral APIS that can run on the CLI and Web</td>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/terminal.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-shell.html">CLI</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-cli</a></strong></td>
+    <td>com.slatekit:slatekit-cli</td>
+    <td>0.9.9</td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/cloud_sync.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-shell.html">Cloud</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-cloud</a></strong></td>
+    <td>com.slatekit:slatekit-cloud</td>
+    <td>0.9.9</td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/gears.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-jobs.html">Workers</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-jobs</a></strong></td>
+    <td>com.slatekit:slatekit-workers</td>
+    <td>0.9.9</td>
+    <td>A base template to build command line interaces for accessing your components</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/layers.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-orm.html">Entities</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-entities</a></strong></td>
+    <td>com.slatekit:slatekit-entities</td>
+    <td>0.9.9</td>
+    <td>Light-weight ORM with a DDD/Entity Services approach </td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/server.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-server.html">Server</a></strong></td>
+    <td><strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-server</a></strong></td>
+    <td>com.slatekit:slatekit-server</td>
+    <td>0.9.9</td>
+    <td>General purpose utility components to extend the standard library</td>
+  </tr>
+</table>
 <a href="" class="more"><span class="btn btn-template">see overview</span></a>
 <br/><br/>
 <br/><br/></p>
