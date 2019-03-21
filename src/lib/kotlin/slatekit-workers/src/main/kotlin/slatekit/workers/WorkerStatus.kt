@@ -11,12 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.workers.core
+package slatekit.workers
 
 import slatekit.common.DateTime
 import slatekit.common.Status
 
-data class RunStatus(
+data class WorkerStatus(
     val id: String = "",
     val name: String = "",
     val lastRunTime: DateTime = DateTime.now(),

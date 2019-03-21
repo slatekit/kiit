@@ -12,18 +12,16 @@ mantra: Simplicity above all else
  */
 package slatekit.workers
 
-import slatekit.workers.core.QueueInfo
 import java.util.*
 
 /**
  * Contains the collection of all the available queues and provides
  * functionality to lookup, and get the next queue while factoring in queue priority
  */
-class Queues(val queues: List<QueueInfo>) {
+class Queues(val queues: List<Queue>, applyPrioritization:Boolean = true) {
 
-    val prioritizedQueues: List<QueueInfo> =
-        prioritize(queues)
-    val lookup: Map<String, QueueInfo> = prioritizedQueues.map { it -> it.name to it }.toMap()
+    val prioritizedQueues: List<Queue> = if(applyPrioritization) prioritize(queues) else queues
+    val lookup: Map<String, Queue> = prioritizedQueues.map { it -> it.name to it }.toMap()
     val random = Random()
 
     fun size(): Int = queues.size
@@ -31,24 +29,16 @@ class Queues(val queues: List<QueueInfo>) {
     /**
      * gets the next queue based on weighted priority of the queues
      */
-    fun next(): QueueInfo {
-        val ndx = nextRandomQueuePos()
+    fun next(): Queue {
+        val ndx = nextPos()
         val queue = prioritizedQueues[ndx]
         return queue
     }
 
     /**
-     * gets the next queue based on weighted priority of the queues
-     */
-    fun nextRandomQueuePos(): Int {
-        val ndx = random.nextInt(prioritizedQueues.size)
-        return ndx
-    }
-
-    /**
      * Gets the queue at the supplied position if the position is a valid range
      */
-    operator fun get(pos: Int): QueueInfo? {
+    operator fun get(pos: Int): Queue? {
         if (pos < 0 || pos >= prioritizedQueues.size) return null
         return prioritizedQueues[pos]
     }
@@ -56,8 +46,16 @@ class Queues(val queues: List<QueueInfo>) {
     /**
      * Gets the queue by name if it exists
      */
-    operator fun get(name: String): QueueInfo? {
+    operator fun get(name: String): Queue? {
         return lookup[name]
+    }
+
+    /**
+     * gets the next queue based on weighted priority of the queues
+     */
+    private fun nextPos(): Int {
+        val ndx = random.nextInt(prioritizedQueues.size)
+        return ndx
     }
 
     companion object {
@@ -89,8 +87,8 @@ class Queues(val queues: List<QueueInfo>) {
          * priority queues have a higher probability of being selected.
          */
         @JvmStatic
-        fun prioritize(queues: List<QueueInfo>): List<QueueInfo> {
-            val buffer = mutableListOf<QueueInfo>()
+        fun prioritize(queues: List<Queue>): List<Queue> {
+            val buffer = mutableListOf<Queue>()
             queues.forEach { queueInfo ->
                 for (ndx in 1..queueInfo.priority.value) {
                     buffer.add(queueInfo)

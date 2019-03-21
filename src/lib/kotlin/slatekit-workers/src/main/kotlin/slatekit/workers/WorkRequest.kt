@@ -1,5 +1,3 @@
 package slatekit.workers
 
-import slatekit.workers.core.QueueInfo
-
-data class WorkRequest(val job:Job, val queue: QueueInfo, val worker:Worker<*>)
+data class WorkRequest(val job:Job, val queue: Queue, val worker:Worker<*>)

@@ -4,8 +4,6 @@ import slatekit.common.Context
 import slatekit.common.info.About
 import slatekit.common.metrics.Metrics
 import slatekit.common.Status
-import slatekit.workers.core.QueueInfo
-import slatekit.workers.core.Stats
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
@@ -23,7 +21,7 @@ import java.util.concurrent.TimeUnit
  */
 open class System(
         val ctx: Context,
-        val queueInfos: List<QueueInfo>,
+        val queueInfos: List<Queue>,
         service: ExecutorService? = null,
         val managerCreator: ((System) -> Manager)? = null,
         val settings: SystemSettings = SystemSettings(),
@@ -93,7 +91,7 @@ open class System(
 
     fun getWorkerNames(): List<About> = workers.values.map { it.about }
 
-    fun getWorkerStats(): List<Stats> = workers.values.map { it.stats() }
+    fun getWorkerStats(): List<WorkerStats> = workers.values.map { it.stats() }
 
     /**
      * Start up and run all the background workers

@@ -52,7 +52,7 @@ class Example_Workers : Cmd("utils") {
         sys.register(Worker<String>(
             "emailer", group = "notifications", version = "1.0",
             desc = "Sends out email notifications",
-            callback = {
+            work = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
             Thread.sleep(500)
             println("email worker: " + DateTime.now().toString())
@@ -64,7 +64,7 @@ class Example_Workers : Cmd("utils") {
         sys.register(Worker<String>(
             "message_worker", group = "notifications" , version = "1.0",
             desc = "Sends out push notifications for message feeds",
-            callback = {
+            work = {
             // NOTE: Simulating work, do not use thread.sleep in a real environment
                 Thread.sleep(500)
                 println("message worker: " + DateTime.now().toString())
@@ -74,7 +74,7 @@ class Example_Workers : Cmd("utils") {
         sys.register(Worker<String>(
             "reminder_worker", group = "notifications" , version = "1.0",
             desc = "Sends out push notifications of reminders",
-            callback = {
+            work = {
                 // NOTE: Simulating work, do not use thread.sleep in a real environment
                 Thread.sleep(500)
                 println("reminder worker: " + DateTime.now().toString())
@@ -92,7 +92,7 @@ class Example_Workers : Cmd("utils") {
         sys.register(Worker<String>(
             "Active users", group = "reports", version = "1.0",
             desc = "Generates a report that determines active users",
-            callback = {
+            work = {
                 // NOTE: Simulating work, do not use thread.sleep in a real environment
                 Thread.sleep(500)
                 println("report worker: " + DateTime.now().toString())
@@ -134,7 +134,7 @@ class Example_Workers : Cmd("utils") {
         sys.register( Worker<Int>(
             "queued", "", "", version = "1.0",
             settings = WorkerSettings(batchSize = 2),
-            callback = { value ->
+            work = { value ->
                 println("queue worker: " + DateTime.now().toString() + " : " + value )
                 Success(1)
             }, logs = LogsDefault

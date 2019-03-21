@@ -12,9 +12,6 @@ mantra: Simplicity above all else
  */
 package slatekit.workers
 
-import slatekit.common.queues.QueueSource
-import slatekit.workers.core.QueueInfo
-import slatekit.workers.core.Utils
 import java.util.*
 
 class Registry(val sys: System) {
@@ -22,12 +19,12 @@ class Registry(val sys: System) {
     /**
      * Lookup of queues to workers that can handle the queue
      */
-    val queueToWorkers: Map<String, List<Worker<*>>> = Utils.toWorkerLookup(sys.queues.queues, sys.getWorkers())
+    val queueToWorkers: Map<String, List<Worker<*>>> = toLookup(sys.queues.queues, sys.getWorkers())
 
     /**
      * Gets a random queue from the list of queues, factoring in the queue priority
      */
-    fun getQueue(): QueueInfo {
+    fun getQueue(): Queue {
         val queue = sys.queues.next()
         return queue
     }
@@ -35,7 +32,7 @@ class Registry(val sys: System) {
     /**
      * Gets a random queue from the list of queues, factoring in the queue priority
      */
-    fun getQueueAt(pos: Int): QueueInfo? {
+    fun getQueueAt(pos: Int): Queue? {
         val queue = sys.queues.prioritizedQueues[pos]
         return queue
     }
@@ -43,12 +40,10 @@ class Registry(val sys: System) {
     /**
      * Gets a batch of jobs from the next queue
      */
-    fun getBatch(queueInfo: QueueInfo, size: Int): List<Job>? {
+    fun getBatch(queueInfo: Queue, size: Int): List<Job>? {
         val queue = queueInfo.queue
         val entries = queue.next(size)
-        return entries?.map { entry ->
-            Utils.toJob(entry, queueInfo)
-        }
+        return entries?.map { entry -> Job(entry, queueInfo) }
     }
 
     /**
@@ -67,5 +62,25 @@ class Registry(val sys: System) {
             }
         }
         return worker
+    }
+
+    fun toLookup(queues: List<Queue>, workers: List<Worker<*>>): Map<String, List<Worker<*>>> {
+
+        // Get a mapping between 1 queue to all workers that can handle the queue
+        // NOTE: "*" is designated as a wildcard to indicate that a worker can handle
+        // item from any queue.
+        return queues.map { it ->
+            // Queue name -> List( worker 1, worker 2, worker 3 )
+            Pair(it.name, getWorkers(it, workers))
+        }.toMap()
+    }
+
+    /**
+     * Gets all the workers that can handle the queue of items
+     */
+    fun getWorkers(queue: Queue, workers: List<Worker<*>>): List<Worker<*>> {
+        return workers.filter { worker ->
+            worker.queues.contains(queue.name) || worker.queues.contains("*")
+        }
     }
 }

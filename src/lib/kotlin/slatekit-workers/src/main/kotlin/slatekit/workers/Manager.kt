@@ -4,9 +4,10 @@ import slatekit.common.utils.Pager
 import slatekit.common.DateTime
 import slatekit.common.TODO
 import slatekit.common.Status
-import slatekit.workers.core.QueueInfo
-import slatekit.workers.core.Utils
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ExecutorService
 import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 /**
  * Interface to handle execution of the background workers.
@@ -34,7 +35,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
     private val threads = Runtime.getRuntime().availableProcessors()
     // TODO: What should be a preferred queue size ?
     private val queueSize = threads * 3
-    private val executor = Utils.newFixedThreadPoolWithQueueSize(threads, queueSize)
+    private val executor = newFixedThreadPoolWithQueueSize(threads, queueSize)
     private val threadPool = executor as ThreadPoolExecutor
     private var queuePos = 0
 
@@ -99,7 +100,7 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
      * Gets the next batch of jobs from the next queue.
      *
      */
-    private fun getJobBatch(queuePosition: Int): Batch? {
+    private fun getJobBatch(queuePosition: Int): JobBatch? {
 
         // 1. Get the next queue to process
         val queueOpt = registry.getQueueAt(queuePosition)
@@ -112,10 +113,10 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
             // 3. Any ?
             if (jobs != null && !jobs.isEmpty()) {
                 log.info("No jobs for queue: ${queue.name}")
-                Batch(queue, jobs, DateTime.now())
+                JobBatch(jobs, queue, DateTime.now())
             } else {
                 log.info("Got jobs from queue: ${queue.name} : ${jobs?.size ?: 0}")
-                Batch(queue, listOf(), DateTime.now())
+                JobBatch(listOf(), queue, DateTime.now())
             }
         }
     }
@@ -123,12 +124,12 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
     /**
      * Gets the next worker that can handle jobs from the supplied queue
      */
-    private fun getWorker(queue: QueueInfo): Worker<*>? {
+    private fun getWorker(queue: Queue): Worker<*>? {
         return registry.getWorker(queue.name)
     }
 
 
-    private fun process(batch: Batch, worker: Worker<*>) {
+    private fun process(batch: JobBatch, worker: Worker<*>) {
         perform(worker) {
             worker.work(this, batch)
         }
@@ -143,5 +144,20 @@ open class DefaultManager(val sys: System, val jobBatchSize: Int = 10) : Manager
         log.info("trigger worker $name starting")
         metrics.count("worker.$name", null)
         action()
+    }
+
+
+    companion object {
+        /**
+         * @see https://stackoverflow.com/questions/2265869/elegantly-implementing-queue-length-indicators-to-executorservices
+         * @see https://stackoverflow.com/questions/2247734/executorservice-standard-way-to-avoid-to-task-queue-getting-too-full
+         */
+        fun newFixedThreadPoolWithQueueSize(nThreads: Int, queueSize: Int): ExecutorService {
+            return ThreadPoolExecutor(
+                    nThreads, nThreads,
+                    5000L, TimeUnit.MILLISECONDS,
+                    ArrayBlockingQueue(queueSize, true), ThreadPoolExecutor.CallerRunsPolicy()
+            )
+        }
     }
 }

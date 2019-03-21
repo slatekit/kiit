@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.workers.core
+package slatekit.workers
 
 import slatekit.common.EnumLike
 import slatekit.common.EnumSupport

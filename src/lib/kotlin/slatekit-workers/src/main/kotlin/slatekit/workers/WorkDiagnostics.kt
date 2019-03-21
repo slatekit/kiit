@@ -5,7 +5,7 @@ import slatekit.common.diagnostics.Events
 import slatekit.common.diagnostics.Tracker
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
-
+import slatekit.workers.WorkRequest
 
 
 /**
@@ -18,7 +18,7 @@ import slatekit.common.metrics.Metrics
  * @param metrics: Metrics to store counters/gauges/meters
  * @param logger: Logger for the API server
  */
-class Diagnostics(prefix:String, metrics: Metrics, logger: Logger) : Diagnostics<WorkRequest>(
+class WorkDiagnostics(prefix:String, metrics: Metrics, logger: Logger) : Diagnostics<WorkRequest>(
         // Shows up as a prefix in the logs message
         prefix = "workers.jobs",
 
