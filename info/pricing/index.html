@@ -12,7 +12,7 @@
       <meta name="author" content="CodeHelix">
 
       
-      <title>Slate Kit Utils</title>
+      <title>Slate Kit More</title>
     <base href="../../">
             
       <link rel="shortcut icon" href="assets/theme/img/favicon.ico">
@@ -82,7 +82,7 @@
                      
                       
                       <div class="text text-right col-md-6 col-sm-12">
-                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                          <h2 class="h1 has-text-shadow">More <br/> </h2>
                       </div>
                   </div>
 
@@ -90,121 +90,91 @@
           </section>
           
 
-
           
           <section id="about" class="about no-padding-bottom">
               <div class="container">
-                  
+                  <p><header>
+  <h2 class="with-bg-text has-line" data-text="Overview">Overview</h2>
+</header>
+Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+<br/><br/></p>
 
-<h1 id="folders">Folders</h1>
-
-<table class="table table-striped table-bordered">
-  <tbody>
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Index">Index</h2>
+</header>
+Table of contents for this page
+<table class="table table-bordered table-striped">
     <tr>
-      <td><strong>desc</strong></td>
-      <td>Standardized application folder setup; includes conf, cache, inputs, logs, outputs</td>
+        <td><strong>Section</strong></td>
+        <td><strong>Component</strong></td>
+        <td><strong>Description</strong></td>
     </tr>
     <tr>
-      <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+        <td><strong>1</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td>Current status of this component</td>
     </tr>
     <tr>
-      <td><strong>version</strong></td>
-      <td>0.9.9</td>
+        <td><strong>2</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
-      <td><strong>jar</strong></td>
-      <td>slatekit.common.jar</td>
+        <td><strong>3</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
-    <tr>
-      <td><strong>namespace</strong></td>
-      <td>slatekit.common.info</td>
-    </tr>
-    <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.info.Folders.kt</td>
-    </tr>
-    <tr>
-      <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/info" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/info</a></td>
-    </tr>
-    <tr>
-      <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Folders.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Folders.kt</a></td>
-    </tr>
-    <tr>
-      <td><strong>depends on</strong></td>
-      <td></td>
-    </tr>
-  </tbody>
 </table>
+<br/><br/><br/>
+<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
+<br/><br/><br/></p>
 
-<h2 id="import">Import</h2>
+<p><header>
+  <h2 class="with-bg-text has-line" data-text="Maxtrix">Maxtrix</h2>
+</header>
+coming soon</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
-</span><span style="color:#75715e"></span>
-
-
-<span style="color:#75715e">// optional 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.results.Try
-<span style="color:#66d9ef">import</span> slatekit.results.Success
-<span style="color:#66d9ef">import</span> slatekit.common.info.Folders
-<span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd</code></pre></div>
-
-<h2 id="setup">Setup</h2>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">n/a</code></pre></div>
-
-<h2 id="usage">Usage</h2>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        <span style="color:#75715e">// CASE 1: Build a folder structure for an application
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Explicitly indicate user-directory with the following folder structure
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// NOTE: Slate Kit based applications are setup this way.
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// /c/users/{user}/
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//  - company-1
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//    - department-1
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//      - app-1
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - conf
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - cache
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - inputs
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - logs
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - outputs
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">//        - temp
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> folders = Folders(
-                home = System.getProperty(<span style="color:#e6db74">&#34;user.dir&#34;</span>),
-                root = <span style="color:#e6db74">&#34;company-1&#34;</span>,
-                group = <span style="color:#e6db74">&#34;department-1&#34;</span>,
-                app = <span style="color:#e6db74">&#34;app-1&#34;</span>,
-                cache = <span style="color:#e6db74">&#34;cache&#34;</span>,
-                inputs = <span style="color:#e6db74">&#34;input&#34;</span>,
-                logs = <span style="color:#e6db74">&#34;logs&#34;</span>,
-                outputs = <span style="color:#e6db74">&#34;output&#34;</span>,
-                temp = <span style="color:#e6db74">&#34;temp&#34;</span>,
-                conf = <span style="color:#e6db74">&#34;conf&#34;</span>
-        )
-
-        <span style="color:#75715e">// CASE 2: Build a folder structure for an application
-</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Same as Case 1 above but using a short-hand approach
-</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> folders2 = Folders.userDir(
-                root = <span style="color:#e6db74">&#34;company-1&#34;</span>,
-                group = <span style="color:#e6db74">&#34;department-1&#34;</span>,
-                app = <span style="color:#e6db74">&#34;app-1&#34;</span>
-        )
-
-        <span style="color:#75715e">// CASE 3: Create the folders if they do not exist
-</span><span style="color:#75715e"></span>        folders.create()
-
-        <span style="color:#75715e">// CASE 4: Get the individual paths to the folders
-</span><span style="color:#75715e"></span>        println(<span style="color:#e6db74">&#34;app    :&#34;</span> + folders.pathToApp)
-        println(<span style="color:#e6db74">&#34;cache  :&#34;</span> + folders.pathToCache)
-        println(<span style="color:#e6db74">&#34;conf   :&#34;</span> + folders.pathToConf)
-        println(<span style="color:#e6db74">&#34;input  :&#34;</span> + folders.pathToInputs)
-        println(<span style="color:#e6db74">&#34;logs   :&#34;</span> + folders.pathToLogs)
-        println(<span style="color:#e6db74">&#34;output :&#34;</span> + folders.pathToOutputs)
-        println(<span style="color:#e6db74">&#34;output :&#34;</span> + folders.pathToTemp)
-
-        </code></pre></div>
+<p><table class="table table-bordered table-striped">
+    <tr>
+        <td><strong></strong></td>
+        <td><strong>OSS</strong></td>
+        <td><strong>Pro</strong></td>
+        <td><strong>Enterprise</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Core Modules</strong></td>
+        <td>package</td>
+        <td>package</td>
+        <td>package</td>
+    </tr>
+    <tr>
+        <td><strong>Backgroun Jobs</strong></td>
+        <td>package</td>
+        <td>package</td>
+        <td>package</td>
+    </tr>
+    <tr>
+        <td><strong>Universal API Server</strong></td>
+        <td>package</td>
+        <td>package</td>
+        <td>package</td>
+    </tr>
+    <tr>
+        <td><strong>Support</strong></td>
+        <td>package</td>
+        <td>package</td>
+        <td>package</td>
+    </tr>
+    <tr>
+        <td><strong>Server license</strong></td>
+        <td>package</td>
+        <td>package</td>
+        <td>package</td>
+    </tr>
+</table>
+<br/><br/><br/>
+<a href="core/cli#overview" class="more"><span class="btn btn-template">Back to top</span></a>
+<br/><br/><br/></p>
 
               </div>
           </section>
@@ -256,6 +226,7 @@
        </div>
    </div> 
 </footer>
+           
            
 
 

@@ -12,7 +12,7 @@
       <meta name="author" content="CodeHelix">
 
       
-      <title>Slate Kit Utils</title>
+      <title>Slate Kit </title>
     <base href="../../">
             
       <link rel="shortcut icon" href="assets/theme/img/favicon.ico">
@@ -82,7 +82,7 @@
                      
                       
                       <div class="text text-right col-md-6 col-sm-12">
-                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                          <h2 class="h1 has-text-shadow"> <br/> </h2>
                       </div>
                   </div>
 
@@ -90,101 +90,37 @@
           </section>
           
 
-
           
           <section id="about" class="about no-padding-bottom">
               <div class="container">
                   
 
-<h1 id="encrypt">Encrypt</h1>
+<h1 id="scratch">Scratch</h1>
 
-<table class="table table-striped table-bordered">
-  <tbody>
-    <tr>
-      <td><strong>desc</strong></td>
-      <td>Encryption using AES</td>
-    </tr>
-    <tr>
-      <td><strong>date</strong></td>
-      <td>2019-03-15</td>
-    </tr>
-    <tr>
-      <td><strong>version</strong></td>
-      <td>0.9.9</td>
-    </tr>
-    <tr>
-      <td><strong>jar</strong></td>
-      <td>slatekit.common.jar</td>
-    </tr>
-    <tr>
-      <td><strong>namespace</strong></td>
-      <td>slatekit.common.encrypt</td>
-    </tr>
-    <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.encrypt.Encryptor.kt</td>
-    </tr>
-    <tr>
-      <td><strong>source folder</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/encrypt" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/encrypt</a></td>
-    </tr>
-    <tr>
-      <td><strong>example</strong></td>
-      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Encryptor.kt</a></td>
-    </tr>
-    <tr>
-      <td><strong>depends on</strong></td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories {
+        maven { url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> }
+    }
 
-<h2 id="import">Import</h2>
+    dependencies {
+        <span style="color:#75715e">// For results ( modeling success/failures with optional status codes )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-results:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.encrypt.Encryptor
-<span style="color:#66d9ef">import</span> slatekit.common.encrypt.B64Java8
+        <span style="color:#75715e">// For the smaller components ( context, email, sms )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-core:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 
+        <span style="color:#75715e">// For app ( application template with args, cli, envs, logs, help )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-app:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 
-<span style="color:#75715e">// optional 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
-<span style="color:#66d9ef">import</span> slatekit.results.Try
-<span style="color:#66d9ef">import</span> slatekit.results.Success</code></pre></div>
+        <span style="color:#75715e">// For CLI ( command line interaction template )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-cli:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 
-<h2 id="setup">Setup</h2>
+        <span style="color:#75715e">// For Entities ( General Domain-Driven Entity/Service/Repo pattern )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-entities:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">  <span style="color:#75715e">// SETUP 1: Create your singleton encryptor that can encrypt/decrypt using your custom key/secret.
-</span><span style="color:#75715e"></span>  <span style="color:#75715e">// and use it as a singleton.
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">object</span> <span style="color:#a6e22e">TestEncryptor</span> : Encryptor(<span style="color:#e6db74">&#34;wejklhviuxywehjk&#34;</span>, <span style="color:#e6db74">&#34;3214maslkdf03292&#34;</span>, B64Java8)
-
-
-  <span style="color:#75715e">// SETUP 2: Create an instance encryptor
-</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">val</span> encryptor = Encryptor(<span style="color:#e6db74">&#34;wejklhviuxywehjk&#34;</span>, <span style="color:#e6db74">&#34;3214maslkdf03292&#34;</span>, B64Java8)
-
-  </code></pre></div>
-
-<h2 id="usage">Usage</h2>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// CASE 1: Encrypt using AES ( text is base64 encoded without newlines )
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> input = <span style="color:#e6db74">&#34;basMoAKSKDFJrd789&#34;</span>
-    <span style="color:#66d9ef">val</span> encrypted = TestEncryptor.encrypt(input)
-    println(encrypted)
-
-
-    <span style="color:#75715e">// CASE 2: Decrypt using AES
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> decrypted = TestEncryptor.decrypt(encrypted)
-    println(decrypted)
-
-
-    <span style="color:#75715e">// CASE 3: Ensure decrypted matches original
-</span><span style="color:#75715e"></span>    println(input == decrypted)
-
-
-    <span style="color:#75715e">// CASE 4: Use the EncryptSupportIn trait to have built in encrypt/decrypt methods
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// NOTE: You just have to have an _enc member field
-</span><span style="color:#75715e"></span>    println( encryptor.encrypt(input))
-    println( encryptor.decrypt(encrypted) )
-    </code></pre></div>
+        <span style="color:#75715e">// For Workers ( Background workers for persistant job queues - like Ruby Resque )
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-workers:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+    }</code></pre></div>
 
               </div>
           </section>
@@ -236,6 +172,7 @@
        </div>
    </div> 
 </footer>
+           
            
 
 

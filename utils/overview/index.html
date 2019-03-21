@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      
+      <meta name="description" content="Kotlin Tool-Kit">
+      
+      <meta name="author" content="CodeHelix">
+
+      
+      <title>Slate Kit Utils</title>
+    <base href="../../">
+            
+      <link rel="shortcut icon" href="assets/theme/img/favicon.ico">
+      
+      <link rel="stylesheet" href="assets/theme/css/font-awesome.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/bootstrap.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/device-mockups.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/owl.carousel.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/animate.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/preloader.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/style.default2.css">
+
+      <link rel="stylesheet" href="assets/app/app.css">
+    
+    
+    
+    
+  </head>
+
+  <body>
+    
+
+
+      <div class="page-header">
+          
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
+              </div>
+          </nav>
+
+
+          
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
+
+                  <div class="row">
+                      
+                      <div class="image col-md-6 hidden-sm-down">
+                          
+                      </div>
+                     
+                      
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          
+
+
+          
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+                  
+
+<h1 id="overview">Overview</h1>
+
+<p>Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard library by offering a powerful set of general purpose Kotlin components that can be used for any application. Many of these components are located in the <a class="url-ch" href="#project">SlateKit.Common</a> project. However, there are a few components located in other projects. Refer to each utility component for more info.
+<br/><br/>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories {
+        maven { url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> }
+    }
+
+    dependencies {
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#960050;background-color:#1e0010">&#39;</span>com.slatekit:slatekit-common:<span style="color:#ae81ff">0.9</span>.<span style="color:#ae81ff">9</span><span style="color:#960050;background-color:#1e0010">&#39;</span>
+    }</code></pre></div></p>
+
+<section id="services" class="services">
+  <div class="container">
+      <div class="row text-center">
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                        <div class="icon-wrap">
+                            <a href="utils/args"><img src="assets/media/img/white/gears.png" width="80" alt=""></a>         
+                        </div>
+                        <a href="utils/args"><h4>Args</h4></a>
+                        <p>A lexical command line arguments parser</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/auth"><img src="assets/media/img/white/male.png" width="70" alt=""></a>            
+                        </div>
+                <a href="utils/auth"><h4>Auth</h4></a>
+                <p>Easily access authentication information</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/config"><img src="assets/media/img/white/settings.png" width="65" alt=""></a>          
+                        </div>
+                <a href="utils/config"><h4>Config</h4></a>
+                <p>Java props with types, lists, encryption, and more</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/console"><img src="assets/media/img/white/console.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/console"><h4>Console</h4></a>
+                <p>Console writer with semantics and colors</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/data"><img src="assets/media/img/white/layers.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/data"><h4>Database</h4></a>
+                <p>JDBC database access and utilities</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/datetime"><img src="assets/media/img/white/calendar.PNG" width="60" alt=""></a>            
+                        </div>
+                <a href="utils/datetime"><h4>DateTime</h4></a>
+                <p>Easier Java 8 DateTime and Timezone usage</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/encrypt"><img src="assets/media/img/white/lock.png" width="80" alt=""></a>         
+                        </div>
+                <a href="utils/encrypt"><h4>Encrypt</h4></a>
+                <p>AES encryption/decryption support</p>
+              </div>    
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/env"><img src="assets/media/img/white/nodes.png" width="80" alt=""></a>            
+                        </div>
+                <a href="utils/env"><h4>Env</h4></a>
+                <p>Environment selector ( dev, qa, stg, prod )</p>
+              </div>     
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/env"><img src="assets/media/img/white/folders.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/folders"><h4>Folders</h4></a>
+                <p>Standardized runtime app folders and structure.</p>
+              </div>              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/info"><img src="assets/media/img/white/info.png" width="65" alt=""></a>            
+                        </div>
+                <a href="utils/info"><h4>Info</h4></a>
+                <p>Useful information about app, host, runtime</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/lex"><img src="assets/media/img/white/document.png" width="80" alt=""></a>         
+                        </div>
+                <a href="utils/lex"><h4>Lex</h4></a>
+                <p>A light-weight lexer to parse text into tokens</p>
+              </div>             
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/logger"><img src="assets/media/img/white/error.png" width="60" alt=""></a>         
+                        </div>
+                <a href="utils/logger"><h4>Logs</h4></a>
+                <p>Simple, extensible, customizable logger</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/model"><img src="assets/media/img/white/prototype.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/model"><h4>Model</h4></a>
+                <p>Builts schemas to map models and generate code</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/random"><img src="assets/media/img/white/question.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/random"><h4>Random</h4></a>
+                <p>Random generator for strings, numbers, alpha, guids</p>
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/reflect"><img src="assets/media/img/white/search.png" width="80" alt=""></a>           
+                        </div>
+                <a href="utils/reflect"><h4>Reflection</h4></a>
+                <p>Reflection utils for classes, methods, annotations</p> 
+              </div>
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/request"><img src="assets/media/img/white/request.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/request"><h4>Request</h4></a>
+                <p>Abstracts and represents HTTP and CLI requests</p> 
+              </div> 
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/results"><img src="assets/media/img/white/result.png" width="80" alt=""></a>           
+                        </div>
+                <a href="utils/results"><h4>Result</h4></a>
+                <p>Models response with success and failures.</p> 
+              </div> 
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/serialization"><img src="assets/media/img/white/print.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/serialization"><h4>Serialization</h4></a>
+                <p>Csv, Json, HoCon serialization of data classes</p>
+              </div> 
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                  <a href="utils/serialization"><img src="assets/media/img/white/print.png" width="80" alt=""></a>     
+                </div>
+                <a href="utils/smartstrings"><h4>Smart Strings</h4></a>
+                <p>Store, validate, describe strongly formatted strings</p>
+              </div> 
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/templates"><img src="assets/media/img/white/share.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/templates"><h4>Templates</h4></a>
+                <p>A micro template system</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/timer"><img src="assets/media/img/white/timer.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/timer"><h4>Timer</h4></a>
+                <p>Timer class to benchmark code</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/todo"><img src="assets/media/img/white/notes.png" width="80" alt=""></a>           
+                        </div>
+                <a href="utils/todo"><h4>Todo</h4></a>
+                <p>Programmatic approach to marking TODOs in code</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/utils"><img src="assets/media/img/white/settings2.png" width="80" alt=""></a>          
+                        </div>
+                <a href="utils/utils"><h4>Utils</h4></a>
+                <p>Miscellaneous utilities</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href="utils/validations"><img src="assets/media/img/white/checklist.png" width="80" alt=""></a>            
+                        </div>
+                <a href="utils/validations"><h4>Validations</h4></a>
+                <p>Functional validation</p>
+              </div>
+              
+
+              <div class="item col-lg-4 col-md-6 wow fadeInUp">
+                <div class="icon-wrap">
+                          <a href=""><img src="assets/media/img/white/gears.png" width="80" alt=""></a>         
+                        </div>
+                <a href=""><h4>Extensions</h4></a>
+                <p>Extension methods ( Coming soon )</p>
+              </div>
+
+              </div>
+  </div>
+</section>
+
+<h1 id="sources">Sources</h1>
+
+<p>The Slate Kit Utilities source code is fully available from Git.
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <td><strong>package</strong></td>
+    <td>slatekit.common</td>
+  </tr>
+  <tr>
+    <td><strong>jar</strong></td>
+    <td>slatekit.common.jar</td>
+  </tr>
+  <tr>
+    <td><strong>git</strong></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common">slatekit-common</a></td>
+  </tr>
+  <tr>
+    <td><strong>docs</strong></td>
+    <td><a class="url-ch" href="utils/utils.html">Common</a></td>
+  </tr>
+  <tr>
+    <td><strong>uses</strong></td>
+    <td>slatekit-results</td>
+  </tr>
+  <tr>
+      <td><strong>example</strong></td>
+      <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples">All Examples</a></td>
+  </tr>
+</table></p>
+
+              </div>
+          </section>
+          
+
+          
+<footer id="main-footer" class="main-footer">
+   <div class="container text-center">
+
+       
+       <div class="logo">
+           <strong class="brand-text">Slate Kit</strong>
+       </div>
+       
+       <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+       
+       <ul class="social list-inline">
+           <li class="list-inline-item">
+               <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+           </li>
+       </ul>
+   </div>
+
+  
+   <div class="copyrights">
+       <div class="container">
+           <div class="row">
+               <div class="col-md-6">
+                   <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+               </div>
+               <div class="col-md-6 text-right">
+                   <ul class="list-inline">
+                       <li class="list-inline-item"><a href="#">FAQ</a></li>
+                       <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                       <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   </div> 
+</footer>
+           
+
+
+           
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           
+
+
+           
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           
+      </div>
+    
+                
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        
+        <script src="assets/theme/js/bootstrap.min.js"></script>
+        
+        <script src="assets/theme/js/owl.carousel.min.js"></script>
+        
+        <script src="assets/theme/js/easyscroll.min.js"></script>
+        
+        <script src="assets/theme/js/wow.min.js"></script>
+        
+        <script src="assets/theme/js/script.js"></script>
+
+        <script type="text/javascript">
+          var _codehelixAppPage = "infra";
+        </script>
+          <script type="text/javascript" src="assets/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+  </body>
+</html>
