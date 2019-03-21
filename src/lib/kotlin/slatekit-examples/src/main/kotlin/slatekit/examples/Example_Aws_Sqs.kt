@@ -1,10 +1,10 @@
 /**
 <slate_header>
   author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
+  url: www.github.com/code-helix/slatekit
   copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
+  license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+  desc: A tool-kit, utility library and server-backend
   usage: Please refer to license on github for more info.
 </slate_header>
   */
@@ -52,10 +52,10 @@ class Example_Aws_Sqs  : Cmd("sqs") {
     queue2.init()
 
     // Use case 2: send 1 message
-    queue2.send("scala test 1")
+    queue2.send("test 1")
 
     // Use case 3: send multiple messages
-    queue2.send("scala test 2")
+    queue2.send("test 2")
 
     // Use case 4: send message with tags
     queue2.send("user=kishore", tagName="type", tagValue="reg")

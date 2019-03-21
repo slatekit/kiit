@@ -1,10 +1,10 @@
 /**
 <slate_header>
   author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
+  url: www.github.com/code-helix/slatekit
   copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
+  license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+  desc: A tool-kit, utility library and server-backend
   usage: Please refer to license on github for more info.
 </slate_header>
   */
@@ -53,7 +53,7 @@ class Example_Utils : Cmd("utils") {
     // of functional error handling, however, there are times where
     // a guard like approach to inputs is preferable
     requireText("slate-kit", "Name must be supplied" )
-    requireOneOf( "scala", listOf("scala", "go"), "Name not valid")
+    requireOneOf( "kotlin", listOf("kotlin", "go"), "Name not valid")
     requireValidIndex( 3, 4, "Index is must be 0 <= index <= 4")
 
     // CASE 4: Db connection

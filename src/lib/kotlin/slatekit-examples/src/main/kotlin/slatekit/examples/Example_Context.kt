@@ -1,10 +1,10 @@
 /**
 <slate_header>
 author: Kishore Reddy
-url: https://github.com/kishorereddy/scala-slate
+url: www.github.com/code-helix/slatekit
 copyright: 2015 Kishore Reddy
-license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-desc: a scala micro-framework
+license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+desc: A tool-kit, utility library and server-backend
 usage: Please refer to license on github for more info.
 </slate_header>
  */
@@ -98,7 +98,7 @@ class Example_Context : Cmd("cmd") {
                     url = "http://company1.com/dep1/sampleapp-1",
                     contact = "dept1@company1.com",
                     version = "1.0.1",
-                    tags = "sample app slatekit scala",
+                    tags = "sample app slatekit",
                     examples = ""
             )
         )

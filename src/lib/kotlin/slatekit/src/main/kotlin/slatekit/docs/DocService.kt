@@ -156,7 +156,7 @@ class DocService(val _rootdir: String, val _outputDir: String, val templatePath:
         template = replace(template, "lang", data, "lang")
         template = replace(template, "lang-ext", data, "lang-ext")
 
-        //https://github.com/kishorereddy/blend-server/blob/master/src/apps/scala/slate-examples/src/main/scala/slate/examples/Example_Args.scala
+        //https://github.com/kishorereddy/blend-server/blob/master/src/apps/kotlin/slate-examples/src/main/kotlin/slate/examples/Example_Args.kotlin
 
         template = replace(template, DocConstants.header, data, "header")
         template = replace(template, DocConstants.import_required, data, "import_required")

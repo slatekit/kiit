@@ -1,10 +1,10 @@
 /**
 <slate_header>
   author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
+  url: www.github.com/code-helix/slatekit
   copyright: 2016 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
+  license: www.github.com/code-helix/slatekit/blob/master/LICENSE.md
+  desc: A tool-kit, utility library and server-backend
   usage: Please refer to license on github for more info.
 </slate_header>
   */
@@ -99,7 +99,7 @@ class Example_Validation : Cmd("validation") {
 
   // CASE 3: Same checks above but these return a ValidationResult
   // which contains success(true/false), message, reference, and status code
-  // You can supply a reference to a field/position refer to common\Reference.scala
+  // You can supply a reference to a field/position refer to common\Reference.kt
   fun showValidationResult():Unit {
 
     println("CASE 3: Same checks above but these return a ValidationResult")

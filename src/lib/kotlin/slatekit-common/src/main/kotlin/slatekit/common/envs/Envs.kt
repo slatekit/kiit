@@ -17,41 +17,41 @@ package slatekit.common.envs
  * Store the currently selected environment ( local, dev, qa, stg, prod ) and provides some
  * utility functions to parse an environment
  */
-data class Envs(val all: List<Env>, val current: Env? = null) : EnvSupport {
+data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
 
     /**
      * Initialize with the first one
      */
-    constructor(all: List<Env>) : this(all, all.firstOrNull())
+    constructor(all: List<Env>) : this(all, all.first{ it.isDev })
 
     /**
      * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
      * @return
      */
-    val name: String get() = current?.name ?: ""
+    val name: String get() = current.name
 
     /**
      * Environment of the currently selected ( dev, qa, uat, pro )
      * @return
      */
-    val env: String get() = current?.mode?.name ?: ""
+    val env: String get() = current.mode.name
 
     /**
      * The fully qualified name of the currently selected environment ( combines the name + key )
      * @return
      */
-    val key: String get() = current?.key ?: ""
+    val key: String get() = current.key
 
     /**
      * whether the current environment matches the environment name supplied.
-     * @param env
+     * @param envMode
      * @return
      */
     override fun isEnvName(envMode: String): Boolean = this.env == envMode
 
     /**
      * whether the current environment matches the environment  supplied.
-     * @param env
+     * @param envMode
      * @return
      */
     override fun isEnv(envMode: EnvMode): Boolean = this.env == envMode.name
@@ -89,6 +89,5 @@ data class Envs(val all: List<Env>, val current: Env? = null) : EnvSupport {
      * @param name
      * @return
      */
-    fun get(name: String): Env? =
-        all.filter { item -> item.name == name }.firstOrNull()
+    fun get(name: String): Env? = all.firstOrNull { item -> item.name == name }
 }

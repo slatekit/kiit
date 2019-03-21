@@ -31,7 +31,7 @@ class Guide_ORM : Cmd("types") {
     override fun executeInternal(args: Array<String>?): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
-        // See Example_Database.scala for more info
+        // See Example_Database.kt for more info
 
         // 1. Create DbLookup using a connection from a file
         // NOTE: This is safer and more secure as it loads

@@ -1,13 +1,15 @@
 /**
-<slate_header>
-  author: Kishore Reddy
-  url: https://github.com/kishorereddy/scala-slate
-  copyright: 2015 Kishore Reddy
-  license: https://github.com/kishorereddy/scala-slate/blob/master/LICENSE.md
-  desc: a scala micro-framework
-  usage: Please refer to license on github for more info.
-</slate_header>
-  */
+ * <slate_header>
+ * url: www.slatekit.com
+ * git: www.github.com/code-helix/slatekit
+ * org: www.codehelix.co
+ * author: Kishore Reddy
+ * copyright: 2016 CodeHelix Solutions Inc.
+ * license: refer to website and/or github
+ * about: A tool-kit, utility library and server-backend
+ * mantra: Simplicity above all else
+ * </slate_header>
+ */
 
 package test.setup
 
