@@ -106,12 +106,14 @@ Slate Kit supports building Web APIs using <strong>Spark Java</strong>, Cloud Se
         <td><strong>About</strong></td>
         <td><strong>Link</strong></td>
     </tr>
+    <!--
     <tr>
         <td><strong>MySql</strong></td>
         <td>5.7</td>
         <td>Database Server</td>
         <td><a class="url-ch" href="https://dev.mysql.com/downloads/mysql/">download</a></td>
     </tr>
+    -->
     <tr>
         <td><strong>MySql Connector</strong></td>
         <td>5.7</td>
@@ -119,10 +121,10 @@ Slate Kit supports building Web APIs using <strong>Spark Java</strong>, Cloud Se
         <td><a class="url-ch" href="https://dev.mysql.com/downloads/connector/j/">download</a></td>
     </tr>
     <tr>
-        <td><strong>Spark Java</strong></td>
-        <td>2.6</td>
+        <td><strong>Kotlin Ktor</strong></td>
+        <td>1.0.0</td>
         <td>For Slate API Server</td>
-        <td><a class="url-ch" href="http://sparkjava.com/">visit</a></td>
+        <td><a class="url-ch" href="https://ktor.io/">visit</a></td>
     </tr>
     <tr>
         <td><strong>AWS Sdk</strong></td>

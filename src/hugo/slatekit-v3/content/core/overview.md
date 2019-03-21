@@ -8,7 +8,26 @@ draft: true
 Slate Kit offers <strong>several features</strong> designed as modular <strong>Architecture components</strong>. These are designed are a collection of Kotlin libraries that help you to quickly build fully featured, testable, 
 and scalable applications on the JVM. Some components are sophisticated enough to have their own module/project. Other smaller ones are
 located in the <a class="url-ch" href="#project">slateKit-core</a> project.
- Refer to each component for more info.
+ Refer to each component for more info. Click any of the modules below for more info.
+ {{% break %}}
+{{< highlight kotlin >}}
+
+     
+    repositories {
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    }
+
+    dependencies {
+        // For results ( modeling success/failures with optional status codes )
+        compile 'com.slatekit:slatekit-results:0.9.9'
+
+        // For app ( application template with args, cli, envs, logs, help )
+        compile 'com.slatekit:slatekit-app:0.9.9'
+
+        // Click on components for more info or see setup page
+    }
+
+{{< /highlight >}}
 
 <section id="services" class="services">
   <div class="container">
@@ -52,7 +71,6 @@ located in the <a class="url-ch" href="#project">slateKit-core</a> project.
                  See <a class="url-ch" href="core/kotlin-cli.html">example</a>.
               </p>
           </div><!-- End Item -->
-
 
           <!-- Item -->
           <div class="item col-lg-4 col-md-6 wow fadeInUp">
@@ -167,3 +185,16 @@ located in the <a class="url-ch" href="#project">slateKit-core</a> project.
 </section>
 
 
+# Sources
+Some smaller Slate Kit components listed here are available in the core module. Click on any of the modules above for more info.
+{{% sk-module 
+    name="Core"
+    package="slatekit.core"
+    jar="slatekit.core.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core"
+    gitAlias="slatekit-core"
+    url="core/overview"
+    uses="slatekit-results, slatekit-common, slatekit-meta"
+    exampleUrl="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples"
+    exampleFileName="Misc examples"
+%}}

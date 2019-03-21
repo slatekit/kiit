@@ -3,9 +3,22 @@ title: "Utilities"
 date: 2019-03-17T14:30:52-04:00
 draft: true
 ---
-
 # Overview
 Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard library by offering a powerful set of general purpose Kotlin components that can be used for any application. Many of these components are located in the <a class="url-ch" href="#project">SlateKit.Common</a> project. However, there are a few components located in other projects. Refer to each utility component for more info.
+{{% break %}}
+{{< highlight kotlin >}}
+
+    // other setup ...
+    repositories {
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    }
+
+    dependencies {
+        // slatekit-common: Utilities for Android or Server
+        compile 'com.slatekit:slatekit-common:0.9.9'
+    }
+
+{{< /highlight >}}
 
 <section id="services" class="services">
   <div class="container">
@@ -225,5 +238,19 @@ Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard lib
               </div>
   </div>
 </section>
+
+# Sources
+The Slate Kit Utilities source code is fully available from Git.
+{{% sk-module 
+    name="Common"
+    package="slatekit.common"
+    jar="slatekit.common.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common"
+    gitAlias="slatekit-common"
+    url="utils/utils.html"
+    uses="slatekit-results"
+    exampleUrl="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples"
+    exampleFileName="All Examples"
+%}}
 
 
