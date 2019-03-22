@@ -17,9 +17,6 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.common.db.DbType
-import slatekit.entities.repos.EntityMapperInMemory
-import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.integration.errors.ErrorHandler
 import slatekit.integration.errors.ErrorItem
@@ -47,7 +44,7 @@ class Api_Error_Tests : ApiTestsBase() {
 
         // Api
         val api = SampleRetryApi(handler)
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
+        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         svc.setApiHost(apis)
         val t1 = apis.call("app", "retry", "test", "get", mapOf("token" to "abc"), mapOf("text" to "123"))
         Assert.assertFalse(t1.success)

@@ -8,7 +8,7 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.common.DateTime
 import slatekit.common.info.Info
 import slatekit.common.toResponse

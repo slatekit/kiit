@@ -23,7 +23,7 @@ import slatekit.common.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Notices
 
-class Validation(val ctn: ApiContainer) {
+class Validation(val ctn: ApiHost) {
 
     fun validateApi(req: Request): Notice<ApiRef> {
         return ctn.getApi(req.area, req.name, req.action)

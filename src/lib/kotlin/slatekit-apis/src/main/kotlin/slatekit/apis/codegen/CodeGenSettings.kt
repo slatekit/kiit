@@ -1,10 +1,10 @@
 package slatekit.apis.codegen
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.common.requests.Request
 
 data class CodeGenSettings(
-        val host: ApiContainer,
+        val host: ApiHost,
         val req: Request,
         val templatesFolder: String,
         val outputFolder: String,

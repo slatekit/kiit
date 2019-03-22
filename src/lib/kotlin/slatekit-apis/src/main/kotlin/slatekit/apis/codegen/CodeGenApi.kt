@@ -19,10 +19,10 @@ import slatekit.results.Notice
         auth = AuthModes.apiKey, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
 class CodeGenApi : ApiHostAware {
 
-    private var host: ApiContainer? = null
+    private var host: ApiHost? = null
 
     @Ignore
-    override fun setApiHost(host: ApiContainer) {
+    override fun setApiHost(host: ApiHost) {
         this.host = host
     }
 

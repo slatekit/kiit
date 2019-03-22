@@ -1,7 +1,7 @@
 package slatekit.integration.workers
 
 import slatekit.apis.ApiConstants
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.results.Failure
@@ -10,10 +10,10 @@ import slatekit.results.Try
 import slatekit.workers.*
 
 open class WorkerWithQueuesApi(
-    val container: ApiContainer,
+    val container: ApiHost,
     settings: WorkerSettings
 )
-    : Worker<Any>("apis", "apis", "apiqueues", "1.0", container.ctx.logs) {
+    : Worker<Any>("apis", "apis", "apiqueues", "1.0", logs = container.ctx.logs) {
 
     /**
      * Process an message from the queue represented as an API request.

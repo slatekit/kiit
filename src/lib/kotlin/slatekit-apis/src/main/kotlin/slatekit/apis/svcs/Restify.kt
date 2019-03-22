@@ -1,6 +1,6 @@
 package slatekit.apis.svcs
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.middleware.Rewriter
 import slatekit.common.Context
 import slatekit.common.requests.Request
@@ -20,7 +20,7 @@ class Restify : Rewriter() {
 
         // Get the first and second part
         val verb = req.verb.toLowerCase()
-        val container = source as ApiContainer
+        val container = source as ApiHost
         return if (verb == verbGet && req.parts[2] == "") {
             rewriteAction(req, container.rename("getAll"))
         } else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])) {

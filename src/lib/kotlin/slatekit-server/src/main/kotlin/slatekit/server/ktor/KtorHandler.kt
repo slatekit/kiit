@@ -6,7 +6,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.request.httpMethod
 import io.ktor.request.receiveText
 import io.ktor.routing.*
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.common.Context
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
@@ -14,7 +14,7 @@ import slatekit.server.common.Diagnostics
 class KtorHandler(
         val context: Context,
         val config: ServerConfig,
-        val container:ApiContainer,
+        val container:ApiHost,
         val diagnostics: Diagnostics
 ) {
 
@@ -55,7 +55,7 @@ class KtorHandler(
         val request = KtorRequest.build(context, body, call, config)
 
         // Execute the API call
-        // The SlateKit ApiContainer will handle the heavy work of
+        // The SlateKit ApiHost will handle the heavy work of
         // 1. Checking routes to area/api/actions ( methods )
         // 2. Validating parameters to methods
         // 3. Decoding request to method parameters

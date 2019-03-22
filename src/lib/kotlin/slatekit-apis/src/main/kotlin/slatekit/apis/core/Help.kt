@@ -13,12 +13,12 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.doc.ApiVisitOptions
 import slatekit.apis.doc.ApiVisitor
 import slatekit.apis.doc.Doc
 
-class Help(val host: ApiContainer, val routes: Routes, val docBuilder: () -> Doc) {
+class Help(val host: ApiHost, val routes: Routes, val docBuilder: () -> Doc) {
 
     /**
      * handles help request for all the areas supported

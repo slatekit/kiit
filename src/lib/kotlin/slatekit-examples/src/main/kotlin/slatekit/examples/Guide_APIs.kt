@@ -1,6 +1,6 @@
 package slatekit.examples
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.core.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
@@ -24,7 +24,7 @@ class Guide_APIs : Cmd("types") {
     fun setup():Unit {
 
         val ctx = AppEntContext.sample(Config(), "myapp", "myapp", "App1", "Company1")
-        val container = ApiContainer(
+        val container = ApiHost(
                 ctx  = ctx,
                 auth = null,
                 apis = listOf(

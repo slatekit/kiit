@@ -41,13 +41,13 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun text(
-        name: String,
-        desc: String = "",
-        required: Boolean = false,
-        defaultVal: String = "",
-        example: String = "",
-        exampleMany: String = "",
-        group: String = ""
+            name: String,
+            desc: String = "",
+            required: Boolean = false,
+            defaultVal: String = "",
+            example: String = "",
+            exampleMany: String = "",
+            group: String = ""
     ): ArgsSchema =
             add(name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
 
@@ -64,13 +64,13 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun flag(
-        name: String,
-        desc: String = "",
-        required: Boolean = false,
-        defaultVal: String = "",
-        example: String = "",
-        exampleMany: String = "",
-        group: String = ""
+            name: String,
+            desc: String = "",
+            required: Boolean = false,
+            defaultVal: String = "",
+            example: String = "",
+            exampleMany: String = "",
+            group: String = ""
     ): ArgsSchema =
             add(name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
 
@@ -87,13 +87,13 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun number(
-        name: String,
-        desc: String = "",
-        required: Boolean = false,
-        defaultVal: String = "",
-        example: String = "",
-        exampleMany: String = "",
-        group: String = ""
+            name: String,
+            desc: String = "",
+            required: Boolean = false,
+            defaultVal: String = "",
+            example: String = "",
+            exampleMany: String = "",
+            group: String = ""
     ): ArgsSchema =
             add(name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
 
@@ -111,17 +111,18 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun add(
-        name: String,
-        desc: String = "",
-        dataType: Class<*>,
-        required: Boolean = false,
-        defaultVal: String = "",
-        example: String = "",
-        exampleMany: String = "",
-        group: String = ""
+            name: String,
+            desc: String = "",
+            dataType: Class<*>,
+            required: Boolean = false,
+            defaultVal: String = "",
+            example: String = "",
+            exampleMany: String = "",
+            group: String = ""
     ): ArgsSchema {
         val typeName = dataType.simpleName
-        val arg = Arg("", name, desc, typeName ?: "string", required, false, false, false, group, "", defaultVal, example, exampleMany)
+        val arg = Arg("", name, desc, typeName
+                ?: "string", required, false, false, false, group, "", defaultVal, example, exampleMany)
         val newList = items.plus(arg)
         return ArgsSchema(newList)
     }

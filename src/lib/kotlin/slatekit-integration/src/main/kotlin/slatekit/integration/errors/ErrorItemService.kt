@@ -1,7 +1,7 @@
 package slatekit.integration.errors
 
 import slatekit.apis.ApiConstants
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.ApiHostAware
 import slatekit.apis.core.Requests
 import slatekit.common.*
@@ -15,8 +15,8 @@ import slatekit.results.Try
 class ErrorItemService(ctx: AppEntContext, entities: Entities, repo: slatekit.entities.core.EntityRepo<Long, ErrorItem>)
     : slatekit.entities.services.EntityServiceWithSupport<Long, ErrorItem>(ctx, entities, repo), ApiHostAware {
 
-    private var container: ApiContainer? = null
-    override fun setApiHost(host: ApiContainer) {
+    private var container: ApiHost? = null
+    override fun setApiHost(host: ApiHost) {
         container = host
     }
 
@@ -70,7 +70,7 @@ class ErrorItemService(ctx: AppEntContext, entities: Entities, repo: slatekit.en
                 update(itemUpdated)
                 res
             }
-        } ?: Failure(Exception("ApiContainer not set for ErrorItems"))
+        } ?: Failure(Exception("ApiHost not set for ErrorItems"))
         val finalResult = result.transform({ it -> Success(it.toString()) }, { err -> Failure(err.toString()) })
         return finalResult
     }

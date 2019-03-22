@@ -91,19 +91,9 @@ dependencies {
     // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version"
-        compile "com.slatekit:slatekit-entities:$slatekit_version"
-        compile "com.slatekit:slatekit-core:$slatekit_version"
-        compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-integration:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-common")
-        compile project(":slatekit-meta")
-        compile project(":slatekit-entities")
-        compile project(":slatekit-core")
-        compile project(":slatekit-apis")
-        compile project(":slatekit-integration")
     } //</slatekit_local>
 }
 

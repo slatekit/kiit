@@ -29,7 +29,7 @@ interface Filter : Middleware {
      * Filters the calls and returns a true/false indicating whether or not to proceed
      * @param ctx : The application context
      * @param req : The source to determine if it can be filtered
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
+     * @param source: The originating source for this hook ( e.g. ApiHost )
      * @param args : Additional arguments supplied by the source
      */
     @Ignore

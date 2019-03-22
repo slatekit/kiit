@@ -12,9 +12,9 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.ApiRef
 import slatekit.common.Context
 import slatekit.common.requests.Request
 
-data class Ctx(val container: ApiContainer, val context: Context, val req: Request, val apiRef: ApiRef)
+data class Ctx(val host: ApiHost, val context: Context, val req: Request, val apiRef: ApiRef)

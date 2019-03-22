@@ -25,7 +25,7 @@ object Require {
      * @param message : Message for the exception
      */
     fun requireText(text: String?, message: String) {
-        require(!text.isNullOrEmpty(), { message })
+        require(!text.isNullOrEmpty()) { message }
     }
 
     /**
@@ -36,7 +36,7 @@ object Require {
      * @param message : Message for the exception
      */
     fun requireOneOf(text: String, items: List<String>, message: String) {
-        require(items.contains(text), { message })
+        require(items.contains(text)) { message }
     }
 
     /**
@@ -47,6 +47,6 @@ object Require {
      * @param message : Message for the exception
      */
     fun requireValidIndex(pos: Int, size: Int, message: String) {
-        require(pos > 0 && pos < size, { message })
+        require(pos in 1..(size - 1)) { message }
     }
 }

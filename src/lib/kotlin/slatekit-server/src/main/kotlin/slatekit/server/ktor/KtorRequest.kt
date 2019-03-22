@@ -41,8 +41,6 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
 
     /**
      * Access to an uploaded file
-     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
-     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getDoc(name: String): Doc {
         return getFile(name) { stream ->
@@ -61,8 +59,6 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
 
     /**
      * Access to an uploaded file
-     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
-     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
         // getFileStream(name, callback)
@@ -82,8 +78,6 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
 
     /**
      * Access to an uploaded file
-     * https://github.com/tipsy/spark-file-upload/blob/master/src/main/java/UploadExample.java
-     * http://javasampleapproach.com/java/ways-to-convert-inputstream-to-string
      */
     override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
 //        async {

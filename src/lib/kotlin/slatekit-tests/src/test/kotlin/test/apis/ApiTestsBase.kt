@@ -31,13 +31,8 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.db.DbType
 import slatekit.db.Db
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityContext
-import slatekit.entities.repos.EntityMapperInMemory
-import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.LongIdGenerator
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 import test.setup.MyAuthProvider
@@ -90,10 +85,10 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth: Auth? = null,
-                apis: List<Api> = listOf()): ApiContainer {
+                apis: List<Api> = listOf()): ApiHost {
 
         // 2. apis
-        val container = ApiContainer(ctx, false, auth, apis = apis, protocol = protocol)
+        val container = ApiHost(ctx, false, auth, apis = apis, protocol = protocol)
         return container
     }
 
@@ -142,7 +137,7 @@ open class ApiTestsBase {
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
 
         // Host
-        val host = ApiContainer(ctx,
+        val host = ApiHost(ctx,
                 allowIO = false,
                 auth = auth,
                 apis = apis,
