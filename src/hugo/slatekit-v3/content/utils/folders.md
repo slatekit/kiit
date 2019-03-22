@@ -9,11 +9,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+      <td>2019-03-22</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.9</td>
+      <td>0.9.17</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -24,8 +24,8 @@
       <td>slatekit.common.info</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.info.Folders.kt</td>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -37,31 +37,47 @@
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td></td>
+      <td> slatekit-results</td>
     </tr>
   </tbody>
 </table>
+{{% break %}}
 
+## Gradle
+{{< highlight gradle >}}
+    // other setup ...
+    repositories {
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    }
 
+    dependencies {
+        // other libraries
+
+        // slatekit-common: Utilities for Android or Server
+        compile 'com.slatekit:slatekit-common:0.9.17'
+    }
+
+{{< /highlight >}}
+{{% break %}}
 
 ## Import
 {{< highlight kotlin >}}
 
 
 // required 
-
+import slatekit.common.info.Folders
 
 
 // optional 
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.info.Folders
 import slatekit.core.cmds.Cmd
 
 
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Setup
 {{< highlight kotlin >}}
@@ -71,6 +87,7 @@ n/a
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Usage
 {{< highlight kotlin >}}
@@ -127,5 +144,5 @@ n/a
         
 
 {{< /highlight >}}
-
+{{% break %}}
 

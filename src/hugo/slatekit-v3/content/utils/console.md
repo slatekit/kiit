@@ -9,11 +9,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+      <td>2019-03-22</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.9</td>
+      <td>0.9.17</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -24,8 +24,8 @@
       <td>slatekit.common.console</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.console.Console.kt</td>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -37,12 +37,28 @@
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td></td>
+      <td> slatekit-results</td>
     </tr>
   </tbody>
 </table>
+{{% break %}}
 
+## Gradle
+{{< highlight gradle >}}
+    // other setup ...
+    repositories {
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    }
 
+    dependencies {
+        // other libraries
+
+        // slatekit-common: Utilities for Android or Server
+        compile 'com.slatekit:slatekit-common:0.9.17'
+    }
+
+{{< /highlight >}}
+{{% break %}}
 
 ## Import
 {{< highlight kotlin >}}
@@ -62,6 +78,7 @@ import slatekit.results.Success
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Setup
 {{< highlight kotlin >}}
@@ -71,6 +88,7 @@ n/a
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Usage
 {{< highlight kotlin >}}
@@ -100,24 +118,27 @@ n/a
     // Case 7: Subtitle ( Color Green )
     writer.success("success is in green")
 
-    // Case 8: Tab
+    // Case 8: Subtitle ( Color Green )
+    writer.text("normal text")
+
+    // Case 9: Tab
     writer.tab()
 
-    // Case 9: New line
+    // Case 10: New line
     writer.line()
 
-    // Case 10: Label "Key :"
+    // Case 11: Label "Key :"
     writer.label("Key")
 
-    // Case 11: Key/Value = "Name : Superman"
+    // Case 12: Key/Value = "Name : Superman"
     writer.keyValue("Name", "Superman")
     writer.lines(2)
 
-    // Case 12: List of items ( unordered and ordered )
+    // Case 13: List of items ( unordered and ordered )
     writer.list( listOf( 1, true , "www.slatekit.com", DateTime.now(), 12.34 ), true)
     writer.list( listOf( 2, false, "www.codehelix.co", DateTime.now(), 56.78 ), true)
 
-    // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
+    // Case 14: Supply a list of items to print specifying the semantic mode ( title, url, etc )
     writer.writeItems(listOf(
       SemanticOutput(SemanticText.Title     , "About App"                   , true),
       SemanticOutput(SemanticText.Subtitle  , "Example of Console component", true),
@@ -127,7 +148,7 @@ n/a
     
 
 {{< /highlight >}}
-
+{{% break %}}
 
 
 ## Output

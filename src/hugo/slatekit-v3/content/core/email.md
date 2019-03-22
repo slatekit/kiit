@@ -1,273 +1,146 @@
----
-title: "Email"
-date: 2019-03-17T14:30:51-04:00
-draft: true
----
 
-# Overview
-Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+# Email
+
+<table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>An Email service to send emails with support for templates using SendGrid as the default implementation</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-22</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.17</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.core.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.core.sms.EmailService</td>
+    </tr>
+    <tr>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-core</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/sms/EmailService" class="url-ch">src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/sms/EmailService</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Email.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Email.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td> slatekit-results slatekit-common</td>
+    </tr>
+  </tbody>
+</table>
 {{% break %}}
 
-# Index
-Table of contents for this page
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Section</strong></td>
-        <td><strong>Component</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
-        <td>Current status of this component</td>
-    </tr>
-    <tr>
-        <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
-        <td>Installation instructions and references to sources</td>
-    </tr>
-    <tr>
-        <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
-        <td>Lists all the Slate Kit and third-party dependencies</td>
-    </tr>
-    <tr>
-        <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
-        <td>Quick sample to show usage of the component</td>
-    </tr>
-    <tr>
-        <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
-        <td>Goals of this component and the problems it attempts to solve</td>
-    </tr>
-    <tr>
-        <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
-        <td>Core concepts to understand in this component</td>
-    </tr>
-    <tr>
-        <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
-        <td>List all the features supported</td>
-    </tr>
-    <tr>
-        <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
-        <td>Set up and configure this component for use</td>
-    </tr>
-    <tr>
-        <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
-        <td>In-depth examples of the supported features</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Status
-coming soon
-{{% section-end mod="core/cli" %}}
-
-# Install
-coming soon
-{{< highlight groovy >}}
-
+## Gradle
+{{< highlight gradle >}}
+    // other setup ...
     repositories {
-        // other repositories
-        maven { url  "http://dl.bintray.com/codehelixinc/slatekit" }
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
     }
 
     dependencies {
-        // other dependencies ...
+        // other libraries
 
-        compile 'com.slatekit:slatekit-{COMPONENT_ID}:0.9.9'
+        // slatekit-common: Utilities for Android or Server
+        compile 'com.slatekit:slatekit-core:0.9.17'
     }
 
 {{< /highlight >}}
-{{% sk-module 
-    name="App"
-    package="slatekit.app"
-    jar="slatekit.app.jar"
-    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
-    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
-    url="core/app"
-    uses="slatekit.results, slatekit.common"
-    exampleUrl=""
-    exampleFileName="Example_App.kt"
-%}}
-{{% section-end mod="core/cli" %}}
+{{% break %}}
 
-# Requires
-This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Component</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
-        <td>To model successes and failures with optional status codes</td>
-    </tr>
-    <tr>
-        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
-        <td>Common utilities for both android + server</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Sample
-coming soon
+## Import
 {{< highlight kotlin >}}
 
-    fun quick_sample() {
-        
-    }
+
+// required 
+import slatekit.common.*
+import slatekit.core.email.EmailMessage
+import slatekit.core.email.EmailServiceSendGrid
+import slatekit.common.templates.Template
+import slatekit.common.templates.Templates
+
+
+// optional 
+import slatekit.results.Try
+import slatekit.results.Success
+import slatekit.core.cmds.Cmd
+import slatekit.common.conf.Config
+import slatekit.common.info.ApiLogin
+
+
+
 
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
+{{% break %}}
 
-# Goals
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
-    </tr>
-    <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Concepts
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Concept</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
-    </tr>
-    <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Features
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Feature</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Feature A</strong></td>
-        <td>Description of feature</td>
-    </tr>
-    <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Setup
-coming soon
+## Setup
 {{< highlight kotlin >}}
 
-    fun setup() {
-        
-    }
+
+
+    // Setup 1: Getting key from config
+    // Load the config file from slatekit directory in user_home directory
+    // e.g. {user_home}/slatekit/conf/sms.conf
+    // NOTE: It is safer/more secure to store config files there.
+    val conf =  Config("user://slatekit/conf/email.conf")
+
+    // Setup 2: Get the api key either through conf or explicitly
+    val apiKey1 = conf.apiLogin("email")
+    val apiKey2 = ApiLogin("17181234567", "ABC1234567", "password", "dev", "sendgrid-email")
+    val apiKey  = apiKey1 ?: apiKey2
+
+    // Setup 3a: Setup the email service ( basic ) with api key
+    val email1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
+
+    // Setup 3b: Setup the sms service with support for templates
+    val templates = Templates.build(
+      templates = listOf(
+         Template("email_welcome", Uris.readText("user://slatekit/templates/email_welcome.txt") ?: "" ),
+         Template("email_pass", Uris.readText("user://slatekit/templates/email_password.txt") ?: "")
+      ),
+      subs = listOf(
+        Pair("company.api" , { s -> "MyCompany"        }),
+        Pair("app.api"     , { s -> "SlateKit.Sample"  })
+      )
+    )
+    val email2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
+    
+
 
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
+{{% break %}}
 
-
-# Details
-Details on using the features here.
-coming soon
-
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Section</strong></td>
-        <td><strong>Name</strong></td>
-        <td><strong>Description</strong></td>
-        <td><strong>More</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1</strong></td>
-        <td><strong>Feature 1</strong></td>
-        <td>Brief description of feature 1</td>
-        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>2</strong></td>
-        <td><strong>Feature 2</strong></td>
-        <td>Brief description of feature 2</td>
-        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>3</strong></td>
-        <td><strong>Feature 3</strong></td>
-        <td>Brief description of feature 3</td>
-        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-</table>
-<br/>
-
-## Feature 1 {#feature1}
-coming soon
+## Usage
 {{< highlight kotlin >}}
 
-    fun setup() {
-        
-    }
+
+    // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
+    val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
+
+    // Use case 2: Send using a constructed message object
+    email2.send(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
+
+    // Use case 3: Send message using one of the setup templates
+    email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
+       Vars(listOf(
+        Pair("greeting" , "hello"),
+        Pair("user.api", "kishore"),
+        Pair("app.code" , "ABC123")
+      )))
+    
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-## Feature 2 {#feature2}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-## Feature 3 {#feature3}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-{{% section-end mod="core/cli" %}}
+{{% break %}}
 
