@@ -75,12 +75,12 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
         // System level ( slate kit )
         // This ModServices allow storing/checking for installed modules in the DB
-        ctx.ent.orm<Long, Mod>(DbType.DbTypeMySql, Mod::class, Long::class,null, ModService::class)
+        ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
 
 
         // Application level
         // All application level components should go here.
-        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMySql, Dependency::class, Long::class,null, DependencyService::class)
+        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
         return super.init()
     }
 

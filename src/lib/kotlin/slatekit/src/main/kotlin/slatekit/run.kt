@@ -12,17 +12,27 @@ import slatekit.providers.logs.logback.LogbackLogs
  */
 fun main(args: Array<String>) {
 
+    val root = "/Users/kishorereddy/git/slatekit"
     val svc = DocService(
-            "/Users/kishore.reddy/dev/tmp/slatekit/slatekit",
-            "/Users/kishore.reddy/dev/tmp/slatekit/slatekit-site/src/hugo/slatekit-v3/content/utils",
-            "scripts/doc/doc_template_kotlin.md")
-    svc.processProject("slatekit-common")
+            "$root/slatekit",
+            "$root/slatekit-site/src/hugo/slatekit-v3/content/core",
+            "scripts/doc/doc_template_cloud.md")
+    svc.processItems(listOf(
+            "AWS-S3",
+            "AWS-SQS"
+//            "Ctx",
+//            "Cmd",
+//            "Email",
+//            "Sms"
+    ))
 
+    //println("slatekit command line")
+    //run2(args)
 }
 
 
-fun run(args:Array<String>) {
-    AppRunner.run(
+fun run2(args: Array<String>) {
+    val result = AppRunner.run(
             rawArgs = args,
             about = SlateKit.about,
             schema = SlateKit.schema,
@@ -30,4 +40,8 @@ fun run(args:Array<String>) {
             logs = LogbackLogs(),
             builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
     )
+    result.onFailure {
+        println(it.message)
+        println(it.toString())
+    }
 }

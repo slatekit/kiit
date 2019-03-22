@@ -24,8 +24,8 @@
       <td>@{namespace}</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>@{source}.@{lang-ext}</td>
+      <td><strong>artifact</strong></td>
+      <td>@{artifact}</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -41,8 +41,24 @@
     </tr>
   </tbody>
 </table>
+{{% break %}}
 
+## Gradle
+{{< highlight gradle >}}
+    // other setup ...
+    repositories {
+        maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    }
 
+    dependencies {
+        // other libraries
+
+        // slatekit-common: Utilities for Android or Server
+        compile 'com.slatekit:slatekit-common:0.9.17'
+    }
+
+{{< /highlight >}}
+{{% break %}}
 
 ## Import
 {{< highlight kotlin >}}
@@ -54,6 +70,7 @@
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Setup
 {{< highlight kotlin >}}
@@ -63,6 +80,7 @@
 
 
 {{< /highlight >}}
+{{% break %}}
 
 ## Usage
 {{< highlight kotlin >}}
@@ -70,6 +88,6 @@
 @{doc:examples}
 
 {{< /highlight >}}
-
+{{% break %}}
 
 @{doc:output}
