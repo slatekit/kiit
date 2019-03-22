@@ -98,6 +98,7 @@ docs | source | desc | download
 [slatekit-integration](https://www.slatekit.com)                       | [src](src/lib/kotlin/slatekit-integration) | integration components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-integration/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-integration/_latestVersion)
 [slatekit-cloud](http://www.slatekit.com/infra.html)                   | [src](src/lib/kotlin/slatekit-cloud)       | clouder services ( AWS ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cloud/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-cloud/_latestVersion)
 [slatekit-server](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-server)      | http server to run slatekit APIs ( using ktor ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
+[slatekit-providers](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-providers)      | 3rd party implementations for Logs/Metrics | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers/_latestVersion)
 
 
 # Setup
