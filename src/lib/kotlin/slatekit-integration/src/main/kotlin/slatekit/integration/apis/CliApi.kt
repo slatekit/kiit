@@ -13,7 +13,7 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.cli.*
@@ -59,7 +59,7 @@ class CliApi(
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
-    val apis = ApiContainer(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
+    val apis = ApiHost(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
 
     enum class ApiHelpType {
         Listing,

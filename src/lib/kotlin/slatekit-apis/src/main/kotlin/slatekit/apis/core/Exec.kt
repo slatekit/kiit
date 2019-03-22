@@ -86,74 +86,10 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     }
 
     /**
-     * Ensures valid protocols before processing
-     */
-    fun protocol(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::protocol) {
-
-            val check = validator.validateProtocol(ctx.req, ctx.apiRef)
-            val result = if (check.success) {
-                proceed()
-            } else {
-                check.toTry()
-            }
-            result
-        }
-    }
-
-    /**
-     * Ensures valid authorization before processing
-     */
-    fun auth(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::auth) {
-
-            val check = validator.validateAuthorization(ctx.req, ctx.apiRef)
-            val result = if (check.success) {
-                proceed()
-            } else {
-                check.toTry()
-            }
-            result
-        }
-    }
-
-    /**
-     * Ensures valid authorization before processing
-     */
-    fun middleware(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::middleware) {
-
-            val check = validator.validateMiddleware(ctx.req, ctx.host.filters)
-            val result = if (check.success) {
-                proceed()
-            } else {
-                check.toTry()
-            }
-            result
-        }
-    }
-
-    /**
-     * Ensures valid authorization before processing
-     */
-    fun params(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::params) {
-
-            val check = validator.validateParameters(ctx.req)
-            val result = if (check.success) {
-                proceed()
-            } else {
-                check.toTry()
-            }
-            result
-        }
-    }
-
-    /**
      * Applies the tracking middleware to track requests, successes, failures
      */
-    fun track(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::track) {
+    private inline fun track(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::track.name") {
             val instance = ctx.host.tracker
 
             // Hook: Before
@@ -173,10 +109,74 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     }
 
     /**
+     * Ensures valid protocols before processing
+     */
+    inline fun protocol(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::protocol.name") {
+
+            val check = validator.validateProtocol(ctx.req, ctx.apiRef)
+            val result = if (check.success) {
+                proceed()
+            } else {
+                check.toTry()
+            }
+            result
+        }
+    }
+
+    /**
+     * Ensures valid authorization before processing
+     */
+    inline fun auth(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::auth.name") {
+
+            val check = validator.validateAuthorization(ctx.req, ctx.apiRef)
+            val result = if (check.success) {
+                proceed()
+            } else {
+                check.toTry()
+            }
+            result
+        }
+    }
+
+    /**
+     * Ensures valid authorization before processing
+     */
+    inline fun middleware(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::middleware") {
+
+            val check = validator.validateMiddleware(ctx.req, ctx.host.filters)
+            val result = if (check.success) {
+                proceed()
+            } else {
+                check.toTry()
+            }
+            result
+        }
+    }
+
+    /**
+     * Ensures valid authorization before processing
+     */
+    inline fun params(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::params") {
+
+            val check = validator.validateParameters(ctx.req)
+            val result = if (check.success) {
+                proceed()
+            } else {
+                check.toTry()
+            }
+            result
+        }
+    }
+
+    /**
      * Applies the tracking middleware to track requests, successes, failures
      */
-    fun diagnostics(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::track) {
+    inline fun diagnostics(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::track") {
             val instance = ctx.apiRef.instance
 
             // Hook: Before
@@ -198,8 +198,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the filter middleware to filter out requests
      */
-    fun filter(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::filter) {
+    inline fun filter(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::filter") {
             val instance = ctx.apiRef.instance
 
             val result = if (instance is Filter) {
@@ -223,8 +223,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the hooks middleware before/after execution of action
      */
-    fun hook(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::hook) {
+    inline fun hook(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::hook") {
 
             val instance = ctx.apiRef.instance
 
@@ -246,8 +246,8 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     /**
      * Applies the handler middleware to either handle the request or proceed
      */
-    fun handle(proceed: () -> Try<Any>): Try<Any> {
-        return log(this::handle) {
+    inline fun handle(proceed: () -> Try<Any>): Try<Any> {
+        return log("Exec::handle") {
             val instance = ctx.apiRef.instance
             val result = if (instance is Handler) {
                 val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.host, null)
@@ -279,18 +279,18 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         return result
     }
 
-    private fun log(method: KCallable<*>, call: () -> Try<Any>): Try<Any> {
+    inline fun log(method: String, call: () -> Try<Any>): Try<Any> {
         // Build a message
         val result = call()
 
-        logger.debug("""{ "api-pipeline": "${method.name}", "path" : "${ctx.req.fullName}", """ +
+        logger.debug("""{ "api-pipeline": "${method}", "path" : "${ctx.req.fullName}", """ +
                            """verb" : "${ctx.req.verb}", "success" : ${result.success}, "message" : "${result.msg}"""".trimIndent())
 
-        result.onFailure { logError(method.name, it) }
+        result.onFailure { logError(method, it) }
         return result
     }
 
-    private fun logError(method: String, ex: Exception) {
+     fun logError(method: String, ex: Exception) {
         val json = Requests.toJson(ctx.req, ctx.context.enc)
         logger.error("""{ "method": "$method", "path": "${ctx.req.fullName}", "request" : $json }""".trimIndent(), ex)
     }

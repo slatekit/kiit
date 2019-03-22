@@ -135,7 +135,7 @@ object ArgsFuncs {
         // Parses all named args e..g -a=1 -b=2
         // Keep looping until the index where the named args ends
         // NOTE: Get the index after the last named arg.
-        val endIndex = repeatWithIndex(startIndex, args.size, { ndx ->
+        val endIndex = repeatWithIndex(startIndex, args.size) { ndx ->
 
             // GIVEN: -a=1 the tokens are : ( "-", "a", "=", "1" )
             val text = args[ndx]
@@ -164,7 +164,7 @@ object ArgsFuncs {
                 ndx + 1
 
             nextIndex
-        })
+        }
 
         return ParsedArgs(namedArgs.toMap(), metaArgs, sysArgs, endIndex)
     }
@@ -186,14 +186,14 @@ object ArgsFuncs {
             val posKeyExt = posKey + 1
 
             // Keep building key until "." is done
-            val posEndKey = repeatWithIndexAndBool(posKeyExt, args.size, { posNext ->
+            val posEndKey = repeatWithIndexAndBool(posKeyExt, args.size) { posNext ->
                 if (args[posNext] == ".") {
                     keyBuff.append("." + args[posNext + 1])
                     Pair(true, posNext + 2)
                 } else {
                     Pair(false, posNext)
                 }
-            })
+            }
 
             // Move past "="
             val posVal = posEndKey + 1

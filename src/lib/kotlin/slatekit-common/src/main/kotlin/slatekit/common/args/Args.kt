@@ -36,17 +36,17 @@ import org.threeten.bp.*
  */
 
 class Args(
-    val line: String,
-    override val raw: List<String>,
-    val action: String,
-    val actionParts: List<String>,
-    val prefix: String = "-",
-    val separator: String = "=",
-    private val _namedArgs: Map<String, String>? = null,
-    private val _metaArgs: Map<String, String>? = null,
-    private val _sysArgs: Map<String, String>? = null,
-    private val _indexArgs: List<String>? = null,
-    private val _decryptor: ((String) -> String)?
+        val line: String,
+        override val raw: List<String>,
+        val action: String,
+        val actionParts: List<String>,
+        val prefix: String = "-",
+        val separator: String = "=",
+        private val _namedArgs: Map<String, String>? = null,
+        private val _metaArgs: Map<String, String>? = null,
+        private val _sysArgs: Map<String, String>? = null,
+        private val _indexArgs: List<String>? = null,
+        private val _decryptor: ((String) -> String)?
 ) : Inputs {
 
     private val _metaIndex = 0
@@ -159,11 +159,11 @@ class Args(
      * gets a string from the meta args
      */
     fun getMetaString(key: String): String? {
-       return if (containsMetaKey(key)) {
-           _metaArgs?.let { m -> m[key] } ?: ""
-       } else {
-           null
-       }
+        return if (containsMetaKey(key)) {
+            _metaArgs?.let { m -> m[key] } ?: ""
+        } else {
+            null
+        }
     }
 
     /**
@@ -220,6 +220,7 @@ class Args(
      * @return
      */
     override fun getString(key: String): String = Strings.decrypt(named[key] ?: "", _decryptor)
+
     override fun getBool(key: String): Boolean = Conversions.toBool(named[key] ?: "false")
     override fun getShort(key: String): Short = Conversions.toShort(named[key] ?: "0")
     override fun getInt(key: String): Int = Conversions.toInt(named[key] ?: "0")
@@ -259,12 +260,12 @@ class Args(
          */
         @JvmStatic
         fun parse(
-            line: String,
-            prefix: String = "-",
-            sep: String = ":",
-            hasAction: Boolean = false,
-            metaChar: String = "@",
-            sysChar: String = "$"
+                line: String,
+                prefix: String = "-",
+                sep: String = ":",
+                hasAction: Boolean = false,
+                metaChar: String = "@",
+                sysChar: String = "$"
         ): Try<Args> {
             return ArgsService().parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
@@ -283,12 +284,12 @@ class Args(
          */
         @JvmStatic
         fun parseArgs(
-            args: Array<String>,
-            prefix: String = "-",
-            sep: String = ":",
-            hasAction: Boolean = false,
-            metaChar: String = "@",
-            sysChar: String = "$"
+                args: Array<String>,
+                prefix: String = "-",
+                sep: String = ":",
+                hasAction: Boolean = false,
+                metaChar: String = "@",
+                sysChar: String = "$"
         ): Try<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {

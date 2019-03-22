@@ -1,7 +1,7 @@
 package slatekit.server.sample
 
 import io.ktor.application.ApplicationCall
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.doc.DocWeb
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
@@ -79,7 +79,7 @@ object SampleSetup {
 
 
     // Slate Kit API Container
-    fun container(auth: Authenticator) = ApiContainer(
+    fun container(auth: Authenticator) = ApiHost(
             context,
             false,
             auth,

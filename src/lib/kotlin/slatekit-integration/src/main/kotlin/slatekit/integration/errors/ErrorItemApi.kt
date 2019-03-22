@@ -13,10 +13,10 @@ import slatekit.results.Notice
 class ErrorItemApi(entCtx: AppEntContext)
     : ApiBaseEntity<Long, ErrorItem, ErrorItemService>(entCtx, Long::class, ErrorItem::class), ApiHostAware {
 
-    private var container: ApiContainer? = null
+    private var container: ApiHost? = null
 
     @Ignore
-    override fun setApiHost(host: ApiContainer) {
+    override fun setApiHost(host: ApiHost) {
         container = host
         service.setApiHost(host)
     }

@@ -17,7 +17,7 @@ interface Error : Middleware {
      * @param ctx : The application context
      * @param req : The source to determine if it can be filtered
      * @param target: The target of the request
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
+     * @param source: The originating source for this hook ( e.g. ApiHost )
      * @param ex : The exception associated with error
      * @param args : Additional arguments supplied by the source
      */

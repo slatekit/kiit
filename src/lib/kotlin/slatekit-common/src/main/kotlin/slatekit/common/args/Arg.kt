@@ -31,19 +31,19 @@ import slatekit.common.console.*
  * @param exampleMany : multiple examples of arg values
  */
 data class Arg(
-    val alias: String = "",
-    val name: String = "",
-    val desc: String = "",
-    val dataType: String = "",
-    val isRequired: Boolean = true,
-    val isCased: Boolean = true,
-    val isDevOnly: Boolean = false,
-    val isInterpreted: Boolean = false,
-    val group: String = "",
-    val tag: String = "",
-    val defaultVal: String = "",
-    val example: String = "",
-    val exampleMany: String = ""
+        val alias: String = "",
+        val name: String = "",
+        val desc: String = "",
+        val dataType: String = "",
+        val isRequired: Boolean = true,
+        val isCased: Boolean = true,
+        val isDevOnly: Boolean = false,
+        val isInterpreted: Boolean = false,
+        val group: String = "",
+        val tag: String = "",
+        val defaultVal: String = "",
+        val example: String = "",
+        val exampleMany: String = ""
 ) {
 
     /**
@@ -64,9 +64,9 @@ data class Arg(
      * @param maxWidth
      */
     fun semantic(
-        prefix: String? = "-",
-        separator: String? = "=",
-        maxWidth: Int? = null
+            prefix: String? = "-",
+            separator: String? = "=",
+            maxWidth: Int? = null
     ): List<SemanticOutput> {
 
         val nameLen = maxWidth ?: name.length

@@ -31,7 +31,7 @@ interface Before : Middleware {
      * @param ctx : The application context
      * @param req : The request
      * @param target: The target of the request
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
+     * @param source: The originating source for this hook ( e.g. ApiHost )
      * @param args : Additional arguments supplied by the source
      */
     @Ignore

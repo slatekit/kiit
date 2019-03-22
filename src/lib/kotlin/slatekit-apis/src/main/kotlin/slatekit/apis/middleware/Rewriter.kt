@@ -16,7 +16,7 @@ open class Rewriter : Middleware {
      * Rewrites the calls and returns a new request
      * @param ctx : The application context
      * @param req : The request
-     * @param source: The originating source for this hook ( e.g. ApiContainer )
+     * @param source: The originating source for this hook ( e.g. ApiHost )
      * @param args : Additional arguments supplied by the source
      */
     open fun rewrite(ctx: Context, req: Request, source: Any, args: Map<String, Any>): Request {
