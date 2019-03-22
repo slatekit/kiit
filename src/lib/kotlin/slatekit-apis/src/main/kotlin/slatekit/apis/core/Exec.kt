@@ -123,7 +123,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     fun middleware(proceed: () -> Try<Any>): Try<Any> {
         return log(this::middleware) {
 
-            val check = validator.validateMiddleware(ctx.req, ctx.container.filters)
+            val check = validator.validateMiddleware(ctx.req, ctx.host.filters)
             val result = if (check.success) {
                 proceed()
             } else {
@@ -154,7 +154,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
      */
     fun track(proceed: () -> Try<Any>): Try<Any> {
         return log(this::track) {
-            val instance = ctx.container.tracker
+            val instance = ctx.host.tracker
 
             // Hook: Before
             if (instance is Tracked) {
@@ -203,7 +203,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             val instance = ctx.apiRef.instance
 
             val result = if (instance is Filter) {
-                val filterResult = instance.onFilter(ctx.context, ctx.req, ctx.container, null).toTry()
+                val filterResult = instance.onFilter(ctx.context, ctx.req, ctx.host, null).toTry()
                 if (filterResult.success) {
                     proceed()
                 } else {
@@ -230,7 +230,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
 
             // Hook: Before
             if (instance is Hook) {
-                instance.onBefore(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
+                instance.onBefore(ctx.context, ctx.req, ctx.apiRef.action, ctx.host, null)
             }
 
             val result = proceed()
@@ -250,7 +250,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         return log(this::handle) {
             val instance = ctx.apiRef.instance
             val result = if (instance is Handler) {
-                val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.container, null)
+                val handlerResult = instance.handle(ctx.context, ctx.req, ctx.apiRef.action, ctx.host, null)
                 if (handlerResult.success) {
                     handlerResult.toTry()
                 } else {
@@ -270,7 +270,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         } catch (ex: Exception) {
             val msg = ex.message
             logError("attempt", ex)
-            ctx.container.errorHandler.handleError(ctx.context, ctx.container.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
+            ctx.host.errorHandler.handleError(ctx.context, ctx.host.errs, ctx.apiRef.api, ctx.apiRef, ctx.req, ex)
             Tries.unexpected<Any>(Exception("unexpected error in api: $msg", ex))
         }
 

@@ -35,7 +35,7 @@ import kotlin.reflect.KClass
  * @param filters: 
  * @param controls: 
  */
-open class ApiContainer(
+open class ApiHost(
         val ctx: Context,
         val allowIO: Boolean,
         val auth: Auth? = null,
@@ -91,7 +91,7 @@ open class ApiContainer(
     fun rename(text: String): String = namer?.rename(text) ?: text
 
     fun setApiContainerHost() {
-        routes.visitApis{ _, api -> ApiContainer.setApiHost(api.singleton, this) }
+        routes.visitApis{ _, api -> ApiHost.setApiHost(api.singleton, this) }
     }
 
     /**
@@ -305,7 +305,7 @@ open class ApiContainer(
     companion object {
 
         @JvmStatic
-        fun setApiHost(item: Any?, host: ApiContainer) {
+        fun setApiHost(item: Any?, host: ApiHost) {
             if (item is ApiHostAware) {
                 item.setApiHost(host)
             }

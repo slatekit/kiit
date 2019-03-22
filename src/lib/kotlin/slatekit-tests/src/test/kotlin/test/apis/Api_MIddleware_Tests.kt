@@ -89,7 +89,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun can_handle_hooks() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
         val r2 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
@@ -104,7 +104,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun can_handle_filters_request_filtered_out() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = apis.call("app", "SampleMiddleware", "hi", "get", mapOf(), mapOf())
 
         assert(!r1.success)
@@ -115,7 +115,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun can_handle_filters_request_ok() {
         val api = SampleMiddlewareApi()
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
         assert(r1.success)

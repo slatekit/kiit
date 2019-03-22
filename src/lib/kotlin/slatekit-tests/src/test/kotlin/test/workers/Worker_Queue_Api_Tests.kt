@@ -3,7 +3,7 @@ package test.workers
 import org.junit.Test
 
 import slatekit.common.TODO
-import slatekit.apis.ApiContainer
+import slatekit.apis.ApiHost
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.*
@@ -14,10 +14,10 @@ import test.setup.WorkerSampleApi
 
 class Worker_Queue_Api_Tests {
 
-    fun buildContainer(): ApiContainer {
+    fun buildContainer(): ApiHost {
         val ctx = AppContext.simple("queues")
         val api = SampleTypes2Api()
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
+        val apis = ApiHost(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
         return apis
     }
 
@@ -34,7 +34,7 @@ class Worker_Queue_Api_Tests {
         val api = WorkerSampleApi(ctx, queues)
 
         // 4. container
-        val apis = ApiContainer(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
+        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
 
         // 5. worker system
 //        val sys = System()

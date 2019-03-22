@@ -59,7 +59,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_get_by_id() {
 
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "1", "get", mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
@@ -72,7 +72,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_patch() {
 
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "1", "patch", mapOf(),
                 mapOf("title" to "Indiana Jones Original"))
 
@@ -84,7 +84,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_delete_by_id() {
 
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "1", "delete", mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
@@ -95,7 +95,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_activate_by_id() {
 
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", "activateById", "post", mapOf(), mapOf("id" to 1))
 
         Assert.assertTrue(r1.success)
@@ -119,7 +119,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiContainer(ctx,
+        val apis = ApiHost(ctx,
                 apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),
                 auth = null, allowIO = false,
                 middleware = listOf(Restify()))
@@ -151,7 +151,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call(
                 "app", "SampleREST", "", "put",
                 mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
@@ -166,11 +166,11 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
 
-        val apis = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
+        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)
         callback(r1)
 
-        val api2 = ApiContainer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()), namer = namer)
+        val api2 = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()), namer = namer)
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
         val r2 = api2.call("app", name, act, verb, mapOf(), args)
