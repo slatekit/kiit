@@ -18,12 +18,12 @@ class Worker_Queue_Tests {
         val infos = (0..2).map { it -> Queue(it.toString(), Priority.Low, queue) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
-        Assert.assertEquals(queues.get(0)?.name, "0")
-        Assert.assertEquals(queues.get(1)?.name, "1")
-        Assert.assertEquals(queues.get(2)?.name, "2")
-        Assert.assertEquals(queues.get("0")?.name, "0")
-        Assert.assertEquals(queues.get("1")?.name, "1")
-        Assert.assertEquals(queues.get("2")?.name, "2")
+        Assert.assertEquals(queues[0]?.name, "0")
+        Assert.assertEquals(queues[1]?.name, "1")
+        Assert.assertEquals(queues[2]?.name, "2")
+        Assert.assertEquals(queues["0"]?.name, "0")
+        Assert.assertEquals(queues["1"]?.name, "1")
+        Assert.assertEquals(queues["2"]?.name, "2")
     }
 
     @Test

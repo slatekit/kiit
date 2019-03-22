@@ -192,14 +192,11 @@ class Example_Workers : Cmd("utils") {
         println( status?.name             )
         println( status?.lastRunTime      )
         println( status?.lastResult       )
-        println( status?.totalRequests    )
-        println( status?.totalSuccesses   )
-        println( status?.totalFiltered    )
-        println( status?.totalErrored     )
         println( status?.lastRequest      )
         println( status?.lastSuccess      )
         println( status?.lastFiltered     )
         println( status?.lastErrored      )
+        println( status?.totals           )
 
         // CASE 5: You can pause, resume, stop, start the worker
         // NOTE: The status of the worker will be changed immediately
