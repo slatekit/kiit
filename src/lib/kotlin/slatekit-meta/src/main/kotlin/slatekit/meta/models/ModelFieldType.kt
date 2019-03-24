@@ -4,32 +4,33 @@ package slatekit.meta.models
 sealed class ModelFieldType {
 
     // Bool
-    object TypeBool    : ModelFieldType()
+    object typeBool    : ModelFieldType()
 
     // Chars/Strings
-    object TypeChar    : ModelFieldType()
-    object TypeString  : ModelFieldType()
-    object TypeText    : ModelFieldType()
+    object typeChar    : ModelFieldType()
+    object typeString  : ModelFieldType()
+    object typeText    : ModelFieldType()
 
     // Numbers
-    object TypeShort   : ModelFieldType()
-    object TypeInt     : ModelFieldType()
-    object TypeLong    : ModelFieldType()
-    object TypeFloat   : ModelFieldType()
-    object TypeDouble  : ModelFieldType()
-    object TypeDecimal : ModelFieldType()
+    object typeShort   : ModelFieldType()
+    object typeInt     : ModelFieldType()
+    object typeLong    : ModelFieldType()
+    object typeFloat   : ModelFieldType()
+    object typeDouble  : ModelFieldType()
+    object typeDecimal : ModelFieldType()
 
     // Dates
-    object TypeLocalDate     : ModelFieldType()
-    object TypeLocalTime     : ModelFieldType()
-    object TypeLocalDateTime : ModelFieldType()
-    object TypeZonedDateTime : ModelFieldType()
-    object TypeInstant       : ModelFieldType()
-    object TypeDateTime      : ModelFieldType()
+    object typeLocalDate     : ModelFieldType()
+    object typeLocalTime     : ModelFieldType()
+    object typeLocalDateTime : ModelFieldType()
+    object typeZonedDateTime : ModelFieldType()
+    object typeInstant       : ModelFieldType()
+    object typeDateTime      : ModelFieldType()
 
     // Enum
-    object TypeEnum : ModelFieldType()
+    object typeEnum : ModelFieldType()
+    object typeUUID : ModelFieldType()
 
     // Complex/Object
-    object TypeObject : ModelFieldType()
+    object typeObject : ModelFieldType()
 }

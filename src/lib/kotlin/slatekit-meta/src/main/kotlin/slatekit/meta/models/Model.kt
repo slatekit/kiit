@@ -20,6 +20,7 @@ import slatekit.meta.KTypes
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
@@ -29,16 +30,16 @@ import kotlin.reflect.full.createType
  * Stores the schema of a data-model with properties.
  */
 class Model(
-    val name: String,
-    val fullName: String,
-    val dataType: KClass<*>? = null,
-    val desc: String = "",
-    tableName: String = "",
-    private val _propList: List<ModelField>? = null,
-    val namer: Namer? = null
+        val name: String,
+        val fullName: String,
+        val dataType: KClass<*>? = null,
+        val desc: String = "",
+        tableName: String = "",
+        private val _propList: List<ModelField>? = null,
+        val namer: Namer? = null
 ) {
 
-    constructor(dataType: KClass<*>, tableName:String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName)
+    constructor(dataType: KClass<*>, tableName: String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName)
 
     /**
      * The name of the table
@@ -94,24 +95,25 @@ class Model(
      * @return
      */
     fun add(
-        field: KProperty<*>,
-        desc: String = "",
-        minLength: Int = 0,
-        maxLength: Int = 50,
-        storedName: String? = null,
-        defaultValue: String = "",
-        encrypt: Boolean = false,
-        tag: String = "",
-        cat: String = "data"
+            field: KProperty<*>,
+            desc: String = "",
+            minLength: Int = 0,
+            maxLength: Int = 50,
+            storedName: String? = null,
+            defaultValue: String = "",
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
+        val fieldType = ModelUtils.fieldType(field)
         return addField(
-            field,
-            field.name,
-            KTypes.getClassFromType(field.returnType),
-            field.returnType,
-            desc,
-            !field.returnType.isMarkedNullable,
-            minLength, maxLength, storedName, defaultValue, encrypt, tag, cat
+                field,
+                field.name,
+                KTypes.getClassFromType(field.returnType),
+                fieldType,
+                desc,
+                !field.returnType.isMarkedNullable,
+                minLength, maxLength, storedName, defaultValue, encrypt, tag, cat
         )
     }
 
@@ -123,11 +125,8 @@ class Model(
      * @return
      */
     fun addId(field: KProperty<*>, autoIncrement: Boolean = false): Model {
-        return addField(
-            field, field.name,
-            KTypes.getClassFromType(field.returnType),
-            field.returnType, "", true, 0, 0, name, 0, cat = "id"
-        )
+        val type = KTypes.getClassFromType(field.returnType)
+        return addId(field.name, type, autoIncrement)
     }
 
     /**
@@ -138,7 +137,13 @@ class Model(
      * @return
      */
     fun addId(name: String, dataType: KClass<*>, autoIncrement: Boolean = false): Model {
-        return addField(null, name, Long::class, dataType.createType(), "", true, 0, 0, name, 0, cat = "id")
+        val fieldType = when(dataType){
+            Int::class -> ModelFieldType.typeInt
+            Long::class -> ModelFieldType.typeLong
+            UUID::class -> ModelFieldType.typeUUID
+            else -> throw Exception("Unexpected id type for model for : ${dataType.qualifiedName}")
+        }
+        return addField(null, name, dataType, fieldType, "", true, 0, 0, name, 0, cat = "id")
     }
 
 
@@ -168,7 +173,7 @@ class Model(
             cat: String = "data"
     ): Model {
         return addField(
-                name, String::class, KTypes.KStringType, desc, isRequired, minLength, maxLength, storedName,
+                name, String::class, ModelFieldType.typeString, desc, isRequired, minLength, maxLength, storedName,
                 defaultValue, encrypt, tag, cat
         )
     }
@@ -187,20 +192,20 @@ class Model(
      * @return
      */
     fun addText(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        minLength: Int = 0,
-        maxLength: Int = 50,
-        storedName: String? = null,
-        defaultValue: String = "",
-        encrypt: Boolean = false,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            minLength: Int = 0,
+            maxLength: Int = 50,
+            storedName: String? = null,
+            defaultValue: String = "",
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name, String::class, KTypes.KStringType, desc, isRequired, minLength, maxLength, storedName,
-            defaultValue, encrypt, tag, cat
+                name, String::class, ModelFieldType.typeText, desc, isRequired, minLength, maxLength, storedName,
+                defaultValue, encrypt, tag, cat
         )
     }
 
@@ -215,26 +220,26 @@ class Model(
      * @return
      */
     fun addBool(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name,
-            Boolean::class,
-            KTypes.KBoolType,
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            false,
-            false,
-            tag,
-            cat
+                name,
+                Boolean::class,
+                ModelFieldType.typeBool,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                false,
+                false,
+                tag,
+                cat
         )
     }
 
@@ -249,26 +254,26 @@ class Model(
      * @return
      */
     fun addLocalDate(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name,
-            LocalDate::class,
-            KTypes.KLocalDateType,
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            DateTimes.MIN,
-            false,
-            tag,
-            cat
+                name,
+                LocalDate::class,
+                ModelFieldType.typeLocalDate,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                DateTimes.MIN,
+                false,
+                tag,
+                cat
         )
     }
 
@@ -283,26 +288,26 @@ class Model(
      * @return
      */
     fun addLocalTime(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name,
-            LocalTime::class,
-            KTypes.KLocalTimeType,
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            DateTimes.MIN,
-            false,
-            tag,
-            cat
+                name,
+                LocalTime::class,
+                ModelFieldType.typeLocalTime,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                DateTimes.MIN,
+                false,
+                tag,
+                cat
         )
     }
 
@@ -317,26 +322,26 @@ class Model(
      * @return
      */
     fun addLocalDateTime(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name,
-            LocalDateTime::class,
-            KTypes.KLocalDateTimeType,
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            DateTimes.MIN,
-            false,
-            tag,
-            cat
+                name,
+                LocalDateTime::class,
+                ModelFieldType.typeLocalDateTime,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                DateTimes.MIN,
+                false,
+                tag,
+                cat
         )
     }
 
@@ -351,26 +356,26 @@ class Model(
      * @return
      */
     fun addDateTime(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         return addField(
-            name,
-            DateTime::class,
-            KTypes.KDateTimeType,
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            DateTimes.MIN,
-            false,
-            tag,
-            cat
+                name,
+                DateTime::class,
+                ModelFieldType.typeDateTime,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                DateTimes.MIN,
+                false,
+                tag,
+                cat
         )
     }
 
@@ -385,14 +390,14 @@ class Model(
      * @return
      */
     fun addShort(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
-        return addField(name, Short::class, KTypes.KShortType, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Short::class, ModelFieldType.typeShort, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -406,14 +411,14 @@ class Model(
      * @return
      */
     fun addInt(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
-        return addField(name, Int::class, KTypes.KIntType, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Int::class, ModelFieldType.typeInt, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -427,14 +432,14 @@ class Model(
      * @return
      */
     fun addLong(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
-        return addField(name, Long::class, KTypes.KLongType, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Long::class, ModelFieldType.typeLong, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -448,14 +453,14 @@ class Model(
      * @return
      */
     fun addFloat(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
-        return addField(name, Float::class, KTypes.KFloatType, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Float::class, ModelFieldType.typeFloat, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -469,14 +474,14 @@ class Model(
      * @return
      */
     fun addDouble(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        storedName: String? = null,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            storedName: String? = null,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
-        return addField(name, Double::class, KTypes.KDoubleType, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Double::class, ModelFieldType.typeDouble, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -490,25 +495,25 @@ class Model(
      * @return
      */
     fun addObject(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        dataType: KClass<*>,
-        storedName: String? = null,
-        defaultValue: Any? = null
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            dataType: KClass<*>,
+            storedName: String? = null,
+            defaultValue: Any? = null
     ): Model {
         return addField(
-            null,
-            name,
-            dataType,
-            dataType.createType(),
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            defaultValue,
-            false
+                null,
+                name,
+                dataType,
+                ModelFieldType.typeObject,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                defaultValue,
+                false
         )
     }
 
@@ -523,25 +528,25 @@ class Model(
      * @return
      */
     fun addEnum(
-        name: String,
-        desc: String = "",
-        isRequired: Boolean = false,
-        dataType: KClass<*>,
-        storedName: String? = null,
-        defaultValue: Any? = null
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            dataType: KClass<*>,
+            storedName: String? = null,
+            defaultValue: Any? = null
     ): Model {
         return addField(
-            null,
-            name,
-            dataType,
-            dataType.createType(),
-            desc,
-            isRequired,
-            0,
-            0,
-            storedName,
-            defaultValue,
-            false
+                null,
+                name,
+                dataType,
+                ModelFieldType.typeEnum,
+                desc,
+                isRequired,
+                0,
+                0,
+                storedName,
+                defaultValue,
+                false
         )
     }
 
@@ -560,23 +565,23 @@ class Model(
      * @return
      */
     fun addField(
-        name: String,
-        dataType: KClass<*>,
-        dataKType: KType,
-        desc: String = "",
-        isRequired: Boolean = false,
-        minLength: Int = -1,
-        maxLength: Int = -1,
-        destName: String? = null,
-        defaultValue: Any? = null,
-        encrypt: Boolean = false,
-        tag: String = "",
-        cat: String = "data"
+            name: String,
+            dataCls: KClass<*>,
+            dataTpe: ModelFieldType,
+            desc: String = "",
+            isRequired: Boolean = false,
+            minLength: Int = -1,
+            maxLength: Int = -1,
+            destName: String? = null,
+            defaultValue: Any? = null,
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         val field = ModelField.build(
-            null, name, desc, dataType, dataKType, isRequired,
-            false, false, true,
-            minLength, maxLength, destName, defaultValue, encrypt, tag, cat
+                null, name, desc, dataCls, dataTpe, isRequired,
+                false, false, true,
+                minLength, maxLength, destName, defaultValue, encrypt, tag, cat
         )
         return add(field)
     }
@@ -596,24 +601,24 @@ class Model(
      * @return
      */
     private fun addField(
-        prop: KProperty<*>?,
-        name: String,
-        dataType: KClass<*>,
-        dataKType: KType,
-        desc: String = "",
-        isRequired: Boolean = false,
-        minLength: Int = -1,
-        maxLength: Int = -1,
-        destName: String? = null,
-        defaultValue: Any? = null,
-        encrypt: Boolean = false,
-        tag: String = "",
-        cat: String = "data"
+            prop: KProperty<*>?,
+            name: String,
+            dataCls: KClass<*>,
+            dataTpe: ModelFieldType,
+            desc: String = "",
+            isRequired: Boolean = false,
+            minLength: Int = -1,
+            maxLength: Int = -1,
+            destName: String? = null,
+            defaultValue: Any? = null,
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
     ): Model {
         val field = ModelField.build(
-            prop, name, desc, dataType, dataKType, isRequired,
-            false, false, true,
-            minLength, maxLength, destName, defaultValue, encrypt, tag, cat
+                prop, name, desc, dataCls, dataTpe, isRequired,
+                false, false, true,
+                minLength, maxLength, destName, defaultValue, encrypt, tag, cat
         )
         return add(field)
     }

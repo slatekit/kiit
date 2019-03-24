@@ -134,11 +134,12 @@ open class ModelMapper(
                 val encrypt = anno.encrypt
                 val prop = matchedField.first
                 val fieldKType = matchedField.first.returnType
+                val fieldType = ModelUtils.fieldType(prop)
                 val fieldCls = fieldKType.jvmErasure
                 val modelField = ModelField.build(
                         prop = prop, name = name,
                         dataType = fieldCls,
-                        dataKType = fieldKType,
+                        dataFieldType = fieldType,
                         isRequired = required,
                         isIndexed = anno.indexed,
                         isUnique = anno.unique,

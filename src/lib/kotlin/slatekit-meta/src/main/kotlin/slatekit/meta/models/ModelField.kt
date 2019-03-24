@@ -23,7 +23,7 @@ data class ModelField(
         @JvmField val desc: String = "",
         @JvmField val prop: KProperty<*>? = null,
         @JvmField val dataCls: KClass<*>,
-        @JvmField val dataTpe: KType,
+        @JvmField val dataTpe: ModelFieldType = ModelUtils.fieldType(dataCls),
         @JvmField val storedName: String = "",
         @JvmField val pos: Int = 0,
         @JvmField val isRequired: Boolean = true,
@@ -85,8 +85,8 @@ data class ModelField(
          * @return
          */
         @JvmStatic
-        fun id(name: String, dataType: KClass<*>, dataKType: KType): ModelField {
-            return build(null, name, "", dataType, dataKType, true, true, true, false, 0, 0, name, 0, cat = "id")
+        fun id(name: String, dataType: KClass<*>, dataTpe: ModelFieldType): ModelField {
+            return build(null, name, "", dataType, dataTpe, true, true, true, false, 0, 0, name, 0, cat = "id")
         }
 
         /**
@@ -109,7 +109,7 @@ data class ModelField(
             name: String,
             desc: String = "",
             dataType: KClass<*>,
-            dataKType: KType,
+            dataFieldType: ModelFieldType,
             isRequired: Boolean = false,
             isUnique: Boolean = false,
             isIndexed: Boolean = false,
@@ -131,7 +131,7 @@ data class ModelField(
                     desc = desc,
                     prop = prop,
                     dataCls = dataType,
-                    dataTpe = dataKType,
+                    dataTpe = dataFieldType,
                     isEnum = isEnum,
                     storedName = finalName,
                     pos = 0,

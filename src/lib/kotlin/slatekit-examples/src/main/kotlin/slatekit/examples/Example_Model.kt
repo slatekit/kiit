@@ -70,12 +70,12 @@ class Example_Model : Cmd("model") {
 
     // CASE 3: add fields for text, bool, int, date etc.
     model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", _propList = listOf(
-                 ModelField(name = "key"        , isRequired = true, maxLength = 30, dataCls = String::class, dataTpe = KTypes.KStringType),
-                 ModelField(name = "api"       , isRequired = true, maxLength = 30, dataCls = String::class, dataTpe = KTypes.KStringType),
-                 ModelField(name = "recordState", isRequired = true, dataCls = Int::class, dataTpe = KTypes.KIntType),
-                 ModelField(name = "hostInfo"   , isRequired = true, dataCls = Host::class, dataTpe = Host::class.createType()),
-                 ModelField(name = "created"    , isRequired = true, dataCls = DateTime::class, dataTpe = KTypes.KDateTimeType),
-                 ModelField(name = "updated"    , isRequired = true, dataCls = DateTime::class, dataTpe = KTypes.KDateTimeType)
+                 ModelField(name = "key"        , isRequired = true, maxLength = 30, dataCls = String::class),
+                 ModelField(name = "api"       , isRequired = true, maxLength = 30, dataCls = String::class),
+                 ModelField(name = "recordState", isRequired = true, dataCls = Int::class),
+                 ModelField(name = "hostInfo"   , isRequired = true, dataCls = Host::class),
+                 ModelField(name = "created"    , isRequired = true, dataCls = DateTime::class),
+                 ModelField(name = "updated"    , isRequired = true, dataCls = DateTime::class)
       ))
 
     // CASE 4. check for any fields
