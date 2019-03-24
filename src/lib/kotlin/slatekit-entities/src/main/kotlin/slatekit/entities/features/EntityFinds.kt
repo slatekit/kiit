@@ -4,6 +4,7 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.core.Entity
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.QueryEncoder
 import kotlin.reflect.KProperty
 
 interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
@@ -15,6 +16,18 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun find(query: IQuery): List<T> {
         return repoT().find(query)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param field: The field name
+     * @param value: The value to check for
+     * @return
+     */
+    fun findByField(field:String, value: Any): List<T> {
+        // Get column name from model schema ( if available )
+        val column = QueryEncoder.ensureField(field)
+        return repoT().findBy(column, "=", value)
     }
 
     /**

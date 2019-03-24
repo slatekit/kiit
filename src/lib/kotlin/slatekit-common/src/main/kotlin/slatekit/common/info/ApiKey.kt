@@ -20,10 +20,10 @@ package slatekit.common.info
  * @param rolesLookup : "admin" -> true, "dev" -> true
  */
 data class ApiKey(
-    val name: String,
-    val key: String,
-    val roles: String,
-    val rolesLookup: Map<String, String>
+    @JvmField val name: String,
+    @JvmField val key: String,
+    @JvmField val roles: String,
+    @JvmField val rolesLookup: Map<String, String>
 ) {
 
     constructor(name: String, key: String, roles: String) : this(name, key, roles,

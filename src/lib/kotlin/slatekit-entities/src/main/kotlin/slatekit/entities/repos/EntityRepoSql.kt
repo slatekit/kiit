@@ -114,6 +114,16 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    override fun deleteAll(): Long {
+        val count = db.update("delete from ${repoName()};")
+        return count.toLong()
+    }
+
+    /**
      * deletes items based on the field name and value
      * @param field: The field name
      * @param value: The value to check for

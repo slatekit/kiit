@@ -23,6 +23,10 @@ interface IQuery {
 
     fun toFilter(): String
 
+    fun hasOrderBy():Boolean
+
+    fun getOrderBy():String
+
     fun set(field: String, fieldValue: Any?): IQuery
 
     fun set(vararg pairs:Pair<String, Any>): IQuery

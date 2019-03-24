@@ -1,8 +1,8 @@
 package slatekit.common.info
 
 data class Sys(
-        val host: Host,
-        val lang: Lang
+        @JvmField val host: Host,
+        @JvmField val lang: Lang
 ) {
 
     companion object {

@@ -13,13 +13,13 @@ package slatekit.common.utils
  * @param raw    : Raw typed non-serialized data  e.g. List<TodoItem>
  */
 data class Export<out T>(
-    val version : String,
-    val type    : String,
-    val path    : String,
-    val source  : String,
-    val tag     : String,
-    val format  : String,
-    val size    : Int   ,
-    val data    : String,
-    val raw     : T
+    @JvmField val version : String,
+    @JvmField val type    : String,
+    @JvmField val path    : String,
+    @JvmField val source  : String,
+    @JvmField val tag     : String,
+    @JvmField val format  : String,
+    @JvmField val size    : Int   ,
+    @JvmField val data    : String,
+    @JvmField val raw     : T
 )

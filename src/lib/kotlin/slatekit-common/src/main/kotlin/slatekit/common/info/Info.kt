@@ -14,10 +14,10 @@
 package slatekit.common.info
 
 data class Info(
-    val about: About,
-    val build: Build,
-    val start: StartInfo,
-    val system: Sys
+    @JvmField val about: About,
+    @JvmField val build: Build,
+    @JvmField val start: StartInfo,
+    @JvmField val system: Sys
 ) {
 
 

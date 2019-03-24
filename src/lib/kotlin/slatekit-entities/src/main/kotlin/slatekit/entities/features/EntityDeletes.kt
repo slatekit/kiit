@@ -30,11 +30,20 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
     }
 
     /**
+     * deletes the entity by its id
+     * @param id
+     * @return
+     */
+    fun deleteById(id: TId): Boolean {
+        return repoT().delete(id)
+    }
+
+    /**
      * deletes the entities
      *
      * @param entity
      */
-    fun delete(ids: List<TId>): Int {
+    fun deleteByIds(ids: List<TId>): Int {
 
         // Event out one by one
         return if ( this is EntityHooks ) {
@@ -46,12 +55,11 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
     }
 
     /**
-     * deletes the entity by its id
-     * @param id
+     * deletes all the items in the table
      * @return
      */
-    fun deleteById(id: TId): Boolean {
-        return repoT().delete(id)
+    fun deleteAll(): Long {
+        return repoT().deleteAll()
     }
 
     /**

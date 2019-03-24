@@ -32,9 +32,33 @@ import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
 
-open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>)
-    : EntityRepoInMemory<Long, T>(cls, Long::class, EntityMapperInMemory<Long,T>(Model(cls), LongIdGenerator()) )
-        where T:Entity<Long>
+open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
+    : EntityRepoInMemory<Long, T>(cls, Long::class, EntityMapperInMemory<Long,T>(Model(cls), idGen), idGenerator = idGen)
+        where T:Entity<Long> {
+
+    companion object {
+        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithLongId<T> where T:Entity<Long> {
+            val idGen = LongIdGenerator()
+            return EntityRepoInMemoryWithLongId(cls, idGen)
+        }
+    }
+}
+
+
+open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
+    : EntityRepoInMemory<Int, T>(cls, Int::class, EntityMapperInMemory<Int,T>(Model(cls), idGen), idGenerator = idGen )
+        where T:Entity<Int> {
+
+    companion object {
+
+        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithIntId<T> where T:Entity<Int> {
+            val idGen = IntIdGenerator()
+            return EntityRepoInMemoryWithIntId(cls, idGen)
+        }
+    }
+}
+
+
 
 /**
  * An In-Memory repository to store entities.
@@ -117,6 +141,17 @@ open class EntityRepoInMemory<TId, T>(
     }
 
     /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    override fun deleteAll(): Long {
+        val count = _items.size
+        _items = ListMap(listOf())
+        return count.toLong()
+    }
+
+    /**
      * gets the entity from memory with the specified id.
      *
      * @param id
@@ -140,7 +175,9 @@ open class EntityRepoInMemory<TId, T>(
      * @return
      */
     override fun findBy(field: String, op: String, value: Any): List<T> {
-        val prop = Reflector.findProperty(entityType, field)
+        val propRaw  = Reflector.findPropertyExtended(entityType, field)
+        //val prop =  if(propRaw != null) propRaw else Reflector.findField(entityType)
+        val prop = propRaw
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 

@@ -21,6 +21,7 @@ import java.util.*
 
 object QueryEncoder {
 
+    @JvmStatic
     fun convertVal(value: Any?): String {
         return when (value) {
             Query.Null -> "null"
@@ -48,6 +49,7 @@ object QueryEncoder {
      * @param text
      * @return
      */
+    @JvmStatic
     fun ensureValue(text: String): String =
             if (text.isNullOrEmpty()) {
                 ""
@@ -55,6 +57,7 @@ object QueryEncoder {
                 text.replace("'", "''")
             }
 
+    @JvmStatic
     fun ensureField(text: String): String =
             if (text.isNullOrEmpty()) {
                 ""
@@ -69,6 +72,7 @@ object QueryEncoder {
      * @param compare
      * @return
      */
+    @JvmStatic
     fun ensureCompare(compare: String): String =
             when (compare) {
                 "=" -> "="
@@ -83,6 +87,7 @@ object QueryEncoder {
                 else -> ensureField(compare)
             }
 
+    @JvmStatic
     fun toString(value: String): String {
         val s = ensureValue(value)
         val res = if (s.isNullOrEmpty()) "''" else "'$s'"

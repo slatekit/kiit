@@ -21,7 +21,7 @@ interface DbCon {
 
   companion object {
 
-    val empty = DbConString("", "", "", "")
+    @JvmField val empty = DbConString("", "", "", "")
   }
 }
 

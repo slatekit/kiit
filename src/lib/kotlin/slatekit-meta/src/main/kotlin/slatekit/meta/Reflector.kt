@@ -189,6 +189,11 @@ object Reflector {
         return item
     }
 
+    fun findPropertyExtended(cls: KClass<*>, name: String): KProperty<*>? {
+        val item = cls.memberProperties.find { it.name == name }
+        return item
+    }
+
     fun getMethod(cls: KClass<*>, name: String): KCallable<*>? {
         val mem = cls.members.find { m -> m.name == name }
         return mem
