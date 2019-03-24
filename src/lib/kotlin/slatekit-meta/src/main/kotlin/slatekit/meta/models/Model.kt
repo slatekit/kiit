@@ -48,7 +48,7 @@ class Model(
     /**
      * The field that represents the id
      */
-    val idField: ModelField? get() = _propList?.find { p -> p.cat == "id" }
+    val idField: ModelField? get() = _propList?.find { p -> p.category == "id" }
 
     /**
      * The mapping of property names to the fields.
@@ -139,6 +139,38 @@ class Model(
      */
     fun addId(name: String, dataType: KClass<*>, autoIncrement: Boolean = false): Model {
         return addField(null, name, Long::class, dataType.createType(), "", true, 0, 0, name, 0, cat = "id")
+    }
+
+
+    /**
+     * builds a new model by adding an text field to the list of fields
+     * @param name
+     * @param desc
+     * @param isRequired
+     * @param minLength
+     * @param maxLength
+     * @param storedName
+     * @param defaultValue
+     * @param tag
+     * @param cat
+     * @return
+     */
+    fun addString(
+            name: String,
+            desc: String = "",
+            isRequired: Boolean = false,
+            minLength: Int = 0,
+            maxLength: Int = 50,
+            storedName: String? = null,
+            defaultValue: String = "",
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
+    ): Model {
+        return addField(
+                name, String::class, KTypes.KStringType, desc, isRequired, minLength, maxLength, storedName,
+                defaultValue, encrypt, tag, cat
+        )
     }
 
     /**

@@ -31,6 +31,11 @@ open class Query : IQuery {
     protected val _joins = mutableListOf<Triple<String, String, String>>()
     protected val _orders = mutableListOf<Pair<String, String>>()
 
+
+    override fun hasOrderBy():Boolean = !_orders.isEmpty()
+
+    override fun getOrderBy():String = _orders.joinToString(",") { it.first + it.second }
+
     override fun toUpdates(): List<FieldValue> = _data.updates.toList()
 
     override fun toUpdatesText(): String {

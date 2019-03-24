@@ -19,28 +19,29 @@ import slatekit.meta.Reflector
 import kotlin.reflect.*
 
 data class ModelField(
-    val name: String,
-    val desc: String = "",
-    val prop: KProperty<*>? = null,
-    val dataCls: KClass<*>,
-    val dataTpe: KType,
-    val storedName: String = "",
-    val pos: Int = 0,
-    val isRequired: Boolean = true,
-    val minLength: Int = -1,
-    val maxLength: Int = -1,
-    val isEnum: Boolean = false,
-    val isUnique: Boolean = false,
-    val isIndexed: Boolean = false,
-    val isUpdatable: Boolean = true,
-    val defaultVal: Any? = null,
-    val encrypt: Boolean = false,
-    val key: String = "",
-    val extra: String = "",
-    val example: String = "",
-    val tag: String = "",
-    val cat: String = "",
-    val model: Model? = null
+        @JvmField val name: String,
+        @JvmField val desc: String = "",
+        @JvmField val prop: KProperty<*>? = null,
+        @JvmField val dataCls: KClass<*>,
+        @JvmField val dataTpe: KType,
+        @JvmField val storedName: String = "",
+        @JvmField val pos: Int = 0,
+        @JvmField val isRequired: Boolean = true,
+        @JvmField val minLength: Int = -1,
+        @JvmField val maxLength: Int = -1,
+        @JvmField val isEnum: Boolean = false,
+        @JvmField val isUnique: Boolean = false,
+        @JvmField val isIndexed: Boolean = false,
+        @JvmField val isUpdatable: Boolean = true,
+        @JvmField val defaultValue: Any? = null,
+        @JvmField val encrypt: Boolean = false,
+        @JvmField val key: String = "",
+        @JvmField val extra: String = "",
+        @JvmField val example: String = "",
+        @JvmField val format: String = "",
+        @JvmField val tag: String = "",
+        @JvmField val category: String = "",
+        @JvmField val model: Model? = null
 ) {
 
     override fun toString(): String {
@@ -54,13 +55,14 @@ data class ModelField(
         text.append(", isRequired : $isRequired")
         text.append(", minLength : $minLength")
         text.append(", maxLength : $maxLength")
-        text.append(", defaultVal : $defaultVal")
+        text.append(", defaultValue : $defaultValue")
         text.append(", encrypt : $encrypt")
         text.append(", example : $example")
+        text.append(", format : $format")
         text.append(", key : $key")
         text.append(", extra : $extra")
         text.append(", tag : $tag")
-        text.append(", cat : $cat")
+        text.append(", category : $category")
         text.append(" )")
         return text.toString()
     }
@@ -139,11 +141,11 @@ data class ModelField(
                     isUpdatable = isUpdatable,
                     minLength = minLength,
                     maxLength = maxLength,
-                    defaultVal = defaultValue,
+                    defaultValue = defaultValue,
                     encrypt = encrypt,
                     key = "",
                     tag = tag,
-                    cat = cat
+                    category = cat
             )
             return field
         }

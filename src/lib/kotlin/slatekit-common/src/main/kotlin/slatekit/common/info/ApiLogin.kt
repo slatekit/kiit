@@ -23,11 +23,11 @@ package slatekit.common.info
  * @param tag : Optional tag
  */
 data class ApiLogin(
-    val account: String = "",
-    val key: String = "",
-    val pass: String = "",
-    val env: String = "",
-    val tag: String = ""
+    @JvmField val account: String = "",
+    @JvmField val key: String = "",
+    @JvmField val pass: String = "",
+    @JvmField val env: String = "",
+    @JvmField val tag: String = ""
 ) {
 
     companion object {
