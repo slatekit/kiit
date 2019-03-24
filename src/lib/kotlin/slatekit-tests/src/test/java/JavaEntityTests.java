@@ -2,6 +2,7 @@
 import app.SimpleEvent;
 import app.SimpleEventService;
 import entities.SqliteDb;
+import kotlin.ranges.IntRange;
 import kotlin.reflect.KClass;
 import meta.ModelHelpers;
 import org.junit.Assert;
@@ -69,5 +70,28 @@ public class JavaEntityTests {
         Assert.assertEquals(id , 1);
         List<SimpleEvent> all = service.getAll();
         Assert.assertEquals(1, all.size());
+    }
+
+
+    @Test
+    public void can_find_by() {
+        Entities entities = new Entities( (con) -> new SqliteDb(), DbLookup.defaultDb(DbCon.empty), null, LogsDefault.INSTANCE, null);
+        IdGenerator<Integer> idGen = new IntIdGenerator();
+        EntityRepo<Integer, SimpleEvent> repo = new EntityRepoInMemoryWithIntId(ModelHelpers.model(SimpleEvent.class), idGen);
+        SimpleEventService service = new SimpleEventService(entities, repo);
+
+        for(int ndx = 1; ndx < 3; ndx++ ) {
+            LocalDateTime timestamp = LocalDateTime.of(2019, 3, 1, 9, 30, 0);
+            SimpleEvent simpleEvent = new SimpleEvent();
+            simpleEvent.title = "event " + ndx ;
+            simpleEvent.details = "details " + ndx;
+            simpleEvent.startTime = ZonedDateTime.of(timestamp, ZoneId.systemDefault());
+            simpleEvent.endTime = ZonedDateTime.of(timestamp.plusHours(1), ZoneId.systemDefault());
+            simpleEvent.url = "www.event" + ndx + ".com";
+            int id = service.create(simpleEvent);
+        }
+
+        List<SimpleEvent> matches = service.findByField("title", "event 1");
+        Assert.assertEquals(1, matches.size());
     }
 }

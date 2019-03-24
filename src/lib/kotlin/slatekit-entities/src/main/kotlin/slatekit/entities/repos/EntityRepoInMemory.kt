@@ -141,6 +141,17 @@ open class EntityRepoInMemory<TId, T>(
     }
 
     /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    override fun deleteAll(): Long {
+        val count = _items.size
+        _items = ListMap(listOf())
+        return count.toLong()
+    }
+
+    /**
      * gets the entity from memory with the specified id.
      *
      * @param id
@@ -164,7 +175,9 @@ open class EntityRepoInMemory<TId, T>(
      * @return
      */
     override fun findBy(field: String, op: String, value: Any): List<T> {
-        val prop = Reflector.findProperty(entityType, field)
+        val propRaw  = Reflector.findPropertyExtended(entityType, field)
+        //val prop =  if(propRaw != null) propRaw else Reflector.findField(entityType)
+        val prop = propRaw
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
