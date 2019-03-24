@@ -115,6 +115,41 @@ class Model(
                 !field.returnType.isMarkedNullable,
                 minLength, maxLength, storedName, defaultValue, encrypt, tag, cat
         )
+    }/**
+     * builds a new model by adding an text field to the list of fields
+     * @param name
+     * @param desc
+     * @param isRequired
+     * @param minLength
+     * @param maxLength
+     * @param storedName
+     * @param defaultValue
+     * @param tag
+     * @param cat
+     * @return
+     */
+    fun add(
+            field: KProperty<*>,
+            required:Boolean,
+            desc: String = "",
+            minLength: Int = 0,
+            maxLength: Int = 50,
+            storedName: String? = null,
+            defaultValue: String = "",
+            encrypt: Boolean = false,
+            tag: String = "",
+            cat: String = "data"
+    ): Model {
+        val fieldType = ModelUtils.fieldType(field)
+        return addField(
+                field,
+                field.name,
+                KTypes.getClassFromType(field.returnType),
+                fieldType,
+                desc,
+                required,
+                minLength, maxLength, storedName, defaultValue, encrypt, tag, cat
+        )
     }
 
     /**

@@ -26,7 +26,6 @@ open class Query : IQuery {
     )
 
     protected val _limit = AtomicInteger(0)
-    protected val EmptyString = "''"
     protected val _data = QueryData(mutableListOf(), mutableListOf())
     protected val _joins = mutableListOf<Triple<String, String, String>>()
     protected val _orders = mutableListOf<Pair<String, String>>()
@@ -249,5 +248,6 @@ open class Query : IQuery {
         @JvmStatic val Null = "null"
         @JvmStatic val Asc = "asc"
         @JvmStatic val Desc = "desc"
+        @JvmStatic val EmptyString = "''"
     }
 }

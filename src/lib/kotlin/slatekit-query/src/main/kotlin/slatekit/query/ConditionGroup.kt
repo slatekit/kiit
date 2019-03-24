@@ -13,7 +13,9 @@
 
 package slatekit.query
 
-data class ConditionGroup(val left: Any, val operator: String, val right: Any) : ICondition {
+data class ConditionGroup(@JvmField val left: Any,
+                          @JvmField val operator: String,
+                          @JvmField val right: Any) : ICondition {
 
     override fun toStringQuery(): String = getString(left) + " " + operator + " " + getString(right)
 
