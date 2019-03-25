@@ -22,7 +22,7 @@ import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.Uris
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.meta.Serialization
 import java.io.File
@@ -91,7 +91,7 @@ object Requests {
         val jsonMeta = jsonRoot.get("meta") as JSONObject
         val sep = if (path.contains("/")) "/" else "."
 
-        return SimpleRequest(
+        return CommonRequest(
                 version = version,
                 path = path,
                 parts = path.split(sep),

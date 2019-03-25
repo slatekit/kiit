@@ -14,11 +14,9 @@ package test.meta
 
 import org.junit.Test
 import slatekit.common.Conversions
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.meta.Reflector
 import slatekit.meta.Deserializer
@@ -86,7 +84,7 @@ class CallTests {
     @Test fun can_handle_types(){
 
         fun ensureTypes(inputs: InputArgs):Unit {
-            val req = SimpleRequest("app.users.testTypes", listOf("app", "users", "testTypes"), Source.CLI, "post", inputs, InputArgs(mapOf()))
+            val req = CommonRequest("app.users.testTypes", listOf("app", "users", "testTypes"), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = deserializer.deserialize(method!!.parameters.drop(1))
@@ -128,7 +126,7 @@ class CallTests {
 
         fun ensureList(inputs: InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
-            val req = SimpleRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
+            val req = CommonRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
@@ -150,7 +148,7 @@ class CallTests {
 
         fun ensureMap(inputs: InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
-            val req = SimpleRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
+            val req = CommonRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))

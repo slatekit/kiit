@@ -26,11 +26,9 @@ import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.db.Db
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityContext
-import slatekit.results.StatusCodes
 
 /**
   *
@@ -67,8 +65,8 @@ data class AppEntContext(
      * converts this to an app context which is basically
      * the same context without the Entities
      */
-    fun toAppContext(): AppContext {
-        return AppContext(arg, env, cfg, logs, app, sys, build, start, enc, dirs)
+    fun toAppContext(): CommonContext {
+        return CommonContext(arg, env, cfg, logs, app, sys, build, start, enc, dirs)
     }
 
     companion object {
@@ -89,7 +87,7 @@ data class AppEntContext(
          * converts this to an app context which is basically
          * the same context without the Entities
          */
-        fun fromAppContext(ctx: AppContext, namer: Namer? = null): AppEntContext {
+        fun fromAppContext(ctx: CommonContext, namer: Namer? = null): AppEntContext {
             val dbCons = DbLookup.fromConfig(ctx.cfg)
             return AppEntContext(
                     ctx.arg, ctx.env, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, ctx.start, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs

@@ -1,6 +1,5 @@
 package slatekit.server.sample
 
-import io.ktor.application.ApplicationCall
 import slatekit.apis.ApiHost
 import slatekit.apis.doc.DocWeb
 import slatekit.apis.security.AuthModes
@@ -8,7 +7,6 @@ import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.security.WebProtocol
 import slatekit.apis.svcs.Authenticator
-import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.auth.Roles
 import slatekit.common.conf.Config
@@ -16,13 +14,10 @@ import slatekit.common.envs.Env
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.metrics.MetricsLite
-import slatekit.common.toResponse
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.meta.Deserializer
-import slatekit.results.Success
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
-import slatekit.server.ktor.KtorResponse
 
 object SampleSetup {
 
@@ -39,7 +34,7 @@ object SampleSetup {
 
     // Context for sample purposes.
     val context by lazy {
-        AppContext(
+        CommonContext(
                 arg = Args.default(),
                 env = Env.defaults().select("dev").current!!,
                 cfg = Config(),

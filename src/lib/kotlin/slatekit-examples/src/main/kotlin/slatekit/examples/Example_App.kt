@@ -31,7 +31,7 @@ import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.core.cmds.Cmd
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.db.Db
 import slatekit.entities.core.Entities
 import slatekit.providers.logs.logback.LogbackLogs
@@ -166,12 +166,12 @@ class Example_App : Cmd("app") {
         // APPROACH 1: Manually / Explicitly build up the AppContext
         // Load the config "env.conf" from resources
         val conf = Config("env.conf")
-        val ctx = AppContext(
+        val ctx = CommonContext(
                 arg = Args.default(),
                 env = conf.env(),
                 cfg = conf,
                 logs = LogsDefault,
-                ent = Entities({con -> Db(con) }),
+                ent = Entities({ con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 app = About(
                         id = "slatekit.examples",

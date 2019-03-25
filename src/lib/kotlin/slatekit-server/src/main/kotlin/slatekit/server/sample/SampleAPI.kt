@@ -8,14 +8,14 @@ import slatekit.apis.support.ApiBase
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.Request
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
         roles = "", auth = "", verb = Verbs.auto, protocol = Protocols.web)
-class SampleApi(context: AppContext) : ApiBase(context) {
+class SampleApi(context: CommonContext) : ApiBase(context) {
 
     // For unit-tests
     var inc = 0

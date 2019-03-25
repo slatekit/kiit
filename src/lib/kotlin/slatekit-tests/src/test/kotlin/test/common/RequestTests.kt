@@ -4,15 +4,14 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Requests
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 
 class RequestTests {
 
-    val sampleRequest = SimpleRequest(
+    val sampleRequest = CommonRequest(
             "app.users.activate",
             listOf("app", "users", "activate"),
             Source.Web,

@@ -21,7 +21,7 @@ import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.requests.Request
 import slatekit.common.info.Credentials
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.results.Failure
 import slatekit.results.StatusCodes
 import slatekit.results.Try
@@ -44,7 +44,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 protocol = CliProtocol,
                 apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = SimpleRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
                 response = Results.unexpected<Any>(Exception("unexpected error in api")).toResponse()
@@ -65,7 +65,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 protocol = CliProtocol,
                 apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = SimpleRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
                 response = Results.unexpected<Any>(Exception("global middleware error handler")).toResponse()
@@ -79,7 +79,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 protocol = CliProtocol,
                 apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthModes.token, roles = Roles.all, declaredOnly = false)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = SimpleRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
                 response = Results.unexpected<Any>(Exception("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs")).toResponse()

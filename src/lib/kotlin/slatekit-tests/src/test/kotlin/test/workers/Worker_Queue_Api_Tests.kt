@@ -3,15 +3,13 @@ package test.workers
 import org.junit.Assert
 import org.junit.Test
 
-import slatekit.common.TODO
 import slatekit.apis.ApiHost
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.integration.workers.WorkerWithQueuesApi
-import slatekit.results.Try
 import slatekit.results.getOrElse
 import slatekit.workers.Job
 import slatekit.workers.Priority
@@ -23,7 +21,7 @@ import test.setup.WorkerSampleApi
 class Worker_Queue_Api_Tests {
 
     fun buildContainer(): ApiHost {
-        val ctx = AppContext.simple("queues")
+        val ctx = CommonContext.simple("queues")
         val api = SampleTypes2Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
         return apis
@@ -33,7 +31,7 @@ class Worker_Queue_Api_Tests {
     @Test
     fun can_send_to_queue(){
         // 1. context
-        val ctx = AppContext.simple("queues")
+        val ctx = CommonContext.simple("queues")
 
         // 2. queues
         val queues = listOf(QueueSourceInMemory.stringQueue())

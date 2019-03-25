@@ -5,7 +5,7 @@ import slatekit.common.Random
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.workers.System
 import test.workers.WorkerSample
 import slatekit.workers.Priority
@@ -51,7 +51,7 @@ fun testWorkers():Unit {
     // 2. Work system.
     val queueInfos = queues.map { Queue(it.name, Priority.Low, it) }
     val sys = System(
-        AppContext.simple("test"),
+        CommonContext.simple("test"),
         queueInfos,
             metrics = MetricsLite.build()
     )
