@@ -25,12 +25,11 @@ import java.util.*
  * Created by kishorereddy on 6/15/17.
  */
 class ConfigMulti(
-    private val _config: Properties,
-    private val _configParent: Properties,
-    path: String,
-    enc: Encryptor? = null
-)
-    : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
+        private val config: Properties,
+        private val configParent: Properties,
+        private val path: String,
+        private val enc: Encryptor? = null
+) : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
 
     constructor(configPath: String, configParentPath: String, enc: Encryptor?) :
             this(ConfFuncs.loadPropertiesFrom(configPath),
@@ -45,15 +44,12 @@ class ConfigMulti(
             this(ConfFuncs.loadPropertiesFrom(configPath),
                     configParent.rawConfig as Properties, configPath, enc)
 
-    private val _fileName = path
-    private val _enc = enc
-
-    override val raw: Any = _config
+    override val raw: Any = config
     override fun get(key: String): Any? = getInternalString(key)
     override fun containsKey(key: String): Boolean = containsKeyInternal(key)
-    override fun size(): Int = _config.values.size
+    override fun size(): Int = config.values.size
 
-    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), _encryptor)
+    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))
@@ -73,13 +69,13 @@ class ConfigMulti(
      *
      * @return
      */
-    override val rawConfig: Any = _config
+    override val rawConfig: Any = config
 
     /**
      * The origin file path of the config
      * @return
      */
-    override fun origin(): String = _fileName
+    override fun origin(): String = this.path
 
     /**
      * Loads config from the file path supplied
@@ -87,17 +83,17 @@ class ConfigMulti(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, _enc)
+    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
 
     fun containsKeyInternal(key: String): Boolean {
-        return _config.containsKey(key) || _configParent.containsKey(key)
+        return config.containsKey(key) || configParent.containsKey(key)
     }
 
     fun getInternal(key: String): Any? {
-        val value = if (_config.containsKey(key)) {
-            _config.getProperty(key)
-        } else if (_configParent.containsKey(key)) {
-            _configParent.getProperty(key)
+        val value = if (config.containsKey(key)) {
+            config.getProperty(key)
+        } else if (configParent.containsKey(key)) {
+            configParent.getProperty(key)
         } else {
             null
         }
@@ -109,10 +105,10 @@ class ConfigMulti(
     }
 
     fun getInternalString(key: String): String? {
-        val value = if (_config.containsKey(key)) {
-            _config.getProperty(key)
-        } else if (_configParent.containsKey(key)) {
-            _configParent.getProperty(key)
+        val value = if (config.containsKey(key)) {
+            config.getProperty(key)
+        } else if (configParent.containsKey(key)) {
+            configParent.getProperty(key)
         } else {
             null
         }

@@ -22,20 +22,20 @@ data class Task(val name:String, val runMode: RunMode, val errorMode: ErrorMode,
     /**
      * Current status of the task ( see status )
      */
-    private val _status = AtomicReference<Status>(Status.InActive)
+    private val status = AtomicReference<Status>(Status.InActive)
 
 
     /**
      * Gets the current status of the task
      */
-    override fun status(): Status = _status.get()
+    override fun status(): Status = status.get()
 
 
     /**
      * Move the status to the one supplied.
      */
     override fun moveToState(state: Status): Status {
-        _status.set(state)
-        return _status.get()
+        status.set(state)
+        return status.get()
     }
 }

@@ -28,8 +28,8 @@ class EmailServiceSendGrid(
 )
     : EmailService(templates) {
 
-    val _settings = EmailSettings(user, key, phone)
-    private val _baseUrl = "https://api.sendgrid.com/api/mail.send.json"
+    val settings = EmailSettings(user, key, phone)
+    private val baseUrl = "https://api.sendgrid.com/api/mail.send.json"
 
     /**
      * Initialize with api credentials
@@ -45,14 +45,14 @@ class EmailServiceSendGrid(
 
         val result = HttpRPC().sendSync(
                 method = HttpRPC.Method.Post,
-                url = _baseUrl,
+                url = baseUrl,
                 headers = null,
-                creds = HttpRPC.Auth.Basic(_settings.user, _settings.key),
+                creds = HttpRPC.Auth.Basic(settings.user, settings.key),
                 body = HttpRPC.Body.FormData(listOf(
-                        Pair("api_user", _settings.user),
-                        Pair("api_key", _settings.key),
+                        Pair("api_user", settings.user),
+                        Pair("api_key", settings.key),
                         Pair("to", msg.to),
-                        Pair("from", _settings.account),
+                        Pair("from", settings.account),
                         Pair("subject", msg.subject),
                         Pair(bodyArg, msg.body)
                 )

@@ -29,8 +29,8 @@ open class System(
         ) : Runnable {
 
 
-    private val _runState = AtomicReference<Status>(Status.InActive)
-    private var _thread: Thread? = null
+    private val runState = AtomicReference<Status>(Status.InActive)
+    private var thread: Thread? = null
 
 
     /**
@@ -160,8 +160,8 @@ open class System(
     }
 
     fun start() {
-        _thread = Thread(this)
-        _thread?.start()
+        thread = Thread(this)
+        thread?.start()
     }
 
     /**
@@ -223,7 +223,7 @@ open class System(
     fun stopWorker(worker: String) = perform("stopping worker: $worker") { get(worker)?.stop() }
 
 
-    fun getState(): Status = _runState.get()
+    fun getState(): Status = runState.get()
 
     /**
      * moves the current state to the name supplied and performs a status update
@@ -232,7 +232,7 @@ open class System(
      * @return
      */
     fun moveToState(state: Status): Status {
-        _runState.set(state)
+        runState.set(state)
         log.info("$logPrefix transitioning to ${state.name}")
         return state
     }

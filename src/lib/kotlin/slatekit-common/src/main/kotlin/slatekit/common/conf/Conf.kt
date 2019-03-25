@@ -22,9 +22,9 @@ import slatekit.common.Strings
  * 2. referencing settings in other files
  * 3. mapping settings from objects ( db connection, login, apiCredentials ) via ConfigSupport trait
  *
- * @param _encryptor: Optional encryptor for decrypting encrypted config settings.
+ * @param encryptor: Optional encryptor for decrypting encrypted config settings.
  */
-abstract class Conf(val _encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
+abstract class Conf(val encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
 
     /**
      * access to raw config object. e.g. could be a type-safe config.
@@ -48,7 +48,7 @@ abstract class Conf(val _encryptor: ((String) -> String)?) : Inputs, ConfigSuppo
      */
     override fun getString(key: String): String {
         val value = get(key) ?: ""
-        return Strings.decrypt(value.toString(), _encryptor)
+        return Strings.decrypt(value.toString(), encryptor)
     }
 
     /**

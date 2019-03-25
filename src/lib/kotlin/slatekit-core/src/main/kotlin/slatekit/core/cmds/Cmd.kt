@@ -46,24 +46,23 @@ import java.util.concurrent.atomic.AtomicReference
 open class Cmd(
     val name: String,
     val desc: String? = null,
-    call: ((Array<String>?) -> Any?)? = null
+    val call: ((Array<String>?) -> Any?)? = null
 ) {
 
-    private val _call = call
-    private val _lastResult = AtomicReference<CmdResult>(CmdFuncs.defaultResult(name))
-    private val _lastStatus = AtomicReference<CmdState>(CmdFuncs.defaultState(name))
+    private val lastResult = AtomicReference<CmdResult>(CmdFuncs.defaultResult(name))
+    private val lastStatus = AtomicReference<CmdState>(CmdFuncs.defaultState(name))
 
     /**
      * Expose the immutable last execution result of this command
      * @return
      */
-    fun lastResult(): CmdResult = _lastResult.get()
+    fun lastResult(): CmdResult = lastResult.get()
 
     /**
      * Expose the last known status of this command
      * @return
      */
-    fun lastStatus(): CmdState = _lastStatus.get()
+    fun lastStatus(): CmdState = lastStatus.get()
 
     /**
      * execute this command with optional arguments
@@ -79,7 +78,7 @@ open class Cmd(
         val result: Try<Any> =
                 try {
 
-                    _call?.let { c ->
+                    call?.let { c ->
                         val res = c(args)
                         val finalResult = when(res){
                             null -> Failure("unable to execute command")
@@ -98,8 +97,8 @@ open class Cmd(
         val cmdResult = CmdFuncs.fromResult(name, start, end, result)
 
         // Track the last result and build updated status
-        _lastResult.set(cmdResult)
-        _lastStatus.set(_lastStatus.get().update(cmdResult))
+        lastResult.set(cmdResult)
+        lastStatus.set(lastStatus.get().update(cmdResult))
 
         return cmdResult
     }

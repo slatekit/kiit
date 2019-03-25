@@ -25,7 +25,7 @@ open class Authenticator(
         private val headerKey: String = "api-key"
 ) : Auth {
 
-    private val _keyLookup = AuthFuncs.convertKeys(keys)
+    private val keyLookup = AuthFuncs.convertKeys(keys)
 
     /**
      * whether or not the authorization is valid for the mode, roles supplied.
@@ -75,7 +75,7 @@ open class Authenticator(
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
-        return AuthFuncs.isKeyValid(req.meta, _keyLookup, headerKey, role)
+        return AuthFuncs.isKeyValid(req.meta, keyLookup, headerKey, role)
     }
 
     /**

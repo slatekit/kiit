@@ -69,29 +69,27 @@ Examples:
 
  * @param fileName
  * @param enc
- * @param config
+ * @param props
  */
 class Config(
-    fileName: String? = null,
-    enc: Encryptor? = null,
-    config: Properties? = null
+        private val fileName: String? = null,
+        private val enc: Encryptor? = null,
+        props: Properties? = null
 )
     : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
 
-    private val _fileName = fileName
-    private val _enc = enc
 
     /**
      * Get or load the config object
      */
-    private val _config: Properties = config ?: ConfFuncs.loadPropertiesFrom(fileName)
-    override val raw: Any = _config
+    private val config: Properties = props ?: ConfFuncs.loadPropertiesFrom(fileName)
+    override val raw: Any = config
     override fun get(key: String): Any? = getInternal(key)
     //override fun getObject(key: String): Any? = getInternal(key)
-    override fun containsKey(key: String): Boolean = _config.containsKey(key)
-    override fun size(): Int = _config.values.size
+    override fun containsKey(key: String): Boolean = config.containsKey(key)
+    override fun size(): Int = config.values.size
 
-    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), _encryptor)
+    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), encryptor)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))
@@ -111,13 +109,13 @@ class Config(
      *
      * @return
      */
-    override val rawConfig: Any = _config
+    override val rawConfig: Any = config
 
     /**
      * The origin file path of the config
      * @return
      */
-    override fun origin(): String = _fileName ?: ""
+    override fun origin(): String = fileName ?: ""
 
     /**
      * Loads config from the file path supplied
@@ -125,11 +123,11 @@ class Config(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, _enc)
+    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
 
     fun getInternal(key: String): Any? {
         return if (containsKey(key)) {
-            val value = _config.getProperty(key)
+            val value = config.getProperty(key)
             if (value != null && value is String) {
                 value.trim()
             } else {
@@ -140,6 +138,6 @@ class Config(
         }
     }
 
-    fun getStringRaw(key: String): String = _config.getProperty(key)?.trim() ?: ""
+    fun getStringRaw(key: String): String = config.getProperty(key)?.trim() ?: ""
 }
 

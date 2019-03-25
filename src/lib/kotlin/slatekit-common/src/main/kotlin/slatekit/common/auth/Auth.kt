@@ -29,48 +29,41 @@ package slatekit.common.auth
  *
  * @param isAuthenticated
  * @param userInfo
- * @param roles
+ * @param rolesDelimited
  */
-open class Auth(val isAuthenticated: Boolean, userInfo: User?, roles: String) {
+open class Auth(val isAuthenticated: Boolean, val user: User?, rolesDelimited: String) {
 
-    private val _user = userInfo
-    private val _roles = AuthFuncs.convertRoles(roles)
+    private val roles = AuthFuncs.convertRoles(rolesDelimited)
 
     /**
      * matches the user to the one supplied.
      * @param user
      * @return
      */
-    fun isUser(user: User?): Boolean = user?.isMatch(_user ?: AuthFuncs.guest) ?: false
+    fun isUser(user: User?): Boolean = user?.isMatch(this.user ?: AuthFuncs.guest) ?: false
 
     /**
      * whether or not the user in the role supplied.
      * @param role
      * @return
      */
-    fun isInRole(role: String): Boolean = _roles.containsKey(role)
+    fun isInRole(role: String): Boolean = roles.containsKey(role)
 
     /**
      * whether or not the users phone is verified
      * @return
      */
-    val isPhoneVerified: Boolean get() = _user?.isPhoneVerified ?: false
+    val isPhoneVerified: Boolean get() = user?.isPhoneVerified ?: false
 
     /**
      * whether or not the users email is verified
      * @return
      */
-    val isEmailVerified: Boolean get() = _user?.isEmailVerified ?: false
+    val isEmailVerified: Boolean get() = user?.isEmailVerified ?: false
 
     /**
      * The user id
      * @return
      */
-    val userId: String get() = _user?.id ?: ""
-
-    /**
-     * The user info
-     * @return
-     */
-    val user: User? = _user
+    val userId: String get() = user?.id ?: ""
 }

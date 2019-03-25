@@ -199,7 +199,7 @@ open class Deserializer(
                 val json = if (jsonRaw == null) {
                     val obj = JSONObject()
                     if (data is InputArgs) {
-                        val map = data._map
+                        val map = data.map
                         map.entries.forEach { pair ->
                             obj.put(pair.key, pair.value)
                         }

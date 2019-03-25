@@ -30,7 +30,7 @@ import slatekit.results.builders.Notices
 
 object ApiHelper {
 
-    val _typeDefaults = mapOf(
+    val typeDefaults = mapOf(
             "String" to "",
             "Boolean" to false,
             "Int" to 0,
@@ -135,7 +135,7 @@ object ApiHelper {
         // Check 2: 1 param with default and no args
         else if (action.isSingleDefaultedArg() && cmd.data.size() == 0) {
             val argType = action.paramsUser[0].type.toString()
-            val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
+            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         } else {
             deserializer.deserialize(action.params)

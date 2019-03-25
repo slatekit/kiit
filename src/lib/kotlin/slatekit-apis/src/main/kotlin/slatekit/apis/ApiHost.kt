@@ -78,7 +78,7 @@ open class ApiHost(
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
-    private val _validator by lazy { Validation(this) }
+    private val validator by lazy { Validation(this) }
 
     private val formatter = Format()
 
@@ -228,7 +228,7 @@ open class ApiHost(
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
 
         // Api exists ?
-        val apiCheck = _validator.validateApi(req)
+        val apiCheck = validator.validateApi(req)
 
         // Execute the API using
         val resultRaw = apiCheck.flatMap { apiRef ->
@@ -237,7 +237,7 @@ open class ApiHost(
             val runCtx = Ctx(this, this.ctx, req, apiRef)
 
             // Execute using a pipeline
-            Exec(runCtx, _validator, logger).run(this::executeMethod)
+            Exec(runCtx, validator, logger).run(this::executeMethod)
         }
         val result = resultRaw.toTry()
 

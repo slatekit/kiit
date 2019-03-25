@@ -78,11 +78,11 @@ open class Worker<T>(
     constructor(name:String, desc:String, queues:List<String>): this( name, "", desc, "", queues )
 
 
-    private val _runState = AtomicReference<Status>(Status.InActive)
-    private val _runStatus = AtomicReference<WorkerStatus>(WorkerStatus())
-    private val _runDelay = AtomicReference<Int>(0)
-    private val _lastResult = AtomicReference<Try<T>>(slatekit.results.Failure(Exception("not started")))
-    private val _lastRunTime = AtomicReference<DateTime>(DateTimes.MIN)
+    private val runState = AtomicReference<Status>(Status.InActive)
+    private val runStatus = AtomicReference<WorkerStatus>(WorkerStatus())
+    private val runDelay = AtomicReference<Int>(0)
+    private val lastResult = AtomicReference<Try<T>>(slatekit.results.Failure(Exception("not started")))
+    private val lastRunTime = AtomicReference<DateTime>(DateTimes.MIN)
 
     /**
      * Unique id for this worker
@@ -118,14 +118,14 @@ open class Worker<T>(
      *
      * @return
      */
-    fun state(): Status = _runState.get()
+    fun state(): Status = runState.get()
 
     /**
      * gets the current status of the application
      *
      * @return
      */
-    override fun status(): Status = _runStatus.get().status
+    override fun status(): Status = runStatus.get().status
 
     /**
      * Whether or not this worker is available for handling jobs
@@ -182,15 +182,15 @@ open class Worker<T>(
 
         // Check current status
         if (isFailed() || isStopped() || isPaused()) {
-            return _lastResult.get()
+            return lastResult.get()
         }
 
         // Update state
         moveToState(Status.Running)
-        _lastRunTime.set(DateTime.now())
+        lastRunTime.set(DateTime.now())
 
         val result = work?.invoke(job) ?: perform(job)
-        _lastResult.set(result)
+        lastResult.set(result)
         moveToState(Status.Idle)
         return result
     }
@@ -212,9 +212,9 @@ open class Worker<T>(
         return WorkerStats(
                 about.id,
                 about.name,
-                status = _runState.get(),
-                lastRunTime = _lastRunTime.get(),
-                lastResult = _lastResult.get(),
+                status = runState.get(),
+                lastRunTime = lastRunTime.get(),
+                lastResult = lastResult.get(),
                 totals = listOf(
                     Pair("totalRequests" , metrics.total ("$metricId.total_requests").toLong()),
                     Pair("totalSuccesses", metrics.total("$metricId.total_successes").toLong()),
@@ -235,9 +235,9 @@ open class Worker<T>(
      * @return
      */
     override fun moveToState(state: Status): Status {
-        val last = _runStatus.get()
-        _runState.set(state)
-        _runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))
+        val last = runStatus.get()
+        runState.set(state)
+        runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))
         diagnostics.logger?.info("$metricId moving to state: " + state.name)
         return state
     }

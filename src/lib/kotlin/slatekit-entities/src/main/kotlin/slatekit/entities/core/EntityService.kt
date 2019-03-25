@@ -25,14 +25,14 @@ import slatekit.entities.services.EntityServices
  * @tparam T
  */
 open class EntityService<TId,T>(
-        protected val _entities: Entities,
-        protected val _repo: EntityRepo<TId, T>
+        protected val entities: Entities,
+        protected val repo: EntityRepo<TId, T>
 )
     : EntityServices<TId, T> where TId: Comparable<TId>, T : Entity<TId> {
 
-    override fun entities(): Entities = _entities
+    override fun entities(): Entities = entities
 
-    override fun repo(): IEntityRepo = _repo
+    override fun repo(): IEntityRepo = repo
 
-    override fun repoT(): EntityRepo<TId, T> = _repo
+    override fun repoT(): EntityRepo<TId, T> = repo
 }
