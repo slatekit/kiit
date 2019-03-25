@@ -48,7 +48,7 @@ open class OrmMapper<TId, T>(
         val quoteChar: Char = '`',
         encryptor: Encryptor? = null,
         namer: Namer? = null)
-    : ModelMapper(model, _encryptor = encryptor, namer = namer),
+    : ModelMapper(model, encryptor = encryptor, namer = namer),
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
@@ -69,7 +69,7 @@ open class OrmMapper<TId, T>(
      * Gets the optional Model schema which stores field/properties
      * and their corresponding column metadata
      */
-    override fun schema(): Model? = _model
+    override fun schema(): Model? = metaModel
 
 
     @Suppress("UNCHECKED_CAST")
@@ -84,7 +84,7 @@ open class OrmMapper<TId, T>(
      * Inserts the entity into the database and returns the new primary key id
      */
     fun insert(entity: T): TId {
-        val sql = converter.inserts.sql(entity, _model, this)
+        val sql = converter.inserts.sql(entity, metaModel, this)
         val id = db.insertGetId(sql, null)
         return convertToId(id, idType)
     }
@@ -94,7 +94,7 @@ open class OrmMapper<TId, T>(
      * Updates the entity into the database and returns whether or not the update was successful
      */
     fun update(entity: T): Boolean {
-        val sql = converter.updates.sql(entity, _model, this)
+        val sql = converter.updates.sql(entity, metaModel, this)
         val count = db.update(sql)
         return count > 0
     }
@@ -142,7 +142,7 @@ open class OrmMapper<TId, T>(
     }
 
 
-    open fun tableName(): String = columnName(_model.table)
+    open fun tableName(): String = columnName(metaModel.table)
 
 
     /**
@@ -183,7 +183,7 @@ open class OrmMapper<TId, T>(
         // Similar to the Mapper class but reversed
         val data = if (mapping.dataCls == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
-            converter.strings.toSql(sVal, mapping.encrypt, _encryptor)
+            converter.strings.toSql(sVal, mapping.encrypt, encryptor)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             converter.bools.toSql(bVal)

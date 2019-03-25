@@ -13,7 +13,6 @@
 
 package slatekit.common.templates
 
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.utils.ListMap
@@ -26,7 +25,7 @@ import slatekit.common.utils.ListMap
  */
 class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefaults: Boolean = true) {
 
-    private val _groups = ListMap(items ?: listOf())
+    private val groups = ListMap(items ?: listOf())
 
     init {
 
@@ -37,7 +36,7 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
 
         // Add the custom variables
         items?.let { it ->
-            it.forEach { entry -> _groups.add(entry.first, entry.second) }
+            it.forEach { entry -> groups.add(entry.first, entry.second) }
         }
     }
 
@@ -47,13 +46,13 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
      * @param key
      * @return
      */
-    fun contains(key: String): Boolean = _groups.contains(key)
+    fun contains(key: String): Boolean = groups.contains(key)
 
     /**
      * Size of the substitutions
      * @return
      */
-    val size: Int get() = _groups.size
+    val size: Int get() = groups.size
 
     /**
      * gets the value with the supplied key
@@ -70,23 +69,23 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
      * @return
      */
     fun lookup(key: String): String =
-            if (!_groups.contains(key)) {
+            if (!groups.contains(key)) {
                 ""
             } else {
-                val sub = _groups[key]
+                val sub = groups[key]
                 sub?.invoke(TemplatePart(key, TemplateConstants.TypeText, -1, -1)) ?: ""
             }
 
     private fun defaults() {
 
         // Default functions.
-        _groups.add("today"    , {  DateTimes.today().toStringYYYYMMDD() })
-        _groups.add("yesterday", {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
-        _groups.add("tomorrow" , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("t"        , {  DateTimes.today().toStringYYYYMMDD() })
-        _groups.add("t-1"      , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
-        _groups.add("t+1"      , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("today+1"  , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        _groups.add("today-1"  , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("today"    , {  DateTimes.today().toStringYYYYMMDD() })
+        groups.add("yesterday", {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("tomorrow" , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("t"        , {  DateTimes.today().toStringYYYYMMDD() })
+        groups.add("t-1"      , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("t+1"      , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("today+1"  , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("today-1"  , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
     }
 }

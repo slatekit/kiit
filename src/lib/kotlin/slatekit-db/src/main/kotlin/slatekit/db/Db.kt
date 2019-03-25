@@ -33,14 +33,14 @@ import kotlin.io.*
 
 /**
  * Light-weight database wrapper.
- * @param _dbCon: DbConfig.loadFromUserFolder(".slate", "db.txt")
+ * @param dbCon: DbConfig.loadFromUserFolder(".slate", "db.txt")
  *   although tested using mysql, sql-server should be
  * 1. sql-server: driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
 class Db(
-        private val _dbCon: DbCon,
+        private val dbCon: DbCon,
         val source: DbSource = DbSourceMySql(),
         errorCallback: ((Exception) -> Unit)? = null
 ) : IDb {
@@ -53,12 +53,12 @@ class Db(
      * @return
      */
     override fun open(): Db {
-        Class.forName(_dbCon.driver)
+        Class.forName(dbCon.driver)
         return this
     }
 
     override fun execute(sql: String) {
-        executeStmt(_dbCon, { con, stmt -> stmt.execute(sql) }, onError)
+        executeStmt(dbCon, { con, stmt -> stmt.execute(sql) }, onError)
     }
 
 
@@ -70,7 +70,7 @@ class Db(
      */
     override fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
-        return executePrepAs<T>(_dbCon, sql, { _, stmt ->
+        return executePrepAs<T>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }
@@ -97,7 +97,7 @@ class Db(
      * @return : The id ( primary key )
      */
     override fun insert(sql: String, inputs: List<Any>?): Long {
-        val res = executeCon(_dbCon, { con: Connection ->
+        val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -129,7 +129,7 @@ class Db(
      * @return : The id ( primary key )
      */
     override fun insertGetId(sql: String, inputs: List<Any>?): String {
-        val res = executeCon(_dbCon, { con: Connection ->
+        val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -161,7 +161,7 @@ class Db(
      * @return : The number of affected records
      */
     override fun update(sql: String, inputs: List<Any>?): Int {
-        val result = executePrepAs<Int>(_dbCon, sql, { con, stmt ->
+        val result = executePrepAs<Int>(dbCon, sql, { con, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }
@@ -186,7 +186,7 @@ class Db(
         moveNext: Boolean,
         inputs: List<Any>?
     ): T? {
-        val result = executePrepAs<T>(_dbCon, sql, { _: Connection, stmt: PreparedStatement ->
+        val result = executePrepAs<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }

@@ -83,13 +83,13 @@ class Conf(fileName:String?  = null,
           )
   : ConfigBase( { raw -> enc?.encrypt(raw) ?: raw } ) {
 
-  private val _fileName = fileName
-  private val _enc = enc
+  private val fileName = fileName
+  private val enc = enc
 
   /**
     * Get or load the config object
     */
-  private val _config:Config = config ?:  Conf.loadTypeSafeConfig(fileName)
+  private val config:Config = config ?:  Conf.loadTypeSafeConfig(fileName)
 
 
   override fun get(key: String) : Any?             = if (containsKey(key)) get(key) else null

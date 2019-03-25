@@ -36,20 +36,20 @@ class SerializerCsv(
      */
     override fun onContainerEnd(item: Any, type: ParentType, depth: Int) {
         if (depth <= 2) {
-            _buff.append(newline)
+            buff.append(newline)
         }
     }
 
     override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
         if (pos > 0 && depth <= 2) {
-            _buff.append(", ")
+            buff.append(", ")
         }
         serializeValue(value, depth)
     }
 
     override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
         if (pos > 0 && depth <= 0) {
-            _buff.append(", ")
+            buff.append(", ")
         }
         serializeValue(value, depth)
     }

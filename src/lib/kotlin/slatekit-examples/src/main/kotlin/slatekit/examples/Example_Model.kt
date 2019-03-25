@@ -23,9 +23,7 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.auth.User
 import slatekit.common.info.Host
-import slatekit.meta.KTypes
 import slatekit.orm.databases.vendors.MySqlBuilder
-import kotlin.reflect.full.createType
 
 //</doc:import_examples>
 
@@ -69,7 +67,7 @@ class Example_Model : Cmd("model") {
                  .addDateTime(name = "updated"  , isRequired = true                )
 
     // CASE 3: add fields for text, bool, int, date etc.
-    model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", _propList = listOf(
+    model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", fields = listOf(
                  ModelField(name = "key"        , isRequired = true, maxLength = 30, dataCls = String::class),
                  ModelField(name = "api"       , isRequired = true, maxLength = 30, dataCls = String::class),
                  ModelField(name = "recordState", isRequired = true, dataCls = Int::class),

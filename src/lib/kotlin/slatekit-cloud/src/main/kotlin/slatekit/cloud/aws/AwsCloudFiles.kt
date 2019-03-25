@@ -42,7 +42,7 @@ class AwsCloudFiles(
     override val createDefaultFolder = createBucket
 
     private val SOURCE = "aws:s3"
-    private val _s3: AmazonS3Client = AwsFuncs.s3(creds)
+    private val s3: AmazonS3Client = AwsFuncs.s3(creds)
 
     constructor(
         bucket: String,
@@ -66,7 +66,7 @@ class AwsCloudFiles(
      */
     override fun init() {
         if (createDefaultFolder) {
-            _s3.createBucket(defaultFolder)
+            s3.createBucket(defaultFolder)
         }
     }
 
@@ -77,7 +77,7 @@ class AwsCloudFiles(
      */
     override fun createRootFolder(rootFolder: String) {
         if (!rootFolder.isNullOrEmpty() && rootFolder != defaultFolder) {
-            _s3.createBucket(rootFolder)
+            s3.createBucket(rootFolder)
         }
     }
 
@@ -112,7 +112,7 @@ class AwsCloudFiles(
     override fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "delete", data = fullName, call = {
-            _s3.deleteObject(defaultFolder, fullName)
+            s3.deleteObject(defaultFolder, fullName)
             fullName
         })
     }
@@ -128,7 +128,7 @@ class AwsCloudFiles(
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "getAsText", data = fullName, call = {
 
-            val obj = _s3.getObject(GetObjectRequest(defaultFolder, fullName))
+            val obj = s3.getObject(GetObjectRequest(defaultFolder, fullName))
             val content = CloudUtils.toString(obj.getObjectContent())
             // val content = "simulating download of " + fullName
             content
@@ -188,7 +188,7 @@ class AwsCloudFiles(
 
         return executeResult(SOURCE, action, data = fullName, call = {
 
-            _s3.putObject(defaultFolder, fullName, CloudUtils.toInputStream(content), ObjectMetadata())
+            s3.putObject(defaultFolder, fullName, CloudUtils.toInputStream(content), ObjectMetadata())
             fullName
         })
     }

@@ -25,26 +25,26 @@ open class Query : IQuery {
             val updates: MutableList<FieldValue>
     )
 
-    protected val _limit = AtomicInteger(0)
-    protected val _data = QueryData(mutableListOf(), mutableListOf())
-    protected val _joins = mutableListOf<Triple<String, String, String>>()
-    protected val _orders = mutableListOf<Pair<String, String>>()
+    protected val limit = AtomicInteger(0)
+    protected val data = QueryData(mutableListOf(), mutableListOf())
+    protected val joins = mutableListOf<Triple<String, String, String>>()
+    protected val orders = mutableListOf<Pair<String, String>>()
 
 
-    override fun hasOrderBy():Boolean = !_orders.isEmpty()
+    override fun hasOrderBy():Boolean = !orders.isEmpty()
 
-    override fun getOrderBy():String = _orders.joinToString(",") { it.first + it.second }
+    override fun getOrderBy():String = orders.joinToString(",") { it.first + it.second }
 
-    override fun toUpdates(): List<FieldValue> = _data.updates.toList()
+    override fun toUpdates(): List<FieldValue> = data.updates.toList()
 
     override fun toUpdatesText(): String {
         // No updates ?
-        return if (_data.updates.size > 0) {
+        return if (data.updates.size > 0) {
             // Build up the sql
             val text = mutableListOf("SET ")
 
             // Each update
-            val updates = _data.updates.joinToString(",", transform = { u ->
+            val updates = data.updates.joinToString(",", transform = { u ->
                 when (u.fieldValue) {
                     "" -> u.field + "=" + "''"
                     else -> u.field + "=" + QueryEncoder.convertVal(u.fieldValue)
@@ -54,7 +54,7 @@ open class Query : IQuery {
 
             // Filters
             if (anyConditions()) text += " WHERE " + toFilter()
-            if (anyLimit()) text += " LIMIT " + _limit
+            if (anyLimit()) text += " LIMIT " + limit
 
             val sql = text.reduce { a, b -> a + b }
             sql
@@ -65,10 +65,10 @@ open class Query : IQuery {
     override fun toFilter(): String {
 
         // 1. Handle the joins
-        val joins = if (_joins.isEmpty())
+        val joins = if (joins.isEmpty())
             ""
         else
-            " " + _joins.joinToString(",", transform = { (modelRaw, modelFieldRaw, refFieldRaw) ->
+            " " + joins.joinToString(",", transform = { (modelRaw, modelFieldRaw, refFieldRaw) ->
                 val model = QueryEncoder.ensureField(modelRaw)
                 val modelField = QueryEncoder.ensureField(modelFieldRaw)
                 val refField = QueryEncoder.ensureField(refFieldRaw)
@@ -76,13 +76,13 @@ open class Query : IQuery {
             }) + " "
 
         // 2. Where / and / or conditions
-        val conditions = _data.conditions.joinToString(",", transform = { c -> c.toStringQuery() })
+        val conditions = data.conditions.joinToString(",", transform = { c -> c.toStringQuery() })
 
         // 3. Order by clauses
-        val orders = if (_orders.isEmpty())
+        val orders = if (orders.isEmpty())
             ""
         else
-            " order by " + _orders.joinToString(",", transform = { (fieldRaw, modeRaw) ->
+            " order by " + orders.joinToString(",", transform = { (fieldRaw, modeRaw) ->
                 val mode = when (modeRaw.toLowerCase()) {
                     Asc -> "asc"
                     Desc -> "desc"
@@ -105,7 +105,7 @@ open class Query : IQuery {
     override fun set(field: String, fieldValue: Any?): IQuery {
         val finalValue = fieldValue ?: Null
         val col = QueryEncoder.ensureField(field)
-        _data.updates.add(FieldValue(col, finalValue))
+        data.updates.add(FieldValue(col, finalValue))
         return this
     }
 
@@ -118,7 +118,7 @@ open class Query : IQuery {
     override fun set(vararg pairs:Pair<String, Any>): IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.first)
-            _data.updates.add(FieldValue(col, it.second))
+            data.updates.add(FieldValue(col, it.second))
         }
         return this
     }
@@ -135,7 +135,7 @@ open class Query : IQuery {
     override fun where(field: String, op: String, fieldValue: Any?): IQuery {
         val finalValue = fieldValue ?: Null
         val condition = buildCondition(field, op, finalValue)
-        _data.conditions.add(condition)
+        data.conditions.add(condition)
         return this
     }
 
@@ -193,17 +193,17 @@ open class Query : IQuery {
     }
 
     override fun limit(max: Int): IQuery {
-        this._limit.set(max)
+        this.limit.set(max)
         return this
     }
 
     override fun orderBy(field: String, mode: String): IQuery {
-        this._orders.add(Pair(field, mode))
+        this.orders.add(Pair(field, mode))
         return this
     }
 
     override fun join(model: String, modelField: String, refField: String): IQuery {
-        this._joins.add(Triple(model, modelField, refField))
+        this.joins.add(Triple(model, modelField, refField))
         return this
     }
 
@@ -229,20 +229,20 @@ open class Query : IQuery {
 
     protected fun group(op: String, condition: Condition) {
         // Pop the last one
-        val last = _data.conditions.size - 1
-        val left = _data.conditions[last]
-        _data.conditions.removeAt(last)
+        val last = data.conditions.size - 1
+        val left = data.conditions[last]
+        data.conditions.removeAt(last)
 
         // Build a binary condition from left and right
         val group = ConditionGroup(left, op, condition)
 
         // Push back on condition list
-        _data.conditions.add(group)
+        data.conditions.add(group)
     }
 
-    protected fun anyLimit(): Boolean = _limit.get() > 0
+    protected fun anyLimit(): Boolean = limit.get() > 0
 
-    protected fun anyConditions(): Boolean = _data.conditions.isNotEmpty()
+    protected fun anyConditions(): Boolean = data.conditions.isNotEmpty()
 
     companion object {
         @JvmStatic val Null = "null"
