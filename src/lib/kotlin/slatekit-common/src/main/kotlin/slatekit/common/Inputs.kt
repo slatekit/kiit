@@ -33,7 +33,7 @@ interface InputsUpdateable {
  * NOTE: This allows for abstracting the input source to accommodate
  * Slate Kit protocol independent APIs
  */
-interface Inputs {
+interface Inputs : Gets {
 
     // Get values for core value types, must be implemented in derived classes
     val raw: Any
@@ -42,40 +42,23 @@ interface Inputs {
     fun containsKey(key: String): Boolean
     fun size(): Int
 
-    fun getString(key: String): String
-    fun getBool(key: String): Boolean
-    fun getShort(key: String): Short
-    fun getInt(key: String): Int
-    fun getLong(key: String): Long
-    fun getFloat(key: String): Float
-    fun getDouble(key: String): Double
-    fun getInstant(key:String): Instant
-    fun getDateTime(key: String): DateTime
-    fun getLocalDate(key: String): LocalDate
-    fun getLocalTime(key: String): LocalTime
-    fun getLocalDateTime(key: String): LocalDateTime
-    fun getZonedDateTime(key: String): ZonedDateTime
-    fun getZonedDateTimeUtc(key: String): ZonedDateTime
-    fun getUUID(key: String): java.util.UUID = UUID.fromString(getString(key))
-    fun getUniqueId(key: String): UniqueId = UniqueId.fromString(getString(key))
-
     // Get values as Option[T]
-    fun getStringOrNull(key: String): String? = getOrNull(key) { k: String -> getString(k) }
-    fun getBoolOrNull(key: String): Boolean? = getOrNull(key) { k: String -> getBool(k) }
-    fun getShortOrNull(key: String): Short? = getOrNull(key) { k: String -> getShort(k) }
-    fun getIntOrNull(key: String): Int? = getOrNull(key) { k: String -> getInt(k) }
-    fun getLongOrNull(key: String): Long? = getOrNull(key) { k: String -> getLong(k) }
-    fun getFloatOrNull(key: String): Float? = getOrNull(key) { k: String -> getFloat(k) }
-    fun getDoubleOrNull(key: String): Double? = getOrNull(key) { k: String -> getDouble(k) }
-    fun getInstantOrNull(key: String): Instant? = getOrNull(key) { k: String -> getInstant(k) }
-    fun getDateTimeOrNull(key: String): DateTime? = getOrNull(key) { k: String -> getDateTime(k) }
-    fun getLocalDateOrNull(key: String): LocalDate? = getOrNull(key) { k: String -> getLocalDate(k) }
-    fun getLocalTimeOrNull(key: String): LocalTime? = getOrNull(key) { k: String -> getLocalTime(k) }
-    fun getLocalDateTimeOrNull(key: String): LocalDateTime? = getOrNull(key) { k: String -> getLocalDateTime(k) }
-    fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
-    fun getZonedDateTimeUtcOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTimeUtc(k) }
-    fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
-    fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.fromString(getString(k)) }
+    override fun getStringOrNull(key: String): String? = getOrNull(key) { k: String -> getString(k) }
+    override fun getBoolOrNull(key: String): Boolean? = getOrNull(key) { k: String -> getBool(k) }
+    override fun getShortOrNull(key: String): Short? = getOrNull(key) { k: String -> getShort(k) }
+    override fun getIntOrNull(key: String): Int? = getOrNull(key) { k: String -> getInt(k) }
+    override fun getLongOrNull(key: String): Long? = getOrNull(key) { k: String -> getLong(k) }
+    override fun getFloatOrNull(key: String): Float? = getOrNull(key) { k: String -> getFloat(k) }
+    override fun getDoubleOrNull(key: String): Double? = getOrNull(key) { k: String -> getDouble(k) }
+    override fun getInstantOrNull(key: String): Instant? = getOrNull(key) { k: String -> getInstant(k) }
+    override fun getDateTimeOrNull(key: String): DateTime? = getOrNull(key) { k: String -> getDateTime(k) }
+    override fun getLocalDateOrNull(key: String): LocalDate? = getOrNull(key) { k: String -> getLocalDate(k) }
+    override fun getLocalTimeOrNull(key: String): LocalTime? = getOrNull(key) { k: String -> getLocalTime(k) }
+    override fun getLocalDateTimeOrNull(key: String): LocalDateTime? = getOrNull(key) { k: String -> getLocalDateTime(k) }
+    override fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
+    override fun getZonedDateTimeUtcOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTimeUtc(k) }
+    override fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
+    override fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.fromString(getString(k)) }
 
     // Get value or default
     fun getStringOrElse(key: String, default: String): String = getOrElse(key, { k: String -> getString(k) }, default)
