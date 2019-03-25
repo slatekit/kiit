@@ -82,7 +82,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
         val dataFields = if (filterId) model.fields.filter { idCol.compareTo(it.name) != 0 } else model.fields
 
         // Build sql for the data fields.
-        val dataFieldSql = dataFields.fold("", { acc, field ->
+        val dataFieldSql = dataFields.fold("") { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
                 acc + ", " + createCol(finalStoredName, DbFieldType.DbNumber, field.isRequired, field.maxLength)
@@ -93,7 +93,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
                 val sqlType = DbUtils.getTypeFromLang(field.dataCls.java)
                 acc + ", " + createCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
-        })
+        }
         buff.append(dataFieldSql)
 
         val sql = buff.toString()

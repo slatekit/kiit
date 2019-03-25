@@ -53,7 +53,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param namer: Optional namer to create naming conventions
      */
     fun <TId, T> mapper(dbType: DbType, db:IDb, idType:KClass<*>, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null)
-            : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+            : OrmMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
         return when (dbType) {
             DbTypeMySql -> MySqlEntityMapper(model, db, idType, utc, enc, namer)
             DbTypePGres -> PostGresEntityMapper(model, db, idType, utc, enc, namer)
@@ -78,7 +78,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             db:IDb,
             entityType: KClass<*>,
             entityIdType:KClass<*>,
-            mapper: EntityMapper<TId, T>,
+            mapper: OrmMapper<TId, T>,
             tableName: String,
             utc: Boolean = false,
             enc: Encryptor? = null,
@@ -89,7 +89,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
         return when (dbType) {
             DbTypeMySql -> MySqlEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
             DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
-            else -> EntityRepoInMemory(entityType, entityIdType, mapper, enc, namer)
+            else -> EntityRepoInMemory(entityType, entityIdType, enc, namer)
         }
     }
 }
