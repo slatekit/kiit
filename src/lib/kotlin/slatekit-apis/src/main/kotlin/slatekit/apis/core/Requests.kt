@@ -23,6 +23,7 @@ import slatekit.common.requests.Request
 import slatekit.common.Uris
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.CommonRequest
+import slatekit.common.ext.toStringUtc
 import slatekit.common.requests.Source
 import slatekit.meta.Serialization
 import java.io.File
@@ -85,10 +86,14 @@ object Requests {
         val tag = jsonRoot.get("tag") as String
         val source = jsonRoot.get("source") as String
         val verb = jsonRoot.get("verb") as String
+        val timestamp = jsonRoot.get("timestamp") as String
+        val time = DateTime.parse(timestamp)
 
         // Meta / Data
-        val jsonData = jsonRoot.get("data") as JSONObject
-        val jsonMeta = jsonRoot.get("meta") as JSONObject
+        val data = jsonRoot.get("data") as String
+        val meta = jsonRoot.get("meta") as String
+        val jsonData = JSONParser().parse(data) as JSONObject
+        val jsonMeta = JSONParser().parse(meta) as JSONObject
         val sep = if (path.contains("/")) "/" else "."
 
         return CommonRequest(
@@ -101,43 +106,84 @@ object Requests {
                 data = Params(rawSource ?: "json", ApiConstants.SourceFile, true, enc, jsonData),
                 raw = rawSource,
                 tag = tag,
-                timestamp = DateTime.now()
+                timestamp = time
         )
     }
 
     /**
-     * Converts the request to JSON and encrypts the content if the encryptor is supplied
+     * Convert the request to a JSON string with optionally encrypted metadata and data
+     * @param req    : Request
+     * @param enc    : Encryption service to encrypt the meta and data
+     * @param source : Overridable source to set on request ( e.g. queue if converted from web -> queue )
+     * @param verb   : Overridable verb to set on request ( e.g. queue if converted from web -> queue )
      */
-    fun toJson(req: Request, enc: Encryptor? = null, source: String? = null, verb: String? = null): String {
+    fun toJsonString(req: Request, enc: Encryptor? = null, source: String? = null, verb: String? = null): String {
         // Convert the meta data to JSON
         val meta = convertMetaToJson(req.meta, req.meta.raw)
         val data = convertDataToJson(req.data, req.data.raw)
-        val finalMeta = enc?.encrypt(meta) ?: meta
-        val finalData = enc?.encrypt(data) ?: data
+        val root = toJsonObject(req, meta, data, enc, source, verb)
+        val json = root.toJSONString()
+        return json
+    }
+
+
+    /**
+     * Convert the request to a JSON object with optionally encrypted metadata and data
+     * @param req    : Request
+     * @param meta   : Meta converted to a JSON string ( to be encrypted if encryptor is supplied )
+     * @param data   : Data converted to a JSON string ( to be encrypted if encryptor is supplied )
+     * @param enc    : Encryption service to encrypt the meta and data
+     * @param source : Overridable source to set on request ( e.g. queue if converted from web -> queue )
+     * @param verb   : Overridable verb to set on request ( e.g. queue if converted from web -> queue )
+     */
+    fun toJsonObject(req: Request, enc: Encryptor? = null, source: String? = null, verb: String? = null):JSONObject {
+        // Convert the meta data to JSON
+        val meta = convertMetaToJson(req.meta, req.meta.raw)
+        val data = convertDataToJson(req.data, req.data.raw)
+        val root = toJsonObject(req, meta, data, enc, source, verb)
+        return root
+    }
+
+
+    /**
+     * Convert the request to a JSON object with optionally encrypted metadata and data
+     * @param req    : Request
+     * @param meta   : Meta converted to a JSON string ( to be encrypted if encryptor is supplied )
+     * @param data   : Data converted to a JSON string ( to be encrypted if encryptor is supplied )
+     * @param enc    : Encryption service to encrypt the meta and data
+     * @param source : Overridable source to set on request ( e.g. queue if converted from web -> queue )
+     * @param verb   : Overridable verb to set on request ( e.g. queue if converted from web -> queue )
+     */
+    private fun toJsonObject(req: Request, meta:String, data:String, enc: Encryptor? = null, source: String? = null, verb: String? = null):JSONObject {
         val finalSource = source ?: req.source.id
         val finalVerb = verb ?: req.verb
         val finalPath = req.parts.joinToString(".")
-        val json = """
-            {
-                 "version"  : "${req.version}",
-                 "path"     : "$finalPath",
-                 "source"   : "$finalSource",
-                 "verb"     : "$finalVerb",
-                 "tag"      : "${req.tag}",
-                 "timestamp": "${req.timestamp}",
-                 "meta"     : $finalMeta,
-                 "data"     : $finalData
-            }
-            """
-        return json
+
+        // Basics
+        val root = JSONObject()
+        root["version"] = req.version
+        root["path"] = finalPath
+        root["source"] = finalSource
+        root["verb"] = finalVerb
+        root["tag"] = req.tag
+        root["timestamp"] = req.timestamp.toStringUtc()
+
+        // Encrypt
+        val finalMeta = enc?.encrypt(meta) ?: meta
+        val finalData = enc?.encrypt(data) ?: data
+        root["meta"] = finalMeta
+        root["data"] = finalData
+        return root
     }
+
 
     /**
      * Converts the request to JSON designated as a request from a Queue ( source = queue )
      */
     fun toJsonAsQueued(req: Request): String {
-        return toJson(req, null, ApiConstants.SourceQueue, ApiConstants.SourceQueue)
+        return toJsonString(req, null, ApiConstants.SourceQueue, ApiConstants.SourceQueue)
     }
+
 
     private fun convertMetaToJson(source: Inputs, rawData: Any): String {
         // Convert the data to JSON

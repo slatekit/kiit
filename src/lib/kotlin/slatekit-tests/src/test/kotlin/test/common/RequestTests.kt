@@ -28,7 +28,7 @@ class RequestTests {
 
     @Test
     fun can_serialize_to_json(){
-        val actual = Requests.toJson(sampleRequest)
+        val actual = Requests.toJsonString(sampleRequest)
         val expected = """
             {
                  "version"  : "1.1",
