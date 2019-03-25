@@ -34,5 +34,5 @@ annotation class ApiAction(
     val roles: String = "",
     val verb: String = "",
     val protocol: String = "*",
-    val tag: String = ""
+    val tags: Array<String> = []
 )
