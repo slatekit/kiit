@@ -20,13 +20,13 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
  * NOTE: This is basically a GenericRepository implementation
  * @param entityType   : The data type of the entity/model
  * @param entityIdType : The data type of the primary key/identity field
- * @param entityMapper : The entity mapper that maps to/from entities / records
  * @param tableName    : The name of the table ( defaults to entity name )
  * @param encodedChar  : The name of the table ( defaults to entity name )
  * @tparam T
@@ -34,7 +34,6 @@ import kotlin.reflect.KClass
 abstract class EntityRepo<TId, T>(
     val entityType: KClass<*>,
     val entityIdType: KClass<*>,
-    val entityMapper: EntityMapper<TId,T>,
     val tableName:String,
     val encodedChar: Char = '`',
     protected val model:Model? = null,
@@ -50,12 +49,6 @@ abstract class EntityRepo<TId, T>(
     override fun repoName(): String {
         return namer?.rename(tableName) ?: tableName[0].toLowerCase() + tableName.substring(1)
     }
-
-    /**
-     * gets the internal mapper used to convert entities to sql or records to entity
-     * @return
-     */
-    override fun mapper(): EntityMapper<TId, T> = entityMapper
 
     /**
      * the name of the id field.
@@ -278,4 +271,16 @@ abstract class EntityRepo<TId, T>(
      * @return
      */
     open fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
+
+
+    /**
+     * Gets the column name for the Kproperty from the model schema if available
+     * or defaults to the property name.
+     */
+    open fun columnName(prop: KProperty<*>):String {
+        return when(model) {
+            null -> prop.name
+            else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
+        }
+    }
 }

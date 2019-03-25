@@ -73,7 +73,7 @@ open class OrmMapper<TId, T>(
 
 
     @Suppress("UNCHECKED_CAST")
-    override fun setId(id: TId, entity: T): T {
+    fun setId(id: TId, entity: T): T {
         return when(entity){
             is EntityUpdatable<*, *> -> entity.withIdAny(id) as T
             else -> entity
@@ -83,7 +83,7 @@ open class OrmMapper<TId, T>(
     /**
      * Inserts the entity into the database and returns the new primary key id
      */
-    override fun insert(entity: T): TId {
+    fun insert(entity: T): TId {
         val sql = converter.inserts.sql(entity, _model, this)
         val id = db.insertGetId(sql, null)
         return convertToId(id, idType)
@@ -93,7 +93,7 @@ open class OrmMapper<TId, T>(
     /**
      * Updates the entity into the database and returns whether or not the update was successful
      */
-    override fun update(entity: T): Boolean {
+    fun update(entity: T): Boolean {
         val sql = converter.updates.sql(entity, _model, this)
         val count = db.update(sql)
         return count > 0

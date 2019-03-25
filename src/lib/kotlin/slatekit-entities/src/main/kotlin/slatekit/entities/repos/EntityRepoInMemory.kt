@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
 
 
 open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
-    : EntityRepoInMemory<Long, T>(cls, Long::class, EntityMapperInMemory<Long,T>(Model(cls), idGen), idGenerator = idGen)
+    : EntityRepoInMemory<Long, T>(cls, Long::class, idGenerator = idGen)
         where T:Entity<Long> {
 
     companion object {
@@ -46,7 +46,7 @@ open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long
 
 
 open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
-    : EntityRepoInMemory<Int, T>(cls, Int::class, EntityMapperInMemory<Int,T>(Model(cls), idGen), idGenerator = idGen )
+    : EntityRepoInMemory<Int, T>(cls, Int::class, idGenerator = idGen )
         where T:Entity<Int> {
 
     companion object {
@@ -70,12 +70,11 @@ open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
 open class EntityRepoInMemory<TId, T>(
     entityType: KClass<*>,
     entityIdType: KClass<*>,
-    entityMapper: EntityMapper<TId, T>,
     encryptor: Encryptor? = null,
     namer: Namer? = null,
     idGenerator: IdGenerator<TId>? = null
 )
-    : EntityRepo<TId, T>(entityType, entityIdType, entityMapper, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
+    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
         where TId: kotlin.Comparable<TId>, T:Entity<TId> {
 
     private val _idGenerator = idGenerator ?: LongIdGenerator()
@@ -93,7 +92,7 @@ open class EntityRepoInMemory<TId, T>(
             val id = getNextId()
             val en = when (entity) {
                 is EntityUpdatable<*, *> -> entity.withIdAny(id)
-                else -> mapper().setId(id, entity)
+                else -> { }
             }
 
             // store
@@ -276,17 +275,10 @@ open class EntityRepoInMemory<TId, T>(
 }
 
 
-class EntityMapperInMemory<TId, T>(val model:Model, val idGen:IdGenerator<TId>)
+class EntityMapperEmpty<TId, T>(val model:Model?)
     : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
 
     override fun schema(): Model? = model
 
-    override fun setId(id: TId, entity: T): T = entity
-
-    override fun insert(entity: T): TId = idGen.nextId()
-
-    override fun update(entity: T): Boolean = true
-
     override fun <T> mapFrom(record: Record): T? = null
-
 }

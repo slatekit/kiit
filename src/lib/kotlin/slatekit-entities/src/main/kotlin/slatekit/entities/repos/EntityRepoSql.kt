@@ -41,27 +41,19 @@ abstract class EntityRepoSql<TId, T>(
         val db: IDb,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
-        entityMapper: EntityMapper<TId, T>,
+        val entityMapper: EntityMapper<TId, T>,
         nameOfTable: String,
         model: Model? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null,
         encodedChar: Char = '`',
         query: (() -> Query)? = null
-) : EntityRepo<TId, T>(entityType, entityIdType, entityMapper, nameOfTable, encodedChar, model, encryptor, namer, query)
+) : EntityRepo<TId, T>(entityType, entityIdType, nameOfTable, encodedChar, model, encryptor, namer, query)
         where TId:Comparable<TId>, T:Entity<TId> {
 
 
     override fun repoName(): String = "$encodedChar" + super.repoName() + "$encodedChar"
 
-
-    override fun create(entity: T): TId {
-        return entityMapper.insert(entity)
-    }
-
-    override fun update(entity: T): Boolean {
-        return entityMapper.update(entity)
-    }
 
     /**
      * updates the table field using the value supplied

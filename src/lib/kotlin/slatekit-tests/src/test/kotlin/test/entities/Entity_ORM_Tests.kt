@@ -21,14 +21,9 @@ import slatekit.common.Field
 import slatekit.common.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType
 import slatekit.db.Db
 import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityContext
-import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.LongIdGenerator
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityMapperInMemory
 
 
 class Entity_ORM_Tests {
