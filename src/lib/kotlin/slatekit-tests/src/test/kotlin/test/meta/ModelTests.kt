@@ -89,9 +89,9 @@ class ModelTests {
 
     fun ensureField(model: Model, name:String, required:Boolean, tpe: KClass<*>):Unit {
         val field = model.fields.find { it.name == name }
-        assert(field != null)
-        assert(field!!.isRequired == required)
-        assert(field!!.dataCls == tpe)
+        Assert.assertTrue(field != null)
+        Assert.assertTrue(field!!.isRequired == required)
+        Assert.assertTrue(field!!.dataCls == tpe)
     }
 
 

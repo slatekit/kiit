@@ -124,11 +124,13 @@ open class ModelMapper(
             // val fields = mutableListOf<ModelField>()
 
             // Loop through each field
+            val catData = ModelFieldCategory.Data
+            val catId = ModelFieldCategory.Id
             val withAnnos = matchedFields.filter { it.second != null }
             val fields = withAnnos.map { matchedField ->
                 val anno = matchedField.second!!
-                val cat = idFieldName?.let { "id" } ?: ""
                 val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
+                val cat = idFieldName?.let { if(it == name) catId else catData } ?: catData
                 val required = anno.required
                 val length = anno.length
                 val encrypt = anno.encrypt
