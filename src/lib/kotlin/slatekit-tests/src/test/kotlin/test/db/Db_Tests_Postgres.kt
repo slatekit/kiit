@@ -1,5 +1,6 @@
 package test.db
 
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -147,7 +148,7 @@ class Db_Tests_Postgres : TestSupport {
     fun can_execute_proc() {
         val db = Db(getConnection())
         val result = db.callQuery("get_max_id", { rs -> rs.getLong(1) })
-        assert(result!! > 0L)
+        Assert.assertTrue(result!! > 0L)
     }
 
 
@@ -155,7 +156,7 @@ class Db_Tests_Postgres : TestSupport {
     fun can_execute_proc_update() {
         val db = Db(getConnection())
         val result = db.callUpdate("dbtests_update_by_id", listOf(6))
-        assert(result!! >= 1)
+        Assert.assertTrue(result!! >= 1)
     }
 
 
@@ -183,17 +184,17 @@ class Db_Tests_Postgres : TestSupport {
 
         // 1. add
         val id = db.insert(sqlInsert)
-        assert(id > 0)
+        Assert.assertTrue(id > 0)
 
         // 2. update
         val sqlUpdate = "update $tableName set test_int = 987 where id = $id"
         val count = db.update(sqlUpdate)
-        assert(count > 0)
+        Assert.assertTrue(count > 0)
 
         // 3. get
         val sql = "select test_int from $tableName where id = $id"
         val updatedVal = db.getScalarInt(sql, null)
-        assert(updatedVal == 987)
+        Assert.assertTrue(updatedVal == 987)
     }
 
 
@@ -202,6 +203,6 @@ class Db_Tests_Postgres : TestSupport {
         val db = Db(getConnection())
         val sql = "select $colName from $tableName where id = " + Db_Tests_Postgres.id
         val actual = callback(db, sql)
-        assert(expected == actual)
+        Assert.assertTrue(expected == actual)
     }
 }

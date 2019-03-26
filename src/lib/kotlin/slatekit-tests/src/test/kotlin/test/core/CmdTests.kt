@@ -13,6 +13,7 @@
 package test
 
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.*
 import slatekit.core.cmds.Cmd
@@ -61,9 +62,9 @@ class CmdTests {
           CmdCreateAdmin()
         )
       )
-      assert( cmds.size == 2 )
-      assert( cmds.contains("create user"))
-      assert( cmds.contains("create admin"))
+      Assert.assertTrue( cmds.size == 2 )
+      Assert.assertTrue( cmds.contains("create user"))
+      Assert.assertTrue( cmds.contains("create admin"))
     }
 
 
@@ -74,8 +75,8 @@ class CmdTests {
           CmdCreateAdmin()
         )
       )
-      assert( !cmds.state("create user").hasRun)
-      assert( !cmds.state("create admin").hasRun)
+      Assert.assertTrue( !cmds.state("create user").hasRun)
+      Assert.assertTrue( !cmds.state("create admin").hasRun)
     }
 
 
@@ -87,11 +88,11 @@ class CmdTests {
         )
       )
       val result = cmds.run("create user")
-      assert(result.success)
-      assert(result.ended > DateTimes.MIN)
-      assert(result.error == null)
-      assert(result.value == "user_0")
-      assert(result.started > DateTimes.MIN)
+      Assert.assertTrue(result.success)
+      Assert.assertTrue(result.ended > DateTimes.MIN)
+      Assert.assertTrue(result.error == null)
+      Assert.assertTrue(result.value == "user_0")
+      Assert.assertTrue(result.started > DateTimes.MIN)
     }
 
 
@@ -103,11 +104,11 @@ class CmdTests {
         )
       )
       val result = cmds.run("create admin")
-      assert(result.success)
-      assert(result.ended > DateTimes.MIN)
-      assert(result.error == null)
-      assert(result.value == "admin_1")
-      assert(result.started > DateTimes.MIN)
+      Assert.assertTrue(result.success)
+      Assert.assertTrue(result.ended > DateTimes.MIN)
+      Assert.assertTrue(result.error == null)
+      Assert.assertTrue(result.value == "admin_1")
+      Assert.assertTrue(result.started > DateTimes.MIN)
     }
 
 
@@ -121,11 +122,11 @@ class CmdTests {
       cmds.run("create user")
       val state = cmds.state("create user")
 
-      assert(state.hasRun)
-      assert(state.errorCount == 0)
-      assert(state.runCount == 1)
-      assert(state.lastResult?.value == "user_0")
-      assert(state.name == "create user")
+      Assert.assertTrue(state.hasRun)
+      Assert.assertTrue(state.errorCount == 0)
+      Assert.assertTrue(state.runCount == 1)
+      Assert.assertTrue(state.lastResult?.value == "user_0")
+      Assert.assertTrue(state.name == "create user")
     }
 
 
@@ -140,11 +141,11 @@ class CmdTests {
       cmds.run("create admin")
       val state = cmds.state("create admin")
 
-      assert(state.hasRun)
-      assert(state.errorCount == 0)
-      assert(state.runCount == 2)
-      assert(state.lastResult!!.value == "admin_2")
-      assert(state.name == "create admin")
+      Assert.assertTrue(state.hasRun)
+      Assert.assertTrue(state.errorCount == 0)
+      Assert.assertTrue(state.runCount == 2)
+      Assert.assertTrue(state.lastResult!!.value == "admin_2")
+      Assert.assertTrue(state.name == "create admin")
     }
 
 
@@ -155,13 +156,13 @@ class CmdTests {
         )
       )
       val result = cmds.run("create error")
-      assert(!result.success)
-      assert(result.ended > DateTimes.MIN)
-      assert(result.error != null)
-      assert(result.message == "Unexpected")
-      assert(result.error!!.message == "Error while executing : create error. error_1")
-      assert(result.error!!.cause!!.message == "error_1")
-      assert(result.started > DateTimes.MIN)
+      Assert.assertTrue(!result.success)
+      Assert.assertTrue(result.ended > DateTimes.MIN)
+      Assert.assertTrue(result.error != null)
+      Assert.assertTrue(result.message == "Unexpected")
+      Assert.assertTrue(result.error!!.message == "Error while executing : create error. error_1")
+      Assert.assertTrue(result.error!!.cause!!.message == "error_1")
+      Assert.assertTrue(result.started > DateTimes.MIN)
     }
 
 
@@ -174,12 +175,12 @@ class CmdTests {
       cmds.run("create error")
       val state = cmds.state("create error")
 
-      assert(state.hasRun)
-      assert(state.errorCount == 1)
-      assert(state.runCount == 1)
-      assert(state.lastResult!!.message == "Unexpected")
-      assert(state.lastResult!!.error!!.message == "Error while executing : create error. error_1")
-      assert(state.name == "create error")
+      Assert.assertTrue(state.hasRun)
+      Assert.assertTrue(state.errorCount == 1)
+      Assert.assertTrue(state.runCount == 1)
+      Assert.assertTrue(state.lastResult!!.message == "Unexpected")
+      Assert.assertTrue(state.lastResult!!.error!!.message == "Error while executing : create error. error_1")
+      Assert.assertTrue(state.name == "create error")
     }
 
 
@@ -193,10 +194,10 @@ class CmdTests {
       cmds.run("create error")
       val state = cmds.state("create error")
 
-      assert(state.hasRun)
-      assert(state.errorCount == 2)
-      assert(state.runCount == 2)
-      assert(state.lastResult!!.error!!.message == "Error while executing : create error. error_2")
-      assert(state.name == "create error")
+      Assert.assertTrue(state.hasRun)
+      Assert.assertTrue(state.errorCount == 2)
+      Assert.assertTrue(state.runCount == 2)
+      Assert.assertTrue(state.lastResult!!.error!!.message == "Error while executing : create error. error_2")
+      Assert.assertTrue(state.name == "create error")
     }
 }

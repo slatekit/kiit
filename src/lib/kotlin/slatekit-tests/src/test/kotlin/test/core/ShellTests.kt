@@ -13,6 +13,7 @@
 
 package slate.test
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
@@ -43,47 +44,47 @@ class ShellTests  {
         CliResponse( CliRequest.build(Args.default(), ""),true, 1, mapOf(), "" )
       }
       val req = res.request
-      assert( req.area == "app" )
-      assert( req.name == "version" )
-      assert( req.action == "host" )
-      assert( req.args.line == "app.version.host" )
-      assert( res.value is Host)
-      assert( res.success)
+      Assert.assertTrue( req.area == "app" )
+      Assert.assertTrue( req.name == "version" )
+      Assert.assertTrue( req.action == "host" )
+      Assert.assertTrue( req.args.line == "app.version.host" )
+      Assert.assertTrue( res.value is Host)
+      Assert.assertTrue( res.success)
     }
 
 
     @Test fun can_handle_help() {
       val cli = getCli()
       val result = cli.executeText("?")
-      assert( result.code == StatusCodes.HELP.code )
-      assert( result.msg  == StatusCodes.HELP.msg)
+      Assert.assertTrue( result.code == StatusCodes.HELP.code )
+      Assert.assertTrue( result.msg  == StatusCodes.HELP.msg)
     }
 
 
     @Test fun can_handle_help_for_area() {
       val cli = getCli()
       val result = cli.executeText("app ?")
-      //assert( result.getOrElse { null } == null )
-      assert( result.code == StatusCodes.HELP.code )
-      assert( result.msg  == StatusCodes.HELP.msg)
+      //Assert.assertTrue( result.getOrElse { null } == null )
+      Assert.assertTrue( result.code == StatusCodes.HELP.code )
+      Assert.assertTrue( result.msg  == StatusCodes.HELP.msg)
     }
 
 
     @Test fun can_handle_help_for_area_api() {
       val cli = getCli()
       val result = cli.executeText("app.info ?")
-      //assert( result.getOrElse { null } == null )
-      assert( result.code == StatusCodes.HELP.code )
-      assert( result.msg  == StatusCodes.HELP.msg)
+      //Assert.assertTrue( result.getOrElse { null } == null )
+      Assert.assertTrue( result.code == StatusCodes.HELP.code )
+      Assert.assertTrue( result.msg  == StatusCodes.HELP.msg)
     }
 
 
     @Test fun can_handle_help_for_area_api_action() {
       val cli = getCli()
       val result = cli.executeText("app.version.host ?")
-      //assert( result.getOrElse { null } == null )
-      assert( result.code == StatusCodes.HELP.code )
-      assert( result.msg  == StatusCodes.HELP.msg)
+      //Assert.assertTrue( result.getOrElse { null } == null )
+      Assert.assertTrue( result.code == StatusCodes.HELP.code )
+      Assert.assertTrue( result.msg  == StatusCodes.HELP.msg)
     }
 
 
