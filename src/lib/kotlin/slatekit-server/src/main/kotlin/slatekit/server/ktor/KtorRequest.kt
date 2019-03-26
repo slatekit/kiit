@@ -42,7 +42,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
     /**
      * Access to an uploaded file
      */
-    override fun getDoc(name: String): Doc {
+    override fun getDoc(name: String): Doc? {
         return getFile(name) { stream ->
 
             val bis = BufferedInputStream(stream)
@@ -60,7 +60,7 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
     /**
      * Access to an uploaded file
      */
-    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc? {
         // getFileStream(name, callback)
         return Doc("", "", ContentTypeText, 0)
     }

@@ -3,7 +3,7 @@ package slatekit.integration.errors
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Random
-import slatekit.entities.core.EntityWithLabel
+import slatekit.entities.*
 
 data class ErrorItem(
 
@@ -78,8 +78,8 @@ data class ErrorItem(
     override val updatedBy: String = ""
 )
 
-    : slatekit.entities.core.EntityWithId<Long>, slatekit.entities.core.EntityWithMeta,
-        slatekit.entities.core.EntityWithShard, slatekit.entities.core.EntityUpdatable<Long, ErrorItem> {
+    : EntityWithId<Long>, EntityWithMeta,
+        EntityWithShard, EntityUpdatable<Long, ErrorItem> {
 
 
 

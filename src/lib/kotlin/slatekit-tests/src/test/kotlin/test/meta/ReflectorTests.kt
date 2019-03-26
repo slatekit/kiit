@@ -29,13 +29,11 @@ import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.common.smartvalues.SmartValue
 import slatekit.common.smartvalues.PhoneUS
 import slatekit.common.smartvalues.SmartValued
 import slatekit.db.Db
 import slatekit.meta.Reflector
-import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityContext
+import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.results.Notice

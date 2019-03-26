@@ -1,14 +1,11 @@
 package slatekit.info
 
-import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.support.ApiModule
-import slatekit.common.db.DbType
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Module
 import slatekit.integration.mods.ModuleContext
 import slatekit.integration.mods.ModuleInfo
-import slatekit.orm.core.orm
 
 class DependencyModule(
         val appEntCtx: AppEntContext,

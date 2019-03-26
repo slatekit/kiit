@@ -19,7 +19,7 @@ import slatekit.common.ids.UniqueId
 import slatekit.common.utils.ListMap
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
 import test.setup.*
 import java.sql.Timestamp

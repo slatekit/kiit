@@ -4,7 +4,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.Field
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 
 data class Movie(
         override val id :Long = 0L,

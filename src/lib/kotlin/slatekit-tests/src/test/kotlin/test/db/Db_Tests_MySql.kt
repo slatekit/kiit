@@ -6,13 +6,15 @@ import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
+import slatekit.common.db.DbCon
 import slatekit.db.Db
+import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Ignore
-class Db_Tests_MySql {
+class Db_Tests_MySql : TestSupport {
 
     companion object {
         var id = 0L
@@ -21,7 +23,7 @@ class Db_Tests_MySql {
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
     @Before
     fun can_setup() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO `slatekit`.`db_tests`
             (
@@ -111,7 +113,7 @@ class Db_Tests_MySql {
 
     @Test
     fun can_execute_proc() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callQuery("dbtests_get_max_id", { rs -> rs.getLong(1) })
         assert(result!! > 0L)
     }
@@ -119,7 +121,7 @@ class Db_Tests_MySql {
 
     @Test
     fun can_execute_proc_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callUpdate("dbtests_update_by_id", listOf(6))
         assert(result!! >= 1)
     }
@@ -127,7 +129,7 @@ class Db_Tests_MySql {
 
     @Test
     fun can_add_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO `slatekit`.`db_tests`
             (
@@ -157,7 +159,7 @@ class Db_Tests_MySql {
 
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sql = "select $colName from db_tests where id = " + Db_Tests_MySql.id
         val actual = callback(db, sql)
         assert(expected == actual)

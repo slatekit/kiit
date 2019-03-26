@@ -116,8 +116,8 @@ open class ModelMapper(
          */
         @JvmStatic
         fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
-            val modelName = dataType.simpleName!!
-            val modelNameFull = dataType.qualifiedName!!
+            val modelName = dataType.simpleName ?: ""
+            val modelNameFull = dataType.qualifiedName ?: ""
 
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)

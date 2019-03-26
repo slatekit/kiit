@@ -1,19 +1,17 @@
 package slatekit.orm.databases.vendors
 
 import slatekit.common.db.IDb
-import slatekit.db.Db
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.entities.repos.EntityRepoSql
 import slatekit.query.Query
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityMapper
+import slatekit.entities.Entity
 import slatekit.entities.core.buildTableName
-import slatekit.orm.databases.Converter
-import slatekit.orm.databases.SqlBuilder
-import slatekit.orm.databases.TypeMap
+import slatekit.orm.core.Converter
+import slatekit.orm.core.SqlBuilder
+import slatekit.orm.core.TypeMap
 import slatekit.meta.models.Model
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import kotlin.reflect.KClass
 
 /**

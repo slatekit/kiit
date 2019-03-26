@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.common.DateTime
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 
 
 data class Phone (

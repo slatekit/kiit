@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.entities.core
+package slatekit.entities
 
 import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
@@ -19,6 +19,7 @@ import slatekit.meta.models.Model
 import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
+import slatekit.entities.core.IEntityRepo
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 

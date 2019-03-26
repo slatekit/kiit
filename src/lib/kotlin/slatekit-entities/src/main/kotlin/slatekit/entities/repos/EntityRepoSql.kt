@@ -16,16 +16,13 @@ package slatekit.entities.repos
 import slatekit.common.db.IDb
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.common.toUUId
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.query.Query
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityMapper
-import slatekit.entities.core.EntityRepo
-import slatekit.entities.core.convertToId
+import slatekit.entities.Entity
+import slatekit.entities.EntityMapper
+import slatekit.entities.EntityRepo
 import slatekit.meta.models.Model
-import java.util.*
 import kotlin.reflect.KClass
 
 /**
@@ -49,7 +46,7 @@ abstract class EntityRepoSql<TId, T>(
         encodedChar: Char = '`',
         query: (() -> Query)? = null
 ) : EntityRepo<TId, T>(entityType, entityIdType, nameOfTable, encodedChar, model, encryptor, namer, query)
-        where TId:Comparable<TId>, T:Entity<TId> {
+        where TId:Comparable<TId>, T: Entity<TId> {
 
 
     override fun repoName(): String = "$encodedChar" + super.repoName() + "$encodedChar"

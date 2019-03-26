@@ -1,7 +1,7 @@
 package app;
 
 import meta.ModelHelpers;
-import slatekit.entities.core.Entity;
+import slatekit.entities.Entity;
 import slatekit.meta.models.Model;
 
 // Temp to represent a vacation day

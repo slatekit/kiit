@@ -18,7 +18,8 @@ import org.junit.Test
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.db.Db
-import slatekit.entities.core.*
+import slatekit.entities.Entities
+import slatekit.entities.EntityService
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5

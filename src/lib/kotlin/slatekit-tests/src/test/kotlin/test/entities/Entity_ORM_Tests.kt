@@ -22,8 +22,9 @@ import slatekit.common.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.db.Db
-import slatekit.entities.core.Entities
-import slatekit.entities.core.*
+import slatekit.entities.Entities
+import slatekit.entities.EntityUpdatable
+import slatekit.entities.EntityWithId
 
 
 class Entity_ORM_Tests {

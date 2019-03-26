@@ -4,6 +4,7 @@ import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.Reflector
 import slatekit.common.naming.Namer
+import slatekit.entities.*
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -108,7 +109,7 @@ open class EntityBuilder(
             serviceType: KClass<*>?,
             repo: EntityRepo<TId, T>,
             args: Any?
-    ): EntityService<TId,T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): EntityService<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
         return serviceType?.let {
             // Parameters to service is the context and repo
             val params = args?.let { args -> listOf(args, entities, repo) } ?: listOf(entities, repo)

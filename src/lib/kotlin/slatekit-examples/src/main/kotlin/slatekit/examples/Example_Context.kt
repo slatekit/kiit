@@ -28,7 +28,7 @@ import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.Context
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 import slatekit.core.cmds.Cmd
 import slatekit.db.Db
 import slatekit.results.StatusCodes

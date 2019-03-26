@@ -5,14 +5,15 @@ import slatekit.apis.ApiHost
 import slatekit.apis.ApiHostAware
 import slatekit.apis.core.Requests
 import slatekit.common.*
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
+import slatekit.entities.EntityRepo
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 
-class ErrorItemService(ctx: AppEntContext, entities: Entities, repo: slatekit.entities.core.EntityRepo<Long, ErrorItem>)
+class ErrorItemService(ctx: AppEntContext, entities: Entities, repo: EntityRepo<Long, ErrorItem>)
     : slatekit.entities.services.EntityServiceWithSupport<Long, ErrorItem>(ctx, entities, repo), ApiHostAware {
 
     private var container: ApiHost? = null

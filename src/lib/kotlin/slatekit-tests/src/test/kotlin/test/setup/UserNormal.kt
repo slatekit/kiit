@@ -15,9 +15,9 @@ package test.setup
 import slatekit.common.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityUpdatable
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.Entity
+import slatekit.entities.EntityUpdatable
+import slatekit.entities.EntityWithId
 
 /**
  * Created by kishorereddy on 5/23/17.

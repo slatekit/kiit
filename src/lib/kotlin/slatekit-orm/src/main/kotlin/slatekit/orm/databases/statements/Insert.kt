@@ -1,8 +1,8 @@
 package slatekit.orm.databases.statements
 
 import slatekit.meta.models.Model
-import slatekit.entities.core.Entity
-import slatekit.orm.core.OrmMapper
+import slatekit.entities.Entity
+import slatekit.orm.OrmMapper
 
 class Insert<TId, T> : Statement<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 

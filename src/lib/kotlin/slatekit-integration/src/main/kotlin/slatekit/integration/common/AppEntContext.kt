@@ -28,7 +28,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.CommonContext
 import slatekit.db.Db
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 
 /**
   *

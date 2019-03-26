@@ -20,7 +20,7 @@ import slatekit.common.ids.UniqueId
 import slatekit.common.toUUId
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.statements.Insert
 import slatekit.orm.databases.statements.Update
 import slatekit.orm.databases.vendors.MySqlConverter

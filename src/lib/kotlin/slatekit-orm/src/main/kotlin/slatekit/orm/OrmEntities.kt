@@ -11,15 +11,17 @@
  * </slate_header>
  */
 
-package slatekit.orm.core
+package slatekit.orm
 
 import slatekit.common.db.DbType
 import slatekit.db.types.DbSource
 import slatekit.db.types.DbSourceMySql
 import slatekit.db.types.DbSourcePostGres
+import slatekit.entities.Entities
+import slatekit.entities.Entity
 import slatekit.entities.core.*
 import slatekit.meta.models.Model
-import slatekit.orm.databases.SqlBuilder
+import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.MySqlTypeMap
 import slatekit.orm.databases.vendors.PostGresMap
 import kotlin.reflect.KClass
@@ -117,11 +119,14 @@ fun Entities.sqlBuilder(entityFullName:String): SqlBuilder {
 /**
  * Gets a registered model ( schema for an entity ) for the entity type
  */
-fun Entities.getModel(entityType: KClass<*>): Model {
+fun Entities.getModel(entityType: KClass<*>): Model? {
     val entityKey = builder.key(entityType)
-    if (!info.contains(entityKey)) {
-        logger.error("Model not found for $entityKey")
-        throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+    val entityCtx = this.getInfoByKey(entityKey)
+    return when(entityCtx) {
+        null -> {
+            logger.error("Model not found for $entityKey")
+            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+        }
+        else -> entityCtx.model
     }
-    return info.get(entityKey)?.model!!
 }

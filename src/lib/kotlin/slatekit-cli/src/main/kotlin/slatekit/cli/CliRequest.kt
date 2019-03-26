@@ -61,15 +61,15 @@ data class CliRequest(
     /**
      * Get a document referenced by name in the arguments as a Doc of string content
      */
-    override fun getDoc(name: String): Doc {
-        return Uris.readDoc(this.args.getString(name))!!
+    override fun getDoc(name: String): Doc? {
+        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
     }
 
     /**
      * Get a file referenced by name in the arguments
      */
-    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
-        return Uris.readDoc(this.args.getString(name))!!
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc? {
+        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
     }
 
     /**

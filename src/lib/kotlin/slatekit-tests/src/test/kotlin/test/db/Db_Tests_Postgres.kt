@@ -7,6 +7,7 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.db.Db
+import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -33,7 +34,7 @@ $$ LANGUAGE sql;
 
  */
 @Ignore
-class Db_Tests_Postgres {
+class Db_Tests_Postgres : TestSupport {
 
     companion object {
         var id = 0L
@@ -45,7 +46,7 @@ class Db_Tests_Postgres {
 
     @Before
     fun can_setup() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         db.open()
         val sqlInsert = """
             INSERT INTO sample_entity
@@ -144,7 +145,7 @@ class Db_Tests_Postgres {
 
     @Test
     fun can_execute_proc() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callQuery("get_max_id", { rs -> rs.getLong(1) })
         assert(result!! > 0L)
     }
@@ -152,7 +153,7 @@ class Db_Tests_Postgres {
 
     @Ignore
     fun can_execute_proc_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callUpdate("dbtests_update_by_id", listOf(6))
         assert(result!! >= 1)
     }
@@ -160,7 +161,7 @@ class Db_Tests_Postgres {
 
     @Test
     fun can_add_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO sample_entity
             (
@@ -198,7 +199,7 @@ class Db_Tests_Postgres {
 
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sql = "select $colName from $tableName where id = " + Db_Tests_Postgres.id
         val actual = callback(db, sql)
         assert(expected == actual)

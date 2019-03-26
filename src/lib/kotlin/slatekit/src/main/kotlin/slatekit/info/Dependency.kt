@@ -2,9 +2,8 @@ package slatekit.info
 
 import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.common.Random
-import slatekit.entities.core.EntityUpdatable
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityUpdatable
+import slatekit.entities.EntityWithId
 
 
 data class Dependency(

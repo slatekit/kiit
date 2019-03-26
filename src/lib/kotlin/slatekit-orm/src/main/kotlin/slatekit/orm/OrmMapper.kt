@@ -13,16 +13,15 @@
 
 @file:Suppress("NOTHING_TO_INLINE")
 
-package slatekit.orm.core
+package slatekit.orm
 
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.QueryEncoder
 import slatekit.common.ids.UniqueId
-import slatekit.orm.Consts
 import slatekit.orm.Consts.idCol
-import slatekit.orm.databases.Converter
+import slatekit.orm.core.Converter
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
@@ -30,6 +29,9 @@ import slatekit.meta.models.ModelField
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.db.IDb
+import slatekit.entities.Entity
+import slatekit.entities.EntityMapper
+import slatekit.entities.EntityUpdatable
 import slatekit.entities.core.*
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -101,8 +103,6 @@ open class OrmMapper<TId, T>(
 
 
     /**
-     * This is intentionally a long method that:
-     *
      * 1. is optimized for performance of the model to sql mappings
      * 2. is recursive to support embedded objects in a table/model
      * 3. handles the construction of sql for both inserts/updates

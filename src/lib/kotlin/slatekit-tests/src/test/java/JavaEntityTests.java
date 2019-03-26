@@ -2,7 +2,6 @@
 import app.SimpleEvent;
 import app.SimpleEventService;
 import entities.SqliteDb;
-import kotlin.ranges.IntRange;
 import kotlin.reflect.KClass;
 import meta.ModelHelpers;
 import org.junit.Assert;
@@ -13,8 +12,8 @@ import org.threeten.bp.ZonedDateTime;
 import slatekit.common.db.DbCon;
 import slatekit.common.db.DbLookup;
 import slatekit.common.log.LogsDefault;
-import slatekit.entities.core.Entities;
-import slatekit.entities.core.EntityRepo;
+import slatekit.entities.Entities;
+import slatekit.entities.EntityRepo;
 import slatekit.entities.repos.EntityRepoInMemoryWithIntId;
 import slatekit.entities.repos.IdGenerator;
 import slatekit.entities.repos.IntIdGenerator;

@@ -1,17 +1,15 @@
-package slatekit.orm.core
+package slatekit.orm
 
 import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.db.DbType.*
 import slatekit.common.naming.Namer
-import slatekit.db.Db
 import slatekit.common.db.DbType
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
-import slatekit.entities.core.EntityMapper
-import slatekit.entities.core.EntityRepo
+import slatekit.entities.EntityRepo
 import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.orm.databases.SqlBuilder
+import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
 import slatekit.meta.models.Model
 import kotlin.reflect.KClass
@@ -53,7 +51,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param namer: Optional namer to create naming conventions
      */
     fun <TId, T> mapper(dbType: DbType, db:IDb, idType:KClass<*>, model: Model, utc: Boolean = false, enc: Encryptor? = null, namer: Namer? = null)
-            : OrmMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+            : OrmMapper<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
         return when (dbType) {
             DbTypeMySql -> MySqlEntityMapper(model, db, idType, utc, enc, namer)
             DbTypePGres -> PostGresEntityMapper(model, db, idType, utc, enc, namer)
@@ -66,8 +64,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * Builds the repository associated w/ the database type
      * @param entityType: The class name e.g. "MyApp.User" of the Entity
      * @param dbType: The type of the database to create
-     * @param dbKey: The name of the database key ( empty / "" by default if only 1 database )
-     * @param dbShard: The name of the database shard ( empty / "" by default if only 1 database )
+     * @param db: The implementation of IDb providing core database sql operations
      * @param tableName: Optional name of the table for the model if different than entity name
      * @param utc: Optional flag to save all datetimes in UTC ( defaults to false )
      * @param enc: Optional encrptor to support encryption of selected columns
@@ -83,7 +80,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             utc: Boolean = false,
             enc: Encryptor? = null,
             namer: Namer? = null
-    ): EntityRepo<TId,T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
         // Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {

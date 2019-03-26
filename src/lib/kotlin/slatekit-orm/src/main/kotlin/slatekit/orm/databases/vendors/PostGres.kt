@@ -5,14 +5,13 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.Query
 import slatekit.meta.models.Model
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityMapper
+import slatekit.entities.Entity
 import slatekit.entities.core.buildTableName
 import slatekit.entities.repos.EntityRepoSql
-import slatekit.orm.databases.Converter
-import slatekit.orm.databases.SqlBuilder
-import slatekit.orm.databases.TypeMap
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.core.Converter
+import slatekit.orm.core.SqlBuilder
+import slatekit.orm.core.TypeMap
+import slatekit.orm.OrmMapper
 import kotlin.reflect.KClass
 
 /**
@@ -90,4 +89,4 @@ open class PostGresEntityMapper<TId, T>(
         enc: Encryptor? = null,
         namer: Namer? = null)
     : OrmMapper<TId, T>(model, db, idType, MySqlConverter(), utc, '"', enc, namer)
-        where TId : kotlin.Comparable<TId>, T : slatekit.entities.core.Entity<TId>
+        where TId : kotlin.Comparable<TId>, T : Entity<TId>

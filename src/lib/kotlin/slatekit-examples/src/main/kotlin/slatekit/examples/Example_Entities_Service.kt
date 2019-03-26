@@ -15,7 +15,6 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.Field
-import slatekit.entities.core.*
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -24,9 +23,10 @@ import slatekit.results.Success
 import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.core.cmds.Cmd
+import slatekit.entities.*
 import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
 import slatekit.orm.databases.vendors.MySqlEntityRepo
 
@@ -94,7 +94,7 @@ class Example_Entities_Service : Cmd("service") {
     val repoMySql = MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserService(repo: EntityRepo<Long, User>) : EntityService<Long, User>(Entities({con -> Db(con)}), repo)
+    class UserService(repo: EntityRepo<Long, User>) : EntityService<Long, User>(Entities({ con -> Db(con) }), repo)
     //</doc:setup>
 
 

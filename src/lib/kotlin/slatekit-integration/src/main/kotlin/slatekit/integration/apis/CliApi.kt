@@ -52,8 +52,7 @@ class CliApi(
         val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
         //val cliMeta: CliMeta? = null
 )
-    // TODO: get rid of the "!!" its left over from early days
-    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs!!)
+    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs)
 {
 
     val metaNameForApiKey = "api-key"
