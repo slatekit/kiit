@@ -23,8 +23,8 @@ import slatekit.results.getOrElse
  */
 open class Lexer(val text: String) {
 
-    private val _state = LexState(text)
-    private val _settings = LexSettings()
+    private val state = LexState(text)
+    private val settings = LexSettings()
 
     fun parse(): LexResult {
         val res = getTokens()
@@ -35,51 +35,51 @@ open class Lexer(val text: String) {
     fun getTokens(batchSize: Int = -1): Try<List<Token>> {
         val result = try {
             val tokens = mutableListOf<Token>()
-            while (_state.pos < _state.END && !isEndOfTokenBatch(batchSize, tokens.size)) {
-                val c = _state.text[_state.pos]
-                val charPos = _state.charPos
-                _state.count = _state.count + 1
+            while (state.pos < state.END && !isEndOfTokenBatch(batchSize, tokens.size)) {
+                val c = state.text[state.pos]
+                val charPos = state.charPos
+                state.count = state.count + 1
 
                 // CASE 1: space
                 val token = if (c == ' ' || c == '\t') {
-                    _state.incrementPos()
+                    state.incrementPos()
                     Token.none
                 }
                 // CASE 2: identifier
                 else if (c.isLetter()) {
                     val word = readWord()
-                    buildWordToken(word, charPos, _state.count)
+                    buildWordToken(word, charPos, state.count)
                 }
                 // CASE 3: number
                 else if (c.isDigit()) {
                     val word = readNumber()
-                    Token(word, word.toDouble(), TokenType.Number, _state.line, charPos, _state.count)
+                    Token(word, word.toDouble(), TokenType.Number, state.line, charPos, state.count)
                 }
                 // CASE 4: string
                 else if (c == '"' || c == '\'') {
                     val text = readString()
-                    Token(text, text, TokenType.String, _state.line, charPos, _state.count)
+                    Token(text, text, TokenType.String, state.line, charPos, state.count)
                 }
                 // CASE 5: comment #
                 else if (c == '#') {
                     val line = readComment()
-                    Token(line, line, TokenType.Comment, _state.line, charPos, _state.count)
+                    Token(line, line, TokenType.Comment, state.line, charPos, state.count)
                 }
                 // CASE 6: number with .04
                 else if (c == '.' && peekChar().isDigit()) {
                     val word = readNumber()
-                    Token(word, word.toDouble(), TokenType.Number, _state.line, charPos, _state.count)
+                    Token(word, word.toDouble(), TokenType.Number, state.line, charPos, state.count)
                 }
                 // CASE 7: newline
                 else if (c == '\r' || c == '\n') {
                     val line = readNewLine()
-                    Token(line, line, TokenType.Comment, _state.line, charPos, _state.count)
+                    Token(line, line, TokenType.Comment, state.line, charPos, state.count)
                 }
                 // CASE 8: other
                 else {
-                    val word = _state.text[_state.pos]
-                    _state.incrementPos()
-                    Token(word.toString(), word.toString(), TokenType.NonAlphaNum, _state.line, charPos, _state.count)
+                    val word = state.text[state.pos]
+                    state.incrementPos()
+                    Token(word.toString(), word.toString(), TokenType.NonAlphaNum, state.line, charPos, state.count)
                 }
 
                 // Add to token
@@ -88,15 +88,15 @@ open class Lexer(val text: String) {
                 }
             }
             // At end of text
-            if (_state.pos >= _state.END) {
-                val endToken = Token("<END>", "<END>", TokenType.End, _state.line, _state.charPos, _state.count)
+            if (state.pos >= state.END) {
+                val endToken = Token("<END>", "<END>", TokenType.End, state.line, state.charPos, state.count)
                 if (batchSize <= -1 || (batchSize > -1 && tokens.size < batchSize))
                     tokens.add(endToken)
             }
             Success(tokens.toList())
         } catch (ex: Exception) {
-            val line = _state.line
-            val cpos = _state.charPos
+            val line = state.line
+            val cpos = state.charPos
             val text = "Error occurred at : line : $line, char : $cpos"
             Failure(ex, msg = text)
         }
@@ -108,10 +108,10 @@ open class Lexer(val text: String) {
     }
 
     fun readWord(): String {
-        val start = _state.pos
+        val start = state.pos
 
         fun isValidWordChar(curr: Char): Boolean {
-            val isFirstChar = start == _state.pos
+            val isFirstChar = start == state.pos
             val isValidNonChar = curr == '-' || curr == '_' || curr.isDigit()
             val isValidNonFirstChar = !isFirstChar && isValidNonChar
 
@@ -120,7 +120,7 @@ open class Lexer(val text: String) {
             else isValidNonFirstChar
             return res
         }
-        return readUntil(_state.pos, _state.pos, false, false, { _, curr, _ -> !isValidWordChar(curr) })
+        return readUntil(state.pos, state.pos, false, false, { _, curr, _ -> !isValidWordChar(curr) })
     }
 
     /**
@@ -129,7 +129,7 @@ open class Lexer(val text: String) {
      */
     fun readNumber(): String {
         var hasHitPeriod = false
-        return readUntil(_state.pos, _state.pos, false, false, { _, curr, next ->
+        return readUntil(state.pos, state.pos, false, false, { _, curr, next ->
             val isDigit = curr.isDigit()
             // Case 1: integer ( no "." yet )
             val isValid = if (!hasHitPeriod && isDigit) {
@@ -151,9 +151,9 @@ open class Lexer(val text: String) {
      * @return
      */
     fun readString(): String {
-        val quote = _state.text[_state.pos]
-        _state.incrementPos()
-        return readUntil(_state.pos, _state.pos, false, true, { prev, curr, _ -> prev != '\\' && curr == quote })
+        val quote = state.text[state.pos]
+        state.incrementPos()
+        return readUntil(state.pos, state.pos, false, true, { prev, curr, _ -> prev != '\\' && curr == quote })
     }
 
     /**
@@ -161,16 +161,16 @@ open class Lexer(val text: String) {
      * @return
      */
     fun readNewLine(): String {
-        val ch = _state.text[_state.pos]
+        val ch = state.text[state.pos]
         return if (ch == '\n') {
-            _state.incrementPos()
+            state.incrementPos()
             "\n"
         } else {
             require(ch == '\r')
-            _state.incrementPos()
-            val n1 = _state.text[_state.pos]
+            state.incrementPos()
+            val n1 = state.text[state.pos]
             require(n1 == '\n')
-            _state.incrementPos()
+            state.incrementPos()
             "\r\n"
         }
     }
@@ -180,8 +180,8 @@ open class Lexer(val text: String) {
      * @return
      */
     fun readComment(): String {
-        _state.incrementPos()
-        return readUntil(_state.pos, _state.pos, false, false, { prev, curr, _ -> prev != '\\' && (curr == '\n' || curr == '\r') })
+        state.incrementPos()
+        return readUntil(state.pos, state.pos, false, false, { prev, curr, _ -> prev != '\\' && (curr == '\n' || curr == '\r') })
     }
 
     tailrec fun readUntil(
@@ -191,63 +191,63 @@ open class Lexer(val text: String) {
         incrementAfterExtract: Boolean,
         untilPredicate: (Char, Char, Char) -> Boolean
     ): String {
-        return if (_state.pos >= _state.END) {
-            val text = _state.substring(startPos)
-            _state.incrementPos()
+        return if (state.pos >= state.END) {
+            val text = state.substring(startPos)
+            state.incrementPos()
             text
         } else {
             val prevPos = if (currentPos > 0) currentPos - 1 else 0
-            val prev = _state.text[prevPos]
-            val curr = _state.text[currentPos]
-            val next = if (currentPos + 1 < _state.END) _state.text[currentPos + 1] else Char.MIN_SURROGATE
+            val prev = state.text[prevPos]
+            val curr = state.text[currentPos]
+            val next = if (currentPos + 1 < state.END) state.text[currentPos + 1] else Char.MIN_SURROGATE
             val isEnded = untilPredicate(prev, curr, next)
             if (isEnded) {
 
                 val text = if (includeLastChar) {
-                    _state.incrementPos()
-                    _state.substring(startPos)
+                    state.incrementPos()
+                    state.substring(startPos)
                 } else {
-                    _state.substring(startPos)
+                    state.substring(startPos)
                 }
                 if (incrementAfterExtract) {
-                    _state.incrementPos()
+                    state.incrementPos()
                 }
                 text
             } else {
-                _state.incrementPos()
-                readUntil(startPos, _state.pos, includeLastChar, incrementAfterExtract, untilPredicate)
+                state.incrementPos()
+                readUntil(startPos, state.pos, includeLastChar, incrementAfterExtract, untilPredicate)
             }
         }
     }
 
     protected fun peekChar(): Char {
-        val nextPos = _state.pos + 1
-        return if (nextPos < _state.END)
-            _state.text[nextPos]
+        val nextPos = state.pos + 1
+        return if (nextPos < state.END)
+            state.text[nextPos]
         else
             Character.MIN_VALUE
     }
 
     protected fun buildToken(text: String, value: Any, tokenType: Int): Token {
-        _state.count = _state.count + 1
-        val token = Token(text, value, tokenType, _state.line, _state.charPos, _state.count)
+        state.count = state.count + 1
+        val token = Token(text, value, tokenType, state.line, state.charPos, state.count)
         return token
     }
 
     protected fun buildWordToken(word: String, charPos: Int, ndx: Int): Token {
         val t: Token =
-                if (!_settings.enableBoolIdentifiers) {
-                    Token(word, word, TokenType.Ident, _state.line, charPos, ndx)
+                if (!settings.enableBoolIdentifiers) {
+                    Token(word, word, TokenType.Ident, state.line, charPos, ndx)
                 }
                 // Case 1: true
-                else if (word == "true" || (_settings.enableBoolYesNoIdentifiers && word == "yes")) {
-                    Token(word, true, TokenType.Boolean, _state.line, charPos, ndx)
+                else if (word == "true" || (settings.enableBoolYesNoIdentifiers && word == "yes")) {
+                    Token(word, true, TokenType.Boolean, state.line, charPos, ndx)
                 }
                 // Case 2: false
-                else if (word == "false" || (_settings.enableBoolYesNoIdentifiers && word == "no")) {
-                    Token(word, false, TokenType.Boolean, _state.line, charPos, ndx)
+                else if (word == "false" || (settings.enableBoolYesNoIdentifiers && word == "no")) {
+                    Token(word, false, TokenType.Boolean, state.line, charPos, ndx)
                 } else {
-                    Token(word, word, TokenType.Ident, _state.line, charPos, ndx)
+                    Token(word, word, TokenType.Ident, state.line, charPos, ndx)
                 }
         return t
     }

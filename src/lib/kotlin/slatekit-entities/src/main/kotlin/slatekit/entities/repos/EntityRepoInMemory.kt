@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
 
 
 open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
-    : EntityRepoInMemory<Long, T>(cls, Long::class, EntityMapperInMemory<Long,T>(Model(cls), idGen), idGenerator = idGen)
+    : EntityRepoInMemory<Long, T>(cls, Long::class, idGenerator = idGen)
         where T:Entity<Long> {
 
     companion object {
@@ -46,7 +46,7 @@ open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long
 
 
 open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
-    : EntityRepoInMemory<Int, T>(cls, Int::class, EntityMapperInMemory<Int,T>(Model(cls), idGen), idGenerator = idGen )
+    : EntityRepoInMemory<Int, T>(cls, Int::class, idGenerator = idGen )
         where T:Entity<Int> {
 
     companion object {
@@ -70,16 +70,15 @@ open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
 open class EntityRepoInMemory<TId, T>(
     entityType: KClass<*>,
     entityIdType: KClass<*>,
-    entityMapper: EntityMapper<TId, T>,
     encryptor: Encryptor? = null,
     namer: Namer? = null,
     idGenerator: IdGenerator<TId>? = null
 )
-    : EntityRepo<TId, T>(entityType, entityIdType, entityMapper, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
+    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
         where TId: kotlin.Comparable<TId>, T:Entity<TId> {
 
-    private val _idGenerator = idGenerator ?: LongIdGenerator()
-    private var _items = ListMap<TId, T>(listOf())
+    private val idGenerator = idGenerator ?: LongIdGenerator()
+    private var items = ListMap<TId, T>(listOf())
 
     /**
      * create the entity in memory
@@ -93,11 +92,11 @@ open class EntityRepoInMemory<TId, T>(
             val id = getNextId()
             val en = when (entity) {
                 is EntityUpdatable<*, *> -> entity.withIdAny(id)
-                else -> mapper().setId(id, entity)
+                else -> { }
             }
 
             // store
-            _items = _items.add(id, en as T)
+            items = items.add(id, en as T)
             id
         } else
             entity.identity()
@@ -110,9 +109,9 @@ open class EntityRepoInMemory<TId, T>(
      */
     override fun update(entity: T): Boolean {
         // Check 1: already persisted ?
-        if (entity.isPersisted() && _items.contains(entity.identity())) {
-            _items = _items.minus(entity.identity())
-            _items = _items.add(entity.identity(), entity)
+        if (entity.isPersisted() && items.contains(entity.identity())) {
+            items = items.minus(entity.identity())
+            items = items.add(entity.identity(), entity)
         }
         return true
     }
@@ -123,10 +122,10 @@ open class EntityRepoInMemory<TId, T>(
      * @param id
      */
     override fun delete(id: TId): Boolean {
-        return if (!_items.contains(id))
+        return if (!items.contains(id))
             false
         else {
-            _items = _items.remove(id)
+            items = items.remove(id)
             true
         }
     }
@@ -146,8 +145,8 @@ open class EntityRepoInMemory<TId, T>(
      * @return
      */
     override fun deleteAll(): Long {
-        val count = _items.size
-        _items = ListMap(listOf())
+        val count = items.size
+        items = ListMap(listOf())
         return count.toLong()
     }
 
@@ -157,7 +156,7 @@ open class EntityRepoInMemory<TId, T>(
      * @param id
      */
     override fun get(id: TId): T? {
-        return _items[id]
+        return items[id]
     }
 
     /**
@@ -166,7 +165,7 @@ open class EntityRepoInMemory<TId, T>(
      * @return
      */
     override fun get(ids: List<TId>): List<T> {
-        return ids.mapNotNull { _items[it] }
+        return ids.mapNotNull { items[it] }
     }
 
     /**
@@ -183,7 +182,7 @@ open class EntityRepoInMemory<TId, T>(
 
             val finalValue = if (value is UUID) value.toString() else value
             property.let { p ->
-                _items.all().filter { it ->
+                items.all().filter { it ->
                     val actual = Reflector.getFieldValue(it, p)
                     val expected = finalValue
                     compare(cls, actual, expected)
@@ -209,15 +208,15 @@ open class EntityRepoInMemory<TId, T>(
      *
      * @return
      */
-    override fun getAll(): List<T> = _items.all()
+    override fun getAll(): List<T> = items.all()
 
-    override fun count(): Long = _items.size.toLong()
+    override fun count(): Long = items.size.toLong()
 
     override fun top(count: Int, desc: Boolean): List<T> {
-        return if (_items.size == 0) {
+        return if (items.size == 0) {
             listOf()
         } else {
-            val items = _items.all().sortedBy { item -> item.identity() }
+            val items = items.all().sortedBy { item -> item.identity() }
             val sorted = if (desc) items.reversed() else items
             sorted.take(count)
         }
@@ -248,7 +247,7 @@ open class EntityRepoInMemory<TId, T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    fun getNextId(): TId = _idGenerator.nextId() as TId
+    fun getNextId(): TId = idGenerator.nextId() as TId
 
     /**
      * Simple equality comparison fields ( used mostly in
@@ -276,17 +275,10 @@ open class EntityRepoInMemory<TId, T>(
 }
 
 
-class EntityMapperInMemory<TId, T>(val model:Model, val idGen:IdGenerator<TId>)
+class EntityMapperEmpty<TId, T>(val model:Model?)
     : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
 
     override fun schema(): Model? = model
 
-    override fun setId(id: TId, entity: T): T = entity
-
-    override fun insert(entity: T): TId = idGen.nextId()
-
-    override fun update(entity: T): Boolean = true
-
     override fun <T> mapFrom(record: Record): T? = null
-
 }

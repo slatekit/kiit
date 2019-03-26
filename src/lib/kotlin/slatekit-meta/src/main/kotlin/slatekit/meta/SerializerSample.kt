@@ -23,7 +23,7 @@ class SerializerSample(
      * serializes an object, factoring in a root item.
      */
     fun serializeParams(s: List<KParameter>): String {
-        _buff = StringBuilder()
+        buff = StringBuilder()
 
         // Begin
         onContainerStart(s, ParentType.MAP_TYPE, 0)
@@ -34,7 +34,7 @@ class SerializerSample(
         // End
         onContainerEnd(s, ParentType.MAP_TYPE, 0)
 
-        val text = _buff.toString()
+        val text = buff.toString()
         return text
     }
 
@@ -54,7 +54,7 @@ class SerializerSample(
 
     fun serializeParameter(parameter: KParameter, depth: Int) {
         val tpe = parameter.type
-        _buff.append("\"" + parameter.name + "\" : ")
+        buff.append("\"" + parameter.name + "\" : ")
         serializerType(parameter, tpe, depth)
     }
 
@@ -66,26 +66,26 @@ class SerializerSample(
     fun serializerType(parent: Any, tpe: KType, depth: Int) {
         when (tpe) {
             // Basic types
-            KTypes.KStringType -> _buff.append("\"abc\"")
-            KTypes.KBoolType -> _buff.append(true)
-            KTypes.KShortType -> _buff.append(0.toShort())
-            KTypes.KIntType -> _buff.append(10)
-            KTypes.KLongType -> _buff.append(100L)
-            KTypes.KFloatType -> _buff.append(10.0.toFloat())
-            KTypes.KDoubleType -> _buff.append(10.00)
-            KTypes.KDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
-            KTypes.KLocalDateType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalDate() + "\"")
-            KTypes.KLocalTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalTime() + "\"")
-            KTypes.KLocalDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).local() + "\"")
-            KTypes.KZonedDateTimeType -> _buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
-            KTypes.KInstantType -> _buff.append("\"" + DateTimes.of(2017, 8, 20).toInstant() + "\"")
-            KTypes.KDocType -> _buff.append("\"user://myapp/conf/abc.conf\"")
-            KTypes.KVarsType -> _buff.append("\"a=1,b=2,c=3\"")
-            KTypes.KSmartValueType -> _buff.append("\"123-456-7890\"")
-            KTypes.KDecStringType -> _buff.append("\"ALK342481SFA\"")
-            KTypes.KDecIntType -> _buff.append("\"ALK342481SFA\"")
-            KTypes.KDecLongType -> _buff.append("\"ALK342481SFA\"")
-            KTypes.KDecDoubleType -> _buff.append("\"ALK342481SFA\"")
+            KTypes.KStringType -> buff.append("\"abc\"")
+            KTypes.KBoolType -> buff.append(true)
+            KTypes.KShortType -> buff.append(0.toShort())
+            KTypes.KIntType -> buff.append(10)
+            KTypes.KLongType -> buff.append(100L)
+            KTypes.KFloatType -> buff.append(10.0.toFloat())
+            KTypes.KDoubleType -> buff.append(10.00)
+            KTypes.KDateTimeType -> buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
+            KTypes.KLocalDateType -> buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalDate() + "\"")
+            KTypes.KLocalTimeType -> buff.append("\"" + DateTimes.of(2017, 8, 20).local().toLocalTime() + "\"")
+            KTypes.KLocalDateTimeType -> buff.append("\"" + DateTimes.of(2017, 8, 20).local() + "\"")
+            KTypes.KZonedDateTimeType -> buff.append("\"" + DateTimes.of(2017, 8, 20) + "\"")
+            KTypes.KInstantType -> buff.append("\"" + DateTimes.of(2017, 8, 20).toInstant() + "\"")
+            KTypes.KDocType -> buff.append("\"user://myapp/conf/abc.conf\"")
+            KTypes.KVarsType -> buff.append("\"a=1,b=2,c=3\"")
+            KTypes.KSmartValueType -> buff.append("\"123-456-7890\"")
+            KTypes.KDecStringType -> buff.append("\"ALK342481SFA\"")
+            KTypes.KDecIntType -> buff.append("\"ALK342481SFA\"")
+            KTypes.KDecLongType -> buff.append("\"ALK342481SFA\"")
+            KTypes.KDecDoubleType -> buff.append("\"ALK342481SFA\"")
             else -> serializeObject(parent, tpe, depth)
         }
     }
@@ -102,7 +102,7 @@ class SerializerSample(
         if (Reflector.isSlateKitEnum(ktype.classifier as KClass<*>)) {
             val enumVal = Reflector.getEnumSample(ktype.classifier as KClass<*>)
             // serializerType(parent, KTypes.KIntType, depth)
-            _buff.append(enumVal)
+            buff.append(enumVal)
             return
         }
 

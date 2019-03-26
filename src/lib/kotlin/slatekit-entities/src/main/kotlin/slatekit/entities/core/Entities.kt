@@ -19,12 +19,11 @@ import slatekit.common.db.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.entities.repos.EntityMapperInMemory
+import slatekit.entities.repos.EntityMapperEmpty
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.IdGenerator
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.meta.models.Model
-import sun.java2d.cmm.kcms.KcmsServiceProvider
 import kotlin.reflect.KClass
 
 /**
@@ -96,7 +95,8 @@ open class Entities(
             entityIdType: KClass<*>,
             service: EntityService<TId, T>,
             dbType:DbType):EntityContext where TId : Comparable<TId>, T : Entity<TId> {
-        val context = EntityContext(entityType, entityIdType, service::class, service.repoT(), service.repoT().entityMapper, dbType, Model(entityType), "", "", service)
+        val mapper = EntityMapperEmpty<TId, T>(null)
+        val context = EntityContext(entityType, entityIdType, service::class, service.repoT(), mapper, dbType, Model(entityType), "", "", service)
         register(context)
         return context
     }
@@ -112,10 +112,12 @@ open class Entities(
             entityIdType: KClass<*>,
             serviceType:KClass<*>,
             repo: EntityRepo<TId, T>,
+            mapper:EntityMapper<TId, T>?,
             dbType:DbType,
             serviceCtx:Any? = null):EntityContext where TId : Comparable<TId>, T : Entity<TId> {
         val service = builder.service(this, serviceType, repo, serviceCtx)
-        val context = EntityContext(entityType, entityIdType, serviceType, repo, repo.entityMapper, dbType, Model(entityType), "", "", service, serviceCtx)
+        val finalMapper = mapper ?: EntityMapperEmpty(null)
+        val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, dbType, Model(entityType), "", "", service, serviceCtx)
         register(context)
         return context
     }
@@ -159,10 +161,10 @@ open class Entities(
         val model = Model(entityType, table) // Empty model as this is in-memory
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val mapper = EntityMapperInMemory<TId, T>(model, entityIdGen) // Empty mapper as this is in-memory
+        val mapper = EntityMapperEmpty<TId, T>(model) // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
-        val repo = EntityRepoInMemory(entityType, entityIdType, mapper, this.enc, this.namer, entityIdGen)
+        val repo = EntityRepoInMemory(entityType, entityIdType, this.enc, this.namer, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)

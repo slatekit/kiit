@@ -31,8 +31,8 @@ import org.threeten.bp.*
  * @param actionParts : ["app", "users", "invite" ]
  * @param prefix : the letter used to prefix each key / name of named parameters e.g. "-"
  * @param separator : the letter used to separate the key / name with value e.g. ":"
- * @param _namedArgs : the map of named arguments ( key / value ) pairs
- * @param _indexArgs : the list of positional arguments ( index based )
+ * @param namedArgs : the map of named arguments ( key / value ) pairs
+ * @param indexArgs : the list of positional arguments ( index based )
  */
 
 class Args(
@@ -42,49 +42,49 @@ class Args(
         val actionParts: List<String>,
         val prefix: String = "-",
         val separator: String = "=",
-        private val _namedArgs: Map<String, String>? = null,
-        private val _metaArgs: Map<String, String>? = null,
-        private val _sysArgs: Map<String, String>? = null,
-        private val _indexArgs: List<String>? = null,
-        private val _decryptor: ((String) -> String)?
+        private val namedArgs: Map<String, String>? = null,
+        private val metaArgs: Map<String, String>? = null,
+        private val sysArgs: Map<String, String>? = null,
+        private val indexArgs: List<String>? = null,
+        private val decryptor: ((String) -> String)?
 ) : Inputs {
 
-    private val _metaIndex = 0
+    private val metaIndex = 0
 
     /**
      * gets read-only map of key-value based arguments
      *
      * @return
      */
-    val named: Map<String, String> = _namedArgs ?: mapOf()
+    val named: Map<String, String> = namedArgs ?: mapOf()
 
     /**
      * gets read-only map of key-value based arguments
      *
      * @return
      */
-    val meta: Map<String, String> = _metaArgs ?: mapOf()
+    val meta: Map<String, String> = metaArgs ?: mapOf()
 
     /**
      * gets read-only map of key-value based arguments
      *
      * @return
      */
-    val sys: Map<String, String> = _sysArgs ?: mapOf()
+    val sys: Map<String, String> = sysArgs ?: mapOf()
 
     /**
      * gets read-only list of index/positional based arguments.
      *
      * @return
      */
-    val positional: List<String> = _indexArgs ?: listOf()
+    val positional: List<String> = indexArgs ?: listOf()
 
     /**
      * gets the size of all the arguments ( named + positional )
      *
      * @return
      */
-    override fun size(): Int = (_namedArgs?.size ?: 0) + (_indexArgs?.size ?: 0)
+    override fun size(): Int = (namedArgs?.size ?: 0) + (indexArgs?.size ?: 0)
 
     /**
      * True if there are 0 arguments.
@@ -99,7 +99,7 @@ class Args(
      *
      * @return
      */
-    val isVersion: Boolean = ArgsFuncs.isVersion(positional, _metaIndex)
+    val isVersion: Boolean = ArgsFuncs.isVersion(positional, metaIndex)
 
     /**
      * Returns true if there is only 1 positional argument with value: pause -pause /pause
@@ -107,7 +107,7 @@ class Args(
      *
      * @return
      */
-    val isPause: Boolean = ArgsFuncs.isPause(positional, _metaIndex)
+    val isPause: Boolean = ArgsFuncs.isPause(positional, metaIndex)
 
     /**
      * Returns true if there is only 1 positional argument with value: exit -exit /exit
@@ -115,21 +115,21 @@ class Args(
      *
      * @return
      */
-    val isExit: Boolean = ArgsFuncs.isExit(positional, _metaIndex)
+    val isExit: Boolean = ArgsFuncs.isExit(positional, metaIndex)
 
     /**
      * returns true if there is only 1 argument with value: --help -help /? -? ?
      *
      * @return
      */
-    val isHelp: Boolean = ArgsFuncs.isHelp(positional, _metaIndex)
+    val isHelp: Boolean = ArgsFuncs.isHelp(positional, metaIndex)
 
     /**
      * returns true if there is only 1 argument with value -about or -info
      *
      * @return
      */
-    val isInfo: Boolean = ArgsFuncs.isMetaArg(positional, _metaIndex, "about", "info")
+    val isInfo: Boolean = ArgsFuncs.isMetaArg(positional, metaIndex, "about", "info")
 
     /**
      * gets the verb at the supplied position
@@ -143,24 +143,24 @@ class Args(
      * @param pos
      * @return
      */
-    fun getValueAt(pos: Int): String = getListValueOrElse(_indexArgs, pos, "")
+    fun getValueAt(pos: Int): String = getListValueOrElse(indexArgs, pos, "")
 
     /**
      * whether or not this contains the key in the meta args
      */
-    fun containsMetaKey(key: String): Boolean = _metaArgs?.let { meta -> meta.containsKey(key) } ?: false
+    fun containsMetaKey(key: String): Boolean = metaArgs?.let { meta -> meta.containsKey(key) } ?: false
 
     /**
      * whether or not this contains the key in the meta args
      */
-    fun containsSysKey(key: String): Boolean = _sysArgs?.let { sys -> sys.containsKey(key) } ?: false
+    fun containsSysKey(key: String): Boolean = sysArgs?.let { sys -> sys.containsKey(key) } ?: false
 
     /**
      * gets a string from the meta args
      */
     fun getMetaString(key: String): String? {
         return if (containsMetaKey(key)) {
-            _metaArgs?.let { m -> m[key] } ?: ""
+            metaArgs?.let { m -> m[key] } ?: ""
         } else {
             null
         }
@@ -171,7 +171,7 @@ class Args(
      */
     fun getMetaStringOrElse(key: String, defaultValue: String): String {
         return if (containsMetaKey(key)) {
-            _metaArgs?.let { m -> m[key] } ?: ""
+            metaArgs?.let { m -> m[key] } ?: ""
         } else {
             defaultValue
         }
@@ -182,7 +182,7 @@ class Args(
      */
     fun getSysString(key: String): String? {
         return if (containsSysKey(key)) {
-            _sysArgs?.let { m -> m[key] } ?: ""
+            sysArgs?.let { m -> m[key] } ?: ""
         } else {
             null
         }
@@ -193,7 +193,7 @@ class Args(
      */
     fun getSysStringOrElse(key: String, defaultValue: String): String {
         return if (containsSysKey(key)) {
-            _sysArgs?.let { m -> m[key] } ?: ""
+            sysArgs?.let { m -> m[key] } ?: ""
         } else {
             defaultValue
         }
@@ -219,7 +219,7 @@ class Args(
      * @param key
      * @return
      */
-    override fun getString(key: String): String = Strings.decrypt(named[key] ?: "", _decryptor)
+    override fun getString(key: String): String = Strings.decrypt(named[key] ?: "", decryptor)
 
     override fun getBool(key: String): Boolean = Conversions.toBool(named[key] ?: "false")
     override fun getShort(key: String): Short = Conversions.toShort(named[key] ?: "0")
@@ -237,14 +237,14 @@ class Args(
 
     override fun get(key: String): Any? = if (named.contains(key)) named[key] else null
     //override fun getObject(key: String): Any? = if (named.contains(key)) named[key] else null
-    override fun containsKey(key: String): Boolean = _namedArgs?.contains(key) ?: false
+    override fun containsKey(key: String): Boolean = namedArgs?.contains(key) ?: false
 
-    fun hasMetaArgs(): Boolean = _metaArgs?.isNotEmpty() ?: false
+    fun hasMetaArgs(): Boolean = metaArgs?.isNotEmpty() ?: false
 
     companion object {
 
         @JvmStatic
-        fun default(): Args = Args("", listOf(), "", listOf(), _decryptor = null)
+        fun default(): Args = Args("", listOf(), "", listOf(), decryptor = null)
 
         /**
          * Parses the arguments using the supplied prefix and separator for the args.

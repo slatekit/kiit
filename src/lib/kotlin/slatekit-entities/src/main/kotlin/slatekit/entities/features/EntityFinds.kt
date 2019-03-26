@@ -38,7 +38,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun findByField(prop: KProperty<*>, value: Any): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repoT().mapper().columnName(prop)
+        val column = this.repoT().columnName(prop)
         return repoT().findBy(column, "=", value)
     }
 
@@ -50,7 +50,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun findByField(prop: KProperty<*>, value: Any, limit:Int): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repoT().mapper().columnName(prop)
+        val column = this.repoT().columnName(prop)
         val query = Query().where(column, "=", value).limit(limit)
         return repoT().find(query)
     }
@@ -63,7 +63,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun findByFieldIn(prop: KProperty<*>, value: List<Any>): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repoT().mapper().columnName(prop)
+        val column = this.repoT().columnName(prop)
         return repoT().findIn(column, value)
     }
 
@@ -75,7 +75,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun findFirstByField(prop: KProperty<*>, value: Any): T? {
         // Get column name from model schema ( if available )
-        val column = this.repoT().mapper().columnName(prop)
+        val column = this.repoT().columnName(prop)
         return repoT().findFirstBy(column, "=", value)
     }
 
@@ -96,7 +96,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
 
     fun where(prop: KProperty<*>, op: String, value: Any?): IQuery {
         // Get column name from model schema ( if available )
-        val column = this.repoT().mapper().columnName(prop)
+        val column = this.repoT().columnName(prop)
         return Query().where(column, op, value ?: Query.Null)
     }
 }

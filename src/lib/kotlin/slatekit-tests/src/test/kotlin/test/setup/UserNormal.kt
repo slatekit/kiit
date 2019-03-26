@@ -49,9 +49,11 @@ data class Group(
 
         @property:Field(required = true, length = 30)
         val name: String
-) : Entity<Long> {
+) : Entity<Long>, EntityUpdatable<Long, Group> {
+
     override fun isPersisted(): Boolean = id > 0
     override fun identity(): Long = id
+    override fun withId(id: Long): Group = this.copy(id = id)
 }
 
 
@@ -64,9 +66,11 @@ data class Member(
 
         @property:Field(required = true)
         val userId: Long
-) : Entity<Long> {
+) : Entity<Long>, EntityUpdatable<Long, Member> {
+
     override fun isPersisted(): Boolean = id > 0
     override fun identity(): Long = id
+    override fun withId(id: Long): Member = this.copy(id = id)
 }
 
 

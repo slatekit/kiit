@@ -13,21 +13,9 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.app.AppFuncs
-import slatekit.core.common.AppContext
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.args.Args
-import slatekit.common.args.ArgsSchema
-import slatekit.common.conf.Config
-import slatekit.common.encrypt.B64Java8
-import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
-import slatekit.common.info.*
-import slatekit.common.log.LogsDefault
-import slatekit.app.AppRunner
 import slatekit.common.Context
 import slatekit.common.diagnostics.Diagnostics
 import slatekit.common.diagnostics.Events
@@ -35,17 +23,10 @@ import slatekit.common.diagnostics.Tracker
 import slatekit.common.log.LoggerConsole
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Response
-import slatekit.common.requests.SimpleResponse
-import slatekit.entities.core.Entities
+import slatekit.common.CommonResponse
 import slatekit.core.cmds.Cmd
-import slatekit.core.loader.SampleResult
-import slatekit.db.Db
-import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.results.StatusCodes
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.results.getOrElse
-import slatekit.workers.WorkRequest
 
 //</doc:import_examples>
 
@@ -111,7 +92,7 @@ class Example_Diagnostics : Cmd("cmd") {
 
         // Sample response ( assume you've done processing on your sample request )
         // NOTE: The response has to be an instance of the slatekit.common.requests.Response interface
-        val response1:Response<String> = SimpleResponse(true, 1000, mapOf(), "processed")
+        val response1:Response<String> = CommonResponse(true, 1000, mapOf(), "processed")
 
         // CASE 1: Record all diagnostics  :
         // 1. log   : log the response to the logger

@@ -34,7 +34,7 @@ interface ApiQueueSupport {
      */
     fun sendToQueueOrProcess(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Notice<String> {
         // Coming in as http request and mode is queued ?
-        return if (req.source != Source.Queue && target.tag == "queued") {
+        return if (req.source != Source.Queue && target.tags.contains("queued")) {
             sendToQueue(ctx, req, target, source, args)
         } else {
             slatekit.results.Failure("Continue processing")

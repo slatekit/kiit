@@ -36,7 +36,7 @@ data class Action(
     val roles: String = "",
     val verb: String = "*",
     val protocol: String = "*",
-    val tag: String = ""
+    val tags: List<String> = listOf()
 ) {
     /**
      * All the parameters of the function, this includes:

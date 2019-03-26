@@ -15,7 +15,7 @@ import slatekit.common.log.Logger
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.meta.*
 import slatekit.results.*
 import slatekit.results.builders.Notices
@@ -78,7 +78,7 @@ open class ApiHost(
     /**
      * The validator for requests, checking protocol, parameter validation, etc
      */
-    private val _validator by lazy { Validation(this) }
+    private val validator by lazy { Validation(this) }
 
     private val formatter = Format()
 
@@ -162,7 +162,7 @@ open class ApiHost(
         opts: Map<String, Any>,
         args: Map<String, Any>
     ): Try<Any> {
-        val req = SimpleRequest.cli(area, api, action, verb, opts, args)
+        val req = CommonRequest.cli(area, api, action, verb, opts, args)
         return callAsResult(req)
     }
 
@@ -228,7 +228,7 @@ open class ApiHost(
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
 
         // Api exists ?
-        val apiCheck = _validator.validateApi(req)
+        val apiCheck = validator.validateApi(req)
 
         // Execute the API using
         val resultRaw = apiCheck.flatMap { apiRef ->
@@ -237,7 +237,7 @@ open class ApiHost(
             val runCtx = Ctx(this, this.ctx, req, apiRef)
 
             // Execute using a pipeline
-            Exec(runCtx, _validator, logger).run(this::executeMethod)
+            Exec(runCtx, validator, logger).run(this::executeMethod)
         }
         val result = resultRaw.toTry()
 

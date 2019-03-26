@@ -1,20 +1,20 @@
 package slatekit.common.utils
 
-class StringParser(private val _content: String) {
+class StringParser(private val content: String) {
 
-    private val _extracts = mutableMapOf<String, String>()
-    private var _pos = 0
-    private var _lastMatch = false
+    private val extracts = mutableMapOf<String, String>()
+    private var pos = 0
+    private var lastMatch = false
 
-    fun extracts(): MutableMap<String, String> = _extracts
+    fun extracts(): MutableMap<String, String> = extracts
 
     fun saveUntil(token: String, name: String, ensure: Boolean = true): StringParser {
-        val start = _pos
+        val start = pos
         moveInternal(token, ensure)
-        if (_lastMatch) {
-            val end = _pos - token.length
+        if (lastMatch) {
+            val end = pos - token.length
             val content = extract(start, end)
-            _extracts.put(name, content)
+            extracts.put(name, content)
         }
         return this
     }
@@ -25,18 +25,18 @@ class StringParser(private val _content: String) {
     }
 
     fun moveInternal(token: String, ensure: Boolean = true): StringParser {
-        val ndxMatch = _content.indexOf(token, _pos)
+        val ndxMatch = content.indexOf(token, pos)
         if (ensure && ndxMatch < 0) {
         } else {
-            _lastMatch = ndxMatch >= 0
+            lastMatch = ndxMatch >= 0
 
             if (ndxMatch >= 0) {
                 // Update pos to next position
-                _pos = ndxMatch + token.length
+                pos = ndxMatch + token.length
             }
         }
         return this
     }
 
-    fun extract(start: Int, end: Int): String = _content.substring(start, end)
+    fun extract(start: Int, end: Int): String = content.substring(start, end)
 }

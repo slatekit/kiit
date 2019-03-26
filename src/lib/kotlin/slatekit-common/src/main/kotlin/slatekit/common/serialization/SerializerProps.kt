@@ -39,7 +39,7 @@ class SerializerProps(
      */
     override fun onContainerEnd(item: Any, type: ParentType, depth: Int) {
         if (depth <= 2) {
-            _buff.append(newline)
+            buff.append(newline)
         }
     }
 
@@ -51,13 +51,13 @@ class SerializerProps(
     }
 
     override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
-        _buff.append(newline)
-        _buff.append("$key = ")
+        buff.append(newline)
+        buff.append("$key = ")
         serializeValue(value, depth)
     }
 
     override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
-        _buff.append(newline)
+        buff.append(newline)
         serializeValue(value, depth)
     }
 }

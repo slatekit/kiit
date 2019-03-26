@@ -37,20 +37,20 @@ class QueueSourceInMemory<T>(
     val size: Int = -1
 ) : QueueSource<T> {
 
-    private val _list = if (size <= 0) LinkedBlockingQueue<QueueEntry<T>>() else LinkedBlockingQueue(size)
-    private val _object = Object()
+    private val list = if (size <= 0) LinkedBlockingQueue<QueueEntry<T>>() else LinkedBlockingQueue(size)
+    private val obj = Object()
 
     /**
      * Count of items in the queue
      */
-    override fun count(): Int = _list.size
+    override fun count(): Int = list.size
 
 
     /**
      * Gets the next 1 item in the queue
      */
     override fun next(): QueueEntry<T>? {
-        val result = _list.poll()
+        val result = list.poll()
         return when(result) {
             null -> null
             else -> result
@@ -62,12 +62,12 @@ class QueueSourceInMemory<T>(
      * Gets the next X items from the queue
      */
     override fun next(size: Int): List<QueueEntry<T>>? {
-        return if (_list.isEmpty()) null
+        return if (list.isEmpty()) null
         else {
             val results = mutableListOf<QueueEntry<T>>()
-            val actualSize = Math.min(size, _list.size)
+            val actualSize = Math.min(size, list.size)
             for (ndx in 0 until actualSize) {
-                val entry = _list.poll()
+                val entry = list.poll()
                 if (entry != null) {
                     results.add(entry)
                 }
@@ -82,7 +82,7 @@ class QueueSourceInMemory<T>(
      */
     override fun send(value: T, tagName: String, tagValue: String): Try<String> {
         val entry = QueueEntrySimple(value, mapOf(tagName to tagValue), uuid())
-        val success = _list.offer(entry)
+        val success = list.offer(entry)
         return when(success){
             true -> Success(entry.id)
             false -> Failure(Exception("Error sending msg with $tagName"))
@@ -95,7 +95,7 @@ class QueueSourceInMemory<T>(
      */
     override fun send(value: T, attributes: Map<String, Any>): Try<String> {
         val entry = QueueEntrySimple(value, attributes, uuid())
-        _list += entry
+        list += entry
         return Success(entry.id)
     }
 
@@ -143,10 +143,10 @@ class QueueSourceInMemory<T>(
      *
      */
     fun discard(entry: QueueEntry<T>) {
-        synchronized(_object) {
-            val pos = _list.indexOf(entry)
+        synchronized(obj) {
+            val pos = list.indexOf(entry)
             if (pos > -1) {
-                _list.remove(entry)
+                list.remove(entry)
             }
         }
     }

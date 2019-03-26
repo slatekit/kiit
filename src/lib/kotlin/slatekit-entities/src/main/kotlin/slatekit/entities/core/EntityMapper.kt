@@ -44,24 +44,6 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T:Entity<TId>
 
 
     /**
-     * Sets the id on the entity
-     */
-    fun setId(id:TId, entity:T):T
-
-
-    /**
-     * Maps the entity to a sql Insert
-     */
-    fun insert(entity:T):TId
-
-
-    /**
-     * Maps the entity to a sql Update
-     */
-    fun update(entity:T):Boolean
-
-
-    /**
      * Gets the column name for the Kproperty from the model schema if available
      * or defaults to the property name.
      */

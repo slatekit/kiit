@@ -20,7 +20,6 @@ import slatekit.common.log.Logger
 import slatekit.common.toResponse
 import slatekit.results.Try
 import slatekit.results.builders.Tries
-import kotlin.reflect.KCallable
 
 /**
  * Executes the API action using a pipeline of steps
@@ -291,7 +290,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     }
 
      fun logError(method: String, ex: Exception) {
-        val json = Requests.toJson(ctx.req, ctx.context.enc)
+        val json = Requests.toJsonString(ctx.req, ctx.context.enc)
         logger.error("""{ "method": "$method", "path": "${ctx.req.fullName}", "request" : $json }""".trimIndent(), ex)
     }
 }

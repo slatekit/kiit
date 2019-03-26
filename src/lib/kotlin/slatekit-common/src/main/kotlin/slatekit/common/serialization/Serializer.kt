@@ -46,8 +46,8 @@ open class Serializer(
 
     open val standardizeWidth = false
     open val standardizeResult = false
-    protected val _indenter = Indenter()
-    protected var _buff = StringBuilder()
+    protected val indenter = Indenter()
+    protected var buff = StringBuilder()
     private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     private val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -60,12 +60,12 @@ open class Serializer(
      * serializes an object, factoring in a root item.
      */
     open fun serialize(s: Any?): String {
-        _buff = StringBuilder()
+        buff = StringBuilder()
 
         // Serialize
         serializeValue(s, 0)
 
-        val text = _buff.toString()
+        val text = buff.toString()
         return text
     }
 
@@ -73,7 +73,7 @@ open class Serializer(
      * serializes an object, factoring in a root item.
      */
     open fun serializeDocument(s: Any?): String {
-        _buff = StringBuilder()
+        buff = StringBuilder()
 
         val root = s!!
 
@@ -87,7 +87,7 @@ open class Serializer(
         // End
         onContainerEnd(root, ParentType.ROOT_TYPE, 0)
 
-        val text = _buff.toString()
+        val text = buff.toString()
         return text
     }
 
@@ -99,26 +99,26 @@ open class Serializer(
      */
     open fun serializeValue(s: Any?, depth: Int) {
         when (s) {
-            null -> _buff.append("null")
-            is Unit -> _buff.append("null")
-            is Char -> _buff.append(serializeString(s.toString()))
-            is String -> _buff.append(serializeString(s))
-            is Boolean -> _buff.append(s.toString().toLowerCase())
-            is Short -> _buff.append(s.toString())
-            is Int -> _buff.append(s.toString())
-            is Long -> _buff.append(s.toString())
-            is Float -> _buff.append(s.toString())
-            is Double -> _buff.append(s.toString())
-            is LocalDate -> _buff.append("\"" + s.format(dateFormat) + "\"")
-            is LocalTime -> _buff.append("\"" + s.format(timeFormat) + "\"")
-            is LocalDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
-            is ZonedDateTime -> _buff.append("\"" + s.format(dateTimeFormat) + "\"")
-            is Instant -> _buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
-            is DateTime -> _buff.append("\"" + (if (isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
+            null -> buff.append("null")
+            is Unit -> buff.append("null")
+            is Char -> buff.append(serializeString(s.toString()))
+            is String -> buff.append(serializeString(s))
+            is Boolean -> buff.append(s.toString().toLowerCase())
+            is Short -> buff.append(s.toString())
+            is Int -> buff.append(s.toString())
+            is Long -> buff.append(s.toString())
+            is Float -> buff.append(s.toString())
+            is Double -> buff.append(s.toString())
+            is LocalDate -> buff.append("\"" + s.format(dateFormat) + "\"")
+            is LocalTime -> buff.append("\"" + s.format(timeFormat) + "\"")
+            is LocalDateTime -> buff.append("\"" + s.format(dateTimeFormat) + "\"")
+            is ZonedDateTime -> buff.append("\"" + s.format(dateTimeFormat) + "\"")
+            is Instant -> buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
+            is DateTime -> buff.append("\"" + (if (isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
             is Result<*, *> -> serializeResult(s, depth)
             is List<*> -> serializeList(s, depth + 1)
             is Map<*, *> -> serializeMap(s, depth + 1)
-            is Exception -> _buff.append(serializeString(s.message ?: ""))
+            is Exception -> buff.append(serializeString(s.message ?: ""))
             else -> objectSerializer?.invoke(this, s, depth + 1) ?: "null"
         }
     }
@@ -210,10 +210,10 @@ open class Serializer(
      */
     open fun onContainerStart(item: Any, type: ParentType, depth: Int) {
         when (type) {
-            ParentType.LIST_TYPE -> _buff.append("[")
-            ParentType.MAP_TYPE -> _buff.append("{")
-            ParentType.OBJECT_TYPE -> _buff.append("{")
-            ParentType.ROOT_TYPE -> _buff.append("{")
+            ParentType.LIST_TYPE -> buff.append("[")
+            ParentType.MAP_TYPE -> buff.append("{")
+            ParentType.OBJECT_TYPE -> buff.append("{")
+            ParentType.ROOT_TYPE -> buff.append("{")
         }
     }
 
@@ -222,24 +222,24 @@ open class Serializer(
      */
     open fun onContainerEnd(item: Any, type: ParentType, depth: Int) {
         when (type) {
-            ParentType.LIST_TYPE -> _buff.append("]")
-            ParentType.MAP_TYPE -> _buff.append("}")
-            ParentType.OBJECT_TYPE -> _buff.append("}")
-            ParentType.ROOT_TYPE -> _buff.append("}")
+            ParentType.LIST_TYPE -> buff.append("]")
+            ParentType.MAP_TYPE -> buff.append("}")
+            ParentType.OBJECT_TYPE -> buff.append("}")
+            ParentType.ROOT_TYPE -> buff.append("}")
         }
     }
 
     open fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
         if (pos > 0) {
-            _buff.append(", ")
+            buff.append(", ")
         }
-        _buff.append("\"$key\" : ")
+        buff.append("\"$key\" : ")
         serializeValue(value, depth)
     }
 
     protected open fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
         if (pos > 0) {
-            _buff.append(", ")
+            buff.append(", ")
         }
         serializeValue(value, depth)
     }

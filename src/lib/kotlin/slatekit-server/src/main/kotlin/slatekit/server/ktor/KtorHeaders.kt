@@ -18,14 +18,33 @@ import slatekit.common.DateTime
 import slatekit.common.encrypt.Encryptor
 
 import io.ktor.request.*
+import org.json.simple.JSONObject
 import slatekit.common.Metadata
 import slatekit.common.Strings
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.apis.support.JsonSupport
 
-data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : Metadata {
+data class KtorHeaders(val req: ApplicationRequest, val enc: Encryptor?) : Metadata, JsonSupport {
 
     override val raw: Any = req.headers
+
+
+    /**
+     * Convertible back to JSON for queueing
+     */
+    override fun toJson(): JSONObject {
+        val root = JSONObject()
+        req.headers.names().forEach{ name ->
+            root[name] = req.headers.get(name)
+        }
+        return root
+    }
+
+
+    /**
+     * Convertible to a Map for processing
+     */
     override fun toMap(): Map<String, Any> {
         val pairs = req.headers.names().map { name -> Pair<String, Any>(name, req.headers.get(name) ?: "") }.toMap()
         return pairs.toMap()

@@ -20,7 +20,6 @@ import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.Context
-import slatekit.core.common.AppContext
 
 /**
  * Created by kreddy on 3/23/2016.

@@ -32,21 +32,21 @@ import java.util.concurrent.ConcurrentHashMap
 class Cache(opts: CacheSettings) : ICache {
 
     override val settings = opts
-    private val _lookup = ConcurrentHashMap<String, CacheEntry>()
+    private val lookup = ConcurrentHashMap<String, CacheEntry>()
 
     /**
      * size of the cache
      *
      * @return
      */
-    override fun size(): Int = _lookup.size
+    override fun size(): Int = lookup.size
 
     /**
      * size of the cache
      *
      * @return
      */
-    override fun keys(): List<String> = _lookup.keys().toList()
+    override fun keys(): List<String> = lookup.keys().toList()
 
     /**
      * whether this cache contains the entry with the supplied key
@@ -54,18 +54,18 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      * @return
      */
-    override fun contains(key: String): Boolean = _lookup.contains(key)
+    override fun contains(key: String): Boolean = lookup.contains(key)
 
     /**
      * invalidates all the entries in this cache by maxing out their expiration times
      */
-    override fun invalidateAll(): Unit = _lookup.keys.toList().forEach { key -> invalidate(key) }
+    override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
 
     /**
      * invalidates a specific cache item with the key
      */
     override fun invalidate(key: String) {
-        _lookup.get(key)?.let { c -> c.invalidate() }
+        lookup.get(key)?.let { c -> c.invalidate() }
     }
 
     /**
@@ -73,14 +73,14 @@ class Cache(opts: CacheSettings) : ICache {
      *
      * @param key
      */
-    override fun clear(): Boolean = _lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+    override fun clear(): Boolean = lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
 
     /**
      * remove a single cache item with the key
      *
      * @param key
      */
-    override fun remove(key: String): Boolean = _lookup.remove(key)?.let { k -> true } ?: false
+    override fun remove(key: String): Boolean = lookup.remove(key)?.let { k -> true } ?: false
 
     /**
      * gets a cache item associated with the key
@@ -88,7 +88,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      * @return
      */
-    override fun getEntry(key: String): CacheItem? = _lookup.get(key)?.item?.get()
+    override fun getEntry(key: String): CacheItem? = lookup.get(key)?.item?.get()
 
     /**
      * gets a cache item associated with the key
@@ -98,7 +98,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @return
      */
     override fun <T> get(key: String): T? {
-        val result = _lookup.get(key)?.let { c ->
+        val result = lookup.get(key)?.let { c ->
             if (c.isAlive()) {
                 c.item.get().value
             } else {
@@ -130,7 +130,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @param key
      */
     override fun <T> getFresh(key: String): T? {
-        val item = _lookup.get(key)
+        val item = lookup.get(key)
         item?.let { it ->
             it.refresh()
         }
@@ -144,7 +144,7 @@ class Cache(opts: CacheSettings) : ICache {
      * @return
      */
     override fun refresh(key: String) {
-        _lookup.get(key)?.refresh()
+        lookup.get(key)?.refresh()
     }
 
     /**
@@ -170,7 +170,7 @@ class Cache(opts: CacheSettings) : ICache {
         fetcher: () -> Any?
     ) {
         val entry = CacheEntry(key, desc, text, seconds, fetcher)
-        _lookup[key] = entry
+        lookup[key] = entry
         entry.refresh()
     }
 }

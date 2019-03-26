@@ -23,8 +23,6 @@ import slatekit.common.DateTimes
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
-import kotlin.reflect.KType
-import kotlin.reflect.full.createType
 
 /**
  * Stores the schema of a data-model with properties.
@@ -35,7 +33,7 @@ class Model(
         val dataType: KClass<*>? = null,
         val desc: String = "",
         tableName: String = "",
-        private val _propList: List<ModelField>? = null,
+        modelFields: List<ModelField>? = null,
         val namer: Namer? = null
 ) {
 
@@ -47,14 +45,15 @@ class Model(
     val table = tableName.nonEmptyOrDefault(name)
 
     /**
-     * The field that represents the id
+     * gets the list of fields in this model or returns an emptylist if none
+     * @return
      */
-    val idField: ModelField? get() = _propList?.find { p -> p.category == "id" }
+    val fields: List<ModelField> = modelFields ?: listOf()
 
     /**
-     * The mapping of property names to the fields.
+     * The field that represents the id
      */
-    val _propMap = _propList?.toHashSet()
+    val idField: ModelField? get() = fields.find { p -> p.category == "id" }
 
     /**
      * whether there are any fields in the model
@@ -72,20 +71,12 @@ class Model(
      * the number of fields in this model.
      * @return
      */
-    val size: Int get() = _propList?.size ?: 0
-
-    /**
-     * gets the list of fields in this model or returns an emptylist if none
-     * @return
-     */
-    val fields: List<ModelField> get() = _propList ?: listOf<ModelField>()
+    val size: Int get() = fields.size
 
 
     /**
      * builds a new model by adding an text field to the list of fields
-     * @param name
      * @param desc
-     * @param isRequired
      * @param minLength
      * @param maxLength
      * @param storedName
@@ -621,6 +612,12 @@ class Model(
         return add(field)
     }
 
+
+    fun addFields(fields:List<ModelField>): Model {
+        val newFields = fields.plus(fields)
+        return Model(this.name, fullName, this.dataType, desc, table, newFields)
+    }
+
     /**
      * builds a new model by adding a new field to the list of fields using the supplied fields.
      * @param name
@@ -659,7 +656,7 @@ class Model(
     }
 
     fun add(field: ModelField): Model {
-        val newPropList = _propList?.plus(field) ?: listOf(field)
+        val newPropList = fields.plus(field)
         return Model(this.name, fullName, this.dataType, desc, table, newPropList)
     }
 }

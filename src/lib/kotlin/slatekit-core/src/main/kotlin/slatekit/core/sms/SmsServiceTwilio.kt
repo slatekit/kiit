@@ -47,8 +47,8 @@ class SmsServiceTwilio(
 )
     : SmsService(templates, countries) {
 
-    private val _settings = SmsSettings(key, password, phone)
-    private val _baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
+    private val settings = SmsSettings(key, password, phone)
+    private val baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 
     /**
      * Initialize with api credentials
@@ -72,12 +72,12 @@ class SmsServiceTwilio(
                 val phone = phoneResult.value
                 val result = HttpRPC().sendSync(
                         method = HttpRPC.Method.Post,
-                        url = _baseUrl,
+                        url = baseUrl,
                         headers = null,
-                        creds = HttpRPC.Auth.Basic(_settings.key, _settings.password),
+                        creds = HttpRPC.Auth.Basic(settings.key, settings.password),
                         body = HttpRPC.Body.FormData(listOf(
                                 Pair("To", phone),
-                                Pair("From", _settings.account),
+                                Pair("From", settings.account),
                                 Pair("Body", msg.msg))
                         )
                 )

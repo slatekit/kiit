@@ -33,13 +33,13 @@ import slatekit.results.getOrElse
  * Created by kreddy on 3/23/2016.
  */
 class MigrationService(
-        private val _entities: Entities,
-        private val _dbs: DbLookup?,
-        private val _settings: MigrationSettings,
-        private val _folders: Folders?
+        private val entities: Entities,
+        private val dbs: DbLookup?,
+        private val settings: MigrationSettings,
+        private val folders: Folders?
 ) {
 
-    fun names(): List<Pair<String, String>> = _entities.getEntities().map {
+    fun names(): List<Pair<String, String>> = entities.getEntities().map {
         Pair(it.entityTypeName, it.entityRepoInstance?.repoName() ?: it.entityTypeName)
     }
 
@@ -63,7 +63,7 @@ class MigrationService(
 
        return when (result) {
             is slatekit.results.Success -> {
-                val db = _entities.builder.db(dbKey, dbShard)
+                val db = entities.builder.db(dbKey, dbShard)
                 result.value.forEach {
                     if (!it.isNullOrEmpty()) { db.update(it) }
                 }
@@ -90,11 +90,11 @@ class MigrationService(
     }
 
     fun delete(name: String): Try<String> {
-        return operate("Delete", name, { info, tableName -> _entities.getDbSource().buildDeleteAll(tableName) })
+        return operate("Delete", name, { info, tableName -> entities.getDbSource().buildDeleteAll(tableName) })
     }
 
     fun drop(name: String): Try<String> {
-        return operate("Drop", name, { info, tableName -> _entities.getDbSource().buildDropTable(tableName) })
+        return operate("Drop", name, { info, tableName -> entities.getDbSource().buildDropTable(tableName) })
     }
 
     fun installAll(): Try<List<String>> {
@@ -110,7 +110,7 @@ class MigrationService(
 
     fun generateSqlAllInstall(): Try<String> {
         val fileName = "sql-all-install-" + DateTime.now().toStringNumeric()
-        val results = _entities.getEntities().map { entity ->
+        val results = entities.getEntities().map { entity ->
             val result = generateSql(entity.entityTypeName)
             result.map {
                 val allSqlForModel = it.joinToString(newline)
@@ -122,16 +122,16 @@ class MigrationService(
             acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
         })
         val finalFileName = "$fileName.sql"
-        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
-        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        Files.writeDatedFile(folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = folders!!.pathToOutputs + Props.pathSeparator + finalFileName
         return slatekit.results.Success(filePath)
     }
 
     fun generateSqlAllUninstall(): Try<String> {
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
-        val results = _entities.getEntities().map { entity ->
+        val results = entities.getEntities().map { entity ->
             val ormEntityInfo = entity
-            val dropTable = _entities.getDbSource().buildDropTable(ormEntityInfo.model.table)
+            val dropTable = entities.getDbSource().buildDropTable(ormEntityInfo.model.table)
 
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }
@@ -140,8 +140,8 @@ class MigrationService(
             acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
         })
         val finalFileName = "$fileName.sql"
-        Files.writeDatedFile(_folders!!.pathToOutputs, finalFileName, allSql)
-        val filePath = _folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        Files.writeDatedFile(folders!!.pathToOutputs, finalFileName, allSql)
+        val filePath = folders!!.pathToOutputs + Props.pathSeparator + finalFileName
         return slatekit.results.Success(filePath)
     }
 
@@ -163,15 +163,15 @@ class MigrationService(
     fun generateSql(moduleName: String, version: String = ""): Try<List<String>> {
         val result = try {
             val fullName = moduleName
-            val svc = _entities.getSvcByTypeName(fullName)
-            val info = _entities.getInfoByName(moduleName)
-            val ctx = _entities.getInfoByName(fullName)
-            val ddl = _entities.sqlBuilder(fullName)
+            val svc = entities.getSvcByTypeName(fullName)
+            val info = entities.getInfoByName(moduleName)
+            val ctx = entities.getInfoByName(fullName)
+            val ddl = entities.sqlBuilder(fullName)
             val sqlTable = ddl.createTable(info.model)
             val sqlIndexes = ddl.createIndex(info.model)
             val sql: List<String> = listOf(sqlTable).plus(sqlIndexes)
-            val filePath = if (_settings.enableOutput) {
-                _folders?.let { folders ->
+            val filePath = if (settings.enableOutput) {
+                folders?.let { folders ->
                     val fileName = "model-${info.model.name}.sql"
                     Files.writeDatedFile(folders.pathToOutputs, fileName, sql.joinToString(newline))
                     folders.pathToOutputs + Props.pathSeparator + fileName
@@ -192,24 +192,24 @@ class MigrationService(
     }
 
     fun connection(): Notice<DbCon> {
-        return _dbs?.let { dbs ->
+        return dbs?.let { dbs ->
             slatekit.results.Success(dbs.default() ?: DbCon.empty)
         } ?: slatekit.results.Failure("no db setup")
     }
 
     fun connectionByName(name: String): Notice<DbCon> {
-        return _dbs?.let { dbs ->
+        return dbs?.let { dbs ->
             slatekit.results.Success(dbs.named(name) ?: DbCon.empty)
         } ?: slatekit.results.Failure("no db setup")
     }
 
     private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext, String) -> String): Try<String> {
-        val ent = _entities.getInfoByName(entityName)
-        val svc = _entities.getSvcByTypeName(entityName)
+        val ent = entities.getInfoByName(entityName)
+        val svc = entities.getSvcByTypeName(entityName)
         val table = svc.repo().repoName()
         val sql = sqlBuilder(ent, table)
         return try {
-            val db = _entities.getDb()
+            val db = entities.getDb()
             db.update(sql)
             slatekit.results.Success("Operation $operationName successful on $table")
         } catch (ex: Exception) {
@@ -218,7 +218,7 @@ class MigrationService(
     }
 
     private fun each(operation: (EntityContext) -> Try<String>): Try<List<String>> {
-        val results = _entities.getEntities().map { operation(it ) }
+        val results = entities.getEntities().map { operation(it ) }
         val success = results.all { it.success }
         val messages = results.map { it.msg ?: "" }
         val error = if (success) "" else messages.joinToString(newline)

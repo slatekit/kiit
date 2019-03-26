@@ -17,22 +17,22 @@ package slatekit.common.utils
  * Created by kishorereddy on 5/24/17.
  */
 
-open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
+open class ListMap<A, B>(protected val list: List<Pair<A, B>> = listOf()) {
 
-    protected val _map = convert(_list)
+    protected val map = convert(list)
 
     /**
      * size of the list
      * @return
      */
-    val size: Int = _list.size
+    val size: Int = list.size
 
     /**
      * whether there is a key with the supplied name
      * @param key
      * @return
      */
-    fun contains(key: A): Boolean = _map.contains(key)
+    fun contains(key: A): Boolean = map.contains(key)
 
     /** Checks if this map maps `key` to a value and return the
      *  value if it exists.
@@ -41,9 +41,9 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
      *  @return the value of the mapping, if it exists
      */
     operator fun get(key: A): B? {
-        if (!_map.containsKey(key)) return null
-        val ndx = _map[key]
-        return if (ndx == null) null else _list[ndx].second
+        if (!map.containsKey(key)) return null
+        val ndx = map[key]
+        return if (ndx == null) null else list[ndx].second
     }
 
     /**
@@ -51,7 +51,7 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
      * @param pos
      * @return
      */
-    fun getAt(pos: Int): B? = _list[pos].second
+    fun getAt(pos: Int): B? = list[pos].second
 
     /**
      * Adds a new entry
@@ -76,7 +76,7 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
     }
 
     open fun add(item: Pair<A, B>): ListMap<A, B> {
-        val newList = _list.toMutableList()
+        val newList = list.toMutableList()
         newList.add(item)
         return ListMap(newList)
     }
@@ -86,20 +86,20 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
      * @param key
      */
     open fun remove(key: A): ListMap<A, B> {
-        val allowed = _list.filter { it.first != key }
+        val allowed = list.filter { it.first != key }
         return ListMap(allowed)
     }
 
     open fun clone(): ListMap<A, B> {
-        val copies = _list.map { it -> Pair(it.first, it.second) }
+        val copies = list.map { it -> Pair(it.first, it.second) }
         return ListMap(copies)
     }
 
-    fun keys(): List<A> = _list.map { it.first }
+    fun keys(): List<A> = list.map { it.first }
 
-    fun values(): List<B> = _list.map { it.second }
+    fun values(): List<B> = list.map { it.second }
 
-    fun entries(): List<Pair<A, B>> = _list
+    fun entries(): List<Pair<A, B>> = list
 
     fun all(): List<B> = values()
 
@@ -108,10 +108,10 @@ open class ListMap<A, B>(protected val _list: List<Pair<A, B>> = listOf()) {
      * @param callback
      */
     fun each(callback: (Int, A, B) -> Unit) {
-        _list.mapIndexed { index, pair -> callback(index, pair.first, pair.second) }
+        list.mapIndexed { index, pair -> callback(index, pair.first, pair.second) }
     }
 
-    fun toMap(): Map<String, Any> = _map.map { entry -> entry.key.toString() to _list[entry.value].second as Any }.toMap()
+    fun toMap(): Map<String, Any> = map.map { entry -> entry.key.toString() to list[entry.value].second as Any }.toMap()
 
     companion object {
 

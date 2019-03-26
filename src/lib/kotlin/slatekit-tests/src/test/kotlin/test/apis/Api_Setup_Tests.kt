@@ -5,7 +5,7 @@ import org.junit.Test
 import slatekit.apis.ApiHost
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 import slatekit.results.getOrElse
@@ -129,7 +129,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test
     fun can_get_api_info_from_method() {
-        val ctx = AppContext.simple("queues")
+        val ctx = CommonContext.simple("queues")
         val api = WorkerSampleApi(ctx)
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null , allowIO = false)
         val apiRef = apis.getApi(WorkerSampleApi::class, WorkerSampleApi::test1)

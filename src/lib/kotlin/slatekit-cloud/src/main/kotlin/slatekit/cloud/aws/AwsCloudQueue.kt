@@ -13,7 +13,6 @@
 
 package slatekit.cloud.aws
 
-import slatekit.common.TODO
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
@@ -45,9 +44,9 @@ class AwsCloudQueue<T>(
     val waitTimeInSeconds: Int = 0
 ) : CloudQueue<T>, AwsSupport {
 
-    private val _queue = queue
-    private val _sqs: AmazonSQSClient = AwsFuncs.sqs(creds)
-    private val _queueUrl = _sqs.getQueueUrl(_queue).queueUrl
+    private val queue = queue
+    private val sqs: AmazonSQSClient = AwsFuncs.sqs(creds)
+    private val queueUrl = sqs.getQueueUrl(this.queue).queueUrl
     private val SOURCE = "aws:sqs"
     override val name = queue
 
@@ -81,8 +80,8 @@ class AwsCloudQueue<T>(
     override fun count(): Int {
         val count = execute(SOURCE, "count", rethrow = true, data = null, call = {
 
-            val request = GetQueueAttributesRequest(_queueUrl).withAttributeNames("All")
-            val atts = _sqs.getQueueAttributes(request).attributes
+            val request = GetQueueAttributesRequest(queueUrl).withAttributeNames("All")
+            val atts = sqs.getQueueAttributes(request).attributes
 
             // get count
             if (atts.containsKey("ApproximateNumberOfMessages"))
@@ -111,12 +110,12 @@ class AwsCloudQueue<T>(
      */
     override fun next(size: Int): List<QueueEntry<T>> {
         val results = execute(SOURCE, "nextbatch", data = size, call = { ->
-            val reqRaw = ReceiveMessageRequest(_queueUrl)
+            val reqRaw = ReceiveMessageRequest(queueUrl)
                 .withMaxNumberOfMessages(size)
             val req1 = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
             val req2 = req1.withAttributeNames(QueueAttributeName.All)
             val req = req2.withMessageAttributeNames(QueueAttributeName.All.name)
-            val msgs = _sqs.receiveMessage(req).messages
+            val msgs = sqs.receiveMessage(req).messages
             val entries = if(msgs.isEmpty()) listOf() else msgs.map { createEntry(it)  }
             entries
         })
@@ -148,14 +147,14 @@ class AwsCloudQueue<T>(
         // and the onError method is called for that message
         return executeResult<String>(SOURCE, "send", data = value, call = {
             val message = converter.convertToString(value) ?: ""
-            val req = SendMessageRequest(_queueUrl, message)
+            val req = SendMessageRequest(queueUrl, message)
 
             // Add the attributes
             req.withMessageAttributes(attributes.map { it ->
                 Pair(it.key, MessageAttributeValue().withDataType("String").withStringValue(it.value.toString()))
             }.toMap())
 
-            val result = _sqs.sendMessage(req)
+            val result = sqs.sendMessage(req)
             result.messageId
         })
     }
@@ -215,7 +214,7 @@ class AwsCloudQueue<T>(
                     val message = item as Message
                     val msgHandle = message.receiptHandle
 
-                    _sqs.deleteMessage(DeleteMessageRequest(_queueUrl, msgHandle))
+                    sqs.deleteMessage(DeleteMessageRequest(queueUrl, msgHandle))
                 })
             }
             else -> {

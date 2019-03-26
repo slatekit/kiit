@@ -49,7 +49,7 @@ open class MySqlEntityRepo<TId, T>(
         db: IDb,
         entityType: KClass<*>,
         entityIdType: KClass<*>,
-        entityMapper: EntityMapper<TId, T>,
+        entityMapper: OrmMapper<TId, T>,
         nameOfTable: String? = null,
         encryptor: Encryptor? = null,
         namer: Namer? = null
@@ -63,7 +63,19 @@ open class MySqlEntityRepo<TId, T>(
         namer = namer,
         encodedChar = '`',
         query = { MySqlQuery() }
-) where TId : Comparable<TId>, T : Entity<TId>
+) where TId : Comparable<TId>, T : Entity<TId> {
+
+    private val ormMapper = entityMapper
+
+    override fun create(entity: T): TId {
+        return ormMapper.insert(entity)
+    }
+
+
+    override fun update(entity: T): Boolean {
+        return ormMapper.update(entity)
+    }
+}
 
 
 /**

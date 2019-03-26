@@ -13,16 +13,6 @@
 
 package slate.test
 
-import org.junit.Test
-import slatekit.common.*
-import slatekit.common.args.Arg
-import slatekit.common.args.ArgsSchema
-import slatekit.core.common.AppContext
-import slatekit.results.StatusCodes
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.getOrElse
-
 
 class AppTests {
 

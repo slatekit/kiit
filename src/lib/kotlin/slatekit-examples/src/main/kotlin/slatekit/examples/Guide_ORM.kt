@@ -1,26 +1,5 @@
 package slatekit.examples
 
-import slatekit.common.*
-import slatekit.common.conf.ConfFuncs
-import slatekit.db.Db
-import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup.Companion.defaultDb
-import slatekit.common.db.DbLookup.Companion.namedDbs
-import slatekit.common.db.DbType.DbTypeMySql
-import slatekit.meta.models.*
-import slatekit.query.Query
-import slatekit.core.cmds.Cmd
-import slatekit.core.common.AppContext
-import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityContext
-import slatekit.entities.core.EntityMapper
-import slatekit.orm.databases.vendors.MySqlConverter
-import slatekit.orm.databases.vendors.MySqlEntityRepo
-import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.examples.common.*
-import slatekit.results.Try
-import slatekit.results.Success
-
 
 /**
  * Created by kreddy on 3/15/2016.

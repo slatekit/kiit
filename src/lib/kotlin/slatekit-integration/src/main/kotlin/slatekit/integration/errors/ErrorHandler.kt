@@ -25,7 +25,7 @@ class ErrorHandler(val ctx: AppEntContext, val queue: ErrorItemQueue, val enable
         return try {
             // Put the request into the
             val enc = if (enableEncryption) ctx.enc else null
-            val jsonRequest = Requests.toJson(req, enc)
+            val jsonRequest = Requests.toJsonString(req, enc)
 
             // Create an error item out of the request
             val error = ErrorItem(

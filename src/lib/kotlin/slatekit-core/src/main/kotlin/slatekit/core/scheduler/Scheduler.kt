@@ -3,14 +3,13 @@ package slatekit.core.scheduler
 import slatekit.common.*
 import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
-import slatekit.common.requests.Response
 import slatekit.core.scheduler.core.ErrorMode
 import slatekit.core.scheduler.core.RunMode
 import slatekit.common.Status
 import slatekit.results.*
 //import java.time.Duration
 import org.threeten.bp.Duration
-import slatekit.common.requests.SimpleResponse
+import slatekit.common.CommonResponse
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -163,7 +162,7 @@ class Scheduler(val settings: SchedulerSettings,
      * Used only for non-execution attempts
      */
     private fun record(request: TaskRequest, code: Int, msg: String? = null) {
-        diagnostics.record(this, request, SimpleResponse(false, code, null, null))
+        diagnostics.record(this, request, CommonResponse(false, code, null, null))
     }
 
 

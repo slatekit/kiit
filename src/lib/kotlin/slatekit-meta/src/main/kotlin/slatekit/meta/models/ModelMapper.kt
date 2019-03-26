@@ -28,12 +28,12 @@ import kotlin.reflect.jvm.jvmErasure
  * NOTES:
  * 1. can create a model that is a case class
  * 2. can create a model that is a regular class
- * @param _model
+ * @param metaModel
  */
 open class ModelMapper(
-        protected val _model: Model,
-        protected val _settings: ModelMapperSettings = ModelMapperSettings(),
-        protected val _encryptor: Encryptor? = null,
+        protected val metaModel: Model,
+        protected val settings: ModelMapperSettings = ModelMapperSettings(),
+        protected val encryptor: Encryptor? = null,
         protected val namer: Namer? = null
 ) : Mapper {
 
@@ -41,14 +41,14 @@ open class ModelMapper(
      * The model associated with this mapper.
      * @return
      */
-    fun model(): Model = _model
+    fun model(): Model = metaModel
 
     /**
      * Creates the entity/model expecting a 0 parameter constructor
      * @return
      */
     open fun createEntity(): Any? =
-            _model.dataType?.let { type -> Reflector.create<Any>(type) }
+            metaModel.dataType?.let { type -> Reflector.create<Any>(type) }
 
     /**
      * Creates the entity/model with all the supplied constructor parameters (ideal for case classes)
@@ -68,8 +68,8 @@ open class ModelMapper(
      * @return
      */
     override fun <T> mapFrom(record: Record): T? {
-        return if (_model.any && _model.dataType != null) {
-            _model.dataType.let { tpe ->
+        return if (metaModel.any && metaModel.dataType != null) {
+            metaModel.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
                     mapFromToValType<T>(record)
                 } else
@@ -88,7 +88,7 @@ open class ModelMapper(
      */
     @Suppress("UNCHECKED_CAST")
     fun <T>  mapFromToValType(record: Record): T? {
-        return mapFromToValType(null, record, _model) as T?
+        return mapFromToValType(null, record, metaModel) as T?
     }
 
     /**
@@ -100,11 +100,11 @@ open class ModelMapper(
      */
     @Suppress("UNCHECKED_CAST")
     fun <T> mapFromToVarType(record: Record): T? {
-        return mapFromToVarType(null, record, _model) as T?
+        return mapFromToVarType(null, record, metaModel) as T?
     }
 
     override fun toString(): String =
-            _model.fields.fold("", { s, field -> s + field.toString() + newline })
+            metaModel.fields.fold("", { s, field -> s + field.toString() + newline })
 
     companion object {
 
@@ -157,13 +157,13 @@ open class ModelMapper(
                 finalModelField
             }
 
-            return Model(modelName, modelNameFull, dataType, _propList = fields, namer = namer, tableName = table ?: "")
+            return Model(modelName, modelNameFull, dataType, modelFields = fields, namer = namer, tableName = table ?: "")
         }
     }
 
     private fun mapFromToValType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
-            val isUTC = _settings.persisteUTCDate
+            val isUTC = settings.persisteUTCDate
             val data = model.fields.map { mapping ->
                 val dataValue = getDataValue(prefix, mapping, record, isUTC)
                 dataValue
@@ -177,7 +177,7 @@ open class ModelMapper(
     private fun mapFromToVarType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
 
-            val isUTC = _settings.persisteUTCDate
+            val isUTC = settings.persisteUTCDate
             val entity: Any? = createEntity()
             model.fields.forEach { mapping ->
                 val dataValue = getDataValue(prefix, mapping, record, isUTC)
@@ -201,7 +201,7 @@ open class ModelMapper(
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
 
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> getString(record, mapping, colName, _encryptor)
+            KTypes.KStringClass        -> getString(record, mapping, colName, encryptor)
             KTypes.KBoolClass          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
             KTypes.KShortClass         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
             KTypes.KIntClass           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)

@@ -13,7 +13,6 @@
 
 package slatekit.common.templates
 
-import slatekit.common.*
 import slatekit.common.lex.LexState
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.TemplateConstants.TypeText
@@ -41,7 +40,7 @@ import slatekit.results.Try
  */
 class TemplateParser(val text: String) {
 
-    private val _state = LexState(text)
+    private val state = LexState(text)
 
     fun parse(): Try<List<TemplatePart>> {
 
@@ -49,19 +48,19 @@ class TemplateParser(val text: String) {
         val result =
                 try {
                     var lastText: String = ""
-                    var lastPos = _state.pos
+                    var lastPos = state.pos
 
-                    while (_state.pos < _state.END) {
-                        val c = _state.text[_state.pos]
-                        val hasMore = _state.pos + 1 < _state.END
-                        val n = if (hasMore) _state.text[_state.pos + 1] else ' '
+                    while (state.pos < state.END) {
+                        val c = state.text[state.pos]
+                        val hasMore = state.pos + 1 < state.END
+                        val n = if (hasMore) state.text[state.pos + 1] else ' '
 
-                        _state.count = _state.count + 1
+                        state.count = state.count + 1
 
                         // CASE 1: substitution
                         if (c == '@' && hasMore && n == '{') {
                             if (!lastText.isNullOrEmpty()) {
-                                val sub = TemplatePart(lastText, TypeText, lastPos, _state.pos - lastPos)
+                                val sub = TemplatePart(lastText, TypeText, lastPos, state.pos - lastPos)
                                 subs.add(sub)
                             }
                             val sub = readSub()
@@ -69,26 +68,26 @@ class TemplateParser(val text: String) {
 
                             // reset
                             lastText = ""
-                            lastPos = _state.pos
+                            lastPos = state.pos
                         }
                         // CASE 2: Keep reading until sub
                         else {
                             lastText += c
-                            _state.pos += 1
+                            state.pos += 1
                         }
                     }
 
                     // Last part was text ?!
                     if (!lastText.isNullOrEmpty()) {
-                        val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, _state.pos - lastPos)
+                        val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
                         subs.add(sub)
                     }
 
                     // Success!
                     Success(subs.toList())
                 } catch (ex: Exception) {
-                    val line = _state.line
-                    val text = "Error occurred at : line : $line, char : ${_state.pos}" + ex.message
+                    val line = state.line
+                    val text = "Error occurred at : line : $line, char : ${state.pos}" + ex.message
                     val err = Exception(text, ex)
                     Failure(err, msg = text)
                 }
@@ -105,7 +104,7 @@ class TemplateParser(val text: String) {
 
         advanceAndExpect('{')
         val c = advance()
-        val start = _state.pos
+        val start = state.pos
         val end = start
         // 1. edge case ${}
         return if (c == '}') {
@@ -114,12 +113,12 @@ class TemplateParser(val text: String) {
         } else {
             // 2. read sub
             Loops.doUntil({
-                if (_state.pos < _state.END) {
-                    val curr = _state.text[_state.pos]
+                if (state.pos < state.END) {
+                    val curr = state.text[state.pos]
                     if (curr == '}') {
                         false
-                    } else if ((_state.pos + 1 < _state.END)) {
-                        _state.pos += 1
+                    } else if ((state.pos + 1 < state.END)) {
+                        state.pos += 1
                         true
                     } else {
                         false
@@ -129,9 +128,9 @@ class TemplateParser(val text: String) {
                 }
             })
 
-            val text = _state.substringInclusive(start)
-            val sub = TemplatePart(text, TypeSub, start, _state.pos)
-            _state.pos += 1
+            val text = state.substringInclusive(start)
+            val sub = TemplatePart(text, TypeSub, start, state.pos)
+            state.pos += 1
             sub
         }
     }
@@ -143,7 +142,7 @@ class TemplateParser(val text: String) {
     }
 
     fun advance(): Char {
-        _state.pos += 1
-        return _state.text[_state.pos]
+        state.pos += 1
+        return state.text[state.pos]
     }
 }

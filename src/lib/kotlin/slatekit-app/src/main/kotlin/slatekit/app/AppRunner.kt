@@ -44,7 +44,8 @@ object AppRunner {
             builder: (Context) -> App<C>,
             schema: ArgsSchema? = null,
             enc: Encryptor? = null,
-            logs: Logs? = null
+            logs: Logs? = null,
+            errorMode: ErrorMode = ErrorMode.Print
     ): Try<Any> {
 
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
@@ -78,6 +79,15 @@ object AppRunner {
             // STEP 4: Run - Finally run the application with workflow ( init, exec, end )
             run(app)
         }
+
+        result.onFailure {
+            when(errorMode) {
+                ErrorMode.Rethrow -> throw it
+                ErrorMode.Print   -> showError(result, it)
+                else              -> {}
+            }
+        }
+
         return result
     }
 
@@ -186,6 +196,18 @@ object AppRunner {
         // Finally convert the error
         return result.mapError {
             Exception("error while shutting down app : " + it.message, it)
+        }
+    }
+
+
+    private fun showError(result:Try<Any>, ex:Exception){
+        println("success: " + result.success)
+        println("code   : " + result.code)
+        println("message: " + result.msg)
+        println("error  : " + ex.message)
+        val count = Math.min(5, ex.stackTrace.size)
+        (0 until count).forEach { ndx ->
+            println(ex.stackTrace[ndx])
         }
     }
 }

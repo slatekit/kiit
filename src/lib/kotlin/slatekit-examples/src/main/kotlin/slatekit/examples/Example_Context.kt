@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.app.AppFuncs
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -27,7 +27,6 @@ import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
-import slatekit.app.AppRunner
 import slatekit.common.Context
 import slatekit.entities.core.Entities
 import slatekit.core.cmds.Cmd
@@ -79,28 +78,28 @@ class Example_Context : Cmd("cmd") {
         // - Config() representing conf settings from "env.conf"
         // - default logger ( console )
         // - entities ( registrations for orm )
-        val ctx1 = AppContext(
-            arg = Args.default(),
-            env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
-            cfg = Config(),
-            logs = LogsDefault,
-            ent = Entities({con -> Db(con) }),
-            sys = Sys.build(),
-            build = Build.empty,
-            start = StartInfo.none,
-            app = About(
-                    id = "sample-app-1",
-                    name = "Sample App-1",
-                    desc = "Sample application 1",
-                    company = "Company 1",
-                    group = "Department 1",
-                    region = "New York",
-                    url = "http://company1.com/dep1/sampleapp-1",
-                    contact = "dept1@company1.com",
-                    version = "1.0.1",
-                    tags = "sample app slatekit",
-                    examples = ""
-            )
+        val ctx1 = CommonContext(
+                arg = Args.default(),
+                env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
+                cfg = Config(),
+                logs = LogsDefault,
+                ent = Entities({ con -> Db(con) }),
+                sys = Sys.build(),
+                build = Build.empty,
+                start = StartInfo.none,
+                app = About(
+                        id = "sample-app-1",
+                        name = "Sample App-1",
+                        desc = "Sample application 1",
+                        company = "Company 1",
+                        group = "Department 1",
+                        region = "New York",
+                        url = "http://company1.com/dep1/sampleapp-1",
+                        contact = "dept1@company1.com",
+                        version = "1.0.1",
+                        tags = "sample app slatekit",
+                        examples = ""
+                )
         )
 
         // CASE 2: Typically your application will want to derive the
@@ -135,7 +134,7 @@ class Example_Context : Cmd("cmd") {
         }
 
         // CASE 4: You can also build an error context representing an invalid context
-        val ctx4 = AppContext.err(StatusCodes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
+        val ctx4 = CommonContext.err(StatusCodes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 
         //</doc:examples>

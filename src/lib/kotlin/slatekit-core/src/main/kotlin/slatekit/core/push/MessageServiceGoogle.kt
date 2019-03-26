@@ -83,19 +83,19 @@ open class MessageServiceGoogle(
 ) :
     MessageServiceBase() {
 
-    private val _settings = MessageSettings("", _key, "")
-    private val _baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
-    private val _sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
-    private val _logger = logs.getLogger(this.javaClass)
+    private val settings = MessageSettings("", _key, "")
+    private val baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
+    private val sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
+    private val logger = logs.getLogger(this.javaClass)
 
     /**
      * Sends a push notification to Android using the data from the Message supplied.
      */
     override fun send(msg: Message): Notice<Boolean> {
-        return if (_sendNotifications) {
+        return if (sendNotifications) {
             sendSync(msg)
         } else {
-            _logger.warn("Push notification disabled for: ${msg.to}")
+            logger.warn("Push notification disabled for: ${msg.to}")
             Success(true, msg = "Disabled")
         }
     }
@@ -147,10 +147,10 @@ open class MessageServiceGoogle(
         // 3. Send off w/ json
         val result = HttpRPC().sendSync(
                 method = HttpRPC.Method.Post,
-                url = _baseUrl,
+                url = baseUrl,
                 headers = mapOf(
                         "Content-Type" to "application/json",
-                        "Authorization" to "key=" + _settings.key
+                        "Authorization" to "key=" + settings.key
                 ),
                 body = HttpRPC.Body.JsonContent(content)
         )

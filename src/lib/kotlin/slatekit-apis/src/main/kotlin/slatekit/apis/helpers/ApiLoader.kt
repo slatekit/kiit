@@ -148,7 +148,7 @@ object ApiLoader {
         val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
         val actionName = namer?.rename(actionNameRaw) ?: actionNameRaw
         val actionDesc = apiAction?.desc ?: ""
-        val actionTag = apiAction?.tag ?: ""
+        val actionTags = apiAction?.tags?.toList() ?: listOf()
 
         // Default these from api if empty
         val actionRoles = apiAction?.roles.orElse(api.roles)
@@ -168,7 +168,7 @@ object ApiLoader {
                 actionRoles,
                 actionVerb,
                 actionProtocol,
-                actionTag
+                actionTags
         )
     }
 

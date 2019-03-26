@@ -21,11 +21,11 @@ import slatekit.apis.security.Verbs
 import slatekit.core.cmds.CmdResult
 import slatekit.core.cmds.CmdState
 import slatekit.core.cmds.Cmds
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 
 @Api(area = "infra", name = "commands", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class CmdApi(val cmd: Cmds, context: AppContext) {
+class CmdApi(val cmd: Cmds, context: CommonContext) {
 
     @ApiAction(desc = "get the number of commands available")
     fun names(): List<String> = cmd.names

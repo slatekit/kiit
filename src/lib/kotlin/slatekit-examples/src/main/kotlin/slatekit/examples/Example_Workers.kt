@@ -22,7 +22,7 @@ import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueValueConverter
 import slatekit.core.cmds.Cmd
-import slatekit.core.common.AppContext
+import slatekit.common.CommonContext
 import slatekit.workers.*
 import slatekit.results.Try
 import slatekit.results.Success
@@ -44,7 +44,7 @@ class Example_Workers : Cmd("utils") {
         // 4. System  : Top level system that runs workers in a java executor service
         // 5. Queued  : Interface for handling work from a queue
         val sys = slatekit.workers.System(
-                AppContext.sample("test", "", "", ""),
+                CommonContext.sample("test", "", "", ""),
                 listOf(),
                 metrics = MetricsLite.build())
 

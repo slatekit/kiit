@@ -21,7 +21,7 @@ import slatekit.common.auth.AuthFuncs
 import slatekit.common.auth.Roles
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.SimpleRequest
+import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.meta.Deserializer
 import slatekit.results.Notice
@@ -30,7 +30,7 @@ import slatekit.results.builders.Notices
 
 object ApiHelper {
 
-    val _typeDefaults = mapOf(
+    val typeDefaults = mapOf(
             "String" to "",
             "Boolean" to false,
             "Int" to 0,
@@ -73,7 +73,7 @@ object ApiHelper {
         val tokens = path.split('.').toList()
         val args = buildArgs(inputs)
         val opts = buildArgs(headers)
-        val apiCmd = SimpleRequest(path, tokens, Source.CLI, "get", args, opts,
+        val apiCmd = CommonRequest(path, tokens, Source.CLI, "get", args, opts,
                 null, "", "", ApiConstants.Version, DateTime.now())
         return apiCmd
     }
@@ -135,7 +135,7 @@ object ApiHelper {
         // Check 2: 1 param with default and no args
         else if (action.isSingleDefaultedArg() && cmd.data.size() == 0) {
             val argType = action.paramsUser[0].type.toString()
-            val defaultVal = if (_typeDefaults.contains(argType)) _typeDefaults[argType] else null
+            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         } else {
             deserializer.deserialize(action.params)
