@@ -13,7 +13,7 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.app.AppFuncs
+import slatekit.app.AppUtils
 import slatekit.common.CommonContext
 //</doc:import_required>
 
@@ -118,7 +118,7 @@ class Example_Context : Cmd("cmd") {
         // refer to Args in utils for more info.
         // NOTE: There are additional parameters on the build function ( callbacks )
         // to allow you to get the context and modify it before it is returned.
-        val ctx3 = AppFuncs.context(
+        val ctx3 = AppUtils.context(
                     args   = Args.parse("-env=dev -log -log.level=debug").getOrElse { Args.default() },
                     enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     schema = ArgsSchema()
