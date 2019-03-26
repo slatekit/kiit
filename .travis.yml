@@ -11,7 +11,7 @@ jdk:
 before_script:
 - echo "hello from slatekit"
 - echo "$TRAVIS_BUILD_DIR"
-- cd ./src/lib/kotlin
+- cd ./src/lib/kotlin/slatekit
 - chmod +x gradlew
 - chmod +x gradle/wrapper/gradle-wrapper.jar
 
