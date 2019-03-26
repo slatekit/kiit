@@ -229,7 +229,7 @@ data class CommonRequest(
          */
         @JvmStatic
         fun cli(path: String, verb: String, meta: Metadata?, args: Args, raw: Any?): Request {
-            return CommonRequest(path, args.actionParts, Source.CLI, verb, args, meta
+            return CommonRequest(path, args.parts, Source.CLI, verb, args, meta
                     ?: InputArgs(mapOf()), raw, "")
         }
 

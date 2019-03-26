@@ -17,9 +17,7 @@ import slatekit.apis.ApiHost
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.cli.*
-import slatekit.common.args.Args
 import slatekit.common.requests.InputArgs
-import slatekit.common.info.Credentials
 import slatekit.common.info.Info
 import slatekit.results.StatusCodes
 import slatekit.results.Success
@@ -141,9 +139,9 @@ class CliApi(
 
     fun checkForHelp(req:CliRequest):Pair<Boolean, ApiHelpType> {
         val args = req.args
-        val hasQuestion = args.actionParts.isNotEmpty() && args.actionParts.last() == "?"
+        val hasQuestion = args.parts.isNotEmpty() && args.parts.last() == "?"
         return if( hasQuestion ) {
-            when(args.actionParts.size ) {
+            when(args.parts.size ) {
                 1    -> Pair(true, ApiHelpType.Listing)
                 2    -> Pair(true, ApiHelpType.Area)
                 3    -> Pair(true, ApiHelpType.Api)
@@ -151,7 +149,7 @@ class CliApi(
                 else -> Pair(false, ApiHelpType.NA)
             }
         } else {
-            if(args.actionParts.isNotEmpty() && args.actionParts[0] == "?" ){
+            if(args.parts.isNotEmpty() && args.parts[0] == "?" ){
                 Pair(true, ApiHelpType.Listing)
             } else {
                 Pair(false, ApiHelpType.NA)

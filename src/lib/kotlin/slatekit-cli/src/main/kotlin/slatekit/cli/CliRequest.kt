@@ -40,7 +40,7 @@ data class CliRequest(
     /**
      * E.g. [ "app", "info", "version" ]
      */
-    override val parts: List<String> = args.actionParts
+    override val parts: List<String> = args.parts
 
     /**
      * Defaulted to CLI for now

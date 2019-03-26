@@ -19,7 +19,7 @@ package test.common
 
 import org.junit.Test
 import slatekit.common.args.Args
-import slatekit.common.args.ArgsFuncs
+import slatekit.common.args.ArgsCheck
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
@@ -43,6 +43,17 @@ class ArgsTests {
             Pair("env"   , "loc" ),
             Pair("log"   , "info"),
             Pair("region", "ny"  )
+        ))
+    }
+
+
+    @Test fun can_parse_args_with_aliases() {
+
+        val result = Args.parse("--e:loc --l:info --r:ny")
+        ensure(result, true, 3, listOf(
+                Pair("e"   , "loc" ),
+                Pair("l"   , "info"),
+                Pair("r"   , "ny"  )
         ))
     }
 
@@ -193,22 +204,22 @@ class ArgsTests {
 
 
     @Test fun is_meta_arg_with_help() {
-        assert( ArgsFuncs.isMetaArg(listOf("help"  ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("-help" ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("--help"), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("/help" ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("help"  ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("-help" ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("--help"), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("/help" ), 0, "help", "info") )
 
-        assert( ArgsFuncs.isMetaArg(listOf("info"  ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("-info" ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("--info"), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("/info" ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("info"  ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("-info" ), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("--info"), 0, "help", "info") )
+        assert( ArgsCheck.isMetaArg(listOf("/info" ), 0, "help", "info") )
 
-        assert( !ArgsFuncs.isMetaArg(listOf("/about" ), 0, "help", "info"))
+        assert( !ArgsCheck.isMetaArg(listOf("/about" ), 0, "help", "info"))
     }
 
 
     @Test fun is_help_on_area() {
-        assert( ArgsFuncs.isHelp(listOf("app", "?"), 1) )
+        assert( ArgsCheck.isHelp(listOf("app", "?"), 1) )
     }
 
 
@@ -249,7 +260,7 @@ class ArgsTests {
         parts?.let { p ->
 
             if(p.isNotEmpty()){
-                assert(args.actionParts.size == p.size)
+                assert(args.parts.size == p.size)
                 for(i in 0 .. p.size - 1){
                     val part = p[i]
                     assert( args.getVerb(i) == part)

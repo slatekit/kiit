@@ -97,10 +97,10 @@ class Example_Args  : Cmd("args") {
     }
     val args = result.getOrElse { Args.default() }
     println("action   : " + args.action)
-    if(!args.actionParts.isEmpty()) {
+    if(!args.parts.isEmpty()) {
       print("parts    : ")
       var parts = ""
-      args.actionParts.forEach{ item -> parts += (item + " ") }
+      args.parts.forEach{ item -> parts += (item + " ") }
       println( parts )
     }
     println("prefix   : '" + args.prefix + "'")

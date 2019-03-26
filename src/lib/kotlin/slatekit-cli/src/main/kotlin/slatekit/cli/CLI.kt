@@ -181,7 +181,7 @@ open class CLI(
 
         // Single command ( e.g. help, quit, about, version )
         // These are typically system level
-        return if( args.actionParts.size == 1 ){
+        return if( args.parts.size == 1 ){
             when(args.line) {
                 Command.About  .id -> { context.help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
                 Command.Help   .id -> { context.help.showHelp()   ; Success(true, StatusCodes.HELP)    }

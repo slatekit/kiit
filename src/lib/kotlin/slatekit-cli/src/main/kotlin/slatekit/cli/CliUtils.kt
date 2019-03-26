@@ -15,7 +15,6 @@ package slatekit.cli
 
 import slatekit.common.args.Args
 import slatekit.common.io.Files
-import slatekit.common.args.ArgsFuncs
 import slatekit.common.info.Folders
 import slatekit.results.*
 

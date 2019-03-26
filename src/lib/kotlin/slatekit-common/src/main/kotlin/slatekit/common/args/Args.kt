@@ -28,7 +28,7 @@ import org.threeten.bp.*
  * @param line : the raw line ( if available )
  * @param raw : the raw text that was parsed into arguments.
  * @param action : "app.users.invite"
- * @param actionParts : ["app", "users", "invite" ]
+ * @param parts : ["app", "users", "invite" ]
  * @param prefix : the letter used to prefix each key / name of named parameters e.g. "-"
  * @param separator : the letter used to separate the key / name with value e.g. ":"
  * @param namedArgs : the map of named arguments ( key / value ) pairs
@@ -39,7 +39,7 @@ class Args(
         val line: String,
         override val raw: List<String>,
         val action: String,
-        val actionParts: List<String>,
+        val parts: List<String>,
         val prefix: String = "-",
         val separator: String = "=",
         private val namedArgs: Map<String, String>? = null,
@@ -99,7 +99,7 @@ class Args(
      *
      * @return
      */
-    val isVersion: Boolean = ArgsFuncs.isVersion(positional, metaIndex)
+    val isVersion: Boolean = ArgsCheck.isVersion(positional, metaIndex)
 
     /**
      * Returns true if there is only 1 positional argument with value: pause -pause /pause
@@ -107,7 +107,7 @@ class Args(
      *
      * @return
      */
-    val isPause: Boolean = ArgsFuncs.isPause(positional, metaIndex)
+    val isPause: Boolean = ArgsCheck.isPause(positional, metaIndex)
 
     /**
      * Returns true if there is only 1 positional argument with value: exit -exit /exit
@@ -115,28 +115,28 @@ class Args(
      *
      * @return
      */
-    val isExit: Boolean = ArgsFuncs.isExit(positional, metaIndex)
+    val isExit: Boolean = ArgsCheck.isExit(positional, metaIndex)
 
     /**
      * returns true if there is only 1 argument with value: --help -help /? -? ?
      *
      * @return
      */
-    val isHelp: Boolean = ArgsFuncs.isHelp(positional, metaIndex)
+    val isHelp: Boolean = ArgsCheck.isHelp(positional, metaIndex)
 
     /**
      * returns true if there is only 1 argument with value -about or -info
      *
      * @return
      */
-    val isInfo: Boolean = ArgsFuncs.isMetaArg(positional, metaIndex, "about", "info")
+    val isInfo: Boolean = ArgsCheck.isMetaArg(positional, metaIndex, "about", "info")
 
     /**
      * gets the verb at the supplied position
      * @param pos
      * @return
      */
-    fun getVerb(pos: Int): String = getListValueOrElse(actionParts, pos, "")
+    fun getVerb(pos: Int): String = getListValueOrElse(parts, pos, "")
 
     /**
      * get the value of the indexed argumentd ( after named arguments ) at the supplied pos
@@ -267,7 +267,7 @@ class Args(
                 metaChar: String = "@",
                 sysChar: String = "$"
         ): Try<Args> {
-            return ArgsService().parse(line, prefix, sep, hasAction, metaChar, sysChar)
+            return ArgsService.parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
 
         /**
@@ -296,7 +296,7 @@ class Args(
                 args.joinToString(" ")
             } else
                 ""
-            return ArgsService().parse(line, prefix, sep, hasAction, metaChar, sysChar)
+            return ArgsService.parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
     }
 }
