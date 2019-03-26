@@ -2,13 +2,17 @@ package test.workers
 
 import org.junit.Assert
 import org.junit.Test
+import org.threeten.bp.ZoneId
 
 import slatekit.apis.ApiHost
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.CommonContext
+import slatekit.common.requests.InputArgs
+import slatekit.common.requests.Source
 import slatekit.integration.workers.WorkerWithQueuesApi
 import slatekit.results.getOrElse
 import slatekit.workers.Job
@@ -67,27 +71,29 @@ class Worker_Queue_Api_Tests {
         val container = buildContainer()
         val queues = listOf(QueueSourceInMemory.stringQueue())
         val worker = WorkerWithQueuesApi(container, WorkerSettings())
-        val json1 = """
-        {
-             "version"  : "1.0",
-             "path"     : "samples.types2.loadBasicTypes",
-             "source"   : "queue",
-             "verb"     : "queue",
-             "tag"      : "abcd",
-             "timestamp": "2019-03-21T21:29:41.622-04:00[America/New_York]",
-             "meta"     : {
-                 "api-key" : "2DFAD90A0F624D55B9F95A4648D7619A",
-                 "token"   : "mmxZr5tkfMUV5/duU2rhHg"
-             },
-             "data"      : {
-                 "s" : "user1@abc.com",
-                 "b" : true,
-                 "i" :123,
-                 "d" : 20180127093045
-             }
-        }
-
-        """
+        val sampleDate = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("UTC"))
+        val sampleRequest = CommonRequest(
+                path = "samples.types2.loadBasicTypes",
+                parts = listOf("samples", "types2", "loadBasicTypes"),
+                source = Source.Queue,
+                verb = "queue",
+                data = InputArgs(mapOf(
+                        "s" to "user1@abc.com",
+                        "b" to true,
+                        "i" to 123,
+                        "d" to sampleDate
+                )),
+                meta = InputArgs(mapOf(
+                        "api-key" to "2DFAD90A0F624D55B9F95A4648D7619A",
+                        "token" to "mmxZr5tkfMUV5/duU2rhHg"
+                )),
+                raw = null,
+                output = null,
+                tag = "tag123",
+                version = "1.0",
+                timestamp = sampleDate
+        )
+        val json1 = Requests.toJsonString(sampleRequest)
         val queue = queues.first()
         queue.send(json1, mapOf("id" to "123", "refId" to "abc", "task" to "samples.types2.loadBasicTypes"))
         val entry = queue.next()!!
@@ -96,6 +102,6 @@ class Worker_Queue_Api_Tests {
         val job = Job(entry, queueInfo)
         val result = worker.perform(job)
         assert( result.success )
-        assert( result.getOrElse { null } == "user1@abc.com, true, 123, 2018-01-27T09:30:45-05:00[America/New_York]" )
+        assert( result.getOrElse { null } == "user1@abc.com, true, 123, 2018-01-27T09:30:45Z" )
     }
 }
