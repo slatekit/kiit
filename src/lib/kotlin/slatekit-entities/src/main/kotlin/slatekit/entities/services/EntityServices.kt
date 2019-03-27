@@ -1,6 +1,6 @@
 package slatekit.entities.services
 
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.IEntityService
 
 /**

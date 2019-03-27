@@ -14,8 +14,8 @@
 package slatekit.examples.common
 
 import slatekit.common.CommonContext
-import slatekit.entities.core.Entities
-import slatekit.entities.core.EntityRepo
+import slatekit.entities.Entities
+import slatekit.entities.EntityRepo
 import slatekit.entities.services.EntityServiceWithSupport
 
 

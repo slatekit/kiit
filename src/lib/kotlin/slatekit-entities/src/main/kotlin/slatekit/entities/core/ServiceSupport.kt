@@ -1,5 +1,9 @@
 package slatekit.entities.core
 
+import slatekit.entities.Entities
+import slatekit.entities.Entity
+import slatekit.entities.EntityRepo
+
 interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     fun repo(): IEntityRepo

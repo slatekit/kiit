@@ -14,9 +14,9 @@
 package slatekit.integration.common
 
 import slatekit.apis.support.ApiBase
-import slatekit.entities.core.Entities
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityService
+import slatekit.entities.Entities
+import slatekit.entities.Entity
+import slatekit.entities.EntityService
 import kotlin.reflect.KClass
 
 /**

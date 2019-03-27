@@ -19,8 +19,11 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType.DbTypeMemory
 import slatekit.db.Db
-import slatekit.entities.core.*
-import slatekit.orm.core.getModel
+import slatekit.entities.Entities
+import slatekit.entities.EntityMapper
+import slatekit.entities.EntityRepo
+import slatekit.entities.EntityService
+import slatekit.orm.getModel
 import test.setup.Phone
 import test.setup.User5
 import kotlin.reflect.KClass
@@ -82,7 +85,7 @@ class Entity_Reg_Tests {
         ent.prototype<User5>(entityType = User5::class)
         ent.prototype<Phone>(entityType = Phone::class)
 
-        fun check(mapper:EntityMapper<Long, *>?, cls: KClass<*>):Unit {
+        fun check(mapper: EntityMapper<Long, *>?, cls: KClass<*>):Unit {
             Assert.assertTrue(mapper != null)
             Assert.assertTrue(mapper?.schema()?.dataType == cls)
         }
@@ -96,7 +99,7 @@ class Entity_Reg_Tests {
         ent.prototype<User5>(entityType = User5::class)
         ent.prototype<Phone>(entityType = Phone::class)
 
-        Assert.assertTrue(ent.getModel(User5::class).dataType == User5::class)
-        Assert.assertTrue(ent.getModel(Phone::class).dataType == Phone::class)
+        Assert.assertTrue(ent.getModel(User5::class)?.dataType == User5::class)
+        Assert.assertTrue(ent.getModel(Phone::class)?.dataType == Phone::class)
     }
 }

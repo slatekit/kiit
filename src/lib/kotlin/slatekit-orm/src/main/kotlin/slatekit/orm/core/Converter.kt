@@ -1,6 +1,6 @@
-package slatekit.orm.databases
+package slatekit.orm.core
 
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.orm.databases.converters.*
 import slatekit.orm.databases.statements.Delete
 import slatekit.orm.databases.statements.Insert

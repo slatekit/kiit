@@ -18,10 +18,10 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.query.IQuery
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityMapper
-import slatekit.entities.core.EntityRepo
-import slatekit.entities.core.EntityUpdatable
+import slatekit.entities.Entity
+import slatekit.entities.EntityMapper
+import slatekit.entities.EntityRepo
+import slatekit.entities.EntityUpdatable
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import java.util.*
@@ -34,10 +34,10 @@ import kotlin.reflect.KClass
 
 open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
     : EntityRepoInMemory<Long, T>(cls, Long::class, idGenerator = idGen)
-        where T:Entity<Long> {
+        where T: Entity<Long> {
 
     companion object {
-        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithLongId<T> where T:Entity<Long> {
+        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithLongId<T> where T: Entity<Long> {
             val idGen = LongIdGenerator()
             return EntityRepoInMemoryWithLongId(cls, idGen)
         }
@@ -47,11 +47,11 @@ open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long
 
 open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
     : EntityRepoInMemory<Int, T>(cls, Int::class, idGenerator = idGen )
-        where T:Entity<Int> {
+        where T: Entity<Int> {
 
     companion object {
 
-        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithIntId<T> where T:Entity<Int> {
+        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithIntId<T> where T: Entity<Int> {
             val idGen = IntIdGenerator()
             return EntityRepoInMemoryWithIntId(cls, idGen)
         }
@@ -75,7 +75,7 @@ open class EntityRepoInMemory<TId, T>(
     idGenerator: IdGenerator<TId>? = null
 )
     : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
-        where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+        where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     private val idGenerator = idGenerator ?: LongIdGenerator()
     private var items = ListMap<TId, T>(listOf())
@@ -276,7 +276,7 @@ open class EntityRepoInMemory<TId, T>(
 
 
 class EntityMapperEmpty<TId, T>(val model:Model?)
-    : EntityMapper<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+    : EntityMapper<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
 
     override fun schema(): Model? = model
 

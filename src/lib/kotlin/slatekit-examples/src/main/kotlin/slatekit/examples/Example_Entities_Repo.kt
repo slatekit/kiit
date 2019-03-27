@@ -14,16 +14,17 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.entities.core.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.db.Db
 import slatekit.common.db.DbConString
 import slatekit.core.cmds.Cmd
+import slatekit.entities.EntityMapper
+import slatekit.entities.EntityWithId
 import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
 import slatekit.orm.databases.vendors.MySqlEntityRepo
 import slatekit.results.Try
@@ -84,14 +85,14 @@ class Example_Entities_Repo : Cmd("entities") {
 
     // 2. Setup the mapper
     val model = ModelMapper.loadSchema(User::class)
-    val mapper:EntityMapper<Long,User> = OrmMapper(model, db, Long::class, MySqlConverter())
+    val mapper: EntityMapper<Long, User> = OrmMapper(model, db, Long::class, MySqlConverter())
 
 
     // 3. Now create the repo with database and mapper
     val repoMySql = MySqlEntityRepo(db, User::class, Long::class, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserRepository(db:Db, mapper: EntityMapper<Long,User>) : MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
+    class UserRepository(db:Db, mapper: EntityMapper<Long, User>) : MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
 
 
     val userRepo = UserRepository(db, mapper)

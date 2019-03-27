@@ -13,21 +13,23 @@
 
 package slatekit.common.args
 
+import slatekit.common.lex.LexResult
 import slatekit.common.lex.Lexer
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.then
 
 /**
  * Parses arguments.
  */
-class ArgsService {
+object ArgsService {
 
     /**
      * Parses the arguments using the supplied prefix and separator for the args.
      * e.g. users.activate -email:kishore@gmail.com -code:1234
      *
-     * @param line : the raw line of text to parse into {action} {key/value}* {position}*
+     * @param text : the raw line of text to parse into {action} {key/value}* {position}*
      * @param prefix : the prefix for a named key/value pair e.g. "-" as in -env=dev
      * @param sep : the separator for a nmaed key/value pair e.g. "=" as in -env=dev
      * @param hasAction: whether the line of text has an action before any named args.
@@ -35,41 +37,60 @@ class ArgsService {
      * @return
      */
     fun parse(
-            line: String,
+            text: String,
             prefix: String = "-",
             sep: String = "=",
             hasAction: Boolean = false,
             metaChar: String = "@",
             sysChar: String = "$"
     ): Try<Args> {
-        // Check 1: Empty line ?
-        return if (line.isEmpty()) {
-            Success(Args("", listOf(), "", listOf(), prefix, sep,
-                    null, null, null, null, null))
-        } else {
-            // Check 2: Parse the line into words/args
-            val lexer = Lexer(line)
-            val result = lexer.parse()
-            if (!result.success) {
-                Failure(Exception(result.message), msg = result.message)
-            } else {
-                // Get the text from the tokens except for the last token(end token)
-                val args = result.tokens.map { t -> t.text }.take(result.tokens.size - 1)
-                val err = "Error parsing arguments"
 
-                // Any text ?
-                if (args.isEmpty()) {
-                    Failure(Exception("No data provided"), msg = err)
-                } else {
-                    // Now parse the lexically parsed text into arguments
-                    val parseResult = parseInternal(line, args, prefix, sep, hasAction, metaChar, sysChar)
-                    parseResult
-                }
-            }
+         return check(text)
+        .then { line:String         -> tokenize(line) }
+        .then { result:LexResult    -> validate(result) }
+        .then { tokens:List<String> -> process(text.trim(), tokens, prefix, sep, hasAction, metaChar, sysChar) }
+    }
+
+    /**
+     * Check for empty line
+     */
+    private fun check(line:String): Try<String> {
+        val cleaned = line.trim()
+        return when(cleaned.isEmpty() || cleaned.isBlank()) {
+            true  -> Failure(Exception("No data provided"), msg = "Error parsing arguments")
+            false -> Success(line)
         }
     }
 
-    private fun parseInternal(
+
+    /**
+     * Tokenize the line by parsing it lexically
+     */
+    private fun tokenize(line: String): Try<LexResult> {
+        val result = Lexer(line).parse()
+        return when (result.success) {
+            false -> Failure(Exception(result.message), msg = result.message)
+            true -> Success(result)
+        }
+    }
+
+
+    /**
+     * Validate the tokens
+     */
+    private fun validate(lexResult:LexResult): Try<List<String>> {
+        val args = lexResult.tokens.map { t -> t.text }.take(lexResult.tokens.size - 1)
+        return when(args.isEmpty()){
+            true -> Failure(Exception("No data provided"), msg = "Error parsing arguments")
+            else -> Success(args)
+        }
+    }
+
+
+    /**
+     * Finally parse the tokens into arguments
+     */
+    private fun process(
             line: String,
             tokens: List<String>,
             prefix: String,
@@ -82,8 +103,9 @@ class ArgsService {
 
             // if input = "area.api.action -arg1="1" -arg2="2"
             // result = "area.api.action"
+            val parser = ArgsParser(prefix, sep, metaChar, sysChar)
             val result = if (hasAction) {
-                val actionResult = ArgsFuncs.parseAction(tokens, prefix, metaChar, sysChar)
+                val actionResult = parser.parseAction(tokens, prefix, metaChar, sysChar)
                 // Start of named args is always 1 after the action
                 val startOfNamedArgs = if (actionResult.pos == 0) 0 else actionResult.posLast
                 Triple(actionResult.action, actionResult.actions, startOfNamedArgs)
@@ -103,7 +125,7 @@ class ArgsService {
             val argsResult = if (startOfNamedArgs >= tokens.size - 1)
                 ParsedArgs(mapOf(), mapOf(), mapOf(), startOfNamedArgs)
             else
-                ArgsFuncs.parseNamedArgs(tokens, startOfNamedArgs, prefix, sep, metaChar, sysChar)
+                parser.parseNamed(tokens, startOfNamedArgs)
 
             // start of index args is always 1 after the named args
             val startOfIndexArgs =

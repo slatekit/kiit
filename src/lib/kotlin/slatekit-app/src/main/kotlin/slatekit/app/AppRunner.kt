@@ -60,7 +60,7 @@ object AppRunner {
         }.then { args ->
 
             // STEP 2: Context - Build AppContext using args, about, schema
-            val context = AppFuncs.context(args, about, schema ?:AppBuilder.schema(), enc, logs)
+            val context = AppUtils.context(args, about, schema ?:AppBuilder.schema(), enc, logs)
             context.fold( { Success(it) }, { Failure( Exception(it)) })
 
         }.then { context ->

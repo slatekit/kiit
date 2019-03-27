@@ -2,12 +2,12 @@ package slatekit.entities.features
 
 import slatekit.query.IQuery
 import slatekit.query.Query
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.query.QueryEncoder
 import kotlin.reflect.KProperty
 
-interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     /**
      * finds items based on the query

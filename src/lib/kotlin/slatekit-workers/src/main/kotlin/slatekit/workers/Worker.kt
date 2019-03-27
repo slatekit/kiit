@@ -1,7 +1,7 @@
 package slatekit.workers
 
 import slatekit.common.*
-import slatekit.common.TODO.IMPROVE
+import slatekit.common.TODO
 import slatekit.common.info.About
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -259,7 +259,7 @@ open class Worker<T>(
 
 
     protected open fun complete(sender: Any, queue: QueueSource<String>, job:Job, result:Try<*>) {
-        IMPROVE("workers", "make the source type safe or decouple it from the job")
+        TODO.IMPROVE("workers", "make the source type safe or decouple it from the job")
         when(result.success){
             true  -> queue.complete(job.source as QueueEntry<String>)
             false -> queue.abandon(job.source as QueueEntry<String>)

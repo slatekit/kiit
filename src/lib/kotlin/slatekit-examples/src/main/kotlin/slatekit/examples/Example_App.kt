@@ -33,7 +33,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.core.cmds.Cmd
 import slatekit.common.CommonContext
 import slatekit.db.Db
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try

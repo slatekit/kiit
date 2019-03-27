@@ -1,4 +1,4 @@
-package slatekit.orm.databases
+package slatekit.orm.core
 
 import slatekit.common.Record
 

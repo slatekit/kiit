@@ -14,11 +14,11 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.entities.core.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.core.cmds.Cmd
+import slatekit.entities.*
 import slatekit.results.Try
 import slatekit.results.Success
 

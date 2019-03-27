@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.utils.ListMap
 import slatekit.common.Vars
@@ -30,11 +31,11 @@ class ListMapTests {
             Pair("b", 2),
             Pair("c", 3)
         ))
-        assert( items.size == 3)
-        assert( items.contains("a"))
-        assert( items.contains("b"))
-        assert( items.contains("c"))
-        assert( !items.contains("d"))
+        Assert.assertTrue( items.size == 3)
+        Assert.assertTrue( items.contains("a"))
+        Assert.assertTrue( items.contains("b"))
+        Assert.assertTrue( items.contains("c"))
+        Assert.assertTrue( !items.contains("d"))
     }
 
 
@@ -44,9 +45,9 @@ class ListMapTests {
                 Pair("b", 2),
                 Pair("c", 3)
         ))
-        assert( items.get("a") == 1)
-        assert( items.get("b") == 2)
-        assert( items.get("c") == 3)
+        Assert.assertTrue( items.get("a") == 1)
+        Assert.assertTrue( items.get("b") == 2)
+        Assert.assertTrue( items.get("c") == 3)
     }
 
 
@@ -56,9 +57,9 @@ class ListMapTests {
                 Pair("b", 2),
                 Pair("c", 3)
         ))
-        assert( items.getAt(0) == 1)
-        assert( items.getAt(1) == 2)
-        assert( items.getAt(2) == 3)
+        Assert.assertTrue( items.getAt(0) == 1)
+        Assert.assertTrue( items.getAt(1) == 2)
+        Assert.assertTrue( items.getAt(2) == 3)
     }
 
 
@@ -68,20 +69,20 @@ class ListMapTests {
                 Pair("b", 2),
                 Pair("c", 3)
         ))
-        assert( items.size == 3)
+        Assert.assertTrue( items.size == 3)
 
         val items2 = items.remove("b")
-        assert( items.contains("a"))
-        assert( items.contains("b"))
-        assert( items.contains("c"))
+        Assert.assertTrue( items.contains("a"))
+        Assert.assertTrue( items.contains("b"))
+        Assert.assertTrue( items.contains("c"))
 
-        assert( items2.contains("a"))
-        assert( !items2.contains("b"))
-        assert( items2.contains("c"))
-        assert( items2.get("a") == 1)
-        assert( items2.get("c") == 3)
-        assert( items2.getAt(0) == 1)
-        assert( items2.getAt(1) == 3)
+        Assert.assertTrue( items2.contains("a"))
+        Assert.assertTrue( !items2.contains("b"))
+        Assert.assertTrue( items2.contains("c"))
+        Assert.assertTrue( items2.get("a") == 1)
+        Assert.assertTrue( items2.get("c") == 3)
+        Assert.assertTrue( items2.getAt(0) == 1)
+        Assert.assertTrue( items2.getAt(1) == 3)
     }
 
 
@@ -93,9 +94,9 @@ class ListMapTests {
         ))
 
         val items2 = items.remove(2)
-        assert(items2[1]!!.id == 1)
-        assert(items2[3]!!.id == 3)
-        assert( items2.size == 2)
+        Assert.assertTrue(items2[1]!!.id == 1)
+        Assert.assertTrue(items2[3]!!.id == 3)
+        Assert.assertTrue( items2.size == 2)
 
     }
 
@@ -107,7 +108,7 @@ class ListMapTests {
                 Pair("app.confirmUrl", "http://myapp1.com/api/confirm?id=123"),
                 Pair("user.email", "john.doe@gmail.com")
         ))
-        assert(vars.get("user.name") == "john.doe")
-        assert(vars.get("app.name") == "mobile.app1")
+        Assert.assertTrue(vars.get("user.name") == "john.doe")
+        Assert.assertTrue(vars.get("app.name") == "mobile.app1")
     }
 }

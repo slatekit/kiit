@@ -15,9 +15,9 @@ package slatekit.app
 
 import slatekit.common.*
 import slatekit.common.args.Args
-import slatekit.common.args.ArgsFuncs
-import slatekit.common.args.ArgsFuncs.isExit
-import slatekit.common.args.ArgsFuncs.isVersion
+import slatekit.common.args.ArgsCheck
+import slatekit.common.args.ArgsCheck.isExit
+import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.*
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
@@ -28,7 +28,7 @@ import slatekit.common.info.*
 import slatekit.common.log.*
 import slatekit.results.*
 
-object AppFuncs {
+object AppUtils {
 
     fun getConfPath(args: Args, file: String, conf: Conf?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
@@ -62,11 +62,11 @@ object AppFuncs {
             Success("version", StatusCodes.VERSION)
         }
         // Case 2b: about ?
-        else if (ArgsFuncs.isAbout(raw, 0)) {
+        else if (ArgsCheck.isAbout(raw, 0)) {
             Success("about", StatusCodes.ABOUT)
         }
         // Case 3a: Help ?
-        else if ( ArgsFuncs.isHelp(raw, 0)) {
+        else if ( ArgsCheck.isHelp(raw, 0)) {
             Success("help", StatusCodes.HELP)
         } else {
             Failure("other")

@@ -1,5 +1,6 @@
 package test.cloud
 
+import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
 import slatekit.cloud.aws.AwsCloudFiles
@@ -41,7 +42,7 @@ class AwsS3Tests {
         // 3. Test delete
         files.delete(filename)
         val result = files.getAsText(filename)
-        assert(!result.success)
+        Assert.assertTrue(!result.success)
     }
 
 
@@ -49,16 +50,16 @@ class AwsS3Tests {
 
         // Get text
         val result1 = files.getAsText(fileName)
-        assert(result1.success)
-        assert(result1.getOrElse { null } == expectedContent)
+        Assert.assertTrue(result1.success)
+        Assert.assertTrue(result1.getOrElse { null } == expectedContent)
 
         // Download
         val folderPath = Uris.interpret("user://$SLATEKIT_DIR/temp/")
         val downloadResult1 = files.download(fileName, folderPath!!)
         val downloadFilePath1 = downloadResult1.getOrElse { null }
         val file1 = File(downloadFilePath1)
-        assert(file1.exists())
-        assert(file1.readText() == expectedContent)
+        Assert.assertTrue(file1.exists())
+        Assert.assertTrue(file1.readText() == expectedContent)
 
         // Download as
         val newFileName = fileName + "-01"
@@ -66,7 +67,7 @@ class AwsS3Tests {
         val downloadResult2 = files.downloadToFile(fileName, filePath!!)
         val downloadFilePath2 = downloadResult2.getOrElse { null }
         val file = File(downloadFilePath2)
-        assert(file.exists())
-        assert(file.readText() == expectedContent)
+        Assert.assertTrue(file.exists())
+        Assert.assertTrue(file.readText() == expectedContent)
     }
 }

@@ -68,8 +68,8 @@ class Worker_System_Tests {
         val worker2 = sys.get("worker 2")!!
         TODO.IMPLEMENT("tests", "Workers")
         Assert.assertEquals(group1.status(), Status.Running)
-//        assert(worker1.lastResult.getOrElse { "" } == "worktype 1:done")
-//        assert(worker2.lastResult.getOrElse { "" } == "worktype 2:done")
+//        Assert.assertTrue(worker1.lastResult.getOrElse { "" } == "worktype 1:done")
+//        Assert.assertTrue(worker2.lastResult.getOrElse { "" } == "worktype 2:done")
         sys.done()
     }
 }

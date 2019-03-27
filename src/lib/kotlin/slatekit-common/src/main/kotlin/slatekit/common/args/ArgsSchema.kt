@@ -145,12 +145,6 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      */
     fun missing(args: Args, arg: Arg): Boolean = arg.isRequired && !args.containsKey(arg.name)
 
-    /**
-     * gets the maximum length of an argument name from all arguments
-     *
-     * @return
-     */
-    fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxBy { it.name.length }?.name?.length ?: 0
 
     fun buildHelp(prefix: String? = "-", separator: String? = "=") {
 
@@ -163,4 +157,11 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             writer.writeItems(semanticHelp)
         }
     }
+
+    /**
+     * gets the maximum length of an argument name from all arguments
+     *
+     * @return
+     */
+    private fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxBy { it.name.length }?.name?.length ?: 0
 }

@@ -53,7 +53,7 @@ class Model(
     /**
      * The field that represents the id
      */
-    val idField: ModelField? get() = fields.find { p -> p.category == "id" }
+    val idField: ModelField? get() = fields.find { p -> p.category == ModelFieldCategory.Id }
 
     /**
      * whether there are any fields in the model
@@ -94,7 +94,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         val fieldType = ModelUtils.fieldType(field)
         return addField(
@@ -108,9 +108,7 @@ class Model(
         )
     }/**
      * builds a new model by adding an text field to the list of fields
-     * @param name
      * @param desc
-     * @param isRequired
      * @param minLength
      * @param maxLength
      * @param storedName
@@ -129,7 +127,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         val fieldType = ModelUtils.fieldType(field)
         return addField(
@@ -145,8 +143,6 @@ class Model(
 
     /**
      * builds a new model by adding an id field to the list of fields
-     * @param name
-     * @param dataType
      * @param autoIncrement
      * @return
      */
@@ -169,7 +165,7 @@ class Model(
             UUID::class -> ModelFieldType.typeUUID
             else -> throw Exception("Unexpected id type for model for : ${dataType.qualifiedName}")
         }
-        return addField(null, name, dataType, fieldType, "", true, 0, 0, name, 0, cat = "id")
+        return addField(null, name, dataType, fieldType, "", true, 0, 0, name, 0, cat = ModelFieldCategory.Id)
     }
 
 
@@ -196,7 +192,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name, String::class, ModelFieldType.typeString, desc, isRequired, minLength, maxLength, storedName,
@@ -227,7 +223,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name, String::class, ModelFieldType.typeText, desc, isRequired, minLength, maxLength, storedName,
@@ -251,7 +247,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name,
@@ -285,7 +281,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name,
@@ -319,7 +315,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name,
@@ -353,7 +349,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name,
@@ -387,7 +383,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(
                 name,
@@ -421,7 +417,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(name, Short::class, ModelFieldType.typeShort, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
@@ -442,7 +438,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(name, Int::class, ModelFieldType.typeInt, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
@@ -463,7 +459,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(name, Long::class, ModelFieldType.typeLong, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
@@ -484,7 +480,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(name, Float::class, ModelFieldType.typeFloat, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
@@ -505,7 +501,7 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         return addField(name, Double::class, ModelFieldType.typeDouble, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
@@ -602,7 +598,7 @@ class Model(
             defaultValue: Any? = null,
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         val field = ModelField.build(
                 null, name, desc, dataCls, dataTpe, isRequired,
@@ -645,7 +641,7 @@ class Model(
             defaultValue: Any? = null,
             encrypt: Boolean = false,
             tag: String = "",
-            cat: String = "data"
+            cat: ModelFieldCategory = ModelFieldCategory.Data
     ): Model {
         val field = ModelField.build(
                 prop, name, desc, dataCls, dataTpe, isRequired,

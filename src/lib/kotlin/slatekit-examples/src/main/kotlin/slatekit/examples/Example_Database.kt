@@ -21,10 +21,9 @@ import slatekit.common.db.DbConString
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.core.cmds.Cmd
-import slatekit.entities.core.EntityMapper
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
 
 //</doc:import_examples>
@@ -102,7 +101,7 @@ class Example_Database : Cmd("db") {
         // The mapper will load a schema from the User class by checking
         // for "Field" annotations
         val userModelSchema = ModelMapper.loadSchema(User::class)
-        val mapper = OrmMapper<Long,User>(userModelSchema, db, Long::class, MySqlConverter())
+        val mapper = OrmMapper<Long, User>(userModelSchema, db, Long::class, MySqlConverter())
         val item1 = db.mapOne<User>("select * from `user` where id = 1", mapper)
         println(item1)
 

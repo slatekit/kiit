@@ -3,7 +3,7 @@ package slatekit.examples.common
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.Field
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 
 // NOTES: You can entities properties to be persisted
 // in 3 different ways:

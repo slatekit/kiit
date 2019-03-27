@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.validations.ValidationFuncs.hasCharsLCase
 import slatekit.common.validations.ValidationFuncs.hasCharsUCase
@@ -40,170 +41,170 @@ import slatekit.common.validations.ValidationFuncs.isZipCodeUS
 
 class ValidationTests {
     @Test fun is_Empty() {
-        assert( isEmpty("") )
-        assert( !isEmpty("123") )
+        Assert.assertTrue( isEmpty("") )
+        Assert.assertTrue( !isEmpty("123") )
     }
 
 
     @Test fun is_Non_Empty() {
-        assert( isNotEmpty("123") )
-        assert( !isNotEmpty("") )
+        Assert.assertTrue( isNotEmpty("123") )
+        Assert.assertTrue( !isNotEmpty("") )
     }
 
 
     @Test fun is_Length() {
-        assert( isLength("123", 3) )
-        assert( isLength("abc", 3) )
-        assert( !isLength("", 3) )
-        assert( !isLength("abc", 4) )
+        Assert.assertTrue( isLength("123", 3) )
+        Assert.assertTrue( isLength("abc", 3) )
+        Assert.assertTrue( !isLength("", 3) )
+        Assert.assertTrue( !isLength("abc", 4) )
     }
 
 
     @Test fun is_Min_Length() {
-        assert( !isMinLength("12" , 3) )
-        assert( isMinLength("123" , 3) )
-        assert( isMinLength("1234", 3) )
+        Assert.assertTrue( !isMinLength("12" , 3) )
+        Assert.assertTrue( isMinLength("123" , 3) )
+        Assert.assertTrue( isMinLength("1234", 3) )
     }
 
 
     @Test fun is_Max_Length() {
-        assert(  isMaxLength("12"  , 3) )
-        assert(  isMaxLength("123" , 3) )
-        assert( !isMaxLength("1234", 3) )
+        Assert.assertTrue(  isMaxLength("12"  , 3) )
+        Assert.assertTrue(  isMaxLength("123" , 3) )
+        Assert.assertTrue( !isMaxLength("1234", 3) )
     }
 
 
     @Test fun is_Min_Value() {
-        assert( !isMinValue( 99, 100) )
-        assert(  isMinValue(100, 100) )
-        assert(  isMinValue(101, 100) )
+        Assert.assertTrue( !isMinValue( 99, 100) )
+        Assert.assertTrue(  isMinValue(100, 100) )
+        Assert.assertTrue(  isMinValue(101, 100) )
     }
 
 
     @Test fun is_Max_Value() {
-        assert(  isMaxValue(99 , 100) )
-        assert(  isMaxValue(100, 100) )
-        assert( !isMaxValue(101, 100) )
+        Assert.assertTrue(  isMaxValue(99 , 100) )
+        Assert.assertTrue(  isMaxValue(100, 100) )
+        Assert.assertTrue( !isMaxValue(101, 100) )
     }
 
 
     @Test fun has_Digits() {
-        assert( hasDigits("a1b2c3"  , 3) )
-        assert( hasDigits("abc123"  , 3) )
-        assert( hasDigits("1234abcd", 4) )
+        Assert.assertTrue( hasDigits("a1b2c3"  , 3) )
+        Assert.assertTrue( hasDigits("abc123"  , 3) )
+        Assert.assertTrue( hasDigits("1234abcd", 4) )
     }
 
 
     @Test fun has_Chars_Lower_case() {
-        assert( hasCharsLCase("a1b2c3"  , 3) )
-        assert( hasCharsLCase("abc123"  , 3) )
-        assert( hasCharsLCase("1234abcd", 4) )
+        Assert.assertTrue( hasCharsLCase("a1b2c3"  , 3) )
+        Assert.assertTrue( hasCharsLCase("abc123"  , 3) )
+        Assert.assertTrue( hasCharsLCase("1234abcd", 4) )
     }
 
 
     @Test fun has_Chars_Upper_case() {
-        assert( hasCharsUCase("A1B2C3"  , 3) )
-        assert( hasCharsUCase("ABC123"  , 3) )
-        assert( hasCharsUCase("1234ABCD", 4) )
+        Assert.assertTrue( hasCharsUCase("A1B2C3"  , 3) )
+        Assert.assertTrue( hasCharsUCase("ABC123"  , 3) )
+        Assert.assertTrue( hasCharsUCase("1234ABCD", 4) )
     }
 
 
     @Test fun has_Symbols() {
-        assert( hasSymbols("A\$B%C^"  , 3) )
-        assert( hasSymbols("ABC<>?"  , 3) )
-        assert( hasSymbols("1234[]{}", 4) )
+        Assert.assertTrue( hasSymbols("A\$B%C^"  , 3) )
+        Assert.assertTrue( hasSymbols("ABC<>?"  , 3) )
+        Assert.assertTrue( hasSymbols("1234[]{}", 4) )
     }
 
     @Test fun regex_is_Email() {
-        assert( !isEmail(""))
-        assert( !isEmail("wonderwoman"))
-        assert( !isEmail("@amazonian.com"))
-        assert( !isEmail("wonderwoman_amazonian.com"))
-        assert(  isEmail("wonderwoman@amazonian.com"))
+        Assert.assertTrue( !isEmail(""))
+        Assert.assertTrue( !isEmail("wonderwoman"))
+        Assert.assertTrue( !isEmail("@amazonian.com"))
+        Assert.assertTrue( !isEmail("wonderwoman_amazonian.com"))
+        Assert.assertTrue(  isEmail("wonderwoman@amazonian.com"))
     }
 
 
     @Test fun regex_is_Alpha() {
-        assert( !isAlpha(""))
-        assert( !isAlpha("[]{},."))
-        assert( !isAlpha("123456"))
-        assert(  isAlpha("abcdefg"))
-        assert(  isAlpha("ABCDEFG"))
+        Assert.assertTrue( !isAlpha(""))
+        Assert.assertTrue( !isAlpha("[]{},."))
+        Assert.assertTrue( !isAlpha("123456"))
+        Assert.assertTrue(  isAlpha("abcdefg"))
+        Assert.assertTrue(  isAlpha("ABCDEFG"))
     }
 
 
     @Test fun regex_is_Alpha_Uppercase() {
-        assert( !isAlphaUpperCase(""))
-        assert( !isAlphaUpperCase("[]{},."))
-        assert( !isAlphaUpperCase("123456"))
-        assert( !isAlphaUpperCase("abcdefg"))
-        assert(  isAlphaUpperCase("ABCDEFG"))
+        Assert.assertTrue( !isAlphaUpperCase(""))
+        Assert.assertTrue( !isAlphaUpperCase("[]{},."))
+        Assert.assertTrue( !isAlphaUpperCase("123456"))
+        Assert.assertTrue( !isAlphaUpperCase("abcdefg"))
+        Assert.assertTrue(  isAlphaUpperCase("ABCDEFG"))
     }
 
 
     @Test fun regex_is_Alpha_Lowercase() {
-        assert( !isAlphaLowerCase(""))
-        assert( !isAlphaLowerCase("[]{},."))
-        assert( !isAlphaLowerCase("123456"))
-        assert(  isAlphaLowerCase("abcdefg"))
-        assert( !isAlphaLowerCase("ABCDEFG"))
+        Assert.assertTrue( !isAlphaLowerCase(""))
+        Assert.assertTrue( !isAlphaLowerCase("[]{},."))
+        Assert.assertTrue( !isAlphaLowerCase("123456"))
+        Assert.assertTrue(  isAlphaLowerCase("abcdefg"))
+        Assert.assertTrue( !isAlphaLowerCase("ABCDEFG"))
     }
 
 
     @Test fun regex_is_Alpha_Numeric() {
-        assert( !isAlphaNumeric(""))
-        assert( !isAlphaNumeric("[]{},."))
-        assert(  isAlphaNumeric("123456"))
-        assert(  isAlphaNumeric("abcdefg"))
-        assert(  isAlphaNumeric("ABCDEFG"))
+        Assert.assertTrue( !isAlphaNumeric(""))
+        Assert.assertTrue( !isAlphaNumeric("[]{},."))
+        Assert.assertTrue(  isAlphaNumeric("123456"))
+        Assert.assertTrue(  isAlphaNumeric("abcdefg"))
+        Assert.assertTrue(  isAlphaNumeric("ABCDEFG"))
     }
 
 
     @Test fun regex_is_Numeric() {
-        assert( !isNumeric(""))
-        assert( !isNumeric("[]{},."))
-        assert(  isNumeric("123456"))
-        assert( !isNumeric("abcdefg"))
-        assert( !isNumeric("ABCDEFG"))
+        Assert.assertTrue( !isNumeric(""))
+        Assert.assertTrue( !isNumeric("[]{},."))
+        Assert.assertTrue(  isNumeric("123456"))
+        Assert.assertTrue( !isNumeric("abcdefg"))
+        Assert.assertTrue( !isNumeric("ABCDEFG"))
     }
 
 
     @Test fun regex_is_Url() {
-        assert( !isUrl(""))
-        assert( !isUrl("[]{},."))
-        assert( !isUrl("123456"))
-        assert( !isUrl("abcdefg"))
-        assert( !isUrl("ABCDEFG"))
-        assert( !isUrl("http"))
-        assert( !isUrl("http://"))
-        assert( isUrl("http://slatekit.com"))
-        assert( isUrl("http://www.slatekit.com"))
-        assert( isUrl("http://www.slatekit.com/"))
-        assert( isUrl("http://www.slatekit.com/about"))
-        assert( isUrl("http://www.slatekit.com/about?"))
-        assert( isUrl("http://www.slatekit.com/about.json"))
-        assert( isUrl("http://www.slatekit.com/about?version=1.2"))
+        Assert.assertTrue( !isUrl(""))
+        Assert.assertTrue( !isUrl("[]{},."))
+        Assert.assertTrue( !isUrl("123456"))
+        Assert.assertTrue( !isUrl("abcdefg"))
+        Assert.assertTrue( !isUrl("ABCDEFG"))
+        Assert.assertTrue( !isUrl("http"))
+        Assert.assertTrue( !isUrl("http://"))
+        Assert.assertTrue( isUrl("http://slatekit.com"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com/"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com/about"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com/about?"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com/about.json"))
+        Assert.assertTrue( isUrl("http://www.slatekit.com/about?version=1.2"))
     }
 
 
     @Test fun regex_is_Phone_US() {
-        assert( !isPhoneUS(""))
-        assert( !isPhoneUS("[]{},."))
-        assert( !isPhoneUS("123456"))
-        assert( !isPhoneUS("abcdefg"))
-        assert( !isPhoneUS("ABCDEFG"))
-        assert(  isPhoneUS("123-456-7890"))
-        assert(  isPhoneUS("1234567890"))
+        Assert.assertTrue( !isPhoneUS(""))
+        Assert.assertTrue( !isPhoneUS("[]{},."))
+        Assert.assertTrue( !isPhoneUS("123456"))
+        Assert.assertTrue( !isPhoneUS("abcdefg"))
+        Assert.assertTrue( !isPhoneUS("ABCDEFG"))
+        Assert.assertTrue(  isPhoneUS("123-456-7890"))
+        Assert.assertTrue(  isPhoneUS("1234567890"))
     }
 
 
     @Test fun regex_is_ZipCode_US() {
-        assert( !isZipCodeUS(""))
-        assert( !isZipCodeUS("[]{},."))
-        assert( !isZipCodeUS("123456"))
-        assert( !isZipCodeUS("abcdefg"))
-        assert( !isZipCodeUS("ABCDEFG"))
-        assert(  isZipCodeUS("12345"))
-        assert(  isZipCodeUS("01234"))
+        Assert.assertTrue( !isZipCodeUS(""))
+        Assert.assertTrue( !isZipCodeUS("[]{},."))
+        Assert.assertTrue( !isZipCodeUS("123456"))
+        Assert.assertTrue( !isZipCodeUS("abcdefg"))
+        Assert.assertTrue( !isZipCodeUS("ABCDEFG"))
+        Assert.assertTrue(  isZipCodeUS("12345"))
+        Assert.assertTrue(  isZipCodeUS("01234"))
     }
 }

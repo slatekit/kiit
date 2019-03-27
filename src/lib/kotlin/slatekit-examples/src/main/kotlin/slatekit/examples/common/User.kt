@@ -14,7 +14,7 @@
 package slatekit.examples.common
 
 import slatekit.common.Field
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 
 
 data class User(

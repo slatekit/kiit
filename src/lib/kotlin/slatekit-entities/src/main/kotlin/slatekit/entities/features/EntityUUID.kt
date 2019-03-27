@@ -1,7 +1,7 @@
 package slatekit.entities.features
 
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityWithUUID
+import slatekit.entities.Entity
+import slatekit.entities.EntityWithUUID
 import slatekit.entities.core.ServiceSupport
 import java.util.*
 
@@ -11,7 +11,7 @@ import java.util.*
  * supply another type constraint on T to be EntityWithUUID to provide compile time safety.
  *
  */
-interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     /**
      * gets the entity from the datastore using the uuid as a string

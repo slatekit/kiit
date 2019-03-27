@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.info.ApiLogin
 import slatekit.common.DateTime
@@ -50,11 +51,11 @@ class ConfigTests {
 
     @Test fun test_basic() {
         val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-        assert(conf.getInt("test_int") == 1)
-        assert(conf.getBool("test_bool"))
-        assert(conf.getString("test_text") == "abc")
-        assert(conf.getLong("test_long") == 10L)
-        assert(conf.getDouble("test_doub") == 1.23)
+        Assert.assertTrue(conf.getInt("test_int") == 1)
+        Assert.assertTrue(conf.getBool("test_bool"))
+        Assert.assertTrue(conf.getString("test_text") == "abc")
+        Assert.assertTrue(conf.getLong("test_long") == 10L)
+        Assert.assertTrue(conf.getDouble("test_doub") == 1.23)
     }
 
 
@@ -62,10 +63,10 @@ class ConfigTests {
         val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val items = conf.getList("test_ints", Int::class.java)
 
-        assert(items[0] == 1)
-        assert(items[1] == 22)
-        assert(items[2] == 33)
-        assert(items[3] == 44)
+        Assert.assertTrue(items[0] == 1)
+        Assert.assertTrue(items[1] == 22)
+        Assert.assertTrue(items[2] == 33)
+        Assert.assertTrue(items[3] == 44)
     }
 
 
@@ -73,53 +74,53 @@ class ConfigTests {
         val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val items = conf.getMap("test_maps", String::class.java, Int::class.java)
 
-        assert(items["a"] == 1)
-        assert(items["b"] == 22)
-        assert(items["c"] == 33)
-        assert(items["d"] == 44)
+        Assert.assertTrue(items["a"] == 1)
+        Assert.assertTrue(items["b"] == 22)
+        Assert.assertTrue(items["c"] == 33)
+        Assert.assertTrue(items["d"] == 44)
     }
 
 
     @Test fun test_model_env() {
         val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val env = conf.env()
-        assert(env.name == "local")
-        assert(env.mode == EnvMode.Dev)
+        Assert.assertTrue(env.name == "local")
+        Assert.assertTrue(env.mode == EnvMode.Dev)
     }
 
 
     @Test fun test_model_db_con() {
         val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val con = conf.dbCon("db1")
-        assert(con.driver == "mysql")
-        assert(con.url == "localhost")
-        assert(con.user == "root")
-        assert(con.password == "12345678")
+        Assert.assertTrue(con.driver == "mysql")
+        Assert.assertTrue(con.url == "localhost")
+        Assert.assertTrue(con.user == "root")
+        Assert.assertTrue(con.password == "12345678")
     }
 
 
     @Test fun test_model_movie() {
         val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val movie = conf.map<Movie>("movie", Movie::class, null)!!
-        assert(movie.id == 0L )
-        assert(movie.title == "Indiana Jones")
-        assert(movie.category == "adventure")
-        assert(!movie.playing )
-        assert(movie.cost == 30)
-        assert(movie.rating == 4.8)
-        assert(movie.released == DateTimes.of(1981, 6, 12))
+        Assert.assertTrue(movie.id == 0L )
+        Assert.assertTrue(movie.title == "Indiana Jones")
+        Assert.assertTrue(movie.category == "adventure")
+        Assert.assertTrue(!movie.playing )
+        Assert.assertTrue(movie.cost == 30)
+        Assert.assertTrue(movie.rating == 4.8)
+        Assert.assertTrue(movie.released == DateTimes.of(1981, 6, 12))
     }
 
 
     @Test fun test_model_creds() {
         val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val login = conf.login("login")
-        assert(login.id     == "user1")
-        assert(login.name   == "user one")
-        assert(login.email  == "user1@abc.com")
-        assert(login.region == "us")
-        assert(login.key    == "abcd")
-        assert(login.env    == "dev")
+        Assert.assertTrue(login.id     == "user1")
+        Assert.assertTrue(login.name   == "user one")
+        Assert.assertTrue(login.email  == "user1@abc.com")
+        Assert.assertTrue(login.region == "us")
+        Assert.assertTrue(login.key    == "abcd")
+        Assert.assertTrue(login.env    == "dev")
     }
 
 
@@ -155,23 +156,23 @@ class ConfigTests {
         val raw = "StarTrek2100"
         var enc = MyEncryptor.encrypt(raw)
 
-        assert(raw == conf.getString("enc.raw"))
-        assert(raw == conf.getString("enc.enc"))
+        Assert.assertTrue(raw == conf.getString("enc.raw"))
+        Assert.assertTrue(raw == conf.getString("enc.enc"))
     }
 
 
     @Test fun test_inheritance() {
         val conf = ConfFuncs.loadWithFallbackConfig("jars://env.dev.conf", "jars://env.conf", null)
-        assert(conf.getString("env.name") == "dev")
-        assert(conf.getString("root_name") == "parent env config")
+        Assert.assertTrue(conf.getString("env.name") == "dev")
+        Assert.assertTrue(conf.getString("root_name") == "parent env config")
     }
 
 
     fun matchkey(actual: ApiLogin, expected: ApiLogin):Unit {
-        assert(expected.account == actual.account)
-        assert(expected.key == actual.key)
-        assert(expected.env == actual.env)
-        assert(expected.pass == actual.pass)
-        assert(expected.tag == actual.tag)
+        Assert.assertTrue(expected.account == actual.account)
+        Assert.assertTrue(expected.key == actual.key)
+        Assert.assertTrue(expected.env == actual.env)
+        Assert.assertTrue(expected.pass == actual.pass)
+        Assert.assertTrue(expected.tag == actual.tag)
     }
 }

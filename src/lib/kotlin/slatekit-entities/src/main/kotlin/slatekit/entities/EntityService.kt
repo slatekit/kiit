@@ -11,8 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.entities.core
+package slatekit.entities
 
+import slatekit.entities.core.IEntityRepo
 import slatekit.entities.services.EntityServices
 
 

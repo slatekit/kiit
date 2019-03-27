@@ -134,13 +134,13 @@ n/a
         // url:jdbc:mysql://localhost/World
         // user:root
         // password:123abc
-        val dbs2: DbLookup = defaultDb(ConfFuncs.readDbCon("user://.slatekit/conf/db.txt")!!)
+        val dbs2: DbLookup = defaultDb(ConfFuncs.readDbCon("user://.slatekit/conf/db.txt"))
         showResult(dbs2.default())
 
 
         // CASE 4: Register connection and link to a key "user_db" using credentials from user folder
         val dbs4: DbLookup = namedDbs(
-            listOf(Pair("users", ConfFuncs.readDbCon("user://.slatekit/conf/db_default.txt")!!))
+            listOf(Pair("users", ConfFuncs.readDbCon("user://.slatekit/conf/db_default.txt"))
         )
         showResult(dbs4.named("users"))
 

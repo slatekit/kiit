@@ -1,6 +1,6 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.databases.SqlConverter
+import slatekit.orm.core.SqlConverter
 import slatekit.common.Record
 import slatekit.orm.Consts
 import java.util.*

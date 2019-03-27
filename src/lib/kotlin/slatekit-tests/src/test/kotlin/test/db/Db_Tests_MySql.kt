@@ -1,18 +1,21 @@
 package test.db
 
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
+import slatekit.common.db.DbCon
 import slatekit.db.Db
+import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Ignore
-class Db_Tests_MySql {
+class Db_Tests_MySql : TestSupport {
 
     companion object {
         var id = 0L
@@ -21,7 +24,7 @@ class Db_Tests_MySql {
     val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
     @Before
     fun can_setup() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO `slatekit`.`db_tests`
             (
@@ -111,23 +114,23 @@ class Db_Tests_MySql {
 
     @Test
     fun can_execute_proc() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callQuery("dbtests_get_max_id", { rs -> rs.getLong(1) })
-        assert(result!! > 0L)
+        Assert.assertTrue(result!! > 0L)
     }
 
 
     @Test
     fun can_execute_proc_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callUpdate("dbtests_update_by_id", listOf(6))
-        assert(result!! >= 1)
+        Assert.assertTrue(result!! >= 1)
     }
 
 
     @Test
     fun can_add_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO `slatekit`.`db_tests`
             (
@@ -141,25 +144,25 @@ class Db_Tests_MySql {
 
         // 1. add
         val id = db.insert(sqlInsert)
-        assert(id > 0)
+        Assert.assertTrue(id > 0)
 
         // 2. update
         val sqlUpdate = "update `slatekit`.`db_tests` set test_int = 987 where id = $id"
         val count = db.update(sqlUpdate)
-        assert(count > 0)
+        Assert.assertTrue(count > 0)
 
         // 3. get
         val sql = "select test_int from db_tests where id = $id"
         val updatedVal = db.getScalarInt(sql, null)
-        assert(updatedVal == 987)
+        Assert.assertTrue(updatedVal == 987)
     }
 
 
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sql = "select $colName from db_tests where id = " + Db_Tests_MySql.id
         val actual = callback(db, sql)
-        assert(expected == actual)
+        Assert.assertTrue(expected == actual)
     }
 }

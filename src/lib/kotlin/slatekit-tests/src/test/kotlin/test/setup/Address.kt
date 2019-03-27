@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.common.Field
 import slatekit.common.ids.UniqueId
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 import java.util.*
 
 data class Address(

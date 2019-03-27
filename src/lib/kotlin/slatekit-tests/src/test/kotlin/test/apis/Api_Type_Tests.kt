@@ -36,8 +36,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecInt", "get", mapOf(), mapOf("id" to encryptedText))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "decrypted int : 123")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "decrypted int : 123")
     }
 
 
@@ -46,8 +46,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecLong", "get", mapOf(), mapOf("id" to encryptedText))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "decrypted long : 123456")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "decrypted long : 123456")
     }
 
 
@@ -56,8 +56,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecDouble", "get", mapOf(), mapOf("id" to encryptedText))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "decrypted double : 123.456")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "decrypted double : 123.456")
     }
 
 
@@ -66,8 +66,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
         val r1 = apis.call("samples", "types3", "getDecString", "get", mapOf(), mapOf("id" to encryptedText))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "decrypted string : slate-kit")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "decrypted string : slate-kit")
     }
 
 
@@ -93,8 +93,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
         val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
     }
 
 
@@ -102,8 +102,8 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
         val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
-        assert(r1.success)
-        assert(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
     }
 
 

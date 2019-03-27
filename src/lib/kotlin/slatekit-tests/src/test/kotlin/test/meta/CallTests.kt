@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.meta
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Conversions
 import slatekit.common.DateTimes
@@ -33,7 +34,7 @@ class CallTests {
 //        val p = method!!.parameters[3]
 //        println(p.type)
 //        println(t)
-//        assert(p.type == t)
+//        Assert.assertTrue(p.type == t)
 //    }
 //
 //
@@ -52,32 +53,32 @@ class CallTests {
 //        }
 //
 //        val isListType = listParam.type.isSubtypeOf(listtype)
-//        assert(isListType)
+//        Assert.assertTrue(isListType)
 //        val tp = listParam.type.arguments[0]
-//        assert( tp.type!! == Reflector.IntType)
+//        Assert.assertTrue( tp.type!! == Reflector.IntType)
 //    }
 
 
     @Test fun can_handle_string(){
-        assert(Conversions.handleString("null") == "")
-        assert(Conversions.handleString("") == "")
-        assert(Conversions.handleString("''") == "''")
-        assert(Conversions.handleString("abc") == "abc")
+        Assert.assertTrue(Conversions.handleString("null") == "")
+        Assert.assertTrue(Conversions.handleString("") == "")
+        Assert.assertTrue(Conversions.handleString("''") == "''")
+        Assert.assertTrue(Conversions.handleString("abc") == "abc")
     }
 
 
     @Test fun can_handle_vars(){
         val vars1 = Conversions.toVars("null")
-        assert(vars1.size == 0 )
+        Assert.assertTrue(vars1.size == 0 )
 
         val vars2 = Conversions.toVars("")
-        assert(vars2.size == 0 )
+        Assert.assertTrue(vars2.size == 0 )
 
         val vars3 = Conversions.toVars("a=1,b=2,c=3")
-        assert(vars3.size == 3 )
-        assert(vars3["a"] == "1" )
-        assert(vars3["b"] == "2" )
-        assert(vars3["c"] == "3" )
+        Assert.assertTrue(vars3.size == 3 )
+        Assert.assertTrue(vars3["a"] == "1" )
+        Assert.assertTrue(vars3["b"] == "2" )
+        Assert.assertTrue(vars3["c"] == "3" )
     }
 
 
@@ -89,15 +90,15 @@ class CallTests {
             val method = Reflector.getMethod(UserApi::class, "testTypes")
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
-            assert(args.size == 8)
-            assert(args[0] == "123456789")
-            assert(args[1] == true)
-            assert(args[2] == 123.toShort())
-            assert(args[3] == 98765)
-            assert(args[4] == 123456.toLong())
-            assert(args[5] == 2.5f)
-            assert(args[6] == 900.99)
-            assert(args[7] == DateTimes.of(2017, 5, 27))
+            Assert.assertTrue(args.size == 8)
+            Assert.assertTrue(args[0] == "123456789")
+            Assert.assertTrue(args[1] == true)
+            Assert.assertTrue(args[2] == 123.toShort())
+            Assert.assertTrue(args[3] == 98765)
+            Assert.assertTrue(args[4] == 123456.toLong())
+            Assert.assertTrue(args[5] == 2.5f)
+            Assert.assertTrue(args[6] == 900.99)
+            Assert.assertTrue(args[7] == DateTimes.of(2017, 5, 27))
         }
         ensureTypes(InputArgs(mapOf<String, Any>(
                 "phone" to "123456789",
@@ -131,11 +132,11 @@ class CallTests {
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
-            assert(args.size == 1)
+            Assert.assertTrue(args.size == 1)
             for(ndx in 0..expected.size -1 ) {
                 val actual = (args[0] as List<Int>)[ndx]
                 val expected = expected[ndx]
-                assert( expected == actual)
+                Assert.assertTrue( expected == actual)
             }
         }
         ensureList(InputArgs(mapOf<String, Any>("items" to "null")), listOf<Int>())
@@ -153,11 +154,11 @@ class CallTests {
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
-            assert(args.size == 1)
+            Assert.assertTrue(args.size == 1)
             for(key in expected.keys ) {
                 val actual = (args[0] as Map<String,Int>)[key]
                 val expected = expected[key]
-                assert( expected == actual)
+                Assert.assertTrue( expected == actual)
             }
         }
         val sample = mapOf<String,Int>( "a" to 1, "b" to 2, "c" to 3, "d" to 4)

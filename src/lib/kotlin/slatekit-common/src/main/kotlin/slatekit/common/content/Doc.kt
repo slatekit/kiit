@@ -26,21 +26,35 @@ package slatekit.common.content
 data class Doc(val name: String, val content: String, val tpe: ContentType, val size: Long) {
 
     companion object {
-        @JvmStatic val empty = Doc("", "", ContentTypeText, 0)
+        @JvmStatic
+        val empty = Doc("", "", ContentTypeText, 0)
 
-        @JvmStatic fun csv(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeCsv, content.length.toLong())
-        @JvmStatic fun html(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeHtml, content.length.toLong())
-        @JvmStatic fun json(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeJson, content.length.toLong())
-        @JvmStatic fun text(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeText, content.length.toLong())
-        @JvmStatic fun prop(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeProp, content.length.toLong())
-        @JvmStatic fun xml(name: String, content: String): Doc =
-            Doc(name, content, ContentTypeXml, content.length.toLong())
-        @JvmStatic fun other(name: String, content: String, tpe: ContentType): Doc =
-            Doc(name, content, tpe, content.length.toLong())
+        @JvmStatic
+        fun csv(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeCsv, content.length.toLong())
+
+        @JvmStatic
+        fun html(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeHtml, content.length.toLong())
+
+        @JvmStatic
+        fun json(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeJson, content.length.toLong())
+
+        @JvmStatic
+        fun text(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeText, content.length.toLong())
+
+        @JvmStatic
+        fun prop(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeProp, content.length.toLong())
+
+        @JvmStatic
+        fun xml(name: String, content: String): Doc =
+                Doc(name, content, ContentTypeXml, content.length.toLong())
+
+        @JvmStatic
+        fun other(name: String, content: String, tpe: ContentType): Doc =
+                Doc(name, content, tpe, content.length.toLong())
     }
 }

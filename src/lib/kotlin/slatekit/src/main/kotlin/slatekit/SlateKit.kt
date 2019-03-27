@@ -2,7 +2,6 @@ package slatekit
 
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.apis.support.ApiModule
 import slatekit.apis.svcs.Authenticator
 import slatekit.app.App
 import slatekit.cli.CliSettings
@@ -24,10 +23,7 @@ import slatekit.info.DependencyService
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService
-import slatekit.integration.mods.ModuleContext
-import slatekit.orm.core.orm
-import slatekit.orm.migrations.MigrationService
-import slatekit.orm.migrations.MigrationSettings
+import slatekit.orm.orm
 
 class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 

@@ -20,10 +20,10 @@ import slatekit.common.ext.toStringNumeric
 import slatekit.common.info.Folders
 import slatekit.common.io.Files
 import slatekit.common.utils.Props
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 import slatekit.entities.core.EntityContext
-import slatekit.orm.core.getDbSource
-import slatekit.orm.core.sqlBuilder
+import slatekit.orm.getDbSource
+import slatekit.orm.sqlBuilder
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -118,12 +118,15 @@ class MigrationService(
             }
         }
         val succeeded = results.filter { it.success }
-        val allSql = succeeded.fold("", { acc, result ->
+        val allSql = succeeded.fold("") { acc, result ->
             acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
-        })
+        }
         val finalFileName = "$fileName.sql"
-        Files.writeDatedFile(folders!!.pathToOutputs, finalFileName, allSql)
-        val filePath = folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        val filePath = folders?.let {
+            Files.writeDatedFile(folders.pathToOutputs, finalFileName, allSql)
+            val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
+            filePath
+        } ?: "Folders not available, sql files not written"
         return slatekit.results.Success(filePath)
     }
 
@@ -136,17 +139,20 @@ class MigrationService(
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }
         val succeeded = results.filter { it.success }
-        val allSql = succeeded.fold("", { acc, result ->
+        val allSql = succeeded.fold("") { acc, result ->
             acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
-        })
+        }
         val finalFileName = "$fileName.sql"
-        Files.writeDatedFile(folders!!.pathToOutputs, finalFileName, allSql)
-        val filePath = folders!!.pathToOutputs + Props.pathSeparator + finalFileName
+        val filePath = folders?.let {
+            Files.writeDatedFile(folders.pathToOutputs, finalFileName, allSql)
+            val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
+            filePath
+        } ?: "Folders not available, sql files not written"
         return slatekit.results.Success(filePath)
     }
 
     fun deleteAll(): Try<List<String>> {
-        return each({ entity -> delete(entity.entityTypeName) })
+        return each { entity -> delete(entity.entityTypeName) }
     }
 
     fun dropAll(): Try<List<String>> {

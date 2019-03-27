@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.entities.core
+package slatekit.entities
 
 import slatekit.common.DateTime
 
@@ -55,7 +55,7 @@ interface EntityWithId<TId:Comparable<TId>> : Entity<TId> {
  * e.g. case class copying which must be implemented in the case class
  * @tparam T
  */
-interface EntityUpdatable<TId, T> where TId:Comparable<TId>, T:Entity<TId> {
+interface EntityUpdatable<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
 
     /**
      * sets the id on the entity and returns the entity with updated id.
